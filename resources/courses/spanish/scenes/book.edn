@@ -150,7 +150,7 @@
                   :name        "book",
                   :scale-x     1,
                   :scale-y     1,
-                  :skin        "default"
+                  :skin        "default",
                   :start       false},
                  :content
                  {:type       "group",
@@ -158,8 +158,8 @@
                   :y          89,
                   :transition "content",
                   :children   ["letter" "image" "image2" "image3"],
-                  :visible    false
-                  :states     {:hidden {:visible false}, :visible {:visible true, :opacity 0}}},
+                  :states     {:hidden {:visible false}, :visible {:opacity 0, :visible true}},
+                  :visible    false},
                  :image
                  {:type       "image",
                   :x          220,
@@ -196,8 +196,8 @@
                   :y              150,
                   :font-family    "Comic Sans MS",
                   :font-size      280,
-                  :vertical-align "middle"
-                  :states         {:default {}}},
+                  :states         {:default {}},
+                  :vertical-align "middle"},
                  :next-page-arrow
                  {:type    "image",
                   :x       1640,
@@ -239,8 +239,7 @@
  :scene-objects [["background"] ["book" "title-text" "content" "next-page-arrow"]],
  :actions
                 {:clear-instruction      {:type "remove-flows", :flow-tag "instruction"},
-                 :finish-activity
-                                         {:type "sequence-data", :data [{:id "book", :type "finish-activity"}]},
+                 :finish-activity        {:type "sequence-data", :data [{:id "book", :type "finish-activity"}]},
                  :init-next-page         {:type "set-variable", :var-name "next-page-action", :var-value "open-book"},
                  :next-page
                                          {:type     "action",

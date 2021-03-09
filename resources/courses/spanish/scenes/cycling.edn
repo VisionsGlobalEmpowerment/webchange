@@ -3,7 +3,7 @@
                  {:url "/raw/img/stadium/cycling/cycle_race_bg_02.jpg", :size 10, :type "image"}
                  {:url "/raw/img/stadium/cycling/cycle_race_bg_03.jpg", :size 10, :type "image"}
                  {:url "/raw/audio/l1/a8/Mari_L1_A8.m4a", :size 2, :type "audio", :alias "mari old"}
-                 {:url "/raw/audio/l2/a4/L2_A4_Mari.m4a" :size 2 :type "audio" :alias "mari statements"}
+                 {:url "/raw/audio/l2/a4/L2_A4_Mari.m4a", :size 2, :type "audio", :alias "mari statements"}
                  {:url "/raw/audio/l1/a8/mari.m4a", :size 2, :type "audio", :alias "mari"}
                  {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
                  {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio", :alias "game voice 1 redo"}
@@ -28,7 +28,7 @@
                   :scale       {:x -0.25, :y 0.25},
                   :scene-name  "box1",
                   :transition  "box1",
-                  :actions     {:click {:id "pick-box-1", :on "click", :type "action" :unique-tag "box"}},
+                  :actions     {:click {:id "pick-box-1", :on "click", :type "action", :unique-tag "box"}},
                   :anim        "idle2",
                   :anim-offset {:x 0, :y -300},
                   :loop        true,
@@ -45,7 +45,7 @@
                   :scale       {:x -0.25, :y 0.25},
                   :scene-name  "box2",
                   :transition  "box2",
-                  :actions     {:click {:id "pick-box-2", :on "click", :type "action" :unique-tag "box"}},
+                  :actions     {:click {:id "pick-box-2", :on "click", :type "action", :unique-tag "box"}},
                   :anim        "idle2",
                   :anim-offset {:x 0, :y -300},
                   :loop        true,
@@ -62,7 +62,7 @@
                   :scale       {:x -0.25, :y 0.25},
                   :scene-name  "box3",
                   :transition  "box3",
-                  :actions     {:click {:id "pick-box-3", :on "click", :type "action" :unique-tag "box"}},
+                  :actions     {:click {:id "pick-box-3", :on "click", :type "action", :unique-tag "box"}},
                   :anim        "idle2",
                   :anim-offset {:x 0, :y -300},
                   :loop        true,
@@ -102,8 +102,7 @@
  :scene-objects [["background"] ["box1" "box2" "box3" "vera" "mari"]],
  :actions
                 {:clear-instruction       {:type "remove-flows", :flow-tag "instruction"},
-                 :finish-activity
-                                          {:id "cycling", :type "finish-activity"},
+                 :finish-activity         {:type "finish-activity", :id "cycling"},
                  :go-to-box1-line
                                           {:type "sequence-data",
                                            :data
@@ -139,6 +138,19 @@
                                                   {:type "set-variable", :var-name "slot2", :var-value "box2"}
                                                   {:type "set-variable", :var-name "slot3", :var-value "box3"}]},
                  :init-vera-position      {:type "set-variable", :var-name "current-line", :var-value "box2"},
+                 :mari-voice-wrong
+                                          {:type                   "animation-sequence",
+                                           :data                   [{:end 24.138, :anim "talk", :start 19.83}],
+                                           :phrase                 "wrong-answer",
+                                           :phrase-description     "Wrong answer",
+                                           :phrase-text            "Ayyy, try again, listen carefully!",
+                                           :phrase-text-translated "Ayy intentalo de nuevo, escucha atentamente!",
+                                           :target                 "mari",
+                                           :audio                  "/raw/audio/l2/a4/L2_A4_Mari.m4a",
+                                           :start                  19.704,
+                                           :duration               4.537,
+                                           :track                  1,
+                                           :offset                 19.704},
                  :mari-welcome-audio-1
                                           {:type     "animation-sequence",
                                            :data
@@ -151,19 +163,6 @@
                                            :duration 10.782,
                                            :track    1,
                                            :offset   1.244},
-                 :mari-voice-wrong
-                                          {:phrase                 :wrong-answer
-                                           :phrase-description     "Wrong answer"
-                                           :offset                 19.704,
-                                           :phrase-text            "Ayyy, try again, listen carefully!",
-                                           :phrase-text-translated "Ayy intentalo de nuevo, escucha atentamente!",
-                                           :start                  19.704,
-                                           :type                   "animation-sequence",
-                                           :duration               4.537,
-                                           :audio                  "/raw/audio/l2/a4/L2_A4_Mari.m4a",
-                                           :target                 "mari",
-                                           :track                  1,
-                                           :data                   [{:end 24.138, :anim "talk", :start 19.83}]},
                  :pick-box-1
                                           {:type "sequence-data",
                                            :data
@@ -230,11 +229,14 @@
                                                            :type "sequence-data"}],
                                                    :type "parallel"}
                                                   {:id "renew-current-concept", :type "action"}
-                                                  {:type "remove-flow-tag" :tag "box"}
+                                                  {:tag "box", :type "remove-flow-tag"}
                                                   {:id "voice-high-var", :type "action"}]},
-                 :pick-wrong              {:type "sequence-data", :data [{:id "mari-voice-wrong", :type "action"}
-                                                                         {:type "remove-flow-tag" :tag "box"}
-                                                                         {:id "voice-high-var", :type "action"}]},
+                 :pick-wrong
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:id "mari-voice-wrong", :type "action"}
+                                                  {:tag "box", :type "remove-flow-tag"}
+                                                  {:id "voice-high-var", :type "action"}]},
                  :renew-current-concept
                                           {:type "sequence-data",
                                            :data
@@ -333,11 +335,12 @@
                  :start-background-music  {:type "audio", :id "background", :loop true},
                  :stay-on-line            {:type "empty", :duration 100},
                  :stop-activity           {:type "stop-activity", :id "cycling"},
-                 :voice-high-var          {:type "action",
-                                           :phrase             :chant
-                                           :phrase-description "Chant current word"
-                                           :tags ["instruction"]
-                                           :from-var [{:var-name "current-concept", :var-property "game-voice-action"}]},
+                 :voice-high-var
+                                          {:type               "action",
+                                           :phrase             "chant",
+                                           :phrase-description "Chant current word",
+                                           :from-var           [{:var-name "current-concept", :var-property "game-voice-action"}],
+                                           :tags               ["instruction"]},
                  :wait-for-box-animations {:type "empty", :duration 100}},
  :triggers      {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
  :metadata      {:prev "stadium", :autostart true},

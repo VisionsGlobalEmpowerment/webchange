@@ -468,10 +468,12 @@
                                                   "mari-move-to-start"]},
                  :start-swings            {:type "sequence", :data ["prepare-swing" "swing"], :tags ["swings"]},
                  :stop-activity           {:type "stop-activity", :id "swings"},
-                 :stop-swings             {:type "sequence-data"
-                                           :data [{:type "remove-flows", :flow-tag "swings"}
-                                                  {:type "stop-transition" :id "swings"}
-                                                  {:type "transition", :to {:loop false, :duration 0.5, :rotation 0}, :transition-id "swings"}]},
+                 :stop-swings
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:type "remove-flows", :flow-tag "swings"}
+                                                  {:id "swings", :type "stop-transition"}
+                                                  {:to {:loop false, :duration 0.5, :rotation 0}, :type "transition", :transition-id "swings"}]},
                  :swing                   {:type "sequence", :data ["swing-right" "swing-left" "swing"], :return-immediately true, :tags ["swings"]},
                  :swing-left              {:type "transition", :to {:loop false, :duration 2, :rotation -15}, :transition-id "swings"},
                  :swing-right             {:type "transition", :to {:loop false, :duration 2, :rotation 15}, :transition-id "swings"},

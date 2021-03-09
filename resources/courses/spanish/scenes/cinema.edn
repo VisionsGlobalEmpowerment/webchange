@@ -1,364 +1,373 @@
 {:assets
-           [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
-            {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
-            {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio", :alias "mari voice 1"}
-            {:url "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a", :size 5, :type "audio", :alias "vaca voice 1"}
-            {:url "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", :size 5, :type "audio", :alias "vaca voice 2"}
-            {:url "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", :size 5, :type "audio", :alias "vaca voice 3"}
-            {:url "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", :size 5, :type "audio", :alias "vaca voice 4"}
-            {:url "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", :size 5, :type "audio", :alias "vaca voice 5"}
-            {:url "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", :size 5, :type "audio", :alias "vaca voice 6"}
-            {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio", :alias "vaca voice 7"}],
+                [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
+                 {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio", :alias "mari voice 1"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a", :size 5, :type "audio", :alias "vaca voice 1"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", :size 5, :type "audio", :alias "vaca voice 2"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", :size 5, :type "audio", :alias "vaca voice 3"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", :size 5, :type "audio", :alias "vaca voice 4"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", :size 5, :type "audio", :alias "vaca voice 5"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", :size 5, :type "audio", :alias "vaca voice 6"}
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio", :alias "vaca voice 7"}],
  :objects
-           {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
-            :cards      {:type "propagate",
-                         :x 342,
-                         :y 119,
-                         :width 1238,
-                         :height 668,
-                         :el-width 100,
-                         :el-height 150
-                         :el [{:name "card-{concept-name}"
-                               :data {:type "group",
-                                      :dx 0,
-                                      :dy 0,
-                                      :width 100,
-                                      :height 164,
-                                      :children ["card-{concept-name}-image"
-                                                 "card-{concept-name}-text"],
-                                      :states {:normal  {:dx 0,   :dy 0,   :scale-x 1,   :scale-y 1},
-                                               :pointed {:dx -15, :dy -25, :scale-x 1.3, :scale-y 1.3}}}}
-                              {:name "card-{concept-name}-image"
-                               :add-to-scene-objects false
-                               :data {:type "image",
-                                      :x 0,
-                                      :y 50,
-                                      :width 100,
-                                      :height 100,
-                                      :transition "card-{concept-name}",
-                                      :brightness -0.25,
-                                      :filter "brighten",
-                                      :src "{image-src}"}}
-                              {:name "card-{concept-name}-text"
-                               :add-to-scene-objects false
-                               :data {:type "text",
-                                      :x 50,
-                                      :y 25,
-                                      :align "center",
-                                      :fill "black",
-                                      :font-family "Lexend Deca",
-                                      :font-size 64,
-                                      :text "{letter}",
-                                      :vertical-align "middle"}}]}
-            :mari
-                        {:type "animation",
-                         :x 1613,
-                         :y 785,
-                         :width 473,
-                         :height 511,
-                         :transition "mari",
-                         :anim "idle",
-                         :name "mari",
-                         :scale-x 0.3,
-                         :scale-y 0.3,
-                         :speed 0.35,
-                         :start true},
-            :screen-overlay
-                        {:type "image",
-                         :x 342,
-                         :y 109,
-                         :width 1238,
-                         :height 678,
-                         :src "/raw/img/cinema/screen-off.png",
-                         :visible true
-                         :states {:hidden {:visible false},
-                                  :visible {:visible true}}},
-            :senora-vaca
-                        {:type "animation",
-                         :x 263,
-                         :y 915,
-                         :width 351,
-                         :height 717,
-                         :anim "idle",
-                         :name "senoravaca",
-                         :scale-x 0.5,
-                         :scale-y 0.5,
-                         :skin "vaca",
-                         :speed 0.3,
-                         :start true}},
- :scene-objects
-           [["background"] ["cards" "screen-overlay" "senora-vaca" "mari"]],
+                {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
+                 :cards
+                             {:type      "propagate",
+                              :x         342,
+                              :y         119,
+                              :width     1238,
+                              :height    668,
+                              :el
+                                         [{:data
+                                                 {:dx       0,
+                                                  :dy       0,
+                                                  :type     "group",
+                                                  :width    100,
+                                                  :height   164,
+                                                  :states   {:normal {:dx 0, :dy 0, :scale-x 1, :scale-y 1}, :pointed {:dx -15, :dy -25, :scale-x 1.3, :scale-y 1.3}},
+                                                  :children ["card-{concept-name}-image" "card-{concept-name}-text"]},
+                                           :name "card-{concept-name}"}
+                                          {:data
+                                                                 {:y          50,
+                                                                  :transition "card-{concept-name}",
+                                                                  :width      100,
+                                                                  :type       "image",
+                                                                  :brightness -0.25,
+                                                                  :src        "{image-src}",
+                                                                  :filter     "brighten",
+                                                                  :x          0,
+                                                                  :height     100},
+                                           :name                 "card-{concept-name}-image",
+                                           :add-to-scene-objects false}
+                                          {:data
+                                                                 {:y              25,
+                                                                  :align          "center",
+                                                                  :vertical-align "middle",
+                                                                  :font-size      64,
+                                                                  :fill           "black",
+                                                                  :type           "text",
+                                                                  :x              50,
+                                                                  :font-family    "Lexend Deca",
+                                                                  :text           "{letter}"},
+                                           :name                 "card-{concept-name}-text",
+                                           :add-to-scene-objects false}],
+                              :el-height 150,
+                              :el-width  100},
+                 :mari
+                             {:type       "animation",
+                              :x          1613,
+                              :y          785,
+                              :width      473,
+                              :height     511,
+                              :transition "mari",
+                              :anim       "idle",
+                              :name       "mari",
+                              :scale-x    0.3,
+                              :scale-y    0.3,
+                              :speed      0.35,
+                              :start      true},
+                 :screen-overlay
+                             {:type    "image",
+                              :x       342,
+                              :y       109,
+                              :width   1238,
+                              :height  678,
+                              :src     "/raw/img/cinema/screen-off.png",
+                              :states  {:hidden {:visible false}, :visible {:visible true}},
+                              :visible true},
+                 :senora-vaca
+                             {:type    "animation",
+                              :x       263,
+                              :y       915,
+                              :width   351,
+                              :height  717,
+                              :anim    "idle",
+                              :name    "senoravaca",
+                              :scale-x 0.5,
+                              :scale-y 0.5,
+                              :skin    "vaca",
+                              :speed   0.3,
+                              :start   true}},
+ :scene-objects [["background"] ["cards" "screen-overlay" "senora-vaca" "mari"]],
  :actions
-           {
-            :chant-current-concept
-                               {:type "sequence-data",
-                                :data
-                                [{:id "pointed",
-                                  :type "state",
-                                  :from-var [{:template "card-%", :var-name "current-concept-name", :action-property "target"}]}
-                                 {:id "start-highlight", :type "action", :return-immediately true}
-                                 {:id "move-to-current-card-copy-3", :type "action"}
-                                 {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-word"}]}
-                                 {:id "vaca-voice-chanting-4", :type "action"}
-                                 {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-song"}]}
-                                 {:id "stop-highlight", :type "action"}
-                                 {:id "normal",
-                                  :type "state",
-                                  :from-var [{:template "card-%", :var-name "current-concept-name", :action-property "target"}]}]
-                                :phrase                        :chant-concept,
-                                :phrase-description            "Chant current concept"},
-
-            :check-round
-                               {:type "test-var-scalar",
-                                :var-name "current-round",
-                                :success "finish-chanting",
-                                :fail "go-next-round",
-                                :from-var [{:var-name "rounds-number", :action-property "value"}]},
-            :clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
-            :finish-activity
-                               {:id "cinema", :type "finish-activity"},
-            :finish-chanting
-                               {:type "sequence-data",
-                                :data
-                                      [{:data
-                                              [{:id "vaca-voice-finish", :type "action"}
-                                               {:id "visible", :type "state", :target "screen-overlay"}
-                                               {:to {:x 1613, :y 785, :loop false}, :type "transition", :transition-id "mari"}],
-                                        :type "parallel"}
-                                       {:id "finish-activity", :type "action"}]},
-            :go-next-round
-                               {:type "sequence-data",
-                                :data
-                                      [{:type "counter", :counter-id "current-round", :counter-action "increase"}
-                                       {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name []}}
-                                       {:id "vaca-voice-one-more-round", :type "action"}
-                                       {:id "renew-current-concept", :type "action"}]},
-            :init-vaca-voice-next
-                               {:type "parallel",
-                                :data
-                                      [{:type "set-variable", :var-name "vaca-voice-next-picture-1", :var-value "vaca-voice-next-picture-1"}
-                                       {:type "set-variable", :var-name "vaca-voice-next-picture-2", :var-value "vaca-voice-next-picture-2"}
-                                       {:type "set-variable", :var-name "vaca-voice-next-picture-3", :var-value "vaca-voice-next-picture-3"}
-                                       {:type "set-variable", :var-name "vaca-voice-next-picture-4", :var-value "vaca-voice-next-picture-4"}]},
-            :init-vars
-                               {:type "parallel",
-                                :data
-                                      [{:type "set-variable", :var-name "current-round", :var-value 1}
-                                       {:type "set-variable", :var-name "rounds-number", :var-value 2}
-                                       {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name []}}]},
-            :mari-init-wand          {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true}
-            :intro
-                               {:type "sequence-data",
-                                :phrase                        :intro
-                                :phrase-description            "Start Activity",
-                                :data
-                                [{:id "hidden", :type "state", :target "screen-overlay"}
-                                 {:audio "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a",
-                                  :start 0.593,
-                                  :duration 20.321,
-                                  :type "animation-sequence",
-                                  :track 1,
-                                  :offset 0.593,
-                                  :target "senoravaca",
-                                  :data
-                                  [{:end 2.017, :anim "talk", :start 0.763}
-                                   {:end 4.335, :anim "talk", :start 2.672}
-                                   {:end 8.642, :anim "talk", :start 5.098}
-                                   {:end 16.058, :anim "talk", :start 9.406}
-                                   {:end 20.502, :anim "talk", :start 17.067}]
-                                  :phrase-text "Hello everyone! Are you ready to practice letter sounds? Look at all these words you already know! Let’s review the sound at the beginning of each word. Mari, can you fly around and point to each picture and letter?"
-                                  :phrase-text-translated "Buenos dias! Hoy es tiempo de aprender. Mira todas las palabras que ya conoces. Vamos empezar esta actividad por repasar los sonidos de las palabras. Mari, puedes volar y senalar cada imagen y letra?"
-                                  }
-                                 {:type "animation-sequence",
-                                  :audio "/raw/audio/l2/a1/L2_A1_Mari.m4a",
-                                  :start 0.793,
-                                  :duration 2.379,
-                                  :track 1,
-                                  :offset 0.793,
-                                  :target "mari",
-                                  :data [{:end 3.173, :anim "talk", :start 0.793}]
-                                  :phrase-text "Sure thing, Senora Vaca!"
-                                  :phrase-text-translated "Claro que si, Senora Vaca!"}
-                                 {:type "action" :id "mari-init-wand"}
-                                 {:to {:x 1290, :y 580, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
-                                 {:type "animation-sequence",
-                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                  :start 0.954,
-                                  :duration 17.236,
-                                  :track 1,
-                                  :offset 0.954,
-                                  :target "senoravaca",
-                                  :data
-                                  [{:end 4.98, :anim "talk", :start 1.252}
-                                   {:end 6.59, :anim "talk", :start 5.636}
-                                   {:end 10.288, :anim "talk", :start 7.127}
-                                   {:end 12.644, :anim "talk", :start 10.944}
-                                   {:end 13.747, :anim "talk", :start 12.882}
-                                   {:end 15.924, :anim "talk", :start 14.612}
-                                   {:end 18.071, :anim "talk", :start 16.699}],
-                                  :phrase-text "Listen to the sounds at the beginning of each word.  For example, When we say the word “Ant”, we hear an “aaaaa” sound.  “Aa- Aaant. Aa - Aant."
-                                  :phrase-text-translated "Escucha los sonidos al principio de cada palabra. Por ejemplo, cuando decimos la palabra “ardilla,” escuchamos el sonido “aaaaaa”. “Aaaardilla. Aaaardilla.”"}
-                                 ],
-                                :description "Initial action"},
-            :move-to-current-card-copy-3
-                               {:type "sequence-data"
-                                :data [{:type "transition",
-                                        :from-var-object
-                                        [{:offset 210,
-                                          :var-name "current-concept-name",
-                                          :action-property "to.x",
-                                          :object-property "x",
-                                          :object-name-template "card-%"}
-                                         {:offset 120,
-                                          :var-name "current-concept-name",
-                                          :action-property "to.y",
-                                          :object-property "y",
-                                          :object-name-template "card-%"}],
-                                        :to {:loop false, :duration 2},
-                                        :transition-id "mari"}
-                                       {:id "wand_hit", :type "animation", :track 2, :target "mari"}
-                                       {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}]},
-            :renew-current-concept
-                               {:type "sequence-data",
-                                :data
-                                      [{:from "concepts-all",
-                                        :type "lesson-var-provider",
-                                        :on-end "check-round",
-                                        :from-var
-                                        [{:template "concept-round-%", :var-name "current-round", :action-property "provider-id"}
-                                         {:var-name "exclude-concepts", :action-property "exclude-property-values"}],
-                                        :shuffled true,
-                                        :variables ["current-concept"]}
-                                       {:type "set-variable",
-                                        :from-var [{:var-name "current-concept", :var-property "concept-name", :action-property "var-value"}],
-                                        :var-name "current-concept-name"}
-                                       {:type "parallel"
-                                        :data [{:id "vaca-voice-next", :type "action"}
-                                               {:id "chant-current-concept", :type "action"}]}
-                                       {:id "renew-current-concept", :type "action"}]},
-            :start-scene
-                               {:type "sequence",
-                                :data ["start-activity" "propagate-objects" "clear-instruction" "init-vaca-voice-next" "init-vars" "intro" "renew-current-concept"],
-                                :description "Initial action"},
-            :start-activity {:type "start-activity", :id "cinema"},
-            :propagate-objects {:type "propagate-objects" :id "cards" :from "concepts-all"}
-            :start-highlight
-                               {:type "transition",
-                                :from-var
-                                      [{:template "card-%-filter", :var-name "current-concept-name", :action-property "transition-id"}
-                                       {:template "card-%-filter", :var-name "current-concept-name", :action-property "transition-tag"}],
-                                :from {:brightness -0.25},
-                                :to {:yoyo true, :easing "strong-ease-in", :duration 1, :brightness 0.25}},
-            :stop-activity {:type "stop-activity", :id "cinema"},
-            :stop-highlight
-                               {:type "stop-transition", :from-var [{:template "card-%-filter", :var-name "current-concept-name", :action-property "id"}]},
-
-            :vaca-voice-chanting-4
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                :start 59.566,
-                                :duration 1.261,
-                                :track 1,
-                                :offset 59.566,
-                                :target "senoravaca",
-                                :data [{:end 60.742, :anim "talk", :start 59.66}],
-                                :phrase-text "Let’s sing it"
-                                :phrase-text-translated "Vamos a cantarlo"},
-            :vaca-voice-finish
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
-                                :start 0.897,
-                                :duration 8.719,
-                                :track 1,
-                                :offset 0.897,
-                                :target "senoravaca"
-                                :data
-                                [{:end 2.915, :anim "talk", :start 1.158}
-                                 {:end 6.191, :anim "talk", :start 3.4}
-                                 {:end 8.968, :anim "talk", :start 6.926}],
-                                :phrase :finish-activity
-                                :phrase-description "Finish activity"
-                                :phrase-text "Woohoo! Did you sing all the letters nice and loud? I’m impressed!"
-                                :phrase-text-translated "Wiiiiiiii! Lo cantaste conmigo asi de fuerte? Estoy impresionada!"},
-            :vaca-voice-next
-                               {:type "sequence",
-                                :data ["vaca-voice-next-1" "vaca-voice-next-2"]
-                                :phrase :next-photo
-                                :phrase-description "Next photo"},
-            :vaca-voice-next-1
-                               {:from ["vaca-voice-next-picture-1" "vaca-voice-next-picture-2" "vaca-voice-next-picture-3" "vaca-voice-next-picture-4"],
-                                :type "vars-var-provider",
-                                :shuffled true,
-                                :variables ["current-vaca-voice-next"]}
-            :vaca-voice-next-2
-                               {:type "action",
-                                :from-var [{:var-name "current-vaca-voice-next", :action-property "id"
-                                            :possible-values ["vaca-voice-next-picture-1"
-                                                              "vaca-voice-next-picture-2"
-                                                              "vaca-voice-next-picture-3"
-                                                              "vaca-voice-next-picture-4"]}]}
-            :vaca-voice-next-picture-1
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                :start 38.932,
-                                :duration 2.56
-                                :track 1,
-                                :offset 38.932,
-                                :target "senoravaca",
-                                :data [{:end 41.182, :anim "talk", :start 39.303}],
-                                :phrase-text "What’s the next picture?",
-                                :phrase-text-translated "Cual es la siguiente foto?"},
-            :vaca-voice-next-picture-2
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                :start 65.604,
-                                :duration 2.505,
-                                :track 1,
-                                :offset 65.604,
-                                :target "senoravaca",
-                                :data [{:end 66.409, :anim "talk", :start 65.664} {:end 68.05, :anim "talk", :start 66.708}],
-                                :phrase-text "And now the next picture!",
-                                :phrase-text-translated "Y ahora la proxima foto!"},
-            :vaca-voice-next-picture-3
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                :start 73.805,
-                                :duration 1.324,
-                                :track 1,
-                                :offset 73.805,
-                                :target "senoravaca",
-                                :data [{:end 74.878, :anim "talk", :start 73.984}],
-                                :phrase-text "What’s next?!",
-                                :phrase-text-translated "Que sigue?!"},
-            :vaca-voice-next-picture-4
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-                                :start 0.907,
-                                :duration 1.36,
-                                :track 1,
-                                :offset 0.907,
-                                :target "senoravaca",
-                                :data [{:end 2.189, :anim "talk", :start 0.97}],
-                                :phrase-text "Keep going!",
-                                :phrase-text-translated "Sigue! Sigue!"},
-            :vaca-voice-one-more-round
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-                                :start 15.147,
-                                :duration 13.047,
-                                :track 1,
-                                :offset 15.147,
-                                :target "senoravaca",
-                                :data
-                                [{:end 18.641, :anim "talk", :start 15.221}
-                                 {:end 25.908, :anim "talk", :start 19.087}
-                                 {:end 28.027, :anim "talk", :start 26.428}],
-                                :phrase :one-more-round
-                                :phrase-description "One more round"
-                                :phrase-text
-                                "Fantastic!! You are so good! Do you think we can do all those pictures and sounds one more time?  Let’s do it!"
-                                :phrase-text-translated
-                                "Fantastico!! Lo estas haciendo muy bien! Crees que podremos hacer todas estas fotos y los sonidos una vez mas? Vamos a hacerlo!"}
-            },
- :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata {:prev "map", :autostart true}}
+                {:chant-current-concept
+                                    {:type               "sequence-data",
+                                     :data
+                                                         [{:id       "pointed",
+                                                           :type     "state",
+                                                           :from-var [{:template "card-%", :var-name "current-concept-name", :action-property "target"}]}
+                                                          {:id "start-highlight", :type "action", :return-immediately true}
+                                                          {:id "move-to-current-card-copy-3", :type "action"}
+                                                          {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-word"}]}
+                                                          {:id "vaca-voice-chanting-4", :type "action"}
+                                                          {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-song"}]}
+                                                          {:id "stop-highlight", :type "action"}
+                                                          {:id       "normal",
+                                                           :type     "state",
+                                                           :from-var [{:template "card-%", :var-name "current-concept-name", :action-property "target"}]}],
+                                     :phrase             "chant-concept",
+                                     :phrase-description "Chant current concept"},
+                 :check-round
+                                    {:type     "test-var-scalar",
+                                     :var-name "current-round",
+                                     :success  "finish-chanting",
+                                     :fail     "go-next-round",
+                                     :from-var [{:var-name "rounds-number", :action-property "value"}]},
+                 :clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
+                 :finish-activity   {:type "finish-activity", :id "cinema"},
+                 :finish-chanting
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:data
+                                                   [{:id "vaca-voice-finish", :type "action"}
+                                                    {:id "visible", :type "state", :target "screen-overlay"}
+                                                    {:to {:x 1613, :y 785, :loop false}, :type "transition", :transition-id "mari"}],
+                                             :type "parallel"}
+                                            {:id "finish-activity", :type "action"}]},
+                 :go-next-round
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:type "counter", :counter-id "current-round", :counter-action "increase"}
+                                            {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name []}}
+                                            {:id "vaca-voice-one-more-round", :type "action"}
+                                            {:id "renew-current-concept", :type "action"}]},
+                 :init-vaca-voice-next
+                                    {:type "parallel",
+                                     :data
+                                           [{:type "set-variable", :var-name "vaca-voice-next-picture-1", :var-value "vaca-voice-next-picture-1"}
+                                            {:type "set-variable", :var-name "vaca-voice-next-picture-2", :var-value "vaca-voice-next-picture-2"}
+                                            {:type "set-variable", :var-name "vaca-voice-next-picture-3", :var-value "vaca-voice-next-picture-3"}
+                                            {:type "set-variable", :var-name "vaca-voice-next-picture-4", :var-value "vaca-voice-next-picture-4"}]},
+                 :init-vars
+                                    {:type "parallel",
+                                     :data
+                                           [{:type "set-variable", :var-name "current-round", :var-value 1}
+                                            {:type "set-variable", :var-name "rounds-number", :var-value 2}
+                                            {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name []}}]},
+                 :intro
+                                    {:type               "sequence-data",
+                                     :data
+                                                         [{:id "hidden", :type "state", :target "screen-overlay"}
+                                                          {:offset   0.593,
+                                                           :phrase-text
+                                                                     "Hello everyone! Are you ready to practice letter sounds? Look at all these words you already know! Let’s review the sound at the beginning of each word. Mari, can you fly around and point to each picture and letter?",
+                                                           :start    0.593,
+                                                           :type     "animation-sequence",
+                                                           :duration 20.321,
+                                                           :audio    "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a",
+                                                           :target   "senoravaca",
+                                                           :phrase-text-translated
+                                                                     "Buenos dias! Hoy es tiempo de aprender. Mira todas las palabras que ya conoces. Vamos empezar esta actividad por repasar los sonidos de las palabras. Mari, puedes volar y senalar cada imagen y letra?",
+                                                           :track    1,
+                                                           :data
+                                                                     [{:end 2.017, :anim "talk", :start 0.763}
+                                                                      {:end 4.335, :anim "talk", :start 2.672}
+                                                                      {:end 8.642, :anim "talk", :start 5.098}
+                                                                      {:end 16.058, :anim "talk", :start 9.406}
+                                                                      {:end 20.502, :anim "talk", :start 17.067}]}
+                                                          {:offset                 0.793,
+                                                           :phrase-text            "Sure thing, Senora Vaca!",
+                                                           :start                  0.793,
+                                                           :type                   "animation-sequence",
+                                                           :duration               2.379,
+                                                           :audio                  "/raw/audio/l2/a1/L2_A1_Mari.m4a",
+                                                           :target                 "mari",
+                                                           :phrase-text-translated "Claro que si, Senora Vaca!",
+                                                           :track                  1,
+                                                           :data                   [{:end 3.173, :anim "talk", :start 0.793}]}
+                                                          {:id "mari-init-wand", :type "action"}
+                                                          {:to {:x 1290, :y 580, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+                                                          {:offset   0.954,
+                                                           :phrase-text
+                                                                     "Listen to the sounds at the beginning of each word.  For example, When we say the word “Ant”, we hear an “aaaaa” sound.  “Aa- Aaant. Aa - Aant.",
+                                                           :start    0.954,
+                                                           :type     "animation-sequence",
+                                                           :duration 17.236,
+                                                           :audio    "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                                           :target   "senoravaca",
+                                                           :phrase-text-translated
+                                                                     "Escucha los sonidos al principio de cada palabra. Por ejemplo, cuando decimos la palabra “ardilla,” escuchamos el sonido “aaaaaa”. “Aaaardilla. Aaaardilla.”",
+                                                           :track    1,
+                                                           :data
+                                                                     [{:end 4.98, :anim "talk", :start 1.252}
+                                                                      {:end 6.59, :anim "talk", :start 5.636}
+                                                                      {:end 10.288, :anim "talk", :start 7.127}
+                                                                      {:end 12.644, :anim "talk", :start 10.944}
+                                                                      {:end 13.747, :anim "talk", :start 12.882}
+                                                                      {:end 15.924, :anim "talk", :start 14.612}
+                                                                      {:end 18.071, :anim "talk", :start 16.699}]}],
+                                     :phrase             "intro",
+                                     :phrase-description "Start Activity",
+                                     :description        "Initial action"},
+                 :mari-init-wand    {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
+                 :move-to-current-card-copy-3
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:to            {:loop false, :duration 2},
+                                             :type          "transition",
+                                             :transition-id "mari",
+                                             :from-var-object
+                                                            [{:offset               210,
+                                                              :var-name             "current-concept-name",
+                                                              :action-property      "to.x",
+                                                              :object-property      "x",
+                                                              :object-name-template "card-%"}
+                                                             {:offset               120,
+                                                              :var-name             "current-concept-name",
+                                                              :action-property      "to.y",
+                                                              :object-property      "y",
+                                                              :object-name-template "card-%"}]}
+                                            {:id "wand_hit", :type "animation", :track 2, :target "mari"}
+                                            {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}]},
+                 :propagate-objects {:type "propagate-objects", :id "cards", :from "concepts-all"},
+                 :renew-current-concept
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:from      "concepts-all",
+                                             :type      "lesson-var-provider",
+                                             :on-end    "check-round",
+                                             :from-var
+                                                        [{:template "concept-round-%", :var-name "current-round", :action-property "provider-id"}
+                                                         {:var-name "exclude-concepts", :action-property "exclude-property-values"}],
+                                             :shuffled  true,
+                                             :variables ["current-concept"]}
+                                            {:type     "set-variable",
+                                             :from-var [{:var-name "current-concept", :var-property "concept-name", :action-property "var-value"}],
+                                             :var-name "current-concept-name"}
+                                            {:data [{:id "vaca-voice-next", :type "action"} {:id "chant-current-concept", :type "action"}], :type "parallel"}
+                                            {:id "renew-current-concept", :type "action"}]},
+                 :start-activity    {:type "start-activity", :id "cinema"},
+                 :start-highlight
+                                    {:type "transition",
+                                     :from-var
+                                           [{:template "card-%-filter", :var-name "current-concept-name", :action-property "transition-id"}
+                                            {:template "card-%-filter", :var-name "current-concept-name", :action-property "transition-tag"}],
+                                     :from {:brightness -0.25},
+                                     :to   {:yoyo true, :easing "strong-ease-in", :duration 1, :brightness 0.25}},
+                 :start-scene
+                                    {:type        "sequence",
+                                     :data
+                                                  ["start-activity"
+                                                   "propagate-objects"
+                                                   "clear-instruction"
+                                                   "init-vaca-voice-next"
+                                                   "init-vars"
+                                                   "intro"
+                                                   "renew-current-concept"],
+                                     :description "Initial action"},
+                 :stop-activity     {:type "stop-activity", :id "cinema"},
+                 :stop-highlight
+                                    {:type     "stop-transition",
+                                     :from-var [{:template "card-%-filter", :var-name "current-concept-name", :action-property "id"}]},
+                 :vaca-voice-chanting-4
+                                    {:type                   "animation-sequence",
+                                     :data                   [{:end 60.742, :anim "talk", :start 59.66}],
+                                     :phrase-text            "Let’s sing it",
+                                     :phrase-text-translated "Vamos a cantarlo",
+                                     :target                 "senoravaca",
+                                     :audio                  "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                     :start                  59.566,
+                                     :duration               1.261,
+                                     :track                  1,
+                                     :offset                 59.566},
+                 :vaca-voice-finish
+                                    {:type                   "animation-sequence",
+                                     :data
+                                                             [{:end 2.915, :anim "talk", :start 1.158}
+                                                              {:end 6.191, :anim "talk", :start 3.4}
+                                                              {:end 8.968, :anim "talk", :start 6.926}],
+                                     :phrase                 "finish-activity",
+                                     :phrase-description     "Finish activity",
+                                     :phrase-text            "Woohoo! Did you sing all the letters nice and loud? I’m impressed!",
+                                     :phrase-text-translated "Wiiiiiiii! Lo cantaste conmigo asi de fuerte? Estoy impresionada!",
+                                     :target                 "senoravaca",
+                                     :audio                  "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+                                     :start                  0.897,
+                                     :duration               8.719,
+                                     :track                  1,
+                                     :offset                 0.897},
+                 :vaca-voice-next
+                                    {:type               "sequence",
+                                     :data               ["vaca-voice-next-1" "vaca-voice-next-2"],
+                                     :phrase             "next-photo",
+                                     :phrase-description "Next photo"},
+                 :vaca-voice-next-1
+                                    {:type      "vars-var-provider",
+                                     :from
+                                                ["vaca-voice-next-picture-1" "vaca-voice-next-picture-2" "vaca-voice-next-picture-3" "vaca-voice-next-picture-4"],
+                                     :shuffled  true,
+                                     :variables ["current-vaca-voice-next"]},
+                 :vaca-voice-next-2
+                                    {:type "action",
+                                     :from-var
+                                           [{:var-name        "current-vaca-voice-next",
+                                             :action-property "id",
+                                             :possible-values
+                                                              ["vaca-voice-next-picture-1"
+                                                               "vaca-voice-next-picture-2"
+                                                               "vaca-voice-next-picture-3"
+                                                               "vaca-voice-next-picture-4"]}]},
+                 :vaca-voice-next-picture-1
+                                    {:type                   "animation-sequence",
+                                     :data                   [{:end 41.182, :anim "talk", :start 39.303}],
+                                     :phrase-text            "What’s the next picture?",
+                                     :phrase-text-translated "Cual es la siguiente foto?",
+                                     :target                 "senoravaca",
+                                     :audio                  "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                     :start                  38.932,
+                                     :duration               2.56,
+                                     :track                  1,
+                                     :offset                 38.932},
+                 :vaca-voice-next-picture-2
+                                    {:type                   "animation-sequence",
+                                     :data                   [{:end 66.409, :anim "talk", :start 65.664} {:end 68.05, :anim "talk", :start 66.708}],
+                                     :phrase-text            "And now the next picture!",
+                                     :phrase-text-translated "Y ahora la proxima foto!",
+                                     :target                 "senoravaca",
+                                     :audio                  "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                     :start                  65.604,
+                                     :duration               2.505,
+                                     :track                  1,
+                                     :offset                 65.604},
+                 :vaca-voice-next-picture-3
+                                    {:type                   "animation-sequence",
+                                     :data                   [{:end 74.878, :anim "talk", :start 73.984}],
+                                     :phrase-text            "What’s next?!",
+                                     :phrase-text-translated "Que sigue?!",
+                                     :target                 "senoravaca",
+                                     :audio                  "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                     :start                  73.805,
+                                     :duration               1.324,
+                                     :track                  1,
+                                     :offset                 73.805},
+                 :vaca-voice-next-picture-4
+                                    {:type                   "animation-sequence",
+                                     :data                   [{:end 2.189, :anim "talk", :start 0.97}],
+                                     :phrase-text            "Keep going!",
+                                     :phrase-text-translated "Sigue! Sigue!",
+                                     :target                 "senoravaca",
+                                     :audio                  "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+                                     :start                  0.907,
+                                     :duration               1.36,
+                                     :track                  1,
+                                     :offset                 0.907},
+                 :vaca-voice-one-more-round
+                                    {:type               "animation-sequence",
+                                     :data
+                                                         [{:end 18.641, :anim "talk", :start 15.221}
+                                                          {:end 25.908, :anim "talk", :start 19.087}
+                                                          {:end 28.027, :anim "talk", :start 26.428}],
+                                     :phrase             "one-more-round",
+                                     :phrase-description "One more round",
+                                     :phrase-text
+                                                         "Fantastic!! You are so good! Do you think we can do all those pictures and sounds one more time?  Let’s do it!",
+                                     :phrase-text-translated
+                                                         "Fantastico!! Lo estas haciendo muy bien! Crees que podremos hacer todas estas fotos y los sonidos una vez mas? Vamos a hacerlo!",
+                                     :target             "senoravaca",
+                                     :audio              "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+                                     :start              15.147,
+                                     :duration           13.047,
+                                     :track              1,
+                                     :offset             15.147}},
+ :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :metadata      {:prev "map", :autostart true}}

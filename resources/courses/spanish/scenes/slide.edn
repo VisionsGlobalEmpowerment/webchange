@@ -2,7 +2,7 @@
                 [{:url "/raw/img/park/slide/background2.jpg", :type "image"}
                  {:url "/raw/img/park/slide/slide.png", :type "image"}
                  {:url "/raw/img/park/slide/side.png", :type "image"}
-                 {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}
+                 {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio", :alias "statements"}
                  {:url "/raw/audio/l2/a5/L2_A5_Mari.m4a", :type "audio"}
                  {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio", :alias "mari chants"}
                  {:url "/raw/audio/l2/a5/riddles/ardilla.mp3", :type "audio", :alias "ardilla"}
@@ -47,7 +47,7 @@
                               :scale      {:x 0.25, :y 0.25},
                               :scene-name "box1",
                               :transition "box1",
-                              :actions    {:click {:id "pick-box-1", :on "click", :type "action" :unique-tag "clickable"}},
+                              :actions    {:click {:id "pick-box-1", :on "click", :type "action", :unique-tag "clickable"}},
                               :anim       "idle2",
                               :loop       true,
                               :name       "boxes",
@@ -64,7 +64,7 @@
                               :scale      {:x 0.25, :y 0.25},
                               :scene-name "box2",
                               :transition "box2",
-                              :actions    {:click {:id "pick-box-2", :on "click", :type "action" :unique-tag "clickable"}},
+                              :actions    {:click {:id "pick-box-2", :on "click", :type "action", :unique-tag "clickable"}},
                               :anim       "idle2",
                               :loop       true,
                               :name       "boxes",
@@ -81,7 +81,7 @@
                               :scale      {:x 0.25, :y 0.25},
                               :scene-name "box3",
                               :transition "box3",
-                              :actions    {:click {:id "pick-box-3", :on "click", :type "action" :unique-tag "clickable"}},
+                              :actions    {:click {:id "pick-box-3", :on "click", :type "action", :unique-tag "clickable"}},
                               :anim       "idle2",
                               :loop       true,
                               :name       "boxes",
@@ -108,120 +108,126 @@
  :actions
                 {:clear-instruction {:type "remove-flows", :flow-tag "instruction"},
                  :finish-activity
-                                    {:type "sequence-data"
-                                     :data [{:type                   "animation-sequence",
-                                             :target                 "mari",
-                                             :track                  1,
-                                             :offset                 4.697,
-                                             :audio                  "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:offset                 4.697,
+                                             :phrase-text            "Good job!",
                                              :start                  4.697,
+                                             :type                   "animation-sequence",
                                              :duration               1.358,
-                                             :data                   [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}],
-                                             :phrase                 :finish,
                                              :phrase-description     "Finish Good job",
-                                             :phrase-text            "Good job!"
-                                             :phrase-text-translated "Buen trabajo!"}
+                                             :phrase                 "finish",
+                                             :audio                  "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                             :target                 "mari",
+                                             :phrase-text-translated "Buen trabajo!",
+                                             :track                  1,
+                                             :data                   [{:end 5.926, :anim "talk", :start 4.867, :duration 1.059}]}
                                             {:id "slide", :type "finish-activity"}]},
                  :mari-voice-correct
-                                    {:offset                 34.714,
-                                     :phrase                 :correct-answer
-                                     :phrase-description     "Correct answer"
-                                     :phrase-text            "That’s correct. You got it! Wheeeee!"
+                                    {:type                   "animation-sequence",
+                                     :data                   [{:end 38.088, :anim "talk", :start 35.19} {:end 39.504, :anim "talk", :start 38.508}],
+                                     :phrase                 "correct-answer",
+                                     :phrase-description     "Correct answer",
+                                     :phrase-text            "That’s correct. You got it! Wheeeee!",
                                      :phrase-text-translated "Eso es correcto. Ya lo tienes! Wiiii!",
-                                     :start                  34.714,
-                                     :type                   "animation-sequence",
-                                     :duration               5.089,
-                                     :audio                  "mari",
                                      :target                 "mari",
+                                     :audio                  "mari",
+                                     :start                  34.714,
+                                     :duration               5.089,
                                      :track                  1,
-                                     :data                   [{:end 38.088, :anim "talk", :start 35.19} {:end 39.504, :anim "talk", :start 38.508}]},
+                                     :offset                 34.714},
                  :mari-voice-try-another
-                                    {:phrase                 :try-another
-                                     :phrase-description     "Try another riddle"
-                                     :type                   "animation-sequence",
+                                    {:type                   "animation-sequence",
                                      :data                   [{:end 46.506, :anim "talk", :start 43.409, :duration 3.097}],
+                                     :phrase                 "try-another",
+                                     :phrase-description     "Try another riddle",
+                                     :phrase-text            "Let’s try another riddle.",
+                                     :phrase-text-translated "Vamos a intentar otra adivinanza.",
                                      :target                 "mari",
                                      :audio                  "/raw/audio/l2/a5/L2_A5_Mari.m4a",
                                      :start                  43.188,
                                      :duration               3.589,
                                      :track                  1,
-                                     :offset                 43.188,
-                                     :phrase-text            "Let’s try another riddle."
-                                     :phrase-text-translated "Vamos a intentar otra adivinanza."},
+                                     :offset                 43.188},
                  :mari-voice-welcome
-                                    {:phrase             :welcome
-                                     :phrase-description "Welcome"
-                                     :type               "animation-sequence",
+                                    {:type               "animation-sequence",
                                      :data
                                                          [{:end 3.872, :anim "talk", :start 1.704, :duration 2.168}
                                                           {:end 8.275, :anim "talk", :start 4.735, :duration 3.54}
                                                           {:end 15.62, :anim "talk", :start 9.248, :duration 6.372}
                                                           {:end 20.089, :anim "talk", :start 16.505, :duration 3.584}
                                                           {:end 23.342, :anim "talk", :start 21.151, :duration 2.191}],
-                                     :skippable true
+                                     :phrase             "welcome",
+                                     :phrase-description "Welcome",
+                                     :phrase-text
+                                                         "How are you doing little genius? Are you ready for a fun slide activity?  First, we are going to listen carefully to a riddle.  Then touch the picture that correctly answers the riddle! Ready to begin? Click on the slide.",
+                                     :phrase-text-translated
+                                                         "Como estas pequeno genio? Estas listo para seguir con tu proxima actividad? Primero, vamos a empezar por escuchar atentamente la adivinanza. Despues, toca la foto para contestarla! Estas listo para empezar?",
                                      :target             "mari",
                                      :audio              "/raw/audio/l2/a5/L2_A5_Mari.m4a",
                                      :start              0.974,
                                      :duration           22.612,
                                      :track              1,
                                      :offset             0.974,
-                                     :phrase-text
-                                                         "How are you doing little genius? Are you ready for a fun slide activity?  First, we are going to listen carefully to a riddle.  Then touch the picture that correctly answers the riddle! Ready to begin? Click on the slide."
-                                     :phrase-text-translated
-                                                         "Como estas pequeno genio? Estas listo para seguir con tu proxima actividad? Primero, vamos a empezar por escuchar atentamente la adivinanza. Despues, toca la foto para contestarla! Estas listo para empezar?"},
+                                     :skippable          true},
                  :mari-voice-wrong
-                                    {:phrase                 :wrong-answer
-                                     :phrase-description     "Wrong answer"
-                                     :offset                 29.581,
-                                     :phrase-text            "No, try again."
+                                    {:type                   "animation-sequence",
+                                     :data                   [{:end 30.621, :anim "talk", :start 29.802} {:end 32.457, :anim "talk", :start 31.019}],
+                                     :phrase                 "wrong-answer",
+                                     :phrase-description     "Wrong answer",
+                                     :phrase-text            "No, try again.",
                                      :phrase-text-translated "No, intenta de nuevo.",
-                                     :start                  29.581,
-                                     :type                   "animation-sequence",
-                                     :duration               3.12,
-                                     :audio                  "mari",
                                      :target                 "mari",
+                                     :audio                  "mari",
+                                     :start                  29.581,
+                                     :duration               3.12,
                                      :track                  1,
-                                     :data                   [{:end 30.621, :anim "talk", :start 29.802} {:end 32.457, :anim "talk", :start 31.019}]},
+                                     :offset                 29.581},
                  :pick-box-1
-                                    {:type "sequence-data"
-                                     :data [{:type "copy-variable" :var-name "selected-concept" :from "box1"}
-                                            {:id "clear-instruction" :type "action"}
-                                            {:type "action" :id "say-selected-concept"}
-                                            {:id "clear-instruction" :type "action"}
-                                            {:fail     "pick-wrong",
-                                             :type     "test-value",
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:from "box1", :type "copy-variable", :var-name "selected-concept"}
+                                            {:id "clear-instruction", :type "action"}
+                                            {:id "say-selected-concept", :type "action"}
+                                            {:id "clear-instruction", :type "action"}
+                                            {:fail "pick-wrong",
+                                             :type "test-value",
                                              :success
-                                                       {:data [{:type "set-variable", :var-name "current-target", :var-value "box1"} {:id "pick-correct", :type "action"}],
-                                                        :type "sequence-data"},
-                                             :from-var [{:var-name "box1", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]}
+                                                   {:data
+                                                          [{:type "set-variable", :var-name "current-target", :var-value "box1"} {:id "pick-correct", :type "action"}],
+                                                    :type "sequence-data"},
+                                             :from-var
+                                                   [{:var-name "box1", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]},
                  :pick-box-2
-                                    {:type "sequence-data"
-                                     :data [{:type "copy-variable" :var-name "selected-concept" :from "box2"}
-                                            {:id "clear-instruction" :type "action"}
-                                            {:type "action" :id "say-selected-concept"}
-                                            {:id "clear-instruction" :type "action"}
-                                            {:fail     "pick-wrong",
-                                             :type     "test-value",
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:from "box2", :type "copy-variable", :var-name "selected-concept"}
+                                            {:id "clear-instruction", :type "action"}
+                                            {:id "say-selected-concept", :type "action"}
+                                            {:id "clear-instruction", :type "action"}
+                                            {:fail "pick-wrong",
+                                             :type "test-value",
                                              :success
-                                                       {:data [{:type "set-variable", :var-name "current-target", :var-value "box2"} {:id "pick-correct", :type "action"}],
-                                                        :type "sequence-data"},
-                                             :from-var [{:var-name "box2", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]}
+                                                   {:data
+                                                          [{:type "set-variable", :var-name "current-target", :var-value "box2"} {:id "pick-correct", :type "action"}],
+                                                    :type "sequence-data"},
+                                             :from-var
+                                                   [{:var-name "box2", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]},
                  :pick-box-3
-                                    {:type "sequence-data"
-                                     :data [{:type "copy-variable" :var-name "selected-concept" :from "box3"}
-                                            {:id "clear-instruction" :type "action"}
-                                            {:type "action" :id "say-selected-concept"}
-                                            {:id "clear-instruction" :type "action"}
-                                            {:fail     "pick-wrong",
-                                             :type     "test-value",
+                                    {:type "sequence-data",
+                                     :data
+                                           [{:from "box3", :type "copy-variable", :var-name "selected-concept"}
+                                            {:id "clear-instruction", :type "action"}
+                                            {:id "say-selected-concept", :type "action"}
+                                            {:id "clear-instruction", :type "action"}
+                                            {:fail "pick-wrong",
+                                             :type "test-value",
                                              :success
-                                                       {:data [{:type "set-variable", :var-name "current-target", :var-value "box3"} {:id "pick-correct", :type "action"}],
-                                                        :type "sequence-data"},
-                                             :from-var [{:var-name "box3", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]}
-                 :say-selected-concept
-                                    {:phrase             :concept-name,
-                                     :phrase-description "Content name",
-                                     :type               "action", :from-var [{:var-name "selected-concept", :var-property "mari-word"}]}
+                                                   {:data
+                                                          [{:type "set-variable", :var-name "current-target", :var-value "box3"} {:id "pick-correct", :type "action"}],
+                                                    :type "sequence-data"},
+                                             :from-var
+                                                   [{:var-name "box3", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]},
                  :pick-correct
                                     {:type "sequence-data",
                                      :data
@@ -235,8 +241,8 @@
                                      :data
                                            [{:id "mari-voice-wrong", :type "action"}
                                             {:type "empty", :duration 1000}
-                                            {:type "remove-flow-tag" :tag "clickable"}
-                                            {:id "riddle" :type "action"}]},
+                                            {:tag "clickable", :type "remove-flow-tag"}
+                                            {:id "riddle", :type "action"}]},
                  :renew-current-concept
                                     {:type "sequence-data",
                                      :data
@@ -277,14 +283,8 @@
                                                      :slot-name  "box1",
                                                      :attachment {:x 40, :scale-x 4, :scale-y 4}}],
                                              :type "sequence-data"}
-                                            {:type "remove-flow-tag" :tag "clickable"}
-                                            {:id "riddle" :type "action"}]},
-                 :riddle
-                                    {:phrase             :riddle,
-                                     :phrase-description "Riddle",
-                                     :tags               ["instruction"]
-                                     :type               "action",
-                                     :from-var           [{:var-name "current-concept", :var-property "riddle"}]}
+                                            {:tag "clickable", :type "remove-flow-tag"}
+                                            {:id "riddle", :type "action"}]},
                  :renew-words
                                     {:type        "lesson-var-provider",
                                      :from        "concepts-group",
@@ -315,6 +315,17 @@
                                             {:id "init-position", :type "state", :from-var [{:var-name "current-target", :action-property "target"}]}
                                             {:type "empty", :duration 100}
                                             {:id "visible", :type "state", :from-var [{:var-name "current-target", :action-property "target"}]}]},
+                 :riddle
+                                    {:type               "action",
+                                     :phrase             "riddle",
+                                     :phrase-description "Riddle",
+                                     :from-var           [{:var-name "current-concept", :var-property "riddle"}],
+                                     :tags               ["instruction"]},
+                 :say-selected-concept
+                                    {:type               "action",
+                                     :phrase             "concept-name",
+                                     :phrase-description "Content name",
+                                     :from-var           [{:var-name "selected-concept", :var-property "mari-word"}]},
                  :slide-current-target
                                     {:type "sequence-data",
                                      :data
@@ -325,12 +336,11 @@
                                              :type     "transition",
                                              :from-var [{:var-name "current-target", :action-property "transition-id"}]}
                                             {:type "empty", :duration 1000}]},
+                 :start-activity    {:type "start-activity", :id "slide"},
                  :start-scene
                                     {:type "sequence",
-                                     :tags ["clickable"]
-                                     :data
-                                           ["start-activity" "renew-words" "mari-voice-welcome" "renew-current-concept"]},
-                 :start-activity    {:type "start-activity", :id "slide"},
+                                     :data ["start-activity" "renew-words" "mari-voice-welcome" "renew-current-concept"],
+                                     :tags ["clickable"]},
                  :stop-activity     {:type "stop-activity", :id "slide"}},
  :triggers      {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata      {:autostart true},
