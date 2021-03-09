@@ -83,6 +83,14 @@
      (throw-unauthorized metadata)
      (resource-response "index.html" {:root "public"}))))
 
+(defn public-student-route [] (resource-response "student.html" {:root "public"}))
+
+(defn student-route
+  [request]
+  (if-not (authenticated? request)
+    (throw-unauthorized {:role :student})
+    (resource-response "student.html" {:root "public"})))
+
 (defn teacher? [request]
   (and (authenticated? request)
        (-> request :session :identity :teacher-id)))
@@ -95,7 +103,7 @@
 (defroutes pages-routes
            (GET "/" [] (public-route))
            (GET "/login" [] (public-route))
-           (GET "/student-login" [] (public-route))
+           (GET "/student-login" [] (public-student-route))
            (GET "/register" [] (public-route))
 
            (GET "/s/:course-id/:scene-id" [] (public-route))
@@ -110,9 +118,9 @@
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
 
            ;; student routes
-           (GET "/courses/:id" request (authenticated-route request {:role :student}))
-           (GET "/courses/:id/dashboard" request (authenticated-route request {:role :student}))
-           (GET "/courses/:id/dashboard/finished" request (authenticated-route request {:role :student}))
+           (GET "/courses/:id" request (student-route request))
+           (GET "/courses/:id/dashboard" request (student-route request))
+           (GET "/courses/:id/dashboard/finished" request (student-route request))
 
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))
@@ -127,7 +135,7 @@
            (GET "/api/actions/get-talk-animations" _ (->> handle-parse-audio-animation wrap-params)))
 
 (defroutes service-worker-route
-           (GET "/page-skeleton" [] (public-route))
+           (GET "/page-skeleton" [] (public-student-route))
            (GET "/service-worker.js" [] (-> (resource-response "js/compiled/service-worker.js" {:root "public"})
                                             (assoc-in [:headers "Content-Type"] "text/javascript")))
            (GET "/service-worker.js.map" [] (-> (resource-response "js/compiled/service-worker.js.map" {:root "public"})
