@@ -28,7 +28,9 @@
                        (reduce #(templates/update-activity-from-template %1 {:data %2}) a updated)
                        (update a :objects merge preserve-objects)
                        (update a :actions merge preserve-actions)
-                       (update a :assets #(merge original-assets %)))]
+                       (update a :assets #(->> (concat original-assets %)
+                                               (flatten)
+                                               (distinct))))]
     (-> (core/save-scene! course-slug scene-slug activity user-id)
         second)))
 

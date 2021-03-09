@@ -26,7 +26,7 @@
 (defn set-src
   [sprite resource {:keys [play on-end]}]
   (let [video (.-data resource)
-        texture (.fromVideo Texture video)]
+        texture (.from Texture video)]
     (aset sprite "texture" texture)
     (when-not (nil? on-end)
       (set-handler video "end" on-end))

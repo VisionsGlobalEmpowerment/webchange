@@ -488,7 +488,9 @@
     {:type        'sequence',
      :data        ['start-activity' 'clear-instruction' 'reset-tools' 'init-current-tool']}"
     (let [data (->> (:data action)
-                    (map #(get-action % db action))
+                    (map #(-> %
+                              (get-action db action)
+                              (assoc :display-name (keyword %))))
                     (into []))]
       {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
@@ -510,7 +512,7 @@
            flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
                       :current-scene current-scene}
            current-action (-> current
-                              (assoc :display-name (sequenced-action->display-name action sequence-position))
+                              (update :display-name #(or % (sequenced-action->display-name action sequence-position)))
                               (assoc :flow-id flow-id)
                               (assoc :action-id action-id)
                               (with-prev action))]

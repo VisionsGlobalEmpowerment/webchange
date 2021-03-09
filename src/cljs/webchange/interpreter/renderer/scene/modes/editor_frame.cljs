@@ -18,7 +18,8 @@
 
 (defn- handle-drag
   [container]
-  (let [{:keys [x y]} (utils/get-position container)]
+  (let [{:keys [x y] :as position} (utils/get-position container)]
+    (logger/trace-folded "change position on drag end" position)
     (re-frame/dispatch [::skin/change-position x y])))
 
 (defn- wrap
