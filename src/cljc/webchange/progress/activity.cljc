@@ -59,7 +59,7 @@
       (not (tags/has-one-from tags (:only workflow-action))))))
 
 (defn next-for
-  [levels {:keys [level lesson activity]}]
+  [levels {:keys [level lesson activity] :or {level 0 lesson 0 activity 0}}]
   (let [lessons (get-in levels [level :lessons])
         activities (get-in lessons [lesson :activities])]
     (cond

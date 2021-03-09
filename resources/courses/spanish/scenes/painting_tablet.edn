@@ -3,7 +3,8 @@
                  {:url "/raw/img/library/painting-tablet/brush.png", :size 10, :type "image"}
                  {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10, :type "image"}
                  {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
-                 {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}],
+                 {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}
+                 {:url "/raw/img/flipbook/next-page.png" :size 1 :type "image"}],
  :objects
                 {:background {:type "background", :src "/raw/img/library/painting-tablet/background.jpg"},
                  :brush
@@ -59,8 +60,15 @@
                               :height  135,
                               :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "pencil"}}},
                               :src     "/raw/img/library/painting-tablet/pencil.png",
-                              :states  {:active {:x -183}, :inactive {:x -283}}}},
- :scene-objects [["background"] ["painting-area" "felt-tip" "brush" "pencil" "eraser" "colors-palette"]],
+                              :states  {:active {:x -183}, :inactive {:x -283}}}
+                 :finish     {:type    "image"
+                              :x       "1575"
+                              :y       "925"
+                              :width   95
+                              :height  95
+                              :src     "/raw/img/flipbook/next-page.png"
+                              :actions {:click {:id "finish-activity" :on "click" :type "action"}}}},
+ :scene-objects [["background"] ["painting-area" "felt-tip" "brush" "pencil" "eraser" "colors-palette" "finish"]],
  :actions
                 {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
                  :finish-activity   {:type "finish-activity", :id "painting-tablet"},

@@ -130,7 +130,7 @@
 
 (defn process-audio
   [course-slug scene-slug]
-  (let [scene-data (course-core/get-scene-data course-slug scene-slug)
+  (let [scene-data (course-core/get-scene-latest-version course-slug scene-slug)
         actions (into {} (map (fn [[key value]] [key (process-action value scene-data)]) (:actions scene-data)))
         _ (println "process-audio" scene-data)
         activity (-> scene-data
