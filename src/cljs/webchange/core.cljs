@@ -33,8 +33,9 @@
   (.addEventListener js/window "resize" reset-viewport)
   (reset-viewport))
 
-(defn ^:export init []
-  (sw/setup config/use-cache "/service-worker.js")
+(defn ^:export init
+  [service-worker-enabled]
+  (sw/setup (and service-worker-enabled config/use-cache) "/service-worker.js")
   (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (re-frame/dispatch [::events/init-current-school])
