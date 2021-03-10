@@ -14,7 +14,7 @@
 (defn update-activity
   [course-slug scene-slug & options]
   (let [{:keys [history objects actions]} options
-        scene-data (core/get-scene-data course-slug scene-slug)
+        scene-data (core/get-scene-latest-version course-slug scene-slug)
         {:keys [created updated]} (get-in scene-data [:metadata :history])
 
         original-assets (:assets scene-data)
@@ -34,7 +34,7 @@
 
 (defn get-dialog-actions
   [course-slug scene-slug]
-  (->> (core/get-scene-data course-slug scene-slug)
+  (->> (core/get-scene-latest-version course-slug scene-slug)
        :actions
        (filter (fn [[_ {:keys [phrase]}]] (some? phrase)))
        (map first)))

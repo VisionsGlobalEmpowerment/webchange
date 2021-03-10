@@ -96,21 +96,28 @@
                       (and (= (:id skill) skill-id) skill))
                     skills)))))
 
-(defn get-scene-latest-version
+(defn- scene-slug->id
   [course-slug scene-name]
   (let [{course-id :id} (db/get-course {:slug course-slug})
-        {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
-        latest-version (db/get-latest-scene-version {:scene_id scene-id})
-        scene-skills (get-scene-skills scene-id)]
-    (when latest-version
-      (merge (:data latest-version)
-             {:skills scene-skills}))))
+        {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]
+    {:course-id course-id :scene-id scene-id}))
+
+(defn get-scene-latest-version
+  [course-slug scene-name]
+  (let [{:keys [scene-id]} (scene-slug->id course-slug scene-name)]
+    (-> (db/get-latest-scene-version {:scene_id scene-id})
+        :data)))
 
 (defn get-scene-data
   [course-slug scene-name]
   (if (contains? hardcoded course-slug)
     (scene/get-scene course-slug scene-name)
-    (get-scene-latest-version course-slug scene-name)))
+    (let [{:keys [scene-id]} (scene-slug->id course-slug scene-name)
+          latest-version (db/get-latest-scene-version {:scene_id scene-id})
+          scene-skills (get-scene-skills scene-id)]
+      (when latest-version
+        (merge (:data latest-version)
+               {:skills scene-skills})))))
 
 (defn get-or-create-scene! [course-id scene-name]
   (if-let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]
@@ -631,6 +638,6 @@
 
 (defn update-activity!
   [course-slug scene-slug data user-id]
-  (let [scene-data (-> (get-scene-data course-slug scene-slug)
+  (let [scene-data (-> (get-scene-latest-version course-slug scene-slug)
                        (templates/update-activity-from-template data))]
     (save-scene! course-slug scene-slug scene-data user-id)))

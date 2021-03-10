@@ -38,7 +38,7 @@
                :spread-layout "text-right-top"
                :text          "left page"
                :image         {:src "/upload/RGKDBQVKBIMYBBMS.png"}}}
-        scene-data (core/get-scene-data test-course-slug scene-slug)
+        scene-data (core/get-scene-latest-version test-course-slug scene-slug)
         activity (templates/update-activity-from-template scene-data data)]
     (-> (core/save-scene! test-course-slug scene-slug activity t/user-id)
         first))
@@ -51,14 +51,14 @@
                :spread-layout "text-right-top"
                :text          "right page"
                :image         {:src "/upload/RGKDBQVKBIMYBBMS.png"}}}
-        scene-data (core/get-scene-data test-course-slug scene-slug)
+        scene-data (core/get-scene-latest-version test-course-slug scene-slug)
         activity (templates/update-activity-from-template scene-data data)]
     (-> (core/save-scene! test-course-slug scene-slug activity t/user-id)
         first))
 
   ;add dialog
   (let [data {:action "add-dialog" :data {:dialog "dialog one"}}
-        scene-data (core/get-scene-data test-course-slug scene-slug)
+        scene-data (core/get-scene-latest-version test-course-slug scene-slug)
         activity (templates/update-activity-from-template scene-data data)]
     (-> (core/save-scene! test-course-slug scene-slug activity t/user-id)
         first))
@@ -72,7 +72,7 @@
                                           {:text "answer four"}]
                                :question "Question one"
                                :img      "/upload/DQHMQLASWJIKMETH.png"}}}
-        scene-data (core/get-scene-data test-course-slug scene-slug)
+        scene-data (core/get-scene-latest-version test-course-slug scene-slug)
         activity (templates/update-activity-from-template scene-data data)]
     (-> (core/save-scene! test-course-slug scene-slug activity t/user-id)
         first)))

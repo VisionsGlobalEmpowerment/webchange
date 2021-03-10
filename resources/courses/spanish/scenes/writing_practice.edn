@@ -8,6 +8,32 @@
             {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}],
  :objects
            {:background    {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
+            :brush
+                           {:type       "image",
+                            :x          -196,
+                            :y          450,
+                            :width      540,
+                            :height     140,
+                            :scene-name "brush",
+                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "brush"}}},
+                            :rotation   0,
+                            :scale-x    0.7,
+                            :scale-y    0.7,
+                            :src        "/raw/img/library/painting-tablet/brush.png",
+                            :states     {:active {:x -126}, :inactive {:x -196}}},
+            :colors-palette
+                           {:type       "colors-palette",
+                            :x          1680,
+                            :y          100,
+                            :width      140,
+                            :height     800,
+                            :scene-name "colors-palette",
+                            :actions    {:change {:id "set-current-color", :on "change", :type "action", :pick-event-param "color"}},
+                            :colors     ["#4479bb" "#92bd4a" "#ed91aa" "#fdc531" "#010101"],
+                            :rotation   0,
+                            :scale-x    1,
+                            :scale-y    1,
+                            :var-name   "current-color"},
             :concept-card  {:type "group", :x 230, :y 100, :width 400, :height 300, :children ["concept-image" "concept-word"]},
             :concept-image {:type "image", :x 100, :y 0, :width 100, :height 100, :rotation 0, :scale-x 2, :scale-y 2},
             :concept-word
@@ -36,6 +62,32 @@
                             :rotation       0,
                             :scale-x        1,
                             :scale-y        1},
+            :eraser
+                           {:type       "image",
+                            :x          -82,
+                            :y          794,
+                            :width      380,
+                            :height     175,
+                            :scene-name "eraser",
+                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "eraser"}}},
+                            :rotation   0,
+                            :scale-x    0.7,
+                            :scale-y    0.7,
+                            :src        "/raw/img/library/painting-tablet/eraser.png",
+                            :states     {:active {:x -12}, :inactive {:x -82}}},
+            :felt-tip
+                           {:type       "image",
+                            :x          -221,
+                            :y          273,
+                            :width      590,
+                            :height     150,
+                            :scene-name "felt-tip",
+                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "felt-tip"}}},
+                            :rotation   0,
+                            :scale-x    0.7,
+                            :scale-y    0.7,
+                            :src        "/raw/img/library/painting-tablet/felt-tip.png",
+                            :states     {:active {:x -151}, :inactive {:x -221}}},
             :letter-trace
                            {:type         "svg-path",
                             :x            600,
@@ -110,6 +162,19 @@
                             :scale-x  -1,
                             :scale-y  1,
                             :src      "/raw/img/ui/back_button_01.png"},
+            :pencil
+                           {:type       "image",
+                            :x          -198,
+                            :y          622,
+                            :width      550,
+                            :height     135,
+                            :scene-name "pencil",
+                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "pencil"}}},
+                            :rotation   0,
+                            :scale-x    0.7,
+                            :scale-y    0.7,
+                            :src        "/raw/img/library/painting-tablet/pencil.png",
+                            :states     {:active {:x -128}, :inactive {:x -198}}},
             :practice-canvas
                            {:type       "painting-area",
                             :x          0,
@@ -123,88 +188,24 @@
                             :scale-y    1,
                             :states     {:hidden {:visible false}, :visible {:visible true}},
                             :tool       "brush",
-                            :var-name   "writing-practice-stage-1-pt-1"},
-            :brush
-                           {:type       "image",
-                            :x          -196,
-                            :y          450,
-                            :width      540,
-                            :height     140,
-                            :scene-name "brush",
-                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "brush"}}},
-                            :rotation   0,
-                            :scale-x    0.7,
-                            :scale-y    0.7,
-                            :src        "/raw/img/library/painting-tablet/brush.png",
-                            :states     {:active {:x -126}, :inactive {:x -196}}},
-            :colors-palette
-                           {:type       "colors-palette",
-                            :x          1680,
-                            :y          100,
-                            :width      140,
-                            :height     800,
-                            :scene-name "colors-palette",
-                            :actions    {:change {:id "set-current-color", :on "change", :type "action", :pick-event-param "color"}},
-                            :colors     ["#4479bb" "#92bd4a" "#ed91aa" "#fdc531" "#010101"],
-                            :rotation   0,
-                            :scale-x    1,
-                            :scale-y    1,
-                            :var-name   "current-color"},
-            :eraser
-                           {:type       "image",
-                            :x          -82,
-                            :y          794,
-                            :width      380,
-                            :height     175,
-                            :scene-name "eraser",
-                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "eraser"}}},
-                            :rotation   0,
-                            :scale-x    0.7,
-                            :scale-y    0.7,
-                            :src        "/raw/img/library/painting-tablet/eraser.png",
-                            :states     {:active {:x -12}, :inactive {:x -82}}},
-            :felt-tip
-                           {:type       "image",
-                            :x          -221,
-                            :y          273,
-                            :width      590,
-                            :height     150,
-                            :scene-name "felt-tip",
-                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "felt-tip"}}},
-                            :rotation   0,
-                            :scale-x    0.7,
-                            :scale-y    0.7,
-                            :src        "/raw/img/library/painting-tablet/felt-tip.png",
-                            :states     {:active {:x -151}, :inactive {:x -221}}},
-            :pencil
-                           {:type       "image",
-                            :x          -198,
-                            :y          622,
-                            :width      550,
-                            :height     135,
-                            :scene-name "pencil",
-                            :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "pencil"}}},
-                            :rotation   0,
-                            :scale-x    0.7,
-                            :scale-y    0.7,
-                            :src        "/raw/img/library/painting-tablet/pencil.png",
-                            :states     {:active {:x -128}, :inactive {:x -198}}}},
+                            :var-name   "writing-practice-stage-1-pt-1"}},
  :scene-objects
            [["background"]
-            ["concept-card" "letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path" "letter-tutorial-image" "practice-canvas" "felt-tip" "brush" "pencil" "eraser" "colors-palette" "next-button" "mari"]],
+            ["concept-card"
+             "letter-trace-matrix"
+             "letter-tutorial-trace"
+             "letter-tutorial-path"
+             "letter-tutorial-image"
+             "practice-canvas"
+             "felt-tip"
+             "brush"
+             "pencil"
+             "eraser"
+             "colors-palette"
+             "next-button"
+             "mari"]],
  :actions
-           {:set-current-tool
-                               {:type "sequence-data",
-                                :data
-                                      [{:type "state", :target "practice-canvas", :from-params [{:param-property "tool", :action-property "value"}]}
-                                       {:id "inactive", :type "state", :from-var [{:var-name "current-tool", :action-property "target"}]}
-                                       {:id "active", :type "state", :from-params [{:param-property "tool", :action-property "target"}]}
-                                       {:type        "set-variable",
-                                        :var-name    "current-tool",
-                                        :from-params [{:param-property "tool", :action-property "var-value"}]}]},
-            :set-current-color
-                               {:type "state", :target "practice-canvas", :from-params [{:param-property "color", :action-property "value"}]},
-            :check-page
+           {:check-page
                                {:type     "test-var-scalar",
                                 :var-name "current-page",
                                 :success  "check-stage",
@@ -212,8 +213,7 @@
                                 :from-var [{:var-name "pages-number", :action-property "value"}]},
             :check-stage
                                {:type "test-var-scalar", :var-name "current-stage", :value 2, :success "finish-activity", :fail "go-next-stage"},
-            :finish-activity
-                               {:id "writing-practice", :type "finish-activity"},
+            :finish-activity   {:type "finish-activity", :id "writing-practice"},
             :go-next           {:type "action", :id "check-page"},
             :go-next-page
                                {:type "sequence-data",
@@ -233,6 +233,7 @@
                                 :data
                                       [{:id "hidden", :type "state", :target "letter-trace"}
                                        {:id "hidden", :type "state", :target "letter-tutorial-path"}]},
+            :init-current-tool {:type "action", :id "set-current-tool", :params {:tool "felt-tip"}},
             :init-stage-1
                                {:type "parallel",
                                 :data
@@ -271,9 +272,7 @@
                                        {:type "calc", :value-1 30, :value-2 13, :var-name "pages-number", :operation "div-ceil"}
                                        {:type     "set-variable",
                                         :from-var [{:var-name "current-concept", :var-property "letter-path", :action-property "var-value"}],
-                                        :var-name "letter-path"}
-                                       ]},
-            :init-current-tool {:type "action", :id "set-current-tool", :params {:tool "felt-tip"}},
+                                        :var-name "letter-path"}]},
             :mari-go-wait      {:type "transition", :to {:x 1490, :y 130, :loop false, :duration 2}, :transition-id "mari"},
             :mari-init-wand    {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
             :mari-shows-example
@@ -290,71 +289,90 @@
                                         :type "parallel"}
                                        {:to {:x 1490, :y 180, :loop false, :duration 2}, :type "transition", :transition-id "mari"}]},
             :mari-voice-go-next-practice
-                               {:type               "sequence-data"
-                                :phrase             :next-practice
-                                :phrase-description "Next practice"
-                                :data               [{:offset                 62.923,
-                                                      :phrase-text            "Click on the arrow to do a little more writing work."
-                                                      :phrase-text-translated "Haz click en la flecha para seguir con tu trabajo.",
+                               {:type               "sequence-data",
+                                :data
+                                                    [{:offset                 62.923,
+                                                      :phrase-text            "Click on the arrow to do a little more writing work.",
                                                       :start                  62.923,
                                                       :type                   "animation-sequence",
                                                       :duration               4.054,
                                                       :volume                 0.2,
                                                       :audio                  "/raw/audio/l2/a7/L2_A7_Mari.m4a",
                                                       :target                 "mari",
+                                                      :phrase-text-translated "Haz click en la flecha para seguir con tu trabajo.",
                                                       :track                  1,
-                                                      :data                   [{:end 66.859, :anim "talk", :start 63.08}]}]}
+                                                      :data                   [{:end 66.859, :anim "talk", :start 63.08}]}],
+                                :phrase             "next-practice",
+                                :phrase-description "Next practice"},
             :mari-voice-intro
-                               {:offset                 32.357,
-                                :phrase                 :welcome
-                                :phrase-description     "Welcome"
-                                :phrase-text            "Pick a pencil or a color and follow the arrows to trace the letter.  Remember to follow the correct tracing pattern.  I’ll show you how to do the first one."
-                                :phrase-text-translated "Escoge un lapiz o un color y sigue las flechas para rastrear la letra. Recuerda seguir el modelo correcto de rastrear. Yo te ensenare como hacer el primero. ",
-                                :start                  32.357,
-                                :type                   "animation-sequence",
-                                :duration               17.005,
-                                :volume                 0.2,
-                                :audio                  "/raw/audio/l2/a7/L2_A7_Mari.m4a",
-                                :target                 "mari",
-                                :track                  1,
-                                :skippable true
-                                :data                   [{:end 36.254, :anim "talk", :start 33.026}
-                                                         {:end 40.367, :anim "talk", :start 36.707}
-                                                         {:end 45.485, :anim "talk", :start 41.627}
-                                                         {:end 49.047, :anim "talk", :start 46.193}]},
+                               {:type               "animation-sequence",
+                                :data
+                                                    [{:end 36.254, :anim "talk", :start 33.026}
+                                                     {:end 40.367, :anim "talk", :start 36.707}
+                                                     {:end 45.485, :anim "talk", :start 41.627}
+                                                     {:end 49.047, :anim "talk", :start 46.193}],
+                                :phrase             "welcome",
+                                :phrase-description "Welcome",
+                                :phrase-text
+                                                    "Pick a pencil or a color and follow the arrows to trace the letter.  Remember to follow the correct tracing pattern.  I’ll show you how to do the first one.",
+                                :phrase-text-translated
+                                                    "Escoge un lapiz o un color y sigue las flechas para rastrear la letra. Recuerda seguir el modelo correcto de rastrear. Yo te ensenare como hacer el primero. ",
+                                :target             "mari",
+                                :audio              "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+                                :start              32.357,
+                                :duration           17.005,
+                                :track              1,
+                                :offset             32.357,
+                                :skippable          true,
+                                :volume             0.2},
             :mari-voice-intro-2
-                               {:offset                 70.402,
-                                :phrase                 :free-drawing
-                                :phrase-description     "Free drawing intro"
-                                :phrase-text            "On this page, you should practice drawing the letters OR you can draw anything you want. When you are finished drawing, click the arrow to go to your next activity.",
-                                :phrase-text-translated "En esta pagina, podras practicar a dibujar las letras O podras dibujar lo que gustes. Cuando termines, haz click sobre la flecha para ir a tu proxima actividad.",
-                                :start                  70.402,
-                                :type                   "animation-sequence",
-                                :duration               16.848,
-                                :volume                 0.2,
-                                :audio                  "/raw/audio/l2/a7/L2_A7_Mari.m4a",
-                                :target                 "mari",
-                                :track                  1,
-                                :data                   [{:end 75.952, :anim "talk", :start 70.677}
-                                                         {:end 79.298, :anim "talk", :start 76.68}
-                                                         {:end 81.483, :anim "talk", :start 80.046}
-                                                         {:end 86.915, :anim "talk", :start 82.073}]},
+                               {:type               "animation-sequence",
+                                :data
+                                                    [{:end 75.952, :anim "talk", :start 70.677}
+                                                     {:end 79.298, :anim "talk", :start 76.68}
+                                                     {:end 81.483, :anim "talk", :start 80.046}
+                                                     {:end 86.915, :anim "talk", :start 82.073}],
+                                :phrase             "free-drawing",
+                                :phrase-description "Free drawing intro",
+                                :phrase-text
+                                                    "On this page, you should practice drawing the letters OR you can draw anything you want. When you are finished drawing, click the arrow to go to your next activity.",
+                                :phrase-text-translated
+                                                    "En esta pagina, podras practicar a dibujar las letras O podras dibujar lo que gustes. Cuando termines, haz click sobre la flecha para ir a tu proxima actividad.",
+                                :target             "mari",
+                                :audio              "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+                                :start              70.402,
+                                :duration           16.848,
+                                :track              1,
+                                :offset             70.402,
+                                :volume             0.2},
             :mari-voice-try-again
-                               {:offset                 52.432,
-                                :phrase                 :more-practice
-                                :phrase-description     "More practice"
+                               {:type                   "animation-sequence",
+                                :data                   [{:end 55.562, :anim "talk", :start 52.629}],
+                                :phrase                 "more-practice",
+                                :phrase-description     "More practice",
                                 :phrase-text            "Touch here for more tracing practice",
                                 :phrase-text-translated "Toca aqui para seguir rastreando",
-                                :start                  52.432,
-                                :type                   "animation-sequence",
-                                :duration               3.228,
-                                :volume                 0.2,
-                                :audio                  "/raw/audio/l2/a7/L2_A7_Mari.m4a",
                                 :target                 "mari",
+                                :audio                  "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+                                :start                  52.432,
+                                :duration               3.228,
                                 :track                  1,
-                                :data                   [{:end 55.562, :anim "talk", :start 52.629}]},
+                                :offset                 52.432,
+                                :volume                 0.2},
             :renew-concept
                                {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
+            :set-current-color
+                               {:type "state", :target "practice-canvas", :from-params [{:param-property "color", :action-property "value"}]},
+            :set-current-tool
+                               {:type "sequence-data",
+                                :data
+                                      [{:type "state", :target "practice-canvas", :from-params [{:param-property "tool", :action-property "value"}]}
+                                       {:id "inactive", :type "state", :from-var [{:var-name "current-tool", :action-property "target"}]}
+                                       {:id "active", :type "state", :from-params [{:param-property "tool", :action-property "target"}]}
+                                       {:type        "set-variable",
+                                        :var-name    "current-tool",
+                                        :from-params [{:param-property "tool", :action-property "var-value"}]}]},
+            :start-activity    {:type "start-activity", :id "writing-practice"},
             :start-scene
                                {:type "sequence",
                                 :data
@@ -368,7 +386,6 @@
                                        "mari-init-wand"
                                        "mari-shows-example"
                                        "mari-voice-go-next-practice"]},
-            :start-activity    {:type "start-activity", :id "writing-practice"},
             :stop-activity     {:type "stop-activity", :id "writing-practice"},
             :update-painting-var
                                {:type     "test-var-scalar",

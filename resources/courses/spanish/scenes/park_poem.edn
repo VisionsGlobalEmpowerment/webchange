@@ -51,8 +51,8 @@
                          :scale-x    1,
                          :scale-y    1,
                          :src        "",
-                         :visible    false,
-                         :states     {:hidden {:visible false}, :visible {:visible true}}},
+                         :states     {:hidden {:visible false}, :visible {:visible true}},
+                         :visible    false},
             :bubble-2
                         {:type       "image",
                          :x          470,
@@ -63,8 +63,8 @@
                          :scale-x    1,
                          :scale-y    1,
                          :src        "",
-                         :visible    false,
-                         :states     {:hidden {:visible false}, :visible {:visible true}}},
+                         :states     {:hidden {:visible false}, :visible {:visible true}},
+                         :visible    false},
             :bubble-3
                         {:type       "image",
                          :x          470,
@@ -75,45 +75,44 @@
                          :scale-x    1,
                          :scale-y    1,
                          :src        "",
-                         :visible    false,
-                         :states     {:hidden {:visible false}, :visible {:visible true}}},
+                         :states     {:hidden {:visible false}, :visible {:visible true}},
+                         :visible    false},
             :image-story-1
                         {:type    "image",
                          :x       426,
                          :y       551,
                          :width   450,
                          :height  450,
-                         :actions {:click {:id "image-story-1-clicked", :on "click", :type "action" :unique-tag "story"}},
+                         :actions {:click {:id "image-story-1-clicked", :on "click", :type "action", :unique-tag "story"}},
                          :scale-x 0.25,
                          :scale-y 0.25,
                          :src     "",
-                         :visible false,
-                         :states  {:visible {:visible true}, :clickable {:x 415, :y 540, :scale-x 1.2, :scale-y 1.2}}},
+                         :states  {:visible {:visible true}, :clickable {:x 415, :y 540, :scale-x 1.2, :scale-y 1.2}},
+                         :visible false},
             :image-story-2
                         {:type    "image",
                          :x       621,
                          :y       546,
                          :width   450,
                          :height  450,
-                         :actions {:click {:id "image-story-2-clicked", :on "click", :type "action" :unique-tag "story"}},
+                         :actions {:click {:id "image-story-2-clicked", :on "click", :type "action", :unique-tag "story"}},
                          :scale-x 0.25,
                          :scale-y 0.25,
                          :src     "",
-                         :visible false,
-                         :states  {:visible {:visible true}, :clickable {:x 610, :y 535, :scale-x 1.2, :scale-y 1.2}}},
+                         :states  {:visible {:visible true}, :clickable {:x 610, :y 535, :scale-x 1.2, :scale-y 1.2}},
+                         :visible false},
             :image-story-3
                         {:type    "image",
                          :x       791,
                          :y       581,
                          :width   450,
                          :height  450,
-                         :actions {:click {:id "image-story-3-clicked", :on "click", :type "action" :unique-tag "story"}},
+                         :actions {:click {:id "image-story-3-clicked", :on "click", :type "action", :unique-tag "story"}},
                          :scale-x 0.25,
                          :scale-y 0.25,
                          :src     "",
-                         :visible false,
-                         :states  {:visible {:visible true}, :clickable {:x 780, :y 570, :scale-x 1.2, :scale-y 1.2}}},
-
+                         :states  {:visible {:visible true}, :clickable {:x 780, :y 570, :scale-x 1.2, :scale-y 1.2}},
+                         :visible false},
             :mari
                         {:type       "animation",
                          :x          230,
@@ -145,270 +144,266 @@
                          :speed      0.35,
                          :start      true}},
  :scene-objects
-           [["background"]
-            ["image-story-1" "image-story-2" "image-story-3" "mari" "rock" "bubble-1" "bubble-2" "bubble-3"]],
+           [["background"] ["image-story-1" "image-story-2" "image-story-3" "mari" "rock" "bubble-1" "bubble-2" "bubble-3"]],
  :actions
            {:enable-story-1
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "clickable", :type "state", :target "image-story-1"}
-                                    {:type "set-variable", :var-name "story-1-clickable", :var-value true}]},
-            :finish-activity
-                            {:id "park-poem", :type "finish-activity"},
-            :image-story-1-clicked
-                            {:type     "test-var-scalar",
-                             :var-name "story-1-clickable",
-                             :value    true,
-                             :success  "finish-story-1",
-                             :fail     {:type "empty", :duration 1}},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "clickable", :type "state", :target "image-story-1"}
+                                     {:type "set-variable", :var-name "story-1-clickable", :var-value true}]},
+            :finish-activity {:type "finish-activity", :id "park-poem"},
             :finish-story-1
-                            {:data
-                                   [
-                                    {:type     "set-variable",
-                                     :from-var [{:var-name "concept-1", :action-property "var-value"}],
-                                     :var-name "current-concept"}
-                                    {:type "set-variable", :var-name "bubble-init-position", :var-value {:x 350, :y 470}}
-                                    {:id "run-story", :type "action"}
-                                    {:type "set-variable", :var-name "story-1-passed", :var-value true}
-                                    {:type "set-variable", :var-name "story-2-clickable", :var-value true}
-                                    {:id "clickable", :type "state", :target "image-story-2"}
-                                    {:id "test-stories-complete", :type "action"}
-                                    {:id "mari-voice-next", :type "action"}
-                                    ],
-                             :type "sequence-data"}
-            :image-story-2-clicked
-                            {:type     "test-var-scalar",
-                             :var-name "story-2-clickable",
-                             :value    true,
-                             :success  "finish-story-2",
-                             :fail     {:type "empty", :duration 1}},
+                             {:type "sequence-data",
+                              :data
+                                    [{:type     "set-variable",
+                                      :from-var [{:var-name "concept-1", :action-property "var-value"}],
+                                      :var-name "current-concept"}
+                                     {:type "set-variable", :var-name "bubble-init-position", :var-value {:x 350, :y 470}}
+                                     {:id "run-story", :type "action"}
+                                     {:type "set-variable", :var-name "story-1-passed", :var-value true}
+                                     {:type "set-variable", :var-name "story-2-clickable", :var-value true}
+                                     {:id "clickable", :type "state", :target "image-story-2"}
+                                     {:id "test-stories-complete", :type "action"}
+                                     {:id "mari-voice-next", :type "action"}]},
             :finish-story-2
-                            {:data
-                                   [{:type     "set-variable",
-                                     :from-var [{:var-name "concept-2", :action-property "var-value"}],
-                                     :var-name "current-concept"}
-                                    {:type "set-variable", :var-name "bubble-init-position", :var-value {:x 540, :y 465}}
-                                    {:id "run-story", :type "action"}
-                                    {:type "set-variable", :var-name "story-2-passed", :var-value true}
-                                    {:type "set-variable", :var-name "story-3-clickable", :var-value true}
-                                    {:id "clickable", :type "state", :target "image-story-3"}
-                                    {:id "test-stories-complete", :type "action"}
-                                    {:id "mari-voice-next", :type "action"}],
-                             :type "sequence-data"}
-            :image-story-3-clicked
-                            {:type     "test-var-scalar",
-                             :var-name "story-3-clickable",
-                             :value    true,
-                             :success  "finish-story-3",
-                             :fail     {:type "empty", :duration 1}},
+                             {:type "sequence-data",
+                              :data
+                                    [{:type     "set-variable",
+                                      :from-var [{:var-name "concept-2", :action-property "var-value"}],
+                                      :var-name "current-concept"}
+                                     {:type "set-variable", :var-name "bubble-init-position", :var-value {:x 540, :y 465}}
+                                     {:id "run-story", :type "action"}
+                                     {:type "set-variable", :var-name "story-2-passed", :var-value true}
+                                     {:type "set-variable", :var-name "story-3-clickable", :var-value true}
+                                     {:id "clickable", :type "state", :target "image-story-3"}
+                                     {:id "test-stories-complete", :type "action"}
+                                     {:id "mari-voice-next", :type "action"}]},
             :finish-story-3
-                            {:data
-                                   [{:type     "set-variable",
-                                     :from-var [{:var-name "concept-3", :action-property "var-value"}],
-                                     :var-name "current-concept"}
-                                    {:type "set-variable", :var-name "bubble-init-position", :var-value {:x 540, :y 465}}
-                                    {:id "run-story", :type "action"}
-                                    {:type "set-variable", :var-name "story-3-passed", :var-value true}
-                                    {:id "test-stories-complete", :type "action"}],
-                             :type "sequence-data"}
+                             {:type "sequence-data",
+                              :data
+                                    [{:type     "set-variable",
+                                      :from-var [{:var-name "concept-3", :action-property "var-value"}],
+                                      :var-name "current-concept"}
+                                     {:type "set-variable", :var-name "bubble-init-position", :var-value {:x 540, :y 465}}
+                                     {:id "run-story", :type "action"}
+                                     {:type "set-variable", :var-name "story-3-passed", :var-value true}
+                                     {:id "test-stories-complete", :type "action"}]},
+            :image-story-1-clicked
+                             {:type     "test-var-scalar",
+                              :var-name "story-1-clickable",
+                              :value    true,
+                              :success  "finish-story-1",
+                              :fail     {:type "empty", :duration 1}},
+            :image-story-2-clicked
+                             {:type     "test-var-scalar",
+                              :var-name "story-2-clickable",
+                              :value    true,
+                              :success  "finish-story-2",
+                              :fail     {:type "empty", :duration 1}},
+            :image-story-3-clicked
+                             {:type     "test-var-scalar",
+                              :var-name "story-3-clickable",
+                              :value    true,
+                              :success  "finish-story-3",
+                              :fail     {:type "empty", :duration 1}},
             :init-concepts
-                            {:type "sequence-data",
-                             :data
-                                   [{:from        "concepts-group",
-                                     :type        "lesson-var-provider",
-                                     :shuffled    false,
-                                     :variables   ["concept-1" "concept-2" "concept-3"],
-                                     :provider-id "words-set"}
-                                    {:fail     "init-image-story-1",
-                                     :type     "test-var-scalar",
-                                     :value    nil,
-                                     :success  {:type "set-variable", :var-name "story-1-passed", :var-value true},
-                                     :var-name "concept-1"}
-                                    {:fail     "init-image-story-2",
-                                     :type     "test-var-scalar",
-                                     :value    nil,
-                                     :success  {:type "set-variable", :var-name "story-2-passed", :var-value true},
-                                     :var-name "concept-2"}
-                                    {:fail     "init-image-story-3",
-                                     :type     "test-var-scalar",
-                                     :value    nil,
-                                     :success  {:type "set-variable", :var-name "story-3-passed", :var-value true},
-                                     :var-name "concept-3"}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:from        "concepts-group",
+                                      :type        "lesson-var-provider",
+                                      :shuffled    false,
+                                      :variables   ["concept-1" "concept-2" "concept-3"],
+                                      :provider-id "words-set"}
+                                     {:fail     "init-image-story-1",
+                                      :type     "test-var-scalar",
+                                      :value    nil,
+                                      :success  {:type "set-variable", :var-name "story-1-passed", :var-value true},
+                                      :var-name "concept-1"}
+                                     {:fail     "init-image-story-2",
+                                      :type     "test-var-scalar",
+                                      :value    nil,
+                                      :success  {:type "set-variable", :var-name "story-2-passed", :var-value true},
+                                      :var-name "concept-2"}
+                                     {:fail     "init-image-story-3",
+                                      :type     "test-var-scalar",
+                                      :value    nil,
+                                      :success  {:type "set-variable", :var-name "story-3-passed", :var-value true},
+                                      :var-name "concept-3"}]},
             :init-image-story-1
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "visible", :type "state", :target "image-story-1"}
-                                    {:type      "set-attribute",
-                                     :target    "image-story-1",
-                                     :from-var  [{:var-name "concept-1", :var-property "poem-image-1", :action-property "attr-value"}],
-                                     :attr-name "src"}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "visible", :type "state", :target "image-story-1"}
+                                     {:type      "set-attribute",
+                                      :target    "image-story-1",
+                                      :from-var  [{:var-name "concept-1", :var-property "poem-image-1", :action-property "attr-value"}],
+                                      :attr-name "src"}]},
             :init-image-story-2
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "visible", :type "state", :target "image-story-2"}
-                                    {:type      "set-attribute",
-                                     :target    "image-story-2",
-                                     :from-var  [{:var-name "concept-2", :var-property "poem-image-1", :action-property "attr-value"}],
-                                     :attr-name "src"}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "visible", :type "state", :target "image-story-2"}
+                                     {:type      "set-attribute",
+                                      :target    "image-story-2",
+                                      :from-var  [{:var-name "concept-2", :var-property "poem-image-1", :action-property "attr-value"}],
+                                      :attr-name "src"}]},
             :init-image-story-3
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "visible", :type "state", :target "image-story-3"}
-                                    {:type      "set-attribute",
-                                     :target    "image-story-3",
-                                     :from-var  [{:var-name "concept-3", :var-property "poem-image-1", :action-property "attr-value"}],
-                                     :attr-name "src"}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "visible", :type "state", :target "image-story-3"}
+                                     {:type      "set-attribute",
+                                      :target    "image-story-3",
+                                      :from-var  [{:var-name "concept-3", :var-property "poem-image-1", :action-property "attr-value"}],
+                                      :attr-name "src"}]},
             :init-state
-                            {:type "sequence-data",
-                             :data
-                                   [{:type "set-variable", :var-name "story-1-passed", :var-value false}
-                                    {:type "set-variable", :var-name "story-2-passed", :var-value false}
-                                    {:type "set-variable", :var-name "story-3-passed", :var-value false}
-                                    {:type "set-variable", :var-name "story-1-clickable", :var-value false}
-                                    {:type "set-variable", :var-name "story-2-clickable", :var-value false}
-                                    {:type "set-variable", :var-name "story-3-clickable", :var-value false}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:type "set-variable", :var-name "story-1-passed", :var-value false}
+                                     {:type "set-variable", :var-name "story-2-passed", :var-value false}
+                                     {:type "set-variable", :var-name "story-3-passed", :var-value false}
+                                     {:type "set-variable", :var-name "story-1-clickable", :var-value false}
+                                     {:type "set-variable", :var-name "story-2-clickable", :var-value false}
+                                     {:type "set-variable", :var-name "story-3-clickable", :var-value false}]},
             :mari-voice-finish
-                            {:type "sequence-data"
-                             :phrase                 :finish
-                             :phrase-description     "Finish"
-                             :data [{:offset                 30.397,
-                                     :phrase-text            "Bravo! Do you want to listen to the story again?  Touch the picture to listen again, or touch the arrow to go to your next activity!",
-                                     :phrase-text-translated "Bravo! Te gustaria escuchar la historia de nuevo? Toca la foto para escuchar de nuevo, o toca la flecha para seguir a tu proxima actividad!",
-                                     :start                  30.397,
-                                     :type                   "animation-sequence",
-                                     :duration               12.706,
-                                     :audio                  "mari",
-                                     :target                 "mari",
-                                     :track                  1,
-                                     :data
-                                                             [{:end 31.446, :anim "talk", :start 30.559}
-                                                              {:end 34.928, :anim "talk", :start 31.792}
-                                                              {:end 38.572, :anim "talk", :start 35.988}
-                                                              {:end 42.93, :anim "talk", :start 39.016}]}
-                                    {:id "finish-activity" :type "action"}]},
+                             {:type               "sequence-data",
+                              :data
+                                                  [{:offset   30.397,
+                                                    :phrase-text
+                                                              "Bravo! Do you want to listen to the story again?  Touch the picture to listen again, or touch the arrow to go to your next activity!",
+                                                    :start    30.397,
+                                                    :type     "animation-sequence",
+                                                    :duration 12.706,
+                                                    :audio    "mari",
+                                                    :target   "mari",
+                                                    :phrase-text-translated
+                                                              "Bravo! Te gustaria escuchar la historia de nuevo? Toca la foto para escuchar de nuevo, o toca la flecha para seguir a tu proxima actividad!",
+                                                    :track    1,
+                                                    :data
+                                                              [{:end 31.446, :anim "talk", :start 30.559}
+                                                               {:end 34.928, :anim "talk", :start 31.792}
+                                                               {:end 38.572, :anim "talk", :start 35.988}
+                                                               {:end 42.93, :anim "talk", :start 39.016}]}
+                                                   {:id "finish-activity", :type "action"}],
+                              :phrase             "finish",
+                              :phrase-description "Finish"},
             :mari-voice-next
-                            {:type        "animation-sequence",
-                             :data        [{:end 10.34, :anim "talk", :start 6.42}],
-                             :target      "mari",
-                             :audio       "/raw/audio/l2/a3/mari-instructions.m4a",
-                             :start       6.251,
-                             :duration    4.268,
-                             :track       1,
-                             :offset      6.251,
-                             :description "Touch the next picture to start the poem"},
+                             {:type        "animation-sequence",
+                              :data        [{:end 10.34, :anim "talk", :start 6.42}],
+                              :target      "mari",
+                              :audio       "/raw/audio/l2/a3/mari-instructions.m4a",
+                              :start       6.251,
+                              :duration    4.268,
+                              :track       1,
+                              :offset      6.251,
+                              :description "Touch the next picture to start the poem"},
             :mari-voice-welcome
-                            {:type               "sequence-data"
-                             :phrase             :welcome
-                             :phrase-description "Welcome"
-                             :data               [{:offset                 0.584,
-                                                   :phrase-text            "Welcome to the park little genius! Do you want to listen to a short story?",
-                                                   :phrase-text-translated "Bienvendio al parque pequeno genio! Te gustaria escuchar una corta historia?",
-                                                   :start                  0.584,
-                                                   :type                   "animation-sequence",
-                                                   :duration               6.661,
-                                                   :audio                  "mari",
-                                                   :target                 "mari",
-                                                   :track                  1,
-                                                   :data                   [{:end 3.406, :anim "talk", :start 0.757} {:end 7.083, :anim "talk", :start 3.925}]}
-                                                  {:type                   "animation-sequence",
-                                                   :data                   [{:end 4.71, :anim "talk", :start 1.5}],
-                                                   :target                 "mari",
-                                                   :audio                  "/raw/audio/l2/a3/mari-instructions.m4a",
-                                                   :start                  1.248,
-                                                   :duration               3.86,
-                                                   :track                  1,
-                                                   :offset                 1.248,
-                                                   :phrase-text            "Touch the picture and listen carefully!"
-                                                   :phrase-text-translated "Toca la imagen y escucha con atención!"}]},
-            :none           {:type "empty", :duration 10},
-            :poem-pause
-                            {:type "empty", :duration 1000}
+                             {:type               "sequence-data",
+                              :data
+                                                  [{:offset                 0.584,
+                                                    :phrase-text            "Welcome to the park little genius! Do you want to listen to a short story?",
+                                                    :start                  0.584,
+                                                    :type                   "animation-sequence",
+                                                    :duration               6.661,
+                                                    :audio                  "mari",
+                                                    :target                 "mari",
+                                                    :phrase-text-translated "Bienvendio al parque pequeno genio! Te gustaria escuchar una corta historia?",
+                                                    :track                  1,
+                                                    :data                   [{:end 3.406, :anim "talk", :start 0.757} {:end 7.083, :anim "talk", :start 3.925}]}
+                                                   {:offset                 1.248,
+                                                    :phrase-text            "Touch the picture and listen carefully!",
+                                                    :start                  1.248,
+                                                    :type                   "animation-sequence",
+                                                    :duration               3.86,
+                                                    :audio                  "/raw/audio/l2/a3/mari-instructions.m4a",
+                                                    :target                 "mari",
+                                                    :phrase-text-translated "Toca la imagen y escucha con atención!",
+                                                    :track                  1,
+                                                    :data                   [{:end 4.71, :anim "talk", :start 1.5}]}],
+                              :phrase             "welcome",
+                              :phrase-description "Welcome"},
+            :none            {:type "empty", :duration 10},
+            :poem-pause      {:type "empty", :duration 1000},
             :prepare-bubbles
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "hidden", :type "state", :target "bubble-1"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-1",
-                                     :from-var  [{:var-name "current-concept", :var-property "poem-image-1", :action-property "attr-value"}],
-                                     :attr-name "src"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-1",
-                                     :from-var  [{:var-name "bubble-init-position", :var-property "x", :action-property "attr-value"}],
-                                     :attr-name "x"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-1",
-                                     :from-var  [{:var-name "bubble-init-position", :var-property "y", :action-property "attr-value"}],
-                                     :attr-name "y"}
-                                    {:id "hidden", :type "state", :target "bubble-2"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-2",
-                                     :from-var  [{:var-name "current-concept", :var-property "poem-image-2", :action-property "attr-value"}],
-                                     :attr-name "src"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-2",
-                                     :from-var  [{:var-name "bubble-init-position", :var-property "x", :action-property "attr-value"}],
-                                     :attr-name "x"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-2",
-                                     :from-var  [{:var-name "bubble-init-position", :var-property "y", :action-property "attr-value"}],
-                                     :attr-name "y"}
-                                    {:id "hidden", :type "state", :target "bubble-3"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-3",
-                                     :from-var  [{:var-name "current-concept", :var-property "poem-image-3", :action-property "attr-value"}],
-                                     :attr-name "src"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-3",
-                                     :from-var  [{:var-name "bubble-init-position", :var-property "x", :action-property "attr-value"}],
-                                     :attr-name "x"}
-                                    {:type      "set-attribute",
-                                     :target    "bubble-3",
-                                     :from-var  [{:var-name "bubble-init-position", :var-property "y", :action-property "attr-value"}],
-                                     :attr-name "y"}
-                                    {:type "empty", :duration 300}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "hidden", :type "state", :target "bubble-1"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-1",
+                                      :from-var  [{:var-name "current-concept", :var-property "poem-image-1", :action-property "attr-value"}],
+                                      :attr-name "src"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-1",
+                                      :from-var  [{:var-name "bubble-init-position", :var-property "x", :action-property "attr-value"}],
+                                      :attr-name "x"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-1",
+                                      :from-var  [{:var-name "bubble-init-position", :var-property "y", :action-property "attr-value"}],
+                                      :attr-name "y"}
+                                     {:id "hidden", :type "state", :target "bubble-2"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-2",
+                                      :from-var  [{:var-name "current-concept", :var-property "poem-image-2", :action-property "attr-value"}],
+                                      :attr-name "src"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-2",
+                                      :from-var  [{:var-name "bubble-init-position", :var-property "x", :action-property "attr-value"}],
+                                      :attr-name "x"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-2",
+                                      :from-var  [{:var-name "bubble-init-position", :var-property "y", :action-property "attr-value"}],
+                                      :attr-name "y"}
+                                     {:id "hidden", :type "state", :target "bubble-3"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-3",
+                                      :from-var  [{:var-name "current-concept", :var-property "poem-image-3", :action-property "attr-value"}],
+                                      :attr-name "src"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-3",
+                                      :from-var  [{:var-name "bubble-init-position", :var-property "x", :action-property "attr-value"}],
+                                      :attr-name "x"}
+                                     {:type      "set-attribute",
+                                      :target    "bubble-3",
+                                      :from-var  [{:var-name "bubble-init-position", :var-property "y", :action-property "attr-value"}],
+                                      :attr-name "y"}
+                                     {:type "empty", :duration 300}]},
             :run-bubble-1
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "visible", :type "state", :target "bubble-1"}
-                                    {:type "empty", :duration 100}
-                                    {:to            {:bezier [{:x 335, :y 390} {:x 350, :y 230} {:x 175, :y 100}], :duration 2.0},
-                                     :type          "transition",
-                                     :transition-id "bubble-1"}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "visible", :type "state", :target "bubble-1"}
+                                     {:type "empty", :duration 100}
+                                     {:to            {:bezier [{:x 335, :y 390} {:x 350, :y 230} {:x 175, :y 100}], :duration 2.0},
+                                      :type          "transition",
+                                      :transition-id "bubble-1"}]},
             :run-bubble-2
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "visible", :type "state", :target "bubble-2"}
-                                    {:type "empty", :duration 100}
-                                    {:to {:bezier [{:x 440, :y 215} {:x 735, :y 60}], :duration 2.0}, :type "transition", :transition-id "bubble-2"}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "visible", :type "state", :target "bubble-2"}
+                                     {:type "empty", :duration 100}
+                                     {:to {:bezier [{:x 440, :y 215} {:x 735, :y 60}], :duration 2.0}, :type "transition", :transition-id "bubble-2"}]},
             :run-bubble-3
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "visible", :type "state", :target "bubble-3"}
-                                    {:type "empty", :duration 100}
-                                    {:to            {:bezier [{:x 740, :y 450} {:x 950, :y 160} {:x 1315, :y 125}], :duration 2.0},
-                                     :type          "transition",
-                                     :transition-id "bubble-3"}]},
-            :run-story
-                            {:type "sequence-data",
-                             :data
-                                   [{:id "prepare-bubbles", :type "action"}
-                                    {:id "run-concept-poem", :type "action"}]},
+                             {:type "sequence-data",
+                              :data
+                                    [{:id "visible", :type "state", :target "bubble-3"}
+                                     {:type "empty", :duration 100}
+                                     {:to            {:bezier [{:x 740, :y 450} {:x 950, :y 160} {:x 1315, :y 125}], :duration 2.0},
+                                      :type          "transition",
+                                      :transition-id "bubble-3"}]},
             :run-concept-poem
-                            {:phrase             :poem
-                             :phrase-description "Play poem"
-                             :type               "action",
-                             :from-var           [{:var-name "current-concept", :var-property "poem-story"}]}
+                             {:type               "action",
+                              :phrase             "poem",
+                              :phrase-description "Play poem",
+                              :from-var           [{:var-name "current-concept", :var-property "poem-story"}]},
+            :run-story
+                             {:type "sequence-data", :data [{:id "prepare-bubbles", :type "action"} {:id "run-concept-poem", :type "action"}]},
+            :start-activity  {:type "start-activity", :id "park-poem"},
             :start-scene
-                            {:type        "sequence",
-                             :data        ["start-activity" "init-state" "init-concepts" "mari-voice-welcome" "enable-story-1"],
-                             :description "Initial action"},
-            :start-activity {:type "start-activity", :id "park-poem"},
-            :stop-activity  {:type "stop-activity", :id "park-poem"},
+                             {:type        "sequence",
+                              :data        ["start-activity" "init-state" "init-concepts" "mari-voice-welcome" "enable-story-1"],
+                              :description "Initial action"},
+            :stop-activity   {:type "stop-activity", :id "park-poem"},
             :test-stories-complete
-                            {:type      "test-var-list",
-                             :success   "mari-voice-finish",
-                             :values    [true true true],
-                             :var-names ["story-1-passed" "story-2-passed" "story-3-passed"]}},
+                             {:type      "test-var-list",
+                              :success   "mari-voice-finish",
+                              :values    [true true true],
+                              :var-names ["story-1-passed" "story-2-passed" "story-3-passed"]}},
  :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "park", :autostart true},
  :audio    {:mari "/raw/audio/l2/a3/L2_A3_Mari.m4a"}}

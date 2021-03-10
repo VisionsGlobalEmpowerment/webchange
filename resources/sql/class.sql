@@ -108,7 +108,7 @@ WHERE school_id = :school_id
 
 -- :name get-first-school :? :1
 -- :doc retrieve first school record
-SELECT * from schools LIMIT 1
+SELECT * from schools ORDER BY ID ASC LIMIT 1
 
 -- :name access-code-exists? :? :1
 -- :doc retrieve first school record

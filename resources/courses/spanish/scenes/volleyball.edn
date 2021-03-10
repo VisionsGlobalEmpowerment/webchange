@@ -14,17 +14,16 @@
                              {:type "group", :x 1163, :y 941, :width 126, :height 126, :transition "ball-transition", :children ["ball-image"]},
                  :ball-image
                              {:type    "image",
-                              :src     "/raw/img/stadium/volleyball/ball.png"
-                              :x       -1
-                              :y       -1
+                              :x       -1,
+                              :y       -1,
                               :width   128,
                               :height  128,
                               :origin  {:type "center-center"},
                               :scale-x 0.55,
                               :scale-y 0.55,
-                              :visible false
-                              :states  {:hidden  {:visible false},
-                                        :visible {:visible true}}},
+                              :src     "/raw/img/stadium/volleyball/ball.png",
+                              :states  {:hidden {:visible false}, :visible {:visible true}},
+                              :visible false},
                  :box1
                              {:type        "animation",
                               :x           1304,
@@ -198,8 +197,7 @@
                                            :from-params [{:param-property "player", :action-property "value"}]},
                  :clear-instruction       {:type "remove-flows", :flow-tag "instruction"},
                  :empty-before-dialog     {:type "empty", :duration 3000},
-                 :finish-activity
-                                          {:type "sequence-data", :data [{:id "volleyball", :type "finish-activity"}]},
+                 :finish-activity         {:type "sequence-data", :data [{:id "volleyball", :type "finish-activity"}]},
                  :init-audio-correct
                                           {:type "parallel",
                                            :data
@@ -455,14 +453,15 @@
                                                  [{:type "action", :from-var [{:template "animate-throw-%", :var-name "current-player", :action-property "id"}]}
                                                   {:id "visible", :type "state", :target "ball-image"}
                                                   {:type "empty", :duration 200}
-                                                  {:type "parallel"
-                                                   :data [{:type "action", :from-var [{:template "throw-from-%", :var-name "current-player", :action-property "id"}]}
-                                                          {:type "sequence-data",
-                                                           :data [{:type "empty", :duration 900}
-                                                                  {:type        "action",
-                                                                   :from-params [{:template "animate-catch-%", :param-property "player", :action-property "id"}]}
+                                                  {:data
+                                                         [{:type "action", :from-var [{:template "throw-from-%", :var-name "current-player", :action-property "id"}]}
+                                                          {:data
+                                                                 [{:type "empty", :duration 900}
+                                                                  {:type "action", :from-params [{:template "animate-catch-%", :param-property "player", :action-property "id"}]}
                                                                   {:type "empty", :duration 800}
-                                                                  {:id "hidden", :type "state", :target "ball-image"}]}],}
+                                                                  {:id "hidden", :type "state", :target "ball-image"}],
+                                                           :type "sequence-data"}],
+                                                   :type "parallel"}
                                                   {:type        "set-variable",
                                                    :var-name    "current-player",
                                                    :from-params [{:param-property "player", :action-property "var-value"}]}

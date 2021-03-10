@@ -20,12 +20,12 @@
         age (if date-of-birth
               (jt/time-between date-of-birth now :years)
               0)
-        age-tag (if (<= 4 age) [tags/age-above-or-equal-4]  [tags/age-less-4])
+        age-tag (if (<= 4 age) [tags/age-above-or-equal-4] [tags/age-less-4])
         level-tag (if (not (tags/has-one-from tags/learning-level-tags current-tags)) [tags/advanced] [])
         current-tags (-> current-tags
-                       (tags/remove-tags tags/age-tags)
-                       (concat age-tag)
-                       (concat level-tag))]
+                         (tags/remove-tags tags/age-tags)
+                         (concat age-tag)
+                         (concat level-tag))]
     (assoc-in progress [:data :current-tags] current-tags)))
 
 (defn get-current-progress [course-slug student-id]
@@ -39,13 +39,13 @@
         stats (->> (db/get-course-stats {:class_id class-id :course_id course-id})
                    (map class/with-user)
                    (map class/with-student-by-user))]
-    [true {:stats stats
-           :class-id class-id
+    [true {:stats       stats
+           :class-id    class-id
            :course-name course-slug}]))
 
 (defn workflow->grid
   [levels f]
-  (let [->lesson (fn [lesson level] {:name (str "L" (:lesson lesson))
+  (let [->lesson (fn [lesson level] {:name   (str "L" (:lesson lesson))
                                      :values (map #(f % level (:lesson lesson)) (:activities lesson))})
         ->level (fn [level] [(:level level) (map #(->lesson % (:level level)) (:lessons level))])]
     (->> levels
@@ -90,11 +90,11 @@
                                                  (get activity)))]
     (fn [{:keys [activity scored]} level lesson]
       (let [data (get-stat level lesson activity)]
-        {:label activity
-         :started (boolean data)
-         :finished (-> data :score boolean)
+        {:label      activity
+         :started    (boolean data)
+         :finished   (-> data :score boolean)
          :percentage (score->value (-> data :score) scored)
-         :value (score->value (-> data :score) scored)}))))
+         :value      (score->value (-> data :score) scored)}))))
 
 (defn time->percentage
   [time expected]
@@ -120,31 +120,31 @@
                                                  (get activity)))]
     (fn [{:keys [activity time-expected]} level lesson]
       (let [data (get-stat level lesson activity)]
-        {:label activity
-         :started (boolean data)
-         :finished (-> data :score boolean)
+        {:label      activity
+         :started    (boolean data)
+         :finished   (-> data :score boolean)
          :percentage (time->percentage (-> data :time-spent) time-expected)
-         :value (time->value (-> data (:time-spent 0)))}))))
+         :value      (time->value (-> data (:time-spent 0)))}))))
 
 (defn get-individual-progress [course-slug student-id]
   (let [{user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:slug course-slug})
         course-data (course/get-course-data course-slug)
         stats (db/get-user-activity-stats {:user_id user-id :course_id course-id})]
-    [true {:stats stats
+    [true {:stats  stats
            :scores (workflow->grid (:levels course-data) (activity->score stats))
-           :times (workflow->grid (:levels course-data) (activity->time stats))}]))
+           :times  (workflow->grid (:levels course-data) (activity->time stats))}]))
 
 (defn save-events! [owner-id course-id events]
   (doseq [{created-at-string :created-at type :type :as data} events]
     (let [created-at (jt/offset-date-time created-at-string)]
       (db/create-event! {
-                         :user_id owner-id
-                         :course_id course-id
+                         :user_id    owner-id
+                         :course_id  course-id
                          :created_at created-at
-                         :type type
-                         :guid (java.util.UUID/fromString (:id data))
-                         :data data
+                         :type       type
+                         :guid       (java.util.UUID/fromString (:id data))
+                         :data       data
                          })
       (events/dispatch (-> data
                            (assoc :user-id owner-id)
@@ -166,38 +166,52 @@
       (update-progress! id progress)
       (create-progress! owner-id course-id progress))))
 
+(defn- filter-last-finished-lessons
+  [lesson-idx finished]
+  (let [[last-level last-lessons] (last finished)
+        filtered-lessons (->> last-lessons
+                              (keep (fn [[idx item]] (when (>= lesson-idx idx) [idx item])))
+                              (into {}))]
+    (-> finished
+        (assoc last-level filtered-lessons))))
+
+(defn- filter-last-finished-activities
+  [activity-idx finished]
+  (let [[last-level last-lessons] (last finished)
+        [last-lesson last-activies] (last last-lessons)
+        filtered-activities (->> last-activies
+                                 (remove (fn [idx] (> idx activity-idx)))
+                                 (into []))]
+    (-> finished
+        (assoc-in [last-level last-lesson] filtered-activities))))
+
 (defn- levels->finished
-  [levels level-idx lesson-idx]
+  [levels level-idx lesson-idx activity-idx]
   (let [->lesson (fn [idx lesson] [idx (->> (:activities lesson) (map-indexed (fn [idx _] idx)) (into #{}))])
         ->level (fn [idx level] [idx (->> (:lessons level) (map-indexed ->lesson) (into {}))])
         prepared (->> levels (map-indexed ->level) (into {}))]
-    (if level-idx
-      (let [filtered-levels (->> prepared
-                                 (keep (fn [[idx item]] (when (>= level-idx idx) [idx item])))
-                                 (into {}))]
-        (if lesson-idx
-          (let [[last-level last-lessons] (last filtered-levels)
-                filtered-lessons (->> last-lessons
-                                      (keep (fn [[idx item]] (when (>= lesson-idx idx) [idx item])))
-                                      (into {}))]
-            (-> filtered-levels
-                (assoc last-level filtered-lessons)))
-          filtered-levels))
-      prepared)))
+    (cond->> prepared
+             level-idx (keep (fn [[idx item]] (when (>= level-idx idx) [idx item])))
+             :always (into {})
+             lesson-idx (filter-last-finished-lessons lesson-idx)
+             activity-idx (filter-last-finished-activities activity-idx))))
 
-(defn complete-individual-progress! [course-slug student-id {lesson-val :lesson level-val :level}]
-  (let [level (dec level-val)
-        lesson (dec lesson-val)
+(defn complete-individual-progress!
+  [course-slug student-id {lesson-val :lesson level-val :level activity-val :activity}]
+  (let [level (when level-val (dec level-val))
+        lesson (when lesson-val (dec lesson-val))
+        activity (when activity-val (dec activity-val))
         {user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:slug course-slug})
         levels (-> (course/get-course-data course-slug) :levels)
         finished (-> levels
-                     (levels->finished level lesson))
+                     (levels->finished level lesson activity))
+        _ (log/debug "finsihed?" finished)
         current-tags (->
-                   (db/get-progress {:user_id user-id :course_id course-id})
-                   :data
-                   :current-tags)
-        next (activity/next-not-finished-for current-tags levels finished {:level level :lesson lesson :activity 0})
+                       (db/get-progress {:user_id user-id :course_id course-id})
+                       :data
+                       :current-tags)
+        next (activity/next-not-finished-for current-tags levels finished {:level level :lesson lesson :activity activity})
         progress (->
                    (db/get-progress {:user_id user-id :course_id course-id})
                    :data
