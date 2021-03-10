@@ -5,8 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
     [webchange.editor-v2.components.slider.views :refer [slider]]
-    [webchange.editor-v2.wizard.activity-template.utils-video :as vu]
-    ))
+    [webchange.interpreter.utils.video :as vu]))
 
 (def video-validation-map {:root [(fn [value] (when (empty? value) "Select at least 1 video range"))]})
 
@@ -142,7 +141,7 @@
                               :data      ranges-list-data
                               :validator validator
                               :max-value (.-duration @video-inst)
-                              :on-play   #(vu/play-range @video-inst %)
+                              :on-play   #(vu/play-range @video-inst (:from %) (:to %))
                               :on-change #(vu/set-current-time @video-inst %)
                               :on-remove handle-remove-range
                               :last?     (= idx (dec (count ranges-list)))}]])))]])

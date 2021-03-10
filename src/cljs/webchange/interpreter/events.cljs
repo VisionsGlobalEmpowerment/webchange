@@ -664,7 +664,7 @@
 (re-frame/reg-event-fx
   ::execute-play-video
   [ce/event-as-action ce/with-flow]
-  (fn [{:keys [_]} {:keys [target src flow-id] :as action}]
+  (fn [{:keys [_]} {:keys [target src flow-id start end] :as action}]
     "Execute `play-video` action - play video file.
 
     Action params:
@@ -680,6 +680,8 @@
                                                   (re-frame/dispatch [::scene/change-scene-object target [[:stop]]])))
       {:dispatch [::scene/change-scene-object target [[:set-src {:src     src
                                                                  :options {:play   true
+                                                                           :start  start
+                                                                           :end    end
                                                                            :on-end #(ce/dispatch-success-fn action)}}]]]})))
 
 (re-frame/reg-event-fx
@@ -1164,19 +1166,19 @@
 (re-frame/reg-event-fx
   ::start-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-             (if (not= course-id (:loaded-course db))
-               {:dispatch-n (list [::load-course course-id scene-id])})))
+    (if (not= course-id (:loaded-course db))
+      {:dispatch-n (list [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::load-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-             (if (not= course-id (:loaded-course db))
-               {:db          (-> db
-                                 (assoc :loaded-course course-id)
-                                 (assoc :current-course course-id)
-                                 (assoc-in [:loading :load-course] true))
-                :load-course {:course-id course-id
-                              :scene-id  scene-id}})))
+    (if (not= course-id (:loaded-course db))
+      {:db          (-> db
+                        (assoc :loaded-course course-id)
+                        (assoc :current-course course-id)
+                        (assoc-in [:loading :load-course] true))
+       :load-course {:course-id course-id
+                     :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
   ::load-scenes-with-skills
@@ -1206,10 +1208,10 @@
 (re-frame/reg-event-fx
   ::load-course-data
   (fn-traced [{:keys [db]} [_ course-id]]
-             (if (not= course-id (:loaded-course db))
-               {:dispatch         [::load-scenes-with-skills course-id]
-                :load-course-data {:course-id course-id}
-                :load-lessons     [course-id]})))
+    (if (not= course-id (:loaded-course db))
+      {:dispatch         [::load-scenes-with-skills course-id]
+       :load-course-data {:course-id course-id}
+       :load-lessons     [course-id]})))
 
 (re-frame/reg-event-fx
   ::set-current-course
