@@ -11,7 +11,7 @@
     [webchange.editor-v2.wizard.activity-template.views-string :refer [string-option]]
     [webchange.editor-v2.wizard.activity-template.views-strings-list :refer [strings-list-option]]
     [webchange.editor-v2.wizard.activity-template.views-video :refer [video-option]]
-    [webchange.editor-v2.wizard.activity-template.views-video-range :refer [video-range-option]]))
+    [webchange.editor-v2.wizard.activity-template.views-video-ranges :refer [video-ranges-option]]))
 
 (defn- undefined-option
   [{:keys [key option]}]
@@ -31,7 +31,7 @@
     "strings-list" [strings-list-option props]
     "questions-no-image" [answers-option props false]
     "video" [video-option props]
-    "video-range" [video-range-option props]
+    "video-ranges" [video-ranges-option props]
     [undefined-option props]))
 
 (defn- template->options

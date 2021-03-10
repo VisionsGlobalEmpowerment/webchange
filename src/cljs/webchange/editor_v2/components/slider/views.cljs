@@ -5,7 +5,7 @@
 (defn- el->value
   [el]
   (->> (.-value el)
-       (.parseInt js/Number)))
+       (.parseFloat js/Number)))
 
 (defn slider
   [{:keys [value1 value2 min max on-change step]
@@ -28,8 +28,6 @@
                               (when (and (some? @slider1)
                                          (some? @slider2)))))]
     [:section.range-slider
-     [:span.rangeValues {:style {:color "white"}}
-      value1 " - " value2]
      [:input {:value     value1
               :min       min
               :max       max

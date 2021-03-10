@@ -16,7 +16,7 @@
                :flex-grow   1}})
 
 (defn- select-file-form
-  [type uploading-atom on-change options]
+  [type uploading-atom on-change]
   (let [on-finish (fn [result]
                     (on-change (:url result))
                     (reset! uploading-atom false))
@@ -65,7 +65,6 @@
        (:label option)]
       [error-message {:field-name :root}]]
      [ui/grid {:item true :xs 12}
-      [video-field (or @page-data "") #(reset! page-data %) (:options option)]
-      [error-message {:field-name :root}]]]
+      [video-field (or @page-data "") #(reset! page-data %) (:options option)]]]
     (finally
       (destroy))))
