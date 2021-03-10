@@ -23,6 +23,7 @@
 (e/reg-simple-executor :calc ::execute-calc)
 (e/reg-simple-executor :string-operation ::execute-string-operation)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
+(e/reg-simple-executor :set-random ::execute-set-random)
 (e/reg-simple-executor :set-variable-list ::execute-set-variable-list)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
@@ -45,6 +46,23 @@
       (core/set-variable! var-name current-user)
       {:dispatch (e/success-event action)})))
 
+
+(re-frame/reg-event-fx
+  ::execute-set-random
+  (fn [{:keys [db]} [_ {:keys [var-name start end] :as action}]]
+    "Execute `set-random` action - allow to set random value between start and end both inclusive to corresponding variable.
+
+    Action params:
+    :var-name - variable name to set.
+    :var-value - value to set.
+
+    Example:
+    {:type 'set-random'
+     :var-name 'answer-clickable'
+     :start 5
+     :end 6}"
+    (core/set-variable! var-name (+ start (rand-int (- (inc end) start))))
+    {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
   ::execute-set-variable
@@ -301,7 +319,8 @@
             :<= (<= test value)
             :>= (>= test value))
         {:dispatch [::e/execute-action (cond-action db action :success)]}
-        (if fail {:dispatch [::e/execute-action (cond-action db action :fail)]})))))
+        (if fail {:dispatch [::e/execute-action (cond-action db action :fail)]}
+                 {:dispatch-n (list (e/success-event action))})))))
 
 
 (re-frame/reg-event-fx
