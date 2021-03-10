@@ -4,7 +4,7 @@
     [webchange.dev-templates :as templates]
     [webchange.templates.core :as core]))
 
-(def m {:id          35
+(def m {:id          36
         :name        "Karaoke"
         :tags        ["listening comprehension" "rhyming" "express ideas verbally"]
         :description "Karaoke"
