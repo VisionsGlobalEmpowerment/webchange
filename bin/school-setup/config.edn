@@ -2,4 +2,5 @@
  :public-dir "/srv/www/webchange/public"
  :upload-dir "/srv/www/webchange/public/upload"
  :secondary {:host-url "http://localhost:3000/"}
- }
+ :local-binary-path "/srv/www/webchange/webchange.jar"}
+

@@ -42,8 +42,8 @@
   (let [file-crc (crc32 (slurp full-path))
         path-md5 (md5 path)]
     (db/update-asset-hash! {:path_hash path-md5
-                            :file_hash file-crc
-                            })))
+                            :file_hash file-crc})))
+
 
 (defn create-asset-hash!
   [path full-path]

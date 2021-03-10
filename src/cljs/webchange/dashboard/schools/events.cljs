@@ -73,14 +73,25 @@
 
 (re-frame/reg-event-fx
   ::sync-school
-  (fn [{:keys [db]} [_ id]]
+  (fn [{:keys [db]} [_ id data]]
     {:db (assoc-in db [:loading :sync-school] true)
      :http-xhrio {:method          :post
                   :uri             (str "/api/school/sync/" id)
+                  :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::sync-school-success]
                   :on-failure      [:api-request-error :sync-school]}}))
+
+(re-frame/reg-event-fx
+  ::software-update
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:loading :software-update] true)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/software/update")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-failure      [:api-request-error :software-update]}}))
 
 
 (re-frame/reg-event-fx
@@ -152,13 +163,12 @@
 
 (re-frame/reg-event-fx
   ::confirm-sync
-  (fn [{:keys [db]} [_ school-id]]
-    {:dispatch [::sync-school school-id]}))
+  (fn [{:keys [db]} [_ school-id data]]
+    {:dispatch [::sync-school school-id data]}))
 
 (re-frame/reg-event-fx
   ::show-sync-school-form
   (fn [{:keys [db]} [_ school-id]]
     {:db (assoc-in db [:dashboard :current-school-id] school-id)
      :dispatch-n (list
-                   [::open-sync-modal]
-                   )}))
+                   [::open-sync-modal])}))
