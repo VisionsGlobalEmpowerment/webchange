@@ -115,8 +115,9 @@
     (let [{:keys [scene-id]} (scene-slug->id course-slug scene-name)
           latest-version (db/get-latest-scene-version {:scene_id scene-id})
           scene-skills (get-scene-skills scene-id)]
-      (merge (:data latest-version)
-             {:skills scene-skills}))))
+      (when latest-version
+        (merge (:data latest-version)
+               {:skills scene-skills})))))
 
 (defn get-or-create-scene! [course-id scene-name]
   (if-let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]
