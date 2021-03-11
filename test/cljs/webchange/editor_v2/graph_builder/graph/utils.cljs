@@ -13,7 +13,7 @@
           {}
           graph))
 
-(defn- compare-results
+(defn compare-results
   ([actual-result expected-result]
    (compare-results actual-result expected-result {:pick-data?   true
                                                    :keep-phrase? true}))

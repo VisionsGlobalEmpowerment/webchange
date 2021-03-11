@@ -1,7 +1,5 @@
 (ns webchange.templates.library.karaoke
   (:require
-    [clojure.tools.logging :as log]
-    [webchange.dev-templates :as templates]
     [webchange.templates.core :as core]))
 
 (def m {:id          36
@@ -438,12 +436,3 @@
 (core/register-template
   m
   (partial f t))
-
-(comment
-  (def course-slug "ee-qq-lfihnruo")
-  (def scene-slug "ww")
-
-  ;; update activity
-  (let [dialog-action (templates/get-dialog-actions course-slug scene-slug)
-        update-result (templates/update-activity course-slug scene-slug :actions dialog-action)]
-    (get-in update-result [:data :assets])))
