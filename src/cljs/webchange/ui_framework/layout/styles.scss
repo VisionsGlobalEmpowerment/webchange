@@ -1,0 +1,47 @@
+@import "../styles/colors";
+
+@import "avatar/styles";
+@import "logo/styles";
+@import "toolbar/styles";
+
+$content-padding: 24px;
+
+.page-layout {
+    background-color: $background-color;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .header {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .body {
+        display: flex;
+        flex-grow: 1;
+
+        .side-menu {
+            flex-grow: 0;
+            flex-shrink: 0;
+            padding: $content-padding;
+            width: 352px;
+
+            .menu-placeholder {
+                background-color: #E2E2E2;
+                border-radius: 8px;
+                color: #bbb;
+                font-size: 19px;
+                font-weight: bold;
+                line-height: 400px;
+                min-height: 400px;
+                text-align: center;
+            }
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: $content-padding;
+        }
+    }
+}

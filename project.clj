@@ -82,7 +82,7 @@
              :init-script "init.sql"
              :db ~(get (System/getenv) "DATABASE_URL")}
 
-  :sass {:src              "resources/sass"
+  :sass {:src              "src/cljs/webchange/ui_framework/styles/index"
          :output-directory "resources/public/css"
          :command          :sass
          :source-maps      false}
