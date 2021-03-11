@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.video.utils
   (:require
-    [webchange.interpreter.pixi :refer [Texture]]))
+    [webchange.interpreter.pixi :refer [Texture]]
+    [webchange.interpreter.utils.video :as utils]))
 
 (defn- ->video
   [sprite]
@@ -13,23 +14,22 @@
 
 (defn stop-video
   [sprite]
-  (doto (->video sprite)
-    (.pause)
-    (aset "currentTime" 0)))
+  (-> (->video sprite) (utils/stop)))
 
 (defn play-video
   [sprite]
   (stop-video sprite)
-  (-> (->video sprite)
-      (.play)))
+  (-> (->video sprite) (utils/play)))
 
 (defn set-src
-  [sprite resource {:keys [play on-end]}]
+  [sprite resource {:keys [play start end on-end]
+                    :or   {on-end #()}}]
   (let [video (.-data resource)
-        texture (.fromVideo Texture video)]
+        texture (.from Texture video)]
     (aset sprite "texture" texture)
-    (when-not (nil? on-end)
-      (set-handler video "end" on-end))
     (if play
-      (play-video sprite)
+      (if (and (some? start) (some? end))
+        (utils/play-range video start end on-end)
+        (do (set-handler video "end" on-end)
+            (play-video sprite)))
       (stop-video sprite))))
