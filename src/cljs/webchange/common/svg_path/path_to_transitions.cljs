@@ -3,7 +3,7 @@
     [clojure.edn :as edn]
     [clojure.string :as s]
     [webchange.common.svg-path.path-splitter :refer [split-path apply-path-to-point]]
-    [webchange.common.svg-path.path-length :refer [path-length]]
+    [webchange.common.svg-path.path-element :refer [length]]
     [svg-arc-to-cubic-bezier :as arcToBezier]))
 
 (defn- apply-origin
@@ -136,7 +136,7 @@
                          (let [transition-path (transition->path transition)
                                new-point (apply-path-to-point last-point transition-path)
                                path (concat ["M" x y ] transition-path)
-                               length (path-length (s/join " " path))]
+                               length (length (s/join " " path))]
                            [new-point (conj result length)]))
                        [origin []])
                      (last))

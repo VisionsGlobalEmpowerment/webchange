@@ -4,6 +4,7 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.path :refer [paths]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.animation :as a]
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as t]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.utils :as a-svg-utils]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
@@ -18,24 +19,26 @@
                     :stroke-width {}
                     :line-cap     {:default "round"}
                     :duration     {}
-                    :scale        {:default {:x 1 :y 1}}})
+                    :scale        {:default {:x 1 :y 1}}
+                    :traceable    {}})
 
 (defn- create-container
   [{:keys [x y scale]}]
   (doto (Container.)
     (utils/set-position {:x x :y y})
-    (utils/set-scale scale)))
+    #_(utils/set-scale scale)))
 
 (defn- create-state
-  [{:keys [path duration width height stroke-width line-cap] :as props}]
+  [{:keys [path duration width height stroke-width line-cap scale] :as props}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
-                 (set! -width (* width 2))
-                 (set! -height (* height 2)))
+                 (set! -width (* width 2 (:x scale)))
+                 (set! -height (* height 2 (:y scale))))
         ctx (doto
               (.getContext canvas "2d")
               (set! -lineWidth stroke-width)
-              (set! -lineCap line-cap))
+              (set! -lineCap line-cap)
+              (.scale (:x scale) (:y scale)))
 
         texture (.from Texture canvas)
         state (atom {:ctx ctx :texture texture :paths (paths path duration)
@@ -76,13 +79,16 @@
     :origin - where image pivot will be set. Can be '(left|center|right)-(top|center|bottom)'. Default: 'left-top'.
     :max-width - max image width.
     :max-height - max image height.
-    :duration - animation duration in seconds"
-  [{:keys [parent type object-name group-name] :as props}]
+    :duration - animation duration in seconds
+    :traceable - flag indicating whether finger tracing allowed"
+  [{:keys [parent type object-name group-name traceable] :as props}]
   (let [container (create-container props)
         state (create-state props)
         wrapped-container (wrap type object-name group-name container state)]
 
     (.addChild container (Sprite. (:texture @state)))
+    (when traceable
+      (.addChild container (t/create-trigger state props)))
     (.addChild parent container)
 
     (a/stop state)

@@ -22,8 +22,7 @@
     (set! (.-alpha this) 0.9)
     (set! (.-dragging this) true)
     (when (and (.-dragging this) (.-on-drag-start-handler this))
-      ((.-on-drag-start-handler this)))
-    ))
+      ((.-on-drag-start-handler this)))))
 
 (defn- on-drag-end
   []
@@ -47,14 +46,13 @@
 
 (defn enable-drag!
   ([object on-drag-end-handler]
-   (enable-drag! object on-drag-end-handler nil)
-   )
+   (enable-drag! object on-drag-end-handler nil))
   ([object on-drag-end-handler on-drag-start-handler]
-  (doto object
-    (set! -interactive true)
-    (set! -on-drag-end-handler on-drag-end-handler)
-    (set! -on-drag-start-handler on-drag-start-handler)
-    (.on "pointerdown" on-drag-start)
-    (.on "pointerup" on-drag-end)
-    (.on "pointerupoutside" on-drag-end)
-    (.on "pointermove" on-drag-move))))
+   (doto object
+     (set! -interactive true)
+     (set! -on-drag-end-handler on-drag-end-handler)
+     (set! -on-drag-start-handler on-drag-start-handler)
+     (.on "pointerdown" on-drag-start)
+     (.on "pointerup" on-drag-end)
+     (.on "pointerupoutside" on-drag-end)
+     (.on "pointermove" on-drag-move))))

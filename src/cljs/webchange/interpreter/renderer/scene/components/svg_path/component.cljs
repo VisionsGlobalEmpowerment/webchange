@@ -23,19 +23,20 @@
   [{:keys [x y scale]}]
   (doto (Container.)
     (utils/set-position {:x x :y y})
-    (utils/set-scale scale)))
+    #_(utils/set-scale scale)))
 
 (defn- create-graphics
-  [{:keys [data width height stroke stroke-width line-cap dash fill]}]
+  [{:keys [data width height stroke stroke-width line-cap dash fill scale]}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
-                 (set! -width (* width 2))
-                 (set! -height (* height 2)))
+                 (set! -width (* width 2 (:x scale)))
+                 (set! -height (* height 2 (:y scale))))
         ctx (doto
               (.getContext canvas "2d")
               (set! -strokeStyle stroke)
               (set! -lineWidth stroke-width)
-              (set! -lineCap line-cap))
+              (set! -lineCap line-cap)
+              (.scale (:x scale) (:y scale)))
         texture (.from Texture canvas)]
     (svg-utils/set-svg-path texture ctx {:data data
                                          :fill fill
