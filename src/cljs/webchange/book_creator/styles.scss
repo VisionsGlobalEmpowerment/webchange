@@ -1,0 +1,50 @@
+@import "text_form/styles";
+
+$border-color: #B7B7B7;
+$border-width: 1px;
+
+.book-creator {
+    display: flex;
+
+    .main-content {
+        flex-grow: 0;
+        padding: 0 36px;
+
+        .book-creator--stage {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+
+            &:after {
+                content: "";
+
+                position: absolute;
+                top: 0;
+                left: 50%;
+                width: $border-width;
+                height: 100%;
+
+                background-image: linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%);
+                background-position: left top, left bottom, left top, right top;
+                background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+                background-size: 20px $border-width, 20px $border-width, $border-width 20px, $border-width 20px;
+            }
+        }
+    }
+
+    .side-block {
+        flex-grow: 1;
+        padding: 0 36px;
+    }
+
+    .block-header {
+        margin-bottom: 21px;
+        padding: 16px 0;
+
+        .title {
+            font-weight: bold;
+            font-size: 22px;
+            line-height: 26px;
+        }
+    }
+}

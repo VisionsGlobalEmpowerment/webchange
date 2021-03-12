@@ -25,7 +25,6 @@ $content-padding: 24px;
             flex-grow: 0;
             flex-shrink: 0;
             padding: $content-padding;
-            width: 352px;
 
             .menu-placeholder {
                 background-color: #E2E2E2;
@@ -36,6 +35,7 @@ $content-padding: 24px;
                 line-height: 400px;
                 min-height: 400px;
                 text-align: center;
+                width: 300px;
             }
         }
 

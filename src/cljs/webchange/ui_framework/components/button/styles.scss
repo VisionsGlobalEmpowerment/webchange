@@ -1,0 +1,42 @@
+@import "../../styles/colors";
+
+$padding-v: 13px;
+$padding-h: 49px;
+
+.wc-button {
+    color: #fff;
+    cursor: pointer;
+
+    border-radius: 24px;
+
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 500;
+
+    line-height: 21px;
+    padding: $padding-v $padding-h;
+    outline: none;
+
+    &.contained {
+        border: none;
+
+        &.primary {
+            background: $primary-color;
+            color: #fff;
+
+            &:hover {
+                background: $primary-color-dark;
+            }
+        }
+    }
+
+    &.outlined {
+        border: 2px solid $default-color;
+        color: $default-color;
+        padding: ($padding-v - 1) ($padding-h - 1);
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
+}
