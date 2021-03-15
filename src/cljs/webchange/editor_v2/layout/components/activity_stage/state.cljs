@@ -5,12 +5,15 @@
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.state.state :as state]))
 
+(defn scene-stages
+  [db scene-id]
+  (get-in db [:scenes scene-id :metadata :stages] []))
+
 (re-frame/reg-sub
   ::stage-options
   (fn [db]
-    (let [scene-id (:current-scene db)
-          data (get-in db [:scenes scene-id] {})]
-      (if-let [stages (-> data (get-in [:metadata :stages]))]
+    (let [scene-id (:current-scene db)]
+      (if-let [stages (scene-stages db scene-id)]
         (map-indexed (fn [idx stage]
                        (assoc stage :idx idx))
                      stages)))))
@@ -47,6 +50,42 @@
                             flatten
                             (map (fn [object-name]
                                    [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]])))})))))
+
+(defn- next-stage-available?
+  [db]
+  (let [scene-id (:current-scene db)
+        stages-count (-> (scene-stages db scene-id) (count))
+        current-stage-idx (current-stage db)]
+    (< current-stage-idx (dec stages-count))))
+
+(re-frame/reg-sub
+  ::next-stage-available?
+  (fn [db]
+    (next-stage-available? db)))
+
+(re-frame/reg-event-fx
+  ::select-next-stage
+  (fn [{:keys [db]} [_]]
+    (let [current-stage-idx (current-stage db)]
+      (cond-> {}
+              (next-stage-available? db) (assoc :dispatch [::select-stage (inc current-stage-idx)])))))
+
+(defn- prev-stage-available?
+  [db]
+  (let [current-stage-idx (current-stage db)]
+    (> current-stage-idx 0)))
+
+(re-frame/reg-sub
+  ::prev-stage-available?
+  (fn [db]
+    (prev-stage-available? db)))
+
+(re-frame/reg-event-fx
+  ::select-prev-stage
+  (fn [{:keys [db]} [_]]
+    (let [current-stage-idx (current-stage db)]
+      (cond-> {}
+              (> current-stage-idx 0) (assoc :dispatch [::select-stage (dec current-stage-idx)])))))
 
 (re-frame/reg-event-fx
   ::select-flipbook-stage

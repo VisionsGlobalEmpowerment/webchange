@@ -1,0 +1,41 @@
+@import "../../styles/colors";
+
+.wc-icon-button {
+    background: rgba(0, 0, 0, 0);
+    border: none;
+    border-radius: 50%;
+    color: $default-color;
+    cursor: pointer;
+    outline: none;
+    padding: 8px;
+    height: 36px;
+    width: 36px;
+
+    & > * {
+        line-height: 20px;
+        padding: 0;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    &:disabled {
+        background: rgba(0, 0, 0, 0);
+        cursor: default;
+
+        path {
+            fill: $default-color-disabled;
+        }
+    }
+
+    &.arrow-left {
+        padding-left: 6px;
+        padding-top: 10px;
+    }
+
+    &.arrow-right {
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+}
