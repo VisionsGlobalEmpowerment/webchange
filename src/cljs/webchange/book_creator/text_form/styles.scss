@@ -1,5 +1,24 @@
 .book-creator {
     .text-form {
+        .font-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+
+            .control-block {
+                align-items: center;
+                display: flex;
+
+                .font-family-selector {
+                    width: 224px;
+                }
+
+                .font-size-selector {
+                    width: 96px;
+                }
+            }
+        }
+
         .buttons-block {
             margin-top: 64px;
 

@@ -33,7 +33,9 @@ $border-width: 1px;
     }
 
     .side-block {
+        box-sizing: content-box;
         flex-grow: 1;
+        max-width: 416px;
         padding: 0 36px;
     }
 

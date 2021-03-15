@@ -1,14 +1,7 @@
 (ns webchange.ui-framework.components.button.index
   (:require
-    [clojure.string :refer [join]]
-    [reagent.core :as r]))
-
-(defn get-class-name
-  [class-names]
-  (->> class-names
-       (filter (fn [[_ condition]] condition))
-       (map first)
-       (join " ")))
+    [reagent.core :as r]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
   [{:keys [color variant on-click]
