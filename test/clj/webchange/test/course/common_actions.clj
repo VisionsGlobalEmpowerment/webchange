@@ -17,7 +17,7 @@
   (let
     [scene {}
      file "/test/test.mp3"
-     data {:common-action? true :action :background-music :data {:background-music {:src file}}}
+     data {:common-action? true :action "background-music" :data {:background-music {:src file}}}
      result (core/update-activity-from-template scene data)]
     (is (get-in result [:triggers :music]))
     (is (has-action result file))
@@ -34,7 +34,7 @@
                      {:music {:on "start", :action "start-background-music-1"}},
             :assets  [{:url old-file, :size 10, :type "audio"}]}
      file "/test/test.mp3"
-     data {:common-action? true :action :background-music :data {:background-music {:src file}}}
+     data {:common-action? true :action "background-music" :data {:background-music {:src file}}}
      result (core/update-activity-from-template scene data)]
     (is (get-in result [:triggers :music]))
     (is (has-action result file))
@@ -56,7 +56,7 @@
                     {:music {:on "start", :action "start-background-music-1"}},
             :assets [{:url old-file, :size 10, :type "audio"}]}
      file "/test/test.mp3"
-     data {:common-action? true :action :background-music :data {:background-music {:src file}}}
+     data {:common-action? true :action "background-music" :data {:background-music {:src file}}}
      result (core/update-activity-from-template scene data)]
     (is (get-in result [:triggers :music]))
     (is (has-action result file))

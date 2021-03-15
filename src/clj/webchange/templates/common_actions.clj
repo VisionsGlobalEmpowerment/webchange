@@ -37,5 +37,5 @@
 
 (defn update-activity
   [scene-data action data]
-  (case action
+  (case (keyword action)
     :background-music (update-background-music scene-data data)))
