@@ -2,7 +2,7 @@
   (:require
     [clojure.test :refer :all]
     [webchange.templates.common-actions :as ca]
-    ))
+    [webchange.templates.core :as core]))
 
 (defn- has-asset
   [data file]
@@ -17,8 +17,8 @@
   (let
     [scene {}
      file "/test/test.mp3"
-     data {:data {:background-music {:src file}}}
-     result (ca/update-activity scene data)]
+     data {:common-action? true :action "background-music" :data {:background-music {:src file}}}
+     result (core/update-activity-from-template scene data)]
     (is (get-in result [:triggers :music]))
     (is (has-action result file))
     (is (has-asset result file))))
@@ -27,17 +27,15 @@
   []
   (let
     [old-file "/test/test-1.mp3"
-     scene {:actions
-                    {:start-background-music-1 {:type "audio",
-                                                :id   old-file,
-                                                :loop true}
-                     },
+     scene {:actions {:start-background-music-1 {:type "audio",
+                                                 :id   old-file,
+                                                 :loop true}},
             :triggers
-                    {:music {:on "start", :action "start-background-music-1"}},
-            :assets [{:url old-file, :size 10, :type "audio"}]}
+                     {:music {:on "start", :action "start-background-music-1"}},
+            :assets  [{:url old-file, :size 10, :type "audio"}]}
      file "/test/test.mp3"
-     data {:data {:background-music {:src file}}}
-     result (ca/update-activity scene data)]
+     data {:common-action? true :action "background-music" :data {:background-music {:src file}}}
+     result (core/update-activity-from-template scene data)]
     (is (get-in result [:triggers :music]))
     (is (has-action result file))
     (is (has-asset result file))
@@ -53,14 +51,13 @@
                                                 :id   old-file,
                                                 :loop true}
                      :act-1                    {:type "audio",
-                                                :id   old-file}
-                     },
+                                                :id   old-file}},
             :triggers
                     {:music {:on "start", :action "start-background-music-1"}},
             :assets [{:url old-file, :size 10, :type "audio"}]}
      file "/test/test.mp3"
-     data {:data {:background-music {:src file}}}
-     result (ca/update-activity scene data)]
+     data {:common-action? true :action "background-music" :data {:background-music {:src file}}}
+     result (core/update-activity-from-template scene data)]
     (is (get-in result [:triggers :music]))
     (is (has-action result file))
     (is (has-asset result file))

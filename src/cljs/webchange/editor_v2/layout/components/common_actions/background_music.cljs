@@ -4,10 +4,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.wizard.activity-template.views-audio :as views-audio]
-    [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
     [webchange.editor-v2.layout.components.common_actions.state :as state]))
-
-
 
 (def modal-state-path [:editor-v2 :sandbox :background-music-modal-state])
 (def modal-share-link-state [:editor-v2 :sandbox :background-music-link-state])
@@ -44,7 +41,7 @@
 
 (defn- background-music-modal
   []
-  (let [form-data (r/atom {:common-action? true})
+  (let [form-data (r/atom {})
         open? @(re-frame/subscribe [::modal-state])
         close #(re-frame/dispatch [::close])
         save #(re-frame/dispatch [::state/save :background-music @form-data [::close]])]
