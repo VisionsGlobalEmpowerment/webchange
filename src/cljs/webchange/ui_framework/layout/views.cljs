@@ -1,7 +1,8 @@
 (ns webchange.ui-framework.layout.views
   (:require
     [reagent.core :as r]
-    [webchange.ui-framework.layout.toolbar.views :refer [toolbar]]))
+    [webchange.ui-framework.layout.toolbar.views :refer [toolbar]]
+    [webchange.views-modals :refer [modal-windows]]))
 
 (defn- menu-placeholder
   []
@@ -17,4 +18,5 @@
       [:div.side-menu
        [menu-placeholder]]
       (into [:div.content]
-            (r/children this))]]))
+            (r/children this))]
+     [modal-windows]]))

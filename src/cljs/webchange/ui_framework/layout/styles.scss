@@ -20,6 +20,7 @@ $content-padding: 24px;
     .body {
         display: flex;
         flex-grow: 1;
+        overflow: auto;
 
         .side-menu {
             flex-grow: 0;

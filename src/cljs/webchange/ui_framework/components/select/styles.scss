@@ -34,7 +34,9 @@
         button {
             background-color: #0071E3;
             border: none;
+            box-sizing: border-box;
             cursor: pointer;
+            outline: none;
             width: 20px;
             height: 16px;
 

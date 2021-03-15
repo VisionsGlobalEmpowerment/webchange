@@ -1,4 +1,4 @@
-(ns webchange.book-creator.text-form.views
+(ns webchange.book-creator.stage.views-text-form
   (:require
     [webchange.ui-framework.index :refer [button icon select text-area]]))
 

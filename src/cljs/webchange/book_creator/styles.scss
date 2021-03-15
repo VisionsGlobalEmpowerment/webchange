@@ -1,4 +1,5 @@
-@import "text_form/styles";
+@import "pages/styles";
+@import "stage/styles";
 
 $border-color: #B7B7B7;
 $border-width: 1px;
@@ -10,34 +11,46 @@ $border-width: 1px;
         flex-grow: 0;
         padding: 0 36px;
 
-        .book-creator--stage {
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
+        .stage-wrapper {
+            align-items: center;
+            display: flex;
 
-            &:after {
-                content: "";
+            .book-creator--stage {
+                border-radius: 8px;
+                overflow: hidden;
+                position: relative;
 
-                position: absolute;
-                top: 0;
-                left: 50%;
-                width: $border-width;
-                height: 100%;
+                &:after {
+                    content: "";
 
-                background-image: linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%);
-                background-position: left top, left bottom, left top, right top;
-                background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-                background-size: 20px $border-width, 20px $border-width, $border-width 20px, $border-width 20px;
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    width: $border-width;
+                    height: 100%;
+
+                    background-image: linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%);
+                    background-position: left top, left bottom, left top, right top;
+                    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+                    background-size: 20px $border-width, 20px $border-width, $border-width 20px, $border-width 20px;
+                }
+            }
+
+            .stage-controls {
+                box-sizing: content-box;
+                flex-grow: 1;
+                max-width: 416px;
+                padding-left: 72px;
             }
         }
     }
 
-    .side-block {
-        box-sizing: content-box;
-        flex-grow: 1;
-        max-width: 416px;
-        padding: 0 36px;
-        padding-top: 80px;
+    .content-block {
+        margin-top: 72px;
+
+        &:first-child {
+            margin-top: 0;
+        }
     }
 
     .block-header {

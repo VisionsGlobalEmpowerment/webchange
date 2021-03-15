@@ -37,7 +37,7 @@
   [stage-idx]
   (fn [callback]
     (re-frame/dispatch [::stage/show-flipbook-stage stage-idx])
-    (js/setTimeout (fn [] (app/take-screenshot callback)) 100)))
+    (js/setTimeout (fn [] (app/take-screenshot callback {:extract-canvas? false})) 100)))
 
 (re-frame/reg-fx
   :take-stages-screenshots

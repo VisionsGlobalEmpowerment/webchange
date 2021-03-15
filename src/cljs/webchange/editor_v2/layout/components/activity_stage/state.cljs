@@ -5,19 +5,6 @@
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.state.state :as state]))
 
-(defn scene-stages
-  [db scene-id]
-  (get-in db [:scenes scene-id :metadata :stages] []))
-
-(re-frame/reg-sub
-  ::stage-options
-  (fn [db]
-    (let [scene-id (:current-scene db)]
-      (if-let [stages (scene-stages db scene-id)]
-        (map-indexed (fn [idx stage]
-                       (assoc stage :idx idx))
-                     stages)))))
-
 (defn current-stage
   [db]
   (get-in db (path-to-db [:current-stage])))
@@ -25,6 +12,22 @@
 (re-frame/reg-sub
   ::current-stage
   current-stage)
+
+(defn scene-stages
+  [db scene-id]
+  (get-in db [:scenes scene-id :metadata :stages] []))
+
+(re-frame/reg-sub
+  ::stage-options
+  (fn [db]
+    (let [scene-id (:current-scene db)
+          current-stage-idx (current-stage db)]
+      (if-let [stages (scene-stages db scene-id)]
+        (map-indexed (fn [idx stage]
+                       (-> stage
+                           (assoc :idx idx)
+                           (assoc :active? (= idx current-stage-idx))))
+                     stages)))))
 
 (re-frame/reg-sub
   ::stage-key

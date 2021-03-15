@@ -1,12 +1,8 @@
 (ns webchange.editor-v2.components.page-layout.views
   (:require
     [reagent.core :as r]
-    [webchange.editor-v2.concepts.views :refer [delete-dataset-item-modal]]
     [webchange.editor-v2.components.toolbar.views :refer [toolbar]]
-    [webchange.editor-v2.translator.views-modal :refer [translator-modal]]
-    [webchange.editor-v2.dialog.views-modal :refer [dialog-modal]]
-    [webchange.editor-v2.question.views-modal :refer [question-modal]]
-    [webchange.editor-v2.translator.text.views-text-chunks-editor :refer [configuration-modal]]
+    [webchange.views-modals :refer [modal-windows]]
     [webchange.ui.utils :refer [deep-merge]]))
 
 (defn- get-styles
@@ -23,15 +19,6 @@
    :content-container-centered {:display         "flex"
                                 :justify-content "center"
                                 :align-items     "start"}})
-
-(defn- modal-windows
-  []
-  [:div
-   [question-modal]
-   [dialog-modal]
-   [translator-modal]
-   [configuration-modal]
-   [delete-dataset-item-modal]])
 
 (defn layout
   [{:keys [align content-ref styles]

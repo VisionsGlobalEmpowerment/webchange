@@ -29,6 +29,8 @@
                {:keys [valid?] :as validator} (validator/init data)
                close #(re-frame/dispatch [::scene-action.events/close])
                save #(if (valid?) (re-frame/dispatch [::scene-action.events/save @data]))]
+    (print "current-action-name" current-action-name)
+    (print "current-action-data" current-action-data)
     [ui/dialog
      {:open       true
       :on-close   close
@@ -53,6 +55,9 @@
   []
   (let [open? @(re-frame/subscribe [::scene-action.events/modal-state])
         current-action-name @(re-frame/subscribe [::scene-action.events/current-action])]
+    (print "action-modal-container")
+    (print "open?" open?)
+    (print "current-action-name" current-action-name)
     (when open?
       ^{:key current-action-name}
       [action-modal])))
