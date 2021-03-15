@@ -36,6 +36,6 @@
             true (update :assets vec))))
 
 (defn update-activity
-  [scene-data {:keys [data]}]
-  (cond-> scene-data
-          (contains? data :background-music) (update-background-music data)))
+  [scene-data action data]
+  (case action
+    :background-music (update-background-music scene-data data)))

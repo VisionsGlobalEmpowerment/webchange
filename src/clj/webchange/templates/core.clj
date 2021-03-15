@@ -49,11 +49,11 @@
                                         :updated []}))))
 
 (defn update-activity-from-template
-  [scene-data {:keys [action data]}]
+  [scene-data {:keys [common-action? action data]}]
   (let [template-id (get-in scene-data [:metadata :template-id])
         {:keys [template-update]} (get-in @templates [template-id])
-        activity (if (:common-action? data)
-                   (common-actions/update-activity scene-data data)
+        activity (if common-action?
+                   (common-actions/update-activity scene-data action data)
                    (template-update scene-data (assoc data :action-name action)))]
     (log/debug "Update activity" template-id action data)
     (-> activity
