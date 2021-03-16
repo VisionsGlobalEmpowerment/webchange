@@ -12,6 +12,8 @@
               :options-text-suffix "pt"
               :options             (->> ["Roboto"]
                                         (map (fn [size] {:text size :value size})))
+              :show-buttons?       true
+              :with-arrow?         false
               :class-name          "font-family-selector"}]]
     [:div.control-block
      [icon {:icon "font-size"}]
@@ -19,6 +21,8 @@
               :options-text-suffix "pt"
               :options             (->> [8 12 16 18 24 32 64 72 98]
                                         (map (fn [size] {:text size :value size})))
+              :show-buttons?       true
+              :with-arrow?         false
               :class-name          "font-size-selector"}]]]
    [text-area {:value "Some Text..."}]
    [:div.buttons-block

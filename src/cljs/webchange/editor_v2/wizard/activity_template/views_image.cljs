@@ -5,7 +5,8 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.file-input.views :as file-input]
     [webchange.editor-v2.assets.events :as assets-events]
-    [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
+    [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
+    [webchange.ui-framework.index :refer [file]]))
 
 (def image-validation-map {:src [(fn [value] (when-not (some? value) "Image is required"))]})
 
@@ -23,7 +24,7 @@
         on-change (fn [js-file]
                     (reset! uploading-atom true)
                     (re-frame/dispatch [::assets-events/upload-asset js-file {:options options
-                                                                                :type type :on-finish on-finish}]))]
+                                                                              :type    type :on-finish on-finish}]))]
     [file-input/select-file-form {:on-change on-change
                                   :styles    {:wrapper      {:display "inline-block"}
                                               :button       {:padding "0 25px"}
@@ -62,17 +63,25 @@
   [{:keys [key option data validator]}]
   (r/with-let [page-data (connect-data data [key] nil)
                {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
-    [ui/grid {:container true
-              :spacing   16
-              :style     {:margin-top "-16px"}}
-     [ui/grid {:item true :xs 12}
-      [ui/typography {:variant "h6"
-                      :style   {:display      "inline-block"
-                                :margin-right "16px"}}
-       (:label option)]
-      [error-message {:field-name :root}]]
-     [ui/grid {:item true :xs 12}
-      [image-field (get @page-data :src "") #(swap! page-data assoc :src %) (:options option)]
-      [error-message {:field-name :src}]]]
+    (print ">> image-option")
+    (print "options" (:options option))
+    [:div
+     [file {:type      "image"
+            :on-change #(swap! page-data assoc :src %)}]
+     [error-message {:field-name :src}]]
+
+    ;[ui/grid {:container true
+    ;          :spacing   16
+    ;          :style     {:margin-top "-16px"}}
+    ; [ui/grid {:item true :xs 12}
+    ;  [ui/typography {:variant "h6"
+    ;                  :style   {:display      "inline-block"
+    ;                            :margin-right "16px"}}
+    ;   (:label option)]
+    ;  [error-message {:field-name :root}]]
+    ; [ui/grid {:item true :xs 12}
+    ;  [image-field (get @page-data :src "") #(swap! page-data assoc :src %) (:options option)]
+    ;  [error-message {:field-name :src}]]]
+
     (finally
       (destroy))))

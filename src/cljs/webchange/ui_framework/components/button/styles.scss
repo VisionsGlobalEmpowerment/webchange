@@ -17,6 +17,20 @@ $padding-h: 49px;
     padding: $padding-v $padding-h;
     outline: none;
 
+    &:disabled {
+        cursor: not-allowed;
+
+        &.contained {
+            &.primary {
+                background: rgba(0, 0, 0, 0.5);
+
+                &:hover {
+                    background: rgba(0, 0, 0, 0.5);
+                }
+            }
+        }
+    }
+
     &.contained {
         border: none;
 
@@ -31,6 +45,7 @@ $padding-h: 49px;
     }
 
     &.outlined {
+        background-color: rgba(0, 0, 0, 0);
         border: 2px solid $default-color;
         color: $default-color;
         padding: ($padding-v - 1) ($padding-h - 1);

@@ -6,7 +6,8 @@
     [webchange.subs :as subs]
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
-    [webchange.editor-v2.wizard.validator :as validator]))
+    [webchange.editor-v2.wizard.validator :as validator]
+    [webchange.ui-framework.index :refer [dialog button]]))
 
 (defn- get-action-default-data
   [scene-data action-data]
@@ -29,35 +30,24 @@
                {:keys [valid?] :as validator} (validator/init data)
                close #(re-frame/dispatch [::scene-action.events/close])
                save #(if (valid?) (re-frame/dispatch [::scene-action.events/save @data]))]
-    (print "current-action-name" current-action-name)
-    (print "current-action-data" current-action-data)
-    [ui/dialog
-     {:open       true
-      :on-close   close
-      :full-width true
-      :max-width  "xl"}
-     [ui/dialog-title (:title current-action-data)]
-     [ui/dialog-content {:class-name "translation-form"}
-      [template {:template current-action-data
-                 :metadata metadata
-                 :data     data
-                 :validator validator}]]
-     [ui/dialog-actions
-      [ui/button {:on-click close}
-       "Cancel"]
-      [:div {:style {:position "relative"}}
-       [ui/button {:color    "secondary"
-                   :variant  "contained"
-                   :on-click save}
-        "Save"]]]]))
+    [dialog
+     {:title    (:title current-action-data)
+      :on-close close}
+     [template {:template  current-action-data
+                :metadata  metadata
+                :data      data
+                :validator validator}]
+     [:div.actions
+      [button {:on-click save}
+       "Save"]
+      [button {:on-click close
+               :variant  "outlined"}
+       "Cancel"]]]))
 
 (defn action-modal-container
   []
   (let [open? @(re-frame/subscribe [::scene-action.events/modal-state])
         current-action-name @(re-frame/subscribe [::scene-action.events/current-action])]
-    (print "action-modal-container")
-    (print "open?" open?)
-    (print "current-action-name" current-action-name)
     (when open?
       ^{:key current-action-name}
       [action-modal])))

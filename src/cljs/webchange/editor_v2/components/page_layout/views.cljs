@@ -2,6 +2,7 @@
   (:require
     [reagent.core :as r]
     [webchange.editor-v2.components.toolbar.views :refer [toolbar]]
+    [webchange.editor-v2.creation-progress.views :refer [progress-panel]]
     [webchange.views-modals :refer [modal-windows]]
     [webchange.ui.utils :refer [deep-merge]]))
 
@@ -36,4 +37,5 @@
      (into [:div {:style content-styles
                   :ref   content-ref}]
            (r/children this))
-     [modal-windows]]))
+     [modal-windows]
+     [progress-panel]]))

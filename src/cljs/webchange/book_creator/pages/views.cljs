@@ -19,7 +19,9 @@
     [:div {:on-click   handle-click
            :class-name (get-class-name {"stage-item" true
                                         "active"     active?})}
-     [:img {:src img}]
+     (if (some? img)
+       [:img {:src img}]
+       [icon {:icon "image"}])
      [:span (get-stage-name stage)]]))
 
 (defn- add-stage-button

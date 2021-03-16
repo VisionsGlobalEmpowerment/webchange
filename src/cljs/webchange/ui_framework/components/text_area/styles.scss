@@ -26,4 +26,8 @@ $border-radius: 8px;
             border-radius: $border-radius;
         }
     }
+
+    &.outlined {
+        border: 1px solid #C4C4C4;
+    }
 }

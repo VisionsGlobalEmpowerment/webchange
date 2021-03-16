@@ -4,7 +4,6 @@
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
-    [webchange.editor-v2.creation-progress.views :refer [progress-panel]]
     [webchange.editor.events :as ee]
     [webchange.editor-v2.course-table.views :refer [course-table]]
     [webchange.editor-v2.scenes-crossing.views :refer [scenes-crossing]]
@@ -106,5 +105,4 @@
     [:div
      [ui/css-baseline]
      [panels handler route-params]
-     [error-message]
-     [progress-panel]]))
+     [error-message]]))
