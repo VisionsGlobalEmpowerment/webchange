@@ -20,6 +20,7 @@
     [webchange.templates.library.painting-tablet]
     [webchange.templates.library.park-poem]
     [webchange.templates.library.slide]
+    [webchange.templates.library.letter-intro]
     [webchange.templates.library.categorize]
     [webchange.templates.library.categorize-hard]
     [webchange.templates.library.conversation]

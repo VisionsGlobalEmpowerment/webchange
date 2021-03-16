@@ -17,6 +17,12 @@
                                       (if (and (not highlight) highlight-filter-set) (f/set-filter text-object "" {}))
                                       (if (and highlight (not highlight-filter-set))
                                         (f/set-filter text-object "glow" {}))))
+
+                   :set-permanent-pulsation (fn [permanent-pulsation]
+                                              (let [pulsation-filter-set (f/has-filter-by-name text-object "pulsation")]
+                                                (if (and (not permanent-pulsation) pulsation-filter-set) (f/set-filter text-object "" {}))
+                                                (if (and permanent-pulsation (not pulsation-filter-set))
+                                                  (f/set-filter text-object "pulsation" (assoc permanent-pulsation :no-interval true)))))
                    :set-fill      (fn [value]
                                     (utils/set-fill text-object value))
                    :get-fill      (fn []
