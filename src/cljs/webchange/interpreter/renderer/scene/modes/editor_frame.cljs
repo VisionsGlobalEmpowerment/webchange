@@ -9,7 +9,7 @@
     [webchange.logger.index :as logger]))
 
 (def frame-width 5)
-(def frame-padding 30)
+(def frame-padding 10)
 (def frame-default-color 0x59acff)
 (def frame-selected-color 0xFFA500)
 

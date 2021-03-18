@@ -25,14 +25,12 @@
                        (some #{text-animation-node} children)))))
 
 (defn- populate-page-text-data
-  [page-data scene-data]
-  (let [text-name (-> page-data (get :text) (keyword))]
-    (if (some? text-name)
-      (-> page-data
-          (assoc :text {:name text-name
-                        :data (get-in scene-data [:objects text-name])})
-          (assoc :phrase-action-path (-> (get-phrase-node scene-data page-data) (second) (:path))))
-      page-data)))
+  [page-data scene-data text-name]
+  (js/console.log "text-name" text-name)
+  (-> page-data
+      (assoc :text {:name text-name
+                    :data (get-in scene-data [:objects text-name])})
+      (assoc :phrase-action-path (-> (get-phrase-node scene-data page-data) (second) (:path)))))
 
 (defn- page-in-stage?
   [scene-data stage-idx page-idx]
@@ -41,9 +39,10 @@
        (some #{page-idx})))
 
 (defn get-page-data
-  [scene-data stage-idx page-idx]
+  [scene-data stage-idx text-name page-idx]
+  (js/console.log "page-in-stage?" stage-idx page-idx (page-in-stage? scene-data stage-idx page-idx))
   (when (page-in-stage? scene-data stage-idx page-idx)
     (let [data (page-idx->data scene-data page-idx)]
-      (if (some? (:text data))
-        (populate-page-text-data data scene-data)
+      (if (some? text-name)
+        (populate-page-text-data data scene-data text-name)
         data))))
