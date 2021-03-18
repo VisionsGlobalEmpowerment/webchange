@@ -5,28 +5,30 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [options value variant class-name on-change show-buttons? width with-arrow?]
-    :or   {variant       ""
-           show-buttons? false
-           with-arrow?   true
-           options       []
-           on-change     #()}
-    :as   props}]
+  [{:keys [options value variant class-name on-arrow-down-click on-arrow-up-click on-change show-buttons? width with-arrow?]
+    :or   {variant             ""
+           show-buttons?       false
+           with-arrow?         true
+           options             []
+           on-change           #()
+           on-arrow-down-click #()
+           on-arrow-up-click   #()}}]
   (let [handle-change #(-> % (.. -target -value) (on-change))]
     [:div {:style      (if (some? width) {:width width} {})
            :class-name (get-class-name (-> {"wc-select"  true
                                             "with-arrow" with-arrow?}
                                            (assoc variant true)
                                            (assoc class-name (some? class-name))))}
-     [:select {:on-change handle-change}
-      (for [{:keys [text value]} options]
+     [:select {:value     value
+               :on-change handle-change}
+      (for [{:keys [text value disabled?]} options]
         ^{:key value}
         [:option {:value    value
-                  :selected (= value (:value props))}
+                  :disabled disabled?}
          text])]
      (when show-buttons?
        [:div.controls
-        [:button
+        [:button {:on-click on-arrow-up-click}
          [icon-up/data]]
-        [:button
+        [:button {:on-click on-arrow-down-click}
          [icon-down/data]]])]))

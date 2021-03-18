@@ -8,9 +8,14 @@
         cursor: pointer;
         padding: 20px;
 
-        img {
-            border-radius: 8px;
+        .img-container {
             width: 240px;
+            height: 115px;
+
+            img {
+                border-radius: 8px;
+                width: 100%;
+            }
         }
 
         span {

@@ -9,10 +9,12 @@
     [webchange.state.state :as state]))
 
 (defn path-to-db
-  [id relative-path]
-  (->> relative-path
-       (concat [:page-text-control id])
-       (db/path-to-db)))
+  ([id]
+   (path-to-db id []))
+  ([id relative-path]
+   (->> relative-path
+        (concat [:page-text-control id])
+        (db/path-to-db))))
 
 (re-frame/reg-event-fx
   ::init
@@ -72,9 +74,9 @@
     (let [text-object-name (get-text-object-name db id)
           parts (clojure.string/split text #" ")
           chunks (parts->chunks text parts)]
-      {:db (-> db
-               (assoc-in (path-to-db id [:current-data :text]) text)
-               (assoc-in (path-to-db id [:current-data :chunks]) chunks))
+      {:db       (-> db
+                     (assoc-in (path-to-db id [:current-data :text]) text)
+                     (assoc-in (path-to-db id [:current-data :chunks]) chunks))
        :dispatch [::scene/set-scene-object-state text-object-name {:text text}]})))
 
 (re-frame/reg-sub
@@ -85,12 +87,27 @@
   (fn [[current-data]]
     (get current-data :font-size 18)))
 
+(re-frame/reg-sub
+  ::current-font-family
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::current-data id])])
+  (fn [[current-data]]
+    (get current-data :font-family)))
+
 (re-frame/reg-event-fx
   ::set-current-font-size
   (fn [{:keys [db]} [_ id font-size]]
     (let [text-object-name (get-text-object-name db id)]
       {:db       (assoc-in db (path-to-db id [:current-data :font-size]) font-size)
        :dispatch [::scene/set-scene-object-state text-object-name {:font-size font-size}]})))
+
+(re-frame/reg-event-fx
+  ::set-current-font-family
+  (fn [{:keys [db]} [_ id font-family]]
+    (let [text-object-name (get-text-object-name db id)]
+      {:db       (assoc-in db (path-to-db id [:current-data :font-family]) font-family)
+       :dispatch [::scene/set-scene-object-state text-object-name {:font-family font-family}]})))
 
 (re-frame/reg-event-fx
   ::open-dialog-window
@@ -102,6 +119,18 @@
       {:dispatch-n [[::translator-form.actions/set-current-dialog-action action-node]
                     [::translator-form.actions/set-current-phrase-action phrase-node]
                     [::dialog.window/open window-options]]})))
+
+(re-frame/reg-event-fx
+  ::reset
+  (fn [{:keys [db]} [_ id]]
+    (let [initial-data (get-initial-data db id)
+          text-object-name (get-text-object-name db id)]
+      {:db       (-> db
+                     (update-in (path-to-db id []) dissoc :text-object-name)
+                     (update-in (path-to-db id []) dissoc :dialog-action-name)
+                     (update-in (path-to-db id []) dissoc :phrase-action-path)
+                     (update-in (path-to-db id []) dissoc :current-data))
+       :dispatch [::scene/set-scene-object-state text-object-name initial-data]})))
 
 (re-frame/reg-sub
   ::loading-status

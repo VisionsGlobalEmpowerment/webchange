@@ -1,5 +1,5 @@
 @import "pages/styles";
-@import "stage/styles";
+@import "text_form/styles";
 
 $border-color: #B7B7B7;
 $border-width: 1px;
@@ -40,6 +40,7 @@ $border-width: 1px;
                 box-sizing: content-box;
                 flex-grow: 1;
                 max-width: 416px;
+                min-width: 380px;
                 padding-left: 72px;
             }
         }
