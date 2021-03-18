@@ -6,7 +6,8 @@
     [webchange.ui-framework.components.icon.icon-close :as close]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
-    [webchange.ui-framework.components.icon.icon-image :as image]))
+    [webchange.ui-framework.components.icon.icon-image :as image]
+    [webchange.ui-framework.components.icon.icon-mic :as mic]))
 
 (defn component
   [{:keys [icon]}]
@@ -18,4 +19,5 @@
      "close" close/data
      "font-family" font-family/data
      "font-size" font-size/data
-     "image" image/data)])
+     "image" image/data
+     "mic" mic/data)])

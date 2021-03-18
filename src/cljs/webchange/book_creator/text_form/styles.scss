@@ -19,6 +19,20 @@
             }
         }
 
+        .text-control-wrapper {
+            position: relative;
+
+            .text-control {
+                padding-bottom: 64px;
+            }
+        }
+
+        .voice-over {
+            position: absolute;
+            left: 16px;
+            bottom: 16px;
+        }
+
         .buttons-block {
             margin-top: 64px;
 

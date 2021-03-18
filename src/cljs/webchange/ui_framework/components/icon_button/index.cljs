@@ -4,12 +4,16 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [class-name icon disabled? on-click]
+  [{:keys [class-name color icon disabled? on-click size]
     :or   {disabled? false
-           on-click  #()}}]
+           color     "default"
+           on-click  #()
+           size      "default"}}]
   [:button {:class-name (get-class-name (-> {"wc-icon-button" true}
                                             (assoc class-name (some? class-name))
-                                            (assoc icon true)))
+                                            (assoc color true)
+                                            (assoc icon true)
+                                            (assoc size true)))
             :disabled   disabled?
             :on-click   on-click}
    [icon/component {:icon icon}]])

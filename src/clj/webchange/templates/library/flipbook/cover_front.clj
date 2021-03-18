@@ -35,6 +35,7 @@
                            :font-family    "Lexend Deca"
                            :align          "center"
                            :vertical-align "top"
+                           :editable?      {:select true}
                            :x              "---"
                            :width          "---"
                            :chunks         "---"

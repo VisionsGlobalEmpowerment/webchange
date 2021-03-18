@@ -6,9 +6,9 @@
     [webchange.book-creator.text-form.views-font-family :refer [font-family-component]]
     [webchange.book-creator.text-form.views-font-size :refer [font-size-component]]
     [webchange.book-creator.text-form.views-text :refer [text-component]]
+    [webchange.book-creator.text-form.views-voice-over-button :refer [voice-over-button]]
     [webchange.editor-v2.layout.flipbook.page-text.state :as state]
-    [webchange.ui-framework.index :refer [button icon select text-area]]))
-
+    [webchange.ui-framework.index :refer [button]]))
 
 (defn- text-form-view
   [{:keys [action phrase-action-path text]}]
@@ -24,7 +24,9 @@
      [:div.font-controls
       ;[font-family-component {:id id}]
       [font-size-component {:id id}]]
-     [text-component {:id id}]
+     [:div.text-control-wrapper
+      [text-component {:id id}]
+      [voice-over-button {:id id}]]
      [:div.buttons-block
       [button {:variant  "contained"
                :color    "primary"

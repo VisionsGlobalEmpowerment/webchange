@@ -4,10 +4,11 @@
     background: rgba(0, 0, 0, 0);
     border: none;
     border-radius: 50%;
+    box-sizing: border-box;
     color: $default-color;
     cursor: pointer;
     outline: none;
-    padding: 8px;
+    padding: 10px 12px;
     height: 36px;
     width: 36px;
 
@@ -29,18 +30,29 @@
         }
     }
 
+    &.primary {
+        background: $primary-color;
+        color: #fff;
+
+        &:hover {
+            background: $primary-color-dark;
+        }
+    }
+
+    &.small {
+        height: 36px;
+        width: 36px;
+    }
+
     &.arrow-left {
-        padding-left: 6px;
-        padding-top: 10px;
+        padding-left: 13px;
     }
 
     &.arrow-right {
-        padding-left: 10px;
-        padding-top: 10px;
+        padding-left: 15px;
     }
 
     &.close {
-        padding-left: 9px;
-        padding-top: 9px;
+        padding-left: 13px;
     }
 }

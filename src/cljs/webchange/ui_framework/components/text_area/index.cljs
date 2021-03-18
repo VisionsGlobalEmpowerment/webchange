@@ -3,12 +3,13 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [value placeholder variant on-change rows]
+  [{:keys [class-name value placeholder variant on-change rows]
     :or   {placeholder ""
            on-change   #()
            rows        3}}]
   (let [handle-change #(-> % (.. -target -value) (on-change))]
     [:div {:class-name (get-class-name (-> {"wc-text-area" true}
+                                           (assoc class-name (some? class-name))
                                            (assoc variant (some? variant))))}
      [:textarea {:value       value
                  :on-change   handle-change

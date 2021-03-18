@@ -8,5 +8,6 @@
   [{:keys [id]}]
   (let [value @(re-frame/subscribe [::state/current-text id])
         handle-change (fn [value] (re-frame/dispatch [::state/set-current-text id value]))]
-    [text-area {:value     value
-                :on-change handle-change}]))
+    [text-area {:value      value
+                :on-change  handle-change
+                :class-name "text-control"}]))

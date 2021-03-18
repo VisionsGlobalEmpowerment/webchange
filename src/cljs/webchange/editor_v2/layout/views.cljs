@@ -6,7 +6,6 @@
     [webchange.editor-v2.creation-progress.state :as progress-state]
     [webchange.editor-v2.layout.common.views :as common]
     [webchange.editor-v2.layout.book.views :as book]
-    [webchange.editor-v2.layout.flipbook.views :as flipbook]
     [webchange.editor-v2.layout.utils :refer [get-activity-type]]))
 
 (defn activity-edit-form
