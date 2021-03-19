@@ -275,7 +275,7 @@
 
 (re-frame/reg-event-fx
   ::execute-test-var-scalar
-  (fn [{:keys [db]} [_ {:keys [value var-name] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [value var-name fail] :as action}]]
     "Execute `test-var-scalar` action - compare variable value with test value.
 
     Action params:
@@ -293,7 +293,8 @@
     (let [test (core/get-variable var-name)]
       (if (= value test)
         {:dispatch [::e/execute-action (cond-action db action :success)]}
-        {:dispatch [::e/execute-action (cond-action db action :fail)]}))))
+        (if fail {:dispatch [::e/execute-action (cond-action db action :fail)]}
+                 {:dispatch (e/success-event action)})))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-inequality
