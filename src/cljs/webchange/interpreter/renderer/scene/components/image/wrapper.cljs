@@ -14,8 +14,9 @@
                    :object                  container
                    :set-highlight           (fn [highlight]
                                               (let [highlight-filter-set (f/has-filter-by-name sprite-object "glow")]
-                                                (if (and (not highlight) highlight-filter-set) (f/set-filter sprite-object "" {}))
-                                                (if (and highlight (not highlight-filter-set))
+                                                (when (and (not highlight) highlight-filter-set)
+                                                  (f/set-filter sprite-object "" {}))
+                                                (when (and highlight (not highlight-filter-set))
                                                   (f/set-filter sprite-object "glow" {}))))
                    :set-permanent-pulsation (fn [permanent-pulsation]
                                               (let [pulsation-filter-set (f/has-filter-by-name sprite-object "pulsation")]

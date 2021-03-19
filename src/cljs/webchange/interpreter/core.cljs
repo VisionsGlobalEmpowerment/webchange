@@ -238,11 +238,11 @@
   [{:keys [id component to from params on-ended skippable]}]
 
   (when from
-    (set-tween-object-params @component from))
+    (set-tween-object-params component from))
 
-  (let [container (get-tween-object-params @component to)
-        duration (transition-duration @component to params)
-        position (w/get-position @component)
+  (let [container (get-tween-object-params component to)
+        duration (transition-duration component to params)
+        position (w/get-position component)
         ease-params (or (:ease params) [1 1])
         to (cond-> to
                 (contains? to :offset-x) (assoc :x (+ (:offset-x to) (:x position)))
@@ -250,11 +250,12 @@
         vars (cond-> (-> to
                          (merge params)
                          (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
-                         (assoc :onUpdate (fn [] (set-tween-object-params @component (js->clj container :keywordize-keys true))))
+                         (assoc :onUpdate (fn [] (set-tween-object-params component (js->clj container :keywordize-keys true))))
                          (assoc :onComplete (if (:loop params)
                                               (fn [] (this-as t (.restart t)))
                                               (fn []
-                                                (on-ended)
+                                                (when on-ended
+                                                  (on-ended))
                                                 (this-as t (.kill t))))))
                      (:yoyo params) (merge {:yoyo   true
                                             :repeat -1})

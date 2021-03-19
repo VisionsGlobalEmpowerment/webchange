@@ -148,6 +148,7 @@
 
 (defn set-filter
   [container name params]
+  (logger/trace-folded "Set Filter" container name params)
   (case name
     "brightness" (apply-brighten-filter container params)
     "glow" (apply-glow-filter container)
@@ -168,5 +169,6 @@
   (if-let [filter (get-filter-by-name container filter-name)]
     (case filter-name
       "brightness" (set-brightness filter value)
+      "brighten" (set-brightness filter value)
       (logger/warn "[Filters]" (str "Filter with type <" filter-name "> can not be updated")))
     (logger/warn "[Filters]" (str "Filter with type <" filter-name "> was not found"))))

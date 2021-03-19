@@ -1,0 +1,432 @@
+(ns webchange.templates.library.writing-practice
+  (:require
+    [webchange.templates.core :as core]))
+
+(def m {:id          37
+        :name        "Writing practice"
+        :tags        ["Guided Practice"]
+        :description "Users will practice writing letters themselves."})
+
+(def t {:assets
+                  [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
+                   {:url "/raw/img/ui/back_button_01.png", :type "image"}
+                   {:url "/raw/img/library/painting-tablet/brush.png", :size 10, :type "image"}
+                   {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10, :type "image"}
+                   {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
+                   {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}],
+        :objects
+                  {:background       {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
+                   :brush
+                                     {:type       "image",
+                                      :x          -196,
+                                      :y          450,
+                                      :width      540,
+                                      :height     140,
+                                      :scene-name "brush",
+                                      :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "brush"}}},
+                                      :rotation   0,
+                                      :scale-x    0.7,
+                                      :scale-y    0.7,
+                                      :src        "/raw/img/library/painting-tablet/brush.png",
+                                      :states     {:active {:x -126}, :inactive {:x -196}}},
+                   :colors-palette
+                                     {:type       "colors-palette",
+                                      :x          1680,
+                                      :y          100,
+                                      :width      140,
+                                      :height     800,
+                                      :scene-name "colors-palette",
+                                      :actions    {:change {:id "set-current-color", :on "change", :type "action", :pick-event-param "color"}},
+                                      :colors     ["#4479bb" "#92bd4a" "#ed91aa" "#fdc531" "#010101"],
+                                      :rotation   0,
+                                      :scale-x    1,
+                                      :scale-y    1,
+                                      :var-name   "current-color"},
+                   :concept-card     {:type "group", :x 230, :y 100, :width 400, :height 300, :children ["concept-image" "concept-word"]},
+                   :concept-image    {:type "image", :x 100, :y 0, :width 100, :height 100, :rotation 0, :scale-x 2, :scale-y 2},
+                   :concept-word
+                                     {:type           "text",
+                                      :x              0,
+                                      :y              190,
+                                      :width          400,
+                                      :height         100,
+                                      :align          "center",
+                                      :fill           "black",
+                                      :font-family    "Lexend Deca",
+                                      :font-size      80,
+                                      :scale-x        1,
+                                      :scale-y        1,
+                                      :text           "",
+                                      :vertical-align "middle"},
+                   :eraser
+                                     {:type       "image",
+                                      :x          -82,
+                                      :y          794,
+                                      :width      380,
+                                      :height     175,
+                                      :scene-name "eraser",
+                                      :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "eraser"}}},
+                                      :rotation   0,
+                                      :scale-x    0.7,
+                                      :scale-y    0.7,
+                                      :src        "/raw/img/library/painting-tablet/eraser.png",
+                                      :states     {:active {:x -12}, :inactive {:x -82}}},
+                   :felt-tip
+                                     {:type       "image",
+                                      :x          -221,
+                                      :y          273,
+                                      :width      590,
+                                      :height     150,
+                                      :scene-name "felt-tip",
+                                      :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "felt-tip"}}},
+                                      :rotation   0,
+                                      :scale-x    0.7,
+                                      :scale-y    0.7,
+                                      :src        "/raw/img/library/painting-tablet/felt-tip.png",
+                                      :states     {:active {:x -151}, :inactive {:x -221}}},
+                   :practice-element {:type     "group"
+                                      :children ["practice-trace" "practice-path"]}
+                   :practice-trace
+                                     {:type         "svg-path",
+                                      :x            0,
+                                      :y            0,
+                                      :scene-name   "practice-trace",
+                                      :dash         [7 7],
+                                      :data         "",
+                                      :line-cap     "round",
+                                      :rotation     0,
+                                      :scale-x      4.2,
+                                      :scale-y      4.2,
+                                      :states       {:hidden {:visible false}, :visible {:visible true}},
+                                      :stroke       "#898989",
+                                      :stroke-width 4},
+                   :practice-path
+                                     {:type         "animated-svg-path",
+                                      :scene-name   "practice-path",
+                                      :x            0,
+                                      :y            0,
+                                      :width        525,
+                                      :height       525,
+                                      :duration     5000,
+                                      :fill         "transparent",
+                                      :line-cap     "round",
+                                      :path         "",
+                                      :scale-x      4.2,
+                                      :scale-y      4.2,
+                                      :states       {:hidden {:visible false}, :visible {:visible true}},
+                                      :stroke       "#323232",
+                                      :traceable    true
+                                      :stroke-width 10},
+                   :letter-trace-matrix
+                                     {:type "matrix", :x 80, :y 330, :width 2025, :height 675, :dx 480, :dy 360, :el "practice-element", :max 3},
+                   :letter-tutorial-image
+                                     {:type "image", :x 1065, :y 75, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
+                   :letter-tutorial-path
+                                     {:type         "animated-svg-path",
+                                      :x            600,
+                                      :y            25,
+                                      :width        225,
+                                      :height       225,
+                                      :duration     5000,
+                                      :fill         "transparent",
+                                      :line-cap     "round",
+                                      :path         "",
+                                      :scale-x      1.8,
+                                      :scale-y      1.8,
+                                      :states       {:hidden {:visible false}, :visible {:visible true}},
+                                      :stroke       "#323232",
+                                      :stroke-width 10},
+                   :letter-tutorial-trace
+                                     {:type         "svg-path",
+                                      :x            600,
+                                      :y            25,
+                                      :width        225,
+                                      :height       225,
+                                      :scene-name   "letter-tutorial-trace",
+                                      :dash         [7 7],
+                                      :data         "",
+                                      :line-cap     "round",
+                                      :rotation     0,
+                                      :scale-x      1.8,
+                                      :scale-y      1.8,
+                                      :states       {:hidden {:visible false}, :visible {:visible true}},
+                                      :stroke       "#898989",
+                                      :stroke-width 4},
+                   :mari
+                                     {:type       "animation",
+                                      :x          1700,
+                                      :y          520,
+                                      :width      473,
+                                      :height     511,
+                                      :scene-name "mari",
+                                      :transition "mari",
+                                      :anim       "idle",
+                                      :name       "mari",
+                                      :scale-x    0.5,
+                                      :scale-y    0.5,
+                                      :speed      0.35,
+                                      :start      true},
+                   :next-button
+                                     {:type     "image",
+                                      :x        1800,
+                                      :y        915,
+                                      :width    97,
+                                      :height   99,
+                                      :actions  {:click {:id "go-next", :on "click", :type "action"}},
+                                      :rotation 0,
+                                      :scale-x  -1,
+                                      :scale-y  1,
+                                      :src      "/raw/img/ui/back_button_01.png"},
+                   :pencil
+                                     {:type       "image",
+                                      :x          -198,
+                                      :y          622,
+                                      :width      550,
+                                      :height     135,
+                                      :scene-name "pencil",
+                                      :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "pencil"}}},
+                                      :rotation   0,
+                                      :scale-x    0.7,
+                                      :scale-y    0.7,
+                                      :src        "/raw/img/library/painting-tablet/pencil.png",
+                                      :states     {:active {:x -128}, :inactive {:x -198}}},
+                   :practice-canvas
+                                     {:type       "painting-area",
+                                      :x          0,
+                                      :y          0,
+                                      :width      1920,
+                                      :height     1080,
+                                      :scene-name "practice-canvas",
+                                      :color      "#323232",
+                                      :rotation   0,
+                                      :scale-x    1,
+                                      :scale-y    1,
+                                      :states     {:hidden {:visible false}, :visible {:visible true}},
+                                      :tool       "brush",
+                                      :var-name   "writing-practice-stage-1-pt-1"}},
+        :scene-objects
+                  [["background"]
+                   ["concept-card"
+                    "letter-trace-matrix"
+                    "letter-tutorial-trace"
+                    "letter-tutorial-path"
+                    "letter-tutorial-image"
+                    ;"practice-canvas"
+                    ;"felt-tip"
+                    ;"brush"
+                    ;"pencil"
+                    ;"eraser"
+                    ;"colors-palette"
+                    "next-button"
+                    "mari"]],
+        :actions
+                  {:check-page
+                                      {:type     "test-var-scalar",
+                                       :var-name "current-page",
+                                       :success  "check-stage",
+                                       :fail     "go-next-page",
+                                       :from-var [{:var-name "pages-number", :action-property "value"}]},
+                   :check-stage
+                                      {:type "test-var-scalar", :var-name "current-stage", :value 2, :success "finish-activity", :fail "go-next-stage"},
+                   :finish-activity   {:type "finish-activity", :id "writing-practice"},
+                   :go-next           {:type "action", :id "check-page"},
+                   :go-next-page
+                                      {:type "sequence-data",
+                                       :data
+                                             [{:type "counter", :counter-id "current-page", :counter-action "increase"}
+                                              {:id "update-painting-var", :type "action"}]},
+                   :go-next-stage
+                                      {:type "sequence-data",
+                                       :data
+                                             [{:type "counter", :counter-id "current-stage", :counter-action "increase"}
+                                              {:type "counter", :counter-id "current-page", :counter-value 0, :counter-action "reset"}
+                                              {:id "go-next-page", :type "action"}
+                                              {:id "hide-stage-1", :type "action"}
+                                              {:id "mari-voice-intro-2", :type "action"}]},
+                   :hide-stage-1
+                                      {:type "parallel",
+                                       :data
+                                             [{:id "hidden", :type "state", :target "practice-element"}
+                                              {:id "hidden", :type "state", :target "letter-tutorial-path"}]},
+                   :init-current-tool {:type "action", :id "set-current-tool", :params {:tool "felt-tip"}},
+                   :init-stage-1
+                                      {:type "parallel",
+                                       :data
+                                             [{:type      "set-attribute",
+                                               :target    "practice-trace",
+                                               :from-var  [{:var-name "letter-path", :action-property "attr-value"}],
+                                               :attr-name "data"}
+                                              {:type      "set-attribute",
+                                               :target    "practice-path",
+                                               :from-var  [{:var-name "letter-path", :action-property "attr-value"}],
+                                               :attr-name "path"}
+                                              {:type      "set-attribute",
+                                               :target    "letter-tutorial-trace",
+                                               :from-var  [{:var-name "letter-path", :action-property "attr-value"}],
+                                               :attr-name "data"}
+                                              {:type      "set-attribute",
+                                               :target    "letter-tutorial-path",
+                                               :from-var  [{:var-name "letter-path", :action-property "attr-value"}],
+                                               :attr-name "path"}]},
+                   :init-state
+                                      {:type "parallel",
+                                       :data
+                                             [{:type      "set-attribute",
+                                               :target    "concept-image",
+                                               :from-var  [{:var-name "current-concept", :var-property "image-src", :action-property "attr-value"}],
+                                               :attr-name "src"}
+                                              {:type      "set-attribute",
+                                               :target    "concept-word",
+                                               :from-var  [{:var-name "current-concept", :var-property "concept-name", :action-property "attr-value"}],
+                                               :attr-name "text"}
+                                              {:type      "set-attribute",
+                                               :target    "letter-tutorial-image",
+                                               :from-var  [{:var-name "current-concept", :var-property "letter-src", :action-property "attr-value"}],
+                                               :attr-name "src"}]},
+                   :init-vars
+                                      {:type "parallel",
+                                       :data
+                                             [{:type "set-variable", :var-name "current-stage", :var-value 1}
+                                              {:type "set-variable", :var-name "current-page", :var-value 1}
+                                              {:type "calc", :value-1 30, :value-2 13, :var-name "pages-number", :operation "div-ceil"}
+                                              {:type     "set-variable",
+                                               :from-var [{:var-name "current-concept", :var-property "letter-path", :action-property "var-value"}],
+                                               :var-name "letter-path"}]},
+                   :mari-go-wait      {:type "transition", :to {:x 1490, :y 130, :loop false, :duration 2}, :transition-id "mari"},
+                   :mari-init-wand    {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
+                   :mari-shows-example
+                                      {:type "sequence-data",
+                                       :data
+                                             [{:to {:x 1080, :y 360, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+                                              {:id "visible", :type "state", :target "letter-tutorial-path"}
+                                              {:data
+                                                     [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
+                                                      {:to            {:path "", :scale {:x 1.7, :y 1.7}, :origin {:x 780, :y 60}, :duration 5},
+                                                       :type          "transition",
+                                                       :from-var      [{:var-name "letter-path", :action-property "to.path"}],
+                                                       :transition-id "mari"}],
+                                               :type "parallel"}
+                                              {:to {:x 1490, :y 180, :loop false, :duration 2}, :type "transition", :transition-id "mari"}]},
+                   :mari-voice-go-next-practice
+                                      {:type               "sequence-data",
+                                       :data
+                                                           [{:offset                 62.923,
+                                                             :phrase-text            "Click on the arrow to do a little more writing work.",
+                                                             :start                  62.923,
+                                                             :type                   "animation-sequence",
+                                                             :duration               4.054,
+                                                             :volume                 0.2,
+                                                             :audio                  "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+                                                             :target                 "mari",
+                                                             :phrase-text-translated "Haz click en la flecha para seguir con tu trabajo.",
+                                                             :track                  1,
+                                                             :data                   [{:end 66.859, :anim "talk", :start 63.08}]}],
+                                       :phrase             "next-practice",
+                                       :phrase-description "Next practice"},
+                   :mari-voice-intro
+                                      {:type               "animation-sequence",
+                                       :data
+                                                           [{:end 36.254, :anim "talk", :start 33.026}
+                                                            {:end 40.367, :anim "talk", :start 36.707}
+                                                            {:end 45.485, :anim "talk", :start 41.627}
+                                                            {:end 49.047, :anim "talk", :start 46.193}],
+                                       :phrase             "welcome",
+                                       :phrase-description "Welcome",
+                                       :phrase-text
+                                                           "Pick a pencil or a color and follow the arrows to trace the letter.  Remember to follow the correct tracing pattern.  I’ll show you how to do the first one.",
+                                       :phrase-text-translated
+                                                           "Escoge un lapiz o un color y sigue las flechas para rastrear la letra. Recuerda seguir el modelo correcto de rastrear. Yo te ensenare como hacer el primero. ",
+                                       :target             "mari",
+                                       :audio              "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+                                       :start              32.357,
+                                       :duration           17.005,
+                                       :track              1,
+                                       :offset             32.357,
+                                       :skippable          true,
+                                       :volume             0.2},
+                   :mari-voice-intro-2
+                                      {:type               "animation-sequence",
+                                       :data
+                                                           [{:end 75.952, :anim "talk", :start 70.677}
+                                                            {:end 79.298, :anim "talk", :start 76.68}
+                                                            {:end 81.483, :anim "talk", :start 80.046}
+                                                            {:end 86.915, :anim "talk", :start 82.073}],
+                                       :phrase             "free-drawing",
+                                       :phrase-description "Free drawing intro",
+                                       :phrase-text
+                                                           "On this page, you should practice drawing the letters OR you can draw anything you want. When you are finished drawing, click the arrow to go to your next activity.",
+                                       :phrase-text-translated
+                                                           "En esta pagina, podras practicar a dibujar las letras O podras dibujar lo que gustes. Cuando termines, haz click sobre la flecha para ir a tu proxima actividad.",
+                                       :target             "mari",
+                                       :audio              "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+                                       :start              70.402,
+                                       :duration           16.848,
+                                       :track              1,
+                                       :offset             70.402,
+                                       :volume             0.2},
+                   :mari-voice-try-again
+                                      {:type                   "animation-sequence",
+                                       :data                   [{:end 55.562, :anim "talk", :start 52.629}],
+                                       :phrase                 "more-practice",
+                                       :phrase-description     "More practice",
+                                       :phrase-text            "Touch here for more tracing practice",
+                                       :phrase-text-translated "Toca aqui para seguir rastreando",
+                                       :target                 "mari",
+                                       :audio                  "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+                                       :start                  52.432,
+                                       :duration               3.228,
+                                       :track                  1,
+                                       :offset                 52.432,
+                                       :volume                 0.2},
+                   :renew-concept
+                                      {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
+                   :set-current-color
+                                      {:type "state", :target "practice-canvas", :from-params [{:param-property "color", :action-property "value"}]},
+                   :set-current-tool
+                                      {:type "sequence-data",
+                                       :data
+                                             [{:type "state", :target "practice-canvas", :from-params [{:param-property "tool", :action-property "value"}]}
+                                              {:id "inactive", :type "state", :from-var [{:var-name "current-tool", :action-property "target"}]}
+                                              {:id "active", :type "state", :from-params [{:param-property "tool", :action-property "target"}]}
+                                              {:type        "set-variable",
+                                               :var-name    "current-tool",
+                                               :from-params [{:param-property "tool", :action-property "var-value"}]}]},
+                   :start-activity    {:type "start-activity", :id "writing-practice"},
+                   :start-scene
+                                      {:type "sequence",
+                                       :data
+                                             ["start-activity"
+                                              "renew-concept"
+                                              "init-state"
+                                              "init-vars"
+                                              "init-current-tool"
+                                              "init-stage-1"
+                                              ;"mari-voice-intro"
+                                              ;"mari-init-wand"
+                                              "mari-shows-example"
+                                              "mari-voice-go-next-practice"]},
+                   :stop-activity     {:type "stop-activity", :id "writing-practice"},
+                   :update-painting-var
+                                      {:type     "test-var-scalar",
+                                       :var-name "current-stage",
+                                       :value    1,
+                                       :success
+                                                 {:type      "set-attribute",
+                                                  :target    "practice-canvas",
+                                                  :from-var  [{:template "writing-practice-stage-1-pt-%", :var-name "current-page", :action-property "attr-value"}],
+                                                  :attr-name "var-name"},
+                                       :fail
+                                                 {:type      "set-attribute",
+                                                  :target    "practice-canvas",
+                                                  :from-var  [{:template "writing-practice-stage-2-pt-%", :var-name "current-page", :action-property "attr-value"}],
+                                                  :attr-name "var-name"}}},
+        :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+        :metadata {:prev "library", :autostart true}})
+
+(defn f
+  [t args]
+  t)
+
+(core/register-template
+  m
+  (partial f t))

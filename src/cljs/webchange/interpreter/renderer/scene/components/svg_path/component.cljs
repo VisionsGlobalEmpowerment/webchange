@@ -3,7 +3,8 @@
     [webchange.interpreter.pixi :refer [Container Graphics Sprite Texture]]
     [webchange.interpreter.renderer.scene.components.svg-path.utils :as svg-utils]
     [webchange.interpreter.renderer.scene.components.svg-path.wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.logger.index :as logger]))
 
 (def default-props {:x            {}
                     :y            {}
@@ -29,8 +30,8 @@
   [{:keys [data width height stroke stroke-width line-cap dash fill scale]}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
-                 (set! -width (* width 2 (:x scale)))
-                 (set! -height (* height 2 (:y scale))))
+                 (set! -width (* width 2 #_(:x scale)))
+                 (set! -height (* height 2 #_(:y scale))))
         ctx (doto
               (.getContext canvas "2d")
               (set! -strokeStyle stroke)
@@ -70,7 +71,8 @@
   (let [container (create-container props)
         {:keys [sprite texture canvas-context]} (create-graphics props)
         wrapped-container (wrap type object-name group-name container texture canvas-context)]
-
+    (logger/trace "svg path created...")
+    (logger/trace-folded "Create svg-path" props)
     (.addChild container sprite)
     (.addChild parent container)
 

@@ -154,6 +154,14 @@
                                    (with-group-params)
                                    (with-filter-params)
                                    (filter-extra-props []))
+                      :painting-toolset (-> object
+                                            (assoc :object-name (keyword name))
+                                            (with-group-params)
+                                            (filter-extra-props []))
+                      :text-tracing-pattern (-> object
+                                                (assoc :object-name (keyword name))
+                                                (with-group-params)
+                                                (filter-extra-props []))
                       (-> (str "Object with type " type " can not be drawn because it is not defined (" name ")") (js/Error.) (throw)))]
     (-> object-data
         (filter-extra-props [:actions :states :scene-name :transition :filter-transition]))))

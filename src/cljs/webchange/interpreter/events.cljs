@@ -405,7 +405,7 @@
     (when transition
       (let [transition-params [:duration :easing :loop :yoyo :speed]]
         {:transition {:id        id
-                      :component transition
+                      :component @transition
                       :to        (without-params to transition-params)
                       :from      from
                       :params    (select-keys to transition-params)

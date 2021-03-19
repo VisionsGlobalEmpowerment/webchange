@@ -1,6 +1,7 @@
 (ns webchange.dev-templates
   (:require [webchange.course.core :as core]
-            [webchange.templates.core :as templates]))
+            [webchange.templates.core :as templates]
+            [webchange.dataset.library :as datasets-library]))
 
 (def user-id 1)
 
@@ -9,6 +10,15 @@
   (let [data {:name "test-course"
               :lang "English"}]
     (-> (core/create-course data user-id)
+        second)))
+
+(defn create-test-course-with-dataset
+  []
+  (let [data {:name "test-course"
+              :lang "English"}
+        course (core/create-course data user-id)]
+    (datasets-library/create-dataset! (-> course second :slug) 1)
+    (-> course
         second)))
 
 (defn update-activity

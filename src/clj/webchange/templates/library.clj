@@ -38,4 +38,5 @@
     [webchange.templates.library.running]
     [webchange.templates.library.interactive-read-aloud]
     [webchange.templates.library.running_time_limited]
-    [webchange.templates.library.karaoke]))
+    [webchange.templates.library.karaoke]
+    [webchange.templates.library.writing-practice]))

@@ -6,7 +6,8 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.animation :as a]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as t]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.utils :as a-svg-utils]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.logger.index :as logger]))
 
 (def default-props {:x            {}
                     :y            {}
@@ -85,7 +86,7 @@
   (let [container (create-container props)
         state (create-state props)
         wrapped-container (wrap type object-name group-name container state)]
-
+    (logger/trace-folded "Create animated-svg-path" props)
     (.addChild container (Sprite. (:texture @state)))
     (when traceable
       (.addChild container (t/create-trigger state props)))
