@@ -18,7 +18,8 @@
     [webchange.views-login-switch :refer [login-switch]]
     [webchange.editor-v2.wizard.views :as wizard]
     [webchange.error-message.views :refer [error-message]]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.ui-framework.test-page.index :refer [test-ui]]))
 
 (defn- str->int-param
   [map key]
@@ -98,6 +99,9 @@
     :book-creator [wizard/book-creator-panel]
     :wizard [wizard/wizard]
     :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
+
+    ;; technical
+    :test-ui [test-ui]
     [page-404]))
 
 (defn main-panel []

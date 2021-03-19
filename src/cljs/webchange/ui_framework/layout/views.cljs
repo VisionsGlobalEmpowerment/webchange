@@ -9,11 +9,11 @@
   [:div.menu-placeholder "Menu Placeholder"])
 
 (defn layout
-  []
+  [{:keys [actions]}]
   (let [this (r/current-component)]
     [:div.page-layout
      [:div.header
-      [toolbar]]
+      [toolbar {:actions actions}]]
      [:div.body
       [:div.side-menu
        [menu-placeholder]]

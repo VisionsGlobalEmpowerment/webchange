@@ -9,6 +9,7 @@
     [webchange.editor-v2.layout.views :refer [activity-edit-form]]
     [webchange.editor-v2.layout.utils :refer [get-activity-type]]
     [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs course-breadcrumbs]]
+    [webchange.editor-v2.sandbox.views :refer [share-button]]
     [webchange.subs :as subs]
     [webchange.ui-framework.layout.views :as ui]))
 
@@ -39,10 +40,11 @@
   (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
         activity-type (get-activity-type scene-data)
         layout (case activity-type
-                     "flipbook" ui/layout
-                     current-layout/layout)]
+                 "flipbook" ui/layout
+                 current-layout/layout)]
     (when (and (some? activity-type)
                (some? scene-data))
-      [layout {:breadcrumbs (course-breadcrumbs course-id "Scene")}
+      [layout {:breadcrumbs (course-breadcrumbs course-id "Scene")
+               :actions     [share-button]}
        [activity-edit-form {:course-id  course-id
                             :scene-data scene-data}]])))

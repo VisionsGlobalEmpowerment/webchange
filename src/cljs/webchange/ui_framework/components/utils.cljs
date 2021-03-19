@@ -7,4 +7,5 @@
   (->> class-names
        (filter (fn [[_ condition]] condition))
        (map first)
+       (distinct)
        (join " ")))

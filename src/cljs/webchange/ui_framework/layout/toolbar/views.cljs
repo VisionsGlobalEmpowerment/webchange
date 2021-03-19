@@ -4,7 +4,11 @@
     [webchange.ui-framework.layout.logo.views :refer [logo]]))
 
 (defn toolbar
-  []
+  [{:keys [actions]}]
   [:div.page-toolbar
-   [avatar]
-   [logo]])
+   [:div.left-side
+    [avatar]
+    [logo]]
+   [:div.right-side
+    (when (some? actions)
+      actions)]])

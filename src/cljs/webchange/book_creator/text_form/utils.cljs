@@ -26,7 +26,6 @@
 
 (defn- populate-page-text-data
   [page-data scene-data text-name]
-  (js/console.log "text-name" text-name)
   (-> page-data
       (assoc :text {:name text-name
                     :data (get-in scene-data [:objects text-name])})
@@ -40,7 +39,6 @@
 
 (defn get-page-data
   [scene-data stage-idx text-name page-idx]
-  (js/console.log "page-in-stage?" stage-idx page-idx (page-in-stage? scene-data stage-idx page-idx))
   (when (page-in-stage? scene-data stage-idx page-idx)
     (let [data (page-idx->data scene-data page-idx)]
       (if (some? text-name)

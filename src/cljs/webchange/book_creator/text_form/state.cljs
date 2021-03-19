@@ -37,7 +37,6 @@
      (re-frame/subscribe [::interpreter/selected-object])
      (re-frame/subscribe [::state/scene-data])])
   (fn [[current-stage selected-object-name scene-data]]
-    (js/console.log "selected-object-name" selected-object-name)
     (when (some? selected-object-name)
       (->> (text-name->page-index selected-object-name scene-data)
            (get-page-data scene-data current-stage selected-object-name)))))

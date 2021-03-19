@@ -4,16 +4,21 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [color disabled? variant on-click class-name]
+  [{:keys [class-name color disabled? href on-click target variant]
     :or   {color     "primary"
            disabled? false
            on-click  #()
+           target    "_blank"
            variant   "contained"}}]
-  (let [this (r/current-component)]
+  (let [this (r/current-component)
+        handle-click (fn []
+                       (if (some? href)
+                         (js/window.open href target)
+                         (on-click)))]
     (into [:button {:class-name (get-class-name (-> {"wc-button" true}
                                                     (assoc variant true)
                                                     (assoc color true)
                                                     (assoc class-name (some? class-name))))
                     :disabled   disabled?
-                    :on-click   on-click}]
+                    :on-click   handle-click}]
           (r/children this))))

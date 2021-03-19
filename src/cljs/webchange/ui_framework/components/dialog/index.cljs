@@ -4,8 +4,7 @@
     [webchange.ui-framework.components.icon-button.index :as icon-button]))
 
 (defn component
-  [{:keys [title on-close] :as props}]
-  (print "props" props)
+  [{:keys [title on-close]}]
   (let [this (r/current-component)]
     [:div.dialog-wrapper
      [:div.dialog
