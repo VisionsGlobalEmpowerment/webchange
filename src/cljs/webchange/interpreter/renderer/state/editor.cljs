@@ -12,6 +12,11 @@
 
 (defn selected-object [db] (get-in db (path-to-db [:editor :selected-object])))
 
+(re-frame/reg-sub
+  ::selected-object
+  (fn [db]
+    (get-in db (path-to-db [:editor :selected-object]))))
+
 (re-frame/reg-event-fx
   ::register-object
   (fn [{:keys [_]} [_ object-wrapper]]

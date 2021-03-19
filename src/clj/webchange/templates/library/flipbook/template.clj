@@ -1,4 +1,4 @@
-(ns webchange.templates.library.flipbook.template
+1(ns webchange.templates.library.flipbook.template
   (:require
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
@@ -51,7 +51,6 @@
                    {:key        :page-layout
                     :type       "lookup-image"
                     :label      "Page layout"
-                    :image-size 1
                     :default    :text-big-at-bottom
                     :conditions [{:key   :type
                                   :state :in
@@ -73,7 +72,6 @@
                    {:key        :spread-layout
                     :type       "lookup-image"
                     :label      "Spread layout"
-                    :image-size 2
                     :default    :text-right-top
                     :conditions [{:key   :type
                                   :state :in

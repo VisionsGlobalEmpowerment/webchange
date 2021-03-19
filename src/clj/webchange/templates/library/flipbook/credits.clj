@@ -69,6 +69,7 @@
                                                                   :font-size   32
                                                                   :font-family "Lexend Deca"
                                                                   :text        text
+                                                                  :editable?   {:select true}
                                                                   :chunks      (text-utils/text->chunks text)}))))
                  {:texts-data [{:name label-name
                                 :text label}]
@@ -85,6 +86,7 @@
                                                                :font-size   32
                                                                :font-family "Lexend Deca"
                                                                :text        label
+                                                               :editable?   {:select true}
                                                                :chunks      (text-utils/text->chunks label)}))}))))
 
 (defn- generate-authors-block

@@ -4,7 +4,6 @@
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
-    [webchange.editor-v2.creation-progress.views :refer [progress-panel]]
     [webchange.editor.events :as ee]
     [webchange.editor-v2.course-table.views :refer [course-table]]
     [webchange.editor-v2.scenes-crossing.views :refer [scenes-crossing]]
@@ -19,7 +18,8 @@
     [webchange.views-login-switch :refer [login-switch]]
     [webchange.editor-v2.wizard.views :as wizard]
     [webchange.error-message.views :refer [error-message]]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.ui-framework.test-page.index :refer [test-ui]]))
 
 (defn- str->int-param
   [map key]
@@ -99,6 +99,9 @@
     :book-creator [wizard/book-creator-panel]
     :wizard [wizard/wizard]
     :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
+
+    ;; technical
+    :test-ui [test-ui]
     [page-404]))
 
 (defn main-panel []
@@ -106,5 +109,4 @@
     [:div
      [ui/css-baseline]
      [panels handler route-params]
-     [error-message]
-     [progress-panel]]))
+     [error-message]]))

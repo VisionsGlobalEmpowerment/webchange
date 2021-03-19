@@ -11,7 +11,8 @@
     [webchange.editor-v2.wizard.activity-template.views-string :refer [string-option]]
     [webchange.editor-v2.wizard.activity-template.views-strings-list :refer [strings-list-option]]
     [webchange.editor-v2.wizard.activity-template.views-video :refer [video-option]]
-    [webchange.editor-v2.wizard.activity-template.views-video-ranges :refer [video-ranges-option]]))
+    [webchange.editor-v2.wizard.activity-template.views-video-ranges :refer [video-ranges-option]]
+    [webchange.logger.index :as logger]))
 
 (defn- undefined-option
   [{:keys [key option]}]
@@ -66,13 +67,11 @@
   (let [options (template->options template)
         filtered-options (filter-options @data metadata options)]
     (set-default-values! data options)
-    [ui/grid {:container   true
-              :justify     "space-between"
-              :spacing     24
-              :align-items "center"}
+    (logger/trace-folded "template form data" @data)
+    [:div.template-form
      (for [[key option] filtered-options]
        ^{:key key}
-       [ui/grid {:item true :xs 12}
+       [:div.option-block
         [option-info {:key       key
                       :option    option
                       :data      data

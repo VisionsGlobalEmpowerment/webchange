@@ -47,6 +47,7 @@
 (re-frame/reg-event-fx
   ::show-actions-form
   (fn [{:keys [_]} [_ action-name]]
+    (print "::show-actions-form" action-name)
     {:dispatch-n (list [::set-current-action action-name]
                        [::open])}))
 

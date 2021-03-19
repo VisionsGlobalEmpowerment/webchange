@@ -85,6 +85,7 @@
                     :height (- text-height (* padding 2))
                     :fill text-color
                     :text text
+                    :editable? {:select true}
                     :chunks (text-utils/text->chunks text))]
     (-> page-data
         (assoc :page-text page-text)

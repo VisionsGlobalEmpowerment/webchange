@@ -1,0 +1,44 @@
+.book-creator {
+    .text-form {
+        .font-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+
+            .control-block {
+                align-items: center;
+                display: flex;
+
+                .font-family-selector {
+                    width: 224px;
+                }
+
+                .font-size-selector {
+                    width: 96px;
+                }
+            }
+        }
+
+        .text-control-wrapper {
+            position: relative;
+
+            .text-control {
+                padding-bottom: 64px;
+            }
+        }
+
+        .voice-over {
+            position: absolute;
+            left: 16px;
+            bottom: 16px;
+        }
+
+        .buttons-block {
+            margin-top: 64px;
+
+            button {
+                margin-right: 16px;
+            }
+        }
+    }
+}

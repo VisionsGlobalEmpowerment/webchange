@@ -1,0 +1,19 @@
+.wc-file {
+    align-items: center;
+    display: flex;
+
+    input[type="file"] {
+        display: none;
+    }
+
+    button {
+        border-radius: 8px;
+
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 14px;
+
+        margin-left: 8px;
+        padding: 9px 17px;
+    }
+}

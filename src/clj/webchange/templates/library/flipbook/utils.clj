@@ -1,4 +1,9 @@
-(ns webchange.templates.library.flipbook.utils)
+(ns webchange.templates.library.flipbook.utils
+  (:require
+    [webchange.utils.flipbook :as utils]))
+
+(def get-book-object-name utils/get-book-object-name)
+(def get-pages-data utils/get-pages-data)
 
 (defn get-text-name
   [template]
@@ -17,17 +22,6 @@
     (case page-side
       "left" (nth pages-idx 0)
       "right" (nth pages-idx 1))))
-
-(defn get-book-object-name
-  [activity-data]
-  (-> activity-data
-      (get-in [:metadata :flipbook-name])
-      (keyword)))
-
-(defn get-pages-data
-  [activity-data]
-  (let [flipbook-name (get-book-object-name activity-data)]
-    (get-in activity-data [:objects flipbook-name :pages])))
 
 (defn get-pages-count
   [activity-data]

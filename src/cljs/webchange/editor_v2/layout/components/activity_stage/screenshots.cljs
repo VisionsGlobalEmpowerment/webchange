@@ -15,7 +15,10 @@
                           (map :idx))]
       {:dispatch                [::overlays/show-waiting-screen]
        :take-stages-screenshots {:stages-idx stages-idx
-                                 :callback   #(do (re-frame/dispatch [::update-stages-screenshots %])
+                                 :callback   #(do (re-frame/dispatch [::stage/set-stages-screenshots (->> %
+                                                                                                          (map (fn [[idx blob]]
+                                                                                                                 [idx (.createObjectURL js/URL blob)]))
+                                                                                                          (into {}))])
                                                   (re-frame/dispatch [::stage/select-stage (or current-stage 0)])
                                                   (re-frame/dispatch [::overlays/hide-waiting-screen]))}})))
 
@@ -37,19 +40,9 @@
   [stage-idx]
   (fn [callback]
     (re-frame/dispatch [::stage/show-flipbook-stage stage-idx])
-    (js/setTimeout (fn [] (app/take-screenshot callback)) 100)))
+    (js/setTimeout (fn [] (app/take-screenshot callback {:extract-canvas? false})) 100)))
 
 (re-frame/reg-fx
   :take-stages-screenshots
   (fn [{:keys [stages-idx callback]}]
     (run-seq (map take-stage-screenshot stages-idx) callback)))
-
-(re-frame/reg-event-fx
-  ::update-stages-screenshots
-  (fn [{:keys [db]} [_ stages-screenshots]]
-    (let [stages (->> (state/scene-metadata db)
-                      (:stages))
-          updated-stages (map (fn [{:keys [idx] :as stage}]
-                                (assoc stage :img (.createObjectURL js/URL (get stages-screenshots idx))))
-                              stages)]
-      {:dispatch [::state/update-scene-metadata {:metadata-patch {:stages updated-stages}}]})))

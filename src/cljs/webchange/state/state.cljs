@@ -26,6 +26,13 @@
 
 ;; Scene data
 
+(re-frame/reg-sub
+  ::current-scene-id
+  (fn []
+    [(re-frame/subscribe [::core/current-scene-id])])
+  (fn [[scene-id]]
+    scene-id))
+
 (defn scene-data
   ([db]
    (core/get-scene-data db (core/current-scene-id db)))
