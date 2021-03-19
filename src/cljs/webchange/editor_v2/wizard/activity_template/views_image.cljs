@@ -60,28 +60,12 @@
 
 
 (defn image-option
-  [{:keys [key option data validator]}]
+  [{:keys [key data validator]}]
   (r/with-let [page-data (connect-data data [key] nil)
                {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
-    (print ">> image-option")
-    (print "options" (:options option))
     [:div
      [file {:type      "image"
             :on-change #(swap! page-data assoc :src %)}]
      [error-message {:field-name :src}]]
-
-    ;[ui/grid {:container true
-    ;          :spacing   16
-    ;          :style     {:margin-top "-16px"}}
-    ; [ui/grid {:item true :xs 12}
-    ;  [ui/typography {:variant "h6"
-    ;                  :style   {:display      "inline-block"
-    ;                            :margin-right "16px"}}
-    ;   (:label option)]
-    ;  [error-message {:field-name :root}]]
-    ; [ui/grid {:item true :xs 12}
-    ;  [image-field (get @page-data :src "") #(swap! page-data assoc :src %) (:options option)]
-    ;  [error-message {:field-name :src}]]]
-
     (finally
       (destroy))))

@@ -4,6 +4,16 @@
     [webchange.ui-framework.components.select.icon-up :as icon-up]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
+(defn- fix-options
+  [options]
+  (->> options
+       (map (fn [{:keys [enable?] :as option}]
+              (if (some? enable?)
+                (-> option
+                    (assoc :disabled? (not enable?))
+                    (dissoc :enable?))
+                option)))))
+
 (defn component
   [{:keys [options value variant class-name on-arrow-down-click on-arrow-up-click on-change show-buttons? width with-arrow?]
     :or   {variant             ""
@@ -13,7 +23,8 @@
            on-change           #()
            on-arrow-down-click #()
            on-arrow-up-click   #()}}]
-  (let [handle-change #(-> % (.. -target -value) (on-change))]
+  (let [handle-change #(-> % (.. -target -value) (on-change))
+        options (fix-options options)]
     [:div {:style      (if (some? width) {:width width} {})
            :class-name (get-class-name (-> {"wc-select"  true
                                             "with-arrow" with-arrow?}
