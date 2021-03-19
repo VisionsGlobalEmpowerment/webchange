@@ -8,6 +8,9 @@
 (defn avatar
   []
   (let [user @(re-frame/subscribe [::as/user])
-        initials (-> user :first-name first)]
+        initials (or (-> user :first-name first)
+                     (-> user :last-name first))]
     [:div.avatar {:on-click #(location :profile)}
-     (string/upper-case initials)]))
+     (if (string? initials)
+       (string/upper-case initials)
+       "T")]))
