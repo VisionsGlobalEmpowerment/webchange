@@ -21,29 +21,30 @@
                     :line-cap     {:default "round"}
                     :duration     {}
                     :scale        {:default {:x 1 :y 1}}
+                    :offset       {:default {:x 0 :y 0}}
                     :traceable    {}})
 
 (defn- create-container
-  [{:keys [x y scale]}]
+  [{:keys [x y]}]
   (doto (Container.)
-    (utils/set-position {:x x :y y})
-    #_(utils/set-scale scale)))
+    (utils/set-position {:x x :y y})))
 
 (defn- create-state
-  [{:keys [path duration width height stroke-width line-cap scale] :as props}]
+  [{:keys [path duration width height stroke-width line-cap scale offset] :as props}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
-                 (set! -width (* width 2 (:x scale)))
-                 (set! -height (* height 2 (:y scale))))
+                 (set! -width (* width (:x scale)))
+                 (set! -height (* height (:y scale))))
         ctx (doto
               (.getContext canvas "2d")
               (set! -lineWidth stroke-width)
               (set! -lineCap line-cap)
-              (.scale (:x scale) (:y scale)))
+              (.scale (:x scale) (:y scale))
+              (.translate (:x offset) (:y offset)))
 
         texture (.from Texture canvas)
         state (atom {:ctx ctx :texture texture :paths (paths path duration)
-                     :width     (* width 2) :height (* height 2) :duration duration})]
+                     :width     (* width (:x scale)) :height (* height (:y scale)) :duration duration})]
     (a-svg-utils/set-stroke state (select-keys props [:stroke]))
     state))
 
@@ -73,13 +74,7 @@
 
     :on-click - on click event handler.
     :ref - callback function that must be called with component wrapper.
-    :src - image src. Default: nil.
     :offset - container position offset. Default: {:x 0 :y 0}.
-    :filters - filters params to be applied to sprite. Default: [].
-    :border-radius - make rounded corners. Radius in pixels. Default: 0.
-    :origin - where image pivot will be set. Can be '(left|center|right)-(top|center|bottom)'. Default: 'left-top'.
-    :max-width - max image width.
-    :max-height - max image height.
     :duration - animation duration in seconds
     :traceable - flag indicating whether finger tracing allowed"
   [{:keys [parent type object-name group-name traceable] :as props}]
@@ -88,9 +83,11 @@
         wrapped-container (wrap type object-name group-name container state)]
     (logger/trace-folded "Create animated-svg-path" props)
     (.addChild container (Sprite. (:texture @state)))
-    (when traceable
-      (.addChild container (t/create-trigger state props)))
+
+    (if traceable
+      (.addChild container (t/create-trigger state props))
+      (a/stop state))
+
     (.addChild parent container)
 
-    (a/stop state)
     wrapped-container))

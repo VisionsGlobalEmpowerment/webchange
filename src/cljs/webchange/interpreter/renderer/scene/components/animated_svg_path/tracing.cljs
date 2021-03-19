@@ -1,8 +1,10 @@
 (ns webchange.interpreter.renderer.scene.components.animated-svg-path.tracing
   (:require
-    [webchange.interpreter.pixi :refer [Sprite Texture]]
+    [webchange.interpreter.pixi :refer [Sprite Texture Graphics]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.path :refer [precision]]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.debug :as debug]
+    [webchange.logger.index :as logger]))
 
 (def touch-distance 5)
 
@@ -15,6 +17,11 @@
   {:x (* px sx)
    :y (* py sy)})
 
+(defn- translate-point
+  [{px :x py :y} {tx :x ty :y}]
+  {:x (+ px tx)
+   :y (+ py ty)})
+
 (defn- in-area
   [{p1-x :x p1-y :y} {p2-x :x p2-y :y} distance]
   (> distance (js/Math.sqrt (+
@@ -22,11 +29,12 @@
                               (* (- p1-y p2-y) (- p1-y p2-y))))))
 
 (defn- complete-path
-  [points point-idx pointer scale]
+  [points point-idx pointer scale offset]
   (loop [point-idx point-idx
          [cur-point & tail] (drop point-idx points)
          updated? false]
-    (let [touch? (in-area pointer (scale-point cur-point scale) (scale-distance touch-distance scale))]
+    (let [point (-> cur-point (translate-point offset) (scale-point scale))
+          touch? (in-area pointer point (scale-distance touch-distance scale))]
       (cond
         (and touch? tail) (recur (inc point-idx) tail true)
         touch? {:updated? true :path-finished true}
@@ -52,10 +60,10 @@
     (.update texture)))
 
 (defn- drag
-  [state scale pointer]
+  [state scale offset pointer]
   (let [{:keys [paths] {:keys [path-idx point-idx] :or {path-idx 0 point-idx 0}} :next-point} @state
         points (some-> paths (nth path-idx nil) :points)
-        {:keys [updated? path-finished next-point-idx]} (complete-path points point-idx pointer scale)
+        {:keys [updated? path-finished next-point-idx]} (complete-path points point-idx pointer scale offset)
         next-point (if path-finished
                      {:path-idx  (inc path-idx)
                       :point-idx 0}
@@ -72,15 +80,19 @@
     (-> points (nth point-idx))))
 
 (defn- on-start
-  [state scale]
+  [state scale offset]
   (fn [event]
     (this-as this
-      (let [point (-> state (next-point-pos) (scale-point scale))
+      (let [point (-> state (next-point-pos) (translate-point offset) (scale-point scale))
             pos (-> event .-data (.getLocalPosition (.-parent this)))
-            offset {:x (- (:x point) (.-x pos))
-                    :y (- (:y point) (.-y pos))}]
+            drag-offset {:x (- (:x point) (.-x pos))
+                         :y (- (:y point) (.-y pos))}]
+        (debug/mark :finger (.-x pos) (.-y pos) (scale-distance touch-distance scale) 0xff0000 (.-parent this))
+        (debug/mark :next (:x point) (:y point) 4 0x00ff00 (.-parent this))
+
+        (logger/trace-folded "animated-svg-path tracing on-start" this)
         (when (in-area {:x (.-x pos) :y (.-y pos)} point (scale-distance touch-distance scale))
-          (set! (.-drag-offset this) offset)
+          (set! (.-drag-offset this) drag-offset)
           (set! (.-data this) (.-data event))
           (set! (.-drawing this) true))))))
 
@@ -91,21 +103,21 @@
     (set! (.-drawing this) false)))
 
 (defn- on-move
-  [state scale]
+  [state scale offset]
   (fn []
     (this-as this
       (when (.-drawing this)
         (let [{offset-x :x offset-y :y} (-> this .-drag-offset)
               pos (-> this .-data (.getLocalPosition (.-parent this)))
               pointer {:x (+ offset-x (.-x pos)) :y (+ offset-y (.-y pos))}]
-          (drag state scale pointer))))))
+          (drag state scale offset pointer))))))
 
 (defn create-trigger
-  [state {:keys [width height scale]}]
+  [state {:keys [width height scale offset]}]
   (doto (Sprite. (.-EMPTY Texture))
     (utils/set-size {:width (* 2 width) :height (* 2 height)})
     (set! -interactive true)
-    (.on "pointerdown" (on-start state scale))
+    (.on "pointerdown" (on-start state scale offset))
     (.on "pointerup" on-end)
     (.on "pointerupoutside" on-end)
-    (.on "pointermove" (on-move state scale))))
+    (.on "pointermove" (on-move state scale offset))))

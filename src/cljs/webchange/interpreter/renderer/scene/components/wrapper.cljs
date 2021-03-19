@@ -2,25 +2,15 @@
   (:require
     [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.debug :as debug]
     [webchange.interpreter.renderer.scene.filters.filters :as filters]
     [webchange.logger.index :as logger]))
 
-;lineStyle (width, color, alpha, alignment, native)
-;drawRect (x, y, width, height)
-
 (defn- with-debug
   [wrapped-object]
-  (when true
-    (.on (-> wrapped-object :object) "added"
-         (fn [parent]
-           (let [random-color (rand-int 16581375)
-                 object (:object wrapped-object)
-                 bounds (.getLocalBounds object)
-                 rect (doto (Graphics.)
-                        (.lineStyle 4 random-color 1)
-                        (.drawRect (.-x object) (.-y object) (.-width bounds) (.-height bounds)))]
-             (logger/trace "with-debug" bounds random-color)
-             (.addChild parent rect)))))
+  (when false                                               ;(= "animated-svg-path" (:type wrapped-object))
+    (let [object (:object wrapped-object)]
+      (debug/show-bounds object)))
   wrapped-object)
 
 (defn- check-name-prop

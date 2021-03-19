@@ -3,10 +3,9 @@
     [webchange.interpreter.pixi :refer [Container Graphics string2hex]]
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.image.component :as image]
-    [webchange.interpreter.renderer.scene.components.svg-path.component :as a]
-    [webchange.logger.index :as logger]
-    ))
+    [webchange.interpreter.renderer.scene.components.svg-path.component :as s]
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
+    [webchange.logger.index :as logger]))
 
 (def default-props {:x         {:default 0}
                     :y         {:default 300}
@@ -15,13 +14,17 @@
                     :text      {}
                     :name      {}
                     :on-change {}
-                    :scale     {:default {:x 1 :y 1}}
+                    :traceable {}
                     :debug     {:default false}})
 
-(def base-height 150)
-(def base-mid-height 74)
-(def base-width 150)
+(def base-height 225)
+(def midline-offset 70)
+(def baseline-offset 150)
+
+(def base-width 225)
 (def line-height 10)
+
+(def safe-padding 60)
 
 (def alphabet-path {"a" "M144.76,92.43a37.5,37.5,0,1,0,0,39.28m0-57.21v75"
                     "b" "M77.77 0.71v149M77.77,92.64a37.5,37.5,0,1,1,0,39.28"
@@ -51,79 +54,132 @@
                     "z" "M79.86,75.66h61.29l-57.29,75h61.28"
                     "ñ" "M82,74.83v75M82,92a32.36,32.36,0,0,1,60.9,15.23v42.65M86,48.06s4.12-11.83,13.63-7.88c3.71,1.54,7.49,2.94,11.29,4.27c10.27,3.6,22.52,2.17,28-8.67"})
 
+(def line-props {:type         "svg-path"
+                 :x            0,
+                 :width        1920,
+                 :height       10,
+                 :data         "M0,5h1920",
+                 :scale        {:x 1 :y 1}
+                 :stroke-width 4})
+
 (defn- create-container
-  [{:keys [x y scale]}]
+  [{:keys [x y]}]
   (doto (Container.)
-    (utils/set-position {:x x :y y})
-    (utils/set-scale scale)))
-
-#_(defn- activate
-  [state active-tool]
-  (doall
-    (for [[tool-name {:keys [set-position]}] (:tools @state)]
-      (if (= active-tool tool-name)
-        (set-position (get-in tools-definitions [tool-name :active]))
-        (set-position (get-in tools-definitions [tool-name :inactive]))))))
-
-#_(defn- create-tool!
-  [group type state {:keys [on-change object-name]}]
-  (let [defaults (get-in tools-definitions [type :defaults])
-        on-click (fn []
-                   (activate state type)
-                   (when on-change
-                     (on-change {:tool (name type)})))
-        tool (image/create (assoc defaults
-                             :filters [{:name  "brightness"
-                                        :value 0}]
-                             :object-name (str object-name "-tool-" (name type))
-                             :transition (str object-name "-tool-" (name type))
-                             :parent group
-                             :on-click on-click))]
-    (swap! state assoc-in [:tools type] tool)))
+    (utils/set-position {:x x :y y})))
 
 (defn- path->letter
-  [letter-width letter-height scale path]
-  #_{:type         "animated-svg-path",
-   :fill         "transparent",
-   :line-cap     "round",
-   :path         path,
-   :stroke       "#323232",
-   :stroke-width 10}
-
+  [scale path]
   {:type         "svg-path",
    :dash         [7 7],
-   :width letter-width
-   :height letter-height
+   :width        base-width
+   :height       base-height
    :data         path,
-   :scale {:x scale :y scale}
+   :scale        {:x scale :y scale}
    :line-cap     "round",
    :stroke       "#898989",
    :stroke-width 4})
 
-(defn draw!
-  [group {:keys [text traceable width height] :as props}]
+(defn- path->animated-letter
+  [scale path]
+  {:type         "animated-svg-path",
+   :duration     1000
+   :width        (- base-width (* 2 safe-padding))
+   :height       base-height
+   :path         path,
+   :traceable    true
+   :scale        {:x scale :y scale}
+   :offset       {:x (- safe-padding) :y 0}
+   :line-cap     "round",
+   :stroke       "#323232",
+   :stroke-width 10})
+
+(defn- draw-pattern!
+  [group {:keys [text]} {letter-scale :letter padding-scale :padding} topline-y]
   (let [length (count text)
-        base-total-width (* length base-width)
-        scale (min (/ width base-total-width) (-> height (- (* 2 line-height)) (/ base-height)))
-        letter-height (* scale base-height)
-        letter-width (* scale base-width)
-        topline-y (-> (- height letter-height) (/ 2))
-        midline-y (-> topline-y (+ line-height) (+ (* base-height scale)))
-        baseline-y (-> topline-y (+ (* base-mid-height scale)))
+        letter-width (* letter-scale base-width)
+        letter-padding (* padding-scale safe-padding)
         positions (->> (range length)
                        (map (fn [pos]
-                              {:x (+ (* 20 pos) (* letter-width pos))
+                              {:x (- (* letter-width pos) (* letter-padding pos 2))
                                :y topline-y})))
         letters (->> text
                      (map alphabet-path)
-                     (map #(path->letter letter-width letter-height scale %))
+                     (map #(path->letter letter-scale %))
                      (map merge positions))]
-    (logger/trace "draw! text-tracing-pattern: letter width - height" letter-width letter-height)
+    (doall
+      (for [letter letters]
+        (s/create (assoc letter
+                    :object-name (str "text-tracing-pattern-" (:x letter))
+                    :parent group))))))
+
+(defn- draw-traceable-pattern!
+  [group {:keys [text]} {letter-scale :letter padding-scale :padding} topline-y]
+  (let [length (count text)
+        letter-width (* letter-scale base-width)
+        letter-padding (* padding-scale safe-padding)
+        letter-width (- letter-width (* 2 letter-padding))
+        positions (->> (range length)
+                       (map (fn [pos]
+                              {:x (+ (* letter-width pos) letter-padding)
+                               :y topline-y})))
+
+        letters (->> text
+                              (map alphabet-path)
+                              (map #(path->animated-letter letter-scale %))
+                              (map merge positions))]
     (doall
       (for [letter letters]
         (a/create (assoc letter
-                    :object-name (str "text-tracing-patter-" (:x letter))
+                    :object-name (str "text-tracing-pattern-animated-" (:x letter))
                     :parent group))))))
+
+(defn- padding-scale
+  [length scale-by-height width]
+  (let [letter-width (* scale-by-height base-width)
+        total-width (* length letter-width)
+        actual-padding-width (- total-width width)
+        estimated-padding-width (* safe-padding (dec length) 2)]
+    (/ actual-padding-width estimated-padding-width)))
+
+(defn- get-scale
+  [{:keys [text width height]}]
+  (let [length (count text)
+        base-total-width (- (* length base-width) (* (dec length) safe-padding 2))
+        scale-by-width (/ width base-total-width)
+        scale-by-height (-> height (- (* 2 line-height)) (/ base-height))]
+    (if (> scale-by-width scale-by-height)
+      {:type :by-height
+       :letter scale-by-height
+       :padding (padding-scale length scale-by-height width)}
+      {:type :by-width
+       :letter scale-by-width
+       :padding scale-by-width})))
+
+(defn draw!
+  [group {:keys [traceable height] :as props}]
+  (let [{letter-scale :letter :as scale} (get-scale props)
+        letter-height (* letter-scale base-height)
+        topline-y (-> (- height letter-height) (/ 2))
+        midline-y (-> topline-y (+ (* midline-offset letter-scale)))
+        baseline-y (-> topline-y (+ (* baseline-offset letter-scale)))]
+
+    (s/create (merge line-props {:object-name (str "text-tracint-pattern-topline")
+                                 :parent      group
+                                 :y           (- topline-y 5),
+                                 :stroke      "#323232"}))
+    (s/create (merge line-props {:object-name (str "text-tracint-pattern-midline")
+                                 :parent      group
+                                 :y           midline-y,
+                                 :dash        [7 7]
+                                 :stroke      "#898989"}))
+    (s/create (merge line-props {:object-name (str "text-tracint-pattern-baseline")
+                                 :parent      group
+                                 :y           baseline-y,
+                                 :stroke      "#323232"}))
+
+    (draw-pattern! group props scale topline-y)
+    (when traceable
+      (draw-traceable-pattern! group props scale topline-y))))
 
 (def component-type "text-tracing-pattern")
 
@@ -133,20 +189,14 @@
   Props params:
   :x - component x-position.
   :y - component y-position.
-  :scale - image scale. Default: {:x 1 :y 1}.
+  :traceable - for traceable overlay based on animated-svg-path
   :name - component name that will be set to sprite and container with corresponding suffixes.
   :on-change - on change event handler."
-  [{:keys [parent type object-name traceable] :as props}]
+  [{:keys [parent type object-name] :as props}]
   (let [group (create-container props)
         state (atom {})
         wrapped-group (wrap type object-name group state)]
     (logger/trace-folded "Create text-tracing-pattern" props)
-
-    (comment
-      (create-tool! group :brush state props)
-      (create-tool! group :felt-tip state props)
-      (create-tool! group :pencil state props)
-      (create-tool! group :eraser state props))
 
     (draw! group props)
     (.addChild parent group)
