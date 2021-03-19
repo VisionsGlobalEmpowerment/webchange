@@ -21,6 +21,8 @@
     [webchange.templates.library.park-poem]
     [webchange.templates.library.slide]
     [webchange.templates.library.letter-intro]
+    [webchange.templates.library.slide-riddle]
+    [webchange.templates.library.slide-riddle-no-concept]
     [webchange.templates.library.categorize]
     [webchange.templates.library.categorize-hard]
     [webchange.templates.library.conversation]

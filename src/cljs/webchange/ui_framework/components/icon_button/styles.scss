@@ -1,0 +1,70 @@
+@import "../../styles/colors";
+
+.wc-icon-button {
+    background: rgba(0, 0, 0, 0);
+    border: none;
+    border-radius: 18px;
+    box-sizing: border-box;
+    color: $default-color;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    min-height: 36px;
+    min-width: 36px;
+
+    & > * {
+        display: inline-block;
+        padding: 0;
+        position: relative;
+        top: 1px;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    &:disabled {
+        background: rgba(0, 0, 0, 0);
+        cursor: default;
+
+        path {
+            fill: $default-color-disabled;
+        }
+    }
+
+    &.primary {
+        background: $primary-color;
+        color: #fff;
+
+        &:hover {
+            background: $primary-color-dark;
+        }
+    }
+
+    &.outlined {
+        background-color: rgba(0, 0, 0, 0);
+        border: 2px solid $default-color;
+        color: $default-color;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    &.with-text {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        padding: 0 16px;
+
+        span {
+            margin-left: 8px;
+            position: relative;
+            top: -1px;
+        }
+    }
+
+     &.play > .wc-icon {
+        left: 1px;
+    }
+}

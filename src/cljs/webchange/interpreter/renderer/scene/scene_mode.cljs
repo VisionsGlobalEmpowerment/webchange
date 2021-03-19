@@ -4,11 +4,21 @@
     [webchange.logger.index :as logger]))
 
 (declare init-mode-props)
+(declare init-mode-object-props)
+
+(defn- update-children
+  [{:keys [type] :as object} mode]
+  (case type
+    "flipbook" (update object :pages (fn [children]
+                                       (map (fn [[object action]]
+                                              [(init-mode-object-props object mode) action])
+                                            children)))
+    (update object :children #(init-mode-props % mode))))
 
 (defn- init-mode-object-props
   [object mode]
   (-> (enable-mode-props mode object)
-      (update :children #(init-mode-props % mode))))
+      (update-children mode)))
 
 (defn init-mode-props
   [objects mode]

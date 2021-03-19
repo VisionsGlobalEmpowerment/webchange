@@ -18,7 +18,7 @@
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
   (reagent/render
-    [with-mui-theme {:type "dark"}
+    [with-mui-theme {:type "light"}
      [views/main-panel]]
     (.getElementById js/document "app")))
 

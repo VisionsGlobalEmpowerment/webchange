@@ -128,6 +128,9 @@
            (GET "/book-creator" request (authenticated-route request {:role :educator}))
            (GET "/wizard" request (authenticated-route request {:role :educator}))
 
+           ;; Technical
+           (GET "/test-ui" [] (public-route))
+
            (files "/upload/" {:root (env :upload-dir)})
            (resources "/"))
 

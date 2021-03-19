@@ -1,36 +1,50 @@
 (ns webchange.editor-v2.views
   (:require
+    [re-frame.core :as re-frame]
     [webchange.editor-v2.fix-lodash]
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form]]
     [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]
     [webchange.editor-v2.lessons.views :refer [add-lesson-form edit-lesson-form]]
-    [webchange.editor-v2.components.page-layout.views :refer [layout]]
+    [webchange.editor-v2.components.page-layout.views :as current-layout]
     [webchange.editor-v2.layout.views :refer [activity-edit-form]]
-    [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs course-breadcrumbs]]))
+    [webchange.editor-v2.layout.utils :refer [get-activity-type]]
+    [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs course-breadcrumbs]]
+    [webchange.editor-v2.sandbox.views :refer [share-button]]
+    [webchange.subs :as subs]
+    [webchange.ui-framework.layout.views :as ui]))
 
 (def course-view course-dashboard)
 
 (defn add-lesson-view
   [course-id level]
-  [layout {:breadcrumbs (course-breadcrumbs course-id "Add lesson")}
+  [current-layout/layout {:breadcrumbs (course-breadcrumbs course-id "Add lesson")}
    [add-lesson-form course-id level]])
 
 (defn lesson-view
   [course-id level lesson]
-  [layout {:breadcrumbs (course-breadcrumbs course-id "Edit lesson")}
+  [current-layout/layout {:breadcrumbs (course-breadcrumbs course-id "Edit lesson")}
    [edit-lesson-form course-id level lesson]])
 
 (defn add-concept-view
   [course-id]
-  [layout {:breadcrumbs (course-breadcrumbs course-id "Add dataset item")}
+  [current-layout/layout {:breadcrumbs (course-breadcrumbs course-id "Add dataset item")}
    [add-dataset-item-form course-id]])
 
 (defn concept-view
   [course-id concept-id]
-  [layout {:breadcrumbs (course-breadcrumbs course-id "Edit dataset item")}
+  [current-layout/layout {:breadcrumbs (course-breadcrumbs course-id "Edit dataset item")}
    [edit-dataset-item-form course-id concept-id]])
 
 (defn scene-view
   [course-id _]
-  [layout {:breadcrumbs (course-breadcrumbs course-id "Scene")}
-   [activity-edit-form {:course-id course-id}]])
+  (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
+        activity-type (get-activity-type scene-data)
+        layout (case activity-type
+                 "flipbook" ui/layout
+                 current-layout/layout)]
+    (when (and (some? activity-type)
+               (some? scene-data))
+      [layout {:breadcrumbs (course-breadcrumbs course-id "Scene")
+               :actions     [share-button]}
+       [activity-edit-form {:course-id  course-id
+                            :scene-data scene-data}]])))

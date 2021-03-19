@@ -1,0 +1,33 @@
+$background-color: #fff;
+$border-radius: 8px;
+
+.wc-text-area {
+    background-color: $background-color;
+    border-radius: $border-radius;
+    padding: 16px;
+
+    textarea {
+        background-color: $background-color;
+        border: none;
+        font-size: 14px;
+        outline: none;
+        padding: 0;
+        resize: none;
+        width: 100%;
+
+        &::-webkit-scrollbar {
+            -webkit-appearance: none;
+            width: 8px;
+            height: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: $background-color;
+            border-radius: $border-radius;
+        }
+    }
+
+    &.outlined {
+        border: 1px solid #C4C4C4;
+    }
+}

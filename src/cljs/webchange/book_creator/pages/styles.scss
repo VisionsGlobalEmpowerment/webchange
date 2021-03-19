@@ -1,0 +1,58 @@
+.stages-list {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    margin: -20px;
+
+    .stage-item {
+        cursor: pointer;
+        padding: 20px;
+
+        .img-container {
+            width: 240px;
+            height: 115px;
+
+            img {
+                border-radius: 8px;
+                width: 100%;
+            }
+        }
+
+        span {
+            color: #929292;
+            display: block;
+            font-size: 14px;
+            line-height: 16px;
+            margin-top: 32px;
+        }
+
+        &:hover {
+            img {
+                box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
+            }
+        }
+
+        &.active {
+            img {
+                border: 2px solid #0071E3;
+            }
+        }
+    }
+
+    .add-stage-button {
+        border: 2px solid #1D1D1F;
+        border-radius: 50%;
+        box-sizing: border-box;
+        cursor: pointer;
+        margin-left: 28px;
+        margin-bottom: 25px;
+        outline: none;
+        padding: 6px;
+        width: 48px;
+        height: 48px;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
+}

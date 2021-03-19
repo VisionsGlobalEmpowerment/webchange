@@ -80,7 +80,11 @@
       (.resize renderer width height))))
 
 (defn take-screenshot
-  [callback]
-  (let [renderer (get-renderer)
-        canvas (.canvas (.-extract renderer) (get-stage))]
-  (.toBlob canvas callback)))
+  ([callback]
+   (take-screenshot callback {}))
+  ([callback {:keys [extract-canvas?] :or {extract-canvas? true}}]
+   (let [renderer (get-renderer)
+         canvas (if extract-canvas?
+                  (.canvas (.-extract renderer) (get-stage))
+                  (.-view renderer))]
+     (.toBlob canvas callback))))
