@@ -6,6 +6,7 @@
     [webchange.utils.text :refer [parts->chunks]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.logger.index :as logger]
     [webchange.state.state :as state]))
 
 (defn path-to-db
@@ -116,6 +117,14 @@
           phrase-action-path (get-phrase-action-path db id)
           action-node {:path [dialog-action-name]}
           phrase-node {:path phrase-action-path}]
+
+      (logger/group-folded "Open voice-over window")
+      (logger/trace "dialog-action-name" dialog-action-name)
+      (logger/trace "phrase-action-path" phrase-action-path)
+      (logger/trace "action-node" action-node)
+      (logger/trace "phrase-node" phrase-node)
+      (logger/group-end "Open voice-over window")
+
       {:dispatch-n [[::translator-form.actions/set-current-dialog-action action-node]
                     [::translator-form.actions/set-current-phrase-action phrase-node]
                     [::dialog.window/open window-options]]})))

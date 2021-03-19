@@ -16,11 +16,13 @@
         graph))
 
 (defn- get-phrase-node
-  [scene-data page-data]
+  [scene-data page-data text-name]
   (let [action-name (-> page-data (get :action) (keyword))
         graph (parse-data scene-data action-name)
         [text-animation-node] (find-node graph (fn [_ node-data]
-                                                 (= (get-in node-data [:data :type]) "text-animation")))]
+                                                 (let [{:keys [type target]} (get-in node-data [:data])]
+                                                   (and (= type "text-animation")
+                                                        (= target (clojure.core/name text-name))))))]
     (find-node graph (fn [_ {:keys [children]}]
                        (some #{text-animation-node} children)))))
 
@@ -29,7 +31,7 @@
   (-> page-data
       (assoc :text {:name text-name
                     :data (get-in scene-data [:objects text-name])})
-      (assoc :phrase-action-path (-> (get-phrase-node scene-data page-data) (second) (:path)))))
+      (assoc :phrase-action-path (-> (get-phrase-node scene-data page-data text-name) (second) (:path)))))
 
 (defn- page-in-stage?
   [scene-data stage-idx page-idx]

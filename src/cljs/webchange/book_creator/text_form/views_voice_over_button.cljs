@@ -16,4 +16,4 @@
     [icon-button {:icon       "mic"
                   :color      "primary"
                   :class-name "voice-over"
-                  :on-click handle-click}]))
+                  :on-click   handle-click}]))
