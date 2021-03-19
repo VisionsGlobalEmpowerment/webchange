@@ -1,8 +1,9 @@
 (ns webchange.interpreter.renderer.scene.filters.filters
   (:require
     [webchange.interpreter.pixi :refer [shared-ticker ColorMatrixFilter DropShadowFilter GlowFilter OutlineFilter]]
-    [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager]]
+    [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager apply-transformation]]
     [webchange.interpreter.renderer.scene.filters.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.utils :as components-utils]
     [webchange.logger.index :as logger]))
 
 (defn- init-filters
@@ -85,6 +86,7 @@
   (.remove shared-ticker animate))
 
 (def pulsation-fns (atom {}))
+(def pulsation-default-scale (atom {}))
 
 (defn destroy
   []
@@ -111,9 +113,12 @@
    (let [state (atom nil)]
      (if remove
        (do
+         (when (get @pulsation-default-scale container)
+           (components-utils/set-scale container (get @pulsation-default-scale container)))
         (remove-ticker (get @pulsation-fns container))
         (swap! pulsation-fns assoc container nil))
        (do
+         (swap! pulsation-default-scale assoc container (components-utils/get-scale container))
          (move-pivot-to-center container)
          (swap! pulsation-fns assoc container (fn [] (animation-eager container {:time (.now js/Date)} state speed no-interval)))
          (create-ticker (get @pulsation-fns container)))))))
