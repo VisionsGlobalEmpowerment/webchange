@@ -4,7 +4,7 @@
 
 (def m {:id          18
         :name        "I spy"
-        :tags        ["Direct Instruction"]
+        :tags        ["Guided Practice"]
         :description "Some description of i spy mechanics and covered skills"
         :fields      []
         :options     {}})
@@ -197,6 +197,33 @@
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/newspaper_02.png"}
+                        :icon-59       {:type       "image",
+                                       :x          210,
+                                       :y          405,
+                                       :width      55,
+                                       :height     55,
+                                       :transition "icon-59",
+                                       :filter     "brighten",
+                                       :src        "/raw/img/i-spy/transparent.png"
+                                       :actions        {:click {:id "icon-59-click", :on "click", :type "action"}}}
+                        :icon-open       {:type       "image",
+                                        :x          200,
+                                        :y          605,
+                                        :width      95,
+                                        :height     80,
+                                        :transition "icon-open",
+                                        :filter     "brighten",
+                                        :src        "/raw/img/i-spy/transparent.png"
+                                        :actions        {:click {:id "icon-open-click", :on "click", :type "action"}}}
+                        :icon-276       {:type       "image",
+                                        :x          1485,
+                                        :y          490,
+                                        :width      43,
+                                        :height     25,
+                                        :transition "icon-276",
+                                        :filter     "brighten",
+                                        :src        "/raw/img/i-spy/transparent.png"
+                                        :actions        {:click {:id "icon-276-click", :on "click", :type "action"}}}
                         :icon-br-1    {:type     "group",
                                        :x        0,
                                        :y        0,
@@ -361,6 +388,7 @@
                         ["bar" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
                         ["icon-1" "icon-2" "icon-3" "icon-4" "icon-5"]
                         ["icon-br-1" "icon-br-2" "icon-br-3" "icon-br-4" "icon-br-5"]
+                        ["icon-59" "icon-open" "icon-276"]
                         ],
         :actions       {
                         :init-items         {:type "sequence-data",
@@ -390,7 +418,28 @@
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                              :phrase             "finish-dialog",
-                                             :phrase-description "Everything done"}
+                                             :phrase-description "Activity completion script"}
+                        :icon-59-click {:type               "sequence-data",
+                                        :editor-type        "dialog",
+                                        :data               [{:type "sequence-data"
+                                                              :data [{:type "empty" :duration 0}
+                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                        :phrase             "icon-59-click",
+                                        :phrase-description "Bakery 59 plate click"}
+                        :icon-open-click {:type               "sequence-data",
+                                        :editor-type        "dialog",
+                                        :data               [{:type "sequence-data"
+                                                              :data [{:type "empty" :duration 0}
+                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                        :phrase             "icon-open-click",
+                                        :phrase-description "Bakery open click"}
+                        :icon-276-click {:type               "sequence-data",
+                                        :editor-type        "dialog",
+                                        :data               [{:type "sequence-data"
+                                                              :data [{:type "empty" :duration 0}
+                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                        :phrase             "icon-276-click",
+                                        :phrase-description "Fire station 276 click"}
 
                         :item-1-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
@@ -399,6 +448,13 @@
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                              :phrase             "bakery-dialog",
                                              :phrase-description "Bakery description"}
+                        :item-1-next-dialog {:type               "sequence-data",
+                                             :editor-type        "dialog",
+                                             :data               [{:type "sequence-data"
+                                                                   :data [{:type "empty" :duration 0}
+                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                             :phrase             "bakery-next-dialog",
+                                             :phrase-description "Bakery description next time"}
                         :item-2-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
@@ -406,13 +462,27 @@
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                              :phrase             "plate-dialog",
                                              :phrase-description "Car plate description"}
+                        :item-2-next-dialog {:type               "sequence-data",
+                                             :editor-type        "dialog",
+                                             :data               [{:type "sequence-data"
+                                                                   :data [{:type "empty" :duration 0}
+                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                             :phrase             "plate-next-dialog",
+                                             :phrase-description "Car plate description next time"}
                         :item-3-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                              :phrase             "cap-dialog",
-                                             :phrase-description "cap description"}
+                                             :phrase-description "Cap description"}
+                        :item-3-next-dialog {:type               "sequence-data",
+                                             :editor-type        "dialog",
+                                             :data               [{:type "sequence-data"
+                                                                   :data [{:type "empty" :duration 0}
+                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                             :phrase             "cap-next-dialog",
+                                             :phrase-description "Cap description next time"}
                         :item-4-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
@@ -420,6 +490,13 @@
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                              :phrase             "fire-station-dialog",
                                              :phrase-description "Fire station description"}
+                        :item-4-next-dialog {:type               "sequence-data",
+                                             :editor-type        "dialog",
+                                             :data               [{:type "sequence-data"
+                                                                   :data [{:type "empty" :duration 0}
+                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                             :phrase             "fire-station-next-dialog",
+                                             :phrase-description "Fire station description next time"}
                         :item-5-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
@@ -427,6 +504,13 @@
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                              :phrase             "newspaper-dialog",
                                              :phrase-description "Newspaper description"}
+                        :item-5-next-dialog {:type               "sequence-data",
+                                             :editor-type        "dialog",
+                                             :data               [{:type "sequence-data"
+                                                                   :data [{:type "empty" :duration 0}
+                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                             :phrase             "newspaper-next-dialog",
+                                             :phrase-description "Newspaper description next time"}
 
                         :check-and-set-item {:type       "sequence-data",
                                              :data       [
@@ -443,24 +527,26 @@
                                                            :from-params [{
                                                                           :template        "icon-br-%",
                                                                           :param-property  "target",
-                                                                          :action-property "target"}
-                                                                         ]
-                                                           }
+                                                                          :action-property "target"}]}
+
+                                                          {:type     "test-var-scalar",
+                                                           :value false
+                                                           :from-params [{:template        "item-%",
+                                                                          :param-property  "target",
+                                                                          :action-property "var-name"}
+                                                                         {:template        "item-%-dialog",
+                                                                          :param-property  "target",
+                                                                          :action-property "success"}
+                                                                         {:template        "item-%-next-dialog",
+                                                                          :param-property  "target",
+                                                                          :action-property "fail"}]},
+
                                                           {:type        "set-variable",
                                                            :var-value   true
                                                            :from-params [{
                                                                           :template        "item-%",
                                                                           :param-property  "target",
-                                                                          :action-property "var-name"}
-                                                                         ]
-                                                           }
-                                                          {:type        "action",
-                                                           :from-params [{
-                                                                          :template        "item-%-dialog",
-                                                                          :param-property  "target",
-                                                                          :action-property "id"}
-                                                                         ]
-                                                           }
+                                                                          :action-property "var-name"}]}
                                                           {:type "action"
                                                            :id   "test-complete"}
                                                           ]
@@ -484,7 +570,42 @@
         :triggers
                        {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "intro"}},
-        :metadata      {:autostart true}}
+        :metadata      {:autostart true
+                        :tracks    [{:title "Dialogs"
+                                     :nodes [{:type      "dialog"
+                                              :action-id :intro-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-1-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-2-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-3-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-4-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-5-dialog}
+                                             {:type      "dialog"
+                                              :action-id :finish-dialog}]}
+                                    {:title "Next time"
+                                     :nodes [{:type      "dialog"
+                                              :action-id :item-1-next-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-2-next-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-3-next-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-4-next-dialog}
+                                             {:type      "dialog"
+                                              :action-id :item-5-next-dialog}]}
+                                    {:title "Wrong answers"
+                                     :nodes [{:type      "dialog"
+                                              :action-id :icon-59-click}
+                                             {:type      "dialog"
+                                              :action-id :icon-open-click}
+                                             {:type      "dialog"
+                                              :action-id :icon-276-click}]}
+                                    ]
+                        }}
 
   )
 

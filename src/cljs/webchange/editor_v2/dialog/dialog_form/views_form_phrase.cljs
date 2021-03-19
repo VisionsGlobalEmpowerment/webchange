@@ -32,7 +32,7 @@
                :on-mouse-leave #(reset! tooltip-open? false)
                :on-mouse-up    #(re-frame/dispatch [::dialog-form.actions/set-phrase-action-volume @current-value])
                :min            0
-               :max            3
+               :max            1
                :step           0.01
                :style          {:cursor      "pointer"
                                 :flex-grow   "1"

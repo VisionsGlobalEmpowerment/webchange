@@ -107,7 +107,7 @@
         [ui/menu-item {:on-click handle-edit}
          [ui/list-item-icon
           [ic/edit {:style (:menu-item-icon styles)}]]
-         "Edit Data"]
+         "Name Recording"]
         [ui/menu-item {:on-click handle-clear-selection}
          [ui/list-item-icon
           [ic/edit {:style (:menu-item-icon styles)}]]
