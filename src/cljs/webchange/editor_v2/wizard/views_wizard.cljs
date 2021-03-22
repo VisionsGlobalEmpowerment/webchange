@@ -52,9 +52,9 @@
                                        component-props (merge {:data      data
                                                                :validator validator}
                                                               (case step-key
-                                                                :choose-template {:data-key :template-id}
-                                                                :fill-template {:data-key    :template-data
-                                                                                :template-id (get-in @data [:template-id])}
+                                                                :choose-template {:data-key :template}
+                                                                :fill-template {:data-key :template-data
+                                                                                :template (get-in @data [:template])}
                                                                 :name-activity {:data-key :activity-data}
                                                                 :skills {:data-key :skills}))]
                                    (-> step
@@ -69,9 +69,24 @@
 
 (defn wizard
   []
-  (r/with-let [data (r/atom {})
+  (r/with-let [data (r/atom {:template      {:id   24
+                                             :name "flipbook"}
+                             :activity-data {:language "q"
+                                             :name     "q"
+                                             :course   "q"}
+                             :skills        {:level   "pre-k"
+                                             :subject "english-native"
+                                             :skills  [4]
+                                             :topics  ["foundational-literacy--phonemic-awareness"]
+                                             :strands ["foundational-literacy"]
+                                             :concept 1}
+                             :template-data {:cover-layout nil
+                                             :cover-title  ""
+                                             :cover-image  nil
+                                             :authors      []
+                                             :illustrators []}})
                steps (get-steps)
-               current-step-idx (r/atom -1)
+               current-step-idx (r/atom 3)
                {:keys [valid?] :as validator} (validator/init data)
                handle-back (fn [] (reset! current-step-idx (dec @current-step-idx)))
                handle-next (fn []
@@ -83,6 +98,11 @@
           last-step? (->> (count steps) (dec) (= @current-step-idx))
           started? (> @current-step-idx -1)
           finished? (= @current-step-idx (count steps))]
+
+      ;(print "data" @data)
+      ;(print "current-step-idx" @current-step-idx)
+      ;(print "current-step" current-step)
+
       [layout {:breadcrumbs (root-breadcrumbs "Create Activity Wizard")}
        [ui/grid {:container true
                  :spacing   32}
