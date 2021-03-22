@@ -109,3 +109,7 @@
 (defn sort-children
   [object]
   (.sortChildren object))
+
+(defn emit
+  [object event]
+  (.emit object event))

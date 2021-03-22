@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.text.wrapper
   (:require
     [webchange.interpreter.renderer.scene.components.text.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.utils :refer [emit]]
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
     [webchange.interpreter.renderer.scene.filters.filters :as f]))
 
@@ -11,7 +12,8 @@
                    :object        text-object
                    :chunks        chunks
                    :set-text      (fn [value]
-                                    (aset text-object "text" value))
+                                    (aset text-object "text" value)
+                                    (emit text-object "textChanged"))
                    :set-highlight (fn [highlight]
                                     (let [highlight-filter-set (f/has-filter-by-name text-object "glow")]
                                       (if (and (not highlight) highlight-filter-set) (f/set-filter text-object "" {}))

@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.components.change-skin.state :as skin]
-    [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE]]
+    [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE Text]]
     [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
@@ -48,6 +48,66 @@
       (.lineTo (:x bottom-left) (:y bottom-left))
       (.lineTo (:x top-left) (- (:y top-left) (/ frame-width 2))))))
 
+(defn- get-sprite-dimensions
+  [object]
+  (let [{:keys [x y width height]} (let [local-bounds (.getLocalBounds object)]
+                                     {:x      (.-x local-bounds)
+                                      :y      (.-y local-bounds)
+                                      :width  (.-width local-bounds)
+                                      :height (.-height local-bounds)})]
+    {:x      (- x frame-padding frame-width)
+     :y      (- y frame-padding frame-width)
+     :width  (+ width (* 2 (+ frame-padding frame-width)))
+     :height (+ height (* 2 (+ frame-padding frame-width)))}))
+
+(defn- set-sprite-dimensions!
+  [sprite {:keys [x y width height]}]
+  (doto sprite
+    (aset "width" (+ width (* 2 (+ frame-padding frame-width))))
+    (aset "height" (+ height (* 2 (+ frame-padding frame-width))))
+    (utils/set-position {:x (- x frame-padding frame-width)
+                         :y (- y frame-padding frame-width)})))
+
+(defn- update-sprite-dimensions!
+  [sprite object]
+  (->> (get-sprite-dimensions object)
+       (set-sprite-dimensions! sprite)))
+
+(defn- get-mask-dimensions
+  [object]
+  (let [{:keys [x y]} (let [local-bounds (.getLocalBounds object)]
+                        {:x      (.-x local-bounds)
+                         :y      (.-y local-bounds)
+                         :width  (.-width local-bounds)
+                         :height (.-height local-bounds)})]
+    {:x (- x frame-padding)
+     :y (- y frame-padding)}))
+
+(defn- set-mask-dimensions!
+  [mask position]
+  (utils/set-position mask position))
+
+(defn- update-mask-dimensions!
+  [mask object]
+  (->> (get-mask-dimensions object)
+       (set-mask-dimensions! mask)))
+
+(defn- update-editor-frame
+  [object sprite mask component-container]
+  (let [{:keys [x y width height]} (let [local-bounds (.getLocalBounds object)]
+                                     {:x      (.-x local-bounds)
+                                      :y      (.-y local-bounds)
+                                      :width  (.-width local-bounds)
+                                      :height (.-height local-bounds)})]
+    (update-sprite-dimensions! sprite object)
+
+    (doto mask
+      (draw-border width height frame-padding)
+      (update-mask-dimensions! object))
+
+    (draw-border mask width height frame-padding)
+    (aset component-container "hitArea" (Rectangle. x y width height))))
+
 (defn- create-frame
   [component-container object-props object]
   (let [{:keys [x y width height]} (let [local-bounds (.getLocalBounds object)]
@@ -57,24 +117,16 @@
                                       :height (.-height local-bounds)})
         sprite (doto (Sprite. WHITE)
                  (aset "tint" frame-default-color)
-                 (aset "width" (+ width (* 2 (+ frame-padding frame-width))))
-                 (aset "height" (+ height (* 2 (+ frame-padding frame-width))))
-                 (utils/set-position {:x (- x frame-padding frame-width)
-                                      :y (- y frame-padding frame-width)}))
+                 (update-sprite-dimensions! object))
+
         mask (doto (Graphics.)
-               (draw-border width height frame-padding)
-               (utils/set-position {:x (- x frame-padding)
-                                    :y (- y frame-padding)}))]
-    (if (instance? Container object)
-      (utils/set-handler object "childAdded"
-                         #(let [local-bounds (.getLocalBounds object)
-                                width (.-width local-bounds)
-                                height (.-height local-bounds)]
-                            + (doto sprite
-                                (aset "width" width)
-                                (aset "height" height))
-                            (draw-border mask width height frame-padding)
-                            (aset component-container "hitArea" (Rectangle. x y width height)))))
+               (update-mask-dimensions! object)
+               (draw-border width height frame-padding))]
+    (when (instance? Container object)
+      (utils/set-handler object "childAdded" #(update-editor-frame object sprite mask component-container)))
+
+    (when (instance? Text object)
+      (utils/set-handler object "textChanged" #(update-editor-frame object sprite mask component-container)))
 
     (aset sprite "mask" mask)
     (aset component-container "hitArea" (Rectangle. x y width height))
