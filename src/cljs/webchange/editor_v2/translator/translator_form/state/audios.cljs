@@ -49,13 +49,14 @@
        :dispatch [::warehouse/upload-file
                   {:file        js-file-value
                    :form-params form-params}
-                  {:on-success [::upload-audio-success (merge audio-props asset-data)]
+                  {:on-success [::upload-audio-success (merge audio-props asset-data form-params)]
                    :on-failure :on-failure}]})))
 
 (re-frame/reg-event-fx
   ::upload-audio-success
   (fn [_ [_ audio-props data]]
     (let [asset-data (merge audio-props data)]
+      (if (:on-success audio-props)  ((:on-success audio-props)))
       {:dispatch-n (list [:complete-request :upload-audio]
                          [::translator-form.scene/add-asset asset-data]
                          [::set-default-target asset-data]

@@ -16,7 +16,7 @@
                      (= border-radius (/ (.-width bounds) 2)))]
     (doto mask
       (.clear)
-      (.beginFill 0x000000))
+      (.beginFill 0x000000 1))
 
     (if circle?
       (.drawCircle mask (/ (.-width bounds) 2) (/ (.-height bounds) 2) border-radius)

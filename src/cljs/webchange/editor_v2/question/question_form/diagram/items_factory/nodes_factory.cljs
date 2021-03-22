@@ -42,15 +42,18 @@
 
 (defn- get-dialog
   [scene-data action-path]
-  (:path (first (filter
-                  (fn [action]
-                    (= (get-in action [:data 0 :data 1 :type]) "animation-sequence"))
-                  (map-indexed (fn [idx action]
-                                 (if (= "action" (:type action))
-                                   (-> (get-in scene-data (concat [:actions] [(keyword (get-in action [:id]))]))
-                                       (assoc :path [(keyword (get-in action [:id]))]))
-                                   (assoc action :path (conj action-path idx))))
-                               (:data (get-in scene-data (concat [:actions] action-path))))))))
+  (let [current-action (get-in scene-data (concat [:actions] action-path))]
+    (if (= (get-in current-action [:data 0 :data 1 :type]) "animation-sequence")
+      (concat action-path)
+      (:path (first (filter
+                      (fn [action]
+                        (= (get-in action [:data 0 :data 1 :type]) "animation-sequence"))
+                      (map-indexed (fn [idx action]
+                                     (if (= "action" (:type action))
+                                       (-> (get-in scene-data (concat [:actions] [(keyword (get-in action [:id]))]))
+                                           (assoc :path [(keyword (get-in action [:id]))]))
+                                       (assoc action :path (conj action-path idx))))
+                                   (:data current-action))))))))
 
 (defn prepare-nodes
   [scene-data path]

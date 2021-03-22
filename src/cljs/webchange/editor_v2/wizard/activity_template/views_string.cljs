@@ -7,11 +7,11 @@
 (def string-validation-map {:root [(fn [value] (when (= value "") "Required field"))]})
 
 (defn string-option
-  [{:keys [key data validator]}]
+  [{:keys [key option data validator]}]
   (r/with-let [string-data (connect-data data [key] "")
                {:keys [error-message destroy]} (v/init string-data string-validation-map validator)]
     [:div {:style {:width 416}}
-     [text-area {:placeholder "Place your text"
+     [text-area {:placeholder  (if (:placeholder option) (:placeholder option) "Place your text")
                  :variant     "outlined"
                  :value       @string-data
                  :on-change   #(reset! string-data %)}]

@@ -34,12 +34,14 @@
                                                  :skip       skip
                                                  :audio-data empty-audio
                                                  :image      (get-in args [:img])
+                                                 :screenshot? (get-in args [:question-screenshot])
                                                  :answers    {:data (map create-answer (get-in args [:answers]))}}}
 
      (keyword success)            {:type "sequence-data",
                                    :data [{:type "empty" :duration 500}
-                                          {:type "hide-question"}
                                           {:type "action" :id success-dialog}
+                                          {:type "hide-question"}
+                                          {:type "empty" :duration 2000}
                                           {:type "action" :id next-action-name}]}
 
      (keyword skip)               {:type "sequence-data",

@@ -171,6 +171,7 @@
                 ]
             }
             :image      '/raw/img/categorize/question.png'
+            :screenshot? false
             :answers    [
                 {:text       'A. They are both red'
                 :correct    false

@@ -29,7 +29,8 @@
                data (r/atom (get-action-default-data scene-data current-action-data))
                {:keys [valid?] :as validator} (validator/init data)
                close #(re-frame/dispatch [::scene-action.events/close])
-               save #(if (valid?) (re-frame/dispatch [::scene-action.events/save @data]))]
+               save #(do
+                       (if (valid?) (re-frame/dispatch [::scene-action.events/save @data])))]
     [dialog
      {:title    (:title current-action-data)
       :on-close close}

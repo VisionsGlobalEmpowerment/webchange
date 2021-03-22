@@ -7,8 +7,10 @@
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
 (def answers-validation-map {:root [(fn [value] (when (= (count value) 0) "answers are required"))]})
-(def page-validation-map {:text [(fn [value] (when (empty? value) "Text is required"))]
+(def answer-option-validation-map-with-image {:text [(fn [value] (when (empty? value) "Text is required"))]
                           :img  [(fn [value] (when (empty? value) "Image is required"))]})
+
+(def answer-option-validation-map-no-image {:text [(fn [value] (when (empty? value) "Text is required"))]})
 
 (defn- form-block
   [{:keys [title]}]
@@ -31,6 +33,16 @@
    [ui/grid {:container true
              :spacing   16}
     [ui/grid {:item true :xs 12}
+     [ui/checkbox {:label     "Screenshot"
+                     :variant   "outlined"
+                     :checked  (get @question-page :question-screenshot false)
+                     :on-change #(do
+                                   (reset! question-page (assoc @question-page :question-screenshot (-> % .-target .-checked))))}]
+     [ui/typography {:style {:display "inline-block"}
+                     :variant "h6"}
+       "Use screenshot instead image"]
+     [error-message {:field-name :root}]]
+    [ui/grid {:item true :xs 12}
      [ui/text-field {:label     "Question text"
                      :variant   "outlined"
                      :value     (get @question-page :question "")
@@ -38,13 +50,21 @@
                      :on-change #(reset! question-page (assoc @question-page :question (-> % .-target .-value)))}]
      [error-message {:field-name :root}]]
     [ui/grid {:item true :xs 12}
-     [image-field/image-field (get @question-page :img "") #(swap! question-page assoc :img %)]
+     [image-field/image-field (get @question-page :img "") #(swap! question-page assoc :img %) {:max-width 600
+                                                                                                :max-height 400
+                                                                                                :min-height 100
+                                                                                                :min-width 100}]
      [error-message {:field-name :img}]]]])
 
 (defn- answer-option
   [{:keys [idx data validator on-remove last? with-image]}]
   (r/with-let [page-data (connect-data data [:answers idx])
-               {:keys [error-message destroy]} (v/init page-data page-validation-map validator)]
+               {:keys [error-message destroy]} (v/init
+                                                 page-data
+                                                 (if with-image
+                                                   answer-option-validation-map-with-image
+                                                   answer-option-validation-map-no-image)
+                                                 validator)]
     [ui/grid {:container   true
               :spacing     16
               :align-items "center"}
