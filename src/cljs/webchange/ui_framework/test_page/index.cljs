@@ -1,7 +1,7 @@
 (ns webchange.ui-framework.test-page.index
   (:require
     [reagent.core :as r]
-    [webchange.ui-framework.index :refer [icon-button]]))
+    [webchange.ui-framework.index :refer [icon icon-button]]))
 
 (defn- row
   [{:keys [title]}]
@@ -23,22 +23,27 @@
 
 (defn test-ui
   []
-  [row {:title "Icon Button"}
-   [block {:title "Default"}
-    [icon-button {:icon "arrow-left"}]]
-   [block {:title "Primary Color"}
-    [icon-button {:icon  "mic"
-                  :color "primary"}]]
-   [block {:title "Disabled"}
-    [icon-button {:icon      "arrow-right"
-                  :disabled? true}]]
-   [block {:title "Outlined"}
-    [icon-button {:icon    "link"
-                  :variant "outlined"}]]
-   [block {:title "Play button"}
-    [icon-button {:icon  "play"
-                  :color "primary"}]]
-   [block {:title "With text"}
-    [icon-button {:icon    "link"
-                  :variant "outlined"}
-     "Copy Link"]]])
+  [:div
+   [row {:title "Icon"}
+    [block {:title "With rotation"}
+     [icon {:icon    "sync"
+            :rotate? true}]]]
+   [row {:title "Icon Button"}
+    [block {:title "Default"}
+     [icon-button {:icon "arrow-left"}]]
+    [block {:title "Primary Color"}
+     [icon-button {:icon  "mic"
+                   :color "primary"}]]
+    [block {:title "Disabled"}
+     [icon-button {:icon      "arrow-right"
+                   :disabled? true}]]
+    [block {:title "Outlined"}
+     [icon-button {:icon    "link"
+                   :variant "outlined"}]]
+    [block {:title "Play button"}
+     [icon-button {:icon  "play"
+                   :color "primary"}]]
+    [block {:title "With text"}
+     [icon-button {:icon    "link"
+                   :variant "outlined"}
+      "Copy Link"]]]])
