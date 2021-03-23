@@ -13,8 +13,7 @@
           form-params))
 
 (defn- create-request
-  [{:keys [method uri body params show-sync? key] :as props} {:keys [on-success on-failure]}]
-  (print ">> create-request" key show-sync?)
+  [{:keys [method uri body params show-sync?] :as props} {:keys [on-success on-failure]}]
   {:dispatch-n (cond-> []
                        show-sync? (conj [::sync-status/show]))
    :http-xhrio (cond-> {:method          method

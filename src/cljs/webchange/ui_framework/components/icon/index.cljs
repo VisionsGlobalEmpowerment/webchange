@@ -10,6 +10,7 @@
     [webchange.ui-framework.components.icon.icon-link :as link]
     [webchange.ui-framework.components.icon.icon-mic :as mic]
     [webchange.ui-framework.components.icon.icon-play :as play]
+    [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
 
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
@@ -30,4 +31,5 @@
      "link" link/data
      "mic" mic/data
      "play" play/data
+     "remove" remove/data
      "sync" sync/data)])

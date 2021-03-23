@@ -38,10 +38,12 @@
                 :data      data
                 :validator validator}]
      [:div.actions
-      [button {:on-click save}
+      [button {:on-click save
+               :size     "big"}
        "Save"]
       [button {:on-click close
-               :variant  "outlined"}
+               :variant  "outlined"
+               :size     "big"}
        "Cancel"]]]))
 
 (defn action-modal-container

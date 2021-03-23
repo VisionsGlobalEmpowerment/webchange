@@ -22,16 +22,14 @@
 
 (defn layout
   [{:keys [data option validator]}]
-  (r/with-let [current-value (r/atom nil)
-               data (connect-data data [key] nil)
+  (r/with-let [data (connect-data data [(:key option)] nil)
                {:keys [destroy error-message]} (v/init data validation-map validator)]
     (let [handle-option-click (fn [value]
-                                (reset! data value)
-                                (reset! current-value value))
+                                (reset! data value))
           layout-options (->> (get option :options [])
                               (map (fn [{:keys [value] :as option}]
                                      (merge option
-                                            {:selected? (= value @current-value)
+                                            {:selected? (= value @data)
                                              :on-click  handle-option-click})))
                               (doall))]
       [:div.layout-block

@@ -27,6 +27,14 @@
               (subvec list (inc position)))
       (vec)))
 
+(defn replace-at-position
+  [list position new-item]
+  "Replace item in list at specific position."
+  {:pre [(sequential? list)
+         (number? position) (>= position 0) (< position (count list))]}
+  (-> (remove-at-position list position)
+      (insert-at-position new-item position)))
+
 (defn move-item
   [list position-from position-to]
   "Move list item from `position-from` to `position-to` position."
@@ -35,7 +43,8 @@
          (number? position-to) (>= position-to 0) (< position-to (count list))]}
   (let [item (nth list position-from)]
     (-> (remove-at-position list position-from)
-        (insert-at-position item position-to))))
+        (insert-at-position item position-to)
+        (vec))))
 
 (defn find-item-position
   [list predicate]
