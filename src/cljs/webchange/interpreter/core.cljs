@@ -7,7 +7,8 @@
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name chunk-animated-variable]]))
+    [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name chunk-animated-variable]]
+    [webchange.logger.index :as logger]))
 
 (def assets (atom {}))
 
@@ -235,8 +236,8 @@
 ;; ToDo: Test :skippable param
 ;; ToDo: Implement :ease param
 (defn interpolate
-  [{:keys [id component to from params on-ended skippable]}]
-
+  [{:keys [id component to from params on-ended skippable kill-after] :as props}]
+  (logger/trace-folded "interpolate" props)
   (when from
     (set-tween-object-params component from))
 
@@ -245,8 +246,8 @@
         position (w/get-position component)
         ease-params (or (:ease params) [1 1])
         to (cond-> to
-                (contains? to :offset-x) (assoc :x (+ (:offset-x to) (:x position)))
-                (contains? to :offset-y) (assoc :y (+ (:offset-y to) (:y position))))
+                   (contains? to :offset-x) (assoc :x (+ (:offset-x to) (:x position)))
+                   (contains? to :offset-y) (assoc :y (+ (:offset-y to) (:y position))))
         vars (cond-> (-> to
                          (merge params)
                          (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
@@ -258,15 +259,16 @@
                                                   (on-ended))
                                                 (this-as t (.kill t))))))
                      (:yoyo params) (merge {:yoyo   true
-                                            :repeat -1})
-
-                     )
+                                            :repeat -1}))
         tween (TweenMax.to container duration (clj->js vars))]
 
     (when skippable
       (ce/on-skip! #(.progress tween 1)))
 
-    (register-transition! id #(.kill tween))))
+    (register-transition! id #(.kill tween))
+
+    (when kill-after
+      (js/setTimeout #(kill-transition! id) kill-after))))
 
 (defn collide?
   [display-object1 display-object2]

@@ -60,7 +60,7 @@
     (.update texture)))
 
 (defn- drag
-  [state scale offset pointer]
+  [state {:keys [scale offset on-finish]} pointer]
   (let [{:keys [paths] {:keys [path-idx point-idx] :or {path-idx 0 point-idx 0}} :next-point} @state
         points (some-> paths (nth path-idx nil) :points)
         {:keys [updated? path-finished next-point-idx]} (complete-path points point-idx pointer scale offset)
@@ -68,10 +68,14 @@
                      {:path-idx  (inc path-idx)
                       :point-idx 0}
                      {:path-idx  path-idx
-                      :point-idx next-point-idx})]
+                      :point-idx next-point-idx})
+        all-paths-finished (and path-finished (= (inc path-idx) (count paths)))]
     (when updated?
       (swap! state assoc :next-point next-point)
-      (draw state next-point))))
+      (draw state next-point))
+
+    (when (and all-paths-finished on-finish)
+      (on-finish))))
 
 (defn- next-point-pos
   [state]
@@ -80,7 +84,7 @@
     (-> points (nth point-idx))))
 
 (defn- on-start
-  [state scale offset]
+  [state {:keys [scale offset]}]
   (fn [event]
     (this-as this
       (let [point (-> state (next-point-pos) (translate-point offset) (scale-point scale))
@@ -91,7 +95,7 @@
         (debug/mark :next (:x point) (:y point) 4 0x00ff00 (.-parent this))
 
         (logger/trace-folded "animated-svg-path tracing on-start" this)
-        (when (in-area {:x (.-x pos) :y (.-y pos)} point (scale-distance touch-distance scale))
+        (when (and (:active @state) (in-area {:x (.-x pos) :y (.-y pos)} point (scale-distance touch-distance scale)))
           (set! (.-drag-offset this) drag-offset)
           (set! (.-data this) (.-data event))
           (set! (.-drawing this) true))))))
@@ -103,21 +107,21 @@
     (set! (.-drawing this) false)))
 
 (defn- on-move
-  [state scale offset]
+  [state props]
   (fn []
     (this-as this
       (when (.-drawing this)
         (let [{offset-x :x offset-y :y} (-> this .-drag-offset)
               pos (-> this .-data (.getLocalPosition (.-parent this)))
               pointer {:x (+ offset-x (.-x pos)) :y (+ offset-y (.-y pos))}]
-          (drag state scale offset pointer))))))
+          (drag state props pointer))))))
 
 (defn create-trigger
-  [state {:keys [width height scale offset]}]
+  [state {:keys [width height] :as props}]
   (doto (Sprite. (.-EMPTY Texture))
     (utils/set-size {:width (* 2 width) :height (* 2 height)})
     (set! -interactive true)
-    (.on "pointerdown" (on-start state scale offset))
+    (.on "pointerdown" (on-start state props))
     (.on "pointerup" on-end)
     (.on "pointerupoutside" on-end)
-    (.on "pointermove" (on-move state scale offset))))
+    (.on "pointermove" (on-move state props))))

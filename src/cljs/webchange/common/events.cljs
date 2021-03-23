@@ -149,15 +149,20 @@
       (assoc :var (:var prev))
       (update-in [:params] merge (:params prev))))
 
+(defn apply-template
+  [template value]
+  (let [prepared-value (clojure.string/replace value #"[_~.<>{}()!№%:,;#$%^&*+='`]" "")]
+    (clojure.string/replace template "%" prepared-value)))
+
 (defn from-template
   [template value]
   (if template
     (if (vector? value)
-      (vec (map (fn [val]
-                  (clojure.string/replace template "%" val)) value))
-      (clojure.string/replace template "%" value))
-    value)
-  )
+      (->> value
+           (map #(apply-template template %))
+           vec)
+      (apply-template template value))
+    value))
 
 (defn with-var-property
   []

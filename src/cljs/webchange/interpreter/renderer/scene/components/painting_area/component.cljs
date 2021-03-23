@@ -6,10 +6,10 @@
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.app :as app]))
 
-(def default-props {:x        {}
-                    :y        {}
-                    :width    {}
-                    :height   {}
+(def default-props {:x        {:default 0}
+                    :y        {:default 0}
+                    :width    {:default 1920}
+                    :height   {:default 1080}
                     :name     {}
                     :on-click {}
                     :ref      {}

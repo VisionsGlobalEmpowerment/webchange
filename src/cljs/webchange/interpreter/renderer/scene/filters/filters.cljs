@@ -136,6 +136,7 @@
 
 (defn apply-filters
   [container filters]
+  (logger/trace-folded "apply Filter" container filters)
   (doseq [{:keys [name] :as filter-params} filters]
     (case name
       "brightness" (apply-brighten-filter container filter-params)
@@ -148,7 +149,7 @@
 
 (defn set-filter
   [container name params]
-  (logger/trace-folded "Set Filter" container name params)
+  (logger/trace-folded "set Filter" container name params)
   (case name
     "brightness" (apply-brighten-filter container params)
     "glow" (apply-glow-filter container)
@@ -166,9 +167,9 @@
 
 (defn set-filter-value
   [container filter-name value]
+  (logger/trace-folded "set filter value" container filter-name value)
   (if-let [filter (get-filter-by-name container filter-name)]
     (case filter-name
       "brightness" (set-brightness filter value)
-      "brighten" (set-brightness filter value)
       (logger/warn "[Filters]" (str "Filter with type <" filter-name "> can not be updated")))
     (logger/warn "[Filters]" (str "Filter with type <" filter-name "> was not found"))))

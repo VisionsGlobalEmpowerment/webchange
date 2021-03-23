@@ -22,7 +22,9 @@
                     :duration     {}
                     :scale        {:default {:x 1 :y 1}}
                     :offset       {:default {:x 0 :y 0}}
-                    :traceable    {}})
+                    :traceable    {}
+                    :on-finish    {}
+                    :active       {:default true}})
 
 (defn- create-container
   [{:keys [x y]}]

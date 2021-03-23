@@ -3,15 +3,19 @@
     [webchange.interpreter.pixi :refer [Container Graphics string2hex]]
     [webchange.interpreter.renderer.scene.components.painting-toolset.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.image.component :as image]))
+    [webchange.interpreter.renderer.scene.components.image.component :as image]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]))
 
-(def default-props {:x         {:default 0}
-                    :y         {:default 0}
-                    :width     {}
-                    :height    {}
-                    :name      {}
-                    :on-change {}
-                    :scale     {:default {:x 1 :y 1}}})
+(def default-props {:x            {:default 0}
+                    :y            {:default 0}
+                    :width        {}
+                    :height       {}
+                    :name         {}
+                    :on-change    {}
+                    :ref          {}
+                    :default-tool {:default "felt-tip"}
+                    :filters      {:default [{:name "brightness" :value 0}]}
+                    :scale        {:default {:x 1 :y 1}}})
 
 (def tools-definitions {:brush    {:defaults {:type "image",
                                               :x    -280,
@@ -39,10 +43,11 @@
                                    :inactive {:x -283}}})
 
 (defn- create-container
-  [{:keys [x y scale]}]
+  [{:keys [x y scale filters]}]
   (doto (Container.)
     (utils/set-position {:x x :y y})
-    (utils/set-scale scale)))
+    (utils/set-scale scale)
+    (apply-filters filters)))
 
 (defn- activate
   [state active-tool]
@@ -60,10 +65,7 @@
                    (when on-change
                      (on-change {:tool (name type)})))
         tool (image/create (assoc defaults
-                             :filters [{:name  "brightness"
-                                        :value 0}]
                              :object-name (str object-name "-tool-" (name type))
-                             :transition (str object-name "-tool-" (name type))
                              :parent group
                              :on-click on-click))]
     (swap! state assoc-in [:tools type] tool)))
@@ -79,10 +81,10 @@
   :scale - image scale. Default: {:x 1 :y 1}.
   :name - component name that will be set to sprite and container with corresponding suffixes.
   :on-change - on change event handler."
-  [{:keys [parent type object-name on-change] :as props}]
+  [{:keys [parent type object-name ref default-tool on-change] :as props}]
   (let [group (create-container props)
         state (atom {:tools {}})
-        wrapped-group (wrap type object-name group state)]
+        wrapped-group (wrap type object-name group)]
 
     (create-tool! group :brush state props)
     (create-tool! group :felt-tip state props)
@@ -90,5 +92,11 @@
     (create-tool! group :eraser state props)
 
     (.addChild parent group)
+
+    (when-not (nil? ref) (ref wrapped-group))
+
+    (when default-tool
+      (activate state (keyword default-tool))
+      (on-change {:tool default-tool}))
 
     wrapped-group))
