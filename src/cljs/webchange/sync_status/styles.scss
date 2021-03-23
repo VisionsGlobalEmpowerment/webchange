@@ -1,0 +1,16 @@
+.sync-status {
+    overflow: hidden;
+    position: relative;
+
+    .wrapper {
+        align-items: center;
+        display: flex;
+        position: relative;
+        transition: top 0.3s ease;
+        top: -32px;
+
+        &.visible {
+            top: 0;
+        }
+    }
+}

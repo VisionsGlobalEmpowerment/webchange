@@ -1,7 +1,8 @@
 (ns webchange.state.warehouse
   (:require
     [re-frame.core :as re-frame]
-    [ajax.core :refer [json-request-format json-response-format]]))
+    [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.sync-status.state :as sync-status]))
 
 (defn- get-form-data
   [form-params]
@@ -12,25 +13,30 @@
           form-params))
 
 (defn- create-request
-  [{:keys [key method uri body params]} {:keys [on-success on-failure]}]
-  {:http-xhrio (cond-> {:method          method
+  [{:keys [method uri body params show-sync?] :as props} {:keys [on-success on-failure]}]
+  {:dispatch-n (cond-> []
+                       show-sync? (conj [::sync-status/show]))
+   :http-xhrio (cond-> {:method          method
                         :uri             uri
                         :format          (json-request-format)
                         :response-format (json-response-format {:keywords? true})
-                        :on-success      [::empty-success-handler]
-                        :on-failure      [::generic-failure-handler key on-failure]}
+                        :on-success      [::generic-on-success-handler props on-success]
+                        :on-failure      [::generic-failure-handler props on-failure]}
                        (some? params) (assoc :params params)
-                       (some? body) (assoc :body body)
-                       (some? on-success) (assoc :on-success on-success))})
+                       (some? body) (assoc :body body))})
 
 (re-frame/reg-event-fx
-  ::empty-success-handler
-  (fn [] {}))
+  ::generic-on-success-handler
+  (fn [{:keys [_]} [_ {:keys [show-sync?]} success-handler response]]
+    {:dispatch-n (cond-> []
+                         show-sync? (conj [::sync-status/hide])
+                         (some? success-handler) (conj (conj success-handler response)))}))
 
 (re-frame/reg-event-fx
   ::generic-failure-handler
-  (fn [{:keys [_]} [_ key failure-handler response]]
+  (fn [{:keys [_]} [_ {:keys [key show-sync?]} failure-handler response]]
     {:dispatch-n (cond-> [[:api-request-error key response]]
+                         show-sync? (conj [::sync-status/hide])
                          (some? failure-handler) (conj (conj failure-handler response)))}))
 
 (re-frame/reg-event-fx
@@ -69,10 +75,11 @@
 (re-frame/reg-event-fx
   ::save-scene
   (fn [{:keys [_]} [_ {:keys [course-id scene-id scene-data]} handlers]]
-    (create-request {:key    :save-scene
-                     :method :put
-                     :uri    (str "/api/courses/" course-id "/scenes/" scene-id)
-                     :params {:scene scene-data}}
+    (create-request {:key        :save-scene
+                     :method     :put
+                     :uri        (str "/api/courses/" course-id "/scenes/" scene-id)
+                     :params     {:scene scene-data}
+                     :show-sync? true}
                     handlers)))
 
 ;; Lesson sets

@@ -30,6 +30,7 @@
      [:div.buttons-block
       [button {:variant  "contained"
                :color    "primary"
+               :size     "big"
                :on-click handle-save}
        "Apply"]]]
     (finally

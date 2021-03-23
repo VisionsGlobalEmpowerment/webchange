@@ -20,10 +20,10 @@
                     :type    "lookup-image"
                     :options [{:name  "Title at top"
                                :value :title-top
-                               :src   "/images/templates/cover_layout/title_at_top.png"}
+                               :src   "/images/templates/cover_layout/title_at_top.svg"}
                               {:name  "Title at bottom"
                                :value :title-bottom
-                               :src   "/images/templates/cover_layout/title_at_bottom.png"}]}
+                               :src   "/images/templates/cover_layout/title_at_bottom.svg"}]}
                    {:key   :cover-title
                     :label "Title"
                     :type  "string"}

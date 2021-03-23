@@ -9,11 +9,17 @@
     [webchange.ui-framework.components.icon.icon-image :as image]
     [webchange.ui-framework.components.icon.icon-link :as link]
     [webchange.ui-framework.components.icon.icon-mic :as mic]
-    [webchange.ui-framework.components.icon.icon-play :as play]))
+    [webchange.ui-framework.components.icon.icon-play :as play]
+    [webchange.ui-framework.components.icon.icon-remove :as remove]
+    [webchange.ui-framework.components.icon.icon-sync :as sync]
+
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [icon]}]
-  [:div.wc-icon
+  [{:keys [icon rotate? class-name]}]
+  [:div {:class-name (get-class-name (cond-> {"wc-icon" true}
+                                             (some? rotate?) (assoc "rotating" rotate?)
+                                             (some? class-name) (assoc class-name true)))}
    (case icon
      "add" add/data
      "arrow-left" arrow-left/data
@@ -24,4 +30,6 @@
      "image" image/data
      "link" link/data
      "mic" mic/data
-     "play" play/data)])
+     "play" play/data
+     "remove" remove/data
+     "sync" sync/data)])

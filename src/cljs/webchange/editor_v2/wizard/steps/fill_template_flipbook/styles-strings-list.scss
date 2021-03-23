@@ -1,0 +1,17 @@
+.strings-list {
+    .controls-container {
+        position: relative;
+
+        .add-button {
+            margin-left: 8px;
+        }
+
+        .remove-button {
+            position: absolute;
+            left: 142px;
+            top: 3px;
+            min-width: 26px;
+            min-height: 26px;
+        }
+    }
+}

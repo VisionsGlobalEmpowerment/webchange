@@ -31,8 +31,9 @@
                                                          :on-finish callback}]))
 
 (defn component
-  [{:keys [type on-change with-upload?]
+  [{:keys [type on-change show-icon? with-upload?]
     :or   {on-change    #()
+           show-icon?   true
            with-upload? true}}]
   (r/with-let [file-input (atom nil)
                uploading? (atom false)
@@ -50,7 +51,8 @@
               :accept    (get-accept-extensions type)
               :on-change handle-change
               :ref       #(reset! file-input %)}]
-     [icon/component {:icon type}]
+     (when (and show-icon? (some? type))
+       [icon/component {:icon type}])
      [text-input/component {:value     (if @uploading? "Uploading.." @text-value)
                             :disabled? true}]
      [button/component {:on-click  #(.click @file-input)

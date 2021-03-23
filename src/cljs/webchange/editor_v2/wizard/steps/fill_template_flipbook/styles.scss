@@ -1,0 +1,30 @@
+.flipbook-template-form {
+    @import "styles-layout";
+    @import "styles-control-row";
+    @import "styles-strings-list";
+
+    h1 {
+        font-family: Roboto;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 26px;
+        margin-bottom: 40px;
+    }
+
+    .content {
+        align-items: center;
+        display: flex;
+
+        .left-side {
+
+        }
+
+        .right-side {
+            flex: 1 1 auto;
+        }
+    }
+
+    .save-button {
+        margin-top: 24px;
+    }
+}

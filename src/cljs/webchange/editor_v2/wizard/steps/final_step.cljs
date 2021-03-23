@@ -39,7 +39,7 @@
   [data]
   (merge {:name        (get-in data [:activity-data :name])
           :skills      (get-in data [:skills :skills])
-          :template-id (get-in data [:template-id])}
+          :template-id (get-in data [:template :id])}
          (get-in data [:template-data])))
 
 (defn- save-course

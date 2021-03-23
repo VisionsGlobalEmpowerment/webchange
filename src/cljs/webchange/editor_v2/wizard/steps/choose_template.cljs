@@ -16,15 +16,20 @@
                            :display         "flex"
                            :justify-content "space-between"}}))
 
-(def validation-map {:root [(fn [value] (when (= "" value) "Template is required"))]})
+(def validation-map {:id [(fn [value] (when (= "" value) "Template is required"))]})
+
+(defn- id->template
+  [template-id templates]
+  (some (fn [{:keys [id] :as template}] (and (= id template-id) template)) templates))
 
 (defn form
   [{:keys [data data-key validator]}]
   (r/with-let [_ (re-frame/dispatch [::state-activity/load-templates])
-               data (connect-data data data-key "")
+               data (connect-data data data-key {})
                current-tag (r/atom nil)
-               handle-change-template (fn [template-id]
-                                        (reset! data template-id))
+               handle-change-template (fn [template-id templates]
+                                        (reset! data {:id   template-id
+                                                      :name (-> template-id (id->template templates) (get :name))}))
                handle-tag-click (fn [tag]
                                   (reset! current-tag tag))
                {:keys [error-message destroy]} (validator/init data validation-map validator)
@@ -33,9 +38,9 @@
       (if (some? templates)
         (let [filtered-templates (->> templates
                                       (filter (fn [{:keys [tags]}]
-                                           (if (some? @current-tag)
-                                             (some #{@current-tag} tags)
-                                             true)))
+                                                (if (some? @current-tag)
+                                                  (some #{@current-tag} tags)
+                                                  true)))
                                       (sort #(compare (clojure.string/lower-case (:name %1))
                                                       (clojure.string/lower-case (:name %2)))))
               tags (->> templates
@@ -67,8 +72,8 @@
             [ui/form-control {:full-width true
                               :style      (:control-container styles)}
              [ui/input-label "Template"]
-             [ui/select {:value        (or @data "")
-                         :on-change    #(handle-change-template (-> % .-target .-value))
+             [ui/select {:value        (get @data :id "")
+                         :on-change    #(handle-change-template (-> % .-target .-value) templates)
                          :variant      "outlined"
                          :render-value (fn [value]
                                          (->> (fn []

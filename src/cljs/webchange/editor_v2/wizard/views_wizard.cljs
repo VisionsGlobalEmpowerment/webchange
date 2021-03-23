@@ -52,9 +52,9 @@
                                        component-props (merge {:data      data
                                                                :validator validator}
                                                               (case step-key
-                                                                :choose-template {:data-key :template-id}
-                                                                :fill-template {:data-key    :template-data
-                                                                                :template-id (get-in @data [:template-id])}
+                                                                :choose-template {:data-key :template}
+                                                                :fill-template {:data-key :template-data
+                                                                                :template (get-in @data [:template])}
                                                                 :name-activity {:data-key :activity-data}
                                                                 :skills {:data-key :skills}))]
                                    (-> step
