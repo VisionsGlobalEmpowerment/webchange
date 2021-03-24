@@ -3,6 +3,19 @@
 $padding-v: 13px;
 $padding-h: 49px;
 
+
+@mixin color-disabled() {
+    background-color: $color-disabled;
+}
+
+@mixin color-primary-hover() {
+    background-color: $color-primary-dark;
+}
+
+@mixin color-primary-active() {
+    background-color: $color-primary-darkest;
+}
+
 .wc-button {
     color: #fff;
     cursor: pointer;
@@ -42,12 +55,12 @@ $padding-h: 49px;
     }
 
     &.color-primary {
-        background-color: $primary-color;
-        border-color: $primary-color;
+        background-color: $color-primary;
+        border-color: $color-primary;
         color: #fff;
 
         &.variant-outlined {
-            color: $primary-color;
+            color: $color-primary;
 
             &:hover {
                 background-color: rgba(0, 113, 227, 0.2);
@@ -55,7 +68,27 @@ $padding-h: 49px;
         }
 
         &:hover {
-            background-color: $primary-color-dark;
+            @include color-primary-hover();
+        }
+
+        &.hover {
+            @include color-primary-hover();
+        }
+
+        &:active {
+            @include color-primary-active();
+        }
+
+        &.active {
+            @include color-primary-active();
+        }
+
+        &:disabled {
+            @include color-disabled();
+        }
+
+        &.disabled {
+            @include color-disabled();
         }
     }
 

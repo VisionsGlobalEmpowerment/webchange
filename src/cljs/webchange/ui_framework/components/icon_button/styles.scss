@@ -33,11 +33,11 @@
     }
 
     &.primary {
-        background: $primary-color;
+        background: $color-primary;
         color: #fff;
 
         &:hover {
-            background: $primary-color-dark;
+            background: $color-primary-dark;
         }
     }
 

@@ -15,21 +15,23 @@
 
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
+(def icons
+  {"add"         add/data
+   "arrow-left"  arrow-left/data
+   "arrow-right" arrow-right/data
+   "close"       close/data
+   "font-family" font-family/data
+   "font-size"   font-size/data
+   "image"       image/data
+   "link"        link/data
+   "mic"         mic/data
+   "play"        play/data
+   "remove"      remove/data
+   "sync"        sync/data})
+
 (defn component
   [{:keys [icon rotate? class-name]}]
   [:div {:class-name (get-class-name (cond-> {"wc-icon" true}
                                              (some? rotate?) (assoc "rotating" rotate?)
                                              (some? class-name) (assoc class-name true)))}
-   (case icon
-     "add" add/data
-     "arrow-left" arrow-left/data
-     "arrow-right" arrow-right/data
-     "close" close/data
-     "font-family" font-family/data
-     "font-size" font-size/data
-     "image" image/data
-     "link" link/data
-     "mic" mic/data
-     "play" play/data
-     "remove" remove/data
-     "sync" sync/data)])
+   (get icons icon)])

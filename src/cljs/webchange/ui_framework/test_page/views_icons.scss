@@ -1,0 +1,32 @@
+.icons-list {
+    display: flex;
+
+    .icons-list-item {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        margin-right: 16px;
+        width: 64px;
+
+        span {
+            color: #3f3f3f;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            justify-content: center;
+            justify-items: center;
+            align-items: center;
+            align-content: center;
+            border: dashed 1px #ff240b;
+            width: 32px;
+            height: 32px;
+
+            & > * {
+                border: dashed 1px #019b00;
+            }
+        }
+    }
+}
