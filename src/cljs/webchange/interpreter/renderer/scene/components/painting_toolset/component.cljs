@@ -81,7 +81,7 @@
   :scale - image scale. Default: {:x 1 :y 1}.
   :name - component name that will be set to sprite and container with corresponding suffixes.
   :on-change - on change event handler."
-  [{:keys [parent type object-name ref default-tool on-change] :as props}]
+  [{:keys [parent type object-name ref default-tool] :as props}]
   (let [group (create-container props)
         state (atom {:tools {}})
         wrapped-group (wrap type object-name group)]
@@ -95,8 +95,6 @@
 
     (when-not (nil? ref) (ref wrapped-group))
 
-    (when default-tool
-      (activate state (keyword default-tool))
-      (on-change {:tool default-tool}))
+    (activate state (keyword default-tool))
 
     wrapped-group))

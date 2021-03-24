@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.debug
   (:require [webchange.interpreter.pixi :refer [Graphics]]))
 
-(def debug-enabled? true)
+(def debug-enabled? false)
 (def state (atom {}))
 
 (defn mark

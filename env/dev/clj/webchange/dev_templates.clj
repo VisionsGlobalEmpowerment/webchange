@@ -21,11 +21,21 @@
     (-> course
         second)))
 
+(defn dialog-names
+  [{:keys [actions]}]
+  (->> actions
+       (filter (fn [[_ action]] (= "dialog" (:editor-type action))))
+       (map first)))
+
 (defn update-activity
   [course-slug scene-slug & options]
-  (let [{:keys [history objects actions]} options
+  (let [{:keys [history objects actions keep-dialogs]} options
         scene-data (core/get-scene-latest-version course-slug scene-slug)
         {:keys [created updated]} (get-in scene-data [:metadata :history])
+
+        actions (if keep-dialogs
+                  (concat actions (dialog-names scene-data))
+                  actions)
 
         original-assets (:assets scene-data)
         preserve-objects (-> scene-data
@@ -50,6 +60,14 @@
        :actions
        (filter (fn [[_ {:keys [phrase]}]] (some? phrase)))
        (map first)))
+
+(defn update-activity-metadata
+  [course-slug scene-slug]
+  (let [{course-id :id} (core/get-course-info course-slug)
+        scene-data (core/get-scene-latest-version course-slug scene-slug)
+        {:keys [created]} (get-in scene-data [:metadata :history])
+        metadata (templates/metadata-from-template created)]
+    (core/save-dataset-on-create! course-id scene-slug metadata)))
 
 (comment
   "define new test course"

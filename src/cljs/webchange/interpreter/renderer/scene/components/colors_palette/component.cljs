@@ -108,8 +108,5 @@
 
     (when-not (nil? ref) (ref wrapped-container))
 
-    (when default-color
-      (activate state default-color)
-      (on-change {:color default-color}))
-
+    (activate state default-color)
     wrapped-container))

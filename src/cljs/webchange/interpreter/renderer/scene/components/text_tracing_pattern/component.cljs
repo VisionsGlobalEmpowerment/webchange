@@ -18,6 +18,7 @@
                     :repeat-text              {}
                     :on-next-letter-activated {}
                     :on-finish                {}
+                    :on-click                 {}
                     :debug                    {:default false}})
 
 (def base-height 225)
@@ -101,7 +102,7 @@
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
         letter-width (* letter-scale base-width)
-        letter-padding (* padding-scale safe-padding)
+        letter-padding (* letter-scale padding-scale safe-padding)
         positions (->> (range length)
                        (map (fn [pos]
                               {:x (- (* letter-width pos) (* letter-padding pos 2))
@@ -138,7 +139,7 @@
         length (count text)
         letter-width (* letter-scale base-width)
         letter-padding (* padding-scale safe-padding)
-        letter-width (- letter-width (* 2 letter-padding))
+        letter-width (- letter-width (* 2 letter-padding letter-scale))
         positions (->> (range length)
                        (map (fn [pos]
                               {:x (+ (* letter-width pos) (* letter-padding letter-scale))
@@ -163,23 +164,62 @@
   (let [letter-width (* scale-by-height base-width)
         total-width (* length letter-width)
         actual-padding-width (- total-width width)
-        estimated-padding-width (* safe-padding (dec length) 2)]
+        estimated-padding-width (* safe-padding (dec length) 2 scale-by-height)]
     (/ actual-padding-width estimated-padding-width)))
 
 (defn- get-scale
   [{:keys [text repeat-text width height]}]
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
+        scale-by-height (-> height (- (* 2 line-height)) (/ base-height))
         base-total-width (- (* length base-width) (* (dec length) safe-padding 2))
-        scale-by-width (/ width base-total-width)
-        scale-by-height (-> height (- (* 2 line-height)) (/ base-height))]
+        scale-by-width (/ width base-total-width)]
     (if (> scale-by-width scale-by-height)
       {:type    :by-height
        :letter  scale-by-height
        :padding (padding-scale length scale-by-height width)}
       {:type    :by-width
        :letter  scale-by-width
-       :padding scale-by-width})))
+       :padding 1})))
+
+(comment
+  (let [topline-y 0
+        text "aaaa"
+        {letter-scale :letter padding-scale :padding} (get-scale {:text text :width 1920 :height 680})
+        _ (println "letter-scale" letter-scale "padding-scale" padding-scale)
+        length (count text)
+        letter-width (* letter-scale base-width)
+        letter-padding (* letter-scale padding-scale safe-padding)
+        positions (->> (range length)
+                       (map (fn [pos]
+                              {:x (- (* letter-width pos) (* letter-padding pos 2))
+                               :y topline-y})))
+        letters (->> text
+                     (map alphabet-path)
+                     (map #(path->letter letter-scale %))
+                     (map merge positions))]
+    (->> letters
+         (map #(select-keys % [:x :scale]))))
+
+  (let [topline-y 0
+        text "aaaa"
+        {letter-scale :letter padding-scale :padding} (get-scale {:text text :width 1920 :height 680})
+        length (count text)
+        letter-width (* letter-scale base-width)
+        letter-padding (* padding-scale safe-padding)
+        letter-width (- letter-width (* 2 letter-padding letter-scale))
+        positions (->> (range length)
+                       (map (fn [pos]
+                              {:x (+ (* letter-width pos) (* letter-padding letter-scale))
+                               :y topline-y})))
+
+        letters (->> text
+                     (map alphabet-path)
+                     (map #(path->animated-letter letter-scale padding-scale %))
+                     (map merge positions))]
+    (->> letters
+         (map #(select-keys % [:x :width :offset :scale])))
+    ))
 
 (defn- reset-group!
   [group]
@@ -230,7 +270,7 @@
   :traceable - for traceable overlay based on animated-svg-path
   :name - component name that will be set to sprite and container with corresponding suffixes.
   :on-change - on change event handler."
-  [{:keys [parent type object-name] :as props}]
+  [{:keys [parent type object-name on-click] :as props}]
   (let [group (create-container props)
         state (atom nil)
         wrapped-group (wrap type object-name group props state draw!)]
@@ -238,5 +278,7 @@
 
     (draw! group props state)
     (.addChild parent group)
+
+    (when-not (nil? on-click) (utils/set-handler group "click" on-click))
 
     wrapped-group))

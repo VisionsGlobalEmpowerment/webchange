@@ -117,9 +117,9 @@
           (drag state props pointer))))))
 
 (defn create-trigger
-  [state {:keys [width height] :as props}]
+  [state {:keys [width height scale] :as props}]
   (doto (Sprite. (.-EMPTY Texture))
-    (utils/set-size {:width (* 2 width) :height (* 2 height)})
+    (utils/set-size {:width (* width (:x scale)) :height (* height (:y scale))})
     (set! -interactive true)
     (.on "pointerdown" (on-start state props))
     (.on "pointerup" on-end)

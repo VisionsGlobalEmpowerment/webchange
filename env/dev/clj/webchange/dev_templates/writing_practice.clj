@@ -8,10 +8,11 @@
   (def test-course-slug (-> (t/create-test-course-with-dataset) :slug))
   (def scene-slug "test-activity")
 
-  (t/update-activity test-course-slug scene-slug)
+  (t/update-activity test-course-slug scene-slug :keep-dialogs true)
+  (t/update-activity-metadata test-course-slug scene-slug)
 
   (let [data {:activity-name "Writing Practice"
-              :template-id   37
+              :template-id   40
               :name          "Writing Practice"
               :lang          "English"
               :skills        []}

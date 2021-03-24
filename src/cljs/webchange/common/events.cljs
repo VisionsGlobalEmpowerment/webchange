@@ -151,7 +151,9 @@
 
 (defn apply-template
   [template value]
-  (let [prepared-value (clojure.string/replace value #"[_~.<>{}()!№%:,;#$%^&*+='`]" "")]
+  (let [prepared-value (-> value
+                           (str)
+                           (clojure.string/replace #"[_~.<>{}()!№%:,;#$%^&*+='`]" ""))]
     (clojure.string/replace template "%" prepared-value)))
 
 (defn from-template
