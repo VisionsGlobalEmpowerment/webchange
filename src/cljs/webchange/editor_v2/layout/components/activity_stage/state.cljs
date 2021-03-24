@@ -43,11 +43,6 @@
                        (assoc :active? (= idx current-stage-idx))))
                  stages)))
 
-(re-frame/reg-sub
-  ::stages-screenshots
-  (fn [db]
-    (get-in db (path-to-db [:stages-screenshots]) [])))
-
 (re-frame/reg-event-fx
   ::set-stages-screenshots
   (fn [{:keys [db]} [_ screenshots]]

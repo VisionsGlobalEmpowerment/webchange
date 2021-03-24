@@ -26,12 +26,12 @@
 (re-frame/reg-event-fx
   ::hide
   (fn [{:keys [_]} [_]]
-    {:timeout {:id    :set-sync-status
+    {:timeout-sync {:id    :set-sync-status
                :event [::set-status-hidden]
                :time  500}}))
 
 (re-frame/reg-fx
-  :timeout
+  :timeout-sync
   (fn [{:keys [id event time]}]
     (when-some [existing (get @timeouts id)]
       (js/clearTimeout existing)
