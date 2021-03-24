@@ -42,8 +42,7 @@
         layout (case activity-type
                  "flipbook" ui/layout
                  current-layout/layout)]
-    (when (and (some? activity-type)
-               (some? scene-data))
+    (when (some? scene-data)
       [layout {:breadcrumbs (course-breadcrumbs course-id "Scene")
                :actions     [share-button]}
        [activity-edit-form {:course-id  course-id
