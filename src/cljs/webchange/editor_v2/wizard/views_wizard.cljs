@@ -84,9 +84,9 @@
           started? (> @current-step-idx -1)
           finished? (= @current-step-idx (count steps))]
       [layout {:breadcrumbs (root-breadcrumbs "Create Activity Wizard")}
-       [ui/grid {:container true
-                 :spacing   32}
-        [ui/grid {:item true :xs 2}
+       [:div {:style {:display "flex"}}
+        [:div {:style {:flex      "0 1"
+                       :min-width "180px"}}
          (when-not (= @current-step-idx -1)
            [ui/stepper {:active-step @current-step-idx
                         :orientation "vertical"}
@@ -95,7 +95,8 @@
                         ^{:key step}
                         [ui/step [ui/step-label step]]))
                  (doall))])]
-        [ui/grid {:item true :xs 8}
+        [:div {:style {:flex      "1 1"
+                       :max-width "1100px"}}
          [ui/card
           [ui/card-header {:title     (:header current-step)
                            :subheader (:sub-header current-step)}]
@@ -109,4 +110,5 @@
              [ui/button {:on-click handle-next
                          :color    "primary"
                          :style    (:next-button styles)}
-              (if last-step? "Finish" "Next")]])]]]])))
+              (if last-step? "Finish" "Next")]])]]]
+       ])))

@@ -16,19 +16,16 @@
 
 (defn template-form
   [{:keys [data template validator]}]
-  (let [common-props {:data      data
+  (let [template-options (get template :options)
+        common-props {:data      data
                       :validator validator}]
     [:div.flipbook-template-form
      [:h1 "Create Book"]
-     [:div.content
-      [:div.left-side
-       [layout (assoc common-props :option (key->option "cover-layout" template))]]
-      [:div.right-side
-       [title (assoc common-props :option (key->option "cover-title" template))]
-       [cover-image (assoc common-props :option (key->option "cover-image" template))]
-       [authors (assoc common-props :option (key->option "authors" template))]
-       [illustrators (assoc common-props :option (key->option "illustrators" template))]
-       ;[control-row {:control [button {:size "big"
-       ;                                :class-name "save-button"}
-       ;                        "Save"]}]
-       ]]]))
+     (when (some? template-options)
+       [:div.content
+        [layout (assoc common-props :option (key->option "cover-layout" template))]
+        [:div
+         [title (assoc common-props :option (key->option "cover-title" template))]
+         [cover-image (assoc common-props :option (key->option "cover-image" template))]
+         [authors (assoc common-props :option (key->option "authors" template))]
+         [illustrators (assoc common-props :option (key->option "illustrators" template))]]])]))
