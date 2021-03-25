@@ -9,7 +9,7 @@
 
 (defn cover-image
   [{:keys [data option validator]}]
-  (r/with-let [data (connect-data data [(:key option)] nil)
+  (r/with-let [data (connect-data data [(-> option :key keyword)] nil)
                {:keys [destroy error-message]} (v/init data validation-map validator)]
     [:div
      [control-row {:label         "Cover Image"

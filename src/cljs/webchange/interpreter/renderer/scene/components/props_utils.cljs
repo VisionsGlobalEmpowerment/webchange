@@ -30,7 +30,9 @@
         current-prop-value (get current-props current-prop-name)
         has-default? (contains? prop-data :default)
         default-prop-value (:default prop-data)
-        prop-passed? (contains? current-props current-prop-name)]
+        prop-passed? (and
+                       (contains? current-props current-prop-name)
+                       (not (and (:not-nil prop-data) (nil? current-prop-value))))]
     (if (or prop-passed? has-default?)
       (assoc {} prop-name (if prop-passed?
                             current-prop-value

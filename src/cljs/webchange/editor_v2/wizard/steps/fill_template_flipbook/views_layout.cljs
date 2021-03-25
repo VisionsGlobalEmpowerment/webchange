@@ -22,7 +22,7 @@
 
 (defn layout
   [{:keys [data option validator]}]
-  (r/with-let [data (connect-data data [(:key option)] nil)
+  (r/with-let [data (connect-data data [(-> option :key keyword)] nil)
                {:keys [destroy error-message]} (v/init data validation-map validator)]
     (let [handle-option-click (fn [value]
                                 (reset! data value))

@@ -9,7 +9,7 @@
 (def default-props {:x               {}
                     :y               {}
                     :text            {}
-                    :font-family     {:default "Liberation Sans"}
+                    :font-family     {:default "Liberation Sans" :not-nil true}
                     :font-size       {}
                     :fill            {:default "#000000"}
                     :shadow-color    {}

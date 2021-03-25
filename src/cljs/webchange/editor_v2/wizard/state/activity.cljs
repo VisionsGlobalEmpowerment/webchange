@@ -110,6 +110,7 @@
 (re-frame/reg-event-fx
   ::create-book
   (fn [{:keys [db]} [_ data]]
+    (js/console.log "create-book" data)
     (let [course-data {:name      (:course-name data)
                        :lang      (:lang data)
                        :type      "book"

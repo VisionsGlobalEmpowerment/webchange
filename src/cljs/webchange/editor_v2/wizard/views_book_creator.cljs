@@ -5,14 +5,14 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.page-layout.views :refer [layout]]
     [webchange.editor-v2.wizard.state.activity :as state-activity]
-    [webchange.editor-v2.wizard.activity-template.views :refer [template]]
+    [webchange.editor-v2.wizard.steps.fill-template-flipbook.views :refer [template-form]]
     [webchange.editor-v2.wizard.validator :as validator]
     [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs]]))
 
 (defn- book-activity-info
   []
   (r/with-let [book-template 24
-               data (r/atom {:lang "English" :skills [] :name "Activity" :template-id book-template})
+               data (r/atom {:lang "English" :skills [] :name "Activity" :template-id book-template :authors [""] :illustrators [""]})
                {:keys [valid?] :as validator} (validator/init data)]
     (let [current-template (->> @(re-frame/subscribe [::state-activity/templates])
                                 (filter #(= (:template-id @data) (:id %)))
@@ -32,11 +32,10 @@
                     :spacing     24
                     :align-items "center"}
            [ui/grid {:item true :xs 12}
-            [ui/typography {:variant "h4"} "Create Book"]]
-           [ui/grid {:item true :xs 12}
-            [template {:template current-template
-                       :data     data
-                       :validator validator}]]]]
+            (when (:options current-template)
+              [template-form {:template  current-template
+                              :data      data
+                              :validator validator}])]]]
          [ui/card-actions
           [ui/button {:color    "secondary"
                       :style    {:margin-left "auto"}

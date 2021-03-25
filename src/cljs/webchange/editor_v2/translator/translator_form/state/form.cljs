@@ -53,7 +53,8 @@
                                               [::editor/reset-scene-objects scene-id objects]
                                               [::editor/reset-scene-metadata scene-id metadata]
                                               [::editor/save-current-scene scene-id]
-                                              [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])])))
+                                              (when (not-empty edited-concepts-ids)
+                                                [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])]))))
        :reset-before-leave true})))
 
 (re-frame/reg-event-fx

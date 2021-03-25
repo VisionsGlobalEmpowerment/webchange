@@ -10,8 +10,9 @@
 
 (defn authors
   [{:keys [data option validator]}]
-  (r/with-let [data (connect-data data [(:key option)] [""])
+  (r/with-let [data (connect-data data [(-> option :key keyword)] [""])
                {:keys [destroy error-message]} (v/init data validation-map validator)]
+    (js/console.log "authors" @data data option)
     [:div
      [strings-list {:data          data
                     :label         "Author"
