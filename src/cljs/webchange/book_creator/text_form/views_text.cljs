@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.flipbook.page-text.state :as state]
-    [webchange.ui-framework.index :refer [text-area]]))
+    [webchange.ui-framework.components.index :refer [text-area]]))
 
 (defn text-component
   [{:keys [id]}]

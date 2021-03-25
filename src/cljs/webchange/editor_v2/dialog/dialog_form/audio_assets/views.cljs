@@ -1,6 +1,5 @@
 (ns webchange.editor-v2.dialog.dialog-form.audio-assets.views
   (:require
-    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
     [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]
@@ -8,8 +7,7 @@
     [webchange.editor-v2.dialog.dialog-form.audio-assets.views-filter :as filter]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.dialog.dialog-form.audio-assets.views-audios-list :refer [audios-list]]
-    [webchange.editor-v2.dialog.dialog-form.state.audios :as dialog-form.audios]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.editor-v2.dialog.dialog-form.state.audios :as dialog-form.audios]))
 
 (defn- filter-audios
   [filter-params audios-list]
@@ -29,9 +27,8 @@
       [:div {:style {:display     "flex"
                      :align-items "center"}}
        [warning-icon]
-       [ui/typography {:style {:color       (get-in-theme [:palette :warning :default])
-                               :font-size   "14px"
-                               :margin-left "8px"}}
+       [:span {:style {:font-size   "14px"
+                       :margin-left "8px"}}
         "Audio region is not selected"]])))
 
 (defn audios-block
@@ -42,5 +39,4 @@
                     (sort-by :date >))]
     [:div
      [warning-block]
-     [add-audio-form]
      [audios-list {:audios audios}]]))

@@ -6,6 +6,7 @@
     [reagent.core :as r]
     [webchange.common.events :as ce]
     [webchange.editor-v2.graph-builder.utils.graph-to-nodes-seq :refer [graph-to-nodes-seq]]
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
     [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
     [webchange.resources.manager :as resources]))
@@ -62,32 +63,34 @@
   []
   (r/with-let [state (r/atom "pause")
                loading-progress (r/atom nil)]
-              (let [graph @(re-frame/subscribe [::translator-form.graph/graph])]
-                (case @state
-                  "pause" [fab (merge common-button-params
-                                      {:disabled (nil? graph)
-                                       :on-click (fn []
-                                                   (let [action (get-phrase-actions-sequence graph #(reset! state "pause"))
-                                                         audios-list (action->audios-list action)]
-                                                     (reset! state "loading")
-                                                     (resources/load-resources audios-list
-                                                                               {:on-progress #(reset! loading-progress %)
-                                                                                :on-complete #(do (reset! loading-progress nil)
-                                                                                                  (reset! state "playing")
-                                                                                                  (re-frame/dispatch [::ce/execute-action action]))})))})
+    (let [graph @(re-frame/subscribe [::translator-form.graph/graph])
+          settings @(re-frame/subscribe [::translator-form/components-settings :play-phrase])]
+      (when-not (:hide? settings)
+        (case @state
+          "pause" [fab (merge common-button-params
+                              {:disabled (nil? graph)
+                               :on-click (fn []
+                                           (let [action (get-phrase-actions-sequence graph #(reset! state "pause"))
+                                                 audios-list (action->audios-list action)]
+                                             (reset! state "loading")
+                                             (resources/load-resources audios-list
+                                                                       {:on-progress #(reset! loading-progress %)
+                                                                        :on-complete #(do (reset! loading-progress nil)
+                                                                                          (reset! state "playing")
+                                                                                          (re-frame/dispatch [::ce/execute-action action]))})))})
 
-                           [ic/play-arrow]]
-                  "playing" [fab (merge common-button-params
-                                        {:on-click (fn []
-                                                     (reset! state "pause")
-                                                     (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag action-flow-id}]))})
-                             [ic/pause]]
-                  "loading" [fab (merge common-button-params
-                                        {:disabled true})
-                             [ui/circular-progress {:size    36
-                                                    :variant (if (nil? @loading-progress)
-                                                               "indeterminate"
-                                                               "determinate")
-                                                    :value   @loading-progress}]]))
-              (finally
-                (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag action-flow-id}]))))
+                   [ic/play-arrow]]
+          "playing" [fab (merge common-button-params
+                                {:on-click (fn []
+                                             (reset! state "pause")
+                                             (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag action-flow-id}]))})
+                     [ic/pause]]
+          "loading" [fab (merge common-button-params
+                                {:disabled true})
+                     [ui/circular-progress {:size    36
+                                            :variant (if (nil? @loading-progress)
+                                                       "indeterminate"
+                                                       "determinate")
+                                            :value   @loading-progress}]])))
+    (finally
+      (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag action-flow-id}]))))

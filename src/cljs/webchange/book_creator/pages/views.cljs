@@ -5,7 +5,7 @@
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
     [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.ui-framework.index :refer [icon]]))
+    [webchange.ui-framework.components.index :refer [icon]]))
 
 (defn get-stage-name
   [{:keys [idx]}]

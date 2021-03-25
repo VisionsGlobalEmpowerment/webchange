@@ -3,7 +3,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-control-row :refer [control-row]]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
-    [webchange.ui-framework.index :refer [file]]))
+    [webchange.ui-framework.components.index :refer [file]]))
 
 (def validation-map {:root [(fn [value] (when (empty? value) "Required field"))]})
 

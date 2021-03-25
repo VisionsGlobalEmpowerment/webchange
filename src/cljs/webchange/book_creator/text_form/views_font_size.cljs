@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.flipbook.page-text.state :as state]
-    [webchange.ui-framework.index :refer [icon select]]))
+    [webchange.ui-framework.components.index :refer [icon select]]))
 
 (def font-sizes [8 9 10 11 12 14 18 24 30 36 48 60 72 96])
 

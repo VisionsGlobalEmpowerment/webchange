@@ -6,7 +6,7 @@
     [webchange.editor-v2.components.file-input.views :as file-input]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
-    [webchange.ui-framework.index :refer [file]]))
+    [webchange.ui-framework.components.index :refer [file]]))
 
 (def image-validation-map {:src [(fn [value] (when-not (some? value) "Image is required"))]})
 

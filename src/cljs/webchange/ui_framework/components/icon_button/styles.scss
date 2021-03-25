@@ -3,7 +3,7 @@
 .wc-icon-button {
     background: rgba(0, 0, 0, 0);
     border: none;
-    border-radius: 18px;
+    border-radius: 50%;
     box-sizing: border-box;
     color: $default-color;
     cursor: pointer;
@@ -33,11 +33,28 @@
     }
 
     &.primary {
-        background: $primary-color;
+        background: $color-primary;
         color: #fff;
 
         &:hover {
-            background: $primary-color-dark;
+            background: $color-primary-dark;
+        }
+
+        &:active {
+            background: $color-primary-darkest;
+        }
+    }
+
+    &.secondary {
+        background: $color-secondary;
+        color: #fff;
+
+        &:hover {
+            background: $color-secondary-dark;
+        }
+
+        &:active {
+            background: $color-secondary-darkest;
         }
     }
 

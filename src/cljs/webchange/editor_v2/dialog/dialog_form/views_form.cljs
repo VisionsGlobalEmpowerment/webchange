@@ -1,6 +1,5 @@
 (ns webchange.editor-v2.dialog.dialog-form.views-form
   (:require
-    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
@@ -12,18 +11,18 @@
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-target :refer [target-block]]
     [webchange.editor-v2.translator.text.views-text-animation-editor :refer [text-chunks-modal]]
-    [webchange.ui.theme :refer [get-in-theme]]))
 
-(defn- get-styles
-  []
-  {:error-wrapper {:background-color (get-in-theme [:palette :background :default])}})
+    [webchange.editor-v2.dialog.dialog-form.views-audio-actions :refer [audio-actions]]
+    [webchange.editor-v2.dialog.dialog-form.views-record-audio :refer [record-audio]]
+    [webchange.editor-v2.dialog.dialog-form.views-upload-audio :refer [upload-audio]]
+    [webchange.editor-v2.dialog.dialog-form.views-volume :refer [volume]]))
 
-(defn translator-form
+(defn dialog-form
   []
   (let [current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
         concept-required? @(re-frame/subscribe [::translator-form.graph/concept-required])
         action? (= "action" (get-in current-phrase-action [:data 1 :type]))]
-    [:div
+    [:div.dialog-form
      [description-block]
      (when concept-required?
        [concepts-block])
@@ -36,7 +35,13 @@
           [:div
            [phrase-block]
            [target-block]
+           [:div.audio-block
+            [:div
+             [volume]
+             [upload-audio]]
+            [record-audio]
+            [audio-actions]]
            [audios-block]])]
-       [ui/typography {:variant "subtitle1"}
+       [:span {:variant "subtitle1"}
         "Select action on diagram"])
      [text-chunks-modal]]))

@@ -4,7 +4,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [class-name color disabled? href on-click size target variant]
+  [{:keys [class-name color disabled? href on-click size state target variant]
     :or   {color     "primary"
            disabled? false
            on-click  #()
@@ -20,7 +20,8 @@
                                                     (assoc (str "variant-" variant) true)
                                                     (assoc (str "size-" size) true)
                                                     (assoc (str "color-" color) true)
-                                                    (assoc class-name (some? class-name))))
+                                                    (assoc class-name (some? class-name))
+                                                    (assoc state (some? state))))
                     :disabled   disabled?
                     :on-click   handle-click}]
           (r/children this))))

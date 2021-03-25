@@ -12,32 +12,6 @@
     [webchange.editor-v2.translator.translator-form.utils :refer [trim-text]]
     [webchange.editor-v2.translator.translator-form.common.views-text-field :refer [text-field]]))
 
-(defn- volume-option
-  []
-  (r/with-let [current-value (or (r/atom (-> @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
-                                             get-inner-action
-                                             :volume))
-                                 1)
-               tooltip-open? (r/atom false)]
-    [:div {:style {:display "flex"
-                   :width   "100%"}}
-     [ui/typography {:variant "body2"} "Voice Volume"]
-     [ui/tooltip {:title     (or @current-value "")
-                  :placement "top"
-                  :open      @tooltip-open?}
-      [:input {:value          @current-value
-               :type           "range"
-               :on-change      #(reset! current-value (.. % -target -value))
-               :on-mouse-enter #(reset! tooltip-open? true)
-               :on-mouse-leave #(reset! tooltip-open? false)
-               :on-mouse-up    #(re-frame/dispatch [::dialog-form.actions/set-phrase-action-volume @current-value])
-               :min            0
-               :max            1
-               :step           0.01
-               :style          {:cursor      "pointer"
-                                :flex-grow   "1"
-                                :margin-left "16px"}}]]]))
-
 (defn node-options
   []
   (let [text-input-params {:placeholder "Enter options"
@@ -57,10 +31,8 @@
     [ui/grid {:container true
               :spacing   16
               :justify   "space-between"}
-     [ui/grid {:item true :xs 6}
-      [volume-option]]
      (if (and parallel? (not main-parallel?))
-       [ui/grid {:item true :xs 6}
+       [ui/grid {:item true :xs 12}
         [text-field (merge text-input-params
                            {:label           "Delay"
                             :value           (or offset-text "")

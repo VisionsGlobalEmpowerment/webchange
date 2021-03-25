@@ -1,34 +1,53 @@
-.test-page-row {
-    align-items: center;
-    display: flex;
-    justify-content: flex-start;
+.test-ui-page{
+    @import "views_icons";
 
-    .test-page-row-title {
-        font-size: 16px;
-        padding: 18px;
-        color: #313131;
-        font-weight: bold;
+    background-color: #E5E5E5;
+    overflow: auto;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    h1 {
+        color: #1D1D1F;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 24px;
+        line-height: 28px;
     }
 
-    .test-page-row-wrapper {
+    .test-page-row {
+        align-items: center;
         display: flex;
+        justify-content: flex-start;
+
+        .test-page-row-title {
+            font-size: 16px;
+            padding: 18px;
+            color: #313131;
+            font-weight: bold;
+        }
+
+        .test-page-row-wrapper {
+            display: flex;
+        }
     }
-}
 
-.test-page-element {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 8px;
+    .test-page-element {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 8px;
 
-    .test-page-element-title {
-        color: #797979;
-        margin-bottom: 8px;
-    }
+        .test-page-element-title {
+            color: #797979;
+            margin-bottom: 8px;
+        }
 
-    .test-page-element-wrapper {
-        border: dashed 1px #ccc;
-        margin: 10px;
+        .test-page-element-wrapper {
+            border: dashed 1px #ccc;
+            margin: 10px;
+        }
     }
 }
