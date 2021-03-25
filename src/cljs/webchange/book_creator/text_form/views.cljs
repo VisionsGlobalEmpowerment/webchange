@@ -8,7 +8,7 @@
     [webchange.book-creator.text-form.views-text :refer [text-component]]
     [webchange.book-creator.text-form.views-voice-over-button :refer [voice-over-button]]
     [webchange.editor-v2.layout.flipbook.page-text.state :as state]
-    [webchange.ui-framework.index :refer [button]]))
+    [webchange.ui-framework.components.index :refer [button]]))
 
 (defn- text-form-view
   [{:keys [action phrase-action-path text]}]

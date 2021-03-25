@@ -7,7 +7,7 @@
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
     [webchange.editor-v2.wizard.validator :as validator]
-    [webchange.ui-framework.index :refer [dialog button]]))
+    [webchange.ui-framework.components.index :refer [dialog button]]))
 
 (defn- get-action-default-data
   [scene-data action-data]

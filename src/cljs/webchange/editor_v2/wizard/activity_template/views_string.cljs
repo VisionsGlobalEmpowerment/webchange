@@ -2,7 +2,7 @@
   (:require
     [reagent.core :as r]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
-    [webchange.ui-framework.index :refer [text-area]]))
+    [webchange.ui-framework.components.index :refer [text-area]]))
 
 (def string-validation-map {:root [(fn [value] (when (= value "") "Required field"))]})
 

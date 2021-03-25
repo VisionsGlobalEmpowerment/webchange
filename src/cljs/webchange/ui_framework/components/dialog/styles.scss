@@ -25,7 +25,8 @@
         padding: 32px;
         padding-top: 84px;
         position: relative;
-        width: 55%;
+        width: 80%;
+        min-width: 900px;
 
         h1 {
             font-family: Roboto;
@@ -36,7 +37,7 @@
 
             position: absolute;
             left: 64px;
-            top: 64px;
+            top: 36px;
         }
 
         .close-button {
@@ -49,6 +50,11 @@
             overflow: auto;
             padding: 32px;
             padding-top: 48px;
+        }
+
+        .dialog-actions {
+            padding: 32px;
+            padding-bottom: 0;
         }
     }
 }

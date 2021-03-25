@@ -1,0 +1,82 @@
+.dialog-form {
+    .audio-block {
+        align-items: stretch;
+        display: flex;
+        margin: 0 -20px;
+
+        & > * {
+            display: inline-block;
+            padding: 20px;
+            width: 50%;
+
+            &:first-child {
+                min-width: 50%;
+            }
+
+            &:last-child {
+                align-items: stretch;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                width: 160px;
+            }
+        }
+
+        .volume-control {
+            align-items: center;
+            display: flex;
+            margin-bottom: 24px;
+
+            .volume-icon {
+                padding: 4px;
+                width: 30px;
+            }
+
+            .volume-input {
+                flex: 1 1;
+            }
+        }
+
+        .record-audio {
+            display: flex;
+            min-width: 250px;
+
+            .action-button {
+                height: 80px;
+                width: 80px;
+
+                svg {
+                    height: 36px;
+                    width: 36px;
+                }
+            }
+
+            .info {
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
+                margin-left: 24px;
+
+                .name {
+                    font-weight: 500;
+                    font-size: 18px;
+                    line-height: 21px;
+                }
+
+                .time {
+                    color: #929292;
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 16px;
+                    margin-top: 6px;
+                }
+            }
+        }
+
+        .audio-actions {
+            & > * {
+                margin-bottom: 16px;
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
 (ns webchange.ui-framework.test-page.views-icons
   (:require
-    [webchange.ui-framework.index :refer [icon]]
+    [webchange.ui-framework.components.index :refer [icon]]
     [webchange.ui-framework.components.icon.index :refer [icons]]
     [webchange.ui-framework.test-page.utils :refer [group group-body group-header]]))
 

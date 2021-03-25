@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.wizard.steps.fill-template-flipbook.views-strings-list
   (:require
     [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-control-row :refer [control-row]]
-    [webchange.ui-framework.index :refer [button icon-button text-input]]
+    [webchange.ui-framework.components.index :refer [button icon-button text-input]]
     [webchange.utils.list :refer [remove-at-position replace-at-position]]))
 
 (defn strings-list

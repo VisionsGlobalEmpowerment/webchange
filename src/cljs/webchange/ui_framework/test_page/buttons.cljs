@@ -1,6 +1,6 @@
 (ns webchange.ui-framework.test-page.buttons
   (:require
-    [webchange.ui-framework.index :refer [button]]
+    [webchange.ui-framework.components.index :refer [button]]
     [webchange.ui-framework.test-page.utils :refer [group group-body group-header table]]))
 
 (defn buttons

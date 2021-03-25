@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.sandbox.state :as state]
     [webchange.editor-v2.sandbox.views-modal :refer [share-modal]]
-    [webchange.ui-framework.index :refer [icon-button]]))
+    [webchange.ui-framework.components.index :refer [icon-button]]))
 
 (defn share-button
   []

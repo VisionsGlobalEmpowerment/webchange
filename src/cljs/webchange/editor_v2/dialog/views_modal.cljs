@@ -1,11 +1,12 @@
 (ns webchange.editor-v2.dialog.views-modal
   (:require
-    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.state.window :as translator.window]
     [webchange.editor-v2.history.views :as history]
-    [webchange.editor-v2.dialog-form.components.views-actions-bar :refer [actions-bar]]
-    [webchange.editor-v2.dialog.dialog-form.views-form :refer [translator-form]]))
+    [webchange.editor-v2.dialog.dialog-form.views-form :refer [dialog-form]]
+    [webchange.editor-v2.dialog.dialog-form.views-form-actions :refer [form-actions]]
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]
+    [webchange.ui-framework.components.index :refer [dialog]]))
 
 (defn- event-handler
   [event]
@@ -27,18 +28,16 @@
 (defn dialog-modal
   []
   (let [open? @(re-frame/subscribe [::translator.window/modal-state])
-        handle-close #(close-window!)]
-    [ui/dialog
-     {:open       open?
-      :on-close   handle-close
-      :on-enter   #(enable-hot-keys)
-      :on-exit    #(disable-hot-keys)
-      :full-width true
-      :max-width  "xl"}
-     [ui/dialog-title
-      "Dialogue"]
-     [ui/dialog-content {:class-name "translation-form"}
-      (when open?
-        [translator-form])]
-     [ui/dialog-actions {:style {:justify-content "space-between"}}
-      [actions-bar {:on-close close-window!}]]]))
+        has-changes? @(re-frame/subscribe [::translator-form.form/has-changes])
+        handle-close #(if has-changes?
+                        (when (js/confirm "Close window without saving?")
+                          (close-window!))
+                        (close-window!))]
+    [dialog
+     {:title    "Dialogue"
+      :open?    open?
+      :on-close handle-close
+      :on-enter enable-hot-keys
+      :on-exit  disable-hot-keys
+      :actions  [form-actions]}
+     [dialog-form]]))

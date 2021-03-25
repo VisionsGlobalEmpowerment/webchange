@@ -5,7 +5,7 @@
     [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.editor-v2.layout.components.interpreter_stage.views :as interpreter]
     [webchange.book-creator.views-content-block :refer [content-block]]
-    [webchange.ui-framework.index :refer [icon-button]]))
+    [webchange.ui-framework.components.index :refer [icon-button]]))
 
 (defn stage-block
   []

@@ -20,6 +20,9 @@ $padding-h: 49px;
     color: #fff;
     cursor: pointer;
 
+    align-items: center;
+    display: flex;
+
     border-radius: 24px;
 
     font-family: 'Roboto';
@@ -27,6 +30,11 @@ $padding-h: 49px;
 
     padding: $padding-v $padding-h;
     outline: none;
+
+    .wc-icon {
+        margin-right: 8px;
+        padding: 0;
+    }
 
     &:disabled {
         cursor: not-allowed;
@@ -45,12 +53,16 @@ $padding-h: 49px;
     //  Color
 
     &.color-default {
-        background-color: rgba(29, 29, 31, 0.3);
+        background-color: #ECECEC;
         border-color: $default-color;
         color: $default-color;
 
         &:hover {
-            background-color: rgba(29, 29, 31, 0.5);
+            background-color: #DDDDDD;
+        }
+
+        &:active {
+            background-color: #C9C9C9;
         }
     }
 

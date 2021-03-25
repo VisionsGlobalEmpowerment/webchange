@@ -4,7 +4,7 @@
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.sandbox.state :as state]
-    [webchange.ui-framework.index :refer [button dialog icon-button text-input]]))
+    [webchange.ui-framework.components.index :refer [button dialog icon-button text-input]]))
 
 ;(defn- select-lesson-set-form
 ;  [{:keys [name]}]

@@ -3,7 +3,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.activity-template.utils :refer [check-conditions]]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
-    [webchange.ui-framework.index :refer [select]]))
+    [webchange.ui-framework.components.index :refer [select]]))
 
 (def lookup-validation-map {:root [(fn [value] (when (= value "") "Required field"))]})
 

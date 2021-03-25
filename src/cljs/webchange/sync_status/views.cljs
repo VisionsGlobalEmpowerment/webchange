@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.sync-status.state :as state]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.ui-framework.index :refer [icon]]))
+    [webchange.ui-framework.components.index :refer [icon]]))
 
 (defn sync-status
   [{:keys [class-name]}]

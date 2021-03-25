@@ -1,7 +1,7 @@
 (ns webchange.ui-framework.test-page.index
   (:require
     [reagent.core :as r]
-    [webchange.ui-framework.index :refer [button icon icon-button]]
+    [webchange.ui-framework.components.index :refer [button icon icon-button]]
     [webchange.ui-framework.test-page.buttons :refer [buttons]]
     [webchange.ui-framework.test-page.views-icons :refer [icons-group]]))
 

@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.flipbook.page-text.state :as state]
-    [webchange.ui-framework.index :refer [icon select]]))
+    [webchange.ui-framework.components.index :refer [icon select]]))
 
 (def font-families ["Roboto"])
 
