@@ -3,6 +3,8 @@
     @import "styles-control-row";
     @import "styles-strings-list";
 
+    min-width: 870px;
+
     h1 {
         font-family: Roboto;
         font-size: 22px;
@@ -15,16 +17,9 @@
         align-items: center;
         display: flex;
 
-        .left-side {
-
+        & > * {
+            padding: 16px;
+            width: 50%;
         }
-
-        .right-side {
-            flex: 1 1 auto;
-        }
-    }
-
-    .save-button {
-        margin-top: 24px;
     }
 }

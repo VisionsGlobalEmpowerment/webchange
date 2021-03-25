@@ -20,11 +20,12 @@
               [control-row {:label         label
                             :error-message (when (= idx 0) error-message)
                             :control       [:div.controls-container
-                                            [text-input {:value     value
-                                                         :on-change #(handle-input-change idx %)}]
-                                            [icon-button {:icon       "remove"
-                                                          :class-name "remove-button"
-                                                          :on-click   #(handle-remove-click idx)}]
+                                            [:div.input-container
+                                             [text-input {:value     value
+                                                          :on-change #(handle-input-change idx %)}]
+                                             [icon-button {:icon       "remove"
+                                                           :class-name "remove-button"
+                                                           :on-click   #(handle-remove-click idx)}]]
                                             (when (and (= idx 0)
                                                        (< (count @data) max))
                                               [button {:variant    "rectangle"
