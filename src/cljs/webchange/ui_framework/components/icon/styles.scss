@@ -1,6 +1,19 @@
+@import "../../styles/colors";
+
 .wc-icon {
     display: flex;
     padding: 8px;
+
+    svg {
+        fill: $default-color;
+    }
+
+    &.icon-undo {
+        svg {
+            fill: none;
+            stroke: $default-color;
+        }
+    }
 
     &.rotating {
         -webkit-animation: spin 4s linear infinite;

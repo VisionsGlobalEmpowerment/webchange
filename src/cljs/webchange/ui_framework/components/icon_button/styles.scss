@@ -9,8 +9,8 @@
     cursor: pointer;
     outline: none;
     padding: 0;
-    min-height: 36px;
-    min-width: 36px;
+    height: 36px;
+    width: 36px;
 
     & > * {
         display: inline-block;
@@ -43,6 +43,10 @@
         &:active {
             background: $color-primary-darkest;
         }
+
+        svg {
+            fill: #fff;
+        }
     }
 
     &.secondary {
@@ -55,6 +59,20 @@
 
         &:active {
             background: $color-secondary-darkest;
+        }
+
+        svg {
+            fill: #fff;
+        }
+    }
+
+    &.big {
+        height: 80px;
+        width: 80px;
+
+        svg {
+            height: 36px;
+            width: 36px;
         }
     }
 

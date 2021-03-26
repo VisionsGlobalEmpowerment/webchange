@@ -41,7 +41,8 @@
 
 (defn component
   [{:keys [icon rotate? class-name]}]
-  [:div {:class-name (get-class-name (cond-> {"wc-icon" true}
+  [:div {:class-name (get-class-name (cond-> {"wc-icon"          true
+                                              (str "icon-" icon) true}
                                              (some? rotate?) (assoc "rotating" rotate?)
                                              (some? class-name) (assoc class-name true)))}
    (get icons icon)])

@@ -1,0 +1,22 @@
+.icon-buttons-list {
+    display: flex;
+
+    .icon-buttons-list-item {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        margin-right: 16px;
+        width: 64px;
+
+        span {
+            color: #3f3f3f;
+            font-size: 12px;
+            margin-bottom: 8px;
+            white-space: nowrap;
+        }
+
+        .icon-button-wrapper {
+
+        }
+    }
+}

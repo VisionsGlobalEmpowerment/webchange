@@ -1,3 +1,5 @@
+$icon-image-size: 18px;
+
 .icons-list {
     display: flex;
 
@@ -12,6 +14,7 @@
             color: #3f3f3f;
             font-size: 12px;
             margin-bottom: 8px;
+            white-space: nowrap;
         }
 
         .icon-wrapper {
@@ -21,11 +24,21 @@
             align-items: center;
             align-content: center;
             border: dashed 1px #ff240b;
+            position: relative;
             width: 32px;
             height: 32px;
 
             & > * {
                 border: dashed 1px #019b00;
+            }
+
+            .icon-size {
+                border: dotted 1px #fff;
+                width: $icon-image-size;
+                height: $icon-image-size;
+                position: absolute;
+                top: 6px;
+                left: 6px;
             }
         }
     }
