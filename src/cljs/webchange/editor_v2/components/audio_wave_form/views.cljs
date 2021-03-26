@@ -40,12 +40,19 @@
                          (.destroy @ws)))
 
        :reagent-render
-                     (fn [{:keys [show-controls?]}]
-                       [:div
+                     (fn [{:keys [file-name right-side-controls show-controls?]
+                           :or   {right-side-controls []}}]
+                       [:div.audio-wave-form
+                        [:div.header
+                         [:div
+                          (when show-controls?
+                            [float-control ws region])
+                          (when (some? file-name)
+                            [:span.file-name file-name])]
+                         (into [:div]
+                               right-side-controls)]
                         [:div {:ref #(when (and % (nil? @element))
-                                       (reset! element %))}]
-                        (when show-controls?
-                          [float-control ws region])])})))
+                                       (reset! element %))}]])})))
 
 (defn audio-wave-form
   [_]

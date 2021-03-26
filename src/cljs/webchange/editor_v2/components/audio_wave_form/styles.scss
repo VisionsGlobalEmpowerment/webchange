@@ -1,0 +1,21 @@
+.audio-wave-form {
+    .header {
+        display: flex;
+        justify-content: space-between;
+
+        & > * {
+            align-items: center;
+            display: flex;
+        }
+
+        .file-name {
+            margin-left: 16px;
+        }
+
+        .stop-button svg {
+            position: relative;
+            top: 1px;
+            width: 15px;
+        }
+    }
+}

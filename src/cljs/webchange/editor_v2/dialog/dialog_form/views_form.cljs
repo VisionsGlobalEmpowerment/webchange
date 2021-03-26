@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
-    [webchange.editor-v2.dialog.dialog-form.audio-assets.views :refer [audios-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-concepts :refer [concepts-block]]
     [webchange.editor-v2.translator.translator-form.views-form-description :refer [description-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-diagram :refer [diagram-block]]
@@ -13,6 +12,8 @@
     [webchange.editor-v2.translator.text.views-text-animation-editor :refer [text-chunks-modal]]
 
     [webchange.editor-v2.dialog.dialog-form.views-audio-actions :refer [audio-actions]]
+    [webchange.editor-v2.dialog.dialog-form.views-audio-warning :refer [audio-warning]]
+    [webchange.editor-v2.dialog.dialog-form.views-audios-list :refer [audios-list]]
     [webchange.editor-v2.dialog.dialog-form.views-record-audio :refer [record-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-upload-audio :refer [upload-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-volume :refer [volume]]))
@@ -41,7 +42,8 @@
              [upload-audio]]
             [record-audio]
             [audio-actions]]
-           [audios-block]])]
+           [audio-warning]
+           [audios-list]])]
        [:div
         [:span "Select action on diagram"]])
      [text-chunks-modal]]))
