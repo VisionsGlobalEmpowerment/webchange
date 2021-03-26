@@ -44,7 +44,7 @@
   (r/with-let [menu-anchor (r/atom nil)]
     (let [close-menu #(reset! menu-anchor nil)]
       (when-not (empty? actions)
-        [:div
+        [:div.diagram-menu-container
          [ui/icon-button
           {:on-click #(reset! menu-anchor (.-currentTarget %))}
           [ic/more-vert {:style {:color "#323232"}}]]
@@ -73,6 +73,6 @@
         dialog-action @(re-frame/subscribe [::translator-form.actions/current-dialog-action-info])
         path (:path dialog-action)]
     (when-not (:hide? settings)
-      [:div
+      [:div.diagram-block
        [menu path]
        [simple-dialog {:path path}]])))

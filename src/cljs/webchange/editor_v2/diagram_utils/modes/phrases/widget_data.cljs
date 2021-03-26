@@ -54,7 +54,7 @@
                           :justify-content  "center"
                           :align-items      "center"
                           :padding          "3px"
-                          :background-color "#156874"
+                          :background-color "#37ddf5"
                           :white-space      "nowrap"}
      :prompt             {:width         "180px"
                           :top           "-20px"
