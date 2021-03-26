@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-widget.colors)
 
 (def colors {:object        {:default "#FFC855"}
-             :global-object {:default "#156874"}
+             :global-object {:default "#37ddf5"}
              :action        {:audio   "#008A66"
                              :phrase  "#6BC784"
                              :default "#CCCCCC"}

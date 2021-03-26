@@ -42,6 +42,6 @@
             [record-audio]
             [audio-actions]]
            [audios-block]])]
-       [:span {:variant "subtitle1"}
-        "Select action on diagram"])
+       [:div
+        [:span "Select action on diagram"]])
      [text-chunks-modal]]))
