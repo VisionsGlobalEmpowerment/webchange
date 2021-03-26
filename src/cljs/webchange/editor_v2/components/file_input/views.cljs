@@ -40,7 +40,7 @@
 
 
 (defn select-file-form
-  [{:keys [text drop-text on-change size styles]}]
+  [{:keys [text drop-text on-change size styles loading]}]
   (let [text (or text "Upload new file")
         drop-text (or drop-text "Drop file here")
         styles (-> (get-styles size)
@@ -65,7 +65,12 @@
                                               (:button styles))}
                   [ui/typography {:variant "h3"
                                   :style   (:icon-wrapper styles)}
-                   [ic/cloud-upload {:style (:icon styles)}]]
+
+                   (if loading
+                     [ui/circular-progress]
+                     [ic/cloud-upload {:style (:icon styles)}]
+                     )
+                   ]
                   [ui/typography {:variant "h5"
                                   :style   (:label styles)}
                    (if @drag-over?

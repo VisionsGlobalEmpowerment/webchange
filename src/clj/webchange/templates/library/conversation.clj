@@ -15,7 +15,8 @@
                                    :type  "characters"
                                    :max   3}}
         :actions     {:add-dialog   {:title   "Add dialog",
-                                     :options {:dialog {:label "Dialog"
+                                     :options {:dialog {:label "Dialog name"
+                                                        :placeholder "(ex. Conversation about ball)"
                                                         :type  "string"}}}
                       :add-question {:title   "Add question",
                                      :options {:question-page {:label       "Question"

@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.image.component
   (:require
-    [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
+    [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE Texture]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.scene.components.image.utils :as image-utils]
@@ -31,16 +31,21 @@
                     :min-height    {}})
 
 (defn- create-sprite
-  [{:keys [src object-name]}]
+  [{:keys [src object-name raw]}]
   (let [resource (resources/get-resource src)]
-    (when (and (-> resource nil?)
-               (-> src nil? not)
-               (-> src empty? not))
-      (logger/warn (js/Error. (str "Resources for " src " were not loaded"))))
-    (doto (if (-> resource nil? not)
-            (Sprite. (.-texture resource))
-            (Sprite.))
-      (aset "name" (str object-name "-sprite")))))
+    (if raw
+        (doto (Sprite. (.from Texture raw))
+          (aset "name" (str object-name "-sprite")))
+        (do
+          (when (and (-> resource nil?)
+                     (-> src nil? not)
+                     (-> src empty? not))
+            (logger/warn (js/Error. (str "Resources for " src " were not loaded"))))
+          (doto (if (-> resource nil? not)
+                  (Sprite. (.-texture resource))
+                  (Sprite.))
+            (aset "name" (str object-name "-sprite")))))))
+
 
 (defn- create-sprite-mask
   [{:keys [border-radius width height image-size mask-width mask-height]}]

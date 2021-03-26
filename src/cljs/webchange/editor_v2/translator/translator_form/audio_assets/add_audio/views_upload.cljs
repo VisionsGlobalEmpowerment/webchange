@@ -15,14 +15,22 @@
                         :height height}}))
 
 (def text-default "Select File To Upload or Drop It Here")
+(def text-uploading "File Uploading...")
 (def text-uploaded "File Uploaded")
 
 (defn audio-upload-panel
   []
-  (r/with-let [text (r/atom text-default)]
+  (r/with-let [text (r/atom text-default)
+               loading (r/atom false)]
               [select-file-form {:text      @text
+                                 :loading @loading
                                  :on-change (fn [file]
-                                              (re-frame/dispatch [::translator-form.audios/upload-audio file {}])
-                                              (reset! text text-uploaded)
-                                              (.setTimeout js/window #(reset! text text-default) 2000))
+                                              (reset! text text-uploading)
+                                              (reset! loading true)
+                                              (re-frame/dispatch [::translator-form.audios/upload-audio file {}
+                                                                  {:on-success (fn []
+                                                                                 (reset! loading false)
+                                                                                 (reset! text text-uploaded)
+                                                                                 (.setTimeout js/window #(reset! text text-default) 2000))}])
+                                              )
                                  :styles    (get-styles)}]))
