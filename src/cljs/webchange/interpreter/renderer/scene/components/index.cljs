@@ -20,7 +20,9 @@
     [webchange.interpreter.renderer.scene.components.timer.component :as timer]
     [webchange.interpreter.renderer.scene.components.transparent.component :as transparent]
     [webchange.interpreter.renderer.scene.components.video.component :as video]
-    [webchange.interpreter.renderer.scene.components.traffic-light.component :as traffic-light]))
+    [webchange.interpreter.renderer.scene.components.traffic-light.component :as traffic-light]
+    [webchange.interpreter.renderer.scene.components.painting-toolset.component :as painting-toolset]
+    [webchange.interpreter.renderer.scene.components.text-tracing-pattern.component :as text-tracing-pattern]))
 
 (def components (apply hash-map [animated-svg-path/component-type {:constructor   animated-svg-path/create
                                                                    :default-props animated-svg-path/default-props}
@@ -63,4 +65,8 @@
                                  video/component-type {:constructor   video/create
                                                        :default-props video/default-props}
                                  traffic-light/component-type {:constructor   traffic-light/create
-                                                               :default-props traffic-light/default-props}]))
+                                                               :default-props traffic-light/default-props}
+                                 painting-toolset/component-type {:constructor painting-toolset/create
+                                                                  :default-props painting-toolset/default-props}
+                                 text-tracing-pattern/component-type {:constructor text-tracing-pattern/create
+                                                                      :default-props text-tracing-pattern/default-props}]))

@@ -398,19 +398,20 @@
   (apply dissoc object params))
 
 (defn execute-transition
-  [db {:keys [transition-id transition-tag to from skippable] :as action}]
+  [db {:keys [transition-id transition-tag to from skippable kill-after] :as action}]
   (let [scene-id (:current-scene db)
         transition (get-in db [:transitions scene-id transition-id])
         id (or transition-tag transition-id)]
     (when transition
       (let [transition-params [:duration :easing :loop :yoyo :speed]]
         {:transition {:id        id
-                      :component transition
+                      :component @transition
                       :to        (without-params to transition-params)
                       :from      from
                       :params    (select-keys to transition-params)
                       :on-ended  #(ce/dispatch-success-fn action)
-                      :skippable skippable}}))))
+                      :skippable skippable
+                      :kill-after kill-after}}))))
 
 (defn point->transition
   ([to transition-id]
@@ -742,12 +743,12 @@
     "Execute `state` action - apply component state.
 
     Action params:
-    :target - component name.
+    :targets - component names.
     :id - state name.
 
     Example:
     {:type   'state',
-     :target 'bubble-1',
+     :targets ['bubble-1' 'bubble-2' 'bubble-3'],
      :id     'hidden'}"
     (let [actions (map (fn [target] [::execute-state (assoc action :target target)]) targets)]
       {:dispatch-n actions})))

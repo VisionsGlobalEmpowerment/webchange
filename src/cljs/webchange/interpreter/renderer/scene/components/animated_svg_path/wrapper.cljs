@@ -16,4 +16,5 @@
                    :animated-svg-path-stop  #(stop state)
                    :animated-svg-path-reset #(reset state)
                    :set-path                #(swap! state assoc :paths (paths % (:duration @state)))
-                   :set-stroke              #(a-svg-utils/set-stroke state %)}))
+                   :set-stroke              #(a-svg-utils/set-stroke state %)
+                   :activate                #(swap! state assoc :active true)}))

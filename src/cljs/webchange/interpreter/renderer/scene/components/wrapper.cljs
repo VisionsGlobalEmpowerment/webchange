@@ -1,8 +1,17 @@
 (ns webchange.interpreter.renderer.scene.components.wrapper
   (:require
+    [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.debug :as debug]
     [webchange.interpreter.renderer.scene.filters.filters :as filters]
     [webchange.logger.index :as logger]))
+
+(defn- with-debug
+  [wrapped-object]
+  (when false                                               ;(= "animated-svg-path" (:type wrapped-object))
+    (let [object (:object wrapped-object)]
+      (debug/show-bounds object)))
+  wrapped-object)
 
 (defn- check-name-prop
   [wrapper]
@@ -62,6 +71,7 @@
 (defn create-wrapper
   [wrapper-object]
   (-> wrapper-object
+      (with-debug)
       (check-name-prop)
       (check-type-prop)
       (check-object-prop)
