@@ -19,7 +19,10 @@
 
         & > * {
             padding: 16px;
-            width: 50%;
+
+            &:first-child {
+                max-width: 50%;
+            }
         }
     }
 }

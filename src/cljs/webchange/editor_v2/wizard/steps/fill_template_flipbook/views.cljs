@@ -5,7 +5,6 @@
     [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-illustrators :refer [illustrators]]
     [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-layout :refer [layout]]
     [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-title :refer [title]]
-    [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-control-row :refer [control-row]]
     [webchange.ui-framework.components.index :refer [button]]))
 
 (defn- key->option
