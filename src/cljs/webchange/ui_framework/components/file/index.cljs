@@ -11,7 +11,7 @@
 (defn- get-accept-extensions
   [type]
   (->> (case type
-         "audio" ["mp3" "wav"]
+         "audio" ["mp3" "wav" "m4a"]
          "image" ["gif" "jpg" "jpeg" "png"]
          [])
        (map #(str "." %))
