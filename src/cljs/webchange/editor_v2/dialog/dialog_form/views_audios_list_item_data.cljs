@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.dialog.dialog-form.views-audio-edit-info
+(ns webchange.editor-v2.dialog.dialog-form.views-audios-list-item-data
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
@@ -8,30 +8,29 @@
 
 (defn- get-styles
   []
-  {:block-wrapper          {:margin-bottom "8px"}
-   :block-wrapper-selected {:border        "solid 1px #00c0ff"
-                            :margin-bottom "8px"}
-   :block-header           {:display         "flex"
-                            :justify-content "space-between"
-                            :padding         "0 0 8px 0"}
+  {:info-form         {:display         "flex"
+                       :justify-content "space-between"
+                       :width           "100%"}
+   :target-form       {:margin-right "16px"}
+   :target-form-label {:top "-16px"}
+   :target-form-input {:margin 0}
+   :alias-form        {:width "170px"}
+   :form-button       {:margin-left "8px"
+                       :padding     "8px"}
+   :menu-item-icon    {:font-size "18px"}
+   :form-button-save  {:margin-left      "8px"
+                       :padding          "6px"
+                       :background-color (get-in-theme [:palette :secondary :main])}})
 
-   :menu-button            {:padding "8px"}
-   :menu-item-icon         {:font-size "18px"}
+(defn audio-data
+  [{:keys [target]}]
+  [:div
+   (when-not (nil? target)
+     [ui/chip {:label target
+               :style {:margin  "0 10px 0 0"
+                       :padding "0"}}])])
 
-   :info-form              {:display         "flex"
-                            :justify-content "space-between"
-                            :width           "100%"}
-   :form-button            {:margin-left "8px"
-                            :padding     "8px"}
-   :form-button-save       {:margin-left      "8px"
-                            :padding          "6px"
-                            :background-color (get-in-theme [:palette :secondary :main])}
-   :alias-form             {:width "170px"}
-   :target-form            {:margin-right "16px"}
-   :target-form-label      {:top "-16px"}
-   :target-form-input      {:margin 0}})
-
-(defn audio-info-form
+(defn audio-data-form
   [{:keys [alias target on-save on-cancel]}]
   (r/with-let [current-data (r/atom {:alias  alias
                                      :target target})]
