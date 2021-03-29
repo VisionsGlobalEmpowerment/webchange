@@ -8,17 +8,17 @@
 
 (defn- record-button
   [{:keys [on-click]}]
-  [icon-button {:icon       "mic"
-                :color      "primary"
-                :class-name "action-button"
-                :on-click   on-click}])
+  [icon-button {:icon     "mic"
+                :color    "primary"
+                :size     "big"
+                :on-click on-click}])
 
 (defn- stop-button
   [{:keys [on-click]}]
-  [icon-button {:icon       "stop"
-                :color      "secondary"
-                :class-name "action-button"
-                :on-click   on-click}])
+  [icon-button {:icon     "stop"
+                :color    "secondary"
+                :size     "big"
+                :on-click on-click}])
 
 (defn- ms->time
   [ms]

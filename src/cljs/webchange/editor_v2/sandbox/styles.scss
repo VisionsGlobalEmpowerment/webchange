@@ -1,6 +1,10 @@
 .share-button {
     background-color: #1D1D1F;
 
+    svg {
+        fill: #fff;
+    }
+
     &:hover {
         background-color: #0071e3;
     }

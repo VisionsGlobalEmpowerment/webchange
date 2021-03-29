@@ -3,7 +3,8 @@
     [reagent.core :as r]
     [webchange.ui-framework.components.index :refer [button icon icon-button]]
     [webchange.ui-framework.test-page.buttons :refer [buttons]]
-    [webchange.ui-framework.test-page.views-icons :refer [icons-group]]))
+    [webchange.ui-framework.test-page.views-icons :refer [icons-group]]
+    [webchange.ui-framework.test-page.views-icon-buttons :refer [icon-buttons-group]]))
 
 (defn- row
   [{:keys [title]}]
@@ -44,6 +45,7 @@
   [:div.test-ui-page
    [buttons]
    [icons-group]
+   [icon-buttons-group]
 
    ;[row {:title "Icon"}
    ; [block {:title "With rotation"}

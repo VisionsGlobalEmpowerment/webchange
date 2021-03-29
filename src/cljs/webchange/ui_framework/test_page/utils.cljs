@@ -5,19 +5,25 @@
 (defn group
   []
   (let [this (r/current-component)]
-    (into [:div]
+    (into [:div.elements-group]
           (r/children this))))
 
 (defn group-body
   []
   (let [this (r/current-component)]
-    (into [:div]
+    (into [:div.elements-group-body]
           (r/children this))))
 
 (defn group-header
   []
   (let [this (r/current-component)]
     (into [:h1]
+          (r/children this))))
+
+(defn group-sub-header
+  []
+  (let [this (r/current-component)]
+    (into [:h3]
           (r/children this))))
 
 (defn table

@@ -14,4 +14,6 @@
        ^{:key icon-name}
        [:div.icons-list-item
         [:span icon-name]
-        [:div.icon-wrapper [icon {:icon icon-name}]]])]]])
+        [:div.icon-wrapper
+         [icon {:icon icon-name}]
+         [:div.icon-size]]])]]])
