@@ -30,4 +30,5 @@
                    :get-fill      (fn []
                                     (utils/get-fill text-object))
                    :set-font-size (fn [font-size]
-                                    (utils/set-font-size text-object font-size))}))
+                                    (utils/set-font-size text-object font-size)
+                                    (emit text-object "fontSizeChanged"))}))
