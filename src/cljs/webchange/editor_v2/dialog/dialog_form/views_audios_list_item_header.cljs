@@ -1,9 +1,9 @@
 (ns webchange.editor-v2.dialog.dialog-form.views-audios-list-item-header
   (:require
-    [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-form.views-audios-list-item-data :refer [audio-data audio-data-form]]
-    [webchange.editor-v2.dialog.dialog-form.views-audios-list-item-menu :refer [audio-menu]]))
+    [webchange.editor-v2.dialog.dialog-form.views-audios-list-item-menu :refer [audio-menu]]
+    [webchange.ui-framework.components.index :refer [circular-progress]]))
 
 (defn- get-styles
   []
@@ -31,7 +31,7 @@
          [audio-data {:alias  alias
                       :target target}])
        (if loading?
-         [ui/circular-progress {:size 20 :color "secondary"}]
+         [circular-progress {:color "secondary"}]
          (when-not @edit-state?
            [audio-menu {:on-edit            handle-edit
                         :on-bring-to-top    handle-bring-to-top

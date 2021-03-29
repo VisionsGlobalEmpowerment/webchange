@@ -1,6 +1,7 @@
 (ns webchange.ui-framework.components.index
   (:require
     [webchange.ui-framework.components.button.index :as button]
+    [webchange.ui-framework.components.circular-progress.index :as circular-progress]
     [webchange.ui-framework.components.dialog.index :as dialog]
     [webchange.ui-framework.components.file.index :as file]
     [webchange.ui-framework.components.icon.index :as icon]
@@ -12,6 +13,7 @@
     [webchange.ui-framework.components.tooltip.index :as tooltip]))
 
 (def button button/component)
+(def circular-progress circular-progress/component)
 (def dialog dialog/component)
 (def file file/component)
 (def icon icon/component)
