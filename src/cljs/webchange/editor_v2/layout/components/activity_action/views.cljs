@@ -33,19 +33,20 @@
                        (if (valid?) (re-frame/dispatch [::scene-action.events/save @data])))]
     [dialog
      {:title    (:title current-action-data)
-      :on-close close}
+      :on-close close
+      :actions  [:div.actions
+                 [button {:on-click save
+                          :size     "big"}
+                  "Save"]
+                 [button {:on-click close
+                          :variant  "outlined"
+                          :color    "default"
+                          :size     "big"}
+                  "Cancel"]]}
      [template {:template  current-action-data
                 :metadata  metadata
                 :data      data
-                :validator validator}]
-     [:div.actions
-      [button {:on-click save
-               :size     "big"}
-       "Save"]
-      [button {:on-click close
-               :variant  "outlined"
-               :size     "big"}
-       "Cancel"]]]))
+                :validator validator}]]))
 
 (defn action-modal-container
   []
