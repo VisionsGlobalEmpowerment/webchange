@@ -211,8 +211,8 @@
                                                         ((:set-border-color rectangle) (if correct 0x0FB600 0xED1C24))
                                                         (re-frame/dispatch [::ce/execute-action remove-flows])
                                                         (re-frame/dispatch (if correct
-                                                                             [::ce/execute-action success-action])
-                                                                           [::ce/execute-action fail-action])))
+                                                                             [::ce/execute-action success-action]
+                                                                             [::ce/execute-action fail-action]))))
                 text-obj (text/create {:type           "text",
                                        :x              x,
                                        :y              (- y 48),

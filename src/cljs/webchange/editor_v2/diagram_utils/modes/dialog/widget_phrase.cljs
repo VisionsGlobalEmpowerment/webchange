@@ -22,6 +22,7 @@
 (defn phrase
   [node]
   (let [inner-action (-> node :data get-inner-action)
+        max-len 17
         action? (= "action" (get inner-action :type))
         action-id (get inner-action :id)
         action-name (if (not (nil? (:name node))) (:name node) (if action? action-id))
@@ -30,6 +31,7 @@
                         (-> (:target phrase-data) (capitalize) (str ":")))
         phrase-text (or (:phrase-text-translated phrase-data)
                         (:phrase-text phrase-data))
+        phrase-text (if (>  (count phrase-text) max-len) (str (subs phrase-text 0 max-len) "...") phrase-text)
         styles (get-styles)]
     (if-not (nil? phrase-text)
       [:div {:style (:title styles)}

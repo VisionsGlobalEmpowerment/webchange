@@ -1,4 +1,6 @@
-(ns webchange.templates.library.categorize-shapes.round-2)
+(ns webchange.templates.library.categorize-shapes.round-2
+  (:require
+    [webchange.templates.utils.dialog :as dialog]))
 
 (def template-round-2 {:assets        [
                                        {:url "/raw/img/categorize-shapes/background-class.png", :size 10, :type "image"}
@@ -90,7 +92,10 @@
                                                             :draggable  true,
                                                             :actions    {:drag-start {:type "action",
                                                                                       :on   "drag-start",
-                                                                                      :id   "start-drag"}
+                                                                                      :id   "start-drag"
+                                                                                      :params {:say-item         "circle-item"
+                                                                                               :placement-target "circle-table"}
+                                                                                      }
                                                                          :drag-end
                                                                                      {:id     "dragged",
                                                                                       :on     "drag-end",
@@ -113,7 +118,10 @@
                                                             :actions    {:drag-start {
                                                                                       :type "action",
                                                                                       :on   "drag-start",
-                                                                                      :id   "start-drag"}
+                                                                                      :id   "start-drag"
+                                                                                      :params {:say-item         "oval-item"
+                                                                                               :placement-target "oval-box"}
+                                                                                      }
                                                                          :drag-end
                                                                                      {:id     "dragged",
                                                                                       :on     "drag-end",
@@ -136,7 +144,10 @@
                                                             :actions    {:drag-start {
                                                                                       :type "action",
                                                                                       :on   "drag-start",
-                                                                                      :id   "start-drag"}
+                                                                                      :id   "start-drag"
+                                                                                      :params {:say-item         "rectangle-item"
+                                                                                               :placement-target "rectangle-box"}
+                                                                                      }
                                                                          :drag-end
                                                                                      {:id     "dragged",
                                                                                       :on     "drag-end",
@@ -159,7 +170,10 @@
                                                             :actions    {:drag-start {
                                                                                       :type "action",
                                                                                       :on   "drag-start",
-                                                                                      :id   "start-drag"}
+                                                                                      :id   "start-drag"
+                                                                                      :params {:say-item         "square-item"
+                                                                                               :placement-target "square-table"}
+                                                                                      }
                                                                          :drag-end
                                                                                      {:id     "dragged",
                                                                                       :on     "drag-end",
@@ -182,7 +196,10 @@
                                                             :actions    {:drag-start {
                                                                                       :type "action",
                                                                                       :on   "drag-start",
-                                                                                      :id   "start-drag"}
+                                                                                      :id   "start-drag"
+                                                                                      :params {:say-item         "star-item"
+                                                                                               :placement-target "star-box"}
+                                                                                      }
                                                                          :drag-end
                                                                                      {:id     "dragged",
                                                                                       :on     "drag-end",
@@ -205,7 +222,10 @@
                                                             :actions    {:drag-start {
                                                                                       :type "action",
                                                                                       :on   "drag-start",
-                                                                                      :id   "start-drag"}
+                                                                                      :id   "start-drag"
+                                                                                      :params {:say-item         "triangle-item"
+                                                                                               :placement-target "triangle-table"}
+                                                                                      }
                                                                          :drag-end
                                                                                      {:id     "dragged",
                                                                                       :on     "drag-end",
@@ -259,17 +279,16 @@
                                                                         }
                                        :dragged                        {:type "sequence-data"
                                                                         :data [
+                                                                               {:type        "copy-variable",
+                                                                                :var-name "current-selection-state"
+                                                                                :from-params [{:param-property "check-variable", :action-property "from"}]}
+                                                                               {:type "set-variable", :var-name "say", :var-value false}
+                                                                               {:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                                                {:type        "test-var-scalar",
                                                                                 :success     "correct-option",
                                                                                 :fail        "check-option",
                                                                                 :value       true,
-                                                                                :from-params [{:param-property "check-variable", :action-property "var-name"}]
-                                                                                }
-                                                                               {:type "remove-interval"
-                                                                                :id   "check-collide-2"}
-                                                                               {:type        "state"
-                                                                                :id          "not-highlighted"
-                                                                                :from-params [{:action-property "target" :param-property "box"}]}
+                                                                                :var-name "current-selection-state"}
                                                                                ]
                                                                         }
                                        :highlight                      {:type "sequence-data"
@@ -280,63 +299,51 @@
                                                                                 }
                                                                                {:type        "state"
                                                                                 :id          "highlighted"
-                                                                                :from-params [{:action-property "target" :param-property "target"}]
-                                                                                }]
+                                                                                :from-params [{:action-property "target" :param-property "transition"}]
+                                                                                }
+                                                                               {:type        "test-var-scalar",
+                                                                                :success     "wrong-answer",
+                                                                                :value       false,
+                                                                                :from-params [{:template        "%-selected"
+                                                                                               :action-property "var-name" :param-property "placement-target"}]
+                                                                                }
+                                                                               ]
                                                                         }
                                        :unhighlight                    {:type "sequence-data"
                                                                         :data [{:type        "state"
                                                                                 :id          "not-highlighted"
-                                                                                :from-params [{:action-property "target" :param-property "target"}]}]
+                                                                                :from-params [{:action-property "target" :param-property "transition"}]}]
                                                                         }
-                                       :check-collide                  {:type "sequence-data"
-                                                                        :data [
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "oval-box",
-                                                                                :params     {:target   "oval-box"
-                                                                                             :variable "oval-box-selected"}
-                                                                                }
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "circle-table"
-                                                                                :params     {:target   "circle-table"
-                                                                                             :variable "circle-table-selected"
-                                                                                             }
-                                                                                }
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "rectangle-box"
-                                                                                :params     {:target   "rectangle-box"
-                                                                                             :variable "rectangle-box-selected"
-                                                                                             }
-                                                                                }
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "square-table"
-                                                                                :params     {:target   "square-table"
-                                                                                             :variable "square-table-selected"
-                                                                                             }
-                                                                                }
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "star-box"
-                                                                                :params     {:target   "star-box"
-                                                                                             :variable "star-box-selected"
-                                                                                             }
-                                                                                }
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "triangle-table"
-                                                                                :params     {:target   "triangle-table"
-                                                                                             :variable "triangle-table-selected"
-                                                                                             }
-                                                                                }]}
+                                       :next-check-collide  {:type "sequence-data"
+                                                             :data [{:type     "set-timeout"
+                                                                     :action   "check-collide"
+                                                                     :interval 10}]}
+                                       :check-collide       {:type "sequence-data"
+                                                             :data [
+                                                                    {:type          "test-transitions-and-pointer-collide",
+                                                                     :success       "highlight",
+                                                                     :fail          "unhighlight",
+                                                                     :transitions   ["oval-box" "circle-table"
+                                                                                     "rectangle-box" "square-table"
+                                                                                     "star-box" "triangle-table"]
+                                                                     :action-params [{:target   "oval-box"
+                                                                                      :variable "oval-box-selected"}
+                                                                                     {:target   "circle-table"
+                                                                                      :variable "circle-table-selected"}
+                                                                                     {:target   "rectangle-box"
+                                                                                      :variable "rectangle-box-selected"}
+                                                                                     {:target   "square-table"
+                                                                                      :variable "square-table-selected"}
+                                                                                     {:target   "star-box"
+                                                                                      :variable "star-box-selected"}
+                                                                                     {:target   "triangle-table"
+                                                                                      :variable "triangle-table-selected"}]}
+                                                                    {:type     "test-var-scalar",
+                                                                     :success  "next-check-collide",
+                                                                     :value    true,
+                                                                     :var-name "next-check-collide"}
+                                                                    ]}
+
 
                                        :init-activity                  {:type "sequence-data"
                                                                         :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-objects"}
@@ -352,13 +359,32 @@
                                                                                {:type "set-variable", :var-name "triangle-table-selected", :var-value false}
                                                                                ]
                                                                         }
+                                       :oval-item           (dialog/default "oval")
+                                       :circle-item         (dialog/default "circle")
+                                       :rectangle-item      (dialog/default "rectangle")
+                                       :square-item         (dialog/default "square")
+                                       :star-item           (dialog/default "star")
+                                       :triangle-item       (dialog/default "triangle")
+
+                                       :say-item            {:type "sequence-data"
+                                                             :data [{:type "action" :from-params [{:action-property "id"
+                                                                                                   :param-property  "say-item"}]}
+                                                                    {:type     "test-var-scalar",
+                                                                     :success  "next-say",
+                                                                     :value    true,
+                                                                     :var-name "say"}]}
+                                       :next-say            {:type "sequence-data"
+                                                             :data [{:type     "set-timeout"
+                                                                     :action   "say-item"
+                                                                     :interval 100}]}
+
                                        :start-drag                     {:type "sequence-data"
                                                                         :data [
                                                                                {:type "action", :id "reset-selected-vars"}
-                                                                               {:type     "set-interval"
-                                                                                :id       "check-collide-2"
-                                                                                :interval 100
-                                                                                :action   "check-collide"}
+                                                                               {:type "set-variable", :var-name "say", :var-value true}
+                                                                               {:type "set-variable", :var-name "next-check-collide", :var-value true}
+                                                                               {:id "next-say" :type "action"}
+                                                                               {:id "next-check-collide" :type "action"}
                                                                                ]
                                                                         }
                                        :intro                          {:type               "sequence-data",
@@ -504,20 +530,18 @@
                                                                         :data               [{:type "sequence-data"
                                                                                               :data [{:type "empty" :duration 0}
                                                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                        :phrase             "finish-dialog",
-                                                                        :phrase-description "finish dialog"}
+                                                                        :phrase             "correct-answer-dialog",
+                                                                        :phrase-description "Correct answer dialog"}
                                        :fail-answer-dialog             {:type               "sequence-data",
                                                                         :editor-type        "dialog",
                                                                         :data               [{:type "sequence-data"
                                                                                               :data [{:type "empty" :duration 0}
                                                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                        :phrase             "finish-dialog",
-                                                                        :phrase-description "finish dialog"}
+                                                                        :phrase             "fail-answer-dialog",
+                                                                        :phrase-description "Fail answer dialog"}
                                        :finish-scene                   {:type "sequence-data",
                                                                         :data [
                                                                                {:type "action" :id "finish-dialog"}
-                                                                               {:type "remove-interval"
-                                                                                :id   "check-collide-2"}
                                                                                {:type "action", :id "stop-activity"}
                                                                                ],
                                                                         }
@@ -563,6 +587,20 @@
                                                                :text "Finish dialog"}
                                                               {:type      "dialog"
                                                                :action-id :finish-dialog}
+                                                              ]}
+                                                     {:title "Round 2 - items"
+                                                      :nodes [{:type      "dialog"
+                                                               :action-id :oval-item}
+                                                              {:type      "dialog"
+                                                               :action-id :circle-item}
+                                                              {:type      "dialog"
+                                                               :action-id :rectangle-item}
+                                                              {:type      "dialog"
+                                                               :action-id :square-item}
+                                                              {:type      "dialog"
+                                                               :action-id :star-item}
+                                                              {:type      "dialog"
+                                                               :action-id :triangle-item}
                                                               ]}
                                                      ]
                                        },

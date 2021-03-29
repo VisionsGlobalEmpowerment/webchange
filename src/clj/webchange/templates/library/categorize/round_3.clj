@@ -1,4 +1,6 @@
-(ns webchange.templates.library.categorize.round-3)
+(ns webchange.templates.library.categorize.round-3
+  (:require
+    [webchange.templates.utils.dialog :as dialog]))
 
 (def template-round-3 {:assets        [{:url "/raw/img/categorize/background-3.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize/02.png", :size 10, :type "image"}
@@ -32,6 +34,8 @@
                                                                                                            "green-table"]
                                                                                                :self      "yellow-group"
                                                                                                :crayon    "yellow-crayon"
+                                                                                               :say-color "yellow-group"
+                                                                                               :target        "purple-table"
                                                                                                }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
@@ -67,6 +71,8 @@
                                                                                                            "green-table"]
                                                                                                :self      "yellow-group-1"
                                                                                                :crayon    "yellow-crayon"
+                                                                                               :say-color "yellow-group"
+                                                                                               :target        "green-table"
                                                                                                }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
@@ -100,7 +106,10 @@
                                                                                       :params {:colliders ["yellow-box" "red-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "blue-group"}}
+                                                                                               :self      "blue-group"
+                                                                                               :say-color "blue-group"
+                                                                                               :target        "green-table"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -131,7 +140,10 @@
                                                                                       :params {:colliders ["blue-box" "yellow-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "red-group"}}
+                                                                                               :self      "red-group"
+                                                                                               :say-color "red-group"
+                                                                                               :target        "green-table"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -141,7 +153,7 @@
                                                                                                                "purple-table" "orange-table"
                                                                                                                "green-table"]
                                                                                                :self          "red-group"
-                                                                                               :target        "orange-table"
+                                                                                               :target        "green-table"
                                                                                                :init-position {:x        100,
                                                                                                                :y        600,
                                                                                                                :duration 1}}}},
@@ -188,8 +200,8 @@
                                                             :src        "/raw/img/categorize/red_crayons.png",
                                                             :transition "red-crayon",
                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden        {:visible false}, :init-position {:x          776,
-                                                                                                                          :y          501,}
+                                                                         :hidden        {:visible false}, :init-position {:x 776,
+                                                                                                                          :y 501,}
                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                          },
                                                             :draggable  true,
@@ -200,7 +212,10 @@
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "red-crayon"}}
+                                                                                               :self      "red-crayon"
+                                                                                               :say-color "red-color"
+                                                                                               :target        "red-box"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -223,8 +238,8 @@
                                                             :src        "/raw/img/categorize/purple_crayons.png",
                                                             :transition "purple-crayon",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden      {:visible false}, :init-position {:x          60,
-                                                                                                                        :y          1054,}
+                                                                         :hidden      {:visible false}, :init-position {:x 60,
+                                                                                                                        :y 1054,}
                                                                          },
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -234,7 +249,10 @@
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "purple-crayon"}}
+                                                                                               :self      "purple-crayon"
+                                                                                               :say-color "purple-color"
+                                                                                               :target        "purple-table"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -259,8 +277,8 @@
                                                             :src        "/raw/img/categorize/yellow_crayons.png",
                                                             :transition "yellow-crayon",
                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden        {:visible false}, :init-position {:x          154,
-                                                                                                                          :y          139, :visible true}
+                                                                         :hidden        {:visible false}, :init-position {:x 154,
+                                                                                                                          :y 139, :visible true}
                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                          },
                                                             :draggable  true,
@@ -271,7 +289,10 @@
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "yellow-crayon"}}
+                                                                                               :say-color "yellow-color"
+                                                                                               :self      "yellow-crayon"
+                                                                                               :target        "yellow-box"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -295,8 +316,8 @@
                                                             :src        "/raw/img/categorize/green_crayons.png",
                                                             :transition "green-crayon",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden      {:visible false}, :init-position {:x          19,
-                                                                                                                        :y          463,}
+                                                                         :hidden      {:visible false}, :init-position {:x 19,
+                                                                                                                        :y 463,}
                                                                          },
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -306,7 +327,10 @@
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "green-crayon"}}
+                                                                                               :self      "green-crayon"
+                                                                                               :say-color "green-color"
+                                                                                               :target        "green-table"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -332,8 +356,8 @@
                                                             :src        "/raw/img/categorize/blue_crayons.png",
                                                             :transition "blue-crayon",
                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden        {:visible false}, :init-position {:x          1611,
-                                                                                                                          :y          440,}
+                                                                         :hidden        {:visible false}, :init-position {:x 1611,
+                                                                                                                          :y 440,}
                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                          },
                                                             :draggable  true,
@@ -344,7 +368,10 @@
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "blue-crayon"}}
+                                                                                               :self      "blue-crayon"
+                                                                                               :say-color "blue-color"
+                                                                                               :target        "blue-box"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -368,8 +395,8 @@
                                                             :src        "/raw/img/categorize/orange_crayons.png",
                                                             :transition "orange-crayon",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden      {:visible false}, :init-position {:x          1495,
-                                                                                                                        :y          914,}
+                                                                         :hidden      {:visible false}, :init-position {:x 1495,
+                                                                                                                        :y 914,}
                                                                          },
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -379,7 +406,10 @@
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
                                                                                                            "purple-table" "orange-table"
                                                                                                            "green-table"]
-                                                                                               :self      "orange-crayon"}}
+                                                                                               :self      "orange-crayon"
+                                                                                               :say-color "orange-color"
+                                                                                               :target        "orange-table"
+                                                                                               }}
                                                                          :drag-end   {
                                                                                       :id     "stop-drag-hide",
                                                                                       :on     "drag-end",
@@ -420,7 +450,6 @@
                                                             :y          773,
                                                             :width      547,
                                                             :height     297,
-
                                                             :src        "/raw/img/categorize/orange_table.png",
                                                             :transition "orange-table",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
@@ -465,17 +494,16 @@
                                                                      :data [
                                                                             {:type        "state",
                                                                              :id          "init-position"
-                                                                             :from-params [{:action-property "target" :param-property "self"}]
-                                                                             }
+                                                                             :from-params [{:action-property "target" :param-property "self"}]}
                                                                             ;{:type        "state"
                                                                             ; :id          "hidden"
                                                                             ; :from-params [{:action-property "target" :param-property "self"}]}
                                                                             {:type "action"
-                                                                             :id   "correct-answer-dialog"
-                                                                             }
+                                                                             :id   "correct-answer-dialog"}
                                                                             {:type     "action"
                                                                              :from-var [{:var-name "next-task", :action-property "id"}]
                                                                              }
+                                                                            {:type "action", :id "object-revert"}
                                                                             ]
                                                                      },
                                        :correct-answer-init-ungroup {:type "sequence-data",
@@ -527,9 +555,7 @@
                                                                             ]
                                                                      },
                                        :wrong-answer                {:type "sequence-data"
-                                                                     :data [{:type "action"
-                                                                             :id   "wrong-answer-dialog"}
-                                                                            {:type "action", :id "object-revert"}
+                                                                     :data [{:type "action", :id "object-revert"}
                                                                             {:type           "counter"
                                                                              :counter-action "increase"
                                                                              :counter-id     "wrong-answers-counter"}
@@ -539,31 +565,49 @@
                                                                              :inequality ">=",
                                                                              :success    "blink-objects"
                                                                              }
+                                                                            {:type "action"
+                                                                             :id   "wrong-answer-dialog"}
                                                                             ]}
-                                       :check-answer                {:type     "test-var-list",
-                                                                     :fail     "wrong-answer",
-                                                                     :values   [true true],
-                                                                     :from-var [{:var-name "check-collide", :action-property "var-names"}
-                                                                                {:var-name "correct-answer", :action-property "success"}]
-                                                                     }
                                        :stop-drag-hide              {:type "sequence-data"
                                                                      :data [
-                                                                            {:type        "test-var-list-at-least-one-true",
-                                                                             :success     "check-answer",
-                                                                             :fail        "object-revert"
+                                                                            {:type        "copy-variables",
                                                                              :from-params [{:template        "colliding-%"
-                                                                                            :action-property "var-names" :param-property "colliders"}]}
-                                                                            {:type "remove-interval"
-                                                                             :id   "check-collide-3"}
-                                                                            {
-                                                                             :type        "mass-state"
-                                                                             :id          "not-highlighted"
-                                                                             :from-params [{:action-property "targets" :param-property "colliders"}]
+                                                                                            :action-property "var-names" :param-property "colliders"}
+                                                                                           {:template        "colliding-raw-%"
+                                                                                            :action-property "from-list" :param-property "colliders"}]}
+                                                                            {:type "set-variable", :var-name "say", :var-value false}
+                                                                            {:type "set-variable", :var-name "next-check-collide", :var-value false}
+
+                                                                            {:type     "test-var-list",
+                                                                             :values   [true true],
+                                                                             :fail "object-revert",
+                                                                             :var-names ["check-collide-1" "check-collide-2"]
+                                                                             :from-var [{:var-name "check-collide", :action-property "var-names"}
+                                                                                        {:var-name "correct-answer", :action-property "success"}]
                                                                              }
-
-                                                                            ]
-
-                                                                     },
+                                                                            ]},
+                                       :yellow-group                (dialog/default "Color yellow group")
+                                       :red-group                   (dialog/default "Color red group")
+                                       :blue-group                  (dialog/default "Color blue group")
+                                       :yellow-color                (dialog/default "Color yellow")
+                                       :blue-color                  (dialog/default "Color blue")
+                                       :red-color                   (dialog/default "Color red")
+                                       :purple-color                (dialog/default "Color purple")
+                                       :orange-color                (dialog/default "Color orange")
+                                       :green-color                 (dialog/default "Color green")
+                                       :say-color                   {:type "sequence-data"
+                                                                     :data [{:type "action" :from-params [{:action-property "id"
+                                                                                                           :param-property  "say-color"}]}
+                                                                            {:type "action" :id "check-say"}
+                                                                            ]}
+                                       :check-say                   {:type     "test-var-scalar",
+                                                                     :success  "next-say",
+                                                                     :value    true,
+                                                                     :var-name "say"}
+                                       :next-say                    {:type "sequence-data"
+                                                                     :data [{:type     "set-timeout"
+                                                                             :action   "say-color"
+                                                                             :interval 100}]}
 
                                        :start-drag                  {:type "sequence-data"
                                                                      :data [
@@ -577,34 +621,54 @@
                                                                                             :template       "colliding-object-%",
                                                                                             :param-property "self", :action-property "var-name"}]
                                                                              }
-                                                                            {:type     "set-interval"
-                                                                             :id       "check-collide-3"
-                                                                             :interval 100
-                                                                             :action   "check-collide"}]},
+                                                                            {:type "set-variable", :var-name "say", :var-value true}
+                                                                            {:type "set-variable", :var-name "next-check-collide", :var-value true}
+                                                                            {:id "check-say" :type "action"}
+                                                                            {:id "next-check-collide" :type "action"}
+                                                                            ]},
+                                       :next-check-collide          {:type "sequence-data"
+                                                                     :data [{:type     "set-timeout"
+                                                                             :action   "check-collide"
+                                                                             :interval 10}]}
                                        :check-collide               {:type "sequence-data"
                                                                      :data [
                                                                             {:type        "test-transitions-and-pointer-collide",
                                                                              :success     "highlight",
                                                                              :fail        "unhighlight",
-                                                                             :from-params [{:param-property "colliders", :action-property "transitions"}]}]}
+                                                                             :from-params [{:param-property "colliders", :action-property "transitions"}]}
+                                                                            {:type "action" :id "check-next-check-collide"}
+                                                                            ]}
+                                       :check-next-check-collide    {:type     "test-var-scalar",
+                                                                     :success  "next-check-collide",
+                                                                     :value    true,
+                                                                     :var-name "next-check-collide"}
                                        :highlight                   {:type "sequence-data"
                                                                      :data [{:type        "set-variable",
                                                                              :var-value   true
                                                                              :from-params [{:action-property "var-name",
-                                                                                            :template        "colliding-%",
+                                                                                            :template        "colliding-raw-%",
                                                                                             :param-property  "transition"}]
                                                                              }
                                                                             {:type        "state"
                                                                              :id          "highlighted"
                                                                              :from-params [{:action-property "target" :param-property "transition"}]
-                                                                             }]
+                                                                             }
+
+                                                                            {:type        "test-var-scalar",
+                                                                             :success     "wrong-answer-dialog",
+                                                                             :value false
+                                                                             :from-params [{:action-property "var-name",
+                                                                                            :template        "colliding-raw-%",
+                                                                                            :param-property  "target"}]},
+
+                                                                            ]
                                                                      }
                                        :unhighlight                 {:type "sequence-data"
                                                                      :data [
                                                                             {:type        "set-variable",
                                                                              :var-value   false
                                                                              :from-params [{:action-property "var-name",
-                                                                                            :template        "colliding-%",
+                                                                                            :template        "colliding-raw-%",
                                                                                             :param-property  "transition"}]
                                                                              }
                                                                             {:type        "state"
@@ -617,7 +681,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "continue-sorting",
-                                                                     :phrase-description "You are doing such a wonderful job of helping me clean up AND sorting colors! But I need your help one more time. This time, I will call out an item and tell you where to put it. Listen carefully, because it might be a different place than where you put it before!"
+                                                                     :phrase-description "Listen carefully, because it might be a different place than where you put it before!"
                                                                      ;:dialog-track       "Intro and finish"
                                                                      }
                                        :instruction-1               {:type               "sequence-data",
@@ -1027,6 +1091,26 @@
                                                              :action-id :instruction-10-2}
                                                             ]
                                                     }
+                                                   {:title "Round 3 - colors"
+                                                    :nodes [{:type      "dialog"
+                                                             :action-id :yellow-color}
+                                                            {:type      "dialog"
+                                                             :action-id :blue-color}
+                                                            {:type      "dialog"
+                                                             :action-id :red-color}
+                                                            {:type      "dialog"
+                                                             :action-id :purple-color}
+                                                            {:type      "dialog"
+                                                             :action-id :orange-color}
+                                                            {:type      "dialog"
+                                                             :action-id :green-color}
+                                                            {:type      "dialog"
+                                                             :action-id :yellow-group}
+                                                            {:type      "dialog"
+                                                             :action-id :red-group}
+                                                            {:type      "dialog"
+                                                             :action-id :blue-group}
+                                                            ]}
                                                    ]
                                        },
                        })

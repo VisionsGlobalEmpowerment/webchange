@@ -33,8 +33,12 @@
 
 (defn- add-default-methods
   [wrapper-object]
-  (let [main-display-object (:object wrapper-object)]
-    (merge {:get-data          (fn []
+  (let [object-data       (atom {})
+        main-display-object (:object wrapper-object)]
+    (merge {:get-object-data   (fn [] @object-data)
+            :set-object-data   (fn [data]
+                                 (reset! object-data data))
+            :get-data          (fn []
                                  (merge (utils/get-stage-position main-display-object)))
             :get-position      (fn []
                                  (utils/get-position main-display-object))

@@ -1,4 +1,6 @@
-(ns webchange.templates.library.categorize-synonyms.round-1)
+(ns webchange.templates.library.categorize-synonyms.round-1
+  (:require
+    [webchange.templates.utils.dialog :as dialog]))
 
 (def template-round-1 {:assets        [
                                        {:url "/raw/img/categorize-synonyms/background.png", :size 10, :type "image"}
@@ -49,7 +51,7 @@
                                                     :width      253,
                                                     :height     253,
                                                     :x          1568,
-                                                    :y          763,              ;
+                                                    :y          763, ;
                                                     :transition "trash-box",
                                                     :src        "/raw/img/categorize-synonyms/trash.png",
                                                     :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
@@ -81,9 +83,12 @@
                                                     :src        "/raw/img/categorize-synonyms/cold.png",
                                                     :transition "cold-1",
                                                     :draggable  true,
-                                                    :actions    {:drag-start {:type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"}
+                                                    :actions    {:drag-start {:type   "action",
+                                                                              :on     "drag-start",
+                                                                              :id     "start-drag"
+                                                                              :params {:say-item         "cold-item"
+                                                                                       :placement-target "chilly-box"}
+                                                                              }
                                                                  :drag-end
                                                                              {:id     "dragged",
                                                                               :on     "drag-end",
@@ -105,9 +110,12 @@
                                                     :transition "child-1",
                                                     :draggable  true,
                                                     :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"}
+                                                                              :type   "action",
+                                                                              :on     "drag-start",
+                                                                              :id     "start-drag"
+                                                                              :params {:say-item         "child-item"
+                                                                                       :placement-target "kid-box"}
+                                                                              }
                                                                  :drag-end
                                                                              {:id     "dragged",
                                                                               :on     "drag-end",
@@ -129,9 +137,12 @@
                                                     :transition "large-1",
                                                     :draggable  true,
                                                     :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"}
+                                                                              :type   "action",
+                                                                              :on     "drag-start",
+                                                                              :id     "start-drag"
+                                                                              :params {:say-item         "large-item"
+                                                                                       :placement-target "big-box"}
+                                                                              }
                                                                  :drag-end
                                                                              {:id     "dragged",
                                                                               :on     "drag-end",
@@ -153,9 +164,12 @@
                                                     :transition "garbage-1",
                                                     :draggable  true,
                                                     :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"}
+                                                                              :type   "action",
+                                                                              :on     "drag-start",
+                                                                              :id     "start-drag"
+                                                                              :params {:say-item         "garbage-item"
+                                                                                       :placement-target "trash-box"}
+                                                                              }
                                                                  :drag-end
                                                                              {:id     "dragged",
                                                                               :on     "drag-end",
@@ -177,9 +191,12 @@
                                                     :transition "scared-1",
                                                     :draggable  true,
                                                     :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"}
+                                                                              :type   "action",
+                                                                              :on     "drag-start",
+                                                                              :id     "start-drag"
+                                                                              :params {:say-item         "scared-item"
+                                                                                       :placement-target "afraid-box"}
+                                                                              }
                                                                  :drag-end
                                                                              {:id     "dragged",
                                                                               :on     "drag-end",
@@ -201,9 +218,12 @@
                                                     :transition "happy-1",
                                                     :draggable  true,
                                                     :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"}
+                                                                              :type   "action",
+                                                                              :on     "drag-start",
+                                                                              :id     "start-drag"
+                                                                              :params {:say-item         "happy-item"
+                                                                                       :placement-target "glad-box"}
+                                                                              }
                                                                  :drag-end
                                                                              {:id     "dragged",
                                                                               :on     "drag-end",
@@ -248,22 +268,19 @@
                                                                      :fail       "continue-sorting"
                                                                      }
                                                                     ]}
-                                       :check-option        {:type      "test-var-list-at-least-one-true"
-                                                             :var-names ["kid-box-selected" "chilly-box-selected" "big-box-selected"
-                                                                         "trash-box-selected" "afraid-box-selected" "glad-box-selected"]
-                                                             :success   "wrong-option",
-                                                             :fail      "object-revert"
-                                                             }
+
                                        :dragged             {:type "sequence-data"
                                                              :data [
+                                                                    {:type        "copy-variable",
+                                                                     :var-name "current-selection-state"
+                                                                     :from-params [{:param-property "check-variable", :action-property "from"}]}
+                                                                    {:type "set-variable", :var-name "say", :var-value false}
+                                                                    {:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                                     {:type        "test-var-scalar",
                                                                      :success     "correct-option",
-                                                                     :fail        "check-option",
+                                                                     :fail        "object-revert",
                                                                      :value       true,
-                                                                     :from-params [{:param-property "check-variable", :action-property "var-name"}]
-                                                                     }
-                                                                    {:type "remove-interval"
-                                                                     :id   "check-collide-2"}
+                                                                     :var-name "current-selection-state"}
                                                                     {:type        "state"
                                                                      :id          "not-highlighted"
                                                                      :from-params [{:action-property "target" :param-property "box"}]}
@@ -271,10 +288,6 @@
                                                              }
                                        :highlight           {:type "sequence-data"
                                                              :data [{:type "action", :id "reset-selected-vars"}
-                                                                    ;{:type        "set-variable",
-                                                                    ; :var-value   true
-                                                                    ; :from-params [{:action-property "var-name" :param-property "variable"}]
-                                                                    ; }
                                                                     {:type        "set-variable",
                                                                      :var-value   true
                                                                      :from-params [{:action-property "var-name",
@@ -284,13 +297,25 @@
                                                                     {:type        "state"
                                                                      :id          "highlighted"
                                                                      :from-params [{:action-property "target" :param-property "transition"}]
-                                                                     }]
+                                                                     }
+                                                                    {:type        "test-var-scalar",
+                                                                     :success     "wrong-answer",
+                                                                     :value       false,
+                                                                     :from-params [{:template        "%-selected"
+                                                                                    :action-property "var-name" :param-property "placement-target"}]
+                                                                     }
+                                                                    ]
                                                              }
                                        :unhighlight         {:type "sequence-data"
                                                              :data [{:type        "state"
                                                                      :id          "not-highlighted"
                                                                      :from-params [{:action-property "target" :param-property "transition"}]}]
                                                              }
+
+                                       :next-check-collide  {:type "sequence-data"
+                                                             :data [{:type     "set-timeout"
+                                                                     :action   "check-collide"
+                                                                     :interval 10}]}
                                        :check-collide       {:type "sequence-data"
                                                              :data [
                                                                     {:type          "test-transitions-and-pointer-collide",
@@ -303,7 +328,12 @@
                                                                                      {:var-name "trash-box"}
                                                                                      {:var-name "afraid-box"}
                                                                                      {:var-name "glad-box"}]
-                                                                     }]}
+                                                                     }
+                                                                    {:type     "test-var-scalar",
+                                                                     :success  "next-check-collide",
+                                                                     :value    true,
+                                                                     :var-name "next-check-collide"}
+                                                                    ]}
 
                                        :init-activity       {:type "sequence-data"
                                                              :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-crayons"}
@@ -316,16 +346,34 @@
                                                                     {:type "set-variable", :var-name "big-box-selected", :var-value false}
                                                                     {:type "set-variable", :var-name "trash-box-selected", :var-value false}
                                                                     {:type "set-variable", :var-name "afraid-box-selected", :var-value false}
-                                                                    {:type "set-variable", :var-name "glad-box-selected", :var-value false}
-                                                                    ]
-                                                             }
+                                                                    {:type "set-variable", :var-name "glad-box-selected", :var-value false}]}
+
+                                       :cold-item           (dialog/default "cold")
+                                       :child-item          (dialog/default "child")
+                                       :large-item          (dialog/default "large")
+                                       :garbage-item        (dialog/default "garbage")
+                                       :scared-item         (dialog/default "scared")
+                                       :happy-item          (dialog/default "happy")
+
+                                       :say-item            {:type "sequence-data"
+                                                             :data [{:type "action" :from-params [{:action-property "id"
+                                                                                                   :param-property  "say-item"}]}
+                                                                    {:type     "test-var-scalar",
+                                                                     :success  "next-say",
+                                                                     :value    true,
+                                                                     :var-name "say"}]}
+                                       :next-say            {:type "sequence-data"
+                                                             :data [{:type     "set-timeout"
+                                                                     :action   "say-item"
+                                                                     :interval 100}]}
+
                                        :start-drag          {:type "sequence-data"
                                                              :data [
                                                                     {:type "action", :id "reset-selected-vars"}
-                                                                    {:type     "set-interval"
-                                                                     :id       "check-collide-2"
-                                                                     :interval 100
-                                                                     :action   "check-collide"}
+                                                                    {:type "set-variable", :var-name "say", :var-value true}
+                                                                    {:type "set-variable", :var-name "next-check-collide", :var-value true}
+                                                                    {:id "next-say" :type "action"}
+                                                                    {:id "next-check-collide" :type "action"}
                                                                     ]
                                                              }
                                        :intro               {:type               "sequence-data",
@@ -399,6 +447,19 @@
                                                             {:type      "dialog"
                                                              :action-id :finish-dialog}
                                                             ]}
-                                                   ]
+                                                   {:title "Round 1 - items"
+                                                    :nodes [{:type      "dialog"
+                                                             :action-id :cold-item}
+                                                            {:type      "dialog"
+                                                             :action-id :child-item}
+                                                            {:type      "dialog"
+                                                             :action-id :large-item}
+                                                            {:type      "dialog"
+                                                             :action-id :garbage-item}
+                                                            {:type      "dialog"
+                                                             :action-id :scared-item}
+                                                            {:type      "dialog"
+                                                             :action-id :happy-item}
+                                                            ]}]
                                        },
                        })
