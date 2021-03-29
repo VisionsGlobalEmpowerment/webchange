@@ -63,7 +63,7 @@
   [{:keys [key data validator]}]
   (r/with-let [page-data (connect-data data [key] nil)
                {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
-    [:div
+    [:div {:style {:width 416}}
      [file {:type      "image"
             :on-change #(swap! page-data assoc :src %)}]
      [error-message {:field-name :src}]]

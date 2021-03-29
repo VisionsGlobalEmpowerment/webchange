@@ -45,9 +45,12 @@
                                (let [file (change-event->file event)]
                                  (when show-file-name? (reset! text-value (.-name file)))
                                  (if with-upload?
-                                   (upload-file {:file     file
-                                                 :type     type
-                                                 :callback #(on-change (:url %))})
+                                   (do (reset! uploading? true)
+                                       (upload-file {:file     file
+                                                     :type     type
+                                                     :callback #(do
+                                                                  (reset! uploading? false)
+                                                                  (on-change (:url %)))}))
                                    (on-change file))))]
     [:div.wc-file
      [:input {:type      "file"
@@ -56,7 +59,7 @@
               :ref       #(reset! file-input %)}]
      (when (and show-icon? (some? type))
        [icon/component {:icon type}])
-     [text-input/component {:value      (if @uploading? "Uploading.." @text-value)
+     [text-input/component {:value      (if @uploading? "Uploading..." @text-value)
                             :class-name "file-name"
                             :disabled?  true}]
      [button/component {:on-click  #(.click @file-input)
