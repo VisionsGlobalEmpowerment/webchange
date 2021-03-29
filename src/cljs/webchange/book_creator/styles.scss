@@ -10,6 +10,7 @@ $border-width: 1px;
     .main-content {
         flex-grow: 0;
         padding: 0 36px;
+        width: 100%;
 
         .stage-wrapper {
             align-items: center;
@@ -47,7 +48,7 @@ $border-width: 1px;
     }
 
     .content-block {
-        margin-top: 72px;
+        margin-top: 36px;
 
         &:first-child {
             margin-top: 0;

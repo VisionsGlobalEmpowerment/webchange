@@ -16,6 +16,7 @@
     .content {
         align-items: center;
         display: flex;
+        overflow: auto;
 
         & > * {
             padding: 16px;
