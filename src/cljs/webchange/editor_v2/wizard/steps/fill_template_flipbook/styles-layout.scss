@@ -4,6 +4,7 @@
     background-color: #fff;
     border-radius: 8px;
     cursor: pointer;
+    margin-right: 32px;
     max-width: 500px;
 
     .options-wrapper {
@@ -14,6 +15,11 @@
             align-items: center;
             display: flex;
             flex-direction: column;
+            margin-right: 32px;
+
+            &:last-child {
+                margin-right: 0;
+            }
 
             .image-wrapper {
                 background: #FFFFFF;

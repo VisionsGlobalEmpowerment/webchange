@@ -28,7 +28,8 @@
                                                            :on-click   #(handle-remove-click idx)}]]
                                             (when (and (= idx 0)
                                                        (< (count @data) max))
-                                              [button {:variant    "rectangle"
+                                              [button {:shape      "rectangle"
+                                                       :variant    "outlined"
                                                        :class-name "add-button"
                                                        :on-click   handle-add-click}
                                                "+ Add"])]}]))]))

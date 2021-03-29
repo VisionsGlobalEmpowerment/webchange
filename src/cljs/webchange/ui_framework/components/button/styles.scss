@@ -104,6 +104,13 @@ $padding-h: 49px;
         }
     }
 
+    // Shape
+
+    &.shape-rectangle {
+        border: none;
+        border-radius: 8px;
+    }
+
     //  Size
 
     &.size-medium {
@@ -122,11 +129,6 @@ $padding-h: 49px;
 
     &.variant-contained {
         border: none;
-    }
-
-    &.variant-rectangle {
-        border: none;
-        border-radius: 8px;
     }
 
     &.variant-outlined {

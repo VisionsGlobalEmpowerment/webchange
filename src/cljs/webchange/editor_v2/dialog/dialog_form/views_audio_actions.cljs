@@ -10,7 +10,7 @@
   []
   (let [handle-click #(re-frame/dispatch [::animation-editor/open])]
     [button {:color    "default"
-             :variant  "rectangle"
+             :shape  "rectangle"
              :on-click handle-click}
      [icon {:icon "settings"}]
      "Configure"]))
@@ -21,7 +21,7 @@
         handle-click #(re-frame/dispatch [::undo/apply-undo])]
     (when has-history?
       [button {:color    "default"
-               :variant  "rectangle"
+               :shape  "rectangle"
                :on-click handle-click}
        [icon {:icon "undo"}]
        "Undo"])))
