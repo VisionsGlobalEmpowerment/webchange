@@ -1,0 +1,8 @@
+.confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    & > * {
+        margin-left: 16px;
+    }
+}

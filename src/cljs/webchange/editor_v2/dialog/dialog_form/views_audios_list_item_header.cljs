@@ -2,8 +2,7 @@
   (:require
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-form.views-audios-list-item-data :refer [audio-data audio-data-form]]
-    [webchange.editor-v2.dialog.dialog-form.views-audios-list-item-menu :refer [audio-menu]]
-    [webchange.ui-framework.components.index :refer [circular-progress]]))
+    [webchange.ui-framework.components.index :refer [circular-progress menu]]))
 
 (defn- get-styles
   []
@@ -33,7 +32,16 @@
        (if loading?
          [circular-progress {:color "secondary"}]
          (when-not @edit-state?
-           [audio-menu {:on-edit            handle-edit
-                        :on-bring-to-top    handle-bring-to-top
-                        :on-clear-selection handle-clear-selection
-                        :on-delete          handle-delete}]))])))
+           [menu {:items [{:icon     "bring-to-top"
+                           :text     "Bring To Top"
+                           :on-click handle-bring-to-top}
+                          {:icon     "edit"
+                           :text     "Name Recording"
+                           :on-click handle-edit}
+                          {:icon     "clear"
+                           :text     "Clear selection"
+                           :on-click handle-clear-selection}
+                          {:icon     "remove"
+                           :text     "Delete"
+                           :confirm  "Remove audio asset from scene?"
+                           :on-click handle-delete}]}]))])))

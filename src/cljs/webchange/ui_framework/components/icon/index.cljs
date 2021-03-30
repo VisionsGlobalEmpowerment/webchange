@@ -4,11 +4,15 @@
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
     [webchange.ui-framework.components.icon.icon-arrow-right :as arrow-right]
     [webchange.ui-framework.components.icon.icon-audio :as audio]
+    [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
+    [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
+    [webchange.ui-framework.components.icon.icon-edit :as edit]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
     [webchange.ui-framework.components.icon.icon-image :as image]
     [webchange.ui-framework.components.icon.icon-link :as link]
+    [webchange.ui-framework.components.icon.icon-menu :as menu]
     [webchange.ui-framework.components.icon.icon-mic :as mic]
     [webchange.ui-framework.components.icon.icon-play :as play]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
@@ -21,23 +25,27 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def icons
-  {"add"         add/data
-   "arrow-left"  arrow-left/data
-   "arrow-right" arrow-right/data
-   "audio"       audio/data
-   "close"       close/data
-   "font-family" font-family/data
-   "font-size"   font-size/data
-   "image"       image/data
-   "link"        link/data
-   "mic"         mic/data
-   "play"        play/data
-   "remove"      remove/data
-   "settings"    settings/data
-   "stop"        stop/data
-   "sync"        sync/data
-   "undo"        undo/data
-   "volume"      volume/data})
+  {"add"          add/data
+   "arrow-left"   arrow-left/data
+   "arrow-right"  arrow-right/data
+   "audio"        audio/data
+   "bring-to-top" bring-to-top/data
+   "clear"        clear/data
+   "close"        close/data
+   "edit"         edit/data
+   "font-family"  font-family/data
+   "font-size"    font-size/data
+   "image"        image/data
+   "link"         link/data
+   "menu"         menu/data
+   "mic"          mic/data
+   "play"         play/data
+   "remove"       remove/data
+   "settings"     settings/data
+   "stop"         stop/data
+   "sync"         sync/data
+   "undo"         undo/data
+   "volume"       volume/data})
 
 (defn component
   [{:keys [icon rotate? class-name]}]
