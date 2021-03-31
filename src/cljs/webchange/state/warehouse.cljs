@@ -150,7 +150,9 @@
 (re-frame/reg-event-fx
   ::update-activity
   (fn [{:keys [_]} [_ {:keys [course-id scene-id data]} handlers]]
-    (create-request {:key    :update-activity
-                     :method :post
-                     :uri    (str "/api/courses/" course-id "/update-activity/" scene-id)
-                     :params data} handlers)))
+    (create-request {:key        :update-activity
+                     :method     :post
+                     :uri        (str "/api/courses/" course-id "/update-activity/" scene-id)
+                     :params     data
+                     :show-sync? true}
+                    handlers)))

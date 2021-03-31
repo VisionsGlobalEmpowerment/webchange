@@ -1,8 +1,6 @@
 @import "pages/styles";
+@import "stage/styles";
 @import "text_form/styles";
-
-$border-color: #B7B7B7;
-$border-width: 1px;
 
 .book-creator {
     display: flex;
@@ -11,40 +9,6 @@ $border-width: 1px;
         flex-grow: 0;
         padding: 0 36px;
         width: 100%;
-
-        .stage-wrapper {
-            align-items: center;
-            display: flex;
-
-            .book-creator--stage {
-                border-radius: 8px;
-                overflow: hidden;
-                position: relative;
-
-                &:after {
-                    content: "";
-
-                    position: absolute;
-                    top: 0;
-                    left: 50%;
-                    width: $border-width;
-                    height: 100%;
-
-                    background-image: linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to right, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%), linear-gradient(to bottom, $border-color 50%, transparent 50%);
-                    background-position: left top, left bottom, left top, right top;
-                    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-                    background-size: 20px $border-width, 20px $border-width, $border-width 20px, $border-width 20px;
-                }
-            }
-
-            .stage-controls {
-                box-sizing: content-box;
-                flex-grow: 1;
-                max-width: 416px;
-                min-width: 380px;
-                padding-left: 72px;
-            }
-        }
     }
 
     .content-block {

@@ -6,15 +6,6 @@
     ;[webchange.state.state :as state]
     ))
 
-;[::page-form/remove-page {:stage     stage
-;                          :page-side page-side}]
-
-(re-frame/reg-event-fx
-  ::remove-page
-  (fn [{:keys [_]} [_ data]]
-    {:dispatch [::activity-action/call-activity-action {:action "remove-page"
-                                                        :data   data}]}))
-
 ;[::page-form/move-page {:stage     stage
 ;                        :page-side page-side
 ;                        :target    %}]
