@@ -18,5 +18,17 @@
             -webkit-appearance: none;
             height: 8px;
         }
+
+        .audio-data {
+            margin-right: 8px;
+        }
+
+        .audio-data-form {
+            display: flex;
+
+            & > * {
+                margin-left: 8px;
+            }
+        }
     }
 }

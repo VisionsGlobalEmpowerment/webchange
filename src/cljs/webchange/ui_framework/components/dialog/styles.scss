@@ -1,6 +1,6 @@
 @import "../../styles/colors";
 
-.dialog-wrapper {
+.wc-dialog-wrapper {
     align-items: center;
     display: flex;
     background-color: rgba(106, 106, 106, 0.5);
@@ -55,6 +55,31 @@
         .dialog-actions {
             padding: 32px;
             padding-bottom: 0;
+        }
+
+        &.size-message {
+            min-width: 300px;
+            padding: 16px;
+            padding-top: 52px;
+            width: 300px;
+
+            h1 {
+                left: 16px;
+                top: 20px;
+            }
+
+            .close-button {
+                right: 16px;
+                top: 16px;
+            }
+
+            .dialog-content {
+                padding: 24px 0;
+            }
+
+            .dialog-actions {
+                padding: 0;
+            }
         }
     }
 }
