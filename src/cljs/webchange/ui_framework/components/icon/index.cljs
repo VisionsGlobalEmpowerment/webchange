@@ -21,6 +21,7 @@
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-volume :as volume]
+    [webchange.ui-framework.components.icon.icon-warning :as warning]
 
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -45,7 +46,8 @@
    "stop"         stop/data
    "sync"         sync/data
    "undo"         undo/data
-   "volume"       volume/data})
+   "volume"       volume/data
+   "warning"      warning/data})
 
 (defn component
   [{:keys [icon rotate? class-name]}]

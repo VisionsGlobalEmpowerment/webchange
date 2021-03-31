@@ -8,7 +8,7 @@
     [webchange.editor-v2.question.state.window :as question.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.question.question-form.state.actions :as question-form.actions]
-    [webchange.editor-v2.translator.text.views-text-chunks-editor :as translator.text]
+    [webchange.editor-v2.text-animation-editor.chunks-editor.state :as translator.text]
     [webchange.subs :as subs]))
 
 (re-frame/reg-event-fx

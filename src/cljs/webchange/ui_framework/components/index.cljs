@@ -7,7 +7,10 @@
     [webchange.ui-framework.components.file.index :as file]
     [webchange.ui-framework.components.icon.index :as icon]
     [webchange.ui-framework.components.icon-button.index :as icon-button]
+    [webchange.ui-framework.components.label.index :as label]
+    [webchange.ui-framework.components.range-input.index :as range-input]
     [webchange.ui-framework.components.menu.index :as menu]
+    [webchange.ui-framework.components.message.index :as message]
     [webchange.ui-framework.components.range-input.index :as range-input]
     [webchange.ui-framework.components.select.index :as select]
     [webchange.ui-framework.components.text-area.index :as text-area]
@@ -21,7 +24,9 @@
 (def file file/component)
 (def icon icon/component)
 (def icon-button icon-button/component)
+(def label label/component)
 (def menu menu/component)
+(def message message/component)
 (def range-input range-input/component)
 (def select select/component)
 (def text-area text-area/component)

@@ -34,8 +34,7 @@
     [dialog
      {:title    (:title current-action-data)
       :on-close close
-      :actions  [:div.actions
-                 [button {:on-click save
+      :actions  [[button {:on-click save
                           :size     "big"}
                   "Save"]
                  [button {:on-click close

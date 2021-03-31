@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.history.state :as state]
     [webchange.editor-v2.history.state-undo :as undo]
-    [webchange.editor-v2.translator.text.views-text-animation-editor :as animation-editor]
+    [webchange.editor-v2.text-animation-editor.state :as animation-editor]
     [webchange.ui-framework.components.index :refer [button icon]]))
 
 (defn- edit-chunks-button

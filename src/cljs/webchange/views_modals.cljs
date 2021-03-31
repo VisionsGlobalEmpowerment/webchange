@@ -4,7 +4,7 @@
     [webchange.editor-v2.translator.views-modal :refer [translator-modal]]
     [webchange.editor-v2.dialog.views-modal :refer [dialog-modal]]
     [webchange.editor-v2.question.views-modal :refer [question-modal]]
-    [webchange.editor-v2.translator.text.views-text-chunks-editor :refer [configuration-modal]]))
+    [webchange.editor-v2.text-animation-editor.chunks-editor.views :refer [configuration-modal]]))
 
 (defn modal-windows
   []

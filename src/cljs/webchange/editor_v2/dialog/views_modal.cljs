@@ -39,5 +39,5 @@
       :on-close handle-close
       :on-enter enable-hot-keys
       :on-exit  disable-hot-keys
-      :actions  [form-actions]}
+      :actions  [[form-actions]]}
      [dialog-form]]))
