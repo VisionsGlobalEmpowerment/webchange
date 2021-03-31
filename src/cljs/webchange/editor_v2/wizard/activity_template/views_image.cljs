@@ -60,12 +60,13 @@
 
 
 (defn image-option
-  [{:keys [key data validator]}]
+  [{:keys [key data validator option]}]
   (r/with-let [page-data (connect-data data [key] nil)
                {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
     [:div {:style {:width 416}}
-     [file {:type      "image"
-            :on-change #(swap! page-data assoc :src %)}]
+     [file {:type           "image"
+            :on-change      #(swap! page-data assoc :src %)
+            :upload-options (:options option)}]
      [error-message {:field-name :src}]]
     (finally
       (destroy))))

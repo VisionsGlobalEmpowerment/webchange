@@ -32,14 +32,15 @@
                                                          :on-finish callback}]))
 
 (defn component
-  [{:keys [button-text type on-change show-file-name? show-icon? with-upload?]
+  [{:keys [button-text type on-change show-file-name? show-icon? upload-options with-upload?]
     :or   {button-text     "Choose File"
            on-change       #()
            show-icon?      true
+           upload-options  {}
            with-upload?    true
            show-file-name? true}}]
   (r/with-let [file-input (atom nil)
-               uploading? (atom false)
+               uploading? (r/atom false)
                text-value (r/atom "Select file..")
                handle-change (fn [event]
                                (let [file (change-event->file event)]
@@ -48,6 +49,7 @@
                                    (do (reset! uploading? true)
                                        (upload-file {:file     file
                                                      :type     type
+                                                     :options  upload-options
                                                      :callback #(do
                                                                   (reset! uploading? false)
                                                                   (on-change (:url %)))}))
