@@ -809,7 +809,7 @@
     Example:
     {:type     'empty',
      :duration 700}"
-    {:dispatch-later [{:ms (:duration action) :dispatch (ce/success-event action)}]}))
+    {:dispatch-later [{:ms (int (:duration action)) :dispatch (ce/success-event action)}]}))
 
 (re-frame/reg-event-fx
   ::execute-animation

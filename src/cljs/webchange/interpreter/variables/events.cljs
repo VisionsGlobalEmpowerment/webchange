@@ -506,19 +506,20 @@
     "Execute `string-operation` action - allow to perform simple string manipulation
 
     Action params:
-    :operation - operation which will be applied to operands. Availble operations: 'div-ceil', 'div-floor'
-    :value-1 - first operand.
-    :value-2 - second operand.
+    :operation - operation which will be applied to operands. Availble operations: 'subs', 'right-pad'
+    :string - to operate on.
+    :options - options to operation.
     :var-name - variable name to store operation result
 
     Example:
     {:type 'string-operation',
      :string 30,
-     :params [0 1],
+     :options [0 1],
      :var-name 'first-letter',
      :operation 'subs'
      }"
     (let [result (case (keyword operation)
-               :subs (apply subs (vec (concat [string] options))))]
+                   :subs (apply subs (vec (concat [string] options)))
+                   :right-pad (apply str string (repeat (- options (count string)) " ")))]
       (core/set-variable! var-name result)
       {:dispatch (e/success-event action)})))

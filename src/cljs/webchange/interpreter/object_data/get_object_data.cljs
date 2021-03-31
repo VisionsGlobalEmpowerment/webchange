@@ -88,6 +88,7 @@
                                        (filter-extra-props [:actions :width :height :origin :meshes])))
                       :text (-> object
                                 (with-group-params)
+                                (with-filter-params)
                                 (merge {:object-name (keyword name)})
                                 (filter-extra-props []))
                       :rectangle (-> object

@@ -4,7 +4,8 @@
     [webchange.interpreter.renderer.scene.components.text.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.text.chunked-text :refer [create-chunked-text]]
     [webchange.interpreter.renderer.scene.components.text.chunked-text-utils :refer [register-chunks]]
-    [webchange.interpreter.renderer.scene.components.text.simple-text :refer [create-simple-text]]))
+    [webchange.interpreter.renderer.scene.components.text.simple-text :refer [create-simple-text]]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]))
 
 (def default-props {:x               {}
                     :y               {}
@@ -27,7 +28,8 @@
                     :word-wrap       {:default false}
                     :height          {:default 0}
                     :on-click        {}
-                    :ref             {}})
+                    :ref             {}
+                    :filters         {}})
 
 (def component-type "text")
 
@@ -58,10 +60,11 @@
   :on-click - on click event handler.
   :ref - callback function that must be called with component wrapper.
   "
-  [{:keys [parent type object-name chunks on-click ref] :as props}]
+  [{:keys [parent type object-name chunks on-click ref filters] :as props}]
   (if chunks
     (let [{:keys [text-container chunks]} (create-chunked-text props)
           wrapped-text (wrap type object-name text-container chunks)]
+      (apply-filters text-container filters)
       (.addChild parent text-container)
 
       (register-chunks chunks object-name type)
@@ -72,6 +75,7 @@
     (let [text (create-simple-text props)
           wrapped-text (wrap type object-name text nil)]
 
+      (apply-filters text filters)
       (.addChild parent text)
 
       (when-not (nil? on-click) (utils/set-handler text "click" on-click))

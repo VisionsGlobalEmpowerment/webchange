@@ -10,11 +10,25 @@
 
   (t/update-activity test-course-slug scene-slug)
 
+  ;;first name
   (let [data {:activity-name "Name Writing"
               :template-id   35
               :name          "Name Writing"
               :lang          "English"
-              :skills        []}
+              :skills        []
+              :type          "first-name"}
+        activity (templates/activity-from-template data)
+        metadata (templates/metadata-from-template data)
+        [_ {scene-slug :scene-slug}] (core/create-scene! activity metadata test-course-slug scene-slug [] t/user-id)]
+    (str "/courses/" test-course-slug "/editor-v2/" scene-slug))
+
+  ;;first letter
+  (let [data {:activity-name "Name Writing"
+              :template-id   35
+              :name          "Name Writing"
+              :lang          "English"
+              :skills        []
+              :type          "first-letter"}
         activity (templates/activity-from-template data)
         metadata (templates/metadata-from-template data)
         [_ {scene-slug :scene-slug}] (core/create-scene! activity metadata test-course-slug scene-slug [] t/user-id)]
