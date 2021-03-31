@@ -4,6 +4,7 @@
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.layout.flipbook.state :as db]
     [webchange.utils.text :refer [parts->chunks]]
+    [webchange.editor-v2.layout.components.activity-stage.screenshots :as screenshots]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.logger.index :as logger]
@@ -180,4 +181,5 @@
   ::save-success
   (fn [{:keys [_]} [_ id data]]
     {:dispatch-n [[::set-initial-data id data]
-                  [::set-loading-status id :done]]}))
+                  [::set-loading-status id :done]
+                  [::screenshots/generate-stages-screenshots]]}))
