@@ -15,12 +15,14 @@
                           (map :idx))]
       {:dispatch                [::overlays/show-waiting-screen]
        :take-stages-screenshots {:stages-idx stages-idx
-                                 :callback   #(do (re-frame/dispatch [::stage/set-stages-screenshots (->> %
-                                                                                                          (map (fn [[idx blob]]
-                                                                                                                 [idx (.createObjectURL js/URL blob)]))
-                                                                                                          (into {}))])
-                                                  (re-frame/dispatch [::stage/select-stage (or current-stage 0)])
-                                                  (re-frame/dispatch [::overlays/hide-waiting-screen]))}})))
+                                 :callback   (fn [screenshots]
+                                               (let [screenshots-blobs (->> screenshots
+                                                                            (map (fn [[idx blob]]
+                                                                                   [idx (.createObjectURL js/URL blob)]))
+                                                                            (into {}))]
+                                                 (re-frame/dispatch [::stage/set-stages-screenshots screenshots-blobs]))
+                                               (re-frame/dispatch [::stage/select-stage (or current-stage 0)])
+                                               (re-frame/dispatch [::overlays/hide-waiting-screen]))}})))
 
 (defn- run-seq
   ([seq callback]
