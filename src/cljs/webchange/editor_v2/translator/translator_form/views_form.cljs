@@ -11,7 +11,7 @@
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-target :refer [target-block]]
-    [webchange.editor-v2.translator.text.views-text-animation-editor :refer [text-chunks-modal]]
+    [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
     [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn- get-styles

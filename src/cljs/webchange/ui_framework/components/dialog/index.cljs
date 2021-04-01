@@ -25,5 +25,5 @@
         (into [:div.dialog-content]
               (r/children this))
         (when (some? actions)
-          [:div.dialog-actions
-           actions])]])))
+          (into [:div.dialog-actions]
+                actions))]])))

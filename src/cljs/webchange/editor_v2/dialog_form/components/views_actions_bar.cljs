@@ -6,7 +6,7 @@
     [webchange.editor-v2.components.confirm-dialog.views :refer [confirm-dialog]]
     [webchange.editor-v2.dialog.state.window :as translator.window]
     [webchange.editor-v2.history.views :as history]
-    [webchange.editor-v2.translator.text.views-text-animation-editor :as animation-editor]
+    [webchange.editor-v2.text-animation-editor.state :as animation-editor]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]))
 
 (defn- get-styles

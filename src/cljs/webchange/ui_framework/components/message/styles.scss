@@ -1,0 +1,19 @@
+$warning-color: #d99c29;
+
+.wc-message {
+    align-items: center;
+    display: flex;
+    border-radius: 8px;
+    box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
+    padding: 4px;
+
+    .wc-message-icon {
+        svg {
+            fill: $warning-color;
+        }
+    }
+
+    .wc-message-text {
+        color: $warning-color;
+    }
+}
