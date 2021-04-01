@@ -2,16 +2,16 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-creator.stage.state :as state]
     [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.editor-v2.layout.components.interpreter_stage.views :as interpreter]
     [webchange.book-creator.views-content-block :refer [content-block]]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.index :refer [icon-button]]))
 
 (defn remove-page
   [{:keys [side]}]
-  (let [removable? @(re-frame/subscribe [::state/page-removable? side])
-        handle-click #(re-frame/dispatch [::state/remove-current-stage-page side])]
+  (let [removable? @(re-frame/subscribe [::state-flipbook/page-removable? side])
+        handle-click #(re-frame/dispatch [::state-flipbook/remove-current-stage-page side])]
     (when removable?
       [icon-button {:icon       "remove"
                     :class-name (str "remove-page remove-" (clojure.core/name side) "-page")

@@ -4,8 +4,8 @@
     [webchange.subs :as subs]
     [webchange.interpreter.components :as i]
     [webchange.interpreter.subs :as isubs]
-    [webchange.editor-v2.layout.components.activity-stage.screenshots :as stage-screenshots]
     [webchange.editor-v2.layout.components.activity-stage.state :as scene-state]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (def stage-width 1920)
@@ -16,7 +16,7 @@
   (let [metadata (get scene-data :metadata {})
         flipbook? (contains? metadata :flipbook-name)]
     (when flipbook?
-      (re-frame/dispatch [::stage-screenshots/generate-stages-screenshots]))))
+      (re-frame/dispatch [::state-flipbook/generate-stages-screenshots]))))
 
 (defn get-stage-size
   [{:keys [width height]}]
