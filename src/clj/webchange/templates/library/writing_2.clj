@@ -1,17 +1,14 @@
-(ns webchange.templates.library.name-writing
+(ns webchange.templates.library.writing-2
   (:require
     [webchange.templates.core :as core]
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
-(def m {:id          35
-        :name        "name writing"
+(def m {:id          42
+        :name        "Writing 2"
         :tags        ["letter formation" "sight words"]
-        :description "name writing"
-        :options     {:type {:label   "Type"
-                             :type    "lookup"
-                             :options [{:name "First name" :value "first-name"}
-                                       {:name "First letter only" :value "firts-letter"}]}}})
+        :description "Writing 2"
+        :options     {:text {:label "Text" :type "string"}}})
 
 (def t {:assets        [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
                         {:url "/raw/img/ui/back_button_01.png", :type "image"}
@@ -43,11 +40,11 @@
                                      :shadow-color   "#1a1a1a",
                                      :shadow-blur    5,
                                      :shadow-opacity 0.5
-                                     :filter     "brighten"}
+                                     :filter         "brighten"}
 
                         :text-tracing-pattern
                                     {:type "text-tracing-pattern"
-                                     :text " "
+                                     :text ""
                                      :y    400}
 
                         :practice-canvas
@@ -91,26 +88,9 @@
         :actions       {:finish-activity         {:type "sequence-data"
                                                   :data [{:type "action" :id "remove-timeout-timer"}
                                                          {:type "finish-activity"}]}
-                        :init-text               {:type     "set-variable"
-                                                  :var-name "text",
-                                                  :from-var [{:var-name "current-user" :action-property "var-value" :var-property "first-name"}]}
-                        :init-tracing-text       {:type     "set-variable"
-                                                  :var-name "tracing-text",
-                                                  :from-var [{:var-name "current-user" :action-property "var-value" :var-property "first-name"}]}
 
                         :start                   {:type "sequence-data"
                                                   :data [{:type "start-activity"}
-                                                         {:type "copy-current-user-to-variable" :var-name "current-user"}
-                                                         {:type "action" :id "init-text"}
-                                                         {:type "action" :id "init-tracing-text"}
-                                                         {:type      "set-attribute",
-                                                          :target    "text-tracing-pattern",
-                                                          :from-var  [{:var-name "tracing-text" :action-property "attr-value"}],
-                                                          :attr-name "text"}
-                                                         {:type      "set-attribute"
-                                                          :target    "outline"
-                                                          :from-var  [{:var-name "text" :action-property "attr-value"}]
-                                                          :attr-name "text"}
                                                          {:type "action" :id "introduction-dialog"}
                                                          {:type "action" :id "timeout-timer"}]}
 
@@ -177,29 +157,16 @@
         :triggers      {:start {:on "start" :action "start"}}
         :metadata      {}})
 
-(def first-letter-actions
-  {:init-tracing-text {:type "sequence-data"
-                       :data [{:type      "string-operation",
-                               :options   [0, 1],
-                               :var-name  "first-letter",
-                               :operation "subs",
-                               :from-var  [{:var-name "current-user" :action-property "string" :var-property "first-name"}]}
-                              {:type      "string-operation",
-                               :options   7,
-                               :var-name  "tracing-text",
-                               :operation "right-pad",
-                               :from-var  [{:var-name "first-letter" :action-property "string"}]}]}})
-
 (defn- config-text
-  [template type]
-  (case type
-    "first-letter" (update template :actions merge first-letter-actions)
-    template))
+  [template text]
+  (-> template
+      (assoc-in [:objects :outline :text] text)
+      (assoc-in [:objects :text-tracing-pattern :text] text)))
 
 (defn f
   [args]
   (-> (common/init-metadata m t args)
-      (config-text (:type args))))
+      (config-text (:text args))))
 
 (core/register-template
   m f)
