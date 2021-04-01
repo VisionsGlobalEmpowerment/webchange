@@ -7,6 +7,7 @@
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
+    [webchange.ui-framework.components.icon.icon-drop-place :as drop-place]
     [webchange.ui-framework.components.icon.icon-edit :as edit]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
@@ -32,6 +33,7 @@
    "bring-to-top" bring-to-top/data
    "clear"        clear/data
    "close"        close/data
+   "drop-place"   drop-place/data
    "edit"         edit/data
    "font-family"  font-family/data
    "font-size"    font-size/data

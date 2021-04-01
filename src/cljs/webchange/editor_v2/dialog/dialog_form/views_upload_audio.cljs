@@ -11,4 +11,5 @@
            :on-change       handle-change
            :show-file-name? false
            :with-upload?    false
+           :drag-and-drop?  true
            :button-text     "Choose File"}]))

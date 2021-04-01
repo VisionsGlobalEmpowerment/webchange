@@ -6,7 +6,8 @@
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.icon.index :as icon]
-    [webchange.ui-framework.components.text-input.index :as text-input]))
+    [webchange.ui-framework.components.text-input.index :as text-input]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- get-accept-extensions
   [type]
@@ -23,6 +24,12 @@
       (.. -target -files)
       (.item 0)))
 
+(defn- drop-event->file
+  [event]
+  (-> event
+      (.. -dataTransfer -files)
+      (.item 0)))
+
 (defn- upload-file
   [{:keys [callback file options type]
     :or   {callback #()
@@ -31,9 +38,43 @@
                                                          :type      type
                                                          :on-finish callback}]))
 
+(defn- drag-and-drop
+  [{:keys [on-drop]}]
+  (r/with-let [active? (r/atom false)
+               drop-area (r/atom nil)
+
+               prevent-defaults #(do (.preventDefault %)
+                                     (.stopPropagation %))
+               handle-document-drag-enter #(do (prevent-defaults %)
+                                               (reset! active? true))
+               handle-area-drag-leave #(do (prevent-defaults %)
+                                           (reset! active? false))
+               handle-area-drop #(do (prevent-defaults %)
+                                     (reset! active? false)
+                                     (on-drop %))
+
+               init-state (fn [ref]
+                            (reset! drop-area ref)
+                            (.addEventListener js/document "dragenter" handle-document-drag-enter)
+                            (.addEventListener @drop-area "dragleave" handle-area-drag-leave)
+                            (.addEventListener @drop-area "dragover" prevent-defaults)
+                            (.addEventListener @drop-area "drop" handle-area-drop))]
+    [:div {:class-name (get-class-name {"dnd-area" true
+                                        "active "  @active?})}
+     [:div {:class-name "dnd-message"}
+      [:div "Drop files here"]
+      [icon/component {:icon "drop-place"}]]
+     [:div.drop-overlay {:ref #(when (some? %) (init-state %))}]]
+    (finally
+      (.removeEventListener js/document "dragenter" handle-document-drag-enter)
+      (.removeEventListener @drop-area "dragleave" handle-area-drag-leave)
+      (.removeEventListener @drop-area "dragover" prevent-defaults)
+      (.removeEventListener @drop-area "drop" handle-area-drop))))
+
 (defn component
-  [{:keys [button-text type on-change show-file-name? show-icon? upload-options with-upload?]
+  [{:keys [button-text drag-and-drop? type on-change show-file-name? show-icon? upload-options with-upload?]
     :or   {button-text     "Choose File"
+           drag-and-drop?  false
            on-change       #()
            show-icon?      true
            upload-options  {}
@@ -42,22 +83,21 @@
   (r/with-let [file-input (atom nil)
                uploading? (r/atom false)
                text-value (r/atom "Select file..")
-               handle-change (fn [event]
-                               (let [file (change-event->file event)]
-                                 (when show-file-name? (reset! text-value (.-name file)))
-                                 (if with-upload?
-                                   (do (reset! uploading? true)
-                                       (upload-file {:file     file
-                                                     :type     type
-                                                     :options  upload-options
-                                                     :callback #(do
-                                                                  (reset! uploading? false)
-                                                                  (on-change (:url %)))}))
-                                   (on-change file))))]
+               handle-change (fn [file]
+                               (when show-file-name? (reset! text-value (.-name file)))
+                               (if with-upload?
+                                 (do (reset! uploading? true)
+                                     (upload-file {:file     file
+                                                   :type     type
+                                                   :options  upload-options
+                                                   :callback #(do
+                                                                (reset! uploading? false)
+                                                                (on-change (:url %)))}))
+                                 (on-change file)))]
     [:div.wc-file
      [:input {:type      "file"
               :accept    (get-accept-extensions type)
-              :on-change handle-change
+              :on-change #(-> % change-event->file handle-change)
               :ref       #(reset! file-input %)}]
      (when (and show-icon? (some? type))
        [icon/component {:icon type}])
@@ -66,4 +106,6 @@
                             :disabled?  true}]
      [button/component {:on-click  #(.click @file-input)
                         :disabled? @uploading?}
-      button-text]]))
+      button-text]
+     (when drag-and-drop?
+       [drag-and-drop {:on-drop #(-> % drop-event->file handle-change)}])]))
