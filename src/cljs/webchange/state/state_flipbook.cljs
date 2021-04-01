@@ -7,7 +7,7 @@
 
 (defn current-stage
   [db]
-  (get-in db (path-to-db [:current-stage])))
+  (get-in db (path-to-db [:current-stage]) 0))
 
 (re-frame/reg-sub
   ::current-stage
