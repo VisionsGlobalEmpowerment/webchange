@@ -1,4 +1,6 @@
-(ns webchange.templates.library.categorize-antonims.round-3)
+(ns webchange.templates.library.categorize-antonims.round-3
+  (:require
+    [webchange.templates.utils.dialog :as dialog]))
 
 (def template-round-3 {:assets        [{:url "/raw/img/categorize-antonims/background-class.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-antonims/surface.png", :size 10, :type "image"}
@@ -72,6 +74,8 @@
                                                                                     :params {:colliders ["in" "quiet" "right"
                                                                                                          "down" "front"
                                                                                                          "day"]
+                                                                                             :say-item         "left-item"
+                                                                                             :placement-target "right"
                                                                                              :self      "left-object"}}
                                                                        :drag-end   {
                                                                                     :id     "stop-drag-hide",
@@ -107,6 +111,8 @@
                                                                                     :params {:colliders ["in" "quiet" "right"
                                                                                                          "down" "front"
                                                                                                          "day"]
+                                                                                             :say-item         "up-item"
+                                                                                             :placement-target "down"
                                                                                              :self      "up-object"}}
                                                                        :drag-end   {
                                                                                     :id     "stop-drag-hide",
@@ -143,6 +149,8 @@
                                                                                     :params {:colliders ["in" "quiet" "right"
                                                                                                          "down" "front"
                                                                                                          "day"]
+                                                                                             :say-item         "out-item"
+                                                                                             :placement-target "in"
                                                                                              :self      "out-object"}}
                                                                        :drag-end   {
                                                                                     :id     "stop-drag-hide",
@@ -179,6 +187,8 @@
                                                                                     :params {:colliders ["in" "quiet" "right"
                                                                                                          "down" "front"
                                                                                                          "day"]
+                                                                                             :say-item         "night-item"
+                                                                                             :placement-target "day"
                                                                                              :self      "night-object"}}
                                                                        :drag-end   {
                                                                                     :id     "stop-drag-hide",
@@ -215,6 +225,8 @@
                                                                                     :params {:colliders ["in" "quiet" "right"
                                                                                                          "down" "front"
                                                                                                          "day"]
+                                                                                             :say-item         "loud-item"
+                                                                                             :placement-target "quiet"
                                                                                              :self      "loud-object"}}
                                                                        :drag-end   {
                                                                                     :id     "stop-drag-hide",
@@ -250,6 +262,8 @@
                                                                                     :id     "start-drag",
                                                                                     :params {:colliders ["in" "quiet" "right"
                                                                                                          "down" "front" "day"]
+                                                                                             :say-item         "back-item"
+                                                                                             :placement-target "front"
                                                                                              :self      "back-object"}}
                                                                        :drag-end   {
                                                                                     :id     "stop-drag-hide",
@@ -472,8 +486,8 @@
                                                                              :fail        "object-revert"
                                                                              :from-params [{:template        "colliding-%"
                                                                                             :action-property "var-names" :param-property "colliders"}]}
-                                                                            {:type "remove-interval"
-                                                                             :id   "check-collide-3"}
+                                                                            {:type "set-variable", :var-name "say", :var-value false}
+                                                                            {:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                                             {
                                                                              :type        "mass-state"
                                                                              :id          "not-highlighted"
@@ -487,6 +501,24 @@
                                                                      :var-name    "object-2"
                                                                      :from-params [{:action-property "value" :param-property "target"}]
                                                                      :from-var    [{:var-name "correct-answer", :action-property "success"}]},
+                                       :left-item                      (dialog/default "Left")
+                                       :back-item                      (dialog/default "Back")
+                                       :up-item                        (dialog/default "Up")
+                                       :loud-item                      (dialog/default "Loud")
+                                       :night-item                     (dialog/default "Night")
+                                       :out-item                       (dialog/default "Out")
+
+                                       :say-item                       {:type "sequence-data"
+                                                                        :data [{:type "action" :from-params [{:action-property "id"
+                                                                                                              :param-property  "say-item"}]}
+                                                                               {:type     "test-var-scalar",
+                                                                                :success  "next-say",
+                                                                                :value    true,
+                                                                                :var-name "say"}]}
+                                       :next-say                       {:type "sequence-data"
+                                                                        :data [{:type     "set-timeout"
+                                                                                :action   "say-item"
+                                                                                :interval 100}]}
 
                                        :start-drag                  {:type "sequence-data"
                                                                      :data [
@@ -500,16 +532,27 @@
                                                                                             :template       "colliding-object-%",
                                                                                             :param-property "self", :action-property "var-name"}]
                                                                              }
-                                                                            {:type     "set-interval"
-                                                                             :id       "check-collide-3"
-                                                                             :interval 100
-                                                                             :action   "check-collide"}]},
-                                       :check-collide               {:type "sequence-data"
-                                                                     :data [
-                                                                            {:type        "test-transitions-and-pointer-collide",
-                                                                             :success     "highlight",
-                                                                             :fail        "unhighlight",
-                                                                             :from-params [{:param-property "colliders", :action-property "transitions"}]}]}
+                                                                            {:type "set-variable", :var-name "say", :var-value true}
+                                                                            {:type "set-variable", :var-name "next-check-collide", :var-value true}
+                                                                            {:id "next-say" :type "action"}
+                                                                            {:id "next-check-collide" :type "action"}
+                                                                            ]},
+
+                                       :next-check-collide             {:type "sequence-data"
+                                                                        :data [{:type     "set-timeout"
+                                                                                :action   "check-collide"
+                                                                                :interval 10}]}
+                                       :check-collide                  {:type "sequence-data"
+                                                                        :data [
+                                                                               {:type        "test-transitions-and-pointer-collide",
+                                                                                :success     "highlight",
+                                                                                :fail        "unhighlight",
+                                                                                :from-params [{:param-property "colliders", :action-property "transitions"}]}
+                                                                               {:type     "test-var-scalar",
+                                                                                :success  "next-check-collide",
+                                                                                :value    true,
+                                                                                :var-name "next-check-collide"}
+                                                                               ]}
                                        :highlight                   {:type "sequence-data"
                                                                      :data [{:type        "set-variable",
                                                                              :var-value   true
@@ -520,7 +563,15 @@
                                                                             {:type        "state"
                                                                              :id          "highlighted"
                                                                              :from-params [{:action-property "target" :param-property "transition"}]
-                                                                             }]
+                                                                             }
+                                                                            {:type        "test-var-scalar",
+                                                                             :success     "wrong-answer-dialog",
+                                                                             :value false
+                                                                             :from-params [{:action-property "var-name",
+                                                                                            :template        "colliding-%",
+                                                                                            :param-property  "placement-target"}]},
+
+                                                                            ]
                                                                      }
                                        :unhighlight                 {:type "sequence-data"
                                                                      :data [
@@ -548,7 +599,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-1",
-                                                                     :phrase-description "Action instructions"
+                                                                     :phrase-description "Left on right"
                                                                      }
                                        :instruction-2               {:type               "sequence-data",
                                                                      :editor-type        "dialog",
@@ -556,7 +607,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-2",
-                                                                     :phrase-description "Action instructions"
+                                                                     :phrase-description "Loud on quiet"
                                                                      }
                                        :instruction-3               {:type               "sequence-data",
                                                                      :editor-type        "dialog",
@@ -564,7 +615,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-3",
-                                                                     :phrase-description "Action instructions"
+                                                                     :phrase-description "Out on in"
                                                                      }
                                        :instruction-4               {:type               "sequence-data",
                                                                      :editor-type        "dialog",
@@ -572,7 +623,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-4",
-                                                                     :phrase-description "Action instructions"
+                                                                     :phrase-description "Night on day"
                                                                      }
                                        :instruction-5               {:type               "sequence-data",
                                                                      :editor-type        "dialog",
@@ -580,7 +631,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-5",
-                                                                     :phrase-description "Action instructions"
+                                                                     :phrase-description "Back on front"
                                                                      }
                                        :instruction-6               {:type               "sequence-data",
                                                                      :editor-type        "dialog",
@@ -588,7 +639,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-6",
-                                                                     :phrase-description "Action instructions"
+                                                                     :phrase-description "Up on down"
                                                                      }
                                        :instruction-7-1             {:type               "sequence-data",
                                                                      :editor-type        "dialog",
@@ -596,7 +647,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-7-1",
-                                                                     :phrase-description "First part of task"
+                                                                     :phrase-description "Left on right"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :instruction-7-2             {:type               "sequence-data",
@@ -605,7 +656,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-7-2",
-                                                                     :phrase-description "Before second part of first task"
+                                                                     :phrase-description "Left-right on quiet"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :instruction-8-1             {:type               "sequence-data",
@@ -614,7 +665,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-8-1",
-                                                                     :phrase-description "First part of task"
+                                                                     :phrase-description "Back on front"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :instruction-8-2             {:type               "sequence-data",
@@ -623,7 +674,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-8-2",
-                                                                     :phrase-description "Before second part of second task"
+                                                                     :phrase-description "Back-front on down"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :instruction-9-1             {:type               "sequence-data",
@@ -632,7 +683,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-9-1",
-                                                                     :phrase-description "First part of task"
+                                                                     :phrase-description "Night on day"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :instruction-9-2             {:type               "sequence-data",
@@ -641,7 +692,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-9-2",
-                                                                     :phrase-description "Before second part of third task"
+                                                                     :phrase-description "Day-night on right"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :instruction-10-1            {:type               "sequence-data",
@@ -650,7 +701,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-10-1",
-                                                                     :phrase-description "First part of task"
+                                                                     :phrase-description "Out on in"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :instruction-10-2            {:type               "sequence-data",
@@ -659,7 +710,7 @@
                                                                                            :data [{:type "empty" :duration 0}
                                                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                      :phrase             "instruction-10-2",
-                                                                     :phrase-description "Before second part of fourth task"
+                                                                     :phrase-description "Out-in on right"
                                                                      :dialog-track       "Second 4 tasks"
                                                                      }
                                        :stop-activity               {:type "stop-activity", :id "categorize"},
@@ -938,6 +989,20 @@
                                                              :action-id :instruction-10-2}
                                                             ]
                                                     }
+                                                   {:title "Round 3 - items"
+                                                    :nodes [{:type      "dialog"
+                                                             :action-id :left-item}
+                                                            {:type      "dialog"
+                                                             :action-id :back-item}
+                                                            {:type      "dialog"
+                                                             :action-id :up-item}
+                                                            {:type      "dialog"
+                                                             :action-id :loud-item}
+                                                            {:type      "dialog"
+                                                             :action-id :night-item}
+                                                            {:type      "dialog"
+                                                             :action-id :out-item}
+                                                            ]}
                                                    ]
                                        },
                        })

@@ -20,7 +20,9 @@
       "action" (if (contains? action :id) (assoc action :id (action-key-fn (:id action))) action)
       "parallel" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
       "sequence-data" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
+      "sequence" (assoc action :data (map (fn [value] (action-key-fn value)) (:data action)))
       "set-interval" (assoc action :action (action-key-fn (:action action)))
+      "set-timeout" (assoc action :action (action-key-fn (:action action)))
       "set-variable" (cond-> action
                              (some #(= (:var-name action) %) var-object-names) (assoc :var-value (replace-name (:var-value action) object-key-fn))
                              (some #(= (:var-name action) %) var-action-names) (assoc :var-value (replace-name (:var-value action) action-key-fn)))

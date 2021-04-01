@@ -52,7 +52,8 @@
                                                (flatten)
                                                (distinct))))]
     (-> (core/save-scene! course-slug scene-slug activity user-id)
-        second)))
+        second)
+    ))
 
 (defn get-dialog-actions
   [course-slug scene-slug]

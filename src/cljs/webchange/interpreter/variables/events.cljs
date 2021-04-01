@@ -27,6 +27,7 @@
 (e/reg-simple-executor :set-variable-list ::execute-set-variable-list)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
+(e/reg-simple-executor :copy-variables ::execute-copy-variables)
 (e/reg-simple-executor :clear-vars ::execute-clear-vars)
 (e/reg-simple-executor :map-value ::execute-map-value)
 
@@ -114,6 +115,26 @@
      :from-params [{:param-property 'scene-id', :action-property 'var-value'}]}"
     {:db         (core/set-progress db var-name var-value)
      :dispatch-n (list (e/success-event action) [:progress-data-changed])}))
+
+(re-frame/reg-event-fx
+  ::execute-copy-variables
+  (fn [{:keys [db]} [_ {:keys [var-names from-list shuffled] :as action}]]
+    "Execute `set-variable-list` action - allow to set value list to corresponding variables.
+
+    Action params:
+    :var-names - variable names to set.
+    :values - values to set.
+
+    Example:
+    {:type     'set-variable-list'
+     :values   [false false]
+     :var-names ['var1' [var2]}]\n                                                               }"
+    (let [values (cond-> (map (fn [from] (core/get-variable from)) from-list)
+                            shuffled (shuffle)
+                         true (vec))]
+      (doall (map-indexed (fn [idx var-name]
+                            (core/set-variable! var-name (get values idx))) var-names)))
+    {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
   ::execute-copy-variable
@@ -412,7 +433,8 @@
      :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
     (let [count (count (filter #(= true %) (map core/get-variable var-names)))]
       (if (not (= count 0))
-        {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
+        {:dispatch-n (list [::e/execute-action (e/get-action success db action)]
+                           (e/success-event action))}
         (if fail
           {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
           {:dispatch-n (list (e/success-event action))})))))

@@ -70,6 +70,7 @@
 (ce/reg-simple-executor :pick-wrong ::execute-pick-wrong)
 (ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
 (ce/reg-simple-executor :set-interval ::execute-set-interval)
+(ce/reg-simple-executor :set-timeout ::execute-set-timeout)
 (ce/reg-simple-executor :start-timeout-counter ::execute-start-timeout-counter)
 (ce/reg-simple-executor :next-timeout-counter ::execute-next-timeout-counter)
 (ce/reg-simple-executor :remove-interval ::execute-remove-interval)
@@ -86,9 +87,9 @@
           {level :level lesson :lesson} (lessons-activity/name->activity-action db activity-name)
           screenshot (-> screenshot
                          (assoc :date (.toUTCString (js/Date.))))]
-      {:db (-> db
-               (update-in [:progress-data :student-assets level lesson activity-name] conj screenshot)
-               (update-in [:progress-data :student-assets level lesson activity-name] vec))
+      {:db         (-> db
+                       (update-in [:progress-data :student-assets level lesson activity-name] conj screenshot)
+                       (update-in [:progress-data :student-assets level lesson activity-name] vec))
        :dispatch-n (list [:progress-data-changed])
        })))
 
@@ -1168,19 +1169,19 @@
 (re-frame/reg-event-fx
   ::start-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-    (if (not= course-id (:loaded-course db))
-      {:dispatch-n (list [::load-course course-id scene-id])})))
+             (if (not= course-id (:loaded-course db))
+               {:dispatch-n (list [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::load-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-    (if (not= course-id (:loaded-course db))
-      {:db          (-> db
-                        (assoc :loaded-course course-id)
-                        (assoc :current-course course-id)
-                        (assoc-in [:loading :load-course] true))
-       :load-course {:course-id course-id
-                     :scene-id  scene-id}})))
+             (if (not= course-id (:loaded-course db))
+               {:db          (-> db
+                                 (assoc :loaded-course course-id)
+                                 (assoc :current-course course-id)
+                                 (assoc-in [:loading :load-course] true))
+                :load-course {:course-id course-id
+                              :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
   ::load-scenes-with-skills
@@ -1210,10 +1211,10 @@
 (re-frame/reg-event-fx
   ::load-course-data
   (fn-traced [{:keys [db]} [_ course-id]]
-    (if (not= course-id (:loaded-course db))
-      {:dispatch         [::load-scenes-with-skills course-id]
-       :load-course-data {:course-id course-id}
-       :load-lessons     [course-id]})))
+             (if (not= course-id (:loaded-course db))
+               {:dispatch         [::load-scenes-with-skills course-id]
+                :load-course-data {:course-id course-id}
+                :load-lessons     [course-id]})))
 
 (re-frame/reg-event-fx
   ::set-current-course
@@ -1529,11 +1530,24 @@
     (let [transition-wrappers (into {} (map (fn [transition] [transition (->> transition keyword (scene/get-scene-object db))]) transitions))
           success (ce/get-action success db action)
           fail (ce/get-action fail db action)
-          actions (doall (map-indexed (fn [idx [transition transition-wrapper]]
-                                        (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
-                                          [::ce/execute-action (assoc success :params (merge (get action-params idx) {:transition transition}))]
-                                          [::ce/execute-action (assoc fail :params (merge (get action-params idx) {:transition transition}))]
-                                          )) transition-wrappers))]
+          actions (remove nil? (doall (map-indexed (fn [idx [transition transition-wrapper]]
+                                                     (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
+                                                       (let [data ((:get-object-data transition-wrapper))
+                                                             collide? (get data :collide?)
+                                                             data-collide (merge data {:collide? true})
+                                                             ]
+                                                         (if (not collide?)
+                                                           (do
+                                                             ((:set-object-data transition-wrapper) data-collide)
+                                                             [::ce/execute-action (assoc success :params (merge (get action-params idx) {:transition transition} (:params action)))])))
+                                                       (let [data ((:get-object-data transition-wrapper))
+                                                             collide? (get data :collide?)
+                                                             data-collide (merge data {:collide? false})]
+                                                         (if (or collide? (nil? collide?))
+                                                           (do
+                                                             ((:set-object-data transition-wrapper) data-collide)
+                                                             [::ce/execute-action (assoc fail :params (merge (get action-params idx) {:transition transition} (:params action)))])))
+                                                       )) transition-wrappers)))]
       {:dispatch-n (vec (conj actions (ce/success-event action)))})))
 
 (re-frame/reg-event-fx
@@ -1751,6 +1765,17 @@
                                 (update-in [id :counter] inc)))
     {:dispatch-n (list
                    (ce/success-event main-action))}))
+
+(re-frame/reg-event-fx
+  ::execute-set-timeout
+  (fn [{:keys [db]} [_ {:keys [action interval] :as main-action}]]
+    (.setTimeout js/window
+                 (fn []
+                   (let [scene-action (-> (ce/get-action action db)
+                                          (assoc :params (:params main-action)))]
+                     (re-frame/dispatch [::ce/execute-action scene-action]))
+                   ) interval)
+    {:dispatch-n (list (ce/success-event main-action))}))
 
 (re-frame/reg-event-fx
   ::execute-start-timeout-counter
