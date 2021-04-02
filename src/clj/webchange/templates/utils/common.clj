@@ -22,6 +22,10 @@
   [scene-data name]
   (keyword (str name "-" (get-unique-suffix scene-data))))
 
+(defn make-name-unique-by-suffix
+  [name unique-suffix]
+  (keyword (str name "-" unique-suffix)))
+
 (defn make-prev-name-unique
   [scene-data name]
   (keyword (str name "-" (get-prev-unique-suffix scene-data))))
@@ -46,6 +50,47 @@
       (assoc-in [:metadata :last-insert] new-action-name)
       (update-unique-suffix)))
 
+(defn remove-scene-object
+  [scene-data scene-object]
+  (assoc scene-data :scene-objects (reduce (fn [result objects]
+                                             (let [current-objects (vec (remove nil? (map
+                                                                                       (fn [obj]
+                                                                                         (if (not (= obj scene-object)) obj)
+                                                                                         ) objects)
+                                                                                ))]
+                                               (if (= 0 (count current-objects))
+                                                 result
+                                                 (conj result current-objects))
+                                               )) [] (:scene-objects scene-data))))
+(defn remove-actions-by-key-value
+  [actions key value]
+  (vec (remove nil? (map (fn [action]
+                           (if (not (= (key action) value))
+                             action)
+                           ) actions))))
+
+(defn remove-object
+  [scene-data object-name]
+  (-> scene-data
+      (assoc :objects (dissoc (:objects scene-data) object-name))
+      (remove-scene-object (name object-name))))
+
+(defn remove-asset
+  [scene-data src]
+  (-> scene-data
+      (assoc :assets (vec (remove nil? (map (fn [asset] (if (not (= (:url asset) src)) asset)) (:assets scene-data)))))
+      )
+  )
+
+(defn remove-action-from-tracks
+  [scene-data scene-action-name]
+  (assoc-in scene-data [:metadata :tracks] (reduce (fn [result track]
+                                                     (let [current-track
+                                                           (assoc track :nodes
+                                                                        (remove-actions-by-key-value (:nodes track) :action-id (name scene-action-name))
+                                                                        )]
+                                                       (conj result current-track)
+                                                       )) [] (get-in scene-data [:metadata :tracks]))))
 
 (defn add-scene-object
   [scene-data scene-objects]

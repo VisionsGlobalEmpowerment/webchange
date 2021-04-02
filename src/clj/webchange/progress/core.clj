@@ -26,7 +26,7 @@
                          (tags/remove-tags tags/age-tags)
                          (concat age-tag)
                          (concat level-tag))]
-    (assoc-in progress [:data :current-tags] current-tags)))
+    (assoc-in progress [:data :current-tags] (vec (set current-tags)))))
 
 (defn get-current-progress [course-slug student-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})

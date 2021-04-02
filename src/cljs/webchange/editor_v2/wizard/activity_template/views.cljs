@@ -12,6 +12,7 @@
     [webchange.editor-v2.wizard.activity-template.views-strings-list :refer [strings-list-option]]
     [webchange.editor-v2.wizard.activity-template.views-video :refer [video-option]]
     [webchange.editor-v2.wizard.activity-template.views-video-ranges :refer [video-ranges-option]]
+    [webchange.editor-v2.wizard.activity-template.view_delete :refer [delete-object-option]]
     [webchange.logger.index :as logger]))
 
 (defn- undefined-option
@@ -31,6 +32,7 @@
     "string" [string-option props]
     "strings-list" [strings-list-option props]
     "questions-no-image" [answers-option props false]
+    "remove-editable-object" [delete-object-option props]
     "video" [video-option props]
     "video-ranges" [video-ranges-option props]
     [undefined-option props]))

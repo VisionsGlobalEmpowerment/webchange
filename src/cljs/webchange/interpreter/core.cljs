@@ -241,13 +241,16 @@
   (when from
     (set-tween-object-params component from))
 
-  (let [container (get-tween-object-params component to)
-        duration (transition-duration component to params)
-        position (w/get-position component)
-        ease-params (or (:ease params) [1 1])
+  (let [position (w/get-position component)
         to (cond-> to
                    (contains? to :offset-x) (assoc :x (+ (:offset-x to) (:x position)))
-                   (contains? to :offset-y) (assoc :y (+ (:offset-y to) (:y position))))
+                   (contains? to :offset-y) (assoc :y (+ (:offset-y to) (:y position)))
+                   (:init-position to) (merge (w/get-init-position component))
+                   (:init-position to) (dissoc :init-position))
+
+        container (get-tween-object-params component to)
+        duration (transition-duration component to params)
+        ease-params (or (:ease params) [1 1])
         vars (cond-> (-> to
                          (merge params)
                          (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))

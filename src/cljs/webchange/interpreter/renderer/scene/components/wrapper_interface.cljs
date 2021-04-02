@@ -21,6 +21,7 @@
 (defn get-filter-value [wrapper & params] (execute wrapper :get-filter-value params))
 (defn get-opacity [wrapper & params] (execute wrapper :get-opacity params))
 (defn get-position [wrapper & params] (execute wrapper :get-position params))
+(defn get-init-position [wrapper & params] (execute wrapper :get-init-position params))
 (defn get-rotation [wrapper & params] (execute wrapper :get-rotation params))
 (defn play [wrapper & params] (execute wrapper :play-video params))
 (defn remove-animation [wrapper & params] (execute wrapper :remove-animation params))
