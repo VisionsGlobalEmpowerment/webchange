@@ -33,8 +33,10 @@
 
 (defn- add-default-methods
   [wrapper-object]
-  (let [object-data       (atom {})
-        main-display-object (:object wrapper-object)]
+  (let [object-data (atom {})
+        main-display-object (:object wrapper-object)
+        init-position (utils/get-position main-display-object)
+        ]
     (merge {:get-object-data   (fn [] @object-data)
             :set-object-data   (fn [data]
                                  (reset! object-data data))
@@ -42,6 +44,7 @@
                                  (merge (utils/get-stage-position main-display-object)))
             :get-position      (fn []
                                  (utils/get-position main-display-object))
+            :get-init-position (fn [] init-position)
             :set-position      (fn [position]
                                  (utils/set-position main-display-object position))
             :get-scale         (fn []

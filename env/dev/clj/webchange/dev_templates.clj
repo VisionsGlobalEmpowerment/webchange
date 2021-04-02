@@ -1,6 +1,8 @@
 (ns webchange.dev-templates
   (:require [webchange.course.core :as core]
             [webchange.templates.core :as templates]
+            [webchange.db.core :refer [*db*] :as db]
+            [clojure.java.jdbc :as jdbc]
             [webchange.dataset.library :as datasets-library]))
 
 (def user-id 1)
@@ -74,3 +76,11 @@
   "define new test course"
   (def test-course-slug (-> (create-test-course) :slug))
   )
+
+
+(defn request [sql]
+  (jdbc/execute! *db* sql))
+
+(defn clear-last-scene-changes
+  []
+  (request "DELETE FROM scene_versions where id in (select id from scene_versions order by id desc limit 1)"))
