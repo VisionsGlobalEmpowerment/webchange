@@ -516,9 +516,11 @@
            flow-id (random-uuid)
            action-id (random-uuid)
            current-scene (:current-scene db)
-           flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
+           tags (get-action-tags action)
+           flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags tags
                       :current-scene current-scene}
            current-action (-> current
+                              (update :tags concat tags)
                               (update :display-name #(or % (sequenced-action->display-name action sequence-position)))
                               (assoc :flow-id flow-id)
                               (assoc :action-id action-id)
