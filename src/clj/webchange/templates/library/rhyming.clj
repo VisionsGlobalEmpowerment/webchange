@@ -91,6 +91,7 @@
                                                       {:type "set-variable", :var-name "right-selected", :var-value false}
                                                       {:type "set-variable", :var-name "next-check-collide", :var-value true}
                                                       {:id "next-check-collide" :type "action"}
+                                                      {:type "remove-flows" :flow-tag "intro"}
                                                       {:type "action", :from-params [{:action-property "id" :param-property "tap-dialog"}]}
                                                       ]
                                                }
