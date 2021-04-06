@@ -20,9 +20,22 @@
   (-> (enable-mode-props mode object)
       (update-children mode)))
 
-(defn init-mode-props
+(defn- init-mode-props
   [objects mode]
   (map #(init-mode-object-props % mode) objects))
+
+(defn- filter-mode-objects
+  [objects mode]
+  (->> objects
+       (filter (fn []))))
+
+(defn apply-mode
+  [objects mode]
+  (print "mode" mode)
+  (print "objects" objects)
+  (-> objects
+      (init-mode-props mode)
+      (init-mode-props mode)))
 
 (defn init-mode-object-helpers!
   [{:keys [props wrapper children]} mode]

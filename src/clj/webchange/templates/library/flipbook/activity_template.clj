@@ -23,14 +23,16 @@
                                            :width   95
                                            :height  95
                                            :src     "/raw/img/flipbook/prev-page.png"
-                                           :actions {:click {:id "prev-page-click" :on "click" :type "action"}}}
+                                           :actions {:click {:id "prev-page-click" :on "click" :type "action"}}
+                                           :interpreter-mode "!editor"}
                                :next-page {:type    "image"
                                            :x       "---"
                                            :y       "---"
                                            :width   95
                                            :height  95
                                            :src     "/raw/img/flipbook/next-page.png"
-                                           :actions {:click {:id "next-page-click" :on "click" :type "action"}}}}
+                                           :actions {:click {:id "next-page-click" :on "click" :type "action"}}
+                                           :interpreter-mode "!editor"}}
                :scene-objects [["background"] ["book"] ["prev-page" "next-page"]]
                :actions       {:start-scene     {:type "sequence-data"
                                                  :data [{:type   "flipbook-init"

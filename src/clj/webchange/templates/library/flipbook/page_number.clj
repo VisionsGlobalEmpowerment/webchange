@@ -12,7 +12,8 @@
    :x              "---"
    :y              "---"
    :fill           "---"
-   :text           "---"})
+   :text           "---"
+   :interpreter-mode "!editor"})
 
 (defn- set-position
   [object-data {:keys [width height padding page-side]}]
