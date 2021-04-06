@@ -20,9 +20,56 @@
   (-> (enable-mode-props mode object)
       (update-children mode)))
 
-(defn init-mode-props
+(defn- init-mode-props
   [objects mode]
   (map #(init-mode-object-props % mode) objects))
+
+(defn- check-mode
+  [{:keys [interpreter-mode]} current-mode]
+  (let [current-mode (clojure.core/name current-mode)
+        object-modes (clojure.string/split interpreter-mode ",")]
+    (if (some? interpreter-mode)
+      (some (fn [object-mode]
+              (let [[negative? mode] (if (clojure.string/starts-with? object-mode "!")
+                                       [true (subs object-mode 1)]
+                                       [false object-mode])]
+                (if negative?
+                  (not= mode current-mode)
+                  (= mode current-mode))))
+            object-modes)
+      true)))
+
+(defn- filter-children
+  [{:keys [type] :as object} mode]
+  (case type
+    "group" (assoc object :children (reduce (fn [result child]
+                                              (if (check-mode child mode)
+                                                (conj result (filter-children child mode))
+                                                result))
+                                            []
+                                            (:children object)))
+    "flipbook" (assoc object :pages (reduce (fn [result [page action]]
+                                              (if (check-mode page mode)
+                                                (conj result [(filter-children page mode) action])
+                                                result))
+                                            []
+                                            (:pages object)))
+    object))
+
+(defn- filter-mode-objects
+  [objects mode]
+  (reduce (fn [result object]
+            (if (check-mode object mode)
+              (conj result (filter-children object mode))
+              result))
+          []
+          objects))
+
+(defn apply-mode
+  [objects mode]
+  (-> objects
+      (filter-mode-objects mode)
+      (init-mode-props mode)))
 
 (defn init-mode-object-helpers!
   [{:keys [props wrapper children]} mode]

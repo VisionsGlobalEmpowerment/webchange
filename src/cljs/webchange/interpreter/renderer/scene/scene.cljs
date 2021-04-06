@@ -9,7 +9,7 @@
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays update-viewport]]
     [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app get-renderer get-stage]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! init-mode-props]]
+    [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! apply-mode]]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
 
 (defn- set-position
@@ -72,7 +72,7 @@
                          (-> (create-component {:type        "group"
                                                 :object-name :scene
                                                 :parent      (.-stage app)
-                                                :children    (init-mode-props objects mode)})
+                                                :children    (apply-mode objects mode)})
                              (init-mode-helpers! mode))
                          (when (modes/show-overlays? mode)
                            (-> (get-renderer)
