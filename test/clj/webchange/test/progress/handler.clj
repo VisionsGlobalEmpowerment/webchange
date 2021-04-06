@@ -56,7 +56,7 @@
         data {:actions [] :progress {:test "check-default-tags-not-override-learning-tag" :current-tags [tags/beginner]}}
         _ (fp/save-current-progress! user-id course-slug data)
         current-tags (-> (fp/get-current-progress user-id course-slug) :body slurp (json/read-str :key-fn keyword) :progress :current-tags)]
-    (is (= [tags/beginner tags/age-less-4] current-tags))))
+    (is (= (sort [tags/beginner tags/age-less-4]) (sort current-tags)))))
 
 (deftest progress-can-be-updated
   (let [{user-id :user-id course-slug :course-slug} (fp/progress-created)

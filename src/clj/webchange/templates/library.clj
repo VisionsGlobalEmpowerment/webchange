@@ -26,7 +26,7 @@
     [webchange.templates.library.categorize]
     [webchange.templates.library.categorize-hard]
     [webchange.templates.library.conversation]
-    [webchange.templates.library.rhyme]
+    [webchange.templates.library.rhyming]
     [webchange.templates.library.onset-and-rime]
     [webchange.templates.library.name-writing]
     [webchange.templates.library.writing-lesson]
