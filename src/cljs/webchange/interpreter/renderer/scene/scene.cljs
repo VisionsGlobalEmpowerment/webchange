@@ -64,6 +64,8 @@
        :component-did-mount
                      (fn [this]
                        (re-frame/dispatch [::state/init])
+                       (re-frame/dispatch [::state/set-rendering-state true])
+
                        (let [{:keys [mode on-ready viewport objects]} (r/props this)
                              app (init-app viewport mode)]
                          (.appendChild @container (.-view app))
@@ -81,6 +83,7 @@
                          (create-component (question/create {:parent   (get-stage)
                                                              :viewport viewport}))
 
+                         (re-frame/dispatch [::state/set-rendering-state false])
                          (on-ready)))
 
        :component-will-unmount

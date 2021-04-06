@@ -5,6 +5,7 @@
     [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
+    [webchange.state.state-activity :as state-activity]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
     [webchange.editor-v2.wizard.validator :as validator]
     [webchange.ui-framework.components.index :refer [dialog button]]))
@@ -24,7 +25,7 @@
   (r/with-let [scene-id (re-frame/subscribe [::subs/current-scene])
                scene-data @(re-frame/subscribe [::subs/scene @scene-id])
                metadata (get scene-data :metadata)
-               current-action-name @(re-frame/subscribe [::scene-action.events/current-action])
+               current-action-name @(re-frame/subscribe [::state-activity/current-action])
                current-action-data (get-in metadata [:actions current-action-name])
                data (r/atom (get-action-default-data scene-data current-action-data))
                {:keys [valid?] :as validator} (validator/init data)
@@ -50,7 +51,7 @@
 (defn action-modal-container
   []
   (let [open? @(re-frame/subscribe [::scene-action.events/modal-state])
-        current-action-name @(re-frame/subscribe [::scene-action.events/current-action])]
+        current-action-name @(re-frame/subscribe [::state-activity/current-action])]
     (when open?
       ^{:key current-action-name}
       [action-modal])))

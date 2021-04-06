@@ -19,3 +19,12 @@
   [activity-data stage-idx]
   (-> (get-stages-data activity-data)
       (nth stage-idx)))
+
+(defn stage-idx->page-idx
+  [activity-data stage-idx page-side]
+  (let [stage-pages (-> (get-stages-data activity-data)
+                        (nth stage-idx)
+                        (get :pages-idx))]
+    (case page-side
+      "left" (first stage-pages)
+      "right" (second stage-pages))))

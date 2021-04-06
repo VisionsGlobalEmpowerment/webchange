@@ -16,6 +16,16 @@
                (assoc-in (path-to-db [:objects]) objects)
                (assoc-in (path-to-db [:groups]) groups))})))
 
+(re-frame/reg-sub
+  ::rendering?
+  (fn [db]
+    (get-in db (path-to-db [:rendering?]) false)))
+
+(re-frame/reg-event-fx
+  ::set-rendering-state
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db (path-to-db [:rendering?]) value)}))
+
 (re-frame/reg-fx
   :add-scene-object
   (fn [{:keys [objects groups object-wrapper]}]
