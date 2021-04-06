@@ -153,6 +153,27 @@
     (-> (core/update-activity! course-slug scene-slug data user-id)
         handle)))
 
+(defn handle-publish-course
+  [course-slug request]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator-by-course-id? user-id course-slug)
+      (throw-unauthorized {:role eduction}))
+    (-> (core/publish-course! course-slug)
+        handle)))
+
+(defn handle-review-course
+  [course-slug review-result request]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator-by-course-id? user-id course-slug)
+      (throw-unauthorized {:role eduction}))
+    (-> (core/review-course! course-slug review-result)
+        handle)))
+
+(defn handle-get-on-review-courses
+  [request]
+  (let [user-id (current-user request)]
+    (when-not (core))))
+
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int (s/optional-key :type) s/Str (s/optional-key :image-src) s/Str})
 (s/defschema Translate {:user-id s/Int :language s/Str})
@@ -170,6 +191,7 @@
 (s/defschema Skills {:levels {s/Keyword s/Str} :subjects {s/Keyword s/Str} :skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
 
 (s/defschema ActivityWithSkills {:id s/Int :name s/Str :course-id s/Int :is-placeholder s/Bool :skills [Skill]})
+(s/defschema ReviewResult {:status s/Str :comment s/Str})
 
 (defn character-skins []
   (response (core/find-all-character-skins)))
@@ -183,9 +205,6 @@
 (s/defschema Error403 {:errors [{:message s/Str}]})
 
 (s/defschema CoursesOrError (s/either [Course] Error403))
-
-
-{:errors [{:message "Api Unauthorized"}]}
 
 (defroutes editor-api-routes
   (api
@@ -228,7 +247,22 @@
       :return [Course]
       :summary "Returns courses by website user id"
       (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
-          sign/wrap-api-with-signature)))
+          sign/wrap-api-with-signature))
+    (POST "/:course-slug/publish" request
+      :path-params [course-slug :- s/Str]
+      :return Course
+      :summary "Send request for publish on review"
+      (handle-publish-course course-slug request))
+    (POST "/:course-slug/review" request
+      :path-params [course-slug :- s/Str]
+      :return Course
+      :body [review-result ReviewResult]
+      :summary "Send review result. Publish or decline"
+      (handle-review-course course-slug review-result request))
+    (GET "/on-review" request
+      :return CoursesOrError
+      :summary "Retuns a list of courses on review"
+      (handle-get-on-review-courses request)))
   (context "/api/books" []
     :tags ["book"]
     (GET "/library" []
