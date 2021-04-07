@@ -3,7 +3,13 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.utils.i18n :refer [t]]))
+
+(defn show-overlay?
+  [mode]
+  (some #{mode} [::modes/game ::modes/sandbox]))
+
 
 (def goodbye-window-name :goodbye-window)
 (def goodbye-window-size {:width  600

@@ -4,6 +4,8 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.wizard.activity-template.views-audio :as views-audio]
+    [webchange.editor-v2.dialog.dialog-form.views-volume :as views-volume]
+    [webchange.ui-framework.components.index :refer [icon range-input]]
     [webchange.editor-v2.layout.components.common_actions.state :as state]))
 
 (def modal-state-path [:editor-v2 :sandbox :background-music-modal-state])
@@ -34,10 +36,13 @@
 
 (defn- background-music-form
   [form-data]
-  [views-audio/audio-option {:key    :background-music
-                             :option {:type  "audio",
-                                      :label "Upload file", :options {}}
-                             :data   form-data}])
+  [:div
+   [:div [views-audio/audio-option {:key    :background-music
+                                    :option {:type  "audio",
+                                             :label "Upload file", :options {}}
+                                    :data   form-data}]]
+   [:div [views-volume/volume-view {:value (get-in @form-data [:background-music :volume] 1)
+                       :on-change #(swap! form-data assoc-in [:background-music :volume] %)}]]])
 
 (defn- background-music-modal
   []

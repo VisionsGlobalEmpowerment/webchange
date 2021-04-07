@@ -1083,6 +1083,22 @@
         new-tags)
       current-tags)))
 
+(defn- next-activity-name
+  [db]
+  (get-in db [:progress-data :next :activity-name]))
+
+(defn- has-next-activity?
+  [db]
+  (next-activity-name db))
+
+
+(re-frame/reg-event-fx
+  ::goodbye-activity
+  (fn [{:keys [db]} _]
+    {:dispatch-n (list [::overlays/show-goodbye-screen]
+                       [::reset-navigation])}))
+
+
 (re-frame/reg-event-fx
   ::execute-finish-activity
   (fn [{:keys [db]} [_ action]]
@@ -1096,6 +1112,7 @@
      :id   'cinema'}"
     (let [events (cond-> (list (ce/success-event action))
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
+                         (and (not (lesson-activity-finished? db action)) (not (has-next-activity? db))) (conj [::goodbye-activity])
                          :always (conj (activity-finished-event db action))
                          :always (conj [::reset-navigation]))
           activity-started? (:activity-started db)
@@ -1336,10 +1353,6 @@
                        (map (fn [[display-name action]] [::ce/execute-action (assoc action :display-name display-name)])))
           default-actions (get default-triggers trigger)]
       {:dispatch-n (concat actions default-actions)})))
-
-(defn- next-activity-name
-  [db]
-  (get-in db [:progress-data :next :activity-name]))
 
 (defn- next-scene-location
   [db]
