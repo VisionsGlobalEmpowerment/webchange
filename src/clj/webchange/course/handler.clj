@@ -17,7 +17,8 @@
             [webchange.common.hmac-sha256 :as sign]
             [compojure.api.middleware :as mw]
             [webchange.templates.core :as templates]
-            [webchange.db.core :refer [*db*] :as db]))
+            [webchange.db.core :refer [*db*] :as db]
+            [webchange.auth.roles :refer [is-admin?]]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
@@ -156,7 +157,7 @@
 (defn handle-publish-course
   [course-slug request]
   (let [user-id (current-user request)]
-    (when-not (core/collaborator-by-course-id? user-id course-slug)
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role eduction}))
     (-> (core/publish-course! course-slug)
         handle)))
@@ -164,15 +165,18 @@
 (defn handle-review-course
   [course-slug review-result request]
   (let [user-id (current-user request)]
-    (when-not (core/collaborator-by-course-id? user-id course-slug)
+    (when-not (is-admin? user-id)
       (throw-unauthorized {:role eduction}))
     (-> (core/review-course! course-slug review-result)
         handle)))
 
 (defn handle-get-on-review-courses
-  [request]
+  [type status request]
   (let [user-id (current-user request)]
-    (when-not (core))))
+    (when-not (is-admin? user-id)
+      (throw-unauthorized {:role eduction}))
+    (-> (core/get-on-review-courses type status)
+        handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int (s/optional-key :type) s/Str (s/optional-key :image-src) s/Str})
@@ -191,7 +195,7 @@
 (s/defschema Skills {:levels {s/Keyword s/Str} :subjects {s/Keyword s/Str} :skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
 
 (s/defschema ActivityWithSkills {:id s/Int :name s/Str :course-id s/Int :is-placeholder s/Bool :skills [Skill]})
-(s/defschema ReviewResult {:status s/Str :comment s/Str})
+(s/defschema ReviewResult {:status s/Str (s/optional-key :comment) s/Str})
 
 (defn character-skins []
   (response (core/find-all-character-skins)))
@@ -259,10 +263,11 @@
       :body [review-result ReviewResult]
       :summary "Send review result. Publish or decline"
       (handle-review-course course-slug review-result request))
-    (GET "/on-review" request
+    (GET "/list/:type/:status" request
+      :path-params [type :- s/Str status :- s/Str]
       :return CoursesOrError
       :summary "Retuns a list of courses on review"
-      (handle-get-on-review-courses request)))
+      (handle-get-on-review-courses type status request)))
   (context "/api/books" []
     :tags ["book"]
     (GET "/library" []

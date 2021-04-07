@@ -644,22 +644,26 @@
 
 (defn publish-course!
   [course-slug]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
-        {:keys [status]} (db/get-course-info {:id course-id})
+  (let [{course-id :id status :status} (db/get-course {:slug course-slug})
         can-publish? (contains? #{"draft" "changes-requested"} status)]
     (if can-publish?
       (do (db/update-course-status! {:id course-id :status "in-review"})
-          [true {:message "ok"}])
+          [true (-> (get-course-info course-slug)
+                    (->website-course))])
       [false {:message "invalid status"}])))
 
 (defn review-course!
   [course-slug {new-status :status}]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
-        {:keys [status]} (db/get-course-info {:id course-id})
+  (let [{course-id :id status :status} (db/get-course {:slug course-slug})
         can-review? (contains? #{"in-review"} status)
         new-status-valid? (contains? #{"published" "declined" "changes-requested"} new-status)]
     (if (and can-review? new-status-valid?)
       (do (db/update-course-status! {:id course-id :status new-status})
-          [true {:message "ok"}])
+          [true (-> (get-course-info course-slug)
+                    (->website-course))])
       [false {:message "invalid status"}])))
 
+(defn get-on-review-courses
+  [type status]
+  (let [courses (db/get-courses-by-status-and-type {:type type :status status})]
+    [true (map ->website-course courses)]))

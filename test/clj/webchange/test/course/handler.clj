@@ -261,6 +261,34 @@
     (is (= 1 (count courses)))
     (is (= course-name (-> courses first :name)))))
 
+(deftest book-in-review-can-be-retrieved
+  (let [{user-id :id} (f/website-user-created)
+        course-name "book in review"
+        _ (f/course-created {:name course-name :status "in-review" :type "book"})
+        response (with-redefs [webchange.auth.roles/is-admin? (fn [user-id] true)]
+                   (f/get-courses-admin-list "book" "in-review" user-id))
+        courses (-> response :body slurp (json/read-str :key-fn keyword))]
+    (is (= 200 (:status response)))
+    (is (= 1 (count courses)))
+    (is (= course-name (-> courses first :name)))))
+
+(deftest book-in-review-can-be-published
+  (let [{user-id :id} (f/website-user-created)
+        {course-slug :slug} (f/course-created {:status "in-review" :type "book"})
+        approve-response (with-redefs [webchange.auth.roles/is-admin? (fn [user-id] true)]
+                           (f/review-course! course-slug user-id {:status "published"}))
+        get-course-response  (-> (f/get-course-info course-slug) :body slurp (json/read-str :key-fn keyword))]
+    (is (= 200 (:status approve-response)))
+    (is (= "published" (:status get-course-response)))))
+
+(deftest book-in-draft-can-be-send-to-review
+  (let [{user-id :id} (f/website-user-created)
+        {course-slug :slug} (f/course-created {:owner-id user-id :status "draft" :type "book"})
+        publish-response (f/publish-course! course-slug user-id)
+        get-course-response  (-> (f/get-course-info course-slug) :body slurp (json/read-str :key-fn keyword))]
+    (is (= 200 (:status publish-response)))
+    (is (= "in-review" (:status get-course-response)))))
+
 (deftest retrieved-course-has-default-image-src
   (let [course-name "available course"
         _ (f/course-created {:name course-name :status "published"})
