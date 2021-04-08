@@ -9,7 +9,7 @@
     [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.ui-framework.components.index :refer [icon]]))
+    [webchange.ui-framework.components.index :refer [icon switcher]]))
 
 (defn- get-stage-name
   [{:keys [idx]}]
@@ -63,7 +63,8 @@
 
 (defn- stages-list
   []
-  (let [stages @(re-frame/subscribe [::state-flipbook/stage-options])
+  (let [show-generated-pages? @(re-frame/subscribe [::state/show-generated-pages?])
+        stages @(re-frame/subscribe [::state-flipbook/stage-options {:filter-generated? (not show-generated-pages?)}])
         disabled? @(re-frame/subscribe [::state/pages-list-disabled?])]
     [:div.stages-list
      (for [{:keys [idx] :as stage} stages]
@@ -72,7 +73,18 @@
                           {:disabled? disabled?})])
      [add-stage-button]]))
 
+(defn- tech-pages-switcher
+  []
+  (let [checked? @(re-frame/subscribe [::state/show-generated-pages?])
+        handle-change (fn [value] (re-frame/dispatch [::state/set-show-generated-pages? value]))]
+    [:div
+     [switcher {:label     "Display technical pages"
+                :checked?  checked?
+                :on-change handle-change}]]))
+
 (defn pages-block
   []
-  [content-block {:title "Pages"}
+  [content-block {:title          "Pages"
+                  :right-controls [tech-pages-switcher]
+                  :style          {:width 800}}
    [stages-list]])

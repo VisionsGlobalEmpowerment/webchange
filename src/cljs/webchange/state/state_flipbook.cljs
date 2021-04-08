@@ -103,7 +103,7 @@
 
 (re-frame/reg-event-fx
   ::generate-stages-screenshots
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? false}}]]
     (let [current-stage (stage-state/current-stage db)
           stages-idx (->> (state/scene-metadata db)
                           (:stages)
@@ -111,7 +111,7 @@
       {:dispatch-n              [[::set-generate-screenshots-running-state true]
                                  [::overlays/show-waiting-screen]]
        :take-stages-screenshots {:stages-idx            stages-idx
-                                 :hide-generated-pages? false
+                                 :hide-generated-pages? hide-generated-pages?
                                  :callback              (fn [screenshots]
                                                           (let [screenshots-blobs (->> screenshots
                                                                                        (map (fn [[idx blob]]
