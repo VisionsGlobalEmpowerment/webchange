@@ -14,7 +14,7 @@
                                                     "page-cover-back-image"
                                                     "page-cover-back-license"
                                                     "page-cover-back-attributions"]
-                                       :src        "/raw/img/flipbook/logo.png"}
+                                       :generated? true}
    :page-cover-back-background        {:type   "rectangle"
                                        :x      "---"
                                        :y      "---"
@@ -129,12 +129,12 @@
 (defn- set-content
   [page-data {:keys [authors illustrators]}]
   (let [text (->
-"Written by __authors__.
-Illustrated by __illustrators__.
+               "Written by __authors__.
+               Illustrated by __illustrators__.
 
-All rights reserved."
-                 (clojure.string/replace-first #"__authors__" (clojure.string/join ", " authors))
-                 (clojure.string/replace-first #"__illustrators__" (clojure.string/join ", " illustrators)))]
+               All rights reserved."
+               (clojure.string/replace-first #"__authors__" (clojure.string/join ", " authors))
+               (clojure.string/replace-first #"__illustrators__" (clojure.string/join ", " illustrators)))]
     (-> page-data
         (assoc-in [:page-cover-back-license :text] text))))
 

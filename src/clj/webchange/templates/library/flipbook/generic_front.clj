@@ -7,7 +7,8 @@
 (def template
   {:generic-front-page                   {:type       "group"
                                           :transition "generic-front-page"
-                                          :children   ["generic-front-page-background"]}
+                                          :children   ["generic-front-page-background"]
+                                          :generated? true}
    :generic-front-page-background        {:type     "group"
                                           :x        0
                                           :y        0

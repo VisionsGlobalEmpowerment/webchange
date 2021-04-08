@@ -11,9 +11,9 @@
   (let [flipbook-name (get-book-object-name activity-data)]
     (get-in activity-data [:objects flipbook-name :pages])))
 
-(defn- get-stages-data
+(defn get-stages-data
   [activity-data]
-  (get-in activity-data [:metadata :stages]))
+  (get-in activity-data [:metadata :stages] []))
 
 (defn get-stage-data
   [activity-data stage-idx]
@@ -28,3 +28,15 @@
     (case page-side
       "left" (first stage-pages)
       "right" (second stage-pages))))
+
+(defn get-page-data
+  [activity-data page-idx]
+  (when (some? page-idx)
+    (let [page-data (-> (get-pages-data activity-data)
+                        (nth page-idx))
+          page-object (->> (:object page-data)
+                           (keyword)
+                           (conj [:objects])
+                           (get-in activity-data))]
+      (-> page-data
+          (assoc :generated? (:generated? page-object))))))

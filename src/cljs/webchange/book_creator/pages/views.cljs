@@ -7,6 +7,7 @@
     [webchange.book-creator.views-content-block :refer [content-block]]
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
     [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.components.index :refer [icon]]))
 
@@ -62,7 +63,7 @@
 
 (defn- stages-list
   []
-  (let [stages @(re-frame/subscribe [::stage-state/stage-options])
+  (let [stages @(re-frame/subscribe [::state-flipbook/stage-options])
         disabled? @(re-frame/subscribe [::state/pages-list-disabled?])]
     [:div.stages-list
      (for [{:keys [idx] :as stage} stages]

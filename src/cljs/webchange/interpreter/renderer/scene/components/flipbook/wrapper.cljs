@@ -18,15 +18,22 @@
    :height (:height state)})
 
 (defn- get-page-object-name
-  [state index]
-  (let [pages-names (->> (:pages state)
-                         (map first)
-                         (map :object-name)
-                         (map clojure.core/name))]
-    (when (and (some? index)
-               (> index -1)
-               (< index (count pages-names)))
-      (nth pages-names index))))
+  ([state index]
+   (get-page-object-name state index {}))
+  ([state index {:keys [hide-generated-pages?]}]
+   (let [pages-names (->> (:pages state)
+                          (map first)
+                          (map (fn [page-data]
+                                 {:name (-> page-data (:object-name) (clojure.core/name))
+                                  :data page-data})))
+         page-data (when (and (some? index)
+                              (> index -1)
+                              (< index (count pages-names)))
+                     (nth pages-names index))]
+     (if hide-generated-pages?
+       (when-not (:generated? (:data page-data))
+         (:name page-data))
+       (:name page-data)))))
 
 (defn- get-page-action-name
   [state index]
@@ -37,9 +44,11 @@
       (nth actions-names index))))
 
 (defn- spread-numbers->object-names
-  [state {:keys [left right]}]
-  {:left  (get-page-object-name state left)
-   :right (get-page-object-name state right)})
+  ([state spread]
+   (spread-numbers->object-names state spread {}))
+  ([state {:keys [left right]} options]
+   {:left  (get-page-object-name state left options)
+    :right (get-page-object-name state right options)}))
 
 (defn- spread-numbers->action-names
   [state {:keys [left right]}]
@@ -116,8 +125,8 @@
       (on-end))))
 
 (defn- show-spread
-  [state spread]
-  (let [{:keys [left right]} (spread-numbers->object-names state spread)]
+  [state spread options]
+  (let [{:keys [left right]} (spread-numbers->object-names state spread options)]
     (when (some? left)
       (utils/set-position (keyword left) (get-left-page-position state))
       (utils/set-visibility (keyword left) true))
@@ -155,12 +164,12 @@
                                     (flip state "forward" on-end read))
                    :flip-backward (fn [{:keys [on-end read]}]
                                     (flip state "backward" on-end read))
-                   :show-spread   (fn [spread-idx]
+                   :show-spread   (fn [spread-idx options]
                                     (let [current-spread (:current-spread @state)
                                           new-spread {:left  (->> (* spread-idx 2) (dec))
                                                       :right (->> (* spread-idx 2))}]
                                       (hide-spread @state current-spread)
-                                      (show-spread @state new-spread)
+                                      (show-spread @state new-spread options)
                                       (swap! state assoc :current-spread new-spread)))
                    :read-left     (fn [on-end]
                                     (let [current-spread (get @state :current-spread)

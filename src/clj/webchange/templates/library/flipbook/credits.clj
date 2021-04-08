@@ -14,7 +14,8 @@
                                     :children   ["credits-page-background"
                                                  "credits-page-title"
                                                  "credits-page-authors"
-                                                 "credits-page-illustrators"]}
+                                                 "credits-page-illustrators"]
+                                    :generated? true}
    :credits-page-background        {:type     "group"
                                     :x        0
                                     :y        0
