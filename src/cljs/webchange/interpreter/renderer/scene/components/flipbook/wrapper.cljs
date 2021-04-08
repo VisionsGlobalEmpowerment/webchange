@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.flipbook.wrapper
   (:require
     [webchange.interpreter.renderer.scene.components.flipbook.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.flipbook.utils-page-number :as page-number-utils]
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 
 (defn- get-left-page-position
@@ -88,24 +89,30 @@
                       "backward" (when-not (first-spread? @state current-spread)
                                    {:left  (- (get current-spread :left) 2)
                                     :right (- (get current-spread :right) 2)}))]
+    (page-number-utils/hide-pages-numbers)
     (if (some? next-spread)
-      (do (utils/set-visibility prev-control false)
-          (utils/set-visibility next-control false)
-          (utils/flip-page {:direction       direction
-                            :current-spread  (spread-numbers->object-names @state current-spread)
-                            :next-spread     (spread-numbers->object-names @state next-spread)
-                            :page-dimensions {:left-page-position  (get-left-page-position @state)
-                                              :right-page-position (get-right-page-position @state)
-                                              :page-size           (get-page-size @state)}
-                            :on-end          (fn []
-                                               (swap! state assoc :current-spread next-spread)
-                                               (utils/set-visibility prev-control (not (first-spread? @state next-spread)))
-                                               (utils/set-visibility next-control (not (last-spread? @state next-spread)))
-                                               (if read
-                                                 (let [{:keys [left right]} (spread-numbers->action-names @state next-spread)
-                                                       action (sequence-for left right on-end)]
-                                                   (utils/execute-action action))
-                                                 (on-end)))}))
+      (let [next-spread-objects (spread-numbers->object-names @state next-spread)]
+        (utils/set-visibility prev-control false)
+        (utils/set-visibility next-control false)
+        (utils/flip-page {:direction       direction
+                          :current-spread  (spread-numbers->object-names @state current-spread)
+                          :next-spread     next-spread-objects
+                          :page-dimensions {:left-page-position  (get-left-page-position @state)
+                                            :right-page-position (get-right-page-position @state)
+                                            :page-size           (get-page-size @state)}
+                          :on-end          (fn []
+                                             (swap! state assoc :current-spread next-spread)
+                                             (page-number-utils/set-pages-numbers (->> (keys next-spread)
+                                                                                       (filter #(get next-spread-objects %))
+                                                                                       (select-keys next-spread)))
+                                             (page-number-utils/show-pages-numbers)
+                                             (utils/set-visibility prev-control (not (first-spread? @state next-spread)))
+                                             (utils/set-visibility next-control (not (last-spread? @state next-spread)))
+                                             (if read
+                                               (let [{:keys [left right]} (spread-numbers->action-names @state next-spread)
+                                                     action (sequence-for left right on-end)]
+                                                 (utils/execute-action action))
+                                               (on-end)))}))
       (on-end))))
 
 (defn- show-spread

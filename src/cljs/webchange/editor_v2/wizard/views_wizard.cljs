@@ -69,15 +69,32 @@
 
 (defn wizard
   []
-  (r/with-let [data (r/atom {})
+  (r/with-let [data (r/atom {:template      {:id   24
+                                             :name "flipbook"}
+                             :activity-data {:language "q"
+                                             :name     "q"
+                                             :course   "q"}
+                             :skills        {:level   "pre-k"
+                                             :subject "english-native"
+                                             :skills  [4]
+                                             :topics  ["foundational-literacy--phonemic-awareness"]
+                                             :strands ["foundational-literacy"]
+                                             :concept 1}
+                             :template-data {:cover-layout "title-top"
+                                             :cover-title  "qqq"
+                                             :cover-image  {:src "/upload/EKRTVCNPSMTGKTTG.png"}
+                                             :authors      ["r"]
+                                             :illustrators ["t"]}})
                steps (get-steps)
-               current-step-idx (r/atom -1)
+               current-step-idx (r/atom 4)
                {:keys [valid?] :as validator} (validator/init data)
                handle-back (fn [] (reset! current-step-idx (dec @current-step-idx)))
                handle-next (fn []
                              (when (valid?)
                                (reset! current-step-idx (inc @current-step-idx))))
                styles (get-styles)]
+    (print "@data" @data)
+    (print "@current-step-idx" @current-step-idx)
     (let [current-step (get-step-content steps @current-step-idx data validator handle-next)
           first-step? (= @current-step-idx 0)
           last-step? (->> (count steps) (dec) (= @current-step-idx))

@@ -1,6 +1,5 @@
 (ns webchange.templates.library.flipbook.remove-page
   (:require
-    [webchange.templates.library.flipbook.page-number :refer [update-pages-numbers]]
     [webchange.templates.library.flipbook.stages :refer [update-stages]]
     [webchange.templates.library.flipbook.utils :refer [get-book-object-name get-page-data stage-number->page-number]]))
 
@@ -41,6 +40,5 @@
           (remove-object (keyword (:object page-data)))
           (remove-action (keyword (:action page-data)))
           (remove-page-from-book book-name page-number)
-          (update-stages {:book-name book-name})
-          (update-pages-numbers page-params))
+          (update-stages {:book-name book-name}))
       activity-data)))

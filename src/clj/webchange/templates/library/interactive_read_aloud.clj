@@ -15,7 +15,6 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.templates.library.flipbook.page-number :refer [add-page-number]]
     [webchange.templates.library.flipbook.stages :refer [update-stages]]))
 
 (def metadata {:id          32
