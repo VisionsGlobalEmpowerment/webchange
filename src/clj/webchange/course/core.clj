@@ -653,8 +653,8 @@
       [false {:message "invalid status"}])))
 
 (defn review-course!
-  [course-slug {new-status :status}]
-  (let [{course-id :id status :status} (db/get-course {:slug course-slug})
+  [course-id {new-status :status}]
+  (let [{course-slug :slug status :status} (db/get-course-by-id {:id course-id})
         can-review? (contains? #{"in-review"} status)
         new-status-valid? (contains? #{"published" "declined" "changes-requested"} new-status)]
     (if (and can-review? new-status-valid?)

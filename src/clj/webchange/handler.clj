@@ -29,7 +29,8 @@
             [ring.middleware.session.memory :as mem]
             [webchange.common.handler :refer [handle current-user]]
             [config.core :refer [env]]
-            [webchange.auth.website :as website])
+            [webchange.auth.website :as website]
+            [webchange.auth.roles :as roles])
   )
 
 (defn api-request? [request] (= "application/json" (:accept request)))
@@ -100,6 +101,15 @@
     (throw-unauthorized {:role :teacher})
     (resource-response "index.html" {:root "public"})))
 
+(defn- admin? [request]
+  (let [current-user (current-user request)]
+    (roles/is-admin? current-user)))
+
+(defn admin-route [request]
+  (if-not (admin? request)
+    (throw-unauthorized {:role :teacher})
+    (resource-response "index.html" {:root "public"})))
+
 (defroutes pages-routes
            (GET "/" [] (public-route))
            (GET "/login" [] (public-route))
@@ -108,6 +118,9 @@
 
            (GET "/s/:course-id/:scene-id" [] (public-route))
            (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
+
+           ;; admin routes
+           (GET "/dashboard/courses" request (admin-route request))
 
            ;; teacher routes
            (GET "/dashboard" request (teachers-route request))

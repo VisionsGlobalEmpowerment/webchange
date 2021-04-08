@@ -4,5 +4,5 @@
 
 (defn is-admin?
   [user-id]
-  (let [admins (env :roles :admin)]
+  (let [admins (get-in env [:roles :admin] [])]
     (some #(= user-id %) admins)))

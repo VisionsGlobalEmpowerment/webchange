@@ -8,6 +8,7 @@
     [webchange.dashboard.classes.views :refer [classes-list class-modal class-delete-modal class-profile]]
     [webchange.dashboard.schools.views :refer [schools-list school-modal school-delete-modal school-sync-modal]]
     [webchange.dashboard.students.views :refer [students-list student-modal student-delete-modal student-remove-from-class-modal student-profile]]
+    [webchange.dashboard.courses.views :refer [courses-list-page]]
     [webchange.dashboard.subs :as dashboard-subs]
     [webchange.routes :refer [redirect-to]]))
 
@@ -26,6 +27,7 @@
     :dashboard (do (redirect-to :dashboard-classes) [content-page {:title (translate [:content :redirect])}])
     :classes-list [classes-list]
     :schools-list [schools-list]
+    :courses-list [courses-list-page]
     :class-profile [class-profile]
     :students-list [students-list]
     :student-profile [student-profile]

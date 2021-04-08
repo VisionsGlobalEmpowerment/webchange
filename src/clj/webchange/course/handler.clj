@@ -163,11 +163,11 @@
         handle)))
 
 (defn handle-review-course
-  [course-slug review-result request]
+  [course-id review-result request]
   (let [user-id (current-user request)]
     (when-not (is-admin? user-id)
       (throw-unauthorized {:role eduction}))
-    (-> (core/review-course! course-slug review-result)
+    (-> (core/review-course! course-id review-result)
         handle)))
 
 (defn handle-get-on-review-courses
@@ -257,12 +257,12 @@
       :return Course
       :summary "Send request for publish on review"
       (handle-publish-course course-slug request))
-    (POST "/:course-slug/review" request
-      :path-params [course-slug :- s/Str]
+    (POST "/:course-id/review" request
+      :path-params [course-id :- s/Int]
       :return Course
       :body [review-result ReviewResult]
       :summary "Send review result. Publish or decline"
-      (handle-review-course course-slug review-result request))
+      (handle-review-course course-id review-result request))
     (GET "/list/:type/:status" request
       :path-params [type :- s/Str status :- s/Str]
       :return CoursesOrError
