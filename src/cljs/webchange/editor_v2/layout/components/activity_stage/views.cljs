@@ -4,6 +4,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui.utils :refer [deep-merge]]))
 
 (defn- get-styles
@@ -26,9 +27,9 @@
 (defn select-stage
   [{:keys [styles]
     :or   {styles {}}}]
-  (let [stages @(re-frame/subscribe [::stage-state/stage-options])
+  (let [stages @(re-frame/subscribe [::state-flipbook/stage-options])
         enabled? (seq stages)
-        current-stage @(re-frame/subscribe [::stage-state/current-stage])
+        current-stage @(re-frame/subscribe [::state-flipbook/current-stage])
         styles (-> (get-styles)
                    (deep-merge styles))]
     (when enabled?

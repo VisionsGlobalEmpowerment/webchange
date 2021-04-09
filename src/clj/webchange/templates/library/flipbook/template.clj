@@ -9,7 +9,6 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.templates.library.flipbook.page-number :refer [update-pages-numbers]]
     [webchange.templates.library.flipbook.remake-covers :refer [remake-covers]]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
     [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
@@ -139,8 +138,7 @@
            :image-src      (:src image)
            :text           text
            :with-action?   true
-           :shift-from-end 1})
-        (update-pages-numbers page-params))))
+           :shift-from-end 1}))))
 
 (defn update-activity
   [activity-data {action-name :action-name :as props}]

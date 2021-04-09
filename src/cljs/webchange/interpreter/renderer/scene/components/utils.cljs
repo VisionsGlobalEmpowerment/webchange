@@ -113,3 +113,7 @@
 (defn emit
   [object event]
   (.emit object event))
+
+(defn set-text
+  [text-object value]
+  (aset text-object "text" value))

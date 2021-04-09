@@ -91,25 +91,36 @@
   (fn [db]
     (get-in db (path-to-db [:generate-screenshots-running?]) false)))
 
+(re-frame/reg-sub
+  ::stages-screenshots
+  (fn [db]
+    (get-in db (path-to-db [:stages-screenshots]) [])))
+
+(re-frame/reg-event-fx
+  ::set-stages-screenshots
+  (fn [{:keys [db]} [_ screenshots]]
+    {:db (assoc-in db (path-to-db [:stages-screenshots]) screenshots)}))
+
 (re-frame/reg-event-fx
   ::generate-stages-screenshots
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? false}}]]
     (let [current-stage (stage-state/current-stage db)
           stages-idx (->> (state/scene-metadata db)
                           (:stages)
                           (map :idx))]
       {:dispatch-n              [[::set-generate-screenshots-running-state true]
                                  [::overlays/show-waiting-screen]]
-       :take-stages-screenshots {:stages-idx stages-idx
-                                 :callback   (fn [screenshots]
-                                               (let [screenshots-blobs (->> screenshots
-                                                                            (map (fn [[idx blob]]
-                                                                                   [idx (.createObjectURL js/URL blob)]))
-                                                                            (into {}))]
-                                                 (re-frame/dispatch [::stage-state/set-stages-screenshots screenshots-blobs]))
-                                               (re-frame/dispatch [::stage-state/select-stage (or current-stage 0)])
-                                               (re-frame/dispatch [::overlays/hide-waiting-screen])
-                                               (re-frame/dispatch [::set-generate-screenshots-running-state false]))}})))
+       :take-stages-screenshots {:stages-idx            stages-idx
+                                 :hide-generated-pages? hide-generated-pages?
+                                 :callback              (fn [screenshots]
+                                                          (let [screenshots-blobs (->> screenshots
+                                                                                       (map (fn [[idx blob]]
+                                                                                              [idx (.createObjectURL js/URL blob)]))
+                                                                                       (into {}))]
+                                                            (re-frame/dispatch [::set-stages-screenshots screenshots-blobs]))
+                                                          (re-frame/dispatch [::stage-state/select-stage (or current-stage 0)])
+                                                          (re-frame/dispatch [::overlays/hide-waiting-screen])
+                                                          (re-frame/dispatch [::set-generate-screenshots-running-state false]))}})))
 
 (defn- run-seq
   ([seq callback]
@@ -126,12 +137,45 @@
               (run-seq seq callback (inc idx) data))))))))
 
 (defn- take-stage-screenshot
-  [stage-idx]
+  [stage-idx hide-generated-pages?]
   (fn [callback]
-    (re-frame/dispatch [::stage-state/show-flipbook-stage stage-idx])
+    (re-frame/dispatch [::stage-state/show-flipbook-stage stage-idx {:hide-generated-pages? hide-generated-pages?}])
     (js/setTimeout (fn [] (app/take-screenshot callback {:extract-canvas? false})) 100)))
 
 (re-frame/reg-fx
   :take-stages-screenshots
-  (fn [{:keys [stages-idx callback]}]
-    (run-seq (map take-stage-screenshot stages-idx) callback)))
+  (fn [{:keys [stages-idx callback hide-generated-pages?]}]
+    (run-seq (map #(take-stage-screenshot % hide-generated-pages?) stages-idx) callback)))
+
+(re-frame/reg-sub
+  ::scene-stages
+  (fn []
+    [(re-frame/subscribe [::state/scene-data])])
+  (fn [[scene-data]]
+    (flipbook-utils/get-stages-data scene-data)))
+
+(defn- filter-generated-page
+  [scene-data page-idx]
+  (let [generated? (->> page-idx (flipbook-utils/get-page-data scene-data) (:generated?))]
+    (when-not generated?
+      page-idx)))
+
+(re-frame/reg-sub
+  ::stage-options
+  (fn []
+    [(re-frame/subscribe [::state/scene-data])
+     (re-frame/subscribe [::scene-stages])
+     (re-frame/subscribe [::current-stage])
+     (re-frame/subscribe [::stages-screenshots])])
+  (fn [[scene-data stages current-stage-idx stages-screenshots] [_ {:keys [filter-generated?] :or {filter-generated? false}}]]
+    (->> stages
+         (map-indexed (fn [idx stage]
+                        (cond-> (-> stage
+                                    (assoc :idx idx)
+                                    (assoc :img (get stages-screenshots idx))
+                                    (assoc :active? (= idx current-stage-idx)))
+                                filter-generated? (assoc :pages-idx [(->> (:pages-idx stage) (first) (filter-generated-page scene-data))
+                                                                     (->> (:pages-idx stage) (second) (filter-generated-page scene-data))]))))
+         (filter (fn [stage]
+                   (not (and (nil? (first (:pages-idx stage)))
+                             (nil? (second (:pages-idx stage))))))))))

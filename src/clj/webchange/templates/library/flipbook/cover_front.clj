@@ -10,7 +10,8 @@
 (def template
   {:page-cover            {:type       "group"
                            :transition "page-cover"
-                           :children   ["page-cover-background" "page-cover-image" "page-cover-title"]}
+                           :children   ["page-cover-background" "page-cover-image" "page-cover-title"]
+                           :generated? true}
    :page-cover-background {:type   "rectangle"
                            :x      0
                            :y      0

@@ -9,44 +9,9 @@
   [db]
   (get-in db (path-to-db [:current-stage])))
 
-(re-frame/reg-sub
-  ::current-stage
-  current-stage)
-
 (defn scene-stages
   [db scene-id]
   (get-in db [:scenes scene-id :metadata :stages] []))
-
-(re-frame/reg-sub
-  ::scene-stages
-  (fn []
-    [(re-frame/subscribe [::state/scene-data])])
-  (fn [[scene-data]]
-    (get-in scene-data [:metadata :stages] [])))
-
-(re-frame/reg-sub
-  ::stages-screenshots
-  (fn [db]
-    (get-in db (path-to-db [:stages-screenshots]) [])))
-
-(re-frame/reg-sub
-  ::stage-options
-  (fn []
-    [(re-frame/subscribe [::scene-stages])
-     (re-frame/subscribe [::current-stage])
-     (re-frame/subscribe [::stages-screenshots])])
-  (fn [[stages current-stage-idx stages-screenshots]]
-    (map-indexed (fn [idx stage]
-                   (-> stage
-                       (assoc :idx idx)
-                       (assoc :img (get stages-screenshots idx))
-                       (assoc :active? (= idx current-stage-idx))))
-                 stages)))
-
-(re-frame/reg-event-fx
-  ::set-stages-screenshots
-  (fn [{:keys [db]} [_ screenshots]]
-    {:db (assoc-in db (path-to-db [:stages-screenshots]) screenshots)}))
 
 (re-frame/reg-sub
   ::stage-key
@@ -119,15 +84,16 @@
 
 (re-frame/reg-event-fx
   ::show-flipbook-stage
-  (fn [{:keys [db]} [_ spread-index]]
+  (fn [{:keys [db]} [_ spread-index {:keys [hide-generated-pages?]}]]
     (let [metadata (state/scene-metadata db)
           book-name (get metadata :flipbook-name)
           scene-id (:current-scene db)
           component-wrapper @(get-in db [:transitions scene-id book-name])]
-      {:flipbook-show-spread {:component-wrapper component-wrapper
-                              :spread-idx        spread-index}})))
+      {:flipbook-show-spread {:component-wrapper     component-wrapper
+                              :spread-idx            spread-index
+                              :hide-generated-pages? hide-generated-pages?}})))
 
 (re-frame/reg-fx
   :flipbook-show-spread
-  (fn [{:keys [component-wrapper spread-idx]}]
-    ((:show-spread component-wrapper) spread-idx)))
+  (fn [{:keys [component-wrapper spread-idx hide-generated-pages?]}]
+    ((:show-spread component-wrapper) spread-idx {:hide-generated-pages? hide-generated-pages?})))
