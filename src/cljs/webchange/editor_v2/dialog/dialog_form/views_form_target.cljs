@@ -26,7 +26,9 @@
 (defn- character-selector
   []
   (let [targets (->> @(re-frame/subscribe [::translator-form.scene/available-animation-targets])
-                     (map value->option))
+                     (map value->option)
+                     (concat [{:text "No Character" :value ""}])
+                     )
         current-target (->> @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
                             get-inner-action
                             :target)
