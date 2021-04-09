@@ -127,7 +127,8 @@
 
     (when (instance? Text object)
       (utils/set-handler object "textChanged" #(update-editor-frame object sprite mask component-container))
-      (utils/set-handler object "fontSizeChanged" #(update-editor-frame object sprite mask component-container)))
+      (utils/set-handler object "fontSizeChanged" #(update-editor-frame object sprite mask component-container))
+      (utils/set-handler object "fontFamilyChanged" #(update-editor-frame object sprite mask component-container)))
 
     (aset sprite "mask" mask)
     (aset component-container "hitArea" (Rectangle. x y width height))

@@ -29,3 +29,7 @@
 (defn set-font-size
   [text-object font-size]
   (set-style-property text-object "fontSize" font-size))
+
+(defn set-font-family
+  [text-object font-family]
+  (set-style-property text-object "fontFamily" font-family))
