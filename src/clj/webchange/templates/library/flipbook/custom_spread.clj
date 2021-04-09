@@ -5,9 +5,9 @@
     [webchange.utils.text :as text-utils]))
 
 (def page-template
-  {:page       {:type       "group"
-                :transition "page"
-                :children   []}})
+  {:page {:type       "group"
+          :transition "page"
+          :children   []}})
 
 (def page-image-template
   {:type        "image"
@@ -19,7 +19,8 @@
    :height      "---"
    :mask-width  "---"
    :mask-height "---"
-   :src         "---"})
+   :src         "---"
+   :editable?   {:select true}})
 
 (def page-text-template
   {:type           "text"
@@ -36,14 +37,15 @@
    :text           "---"})
 
 (defn- add-image
-  [page-data mask-align {:keys [width height]} {:keys [image-src]}]
+  [page-data mask-align {:keys [width height]} {:keys [image-src spread-image-name]}]
   (let [page-image (assoc page-image-template
                      :mask-align (name mask-align)
                      :width (* width 2)
                      :height height
                      :mask-width width
                      :mask-height height
-                     :src image-src)]
+                     :src image-src
+                     :spread-image-name spread-image-name)]
     (-> page-data
         (assoc :page-image page-image)
         (update-in [:page :children] conj "page-image"))))
@@ -124,7 +126,8 @@
 
 (defn create
   [page-params {:keys [page-type] :as content-params}]
-  (let [[left-page-constructor right-page-constructor] (get-spread-constructors page-type)
+  (let [content-params (assoc content-params :spread-image-name (generate-name))
+        [left-page-constructor right-page-constructor] (get-spread-constructors page-type)
         left-page-data (left-page-constructor page-params content-params)
         right-page-data (right-page-constructor page-params content-params)]
     [left-page-data right-page-data]))

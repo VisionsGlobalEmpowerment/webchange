@@ -57,8 +57,18 @@
                 @loader)
         (.load))))
 
+(defn load-resource
+  [src callback]
+  (load-resources
+    [src]
+    {:on-complete (fn []
+                    (let [resource (get-resource src)]
+                      (callback resource)))}))
+
 (defn reset-loader!
   []
   (when (not (nil? @loader))
     (clear-texture-cache)
     (.reset @loader)))
+
+

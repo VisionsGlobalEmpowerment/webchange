@@ -26,12 +26,18 @@
     (find-node graph (fn [_ {:keys [children]}]
                        (some #{text-animation-node} children)))))
 
-(defn- populate-page-text-data
-  [page-data scene-data text-name]
-  (-> page-data
-      (assoc :text {:name text-name
-                    :data (get-in scene-data [:objects text-name])})
-      (assoc :phrase-action-path (-> (get-phrase-node scene-data page-data text-name) (second) (:path)))))
+(defn- populate-page-objects-data
+  [page-data scene-data object-name]
+  (let [object-data (get-in scene-data [:objects object-name])
+        object-type (:type object-data)
+        object-info {:name object-name
+                     :data object-data}]
+    (cond-> (merge page-data
+                   {:phrase-action-path (-> (get-phrase-node scene-data page-data object-name) (second) (:path))})
+            (= object-type "text") (-> (assoc :text object-info)
+                                       (dissoc :image))
+            (= object-type "image") (-> (assoc :image object-info)
+                                        (dissoc :text)))))
 
 (defn- page-in-stage?
   [scene-data stage-idx page-idx]
@@ -40,9 +46,9 @@
        (some #{page-idx})))
 
 (defn get-page-data
-  [scene-data stage-idx text-name page-idx]
+  [scene-data stage-idx object-name page-idx]
   (when (page-in-stage? scene-data stage-idx page-idx)
     (let [data (page-idx->data scene-data page-idx)]
-      (if (some? text-name)
-        (populate-page-text-data data scene-data text-name)
+      (if (some? object-name)
+        (populate-page-objects-data data scene-data object-name)
         data))))

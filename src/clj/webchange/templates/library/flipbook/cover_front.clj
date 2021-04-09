@@ -25,7 +25,8 @@
                            :height     600
                            :image-size "contain"
                            :origin     {:type "center-center"}
-                           :src        "---"}
+                           :src        "---"
+                           :editable?  {:select true}}
    :page-cover-title      {:type     "group"
                            :x        "---"
                            :y        "---"

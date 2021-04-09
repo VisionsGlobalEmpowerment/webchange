@@ -1,0 +1,24 @@
+.asset-form {
+    .asset-controls {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+
+        .control-block {
+            align-items: center;
+            display: flex;
+        }
+    }
+
+    .asset-form-content {
+        position: relative;
+    }
+
+    .buttons-block {
+        margin-top: 64px;
+
+        button {
+            margin-right: 16px;
+        }
+    }
+}

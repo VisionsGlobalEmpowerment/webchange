@@ -15,9 +15,9 @@
                    :set-highlight           (fn [highlight]
                                               (let [highlight-filter-set (f/has-filter-by-name sprite-object "glow")]
                                                 (when (and (not highlight) highlight-filter-set)
-                                                    (f/set-filter sprite-object "" {}))
+                                                  (f/set-filter sprite-object "" {}))
                                                 (when (and highlight (not highlight-filter-set))
-                                                    (f/set-filter sprite-object "glow" {}))))
+                                                  (f/set-filter sprite-object "glow" {}))))
                    :set-permanent-pulsation (fn [permanent-pulsation]
                                               (let [pulsation-filter-set (f/has-filter-by-name sprite-object "pulsation")]
                                                 (if (and (not permanent-pulsation) pulsation-filter-set) (f/set-filter sprite-object "" {}))
@@ -33,11 +33,12 @@
                    :set-position            (fn [position]
                                               (utils/set-position container position))
                    :set-src                 (fn [src]
-                                              (let [resource (resources/get-resource src)]
-                                                (when (nil? resource)
-                                                  (throw (js/Error. (str "Resources for '" src "' were not loaded"))))
-                                                (let [texture (.-texture resource)]
-                                                  (aset sprite-object "texture" texture)
-                                                  (image-utils/set-image-size sprite-object @state)
-                                                  (image-utils/apply-boundaries container @state)
-                                                  (image-utils/apply-origin container @state))))}))
+                                              (resources/load-resource
+                                                src
+                                                (fn [resource]
+                                                  (let [texture (.-texture resource)]
+                                                    (aset sprite-object "texture" texture)
+                                                    (image-utils/set-image-size sprite-object @state)
+                                                    (image-utils/set-image-position sprite-object @state)
+                                                    (image-utils/apply-boundaries container @state)
+                                                    (image-utils/apply-origin container @state)))))}))

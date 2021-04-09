@@ -34,7 +34,8 @@
                                        :width      "---"
                                        :height     "---"
                                        :src        "/raw/img/flipbook/logo.png"
-                                       :origin     {:type "center-center"}}
+                                       :origin     {:type "center-center"}
+                                       :editable?  {:select true}}
    :page-cover-back-license           {:type           "text"
                                        :word-wrap      true
                                        :vertical-align "top"
