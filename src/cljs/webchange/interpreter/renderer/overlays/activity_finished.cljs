@@ -5,7 +5,12 @@
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.utils.i18n :refer [t]]))
+
+(defn show-overlay?
+  [mode]
+  (some #{mode} [::modes/game]))
 
 (def menu-padding {:x 20 :y 20})
 

@@ -4,7 +4,7 @@
 
 (defn show-overlays?
   [mode]
-  (some #{mode} [::game]))
+  (some #{mode} [::game ::sandbox]))
 
 (defn start-on-ready?
   [mode]

@@ -16,7 +16,8 @@
   [scene-data {:keys [background-music]}]
   (let [background-music-name "start-background-music"
         file-name (get-in background-music [:src]),
-        start-background-music {:type "audio", :id file-name :loop true}
+        volume (get-in background-music [:volume]),
+        start-background-music {:type "audio", :id file-name :volume volume :loop true}
         music {:on "start", :action background-music-name}
         asset {:url file-name, :size 10, :type "audio"}
         triggers (:triggers scene-data)]

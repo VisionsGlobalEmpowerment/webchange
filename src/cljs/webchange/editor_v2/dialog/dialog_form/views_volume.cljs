@@ -7,7 +7,7 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.ui-framework.components.index :refer [icon range-input]]))
 
-(defn- volume-view
+(defn volume-view
   [{:keys [value on-change]}]
   (r/with-let [current-value (r/atom value)]
     [:div.volume-control

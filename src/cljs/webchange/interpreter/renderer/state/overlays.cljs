@@ -99,3 +99,11 @@
   (fn scene-data
     [db]
     (get-in db (path-to-db [:overlays :waiting-screen]) false)))
+
+
+(re-frame/reg-event-fx
+  ::show-goodbye-screen
+  (fn [{:keys [db]}]
+      (set-scene-interactive db false)
+      {:dispatch-n (list [::hide-navigation-menu]
+                         [::scene/change-scene-object :goodbye-overlay [[:set-visibility {:visible true}]]])}))

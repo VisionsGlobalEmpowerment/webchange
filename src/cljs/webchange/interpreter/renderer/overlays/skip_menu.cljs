@@ -4,7 +4,12 @@
     [webchange.common.events :as ce]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.utils.i18n :refer [t]]))
+
+(defn show-overlay?
+  [mode]
+  (some #{mode} [::modes/game]))
 
 (def menu-padding {:y 20})
 (def button-name :skip-menu-button)
