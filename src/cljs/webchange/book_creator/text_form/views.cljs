@@ -22,7 +22,7 @@
                handle-save #(re-frame/dispatch [::state/save id])]
     [:div.text-form
      [:div.font-controls
-      ;[font-family-component {:id id}]
+      [font-family-component {:id id}]
       [font-size-component {:id id}]]
      [:div.text-control-wrapper
       [text-component {:id id}]

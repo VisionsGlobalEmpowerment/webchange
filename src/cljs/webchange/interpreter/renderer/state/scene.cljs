@@ -70,26 +70,27 @@
   ::set-scene-object-state
   (fn [{:keys [_]} [_ object-name state]]
     (let [filtered-state (filter-extra-props state [:start :revert :target])
-          available-actions {:set-position   [:x :y]
-                             :set-scale      [:scale :scale-x :scale-y]
-                             :set-visibility [:visible]
-                             :set-src        [:src]
-                             :set-text       [:text]
-                             :clear-area     []
-                             :set-filter     [:filter :brightness :eager]
-                             :set-opacity    [:opacity]
-                             :set-tool       [:tool]
-                             :set-color      [:color]
-                             :set-stroke     [:stroke]
-                             :set-data       [:data]
-                             :set-path       [:path]
-                             :set-fill       [:fill]
-                             :set-border-color   [:border-color]
-                             :set-highlight  [:highlight]
-                             :set-permanent-pulsation  [:permanent-pulsation]
-                             :set-draggable [:draggable]
-                             :set-children  [:children]
-                             :set-font-size  [:font-size]}
+          available-actions {:set-position            [:x :y]
+                             :set-scale               [:scale :scale-x :scale-y]
+                             :set-visibility          [:visible]
+                             :set-src                 [:src]
+                             :set-text                [:text]
+                             :clear-area              []
+                             :set-filter              [:filter :brightness :eager]
+                             :set-opacity             [:opacity]
+                             :set-tool                [:tool]
+                             :set-color               [:color]
+                             :set-stroke              [:stroke]
+                             :set-data                [:data]
+                             :set-path                [:path]
+                             :set-fill                [:fill]
+                             :set-border-color        [:border-color]
+                             :set-highlight           [:highlight]
+                             :set-permanent-pulsation [:permanent-pulsation]
+                             :set-draggable           [:draggable]
+                             :set-children            [:children]
+                             :set-font-size           [:font-size]
+                             :set-font-family         [:font-family]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys filtered-state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
@@ -164,6 +165,11 @@
     (apply-to-wrapper w/set-font-size object-wrapper font-size)))
 
 (re-frame/reg-fx
+  :set-font-family
+  (fn [[object-wrapper {:keys [font-family]}]]
+    (apply-to-wrapper w/set-font-family object-wrapper font-family)))
+
+(re-frame/reg-fx
   :set-src
   (fn [[object-wrapper {:keys [src options]}]]
     (apply-to-wrapper w/set-src object-wrapper src options)))
@@ -196,7 +202,7 @@
         (.removeChild object child)))
 
     (doseq [child children]
-      (apply-to-wrapper w/set-parent (get-object-name db (keyword child)) object-wrapper  options))))
+      (apply-to-wrapper w/set-parent (get-object-name db (keyword child)) object-wrapper options))))
 
 (re-frame/reg-fx
   :set-opacity

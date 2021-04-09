@@ -42,6 +42,7 @@
 (defn set-text [wrapper & params] (execute wrapper :set-text params))
 (defn clear-area [wrapper & params] (execute wrapper :clear params))
 (defn set-font-size [wrapper & params] (execute wrapper :set-font-size params))
+(defn set-font-family [wrapper & params] (execute wrapper :set-font-family params))
 (defn set-value [wrapper & params] (execute wrapper :set-value params))
 (defn set-visibility [wrapper & params] (execute wrapper :set-visibility params))
 (defn start-animation [wrapper & params] (execute wrapper :start-animation params))
