@@ -360,8 +360,8 @@
     (handler/dev-handler request)))
 
 (defn review-course!
-  [course-slug user-id data]
-  (let [url (str "/api/courses/" course-slug "/review")
+  [course-id user-id data]
+  (let [url (str "/api/courses/" course-id "/review")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     (teacher-logged-in user-id))]

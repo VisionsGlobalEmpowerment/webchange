@@ -274,9 +274,9 @@
 
 (deftest book-in-review-can-be-published
   (let [{user-id :id} (f/website-user-created)
-        {course-slug :slug} (f/course-created {:status "in-review" :type "book"})
+        {course-slug :slug course-id :id} (f/course-created {:status "in-review" :type "book"})
         approve-response (with-redefs [webchange.auth.roles/is-admin? (fn [user-id] true)]
-                           (f/review-course! course-slug user-id {:status "published"}))
+                           (f/review-course! course-id user-id {:status "published"}))
         get-course-response  (-> (f/get-course-info course-slug) :body slurp (json/read-str :key-fn keyword))]
     (is (= 200 (:status approve-response)))
     (is (= "published" (:status get-course-response)))))
