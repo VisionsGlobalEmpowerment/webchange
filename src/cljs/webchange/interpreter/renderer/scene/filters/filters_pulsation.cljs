@@ -6,7 +6,7 @@
 (def scale-diff 0.1)
 (def rotation-angle 15)
 
-(defn- init-state!
+(defn init-state!
   [state frame interval-duration]
   (when (nil? @state)
     (reset! state {:interval-number     0
@@ -31,13 +31,13 @@
     (reset! state {:interval-number     next-interval
                    :next-interval-frame next-frame})))
 
-(defn- get-time
+(defn get-time
   "Get time interval [0..1] from current frame number."
   [current-frame duration state]
   (let [milestone-frame (:next-interval-frame @state)]
     (/ (- duration (- milestone-frame current-frame)) duration)))
 
-(defn- apply-intervals!
+(defn apply-intervals!
   "Count time cycles with 'interval-duration' length.
    Return current time value if it's a 'play' interval. Return 0 if it's a 'pause' interval."
   [current-value frame state intervals interval-duration]
@@ -49,7 +49,7 @@
       current-value
       0)))
 
-(defn- get-time-cycled
+(defn get-time-cycled
   "Transform time interval [0..1] to [0..1..-1..0]."
   [time speed]
   (let [speed (if (not speed) 2 speed)]

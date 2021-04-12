@@ -87,6 +87,7 @@
                              :set-border-color        [:border-color]
                              :set-highlight           [:highlight]
                              :set-permanent-pulsation [:permanent-pulsation]
+                             :set-alpha-pulsation     [:alpha-pulsation]
                              :set-draggable           [:draggable]
                              :set-children            [:children]
                              :set-font-size           [:font-size]
@@ -183,6 +184,11 @@
   :set-permanent-pulsation
   (fn [[object-wrapper {:keys [permanent-pulsation options]}]]
     (apply-to-wrapper w/set-permanent-pulsation object-wrapper permanent-pulsation options)))
+
+(re-frame/reg-fx
+  :set-alpha-pulsation
+  (fn [[object-wrapper {:keys [alpha-pulsation options]}]]
+    (apply-to-wrapper w/set-alpha-pulsation object-wrapper alpha-pulsation options)))
 
 (re-frame/reg-fx
   :set-draggable

@@ -23,7 +23,8 @@
         on-change (fn [js-file]
                     (reset! uploading-atom true)
                     (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish}]))]
-    [file-input/select-file-form {:on-change on-change
+    [file-input/select-file-form {:loading @uploading-atom
+                                  :on-change on-change
                                   :styles    {:wrapper      {:display "inline-block"}
                                               :button       {:padding "0 25px"}
                                               :icon-wrapper {:margin "-2px 16px 4px 0px"}
