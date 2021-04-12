@@ -5,6 +5,7 @@
     [webchange.editor-v2.layout.components.activity-stage.state :as stage]
     [webchange.interpreter.renderer.state.editor :as interpreter]
     [webchange.state.state :as state]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.utils.flipbook :as utils]))
 
 (defn path-to-db
@@ -37,7 +38,7 @@
 (re-frame/reg-sub
   ::current-object-data
   (fn []
-    [(re-frame/subscribe [::stage/current-stage])
+    [(re-frame/subscribe [::state-flipbook/current-stage])
      (re-frame/subscribe [::interpreter/selected-object])
      (re-frame/subscribe [::state/scene-data])])
   (fn [[current-stage selected-object-name scene-data]]
