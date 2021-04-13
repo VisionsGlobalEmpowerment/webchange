@@ -15,7 +15,7 @@
                         :mari       {:width  910,
                                      :height 601,
                                      :scale  {:x 0.5, :y 0.5}
-                                     :speed  1
+                                     :speed  0.8
                                      :meshes true
                                      :skin   "01 mari"}
                         :boxes      {:speed 1}})

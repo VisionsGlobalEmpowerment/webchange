@@ -4,7 +4,7 @@
 
 (def m {:id          36
         :name        "Karaoke"
-        :tags        ["listening comprehension" "rhyming" "express ideas verbally"]
+        :tags        ["listening comprehension" "rhyming" "express ideas verbally" "Guided Practice"]
         :description "Karaoke"
         :options     {:video        {:label "Video File"
                                      :type  "video"}
@@ -35,7 +35,7 @@
                                                   :name       "mari"
                                                   :scale-x    0.5
                                                   :scale-y    0.5
-                                                  :speed      0.35
+                                                  :speed      0.15
                                                   :start      true
                                                   :actions    {:click {:id "mari-click" :on "click" :type "action"}}}
                         :video                   {:type       "video"
@@ -54,7 +54,11 @@
                                                   :width      128
                                                   :height     128
                                                   :editable?  true
-                                                  :states     {:hidden {:visible false} :visible {:visible true}}
+                                                  :states     {:hidden {:visible false}
+                                                               :visible {:visible true}
+                                                               :highlighted {:alpha-pulsation {}}
+                                                               :not-highlighted {:alpha-pulsation false}
+                                                               }
                                                   :actions    {:click {:id "on-play-video-button-clicked" :on "click" :type "action"}}}
 
                         :mic                     {:type       "image"
@@ -63,6 +67,9 @@
                                                   :x          770
                                                   :y          485
                                                   :width      360
+                                                  :visible  false
+                                                  :states   {:hidden  {:visible false}
+                                                             :visible {:visible true}}
                                                   :height     656}
                         :record-button           {:type     "group"
                                                   :x        886
@@ -145,17 +152,19 @@
                         :hide-play-video-button               {:type "state" :id "hidden" :target "play-video-button"}
                         :show-playback                        {:type "state" :id "visible" :target "playback-group"}
                         :hide-playback                        {:type "state" :id "hidden" :target "playback-group"}
-                        :highlight-play-video-button          {:type      "set-attribute"
+                        :highlight-play-video-button          {:type      "state"
                                                                :target    "play-video-button"
-                                                               :attr-name "highlight" :attr-value true}
-                        :unhighlight-play-video-button        {:type      "set-attribute"
+                                                               :id "highlighted"}
+
+                        :unhighlight-play-video-button        {:type      "state"
                                                                :target    "play-video-button"
-                                                               :attr-name "highlight" :attr-value false}
+                                                               :id "not-highlighted"}
 
                         :play-video-seq                       {:type "sequence"
                                                                :data ["show-video"
                                                                       "play-video"
-                                                                      "hide-video"]}
+                                                                      ;"hide-video"
+                                                                      ]}
 
                         :play-video                           {:type     "play-video"
                                                                :target   "video"
@@ -188,7 +197,9 @@
                                                                :data ["hide-play-video-button"
                                                                       "unhighlight-play-video-button"
                                                                       "play-video-seq"
+                                                                      "delay-2"
                                                                       "run-round-2"]}
+                        :delay-2                              {:type "empty" :duration 0}
 
                         ;; Round 2
 
@@ -213,12 +224,17 @@
                                                                :data ["hide-play-video-button"
                                                                       "unhighlight-play-video-button"
                                                                       "play-video-seq"
+                                                                      "delay-2"
                                                                       "run-round-3-intro"]}
 
                         ;; Round 3 Intro
-
+                        :show-mic {:type "state"
+                                   :id "visible"
+                                   :target "mic"
+                                   }
                         :run-round-3-intro                    {:type "sequence"
-                                                               :data ["dialog-round-3-intro"
+                                                               :data ["show-mic"
+                                                                      "dialog-round-3-intro"
                                                                       "get-record-buttons"
                                                                       "controls-intro"
                                                                       "dialog-finish-intro"

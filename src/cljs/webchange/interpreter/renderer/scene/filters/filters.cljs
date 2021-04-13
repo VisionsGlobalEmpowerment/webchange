@@ -2,6 +2,7 @@
   (:require
     [webchange.interpreter.pixi :refer [shared-ticker ColorMatrixFilter DropShadowFilter GlowFilter OutlineFilter]]
     [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager apply-transformation]]
+    [webchange.interpreter.renderer.scene.filters.filters-alpha-pulsation :as fap]
     [webchange.interpreter.renderer.scene.filters.utils :as utils]
     [webchange.interpreter.renderer.scene.components.utils :as components-utils]
     [webchange.logger.index :as logger]))
@@ -88,6 +89,9 @@
 (def pulsation-fns (atom {}))
 (def pulsation-default-scale (atom {}))
 
+(def alpha-pulsation-fns (atom {}))
+(def alpha-pulsation-default-scale (atom {}))
+
 (defn destroy
   []
   (doseq [[_ fn] @pulsation-fns]
@@ -123,9 +127,26 @@
          (swap! pulsation-fns assoc container (fn [] (animation-eager container {:time (.now js/Date)} state speed no-interval)))
          (create-ticker (get @pulsation-fns container)))))))
 
+(defn apply-alpha-pulsation-filter
+  ([container]
+   (apply-alpha-pulsation-filter container {}))
+  ([container {:keys [remove speed no-interval]}]
+   (let [state (atom nil)]
+     (if remove
+       (do
+         (when (get @alpha-pulsation-default-scale container)
+           (components-utils/set-opacity container (get @alpha-pulsation-default-scale container)))
+         (remove-ticker (get @alpha-pulsation-fns container))
+         (swap! alpha-pulsation-fns assoc container nil))
+       (do
+         (swap! alpha-pulsation-default-scale assoc container (components-utils/get-opacity container))
+         (swap! alpha-pulsation-fns assoc container (fn [] (fap/animation-eager container {:time (.now js/Date)} state speed no-interval)))
+         (create-ticker (get @alpha-pulsation-fns container)))))))
+
 (defn- remove-all-filters
   [container]
   (apply-pulsation-filter container {:remove true})
+  (apply-alpha-pulsation-filter container {:remove true})
   (aset container "filters" nil))
 
 (defn has-filter-by-name
@@ -144,6 +165,7 @@
       "grayscale" (apply-grayscale-filter container)
       "outline" (apply-outline-filter container filter-params)
       "pulsation" (apply-pulsation-filter container)
+      "alpha-pulsation" (apply-alpha-pulsation-filter container)
       "shadow" (apply-shadow-filter container filter-params)
       (logger/warn "[Filters]" (str "Filter with type <" name "> can not be drawn because it is not defined")))))
 
@@ -156,6 +178,7 @@
     "grayscale" (apply-grayscale-filter container)
     "outline" (apply-outline-filter container params)
     "pulsation" (apply-pulsation-filter container params)
+    "alpha-pulsation" (apply-alpha-pulsation-filter container params)
     "shadow" (apply-shadow-filter container params)
     "" (remove-all-filters container)
     (logger/warn "[Filters]" (str "Filter with type <" name "> can not be set because it is not defined"))))

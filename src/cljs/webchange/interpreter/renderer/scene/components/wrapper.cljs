@@ -3,6 +3,7 @@
     [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.debug :as debug]
+    [webchange.interpreter.renderer.scene.filters.filters :as f]
     [webchange.interpreter.renderer.scene.filters.filters :as filters]
     [webchange.logger.index :as logger]))
 
@@ -69,6 +70,12 @@
                                  (utils/get-opacity main-display-object))
             :set-opacity       (fn [value]
                                  (utils/set-opacity main-display-object value))
+            :set-alpha-pulsation (fn [alpha-pulsation]
+                                       (let [pulsation-filter-set (f/has-filter-by-name main-display-object "alpha-pulsation")]
+                                         (if (and (not alpha-pulsation) pulsation-filter-set) (f/set-filter main-display-object "" {}))
+                                         (if (and alpha-pulsation (not pulsation-filter-set))
+                                           (f/set-filter main-display-object "alpha-pulsation" (assoc alpha-pulsation :no-interval true))))
+                                       )
             :set-interactive   (fn [interactive?]
                                  (set! main-display-object -interactive interactive?)
                                  (set! main-display-object -interactiveChildren interactive?))

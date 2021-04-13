@@ -95,9 +95,9 @@
   (.-alpha object))
 
 (defn set-opacity
-  [object rotation]
-  (when rotation
-    (set! (.-alpha object) rotation)))
+  [object alpha]
+  (when alpha
+    (set! (.-alpha object) alpha)))
 
 (defn set-z-index
   [object index]
