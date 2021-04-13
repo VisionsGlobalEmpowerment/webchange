@@ -6,8 +6,14 @@
         display: none;
     }
 
-    .file-name {
+    .file-name-wrapper {
         flex: 1 1;
+
+        .file-name {
+            box-sizing: border-box;
+            cursor: pointer;
+            width: 100%;
+        }
     }
 
     button {

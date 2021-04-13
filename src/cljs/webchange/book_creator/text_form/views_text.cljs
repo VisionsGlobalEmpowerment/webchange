@@ -10,4 +10,4 @@
         handle-change (fn [value] (re-frame/dispatch [::state/set-current-text id value]))]
     [text-area {:value      value
                 :on-change  handle-change
-                :class-name "text-control"}]))
+                :class-name "text-value-control"}]))

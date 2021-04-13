@@ -29,10 +29,10 @@
   ([display-object x y]
    (set-position display-object {:x x :y y}))
   ([display-object position]
-  (let [{:keys [x y]} (merge (get-position display-object)
-                             (remove-nil-fields position))]
-    (-> (.-position display-object)
-        (.set x y)))))
+   (let [{:keys [x y]} (merge (get-position display-object)
+                              (remove-nil-fields position))]
+     (-> (.-position display-object)
+         (.set x y)))))
 
 (defn get-scale
   [display-object]
@@ -62,7 +62,7 @@
         button-events ["click"]]
     (aset display-object "interactive" true)
     (when (some #{event-name} button-events)
-      (aset display-object "buttonMode" true))                      ;; ToDo: Move "buttonMode" setting to components
+      (aset display-object "buttonMode" true))              ;; ToDo: Move "buttonMode" setting to components
     (if (contains? synonyms event-name)
       (doseq [event (get synonyms event-name)]
         (.on display-object event event-handler))
@@ -70,8 +70,9 @@
 
 (defn get-size
   [object]
-  {:width  (.-width object)
-   :height (.-height object)})
+  (let [bounds (.getLocalBounds object)]
+    {:width  (.-width bounds)
+     :height (.-height bounds)}))
 
 (defn set-size
   [object {:keys [width height]}]

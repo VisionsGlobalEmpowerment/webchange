@@ -1,46 +1,19 @@
-.book-creator {
-    .text-form {
-        .font-controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 24px;
+.text-form {
+    .font-family-selector {
+        flex: 1 1;
+    }
 
-            .control-block {
-                align-items: center;
-                display: flex;
-                flex: 1 1;
-                justify-content: center;
+    .font-size-selector {
+        width: 96px;
+    }
 
-                .font-family-selector {
-                    flex: 1 1;
-                }
+    .text-value-control {
+        padding-bottom: 64px;
+    }
 
-                .font-size-selector {
-                    width: 96px;
-                }
-            }
-        }
-
-        .text-control-wrapper {
-            position: relative;
-
-            .text-control {
-                padding-bottom: 64px;
-            }
-        }
-
-        .voice-over {
-            position: absolute;
-            left: 16px;
-            bottom: 16px;
-        }
-
-        .buttons-block {
-            margin-top: 64px;
-
-            button {
-                margin-right: 16px;
-            }
-        }
+    .voice-over {
+        position: absolute;
+        left: 16px;
+        bottom: 16px;
     }
 }

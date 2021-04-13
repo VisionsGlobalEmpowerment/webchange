@@ -81,16 +81,25 @@
                          (some? on-success) (conj (conj on-success response)))}))
 
 (re-frame/reg-event-fx
-  ::update-scene-object
-  (fn [{:keys [db]} [_ {:keys [scene-id object-name object-data-patch]} handlers]]
-    {:pre [(keyword? object-name)]}
+  ::update-scene-objects
+  (fn [{:keys [db]} [_ {:keys [scene-id patches-list]} handlers]]
+    {:pre [(sequential? patches-list)]}
     (let [scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
-          objects-data (-> (core/get-scene-data db scene-id)
-                           (get :objects {})
-                           (update object-name merge object-data-patch))]
+          objects-data (reduce (fn [objects-data {:keys [object-name object-data-patch]}]
+                                 (update objects-data object-name merge object-data-patch))
+                               (-> (core/get-scene-data db scene-id)
+                                   (get :objects {}))
+                               patches-list)]
       {:dispatch [::update-scene {:scene-id         scene-id
                                   :scene-data-patch {:objects objects-data}}
                   handlers]})))
+
+(re-frame/reg-event-fx
+  ::update-scene-object
+  (fn [{:keys [_]} [_ {:keys [scene-id object-name object-data-patch]} handlers]]
+    {:pre [(keyword? object-name)]}
+    {:dispatch [::update-scene-objects {:scene-id     scene-id
+                                        :patches-list [object-name object-data-patch]} handlers]}))
 
 (re-frame/reg-event-fx
   ::update-scene-metadata

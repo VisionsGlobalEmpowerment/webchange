@@ -1,8 +1,10 @@
 @import "pages/styles";
 @import "stage/styles";
-@import "text_form/styles";
 
 .book-creator {
+    @import "asset_form/styles";
+    @import "text_form/styles";
+
     display: flex;
 
     .main-content {

@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-creator.text-form.state :as text-form-state]
+    [webchange.book-creator.asset-form.views :refer [asset-form]]
+    [webchange.book-creator.state :as state-book-creator]
     [webchange.book-creator.text-form.views-font-family :refer [font-family-component]]
     [webchange.book-creator.text-form.views-font-size :refer [font-size-component]]
     [webchange.book-creator.text-form.views-text :refer [text-component]]
@@ -19,26 +20,22 @@
                                                       :text-object-name   (get-in text [:name])
                                                       :dialog-action-name (keyword action)
                                                       :phrase-action-path phrase-action-path}])
-               handle-save #(re-frame/dispatch [::state/save id])]
-    [:div.text-form
-     [:div.font-controls
-      [font-family-component {:id id}]
-      [font-size-component {:id id}]]
-     [:div.text-control-wrapper
-      [text-component {:id id}]
-      [voice-over-button {:id id}]]
-     [:div.buttons-block
-      [button {:variant  "contained"
-               :color    "primary"
-               :size     "big"
-               :on-click handle-save}
-       "Apply"]]]
+               handle-save #(re-frame/dispatch [::state/save id])
+               disabled? @(re-frame/subscribe [::state/loading? id])]
+
+    [asset-form {:top-controls  [[font-family-component {:id id}]
+                                 [font-size-component {:id id}]]
+                 :on-save-click handle-save
+                 :disabled?     disabled?
+                 :class-name    "text-form"}
+     [text-component {:id id}]
+     [voice-over-button {:id id}]]
     (finally
       (re-frame/dispatch [::state/reset id]))))
 
 (defn text-form
   []
-  (let [{:keys [text] :as text-object-data} @(re-frame/subscribe [::text-form-state/current-text-object-data])]
-    (when (some? text-object-data)
+  (let [{:keys [text] :as object-data} @(re-frame/subscribe [::state-book-creator/current-object-data])]
+    (when (some? text)
       ^{:key (:name text)}
-      [text-form-view text-object-data])))
+      [text-form-view object-data])))

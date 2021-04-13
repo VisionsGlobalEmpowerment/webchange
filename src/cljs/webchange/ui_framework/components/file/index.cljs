@@ -72,8 +72,9 @@
       (.removeEventListener @drop-area "drop" handle-area-drop))))
 
 (defn component
-  [{:keys [button-text drag-and-drop? type on-change show-file-name? show-icon? upload-options with-upload?]
+  [{:keys [button-text disabled? drag-and-drop? type on-change show-file-name? show-icon? upload-options with-upload?]
     :or   {button-text     "Choose File"
+           disabled?       false
            drag-and-drop?  false
            on-change       #()
            show-icon?      true
@@ -101,11 +102,13 @@
               :ref       #(reset! file-input %)}]
      (when (and show-icon? (some? type))
        [icon/component {:icon type}])
-     [text-input/component {:value      (if @uploading? "Uploading..." @text-value)
-                            :class-name "file-name"
-                            :disabled?  true}]
+     [:div {:class-name "file-name-wrapper"
+            :on-click   #(when-not disabled? (.click @file-input))}
+      [text-input/component {:value      (if @uploading? "Uploading..." @text-value)
+                             :class-name "file-name"
+                             :disabled?  true}]]
      [button/component {:on-click  #(.click @file-input)
-                        :disabled? @uploading?}
+                        :disabled? (or disabled? @uploading?)}
       button-text]
      (when drag-and-drop?
        [drag-and-drop {:on-drop #(-> % drop-event->file handle-change)}])]))

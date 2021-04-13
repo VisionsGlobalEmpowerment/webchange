@@ -10,13 +10,14 @@
           :children   []}})
 
 (def page-image-template
-  {:type        "image"
-   :image-size  "contain"
-   :x           0
-   :y           "---"
-   :width       "---"
-   :height      "---"
-   :src         "---"})
+  {:type       "image"
+   :image-size "contain"
+   :x          0
+   :y          "---"
+   :width      "---"
+   :height     "---"
+   :src        "---"
+   :editable?  {:select true}})
 
 (def page-text-background-template
   {:type   "rectangle"
@@ -62,11 +63,11 @@
             0
             (- height background-height))
         page-text-background (assoc page-text-background-template
-                    :x 0
-                    :y y
-                    :width width
-                    :height background-height
-                    :fill background-color)]
+                               :x 0
+                               :y y
+                               :width width
+                               :height background-height
+                               :fill background-color)]
     (-> page-data
         (assoc :page-text-background page-text-background)
         (update-in [:page :children] conj "page-text-background"))))
