@@ -79,7 +79,8 @@
   (fn [{:keys [_]} [_ {:keys [scene-id object-name object-data-patch]} handlers]]
     {:pre [(keyword? object-name)]}
     {:dispatch [::update-scene-objects {:scene-id     scene-id
-                                        :patches-list [object-name object-data-patch]} handlers]}))
+                                        :patches-list [{:object-name       object-name
+                                                        :object-data-patch object-data-patch}]} handlers]}))
 
 (re-frame/reg-event-fx
   ::update-scene-metadata
