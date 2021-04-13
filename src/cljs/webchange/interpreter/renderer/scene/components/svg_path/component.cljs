@@ -38,6 +38,10 @@
               (set! -lineCap line-cap)
               (.scale (:x scale) (:y scale)))
         texture (.from Texture canvas)]
+    (when (and fill  (not (boolean? fill)))
+      (doto
+            (.getContext canvas "2d")
+            (set! -fillStyle fill)))
     (svg-utils/set-svg-path texture ctx {:data data
                                          :fill fill
                                          :dash dash})
