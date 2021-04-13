@@ -8,26 +8,6 @@
   [relative-path]
   (concat [:state] relative-path))
 
-;; Course-data
-
-(defn course-data
-  [db]
-  (get db :course-data))
-
-(re-frame/reg-sub
-  ::course-data
-  course-data)
-
-(re-frame/reg-event-fx
-  ::set-course-data
-  (fn [{:keys [db]} [_ course-data]]
-    {:db (assoc db :course-data course-data)}))
-
-(re-frame/reg-event-fx
-  ::load-course
-  (fn [{:keys [_]} [_ course-slug]]
-    {:dispatch [::warehouse/load-course course-slug {:on-success [::set-course-data]}]}))
-
 ;; Scene data
 
 (re-frame/reg-sub

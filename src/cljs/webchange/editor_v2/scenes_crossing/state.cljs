@@ -4,7 +4,7 @@
     [webchange.editor-v2.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.edit-common :as common]
     [webchange.editor-v2.state :as db]
-    [webchange.state.state :as state]
+    [webchange.state.state-course :as state-course]
     [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
@@ -51,7 +51,7 @@
 
 (defn- get-course-scenes
   ([db]
-   (let [course-data (state/course-data db)]
+   (let [course-data (state-course/get-course-data db)]
      (get-course-scenes course-data nil)))
   ([course-data _]
    (->> (utils/course-scenes-list course-data)
@@ -60,7 +60,7 @@
 (re-frame/reg-sub
   ::course-scenes
   (fn []
-    [(re-frame/subscribe [::state/course-data])])
+    [(re-frame/subscribe [::state-course/course-data])])
   (fn [[course-data]]
     (get-course-scenes course-data nil)))
 
@@ -90,7 +90,7 @@
 (re-frame/reg-sub
   ::scene-outs
   (fn []
-    [(re-frame/subscribe [::state/course-data])
+    [(re-frame/subscribe [::state-course/course-data])
      (re-frame/subscribe [::current-scene])])
   (fn [[course-data current-scene]]
     (->> (:id current-scene)
@@ -116,6 +116,6 @@
   (fn [{:keys [db]} [_ scene-object out-scene-id]]
     (let [scene-id (-> db get-current-scene :id)
           course-id (get-current-course db)
-          course-data (-> (state/course-data db)
+          course-data (-> (state-course/get-course-data db)
                           (utils/set-scene-out scene-id scene-object out-scene-id))]
       {:dispatch [::common/update-course course-id course-data]})))

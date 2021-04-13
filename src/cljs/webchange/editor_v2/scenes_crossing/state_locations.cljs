@@ -4,12 +4,12 @@
     [webchange.editor-v2.scenes-crossing.state :as crossing-state]
     [webchange.editor-v2.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.edit-common :as common]
-    [webchange.state.state :as state]))
+    [webchange.state.state-course :as state-course]))
 
 (re-frame/reg-sub
   ::has-locations?
   (fn []
-    [(re-frame/subscribe [::state/course-data])])
+    [(re-frame/subscribe [::state-course/course-data])])
   (fn [[course-data] [_ scene-id]]
     (->> (keyword scene-id)
          (utils/scene-locations course-data)
@@ -19,14 +19,14 @@
   ::init-scene-locations
   (fn [{:keys [db]} [_ scene-id]]
     (let [course-id (crossing-state/get-current-course db)
-          course-data (-> (state/course-data db)
+          course-data (-> (state-course/get-course-data db)
                           (utils/init-scene-locations (keyword scene-id)))]
       {:dispatch [::common/update-course course-id course-data]})))
 
 (re-frame/reg-sub
   ::scene-locations
   (fn []
-    [(re-frame/subscribe [::state/course-data])])
+    [(re-frame/subscribe [::state-course/course-data])])
   (fn [[course-data] [_ scene-id]]
     (->> (keyword scene-id)
          (utils/scene-locations course-data))))
@@ -42,7 +42,7 @@
   ::save-scene-location
   (fn [{:keys [db]} [_ scene-id level location]]
     (let [course-id (crossing-state/get-current-course db)
-          course-data (-> (state/course-data db)
+          course-data (-> (state-course/get-course-data db)
                           (utils/add-scene-location (keyword scene-id) level location))]
       {:dispatch [::common/update-course course-id course-data]})))
 

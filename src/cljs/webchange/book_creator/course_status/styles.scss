@@ -1,0 +1,15 @@
+.status-message {
+    font-weight: 500;
+
+    &.in-review {
+        color: #8D8D8D;
+    }
+
+    &.declined {
+        color: #D71D1D;
+    }
+
+    &.published {
+        color: #0046AE;
+    }
+}
