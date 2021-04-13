@@ -9,14 +9,16 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.question.question-form.state.actions :as question-form.actions]
     [webchange.editor-v2.text-animation-editor.chunks-editor.state :as translator.text]
+    [webchange.state.state-course :as state-course]
     [webchange.subs :as subs]))
 
 (re-frame/reg-event-fx
   ::init-editor
   (fn [_ [_ course-id scene-id]]
+    (print "::init-editor" course-id)
     {:dispatch-n (list [::ie/start-course course-id scene-id]
                        [::load-lesson-sets course-id]
-                       [::load-course-info course-id])}))
+                       [::state-course/load-course-info course-id])}))
 
 (re-frame/reg-event-fx
   ::load-lesson-sets
@@ -50,24 +52,6 @@
   (fn [{:keys [_]} [_ object-info]]
     {:dispatch-n (list [::translator.text/set-current-dialog-text object-info]
                        [::translator.text/open])}))
-
-(re-frame/reg-event-fx
-  ::load-course-info
-  (fn [{:keys [db]} [_ course-slug]]
-    {:db         (-> db
-                     (assoc-in [:loading :course-info] true))
-     :http-xhrio {:method          :get
-                  :uri             (str "/api/courses/" course-slug "/info")
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::load-course-info-success]
-                  :on-failure      [:api-request-error :course-info]}}))
-
-(re-frame/reg-event-fx
-  ::load-course-info-success
-  (fn [{:keys [db]} [_ result]]
-    {:db         (assoc-in db [:editor :course-info] result)
-     :dispatch-n (list [:complete-request :course-info])}))
 
 (re-frame/reg-event-fx
   ::edit-course-info

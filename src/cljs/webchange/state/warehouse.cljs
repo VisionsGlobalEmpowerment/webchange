@@ -63,6 +63,22 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-course-info
+  (fn [{:keys [_]} [_ course-slug handlers]]
+    (create-request {:key    :load-course-info
+                     :method :get
+                     :uri    (str "/api/courses/" course-slug "/info")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::publish-course
+  (fn [{:keys [_]} [_ course-slug handlers]]
+    (create-request {:key    :publish-course
+                     :method :post
+                     :uri    (str "/api/courses/" course-slug "/publish")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::save-course
   (fn [{:keys [_]} [_ {:keys [course-slug course-data]} handlers]]
     (create-request {:key    :save-course
