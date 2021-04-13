@@ -3,7 +3,8 @@
     [webchange.interpreter.renderer.scene.components.text.utils :as utils]
     [webchange.interpreter.renderer.scene.components.utils :refer [emit]]
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
-    [webchange.interpreter.renderer.scene.filters.filters :as f]))
+    [webchange.interpreter.renderer.scene.filters.filters :as f]
+    [webchange.logger.index :as logger]))
 
 (defn wrap
   [type name text-object chunks]
@@ -33,5 +34,7 @@
                                               (utils/set-font-size text-object font-size)
                                               (emit text-object "fontSizeChanged"))
                    :set-font-family         (fn [font-family]
-                                              (utils/set-font-family text-object font-family)
-                                              (emit text-object "fontFamilyChanged"))}))
+                                              (if (some? font-family)
+                                                (do (utils/set-font-family text-object font-family)
+                                                    (emit text-object "fontFamilyChanged"))
+                                                (logger/warn "[:set-font-family] Font family is not defined")))}))
