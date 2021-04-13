@@ -66,9 +66,7 @@
     (->> (for [[k v] m]
            (str (url-encode (name k)) "=" (url-encode v)))
          (interpose "&")
-         (apply str)
-
-         )))
+         (apply str))))
 
 (defn build-url [url-base query-map]
   (str url-base "?" (make-query-string query-map)))
@@ -351,6 +349,30 @@
         request (-> (mock/request :get url)
                     (mock/header :content-type "application/json")
                     teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-courses-admin-list
+  [type status user-id]
+  (let [url (str "/api/courses/list/" type "/" status)
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn review-course!
+  [course-id user-id data]
+  (let [url (str "/api/courses/" course-id "/review")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn publish-course!
+  [course-slug user-id]
+  (let [url (str "/api/courses/" course-slug "/publish")
+        request (-> (mock/request :post url)
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn get-course-info

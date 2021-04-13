@@ -641,3 +641,29 @@
   (let [scene-data (-> (get-scene-latest-version course-slug scene-slug)
                        (templates/update-activity-from-template data))]
     (save-scene! course-slug scene-slug scene-data user-id)))
+
+(defn publish-course!
+  [course-slug]
+  (let [{course-id :id status :status} (db/get-course {:slug course-slug})
+        can-publish? (contains? #{"draft" "changes-requested"} status)]
+    (if can-publish?
+      (do (db/update-course-status! {:id course-id :status "in-review"})
+          [true (-> (get-course-info course-slug)
+                    (->website-course))])
+      [false {:message "invalid status"}])))
+
+(defn review-course!
+  [course-id {new-status :status}]
+  (let [{course-slug :slug status :status} (db/get-course-by-id {:id course-id})
+        can-review? (contains? #{"in-review"} status)
+        new-status-valid? (contains? #{"published" "declined" "changes-requested"} new-status)]
+    (if (and can-review? new-status-valid?)
+      (do (db/update-course-status! {:id course-id :status new-status})
+          [true (-> (get-course-info course-slug)
+                    (->website-course))])
+      [false {:message "invalid status"}])))
+
+(defn get-on-review-courses
+  [type status]
+  (let [courses (db/get-courses-by-status-and-type {:type type :status status})]
+    [true (map ->website-course courses)]))

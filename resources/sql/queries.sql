@@ -60,6 +60,12 @@ UPDATE courses
 SET name = :name, slug = :slug, lang = :lang, image_src = :image_src
 WHERE id = :id
 
+-- :name update-course-status! :! :n
+-- :doc updates an existing course record status
+UPDATE courses
+SET status = :status
+WHERE id = :id
+
 -- :name save-course! :<!
 -- :doc creates a new course version record
 INSERT INTO course_versions

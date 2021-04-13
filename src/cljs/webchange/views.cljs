@@ -89,6 +89,9 @@
     :dashboard-student-profile [dashboard-panel :student-profile route-params]
     :dashboard-schools [dashboard-panel :schools-list route-params]
 
+    ;; admin dashboard
+    :dashboard-courses [dashboard-panel :courses-list route-params]
+
     ;; student dashboard
     :student-login [student-access-form]
     :student-dashboard [student-dashboard-page]

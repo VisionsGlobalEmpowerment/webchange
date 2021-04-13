@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.dashboard.classes.events :as classes-events]
     [webchange.dashboard.schools.events :as schools-events]
+    [webchange.dashboard.courses.events :as courses-events]
     [webchange.dashboard.students.events :as students-events]
     [webchange.validation.validate :refer [validate]]))
 
@@ -46,6 +47,12 @@
   (fn [{:keys [db]} _]
     {:dispatch-n (list
                    [::schools-events/load-schools])}))
+
+(re-frame/reg-event-fx
+  ::open-courses
+  (fn [{:keys [db]} _]
+    {:dispatch-n (list
+                   [::courses-events/load-courses])}))
 
 (re-frame/reg-event-fx
   ::open-classes
