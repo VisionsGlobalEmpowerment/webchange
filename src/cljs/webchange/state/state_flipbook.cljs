@@ -101,17 +101,34 @@
   (fn [{:keys [db]} [_ screenshots]]
     {:db (assoc-in db (path-to-db [:stages-screenshots]) screenshots)}))
 
+(def show-generated-pages-path (path-to-db [:show-generated-pages?]))
+
+(defn get-show-generated-pages
+  [db]
+  (get-in db show-generated-pages-path false))
+
+(re-frame/reg-sub
+  ::show-generated-pages?
+  get-show-generated-pages)
+
+(re-frame/reg-event-fx
+  ::set-show-generated-pages?
+  (fn [{:keys [db]} [_ value]]
+    {:db       (assoc-in db show-generated-pages-path value)
+     :dispatch [::generate-stages-screenshots {:hide-generated-pages? (not value)}]}))
+
 (re-frame/reg-event-fx
   ::generate-stages-screenshots
-  (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? false}}]]
-    (let [current-stage (stage-state/current-stage db)
+  (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? true}}]]
+    (let [show-generated-pages? (get-show-generated-pages db)
+          current-stage (stage-state/current-stage db)
           stages-idx (->> (state/scene-metadata db)
                           (:stages)
                           (map :idx))]
       {:dispatch-n              [[::set-generate-screenshots-running-state true]
                                  [::overlays/show-waiting-screen]]
        :take-stages-screenshots {:stages-idx            stages-idx
-                                 :hide-generated-pages? hide-generated-pages?
+                                 :hide-generated-pages? (not show-generated-pages?)
                                  :callback              (fn [screenshots]
                                                           (let [screenshots-blobs (->> screenshots
                                                                                        (map (fn [[idx blob]]
