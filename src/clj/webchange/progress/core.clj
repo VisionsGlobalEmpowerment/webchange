@@ -206,7 +206,6 @@
         levels (-> (course/get-course-data course-slug) :levels)
         finished (-> levels
                      (levels->finished level lesson activity))
-        _ (log/debug "finsihed?" finished)
         current-tags (->
                        (db/get-progress {:user_id user-id :course_id course-id})
                        :data
