@@ -1,8 +1,7 @@
 (ns webchange.book-creator.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.book-creator.text-form.utils :refer [get-page-data]]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage]
+    [webchange.book-creator.utils :refer [get-page-data]]
     [webchange.interpreter.renderer.state.editor :as interpreter]
     [webchange.state.state :as state]
     [webchange.state.state-flipbook :as state-flipbook]

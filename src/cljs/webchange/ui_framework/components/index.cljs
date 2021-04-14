@@ -3,6 +3,7 @@
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.chip.index :as chip]
     [webchange.ui-framework.components.circular-progress.index :as circular-progress]
+    [webchange.ui-framework.components.confirm.index :as confirm]
     [webchange.ui-framework.components.dialog.index :as dialog]
     [webchange.ui-framework.components.file.index :as file]
     [webchange.ui-framework.components.icon.index :as icon]
@@ -34,3 +35,4 @@
 (def text-area text-area/component)
 (def text-input text-input/component)
 (def tooltip tooltip/component)
+(def with-confirmation confirm/with-confirmation)

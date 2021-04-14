@@ -1,5 +1,6 @@
 @import "../../styles/colors";
 
+$border-width: 2px;
 $padding-v: 13px;
 $padding-h: 49px;
 
@@ -129,11 +130,12 @@ $padding-h: 49px;
 
     &.variant-contained {
         border: none;
+        padding: ($padding-v + $border-width) ($padding-h + $border-width);
     }
 
     &.variant-outlined {
         background-color: rgba(0, 0, 0, 0);
-        border: 2px solid;
+        border: $border-width solid;
 
         &:hover {
             background: rgba(0, 0, 0, 0.1);
