@@ -47,6 +47,12 @@
   [db id]
   (get-in db (path-to-db id [:initial-data]) {}))
 
+(re-frame/reg-sub
+  ::initial-data
+  (fn [db [_ id]]
+    {:pre [(some? id)]}
+    (get-initial-data db id)))
+
 (re-frame/reg-event-fx
   ::set-initial-data
   (fn [{:keys [db]} [_ id data]]
@@ -111,6 +117,15 @@
       {:db       (assoc-in db (path-to-db id [:current-data :font-family]) font-family)
        :dispatch [::scene/set-scene-object-state text-object-name {:font-family font-family}]})))
 
+(re-frame/reg-sub
+  ::has-changes?
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::current-data id])
+     (re-frame/subscribe [::initial-data id])])
+  (fn [[current-data initial-data]]
+    (not= current-data initial-data)))
+
 (re-frame/reg-event-fx
   ::open-dialog-window
   (fn [{:keys [db]} [_ id window-options]]
@@ -154,13 +169,6 @@
     [(re-frame/subscribe [::loading-status id])])
   (fn [[loading-status]]
     (= loading-status :loading)))
-
-(re-frame/reg-sub
-  ::has-changes?
-  (fn [db [_ id]]
-    (let [current-data (get-current-data db id)
-          initial-data (get-initial-data db id)]
-      (not= current-data initial-data))))
 
 (re-frame/reg-event-fx
   ::set-loading-status

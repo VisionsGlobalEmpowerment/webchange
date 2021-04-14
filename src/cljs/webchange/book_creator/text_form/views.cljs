@@ -15,21 +15,22 @@
   [{:keys [action phrase-action-path text]}]
   (r/with-let [id (-> (random-uuid) str)
                _ (re-frame/dispatch [::state/init id {:data               {:text        (get-in text [:data :text])
+                                                                           :chunks      (get-in text [:data :chunks])
                                                                            :font-size   (get-in text [:data :font-size])
                                                                            :font-family (get-in text [:data :font-family])}
                                                       :text-object-name   (get-in text [:name])
                                                       :dialog-action-name (keyword action)
                                                       :phrase-action-path phrase-action-path}])
-               handle-save #(re-frame/dispatch [::state/save id])
-               disabled? @(re-frame/subscribe [::state/loading? id])]
-
-    [asset-form {:top-controls  [[font-family-component {:id id}]
-                                 [font-size-component {:id id}]]
-                 :on-save-click handle-save
-                 :disabled?     disabled?
-                 :class-name    "text-form"}
-     [text-component {:id id}]
-     [voice-over-button {:id id}]]
+               handle-save #(re-frame/dispatch [::state/save id])]
+    (let [loading? @(re-frame/subscribe [::state/loading? id])
+          has-changes? @(re-frame/subscribe [::state/has-changes? id])]
+      [asset-form {:top-controls  [[font-family-component {:id id}]
+                                   [font-size-component {:id id}]]
+                   :on-save-click handle-save
+                   :disabled?     (or loading? (not has-changes?))
+                   :class-name    "text-form"}
+       [text-component {:id id}]
+       [voice-over-button {:id id}]])
     (finally
       (re-frame/dispatch [::state/reset id]))))
 
