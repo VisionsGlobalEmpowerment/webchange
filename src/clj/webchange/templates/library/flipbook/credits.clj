@@ -40,7 +40,8 @@
                                     :font-size   60
                                     :font-family "Lexend Deca"
                                     :align       "center"
-                                    :text        "My Book"}})
+                                    :text        "---"
+                                    :editable?   {:select true}}})
 
 (defn- get-action-data
   [{:keys [action-name texts-data]}]
