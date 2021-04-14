@@ -223,7 +223,12 @@
               {:label         "Lesson to complete"
                :type          "text"
                :helper-text   "Leave blank to complete all lessons"
-               :on-change #(swap! data assoc :lesson (-> % .-target .-value js/parseInt))}]]
+               :on-change #(swap! data assoc :lesson (-> % .-target .-value js/parseInt))}]
+             [ui/text-field
+              {:label         "Activity to complete"
+               :type          "text"
+               :helper-text   "Leave blank to complete all activities"
+               :on-change #(swap! data assoc :activity (-> % .-target .-value js/parseInt))}]]
             [ui/dialog-actions
              [ui/button {:on-click #(re-frame/dispatch [::students-events/close-complete-modal])} "Cancel"]
              [ui/button
