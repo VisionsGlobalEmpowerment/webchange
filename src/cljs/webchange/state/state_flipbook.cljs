@@ -5,6 +5,7 @@
     [webchange.editor-v2.layout.state :as state-layout]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.interpreter.renderer.state.overlays :as overlays]
+    [webchange.logger.index :as logger]
     [webchange.state.state :as state]
     [webchange.state.state-activity :as state-activity]
     [webchange.utils.flipbook :as flipbook-utils]))
@@ -64,13 +65,36 @@
                      {:keys [on-success]}]]
     (let [activity-data (state/scene-data db)
           page-idx-from (flipbook-utils/stage-idx->page-idx activity-data source-stage-idx source-page-side)
-          page-idx-to (flipbook-utils/stage-idx->page-idx activity-data target-stage-idx target-page-side)]
+          page-idx-to (cond-> (flipbook-utils/stage-idx->page-idx activity-data target-stage-idx target-page-side)
+                              (< target-stage-idx source-stage-idx)
+                              (cond->
+                                (= relative-position "after") (inc))
+
+                              (= target-stage-idx source-stage-idx)
+                              (cond->
+                                (= target-page-side "left")
+                                (cond->
+                                  (= relative-position "after") (inc))
+                                (= target-page-side "right")
+                                (cond->
+                                  (= relative-position "before") (dec)))
+
+                              (> target-stage-idx source-stage-idx)
+                              (cond->
+                                (= relative-position "before") (dec)))]
+
+      (logger/group-folded "::move-page")
+      (logger/trace "source" source-stage-idx source-page-side)
+      (logger/trace "target" target-stage-idx target-page-side)
+      (logger/trace "relative-position" relative-position)
+      (logger/trace "page-idx-from" page-idx-from)
+      (logger/trace "page-idx-to" page-idx-to)
+      (logger/group-end "::move-page")
+
       {:dispatch [::state-activity/call-activity-action
                   {:action "move-page"
                    :data   {:page-idx-from page-idx-from
-                            :page-idx-to   (case relative-position
-                                             "before" (dec page-idx-to)
-                                             "after" page-idx-to)}}
+                            :page-idx-to   page-idx-to}}
                   {:on-success on-success}]})))
 
 (re-frame/reg-event-fx

@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.book-creator.pages.state :as state-pages]
+    [webchange.logger.index :as logger]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -31,7 +32,9 @@
         "after"))))
 
 (defn- page-image-draggable
-  [props]
+  [{:keys [on-drop]
+    :or   {on-drop #()}
+    :as   props}]
   (r/with-let [drop-area (atom nil)
                drag-active? (r/atom nil)
 
@@ -56,7 +59,7 @@
                                                         :side  (.getData data-transfer "side")}
                                            target-page {:stage (-> target (.getAttribute "data-stage") (parse-int))
                                                         :side  (.getAttribute target "data-side")}]
-                                       (re-frame/dispatch [::state-pages/move-page source-page target-page @drag-active?])
+                                       (on-drop source-page target-page @drag-active?)
                                        (reset! drag-active? nil)))
 
                init-state (fn [ref]
@@ -79,9 +82,21 @@
       (.removeEventListener @drop-area "dragover" handle-drag-over)
       (.removeEventListener @drop-area "drop" handle-area-drop))))
 
+(defn- handle-drop
+  [source-page target-page relative-position]
+  (logger/group-folded "handle page drop")
+  (logger/trace "source-page" source-page)
+  (logger/trace "target-page" target-page)
+  (logger/trace "relative-position" relative-position)
+  (logger/group-end "handle page drop")
+
+  (when (not= source-page target-page)
+    (re-frame/dispatch [::state-pages/move-page source-page target-page relative-position])))
+
 (defn page-image
   [{:keys [side stage] :as props}]
   (let [draggable? @(re-frame/subscribe [::state-flipbook/page-draggable? (keyword side) stage])]
     (if draggable?
-      [page-image-draggable props]
+      [page-image-draggable (merge props
+                                   {:on-drop handle-drop})]
       [page-image-view props])))
