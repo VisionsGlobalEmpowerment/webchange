@@ -40,7 +40,7 @@
 (re-frame/reg-sub
   ::show-generated-pages?
   (fn [db]
-    (get-in db (path-to-db [:show-generated-pages?]) true)))
+    (get-in db (path-to-db [:show-generated-pages?]) false)))
 
 (re-frame/reg-event-fx
   ::set-show-generated-pages?
