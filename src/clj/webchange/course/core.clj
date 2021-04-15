@@ -244,7 +244,7 @@
 
 (defn- ->website-course
   [course]
-  (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject])
+  (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status])
       (assoc :slug (-> course :slug (codec/url-encode)))
       (with-course-page)
       (with-default-image)
