@@ -1,6 +1,10 @@
 .status-message {
     font-weight: 500;
 
+    &.sync {
+        color: #8D8D8D;
+    }
+
     &.in-review {
         color: #8D8D8D;
     }

@@ -13,4 +13,5 @@
 (re-frame/reg-event-fx
   ::publish
   (fn [{:keys [_]} [_]]
-    {:dispatch [::state-course/publish-course]}))
+    {:dispatch-n [[::state-course/publish-course]
+                  [::state-course/set-course-status "sync"]]}))

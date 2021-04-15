@@ -48,6 +48,11 @@
   (fn [{:keys [db]} [_ course-info]]
     {:db (assoc-in db course-info-path course-info)}))
 
+(re-frame/reg-event-fx
+  ::set-course-status
+  (fn [{:keys [db]} [_ status]]
+    {:db (assoc-in db (concat course-info-path [:status]) status)}))
+
 ;; Course  status
 
 (re-frame/reg-event-fx
