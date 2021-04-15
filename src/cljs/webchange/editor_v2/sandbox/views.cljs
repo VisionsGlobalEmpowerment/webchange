@@ -3,13 +3,12 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.sandbox.state :as state]
     [webchange.editor-v2.sandbox.views-modal :refer [share-modal]]
-    [webchange.ui-framework.components.index :refer [icon-button]]))
+    [webchange.ui-framework.components.index :refer [button]]))
 
 (defn share-button
   []
   (let [handle-click (fn [] (re-frame/dispatch [::state/open]))]
     [:div
-     [icon-button {:icon       "play"
-                   :class-name "share-button"
-                   :on-click   handle-click}]
+     [button {:on-click handle-click}
+      "Preview"]
      [share-modal]]))
