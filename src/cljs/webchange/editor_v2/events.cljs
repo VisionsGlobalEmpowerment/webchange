@@ -15,7 +15,6 @@
 (re-frame/reg-event-fx
   ::init-editor
   (fn [_ [_ course-id scene-id]]
-    (print "::init-editor" course-id)
     {:dispatch-n (list [::ie/start-course course-id scene-id]
                        [::load-lesson-sets course-id]
                        [::state-course/load-course-info course-id])}))

@@ -17,6 +17,11 @@
                                              (some? class-name) (assoc class-name true)))}
    message])
 
+(defn- syncing
+  []
+  [status-message {:message    "sync.."
+                   :class-name "sync"}])
+
 (defn- in-review
   []
   [status-message {:message    "In Review"
@@ -36,6 +41,7 @@
   []
   (let [status @(re-frame/subscribe [::state/status])]
     (cond
+      (= status "sync") [syncing]
       (= status "in-review") [in-review]
       (= status "declined") [declined]
       (= status "published") [published]

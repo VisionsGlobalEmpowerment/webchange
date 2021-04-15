@@ -1,0 +1,30 @@
+.navigation-menu {
+    border-radius: 8px;
+    margin: 0;
+    padding: 0;
+    width: 300px;
+
+    & > * {
+        list-style: none;
+        margin-bottom: 16px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        button {
+            border: none !important;
+            border-radius: 4px;
+            font-size: 14px !important;
+            justify-content: flex-start;
+            height: 40px;
+            width: 100%;
+        }
+
+        &.active {
+            button {
+                background: #EAEAEA;
+            }
+        }
+    }
+}
