@@ -5,6 +5,7 @@
     [webchange.editor-v2.layout.state :as state-layout]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.interpreter.renderer.state.overlays :as overlays]
+    [webchange.logger.index :as logger]
     [webchange.state.state :as state]
     [webchange.state.state-activity :as state-activity]
     [webchange.utils.flipbook :as flipbook-utils]))
@@ -64,13 +65,36 @@
                      {:keys [on-success]}]]
     (let [activity-data (state/scene-data db)
           page-idx-from (flipbook-utils/stage-idx->page-idx activity-data source-stage-idx source-page-side)
-          page-idx-to (flipbook-utils/stage-idx->page-idx activity-data target-stage-idx target-page-side)]
+          page-idx-to (cond-> (flipbook-utils/stage-idx->page-idx activity-data target-stage-idx target-page-side)
+                              (< target-stage-idx source-stage-idx)
+                              (cond->
+                                (= relative-position "after") (inc))
+
+                              (= target-stage-idx source-stage-idx)
+                              (cond->
+                                (= target-page-side "left")
+                                (cond->
+                                  (= relative-position "after") (inc))
+                                (= target-page-side "right")
+                                (cond->
+                                  (= relative-position "before") (dec)))
+
+                              (> target-stage-idx source-stage-idx)
+                              (cond->
+                                (= relative-position "before") (dec)))]
+
+      (logger/group-folded "::move-page")
+      (logger/trace "source" source-stage-idx source-page-side)
+      (logger/trace "target" target-stage-idx target-page-side)
+      (logger/trace "relative-position" relative-position)
+      (logger/trace "page-idx-from" page-idx-from)
+      (logger/trace "page-idx-to" page-idx-to)
+      (logger/group-end "::move-page")
+
       {:dispatch [::state-activity/call-activity-action
                   {:action "move-page"
                    :data   {:page-idx-from page-idx-from
-                            :page-idx-to   (case relative-position
-                                             "before" (dec page-idx-to)
-                                             "after" page-idx-to)}}
+                            :page-idx-to   page-idx-to}}
                   {:on-success on-success}]})))
 
 (re-frame/reg-event-fx
@@ -101,17 +125,34 @@
   (fn [{:keys [db]} [_ screenshots]]
     {:db (assoc-in db (path-to-db [:stages-screenshots]) screenshots)}))
 
+(def show-generated-pages-path (path-to-db [:show-generated-pages?]))
+
+(defn get-show-generated-pages
+  [db]
+  (get-in db show-generated-pages-path false))
+
+(re-frame/reg-sub
+  ::show-generated-pages?
+  get-show-generated-pages)
+
+(re-frame/reg-event-fx
+  ::set-show-generated-pages?
+  (fn [{:keys [db]} [_ value]]
+    {:db       (assoc-in db show-generated-pages-path value)
+     :dispatch [::generate-stages-screenshots {:hide-generated-pages? (not value)}]}))
+
 (re-frame/reg-event-fx
   ::generate-stages-screenshots
-  (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? false}}]]
-    (let [current-stage (stage-state/current-stage db)
+  (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? true}}]]
+    (let [show-generated-pages? (get-show-generated-pages db)
+          current-stage (stage-state/current-stage db)
           stages-idx (->> (state/scene-metadata db)
                           (:stages)
                           (map :idx))]
       {:dispatch-n              [[::set-generate-screenshots-running-state true]
                                  [::overlays/show-waiting-screen]]
        :take-stages-screenshots {:stages-idx            stages-idx
-                                 :hide-generated-pages? hide-generated-pages?
+                                 :hide-generated-pages? (not show-generated-pages?)
                                  :callback              (fn [screenshots]
                                                           (let [screenshots-blobs (->> screenshots
                                                                                        (map (fn [[idx blob]]

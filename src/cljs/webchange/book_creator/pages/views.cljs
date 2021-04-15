@@ -63,7 +63,7 @@
 
 (defn- stages-list
   []
-  (let [show-generated-pages? @(re-frame/subscribe [::state/show-generated-pages?])
+  (let [show-generated-pages? @(re-frame/subscribe [::state-flipbook/show-generated-pages?])
         stages @(re-frame/subscribe [::state-flipbook/stage-options {:filter-generated? (not show-generated-pages?)}])
         disabled? @(re-frame/subscribe [::state/pages-list-disabled?])]
     [:div.stages-list
@@ -75,8 +75,8 @@
 
 (defn- tech-pages-switcher
   []
-  (let [checked? @(re-frame/subscribe [::state/show-generated-pages?])
-        handle-change (fn [value] (re-frame/dispatch [::state/set-show-generated-pages? value]))]
+  (let [checked? @(re-frame/subscribe [::state-flipbook/show-generated-pages?])
+        handle-change (fn [value] (re-frame/dispatch [::state-flipbook/set-show-generated-pages? value]))]
     [:div
      [switcher {:label     "Display technical pages"
                 :checked?  checked?

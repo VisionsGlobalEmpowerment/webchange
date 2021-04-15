@@ -36,14 +36,3 @@
      (re-frame/subscribe [::state-renderer/rendering?])])
   (fn [[move-page-running? generate-screenshots-running? rendering?]]
     (or move-page-running? generate-screenshots-running? rendering?)))
-
-(re-frame/reg-sub
-  ::show-generated-pages?
-  (fn [db]
-    (get-in db (path-to-db [:show-generated-pages?]) true)))
-
-(re-frame/reg-event-fx
-  ::set-show-generated-pages?
-  (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db (path-to-db [:show-generated-pages?]) value)
-     :dispatch [::state-flipbook/generate-stages-screenshots {:hide-generated-pages? (not value)}]}))

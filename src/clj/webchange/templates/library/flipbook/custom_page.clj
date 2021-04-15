@@ -33,6 +33,7 @@
    :vertical-align "top"
    :align          "center"
    :font-size      38
+   :font-family    "Lexend Deca"
    :chunks         "---"
    :x              "---"
    :y              "---"

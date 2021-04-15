@@ -2,7 +2,8 @@
   (:require
     [webchange.interpreter.renderer.scene.components.flipbook.utils :as utils]
     [webchange.interpreter.renderer.scene.components.flipbook.utils-page-number :as page-number-utils]
-    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
+    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
+    [webchange.logger.index :as logger]))
 
 (defn- get-left-page-position
   [_]
@@ -20,7 +21,7 @@
 (defn- get-page-object-name
   ([state index]
    (get-page-object-name state index {}))
-  ([state index {:keys [hide-generated-pages?]}]
+  ([state index {:keys [hide-generated-pages?] :as options}]
    (let [pages-names (->> (:pages state)
                           (map first)
                           (map (fn [page-data]
@@ -30,6 +31,12 @@
                               (> index -1)
                               (< index (count pages-names)))
                      (nth pages-names index))]
+
+     (logger/group-folded "get-page-object-name" index)
+     (logger/trace "page-data" page-data)
+     (logger/trace "options" options)
+     (logger/group-end "get-page-object-name" index)
+
      (if hide-generated-pages?
        (when-not (:generated? (:data page-data))
          (:name page-data))
@@ -126,7 +133,10 @@
 
 (defn- show-spread
   [state spread options]
+  (logger/trace "show spread" spread)
   (let [{:keys [left right]} (spread-numbers->object-names state spread options)]
+    (logger/trace "left page" left)
+    (logger/trace "right page" right)
     (when (some? left)
       (utils/set-position (keyword left) (get-left-page-position state))
       (utils/set-visibility (keyword left) true))
@@ -136,6 +146,7 @@
 
 (defn- hide-spread
   [state spread]
+  (logger/trace "hide spread" spread)
   (let [{:keys [left right]} (spread-numbers->object-names state spread)]
     (when (some? left) (utils/set-visibility (keyword left) false))
     (when (some? right) (utils/set-visibility (keyword right) false))))
@@ -165,12 +176,17 @@
                    :flip-backward (fn [{:keys [on-end read]}]
                                     (flip state "backward" on-end read))
                    :show-spread   (fn [spread-idx options]
+                                    (logger/group-folded (str "Show spread idx=" spread-idx))
+                                    (logger/trace "options" options)
+
                                     (let [current-spread (:current-spread @state)
                                           new-spread {:left  (->> (* spread-idx 2) (dec))
                                                       :right (->> (* spread-idx 2))}]
                                       (hide-spread @state current-spread)
                                       (show-spread @state new-spread options)
-                                      (swap! state assoc :current-spread new-spread)))
+                                      (swap! state assoc :current-spread new-spread))
+
+                                    (logger/group-end (str "Show spread idx=" spread-idx)))
                    :read-left     (fn [on-end]
                                     (let [current-spread (get @state :current-spread)
                                           {:keys [left]} (spread-numbers->action-names @state current-spread)
