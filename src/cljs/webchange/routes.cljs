@@ -80,7 +80,8 @@
   [name]
   (let [locations {:profile "/user/profile"
                    :courses "/user/courses"
-                   :login   "/user/login"}
+                   :login   "/user/login"
+                   :books   "/user/books"}
         href (get locations name)]
     (set! js/document.location href)))
 
