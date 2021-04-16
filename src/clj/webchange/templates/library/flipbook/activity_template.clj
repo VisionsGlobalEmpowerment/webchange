@@ -2,13 +2,7 @@
 
 (def template {:assets        [{:url "/raw/img/flipbook/next-page.png" :size 1 :type "image"}
                                {:url "/raw/img/flipbook/prev-page.png" :size 1 :type "image"}]
-               :objects       {:background        {:type   "rectangle"
-                                                   :x      0
-                                                   :y      0
-                                                   :width  "---"
-                                                   :height "---"
-                                                   :fill   "---"}
-                               :book              {:type         "flipbook"
+               :objects       {:book              {:type         "flipbook"
                                                    :transition   "book"
                                                    :x            0
                                                    :y            0
@@ -53,7 +47,7 @@
                                                    :src              "/raw/img/flipbook/next-page.png"
                                                    :actions          {:click {:id "next-page-click" :on "click" :type "action"}}
                                                    :interpreter-mode "!editor"}}
-               :scene-objects [["background"] ["book"] ["prev-page" "next-page" "page-numbers"]]
+               :scene-objects [["book"] ["prev-page" "next-page" "page-numbers"]]
                :actions       {:start-scene     {:type "sequence-data"
                                                  :data [{:type   "flipbook-init"
                                                          :target "book"}]}
@@ -74,7 +68,7 @@
                :audio         {}})
 
 (defn- apply-page-size
-  [activity-data {:keys [width height padding background-color]}]
+  [activity-data {:keys [width height padding]}]
   (let [page-number-margin {:h 53
                             :v 12}
         page-number-size {:width  30
@@ -82,9 +76,6 @@
         flip-button-size {:width  95
                           :height 95}]
     (-> activity-data
-        (assoc-in [:objects :background :width] (* width 2))
-        (assoc-in [:objects :background :height] height)
-        (assoc-in [:objects :background :fill] background-color)
         (assoc-in [:objects :book :width] (* width 2))
         (assoc-in [:objects :book :height] height)
         (assoc-in [:objects :prev-page :x] padding)

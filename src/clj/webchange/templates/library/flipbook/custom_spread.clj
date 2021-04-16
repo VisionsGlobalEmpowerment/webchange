@@ -9,6 +9,14 @@
           :transition "page"
           :children   []}})
 
+(def page-background-template
+  {:type   "rectangle"
+   :x      0
+   :y      0
+   :width  "---"
+   :height "---"
+   :fill   "---"})
+
 (def page-image-template
   {:type        "image"
    :image-size  "cover"
@@ -35,6 +43,16 @@
    :height         "---"
    :fill           "---"
    :text           "---"})
+
+(defn- add-background
+  [page-data {:keys [width height background-color]}]
+  (let [page-background (assoc page-background-template
+                               :width width
+                               :height height
+                               :fill background-color)]
+    (-> page-data
+        (assoc :page-background page-background)
+        (update-in [:page :children] conj "page-background"))))
 
 (defn- add-image
   [page-data mask-align {:keys [width height]} {:keys [image-src spread-image-name]}]
@@ -79,12 +97,14 @@
 (defn left-without-text
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image :left-of-center page-params content-params))]
     (create-page objects-data content-params)))
 
 (defn left-text-top
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image :left-of-center page-params content-params)
                          (add-text :top page-params content-params))]
     (create-page objects-data content-params)))
@@ -92,6 +112,7 @@
 (defn left-text-bottom
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image :left-of-center page-params content-params)
                          (add-text :bottom page-params content-params))]
     (create-page objects-data content-params)))
@@ -99,12 +120,14 @@
 (defn right-without-text
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image :right-of-center page-params content-params))]
     (create-page objects-data content-params)))
 
 (defn right-text-top
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image :right-of-center page-params content-params)
                          (add-text :top page-params content-params))]
     (create-page objects-data content-params)))
@@ -112,6 +135,7 @@
 (defn right-text-bottom
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image :right-of-center page-params content-params)
                          (add-text :bottom page-params content-params))]
     (create-page objects-data content-params)))
