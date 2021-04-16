@@ -32,6 +32,7 @@
     "string" [string-option props]
     "strings-list" [strings-list-option props]
     "questions-no-image" [answers-option props false]
+    "question" [answers-option props true]
     "remove-editable-object" [delete-object-option props]
     "video" [video-option props]
     "video-ranges" [video-ranges-option props]

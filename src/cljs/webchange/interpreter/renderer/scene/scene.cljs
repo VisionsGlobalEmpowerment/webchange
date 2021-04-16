@@ -75,13 +75,12 @@
                                                 :parent      (.-stage app)
                                                 :children    (apply-mode objects mode)})
                              (init-mode-helpers! mode))
-                         ;(when (modes/show-overlays? mode)
+
                          (-> (get-renderer)
                              (register-handler "resize" handle-renderer-resize))
                          (create-overlays {:parent   (get-stage)
                                            :viewport viewport
                                            :mode     mode})
-                           ;)
 
                          (create-component (question/create {:parent   (get-stage)
                                                              :viewport viewport}))

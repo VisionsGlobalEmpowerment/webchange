@@ -7,6 +7,7 @@
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
+    [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.state-activity :as state-activity]
     [webchange.utils.flipbook :as flipbook-utils]))
 
@@ -120,6 +121,11 @@
   (fn [db]
     (get-in db (path-to-db [:stages-screenshots]) [])))
 
+(re-frame/reg-sub
+  ::stages-blob-screenshots
+  (fn [db]
+    (get-in db (path-to-db [:stages-blob-screenshots]) [])))
+
 (re-frame/reg-event-fx
   ::set-stages-screenshots
   (fn [{:keys [db]} [_ screenshots]]
@@ -142,13 +148,29 @@
      :dispatch [::generate-stages-screenshots {:hide-generated-pages? (not value)}]}))
 
 (re-frame/reg-event-fx
+  ::set-stages-blob-screenshots
+  (fn [{:keys [db]} [_ screenshots]]
+    {:db (assoc-in db (path-to-db [:stages-blob-screenshots]) screenshots)}))
+
+(re-frame/reg-event-fx
   ::generate-stages-screenshots
   (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? true}}]]
     (let [show-generated-pages? (get-show-generated-pages db)
           current-stage (stage-state/current-stage db)
+          metadata (state/scene-metadata db)
           stages-idx (->> (state/scene-metadata db)
                           (:stages)
-                          (map :idx))]
+                          (map :idx))
+          ;"Interactive Read Aloud workaround to show book and it's background for screenshots"
+          book-name (get metadata :flipbook-name)
+          scene-id (:current-scene db)
+          book-background (str book-name "-background")
+          component-wrapper @(get-in db [:transitions scene-id book-name])
+          book-background-wrapper (get-in db [:transitions scene-id book-background])
+          visibility ((:get-visibility component-wrapper))]
+      (if (not visibility) (do
+                             ((:set-visibility component-wrapper) true)
+                             (if book-background-wrapper ((:set-visibility @book-background-wrapper) true))))
       {:dispatch-n              [[::set-generate-screenshots-running-state true]
                                  [::overlays/show-waiting-screen]]
        :take-stages-screenshots {:stages-idx            stages-idx
@@ -157,11 +179,30 @@
                                                           (let [screenshots-blobs (->> screenshots
                                                                                        (map (fn [[idx blob]]
                                                                                               [idx (.createObjectURL js/URL blob)]))
+                                                                                       (into {}))
+                                                                blobs (->> screenshots
+                                                                                       (map (fn [[idx blob]] [idx blob]))
                                                                                        (into {}))]
-                                                            (re-frame/dispatch [::set-stages-screenshots screenshots-blobs]))
+                                                            (re-frame/dispatch [::set-stages-screenshots screenshots-blobs])
+                                                            (re-frame/dispatch [::set-stages-blob-screenshots blobs])
+                                                            )
                                                           (re-frame/dispatch [::stage-state/select-stage (or current-stage 0)])
                                                           (re-frame/dispatch [::overlays/hide-waiting-screen])
-                                                          (re-frame/dispatch [::set-generate-screenshots-running-state false]))}})))
+                                                          (re-frame/dispatch [::set-generate-screenshots-running-state false])
+                                                          (if (not visibility)
+                                                            (do
+                                                              ((:set-visibility component-wrapper) false)
+                                                              (if book-background-wrapper ((:set-visibility @book-background-wrapper) false))))
+                                                          )}})))
+
+(re-frame/reg-event-fx
+  ::upload-stage-screenshot
+  (fn [{:keys [db]} [_ stages-idx callback]]
+    (let [screenshots @(re-frame/subscribe [::stages-blob-screenshots])]
+      (re-frame/dispatch [::assets-events/upload-asset (get screenshots stages-idx) {:type      "image"
+                                                          :on-finish (fn [result]
+                                                                       (callback result))}]))
+    {}))
 
 (defn- run-seq
   ([seq callback]

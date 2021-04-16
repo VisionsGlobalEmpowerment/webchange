@@ -56,6 +56,10 @@
   [display-object visible?]
   (aset display-object "visible" visible?))
 
+(defn get-visibility
+  [display-object]
+  (aget display-object "visible"))
+
 (defn set-handler
   [display-object event-name event-handler]
   (let [synonyms {"click" ["click" "tap"]}

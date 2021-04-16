@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.question.question-page.type-1
+(ns webchange.interpreter.renderer.question.question-page.type-2
   (:require
     [webchange.common.events :as ce]
     [re-frame.core :as re-frame]
@@ -19,58 +19,24 @@
 (defn sleep [f ms]
   (js/setTimeout f ms))
 
-(defn image-x-to-center
-  [object]
-  (let [r1 (.getBounds object)
-        r1width (.-width r1)]
-    (- (/ 1980 2) (/ r1width 2))))
-
-(defn correct-question-text-y
-  [object center min]
-  (let [r1 (.getBounds object)
-        r1height (.-height r1)]
-    (max min (- center (/ r1height 2)))))
-
-(defn object-position-dimension
-  [object]
-  (let [
-        r1 (.getBounds object)
-        r1x (.-x r1)
-        r1y (.-y r1)
-        r1width (.-width r1)
-        r1height (.-height r1)
-        ]
-    {:x      r1x
-     :y      r1y
-     :width  r1width
-     :height r1height})
-  )
-
-
 (defn get-coord
   [total idx]
   (case total
     1 (case idx
-        0 {:x 410 :y 750}
-        1 {:x 1144 :y 750}
-        2 {:x 410 :y 896}
-        3 {:x 1144 :y 896})
+        0 {:x 792 :y 534})
     2 (case idx
-        0 {:x 410 :y 750}
-        1 {:x 1144 :y 750}
-        2 {:x 410 :y 896}
-        3 {:x 1144 :y 896})
+        0 {:x 792 :y 534}
+        1 {:x 1013 :y 534})
     3 (case idx
-        0 {:x 410 :y 750}
-        1 {:x 1144 :y 750}
-        2 {:x 410 :y 896}
-        3 {:x 1144 :y 896})
+        0 {:x 792 :y 534}
+        1 {:x 1013 :y 534}
+        2 {:x 1235 :y 534})
     4 (case idx
-        0 {:x 410 :y 750}
-        1 {:x 1144 :y 750}
-        2 {:x 410 :y 896}
-        3 {:x 1144 :y 896})
-    ))
+        0 {:x 792 :y 534}
+        1 {:x 1013 :y 534}
+        2 {:x 1235 :y 534}
+        3 {:x 1464 :y 534}))
+  )
 
 (defn create-page-background
   [parent]
@@ -80,21 +46,11 @@
                      :x             0
                      :y             0
                      :width         1920
-                     :height        648
+                     :height        1920
                      :parent        parent
                      :border-width  1
                      :fill          0xFFFFFF
-                     })
-  (rectangle/create {:type          "rectangle"
-                     :object-name   :question-background-2
-                     :border-radius 0
-                     :x             0
-                     :y             648
-                     :width         1920
-                     :height        432
-                     :parent        parent
-                     :border-width  1
-                     :fill          0xff7900}))
+                     }))
 
 (defn create-sound-icon
   [{:keys [x y audio-data parent target]}]
@@ -146,43 +102,36 @@
        }))
   (let [image-wrapper (image/create
                         (cond-> {:type        "image"
-                                 :src         image
-                                 :x           0
-                                 :y           0
+                                 :x           150
+                                 :y           298
                                  :object-name :question-image
                                  :parent      parent}
-                                screenshot? (-> (assoc :width 480)
-                                                (assoc :height 270)
-                                                (assoc :raw image)
-                                                (dissoc :src)
-                                                )))
-        _ ((:set-position image-wrapper) {:x (image-x-to-center (:object image-wrapper)) :y 200})
+                                screenshot? (->
+                                              (assoc :width 480)
+                                              (assoc :height 270)
+                                              (assoc :raw image))
+                                (not screenshot?) (->
+                                                    (assoc :src image))))
         question-wrapper (text/create {:type           "text",
-                                       :x              1000
-                                       :y              100,
+                                       :x              860,
+                                       :y              245,
                                        :object-name    :question-text
                                        :fill           0x000000,
                                        :font-family    "Roboto",
                                        :font-size      60,
-                                       :width          1300,
+                                       :width          776,
                                        :parent         parent
                                        :text           text,
                                        :align          "left",
                                        :vertical-align "top"
                                        :font-weight    "normal"
                                        :scale          {:x 1, :y 1}
-                                       :chunks         chunks
-                                       })
-        x-text-position (image-x-to-center (:object question-wrapper))
-        y-text-position (correct-question-text-y (:object question-wrapper) 90 0)
-        _ ((:set-position question-wrapper) {:x x-text-position :y y-text-position})
-        ]
-    (create-sound-icon {:x          (- x-text-position 112)
-                        :y          40
+                                       :chunks         chunks})]
+    (create-sound-icon {:x          745
+                        :y          240
                         :audio-data audio-data
                         :parent     parent
-                        :target     "question-text"})
-    ))
+                        :target     "question-text"})))
 
 
 
@@ -194,22 +143,30 @@
                         (assoc :tags [flow-tag]))]
     (doall
       (map-indexed
-        (fn [idx {:keys [audio-data text chunks correct]}]
+        (fn [idx {:keys [audio-data text chunks correct image]}]
           (let [{x :x y :y} (get-coord total idx)
 
                 rectangle (rectangle/create {:type          "rectangle"
                                              :object-name   (keyword (str "answer-rectangle-" idx))
-                                             :border-radius 56
+                                             :border-radius 24
                                              :x             (- x 31),
                                              :y             (- y 48),
-                                             :width         560
-                                             :height        96
+                                             :width         191,
+                                             :height        262,
                                              :parent        parent
                                              :border-width  4
                                              :fill          0xFFFFFF
                                              :border-color  0x000000
                                              })
-
+                image-wrapper (image/create
+                                (cond-> {:type        "image"
+                                         :src         image
+                                         :x           (+ x -5)
+                                         :y           (+ y 10)
+                                         :width       141,
+                                         :height      141,
+                                         :object-name :question-image
+                                         :parent      parent}))
                 _ ((:set-on-click-handler rectangle) #(do
                                                         ((:set-border-color rectangle) (if correct 0x0FB600 0xED1C24))
                                                         (re-frame/dispatch [::ce/execute-action remove-flows])
@@ -217,13 +174,13 @@
                                                                              [::ce/execute-action success-action]
                                                                              [::ce/execute-action fail-action]))))
                 text-obj (text/create {:type           "text",
-                                       :x              x,
-                                       :y              (- y 48),
+                                       :x               (+ x 55),
+                                       :y              (+ y 220),
                                        :object-name    (keyword (str "answer-text-" idx))
                                        :fill           0x000000,
                                        :font-family    "Roboto",
                                        :font-size      26,
-                                       :width          520
+                                       :width          191
                                        :height         96
                                        :text           text,
                                        :parent         parent
@@ -232,19 +189,13 @@
                                        :font-weight    "normal"
                                        :chunks         chunks
                                        :scale          {:x 1, :y 1}})]
-            (create-sound-icon {:x          (- x 152)
-                                :y          (- y 48)
+            (create-sound-icon {:x          (- x 40)
+                                :y          (+ y 220)
                                 :audio-data audio-data
                                 :parent     parent
                                 :target     (str "answer-text-" idx)})
-            [
-             text
-             ])
-          )
-        answers
-        ))))
-;
-;(assoc stage :img (.createObjectURL js/URL (get stages-screenshots idx))))
+            [text]))
+        answers))))
 
 (defn create-page
   [{:keys [image parent text chunks answers success fail skip audio-data screenshot?]} db]

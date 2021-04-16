@@ -54,6 +54,8 @@
                                  (utils/set-scale main-display-object scale))
             :set-visibility    (fn [visible?]
                                  (utils/set-visibility main-display-object visible?))
+            :get-visibility    (fn []
+                                 (utils/get-visibility main-display-object))
             :get-rotation      (fn []
                                  (utils/get-rotation main-display-object))
             :set-rotation      (fn [value]

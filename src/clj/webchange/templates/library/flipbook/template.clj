@@ -25,6 +25,7 @@
                                :src   "/images/templates/cover_layout/title_at_bottom.svg"}]}
                    {:key   :cover-title
                     :label "Title"
+                    :placeholder "Type title here"
                     :type  "string"}
                    {:key   :cover-image
                     :label "Cover image"
@@ -36,6 +37,7 @@
                    {:key   :illustrators
                     :label "Illustrators"
                     :type  "strings-list"
+                    :optional? true
                     :max   3}])
 
 (def page-options [{:key     :type

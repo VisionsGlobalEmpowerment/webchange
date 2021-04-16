@@ -24,18 +24,19 @@
                :options     (concat [{:key   "characters"
                                       :label "Characters"
                                       :type  "characters"
-                                      :max   3}]
+                                      :max   4}]
                                     book-options)
-               :actions     {:add-dialog   {:title   "Add dialog",
-                                            :options {:dialog {:label "Dialog"
+               :actions     {:add-dialog   {:title   "Add dialogue",
+                                            :options {:dialog {:label "Dialogue"
+                                                               :placeholder "Name the dialogue"
                                                                :type  "string"}}}
                              :add-page     {:title   "Add page"
                                             :options page-options}
                              :add-question {:title   "Add question",
                                             :options {:question-page {:label         "Question"
-                                                                      :type          "questions-no-image"
+                                                                      :type          "question"
                                                                       :answers-label "Answers"
-                                                                      :max-answers   5}}}
+                                                                      :max-answers   4}}}
                              :config-title {:title   "Frontpage"
                                             :options book-options}}})
 
@@ -51,6 +52,7 @@
                                :book-background    {:type    "rectangle"
                                                     :x       0
                                                     :y       0
+                                                    :transition "book-background"
                                                     :width   "---"
                                                     :height  "---"
                                                     :fill    "---"
@@ -141,12 +143,15 @@
                               :skin   "01 mari"}})
 
 (def character-positions
-  [{:x 428
+  [{:x 310
     :y 960}
-   {:x 928
+   {:x 730
     :y 960}
-   {:x 1428
-    :y 960}])
+   {:x 1200
+    :y 960}
+   {:x 1560
+    :y 960}
+   ])
 
 (def page-params {:width            960
                   :height           1080
@@ -257,10 +262,6 @@
                        :shift-from-end           1
                        :on-text-animation-action add-read-page-to-sequence}))))
 
-(defn- config-frontpage
-  [activity-data args]
-  activity-data)
-
 (defn- apply-page-size
   [activity-data {:keys [width height padding background-color]}]
   (let [flip-button-size {:width  95
@@ -299,6 +300,16 @@
                                                :illustrators illustrators})
       (assoc-in [:metadata :actions] (:actions metadata))
       (assoc-in [:metadata :saved-props :wizard] props)))
+
+(defn- config-frontpage
+  [activity-data args]
+  (let [objects (-> (create-template args)
+                    :objects
+                    (dissoc :book)
+                    (dissoc :layered-background))]
+    (-> activity-data
+        (update-in [:objects] merge objects))))
+
 
 (defn- update-template
   [activity-data {action-name :action-name :as args}]

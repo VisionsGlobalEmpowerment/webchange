@@ -9,6 +9,11 @@
   [db]
   (get-in db (path-to-db [:current-stage])))
 
+(re-frame/reg-sub
+  ::current-stage
+  (fn [db]
+    (current-stage db)))
+
 (defn scene-stages
   [db scene-id]
   (get-in db [:scenes scene-id :metadata :stages] []))

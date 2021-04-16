@@ -6,6 +6,7 @@
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
 (def strings-list-validation-map {:root [(fn [value] (when (empty? value) "Must not be empty"))]})
+(def strings-list-validation-map-optional {:root [(fn [value]  nil)]})
 (def string-validation-map {:root [(fn [value] (when (= value "") "Must not be empty"))]})
 
 (defn- string-option
@@ -39,7 +40,10 @@
   [{:keys [key option data validator]}]
   (r/with-let [add-tooltip-open? (r/atom false)
                strings-list-data (connect-data data [key] [])
-               {:keys [error-message]} (v/init strings-list-data strings-list-validation-map validator)]
+               {:keys [error-message]} (v/init strings-list-data (if (:optional? option)
+                                                                   strings-list-validation-map-optional
+                                                                   strings-list-validation-map
+                                                                   )  validator)]
     (let [handle-add-option (fn []
                               (if (< (count @strings-list-data) (:max option))
                                 (swap! strings-list-data conj "")
