@@ -60,3 +60,8 @@
     {:db (cond-> (assoc-in db (concat modal-share-link-state [lesson-set-name]) {})
                  (some? dataset-id) (assoc-in (concat modal-share-link-state [lesson-set-name :dataset-id]) dataset-id)
                  (some? item-ids) (assoc-in (concat modal-share-link-state [lesson-set-name :item-ids]) item-ids))}))
+
+(re-frame/reg-sub
+  ::form-has-params?
+  (fn [_]
+    false))
