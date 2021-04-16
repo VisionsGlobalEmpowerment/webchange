@@ -1,7 +1,8 @@
 @import "../../styles/colors";
 
-$padding-v: 13px;
-$padding-h: 49px;
+$border-width: 2px;
+$padding-v: 11px;
+$padding-h: 47px;
 
 
 @mixin color-disabled() {
@@ -24,6 +25,7 @@ $padding-h: 49px;
     display: flex;
 
     border-radius: 24px;
+    border-style: solid;
 
     font-family: 'Roboto';
     font-weight: 500;
@@ -116,7 +118,7 @@ $padding-h: 49px;
     &.size-medium {
         font-size: 12px;
         line-height: 12px;
-        padding: 8px 18px;
+        padding: ($padding-v - 5) ($padding-h - 31);
     }
 
     &.size-big {
@@ -127,13 +129,9 @@ $padding-h: 49px;
 
     //  Variant
 
-    &.variant-contained {
-        border: none;
-    }
-
     &.variant-outlined {
         background-color: rgba(0, 0, 0, 0);
-        border: 2px solid;
+        border: $border-width solid;
 
         &:hover {
             background: rgba(0, 0, 0, 0.1);
