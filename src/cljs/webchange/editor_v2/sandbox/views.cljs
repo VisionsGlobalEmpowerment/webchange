@@ -7,8 +7,14 @@
 
 (defn share-button
   []
-  (let [handle-click (fn [] (re-frame/dispatch [::state/open]))]
+  (let [link @(re-frame/subscribe [::state/link])
+        has-params? @(re-frame/subscribe [::state/form-has-params?])
+        handle-click (fn [] (re-frame/dispatch [::state/open]))]
     [:div
-     [button {:on-click handle-click}
-      "Preview"]
+     (if has-params?
+       [button {:on-click handle-click}
+        "Preview"]
+       [button {:href       link
+                :class-name "open-link"}
+        "Preview"])
      [share-modal]]))
