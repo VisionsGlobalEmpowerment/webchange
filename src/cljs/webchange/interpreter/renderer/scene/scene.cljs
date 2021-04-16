@@ -31,9 +31,10 @@
   (if (app-exists?)
     (get-app)
     (let [{:keys [x y width height scale-x scale-y]} viewport]
-      (doto (Application. (clj->js (cond-> {:antialias false
-                                            :width     width
-                                            :height    height}
+      (doto (Application. (clj->js (cond-> {:antialias   false
+                                            :width       width
+                                            :height      height
+                                            :transparent true}
                                            (= mode ::modes/editor) (assoc :preserveDrawingBuffer true))))
         (-> get-stage (set-scale scale-x scale-y))
         (-> get-stage (set-position x y))
@@ -75,11 +76,11 @@
                                                 :children    (apply-mode objects mode)})
                              (init-mode-helpers! mode))
                          ;(when (modes/show-overlays? mode)
-                           (-> (get-renderer)
-                               (register-handler "resize" handle-renderer-resize))
-                           (create-overlays {:parent   (get-stage)
-                                             :viewport viewport
-                                             :mode mode})
+                         (-> (get-renderer)
+                             (register-handler "resize" handle-renderer-resize))
+                         (create-overlays {:parent   (get-stage)
+                                           :viewport viewport
+                                           :mode     mode})
                            ;)
 
                          (create-component (question/create {:parent   (get-stage)

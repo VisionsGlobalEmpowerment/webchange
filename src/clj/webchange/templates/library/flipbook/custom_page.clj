@@ -9,6 +9,14 @@
           :transition "page"
           :children   []}})
 
+(def page-background-template
+  {:type   "rectangle"
+   :x      0
+   :y      0
+   :width  "---"
+   :height "---"
+   :fill   "---"})
+
 (def page-image-template
   {:type       "image"
    :image-size "contain"
@@ -56,6 +64,16 @@
     (-> page-data
         (assoc :page-image page-image)
         (update-in [:page :children] conj "page-image"))))
+
+(defn- add-background
+  [page-data {:keys [width height background-color]}]
+  (let [page-background (assoc page-background-template
+                               :width width
+                               :height height
+                               :fill background-color)]
+    (-> page-data
+        (assoc :page-background page-background)
+        (update-in [:page :children] conj "page-background"))))
 
 (defn- add-text-background
   [page-data {:keys [pos size]} {:keys [width height background-color]}]
@@ -111,6 +129,7 @@
 (defn- text-at-top
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image {:pos :bottom :size 4/5} page-params content-params)
                          (add-text-background {:pos :top :size 1/5} page-params)
                          (add-text {:pos :top :size 1/5} page-params content-params))]
@@ -119,6 +138,7 @@
 (defn- text-small-at-bottom
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image {:pos :top :size 4/5} page-params content-params)
                          (add-text-background {:pos :bottom :size 1/5} page-params)
                          (add-text {:pos :bottom :size 1/5} page-params content-params))]
@@ -127,6 +147,7 @@
 (defn- text-big-at-bottom
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image {:pos :top :size 3/4} page-params content-params)
                          (add-text-background {:pos :bottom :size 1/4} page-params)
                          (add-text {:pos :bottom :size 1/4} page-params content-params))]
@@ -135,6 +156,7 @@
 (defn- text-only
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-text-background {:pos :top :size 1} page-params)
                          (add-text {:pos :top :size 1} page-params content-params))]
     (create-page objects-data content-params)))
@@ -142,6 +164,7 @@
 (defn- text-over-image-at-top
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image {:pos :top :size 1} page-params content-params)
                          (add-text {:pos :top :size 1/5} page-params content-params))]
     (create-page objects-data content-params)))
@@ -149,6 +172,7 @@
 (defn- text-over-image-at-bottom
   [page-params content-params]
   (let [objects-data (-> page-template
+                         (add-background page-params)
                          (add-image {:pos :top :size 1} page-params content-params)
                          (add-text {:pos :bottom :size 1/5} page-params content-params))]
     (create-page objects-data content-params)))
