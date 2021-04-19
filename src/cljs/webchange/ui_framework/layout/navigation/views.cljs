@@ -21,7 +21,7 @@
                        (cond
                          (some? location-name) (location location-name)
                          (some? route-name) (redirect-to route-name)))]
-    [:li {:class-name {"active" active?}}
+    [:li {:class-name (get-class-name {"active" active?})}
      [button {:on-click handle-click
               :color    "default"
               :variant  "outlined"}

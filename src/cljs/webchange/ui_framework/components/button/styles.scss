@@ -7,6 +7,7 @@ $padding-h: 47px;
 
 @mixin color-disabled() {
     background-color: $color-disabled;
+    border-color: $color-disabled;
 }
 
 @mixin color-primary-hover() {
