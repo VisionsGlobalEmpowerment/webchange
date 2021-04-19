@@ -6,7 +6,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.logger.index :as logger]
     [webchange.state.state-fonts :as fonts]
-    [webchange.utils.text :refer [parts->chunks]]))
+    [webchange.utils.text :refer [text->chunks]]))
 
 ;; Dialog action name
 
@@ -67,8 +67,7 @@
 (re-frame/reg-event-fx
   ::set-current-text
   (fn [{:keys [_]} [_ id text]]
-    (let [parts (clojure.string/split text #" ")
-          chunks (parts->chunks text parts)]
+    (let [chunks (text->chunks text)]
       {:dispatch [::state/update-current-data id {:text   text
                                                   :chunks chunks}]})))
 

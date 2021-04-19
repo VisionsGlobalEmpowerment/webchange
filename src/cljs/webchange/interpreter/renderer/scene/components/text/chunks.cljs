@@ -13,29 +13,64 @@
 (defn- map-chunk-index [chunks]
   (map-indexed (fn [idx chunk] (assoc chunk :index idx)) chunks))
 
-(defn- fill-absent-chunks [chunks]
+(defn- split-chunk
+  [{:keys [start text]}]
+  (loop [rest-text text
+         result []]
+    (if-not (empty? rest-text)
+      (let [last-end (if (empty? result) start (-> result last :end))
+            new-line-index (clojure.string/index-of rest-text "\n")]
+        (if new-line-index
+          (let [first-part (subs rest-text 0 (inc new-line-index))
+                rest-part (subs rest-text (inc new-line-index))]
+            (recur rest-part (conj result {:start last-end
+                                           :end   (+ last-end (count first-part))
+                                           :text  first-part})))
+          (recur "" (conj result {:start last-end
+                                  :end   (+ last-end (count rest-text))
+                                  :text  rest-text}))))
+      result)))
+
+(defn fill-absent-chunks
+  [{:keys [text]} chunks]
   (reduce
     (fn [acc chunk]
       (let [end (-> acc last :end (or 0))
             start (:start chunk)]
         (if (> start end)
-          (-> acc (conj {:start end :end start}) (conj chunk))
+          (concat acc
+                  (->> {:start end
+                        :end   start
+                        :text  (subs text end start)}
+                       (split-chunk)
+                       (map #(dissoc % :text)))
+                  [chunk])
           (conj acc chunk))))
-    [] chunks))
+    []
+    chunks))
 
-(defn- prepare-chunk [chunk props]
-  (let [text (subs (:text props) (:start chunk) (:end chunk))
-        width (measure-width text props)
+(defn- set-chunk-text
+  [{:keys [start end] :as chunk} {:keys [text]}]
+  (assoc chunk :text (subs text start end)))
+
+(defn- measure-chunk
+  [{:keys [text] :as chunk} props]
+  (let [width (measure-width text props)
         height (:font-size props)]
     (-> props
         (dissoc :x :y)
-        (merge {:text text :width width :height height} chunk))))
+        (merge {:width  width
+                :height height}
+               chunk))))
 
-(defn- get-chunks [{:keys [chunks] :as props}]
+(defn- get-chunks
+  [{:keys [chunks] :as props}]
   (->> chunks
        map-chunk-index
-       fill-absent-chunks
-       (map (fn [chunk] (prepare-chunk chunk props)))))
+       (fill-absent-chunks props)
+       (map (fn [chunk] (-> chunk
+                            (set-chunk-text props)
+                            (measure-chunk props))))))
 
 (defn- empty-chunk? [chunk]
   (if (get chunk :text)
@@ -85,8 +120,8 @@
   (let [trimmed (trim-chunks chunks)
         width (line-width trimmed)]
     {:line-chunks trimmed
-     :width width
-     :rest rest}))
+     :width       width
+     :rest        rest}))
 
 (defn- line [width words]
   (loop [words-to-process words
@@ -141,8 +176,8 @@
   [line props]
   (reduce (fn [result chunk]
             (let [x (:x result)]
-              {:x (+ x (:width chunk))
+              {:x      (+ x (:width chunk))
                :chunks (conj (:chunks result) (assoc chunk :x x))}))
-          {:x (base-x line props)
+          {:x      (base-x line props)
            :chunks []}
           (:line-chunks line)))
