@@ -42,6 +42,7 @@
             [webchange.editor-v2.scene-diagram.scene-parser.scene-parser-test]
             [webchange.editor-v2.translator.translator-form.audio-assets.utils.test]
             [webchange.interpreter.events-test]
+            [webchange.interpreter.renderer.text.chunks-test]
             [webchange.interpreter.variables.events-test]
             [webchange.interpreter.utils-test]
             [webchange.interpreter.utils.propagate-objects-test]
@@ -94,6 +95,7 @@
   'webchange.editor-v2.scene-diagram.scene-parser.scene-parser-test
   'webchange.editor-v2.translator.translator-form.audio-assets.utils.test
   'webchange.interpreter.events-test
+  'webchange.interpreter.renderer.text.chunks-test
   'webchange.interpreter.variables.events-test
   'webchange.interpreter.utils-test
   'webchange.interpreter.utils.propagate-objects-test

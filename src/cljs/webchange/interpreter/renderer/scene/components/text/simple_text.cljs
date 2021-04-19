@@ -45,11 +45,12 @@
         "bottom" (+ y height))})
 
 (defn create-simple-text
-  [{:keys [text font-family font-size font-weight fill scale skew-x skew-y width word-wrap] :as props}]
+  [{:keys [align text font-family font-size font-weight fill scale skew-x skew-y width word-wrap] :as props}]
   (let [position (calculate-position props)]
-    (doto (Text. text (clj->js (cond-> {:fontFamily    font-family
-                                        :fontWeight    font-weight
-                                        :fill          fill}
+    (doto (Text. text (clj->js (cond-> {:align      align
+                                        :fontFamily font-family
+                                        :fontWeight font-weight
+                                        :fill       fill}
                                        (some? font-size) (assoc :fontSize font-size)
                                        (true? word-wrap) (-> (assoc :wordWrap true)
                                                              (assoc :wordWrapWidth width)))))
