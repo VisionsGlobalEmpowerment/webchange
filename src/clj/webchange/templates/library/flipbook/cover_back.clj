@@ -129,13 +129,14 @@
 
 (defn- set-content
   [page-data {:keys [authors illustrators]}]
-  (let [text (->
+  (let [text (cond->
                "Written by __authors__.
                Illustrated by __illustrators__.
 
                All rights reserved."
-               (clojure.string/replace-first #"__authors__" (clojure.string/join ", " authors))
-               (clojure.string/replace-first #"__illustrators__" (clojure.string/join ", " illustrators)))]
+               true (clojure.string/replace-first #"__authors__" (clojure.string/join ", " authors))
+               (empty? illustrators) (clojure.string/replace-first #"Illustrated by __illustrators__." "")
+               (not (empty? illustrators)) (clojure.string/replace-first #"__illustrators__" (clojure.string/join ", " illustrators)))]
     (-> page-data
         (assoc-in [:page-cover-back-license :text] text))))
 

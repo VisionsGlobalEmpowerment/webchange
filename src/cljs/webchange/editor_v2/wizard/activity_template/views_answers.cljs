@@ -2,15 +2,30 @@
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
+    [re-frame.core :as re-frame]
+    [webchange.editor-v2.layout.components.activity-stage.views :refer [select-stage]]
+    [webchange.state.state-flipbook :as state-flipbook]
+    [webchange.ui-framework.components.index :refer [select]]
     [reagent.core :as r]
     [webchange.editor-v2.wizard.activity-template.views-image :as image-field]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
-(def answers-validation-map {:root [(fn [value] (when (= (count value) 0) "answers are required"))]})
-(def answer-option-validation-map-with-image {:text [(fn [value] (when (empty? value) "Text is required"))]
-                          :img  [(fn [value] (when (empty? value) "Image is required"))]})
+(def question-validation-map {:answers [(fn [value] (when (= (count value) 0) "answers are required"))]
+                              :question-type [(fn [value] (when (empty? value) "select layout type"))]})
+(def answer-option-validation-map {:text [(fn [value] (when (empty? value) "Text is required"))]})
 
-(def answer-option-validation-map-no-image {:text [(fn [value] (when (empty? value) "Text is required"))]})
+(def types-options [{:text "--Select question type--" :value ""}
+                    {:text "Answers without images" :value "type-1"}
+                    {:text "Answers with images" :value "type-2"}])
+
+(defn- image-enabled
+  [type with-image]
+  (if with-image
+    (case type
+      "" false
+      "type-1" false
+      "type-2" true)
+    with-image))
 
 (defn- form-block
   [{:keys [title]}]
@@ -28,7 +43,7 @@
            (r/children this))]))
 
 (defn- question-block
-  [{:keys [question-page option error-message]}]
+  [{:keys [question-page option error-message with-image]}]
   [form-block {:title (:label option)}
    [ui/grid {:container true
              :spacing   16}
@@ -42,6 +57,21 @@
                      :variant "h6"}
        "Use screenshot instead image"]
      [error-message {:field-name :root}]]
+    (if with-image
+      [ui/grid {:item true :xs 12}
+       [ui/typography {:style   {:display "inline-block"}
+                       :variant "h6"}
+        "Select question layout type"]
+       [select {:value     (get @question-page :question-type "")
+                :options   [{:text "--Select question type--" :value "" :enable? true}
+                            {:text "Answers without images" :value "type-1" :enable? true}
+                            {:text "Answers with images" :value "type-2" :enable? true}]
+                :variant   "outlined"
+                :on-change #(reset! question-page (assoc @question-page :question-type %))
+                :width     160}]
+       [error-message {:field-name :question-type}]
+       ])
+
     [ui/grid {:item true :xs 12}
      [ui/text-field {:label     "Question text"
                      :variant   "outlined"
@@ -54,6 +84,8 @@
                                                                                                 :max-height 400
                                                                                                 :min-height 100
                                                                                                 :min-width 100}]
+     [select-stage {:on-change #(re-frame/dispatch [::state-flipbook/upload-stage-screenshot (.. % -target -value)
+                                                    (fn [result] (swap! question-page assoc :img (:url result)))])}]
      [error-message {:field-name :img}]]]])
 
 (defn- answer-option
@@ -61,9 +93,7 @@
   (r/with-let [page-data (connect-data data [:answers idx])
                {:keys [error-message destroy]} (v/init
                                                  page-data
-                                                 (if with-image
-                                                   answer-option-validation-map-with-image
-                                                   answer-option-validation-map-no-image)
+                                                 answer-option-validation-map
                                                  validator)]
     [ui/grid {:container   true
               :spacing     16
@@ -98,7 +128,11 @@
      (when with-image
        [ui/grid {:item true :xs 9}
         [image-field/image-field (get @page-data :img "") #(swap! page-data assoc :img %)]
-        [error-message {:field-name :img}]])]
+        [select-stage {:on-change #(re-frame/dispatch [::state-flipbook/upload-stage-screenshot (.. % -target -value)
+                                                       (fn [result] (swap! page-data assoc :img (:url result)))])}]
+        [error-message {:field-name :img}]]
+       )]
+
     (finally
       (destroy))))
 
@@ -129,7 +163,7 @@
                      :disable-touch-listener true}
          [ui/button {:on-click handle-add-page}
           "Add Answer Option"]]]
-       [error-message {:field-name :root}]]
+       [error-message {:field-name :answers}]]
 
       (when (->> (:answers @question-page)
                  (count) (< 0))
@@ -148,17 +182,19 @@
 (defn answers-option
   [{:keys [key option data validator]} with-image]
   (r/with-let [question-page (connect-data data ["question-page"] {})
-               {:keys [error-message destroy] :as validator} (v/init question-page answers-validation-map validator)]
+               {:keys [error-message destroy] :as validator} (v/init question-page question-validation-map validator)
+               ]
     (when (nil? (:answers @question-page)) (reset! question-page (assoc @question-page :answers [])))
     [:div
      [ui/divider]
      [question-block {:question-page question-page
                       :option        option
-                      :error-message error-message}]
+                      :error-message error-message
+                      :with-image    with-image}]
      [answers-block {:question-page question-page
                      :option        option
                      :error-message error-message
                      :validator     validator
-                     :with-image    with-image}]]
+                     :with-image    (image-enabled (get @question-page :question-type "") with-image)}]]
     (finally
       (destroy))))

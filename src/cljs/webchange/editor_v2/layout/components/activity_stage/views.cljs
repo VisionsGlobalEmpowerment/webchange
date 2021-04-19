@@ -25,20 +25,23 @@
                 :border        "solid 1px #464646"}})
 
 (defn select-stage
-  [{:keys [styles]
+  [{:keys [styles on-change]
     :or   {styles {}}}]
   (let [stages @(re-frame/subscribe [::state-flipbook/stage-options])
         enabled? (seq stages)
         current-stage @(re-frame/subscribe [::state-flipbook/current-stage])
         styles (-> (get-styles)
-                   (deep-merge styles))]
+                   (deep-merge styles))
+        on-change (if on-change on-change
+                                #(re-frame/dispatch [::stage-state/select-stage (.. % -target -value)]))
+        ]
     (when enabled?
       [ui/form-control {:margin "normal"
                         :style  (:container styles)}
        [ui/select {:value         (or current-stage "")
                    :display-empty true
                    :variant       "outlined"
-                   :on-change     #(re-frame/dispatch [::stage-state/select-stage (.. % -target -value)])
+                   :on-change     on-change
                    :render-value  (fn [value]
                                     (->> (fn []
                                            (let [{:keys [idx img name]} (if-not (= value "")

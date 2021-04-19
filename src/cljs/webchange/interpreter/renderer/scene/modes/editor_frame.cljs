@@ -158,9 +158,9 @@
 (defn- wrap-in-container
   [object props]
   (let [container (create-editor-container props)
-        current-parent (.-parent object)]
-    (.removeChild current-parent object)
-    (.addChild current-parent container)
+        current-parent (.-parent object)
+        index (.getChildIndex current-parent object)]
+    (.addChildAt current-parent container index)
     (.addChild container object)
 
     (utils/set-position container (utils/get-position object))

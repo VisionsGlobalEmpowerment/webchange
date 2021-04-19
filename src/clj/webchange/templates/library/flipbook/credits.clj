@@ -110,7 +110,7 @@
                       :vertical-step 50}]
     (generate-list-block (merge block-params
                                 {:name     "credits-page-illustrators"
-                                 :label    "Illustrated By"
+                                 :label    (if (empty? data) "" "Illustrated By")
                                  :data     data
                                  :position {:x "---"
                                             :y 600}}))))
