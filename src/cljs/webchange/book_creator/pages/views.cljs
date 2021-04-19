@@ -77,14 +77,12 @@
   []
   (let [checked? @(re-frame/subscribe [::state-flipbook/show-generated-pages?])
         handle-change (fn [value] (re-frame/dispatch [::state-flipbook/set-show-generated-pages? value]))]
-    [:div
-     [switcher {:label     "Display technical pages"
-                :checked?  checked?
-                :on-change handle-change}]]))
+    [switcher {:label     "Display technical pages"
+               :checked?  checked?
+               :on-change handle-change}]))
 
 (defn pages-block
   []
-  [content-block {:title          "Pages"
-                  :right-controls [tech-pages-switcher]
-                  :style          {:width 800}}
+  [content-block {:title         "Pages"
+                  :left-controls [tech-pages-switcher]}
    [stages-list]])
