@@ -1,0 +1,32 @@
+.game-changer-form {
+    display: grid;
+    grid-template-columns: 240px auto;
+    grid-template-rows: 80px auto;
+    height: 100%;
+    width: 100%;
+
+    & > * {
+        border: solid 1px #acacac;
+    }
+
+    & > .title {
+        grid-column-start: 2;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #1D1D1F;
+        font-weight: bold;
+        font-size: 22px;
+        line-height: 26px;
+    }
+
+    & > .timeline {
+
+    }
+
+    & > .content {
+
+    }
+}

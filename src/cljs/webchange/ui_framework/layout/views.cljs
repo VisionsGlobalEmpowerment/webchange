@@ -5,19 +5,17 @@
     [webchange.ui-framework.layout.toolbar.views :refer [toolbar]]
     [webchange.views-modals :refer [modal-windows]]))
 
-(defn- menu-placeholder
-  []
-  [:div.menu-placeholder "Menu Placeholder"])
-
 (defn layout
-  [{:keys [actions]}]
+  [{:keys [actions show-navigation?]
+    :or   {show-navigation? true}}]
   (let [this (r/current-component)]
     [:div.page-layout
      [:div.header
       [toolbar {:actions actions}]]
      [:div.body
-      [:div.side-menu
-       [navigation-menu]]
+      (when show-navigation?
+        [:div.side-menu
+         [navigation-menu]])
       (into [:div.content]
             (r/children this))]
      [modal-windows]]))

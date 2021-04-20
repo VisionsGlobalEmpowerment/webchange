@@ -140,6 +140,7 @@
            (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))
            (GET "/book-creator" request (authenticated-route request {:role :educator}))
            (GET "/wizard" request (authenticated-route request {:role :educator}))
+           (GET "/game-changer-new" request (authenticated-route request {:role :educator}))
 
            ;; Technical
            (GET "/test-ui" [] (public-route))
