@@ -1,6 +1,10 @@
 (ns webchange.editor-v2.audio-analyzer
   (:require
     [re-frame.core :as re-frame]
+    [webchange.logger.index :as logger]
+    [clojure.string :as s]
+    [clojure.edn :as edn]
+    [webchange.utils.forty-two :as forty-two]
     [webchange.editor-v2.components.audio-wave-form.state :as state]
     ))
 
@@ -31,6 +35,7 @@
 
 (def confidence-treshhold 0.5)
 (def confidence-chunk-treshhold 0.8)
+(def analize-string-length 30)
 
 (defn prepare-result-items
   [data]
@@ -47,10 +52,17 @@
 
 (defn prepare-text
   [text]
-  (-> (or text "")
-      (clojure.string/replace #"[^A-Za-z ]" "")
-      (clojure.string/replace #" +" " ")
-      (clojure.string/lower-case)))
+  (let [numbers (sort-by #(- 0 (count %)) (remove empty? (clojure.string/split text #"[^\d]+")))
+        text-numbers (into {} (map (fn [number] [number (forty-two/words (edn/read-string number))]) numbers))
+        numbers-to-search (reduce (fn [result number] (str result "|" number)) numbers)
+        text (cond-> (or text "")
+                 true (clojure.string/replace #"[\s]" " ")
+                     true (clojure.string/replace #"[^A-Za-z 0-9]" "")
+                     true (clojure.string/replace #" +" " ")
+                     true (clojure.string/lower-case)
+                     (not (empty? text-numbers)) (clojure.string/replace (re-pattern numbers-to-search) text-numbers))]
+    text
+    ))
 
 (defn get-candidates
   [text-to-search-length data-text text-to-search data-text-length]
@@ -64,7 +76,7 @@
                    :start    i
                    :end      end-subs
                    })
-                ) (filter #(or (= % 0) ( <= % (- data-text-length text-to-search-length)))
+                ) (filter #(or (= % 0) (<= % (- data-text-length text-to-search-length)))
                           (reduce (fn [result item]
                                     (let [pos (+ (last result) 1 (count item))]
                                       (conj result pos))
@@ -85,16 +97,28 @@
         data-text-length (count data-text)
         text (prepare-text text)
         text-length (count text)
-        text-to-search-length (min 30 text-length)
+        text-to-search-length (min analize-string-length text-length)
         text-to-search (subs text 0 text-to-search-length)
         result-items (prepare-result-items data)
-        candidates (get-candidates text-to-search-length data-text text-to-search data-text-length)
-        best-candidate (select-best-candidate candidates)
-        final-result (reduce (fn [result item]
+        candidates-start (get-candidates text-to-search-length data-text text-to-search data-text-length)
+        best-candidate-start (select-best-candidate candidates-start)
+        ;Adjust end of fragment to make sure that end fragment correctly selected
+        best-candidate-end (if (< text-length analize-string-length)
+                             best-candidate-start
+                             (let [text-to-search (subs text (- text-length analize-string-length) text-length)
+                                   candidates-end (get-candidates analize-string-length data-text text-to-search text-length)
+                                   best-candidate (select-best-candidate candidates-end)]
+                               ;Check that end fragment found and looks good, if not fallback to default logic
                                (if (and (contains? best-candidate :start)
                                         (contains? best-candidate :end)
-                                        (>= (:end-text item) (:start best-candidate))
-                                        (<= (:start-text item) (+ (:start best-candidate) text-length)))
+                                        (>= (:end best-candidate) (:end best-candidate-start)))
+                                        best-candidate
+                                        (assoc best-candidate-start :end (+ (:start best-candidate) text-length)))))
+        final-result (reduce (fn [result item]
+                               (if (and (contains? best-candidate-start :start)
+                                        (contains? best-candidate-start :end)
+                                        (>= (:end-text item) (:start best-candidate-start))
+                                        (<= (:start-text item) (:end best-candidate-end)))
                                  (cond-> result
                                          (> (:end item) (:end result)) (assoc :end (:end item))
                                          (< (:start item) (:start result)) (assoc :start (:start item)))
@@ -204,4 +228,5 @@
     {}
     (let [script-data @(re-frame/subscribe [::state/audio-script-data url])
           region (get-start-end-for-text text script-data)]
+      (logger/trace "region-data" region)
       region)))

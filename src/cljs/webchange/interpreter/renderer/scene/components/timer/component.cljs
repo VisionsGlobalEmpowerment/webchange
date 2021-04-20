@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.scene.components.timer.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.timer.clock.clock :refer [clock]]
     [webchange.interpreter.renderer.scene.components.timer.progress-circle.progress :refer [progress]]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.scene.components.timer.utils :refer [time->min-sec]]))
 
 (def default-props {:x             {}
@@ -15,7 +16,8 @@
                     :color         {:default 0xff9000}
                     :thickness     {:default 15}
                     :ref           {}
-                    :on-end        {:default #()}})
+                    :on-end        {:default #()}
+                    :filters         {}})
 
 (def component-type "timer")
 
@@ -42,7 +44,7 @@
    :color     color})
 
 (defn create
-  [{:keys [parent type ref object-name show-progress time on-end] :as props}]
+  [{:keys [parent type ref object-name show-progress time on-end filters] :as props}]
   (let [state (atom {:initial-time time
                      :current-time time})
         container (create-container props)
@@ -57,6 +59,10 @@
                                                               :set-clock-activated set-clock-activated})]
     (.addChild container clock)
     (.addChild parent container)
+
+    (apply-filters container filters)
+    (apply-filters clock filters)
+
     (when show-progress (.addChild container progress))
 
     (when-not (nil? ref) (ref wrapped-timer))

@@ -146,10 +146,10 @@
                                          (with-filter-params)
                                          (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
                       :timer (-> object
-                                 (assoc :object-name (keyword name))
-                                 (with-group-params)
-                                 (with-filter-params)
-                                 (filter-extra-props []))
+                                   (assoc :object-name (keyword name))
+                                   (with-group-params)
+                                   (with-filter-params)
+                                   (filter-extra-props []))
                       :counter (-> object
                                    (assoc :object-name (keyword name))
                                    (with-group-params)
