@@ -17,6 +17,7 @@
     [webchange.ui-framework.components.switcher.index :as switcher]
     [webchange.ui-framework.components.text-area.index :as text-area]
     [webchange.ui-framework.components.text-input.index :as text-input]
+    [webchange.ui-framework.components.timeline.index :as timeline]
     [webchange.ui-framework.components.tooltip.index :as tooltip]))
 
 (def button button/component)
@@ -34,5 +35,6 @@
 (def switcher switcher/component)
 (def text-area text-area/component)
 (def text-input text-input/component)
+(def timeline timeline/component)
 (def tooltip tooltip/component)
 (def with-confirmation confirm/with-confirmation)

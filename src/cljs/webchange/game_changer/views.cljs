@@ -1,16 +1,29 @@
 (ns webchange.game-changer.views
   (:require
-    [webchange.ui-framework.layout.views :refer [layout]]))
+    [webchange.ui-framework.components.index :refer [timeline]]
+    [webchange.ui-framework.layout.views :refer [layout]]
 
-(defn form
+    [webchange.game-changer.templates-list.views :refer [templates-list]]
+    ))
+
+(def timeline-items [{:title      "Choose Activity"
+                      :completed? true}
+                     {:title      "Name Activity"
+                      :completed? true}
+                     {:title   "Add Content"
+                      :active? true}
+                     {:title "Select Images"}
+                     {:title "Finish & Publish"}])
+
+(defn- form
   []
   [:div.game-changer-form
    [:div.title
     "Title"]
    [:div.timeline
-    "Timeline"]
+    [timeline {:items timeline-items}]]
    [:div.content
-    "Content"]])
+    [templates-list]]])
 
 (defn index
   []

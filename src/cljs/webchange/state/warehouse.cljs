@@ -164,6 +164,14 @@
 ;; Activity Template
 
 (re-frame/reg-event-fx
+  ::load-templates
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key        :load-templates
+                     :method     :get
+                     :uri        (str "/api/templates")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::update-activity
   (fn [{:keys [_]} [_ {:keys [course-id scene-id data]} handlers]]
     (create-request {:key        :update-activity
