@@ -95,7 +95,7 @@ WHERE status = :status AND type = :type ORDER BY name DESC LIMIT 30;
 -- :name get-courses-by-website-user :? :*
 -- :doc retrieve draft courses given website user id
 SELECT * from courses
-WHERE status = 'draft' AND type = :type AND website_user_id = :website_user_id ORDER BY name DESC LIMIT 30;
+WHERE status != 'archived' AND type = :type AND website_user_id = :website_user_id ORDER BY name DESC LIMIT 50;
 
 -- :name get-course-version :? :1
 -- :doc retrieve course version by id
