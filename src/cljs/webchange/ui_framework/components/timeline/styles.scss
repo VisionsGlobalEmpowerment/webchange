@@ -17,6 +17,8 @@ $items-connector-width: 2px;
     padding: 16px;
 
     & > .time-line-item {
+        align-items: center;
+        display: flex;
         margin-bottom: $item-margin;
 
         &:last-child {
@@ -50,6 +52,7 @@ $items-connector-width: 2px;
 
         & > .idx {
             display: inline-block;
+            flex-shrink: 0;
             position: relative;
 
             width: $idx-size;

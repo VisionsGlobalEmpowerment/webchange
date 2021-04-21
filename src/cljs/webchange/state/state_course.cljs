@@ -6,6 +6,13 @@
 
 (defn path-to-db [relative-path] (concat [:course] relative-path))
 
+;; Create
+
+(re-frame/reg-event-fx
+  ::create-course
+  (fn [{:keys [_]} [_ {:keys [course-data]} handlers]]
+    {:dispatch [::warehouse/create-course {:course-data course-data} handlers]}))
+
 ;; Course Data
 
 (def course-data-path (path-to-db [:course-data]))

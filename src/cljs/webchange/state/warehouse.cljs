@@ -39,20 +39,27 @@
                          show-sync? (conj [::sync-status/hide])
                          (some? failure-handler) (conj (conj failure-handler response)))}))
 
-(re-frame/reg-event-fx
-  ::load-skills
-  (fn [{:keys [_]} [_ handlers]]
-    (create-request {:key    :load-skills
-                     :method :get
-                     :uri    (str "/api/skills")} handlers)))
+;; Templates
 
 (re-frame/reg-event-fx
-  ::update-scene-skills
-  (fn [{:keys [_]} [_ {:keys [course-id scene-id skills-ids]} handlers]]
-    (create-request {:key    :update-scene-skills
-                     :method :post
-                     :uri    (str "/api/courses/" course-id "/scenes/" scene-id "/skills")
-                     :params {:skills skills-ids}} handlers)))
+  ::load-templates
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-templates
+                     :method :get
+                     :uri    (str "/api/templates")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::update-activity
+  (fn [{:keys [_]} [_ {:keys [course-id scene-id data]} handlers]]
+    (create-request {:key        :update-activity
+                     :method     :post
+                     :uri        (str "/api/courses/" course-id "/update-activity/" scene-id)
+                     :params     data
+                     :show-sync? true}
+                    handlers)))
+
+;; Courses
 
 (re-frame/reg-event-fx
   ::load-course
@@ -86,7 +93,42 @@
                      :uri    (str "/api/courses/" course-slug)
                      :params {:course course-data}} handlers)))
 
+; name lang
+
+(re-frame/reg-event-fx
+  ::create-course
+  (fn [{:keys [_]} [_ {:keys [course-data]} handlers]]
+    {:pre [(map? course-data)
+           (string? (:name course-data))
+           (string? (:lang course-data))]}
+    (create-request {:key    :create-course
+                     :method :post
+                     :uri    (str "/api/courses")
+                     :params course-data} handlers)))
+
+;;
+
+(re-frame/reg-event-fx
+  ::load-skills
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-skills
+                     :method :get
+                     :uri    (str "/api/skills")} handlers)))
+
+
 ;; Scene
+
+(re-frame/reg-event-fx
+  ::create-activity
+  (fn [{:keys [_]} [_ {:keys [course-slug activity-data]} handlers]]
+    {:pre [(string? course-slug)
+           (map? activity-data)
+           (string? (:name activity-data))
+           (sequential? (:skills activity-data))]}
+    (create-request {:key    :create-activity
+                     :method :post
+                     :uri    (str "/api/courses/" course-slug "/create-activity")
+                     :params activity-data} handlers)))
 
 (re-frame/reg-event-fx
   ::save-scene
@@ -97,6 +139,14 @@
                      :params     {:scene scene-data}
                      :show-sync? true}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::update-scene-skills
+  (fn [{:keys [_]} [_ {:keys [course-id scene-id skills-ids]} handlers]]
+    (create-request {:key    :update-scene-skills
+                     :method :post
+                     :uri    (str "/api/courses/" course-id "/scenes/" scene-id "/skills")
+                     :params {:skills skills-ids}} handlers)))
 
 ;; Lesson sets
 
@@ -160,23 +210,3 @@
     {:dispatch [::upload-file {:file        blob
                                :form-params [["type" "blob"]
                                              ["blob-type" "image"]]} handlers]}))
-
-;; Activity Template
-
-(re-frame/reg-event-fx
-  ::load-templates
-  (fn [{:keys [_]} [_ handlers]]
-    (create-request {:key        :load-templates
-                     :method     :get
-                     :uri        (str "/api/templates")}
-                    handlers)))
-
-(re-frame/reg-event-fx
-  ::update-activity
-  (fn [{:keys [_]} [_ {:keys [course-id scene-id data]} handlers]]
-    (create-request {:key        :update-activity
-                     :method     :post
-                     :uri        (str "/api/courses/" course-id "/update-activity/" scene-id)
-                     :params     data
-                     :show-sync? true}
-                    handlers)))

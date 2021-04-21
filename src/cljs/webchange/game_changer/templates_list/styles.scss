@@ -1,4 +1,5 @@
 $border-radius: 8px;
+$border-width: 2px;
 $padding: 8px;
 $description-collapsed-height: 70px;
 
@@ -16,6 +17,22 @@ $description-collapsed-height: 70px;
 
         cursor: pointer;
 
+        &.selected {
+            border: solid $border-width #0071E3;
+            box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
+
+            & > .description {
+                border-color: #0071E3;
+            }
+
+            &:hover {
+                & > .description {
+                    border-color: #0071E3;
+                    border-bottom-width: $border-width;
+                }
+            }
+        }
+
         & > .preview {
             height: 120px;
 
@@ -26,7 +43,7 @@ $description-collapsed-height: 70px;
             margin-right: -$padding;
             margin-bottom: $padding;
 
-            border-radius: $border-radius $border-radius 0 0;
+            border-radius: ($border-radius - $border-width) ($border-radius - $border-width) 0 0;
         }
 
         & > .title {
@@ -38,13 +55,16 @@ $description-collapsed-height: 70px;
 
         & > .description {
             position: absolute;
-            width: 100%;
+            margin-left: -$border-width;
+            margin-right: -$border-width;
             height: $description-collapsed-height;
             left: 0;
 
             padding: $padding;
             background-color: #fff;
-            border-radius: $border-radius;
+            border: solid #fff;
+            border-width: 0 $border-width 0 $border-width;
+            border-radius: 0 0 $border-radius $border-radius;
             overflow: hidden;
             text-overflow: ellipsis;
 
@@ -58,6 +78,7 @@ $description-collapsed-height: 70px;
 
             & > .description {
                 display: block;
+                box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
                 height: auto;
                 -webkit-line-clamp: none;
             }

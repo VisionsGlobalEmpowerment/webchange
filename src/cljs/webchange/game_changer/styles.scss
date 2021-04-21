@@ -1,15 +1,14 @@
+@import "create_activity/styles";
 @import "templates_list/styles";
 
 .game-changer-form {
     display: grid;
     grid-template-columns: 240px auto;
     grid-template-rows: 80px auto;
-    height: 100%;
+    max-height: 100%;
     width: 100%;
 
-    & > * {
-        border: solid 1px #acacac;
-    }
+//     & > * { border: solid 1px #acacac;}
 
     & > .title {
         grid-column-start: 2;
@@ -18,17 +17,35 @@
         align-items: center;
         justify-content: center;
 
-        color: #1D1D1F;
-        font-weight: bold;
-        font-size: 22px;
-        line-height: 26px;
+        h1 {
+            color: #1D1D1F;
+            font-weight: bold;
+            font-size: 22px;
+            line-height: 26px;
+
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 8px 16px;
+        }
     }
 
-    & > .timeline {
+    & > .timeline {}
 
-    }
+    & > .content {}
 
-    & > .content {
+    & > .actions {
+        grid-column-start: 2;
 
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        & > * {
+            margin-left: 16px;
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
     }
 }
