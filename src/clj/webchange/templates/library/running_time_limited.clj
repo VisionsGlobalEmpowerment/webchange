@@ -6,7 +6,7 @@
         :name        "Running (time limited)"
         :tags        ["Independent Practice"]
         :description "Running"
-        :lesson-sets ["concepts-group"]
+        :lesson-sets ["concepts-group" "concepts-single"]
         :fields      [{:name "image-src"
                        :type "image"}
                       {:name "concept-name"
@@ -37,6 +37,7 @@
                                               :show-minutes  false
                                               :show-progress true
                                               :time          60
+                                              :filter     "brighten",
                                               :actions       {:end {:on "end" :type "action" :id "finish-game"}}
                                               :states        {:highlighted {:filter "glow"}
                                                               :normal      {:filter ""}}}
@@ -59,6 +60,7 @@
                                               :shadow-color   "#1a1a1a"
                                               :shadow-opacity 0.5
                                               :text           "a"
+                                              :filter     "brighten",
                                               :vertical-align "middle"
                                               :states         {:highlighted {:filter "glow"}
                                                                :normal      {:filter ""}}}
@@ -152,6 +154,7 @@
                         ["target-group" "timer" "line-1" "line-2" "line-3"]]
         :actions       {:dialog-1-welcome        {:type               "sequence-data"
                                                   :editor-type        "dialog"
+                                                  :available-activities ["highlight-target-letter", "highlight-timer"]
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
@@ -189,6 +192,18 @@
                                                   :phrase             "ready-go"
                                                   :phrase-description "Ready-Go"
                                                   :dialog-track       "3 Start"}
+                        :highlight-target-letter {:type               "transition"
+                                                  :transition-id      "letter-target"
+                                                  :return-immediately true
+                                                  :from               {:brightness 0},
+                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.428}
+                                                  :kill-after         3000}
+                        :highlight-timer {:type               "transition"
+                                                  :transition-id      "timer"
+                                                  :return-immediately true
+                                                  :from               {:brightness 0},
+                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.428}
+                                                  :kill-after         3000}
                         :dialog-5-starting-noise {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :concept-var        "current-concept"
@@ -432,11 +447,11 @@
 
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
+                                                         "init-current-concept"
                                                          "welcome"
                                                          "intro"
                                                          "start"
                                                          "init-vars"
-                                                         "init-current-concept"
                                                          "start-timer"
                                                          "emit-objects"]}
 
