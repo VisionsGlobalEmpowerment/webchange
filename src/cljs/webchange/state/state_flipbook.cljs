@@ -322,12 +322,28 @@
   [db scene-id]
   (get-in db [:scenes scene-id :metadata :stages] []))
 
+(defn- get-filtered-scene-stages
+  [db]
+  (let [show-generated-pages? (get-show-generated-pages db)
+        scene-data (state/scene-data db)]
+    (cond->> (flipbook-utils/get-stages-data scene-data)
+             (not show-generated-pages?) (filter (fn [{:keys [pages-idx]}]
+                                                   (not (and (->> (first pages-idx) (flipbook-utils/get-page-data scene-data) (:generated?))
+                                                             (->> (second pages-idx) (flipbook-utils/get-page-data scene-data) (:generated?)))))))))
+
+(defn- get-next-stage-idx
+  [db]
+  (let [scene-stages (get-filtered-scene-stages db)
+        current-stage-idx (get-current-stage-idx db)]
+    (some (fn [stage-data]
+            (let [stage-idx (:idx stage-data)]
+              (and (> stage-idx current-stage-idx)
+                   stage-idx)))
+          scene-stages)))
+
 (defn- next-stage-available?
   [db]
-  (let [scene-id (:current-scene db)
-        stages-count (-> (scene-stages db scene-id) (count))
-        current-stage-idx (get-current-stage-idx db)]
-    (< current-stage-idx (dec stages-count))))
+  (-> (get-next-stage-idx db) (some?)))
 
 (re-frame/reg-sub
   ::next-stage-available?
@@ -337,14 +353,23 @@
 (re-frame/reg-event-fx
   ::select-next-stage
   (fn [{:keys [db]} [_]]
-    (let [current-stage-idx (get-current-stage-idx db)]
+    (let [next-stage-idx (get-next-stage-idx db)]
       (cond-> {}
-              (next-stage-available? db) (assoc :dispatch [::select-stage (inc current-stage-idx)])))))
+              (next-stage-available? db) (assoc :dispatch [::select-stage next-stage-idx])))))
+
+(defn- get-prev-stage-idx
+  [db]
+  (let [scene-stages (get-filtered-scene-stages db)
+        current-stage-idx (get-current-stage-idx db)]
+    (some (fn [stage-data]
+            (let [stage-idx (:idx stage-data)]
+              (and (< stage-idx current-stage-idx)
+                   stage-idx)))
+          (reverse scene-stages))))
 
 (defn- prev-stage-available?
   [db]
-  (let [current-stage-idx (get-current-stage-idx db)]
-    (> current-stage-idx 0)))
+  (-> (get-prev-stage-idx db) (some?)))
 
 (re-frame/reg-sub
   ::prev-stage-available?
@@ -354,9 +379,9 @@
 (re-frame/reg-event-fx
   ::select-prev-stage
   (fn [{:keys [db]} [_]]
-    (let [current-stage-idx (get-current-stage-idx db)]
+    (let [prev-stage-idx (get-prev-stage-idx db)]
       (cond-> {}
-              (> current-stage-idx 0) (assoc :dispatch [::select-stage (dec current-stage-idx)])))))
+              (prev-stage-available? db) (assoc :dispatch [::select-stage prev-stage-idx])))))
 
 ;; Reset Stage
 
