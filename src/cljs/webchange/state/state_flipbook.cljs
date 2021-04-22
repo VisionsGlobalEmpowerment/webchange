@@ -113,12 +113,6 @@
                   {:on-success [::update-activity-success]}]})))
 
 (re-frame/reg-event-fx
-  ::update-activity-success
-  (fn [{:keys [db]} [_ {:keys [on-success]}]]
-    {:dispatch-n (cond-> [[::reset-stage]]
-                         (some? on-success) (conj on-success))}))
-
-(re-frame/reg-event-fx
   ::set-generate-screenshots-running-state
   (fn [{:keys [db]} [_ in-progress?]]
     {:db (assoc-in db (path-to-db [:generate-screenshots-running?]) in-progress?)}))
@@ -384,6 +378,31 @@
               (prev-stage-available? db) (assoc :dispatch [::select-stage prev-stage-idx])))))
 
 ;; Reset Stage
+
+(defn- available-stage-idx?
+  [db stage-idx]
+  (let [scene-data (state/scene-data db)
+        current-stage (->> scene-data
+                           (flipbook-utils/get-stages-data)
+                           (some (fn [{:keys [idx] :as stage-data}]
+                                   (and (= idx stage-idx)
+                                        stage-data))))
+        custom-page? (fn [page-idx]
+                       (and (some? page-idx)
+                            (->> page-idx (flipbook-utils/get-page-data scene-data) (:generated?) (not))))]
+    (->> (:pages-idx current-stage)
+         (some #(custom-page? %))
+         (boolean))))
+
+(re-frame/reg-event-fx
+  ::update-activity-success
+  (fn [{:keys [db]} [_ {:keys [on-success]}]]
+    (let [available-current-stage-idx? (->> (get-current-stage-idx db)
+                                            (available-stage-idx? db))]
+      {:dispatch-n (cond-> []
+                           available-current-stage-idx? (conj [::reset-stage])
+                           (not available-current-stage-idx?) (conj [::select-prev-stage])
+                           (some? on-success) (conj on-success))})))
 
 (re-frame/reg-sub
   ::stage-key

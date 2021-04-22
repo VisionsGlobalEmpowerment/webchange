@@ -56,7 +56,7 @@
 (defn- add-stage-button
   []
   (let [add-stage-action-name :add-page
-        handle-click (fn [] (re-frame/dispatch [::scene-action.events/show-actions-form add-stage-action-name]))]
+        handle-click (fn [] (re-frame/dispatch [::scene-action.events/show-actions-form add-stage-action-name {:on-success [::state-flipbook/reset-stage]}]))]
     [:button.add-stage-button {:on-click handle-click}
      [icon {:icon "add"}]]))
 
