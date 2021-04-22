@@ -1,10 +1,10 @@
 (ns webchange.state.state-flipbook
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.editor-v2.layout.state :as state-layout]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.interpreter.renderer.state.overlays :as overlays]
+    [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
     [webchange.editor-v2.assets.events :as assets-events]
@@ -17,19 +17,23 @@
        (concat [:flipbook])
        (state/path-to-db)))
 
-(defn current-stage
+(defn- get-current-stage-idx
   [db]
   (get-in db (state-layout/path-to-db [:current-stage]) 0))
 
+(defn- set-current-stage-idx
+  [db idx]
+  (assoc-in db (state-layout/path-to-db [:current-stage]) idx))
+
 (re-frame/reg-sub
-  ::current-stage
-  current-stage)
+  ::current-stage-idx
+  get-current-stage-idx)
 
 (re-frame/reg-sub
   ::stage-pages
   (fn []
     [(re-frame/subscribe [::state/scene-data])
-     (re-frame/subscribe [::current-stage])])
+     (re-frame/subscribe [::current-stage-idx])])
   (fn [[scene-data current-stage-idx] [_ page-side stage-idx]]
     (let [current-stage (flipbook-utils/get-stage-data scene-data (if (some? stage-idx) stage-idx current-stage-idx))
           pages (flipbook-utils/get-pages-data scene-data)
@@ -63,7 +67,7 @@
                      {source-stage-idx :stage source-page-side :side}
                      {target-stage-idx :stage target-page-side :side}
                      relative-position
-                     {:keys [on-success]}]]
+                     handlers]]
     (let [activity-data (state/scene-data db)
           page-idx-from (flipbook-utils/stage-idx->page-idx activity-data source-stage-idx source-page-side)
           page-idx-to (cond-> (flipbook-utils/stage-idx->page-idx activity-data target-stage-idx target-page-side)
@@ -96,15 +100,23 @@
                   {:action "move-page"
                    :data   {:page-idx-from page-idx-from
                             :page-idx-to   page-idx-to}}
-                  {:on-success on-success}]})))
+                  {:on-success [::update-activity-success handlers]}]})))
 
 (re-frame/reg-event-fx
   ::remove-current-stage-page
   (fn [{:keys [db]} [_ page-side]]
-    (let [current-stage (stage-state/current-stage db)]
-      {:dispatch [::state-activity/call-activity-action {:action "remove-page"
-                                                         :data   {:stage     current-stage
-                                                                  :page-side page-side}}]})))
+    (let [current-stage (get-current-stage-idx db)]
+      {:dispatch [::state-activity/call-activity-action
+                  {:action "remove-page"
+                   :data   {:stage     current-stage
+                            :page-side page-side}}
+                  {:on-success [::update-activity-success]}]})))
+
+(re-frame/reg-event-fx
+  ::update-activity-success
+  (fn [{:keys [db]} [_ {:keys [on-success]}]]
+    {:dispatch-n (cond-> [[::reset-stage]]
+                         (some? on-success) (conj on-success))}))
 
 (re-frame/reg-event-fx
   ::set-generate-screenshots-running-state
@@ -156,7 +168,7 @@
   ::generate-stages-screenshots
   (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? true}}]]
     (let [show-generated-pages? (get-show-generated-pages db)
-          current-stage (stage-state/current-stage db)
+          current-stage (get-current-stage-idx db)
           metadata (state/scene-metadata db)
           stages-idx (->> (state/scene-metadata db)
                           (:stages)
@@ -181,12 +193,12 @@
                                                                                               [idx (.createObjectURL js/URL blob)]))
                                                                                        (into {}))
                                                                 blobs (->> screenshots
-                                                                                       (map (fn [[idx blob]] [idx blob]))
-                                                                                       (into {}))]
+                                                                           (map (fn [[idx blob]] [idx blob]))
+                                                                           (into {}))]
                                                             (re-frame/dispatch [::set-stages-screenshots screenshots-blobs])
                                                             (re-frame/dispatch [::set-stages-blob-screenshots blobs])
                                                             )
-                                                          (re-frame/dispatch [::stage-state/select-stage (or current-stage 0)])
+                                                          (re-frame/dispatch [::select-stage (or current-stage 0)])
                                                           (re-frame/dispatch [::overlays/hide-waiting-screen])
                                                           (re-frame/dispatch [::set-generate-screenshots-running-state false])
                                                           (if (not visibility)
@@ -200,8 +212,8 @@
   (fn [{:keys [db]} [_ stages-idx callback]]
     (let [screenshots @(re-frame/subscribe [::stages-blob-screenshots])]
       (re-frame/dispatch [::assets-events/upload-asset (get screenshots stages-idx) {:type      "image"
-                                                          :on-finish (fn [result]
-                                                                       (callback result))}]))
+                                                                                     :on-finish (fn [result]
+                                                                                                  (callback result))}]))
     {}))
 
 (defn- run-seq
@@ -221,7 +233,7 @@
 (defn- take-stage-screenshot
   [stage-idx hide-generated-pages?]
   (fn [callback]
-    (re-frame/dispatch [::stage-state/show-flipbook-stage stage-idx {:hide-generated-pages? hide-generated-pages?}])
+    (re-frame/dispatch [::show-flipbook-stage stage-idx {:hide-generated-pages? hide-generated-pages?}])
     (js/setTimeout (fn [] (app/take-screenshot callback {:extract-canvas? false})) 100)))
 
 (re-frame/reg-fx
@@ -247,7 +259,7 @@
   (fn []
     [(re-frame/subscribe [::state/scene-data])
      (re-frame/subscribe [::scene-stages])
-     (re-frame/subscribe [::current-stage])
+     (re-frame/subscribe [::current-stage-idx])
      (re-frame/subscribe [::stages-screenshots])])
   (fn [[scene-data stages current-stage-idx stages-screenshots] [_ {:keys [filter-generated?] :or {filter-generated? false}}]]
     (->> stages
@@ -261,3 +273,99 @@
          (filter (fn [stage]
                    (not (and (nil? (first (:pages-idx stage)))
                              (nil? (second (:pages-idx stage))))))))))
+
+;; Select Stage
+
+(re-frame/reg-event-fx
+  ::select-stage
+  (fn [{:keys [db]} [_ idx]]
+    (let [metadata (get-in db [:current-scene-data :metadata])]
+      (if (contains? metadata :flipbook-name)
+        {:dispatch [::select-flipbook-stage idx]}
+        (let [objects (get-in db [:current-scene-data :scene-objects])
+              stage (get-in db [:current-scene-data :metadata :stages idx])
+              visible? (fn [name] (some #{name} (:objects stage)))]
+          {:db         (assoc-in db (path-to-db [:current-stage]) idx)
+           :dispatch-n (->> objects
+                            flatten
+                            (map (fn [object-name]
+                                   [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]])))})))))
+
+(re-frame/reg-event-fx
+  ::select-flipbook-stage
+  (fn [{:keys [db]} [_ idx]]
+    (let [show-generated-pages? (get-show-generated-pages db)
+          stage (-> (get-in db [:current-scene-data :metadata])
+                    (get-in [:stages idx]))]
+      {:db       (set-current-stage-idx db idx)
+       :dispatch [::show-flipbook-stage (:idx stage) {:hide-generated-pages? (not show-generated-pages?)}]})))
+
+(re-frame/reg-event-fx
+  ::show-flipbook-stage
+  (fn [{:keys [db]} [_ spread-index {:keys [hide-generated-pages?]}]]
+    (let [metadata (state/scene-metadata db)
+          book-name (get metadata :flipbook-name)
+          scene-id (:current-scene db)
+          component-wrapper @(get-in db [:transitions scene-id book-name])]
+      {:flipbook-show-spread {:component-wrapper     component-wrapper
+                              :spread-idx            spread-index
+                              :hide-generated-pages? hide-generated-pages?}})))
+
+(re-frame/reg-fx
+  :flipbook-show-spread
+  (fn [{:keys [component-wrapper spread-idx hide-generated-pages?]}]
+    ((:show-spread component-wrapper) spread-idx {:hide-generated-pages? hide-generated-pages?})))
+
+;; Stages Navigation
+
+(defn- scene-stages
+  [db scene-id]
+  (get-in db [:scenes scene-id :metadata :stages] []))
+
+(defn- next-stage-available?
+  [db]
+  (let [scene-id (:current-scene db)
+        stages-count (-> (scene-stages db scene-id) (count))
+        current-stage-idx (get-current-stage-idx db)]
+    (< current-stage-idx (dec stages-count))))
+
+(re-frame/reg-sub
+  ::next-stage-available?
+  (fn [db]
+    (next-stage-available? db)))
+
+(re-frame/reg-event-fx
+  ::select-next-stage
+  (fn [{:keys [db]} [_]]
+    (let [current-stage-idx (get-current-stage-idx db)]
+      (cond-> {}
+              (next-stage-available? db) (assoc :dispatch [::select-stage (inc current-stage-idx)])))))
+
+(defn- prev-stage-available?
+  [db]
+  (let [current-stage-idx (get-current-stage-idx db)]
+    (> current-stage-idx 0)))
+
+(re-frame/reg-sub
+  ::prev-stage-available?
+  (fn [db]
+    (prev-stage-available? db)))
+
+(re-frame/reg-event-fx
+  ::select-prev-stage
+  (fn [{:keys [db]} [_]]
+    (let [current-stage-idx (get-current-stage-idx db)]
+      (cond-> {}
+              (> current-stage-idx 0) (assoc :dispatch [::select-stage (dec current-stage-idx)])))))
+
+;; Reset Stage
+
+(re-frame/reg-sub
+  ::stage-key
+  (fn [db]
+    (get-in db (path-to-db [:stage-key]) "default")))
+
+(re-frame/reg-event-fx
+  ::reset-stage
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db (path-to-db [:stage-key]) (-> (random-uuid) str))}))

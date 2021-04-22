@@ -1,7 +1,6 @@
 (ns webchange.state.state-activity
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.interpreter.events :as interpreter.events]
     [webchange.state.core :as core]
     [webchange.state.warehouse :as warehouse]))
@@ -55,6 +54,5 @@
     {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
                                                   :scene-data data}]
                           [::interpreter.events/set-scene name data]
-                          [::interpreter.events/store-scene name data]
-                          [::stage-state/reset-stage]]
+                          [::interpreter.events/store-scene name data]]
                          (some? on-success) (conj on-success))}))

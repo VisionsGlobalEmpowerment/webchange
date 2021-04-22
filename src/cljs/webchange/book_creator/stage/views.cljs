@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.editor-v2.layout.components.interpreter_stage.views :as interpreter]
     [webchange.book-creator.views-content-block :refer [content-block]]
     [webchange.state.state-flipbook :as state-flipbook]
@@ -19,10 +18,10 @@
 
 (defn stage-block
   []
-  (let [prev-stage-available? @(re-frame/subscribe [::stage-state/prev-stage-available?])
-        next-stage-available? @(re-frame/subscribe [::stage-state/next-stage-available?])
-        show-prev-stage (fn [] (re-frame/dispatch [::stage-state/select-prev-stage]))
-        show-next-stage (fn [] (re-frame/dispatch [::stage-state/select-next-stage]))
+  (let [prev-stage-available? @(re-frame/subscribe [::state-flipbook/prev-stage-available?])
+        next-stage-available? @(re-frame/subscribe [::state-flipbook/next-stage-available?])
+        show-prev-stage (fn [] (re-frame/dispatch [::state-flipbook/select-prev-stage]))
+        show-next-stage (fn [] (re-frame/dispatch [::state-flipbook/select-next-stage]))
         this (r/current-component)]
     [content-block {:title         "Layout"
                     :left-controls (r/as-element [:div.left-controls-content
