@@ -5,6 +5,7 @@
     [webchange.state.state-activity :as state-activity]))
 
 (def actions-modal-state-path [:editor-v2 :translator :actions-modal-state])
+(def actions-modal-handlers-path [:editor-v2 :translator :actions-modal-handlers])
 
 (re-frame/reg-sub
   ::modal-state
@@ -27,8 +28,9 @@
 
 (re-frame/reg-event-fx
   ::show-actions-form
-  (fn [{:keys [_]} [_ action-name]]
-    {:dispatch-n (list [::state-activity/set-current-action action-name]
+  (fn [{:keys [db]} [_ action-name handlers]]
+    {:db         (assoc-in db actions-modal-handlers-path handlers)
+     :dispatch-n (list [::state-activity/set-current-action action-name]
                        [::open])}))
 
 (re-frame/reg-event-fx
@@ -38,4 +40,12 @@
       {:dispatch [::state-activity/call-activity-action
                   {:action current-action
                    :data   data}
-                  {:on-success [::close]}]})))
+                  {:on-success [::save-success]}]})))
+
+(re-frame/reg-event-fx
+  ::save-success
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-success]} (get-in db actions-modal-handlers-path)]
+      {:dispatch-n (cond-> [[::close]]
+                           (some? on-success) (conj on-success))})))
+

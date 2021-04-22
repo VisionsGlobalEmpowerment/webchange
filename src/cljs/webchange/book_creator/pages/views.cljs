@@ -6,7 +6,6 @@
     [webchange.book-creator.pages.views-page-image :refer [page-image]]
     [webchange.book-creator.views-content-block :refer [content-block]]
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.components.index :refer [icon switcher]]))
@@ -41,7 +40,7 @@
 
 (defn- stage-item
   [{:keys [idx img active? disabled?] :as stage}]
-  (let [handle-click (fn [] (re-frame/dispatch [::stage-state/select-stage idx]))]
+  (let [handle-click (fn [] (re-frame/dispatch [::state-flipbook/select-stage idx]))]
     [:div (cond-> {:class-name (get-class-name {"stage-item" true
                                                 "active"     active?
                                                 "disabled"   disabled?})}
@@ -57,7 +56,7 @@
 (defn- add-stage-button
   []
   (let [add-stage-action-name :add-page
-        handle-click (fn [] (re-frame/dispatch [::scene-action.events/show-actions-form add-stage-action-name]))]
+        handle-click (fn [] (re-frame/dispatch [::scene-action.events/show-actions-form add-stage-action-name {:on-success [::state-flipbook/reset-stage]}]))]
     [:button.add-stage-button {:on-click handle-click}
      [icon {:icon "add"}]]))
 

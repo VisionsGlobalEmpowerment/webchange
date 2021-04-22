@@ -5,7 +5,7 @@
     [webchange.editor-v2.layout.state :refer [path-to-db]]
     [webchange.subs :as subs]
     [webchange.editor.events :as edit-scene]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]))
+    [webchange.state.state-flipbook :as state-flipbook]))
 
 (def default-dimension {:width  1920
                         :height 1080})
@@ -200,4 +200,4 @@
                          [::edit-scene/update-current-scene-object {:target (:name background)
                                                                    :state  background-state}]
                          [::edit-scene/save-current-scene current-scene]
-                         [::stage-state/reset-stage])})))
+                         [::state-flipbook/reset-stage])})))

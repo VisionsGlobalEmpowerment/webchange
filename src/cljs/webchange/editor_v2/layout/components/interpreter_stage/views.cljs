@@ -4,7 +4,6 @@
     [webchange.subs :as subs]
     [webchange.interpreter.components :as i]
     [webchange.interpreter.subs :as isubs]
-    [webchange.editor-v2.layout.components.activity-stage.state :as scene-state]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
@@ -31,7 +30,7 @@
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
         scene-data @(re-frame/subscribe [::subs/scene scene-id])
         dataset-items @(re-frame/subscribe [::isubs/dataset-items])
-        stage-key @(re-frame/subscribe [::scene-state/stage-key])]
+        stage-key @(re-frame/subscribe [::state-flipbook/stage-key])]
     ^{:key stage-key}
     [i/stage-wrapper {:mode          ::modes/editor
                       :scene-id      scene-id
