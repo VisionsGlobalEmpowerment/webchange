@@ -243,6 +243,19 @@
         (is (= 1 (count my-books)))
         (is (= "book" (:type first-book-info)))))))
 
+(deftest books-by-website-user
+  (f/course-created {:type "book" :status "archived" :name "Archived book" :website-user-id website-user-id})
+  (f/course-created {:type "book" :status "draft" :name "Draft book" :website-user-id website-user-id})
+  (f/course-created {:type "book" :status "in-review" :name "In review book" :website-user-id website-user-id})
+  (f/course-created {:type "book" :status "declined" :name "Declined book" :website-user-id website-user-id})
+  (f/course-created {:type "book" :status "published" :name "Published book" :website-user-id website-user-id})
+  (f/course-created {:type "course" :status "published" :name "Published course" :website-user-id website-user-id})
+  (with-global-fake-routes-in-isolation
+    {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
+    (let [my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
+      (testing "Archived books and published courses are not returned"
+        (is (= 4 (count my-books)))))))
+
 (deftest available-courses-can-be-retrieved
   (let [course-name "available course"
         _ (f/course-created {:name course-name :status "published"})
