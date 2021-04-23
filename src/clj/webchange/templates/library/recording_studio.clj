@@ -11,19 +11,9 @@
         :props          {:game-changer? true}
         :options        {:demo-image {:type        "image"
                                       :label       "Prompt Image"
-                                      :description "What visual prompt do you want to show on the screen?"}
-                         :background {:type        "image"
-                                      :collection  "backgrounds"
-                                      :label       "Background"
-                                      :description "Select the background for the activity"}
-                         :character  {:type        "characters"
-                                      :label       "Character"
-                                      :description "What character do you want to include in this activity?"
-                                      :max         1}}
-        :options-groups [{:title   "Select Background"
-                          :options ["background"]}
-                         {:title   "Add Content"
-                          :options ["character" "demo-image"]}]
+                                      :description "What visual prompt do you want to show on the screen?"}}
+        :options-groups [{:title   "Add Content"
+                          :options ["demo-image"]}]
         :fields         [{:name "image-src"
                           :type "image"}]})
 

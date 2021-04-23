@@ -1,13 +1,14 @@
 (ns webchange.game-changer.template-options.update-timeline
   (:require
     [webchange.editor-v2.wizard.activity-template.views :refer [options-form]]
+    [webchange.editor-v2.wizard.validator :refer [connect-data]]
     [webchange.utils.list :refer [find-item-position replace-at-position]]))
 
 (defn get-component
   [options]
   (let [component (fn [{:keys [data]}]
                     [options-form {:options options
-                                   :data    data
+                                   :data    (connect-data data [:options])
                                    ;:metadata
                                    ;:validator
                                    }])]

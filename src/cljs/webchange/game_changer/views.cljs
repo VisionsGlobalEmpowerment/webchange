@@ -4,7 +4,6 @@
     [reagent.core :as r]
     [webchange.ui-framework.components.index :refer [button message timeline]]
     [webchange.ui-framework.layout.views :refer [layout]]
-    [webchange.editor-v2.sandbox.create-link :refer [create-link]]
     [webchange.game-changer.views-layout :as game-changer]
     [webchange.game-changer.template-options.update-timeline :refer [update-timeline]]
     [webchange.game-changer.create-activity.state :as state-create-activity]
@@ -21,12 +20,9 @@
                                             (callback))}
                          {:title          "Name New Activity"
                           :timeline-label "Name Activity"
-                          :component      create-activity
-                          :handle-next    (fn [{:keys [data callback]}]
-                                            (re-frame/dispatch [::state-create-activity/create-activity data callback]))}
+                          :component      create-activity}
                          {:title                 "Add Content"
-                          :replace-with-options? true}
-                         {:title "Finish & Publish"}])
+                          :replace-with-options? true}])
 
 (defn- not-defined-component
   []
@@ -52,15 +48,6 @@
      :handle-next   (get step-data :handle-next)
      :next-enabled? (next-enabled-handler {:data data})}))
 
-(defn get-preview-button
-  [data]
-  (let [{:keys [course-slug scene-slug]} (get data :activity {})]
-    (when (and (some? course-slug)
-               (some? scene-slug))
-      (let [link (create-link {:course-slug course-slug
-                               :scene-slug  scene-slug})]
-        [button {:href link} "Preview"]))))
-
 (defn- form
   []
   (r/with-let [current-step (r/atom 0)
@@ -74,11 +61,8 @@
                                                   :steps    steps
                                                   :callback #(swap! current-step inc)})
                                     (swap! current-step inc)))
-               handle-finish (fn []
-                               ;(let [course-slug (:course-slug @saved-activity)
-                               ;      scene-slug (:scene-slug @saved-activity)]
-                               ;  (re-frame/dispatch [::state-course/redirect-to-editor course-slug scene-slug]))
-                               (print "Finish"))]
+               handle-finish (fn [data]
+                               (re-frame/dispatch [::state-create-activity/create-activity data]))]
     (let [current-step-data (get-current-step-data @current-data @current-step @steps)
           {:keys [component title timeline handle-next next-enabled?]} current-step-data
 
@@ -96,12 +80,8 @@
                                                   :handler #(handle-next-step handle-next)})
                           last-step? (conj {:id      :finish
                                             :text    "Finish"
-                                            :handler handle-finish}))]
-
-      (js/console.log "data" @current-data)
-
+                                            :handler #(handle-finish current-data)}))]
       [game-changer/layout {:title          title
-                            :title-action   (get-preview-button @current-data)
                             :timeline-items timeline
                             :actions        actions}
        [component {:data current-data}]])))

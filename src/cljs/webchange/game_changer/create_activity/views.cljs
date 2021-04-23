@@ -52,11 +52,6 @@
                   :on-change   handle-activity-name-change
                   :placeholder "Enter Activity Name"}]
 
-     [label {:class-name "label"} "Course Name"]
-     [text-input {:value       (get-course-name data)
-                  :on-change   handle-course-name-change
-                  :placeholder "Enter Course Name"}]
-
      [label {:class-name "label"} "Language"]
      [text-input {:value       (get-language data)
                   :on-change   handle-language-change
