@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.interpreter.renderer.state.db :as renderer-state]
     [webchange.editor-v2.layout.state :refer [path-to-db]]
     [webchange.subs :as subs]
     [webchange.interpreter.renderer.state.editor :as editor-renderer-state]
@@ -77,7 +78,7 @@
                     (assoc :skin skin))
           current-scene (subs/current-scene db)
           animation-name (or (:scene-name state) (:name state))]
-      {:set-skin {:state (get-in db [:scenes current-scene :animations animation-name])
+      {:set-skin {:state (get @(get-in db (renderer-state/path-to-db [:objects])) (keyword animation-name))
                   :skin skin}
        :dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
                                                       :target   name

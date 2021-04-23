@@ -13,6 +13,7 @@
 (def flow-tag "question-audio")
 (def image- (r/atom []))
 (def audio-icons (r/atom []))
+(def answer-rectangle (r/atom []))
 (def audio-sleep-icons (r/atom []))
 (def remove-flows {:type "remove-flows" :flow-tag flow-tag})
 
@@ -211,6 +212,7 @@
                                              })
 
                 _ ((:set-on-click-handler rectangle) #(do
+                                                        (doall (map (fn [rectangle] ((:set-border-color rectangle) 0x000000)) @answer-rectangle))
                                                         ((:set-border-color rectangle) (if correct 0x0FB600 0xED1C24))
                                                         (re-frame/dispatch [::ce/execute-action remove-flows])
                                                         (re-frame/dispatch (if correct
@@ -232,14 +234,13 @@
                                        :font-weight    "normal"
                                        :chunks         chunks
                                        :scale          {:x 1, :y 1}})]
+            (swap! answer-rectangle conj rectangle)
             (create-sound-icon {:x          (- x 152)
                                 :y          (- y 48)
                                 :audio-data audio-data
                                 :parent     parent
                                 :target     (str "answer-text-" idx)})
-            [
-             text
-             ])
+            [text])
           )
         answers
         ))))
@@ -249,6 +250,7 @@
 (defn create-page
   [{:keys [image parent text chunks answers success fail skip audio-data screenshot?]} db]
 
+  (reset! answer-rectangle [])
   (reset! audio-icons [])
   (reset! audio-sleep-icons [])
   (create-page-background parent)

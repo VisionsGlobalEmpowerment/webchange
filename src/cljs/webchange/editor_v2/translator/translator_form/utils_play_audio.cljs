@@ -11,12 +11,14 @@
        (filter #(not (= % "empty")))))
 
 (defn- audio->action
-  [{:keys [src start duration]}]
+  [{:keys [src start duration volume]}]
   (if-not (= src "empty")
-    {:type     "audio"
-     :id       src
-     :start    start
-     :duration duration}
+    (cond-> {:type     "audio"
+             :id       src
+             :start    start
+             :duration duration}
+            volume (assoc :volume volume))
+
     {:type     "empty"
      :duration duration}))
 

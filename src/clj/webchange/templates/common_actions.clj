@@ -26,6 +26,9 @@
             ((fn [data]
                (let [action-key (keyword (get-in triggers [:music :action]))
                      file (get-in data [:actions action-key :id])
+                     start-background-music (if file-name
+                                              start-background-music
+                                              (assoc start-background-music :id file))
                      data (assoc-in data [:actions action-key] start-background-music)]
                  (if (file-used? data file) data (remove-asset data file))
                  )))
@@ -36,7 +39,22 @@
             true (update :assets conj asset)
             true (update :assets vec))))
 
+(defn- remove-background-music
+  [scene-data]
+  (let [triggers (:triggers scene-data)]
+    (cond-> scene-data
+            (contains? triggers :music)
+            ((fn [data]
+               (let [action-key (keyword (get-in triggers [:music :action]))
+                     file (get-in data [:actions action-key :id])
+                     data (update-in data [:actions] dissoc action-key)]
+                 (if (file-used? data file) data (remove-asset data file)))))
+            true (update-in [:triggers] dissoc :music)
+            )))
+
 (defn update-activity
   [scene-data action data]
   (case (keyword action)
-    :background-music (update-background-music scene-data data)))
+    :background-music (update-background-music scene-data data)
+    :background-music-remove (remove-background-music scene-data)
+    ))

@@ -113,7 +113,7 @@
                                         (contains? best-candidate :end)
                                         (>= (:end best-candidate) (:end best-candidate-start)))
                                         best-candidate
-                                        (assoc best-candidate-start :end (+ (:start best-candidate) text-length)))))
+                                        (assoc best-candidate-start :end (+ (:start best-candidate-start) text-length)))))
         final-result (reduce (fn [result item]
                                (if (and (contains? best-candidate-start :start)
                                         (contains? best-candidate-start :end)
@@ -228,5 +228,5 @@
     {}
     (let [script-data @(re-frame/subscribe [::state/audio-script-data url])
           region (get-start-end-for-text text script-data)]
-      (logger/trace "region-data" region)
+      (logger/trace "region-data" region text)
       region)))

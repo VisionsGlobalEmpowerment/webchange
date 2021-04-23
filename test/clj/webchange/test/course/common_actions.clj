@@ -63,3 +63,42 @@
     (is (has-asset result file))
     (is (has-asset result old-file))
     (is (not (has-action result old-file)))))
+
+
+(deftest can-delete-background-music
+  []
+  (let
+    [old-file "/test/test-1.mp3"
+     scene {:actions
+                    {:start-background-music-1 {:type "audio",
+                                                :id   old-file,
+                                                :loop true}
+                     :act-1                    {:type "audio",
+                                                :id   old-file}},
+            :triggers
+                    {:music {:on "start", :action "start-background-music-1"}},
+            :assets [{:url old-file, :size 10, :type "audio"}]}
+     data {:common-action? true :action "background-music-remove"}
+     result (core/update-activity-from-template scene data)]
+    (is (nil? (get-in result [:triggers :music])))
+    (is (not (has-action result old-file)))
+    (is (has-asset result old-file))
+    ))
+
+(deftest can-clean-assets-on-remove-background-music
+  []
+  (let
+    [old-file "/test/test-1.mp3"
+     scene {:actions
+                    {:start-background-music-1 {:type "audio",
+                                                :id   old-file,
+                                                :loop true}},
+            :triggers
+                    {:music {:on "start", :action "start-background-music-1"}},
+            :assets [{:url old-file, :size 10, :type "audio"}]}
+     data {:common-action? true :action "background-music-remove"}
+     result (core/update-activity-from-template scene data)]
+    (is (nil? (get-in result [:triggers :music])))
+    (is (not (has-action result old-file)))
+    (is (not (has-asset result old-file)))
+    ))

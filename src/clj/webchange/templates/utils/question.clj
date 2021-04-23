@@ -27,8 +27,7 @@
   (let [action-name (or action-name (str "question" "-" suffix))
         success (str action-name "-correct-answer")
         success-dialog (str action-name "-correct-answer-dialog")
-        fail-answer-dialog (str action-name "-fail-answer-dialog")
-        skip (str action-name "-skip-question")]
+        fail-answer-dialog (str action-name "-fail-answer-dialog")]
     {(keyword action-name)        {:type        "show-question"
                                    :description question
                                    :data        {:type        (if question-type question-type "type-1")
@@ -36,7 +35,6 @@
                                                  :chunks      (text-utils/text->chunks question)
                                                  :success     success
                                                  :fail        fail-answer-dialog
-                                                 :skip        skip
                                                  :audio-data  empty-audio
                                                  :image       img
                                                  :screenshot? question-screenshot
@@ -47,10 +45,6 @@
                                           {:type "action" :id success-dialog}
                                           {:type "hide-question"}
                                           {:type "empty" :duration 2000}
-                                          {:type "action" :id next-action-name}]}
-
-     (keyword skip)               {:type "sequence-data",
-                                   :data [{:type "hide-question"}
                                           {:type "action" :id next-action-name}]}
 
      (keyword success-dialog)     {:type               "sequence-data",

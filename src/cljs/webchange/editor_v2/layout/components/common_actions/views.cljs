@@ -7,4 +7,6 @@
 (defn actions
   []
   [:div
-    [bm/background-music]])
+    [bm/background-music]
+    [bm/remove-background-music]
+   ])
