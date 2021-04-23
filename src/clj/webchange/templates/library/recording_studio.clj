@@ -19,7 +19,7 @@
                          :character  {:type        "characters"
                                       :label       "Character"
                                       :description "What character do you want to include in this activity?"
-                                      :number      1}}
+                                      :max         1}}
         :options-groups [{:title   "Select Background"
                           :options ["background"]}
                          {:title   "Add Content"

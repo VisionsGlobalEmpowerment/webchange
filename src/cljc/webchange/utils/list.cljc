@@ -9,14 +9,19 @@
        (vec)))
 
 (defn insert-at-position
-  [list item position]
-  "Insert into list item at specific position."
-  {:pre [(sequential? list) (number? position)]}
-  (let [position (if (< position 0)
-                   (+ position (count list))
-                   position)
-        [before after] (split-at position list)]
-    (vec (concat before [item] after))))
+  ([list item position]
+   (insert-at-position list item position {}))
+  ([list item position {:keys [insert-list?]
+                        :or   {insert-list? false}}]
+   "Insert into list item at specific position."
+   {:pre [(sequential? list) (number? position)]}
+   (let [position (if (< position 0)
+                    (+ position (count list))
+                    position)
+         [before after] (split-at position list)]
+     (vec (concat before
+                  (if insert-list? item [item])
+                  after)))))
 
 (defn remove-at-position
   [list position]
@@ -28,12 +33,14 @@
       (vec)))
 
 (defn replace-at-position
-  [list position new-item]
-  "Replace item in list at specific position."
-  {:pre [(sequential? list)
-         (number? position) (>= position 0) (< position (count list))]}
-  (-> (remove-at-position list position)
-      (insert-at-position new-item position)))
+  ([list position new-item]
+   (replace-at-position list position new-item {}))
+  ([list position new-item options]
+   "Replace item in list at specific position."
+   {:pre [(sequential? list)
+          (number? position) (>= position 0) (< position (count list))]}
+   (-> (remove-at-position list position)
+       (insert-at-position new-item position options))))
 
 (defn move-item
   [list position-from position-to]

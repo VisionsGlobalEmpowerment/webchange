@@ -6,22 +6,26 @@
     [webchange.ui-framework.layout.views :refer [layout]]
     [webchange.game-changer.views-layout :as game-changer]
 
+    [webchange.game-changer.template-options.update-timeline :refer [update-timeline]]
+
     [webchange.game-changer.create-activity.state :as state-create-activity]
     [webchange.game-changer.create-activity.views :refer [create-activity]]
     [webchange.game-changer.templates-list.views :refer [templates-list]]))
 
 (def steps [{:title          "Choose from a variety of activities..."
              :timeline-label "Choose Activity"
-             :component      templates-list}
+             :component      templates-list
+             :handle-next    (fn [{:keys [data steps callback]}]
+                               (reset! steps (update-timeline @steps @data))
+                               (callback))}
             {:title          "Name New Activity"
              :timeline-label "Name Activity"
              :component      create-activity
-             :handle-next    #(re-frame/dispatch [::state-create-activity/create-activity %1 %2])}
-            {:title "Add Content"}
-            ;{:title "Select Images"}
-            ;{:title "Finish & Publish"}
-
-            ])
+             :handle-next    (fn [{:keys [data callback]}]
+                               (re-frame/dispatch [::state-create-activity/create-activity data callback]))}
+            {:title                 "Add Content"
+             :replace-with-options? true}
+            {:title "Finish & Publish"}])
 
 (defn- not-defined-component
   []
@@ -47,25 +51,27 @@
 
 (defn- form
   []
-  (r/with-let [current-step (r/atom 1)
-               current-data (r/atom {:template {:id 23, :name "recording studio"}})
+  (r/with-let [current-step (r/atom 0)
+               current-data (r/atom {})
+               steps (r/atom steps)
 
                handle-prev-step (fn [] (swap! current-step dec))
                handle-next-step (fn [handle-next]
-                                  (print "handle-next" handle-next)
                                   (if (fn? handle-next)
-                                    (handle-next current-data #(swap! current-step inc))
+                                    (handle-next {:data     current-data
+                                                  :steps    steps
+                                                  :callback #(swap! current-step inc)})
                                     (swap! current-step inc)))
                handle-finish (fn []
                                ;(let [course-slug (:course-slug @saved-activity)
                                ;      scene-slug (:scene-slug @saved-activity)]
                                ;  (re-frame/dispatch [::state-course/redirect-to-editor course-slug scene-slug]))
                                (print "Finish"))]
-    (let [current-step-data (get-current-step-data @current-step steps)
+    (let [current-step-data (get-current-step-data @current-step @steps)
           {:keys [component title timeline handle-next]} current-step-data
 
           first-step? (= @current-step 0)
-          last-step? (= @current-step (dec (count steps)))
+          last-step? (= @current-step (dec (count timeline)))
 
           actions (cond-> []
                           (not first-step?) (conj {:id      :prev-step

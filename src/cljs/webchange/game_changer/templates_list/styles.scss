@@ -23,12 +23,16 @@ $description-collapsed-height: 70px;
 
             & > .description {
                 border-color: #0071E3;
+                border-width: 0 $border-width 0 $border-width;
+
+                margin-left: -$border-width;
+                margin-right: -$border-width;
             }
 
             &:hover {
                 & > .description {
                     border-color: #0071E3;
-                    border-bottom-width: $border-width;
+                    border-width: 0 $border-width $border-width $border-width;
                 }
             }
         }
@@ -55,15 +59,14 @@ $description-collapsed-height: 70px;
 
         & > .description {
             position: absolute;
-            margin-left: -$border-width;
-            margin-right: -$border-width;
+
             height: $description-collapsed-height;
             left: 0;
 
             padding: $padding;
             background-color: #fff;
             border: solid #fff;
-            border-width: 0 $border-width 0 $border-width;
+            border-width: 0;
             border-radius: 0 0 $border-radius $border-radius;
             overflow: hidden;
             text-overflow: ellipsis;

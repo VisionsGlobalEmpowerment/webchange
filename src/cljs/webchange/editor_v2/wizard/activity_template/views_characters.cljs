@@ -14,8 +14,11 @@
 
 (defn- character-option
   [{:keys [idx data validator on-remove last?]}]
-  (r/with-let [character-data (connect-data data [idx])
-               {:keys [error-message destroy]} (v/init character-data character-validation-map validator)]
+  (r/with-let [
+               character-data (connect-data data [idx])
+               ;{:keys [error-message destroy]} (v/init character-data character-validation-map validator)
+
+               ]
     [ui/grid {:container true
               :spacing   16
               :style     {:margin-top "-16px"}}
@@ -26,7 +29,8 @@
                        :value     (get @character-data :name "")
                        :style     {:margin-top "16px"}
                        :on-change #(swap! character-data assoc :name (-> % .-target .-value))}]
-       [error-message {:field-name :name}]]]
+       ;[error-message {:field-name :name}]
+       ]]
      [ui/grid {:item true :xs 5}
       [ui/form-control {:full-width true}
        [ui/input-label "Character"]
@@ -36,7 +40,8 @@
         (for [animation-name animation-names]
           ^{:key animation-name}
           [ui/menu-item {:value animation-name} animation-name])]
-       [error-message {:field-name :skeleton}]]]
+       ;[error-message {:field-name :skeleton}]
+       ]]
      [ui/grid {:item  true :xs 2
                :style {:display         "flex"
                        :align-items     "flex-end"
@@ -47,13 +52,16 @@
                          :style      {:padding "8px"}}
          [ic/delete]])]]
     (finally
-      (destroy))))
+      ;(destroy)
+      )))
 
 (defn characters-option
   [{:keys [key option data validator]}]
-  (r/with-let [add-tooltip-open? (r/atom false)
+  (r/with-let [
+               add-tooltip-open? (r/atom false)
                characters-data (connect-data data [key] [])
-               {:keys [error-message] :as validator} (v/init characters-data characters-validation-map validator)]
+               ;{:keys [error-message] :as validator} (v/init characters-data characters-validation-map validator)
+               ]
     (let [handle-add-option (fn []
                               (if (< (count @characters-data) (:max option))
                                 (swap! characters-data conj {})
@@ -86,7 +94,8 @@
           [ui/button {:size     "small"
                       :on-click handle-add-option}
            "Add"]]]
-        [error-message {:field-name :root}]]
+        ;[error-message {:field-name :root}]
+        ]
 
        (let [characters-list (map-indexed list @characters-data)]
          (for [[idx _] characters-list]
@@ -96,4 +105,5 @@
                                :data      characters-data
                                :validator validator
                                :on-remove handle-remove-option
-                               :last?     (= idx (dec (count characters-list)))}]]))])))
+                               :last?     (= idx (dec (count characters-list)))}]]
+           ))])))

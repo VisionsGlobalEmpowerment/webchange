@@ -19,7 +19,7 @@
   [{:keys [data]}]
   (r/with-let [_ (re-frame/dispatch [::state/init])
                handle-click (fn [template]
-                              (->> (select-keys template [:id :name])
+                              (->> (select-keys template [:id :name :options :options-groups])
                                    (swap! data assoc :template)))]
     (let [templates @(re-frame/subscribe [::state/templates-list])
           current-template-id (get-in @data [:template :id])]
