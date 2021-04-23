@@ -2,12 +2,11 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.ui-framework.components.index :refer [message timeline]]
+    [webchange.ui-framework.components.index :refer [button message timeline]]
     [webchange.ui-framework.layout.views :refer [layout]]
+    [webchange.editor-v2.sandbox.create-link :refer [create-link]]
     [webchange.game-changer.views-layout :as game-changer]
-
     [webchange.game-changer.template-options.update-timeline :refer [update-timeline]]
-
     [webchange.game-changer.create-activity.state :as state-create-activity]
     [webchange.game-changer.create-activity.views :refer [create-activity]]
     [webchange.game-changer.templates-list.views :refer [templates-list]]))
@@ -16,6 +15,7 @@
 (def game-changer-steps [{:title          "Choose from a variety of activities..."
                           :timeline-label "Choose Activity"
                           :component      templates-list
+                          :next-enabled?  (fn [{:keys [data]}] (some? (get-in data [:template :id])))
                           :handle-next    (fn [{:keys [data steps callback]}]
                                             (reset! steps (update-timeline game-changer-steps @data))
                                             (callback))}
@@ -43,12 +43,23 @@
                :completed? (< idx step-idx)}))))
 
 (defn- get-current-step-data
-  [step-idx steps]
-  (let [step-data (nth steps step-idx)]
-    {:title       (get step-data :title "")
-     :timeline    (get-timeline-items step-idx steps)
-     :component   (get step-data :component not-defined-component)
-     :handle-next (get step-data :handle-next)}))
+  [data step-idx steps]
+  (let [step-data (nth steps step-idx)
+        next-enabled-handler (get step-data :next-enabled? (fn [] true))]
+    {:title         (get step-data :title "")
+     :timeline      (get-timeline-items step-idx steps)
+     :component     (get step-data :component not-defined-component)
+     :handle-next   (get step-data :handle-next)
+     :next-enabled? (next-enabled-handler {:data data})}))
+
+(defn get-preview-button
+  [data]
+  (let [{:keys [course-slug scene-slug]} (get data :activity {})]
+    (when (and (some? course-slug)
+               (some? scene-slug))
+      (let [link (create-link {:course-slug course-slug
+                               :scene-slug  scene-slug})]
+        [button {:href link} "Preview"]))))
 
 (defn- form
   []
@@ -68,8 +79,8 @@
                                ;      scene-slug (:scene-slug @saved-activity)]
                                ;  (re-frame/dispatch [::state-course/redirect-to-editor course-slug scene-slug]))
                                (print "Finish"))]
-    (let [current-step-data (get-current-step-data @current-step @steps)
-          {:keys [component title timeline handle-next]} current-step-data
+    (let [current-step-data (get-current-step-data @current-data @current-step @steps)
+          {:keys [component title timeline handle-next next-enabled?]} current-step-data
 
           first-step? (= @current-step 0)
           last-step? (= @current-step (dec (count timeline)))
@@ -81,6 +92,7 @@
                                                    :props   {:variant "outlined"}})
                           (not last-step?) (conj {:id      :next-step
                                                   :text    "Next"
+                                                  :props   {:disabled? (not next-enabled?)}
                                                   :handler #(handle-next-step handle-next)})
                           last-step? (conj {:id      :finish
                                             :text    "Finish"
@@ -89,6 +101,7 @@
       (js/console.log "data" @current-data)
 
       [game-changer/layout {:title          title
+                            :title-action   (get-preview-button @current-data)
                             :timeline-items timeline
                             :actions        actions}
        [component {:data current-data}]])))

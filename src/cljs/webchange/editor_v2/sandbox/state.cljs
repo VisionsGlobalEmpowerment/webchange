@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.sandbox.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.sandbox.create-link :refer [create-link]]
     [webchange.editor-v2.sandbox.parse-actions :refer [find-all-actions]]
     [webchange.subs :as subs]))
 
@@ -32,13 +33,9 @@
 (re-frame/reg-sub
   ::link
   (fn [db]
-    (let [course-slug (:current-course db)
-          scene-slug (:current-scene db)
-          lessons @(re-frame/subscribe [::lesson-set-data]) ;{:concepts {:item-ids [188 196 208], :dataset-id 4}}
-          encoded-lessons (-> lessons clj->js js/JSON.stringify js/btoa js/encodeURIComponent)]
-      (if (seq lessons)
-        (str js/location.protocol "//" js/location.host "/s/" course-slug "/" scene-slug "/" encoded-lessons)
-        (str js/location.protocol "//" js/location.host "/s/" course-slug "/" scene-slug)))))
+    (create-link {:course-slug (:current-course db)
+                  :scene-slug  :current-scene
+                  :lessons     @(re-frame/subscribe [::lesson-set-data])}))) ;{:concepts {:item-ids [188 196 208], :dataset-id 4}}
 
 ;; Events
 

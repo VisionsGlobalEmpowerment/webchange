@@ -15,7 +15,7 @@
 
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
 
         h1 {
             color: #1D1D1F;
@@ -24,6 +24,7 @@
             line-height: 26px;
 
             padding: 8px 16px;
+            margin: 0;
         }
     }
 

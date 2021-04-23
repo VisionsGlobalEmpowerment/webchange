@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: 110px 220px;
     row-gap: 16px;
+    padding: 16px;
 
     & > .label {
         font-weight: bold;

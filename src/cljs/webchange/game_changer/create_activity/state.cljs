@@ -19,10 +19,10 @@
   ::create-activity
   (fn [{:keys [_]} [_ data callback]]
     {
-     ;:dispatch [::state-course/create-course
-     ;           {:course-data (data->course-data @data)}
-     ;           {:on-success [::create-activity-step-2 data callback]}]
-     :callback callback
+     :dispatch [::state-course/create-course
+                {:course-data (data->course-data @data)}
+                {:on-success [::create-activity-step-2 data callback]}]
+     ;:callback callback
      }))
 
 (re-frame/reg-event-fx
