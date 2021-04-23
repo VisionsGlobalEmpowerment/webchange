@@ -47,15 +47,17 @@
                _ (when-not (some? (get-activity-name data))
                    (handle-activity-name-change (generate-activity-name @data)))]
     [:div.create-activity-from
-     [label "Language"]
-     [text-input {:value       (get-language data)
-                  :on-change   handle-language-change
-                  :placeholder "Enter Language"}]
-     [label "Course Name"]
+     [label {:class-name "label"} "Activity Name"]
+     [text-input {:value       (get-activity-name data)
+                  :on-change   handle-activity-name-change
+                  :placeholder "Enter Activity Name"}]
+
+     [label {:class-name "label"} "Course Name"]
      [text-input {:value       (get-course-name data)
                   :on-change   handle-course-name-change
                   :placeholder "Enter Course Name"}]
-     [label "Activity Name"]
-     [text-input {:value       (get-activity-name data)
-                  :on-change   handle-activity-name-change
-                  :placeholder "Enter Activity Name"}]]))
+
+     [label {:class-name "label"} "Language"]
+     [text-input {:value       (get-language data)
+                  :on-change   handle-language-change
+                  :placeholder "Enter Language"}]]))

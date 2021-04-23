@@ -20,16 +20,17 @@
 (def metadata {:id          32
                :name        "Interactive Read Aloud"
                :tags        ["Direct Instruction - Animated Instructor"]
-               :description "Users learn new reading skills through a mini-lesson from a teacher character. Then, the teacher reads a book aloud (these books should be high-quality and longer/more rigorous than what students could read on their own) and stops to help users practice the skills they just learned."
+               :description "Model reading comprehension strategies with this activity. Begin with a mini-lesson, then reference a read aloud book of your choice while inserting explanations and pop-up questions throughout the lesson."
+               :props       {:game-changer? true}
                :options     (concat [{:key   "characters"
                                       :label "Characters"
                                       :type  "characters"
                                       :max   4}]
                                     book-options)
                :actions     {:add-dialog   {:title   "Add dialogue",
-                                            :options {:dialog {:label "Dialogue"
+                                            :options {:dialog {:label       "Dialogue"
                                                                :placeholder "Name the dialogue"
-                                                               :type  "string"}}}
+                                                               :type        "string"}}}
                              :add-page     {:title   "Add page"
                                             :options page-options}
                              :add-question {:title   "Add question",
@@ -49,14 +50,14 @@
                                                     :decoration {:src "/raw/img/casa/decoration_casa.png"}
                                                     :surface    {:src "/raw/img/casa/surface_casa.png"}}
 
-                               :book-background    {:type    "rectangle"
-                                                    :x       0
-                                                    :y       0
+                               :book-background    {:type       "rectangle"
+                                                    :x          0
+                                                    :y          0
                                                     :transition "book-background"
-                                                    :width   "---"
-                                                    :height  "---"
-                                                    :fill    "---"
-                                                    :visible false}
+                                                    :width      "---"
+                                                    :height     "---"
+                                                    :fill       "---"
+                                                    :visible    false}
 
                                :book               {:type       "flipbook"
                                                     :transition "book"

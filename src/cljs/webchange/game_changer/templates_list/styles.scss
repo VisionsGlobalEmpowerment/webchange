@@ -1,9 +1,12 @@
 $border-radius: 8px;
 $border-width: 2px;
-$padding: 8px;
-$description-collapsed-height: 70px;
+$padding: 12px;
+$description-collapsed-height: 74px;
 
 .templates-list {
+    display: flex;
+    justify-content: space-between;
+
     padding: 16px;
 
     & > .templates-list-item {
@@ -11,6 +14,7 @@ $description-collapsed-height: 70px;
 
         background-color: #fff;
         border-radius: $border-radius;
+        box-shadow: 0px 4px 12px rgba(175, 175, 175, 0.25);
         padding: $padding;
         padding-bottom: $description-collapsed-height;
         position: relative;
@@ -19,7 +23,6 @@ $description-collapsed-height: 70px;
 
         &.selected {
             border: solid $border-width #0071E3;
-            box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
 
             & > .description {
                 border-color: #0071E3;
@@ -38,6 +41,7 @@ $description-collapsed-height: 70px;
         }
 
         & > .preview {
+            position: relative;
             height: 120px;
 
             background-size: cover;
@@ -48,6 +52,21 @@ $description-collapsed-height: 70px;
             margin-bottom: $padding;
 
             border-radius: ($border-radius - $border-width) ($border-radius - $border-width) 0 0;
+
+            &.placeholder {
+                background-color: #f2f2f2;
+
+                &:after {
+                    content: "No Image";
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100%;
+                        color: #cecece;
+                        font-weight: 100;
+                        font-size: 18px;
+                }
+            }
         }
 
         & > .title {
@@ -59,6 +78,7 @@ $description-collapsed-height: 70px;
 
         & > .description {
             position: absolute;
+            z-index: 10;
 
             height: $description-collapsed-height;
             left: 0;

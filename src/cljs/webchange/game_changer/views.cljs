@@ -12,20 +12,21 @@
     [webchange.game-changer.create-activity.views :refer [create-activity]]
     [webchange.game-changer.templates-list.views :refer [templates-list]]))
 
-(def steps [{:title          "Choose from a variety of activities..."
-             :timeline-label "Choose Activity"
-             :component      templates-list
-             :handle-next    (fn [{:keys [data steps callback]}]
-                               (reset! steps (update-timeline @steps @data))
-                               (callback))}
-            {:title          "Name New Activity"
-             :timeline-label "Name Activity"
-             :component      create-activity
-             :handle-next    (fn [{:keys [data callback]}]
-                               (re-frame/dispatch [::state-create-activity/create-activity data callback]))}
-            {:title                 "Add Content"
-             :replace-with-options? true}
-            {:title "Finish & Publish"}])
+(declare game-changer-steps)
+(def game-changer-steps [{:title          "Choose from a variety of activities..."
+                          :timeline-label "Choose Activity"
+                          :component      templates-list
+                          :handle-next    (fn [{:keys [data steps callback]}]
+                                            (reset! steps (update-timeline game-changer-steps @data))
+                                            (callback))}
+                         {:title          "Name New Activity"
+                          :timeline-label "Name Activity"
+                          :component      create-activity
+                          :handle-next    (fn [{:keys [data callback]}]
+                                            (re-frame/dispatch [::state-create-activity/create-activity data callback]))}
+                         {:title                 "Add Content"
+                          :replace-with-options? true}
+                         {:title "Finish & Publish"}])
 
 (defn- not-defined-component
   []
@@ -53,7 +54,7 @@
   []
   (r/with-let [current-step (r/atom 0)
                current-data (r/atom {})
-               steps (r/atom steps)
+               steps (r/atom game-changer-steps)
 
                handle-prev-step (fn [] (swap! current-step dec))
                handle-next-step (fn [handle-next]

@@ -15,7 +15,7 @@
 
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
 
         h1 {
             color: #1D1D1F;
@@ -23,18 +23,21 @@
             font-size: 22px;
             line-height: 26px;
 
-            background-color: #fff;
-            border-radius: 8px;
             padding: 8px 16px;
         }
     }
 
     & > .timeline {}
 
-    & > .content {}
+    & > .content {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 16px;
+    }
 
     & > .actions {
         grid-column-start: 2;
+        padding: 16px 0;
 
         display: flex;
         align-items: center;

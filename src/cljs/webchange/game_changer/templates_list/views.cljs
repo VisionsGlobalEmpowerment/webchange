@@ -11,7 +11,10 @@
     [:div {:class-name (get-class-name {"templates-list-item" true
                                         "selected"            selected?})
            :on-click   #(on-click template)}
-     [:div.preview {:style {:background-image (str "url(" preview ")")}}]
+     [:div {:class-name (get-class-name {"preview"     true
+                                         "placeholder" (not (some? preview))})
+            :style      (cond-> {}
+                                (some? preview) (assoc :background-image (str "url(" preview ")")))}]
      [:span.title name]
      [:div.description description]]))
 

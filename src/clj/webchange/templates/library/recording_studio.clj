@@ -5,7 +5,7 @@
 (def m {:id             23
         :name           "recording studio"
         :tags           ["Direct Instruction - Animated Instructor"]
-        :description    "This activity encourages speaking practice. First, verbal and visual prompts are provided. Then, users record their responses to prompts into a microphone with the option to playback."
+        :description    "Users move a character around a race track filled with answer images.  Before time runs out, users must steer the character to as many correct answer options as possible while avoiding incorrect answer images."
         :lesson-sets    ["concepts-recording"]
         :preview        "/images/templates/previews/recording_studio.png"
         :props          {:game-changer? true}
