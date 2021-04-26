@@ -86,7 +86,7 @@
                                  :path         "",
                                  :scale-x      0.75,
                                  :scale-y      0.75,
-                                 :stroke       "red",
+                                 :stroke       "green",
                                  :stroke-width 15
                                  :visible      false
                                  :states       {:hidden  {:visible false},
@@ -330,16 +330,28 @@
         :triggers  {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata  {:prev   "map", :autostart true
                     :tracks [{:title "Dialogs"
-                              :nodes [{:type      "dialog"
+                              :nodes [{:type "prompt"
+                                       :text "Introduce big and small letters"}
+                                      {:type      "dialog"
                                        :action-id :introduce-big-small}
+                                      {:type "prompt"
+                                       :text "Describe writing task. Letter is written on desk"}
                                       {:type      "dialog"
                                        :action-id :describe-writing}
-                                      {:type      "dialog"
-                                       :action-id :whole-word-dialog}
+                                      {:type "prompt"
+                                       :text "Image from concept is moved to the desk"}
                                       {:type      "dialog"
                                        :action-id :introduce-image-dialog}
+                                      {:type "prompt"
+                                       :text "Show word from concept"}
+                                      {:type      "dialog"
+                                       :action-id :whole-word-dialog}
+                                      {:type "prompt"
+                                       :text "When correct letter from word is clicked"}
                                       {:type      "dialog"
                                        :action-id :correct-response-dialog}
+                                      {:type "prompt"
+                                       :text "After inactivity timeout"}
                                       {:type      "dialog"
                                        :action-id :dialog-wrong-answer}]}
                              ]},
