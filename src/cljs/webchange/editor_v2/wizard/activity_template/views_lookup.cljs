@@ -9,7 +9,7 @@
 
 (defn lookup-option
   [{:keys [key option data metadata validator]}]
-  (r/with-let [lookup-data (connect-data data [key] "")
+  (r/with-let [lookup-data (connect-data data [key] (:value (first (:options option))))
                {:keys [error-message]} (v/init lookup-data lookup-validation-map validator)]
     (let [options (->> (:options option)
                        (map (fn [{:keys [enable? name] :as option}]
