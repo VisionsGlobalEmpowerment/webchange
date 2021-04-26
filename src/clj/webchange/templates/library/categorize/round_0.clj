@@ -72,8 +72,8 @@
                                                           :data               [{:type "sequence-data"
                                                                                 :data [{:type "empty" :duration 0}
                                                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                          :phrase             "voiceover",
-                                                          :phrase-description "voiceover"}
+                                                          :phrase             "Introduce Game",
+                                                          :phrase-description "Introduce Game"}
                                        :stop-activity    {:type "stop-activity", :id "categorize"},
                                        :next-round {:type "action" :id "finish-scene"}
                                        :finish-scene    {:type "sequence",
@@ -85,7 +85,7 @@
                                        :start {:on "start", :action "init-activity"}},
                        :metadata      {:autostart   true
                                        :last-insert "technical-question-placeholder"
-                                       :tracks      [{:title "Round 0"
+                                       :tracks      [{:title "Welcome"
                                                       :nodes [{:type      "dialog"
                                                                :action-id :voiceover}]}]},
                        })
