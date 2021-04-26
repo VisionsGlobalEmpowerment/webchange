@@ -106,14 +106,14 @@
         best-candidate-end (if (< text-length analize-string-length)
                              best-candidate-start
                              (let [text-to-search (subs text (- text-length analize-string-length) text-length)
-                                   candidates-end (get-candidates analize-string-length data-text text-to-search text-length)
+                                   candidates-end (get-candidates text-to-search-length data-text text-to-search data-text-length)
                                    best-candidate (select-best-candidate candidates-end)]
                                ;Check that end fragment found and looks good, if not fallback to default logic
                                (if (and (contains? best-candidate :start)
                                         (contains? best-candidate :end)
                                         (>= (:end best-candidate) (:end best-candidate-start)))
                                         best-candidate
-                                        (assoc best-candidate-start :end (+ (:start best-candidate) text-length)))))
+                                        (assoc best-candidate-start :end (+ (:start best-candidate-start) text-length)))))
         final-result (reduce (fn [result item]
                                (if (and (contains? best-candidate-start :start)
                                         (contains? best-candidate-start :end)
