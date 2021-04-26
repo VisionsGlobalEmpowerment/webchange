@@ -4,7 +4,7 @@
 
 (def m {:id          21
         :name        "I spy 3"
-        :tags        ["Direct Instruction"]
+        :tags        ["Guided Practice"]
         :description "Some description of i spy mechanics and covered skills"
         :fields      []
         :options     {}})
@@ -479,14 +479,14 @@
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                              :phrase             "monument-dialog",
-                                             :phrase-description "Monument description"}
+                                             :phrase-description "Statue"}
                         :item-3-next-dialog      {:type               "sequence-data",
                                                   :editor-type        "dialog",
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                   :phrase             "monument-next-dialog",
-                                                  :phrase-description "Monument description next click"}
+                                                  :phrase-description "Statue next click"}
                         :item-4-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
