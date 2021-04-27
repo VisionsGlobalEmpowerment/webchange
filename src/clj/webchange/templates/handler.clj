@@ -17,7 +17,8 @@
                                                           :options [s/Str]}]
                        (s/optional-key :fields)         (s/maybe s/Any)
                        (s/optional-key :lesson-sets)    (s/maybe s/Any)
-                       (s/optional-key :props)          {:game-changer? (s/maybe s/Bool)}})
+                       (s/optional-key :props)          {:game-changer? (s/maybe s/Bool)}
+                       (s/optional-key :version)        (s/maybe s/Int)})
 
 (defroutes templates-api-routes
   (context "/api/templates" []
@@ -25,4 +26,9 @@
     (GET "/" []
       :return [Template]
       :summary "Returns list of templates"
-      (-> (core/get-available-templates) response))))
+      (-> (core/get-available-templates) response))
+    (GET "/:id/metadata" []
+      :path-params [id :- s/Int]
+      :return Template
+      :summary "Returns template metadata by id"
+      (-> (core/get-template-metadata-by-id id) response))))

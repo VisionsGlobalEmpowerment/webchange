@@ -8,6 +8,7 @@
         :name        "Writing 2"
         :tags        ["letter formation" "sight words"]
         :description "Writing 2"
+        :version     2
         :options     {:text {:label "Text" :type "string"}}})
 
 (def t {:assets        [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}

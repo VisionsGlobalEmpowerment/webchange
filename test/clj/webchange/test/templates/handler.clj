@@ -11,3 +11,8 @@
   (let [retrieved (-> (f/get-template-library) :body slurp (json/read-str :key-fn keyword))]
     (is (<= 4 (count retrieved)))
     (is (some #(= "casa" (:name %)) retrieved))))
+
+(deftest template-metadata-can-be-retrieved
+  (let [template-id 42
+        retrieved (-> (f/get-template-metadata template-id) :body slurp (json/read-str :key-fn keyword))]
+    (is (not (nil?  (:version retrieved))))))

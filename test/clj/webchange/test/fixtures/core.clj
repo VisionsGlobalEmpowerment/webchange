@@ -877,6 +877,13 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn get-template-metadata
+  [id]
+  (let [url (str "/api/templates/" id "/metadata")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
 (defn get-skills
   []
   (let [url (str "/api/skills")

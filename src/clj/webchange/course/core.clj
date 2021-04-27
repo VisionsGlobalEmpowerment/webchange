@@ -197,12 +197,15 @@
 (defn restore-scene-version!
   [version-id owner-id]
   (let [{data :data scene-id :scene-id} (db/get-scene-version {:id version-id})
+        {name :name} (db/get-scene-by-id {:id scene-id})
         created-at (jt/local-date-time)]
     (db/save-scene! {:scene_id   scene-id
                      :data       data
                      :owner_id   owner-id
                      :created_at created-at})
-    [true {:created-at (str created-at)}]))
+    [true {:name name
+           :data data
+           :created-at (str created-at)}]))
 
 (defn get-course-versions
   [course-slug]
@@ -635,12 +638,34 @@
   (let [scene-data (update-scene-lip-data data)]
     (save-scene! course-slug scene-name scene-data owner-id)))
 
-
 (defn update-activity!
   [course-slug scene-slug data user-id]
   (let [scene-data (-> (get-scene-latest-version course-slug scene-slug)
                        (templates/update-activity-from-template data))]
     (save-scene! course-slug scene-slug scene-data user-id)))
+
+(defn- dialog-names
+  [{:keys [actions]}]
+  (->> actions
+       (filter (fn [[_ action]] (= "dialog" (:editor-type action))))
+       (map first)))
+
+(defn update-activity-template!
+  [course-slug scene-slug user-id]
+  (let [scene-data (get-scene-latest-version course-slug scene-slug)
+        {:keys [created updated]} (get-in scene-data [:metadata :history])
+        actions (dialog-names scene-data)
+        original-assets (:assets scene-data)
+        preserve-actions (-> scene-data
+                             :actions
+                             (select-keys actions))
+        activity (as-> (templates/activity-from-template created) a
+                       (reduce #(templates/update-activity-from-template %1 {:data %2}) a updated)
+                       (update a :actions merge preserve-actions)
+                       (update a :assets #(->> (concat original-assets %)
+                                               (flatten)
+                                               (distinct))))]
+    (save-scene! course-slug scene-slug activity user-id)))
 
 (defn publish-course!
   [course-slug]
