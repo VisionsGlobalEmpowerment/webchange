@@ -62,6 +62,7 @@
                                           group-params
                                           {:object-name (keyword name)
                                            :children    children-params})
+                                   (with-filter-params)
                                    (filter-extra-props [:width :height])))
                       :flipbook (let [group-params (with-group-params object)
                                       pages-params (->> (:pages object)
@@ -93,6 +94,7 @@
                                 (filter-extra-props []))
                       :rectangle (-> object
                                      (with-group-params)
+                                     (with-filter-params)
                                      (merge {:object-name (keyword name)})
                                      (filter-extra-props []))
                       :carousel (-> object

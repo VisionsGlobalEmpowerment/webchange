@@ -31,7 +31,10 @@
   (create-wrapper {:name                 name
                    :type                 type
                    :object               object
-                   :set-fill             #(aset sprite "tint" %)
+                   :set-fill             (fn [color]
+                                           (aset sprite "tint" color))
+                   :get-fill                (fn []
+                                              (aget sprite "tint"))
                    :set-border-color     #(do
                                             (f/set-filter sprite "" {})
                                             (f/set-filter sprite "outline" {:color   % :width (:border-width props)
