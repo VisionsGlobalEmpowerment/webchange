@@ -135,7 +135,8 @@
       (db/save-scene! {:scene_id   scene-id
                        :data       scene-data
                        :owner_id   owner-id
-                       :created_at created-at}))
+                       :created_at created-at
+                       :description "Save"}))
     [true {:id          scene-id
            :name        scene-name
            :course-slug course-slug
@@ -158,7 +159,8 @@
       (db/save-scene! {:scene_id   scene-id
                        :data       new-scene-data
                        :owner_id   owner-id
-                       :created_at created-at}))
+                       :created_at created-at
+                       :descritpion "Update"}))
     [true {:id          scene-id
            :name        scene-name
            :course-slug course-slug
@@ -202,7 +204,8 @@
     (db/save-scene! {:scene_id   scene-id
                      :data       data
                      :owner_id   owner-id
-                     :created_at created-at})
+                     :created_at created-at
+                     :description "Restore"})
     [true {:name name
            :data data
            :created-at (str created-at)}]))
@@ -307,7 +310,8 @@
         (db/save-scene! {:scene_id   scene-id
                          :data       scene-data
                          :owner_id   owner-id
-                         :created_at current-time})))
+                         :created_at current-time
+                         :description "Start localize"})))
     [true (-> (transform-keys ->kebab-case-keyword localized-course-data)
               (assoc :id new-course-id)
               (->website-course))]))
@@ -472,7 +476,8 @@
     (db/save-scene! {:scene_id   scene-id
                      :data       scene-data
                      :owner_id   owner-id
-                     :created_at created-at})
+                     :created_at created-at
+                     :description "Create"})
     {:scene-id scene-id}))
 
 (defn- name-in-list? [{name :name} names]
@@ -583,7 +588,8 @@
     (db/save-scene! {:scene_id   scene-id
                      :data       scene-data
                      :owner_id   owner-id
-                     :created_at created-at})
+                     :created_at created-at
+                     :description "Create"})
     (save-dataset-on-create! course-id scene-slug metadata)
     (add-activity-lesson-sets! course-id scene-slug metadata owner-id)
     [true {:id          scene-id
