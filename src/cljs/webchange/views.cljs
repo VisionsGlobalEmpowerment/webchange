@@ -13,6 +13,7 @@
     [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
+    [webchange.game-changer.views :as game-changer]
     [webchange.student-dashboard.views :refer [student-dashboard-page student-dashboard-finished-page]]
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.views-login-switch :refer [login-switch]]
@@ -102,6 +103,7 @@
     :book-creator [wizard/book-creator-panel]
     :wizard [wizard/wizard]
     :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
+    :game-changer [game-changer/index]
 
     ;; technical
     :test-ui [test-ui]

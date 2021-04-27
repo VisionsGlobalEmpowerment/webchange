@@ -13,23 +13,23 @@ $content-padding: 24px;
     flex-direction: column;
     height: 100%;
 
-    .header {
+    & > .header {
         flex-grow: 0;
         flex-shrink: 0;
     }
 
-    .body {
+    & > .body {
         display: flex;
         flex-grow: 1;
         overflow: auto;
 
-        .side-menu {
+        & > .side-menu {
             flex-grow: 0;
             flex-shrink: 0;
             padding: $content-padding;
         }
 
-        .content {
+        & > .content {
             flex-grow: 1;
             padding: $content-padding;
         }

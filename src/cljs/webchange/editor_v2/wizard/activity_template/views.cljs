@@ -65,10 +65,9 @@
                (not (some? (get @data key))))
       (swap! data assoc key default))))
 
-(defn template
-  [{:keys [template metadata data validator]}]
-  (let [options (template->options template)
-        filtered-options (filter-options @data metadata options)]
+(defn options-form
+  [{:keys [options metadata data validator]}]
+  (let [filtered-options (filter-options @data metadata options)]
     (set-default-values! data options)
     (logger/trace-folded "template form data" @data)
     [:div.template-form
@@ -80,3 +79,10 @@
                       :data      data
                       :metadata  metadata
                       :validator validator}]])]))
+
+(defn template
+  [{:keys [template] :as props}]
+  (let [options (template->options template)]
+    [options-form (-> props
+                      (assoc :options options)
+                      (dissoc template))]))

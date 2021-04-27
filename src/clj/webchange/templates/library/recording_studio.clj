@@ -2,15 +2,20 @@
   (:require
     [webchange.templates.core :as core]))
 
-(def m {:id          23
-        :name        "recording studio"
-        :tags        ["Direct Instruction - Animated Instructor"]
-        :description "Some description of recording studio mechanics and covered skills"
-        :lesson-sets ["concepts-recording"]
-        :options     {:demo-image {:label "Demo Image"
-                                   :type  "image"}}
-        :fields      [{:name "image-src"
-                       :type "image"}]})
+(def m {:id             23
+        :name           "recording studio"
+        :tags           ["Direct Instruction - Animated Instructor"]
+        :description    "Users move a character around a race track filled with answer images.  Before time runs out, users must steer the character to as many correct answer options as possible while avoiding incorrect answer images."
+        :lesson-sets    ["concepts-recording"]
+        :preview        "/images/templates/previews/recording_studio.png"
+        :props          {:game-changer? true}
+        :options        {:demo-image {:type        "image"
+                                      :label       "Prompt Image"
+                                      :description "What visual prompt do you want to show on the screen?"}}
+        :options-groups [{:title   "Add Content"
+                          :options ["demo-image"]}]
+        :fields         [{:name "image-src"
+                          :type "image"}]})
 
 (def t {:assets        [{:url "/raw/clipart/recording_studio/recording_studio_background.png" :type "image"}
                         {:url "/raw/clipart/recording_studio/recording_studio_decoration.png" :type "image"}
@@ -18,8 +23,7 @@
                         {:url "/raw/clipart/recording_studio/mic.png" :type "image"}
                         {:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}
                         {:url "/raw/audio/l2/a11/L2_A11_Mari.m4a" :type "audio"}
-                        {:url "/raw/audio/l2/mari-chants.m4a" :size 5 :type "audio" :alias "mari chants"}
-                        ]
+                        {:url "/raw/audio/l2/mari-chants.m4a" :size 5 :type "audio" :alias "mari chants"}]
         :objects       {:background              {:type       "layered-background"
                                                   :background {:src "/raw/clipart/recording_studio/recording_studio_background.png"}
                                                   :decoration {:src "/raw/clipart/recording_studio/recording_studio_decoration.png"}
@@ -272,7 +276,7 @@
                                                                     "demonstration-example"
                                                                     "move-mari-back"
                                                                     ]}
-                        :delay {:type "empty" :duration 2000}
+                        :delay                              {:type "empty" :duration 2000}
                         :demonstration-show-demo-image      {:type "sequence-data"
                                                              :data [{:type "action"
                                                                      :id   "demonstration-set-demo-image-src"}

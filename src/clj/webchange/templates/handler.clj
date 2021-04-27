@@ -6,14 +6,18 @@
     [webchange.templates.core :as core]
     [webchange.templates.library]))
 
-(s/defschema Template {:id                           s/Int
-                       :name                         s/Str
-                       :description                  s/Str
-                       :tags                         [s/Str]
-                       (s/optional-key :actions)     (s/maybe s/Any)
-                       (s/optional-key :options)     (s/maybe s/Any)
-                       (s/optional-key :fields)      (s/maybe s/Any)
-                       (s/optional-key :lesson-sets) (s/maybe s/Any)})
+(s/defschema Template {:id                              s/Int
+                       :name                            s/Str
+                       :description                     s/Str
+                       :tags                            [s/Str]
+                       (s/optional-key :preview)        s/Str
+                       (s/optional-key :actions)        (s/maybe s/Any)
+                       (s/optional-key :options)        (s/maybe s/Any)
+                       (s/optional-key :options-groups) [{:title   s/Str
+                                                          :options [s/Str]}]
+                       (s/optional-key :fields)         (s/maybe s/Any)
+                       (s/optional-key :lesson-sets)    (s/maybe s/Any)
+                       (s/optional-key :props)          {:game-changer? (s/maybe s/Bool)}})
 
 (defroutes templates-api-routes
   (context "/api/templates" []

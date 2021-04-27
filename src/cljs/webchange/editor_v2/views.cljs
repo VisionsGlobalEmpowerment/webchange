@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.book-creator.course-status.views :refer [review-status]]
     [webchange.editor-v2.fix-lodash]
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form]]
     [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]
@@ -11,6 +12,7 @@
     [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs course-breadcrumbs]]
     [webchange.editor-v2.sandbox.views :refer [share-button]]
     [webchange.subs :as subs]
+    [webchange.sync-status.views :refer [sync-status]]
     [webchange.ui-framework.layout.views :as ui]))
 
 (def course-view course-dashboard)
@@ -44,6 +46,8 @@
                  current-layout/layout)]
     (when (some? scene-data)
       [layout {:breadcrumbs (course-breadcrumbs course-id "Scene")
-               :actions     [share-button]}
+               :actions     [[sync-status {:class-name "sync-status"}]
+                             [review-status]
+                             [share-button]]}
        [activity-edit-form {:course-id  course-id
                             :scene-data scene-data}]])))

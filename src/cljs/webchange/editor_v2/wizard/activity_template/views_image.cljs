@@ -6,7 +6,7 @@
     [webchange.editor-v2.components.file-input.views :as file-input]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
-    [webchange.ui-framework.components.index :refer [file]]))
+    [webchange.ui-framework.components.index :refer [file label]]))
 
 (def image-validation-map {:src [(fn [value] (when-not (some? value) "Image is required"))]})
 
@@ -25,7 +25,7 @@
                     (reset! uploading-atom true)
                     (re-frame/dispatch [::assets-events/upload-asset js-file {:options options
                                                                               :type    type :on-finish on-finish}]))]
-    [file-input/select-file-form {:loading @uploading-atom
+    [file-input/select-file-form {:loading   @uploading-atom
                                   :on-change on-change
                                   :styles    {:wrapper      {:display "inline-block"}
                                               :button       {:padding "0 25px"}
@@ -63,8 +63,11 @@
 (defn image-option
   [{:keys [key data validator option]}]
   (r/with-let [page-data (connect-data data [key] nil)
+               {:keys [description]} option
                {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
-    [:div {:style {:width 416}}
+    [:div.image-option
+     (when (some? description)
+       [label {:class-name "file-label"} description])
      [file {:type           "image"
             :on-change      #(swap! page-data assoc :src %)
             :upload-options (:options option)}]

@@ -56,3 +56,9 @@
                           [::interpreter.events/set-scene name data]
                           [::interpreter.events/store-scene name data]]
                          (some? on-success) (conj on-success))}))
+
+(re-frame/reg-event-fx
+  ::create-activity
+  (fn [{:keys [_]} [_ {:keys [course-slug activity-data]} handlers]]
+    {:dispatch [::warehouse/create-activity {:course-slug   course-slug
+                                             :activity-data activity-data} handlers]}))

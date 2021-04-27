@@ -7,6 +7,7 @@
         :name        "Writing practice"
         :tags        ["Guided Practice"]
         :lesson-sets ["concepts-single"]
+        :props       {:game-changer? true}
         :fields      [{:name "image-src",
                        :type "image"}
                       {:name "letter-src",
@@ -15,7 +16,7 @@
                        :type "string"}
                       {:name "letter"
                        :type "string"}]
-        :description "Users will practice writing letters themselves."})
+        :description "An animated character shows how to write a letter. Then users practice writing the same letter. The letter must be traced correctly in order to see it appear on their screen."})
 
 (def t {:assets
                   [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
@@ -72,8 +73,8 @@
 
                    :practice-canvas
                                {:type    "painting-area"
-                                :tool "felt-tip"
-                                :color "#4479bb"
+                                :tool    "felt-tip"
+                                :color   "#4479bb"
                                 :visible false
                                 :change  {:on "click" :type "action" :id "timeout-timer"}}
                    :painting-toolset

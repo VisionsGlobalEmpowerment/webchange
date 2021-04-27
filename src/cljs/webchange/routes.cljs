@@ -7,36 +7,37 @@
             [webchange.interpreter.events :as ie]
             [webchange.dashboard.events :as dashboard-events]))
 
-(def routes ["/" {""              :home
-                  "login"         :login
-                  "student-login" :student-login
-                  "register"      :register-user
-                  "wizard"        :wizard                   ;deprecated
-                  "game-changer"  {[""]                                                         :wizard ;migrating full wizard to /game-changer address
-                                   ["/" [#"[\w-%]+" :course-slug] "/" [#"[\w-%]+" :scene-slug]] :wizard-configured}
-                  "book-creator"  :book-creator
-                  "s"             {["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
-                                   ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
-                  "courses"       {["/" [#"[\w-%]+" :id]]                                                              :course
-                                   ["/" [#"[\w-%]+" :id] "/editor"]                                                    :course-editor
-                                   ["/" [#"[\w-%]+" :id] "/editor-v2"]                                                 :course-editor-v2
-                                   ["/" [#"[\w-%]+" :course-id] "/table"]                                              :course-table
-                                   ["/" [#"[\w-%]+" :course-id] "/scenes-crossing"]                                    :scenes-crossing
-                                   ["/" [#"[\w-%]+" :course-id] "/editor-v2/concepts/" :concept-id]                    :course-editor-v2-concept
-                                   ["/" [#"[\w-%]+" :course-id] "/editor-v2/add-concept"]                              :course-editor-v2-add-concept
-                                   ["/" [#"[\w-%]+" :course-id] "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson
-                                   ["/" [#"[\w-%]+" :course-id] "/editor-v2/levels/" :level-id "/add-lesson"]          :course-editor-v2-add-lesson
-                                   ["/" [#"[\w-%]+" :id] "/editor-v2/" [#"[\w-%]+" :scene-id]]                         :course-editor-v2-scene
-                                   ["/" [#"[\w-%]+" :id] "/dashboard"]                                                 :student-course-dashboard
-                                   ["/" [#"[\w-%]+" :id] "/dashboard/finished"]                                        :finished-activities}
-                  "dashboard"     {[""]                                             :dashboard
-                                   ["/classes"]                                     :dashboard-classes
-                                   ["/schools"]                                     :dashboard-schools
-                                   ["/courses"]                                     :dashboard-courses
-                                   ["/classes/" :class-id]                          :dashboard-class-profile
-                                   ["/classes/" :class-id "/students"]              :dashboard-students
-                                   ["/classes/" :class-id "/students/" :student-id] :dashboard-student-profile}
-                  "test-ui"       :test-ui}])
+(def routes ["/" {""                  :home
+                  "login"             :login
+                  "student-login"     :student-login
+                  "register"          :register-user
+                  "wizard"            :wizard               ;deprecated
+                  "game-changer-beta" :game-changer
+                  "game-changer"      {[""]                                                         :wizard ;migrating full wizard to /game-changer address
+                                       ["/" [#"[\w-%]+" :course-slug] "/" [#"[\w-%]+" :scene-slug]] :wizard-configured}
+                  "book-creator"      :book-creator
+                  "s"                 {["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
+                                       ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
+                  "courses"           {["/" [#"[\w-%]+" :id]]                                                              :course
+                                       ["/" [#"[\w-%]+" :id] "/editor"]                                                    :course-editor
+                                       ["/" [#"[\w-%]+" :id] "/editor-v2"]                                                 :course-editor-v2
+                                       ["/" [#"[\w-%]+" :course-id] "/table"]                                              :course-table
+                                       ["/" [#"[\w-%]+" :course-id] "/scenes-crossing"]                                    :scenes-crossing
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/concepts/" :concept-id]                    :course-editor-v2-concept
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/add-concept"]                              :course-editor-v2-add-concept
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/levels/" :level-id "/add-lesson"]          :course-editor-v2-add-lesson
+                                       ["/" [#"[\w-%]+" :id] "/editor-v2/" [#"[\w-%]+" :scene-id]]                         :course-editor-v2-scene
+                                       ["/" [#"[\w-%]+" :id] "/dashboard"]                                                 :student-course-dashboard
+                                       ["/" [#"[\w-%]+" :id] "/dashboard/finished"]                                        :finished-activities}
+                  "dashboard"         {[""]                                             :dashboard
+                                       ["/classes"]                                     :dashboard-classes
+                                       ["/schools"]                                     :dashboard-schools
+                                       ["/courses"]                                     :dashboard-courses
+                                       ["/classes/" :class-id]                          :dashboard-class-profile
+                                       ["/classes/" :class-id "/students"]              :dashboard-students
+                                       ["/classes/" :class-id "/students/" :student-id] :dashboard-student-profile}
+                  "test-ui"           :test-ui}])
 
 
 (defn- parse-url [url]
