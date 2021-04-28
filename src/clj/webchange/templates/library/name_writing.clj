@@ -43,7 +43,7 @@
                                      :shadow-color   "#1a1a1a",
                                      :shadow-blur    5,
                                      :shadow-opacity 0.5
-                                     :filter     "brighten"}
+                                     :filter         "brighten"}
 
                         :text-tracing-pattern
                                     {:type "text-tracing-pattern"
@@ -79,7 +79,8 @@
                                      :scale-y    0.5,
                                      :speed      0.35,
                                      :start      true
-                                     :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}},},
+                                     :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}},
+                        }
         :scene-objects [["background"
                          "outline"
                          "text-tracing-pattern"
@@ -88,91 +89,91 @@
                          "colors-palette"
                          "next-button"
                          "mari"]],
-        :actions       {:finish-activity         {:type "sequence-data"
-                                                  :data [{:type "action" :id "remove-timeout-timer"}
-                                                         {:type "finish-activity"}]}
-                        :init-text               {:type     "set-variable"
-                                                  :var-name "text",
-                                                  :from-var [{:var-name "current-user" :action-property "var-value" :var-property "first-name"}]}
-                        :init-tracing-text       {:type     "set-variable"
-                                                  :var-name "tracing-text",
-                                                  :from-var [{:var-name "current-user" :action-property "var-value" :var-property "first-name"}]}
+        :actions       {:finish-activity             {:type "sequence-data"
+                                                      :data [{:type "action" :id "remove-timeout-timer"}
+                                                             {:type "finish-activity"}]}
+                        :init-text                   {:type     "set-variable"
+                                                      :var-name "text",
+                                                      :from-var [{:var-name "current-user" :action-property "var-value" :var-property "first-name"}]}
+                        :init-tracing-text           {:type     "set-variable"
+                                                      :var-name "tracing-text",
+                                                      :from-var [{:var-name "current-user" :action-property "var-value" :var-property "first-name"}]}
+                        :dialog-tap-instructions     (dialog/default "Tap instructions")
+                        :start                       {:type "sequence-data"
+                                                      :data [{:type "start-activity"}
+                                                             {:type "copy-current-user-to-variable" :var-name "current-user"}
+                                                             {:type "action" :id "init-text"}
+                                                             {:type "action" :id "init-tracing-text"}
+                                                             {:type      "set-attribute",
+                                                              :target    "text-tracing-pattern",
+                                                              :from-var  [{:var-name "tracing-text" :action-property "attr-value"}],
+                                                              :attr-name "text"}
+                                                             {:type      "set-attribute"
+                                                              :target    "outline"
+                                                              :from-var  [{:var-name "text" :action-property "attr-value"}]
+                                                              :attr-name "text"}
+                                                             {:type "action" :id "introduction-dialog"}
+                                                             {:type "action" :id "timeout-timer"}]}
 
-                        :start                   {:type "sequence-data"
-                                                  :data [{:type "start-activity"}
-                                                         {:type "copy-current-user-to-variable" :var-name "current-user"}
-                                                         {:type "action" :id "init-text"}
-                                                         {:type "action" :id "init-tracing-text"}
-                                                         {:type      "set-attribute",
-                                                          :target    "text-tracing-pattern",
-                                                          :from-var  [{:var-name "tracing-text" :action-property "attr-value"}],
-                                                          :attr-name "text"}
-                                                         {:type      "set-attribute"
-                                                          :target    "outline"
-                                                          :from-var  [{:var-name "text" :action-property "attr-value"}]
-                                                          :attr-name "text"}
-                                                         {:type "action" :id "introduction-dialog"}
-                                                         {:type "action" :id "timeout-timer"}]}
+                        :timeout-timer               {:type     "set-interval"
+                                                      :id       "incorrect-answer-checker"
+                                                      :interval 15000
+                                                      :action   "timeout-instructions-dialog"}
+                        :remove-timeout-timer        {:type "remove-interval"
+                                                      :id   "incorrect-answer-checker"}
 
-                        :timeout-timer           {:type     "set-interval"
-                                                  :id       "incorrect-answer-checker"
-                                                  :interval 15000
-                                                  :action   "incorrect-answer-dialog"}
-                        :remove-timeout-timer    {:type "remove-interval"
-                                                  :id   "incorrect-answer-checker"}
+                        :timeout-instructions-dialog (dialog/default "timeout instructions")
+                        :correct-answer-dialog       (dialog/default "correct answer")
+                        :introduction-dialog         (-> (dialog/default "introduction")
+                                                         (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next" "highlight-text"]))
 
-                        :incorrect-answer-dialog (dialog/default "incorrect answer")
-                        :correct-answer-dialog   (dialog/default "correct answer")
-                        :introduction-dialog     (-> (dialog/default "introduction")
-                                                     (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next" "highlight-text"]))
-
-                        :highlight-tools         {:type               "transition"
-                                                  :transition-id      "painting-toolset"
-                                                  :return-immediately true
-                                                  :from               {:brightness 0},
-                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                  :kill-after         3000}
-                        :highlight-colors        {:type               "transition"
-                                                  :transition-id      "colors-palette"
-                                                  :return-immediately true
-                                                  :from               {:brightness 0},
-                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                  :kill-after         3000}
-                        :highlight-next          {:type               "transition"
-                                                  :transition-id      "next-button"
-                                                  :return-immediately true
-                                                  :from               {:brightness 0},
-                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                  :kill-after         3000}
-                        :highlight-text          {:type               "transition"
-                                                  :transition-id      "outline"
-                                                  :return-immediately true
-                                                  :from               {:brightness 0},
-                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                  :kill-after         3000}
-                        :set-current-tool        {:type "sequence-data"
-                                                  :data [{:type        "set-attribute",
-                                                          :target      "practice-canvas"
-                                                          :attr-name   "tool"
-                                                          :from-params [{:param-property "tool", :action-property "attr-value"}]}
-                                                         {:type        "action"
-                                                          :from-params [{:param-property "tool", :action-property "id" :template "dialog-tool-%"}]}]}
-                        :set-current-color       {:type "sequence-data"
-                                                  :data [{:type        "set-attribute",
-                                                          :target      "practice-canvas"
-                                                          :attr-name   "color"
-                                                          :from-params [{:param-property "color", :action-property "attr-value"}]}
-                                                         {:type        "action"
-                                                          :from-params [{:param-property "color", :action-property "id" :template "dialog-color-%"}]}]}
-                        :dialog-tool-brush       (dialog/default "tool brush")
-                        :dialog-tool-felt-tip    (dialog/default "tool felt-tip")
-                        :dialog-tool-pencil      (dialog/default "tool pencil")
-                        :dialog-tool-eraser      (dialog/default "tool eraser")
-                        :dialog-color-4487611    (dialog/default "color blue")
-                        :dialog-color-9616714    (dialog/default "color green")
-                        :dialog-color-15569322   (dialog/default "color pink")
-                        :dialog-color-16631089   (dialog/default "color yellow")
-                        :dialog-color-65793      (dialog/default "color black")
+                        :highlight-tools             {:type               "transition"
+                                                      :transition-id      "painting-toolset"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0},
+                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
+                                                      :kill-after         3000}
+                        :highlight-colors            {:type               "transition"
+                                                      :transition-id      "colors-palette"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0},
+                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
+                                                      :kill-after         3000}
+                        :highlight-next              {:type               "transition"
+                                                      :transition-id      "next-button"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0},
+                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
+                                                      :kill-after         3000}
+                        :highlight-text              {:type               "transition"
+                                                      :transition-id      "outline"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0},
+                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
+                                                      :kill-after         3000}
+                        :set-current-tool            {:type "sequence-data"
+                                                      :data [{:type        "set-attribute",
+                                                              :target      "practice-canvas"
+                                                              :attr-name   "tool"
+                                                              :from-params [{:param-property "tool", :action-property "attr-value"}]}
+                                                             {:type        "action"
+                                                              :from-params [{:param-property "tool", :action-property "id" :template "dialog-tool-%"}]}]}
+                        :set-current-color           {:type "sequence-data"
+                                                      :data [{:type        "set-attribute",
+                                                              :target      "practice-canvas"
+                                                              :attr-name   "color"
+                                                              :from-params [{:param-property "color", :action-property "attr-value"}]}
+                                                             {:type        "action"
+                                                              :from-params [{:param-property "color", :action-property "id" :template "dialog-color-%"}]}]}
+                        :dialog-tool-brush           (dialog/default "tool brush")
+                        :dialog-tool-felt-tip        (dialog/default "tool felt-tip")
+                        :dialog-tool-pencil          (dialog/default "tool pencil")
+                        :dialog-tool-eraser          (dialog/default "tool eraser")
+                        :dialog-color-4487611        (dialog/default "color blue")
+                        :dialog-color-9616714        (dialog/default "color green")
+                        :dialog-color-15569322       (dialog/default "color pink")
+                        :dialog-color-16631089       (dialog/default "color yellow")
+                        :dialog-color-65793          (dialog/default "color black")
                         }
         :triggers      {:start {:on "start" :action "start"}}
         :metadata      {}})
