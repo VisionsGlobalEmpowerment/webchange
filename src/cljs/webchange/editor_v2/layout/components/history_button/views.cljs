@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.components.restore-button.views
+(ns webchange.editor-v2.layout.components.history-button.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
@@ -32,14 +32,11 @@
     (get-in db (concat modal-versions-state-path [:versions]) {})))
 
 (re-frame/reg-sub
-  ::template-version
+  ::update-available
   (fn [db]
-    (get-in db (concat modal-template-state-path [:version]) 0)))
-
-(re-frame/reg-sub
-  ::scene-template-version
-  (fn [db]
-    (-> (subs/current-scene-data db) :metadata :template-version)))
+    (let [activity-template-version (-> (subs/current-scene-data db) :metadata :template-version)
+          template-version (get-in db (concat modal-template-state-path [:version]) 0)]
+      (< activity-template-version template-version))))
 
 ;; Events
 (re-frame/reg-event-fx
@@ -121,7 +118,8 @@
   ::update-template-success
   (fn [{:keys [db]} [_ {:keys [name data]}]]
     {:dispatch-n (list [:complete-request :update-template]
-                       [::reload-scene name data])}))
+                       [::reload-scene name data]
+                       [::close])}))
 
 (re-frame/reg-event-fx
   ::open
@@ -145,11 +143,10 @@
 
 (defn- update-template-button
   []
-  (let [template-version @(re-frame/subscribe [::template-version])
-        activity-template-version @(re-frame/subscribe [::scene-template-version])]
+  (let [update-available @(re-frame/subscribe [::update-available])]
     [:div
      [ui/button {:on-click #(re-frame/dispatch [::update-template])} "Update template"]
-     (when (< activity-template-version template-version)
+     (when update-available
        [ic/warning])]))
 
 (defn- history-form
@@ -158,13 +155,15 @@
     [:div
      [update-template-button]
      [ui/list
-      (for [{:keys [id created-at]} versions]
+      (for [{:keys [id created-at description]} versions]
         ^{:key id}
         [ui/list-item
          [ui/grid {:container true
                    :spacing   8
                    :justify   "space-between"}
-          [ui/grid {:item true :xs 10} [ui/typography created-at]]
+          [ui/grid {:item true :xs 10}
+           [ui/typography created-at]
+           (when description [ui/typography {:variant "caption"} description])]
           [ui/grid {:item true :xs 2}
            [ui/button {:size     "small"
                        :style    {:padding 0}

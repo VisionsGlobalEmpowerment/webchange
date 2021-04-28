@@ -126,8 +126,9 @@
       scene-id)))
 
 (defn save-scene!
-  [course-slug scene-name scene-data owner-id]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
+  [course-slug scene-name scene-data owner-id & options]
+  (let [{:keys [description] :or {description "Save"}} options
+        {course-id :id} (db/get-course {:slug course-slug})
         scene-id (get-or-create-scene! course-id scene-name)
         created-at (jt/local-date-time)
         scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))]
@@ -136,7 +137,7 @@
                        :data       scene-data
                        :owner_id   owner-id
                        :created_at created-at
-                       :description "Save"}))
+                       :description description}))
     [true {:id          scene-id
            :name        scene-name
            :course-slug course-slug
@@ -671,7 +672,7 @@
                        (update a :assets #(->> (concat original-assets %)
                                                (flatten)
                                                (distinct))))]
-    (save-scene! course-slug scene-slug activity user-id)))
+    (save-scene! course-slug scene-slug activity user-id :description "Update template")))
 
 (defn publish-course!
   [course-slug]
