@@ -15,7 +15,8 @@
 
 (defn- get-activity-data
   [data]
-  (merge {:template-id (get-in data [:template-id])}
+  (merge {
+          :template-id (get-in data [:template :id])}
          (get-in data [:template-data])))
 
 (defn- save-activity

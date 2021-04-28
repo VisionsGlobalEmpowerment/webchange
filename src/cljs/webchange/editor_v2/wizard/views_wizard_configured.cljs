@@ -40,9 +40,9 @@
                                        component-props (merge {:data      data
                                                                :validator validator}
                                                               (case step-key
-                                                                :choose-template {:data-key :template-id}
+                                                                :choose-template {:data-key :template}
                                                                 :fill-template {:data-key    :template-data
-                                                                                :template-id (get-in @data [:template-id])}))]
+                                                                                :template (get-in @data [:template])}))]
                                    (-> step
                                        (dissoc :component)
                                        (assoc :content [component component-props])))
