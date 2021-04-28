@@ -1,5 +1,6 @@
 (ns webchange.templates.library.recording-studio
   (:require
+    [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.core :as core]))
 
 (def m {:id             23
@@ -67,11 +68,14 @@
                                                   :start      true
                                                   :states     {:left {:scale-x 1} :right {:scale-x -1}}
                                                   :actions    {:click {:id "mari-click" :on "click" :type "action"}}}
-                        :record-button           {:type     "group"
-                                                  :x        896 :y 513
-                                                  :width    128 :height 128
-                                                  :children ["record-button-back" "record-button-icon" "record-button-icon-int"]
-                                                  :actions  {:click {:id "record-button-click" :on "click" :type "action"}}}
+                        :record-button           {:type       "group"
+                                                  :x          896 :y 513
+                                                  :transition "record-button"
+                                                  :scene-name "record-button"
+                                                  :width      128 :height 128
+                                                  :filter     "brighten",
+                                                  :children   ["record-button-back" "record-button-icon" "record-button-icon-int"]
+                                                  :actions    {:click {:id "record-button-click" :on "click" :type "action"}}}
                         :record-button-back      {:type          "rectangle"
                                                   :x             0 :y 0
                                                   :width         128 :height 128
@@ -89,46 +93,47 @@
                                                   :width         48 :height 48
                                                   :border-radius 32
                                                   :fill          0xFFFFFF}
-                        :approve-group           {:type     "group"
-                                                  :x        1776
-                                                  :y        48
-                                                  :width    96 :height 96
-                                                  :visible  false
-                                                  :states   {:hidden  {:visible false}
-                                                             :visible {:visible true}}
-                                                  :children ["approve-background"
-                                                             "approve-playback-button"
-                                                             ]}
+                        :approve-group           {:type       "group"
+                                                  :x          1776
+                                                  :y          48
+                                                  :width      96 :height 96
+                                                  :transition "approve-group"
+                                                  :visible    false
+                                                  :states     {:hidden  {:visible false}
+                                                               :visible {:visible true}}
+                                                  :children   ["approve-background"
+                                                               "approve-playback-button"
+                                                               ]}
                         :approve-background      {:type          "rectangle"
                                                   :x             0
                                                   :y             0
+                                                  :transition "approve-background"
                                                   :width         96
                                                   :height        96
                                                   :border-radius 48
                                                   :fill          0xFF5C00}
-                        :playback-group          {:type     "group"
-                                                  :x        896 :y 667
-                                                  :width    128 :height 128
-                                                  :visible  false
-                                                  :states   {:hidden  {:visible false}
-                                                             :visible {:visible true}}
-                                                  :children ["playback-background"
-                                                             "green"
-                                                             "run-playback-button"
-                                                             "stop-playback-button"]}
+                        :playback-group          {:type       "group"
+                                                  :x          896 :y 667
+                                                  :width      128 :height 128
+                                                  :visible    false
+                                                  :transition "playback-group"
+                                                  :states     {:hidden  {:visible false}
+                                                               :visible {:visible true}}
+                                                  :children   ["playback-background"
+                                                               "green"
+                                                               "run-playback-button"
+                                                               "stop-playback-button"]}
                         :playback-background     {:type          "rectangle"
                                                   :x             0 :y 0
                                                   :width         128 :height 128
                                                   :border-radius 24
                                                   :fill          0xFFFFFF}
-                        :green                   {:type    "image"
-                                                  :x       16
-                                                  :y       16
-                                                  :width   96
-                                                  :height  96
-                                                  :src     "/raw/clipart/recording_studio/green-circle.png"
-                                                  :visible true
-                                                  }
+                        :green                   {:type          "rectangle"
+                                                  :transition    "green"
+                                                  :x             16 :y 16
+                                                  :width         96 :height 96
+                                                  :border-radius 48
+                                                  :fill          0x10BC2B}
                         :run-playback-button     {:type    "svg-path"
                                                   :x       52
                                                   :y       42
@@ -172,49 +177,53 @@
                                                                     "introduction-how-to-stop"
                                                                     "introduction-how-to-replay"
                                                                     ]}
-                        :introduction-welcome               {:type               "sequence-data"
-                                                             :editor-type        "dialog"
-                                                             :concept-var        "current-concept"
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type        "animation-sequence"
-                                                                                           :phrase-text "New action"
-                                                                                           :audio       nil}]}]
-                                                             :phrase             "introduction-welcome"
-                                                             :phrase-description "Welcome to the Recording Studio"}
-                        :introduction-how-to-start-record   {:type               "sequence-data"
-                                                             :editor-type        "dialog"
-                                                             :concept-var        "current-concept"
-                                                             :skippable          true
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type        "animation-sequence"
-                                                                                           :phrase-text "New action"
-                                                                                           :audio       nil}]}]
-                                                             :phrase             "introduction-how-to-start-record"
-                                                             :phrase-description "How to start record"}
-                        :introduction-when-to-begin-talking {:type               "sequence-data"
-                                                             :editor-type        "dialog"
-                                                             :concept-var        "current-concept"
-                                                             :skippable          true
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type        "animation-sequence"
-                                                                                           :phrase-text "New action"
-                                                                                           :audio       nil}]}]
-                                                             :phrase             "When to begin talking"
-                                                             :phrase-description "How to stop recording"}
-                        :introduction-how-to-stop           {:type               "sequence-data"
-                                                             :editor-type        "dialog"
-                                                             :concept-var        "current-concept"
-                                                             :skippable          true
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type        "animation-sequence"
-                                                                                           :phrase-text "New action"
-                                                                                           :audio       nil}]}]
-                                                             :phrase             "introduction-how-to-stop"
-                                                             :phrase-description "How to stop"}
+                        :introduction-welcome               {:type                 "sequence-data"
+                                                             :editor-type          "dialog"
+                                                             :available-activities ["highlight-record-button", "highlight-playback-button", "highlight-approve-button"]
+                                                             :concept-var          "current-concept"
+                                                             :data                 [{:type "sequence-data"
+                                                                                     :data [{:type "empty" :duration 0}
+                                                                                            {:type        "animation-sequence"
+                                                                                             :phrase-text "New action"
+                                                                                             :audio       nil}]}]
+                                                             :phrase               "introduction-welcome"
+                                                             :phrase-description   "Welcome to the Recording Studio"}
+                        :introduction-how-to-start-record   {:type                 "sequence-data"
+                                                             :editor-type          "dialog"
+                                                             :available-activities ["highlight-record-button", "highlight-playback-button", "highlight-approve-button"]
+                                                             :concept-var          "current-concept"
+                                                             :skippable            true
+                                                             :data                 [{:type "sequence-data"
+                                                                                     :data [{:type "empty" :duration 0}
+                                                                                            {:type        "animation-sequence"
+                                                                                             :phrase-text "New action"
+                                                                                             :audio       nil}]}]
+                                                             :phrase               "introduction-how-to-start-record"
+                                                             :phrase-description   "How to start record"}
+                        :introduction-when-to-begin-talking {:type                 "sequence-data"
+                                                             :editor-type          "dialog"
+                                                             :concept-var          "current-concept"
+                                                             :skippable            true
+                                                             :available-activities ["highlight-record-button", "highlight-playback-button", "highlight-approve-button"]
+                                                             :data                 [{:type "sequence-data"
+                                                                                     :data [{:type "empty" :duration 0}
+                                                                                            {:type        "animation-sequence"
+                                                                                             :phrase-text "New action"
+                                                                                             :audio       nil}]}]
+                                                             :phrase               "When to begin talking"
+                                                             :phrase-description   "When to begin talking"}
+                        :introduction-how-to-stop           {:type                 "sequence-data"
+                                                             :editor-type          "dialog"
+                                                             :concept-var          "current-concept"
+                                                             :skippable            true
+                                                             :available-activities ["highlight-record-button", "highlight-playback-button", "highlight-approve-button"]
+                                                             :data                 [{:type "sequence-data"
+                                                                                     :data [{:type "empty" :duration 0}
+                                                                                            {:type        "animation-sequence"
+                                                                                             :phrase-text "New action"
+                                                                                             :audio       nil}]}]
+                                                             :phrase               "introduction-how-to-stop"
+                                                             :phrase-description   "How to stop"}
                         :introduction-how-to-replay         {:type               "sequence-data"
                                                              :editor-type        "dialog"
                                                              :concept-var        "current-concept"
@@ -275,6 +284,7 @@
                                                                     "delay"
                                                                     "demonstration-example"
                                                                     "move-mari-back"
+                                                                    "hide-playback-group"
                                                                     ]}
                         :delay                              {:type "empty" :duration 2000}
                         :demonstration-show-demo-image      {:type "sequence-data"
@@ -362,20 +372,51 @@
                                                              :data [
                                                                     {:type          "transition"
                                                                      :transition-id "record-button-icon"
-                                                                     :to            {:border-radius 48 :duration 0.2}}
+                                                                     :to            {:border-radius 48 :duration 0.2
+                                                                                     :fill          0xED1C24
+                                                                                     }}
                                                                     {:type          "transition"
                                                                      :transition-id "record-button-icon-int"
                                                                      :to            {:border-radius 32 :duration 0.2}}
                                                                     ]}
+
                         :show-button-stop                   {:type "parallel"
                                                              :data [
                                                                     {:type          "transition"
                                                                      :transition-id "record-button-icon"
-                                                                     :to            {:border-radius 24 :duration 0.2}}
+                                                                     :to            {:border-radius 24 :duration 0.2
+                                                                                     :fill          0x0000FF}}
                                                                     {:type          "transition"
                                                                      :transition-id "record-button-icon-int"
                                                                      :to            {:border-radius 16 :duration 0.2}}
                                                                     ]}
+                        :highlight-record-button            {:type               "transition"
+                                                             :transition-id      "record-button-icon"
+                                                             :return-immediately true
+                                                             :from               {:opacity 1},
+                                                             :to                 {:opacity 0.38 :yoyo true :duration 0.5}
+                                                             :kill-after         3000}
+                        :highlight-playback-button          {:type "sequence-data"
+                                                             :data [
+                                                                    {:type "action" :id "show-playback-group"}
+                                                                    {:type               "transition"
+                                                                     :transition-id      "green"
+                                                                     :return-immediately true
+                                                                     :from               {:opacity 1},
+                                                                     :to                 {:opacity 0.38 :yoyo true :duration 0.5}
+                                                                     :kill-after         3000}
+                                                                    ]}
+                        :highlight-approve-button           {:type "sequence-data"
+                                                             :data [
+                                                                    {:type "action" :id "show-playback-group"}
+                                                                    {:type               "transition"
+                                                                     :transition-id      "approve-background"
+                                                                     :return-immediately true
+                                                                     :from               {:opacity 1},
+                                                                     :to                 {:opacity 0.38 :yoyo true :duration 0.5}
+                                                                     :kill-after         3000}
+                                                                    ]}
+
                         :mari-click                         {:type     "test-var-scalar"
                                                              :var-name "help-available"
                                                              :value    true
@@ -397,10 +438,13 @@
                                                                                         :var-name "recording-studio"
                                                                                         :from-var [{:var-name        "recording-studio-audio"
                                                                                                     :action-property "var-value"}]}
-                                                                                       {:type "action" :id "show-playback-group"}]}]}
+                                                                                       {:type "action" :id "show-playback-group"}
+                                                                                       {:type "action" :id "remove-timeout-timer"}
+                                                                                       ]}]}
                                                              :fail     {:type "sequence-data"
                                                                         :data [{:type "set-variable" :var-name "record-button-state" :var-value "stop"}
                                                                                {:type "start-audio-recording"}
+                                                                               {:type "action" :id "timeout-timer"}
                                                                                {:type "action" :id "show-button-stop"}]}}
 
                         :show-playback-group                {:type "parallel"
@@ -424,10 +468,14 @@
                                                                     {:type "state" :target "run-playback-button" :id "visible"}
                                                                     {:type "state" :target "stop-playback-button" :id "hidden"}]}
                         :run-playback-click                 {:type "sequence-data"
-                                                             :data [{:type "action" :id "run-record-playing"}
+                                                             :data [{:type "action" :id "remove-timeout-timer"}
+                                                                    {:type "action" :id "run-record-playing"}
                                                                     {:type "action" :id "stop-record-playing"}]}
-                        :stop-playback-click                {:type "action"
-                                                             :id   "stop-record-playing"}
+                        :stop-playback-click                {:type "sequence-data"
+                                                             :data [
+                                                                    {:type "action" :id "timeout-timer"}
+                                                                    {:type "action"
+                                                                     :id   "stop-record-playing"}]}
 
                         :approve-playback-click             {:type "action" :id "next-concept"}
 
@@ -437,6 +485,7 @@
                                                                     "introduction"
                                                                     "demonstration"
                                                                     "enable-help"
+                                                                    "timeout-timer"
                                                                     "next-concept"]}
                         :finish                             {:type "sequence-data"
                                                              :data [{:type "action" :id "finish-activity"}
@@ -446,8 +495,20 @@
                                                                     {:type "scene-exit" :exit-point "back"}]}
 
                         :start-activity                     {:type "start-activity" :id "recording-studio"}
-                        :stop-activity                      {:type "stop-activity" :id "recording-studio"}
-                        :finish-activity                    {:type "finish-activity" :id "recording-studio"}}
+                        :stop-activity                      {:type "sequence-data"
+                                                             :data [{:type "action" :id "remove-timeout-timer"}
+                                                                    {:type "stop-activity" :id "recording-studio"}]}
+                        :remove-timeout-timer               {:type "remove-interval"
+                                                             :id   "incorrect-answer-checker"}
+                        :timeout-timer                      {:type     "set-interval"
+                                                             :id       "incorrect-answer-checker"
+                                                             :interval 15000
+                                                             :action   "incorrect-answer-dialog"}
+                        :incorrect-answer-dialog            (dialog/default "Inactivity timeout")
+                        :finish-activity                    {:type "sequence-data"
+                                                             :data [{:type "action" :id "remove-timeout-timer"}
+                                                                    {:type "finish-activity" :id "recording-studio"}]}
+                        }
         :triggers      {:stop  {:on "back" :action "stop-activity"}
                         :start {:on "start" :action "start-scene"}}
         :metadata      {:autostart true

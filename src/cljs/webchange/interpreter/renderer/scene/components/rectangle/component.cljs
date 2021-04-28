@@ -2,7 +2,7 @@
   (:require
     [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters apply-outline-filter
                                                                   apply-shadow-filter]]
     [webchange.interpreter.renderer.scene.components.rectangle.wrapper :refer [wrap set-border-radius]]))
 
@@ -17,6 +17,7 @@
                     :border-color    {}
                     :shadow-color    {}
                     :shadow-distance {}
+                    :filters         {}
                     :ref             {}})
 
 (defn- create-mask
@@ -61,7 +62,7 @@
   :border-color - color of border
   :shadow-color - color of shadow. E.g. 0x75016e
   :shadow-distance - width of shadow."
-  [{:keys [parent type object-name ref border-radius on-click] :as props}]
+  [{:keys [parent type object-name ref border-radius on-click filters] :as props}]
   (let [state (atom (select-keys props [:border-radius]))
         mask (-> (create-mask props)
                  (set-border-radius border-radius state))
@@ -74,6 +75,8 @@
     (.addChild container sprite)
     (.addChild container mask)
     (.addChild parent container)
+
+    (apply-filters sprite filters)
 
     (when-not (nil? on-click) (utils/set-handler container "click" on-click))
     (when-not (nil? ref) (ref wrapped-component))
