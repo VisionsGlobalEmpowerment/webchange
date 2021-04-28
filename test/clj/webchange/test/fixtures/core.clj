@@ -131,7 +131,7 @@
         scene-name "test-scene"
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
         data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
-        [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
+        [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time) :description "test"})]
     {:id scene-id
      :course-name course-name
      :course-slug course-slug
@@ -873,6 +873,13 @@
 (defn get-template-library
   []
   (let [url (str "/api/templates")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-template-metadata
+  [id]
+  (let [url (str "/api/templates/" id "/metadata")
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))

@@ -128,8 +128,8 @@ INSERT INTO scenes (course_id, name) VALUES (:course_id, :name) RETURNING id
 -- :name save-scene! :<!
 -- :doc creates a new course version record
 INSERT INTO scene_versions
-(scene_id, data, owner_id, created_at)
-VALUES (:scene_id, :data, :owner_id, :created_at) RETURNING id
+(scene_id, data, owner_id, created_at, description)
+VALUES (:scene_id, :data, :owner_id, :created_at, :description) RETURNING id
 
 -- :name get-scene :? :1
 -- :doc retrieve a scene record given the course id and the name

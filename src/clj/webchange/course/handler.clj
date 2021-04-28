@@ -154,6 +154,14 @@
     (-> (core/update-activity! course-slug scene-slug data user-id)
         handle)))
 
+(defn handle-update-template
+  [course-slug scene-slug request]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/update-activity-template! course-slug scene-slug user-id)
+        handle)))
+
 (defn handle-publish-course
   [course-slug request]
   (let [user-id (current-user request)]
@@ -318,6 +326,11 @@
       :body [activity-data s/Any]
       :summary "Updates activity using template"
       (handle-update-activity course-slug scene-slug activity-data request))
+    (POST "/:course-slug/update-template/:scene-slug" request
+      :path-params [course-slug :- s/Str scene-slug :- s/Str]
+      :return s/Any
+      :summary "Updates activity template to latest version"
+      (handle-update-template course-slug scene-slug request))
     (GET "/:course-slug/scenes-with-skills" []
       :path-params [course-slug :- s/Str]
       :tags ["skill"]

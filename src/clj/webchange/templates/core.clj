@@ -34,6 +34,7 @@
     (log/debug "Create activity" id data)
     (-> (template data)
         (assoc-in [:metadata :template-id] id)
+        (assoc-in [:metadata :template-version] (:version metadata))
         (assoc-in [:metadata :template-name] (:name metadata))
         (assoc-in [:metadata :history] {:created data
                                         :updated []}))))
@@ -60,6 +61,10 @@
         (prepare-history)
         (update-in [:metadata :history :updated] conj data))))
 
+(defn get-template-metadata-by-id
+  [id]
+  (get-in @templates [id :metadata]))
+
 (defn metadata-from-template
   [{id :template-id}]
-  (get-in @templates [id :metadata]))
+  (get-template-metadata-by-id id))
