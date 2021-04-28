@@ -425,3 +425,61 @@
                        (is (nil? (get-in scene-data [:actions :act-2 :data 1 :data])))
                        (is (= (get-in scene-data [:actions :act-2 :data 2 :data 0 :data]) talking-animation))
                        (is (nil? (get-in scene-data [:actions :act-2 :data 2 :data 1 :data]))))))
+
+(deftest sandbox-available
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        status (-> (f/get-sandbox-route (:slug course) (:name scene) user-id) :status)]
+    (is 200 status)))
+
+(deftest sandbox-licensed-scene-not-available
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        _ (f/require-scene-license-by-id (:id scene))
+        status (-> (f/get-sandbox-route (:slug course) (:name scene) user-id) :status)]
+    (is 403 status)))
+
+(deftest sandbox-licensed-scene-available-for-contributor
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        _ (f/add-collaborator {:course-id (:id course) :user-id user-id})
+        _ (f/require-scene-license-by-id (:id scene))
+        status (-> (f/get-sandbox-route (:slug course) (:name scene) user-id) :status)]
+    (is 200 status)))
+
+
+(deftest sandbox-available
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        status (-> (f/get-scene-api (:slug course) (:name scene) nil) :status)]
+    (is 200 status)))
+
+(deftest sandbox-licensed-scene-not-available
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        _ (f/require-scene-license-by-id (:id scene))
+        status (-> (f/get-scene-api (:slug course) (:name scene) nil) :status)]
+    (is 403 status)))
+
+(deftest sandbox-licensed-scene-available-for-student
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        _ (f/require-scene-license-by-id (:id scene))
+        status (-> (f/get-scene-api (:slug course) (:name scene) user-id) :status)]
+    (is 200 status)))
+
+
+(deftest sandbox-licensed-scene-available-for-contributor
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        _ (f/add-collaborator {:course-id (:id course) :user-id user-id})
+        _ (f/require-scene-license-by-id (:id scene))
+        status (-> (f/get-scene-api (:slug course) (:name scene) user-id) :status)]
+    (is 200 status)))

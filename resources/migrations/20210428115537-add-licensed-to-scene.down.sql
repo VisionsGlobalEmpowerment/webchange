@@ -1,0 +1,1 @@
+ALTER TABLE ONLY scenes DROP COLUMN licensed;

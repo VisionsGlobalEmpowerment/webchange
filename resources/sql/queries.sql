@@ -136,6 +136,11 @@ VALUES (:scene_id, :data, :owner_id, :created_at, :description) RETURNING id
 SELECT * from scenes
 WHERE course_id = :course_id AND name = :name;
 
+-- :name require-scene-license-by-id :! :n
+-- :doc retrieve a scene record given the id
+update scenes SET licensed=true WHERE id = :id;
+
+
 -- :name get-scene-by-id :? :1
 -- :doc retrieve a scene record given the id
 SELECT * from scenes

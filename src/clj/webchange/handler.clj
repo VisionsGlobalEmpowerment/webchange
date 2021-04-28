@@ -8,7 +8,8 @@
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.handler :refer [auth-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
-            [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes]]
+            [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes
+                                              licensed-public-route]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.school.handler :refer [school-routes]]
             [webchange.secondary.handler :refer [local-sync-routes global-sync-routes]]
@@ -116,7 +117,7 @@
            (GET "/student-login" [] (public-student-route))
            (GET "/register" [] (public-route))
 
-           (GET "/s/:course-id/:scene-id" [] (public-route))
+           (GET "/s/:course-id/:scene-id" request (licensed-public-route request))
            (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
 
            ;; admin routes

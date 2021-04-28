@@ -86,10 +86,10 @@
          email (:email data)
          password (:password data)]
      (if-let [user (db/find-user-by-email {:email email})]
-      (assoc user :password password)
-      (let [[{user-id :id}] (auth/create-user-with-credentials! data)]
-        (auth/activate-user! user-id)
-        (assoc data :id user-id))))))
+       (assoc user :password password)
+       (let [[{user-id :id}] (auth/create-user-with-credentials! data)]
+         (auth/activate-user! user-id)
+         (assoc data :id user-id))))))
 
 (defn student-user-created
   ([] (student-user-created {}))
@@ -103,23 +103,23 @@
 (defn course-created
   ([] (course-created {}))
   ([options]
-   (let [defaults {:name "test-course"
-                   :slug "test-course-slug"
-                   :lang nil
-                   :image-src nil
-                   :status "draft"
+   (let [defaults {:name            "test-course"
+                   :slug            "test-course-slug"
+                   :lang            nil
+                   :image-src       nil
+                   :status          "draft"
                    :website-user-id nil
-                   :owner-id 1
-                   :type "course"}
+                   :owner-id        1
+                   :type            "course"}
          course-data (->> (merge defaults options)
                           (transform-keys ->snake_case_keyword))
          [{course-id :id}] (db/create-course! course-data)
          data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
          [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id (:owner_id course-data) :created_at (jt/local-date-time)})]
      (->> (assoc course-data
-           :id course-id
-           :data data
-           :version-id version-id)
+            :id course-id
+            :data data
+            :version-id version-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn scene-created
@@ -127,18 +127,22 @@
    (let [course (course-created)]
      (scene-created course)))
   ([course]
-  (let [{course-id :id course-name :name course-slug :slug} course
-        scene-name "test-scene"
-        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
-        data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
-        [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time) :description "test"})]
-    {:id scene-id
-     :course-name course-name
-     :course-slug course-slug
-     :name scene-name
-     :data data
-     :course-id course-id
-     :version-id version-id})))
+   (let [{course-id :id course-name :name course-slug :slug} course
+         scene-name "test-scene"
+         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
+         data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
+         [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time) :description "test"})]
+     {:id          scene-id
+      :course-name course-name
+      :course-slug course-slug
+      :name        scene-name
+      :data        data
+      :course-id   course-id
+      :version-id  version-id})))
+
+(defn require-scene-license-by-id
+  [id]
+  (db/require-scene-license-by-id {:id id}))
 
 (defn scene-skills-created
   [scene-id skill-id]
@@ -151,12 +155,12 @@
    (let [{course-id :id} (course-created)]
      (dataset-created {:course-id course-id})))
   ([options]
-    (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "image"} {:name "width" :type "number"}]}}
-          data (->> options
-                    (merge defaults)
-                    (transform-keys ->snake_case_keyword))
-          [{id :id}] (db/create-dataset! data)]
-      (assoc data :id id))))
+   (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "image"} {:name "width" :type "number"}]}}
+         data (->> options
+                   (merge defaults)
+                   (transform-keys ->snake_case_keyword))
+         [{id :id}] (db/create-dataset! data)]
+     (assoc data :id id))))
 
 (defn dataset-item-created
   ([]
@@ -407,7 +411,7 @@
 
 (defn get-scene
   [course-name scene-name]
-  (let [scene-url (str "/api/courses/"course-name "/scenes/" scene-name)
+  (let [scene-url (str "/api/courses/" course-name "/scenes/" scene-name)
         request (-> (mock/request :get scene-url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
@@ -699,14 +703,14 @@
 
 (defn asset-hash-created [options]
   (let [params (merge {:path_hash (assets/md5 "test/clj/webchange/resources/raw/background.png")
-                       :path "test/clj/webchange/resources/raw/background.png"
+                       :path      "test/clj/webchange/resources/raw/background.png"
                        :file_hash (assets/crc32 "test content")
                        } options)]
-    (db/create-asset-hash!  params)
+    (db/create-asset-hash! params)
     {:path-hash (:path_hash params)
-     :path (:path params)
+     :path      (:path params)
      :file-hash (:file_hash params)}
-  ))
+    ))
 
 (defn is-created-asset-hash?
   [hash]
@@ -738,7 +742,7 @@
         file-extension-start (clojure.string/last-index-of path ".")
         file-extension (subs path file-extension-start)]
     file-extension
-  ))
+    ))
 
 (defn create-temp-file
   [file-path]
@@ -751,21 +755,21 @@
 
 (defn upload-file!
   [file-path]
-    (let [
-          file-extension (extract-extension file-path)
-          filecontent {:tempfile (create-temp-file file-path)
-                       :content-type (mime/ext-mime-type file-path),
-                       :filename      (str (extract-filename file-path) "." file-extension)
-                       :size (.length (io/file file-path))
-                       }
-          response (handler/dev-handler (-> (assoc
-                              (mock/request :post "/api/assets/")
-                              :params {:filecontent filecontent}
-                              :multipart-params {"file" filecontent})
-                                             (teacher-logged-in)
-                                            ))]
-      (is (= (:status response) 200))
-      response))
+  (let [
+        file-extension (extract-extension file-path)
+        filecontent {:tempfile     (create-temp-file file-path)
+                     :content-type (mime/ext-mime-type file-path),
+                     :filename     (str (extract-filename file-path) "." file-extension)
+                     :size         (.length (io/file file-path))
+                     }
+        response (handler/dev-handler (-> (assoc
+                                            (mock/request :post "/api/assets/")
+                                            :params {:filecontent filecontent}
+                                            :multipart-params {"file" filecontent})
+                                          (teacher-logged-in)
+                                          ))]
+    (is (= (:status response) 200))
+    response))
 
 (defn get-difference
   [data]
@@ -783,7 +787,7 @@
 
 (defn get-school-dump
   [id]
-  (let [url  (str "/api/school/dump-full/" id)
+  (let [url (str "/api/school/dump-full/" id)
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (-> (handler/dev-handler request)
@@ -795,49 +799,49 @@
 
 (defn course-stat-created [course]
   (let [user (student-created)
-        [{course-stat-id :id}] (db/create-course-stat! {:user_id (:user-id user)
-                                 :class_id (:class-id user)
-                                 :course_id (:id course)
-                                 :data {}
-                                 })]
-    {:id course-stat-id
-     :class-id (:class-id user)
-     :user-id (:user-id user)
+        [{course-stat-id :id}] (db/create-course-stat! {:user_id   (:user-id user)
+                                                        :class_id  (:class-id user)
+                                                        :course_id (:id course)
+                                                        :data      {}
+                                                        })]
+    {:id         course-stat-id
+     :class-id   (:class-id user)
+     :user-id    (:user-id user)
      :student-id (:id user)
-     :course-id (:id course)
+     :course-id  (:id course)
      }))
 
 (defn course-progresses-created [options]
-  (let [[{course-progress-id :id}] (db/create-progress! {:user_id (:user-id options)
-                                                :course_id (:course-id options)
-                                                :data {}
-                                                })]
-    {:id course-progress-id
-     :user-id (:user-id options)
+  (let [[{course-progress-id :id}] (db/create-progress! {:user_id   (:user-id options)
+                                                         :course_id (:course-id options)
+                                                         :data      {}
+                                                         })]
+    {:id        course-progress-id
+     :user-id   (:user-id options)
      :course-id (:course-id options)
      }))
 
 (defn course-events-created [options]
   (let [course (course-created)
-        [{course-events-id :id}] (db/create-event! {:guid (java.util.UUID/randomUUID)
-                                                    :user_id (:user-id options)
-                                                    :course_id (:id course)
-                                                    :type "test"
+        [{course-events-id :id}] (db/create-event! {:guid       (java.util.UUID/randomUUID)
+                                                    :user_id    (:user-id options)
+                                                    :course_id  (:id course)
+                                                    :type       "test"
                                                     :created_at (jt/local-date-time)
-                                                    :data {}
-                                                })]
-    {:id course-events-id
-     :user-id (:user-id options)
+                                                    :data       {}
+                                                    })]
+    {:id        course-events-id
+     :user-id   (:user-id options)
      :course-id (:id course)
      }))
 
 (defn datasets-created []
   (let [course (course-created)
         [{datasets-id :id}] (db/create-dataset! {:course_id (:id course)
-                                                :name "test"
-                                                :scheme {}
-                                                })]
-    {:id datasets-id
+                                                 :name      "test"
+                                                 :scheme    {}
+                                                 })]
+    {:id        datasets-id
      :course-id (:id course)
      }))
 
@@ -845,26 +849,26 @@
   (let [activity_id "Test"
         course (course-created)
         [{id :id}] (db/create-activity-stat! {
-                                             :user_id (:id user)
-                                             :course_id (:id course)
+                                              :user_id     (:id user)
+                                              :course_id   (:id course)
                                               :activity_id activity_id
-                                              :data {:hello "world"}
-                                             })
+                                              :data        {:hello "world"}
+                                              })
         ] {:id id :course_id (:id course) :user_id (:id user) :activity_id activity_id}))
 
 (defn editor-tag-created [name]
-   (let [[{id :id}] (db/create-editor-tag! {:name name})]
-     {:id id
-      :name name}))
+  (let [[{id :id}] (db/create-editor-tag! {:name name})]
+    {:id   id
+     :name name}))
 
 (defn editor-asset-created
   ([type] (editor-asset-created type "hello/example.png"))
   ([type path]
-  (let [[{id :id}] (db/create-editor-assets! {:path path :thumbnail_path path :type type})]
-    {:id id
-     :path path
-     :type type
-     })))
+   (let [[{id :id}] (db/create-editor-assets! {:path path :thumbnail_path path :type type})]
+     {:id   id
+      :path path
+      :type type
+      })))
 
 (defn link-editor-asset-tag [tag_id asset_id]
   (let [path "hello/example.png"]
@@ -891,6 +895,21 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn get-sandbox-route
+  [course-slug scene-name user-id]
+  (let [url (str "/s/" course-slug "/" scene-name)
+        request (-> (mock/request :get url)
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn get-scene-api
+  [course-slug scene-name user-id]
+  (let [url (str "/api/courses/" course-slug "/scenes/" scene-name)
+        request (cond-> (mock/request :get url)
+                        user-id (teacher-logged-in user-id)
+                        )]
+    (handler/dev-handler request)))
+
 (defn add-collaborator
   [{:keys [course-id user-id]}]
   (db/add-collaborator! {:course_id course-id :user_id user-id}))
@@ -908,8 +927,8 @@
         {course-id :id course-slug :slug course-data :data} (course-created {:owner-id user-id})
         scene-name "Test Scene"
         placeholder (-> (course/create-activity-placeholder! course-slug scene-name) second)]
-    (db/save-course! {:course_id course-id
-                      :data (assoc-in course-data [:scene-list (-> placeholder :scene-slug keyword)] {:name scene-name})
-                      :owner_id user-id
+    (db/save-course! {:course_id  course-id
+                      :data       (assoc-in course-data [:scene-list (-> placeholder :scene-slug keyword)] {:name scene-name})
+                      :owner_id   user-id
                       :created_at (jt/local-date-time)})
     (assoc placeholder :owner-id user-id)))
