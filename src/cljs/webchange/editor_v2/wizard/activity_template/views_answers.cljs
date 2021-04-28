@@ -21,11 +21,11 @@
 (defn- image-enabled
   [type with-image]
   (if with-image
+    with-image
     (case type
       "" false
       "type-1" false
-      "type-2" true)
-    with-image))
+      "type-2" true)))
 
 (defn- form-block
   [{:keys [title]}]
@@ -57,20 +57,18 @@
                      :variant "h6"}
        "Use screenshot instead image"]
      [error-message {:field-name :root}]]
-    (if with-image
+
       [ui/grid {:item true :xs 12}
        [ui/typography {:style   {:display "inline-block"}
                        :variant "h6"}
         "Select question layout type"]
        [select {:value     (get @question-page :question-type "")
-                :options   [{:text "--Select question type--" :value "" :enable? true}
-                            {:text "Answers without images" :value "type-1" :enable? true}
-                            {:text "Answers with images" :value "type-2" :enable? true}]
+                :options   types-options
                 :variant   "outlined"
                 :on-change #(reset! question-page (assoc @question-page :question-type %))
                 :width     160}]
        [error-message {:field-name :question-type}]
-       ])
+       ]
 
     [ui/grid {:item true :xs 12}
      [ui/text-field {:label     "Question text"

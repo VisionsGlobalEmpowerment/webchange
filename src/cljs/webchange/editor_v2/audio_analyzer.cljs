@@ -228,5 +228,5 @@
     {}
     (let [script-data @(re-frame/subscribe [::state/audio-script-data url])
           region (get-start-end-for-text text script-data)]
-      (logger/trace "region-data" region)
+      (logger/trace "region-data" region text)
       region)))

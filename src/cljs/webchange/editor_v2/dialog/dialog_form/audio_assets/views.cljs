@@ -39,4 +39,5 @@
                     (sort-by :date >))]
     [:div
      [warning-block]
+     [add-audio-form]
      [audios-list {:audios audios}]]))

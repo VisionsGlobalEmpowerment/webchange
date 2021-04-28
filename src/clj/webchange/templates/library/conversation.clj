@@ -13,7 +13,7 @@
         :description "Conversation"
         :options     {:characters {:label "Characters"
                                    :type  "characters"
-                                   :max   3}}
+                                   :max   5}}
         :actions     {:add-dialog   {:title   "Add dialog",
                                      :options {:dialog {:label "Dialog name"
                                                         :placeholder "(ex. Conversation about ball)"
@@ -71,12 +71,11 @@
                               :skin   "01 mari"}})
 
 (def character-positions
-  [{:x 428
-    :y 960}
-   {:x 928
-    :y 960}
-   {:x 1428
-    :y 960}])
+  [{:x 176 :y 960}
+   {:x 543 :y 960}
+   {:x 918 :y 960}
+   {:x 1294 :y 960}
+   {:x 1664 :y 960}])
 
 (defn f
   [args]

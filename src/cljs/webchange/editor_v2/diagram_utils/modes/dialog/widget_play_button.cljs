@@ -20,9 +20,11 @@
   (let [action-data (get-in node-data [:data :data 1])
         audio-src (or (:audio action-data)
                       (:id action-data))
+        volume (or (:volume action-data) 1)
         audio-data (-> action-data
                        (select-keys [:start :duration])
-                       (assoc :src audio-src))
+                       (assoc :src audio-src)
+                       (assoc :volume volume))
         styles (get-styles)]
     (r/with-let [disabled? (r/atom false)]
                 (when-not (nil? audio-src)
