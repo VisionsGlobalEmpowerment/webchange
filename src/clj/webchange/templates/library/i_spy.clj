@@ -425,7 +425,7 @@
                                                               :data [{:type "empty" :duration 0}
                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                         :phrase             "icon-59-click",
-                                        :phrase-description "Bakery 59 plate click"}
+                                        :phrase-description "59 click"}
                         :icon-open-click {:type               "sequence-data",
                                         :editor-type        "dialog",
                                         :data               [{:type "sequence-data"
@@ -439,7 +439,7 @@
                                                               :data [{:type "empty" :duration 0}
                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                         :phrase             "icon-276-click",
-                                        :phrase-description "Fire station 276 click"}
+                                        :phrase-description "276 click"}
 
                         :item-1-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",

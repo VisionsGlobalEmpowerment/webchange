@@ -4,7 +4,7 @@
 
 (def m {:id          20
         :name        "I spy 2"
-        :tags        ["Direct Instruction"]
+        :tags        ["Guided Practice"]
         :description "Some description of i spy mechanics and covered skills"
         :fields      []
         :options     {}})
