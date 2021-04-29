@@ -94,6 +94,14 @@
                                   :name name
                                   :data {:items items}})))))
 
+(defn load-info
+  [config course-slug saved-name dataset-name]
+  (let [path (items-path config saved-name dataset-name)
+        data (-> path io/reader java.io.PushbackReader. edn/read)
+        dataset (core/get-dataset-by-name course-slug dataset-name)]
+
+    (core/update-dataset! (:id dataset) (assoc-in dataset [:scheme :fields] (:fields data)))))
+
 (defn load-force
   [config course-slug saved-name dataset-name]
   (let [path (items-path config saved-name dataset-name)
@@ -138,7 +146,11 @@
 
    "load-dataset-merge"
    (fn [config args]
-     (apply load-merge config args))})
+     (apply load-merge config args))
+
+   "load-dataset-info"
+   (fn [config args]
+     (apply load-info config args))})
 
 (defn command? [[arg]]
   (contains? (set (keys commands)) arg))

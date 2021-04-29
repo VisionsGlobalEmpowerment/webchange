@@ -491,7 +491,7 @@
     (assoc field :scenes [scene-slug])
     (update field :scenes conj scene-slug)))
 
-(defn- merge-fields
+(defn merge-fields
   [original fields scene-slug]
   (let [field-names (->> fields
                          (map :name)
@@ -506,7 +506,7 @@
                         (remove #(contains? original-names (:name %)))
                         (map #(add-field-scene % scene-slug)))]
     (->> original
-         (remove #(contains? field-names %))
+         (remove #(contains? field-names (:name %)))
          (concat existing-fields new-fields)
          (sort-by :name)
          (into []))))

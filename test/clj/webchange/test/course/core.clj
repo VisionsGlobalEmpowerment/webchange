@@ -58,3 +58,15 @@
       (is (= (:type editor-asset) "decoration"))
       (is editor-tag)
       (is (some #{(:id editor-asset)} (map :id editor-assets))))))
+
+(deftest merge-fields
+  (testing "Fields are not duplicated on merge"
+    (let [original-fields [{:name "test-field",
+                            :type "string",
+                            :scenes ["test-scene"]}]
+          new-fields [{:name "test-field"
+                       :type "string"}]
+          scene-slug "new-scene"
+          merged (course/merge-fields original-fields new-fields scene-slug)]
+      (is (= 1 (count merged)))
+      (is (= "test-field" (-> merged first :name))))))
