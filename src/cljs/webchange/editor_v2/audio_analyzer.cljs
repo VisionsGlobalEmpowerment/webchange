@@ -19,7 +19,7 @@
     [(inc (first previous))]
     (map vector previous (next previous) other-seq)))
 
-(defn levenshtein-distance
+(defn- levenshtein-distance
   "Compute the levenshtein distance between two [sequences]."
   [sequence1 sequence2]
   (cond
@@ -36,8 +36,9 @@
 (def confidence-treshhold 0.5)
 (def confidence-chunk-treshhold 0.8)
 (def analize-string-length 30)
+(def end-search-distance 0.1)
 
-(defn prepare-result-items
+(defn- prepare-result-items
   [data]
   (reduce (fn [result item]
             (let [word-len (count (:word item))
@@ -50,7 +51,7 @@
                   (assoc :counter (+ end 1))))
             ) {:counter 0 :items []} data))
 
-(defn prepare-text
+(defn- prepare-text
   [text]
   (let [numbers (sort-by #(- 0 (count %)) (remove empty? (clojure.string/split text #"[^\d]+")))
         text-numbers (into {} (map (fn [number] [number (forty-two/words (edn/read-string number))]) numbers))
@@ -64,7 +65,7 @@
     text
     ))
 
-(defn get-candidates
+(defn- get-candidates
   [text-to-search-length data-text text-to-search data-text-length]
   (doall (map (fn [i]
                 (let [end-subs (+ i text-to-search-length)
@@ -83,7 +84,7 @@
                                     ) [0] (clojure.string/split data-text " ")))))
   )
 
-(defn select-best-candidate
+(defn- select-best-candidate
   [candidates]
   (reduce (fn [result candidate]
             (if (and (> (:conf candidate) confidence-treshhold)
@@ -98,22 +99,27 @@
         text (prepare-text text)
         text-length (count text)
         text-to-search-length (min analize-string-length text-length)
+        max-distance (* end-search-distance text-length)
         text-to-search (subs text 0 text-to-search-length)
         result-items (prepare-result-items data)
         candidates-start (get-candidates text-to-search-length data-text text-to-search data-text-length)
         best-candidate-start (select-best-candidate candidates-start)
+        supposed-end (+ (:start best-candidate-start) text-length)
+        max-supposed-end (+ (:start best-candidate-start) text-length max-distance)
         ;Adjust end of fragment to make sure that end fragment correctly selected
         best-candidate-end (if (< text-length analize-string-length)
                              best-candidate-start
                              (let [text-to-search (subs text (- text-length analize-string-length) text-length)
                                    candidates-end (get-candidates text-to-search-length data-text text-to-search data-text-length)
+                                   ; End should not be far from start
+                                   candidates-end (filter (fn [candidate] (> max-supposed-end (:end candidate)) ) candidates-end)
                                    best-candidate (select-best-candidate candidates-end)]
                                ;Check that end fragment found and looks good, if not fallback to default logic
                                (if (and (contains? best-candidate :start)
                                         (contains? best-candidate :end)
                                         (>= (:end best-candidate) (:end best-candidate-start)))
                                         best-candidate
-                                        (assoc best-candidate-start :end (+ (:start best-candidate-start) text-length)))))
+                                        (assoc best-candidate-start :end supposed-end))))
         final-result (reduce (fn [result item]
                                (if (and (contains? best-candidate-start :start)
                                         (contains? best-candidate-start :end)
