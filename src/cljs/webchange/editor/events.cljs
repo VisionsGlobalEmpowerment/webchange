@@ -238,7 +238,7 @@
 (re-frame/reg-event-fx
   ::update-dataset-item
   (fn [{:keys [db]} [_ id data-patch]]
-    (let [{:keys [name data]} (get-in db [:dataset-items id])
+    (let [{:keys [name data dataset-id]} (get-in db [:dataset-items id])
           new-data (merge data data-patch)]
       {:db         (assoc-in db [:loading :update-dataset-item] true)
        :http-xhrio {:method          :put
@@ -246,15 +246,16 @@
                     :params          {:data new-data :name name}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
-                    :on-success      [::update-dataset-item-success]
+                    :on-success      [::update-dataset-item-success dataset-id]
                     :on-failure      [:api-request-error :update-dataset-item]}})))
 
 (re-frame/reg-event-fx
   ::update-dataset-item-success
-  (fn [{:keys [db]} [_ {:keys [id data]}]]
-    {:db         (assoc-in db [:dataset-items id] data)
-     :dispatch-n (list [:complete-request :update-dataset-item]
-                       [::update-course-dataset-item-data id data])}))
+  (fn [{:keys [db]} [_ dataset-id {:keys [id data]}]]
+    (let [prepared-data (assoc data :dataset-id dataset-id)]
+      {:db         (assoc-in db [:dataset-items id] prepared-data)
+       :dispatch-n (list [:complete-request :update-dataset-item]
+                         [::update-course-dataset-item-data id data])})))
 
 (re-frame/reg-event-fx
   ::update-course-dataset-item-data
