@@ -20,66 +20,82 @@
                         {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
                         {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}
                         {:url "/raw/img/ui/star_03.png", :size 10, :type "image"}]
-        :objects       {:background {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
-                        :next-button
-                                    {:type    "image",
-                                     :x       1800,
-                                     :y       955,
-                                     :actions {:click {:id "finish-activity", :on "click", :type "action"}},
-                                     :scale-x -1,
-                                     :scale-y 1,
-                                     :src     "/raw/img/ui/back_button_01.png"},
-                        :outline    {:type           "text",
-                                     :x              960,
-                                     :y              150,
-                                     :transition     "outline",
-                                     :align          "center",
-                                     :fill           "#ffffff",
-                                     :font-family    "Lexend Deca",
-                                     :font-size      300,
-                                     :text           "",
-                                     :vertical-align "middle"
-                                     :shadow-offset  {:x 0, :y 0},
-                                     :shadow-color   "#1a1a1a",
-                                     :shadow-blur    5,
-                                     :shadow-opacity 0.5
-                                     :filter         "brighten"}
+        :objects       {:background              {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
+                        :next-button             {:type       "group"
+                                                  :x          1766
+                                                  :y          28
+                                                  :width      96 :height 96
+                                                  :transition "next-button"
+                                                  :children   ["next-background"
+                                                               "next-button-mark"
+                                                               ]}
+                        :next-background      {:type          "rectangle"
+                                                  :x             0
+                                                  :y             0
+                                                  :transition    "next-background"
+                                                  :width         96
+                                                  :height        96
+                                                  :border-radius 48
+                                                  :fill          0xFF5C00}
+                        :next-button-mark {:type    "svg-path"
+                                                  :x       20
+                                                  :y       25
+                                                  :width   128
+                                                  :height  128
+                                                  :fill    "#FFFFFF",
+                                                  :actions {:click {:id "finish-activity", :on "click", :type "action"}},
+                                                  :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}
+                        :outline                 {:type           "text",
+                                                  :x              960,
+                                                  :y              150,
+                                                  :transition     "outline",
+                                                  :align          "center",
+                                                  :fill           "#ffffff",
+                                                  :font-family    "Lexend Deca",
+                                                  :font-size      300,
+                                                  :text           "",
+                                                  :vertical-align "middle"
+                                                  :shadow-offset  {:x 0, :y 0},
+                                                  :shadow-color   "#1a1a1a",
+                                                  :shadow-blur    5,
+                                                  :shadow-opacity 0.5
+                                                  :filter         "brighten"}
 
                         :text-tracing-pattern
-                                    {:type "text-tracing-pattern"
-                                     :text " "
-                                     :y    400}
+                                                 {:type "text-tracing-pattern"
+                                                  :text " "
+                                                  :y    400}
 
                         :practice-canvas
-                                    {:type   "painting-area"
-                                     :tool   "felt-tip"
-                                     :color  "#4479bb"
-                                     :change {:on "click" :type "action" :id "timeout-timer"}}
+                                                 {:type   "painting-area"
+                                                  :tool   "felt-tip"
+                                                  :color  "#4479bb"
+                                                  :change {:on "click" :type "action" :id "timeout-timer"}}
                         :painting-toolset
-                                    {:type       "painting-toolset"
-                                     :x          -100
-                                     :transition "painting-toolset"
-                                     :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}}
+                                                 {:type       "painting-toolset"
+                                                  :x          -100
+                                                  :transition "painting-toolset"
+                                                  :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}}
                         :colors-palette
-                                    {:type       "colors-palette",
-                                     :x          1830
-                                     :transition "colors-palette"
-                                     :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}}
+                                                 {:type       "colors-palette",
+                                                  :x          1830
+                                                  :transition "colors-palette"
+                                                  :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}}
                         :mari
-                                    {:type       "animation",
-                                     :x          1600,
-                                     :y          225,
-                                     :width      473,
-                                     :height     511,
-                                     :scene-name "mari",
-                                     :transition "mari",
-                                     :anim       "idle",
-                                     :name       "mari",
-                                     :scale-x    0.5,
-                                     :scale-y    0.5,
-                                     :speed      0.35,
-                                     :start      true
-                                     :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}},
+                                                 {:type       "animation",
+                                                  :x          1600,
+                                                  :y          225,
+                                                  :width      473,
+                                                  :height     511,
+                                                  :scene-name "mari",
+                                                  :transition "mari",
+                                                  :anim       "idle",
+                                                  :name       "mari",
+                                                  :scale-x    0.5,
+                                                  :scale-y    0.5,
+                                                  :speed      0.35,
+                                                  :start      true
+                                                  :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}},
                         }
         :scene-objects [["background"
                          "outline"
@@ -176,7 +192,38 @@
                         :dialog-color-65793          (dialog/default "color black")
                         }
         :triggers      {:start {:on "start" :action "start"}}
-        :metadata      {}})
+        :metadata      {:tracks    [{:title "Tools"
+                                     :nodes [{:type      "dialog"
+                                              :action-id :dialog-tool-brush}
+                                             {:type      "dialog"
+                                              :action-id :dialog-tool-felt-tip}
+                                             {:type      "dialog"
+                                              :action-id :dialog-tool-pencil}
+                                             {:type      "dialog"
+                                              :action-id :dialog-tool-eraser}]}
+                                    {:title "Colors"
+                                     :nodes [{:type      "dialog"
+                                              :action-id :dialog-color-4487611}
+                                             {:type      "dialog"
+                                              :action-id :dialog-color-9616714}
+                                             {:type      "dialog"
+                                              :action-id :dialog-color-15569322}
+                                             {:type      "dialog"
+                                              :action-id :dialog-color-16631089}
+                                             {:type      "dialog"
+                                              :action-id :dialog-color-65793}
+                                             ]}
+                                    {:title "Dialogues"
+                                     :nodes [{:type      "dialog"
+                                              :action-id :introduction-dialog}
+                                             {:type      "dialog"
+                                              :action-id :dialog-tap-instructions}
+                                             {:type      "dialog"
+                                              :action-id :correct-answer-dialog}
+                                             {:type      "dialog"
+                                              :action-id :timeout-instructions-dialog}]}
+                                    ]
+                        }})
 
 (def first-letter-actions
   {:init-tracing-text {:type "sequence-data"
