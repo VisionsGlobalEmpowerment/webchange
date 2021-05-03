@@ -38,6 +38,7 @@
             [webchange.editor-v2.graph-builder.utils.node-siblings-test]
             [webchange.editor-v2.graph-builder.utils.remove-sub-graph-test]
             [webchange.editor-v2.graph-builder.utils.root-nodes-test]
+            [webchange.editor-v2.audio-analyzer.audio-analyzer-test]
             [webchange.editor-v2.scene-diagram.scene-parser.action-children-test]
             [webchange.editor-v2.scene-diagram.scene-parser.scene-parser-test]
             [webchange.editor-v2.translator.translator-form.audio-assets.utils.test]
@@ -94,6 +95,7 @@
   'webchange.editor-v2.scene-diagram.scene-parser.action-children-test
   'webchange.editor-v2.scene-diagram.scene-parser.scene-parser-test
   'webchange.editor-v2.translator.translator-form.audio-assets.utils.test
+  'webchange.editor-v2.audio-analyzer.audio-analyzer-test
   'webchange.interpreter.events-test
   'webchange.interpreter.renderer.text.chunks-test
   'webchange.interpreter.variables.events-test
