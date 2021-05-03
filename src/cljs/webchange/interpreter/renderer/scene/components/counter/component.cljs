@@ -5,19 +5,26 @@
     [webchange.interpreter.renderer.scene.components.counter.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
-(def default-props {:x          {}
-                    :y          {}
-                    :init-value {:default 0}
-                    :digits     {:default 1}
-                    :color      {:default 0xff9000}
-                    :ref        {}})
+(def default-props {:x           {}
+                    :y           {}
+                    :init-value  {:default 0}
+                    :digits      {:default 1}
+                    :color       {:default 0xff9000}
+                    :font-family "Luckiest Guy"
+                    :font-size   68
+                    :font-weight "normal"
+                    :ref         {}})
 
 (defn get-text-style
-  [{:keys [color]}]
-  {:fill        color
-   :font-family "Luckiest Guy"
-   :font-size   68
-   :font-weight "normal"})
+  [{:keys [color font-family font-size font-weight]}]
+  (cond-> {:fill        color
+           :font-family "Luckiest Guy"
+           :font-size   68
+           :font-weight "normal"}
+          font-family (assoc :font-family font-family)
+          font-size (assoc :font-size font-size)
+          font-weight (assoc :font-weight font-weight)
+          ))
 
 (def component-type "counter")
 
