@@ -9,6 +9,8 @@
         :description    "Users move a character around a race track filled with answer images.  Before time runs out, users must steer the character to as many correct answer options as possible while avoiding incorrect answer images."
         :lesson-sets    ["concepts-recording"]
         :preview        "/images/templates/previews/recording_studio.png"
+        :preview-anim   ["/images/templates/previews/recording_studio_1.png"
+                         "/images/templates/previews/recording_studio_2.png"]
         :props          {:game-changer? true}
         :options        {:demo-image {:type        "image"
                                       :label       "Prompt Image"
@@ -107,7 +109,7 @@
                         :approve-background      {:type          "rectangle"
                                                   :x             0
                                                   :y             0
-                                                  :transition "approve-background"
+                                                  :transition    "approve-background"
                                                   :width         96
                                                   :height        96
                                                   :border-radius 48

@@ -11,6 +11,7 @@
                        :description                     s/Str
                        :tags                            [s/Str]
                        (s/optional-key :preview)        s/Str
+                       (s/optional-key :preview-anim)   [s/Str]
                        (s/optional-key :actions)        (s/maybe s/Any)
                        (s/optional-key :options)        (s/maybe s/Any)
                        (s/optional-key :options-groups) [{:title   s/Str
