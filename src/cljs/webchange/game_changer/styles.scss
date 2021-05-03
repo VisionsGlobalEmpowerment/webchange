@@ -7,8 +7,7 @@
     grid-template-rows: 80px auto;
     max-height: 100%;
     width: 100%;
-
-//     & > * { border: solid 1px #acacac;}
+    max-width: 1300px;
 
     & > .title {
         grid-column-start: 2;
