@@ -72,6 +72,11 @@ $description-collapsed-height: 60px;
     background-color: #fff;
 }
 
+.preview-button {
+    float: right;
+    margin-top: $padding;
+}
+
 .preview {
     position: relative;
     height: $preview-height;
