@@ -667,12 +667,20 @@
         preserve-actions (-> scene-data
                              :actions
                              (select-keys actions))
-        activity (as-> (templates/activity-from-template created) a
-                       (reduce #(templates/update-activity-from-template %1 {:data %2}) a updated)
-                       (update a :actions merge preserve-actions)
-                       (update a :assets #(->> (concat original-assets %)
-                                               (flatten)
-                                               (distinct))))]
+        created-activity (as-> (templates/activity-from-template created) a
+                             (reduce #(templates/update-activity-from-template %1 {:data %2}) a updated))
+
+        preserve-actions (->> preserve-actions
+                              (map (fn [[key action]] (let [available-activies (get-in created-activity [:actions key :available-activities])]
+                                                        (if available-activies
+                                                          [key (assoc action :available-activities available-activies)]
+                                                          [key action]))))
+                              (into {}))
+        activity (-> created-activity
+                     (update :actions merge preserve-actions)
+                     (update :assets #(->> (concat original-assets %)
+                                           (flatten)
+                                           (distinct))))]
     (save-scene! course-slug scene-slug activity user-id :description "Update template")))
 
 (defn publish-course!

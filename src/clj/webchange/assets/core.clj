@@ -33,9 +33,11 @@
 
 (defn crc32
   [^String string]
-  (let [crc (java.util.zip.CRC32.)]
-     (. crc update (. string getBytes))
-    (str (Long/toHexString (. crc getValue)))))
+  (let [crc (java.util.zip.CRC32.)
+        _ (. crc update (. string getBytes))
+        result (str (Long/toHexString (. crc getValue)))
+        pad-length (- 8 (count result))]
+    (apply str (concat (take pad-length (repeat "0")) result))))
 
 (defn update-asset-hash!
   [path full-path]

@@ -449,7 +449,7 @@
                                                  :concept-var        "current-dialog",
                                                  :editor-type        "dialog"
                                                  :dialog-track       "Word image"
-                                                 }},
+                                                  }},
         :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata      {:prev "park", :autostart true, :template-id 30},
         :variables     {:status nil}})
