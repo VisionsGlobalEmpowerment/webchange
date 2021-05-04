@@ -1,0 +1,104 @@
+$width: 200px;
+$height: 212px;
+
+$hover-increase: 0.3;
+
+$border-radius: 8px;
+$border-width: 2px;
+$padding: 12px;
+
+$preview-height: 100px;
+
+$description-collapsed-height: 60px;
+
+.templates-list-item-place-holder {
+    position: relative;
+    width: $width;
+    height: $height;
+}
+
+.templates-list-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    cursor: pointer;
+
+    background-color: #fff;
+    border-radius: $border-radius;
+    box-shadow: 0px 4px 12px rgba(175, 175, 175, 0.25);
+    padding: $padding;
+
+     &:hover {
+        width: (100% * (1 + $hover-increase));
+        height: auto;
+        left: -0.5 * (100% * $hover-increase);
+        z-index: 10;
+
+        .preview {
+            height: $preview-height * (1 + $hover-increase);
+        }
+
+        .description {
+            display: block;
+            height: auto;
+            -webkit-line-clamp: none;
+        }
+    }
+
+    &.selected {
+        border: solid $border-width #0071E3;
+    }
+}
+
+.title {
+    text-transform: capitalize;
+    color: #1D1D1F;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: $padding;
+}
+
+.description {
+    height: $description-collapsed-height;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+    background-color: #fff;
+}
+
+.preview {
+    position: relative;
+    height: $preview-height;
+
+    background-size: cover;
+    background-position: center;
+    margin-top: -$padding;
+    margin-left: -$padding;
+    margin-right: -$padding;
+    margin-bottom: $padding;
+
+    border-radius: ($border-radius - $border-width) ($border-radius - $border-width) 0 0;
+
+    &.placeholder {
+        background-color: #f2f2f2;
+
+        &:after {
+            content: "No Image";
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                color: #cecece;
+                font-weight: 100;
+                font-size: 18px;
+        }
+    }
+
+    @import "styles-preview";
+}
