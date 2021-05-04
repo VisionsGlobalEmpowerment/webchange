@@ -375,6 +375,14 @@
                     (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
+(defn archive-course!
+  [course-slug user-id]
+  (let [url (str "/api/courses/" course-slug "/archive")
+        request (-> (mock/request :post url)
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
 (defn get-course-info
   [course-slug]
   (let [course-url (str "/api/courses/" course-slug "/info")

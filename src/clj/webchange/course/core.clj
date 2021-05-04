@@ -133,10 +133,10 @@
         created-at (jt/local-date-time)
         scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))]
     (if (not (identical? scene-data-old scene-data))
-      (db/save-scene! {:scene_id   scene-id
-                       :data       scene-data
-                       :owner_id   owner-id
-                       :created_at created-at
+      (db/save-scene! {:scene_id    scene-id
+                       :data        scene-data
+                       :owner_id    owner-id
+                       :created_at  created-at
                        :description description}))
     [true {:id          scene-id
            :name        scene-name
@@ -157,10 +157,10 @@
         scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))
         new-scene-data (merge scene-data-old scene-data)]
     (if (not (identical? scene-data-old new-scene-data))
-      (db/save-scene! {:scene_id   scene-id
-                       :data       new-scene-data
-                       :owner_id   owner-id
-                       :created_at created-at
+      (db/save-scene! {:scene_id    scene-id
+                       :data        new-scene-data
+                       :owner_id    owner-id
+                       :created_at  created-at
                        :descritpion "Update"}))
     [true {:id          scene-id
            :name        scene-name
@@ -202,13 +202,13 @@
   (let [{data :data scene-id :scene-id} (db/get-scene-version {:id version-id})
         {name :name} (db/get-scene-by-id {:id scene-id})
         created-at (jt/local-date-time)]
-    (db/save-scene! {:scene_id   scene-id
-                     :data       data
-                     :owner_id   owner-id
-                     :created_at created-at
+    (db/save-scene! {:scene_id    scene-id
+                     :data        data
+                     :owner_id    owner-id
+                     :created_at  created-at
                      :description "Restore"})
-    [true {:name name
-           :data data
+    [true {:name       name
+           :data       data
            :created-at (str created-at)}]))
 
 (defn get-course-versions
@@ -251,8 +251,9 @@
 
 (defn- ->website-course
   [course]
-  (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status])
+  (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status :updated-at])
       (assoc :slug (-> course :slug (codec/url-encode)))
+      (assoc :updated-at (-> course :updated-at (str)))
       (with-course-page)
       (with-default-image)
       (with-host-name :image-src)))
@@ -308,10 +309,10 @@
       (let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
             scene-data (:data (db/get-latest-scene-version {:scene_id scene-id}))
             scene-id (get-or-create-scene! new-course-id scene-name)]
-        (db/save-scene! {:scene_id   scene-id
-                         :data       scene-data
-                         :owner_id   owner-id
-                         :created_at current-time
+        (db/save-scene! {:scene_id    scene-id
+                         :data        scene-data
+                         :owner_id    owner-id
+                         :created_at  current-time
                          :description "Start localize"})))
     [true (-> (transform-keys ->kebab-case-keyword localized-course-data)
               (assoc :id new-course-id)
@@ -474,10 +475,10 @@
   [course-id scene-slug scene-data owner-id]
   (let [created-at (jt/local-date-time)
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
-    (db/save-scene! {:scene_id   scene-id
-                     :data       scene-data
-                     :owner_id   owner-id
-                     :created_at created-at
+    (db/save-scene! {:scene_id    scene-id
+                     :data        scene-data
+                     :owner_id    owner-id
+                     :created_at  created-at
                      :description "Create"})
     {:scene-id scene-id}))
 
@@ -586,10 +587,10 @@
         {scene-id :id} (db/get-scene {:course_id course-id :name scene-slug})
         {course-data :data} (db/get-latest-course-version {:course_id course-id})
         created-at (jt/local-date-time)]
-    (db/save-scene! {:scene_id   scene-id
-                     :data       scene-data
-                     :owner_id   owner-id
-                     :created_at created-at
+    (db/save-scene! {:scene_id    scene-id
+                     :data        scene-data
+                     :owner_id    owner-id
+                     :created_at  created-at
                      :description "Create"})
     (save-dataset-on-create! course-id scene-slug metadata)
     (add-activity-lesson-sets! course-id scene-slug metadata owner-id)
@@ -683,6 +684,12 @@
           [true (-> (get-course-info course-slug)
                     (->website-course))])
       [false {:message "invalid status"}])))
+
+(defn archive-course!
+  [course-slug course-id]
+  (db/update-course-status! {:id course-id :status "archived"})
+  [true (-> (get-course-info course-slug)
+            (->website-course))])
 
 (defn review-course!
   [course-id {new-status :status}]
