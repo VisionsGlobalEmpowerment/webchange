@@ -8,13 +8,17 @@
 (def m {:id          27
         :name        "Rhyming"
         :tags        ["Independent Practice"]
-        :description "Rhyme"
+        :description "Users are presented with two category labels and a group of words or images to sort. Users drag the words or images to sort them into their correct categories."
         :options     {:left  {:label       "Left Goal word"
                               :placeholder "Left Goal word"
                               :type        "string"}
                       :right {:label       "Right Goal word"
                               :placeholder "Right Goal word"
                               :type        "string"}}
+        :props       {:game-changer?    true
+                      :preview          "/images/templates/previews/rhyming.png"
+                      :preview-activity {:course-slug   "q-q-nzvzixrf"
+                                         :activity-slug "q"}}
         :actions     {
                       :add-ball    {:title   "Add ball",
                                     :options {
