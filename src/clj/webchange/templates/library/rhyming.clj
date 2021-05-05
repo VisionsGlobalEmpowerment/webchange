@@ -10,11 +10,13 @@
         :tags        ["Independent Practice"]
         :description "Users are presented with two category labels and a group of words or images to sort. Users drag the words or images to sort them into their correct categories."
         :options     {:left  {:label       "Left Goal word"
-                              :placeholder "Left Goal word"
-                              :type        "string"}
+                              :placeholder "Type left goal word here.."
+                              :type        "string"
+                              :description "Left Goal"}
                       :right {:label       "Right Goal word"
-                              :placeholder "Right Goal word"
-                              :type        "string"}}
+                              :placeholder "Type right goal word here.."
+                              :type        "string"
+                              :description "Right Goal"}}
         :props       {:game-changer?    true
                       :preview          "/images/templates/previews/rhyming.png"
                       :preview-activity {:course-slug   "q-q-nzvzixrf"

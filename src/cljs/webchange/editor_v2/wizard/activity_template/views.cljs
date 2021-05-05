@@ -38,17 +38,17 @@
     "video-ranges" [video-ranges-option props]
     [undefined-option props]))
 
-(defn- template->options
+(defn prepare-options
   "Support both versions of options declaration:
    1. {:options [{:key \"some-key\"
                   ...}]}
    2. {:options {:some-key {...}}}"
-  [template]
-  (if (sequential? (:options template))
-    (->> (:options template)
+  [options]
+  (if (sequential? options)
+    (->> options
          (map (fn [{:keys [key] :as option}]
                 [(keyword key) option])))
-    (:options template)))
+    options))
 
 (defn- filter-options
   [data metadata options]
@@ -82,7 +82,7 @@
 
 (defn template
   [{:keys [template] :as props}]
-  (let [options (template->options template)]
+  (let [options (prepare-options (get template :options []))]
     [options-form (-> props
                       (assoc :options options)
                       (dissoc template))]))

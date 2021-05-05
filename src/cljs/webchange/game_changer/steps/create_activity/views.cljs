@@ -1,4 +1,4 @@
-(ns webchange.game-changer.create-activity.views
+(ns webchange.game-changer.steps.create-activity.views
   (:require
     [camel-snake-kebab.core :refer [->Camel_Snake_Case]]
     [reagent.core :as r]

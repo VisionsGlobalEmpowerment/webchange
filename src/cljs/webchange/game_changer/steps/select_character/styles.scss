@@ -1,0 +1,49 @@
+@import "../../_list-items";
+
+.characters-list {
+    @include list();
+
+    .character-item-placeholder {
+        @include list-item-placeholder($width: 200px, $height: 200px);
+
+        .character-item-card {
+            @include list-item-card();
+
+            &.selected {
+                @include list-item-card-selected();
+            }
+
+            .preview {
+                object-fit: contain;
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            .placeholder {
+                @include image-placeholder($message: "No Preview");
+                width: 100%;
+                height: 100%;
+            }
+
+            .title {
+                position: absolute;
+                bottom: 0;
+                padding: 8px;
+
+                color: #1D1D1F;
+                font-weight: 500;
+                font-size: 16px;
+
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 8px;
+                box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+            }
+        }
+    }
+}
+
+.max-count-message {
+    color: #C9C9C9;
+    padding-left: 32px;
+}

@@ -9,6 +9,9 @@ $idx-background: #C9C9C9;
 $idx-background-selected: $color-primary;
 $idx-margin: 8px;
 
+$disabled-color: #C9C9C9;
+$disabled-background: #F6F6F6;
+
 $items-connector-width: 2px;
 
 .wc-time-line {
@@ -47,6 +50,18 @@ $items-connector-width: 2px;
                 border: solid $items-connector-width $idx-background-selected;
                 color: $idx-background-selected;
                 line-height: $idx-size - $items-connector-width;
+            }
+        }
+
+        &.disabled {
+            & > .idx {
+                background-color: $disabled-background;
+                border-color: $disabled-color;
+                color: $disabled-color;
+            }
+
+            & > .title {
+                color: $disabled-color;
             }
         }
 

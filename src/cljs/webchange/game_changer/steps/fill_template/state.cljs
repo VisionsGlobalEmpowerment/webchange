@@ -1,4 +1,4 @@
-(ns webchange.game-changer.create-activity.state
+(ns webchange.game-changer.steps.fill-template.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.state.state-activity :as state-activity]

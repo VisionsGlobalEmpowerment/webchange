@@ -63,6 +63,16 @@
                (and (predicate item)
                     index)))))
 
+(defn remove-by-predicate
+  [list predicate]
+  "Remove from list item by predicate."
+  {:pre [(sequential? list)
+         (fn? predicate)]}
+  (let [position (find-item-position list predicate)]
+    (if (some? position)
+      (remove-at-position list position)
+      list)))
+
 (defn in-list?
   [list item]
   "Check if item in list."
