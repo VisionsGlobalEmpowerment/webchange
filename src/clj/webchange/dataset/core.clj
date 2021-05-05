@@ -74,6 +74,15 @@
     [true {:id   id
            :data prepared-data}]))
 
+(defn update-dataset-item-with-version!
+  [id data]
+  (let [prepared-data (assoc data :id id)
+        result (db/update-dataset-item-with-version! prepared-data)
+        latest-version (db/get-dataset-item {:id id})]
+    (if (< 0 result)
+      [true latest-version]
+      [false latest-version])))
+
 (defn delete-dataset-item!
   [id]
   (db/delete-dataset-item! {:id id})

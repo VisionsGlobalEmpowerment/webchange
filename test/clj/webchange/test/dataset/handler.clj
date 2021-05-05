@@ -53,13 +53,19 @@
     (is (= (:id item) (:id retrieved-item)))))
 
 (deftest item-can-be-updated
-  (let [{item-id :id} (f/dataset-item-created)
+  (let [{item-id :id version :version} (f/dataset-item-created)
         updated-data {:src "test-edited-value"}
-        updated-name "edited-name"
-        _ (f/update-dataset-item! item-id {:data updated-data :name updated-name})
-        retrieved-item (-> item-id f/get-dataset-item :body slurp (json/read-str :key-fn keyword) :item)]
-    (is (= updated-data (:data retrieved-item)))
-    (is (= updated-name (:name retrieved-item)))))
+        updated-name "edited-name"]
+    (testing "Dataset item can be updated"
+      (let [response (f/update-dataset-item! item-id {:data updated-data :name updated-name :version version})
+            retrieved-item (-> item-id f/get-dataset-item :body slurp (json/read-str :key-fn keyword) :item)]
+        (is (= 200 (:status response)))
+        (is (= updated-data (:data retrieved-item)))
+        (is (= updated-name (:name retrieved-item)))
+        (is (< version (-> response :body slurp (json/read-str :key-fn keyword) :version)))))
+    (testing "Dataset item can not be updated with stale version"
+      (let [response (f/update-dataset-item! item-id {:data updated-data :name updated-name :version version})]
+        (is (= 409 (:status response)))))))
 
 (deftest item-can-be-deleted
   (let [{item-id :id} (f/dataset-item-created)

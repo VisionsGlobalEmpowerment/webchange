@@ -37,7 +37,7 @@
 (re-frame/reg-event-fx
   ::save-changes
   (fn [{:keys [db]} [_]]
-    (let [concepts (translator-form.concepts/concepts-data db)
+    (let [concepts (translator-form.concepts/concepts-patch-data db)
           edited-concepts-ids (translator-form.concepts/edited-concepts db)
           edited-concepts (select-keys concepts edited-concepts-ids)
           current-dataset-concept (translator-form.concepts/current-dataset-concept db)
@@ -47,7 +47,7 @@
           objects (translator-form.scene/objects-data db)
           metadata (translator-form.scene/metadata-data db)]
       {:dispatch-n         (->> edited-concepts
-                                (map (fn [[id {:keys [data]}]] [::editor/update-dataset-item id data]))
+                                (map (fn [[id data]] [::editor/update-dataset-item id data]))
                                 (concat (list [::editor/reset-scene-actions scene-id actions]
                                               [::editor/reset-scene-assets scene-id assets]
                                               [::editor/reset-scene-objects scene-id objects]

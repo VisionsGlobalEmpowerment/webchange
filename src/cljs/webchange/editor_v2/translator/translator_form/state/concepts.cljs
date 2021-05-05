@@ -86,6 +86,16 @@
   [db]
   (get-in db (path-to-db [:concepts :data])))
 
+(defn concepts-patch-data
+  [db]
+  (let [concepts (concepts-data db)
+        patches (get-in db (path-to-db [:concepts :patch]))
+        id->fields #(-> patches (get %) keys)]
+    (->> concepts
+         (map (fn [[key {:keys [data]}]]
+                [key (select-keys data (id->fields key))]))
+         (into {}))))
+
 (defn current-dataset-concept
   [db]
   (get-in db (path-to-db [:current-dataset-concept])))
@@ -181,7 +191,9 @@
     (let [concept (get-concept-by-id db concept-id)
           action-data (get-in concept (concat [:data] action-path))
           updated-data (merge action-data data-patch)]
-      {:db         (assoc-in db (path-to-db (concat [:concepts :data] [concept-id :data] action-path)) updated-data)
+      {:db         (-> db
+                       (assoc-in (path-to-db (concat [:concepts :data] [concept-id :data] action-path)) updated-data)
+                       (assoc-in (path-to-db [:concepts :patch concept-id (first action-path)]) true))
        :dispatch-n (->> (list [::add-edited-concepts concept-id]
                               (when-not suppress-history?
                                 [::history/add-history-event {:type       :concept-action
@@ -190,3 +202,8 @@
                                                               :from       (->> data-patch (keys) (select-keys action-data))
                                                               :to         data-patch}]))
                         (remove nil?))})))
+
+(re-frame/reg-event-fx
+  ::reset-concept-patch
+  (fn [{:keys [db]} [_ id]]
+    {:db (assoc-in db (path-to-db [:concepts :patch id]) {})}))

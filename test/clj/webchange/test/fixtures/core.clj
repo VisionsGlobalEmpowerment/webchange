@@ -168,7 +168,7 @@
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-dataset-item! data)]
-     (->> (assoc data :id id)
+     (->> (assoc data :id id :version 1)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn lesson-set-created

@@ -5,7 +5,8 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
     [webchange.editor-v2.concepts.subs :as concepts-subs]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -132,6 +133,7 @@
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::save-scene-success]
+
                   :on-failure      [:api-request-error :save-scene]}}))
 
 (re-frame/reg-event-fx
@@ -237,17 +239,18 @@
 
 (re-frame/reg-event-fx
   ::update-dataset-item
-  (fn [{:keys [db]} [_ id data-patch]]
-    (let [{:keys [name data dataset-id]} (get-in db [:dataset-items id])
-          new-data (merge data data-patch)]
+  (fn [{:keys [db]} [_ id data-patch attempt]]
+    (let [{:keys [name data dataset-id version]} (get-in db [:dataset-items id])
+          new-data (merge data data-patch)
+          attempt (or attempt 0)]
       {:db         (assoc-in db [:loading :update-dataset-item] true)
        :http-xhrio {:method          :put
                     :uri             (str "/api/dataset-items/" id)
-                    :params          {:data new-data :name name}
+                    :params          {:data new-data :name name :version version}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::update-dataset-item-success dataset-id]
-                    :on-failure      [:api-request-error :update-dataset-item]}})))
+                    :on-failure      [::update-dataset-item-error id data-patch dataset-id attempt]}})))
 
 (re-frame/reg-event-fx
   ::update-dataset-item-success
@@ -255,7 +258,21 @@
     (let [prepared-data (assoc data :dataset-id dataset-id)]
       {:db         (assoc-in db [:dataset-items id] prepared-data)
        :dispatch-n (list [:complete-request :update-dataset-item]
-                         [::update-course-dataset-item-data id data])})))
+                         [::update-course-dataset-item-data id data]
+                         [::translator-form.concepts/reset-concept-patch id])})))
+
+(re-frame/reg-event-fx
+  ::update-dataset-item-error
+  (fn [{:keys [db]} [_ id data-patch dataset-id attempt {:keys [status response] :as result}]]
+    (js/console.log "error" result "data-patch" data-patch)
+    (let [attempts-left (< attempt 5)
+          conflict (= 409 status)]
+      (if (and attempts-left conflict)
+        (let [data (-> response :data)
+              prepared-data (assoc data :dataset-id dataset-id)]
+          {:db         (assoc-in db [:dataset-items id] prepared-data)
+           :dispatch-n (list [::update-dataset-item id data-patch (inc attempt)])})
+        {:dispatch [:api-request-error :update-dataset-item]}))))
 
 (re-frame/reg-event-fx
   ::update-course-dataset-item-data

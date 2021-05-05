@@ -54,8 +54,14 @@ SELECT * from dataset_items;
 -- :name update-dataset-item! :! :n
 -- :doc updates an existing dataset item record
 UPDATE dataset_items
-SET data = :data, name = :name
+SET data = :data, name = :name, version = version + 1
 WHERE id = :id
+
+-- :name update-dataset-item-with-version! :! :n
+-- :doc updates an existing dataset item record with version check
+UPDATE dataset_items
+SET data = :data, name = :name, version = version + 1
+WHERE id = :id AND version = :version
 
 -- :name delete-dataset-item! :! :n
 -- :doc deletes a dataset item record given the id

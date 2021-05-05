@@ -161,7 +161,7 @@
                        :data        new-scene-data
                        :owner_id    owner-id
                        :created_at  created-at
-                       :descritpion "Update"}))
+                       :description "Update"}))
     [true {:id          scene-id
            :name        scene-name
            :course-slug course-slug
