@@ -36,6 +36,10 @@
   (let [course (db/get-course {:slug course-slug})]
     (collaborator? user-id course)))
 
+(defn licensed?
+  [course-id scene-name]
+  (:licensed (db/get-scene {:course_id course-id :name scene-name})))
+
 (defn collaborator-by-course-id?
   [user-id course-id]
   (let [course (db/get-course-by-id {:id course-id})]
@@ -64,6 +68,17 @@
 (defn get-course-info
   [course-slug]
   (db/get-course {:slug course-slug}))
+
+(defn has-license-collaborator-access
+  [course-slug scene-name user-id]
+  (let [{course-id :id} (get-course-info course-slug)]
+    (or (not (licensed? course-id scene-name))
+        (collaborator-by-course-slug? user-id course-slug))))
+
+(defn has-license-api-access
+  [course-slug scene-name user-id]
+  (let [{course-id :id} (get-course-info course-slug)]
+    (or (not (licensed? course-id scene-name)) user-id)))
 
 (defn save-course-info!
   [id {:keys [name slug lang image-src]}]

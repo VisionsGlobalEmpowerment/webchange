@@ -186,11 +186,11 @@
     (-> (core/get-on-review-courses type status)
         handle)))
 
-(s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
-                     :url s/Str :lang (s/maybe s/Str)
-                     (s/optional-key :level) s/Str
+(s/defschema Course {:id                       s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
+                     :url                      s/Str :lang (s/maybe s/Str)
+                     (s/optional-key :level)   s/Str
                      (s/optional-key :subject) s/Str
-                     (s/optional-key :status) s/Str})
+                     (s/optional-key :status)  s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int (s/optional-key :type) s/Str (s/optional-key :image-src) s/Str})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
@@ -206,7 +206,7 @@
 (s/defschema Skill {:id s/Int :name s/Str :abbr s/Str :grade s/Str :topic s/Keyword :tags [s/Str]})
 (s/defschema Skills {:levels {s/Keyword s/Str} :subjects {s/Keyword s/Str} :skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
 
-(s/defschema ActivityWithSkills {:id s/Int :name s/Str :course-id s/Int :is-placeholder s/Bool :skills [Skill]})
+(s/defschema ActivityWithSkills {:id s/Int :name s/Str :course-id s/Int :is-placeholder s/Bool :licensed s/Bool :skills [Skill]})
 (s/defschema ReviewResult {:status s/Str (s/optional-key :comment) s/Str})
 
 (defn character-skins []
@@ -350,6 +350,13 @@
       (throw-unauthorized {:role :educator})))
   (resource-response "index.html" {:root "public"}))
 
+(defn licensed-public-route
+  [{{course-slug :course-id name :scene-id} :route-params :as request}]
+  (let [user-id (current-user request)]
+    (when-not (core/has-license-collaborator-access course-slug name user-id)
+      (throw-unauthorized {:role :educator})))
+  (resource-response "index.html" {:root "public"}))
+
 (defroutes course-pages-routes
   (GET "/courses/:course-slug/editor" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2" request (collaborator-route request))
@@ -365,8 +372,11 @@
   (GET "/api/courses/:course-slug" [course-slug] (-> course-slug core/get-course-data response))
 
   ;; Scenes
-  (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name]
-    (-> (core/get-scene-data course-slug scene-name) response))
+  (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
+    (let [user-id (current-user request)]
+      (when-not (core/has-license-api-access course-slug scene-name user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/get-scene-data course-slug scene-name) response)))
   (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
     (handle-save-scene course-slug scene-name request))
   (PUT "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
