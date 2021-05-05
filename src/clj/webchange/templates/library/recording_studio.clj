@@ -8,10 +8,12 @@
         :tags           ["Direct Instruction - Animated Instructor"]
         :description    "Users move a character around a race track filled with answer images.  Before time runs out, users must steer the character to as many correct answer options as possible while avoiding incorrect answer images."
         :lesson-sets    ["concepts-recording"]
-        :preview        "/images/templates/previews/recording_studio.png"
-        :preview-anim   ["/images/templates/previews/recording_studio_1.png"
-                         "/images/templates/previews/recording_studio_2.png"]
-        :props          {:game-changer? true}
+        :props          {:game-changer?    true
+                         :preview          "/images/templates/previews/recording_studio.png"
+                         :preview-anim     ["/images/templates/previews/recording_studio_1.png"
+                                            "/images/templates/previews/recording_studio_2.png"]
+                         :preview-activity {:course-slug   "q-q-uiwvlghm"
+                                            :activity-slug "q"}}
         :options        {:demo-image {:type        "image"
                                       :label       "Prompt Image"
                                       :description "What visual prompt do you want to show on the screen?"}}

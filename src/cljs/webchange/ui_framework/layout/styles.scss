@@ -30,6 +30,10 @@ $content-padding: 24px;
         }
 
         & > .content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+
             flex-grow: 1;
             padding: $content-padding;
         }

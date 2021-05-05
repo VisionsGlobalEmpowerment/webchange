@@ -10,15 +10,17 @@
                        :name                            s/Str
                        :description                     s/Str
                        :tags                            [s/Str]
-                       (s/optional-key :preview)        s/Str
-                       (s/optional-key :preview-anim)   [s/Str]
                        (s/optional-key :actions)        (s/maybe s/Any)
                        (s/optional-key :options)        (s/maybe s/Any)
                        (s/optional-key :options-groups) [{:title   s/Str
                                                           :options [s/Str]}]
                        (s/optional-key :fields)         (s/maybe s/Any)
                        (s/optional-key :lesson-sets)    (s/maybe s/Any)
-                       (s/optional-key :props)          {:game-changer? (s/maybe s/Bool)}
+                       (s/optional-key :props)          {(s/optional-key :game-changer?)    s/Bool ;; should be used in '/game-changer-beta' or not
+                                                         (s/optional-key :preview)          s/Str ;; preview image
+                                                         (s/optional-key :preview-anim)     [s/Str] ;; preview slides (image urls) collection
+                                                         (s/optional-key :preview-activity) {:course-slug   s/Str ;; sandbox data for activity preview
+                                                                                             :activity-slug s/Str}}
                        (s/optional-key :version)        (s/maybe s/Int)})
 
 (defroutes templates-api-routes
