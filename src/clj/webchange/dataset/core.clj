@@ -40,6 +40,17 @@
     (db/update-dataset! prepared-data)
     [true {:id dataset-id}]))
 
+(defn update-dataset-with-version!
+  [dataset-id data]
+  (let [prepared-data (-> data
+                          (assoc :id dataset-id)
+                          (update-in [:scheme :fields] #(sort-by :name %)))
+        result (db/update-dataset-with-version! prepared-data)
+        latest-version (db/get-dataset {:id dataset-id})]
+    (if (< 0 result)
+      [true latest-version]
+      [false latest-version])))
+
 (defn get-dataset-items
   [dataset-id]
   (let [items (db/get-dataset-items {:dataset_id dataset-id})]

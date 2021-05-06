@@ -5,6 +5,7 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
     [webchange.editor-v2.concepts.subs :as concepts-subs]
+    [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]))
 
@@ -178,69 +179,43 @@
 
 (re-frame/reg-event-fx
   ::edit-dataset
-  (fn [{:keys [db]} [_ dataset-id {:keys [fields]}]]
-    {:db         (assoc-in db [:loading :edit-dataset] true)
-     :http-xhrio {:method          :put
-                  :uri             (str "/api/datasets/" dataset-id)
-                  :params          {:scheme {:fields fields}}
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::edit-dataset-success]
-                  :on-failure      [:api-request-error :edit-dataset]}}))
+  (fn [{:keys [db]} [_ dataset-id data attempt]]
+    (let [{version :version {fields :fields} :scheme} (editor-subs/dataset-concept db)
+          fields (->> fields
+                      (concat (:add data))
+                      (remove (fn [field] (some #{field} (:remove data)))))
+          attempt (or attempt 0)]
+      {:db         (assoc-in db [:loading :edit-dataset] true)
+       :http-xhrio {:method          :put
+                    :uri             (str "/api/datasets/" dataset-id)
+                    :params          {:scheme {:fields fields} :version version}
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::edit-dataset-success]
+                    :on-failure      [::edit-dataset-error dataset-id data attempt]}})))
 
 (re-frame/reg-event-fx
   ::edit-dataset-success
-  (fn [_ _]
-    {:dispatch-n (list [:complete-request :edit-dataset]
-                       [::load-datasets])}))
+  (fn [{:keys [db]} [_ response]]
+    {:db (assoc-in db [:editor :course-datasets] [response])
+     :dispatch-n (list [:complete-request :edit-dataset]
+                       [::load-datasets]
+                       [::translator-form.concepts/reset-current-dataset response])}))
 
 (re-frame/reg-event-fx
-  ::load-current-dataset-items
-  (fn [{:keys [db]} _]
-    (let [dataset-id (get-in db [:editor :current-dataset-id])]
-      {:db         (-> db
-                       (assoc-in [:loading :dataset-items] true))
-       :http-xhrio {:method          :get
-                    :uri             (str "/api/datasets/" dataset-id "/items")
-                    :format          (json-request-format)
-                    :response-format (json-response-format {:keywords? true})
-                    :on-success      [::load-current-dataset-items-success]
-                    :on-failure      [:api-request-error :dataset-items]}})))
-
-(re-frame/reg-event-fx
-  ::load-current-dataset-items-success
-  (fn [{:keys [db]} [_ result]]
-    {:db         (assoc-in db [:editor :current-dataset-items] (:items result))
-     :dispatch-n (list [:complete-request :dataset-items])}))
-
-(re-frame/reg-event-fx
-  ::show-add-dataset-item-form
-  (fn [_ _]
-    {:dispatch [::set-main-content :add-dataset-item-form]}))
-
-(re-frame/reg-event-fx
-  ::edit-dataset-item
-  (fn [{:keys [db]} [_ item-id {:keys [data name]}]]
-    {:db         (assoc-in db [:loading :edit-dataset-item] true)
-     :http-xhrio {:method          :put
-                  :uri             (str "/api/dataset-items/" item-id)
-                  :params          {:data data :name name}
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::edit-dataset-item-success]
-                  :on-failure      [:api-request-error :edit-dataset-item]}}))
-
-(re-frame/reg-event-fx
-  ::edit-dataset-item-success
-  (fn [_ _]
-    {:dispatch-n (list [:complete-request :edit-dataset-item]
-                       [::load-current-dataset-items]
-                       [::set-main-content :dataset-info])}))
+  ::edit-dataset-error
+  (fn [{:keys [db]} [_ id data attempt {:keys [status response] :as result}]]
+    (let [attempts-left (< attempt 5)
+          conflict (= 409 status)]
+      (if (and attempts-left conflict)
+        {:db       (assoc-in db [:editor :course-datasets] [response])
+         :dispatch [::edit-dataset id data (inc attempt)]}
+        {:dispatch [:api-request-error :edit-dataset]}))))
 
 (re-frame/reg-event-fx
   ::update-dataset-item
   (fn [{:keys [db]} [_ id data-patch attempt]]
-    (let [{:keys [name data dataset-id version]} (get-in db [:dataset-items id])
+    (let [{:keys [name data version]} (get-in db [:dataset-items id])
           new-data (merge data data-patch)
           attempt (or attempt 0)]
       {:db         (assoc-in db [:loading :update-dataset-item] true)
@@ -249,29 +224,25 @@
                     :params          {:data new-data :name name :version version}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
-                    :on-success      [::update-dataset-item-success dataset-id]
-                    :on-failure      [::update-dataset-item-error id data-patch dataset-id attempt]}})))
+                    :on-success      [::update-dataset-item-success]
+                    :on-failure      [::update-dataset-item-error id data-patch attempt]}})))
 
 (re-frame/reg-event-fx
   ::update-dataset-item-success
-  (fn [{:keys [db]} [_ dataset-id {:keys [id data]}]]
-    (let [prepared-data (assoc data :dataset-id dataset-id)]
-      {:db         (assoc-in db [:dataset-items id] prepared-data)
-       :dispatch-n (list [:complete-request :update-dataset-item]
-                         [::update-course-dataset-item-data id data]
-                         [::translator-form.concepts/reset-concept-patch id])})))
+  (fn [{:keys [db]} [_ {:keys [id data] :as response}]]
+    {:db         (assoc-in db [:dataset-items id] response)
+     :dispatch-n (list [:complete-request :update-dataset-item]
+                       [::update-course-dataset-item-data id data]
+                       [::translator-form.concepts/reset-concept id response])}))
 
 (re-frame/reg-event-fx
   ::update-dataset-item-error
-  (fn [{:keys [db]} [_ id data-patch dataset-id attempt {:keys [status response] :as result}]]
-    (js/console.log "error" result "data-patch" data-patch)
+  (fn [{:keys [db]} [_ id data-patch attempt {:keys [status response] :as result}]]
     (let [attempts-left (< attempt 5)
           conflict (= 409 status)]
       (if (and attempts-left conflict)
-        (let [data (-> response :data)
-              prepared-data (assoc data :dataset-id dataset-id)]
-          {:db         (assoc-in db [:dataset-items id] prepared-data)
-           :dispatch-n (list [::update-dataset-item id data-patch (inc attempt)])})
+        {:db         (assoc-in db [:dataset-items id] response)
+         :dispatch-n (list [::update-dataset-item id data-patch (inc attempt)])}
         {:dispatch [:api-request-error :update-dataset-item]}))))
 
 (re-frame/reg-event-fx

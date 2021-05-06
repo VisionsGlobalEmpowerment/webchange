@@ -5,8 +5,14 @@ INSERT INTO datasets (course_id, name, scheme) VALUES (:course_id, :name, :schem
 -- :name update-dataset! :! :n
 -- :doc update an existing dataset record
 UPDATE datasets
-SET scheme = :scheme
+SET scheme = :scheme, version = version + 1
 WHERE id = :id
+
+-- :name update-dataset-with-version! :! :n
+-- :doc update an existing dataset record with version check
+UPDATE datasets
+SET scheme = :scheme, version = version + 1
+WHERE id = :id AND version = :version
 
 -- :name get-dataset :? :1
 -- :doc retrieve dataset by id

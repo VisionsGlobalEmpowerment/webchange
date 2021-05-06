@@ -156,7 +156,7 @@
                     (merge defaults)
                     (transform-keys ->snake_case_keyword))
           [{id :id}] (db/create-dataset! data)]
-      (assoc data :id id))))
+      (assoc data :id id :version 1))))
 
 (defn dataset-item-created
   ([]

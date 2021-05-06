@@ -32,12 +32,15 @@
     (is (= (:scheme data) (:scheme retrieved-dataset)))))
 
 (deftest dataset-can-be-updated
-  (let [{dataset-id :id :as dataset} (f/dataset-created)
+  (let [{dataset-id :id version :version :as dataset} (f/dataset-created)
         updated-scheme {:fields [{:name "src" :type "string"}
                                  {:name "width" :type "number"}]}
-        _ (f/update-dataset! dataset-id {:scheme updated-scheme})
+        _ (f/update-dataset! dataset-id {:scheme updated-scheme :version version})
         retrieved-dataset (-> dataset-id f/get-dataset :body slurp (json/read-str :key-fn keyword) :dataset)]
-    (is (= updated-scheme (:scheme retrieved-dataset)))))
+    (is (= updated-scheme (:scheme retrieved-dataset)))
+    (testing "Dataset can not be updated with stale version"
+      (let [response (f/update-dataset! dataset-id {:scheme updated-scheme :version version})]
+        (is (= 409 (:status response)))))))
 
 (deftest item-can-be-retrieved
   (let [item (f/dataset-item-created)

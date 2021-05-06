@@ -20,9 +20,13 @@
 (defn handle-update-dataset
   [dataset-id request]
   (let [owner-id (current-user request)
-        data (-> request :body)]
-    (-> (core/update-dataset! (Integer/parseInt dataset-id) data)
-        handle)))
+        data (-> request :body)
+        [ok? data] (core/update-dataset-with-version! (Integer/parseInt dataset-id) data)]
+    (if ok?
+      (response data)
+      (-> data
+          response
+          (status 409)))))
 
 (defn handle-create-dataset-item
   [request]

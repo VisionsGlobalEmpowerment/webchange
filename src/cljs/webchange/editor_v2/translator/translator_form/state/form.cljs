@@ -40,7 +40,8 @@
     (let [concepts (translator-form.concepts/concepts-patch-data db)
           edited-concepts-ids (translator-form.concepts/edited-concepts db)
           edited-concepts (select-keys concepts edited-concepts-ids)
-          current-dataset-concept (translator-form.concepts/current-dataset-concept db)
+          current-dataset (translator-form.concepts/current-dataset-concept db)
+          current-dataset-patch-data (translator-form.concepts/current-dataset-concept-patch-data db)
           scene-id (translator-form.scene/scene-id db)
           actions (translator-form.scene/actions-data db)
           assets (translator-form.scene/assets-data db)
@@ -54,7 +55,7 @@
                                               [::editor/reset-scene-metadata scene-id metadata]
                                               [::editor/save-current-scene scene-id]
                                               (when (not-empty edited-concepts-ids)
-                                                [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])]))))
+                                                [::editor/edit-dataset (:id current-dataset) current-dataset-patch-data ]))))
        :reset-before-leave true})))
 
 (re-frame/reg-event-fx
