@@ -14,31 +14,34 @@
     [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
     [clojure.tools.logging :as log]))
 
-(def book-options [{:key     :cover-layout
-                    :label   "Cover layout"
-                    :type    "lookup-image"
-                    :options [{:name  "Title at top"
-                               :value :title-top
-                               :src   "/images/templates/cover_layout/title_at_top.svg"}
-                              {:name  "Title at bottom"
-                               :value :title-bottom
-                               :src   "/images/templates/cover_layout/title_at_bottom.svg"}]}
-                   {:key   :cover-title
-                    :label "Title"
+(def book-options [{:key         :cover-layout
+                    :label       "Cover layout"
+                    :type        "lookup-image"
+                    :description "Cover layout"
+                    :options     [{:name  "Title at top"
+                                   :value :title-top
+                                   :src   "/images/templates/cover_layout/title_at_top.svg"}
+                                  {:name  "Title at bottom"
+                                   :value :title-bottom
+                                   :src   "/images/templates/cover_layout/title_at_bottom.svg"}]}
+                   {:key         :cover-title
+                    :label       "Title"
                     :placeholder "Type title here"
-                    :type  "string"}
-                   {:key   :cover-image
-                    :label "Cover image"
-                    :type  "image"}
+                    :description "Cover title"
+                    :type        "string"}
+                   {:key         :cover-image
+                    :label       "Cover image"
+                    :description "Cover image"
+                    :type        "image"}
                    {:key   :authors
                     :label "Authors"
                     :type  "strings-list"
                     :max   3}
-                   {:key   :illustrators
-                    :label "Illustrators"
-                    :type  "strings-list"
+                   {:key       :illustrators
+                    :label     "Illustrators"
+                    :type      "strings-list"
                     :optional? true
-                    :max   3}])
+                    :max       3}])
 
 (def page-options [{:key     :type
                     :type    "lookup"

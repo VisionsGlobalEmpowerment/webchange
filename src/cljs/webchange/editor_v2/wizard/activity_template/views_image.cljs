@@ -67,7 +67,7 @@
                {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
     [:div.image-option
      (when (some? description)
-       [label {:class-name "file-label"} description])
+       [label {:class-name "field-label"} description])
      [file {:type           "image"
             :on-change      #(swap! page-data assoc :src %)
             :upload-options (:options option)}]

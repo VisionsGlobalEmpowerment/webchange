@@ -1,5 +1,7 @@
-@import "create_activity/styles";
-@import "templates_list/styles";
+@import "steps/create_activity/styles";
+@import "steps/fill_template/styles";
+@import "steps/select_template/styles";
+@import "steps/select_character/styles";
 
 .game-changer-form {
     display: grid;

@@ -1,28 +1,19 @@
 (ns webchange.game-changer.views
   (:require
-    [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.ui-framework.components.index :refer [button message timeline]]
     [webchange.ui-framework.layout.views :refer [layout]]
     [webchange.game-changer.views-layout :as game-changer]
-    [webchange.game-changer.template-options.update-timeline :refer [update-timeline]]
-    [webchange.game-changer.create-activity.state :as state-create-activity]
-    [webchange.game-changer.create-activity.views :refer [create-activity]]
-    [webchange.game-changer.templates-list.views :refer [templates-list]]))
 
-(declare game-changer-steps)
-(def game-changer-steps [{:title          "Choose from a variety of activities..."
-                          :timeline-label "Choose Activity"
-                          :component      templates-list
-                          :next-enabled?  (fn [{:keys [data]}] (some? (get-in data [:template :id])))
-                          :handle-next    (fn [{:keys [data steps callback]}]
-                                            (reset! steps (update-timeline game-changer-steps @data))
-                                            (callback))}
-                         {:title          "Name New Activity"
-                          :timeline-label "Name Activity"
-                          :component      create-activity}
-                         {:title                 "Add Content"
-                          :replace-with-options? true}])
+    [webchange.game-changer.steps.create-activity.index :as create-activity]
+    [webchange.game-changer.steps.fill-template.index :as fill-template]
+    [webchange.game-changer.steps.select-character.index :as select-character]
+    [webchange.game-changer.steps.select-template.index :as select-template]))
+
+(def game-changer-steps [select-template/data
+                         select-character/data
+                         create-activity/data
+                         fill-template/data])
 
 (defn- not-defined-component
   []
@@ -30,23 +21,37 @@
             :message "Component not defined"}])
 
 (defn- get-timeline-items
-  [step-idx steps]
+  [step-idx steps data]
   (->> steps
        (map-indexed vector)
-       (map (fn [[idx {:keys [title timeline-label]}]]
+       (map (fn [[idx {:keys [title timeline-label available?]
+                       :or   {available? (constantly true)}}]]
               {:title      (or timeline-label title)
                :active?    (= idx step-idx)
-               :completed? (< idx step-idx)}))))
+               :completed? (< idx step-idx)
+               :disabled?  (not (available? {:data data}))}))))
 
 (defn- get-current-step-data
   [data step-idx steps]
   (let [step-data (nth steps step-idx)
-        next-enabled-handler (get step-data :next-enabled? (fn [] true))]
+        next-enabled-handler (get step-data :passed? (constantly true))
+        timeline (get-timeline-items step-idx steps data)]
     {:title         (get step-data :title "")
-     :timeline      (get-timeline-items step-idx steps)
+     :timeline      timeline
      :component     (get step-data :component not-defined-component)
      :handle-next   (get step-data :handle-next)
-     :next-enabled? (next-enabled-handler {:data data})}))
+     :next-enabled? (next-enabled-handler {:data data})
+     :next-step-idx (->> (map-indexed vector timeline)
+                         (some (fn [[index {:keys [disabled?]}]]
+                                 (and (> index step-idx)
+                                      (not disabled?)
+                                      index))))
+     :prev-step-idx (->> (map-indexed vector timeline)
+                         (reverse)
+                         (some (fn [[index {:keys [disabled?]}]]
+                                 (and (< index step-idx)
+                                      (not disabled?)
+                                      index))))}))
 
 (defn- form
   []
@@ -54,33 +59,28 @@
                current-data (r/atom {})
                steps (r/atom game-changer-steps)
 
-               handle-prev-step (fn [] (swap! current-step dec))
-               handle-next-step (fn [handle-next]
+               handle-prev-step (fn [step-idx] (reset! current-step step-idx))
+               handle-next-step (fn [next-idx handle-next]
                                   (if (fn? handle-next)
                                     (handle-next {:data     current-data
-                                                  :steps    steps
-                                                  :callback #(swap! current-step inc)})
-                                    (swap! current-step inc)))
-               handle-finish (fn [data]
-                               (re-frame/dispatch [::state-create-activity/create-activity data]))]
+                                                  :callback #(reset! current-step next-idx)})
+                                    (reset! current-step next-idx)))]
+
     (let [current-step-data (get-current-step-data @current-data @current-step @steps)
-          {:keys [component title timeline handle-next next-enabled?]} current-step-data
+          {:keys [component title timeline handle-next next-enabled? next-step-idx prev-step-idx]} current-step-data
 
           first-step? (= @current-step 0)
           last-step? (= @current-step (dec (count timeline)))
 
-          actions (cond-> []
-                          (not first-step?) (conj {:id      :prev-step
-                                                   :text    "Previous"
-                                                   :handler handle-prev-step
-                                                   :props   {:variant "outlined"}})
-                          (not last-step?) (conj {:id      :next-step
-                                                  :text    "Next"
-                                                  :props   {:disabled? (not next-enabled?)}
-                                                  :handler #(handle-next-step handle-next)})
-                          last-step? (conj {:id      :finish
-                                            :text    "Finish"
-                                            :handler #(handle-finish current-data)}))]
+          actions (cond->> [{:id      :next-step
+                             :text    (if last-step? "Finish" "Next")
+                             :props   {:disabled? (not next-enabled?)}
+                             :handler #(handle-next-step next-step-idx handle-next)}]
+                           (not first-step?) (concat [{:id      :prev-step
+                                                       :text    "Previous"
+                                                       :handler #(handle-prev-step prev-step-idx)
+                                                       :props   {:variant "outlined"}}]))]
+
       [game-changer/layout {:title          title
                             :timeline-items timeline
                             :actions        actions}

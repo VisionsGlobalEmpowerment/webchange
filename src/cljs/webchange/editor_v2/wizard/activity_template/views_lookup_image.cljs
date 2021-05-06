@@ -2,7 +2,8 @@
   (:require
     [reagent.core :as r]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.ui-framework.components.index :refer [label]]))
 
 (def lookup-validation-map {:root [(fn [value] (when-not (some? value) "Required field"))]})
 
@@ -30,8 +31,11 @@
                handle-option-click (fn [value]
                                      (reset! lookup-image-data value)
                                      (reset! current-value value))]
-    [:div
-     [image-options-list {:options       (:options option)
-                          :current-value @lookup-image-data
-                          :on-click      handle-option-click}]
-     [error-message {:field-name :root}]]))
+    (let [{:keys [description]} option]
+      [:div
+       (when (some? description)
+         [label {:class-name "field-label"} description])
+       [image-options-list {:options       (:options option)
+                            :current-value @lookup-image-data
+                            :on-click      handle-option-click}]
+       [error-message {:field-name :root}]])))

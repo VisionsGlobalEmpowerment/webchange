@@ -14,11 +14,12 @@
                        :type "string"}
                       {:name "letter"
                        :type "string"}]
-        :options     {:time {:label   "Time in seconds"
-                             :type    "lookup"
-                             :options [{:name "30" :value 30}
-                                       {:name "45" :value 45}
-                                       {:name "60" :value 60}]}}})
+        :options     {:time {:label       "Time in seconds"
+                             :type        "lookup"
+                             :description "Time in seconds"
+                             :options     [{:name "30" :value 30}
+                                           {:name "45" :value 45}
+                                           {:name "60" :value 60}]}}})
 
 (def t {:assets        [{:url "/raw/img/running-with-letters/bg_01.jpg" :type "image"}
                         {:url "/raw/img/running-with-letters/box.png" :type "image"}]

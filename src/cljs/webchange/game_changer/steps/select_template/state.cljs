@@ -1,4 +1,4 @@
-(ns webchange.game-changer.templates-list.state
+(ns webchange.game-changer.steps.select_template.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.state.state-templates :as state-templates]))

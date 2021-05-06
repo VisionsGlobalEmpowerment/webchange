@@ -1,4 +1,4 @@
-(ns webchange.game-changer.templates-list.views-preview
+(ns webchange.game-changer.steps.select_template.views-preview
   (:require
     [reagent.core :as r]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
