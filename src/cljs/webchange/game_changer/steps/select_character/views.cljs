@@ -4,21 +4,9 @@
     [webchange.characters.library :refer [characters]]
     [webchange.editor-v2.wizard.validator :refer [connect-data]]
     [webchange.game-changer.steps.fill-template.template-options :refer [data->character-option]]
+    [webchange.game-changer.steps.select-character.views-available-list :refer [available-characters-list]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.utils.list :refer [remove-at-position remove-by-predicate]]))
-
-(defn- characters-list-item
-  [{:keys [name on-click preview selected?] :as item}]
-  (let [handle-click #(on-click item)]
-    [:div.character-item-placeholder
-     [:div {:class-name (get-class-name {"character-item-card" true
-                                         "selected"            selected?})
-            :on-click   handle-click}
-      (if (some? preview)
-        [:img {:src        preview
-               :class-name "preview"}]
-        [:div.placeholder])
-      [:div.title name]]]))
 
 (defn- add-character
   [list name skeleton]
@@ -49,14 +37,4 @@
                                      (add-character characters-data name value)
                                      (remove-character characters-data value)))]
     [:div
-     [:div.characters-list
-      (-> (for [[key data] characters]
-            ^{:key key}
-            [characters-list-item (merge data
-                                         {:value     key
-                                          :selected? (some (fn [{:keys [skeleton]}] (= skeleton key)) @characters-data)
-                                          :on-click  handle-item-click})])
-          (doall))]
-     (when (> (count characters) max-count)
-       [:div.max-count-message
-        "Max characters number: " max-count])]))
+     [available-characters-list]]))
