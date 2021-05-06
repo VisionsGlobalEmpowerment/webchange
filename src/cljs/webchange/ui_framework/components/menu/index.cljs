@@ -25,11 +25,28 @@
                                 :on-cancel  close-menu}
    [menu-item (dissoc props :on-click)]])
 
+(defn- get-bounding-rect
+  [el]
+  (let [bounding-rect (.getBoundingClientRect el)]
+    {:x      (.-x bounding-rect)
+     :y      (.-y bounding-rect)
+     :width  (.-width bounding-rect)
+     :height (.-height bounding-rect)}))
+
+(defn- get-menu-position
+  [menu-button]
+  (let [{:keys [x y height]} (get-bounding-rect menu-button)]
+    {:top  (+ y height)
+     :left x}))
+
 (defn component
   [{:keys [items]}]
   (r/with-let [show-menu? (r/atom false)
                menu-ref (r/atom nil)
+               menu-position (r/atom {:top  0
+                                      :left 0})
 
+               menu-button-ref (atom nil)
                close-menu-ref (atom nil)
 
                handle-document-click #(when-not (.contains @menu-ref (.-target %)) (@close-menu-ref))
@@ -39,6 +56,7 @@
                close-menu #(do (reset! show-menu? false)
                                (reset-document-click-handler))
                show-menu #(do (reset! show-menu? true)
+                              (reset! menu-position (get-menu-position @menu-button-ref))
                               (set-document-click-handler))
                _ (reset! close-menu-ref close-menu)
 
@@ -47,9 +65,12 @@
                                            (show-menu))]
     [:div.wc-menu {:ref #(when (some? %) (reset! menu-ref %))}
      [icon-button-component/component {:icon     "menu"
-                                       :on-click handle-menu-button-click}]
+                                       :on-click handle-menu-button-click
+                                       :ref      (fn [el]
+                                                   (reset! menu-button-ref el))}]
      (when @show-menu?
-       [:div.wc-menu-list
+       [:div.wc-menu-list {:style {:top  (:top @menu-position)
+                                   :left (:left @menu-position)}}
         (for [[idx {:keys [confirm] :as item}] (map-indexed vector items)]
           (let [component (if (some? confirm) confirmed-menu-item menu-item)
                 props (merge item {:close-menu close-menu})]
