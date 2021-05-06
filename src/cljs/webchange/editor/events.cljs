@@ -134,7 +134,6 @@
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::save-scene-success]
-
                   :on-failure      [:api-request-error :save-scene]}}))
 
 (re-frame/reg-event-fx
