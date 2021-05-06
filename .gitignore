@@ -23,3 +23,5 @@ Procfile
 profiles.clj
 package-lock.json
 *libvosk_jni.so
+/test/clj/webchange/resources/raw/clipart-thumbs/**
+!/test/clj/webchange/resources/raw/clipart-thumbs/.gitkeep

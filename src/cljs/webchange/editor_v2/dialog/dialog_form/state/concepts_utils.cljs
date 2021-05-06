@@ -16,7 +16,11 @@
 
 (defn- extract-concept-vars
   [actions]
-  (map keyword (filter #(not-empty %) (flatten (map (fn [[name action]] (process-action action)) actions)))))
+  (->> actions
+       (map (fn [[_name action]] (process-action action)))
+       (flatten)
+       (filter #(not-empty %))
+       (map keyword)))
 
 (defn get-scene-action-vars
   ([db]

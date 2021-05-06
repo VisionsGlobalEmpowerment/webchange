@@ -37,24 +37,25 @@
 (re-frame/reg-event-fx
   ::save-changes
   (fn [{:keys [db]} [_]]
-    (let [concepts (translator-form.concepts/concepts-data db)
+    (let [concepts (translator-form.concepts/concepts-patch-data db)
           edited-concepts-ids (translator-form.concepts/edited-concepts db)
           edited-concepts (select-keys concepts edited-concepts-ids)
-          current-dataset-concept (translator-form.concepts/current-dataset-concept db)
+          current-dataset (translator-form.concepts/current-dataset-concept db)
+          current-dataset-patch-data (translator-form.concepts/current-dataset-concept-patch-data db)
           scene-id (translator-form.scene/scene-id db)
           actions (translator-form.scene/actions-data db)
           assets (translator-form.scene/assets-data db)
           objects (translator-form.scene/objects-data db)
           metadata (translator-form.scene/metadata-data db)]
       {:dispatch-n         (->> edited-concepts
-                                (map (fn [[id {:keys [data]}]] [::editor/update-dataset-item id data]))
+                                (map (fn [[id data]] [::editor/update-dataset-item id data]))
                                 (concat (list [::editor/reset-scene-actions scene-id actions]
                                               [::editor/reset-scene-assets scene-id assets]
                                               [::editor/reset-scene-objects scene-id objects]
                                               [::editor/reset-scene-metadata scene-id metadata]
                                               [::editor/save-current-scene scene-id]
                                               (when (not-empty edited-concepts-ids)
-                                                [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])]))))
+                                                [::editor/edit-dataset (:id current-dataset) current-dataset-patch-data ]))))
        :reset-before-leave true})))
 
 (re-frame/reg-event-fx

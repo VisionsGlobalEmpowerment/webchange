@@ -1,7 +1,7 @@
 (ns webchange.dataset.handler
   (:require [compojure.api.sweet :refer [api context GET POST PUT DELETE PATCH defroutes routes swagger-routes]]
             [compojure.route :refer [resources not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
+            [ring.util.response :refer [resource-response response redirect status]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
             [webchange.common.handler :refer [handle current-user]]
@@ -20,9 +20,13 @@
 (defn handle-update-dataset
   [dataset-id request]
   (let [owner-id (current-user request)
-        data (-> request :body)]
-    (-> (core/update-dataset! (Integer/parseInt dataset-id) data)
-        handle)))
+        data (-> request :body)
+        [ok? data] (core/update-dataset-with-version! (Integer/parseInt dataset-id) data)]
+    (if ok?
+      (response data)
+      (-> data
+          response
+          (status 409)))))
 
 (defn handle-create-dataset-item
   [request]
@@ -34,9 +38,13 @@
 (defn handle-update-dataset-item
   [id request]
   (let [owner-id (current-user request)
-        data (-> request :body)]
-    (-> (core/update-dataset-item! (Integer/parseInt id) data)
-        handle)))
+        data (-> request :body)
+        [ok? data] (core/update-dataset-item-with-version! (Integer/parseInt id) data)]
+    (if ok?
+      (response data)
+      (-> data
+          response
+          (status 409)))))
 
 (defn handle-patch-dataset-item
   [id request]

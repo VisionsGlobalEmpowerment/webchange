@@ -6,8 +6,8 @@
 
 (def m {:id          39
         :name        "Letter intro"
-        :tags        ["listening comprehension" "rhyming"]
-        :description "Slide riddle (no concept)"
+        :tags        ["listening comprehension"]
+        :description "letter introduction"
         :lesson-sets ["concepts-single"]
         :fields      [{:name "image-src",
                        :type "image"}]
@@ -56,7 +56,8 @@
                                                :stop-glow {:permanent-pulsation false}
                                                :visible   {:visible true}
                                                :hidden    {:visible false}},
-                                 :text        ""},
+                                 :text        ""
+                                 :transition "letter-big"},
                     :letter-small
                                 {:type        "text",
                                  :x           885,
@@ -71,7 +72,8 @@
                                                :stop-glow {:permanent-pulsation false}
                                                :visible   {:visible true}
                                                :hidden    {:visible false}},
-                                 :text        ""},
+                                 :text        ""
+                                 :transition "letter-small"},
                     :letter-path
                                 {:type         "animated-svg-path",
                                  :x            875,
@@ -81,12 +83,11 @@
                                  :scene-name   "letter-path",
                                  :animation    "stop",
                                  :duration     5000,
-                                 :fill         "green",
                                  :line-cap     "round",
                                  :path         "",
                                  :scale-x      0.75,
                                  :scale-y      0.75,
-                                 :stroke       "green",
+                                 :stroke       "#ef545c",
                                  :stroke-width 15
                                  :visible      false
                                  :states       {:hidden  {:visible false},
@@ -113,6 +114,7 @@
                                  :height 717,
                                  :anim   "idle",
                                  :name   "senoravaca",
+                                 :scene-name "senora-vaca"
                                  :skin   "vaca",
                                  :speed  0.3,
                                  :start  true},
@@ -222,7 +224,7 @@
                     :introduce-big-small     {:type                 "sequence-data",
                                               :editor-type          "dialog",
                                               :concept-var          "current-concept",
-                                              :available-activities ["glow-big" "stop-glow-big" "glow-small" "stop-glow-small"]
+                                              :available-activities ["glow-big" "stop-glow-big" "glow-small" "stop-glow-small" "highlight-big-letter" "highlight-small-letter"]
                                               :data                 [{:type "sequence-data"
                                                                       :data [{:type "empty" :duration 0}
                                                                              {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
@@ -231,6 +233,7 @@
                     :describe-writing        {:type               "sequence-data",
                                               :editor-type        "dialog",
                                               :concept-var        "current-concept",
+                                              :available-activities ["redraw-letter"]
                                               :data               [{:type "sequence-data"
                                                                     :data [{:type "empty" :duration 0}
                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
@@ -262,6 +265,9 @@
                                                              {:type "action", :id "describe-writing"}]
                                                       }
                                                      ]}
+                    :redraw-letter {:type "sequence-data"
+                                    :data [{:type "set-attribute" :target "letter-path" :attr-name "stroke" :attr-value "#5c54ef"}
+                                           {:type "path-animation", :state "play", :target "letter-path"}]}
                     :introduce-image         {:type "sequence-data",
                                               :data [
                                                      {:id "hidden" :type "state" :target "image"}
@@ -325,6 +331,18 @@
                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                               :phrase             "Correct Response",
                                               :phrase-description "Correct Response and finish"}
+                    :highlight-small-letter {:type               "transition"
+                                             :transition-id      "letter-small"
+                                             :return-immediately true
+                                             :from               {:opacity 1},
+                                             :to                 {:opacity 0.38 :yoyo true :duration 0.5}
+                                             :kill-after         3000}
+                    :highlight-big-letter {:type               "transition"
+                                             :transition-id      "letter-big"
+                                             :return-immediately true
+                                             :from               {:opacity 1},
+                                             :to                 {:opacity 0.38 :yoyo true :duration 0.5}
+                                             :kill-after         3000}
                     },
         ;
         :triggers  {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
