@@ -26,6 +26,11 @@
                                                     :mode :short-info})}))
 
 (re-frame/reg-event-fx
+  ::hide-translation-progress
+  (fn [{:keys [db]} [_]]
+    {:db (update-in db (path-to-db [:window-state]) merge {:show? false})}))
+
+(re-frame/reg-event-fx
   ::show-translation-full-progress
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db (path-to-db [:window-state :mode]) :full-info)}))

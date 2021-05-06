@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.creation-progress.views-short-info
   (:require
+    [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
@@ -26,11 +27,19 @@
 (defn short-info
   []
   (let [{:keys [mode show?]} @(re-frame/subscribe [::state/window-state])
-        handle-click (fn [] (re-frame/dispatch [::state/show-translation-full-progress]))]
+        handle-click (fn [] (re-frame/dispatch [::state/show-translation-full-progress]))
+        handle-close-click (fn [event]
+                             (.preventDefault event)
+                             (.stopPropagation event)
+                             (re-frame/dispatch [::state/hide-translation-progress]))]
     [ui/snackbar {:open          (and show? (= mode :short-info))
                   :anchor-origin {:vertical   "bottom"
                                   :horizontal "right"}
                   :on-click      handle-click}
      [ui/snackbar-content {:style   {:background-color (get-in-theme [:palette :background :paper])
                                      :cursor           "pointer"}
-                           :message (r/as-element [bar-content])}]]))
+                           :message (r/as-element [bar-content])
+                           :action  [(r/as-element [ui/icon-button {:size     "small"
+                                                                    :style    {:padding 8}
+                                                                    :on-click handle-close-click}
+                                                    [ic/close {:style {:font-size 16}}]])]}]]))
