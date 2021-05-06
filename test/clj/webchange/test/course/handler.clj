@@ -425,3 +425,11 @@
                        (is (nil? (get-in scene-data [:actions :act-2 :data 1 :data])))
                        (is (= (get-in scene-data [:actions :act-2 :data 2 :data 0 :data]) talking-animation))
                        (is (nil? (get-in scene-data [:actions :act-2 :data 2 :data 1 :data]))))))
+
+(deftest course-can-be-archived
+  (let [{slug :slug} (f/course-created {:type "book" :status "draft" :name "Draft book" :owner-id website-user-id})
+        saved-value (-> (f/archive-course! slug website-user-id) :body slurp (json/read-str :key-fn keyword))
+        retrieved-value (->  slug f/get-course-info :body slurp (json/read-str :key-fn keyword))]
+    (is (= "archived" (:status saved-value)))
+    (is (= "archived" (:status retrieved-value)))))
+

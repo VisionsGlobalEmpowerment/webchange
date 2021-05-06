@@ -170,6 +170,15 @@
     (-> (core/publish-course! course-slug)
         handle)))
 
+(defn handle-archive-course
+  [course-slug request]
+  (let [user-id (current-user request)
+        {owner-id :owner-id course-id :id} (core/get-course-info course-slug)]
+    (when-not (and (= user-id owner-id))
+      (throw-unauthorized {:role eduction}))
+    (-> (core/archive-course! course-slug course-id)
+        handle)))
+
 (defn handle-review-course
   [course-id review-result request]
   (let [user-id (current-user request)]
@@ -188,6 +197,7 @@
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
                      :url s/Str :lang (s/maybe s/Str)
+                     (s/optional-key :updated-at) s/Str
                      (s/optional-key :level) s/Str
                      (s/optional-key :subject) s/Str
                      (s/optional-key :status) s/Str})
@@ -269,6 +279,11 @@
       :return Course
       :summary "Send request for publish on review"
       (handle-publish-course course-slug request))
+    (POST "/:course-slug/archive" request
+      :path-params [course-slug :- s/Str]
+      :return Course
+      :summary "Send request for archive"
+      (handle-archive-course course-slug request))
     (POST "/:course-id/review" request
       :path-params [course-id :- s/Int]
       :return Course
