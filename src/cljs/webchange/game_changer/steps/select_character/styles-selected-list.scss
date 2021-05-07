@@ -43,5 +43,12 @@
                 padding: 4px 8px;
             }
         }
+
+        .start-message {
+            color: #c9c9c9;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: $card-size;
+        }
     }
 }

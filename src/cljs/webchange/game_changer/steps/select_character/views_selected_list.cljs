@@ -38,6 +38,11 @@
                    :class-name "remove"
                    :on-click   #(on-remove character)}]]))
 
+(defn- start-message
+  []
+  [:div.start-message
+   "Click \"+\" to add character"])
+
 (defn- add-button
   [{:keys [on-click]
     :or   {on-click #()}}]
@@ -51,6 +56,8 @@
   (let [characters @(re-frame/subscribe [::state/characters-skins data])]
     [:div.selected-characters
      [:div.characters-list
+      (when (empty? characters)
+        [start-message])
       (for [[idx character] (map-indexed vector characters)]
         ^{:key idx}
         [characters-list-item (merge character

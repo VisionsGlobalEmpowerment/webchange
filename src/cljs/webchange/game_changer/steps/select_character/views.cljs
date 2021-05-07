@@ -34,19 +34,8 @@
   (r/with-let [open-available-characters? (r/atom false)
 
                {max-count :max} (data->character-option @data)
-               characters-data                              ;(connect-data data (get-character-option-path @data) [])
-               (r/atom [{:name     "Child Cow 5"
-                         :skeleton :vera
-                         :skin     "01 Vera_1"
-                         :preview  "/images/characters/child.png"}
-                        {:name     "Child Girl 6"
-                         :skeleton :vera
-                         :skin     "girl"
-                         :preview  nil}
-                        {:name     "Adult Cow 7"
-                         :skeleton :senoravaca
-                         :skin     "vaca"
-                         :preview  nil}])
+               characters-data (connect-data data (get-character-option-path @data) [])
+
                handle-add (fn [char]
                             (when (< (count @characters-data) max-count)
                               (reset! open-available-characters? false)

@@ -55,41 +55,8 @@
 
 (defn- form
   []
-  (r/with-let [current-step (r/atom 1)
-               current-data (r/atom {:template {:id      32
-                                                :name    "Interactive Read Aloud"
-                                                :options [{:key   "characters"
-                                                           :label "Characters"
-                                                           :type  "characters"
-                                                           :max   4}
-                                                          {:key         "cover-layout"
-                                                           :label       "Cover layout"
-                                                           :type        "lookup-image"
-                                                           :description "Cover layout"
-                                                           :options     [{:name  "Title at top"
-                                                                          :value "title-top"
-                                                                          :src   "/images/templates/cover_layout/title_at_top.svg"}
-                                                                         {:name  "Title at bottom"
-                                                                          :value "title-bottom"
-                                                                          :src   "/images/templates/cover_layout/title_at_bottom.svg"}]}
-                                                          {:key         "cover-title"
-                                                           :label       "Title"
-                                                           :placeholder "Type title here"
-                                                           :description "Cover title"
-                                                           :type        "string"}
-                                                          {:key         "cover-image"
-                                                           :label       "Cover image"
-                                                           :description "Cover image"
-                                                           :type        "image"}
-                                                          {:key   "authors"
-                                                           :label "Authors"
-                                                           :type  "strings-list"
-                                                           :max   3}
-                                                          {:key       "illustrators"
-                                                           :label     "Illustrators"
-                                                           :type      "strings-list"
-                                                           :optional? true
-                                                           :max       3}]}})
+  (r/with-let [current-step (r/atom 0)
+               current-data (r/atom {})
                steps (r/atom game-changer-steps)
 
                handle-prev-step (fn [step-idx] (reset! current-step step-idx))
@@ -113,7 +80,6 @@
                                                        :text    "Previous"
                                                        :handler #(handle-prev-step prev-step-idx)
                                                        :props   {:variant "outlined"}}]))]
-
       [game-changer/layout {:title          title
                             :timeline-items timeline
                             :actions        actions}
