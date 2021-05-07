@@ -39,3 +39,18 @@
                   {:name  name
                    :value skin
                    :img   preview}))))))
+
+(defn- get-character-preview
+  [{:keys [skeleton skin]} characters]
+  (let [current-group (some (fn [group-data] (and (= (:skeleton group-data) skeleton) group-data)) characters)
+        current-skin (some (fn [skin-data] (and (= (:skin skin-data) skin) skin-data)) (get current-group :skins []))]
+    (:preview current-skin)))
+
+(re-frame/reg-sub
+  ::characters-skins
+  (fn [db [_ characters-data]]
+    (let [characters (get-in db available-characters-path)]
+      (map (fn [data]
+             (merge data
+                    {:preview (get-character-preview data characters)}))
+           characters-data))))

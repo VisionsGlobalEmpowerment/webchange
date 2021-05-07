@@ -18,7 +18,9 @@
 (defn- groups-list
   [{:keys [on-click]}]
   (let [groups @(re-frame/subscribe [::state/available-characters-groups])]
-    [:div.groups-list-wrapper
+    [:div
+     [:div.list-title
+      "Select animation group:"]
      [:div.groups-list
       (for [{:keys [value] :as group} groups]
         ^{:key value}
@@ -38,12 +40,22 @@
 (defn- skins-list
   [{:keys [group on-click]}]
   (let [skins @(re-frame/subscribe [::state/available-skins group])]
-    [:div.skins-list-wrapper
+    [:div
+     [:div.list-title
+      "Select skin:"]
      [:div.skins-list
       (for [{:keys [name] :as skin} skins]
         ^{:key name}
         [skins-list-item (merge skin
                                 {:on-click on-click})])]]))
+
+(defonce counter (atom 0))
+
+(defn- generate-name
+  [{:keys [group-title skin-title]}]
+  (swap! counter inc)
+  (cond-> (str group-title " " skin-title)
+          (> @counter 1) (str " " @counter)))
 
 (defn available-characters-list
   [{:keys [on-click]
@@ -53,10 +65,13 @@
                handle-group-click (fn [group]
                                     (reset! current-group group))
                handle-skin-click (fn [skin]
-                                   (on-click {:skeleton (:value @current-group)
+                                   (on-click {:name     (generate-name {:group-title (:name @current-group)
+                                                                        :skin-title  (:name skin)})
+                                              :skeleton (:value @current-group)
                                               :skin     (:value skin)}))]
     [:div.available-characters-list
-     [groups-list {:on-click handle-group-click}]
+     (when-not (some? @current-group)
+       [groups-list {:on-click handle-group-click}])
      (when (some? @current-group)
        [skins-list {:group    (:value @current-group)
                     :on-click handle-skin-click}])]))

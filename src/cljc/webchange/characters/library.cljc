@@ -33,8 +33,9 @@
 (def children [{:title    "Child"
                 :skeleton :vera
                 :preview  "/images/characters/child.png"
-                :skins    [{:skin "01 Vera_1"
-                            :name "Cow"}
+                :skins    [{:skin    "01 Vera_1"
+                            :name    "Cow"
+                            :preview "/images/characters/child.png"}
                            {:skin "girl"
                             :name "Girl"}
                            {:skin "boy"

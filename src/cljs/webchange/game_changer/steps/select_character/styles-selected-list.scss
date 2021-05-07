@@ -1,0 +1,36 @@
+@import "styles-common";
+
+.selected-characters {
+   .characters-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        position: relative;
+
+        width: 100%;
+        gap: $padding;
+
+        .characters-list-item {
+             @include list-item;
+             cursor: default;
+
+            .preview {
+                @include list-item-preview();
+            }
+
+            .title {
+                @include list-item-title();
+            }
+
+            .remove {
+                position: absolute;
+                right: 12px;
+                top: 12px;
+            }
+
+            .add {
+                box-shadow: 4px 4px 8px rgba(175, 175, 175, 0.25);
+            }
+        }
+    }
+}
