@@ -661,14 +661,14 @@
 (defn update-activity-template!
   [course-slug scene-slug user-id]
   (let [scene-data (get-scene-latest-version course-slug scene-slug)
-        {:keys [created updated]} (get-in scene-data [:metadata :history])
+        {:keys [created updated]} (-> scene-data templates/prepare-history (get-in [:metadata :history]))
         actions (dialog-names scene-data)
         original-assets (:assets scene-data)
         preserve-actions (-> scene-data
                              :actions
                              (select-keys actions))
         created-activity (as-> (templates/activity-from-template created) a
-                             (reduce #(templates/update-activity-from-template %1 {:data %2}) a updated))
+                             (reduce #(templates/update-activity-from-template %1 %2) a updated))
 
         preserve-actions (->> preserve-actions
                               (map (fn [[key action]] (let [available-activies (get-in created-activity [:actions key :available-activities])]

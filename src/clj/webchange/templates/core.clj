@@ -39,18 +39,36 @@
         (assoc-in [:metadata :history] {:created data
                                         :updated []}))))
 
+(defn- apply-heuristics
+  [updated-data]
+  (cond
+    (:background-music updated-data) {:common-action? true :action "background-music" :data updated-data}
+    (empty? updated-data) {:common-action? true :action "background-music-remove" :data updated-data}
+    (:dialog updated-data) {:action "add-dialog" :data updated-data}
+    (:question-page updated-data) {:action "add-question" :data updated-data}
+    (and (:type updated-data) (:text updated-data) (:image updated-data)) {:action "add-page" :data updated-data}
+    :else (throw (Exception. (str "unknown update history" updated-data)))))
+
+(defn- try-restore-history
+  [updated]
+  (->> updated
+       (map apply-heuristics)
+       (into [])))
+
 (defn prepare-history
   "Check if history of this activity is absent or it is of old format."
   [{{history :history} :metadata :as scene-data}]
-  (if (map? history)
-    scene-data
-    (-> scene-data
-        (assoc-in [:metadata :history-old] history)
-        (assoc-in [:metadata :history] {:created {}
-                                        :updated []}))))
+  (let [updated (:updated history)
+        corrupted (and
+                    (not (empty? updated))
+                    (-> updated first :action nil?))]
+    (log/debug "prepare" corrupted updated)
+    (if corrupted
+      (assoc-in scene-data [:metadata :history :updated] (try-restore-history updated))
+      scene-data)))
 
 (defn update-activity-from-template
-  [scene-data {:keys [common-action? action data]}]
+  [scene-data {:keys [common-action? action data] :as update-data}]
   (let [template-id (get-in scene-data [:metadata :template-id])
         {:keys [template-update]} (get-in @templates [template-id])
         activity (if common-action?
@@ -59,7 +77,7 @@
     (log/debug "Update activity" template-id action data)
     (-> activity
         (prepare-history)
-        (update-in [:metadata :history :updated] conj data))))
+        (update-in [:metadata :history :updated] conj update-data))))
 
 (defn get-template-metadata-by-id
   [id]

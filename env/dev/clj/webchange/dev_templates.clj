@@ -47,7 +47,7 @@
                              :actions
                              (select-keys actions))
         activity (as-> (templates/activity-from-template created) a
-                       (reduce #(templates/update-activity-from-template %1 {:data %2}) a updated)
+                       (reduce #(templates/update-activity-from-template %1 %2) a updated)
                        (update a :objects merge preserve-objects)
                        (update a :actions merge preserve-actions)
                        (update a :assets #(->> (concat original-assets %)
