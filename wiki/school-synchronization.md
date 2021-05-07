@@ -45,7 +45,7 @@ This will update all course data and download all assets.
 ## Course files download 
 This should be used for development purposes. This command will download all files from remote server. This command only download files.
 ```
-lein run download-files
+lein run download-assets
 ```
 
 ## Course files update 

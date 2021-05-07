@@ -1,4 +1,4 @@
-(ns webchange.dev-templates.writing-practice
+ (ns webchange.dev-templates.writing-practice
   (:require
     [webchange.dev-templates :as t]
     [webchange.templates.core :as templates]
@@ -11,7 +11,7 @@
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
   (t/update-activity-metadata test-course-slug scene-slug)
 
-  (let [data {:activity-name "Writing Practice"
+   (let [data {:activity-name "Writing Practice"
               :template-id   40
               :name          "Writing Practice"
               :lang          "English"

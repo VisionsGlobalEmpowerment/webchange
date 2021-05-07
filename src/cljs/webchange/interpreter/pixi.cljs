@@ -5,6 +5,8 @@
 (def PIXI (.. pixi -PIXI))
 
 (set! (.. PIXI -settings -FAIL_IF_MAJOR_PERFORMANCE_CAVEAT) false)
+(set! (.. PIXI -settings -RESOLUTION) js/window.devicePixelRatio)
+(set! (.. PIXI -settings -FILTER_RESOLUTION) js/window.devicePixelRatio)
 
 (def Application (.. PIXI -Application))
 (def Loader (.. PIXI -Loader))

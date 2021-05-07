@@ -24,7 +24,6 @@
 
 (defn- update-progress
   [mask {:keys [radius size thickness]} value]
-  (println "update-progress")
   (let [fixed-value (-> value (Math/max 0) (Math/min 1))
         progress->angle #(* 2 % Math/PI)
         center (/ size 2)
@@ -32,14 +31,11 @@
     (doto mask
       (.clear)
       (.lineStyle thickness 0x000000 1)
-      (.arc center center radius start-angle (->> (progress->angle fixed-value) (+ start-angle))))
-
-    ))
+      (.arc center center radius start-angle (->> (progress->angle fixed-value) (+ start-angle))))))
 
 (defn get-background-props [{:keys [size] :as props}]
   (merge props {:color 0xECECEC
-   :size size})
-  )
+   :size size}))
 
 (defn progress
   [{:keys [radius thickness progress] :as props
@@ -57,9 +53,7 @@
 
         background-props (get-background-props updated-props)
         background-mask (create-mask position)
-        background-sprite (create-sprite background-props position)
-        ]
-    (println "background-props (get-background-props updated-props)" background-props updated-props)
+        background-sprite (create-sprite background-props position)]
     (update-progress background-mask background-props 1)
     (set-progress progress)
 
