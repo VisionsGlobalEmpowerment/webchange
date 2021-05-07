@@ -65,7 +65,8 @@
   [sprite {:keys [mask-width mask-height mask-align]}]
   (when (and (every? some? [mask-width mask-height mask-align]))
     (let [{:keys [width]} (utils/get-size sprite)
+          diff (- (/ width 2) mask-width)
           position (case mask-align
-                     "right-of-center" {:x (* -1 (/ width 2))}
-                     "left-of-center" {:x (- mask-width (/ width 2))})]
+                     "right-of-center" {:x (* -1 (- (/ width 2) diff))}
+                     "left-of-center" {:x 0})]
       (utils/set-position sprite position))))
