@@ -1,16 +1,16 @@
 (ns webchange.characters.library)
 
-(def adults [{:title   "Adult"
-              :key     :adult
-              :preview "/images/characters/adult.png"
-              :skins   [{:skin  "vaca"
-                         :name "Cow"}
-                        {:skin  "6_tall woman"
-                         :name "Woman"}
-                        {:skin  "12 owl"
-                         :name "Owl"}
-                        {:skin  "lion"
-                         :name "Lion"}]}])
+(def adults [{:title    "Adult"
+              :skeleton :senoravaca
+              :preview  "/images/characters/adult.png"
+              :skins    [{:skin "vaca"
+                          :name "Cow"}
+                         {:skin "6_tall woman"
+                          :name "Woman"}
+                         {:skin "12 owl"
+                          :name "Owl"}
+                         {:skin "lion"
+                          :name "Lion"}]}])
 
 ; Senoravaca available skins:
 ;      "default",
@@ -30,15 +30,15 @@
 ;      "lion4",
 ; +    "vaca"
 
-(def children [{:title   "Child"
-                :key     :child
-                :preview "/images/characters/child.png"
-                :skins   [{:skin "01 Vera_1"
-                           :name "Cow"}
-                          {:skin  "girl"
-                           :name "Girl"}
-                          {:skin  "boy"
-                           :name "Boy"}]}])
+(def children [{:title    "Child"
+                :skeleton :vera
+                :preview  "/images/characters/child.png"
+                :skins    [{:skin "01 Vera_1"
+                            :name "Cow"}
+                           {:skin "girl"
+                            :name "Girl"}
+                           {:skin "boy"
+                            :name "Boy"}]}])
 
 ; Vera available skins:
 ; +    "01 Vera_1",
@@ -48,14 +48,14 @@
 ; +    "05 boy",
 ;      "06 girl2"
 
-(def assistants-movable [{:title   "Assistant Movable"
-                          :key     :assistant-movable
-                          :preview "/images/characters/assistants_movable.png"
-                          :skins   []}])
+(def assistants-movable [{:title    "Assistant Movable"
+                          :skeleton :mari
+                          :preview  "/images/characters/assistants_movable.png"
+                          :skins    []}])
 
-(def assistants-static [{:title "Assistant Static"
-                         :key   :assistant-static
-                         :skins []}])
+(def assistants-static [{:title    "Assistant Static"
+                         :skeleton :stone
+                         :skins    []}])
 
 (def characters (concat adults
                         children

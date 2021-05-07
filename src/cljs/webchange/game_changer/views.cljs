@@ -114,9 +114,6 @@
                                                        :handler #(handle-prev-step prev-step-idx)
                                                        :props   {:variant "outlined"}}]))]
 
-      (print "current-data" @current-data)
-
-
       [game-changer/layout {:title          title
                             :timeline-items timeline
                             :actions        actions}

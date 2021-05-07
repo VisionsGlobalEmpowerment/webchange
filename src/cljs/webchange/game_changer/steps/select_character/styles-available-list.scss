@@ -1,63 +1,112 @@
 @import "../../_list-items";
 
-.available-characters-list {
-    display: flex;
-    flex-direction: column;
+$card-size: 200px;
+$padding: 32px;
 
-    gap: 32px;
-    padding: 32px;
+@mixin list-wrapper {
+    position: relative;
+    width: 100%;
+    height: $card-size + (2 * $padding);
+}
 
-    .character-item-card {
-        width: 200px;
-        position: relative;
+@mixin list() {
+    position: absolute;
+    width: 100%;
+    white-space: nowrap;
+    overflow: auto;
+    padding: $padding 0;
 
-        cursor: pointer;
-
-        background-color: #fff;
-        border-radius: $card-border-radius;
-        box-shadow: 0px 4px 6px rgba(175, 175, 175, 0.25);
-        padding: $card-padding;
-
-        &:hover {
-            box-shadow: 4px 8px 12px rgba(175, 175, 175, 0.25);
-        }
-
-        .preview {
-            object-fit: contain;
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        .placeholder {
-            @include image-placeholder($message: "No Preview");
-            width: 100%;
-            height: 100%;
-        }
-
-        .title {
-            position: absolute;
-            bottom: 0;
-            padding: 8px;
-
-            color: #1D1D1F;
-            font-weight: 500;
-            font-size: 16px;
-
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
-        }
-    }
-
-    .card-wrapper {
-        display: flex;
-    }
-
-    .skins-list {
-        border: solid 1px;
-        flex-grow: 1;
+    &:before {
+        content: "";
+        height: 50px;
     }
 }
+
+@mixin list-item() {
+    @include list-item-card-appearance();
+
+    display: inline-block;
+    position: relative;
+
+    width: $card-size;
+    height: $card-size;
+    margin-right: $padding;
+
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+@mixin list-item-preview() {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@mixin list-item-title() {
+    position: absolute;
+    bottom: 0;
+    padding: 8px;
+
+    color: #1D1D1F;
+    font-weight: 500;
+    font-size: 16px;
+
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+}
+
+
+.available-characters-list {
+    position: relative;
+
+    .groups-list-wrapper {
+        @include list-wrapper();
+
+        .groups-list {
+            @include list();
+
+            .groups-list-item {
+                @include list-item();
+
+                .preview {
+                    @include list-item-preview();
+                }
+
+                .title {
+                    @include list-item-title();
+                }
+            }
+        }
+    }
+
+    .skins-list-wrapper {
+        @include list-wrapper();
+
+        .skins-list {
+            @include list();
+
+            .skins-list-item {
+                @include list-item();
+
+                .preview {
+                    @include list-item-preview();
+                }
+
+                .title {
+                    @include list-item-title();
+                }
+            }
+        }
+    }
+
+    .placeholder {
+        @include image-placeholder($message: "No Preview");
+        width: 100%;
+        height: 100%;
+    }
+}
+
 
 

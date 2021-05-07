@@ -14,16 +14,6 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db available-characters-path characters)}))
 
-;(def children [{:title   "Child"
-;                :key     :adult
-;                :preview "/images/characters/child.png"
-;                :skins   [{:skin "01 Vera_1"
-;                           :name "Cow"}
-;                          {:skin  "girl"
-;                           :name "Girl"}
-;                          {:skin  "boy"
-;                           :name "Boy"}]}])
-
 (re-frame/reg-sub
   ::available-characters-groups
   (fn [db]
@@ -31,17 +21,17 @@
       (->> characters
            (filter (fn [{:keys [skins]}]
                      (-> skins empty? not)))
-           (map (fn [{:keys [key preview title]}]
+           (map (fn [{:keys [skeleton preview title]}]
                   {:name  title
-                   :value key
+                   :value skeleton
                    :img   preview}))))))
 
 (re-frame/reg-sub
   ::available-skins
-  (fn [db [_ group-key]]
+  (fn [db [_ current-skeleton]]
     (let [characters (get-in db available-characters-path)
-          group (some (fn [{:keys [key] :as group}]
-                        (and (= key group-key)
+          group (some (fn [{:keys [skeleton] :as group}]
+                        (and (= skeleton current-skeleton)
                              group))
                       characters)]
       (->> (get group :skins [])
