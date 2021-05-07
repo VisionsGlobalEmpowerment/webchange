@@ -20,6 +20,7 @@
 
             .title {
                 @include list-item-title();
+                cursor: pointer;
             }
 
             .remove {
@@ -30,6 +31,16 @@
 
             .add {
                 box-shadow: 4px 4px 8px rgba(175, 175, 175, 0.25);
+            }
+
+            .edit-name {
+                position: absolute;
+                left: 0px;
+                bottom: 0px;
+                width: 100%;
+                font-weight: 500;
+                font-size: 16px;
+                padding: 4px 8px;
             }
         }
     }

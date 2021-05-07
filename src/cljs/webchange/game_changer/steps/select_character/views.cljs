@@ -7,7 +7,7 @@
     [webchange.game-changer.steps.select-character.views-available-list :refer [available-characters-list]]
     [webchange.game-changer.steps.select-character.views-selected-list :refer [selected-characters-list]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.utils.list :refer [remove-at-position remove-by-predicate]]))
+    [webchange.utils.list :refer [remove-at-position remove-by-predicate replace-at-position]]))
 
 (defn- add-character
   [list {:keys [name skeleton skin] :as data}]
@@ -19,6 +19,10 @@
 (defn- remove-character
   [list idx]
   (reset! list (remove-at-position @list idx)))
+
+(defn- change-character
+  [list idx data]
+  (reset! list (replace-at-position @list idx data)))
 
 (defn get-character-option-path
   [data]
@@ -44,17 +48,21 @@
                          :skin     "vaca"
                          :preview  nil}])
                handle-add (fn [char]
-                            (reset! open-available-characters? false)
-                            (add-character characters-data char))
+                            (when (< (count @characters-data) max-count)
+                              (reset! open-available-characters? false)
+                              (add-character characters-data char)))
                handle-remove (fn [{:keys [idx]}]
                                (remove-character characters-data idx))
+               handle-change (fn [{:keys [idx] :as character}]
+                               (change-character characters-data idx (select-keys character [:name :skeleton :skin])))
 
                handle-open-available (fn []
-                                       (reset! open-available-characters? true))
-               ]
+                                       (reset! open-available-characters? true))]
     [:div.activity-characters
      [selected-characters-list {:data            @characters-data
+                                :add-disabled?   (>= (count @characters-data) max-count)
                                 :on-add-click    handle-open-available
-                                :on-remove-click handle-remove}]
+                                :on-remove-click handle-remove
+                                :on-change       handle-change}]
      (when @open-available-characters?
        [available-characters-list {:on-click handle-add}])]))

@@ -22,6 +22,7 @@ $padding: 32px;
 @mixin list-item-title() {
     position: absolute;
     bottom: 0;
+    left: 0;
     padding: 4px 8px;
 
     color: #1D1D1F;
