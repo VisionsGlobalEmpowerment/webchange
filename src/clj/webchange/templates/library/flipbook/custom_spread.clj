@@ -42,6 +42,7 @@
    :width          "---"
    :height         "---"
    :fill           "---"
+   :editable? {:select true}
    :text           "---"})
 
 (defn- add-background
