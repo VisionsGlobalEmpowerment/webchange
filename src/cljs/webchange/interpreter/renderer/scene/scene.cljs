@@ -10,7 +10,8 @@
     [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app get-renderer get-stage]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! apply-mode]]
-    [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
+    [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
+    [webchange.logger.index :as logger]))
 
 (defn- set-position
   [stage x y]
@@ -31,7 +32,8 @@
   (if (app-exists?)
     (get-app)
     (let [{:keys [x y width height scale-x scale-y]} viewport]
-      (doto (Application. (clj->js (cond-> {:antialias   false
+      (doto (Application. (clj->js (cond-> {                ;:antialias  true
+                                            :autoDensity true
                                             :width       width
                                             :height      height
                                             :transparent true}
@@ -69,6 +71,7 @@
 
                        (let [{:keys [mode on-ready viewport objects]} (r/props this)
                              app (init-app viewport mode)]
+                         (logger/trace-folded "scene mounted" viewport mode)
                          (.appendChild @container (.-view app))
                          (-> (create-component {:type        "group"
                                                 :object-name :scene

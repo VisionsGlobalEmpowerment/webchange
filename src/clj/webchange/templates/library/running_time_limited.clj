@@ -1,4 +1,4 @@
-(ns webchange.templates.library.running_time_limited
+(ns webchange.templates.library.running-time-limited
   (:require
     [webchange.templates.core :as core]))
 
@@ -14,6 +14,7 @@
                        :type "string"}
                       {:name "letter"
                        :type "string"}]
+        :version     2
         :options     {:time {:label       "Time in seconds"
                              :type        "lookup"
                              :description "Time in seconds"
@@ -59,7 +60,7 @@
                                                 :x        676
                                                 :y        64
                                                 :children ["letter-background" "letter-target"
-                                                           "box-target-background" "box-target"
+                                                           ;           "box-target-background" "box-target"
                                                            "counter-background" "counter"]}
                         :letter-background     {:type          "rectangle"
                                                 :x             40
@@ -98,7 +99,7 @@
                                                 :height     72,
                                                 :src        ""}
                         :counter-background    {:type          "rectangle"
-                                                :x             296
+                                                :x             232
                                                 :y             24
                                                 :fill          0xECECEC
                                                 :width         104
@@ -106,31 +107,36 @@
                                                 :border-radius 52}
                         :counter               {:type        "counter"
                                                 :transition  "counter"
-                                                :x           335
+                                                :x           271
                                                 :y           48,
                                                 :font-family "Roboto"
                                                 :font-size   48
-                                                :color       0x000000
-                                                }
+                                                :color       0x000000}
 
                         :line-1                {:type    "transparent"
                                                 :x       0
                                                 :y       610
                                                 :width   1920
                                                 :height  150
-                                                :actions {:click {:id "go-line" :on "click" :type "action" :params {:line "box1"}}}}
+                                                :actions {:click       {:id "go-line-check" :on "click" :type "action" :params {:line "box1"}}
+                                                          :pointerdown {:id "go-line-check" :on "pointerdown" :type "action" :params {:line "box1"}}
+                                                          :pointerover {:id "go-line-check" :on "pointerover" :type "action" :params {:line "box1"}}}}
                         :line-2                {:type    "transparent"
                                                 :x       0
                                                 :y       780
                                                 :width   1920
                                                 :height  170
-                                                :actions {:click {:id "go-line" :on "click" :type "action" :params {:line "box2"}}}}
+                                                :actions {:click       {:id "go-line-check" :on "click" :type "action" :params {:line "box2"}}
+                                                          :pointerdown {:id "go-line-check" :on "pointerdown" :type "action" :params {:line "box2"}}
+                                                          :pointerover {:id "go-line-check" :on "pointerover" :type "action" :params {:line "box2"}}}}
                         :line-3                {:type    "transparent"
                                                 :x       0
                                                 :y       950
                                                 :width   1920
                                                 :height  180
-                                                :actions {:click {:id "go-line" :on "click" :type "action" :params {:line "box3"}}}}
+                                                :actions {:click       {:id "go-line-check" :on "click" :type "action" :params {:line "box3"}}
+                                                          :pointerdown {:id "go-line-check" :on "pointerdown" :type "action" :params {:line "box3"}}
+                                                          :pointerover {:id "go-line-check" :on "pointerover" :type "action" :params {:line "box3"}}}}
 
                         :mari                  {:type        "animation"
                                                 :x           1365
@@ -262,53 +268,29 @@
                                                   :phrase-description "Wrong dialog"
                                                   :dialog-track       "4 Options"}
 
+                        :go-line-check           {:type        "test-value"
+                                                  :fail        "go-line"
+                                                  :from-var    [{:var-name "current-line" :action-property "value1"}]
+                                                  :from-params [{:param-property "line" :action-property "value2"}]}
                         :go-line                 {:type "sequence-data"
-                                                  :data [{:type     "set-variable"
-                                                          :var-name "previous-line"
-                                                          :from-var [{:var-name "current-line" :action-property "var-value"}]}
-                                                         {:type        "set-variable"
+                                                  :data [{:type        "set-variable"
                                                           :var-name    "current-line"
                                                           :from-params [{:param-property "line" :action-property "var-value"}]}
                                                          {:type     "case"
-                                                          :options  {:box1 {:id "vera-go-line-1" :type "action"}
-                                                                     :box2 {:id "vera-go-line-2" :type "action"}
-                                                                     :box3 {:id "vera-go-line-3" :type "action"}}
+                                                          :options  {:box1 {:id "go-to-box1-line" :type "action"}
+                                                                     :box2 {:id "go-to-box2-line" :type "action"}
+                                                                     :box3 {:id "go-to-box3-line" :type "action"}}
                                                           :from-var [{:var-name "current-line" :action-property "value"}]}]}
 
-                        :vera-go-line-1          {:type     "test-value"
-                                                  :from-var [{:var-name "previous-line" :action-property "value2"}]
-                                                  :value1   "box1"
-                                                  :success  "stay-on-line"
-                                                  :fail     "go-to-box1-line"}
-
-                        :vera-go-line-2          {:type     "test-value"
-                                                  :from-var [{:var-name "previous-line" :action-property "value2"}]
-                                                  :value1   "box2"
-                                                  :success  "stay-on-line"
-                                                  :fail     "go-to-box2-line"}
-
-                        :vera-go-line-3          {:type     "test-value"
-                                                  :from-var [{:var-name "previous-line" :action-property "value2"}]
-                                                  :value1   "box3"
-                                                  :success  "stay-on-line"
-                                                  :fail     "go-to-box3-line"}
-
-                        :go-to-box1-line         {:type "sequence-data"
-                                                  :data [{:type "set-variable" :var-name "current-line-pos" :var-value {:y 685 :duration 0.5}}
-                                                         {:type          "transition"
-                                                          :from-var      [{:var-name "current-line-pos" :action-property "to"}]
-                                                          :transition-id "vera-group"}]}
-                        :go-to-box2-line         {:type "sequence-data"
-                                                  :data [{:type "set-variable" :var-name "current-line-pos" :var-value {:y 865 :duration 0.5}}
-                                                         {:type          "transition"
-                                                          :from-var      [{:var-name "current-line-pos" :action-property "to"}]
-                                                          :transition-id "vera-group"}]}
-                        :go-to-box3-line         {:type "sequence-data"
-                                                  :data [{:type "set-variable" :var-name "current-line-pos" :var-value {:y 1040 :duration 0.5}}
-                                                         {:type          "transition"
-                                                          :from-var      [{:var-name "current-line-pos" :action-property "to"}]
-                                                          :transition-id "vera-group"}]}
-
+                        :go-to-box1-line         {:type          "transition"
+                                                  :to            {:y 685 :duration 0.5}
+                                                  :transition-id "vera-group"}
+                        :go-to-box2-line         {:type          "transition"
+                                                  :to            {:y 865 :duration 0.5}
+                                                  :transition-id "vera-group"}
+                        :go-to-box3-line         {:type          "transition"
+                                                  :to            {:y 1040 :duration 0.5}
+                                                  :transition-id "vera-group"}
                         :init-vars               {:type "parallel"
                                                   :data [{:type "set-variable" :var-name "game-finished" :var-value false}
                                                          {:type "set-variable" :var-name "current-line" :var-value "box2"}
@@ -326,10 +308,10 @@
                                                           :limit       1
                                                           :variables   ["current-concept"]
                                                           :provider-id "current-concept-provider"}
-                                                         {:type      "set-attribute",
-                                                          :target    "box-target"
-                                                          :from-var  [{:var-name "current-concept" :var-property "image-src", :action-property "attr-value"}],
-                                                          :attr-name "src"}
+                                                         #_{:type      "set-attribute",
+                                                            :target    "box-target"
+                                                            :from-var  [{:var-name "current-concept" :var-property "image-src", :action-property "attr-value"}],
+                                                            :attr-name "src"}
                                                          {:type      "set-attribute"
                                                           :target    "letter-target"
                                                           :from-var  [{:var-name "current-concept" :var-property "letter" :action-property "attr-value"}]
@@ -414,8 +396,8 @@
                                                                                                       :children    ["target-letter-box"
                                                                                                                     "target-letter-text"]}
                                                                                  :target-letter-box  {:type "image"
-                                                                                                      :x           -95
-                                                                                                      :y           -135
+                                                                                                      :x    -95
+                                                                                                      :y    -135
                                                                                                       :src  "/raw/img/running-with-letters/box.png"
                                                                                                       }
                                                                                  :target-letter-text {:type        "text"
@@ -443,8 +425,8 @@
                                                                                                       :children    ["target-letter-box"
                                                                                                                     "target-letter-text"]}
                                                                                  :target-letter-box  {:type "image"
-                                                                                                      :x           -95
-                                                                                                      :y           -135
+                                                                                                      :x    -95
+                                                                                                      :y    -135
                                                                                                       :src  "/raw/img/running-with-letters/box.png"
                                                                                                       }
                                                                                  :target-letter-text {:type        "text"
@@ -472,8 +454,8 @@
                                                                                                       :children    ["target-letter-box"
                                                                                                                     "target-letter-text"]}
                                                                                  :target-letter-box  {:type "image"
-                                                                                                      :x           -95
-                                                                                                      :y           -135
+                                                                                                      :x    -95
+                                                                                                      :y    -135
                                                                                                       :src  "/raw/img/running-with-letters/box.png"
                                                                                                       }
                                                                                  :target-letter-text {:type        "text"

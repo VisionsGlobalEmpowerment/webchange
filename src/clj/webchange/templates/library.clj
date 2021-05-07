@@ -37,7 +37,7 @@
     [webchange.templates.library.alliteration]
     [webchange.templates.library.running]
     [webchange.templates.library.interactive-read-aloud]
-    [webchange.templates.library.running_time_limited]
+    [webchange.templates.library.running-time-limited]
     [webchange.templates.library.karaoke]
     [webchange.templates.library.writing-practice]
     [webchange.templates.library.writing-1]

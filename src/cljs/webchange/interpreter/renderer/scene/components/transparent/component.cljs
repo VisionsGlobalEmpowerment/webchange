@@ -10,6 +10,8 @@
                     :height   {}
                     :name     {}
                     :on-click {}
+                    :on-pointerdown {}
+                    :on-pointerover {}
                     :ref      {}
                     :offset   {:default {:x 0 :y 0}}
                     :scale    {:default {:x 1 :y 1}}})
@@ -43,12 +45,14 @@
   :ref - callback function that must be called with component wrapper.
   :offset - container position offset. Default: {:x 0 :y 0}.
   :scale - image scale. Default: {:x 1 :y 1}."
-  [{:keys [parent type object-name on-click ref] :as props}]
+  [{:keys [parent type object-name on-click on-pointerdown on-pointerover ref] :as props}]
   (let [container (create-container props)
         sprite (create-sprite props)
         wrapped-container (wrap type object-name container)]
 
     (when on-click (utils/set-handler container "click" on-click))
+    (when on-pointerdown (utils/set-handler container "pointerdown" on-pointerdown))
+    (when on-pointerover (utils/set-handler container "pointerover" on-pointerover))
     (when ref (ref wrapped-container))
 
     (.addChild container sprite)

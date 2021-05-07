@@ -365,7 +365,9 @@
      :success     'pick-correct'
      :fail        'pick-wrong'}"
     (if (= value1 value2)
-      {:dispatch-n (list [::e/execute-action (cond-action db action :success)])}
+      (if success
+        {:dispatch-n (list [::e/execute-action (cond-action db action :success)])}
+        {:dispatch-n (list (e/success-event action))})
       (if fail
         {:dispatch-n (list [::e/execute-action (cond-action db action :fail)])}
         {:dispatch-n (list (e/success-event action))}
