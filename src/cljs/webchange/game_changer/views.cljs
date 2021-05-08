@@ -80,7 +80,6 @@
                                                        :text    "Previous"
                                                        :handler #(handle-prev-step prev-step-idx)
                                                        :props   {:variant "outlined"}}]))]
-
       [game-changer/layout {:title          title
                             :timeline-items timeline
                             :actions        actions}

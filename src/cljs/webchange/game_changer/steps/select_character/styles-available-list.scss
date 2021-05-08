@@ -1,0 +1,56 @@
+@import "styles-common";
+
+$card-size: 150px;
+
+.list-title {
+    padding-top: 32px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+@mixin list() {
+    width: 100%;
+    display: flex;
+    padding: $padding 0;
+    gap: $padding;
+}
+
+.available-characters-list {
+    position: relative;
+    background-color: #f2f2f2;
+    padding: 0 32px;
+    border-radius: 8px;
+    margin-top: 32px;
+
+    .groups-list {
+        @include list();
+
+        .groups-list-item {
+            @include list-item();
+
+            .preview {
+                @include list-item-preview();
+            }
+
+            .title {
+                @include list-item-title();
+            }
+        }
+    }
+
+    .skins-list {
+        @include list();
+
+        .skins-list-item {
+            @include list-item();
+
+            .preview {
+                @include list-item-preview();
+            }
+
+            .title {
+                @include list-item-title();
+            }
+        }
+    }
+}

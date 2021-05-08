@@ -81,6 +81,7 @@ $description-collapsed-height: 60px;
 
     &.placeholder {
         @include image-placeholder($message: "No Preview");
+        width: auto;
     }
 
     @import "styles-preview";

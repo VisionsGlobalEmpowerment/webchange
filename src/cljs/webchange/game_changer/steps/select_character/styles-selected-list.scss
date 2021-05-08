@@ -1,0 +1,54 @@
+@import "styles-common";
+
+.selected-characters {
+   .characters-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        position: relative;
+
+        width: 100%;
+        gap: $padding;
+
+        .characters-list-item {
+             @include list-item;
+             cursor: default;
+
+            .preview {
+                @include list-item-preview();
+            }
+
+            .title {
+                @include list-item-title();
+                cursor: pointer;
+            }
+
+            .remove {
+                position: absolute;
+                right: 12px;
+                top: 12px;
+            }
+
+            .add {
+                box-shadow: 4px 4px 8px rgba(175, 175, 175, 0.25);
+            }
+
+            .edit-name {
+                position: absolute;
+                left: 0px;
+                bottom: 0px;
+                width: 100%;
+                font-weight: 500;
+                font-size: 16px;
+                padding: 4px 8px;
+            }
+        }
+
+        .start-message {
+            color: #c9c9c9;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: $card-size;
+        }
+    }
+}
