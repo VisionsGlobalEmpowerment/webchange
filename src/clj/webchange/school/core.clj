@@ -2,7 +2,6 @@
   (:require [webchange.db.core :refer [*db*] :as db]
             [clojure.tools.logging :as log]
             [java-time :as jt]
-            [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword]]
             [webchange.auth.core :as auth]))
 
@@ -10,7 +9,7 @@
 
 (defn create-school!
   [data]
-  (let [prepared-data (transform-keys ->snake_case_keyword data)
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         [{id :id}] (db/create-new-school! prepared-data)]
     [true {:id id}]))
 

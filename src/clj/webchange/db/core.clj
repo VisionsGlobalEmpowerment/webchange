@@ -114,7 +114,9 @@
 (defn transform-keys-one-level
   [t coll]
   (letfn [(transform [[k v]] [(t k) v])]
-    (into {} (map (fn [x] (transform x)) coll))))
+    (->> coll
+         (map transform)
+         (into {}))))
 
 (defmethod hugsql.core/hugsql-result-fn :1 [sym]
   'webchange.db.core/result-one-snake->kebab)

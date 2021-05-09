@@ -46,20 +46,20 @@
 (defn update-users! [users]
   (let [users (prepare-users users)]
     (doseq [user users]
-      (db/create-or-update-user! (transform-keys ->snake_case_keyword user)))
+      (db/create-or-update-user! (db/transform-keys-one-level ->snake_case_keyword user)))
     (db/reset-users-seq!)))
 
 (defn update-teachers!
   [teachers]
   (doseq [teacher teachers]
-    (db/create-or-update-teacher! (transform-keys ->snake_case_keyword teacher))))
+    (db/create-or-update-teacher! (db/transform-keys-one-level ->snake_case_keyword teacher))))
 
 (defn update-students!
   [students]
   (doseq [student students]
     (-> student
         (assoc :date-of-birth (dt/str2date (:date-of-birth student)))
-        (#(transform-keys ->snake_case_keyword %))
+        (#(db/transform-keys-one-level ->snake_case_keyword %))
         (db/create-or-update-student!)
         )))
 
@@ -67,25 +67,25 @@
   [classes]
   (let [classes (prepare-classes classes)]
     (doseq [class classes]
-      (db/create-or-update-class! (transform-keys ->snake_case_keyword class)))
+      (db/create-or-update-class! (db/transform-keys-one-level ->snake_case_keyword class)))
     (db/reset-classes-seq!)
     ))
 
 (defn update-courses!
   [courses]
   (doseq [course courses]
-    (db/create-or-update-courses! (transform-keys ->snake_case_keyword course)))
+    (db/create-or-update-courses! (db/transform-keys-one-level ->snake_case_keyword course)))
   (db/reset-courses-seq!))
 
 (defn update-scene-skills!
   [scene-skills]
   (doseq [scene-skill scene-skills]
-    (db/create-or-update-scene-skills! (transform-keys ->snake_case_keyword scene-skill))))
+    (db/create-or-update-scene-skills! (db/transform-keys-one-level ->snake_case_keyword scene-skill))))
 
 (defn update-course-stat!
   [course-stats]
   (doseq [stat course-stats]
-    (db/create-or-update-course-stat! (transform-keys ->snake_case_keyword stat))))
+    (db/create-or-update-course-stat! (db/transform-keys-one-level ->snake_case_keyword stat))))
 
 (defn update-course-versions!
   [course-versions]
@@ -95,7 +95,7 @@
               (assoc :created-at (dt/iso-str2date-time (:created-at version))))]
       (if-not (.equals (:data version) (:data current-latest))
         (-> version
-            (#(transform-keys ->snake_case_keyword %))
+            (#(db/transform-keys-one-level ->snake_case_keyword %))
             (db/save-course!)))))
   (db/reset-course-versions-seq!))
 
@@ -103,7 +103,7 @@
 (defn update-progress!
   [course-progresses]
   (doseq [progress course-progresses]
-    (db/create-or-update-progress! (transform-keys ->snake_case_keyword progress))))
+    (db/create-or-update-progress! (db/transform-keys-one-level ->snake_case_keyword progress))))
 
 (defn update-events!
   [events]
@@ -111,7 +111,7 @@
     (-> event
         (assoc :created-at (dt/iso-str2date-time (:created-at event)))
         (assoc :guid (java.util.UUID/fromString (:guid event)))
-        (#(transform-keys ->snake_case_keyword %))
+        (#(db/transform-keys-one-level ->snake_case_keyword %))
         (db/create-or-update-event!)
         )
     ))
@@ -119,25 +119,25 @@
 (defn update-dataset!
   [datasets]
   (doseq [dataset datasets]
-    (db/create-or-update-dataset! (transform-keys ->snake_case_keyword dataset)))
+    (db/create-or-update-dataset! (db/transform-keys-one-level ->snake_case_keyword dataset)))
   (db/reset-dataset-seq!))
 
 (defn update-dataset-item-with-id!
   [dataset-items]
   (doseq [dataset-item dataset-items]
-    (db/create-or-update-dataset-item-with-id! (transform-keys ->snake_case_keyword dataset-item))
+    (db/create-or-update-dataset-item-with-id! (db/transform-keys-one-level ->snake_case_keyword dataset-item))
     (db/reset-dataset-items-seq!)))
 
 (defn update-lesson-set!
   [lesson-sets]
   (doseq [lesson-set lesson-sets]
-    (db/create-or-update-lesson-set! (transform-keys ->snake_case_keyword lesson-set)))
+    (db/create-or-update-lesson-set! (db/transform-keys-one-level ->snake_case_keyword lesson-set)))
   (db/reset-lesson-sets-seq!))
 
 (defn update-scene!
   [scenes]
   (doseq [scene scenes]
-    (db/create-or-update-scene! (transform-keys ->snake_case_keyword scene)))
+    (db/create-or-update-scene! (db/transform-keys-one-level ->snake_case_keyword scene)))
   (db/reset-scenes-seq!))
 
 (defn update-scene-versions!
@@ -148,7 +148,7 @@
                       (assoc :created-at (dt/iso-str2date-time (:created-at scene-version))))]
       (if-not (= (:data scene-version) (:data current-latest))
         (-> scene-version
-            (#(transform-keys ->snake_case_keyword %))
+            (#(db/transform-keys-one-level ->snake_case_keyword %))
             (assoc :data (:data scene-version))
             (db/save-scene!))))
     (db/reset-scene-versions-seq!)))
@@ -156,7 +156,7 @@
 (defn update-activity-stats!
   [activity-stats]
   (doseq [activity-stat activity-stats]
-    (db/create-or-update-activity-stat! (transform-keys ->snake_case_keyword activity-stat))))
+    (db/create-or-update-activity-stat! (db/transform-keys-one-level ->snake_case_keyword activity-stat))))
 
 (defn process-data [data]
   (if-let [school (:school data)]
@@ -369,10 +369,10 @@
   (let [users (prepare-users users-imported)]
     (doseq [user users]
       (try
-        (db/create-or-update-user-by-guid! (transform-keys ->snake_case_keyword user))
+        (db/create-or-update-user-by-guid! (db/transform-keys-one-level ->snake_case_keyword user))
         (catch Exception e
           (if (duplicate-email-exception? e)
-            (do (-> (transform-keys ->snake_case_keyword user)
+            (do (-> (db/transform-keys-one-level ->snake_case_keyword user)
                     (assoc :email nil)
                     (db/create-or-update-user-by-guid!))
                 (log/warn (str "User with email " (:email user) " conflicted uuid " (:uuid user))))
@@ -382,7 +382,7 @@
 (defn process-class-imported! [classes]
   (let [classes (prepare-classes classes)]
     (doseq [class classes]
-      (db/create-or-update-class-by-guid! (transform-keys ->snake_case_keyword class))
+      (db/create-or-update-class-by-guid! (db/transform-keys-one-level ->snake_case_keyword class))
       )))
 
 (defn prepare-imported-data [data field remote-map local-map]
@@ -423,7 +423,7 @@
 (defn delete-not-in-guid-list [guids entries extract-guid delete-entry]
   (doseq [entry entries]
     (if-not (contains? (set guids) (extract-guid entry))
-        (delete-entry (transform-keys ->snake_case_keyword entry))
+        (delete-entry (db/transform-keys-one-level ->snake_case_keyword entry))
       nil)))
 
 (defn delete-teacher [teacher]

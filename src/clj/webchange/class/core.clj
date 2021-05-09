@@ -58,7 +58,7 @@
 
 (defn create-class!
   [data]
-  (let [prepared-data (transform-keys ->snake_case_keyword data)
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         [{id :id}] (db/create-class! prepared-data)]
     [true {:id id}]))
 
@@ -76,7 +76,7 @@
 (defn create-student!
   [data]
   (let [date-of-birth (jt/local-date "yyyy-MM-dd" (:date-of-birth data))
-        transform #(transform-keys ->snake_case_keyword %)
+        transform #(db/transform-keys-one-level ->snake_case_keyword %)
         prepared-data (-> data
                           (assoc :date-of-birth date-of-birth)
                           transform)
@@ -87,7 +87,7 @@
   [id {class-id :class-id :as data}]
   (let [{user-id :user-id} (db/get-student {:id id})
         date-of-birth (jt/local-date "yyyy-MM-dd" (:date-of-birth data))
-        transform #(transform-keys ->snake_case_keyword %)
+        transform #(db/transform-keys-one-level ->snake_case_keyword %)
         prepared-data (-> data
                           (assoc :date-of-birth date-of-birth)
                           (assoc :id id)
@@ -97,7 +97,7 @@
 
 (defn update-student-access-code!
   [id data]
-  (let [prepared-data (-> (transform-keys ->snake_case_keyword data)
+  (let [prepared-data (-> (db/transform-keys-one-level ->snake_case_keyword data)
                           (assoc :id id))]
     (db/update-student-access-code! prepared-data)))
 

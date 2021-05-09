@@ -1,8 +1,6 @@
 (ns webchange.progress.core
   (:require [webchange.db.core :refer [*db*] :as db]
             [clojure.tools.logging :as log]
-            [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword]]
             [webchange.auth.core :as auth]
             [webchange.progress.activity :as activity]
             [webchange.events :as events]

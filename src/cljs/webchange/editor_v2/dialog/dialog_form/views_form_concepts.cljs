@@ -26,7 +26,7 @@
         concepts-list (->> @(re-frame/subscribe [::translator-form.concepts/concepts-list]))
         all-concepts-complete? (every? :complete? concepts-list)
         handle-concept-changed (fn [id]
-                                 (re-frame/dispatch [::dialog-form.concepts/prepare-concept (:id id)])
+                                 (re-frame/dispatch [::translator-form.concepts/prepare-concept (:id id)])
                                  (re-frame/dispatch [::translator-form.concepts/set-current-concept (:id id)]))
         styles (get-styles)]
     [:div
