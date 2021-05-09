@@ -116,9 +116,7 @@
   (letfn [(transform [[k v]] [(t k) v])]
     (->> coll
          (map transform)
-         (into {}))
-    ;(into {} (map (fn [x] (transform x)) coll))
-    ))
+         (into {}))))
 
 (defmethod hugsql.core/hugsql-result-fn :1 [sym]
   'webchange.db.core/result-one-snake->kebab)

@@ -310,6 +310,8 @@
                                            :action    "continue-try",
                                            :autostart true
                                            :interval  10000}
+                    :stop-timeout      {:type "remove-interval"
+                                        :id        "inactive-counter"}
                     :continue-try         {:type "sequence",
                                            :data ["start-timeout"
                                                   "dialog-wrong-answer"]},
@@ -322,7 +324,8 @@
                                            :phrase             "dialog-wrong-answer",
                                            :phrase-description "Dialog wrong answer"},
                     :word-1-first-click      {:type "sequence-data",
-                                              :data [{:type "action" :id "correct-response-dialog"}
+                                              :data [{:type "action" :id "stop-timeout"}
+                                                     {:type "action" :id "correct-response-dialog"}
                                                      {:type "action" :id "finish-activity"}]}
                     :correct-response-dialog {:type               "sequence-data",
                                               :editor-type        "dialog",
