@@ -315,6 +315,7 @@
                                                   "dialog-wrong-answer"]},
                     :dialog-wrong-answer  {:type               "sequence-data",
                                            :editor-type        "dialog",
+                                           :concept-var        "current-concept",
                                            :data               [{:type "sequence-data"
                                                                  :data [{:type "empty" :duration 0}
                                                                         {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],

@@ -4,6 +4,7 @@
     [webchange.editor-v2.concepts.utils :refer [resource-type?]]
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
     [webchange.editor-v2.dialog.dialog-form.state.concepts-utils :as concepts-utils]
+    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as defaults]
     [webchange.editor-v2.history.state :as history]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
@@ -104,6 +105,12 @@
   [db]
   (get-in db (path-to-db [:current-dataset-concept-patch])))
 
+(defn get-schema-template-by-name [db var-name]
+  (let [fields (get-in (current-dataset-concept db) [:scheme :fields])]
+    (->> fields
+         (filter (fn [field] (= (keyword (:name field)) var-name)))
+         first)))
+
 (re-frame/reg-sub
   ::concepts-data
   concepts-data)
@@ -156,7 +163,8 @@
                        (assoc-in (path-to-db [:concepts :data]) concepts)
                        (assoc-in (path-to-db [:current-dataset-concept]) dataset-concept)
                        (assoc-in (path-to-db [:current-dataset-concept-patch]) {:add [] :remove []}))
-       :dispatch-n (list [::set-current-concept (:id current-concept)]
+       :dispatch-n (list [::prepare-concept (:id current-concept)]
+                         [::set-current-concept (:id current-concept)]
                          [::set-edited-concepts []])})))
 
 (re-frame/reg-event-fx
@@ -231,3 +239,13 @@
     {:db (-> db
              (assoc-in (path-to-db [:current-dataset-concept]) dataset)
              (assoc-in (path-to-db [:current-dataset-concept-patch]) {:add [] :remove []}))}))
+
+(re-frame/reg-event-fx
+  ::prepare-concept
+  (fn [{:keys [db]} [_ concept-id]]
+    (let [actions-vars (concepts-utils/get-scene-action-vars db)
+          concept-vars (keys (get-in db (path-to-db (concat [:concepts :data] [concept-id :data]))))
+          to-add (clojure.set/difference (set actions-vars) (set concept-vars))
+          template (or (:template (get-schema-template-by-name db name)) defaults/default-concept-action)]
+      (js/console.log "prepare concept" concept-id to-add)
+      {:dispatch-n (vec (map (fn [name] [::update-current-concept [name] template]) to-add))})))

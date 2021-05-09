@@ -28,13 +28,9 @@
           concept-var (:concept-var base-action)
           field-name (actions/unique-var-name)
           empty-action {:type "action", :from-var [{:var-name concept-var, :var-property field-name}]}
-
-          concept-action {:type "sequence-data",
-                          :data [defaults/default-action]}
-
           concept-schema {:name     field-name
                           :type     "action"
-                          :template concept-action}
+                          :template defaults/default-concept-action}
 
           list-to-path (if (actions/node-parallel? parent-action)
                          {:type "parallel",
@@ -46,7 +42,7 @@
                          (select-keys [:data]))]
       {:dispatch-n (list
                      [::dialog-form.concepts/add-concepts-schema-fields concept-schema]
-                     [::translator-form.concepts/update-current-concept [(keyword field-name)] concept-action]
+                     [::translator-form.concepts/update-current-concept [(keyword field-name)] defaults/default-concept-action]
                      [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx
@@ -78,18 +74,16 @@
           concept-var (:concept-var base-action)
           field-name (actions/unique-var-name)
           empty-action {:type "action", :from-var [{:var-name concept-var, :var-property field-name}]}
-          concept-action {:type "sequence-data",
-                          :data [defaults/default-action]},
           concept-schema {:name     field-name
                           :type     "action"
-                          :template concept-action}
+                          :template defaults/default-concept-action}
 
           data-patch (-> base-action
                          (au/insert-child-action empty-action target-position relative-position)
                          (select-keys [:data]))]
       {:dispatch-n (list
                      [::dialog-form.concepts/add-concepts-schema-fields concept-schema]
-                     [::translator-form.concepts/update-current-concept [(keyword field-name)] concept-action]
+                     [::translator-form.concepts/update-current-concept [(keyword field-name)] defaults/default-concept-action]
                      [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx

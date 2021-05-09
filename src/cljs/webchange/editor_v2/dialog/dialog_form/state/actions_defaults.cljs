@@ -11,6 +11,9 @@
                              :phrase-text default-phrase-text,
                              :audio       nil}]})
 
+(def default-concept-action {:type "sequence-data",
+                             :data [default-action]})
+
 (def text-animation-action {:type "sequence-data"
                             :data [{:type     "empty"
                                     :duration 0},

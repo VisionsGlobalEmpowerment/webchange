@@ -28,7 +28,7 @@
   (let [{course-id :id} (db/get-course {:slug (:course-slug data)})
         prepared-data (-> data
                           (assoc :course-id course-id)
-                          (#(transform-keys ->snake_case_keyword %)))
+                          (#(db/transform-keys-one-level ->snake_case_keyword %)))
         [{id :id}] (db/create-dataset! prepared-data)]
     {:id id}))
 
@@ -68,13 +68,13 @@
 
 (defn create-dataset-item!
   [data]
-  (let [prepared-data (transform-keys ->snake_case_keyword data)
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         [{id :id}] (db/create-dataset-item! prepared-data)]
     [true {:id id}]))
 
 (defn create-dataset-item-with-id!
   [data]
-  (let [prepared-data (transform-keys ->snake_case_keyword data)]
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)]
     (db/create-dataset-item-with-id! prepared-data)
     [true data]))
 
@@ -111,7 +111,7 @@
 
 (defn create-lesson-set!
   [data]
-  (let [prepared-data (transform-keys ->snake_case_keyword data)
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         [{id :id}] (db/create-lesson-set! prepared-data)]
     [true {:id     id
            :lesson (assoc prepared-data :id id)}]))

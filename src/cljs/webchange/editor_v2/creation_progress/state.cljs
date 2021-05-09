@@ -13,7 +13,9 @@
 (re-frame/reg-sub
   ::translation-progress
   (fn [db]
-    (let [current-scene-data (w-subs/current-scene-data db)
+    {:progress 0
+     :overall-data nil}
+    #_(let [current-scene-data (w-subs/current-scene-data db)
           dataset-items (subs/dataset-items db)
           dataset-id (->> dataset-items first :dataset-id)
           dataset-scheme (subs/dataset db dataset-id)]

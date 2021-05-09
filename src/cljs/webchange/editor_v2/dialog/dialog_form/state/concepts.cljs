@@ -12,9 +12,6 @@
   [db]
   (get-in db (path-to-db [:current-dataset-concept])))
 
-(defn get-schema-template-by-name [db var-name]
-  (first (filter (fn [field] (= (keyword (:name field)) var-name)) (get-in (current-dataset-concept db) [:scheme :fields]))))
-
 (def current-dataset-concept-path (path-to-db [:current-dataset-concept]))
 (def current-dataset-concept-patch-path (path-to-db [:current-dataset-concept-patch]))
 
@@ -51,14 +48,6 @@
       {:dispatch-n (->> concepts
                         keys
                         (map remove-from-concept))})))
-
-(re-frame/reg-event-fx
-  ::prepare-concept
-  (fn [{:keys [db]} [_ concept-id]]
-    (let [actions-vars (utils/get-scene-action-vars db)
-          concept-vars (keys (get-in db (path-to-db (concat [:concepts :data] [concept-id :data]))))
-          to-add (clojure.set/difference (set actions-vars) (set concept-vars))]
-      {:dispatch-n (vec (map (fn [name] [::translator-form.concepts/update-current-concept [name] (:template (get-schema-template-by-name db name))]) to-add))})))
 
 (re-frame/reg-event-fx
   ::add-new-phrase-in-concept-action

@@ -112,7 +112,7 @@
                    :owner-id 1
                    :type "course"}
          course-data (->> (merge defaults options)
-                          (transform-keys ->snake_case_keyword))
+                          (db/transform-keys-one-level ->snake_case_keyword))
          [{course-id :id}] (db/create-course! course-data)
          data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
          [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id (:owner_id course-data) :created_at (jt/local-date-time)})]
@@ -120,7 +120,7 @@
            :id course-id
            :data data
            :version-id version-id)
-          (transform-keys ->kebab-case-keyword)))))
+          (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn scene-created
   ([]
@@ -154,7 +154,7 @@
     (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "image"} {:name "width" :type "number"}]}}
           data (->> options
                     (merge defaults)
-                    (transform-keys ->snake_case_keyword))
+                    (db/transform-keys-one-level ->snake_case_keyword))
           [{id :id}] (db/create-dataset! data)]
       (assoc data :id id :version 1))))
 
@@ -166,10 +166,10 @@
    (let [defaults {:name "test-item" :data {:src "test-src" :width 100 :height 100}}
          data (->> options
                    (merge defaults)
-                   (transform-keys ->snake_case_keyword))
+                   (db/transform-keys-one-level ->snake_case_keyword))
          [{id :id}] (db/create-dataset-item! data)]
      (->> (assoc data :id id :version 1)
-          (transform-keys ->kebab-case-keyword)))))
+          (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn lesson-set-created
   ([]
@@ -179,11 +179,11 @@
    (let [defaults {:name "test-lesson-set"}
          data (->> options
                    (merge defaults)
-                   (transform-keys ->snake_case_keyword))
+                   (db/transform-keys-one-level ->snake_case_keyword))
          [{id :id}] (db/create-lesson-set! data)]
      (assoc data :dataset-id (:dataset-id options))
      (->> (assoc data :id id)
-          (transform-keys ->kebab-case-keyword)))))
+          (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn school-created
   ([]
@@ -192,10 +192,10 @@
    (let [defaults {:id 1 :name "test-school"}
          data (->> options
                    (merge defaults)
-                   (transform-keys ->snake_case_keyword))
+                   (db/transform-keys-one-level ->snake_case_keyword))
          [{id :id}] (db/create-school! data)]
      (->> (assoc data :id id)
-          (transform-keys ->kebab-case-keyword)))))
+          (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn class-created
   ([]
@@ -204,10 +204,10 @@
    (let [defaults {:name "test-class" :school-id default-school-id}
          data (->> options
                    (merge defaults)
-                   (transform-keys ->snake_case_keyword))
+                   (db/transform-keys-one-level ->snake_case_keyword))
          [{id :id}] (db/create-class! data)]
      (->> (assoc data :id id)
-          (transform-keys ->kebab-case-keyword)))))
+          (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn student-created
   ([]
@@ -218,10 +218,10 @@
          defaults {:user-id user-id :class-id class-id :school-id school-id :gender 1 :date-of-birth (jt/local-date) :access-code "123456"}
          data (->> options
                    (merge defaults)
-                   (transform-keys ->snake_case_keyword))
+                   (db/transform-keys-one-level ->snake_case_keyword))
          [{id :id}] (db/create-student! data)]
      (->> (assoc data :id id :user-id user-id :class-id class-id)
-          (transform-keys ->kebab-case-keyword)))))
+          (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn student-logged-in
   ([request]
@@ -240,10 +240,10 @@
     (let [defaults {:school-id default-school-id}
           data (->> options
                     (merge defaults)
-                    (transform-keys ->snake_case_keyword))
+                    (db/transform-keys-one-level ->snake_case_keyword))
           [{id :id}] (db/create-teacher! data)]
       (->> (assoc data :id id)
-           (transform-keys ->kebab-case-keyword)))))
+           (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn teacher-logged-in
   ([request]

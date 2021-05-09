@@ -436,7 +436,7 @@
         defaults {:type      "course"
                   :image_src nil}
         new-course-data (merge defaults
-                               (transform-keys ->snake_case_keyword data)
+                               (db/transform-keys-one-level ->snake_case_keyword data)
                                {:slug            (course-slug name lang)
                                 :owner_id        owner-id
                                 :website_user_id website-id
@@ -671,10 +671,11 @@
                              (reduce #(templates/update-activity-from-template %1 %2) a updated))
 
         preserve-actions (->> preserve-actions
-                              (map (fn [[key action]] (let [available-activies (get-in created-activity [:actions key :available-activities])]
-                                                        (if available-activies
-                                                          [key (assoc action :available-activities available-activies)]
-                                                          [key action]))))
+                              (map (fn [[key action]] (let [available-activies (get-in created-activity [:actions key :available-activities])
+                                                            concept-var (get-in created-activity [:actions key :concept-var])]
+                                                        [key (cond-> action
+                                                                     available-activies (assoc :available-activities available-activies)
+                                                                     concept-var (assoc :concept-var concept-var))])))
                               (into {}))
         activity (-> created-activity
                      (update :actions merge preserve-actions)
