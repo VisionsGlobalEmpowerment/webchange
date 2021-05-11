@@ -249,5 +249,4 @@
                             keys)
           to-add (clojure.set/difference (set actions-vars) (set concept-vars))
           template (or (:template (get-schema-template-by-name db name)) defaults/default-concept-action)]
-      (js/console.log "prepare concept" concept-id to-add concept-vars)
       {:dispatch-n (vec (map (fn [name] [::update-current-concept [name] template]) to-add))})))
