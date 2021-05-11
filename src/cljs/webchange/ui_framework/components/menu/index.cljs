@@ -3,7 +3,8 @@
     [reagent.core :as r]
     [webchange.ui-framework.components.confirm.index :as confirm-component]
     [webchange.ui-framework.components.icon.index :as icon-component]
-    [webchange.ui-framework.components.icon-button.index :as icon-button-component]))
+    [webchange.ui-framework.components.icon-button.index :as icon-button-component]
+    [webchange.ui-framework.components.utils :refer [get-bounding-rect]]))
 
 (defn- menu-item
   [{:keys [close-menu icon text on-click]}]
@@ -24,14 +25,6 @@
                                                  (close-menu))
                                 :on-cancel  close-menu}
    [menu-item (dissoc props :on-click)]])
-
-(defn- get-bounding-rect
-  [el]
-  (let [bounding-rect (.getBoundingClientRect el)]
-    {:x      (.-x bounding-rect)
-     :y      (.-y bounding-rect)
-     :width  (.-width bounding-rect)
-     :height (.-height bounding-rect)}))
 
 (defn- get-menu-position
   [menu-button]

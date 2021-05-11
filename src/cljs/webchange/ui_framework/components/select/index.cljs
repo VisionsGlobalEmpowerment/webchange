@@ -14,22 +14,26 @@
                     (dissoc :enable?))
                 option)))))
 
+;; variant [string]
+
+
 (defn component
   [{:keys [options value variant class-name on-arrow-down-click on-arrow-up-click on-change show-buttons? width with-arrow?]
-    :or   {variant             ""
-           show-buttons?       false
+    :or   {show-buttons?       false
            with-arrow?         true
            options             []
            on-change           #()
            on-arrow-down-click #()
            on-arrow-up-click   #()}}]
+  "Props:
+   :variant - 'outlined' or none."
   (let [handle-change #(-> % (.. -target -value) (on-change))
         options (fix-options options)]
     [:div {:style      (if (some? width) {:width width} {})
-           :class-name (get-class-name (-> {"wc-select"  true
-                                            "with-arrow" with-arrow?}
-                                           (assoc variant true)
-                                           (assoc class-name (some? class-name))))}
+           :class-name (get-class-name (cond-> (-> {"wc-select"  true
+                                                    "with-arrow" with-arrow?}
+                                                   (assoc class-name (some? class-name)))
+                                               (some? variant) (assoc (str "variant-" variant) true)))}
      [:select {:value     value
                :on-change handle-change}
       (for [{:keys [text value disabled?]} options]

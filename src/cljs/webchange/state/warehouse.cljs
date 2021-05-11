@@ -93,8 +93,6 @@
                      :uri    (str "/api/courses/" course-slug)
                      :params {:course course-data}} handlers)))
 
-; name lang
-
 (re-frame/reg-event-fx
   ::create-course
   (fn [{:keys [_]} [_ {:keys [course-data]} handlers]]
@@ -117,6 +115,14 @@
 
 
 ;; Scene
+
+(re-frame/reg-event-fx
+  ::load-scene
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug]} handlers]]
+    (create-request {:key    :load-activity
+                     :method :get
+                     :uri    (str "/api/courses/" course-slug "/scenes/" scene-slug)}
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::create-activity
@@ -210,3 +216,11 @@
     {:dispatch [::upload-file {:file        blob
                                :form-params [["type" "blob"]
                                              ["blob-type" "image"]]} handlers]}))
+
+(re-frame/reg-event-fx
+  ::load-backgrounds
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-backgrounds
+                     :method :get
+                     :uri    (str "/api/courses/editor/assets")}
+                    handlers)))

@@ -43,3 +43,16 @@
                (assoc (keyword target-name) data))
            (concat rest-que to-rename)))
        result-template))))
+
+;; Scene Data
+
+(defn- get-scene-objects
+  [scene-data]
+  (get scene-data :objects {}))
+
+(defn get-scene-background
+  [scene-data]
+  (->> (get-scene-objects scene-data)
+       (some (fn [[object-name {:keys [type] :as object-data}]]
+               (and (some #{type} ["background" "layered-background"])
+                    [object-name object-data])))))

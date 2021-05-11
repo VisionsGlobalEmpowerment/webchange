@@ -7,13 +7,15 @@
 
     [webchange.game-changer.steps.create-activity.index :as create-activity]
     [webchange.game-changer.steps.fill-template.index :as fill-template]
+    [webchange.game-changer.steps.select-background.index :as select-background]
     [webchange.game-changer.steps.select-character.index :as select-character]
     [webchange.game-changer.steps.select-template.index :as select-template]))
 
 (def game-changer-steps [select-template/data
                          select-character/data
                          create-activity/data
-                         fill-template/data])
+                         fill-template/data
+                         select-background/data])
 
 (defn- not-defined-component
   []

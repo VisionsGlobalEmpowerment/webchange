@@ -36,9 +36,7 @@
   (fn [{:keys [_]} [_ data callback course-data activity-data]]
     (swap! data update :course merge course-data)
     (swap! data update :activity merge activity-data)
-    (let [{:keys [course-slug scene-slug]} activity-data]
-      {:redirect [:course-editor-v2-scene :id course-slug :scene-id scene-slug]
-       :callback callback})))
+    {:callback callback}))
 
 (re-frame/reg-fx
   :callback

@@ -42,9 +42,23 @@
        (get-in [:metadata]))))
 
 (re-frame/reg-event-fx
+  ::load-scene
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug]} handlers]]
+    {:dispatch [::warehouse/load-scene {:course-slug course-slug
+                                        :scene-slug  scene-slug}
+                {:on-success [::load-scene-success handlers scene-slug]}]}))
+
+(re-frame/reg-event-fx
+  ::load-scene-success
+  (fn [{:keys [_]} [_ {:keys [on-success]} scene-slug scene-data]]
+    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   scene-slug
+                                                  :scene-data scene-data}]]
+                         (some? on-success) (conj (conj on-success scene-data)))}))
+
+(re-frame/reg-event-fx
   ::update-scene
-  (fn [{:keys [db]} [_ {:keys [scene-id scene-data-patch]} {:keys [on-success]}]]
-    (let [course-id (core/current-course-id db)
+  (fn [{:keys [db]} [_ {:keys [course-id scene-id scene-data-patch]} {:keys [on-success]}]]
+    (let [course-id (or course-id (core/current-course-id db))
           scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
           current-scene-data (core/get-scene-data db scene-id)
           scene-data (merge current-scene-data scene-data-patch)]
@@ -62,7 +76,7 @@
 
 (re-frame/reg-event-fx
   ::update-scene-objects
-  (fn [{:keys [db]} [_ {:keys [scene-id patches-list]} handlers]]
+  (fn [{:keys [db]} [_ {:keys [course-id scene-id patches-list]} handlers]]
     {:pre [(sequential? patches-list)]}
     (let [scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
           objects-data (reduce (fn [objects-data {:keys [object-name object-data-patch]}]
@@ -70,15 +84,17 @@
                                (-> (core/get-scene-data db scene-id)
                                    (get :objects {}))
                                patches-list)]
-      {:dispatch [::update-scene {:scene-id         scene-id
+      {:dispatch [::update-scene {:course-id        course-id
+                                  :scene-id         scene-id
                                   :scene-data-patch {:objects objects-data}}
                   handlers]})))
 
 (re-frame/reg-event-fx
   ::update-scene-object
-  (fn [{:keys [_]} [_ {:keys [scene-id object-name object-data-patch]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [course-id scene-id object-name object-data-patch]} handlers]]
     {:pre [(keyword? object-name)]}
-    {:dispatch [::update-scene-objects {:scene-id     scene-id
+    {:dispatch [::update-scene-objects {:course-id    course-id
+                                        :scene-id     scene-id
                                         :patches-list [{:object-name       object-name
                                                         :object-data-patch object-data-patch}]} handlers]}))
 
