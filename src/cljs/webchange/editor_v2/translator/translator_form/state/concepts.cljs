@@ -244,8 +244,9 @@
   ::prepare-concept
   (fn [{:keys [db]} [_ concept-id]]
     (let [actions-vars (concepts-utils/get-scene-action-vars db)
-          concept-vars (keys (get-in db (path-to-db (concat [:concepts :data] [concept-id :data]))))
+          concept-vars (->> (get-in db (path-to-db (concat [:concepts :data] [concept-id :data])))
+                            (remove #(nil? (second %)))
+                            keys)
           to-add (clojure.set/difference (set actions-vars) (set concept-vars))
           template (or (:template (get-schema-template-by-name db name)) defaults/default-concept-action)]
-      (js/console.log "prepare concept" concept-id to-add)
       {:dispatch-n (vec (map (fn [name] [::update-current-concept [name] template]) to-add))})))
