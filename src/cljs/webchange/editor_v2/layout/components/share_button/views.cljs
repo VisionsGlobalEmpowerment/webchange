@@ -76,10 +76,9 @@
   [{:keys [name]}]
   (let [lesson-set-data (-> @(re-frame/subscribe [::lesson-set-data])
                             (get name))
-        current-dataset-id (get lesson-set-data :dataset-id "")
         current-dataset-items (get lesson-set-data :item-ids [])
-
         datasets @(re-frame/subscribe [::editor-subs/course-datasets])
+        current-dataset-id (-> datasets first :id)
         dataset-items (->> @(re-frame/subscribe [::editor-subs/course-dataset-items])
                            (map second)
                            (filter (fn [{:keys [dataset-id]}] (= dataset-id current-dataset-id))))]
@@ -90,15 +89,6 @@
                        :align-items "flex-end"}}
       [ui/typography {:variant "subtitle1"
                       :style   {:padding "10px"}} name]]
-     [ui/grid {:item true :xs 3}
-      [ui/form-control {:full-width true}
-       [ui/input-label "Dataset"]
-       [ui/select {:value     current-dataset-id
-                   :variant   "outlined"
-                   :on-change #(re-frame/dispatch [::set-lesson-set-data name (.. % -target -value)])}
-        (for [{:keys [id name]} datasets]
-          ^{:key id}
-          [ui/menu-item {:value id} name])]]]
      [ui/grid {:item true :xs 5}
       [ui/form-control {:full-width true}
        [ui/input-label "Items"]
@@ -113,7 +103,8 @@
 (defn- select-lesson-sets-form
   []
   (let [lesson-sets (->> @(re-frame/subscribe [::lesson-sets])
-                         (map keyword))]
+                         (map keyword)
+                         (distinct))]
     [ui/grid {:container true}
      (for [lesson-set-name lesson-sets]
        ^{:key lesson-set-name}

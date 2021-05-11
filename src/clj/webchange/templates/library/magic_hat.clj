@@ -1,6 +1,7 @@
 (ns webchange.templates.library.magic_hat
   (:require
-    [webchange.templates.core :as core]))
+    [webchange.templates.core :as core]
+    [webchange.templates.utils.dialog :as dialog]))
 
 (def m {:id          10
         :name        "Magic hat"
@@ -250,7 +251,8 @@
                                              :scale-x    0.5,
                                              :scale-y    0.5,
                                              :speed      1,
-                                             :start      true}
+                                             :start      true
+                                             :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}}
                         },
         :scene-objects [["layered-background"] ["hat"
                                                 "letter1" "letter2" "letter3"
@@ -430,6 +432,7 @@
                                                    :data [
                                                           "init-vars"
                                                           "renew-words"
+                                                          "introduce-concept"
                                                           "play"]},
                         :start-scene              {:type "sequence",
                                                    :data [
@@ -441,17 +444,14 @@
                                                           "play"]},
                         :renew-words              {:type "sequence-data",
                                                    :data
-                                                         [
-                                                          {:from        "concepts-all",
-                                                           :type        "lesson-var-provider",
-                                                           :shuffled    true,
-                                                           :from-var
-                                                                        [{:var-key         "concept-name",
-                                                                          :var-name        "item-1",
-                                                                          :var-property    "concept-name",
-                                                                          :action-property "exclude-property-values"}],
-                                                           :variables   ["item-3" "item-4" "item-5"],
-                                                           :provider-id "words-set"}
+                                                         [{:from      "concepts-all",
+                                                           :type      "lesson-var-provider",
+                                                           :shuffled  true,
+                                                           :from-var  [{:var-key         "concept-name",
+                                                                        :var-name        "item-1",
+                                                                        :var-property    "concept-name",
+                                                                        :action-property "exclude-property-values"}],
+                                                           :variables ["item-3" "item-4" "item-5"]}
                                                           {:type       "test-var-inequality"
                                                            :var-name   "correct-letter-number",
                                                            :value      3,
@@ -509,7 +509,7 @@
 
                         :mari-voice-welcome       {:type               "sequence-data",
                                                    :editor-type        "dialog",
-                                                   :concept-var        "current-word",
+                                                   :concept-var        "current-concept",
                                                    :data               [{:type "sequence-data"
                                                                          :data [{:type "empty" :duration 0}
                                                                                 {:type        "animation-sequence",
@@ -554,8 +554,8 @@
                                                    :data               [{:type "sequence-data"
                                                                          :data [{:type "empty" :duration 0}
                                                                                 {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                   :phrase             :word-sound
-                                                   :phrase-description "word-sound"
+                                                   :phrase             :letter-sound
+                                                   :phrase-description "Letter sound"
                                                    },
                         :finish-activity-dialog   {
                                                    :type               "sequence-data",
@@ -567,10 +567,40 @@
                                                    :phrase             "finish-activity-dialog"
                                                    :phrase-description "finish activity dialog"
                                                    },
+                        :dialog-tap-instructions     (dialog/default "Tap instructions")
                         },
         :triggers      {:stop  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "start-scene"}},
-        :metadata      {:prev "library", :autostart true}})
+        :metadata      {:tracks    [{:title "Activity Sequence"
+                                     :nodes [{:type      "dialog"
+                                              :action-id :mari-voice-welcome}
+                                             {:type "prompt"
+                                              :text "Mari flies to magic hat and gives a task. Round begins"}
+                                             {:type      "dialog"
+                                              :action-id :introduce-concept}
+                                             {:type "prompt"
+                                              :text "Waiting for student to pick correct letters"}
+                                             {:type      "dialog"
+                                              :action-id :mari-says-correct-answer}
+                                             {:type      "dialog"
+                                              :action-id :mari-says-wrong-answer}
+                                             {:type "prompt"
+                                              :text "When all letters correctly found new round begins"}
+                                             {:type "prompt"
+                                              :text "After the last round activity finishes with a dialog"}
+                                             {:type      "dialog"
+                                              :action-id :finish-activity-dialog}]}
+                                    {:title "Tap instractions"
+                                     :nodes [{:type "prompt"
+                                              :text "Tap on Mari"}
+                                             {:type      "dialog"
+                                              :action-id :dialog-tap-instructions}
+                                             {:type "prompt"
+                                              :text "Tap on a hat"}
+                                             {:type      "dialog"
+                                              :action-id :letter-sound}]}]
+                        :prev "library", :autostart true
+                        }})
 
 (defn f
   [t args]

@@ -12,8 +12,8 @@
                          :preview          "/images/templates/previews/recording_studio.png"
                          :preview-anim     ["/images/templates/previews/recording_studio_1.png"
                                             "/images/templates/previews/recording_studio_2.png"]
-                         :preview-activity {:course-slug   "q-q-uiwvlghm"
-                                            :activity-slug "q"}}
+                         :preview-activity {:course-slug   "recording-studio-test-english-gvfoggox"
+                                            :activity-slug "recording-apple"}}
         :options        {:demo-image {:type        "image"
                                       :label       "Prompt Image"
                                       :description "What visual prompt do you want to show on the screen?"}}
