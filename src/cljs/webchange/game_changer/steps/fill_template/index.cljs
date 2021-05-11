@@ -6,5 +6,5 @@
 
 (def data {:title       "Add Content"
            :component   template-form
-           :handle-next (fn [{:keys [data]}]
-                          (re-frame/dispatch [::state/create-activity data]))})
+           :handle-next (fn [{:keys [data callback]}]
+                          (re-frame/dispatch [::state/create-activity data callback]))})

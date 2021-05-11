@@ -22,17 +22,17 @@
         (->Camel_Snake_Case template-name)
         (clojure.string/replace #"_" " "))))
 
-(defn- get-language
+(defn get-language
   [data]
-  (get-in @data [:lang]))
+  (get-in data [:lang]))
 
 (defn- get-course-name
   [data]
-  (get-in @data [:course :name]))
+  (get-in data [:course :name]))
 
-(defn- get-activity-name
+(defn get-activity-name
   [data]
-  (get-in @data [:activity :name]))
+  (get-in data [:activity :name]))
 
 (defn create-activity
   [{:keys [data]}]
@@ -40,19 +40,19 @@
                handle-course-name-change (fn [value] (swap! data assoc-in [:course :name] value))
                handle-activity-name-change (fn [value] (swap! data assoc-in [:activity :name] value))
 
-               _ (when-not (some? (get-language data))
+               _ (when-not (some? (get-language @data))
                    (handle-language-change (generate-language)))
-               _ (when-not (some? (get-course-name data))
+               _ (when-not (some? (get-course-name @data))
                    (handle-course-name-change (generate-course-name @data)))
-               _ (when-not (some? (get-activity-name data))
+               _ (when-not (some? (get-activity-name @data))
                    (handle-activity-name-change (generate-activity-name @data)))]
     [:div.create-activity-from
      [label {:class-name "label"} "Activity Name"]
-     [text-input {:value       (get-activity-name data)
+     [text-input {:value       (get-activity-name @data)
                   :on-change   handle-activity-name-change
                   :placeholder "Enter Activity Name"}]
 
      [label {:class-name "label"} "Language"]
-     [text-input {:value       (get-language data)
+     [text-input {:value       (get-language @data)
                   :on-change   handle-language-change
                   :placeholder "Enter Language"}]]))

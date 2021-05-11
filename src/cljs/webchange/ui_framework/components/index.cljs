@@ -14,6 +14,7 @@
     [webchange.ui-framework.components.message.index :as message]
     [webchange.ui-framework.components.range-input.index :as range-input]
     [webchange.ui-framework.components.select.index :as select]
+    [webchange.ui-framework.components.select-image.index :as select-image]
     [webchange.ui-framework.components.switcher.index :as switcher]
     [webchange.ui-framework.components.text-area.index :as text-area]
     [webchange.ui-framework.components.text-input.index :as text-input]
@@ -32,6 +33,7 @@
 (def message message/component)
 (def range-input range-input/component)
 (def select select/component)
+(def select-image select-image/component)
 (def switcher switcher/component)
 (def text-area text-area/component)
 (def text-input text-input/component)
