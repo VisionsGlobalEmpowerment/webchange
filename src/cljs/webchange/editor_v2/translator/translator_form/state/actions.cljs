@@ -124,6 +124,10 @@
   [action]
   (= (:type action) "animation-sequence"))
 
+(defn update-talk-animation-data?
+  [action]
+  (animation-sequence? action))
+
 (defn current-phrase-action-animation-sequence?
   ([db target-action]
    (current-phrase-action-animation-sequence? db target-action nil))
@@ -160,6 +164,11 @@
                                         (update-text-animation-data? action)
                                         (assoc :data
                                                (audio-analyzer/get-chunks-data-if-possible
+                                                 phrase-text audio-url region-data))
+
+                                        (update-talk-animation-data? action)
+                                        (assoc :data
+                                               (audio-analyzer/get-talk-data-if-possible
                                                  phrase-text audio-url region-data))
                                         ) sub-path])}))))))
 
