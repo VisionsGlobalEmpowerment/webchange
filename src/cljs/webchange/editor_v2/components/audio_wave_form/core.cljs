@@ -82,10 +82,10 @@
             recenter-shift (if (some? drawer-wrapper)
                              (let [full-width (.-scrollWidth drawer-wrapper)
                                    client-width (.-offsetWidth drawer-wrapper)]
-                               (/ client-width full-width 2))
+                               (-> (/ client-width full-width) (/ 2) (- 0.01)))
                              0)]
         (.seekTo wave-surfer progress)
-        (.recenter (.-drawer wave-surfer) (+ progress recenter-shift -0.01)))
+        (.recenter (.-drawer wave-surfer) (+ progress recenter-shift)))
       (.addRegion wave-surfer (clj->js region-data)))))
 
 (defn init-audio-region!
