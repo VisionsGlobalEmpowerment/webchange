@@ -34,7 +34,7 @@
   ::link
   (fn [db]
     (create-link {:course-slug (:current-course db)
-                  :scene-slug  :current-scene
+                  :scene-slug  (:current-scene db)
                   :lessons     @(re-frame/subscribe [::lesson-set-data])}))) ;{:concepts {:item-ids [188 196 208], :dataset-id 4}}
 
 ;; Events

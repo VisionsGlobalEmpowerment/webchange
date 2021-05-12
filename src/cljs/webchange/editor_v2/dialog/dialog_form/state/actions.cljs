@@ -11,7 +11,8 @@
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.logger.index :as logger]))
 
 (def dialog-sub-path [:data 1])
 
@@ -141,6 +142,7 @@
 (re-frame/reg-event-fx
   ::update-dialog-audio-action
   (fn [{:keys [db]} [_ target-action data-patch]]
+    (logger/trace "update dialog audio" target-action data-patch)
     (let [[action-path type] (get-action-path-data db target-action)]
       (cond
         (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}

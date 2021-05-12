@@ -139,14 +139,21 @@
                   :end      (:end item),
                   :chunk    idx,
                   :start    (:start item),
-                  :duration (- (:end item) (:start item))}
-                 ) items)
-  )
+                  :duration (- (:end item) (:start item))})
+               items))
+
+(defn- pack-talk-data
+  [items]
+  (map-indexed (fn [_idx item]
+                 {:end      (:end item),
+                  :start    (:start item),
+                  :anim "talk"})
+               items))
 
 (defn get-chunks
   [orig-text rec-text]
   (if (= (count orig-text) (count rec-text))
-    (pack-chunks rec-text)
+    rec-text
     (let [orig-items (doall (map (fn [item]
                                    {:text  item
                                     :match (remove nil? (map-indexed (fn [idx rec-item]
@@ -213,20 +220,38 @@
                                                                    (-> item
                                                                        (assoc :start (+ (* step-duration idx) start-stack))
                                                                        (assoc :end (+ start-stack (* (+ 1 idx) step-duration))))
-                                                                   ) (:stack processed-items))))
-          result-items (pack-chunks (:items processed-items))]
-      result-items)))
+                                                                   ) (:stack processed-items))))]
+      (:items processed-items))))
 
 (defn get-chunks-for-text
   [text data region]
-  (let [chunks (filter (fn [item]
-                         (and (<= (:start region) (:start item)) (>= (:end region) (:end item)))) data)]
-    (get-chunks (-> text (prepare-text) (clojure.string/split " ")) (vec chunks))))
+  (let [items (->> data
+                   (filter (fn [item]
+                              (and (<= (:start region) (:start item)) (>= (:end region) (:end item)))))
+                   (vec))
+        prepared-text (-> text (prepare-text) (clojure.string/split " "))]
+    (-> (get-chunks prepared-text items)
+        (pack-chunks))))
 
 (defn get-chunks-data-if-possible
   [text url region]
   (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
     (get-chunks-for-text text script-data region)))
+
+(defn- get-talk-data-for-text
+  [text data region]
+  (let [items (->> data
+                   (filter (fn [item]
+                             (and (<= (:start region) (:start item)) (>= (:end region) (:end item)))))
+                   (vec))
+        prepared-text (-> text (prepare-text) (clojure.string/split " "))]
+    (-> (get-chunks prepared-text items)
+        (pack-talk-data))))
+
+(defn get-talk-data-if-possible
+  [text url region]
+  (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
+    (get-talk-data-for-text text script-data region)))
 
 (defn get-region-data-if-possible
   [text url]
