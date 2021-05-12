@@ -16,7 +16,8 @@
    :breadcrumbs-wrapper        {:display     "flex"
                                 :align-items "center"}
    :breadcrumbs-icon           {:font-size "1.5rem"
-                                :margin    "0 5px"}
+                                :margin    "0 5px"
+                                :color     (get-in-theme [:palette :text :primary])}
    :breadcrumbs-text           {:display "inline-block"}
    :breadcrumbs-text-clickable {:display "inline-block"
                                 :cursor  "pointer"}})

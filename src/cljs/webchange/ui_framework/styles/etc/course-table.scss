@@ -2,15 +2,15 @@
     table-layout: fixed;
 
     th, td {
-        border: solid 1px #414141;
+        border: solid 1px #dedede;
         padding: 16px;
     }
 
     thead {
         tr {
-            background-color: #2a2a2a;
-            border-bottom: solid 2px #222;
-            box-shadow: 0px 5px 5px #2a2a2a;
+            background-color: #f2f2f2;
+            border-bottom: solid 2px #dedede;
+            box-shadow: 0px 5px 5px #d3d3d3;
 
              th {
                 padding: 8px !important;
@@ -25,9 +25,9 @@
     }
 
     tbody {
-        .row-selected,
-        .row-selected ul {
-           background-color: #3e3e3e;
+        .row-selected {
+            background-color: #fff;
+            box-shadow: 0px 0px 12px rgba(175, 175, 175, 0.5);
         }
 
         td {
@@ -36,9 +36,9 @@
             transition: box-shadow 0.2s ease-out;
             vertical-align: top;
 
-            &.selected,
-            &.selected ul {
-                background-color: #3e3e3e;
+            &.selected {
+                background-color: #fff;
+                box-shadow: 0px 0px 12px rgba(175, 175, 175, 0.5);
             }
 
             &.idx,
@@ -48,10 +48,11 @@
             }
 
             &.level-idx {
-                background-color: #323232;
+                background-color: #f2f2f2;
 
                 &.selected {
-                    background-color: #3e3e3e;
+                    background-color: #f2f2f2;
+                    box-shadow: 0px 0px 12px rgba(175, 175, 175, 0.5);
                 }
             }
 
