@@ -51,6 +51,7 @@
                                 (recorder/start #(reset! current-state :stop-record)))
           handle-stop-record (fn []
                                (js/clearInterval @interval-id)
+                               (reset! timing 0)
                                (recorder/stop
                                  #(do (reset! current-state :start-record)
                                       (re-frame/dispatch [::translator-form.audios/upload-audio %

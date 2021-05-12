@@ -75,8 +75,17 @@
     (when (and (> (:start region-data) 0) (> (:end region-data) 0))
       (.stop wave-surfer)
       (.clearRegions wave-surfer)
-      (.seekAndCenter wave-surfer (/ (last-position key (+ (:start region-data) 5))
-                                     (.getDuration wave-surfer)))
+      (let [progress (/ (last-position key (:start region-data))
+                        (.getDuration wave-surfer))
+
+            drawer-wrapper (.. wave-surfer -drawer -wrapper)
+            recenter-shift (if (some? drawer-wrapper)
+                             (let [full-width (.-scrollWidth drawer-wrapper)
+                                   client-width (.-offsetWidth drawer-wrapper)]
+                               (-> (/ client-width full-width) (/ 2) (- 0.01)))
+                             0)]
+        (.seekTo wave-surfer progress)
+        (.recenter (.-drawer wave-surfer) (+ progress recenter-shift)))
       (.addRegion wave-surfer (clj->js region-data)))))
 
 (defn init-audio-region!
