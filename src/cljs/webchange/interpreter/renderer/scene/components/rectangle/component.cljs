@@ -77,6 +77,7 @@
     (.addChild parent container)
 
     (apply-filters sprite filters)
+    (apply-filters container filters)
 
     (when-not (nil? on-click) (utils/set-handler container "click" on-click))
     (when-not (nil? ref) (ref wrapped-component))

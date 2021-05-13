@@ -205,10 +205,11 @@
                 (or (contains? params-to-animate :x)
                     (contains? params-to-animate :y)) (merge (w/get-position object))
                 (contains? params-to-animate :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
+                (contains? params-to-animate :hue) (assoc :hue (w/get-filter-value object "hue"))
+                (contains? params-to-animate :glow) (assoc :glow (w/get-filter-value object "glow"))
                 (contains? params-to-animate :rotation) (assoc :rotation (w/get-rotation object))
                 (contains? params-to-animate :opacity) (assoc :opacity (w/get-opacity object))
-                (contains? params-to-animate :fill) (assoc :fill (w/get-fill object))
-                )
+                (contains? params-to-animate :fill) (assoc :fill (w/get-fill object)))
         (clj->js))))
 
 (defn- set-tween-object-params
@@ -221,6 +222,10 @@
       (w/set-position object (select-keys params [:x :y])))
     (when (contains? params :brightness)
       (w/set-filter-value object "brightness" (:brightness params)))
+    (when (contains? params :hue)
+      (w/set-filter-value object "hue" (:hue params)))
+    (when (contains? params :glow)
+      (w/set-filter-value object "glow" (:glow params)))
     (when (contains? params :rotation)
       (w/set-rotation object (:rotation params)))
     (when (contains? params :opacity)
@@ -262,13 +267,16 @@
                                                   (on-ended))
                                                 (this-as t (.kill t))))))
                      (:yoyo params) (merge {:yoyo   true
-                                            :repeat -1}))
+                                            :repeat (or (:repeat params) -1)}))
         tween (TweenMax.to container duration (clj->js vars))]
 
     (when skippable
       (ce/on-skip! #(.progress tween 1)))
 
-    (register-transition! id #(.kill tween))
+    (register-transition! id #(do
+                                (when (:yoyo params)
+                                  (.pause tween 0))
+                                (.kill tween)))
 
     (when kill-after
       (js/setTimeout #(kill-transition! id) kill-after))))
