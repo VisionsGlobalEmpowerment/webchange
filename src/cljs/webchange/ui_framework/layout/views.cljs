@@ -3,10 +3,7 @@
     [reagent.core :as r]
     [webchange.ui-framework.layout.navigation.views :refer [navigation-menu]]
     [webchange.ui-framework.layout.toolbar.views :refer [toolbar]]
-    [webchange.views-modals :refer [modal-windows]]
-
-    ))
-
+    [webchange.views-modals :refer [modal-windows]]))
 
 (defn layout
   [{:keys [actions show-navigation?]
@@ -22,4 +19,3 @@
       (into [:div.content]
             (r/children this))]
      [modal-windows]]))
-

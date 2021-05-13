@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.modes.editor-frame
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.layout.components.change-skin.state :as skin]
+    [webchange.editor-v2.activity-form.generic.components.change-skin.state :as skin]
     [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE Text]]
     [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]

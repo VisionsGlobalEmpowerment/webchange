@@ -2,21 +2,13 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.fix-lodash]
-
     [webchange.editor-v2.activity-form.views :refer [activity-form]]
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form]]
     [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]
     [webchange.editor-v2.lessons.views :refer [add-lesson-form edit-lesson-form]]
     [webchange.editor-v2.components.page-layout.views :as current-layout]
-    [webchange.editor-v2.layout.views :refer [activity-edit-form]]
-    ;[webchange.editor-v2.layout.utils :refer [get-activity-type]]
-    [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs course-breadcrumbs]]
-
-    [webchange.subs :as subs]
-
-    [webchange.ui-framework.layout.views :as ui]
-
-    ))
+    [webchange.editor-v2.components.breadcrumbs.views :refer [course-breadcrumbs]]
+    [webchange.subs :as subs]))
 
 (def course-view course-dashboard)
 

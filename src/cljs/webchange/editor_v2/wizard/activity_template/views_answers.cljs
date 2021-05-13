@@ -3,7 +3,7 @@
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.layout.components.activity-stage.views :refer [select-stage]]
+    [webchange.editor-v2.activity-form.generic.components.select-stage.views :refer [select-stage]]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.index :refer [select]]
     [reagent.core :as r]

@@ -1,0 +1,25 @@
+@import "components/styles";
+
+.generic-skeleton {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .top-panel {
+        display: flex;
+        gap: 32px;
+        width: 100%;
+        padding-bottom: 30px;
+
+        .data-container {
+            flex-grow: 0;
+            width: 300px;
+        }
+    }
+
+    .scene-container {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+    }
+}

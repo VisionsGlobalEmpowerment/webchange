@@ -1,0 +1,31 @@
+.share-button {
+    background-color: #1D1D1F;
+
+    svg {
+        fill: #fff;
+    }
+
+    &:hover {
+        background-color: #0071e3;
+    }
+}
+
+.share-form {
+    .link-row {
+        display: flex;
+
+        input {
+            flex: 1 1;
+        }
+
+        button {
+            flex: 0 0 auto;
+            margin-left: 16px;
+        }
+    }
+
+    .open-link {
+        float: left;
+        margin-top: 48px;
+    }
+}

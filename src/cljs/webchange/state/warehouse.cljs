@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.sync-status.state :as sync-status]))
+    [webchange.editor-v2.layout.components.sync-status.state :as sync-status]))
 
 (defn- get-form-data
   [form-params]

@@ -4,7 +4,7 @@
     [webchange.editor-v2.activity-form.flipbook.asset-form.views :refer [asset-form]]
     [webchange.editor-v2.activity-form.flipbook.stage.views :refer [stage-block]]
     [webchange.editor-v2.activity-form.flipbook.pages.views :refer [pages-block]]
-    [webchange.editor-v2.layout.components.activity-action.views :refer [action-modal-container]]))
+    [webchange.editor-v2.activity-form.generic.components.activity-action.views :refer [action-modal-container]]))
 
 (defn activity-form
   []

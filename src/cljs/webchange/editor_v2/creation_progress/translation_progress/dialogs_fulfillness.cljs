@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.creation-progress.translation-progress.dialogs-fulfillness
   (:require
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :refer [validate-dialog-action]]
-    [webchange.editor-v2.sandbox.parse-actions :refer [find-all-actions]]))
+    [webchange.editor-v2.layout.components.sandbox.parse-actions :refer [find-all-actions]]))
 
 (defn check-dialogs
   [scene-data]
