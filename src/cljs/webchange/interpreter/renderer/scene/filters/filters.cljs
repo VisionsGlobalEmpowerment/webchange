@@ -37,13 +37,37 @@
     (set-brightness value)
     (add-filter container)))
 
+(defn- set-hue
+  [filter value]
+  (doto filter
+    (.saturate value)
+    (aset "value" value)))
+
+(defn apply-hue-filter
+  [container {:keys [value]}]
+  (doto (ColorMatrixFilter.)
+    (aset "name" "hue")
+    (set-hue value)
+    (add-filter container)))
+
+(defn- set-glow-outer-strength
+  [filter value]
+  (doto filter
+    (aset "outerStrength" value)
+    (aset "value" value)))
+
 (defn apply-glow-filter
-  [container]
-  (let [glow-params (clj->js {:quality       0.1
-                              :distance      10
-                              :innerStrength 0
-                              :outerStrength 4
-                              :color         0xffffff})]
+  [container {:keys [quality distance inner-strength outer-strength color]
+              :or {quality 0.1
+                   distance 10
+                   inner-strength 0
+                   outer-strength 4
+                   color 0xffffff}}]
+  (let [glow-params (clj->js {:quality       quality
+                              :distance      distance
+                              :innerStrength inner-strength
+                              :outerStrength outer-strength
+                              :color         color})]
     (doto (GlowFilter. glow-params)
       (aset "name" "glow")
       (add-filter container))))
@@ -161,7 +185,8 @@
   (doseq [{:keys [name] :as filter-params} filters]
     (case name
       "brightness" (apply-brighten-filter container filter-params)
-      "glow" (apply-glow-filter container)
+      "hue" (apply-hue-filter container filter-params)
+      "glow" (apply-glow-filter container filter-params)
       "grayscale" (apply-grayscale-filter container)
       "outline" (apply-outline-filter container filter-params)
       "pulsation" (apply-pulsation-filter container)
@@ -174,7 +199,8 @@
   (logger/trace-folded "set Filter" container name params)
   (case name
     "brightness" (apply-brighten-filter container params)
-    "glow" (apply-glow-filter container)
+    "hue" (apply-hue-filter container params)
+    "glow" (apply-glow-filter container params)
     "grayscale" (apply-grayscale-filter container)
     "outline" (apply-outline-filter container params)
     "pulsation" (apply-pulsation-filter container params)
@@ -194,5 +220,7 @@
   (if-let [filter (get-filter-by-name container filter-name)]
     (case filter-name
       "brightness" (set-brightness filter value)
+      "hue" (set-hue filter value)
+      "glow" (set-glow-outer-strength filter value)
       (logger/warn "[Filters]" (str "Filter with type <" filter-name "> can not be updated")))
     (logger/warn "[Filters]" (str "Filter with type <" filter-name "> was not found"))))

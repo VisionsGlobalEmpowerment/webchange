@@ -1,6 +1,7 @@
 (ns webchange.templates.library.running-time-limited
   (:require
-    [webchange.templates.core :as core]))
+    [webchange.templates.core :as core]
+    [webchange.templates.utils.dialog :as dialog]))
 
 (def m {:id          34
         :name        "Running (time limited)"
@@ -52,10 +53,8 @@
                                                 :font-family    "Roboto"
                                                 :progress-color 0xff9000
                                                 :color          0x010101
-                                                :filter         "brighten",
-                                                :actions        {:end {:on "end" :type "action" :id "finish-game"}}
-                                                :states         {:highlighted {:filter "glow"}
-                                                                 :normal      {:filter ""}}}
+                                                :filters        [{:name "brightness" :value 0}]
+                                                :actions        {:end {:on "end" :type "action" :id "finish-game"}}}
                         :target-group          {:type     "group"
                                                 :x        676
                                                 :y        64
@@ -68,7 +67,9 @@
                                                 :fill          0xFF9000
                                                 :width         104
                                                 :height        104
-                                                :border-radius 52}
+                                                :border-radius 52
+                                                :filters       [{:name "brightness" :value 0}]
+                                                :transition    "letter-target-background"}
                         :letter-target         {:type           "text"
                                                 :x              56
                                                 :y              35
@@ -80,10 +81,7 @@
                                                 :font-family    "Lexend Deca"
                                                 :font-size      72
                                                 :text           "a"
-                                                :filter         "brighten",
-                                                :vertical-align "middle"
-                                                :states         {:highlighted {:filter "glow"}
-                                                                 :normal      {:filter ""}}}
+                                                :vertical-align "middle"}
                         :box-target-background {:type          "rectangle"
                                                 :x             168
                                                 :y             24
@@ -104,7 +102,10 @@
                                                 :fill          0xECECEC
                                                 :width         104
                                                 :height        104
-                                                :border-radius 52}
+                                                :border-radius 52
+                                                :filters       [{:name "brightness" :value 0}
+                                                                {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                                :transition    "counter-background"}
                         :counter               {:type        "counter"
                                                 :transition  "counter"
                                                 :x           271
@@ -189,7 +190,7 @@
                         ["target-group" "timer" "line-1" "line-2" "line-3"]]
         :actions       {:dialog-1-welcome        {:type                 "sequence-data"
                                                   :editor-type          "dialog"
-                                                  :available-activities ["highlight-target-letter", "highlight-timer"]
+                                                  :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
                                                   :concept-var          "current-concept"
                                                   :data                 [{:type "sequence-data"
                                                                           :data [{:type "empty" :duration 0}
@@ -228,17 +229,23 @@
                                                   :phrase-description "Ready-Go"
                                                   :dialog-track       "3 Start"}
                         :highlight-target-letter {:type               "transition"
-                                                  :transition-id      "letter-target"
+                                                  :transition-id      "letter-target-background"
                                                   :return-immediately true
-                                                  :from               {:brightness 0},
-                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.428}
-                                                  :kill-after         3000}
+                                                  :from               {:brightness 0 :hue 0},
+                                                  :to                 {:brightness 1 :yoyo true :duration 0.5 :repeat 5}
+                                                  }
+                        :highlight-counter       {:type               "transition"
+                                                  :transition-id      "counter-background"
+                                                  :return-immediately true
+                                                  :from               {:brightness 0 :glow 0}
+                                                  :to                 {:brightness 0.1 :glow 10 :yoyo true :duration 0.5 :repeat 5}
+                                                  }
                         :highlight-timer         {:type               "transition"
                                                   :transition-id      "timer"
                                                   :return-immediately true
-                                                  :from               {:brightness 0},
-                                                  :to                 {:brightness 0.35 :yoyo true :duration 0.428}
-                                                  :kill-after         3000}
+                                                  :from               {:brightness 0 :hue 0},
+                                                  :to                 {:brightness 1 :yoyo true :duration 0.5 :repeat 5}
+                                                  }
                         :dialog-5-starting-noise {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :concept-var        "current-concept"
@@ -342,13 +349,7 @@
 
                         :intro                   {:type "sequence-data"
                                                   :data [{:type "action" :id "dialog-2-intro-concept"}
-                                                         {:type "state" :id "highlighted" :target "letter-target"}
-                                                         {:type "empty" :duration 2000}
-                                                         {:type "state" :id "normal" :target "letter-target"}
-                                                         {:type "action" :id "dialog-3-intro-timer"}
-                                                         {:type "state" :id "highlighted" :target "timer"}
-                                                         {:type "empty" :duration 2000}
-                                                         {:type "state" :id "normal" :target "timer"}]}
+                                                         {:type "action" :id "dialog-3-intro-timer"}]}
 
                         :start                   {:type "sequence-data"
                                                   :data [{:type "action" :id "dialog-4-ready-go"}
@@ -489,7 +490,11 @@
                         :stop-scene              {:type "sequence" :data ["stop-activity"]}
                         :start-activity          {:type "start-activity"}
                         :stop-activity           {:type "stop-activity"}
-                        :finish-activity         {:type "finish-activity"}
+                        :finish-activity         {:type "sequence-data"
+                                                  :data [{:type "action" :id "finish-activity-dialog"}
+                                                         {:type "finish-activity"}]}
+                        :finish-activity-dialog  (-> (dialog/default "Finish activity dialog")
+                                                     (assoc :available-activities ["highlight-target-letter", "highlight-timer", "highlight-counter"]))
                         :wait-for-box-animations {:type "empty" :duration 100}}
         :triggers      {:stop {:on "back" :action "stop-scene"} :start {:on "start" :action "start-scene"}}
         :metadata      {:autostart true}})

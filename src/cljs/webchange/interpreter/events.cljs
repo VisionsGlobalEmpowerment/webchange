@@ -405,7 +405,7 @@
         transition (get-in db [:transitions scene-id transition-id])
         id (or transition-tag transition-id)]
     (when transition
-      (let [transition-params [:duration :easing :loop :yoyo :speed]]
+      (let [transition-params [:duration :easing :loop :yoyo :repeat :speed]]
         {:transition {:id        id
                       :component @transition
                       :to        (without-params to transition-params)

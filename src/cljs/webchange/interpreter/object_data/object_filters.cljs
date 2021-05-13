@@ -22,6 +22,13 @@
                                               :value (:brightness object-params)}) true]
     [object-params has-filter]))
 
+(defn- with-hue
+  [[object-params has-filter]]
+  (if (= (:filter object-params) "hue")
+    [(update-in object-params [:filters] conj {:name  "hue"
+                                               :value (:brightness object-params)}) true]
+    [object-params has-filter]))
+
 (defn- with-highlight
   [[object-params has-filter]]
   (if (contains? object-params :highlight)
@@ -34,13 +41,12 @@
     [(update-in object-params [:filters] conj {:name "pulsation"}) true]
     [object-params has-filter]))
 
-(defn- empty-filter [] {:filters []})
-
 (defn with-filter-params
   [params]
   (-> [params false]
       (with-grayscale)
       (with-brighten)
+      (with-hue)
       (with-highlight)
       (with-pulsation)
       (with-filter-transition)))
