@@ -273,10 +273,7 @@
     (when skippable
       (ce/on-skip! #(.progress tween 1)))
 
-    (register-transition! id #(do
-                                (when (:yoyo params)
-                                  (.pause tween 0))
-                                (.kill tween)))
+    (register-transition! id #(.kill tween))
 
     (when kill-after
       (js/setTimeout #(kill-transition! id) kill-after))))
