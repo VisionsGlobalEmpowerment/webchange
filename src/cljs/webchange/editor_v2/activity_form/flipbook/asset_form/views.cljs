@@ -1,11 +1,11 @@
-(ns webchange.book-creator.asset-form.views
+(ns webchange.editor-v2.activity-form.flipbook.asset-form.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-creator.asset-form.image-form.views :as image-component]
-    [webchange.book-creator.asset-form.text-form.views :as text-component]
-    [webchange.book-creator.asset-form.state :as state]
-    [webchange.book-creator.state :as state-book-creator]
+    [webchange.editor-v2.activity-form.flipbook.asset-form.image-form.views :as image-component]
+    [webchange.editor-v2.activity-form.flipbook.asset-form.text-form.views :as text-component]
+    [webchange.editor-v2.activity-form.flipbook.asset-form.state :as state]
+    [webchange.editor-v2.activity-form.flipbook.state :as state-book-creator]
     [webchange.ui-framework.components.index :refer [button with-confirmation]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 

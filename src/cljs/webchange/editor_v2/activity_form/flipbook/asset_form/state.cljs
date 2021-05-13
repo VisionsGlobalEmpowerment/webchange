@@ -1,7 +1,7 @@
-(ns webchange.book-creator.asset-form.state
+(ns webchange.editor-v2.activity-form.flipbook.asset-form.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.book-creator.state :as state-book-creator]
+    [webchange.editor-v2.activity-form.flipbook.state :as state-book-creator]
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
@@ -149,7 +149,7 @@
   (fn [[loading? has-changes?]]
     (or loading? (not has-changes?))))
 
-;; Init 
+;; Init
 
 (re-frame/reg-event-fx
   ::init

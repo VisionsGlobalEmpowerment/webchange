@@ -1,4 +1,4 @@
-(ns webchange.book-creator.views-content-block
+(ns webchange.editor-v2.activity-form.flipbook.views-content-block
   (:require
     [reagent.core :as r]))
 

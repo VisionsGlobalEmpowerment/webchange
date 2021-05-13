@@ -1,4 +1,4 @@
-(ns webchange.book-creator.course-status.state
+(ns webchange.editor-v2.layout.components.course-status.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.state.state-course :as state-course]))

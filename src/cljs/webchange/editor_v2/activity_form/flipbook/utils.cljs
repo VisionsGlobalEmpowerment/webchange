@@ -1,4 +1,4 @@
-(ns webchange.book-creator.utils
+(ns webchange.editor-v2.activity-form.flipbook.utils
   (:require
     [webchange.editor-v2.graph-builder.scene-parser.scene-parser :refer [parse-data]]
     [webchange.utils.flipbook :as utils]))

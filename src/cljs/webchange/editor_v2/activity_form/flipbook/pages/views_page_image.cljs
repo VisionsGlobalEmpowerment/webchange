@@ -1,8 +1,8 @@
-(ns webchange.book-creator.pages.views-page-image
+(ns webchange.editor-v2.activity-form.flipbook.pages.views-page-image
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-creator.pages.state :as state-pages]
+    [webchange.editor-v2.activity-form.flipbook.pages.state :as state-pages]
     [webchange.logger.index :as logger]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))

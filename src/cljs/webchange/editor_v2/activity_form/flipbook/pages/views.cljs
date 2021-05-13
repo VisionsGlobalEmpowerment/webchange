@@ -1,10 +1,10 @@
-(ns webchange.book-creator.pages.views
+(ns webchange.editor-v2.activity-form.flipbook.pages.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-creator.pages.state :as state]
-    [webchange.book-creator.pages.views-page-image :refer [page-image]]
-    [webchange.book-creator.views-content-block :refer [content-block]]
+    [webchange.editor-v2.activity-form.flipbook.pages.state :as state]
+    [webchange.editor-v2.activity-form.flipbook.pages.views-page-image :refer [page-image]]
+    [webchange.editor-v2.activity-form.flipbook.views-content-block :refer [content-block]]
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.utils :refer [get-class-name]]

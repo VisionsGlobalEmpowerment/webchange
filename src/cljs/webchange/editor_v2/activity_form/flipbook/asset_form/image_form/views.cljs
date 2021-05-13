@@ -1,8 +1,8 @@
-(ns webchange.book-creator.asset-form.image-form.views
+(ns webchange.editor-v2.activity-form.flipbook.asset-form.image-form.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-creator.asset-form.image-form.state :as state]
+    [webchange.editor-v2.activity-form.flipbook.asset-form.image-form.state :as state]
     [webchange.ui-framework.components.index :refer [file]]))
 
 (defn form

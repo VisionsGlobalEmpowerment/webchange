@@ -1,7 +1,7 @@
-(ns webchange.book-creator.asset-form.image-form.state
+(ns webchange.editor-v2.activity-form.flipbook.asset-form.image-form.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.book-creator.asset-form.state :refer [path-to-db] :as state]
+    [webchange.editor-v2.activity-form.flipbook.asset-form.state :refer [path-to-db] :as state]
     [webchange.logger.index :as logger]
     [webchange.state.utils :refer [get-scene-object]]))
 

@@ -1,8 +1,8 @@
-(ns webchange.book-creator.asset-form.text-form.views
+(ns webchange.editor-v2.activity-form.flipbook.asset-form.text-form.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-creator.asset-form.text-form.state :as state]
+    [webchange.editor-v2.activity-form.flipbook.asset-form.text-form.state :as state]
     [webchange.ui-framework.components.index :refer [icon icon-button select text-area]]))
 
 (defn- font-family-component

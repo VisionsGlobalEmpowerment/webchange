@@ -1,7 +1,7 @@
-(ns webchange.book-creator.asset-form.text-form.state
+(ns webchange.editor-v2.activity-form.flipbook.asset-form.text-form.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.book-creator.asset-form.state :refer [path-to-db] :as state]
+    [webchange.editor-v2.activity-form.flipbook.asset-form.state :refer [path-to-db] :as state]
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.logger.index :as logger]

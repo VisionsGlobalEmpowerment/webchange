@@ -1,7 +1,7 @@
-(ns webchange.book-creator.course-status.views
+(ns webchange.editor-v2.layout.components.course-status.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.book-creator.course-status.state :as state]
+    [webchange.editor-v2.layout.components.course-status.state :as state]
     [webchange.ui-framework.components.index :refer [button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 

@@ -1,9 +1,9 @@
-(ns webchange.book-creator.stage.views
+(ns webchange.editor-v2.activity-form.flipbook.stage.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.layout.components.interpreter_stage.views :as interpreter]
-    [webchange.book-creator.views-content-block :refer [content-block]]
+    [webchange.editor-v2.activity-form.flipbook.views-content-block :refer [content-block]]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.index :refer [icon-button]]))
 

@@ -1,7 +1,7 @@
-(ns webchange.book-creator.pages.state
+(ns webchange.editor-v2.activity-form.flipbook.pages.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.book-creator.state :as db]
+    [webchange.editor-v2.activity-form.flipbook.state :as db]
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.state.state-flipbook :as state-flipbook]))
 
