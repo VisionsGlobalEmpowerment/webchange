@@ -27,11 +27,11 @@
 
 (re-frame/reg-event-fx
   ::edit-dataset-item
-  (fn [{:keys [db]} [_ item-id {:keys [data name]}]]
+  (fn [{:keys [db]} [_ item-id {:keys [data name version]}]]
     {:db (assoc-in db [:loading :edit-dataset-item] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/dataset-items/" item-id)
-                  :params          {:data data :name name}
+                  :params          {:data data :name name :version version}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::edit-dataset-item-success]

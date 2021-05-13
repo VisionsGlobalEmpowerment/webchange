@@ -66,7 +66,8 @@
   (let [item @(re-frame/subscribe [::concepts-subs/dataset-item item-id])
         dataset-id (:dataset-id item)
         data (r/atom {:data (:data item)
-                      :name (:name item)})]
+                      :name (:name item)
+                      :version (:version item)})]
     (if item
       (fn []
         (let [loading @(re-frame/subscribe [:loading])]
