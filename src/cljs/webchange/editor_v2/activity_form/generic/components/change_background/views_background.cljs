@@ -5,8 +5,7 @@
     [webchange.editor-v2.activity-form.generic.components.change-background.views-image-selector :refer [image-selector]]
     [webchange.editor-v2.activity-form.generic.components.change-background.views-preview :refer [preview]]
     [webchange.editor-v2.activity-form.generic.components.change-background.views-type-selector :refer [type-selector]]
-    [webchange.editor-v2.activity-form.generic.components.change-background.state :as background]
-    [webchange.editor-v2.layout.components.workflow-steps.views :as translation-steps]))
+    [webchange.editor-v2.activity-form.generic.components.change-background.state :as background]))
 
 (defn- get-styles
   []
@@ -44,10 +43,8 @@
 (defn change-background
   []
   (let [handle-click (fn []
-                       (translation-steps/set-change-background-complete)
                        (re-frame/dispatch [::background/open-window]))]
     [:div
-     [translation-steps/change-background]
      [ui/form-control {:full-width true
                        :margin     "normal"}
       [ui/button

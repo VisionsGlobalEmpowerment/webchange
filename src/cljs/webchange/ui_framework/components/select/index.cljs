@@ -2,40 +2,63 @@
   (:require
     [webchange.ui-framework.components.select.icon-down :as icon-down]
     [webchange.ui-framework.components.select.icon-up :as icon-up]
+    [webchange.ui-framework.components.select.utils :refer [empty-value? fix-options parse-value]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
-(defn- fix-options
-  [options]
-  (->> options
-       (map (fn [{:keys [enable?] :as option}]
-              (if (some? enable?)
-                (-> option
-                    (assoc :disabled? (not enable?))
-                    (dissoc :enable?))
-                option)))))
-
-;; variant [string]
-
+(defn- get-selected-options
+  [event]
+  (->> (.. event -target -options)
+       (.apply js/Array nil)
+       (filter (fn [option] (.-selected option)))
+       (map (fn [option] (.-value option)))))
 
 (defn component
-  [{:keys [options value variant class-name on-arrow-down-click on-arrow-up-click on-change show-buttons? width with-arrow?]
-    :or   {show-buttons?       false
-           with-arrow?         true
+  [{:keys [class-name
+           multiple?
+           on-arrow-down-click
+           on-arrow-up-click
+           on-change
+           options
+           placeholder
+           show-buttons?
+           type
+           value
+           variant
+           width
+           with-arrow?]
+    :or   {multiple?           false
            options             []
            on-change           #()
            on-arrow-down-click #()
-           on-arrow-up-click   #()}}]
+           on-arrow-up-click   #()
+           placeholder         ""
+           show-buttons?       false
+           type                "str"
+           with-arrow?         true}
+    :as   props}]
   "Props:
+   :options - items list
+       .text
+       .value
+       .disabled?
    :variant - 'outlined' or none."
-  (let [handle-change #(-> % (.. -target -value) (on-change))
-        options (fix-options options)]
+  (let [handle-change (fn [event]
+                        (let [selected-options (->> (get-selected-options event)
+                                                    (map #(parse-value % type))
+                                                    (doall))]
+                          (-> (if multiple?
+                                selected-options
+                                (first selected-options))
+                              (on-change))))
+        options (fix-options options props)]
     [:div {:style      (if (some? width) {:width width} {})
            :class-name (get-class-name (cond-> (-> {"wc-select"  true
                                                     "with-arrow" with-arrow?}
                                                    (assoc class-name (some? class-name)))
                                                (some? variant) (assoc (str "variant-" variant) true)))}
-     [:select {:value     value
-               :on-change handle-change}
+     [:select (cond-> {:value     value
+                       :on-change handle-change}
+                      multiple? (assoc :multiple true))
       (for [{:keys [text value disabled?]} options]
         ^{:key value}
         [:option {:value    value

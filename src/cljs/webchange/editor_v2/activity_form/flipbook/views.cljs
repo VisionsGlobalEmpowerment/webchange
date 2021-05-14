@@ -8,7 +8,7 @@
 
 (defn activity-form
   []
-  [layout
+  [layout {:show-review? true}
    [:div.book-creator
     [:div.main-content
      [stage-block
