@@ -14,7 +14,6 @@
     [webchange.editor-v2.activity-form.generic.components.history.views :refer [history-button]]
     [webchange.editor-v2.activity-form.generic.components.object-selector.views :refer [object-selector]]
     [webchange.editor-v2.activity-form.generic.components.select-stage.views :refer [select-stage]]
-    [webchange.editor-v2.activity-form.generic.components.share-button.views :refer [share-button]]
     [webchange.editor-v2.scene-diagram.views-diagram :refer [dialogs-diagram]]
 
     [webchange.editor-v2.creation-progress.state :as progress-state]
@@ -26,8 +25,7 @@
     (let [activity-type (get-activity-type scene-data)]
       [layout
        [skeleton {:top-left-component  (into [:div]
-                                             (cond-> [[activity-actions {:scene-data scene-data}]
-                                                      [share-button]]
+                                             (cond-> [[activity-actions {:scene-data scene-data}]]
                                                      (= activity-type "book") (concat [[select-stage]
                                                                                        [object-selector]])
                                                      (not= activity-type "book") (concat [[change-background]

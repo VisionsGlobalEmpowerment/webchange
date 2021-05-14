@@ -1,31 +1,29 @@
-.share-button {
-    background-color: #1D1D1F;
-
-    svg {
-        fill: #fff;
-    }
-
-    &:hover {
-        background-color: #0071e3;
-    }
-}
-
 .share-form {
-    .link-row {
+    .lesson-set-row {
         display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 32px;
+        margin-bottom: 32px;
 
-        input {
-            flex: 1 1;
+        & > * {
+            flex: 1;
         }
 
-        button {
-            flex: 0 0 auto;
-            margin-left: 16px;
+        .lesson-set-name {
+            font-weight: bold;
+            text-align: left;
+            line-height: 32px;
+            max-width: 150px;
+
+            &:after {
+                content: ":";
+            }
         }
     }
 
-    .open-link {
-        float: left;
-        margin-top: 48px;
+    .link-row,
+    .link-row input {
+        width: 100%;
     }
 }
