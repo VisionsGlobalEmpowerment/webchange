@@ -1,6 +1,7 @@
 (ns webchange.interpreter.events-register
   (:require
-    [re-frame.core :as re-frame]))
+    [re-frame.core :as re-frame]
+    [webchange.logger.index :as logger]))
 
 (re-frame/reg-event-db
   ::register-animation
@@ -11,5 +12,6 @@
 (re-frame/reg-event-db
   ::register-transition
   (fn [db [_ name component]]
+    (logger/trace-folded "register transition" name component)
     (let [scene-id (:current-scene db)]
       (assoc-in db [:transitions scene-id name] component))))
