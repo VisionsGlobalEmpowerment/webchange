@@ -16,17 +16,19 @@
         handle-dataset-items-change #(re-frame/dispatch [::state/set-current-dataset-items-ids name %])]
     [:div.lesson-set-row
      [:div.lesson-set-name name]
-     [select {:value     current-dataset-id
-              :options   dataset-options
-              :on-change handle-dataset-change
-              :type      "int"
-              :variant   "outlined"}]
+     [select {:value       current-dataset-id
+              :options     dataset-options
+              :on-change   handle-dataset-change
+              :type        "int"
+              :variant     "outlined"
+              :placeholder "Select Dataset"}]
      [select {:value     current-dataset-items-ids
               :options   dataset-items-options
               :on-change handle-dataset-items-change
               :multiple? true
               :type      "int"
-              :variant   "outlined"}]]))
+              :variant   "outlined"
+              :placeholder "Select Dataset Items"}]]))
 
 (defn- select-lesson-sets-form
   []
@@ -43,7 +45,9 @@
     [:div.share-form
      [select-lesson-sets-form]
      [:div.link-row
-      [text-input {:value link}]]]))
+      [text-input {:value       link
+                   :disabled?   true
+                   :placeholder "Fill form above to get share link"}]]]))
 
 (defn- copy-link-button
   []

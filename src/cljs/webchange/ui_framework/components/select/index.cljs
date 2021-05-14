@@ -2,7 +2,7 @@
   (:require
     [webchange.ui-framework.components.select.icon-down :as icon-down]
     [webchange.ui-framework.components.select.icon-up :as icon-up]
-    [webchange.ui-framework.components.select.utils :refer [fix-options parse-value]]
+    [webchange.ui-framework.components.select.utils :refer [empty-value? fix-options parse-value]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- get-selected-options
@@ -19,6 +19,7 @@
            on-arrow-up-click
            on-change
            options
+           placeholder
            show-buttons?
            type
            value
@@ -30,6 +31,7 @@
            on-change           #()
            on-arrow-down-click #()
            on-arrow-up-click   #()
+           placeholder         ""
            show-buttons?       false
            type                "str"
            with-arrow?         true}
@@ -42,10 +44,12 @@
    :variant - 'outlined' or none."
   (let [handle-change (fn [event]
                         (let [selected-options (->> (get-selected-options event)
-                                                    (map #(parse-value % type)))]
-                          (print "selected-options" selected-options)
-                          (print "multiple?" multiple?)
-                          (on-change (if multiple? selected-options (first selected-options)))))
+                                                    (map #(parse-value % type))
+                                                    (doall))]
+                          (-> (if multiple?
+                                selected-options
+                                (first selected-options))
+                              (on-change))))
         options (fix-options options props)]
     [:div {:style      (if (some? width) {:width width} {})
            :class-name (get-class-name (cond-> (-> {"wc-select"  true

@@ -77,10 +77,11 @@
      (re-frame/subscribe [::current-scene])
      (re-frame/subscribe [::lesson-set-data])])
   (fn [[form-params-defined? current-course current-scene lesson-set-data]]
-    (when form-params-defined?
+    (if form-params-defined?
       (create-link {:course-slug current-course
                     :scene-slug  current-scene
-                    :lessons     lesson-set-data}))))
+                    :lessons     lesson-set-data})
+      "")))
 
 ;; Datasets
 
