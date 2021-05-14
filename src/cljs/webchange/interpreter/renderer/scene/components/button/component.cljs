@@ -2,7 +2,8 @@
   (:require
     [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE Text]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.button.wrapper :refer [wrap]]))
+    [webchange.interpreter.renderer.scene.components.button.wrapper :refer [wrap]]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]))
 
 (def default-props {:x                   {}
                     :y                   {}
@@ -21,7 +22,9 @@
                     :padding-top         {:default 8}
                     :padding-bottom      {:default 16}
                     :padding-left        {:default 68}
-                    :padding-right       {:default 68}})
+                    :padding-right       {:default 68}
+                    :ref                 {}
+                    :filters             {}})
 
 (defn- create-text
   [{:keys [text text-color font-size font-family font-weight padding-left padding-top text-shadow text-shadow-offset text-shadow-blur text-shadow-opacity]}]
@@ -87,16 +90,18 @@
   :padding-right - padding top from button margin to text. Default 68
   "
 
-  [{:keys [parent on-click padding-left padding-right padding-top padding-bottom object-name type] :as props}]
+  [{:keys [parent on-click padding-left padding-right padding-top padding-bottom object-name type ref filters] :as props}]
   (let [text (create-text props)
         text-size (utils/get-size text)
         button-size {:width  (+ padding-left (:width text-size) padding-right)
                      :height (+ padding-top (:height text-size) padding-bottom)}
         mask (create-mask (merge button-size props))
         sprite (create-sprite (merge button-size props))
-        container (create-container props)]
+        container (create-container props)
+        wrapped-component (wrap type object-name container)]
 
     (when-not (nil? on-click) (utils/set-handler container "click" on-click))
+    (when-not (nil? ref) (ref wrapped-component))
 
     (aset sprite "mask" mask)
     (.addChild container sprite)
@@ -104,4 +109,5 @@
     (.addChild container mask)
     (.addChild parent container)
 
-    (wrap type object-name container)))
+    (apply-filters container filters)
+    wrapped-component))
