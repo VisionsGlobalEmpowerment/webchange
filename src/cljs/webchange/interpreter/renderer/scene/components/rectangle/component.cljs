@@ -76,7 +76,7 @@
     (.addChild container mask)
     (.addChild parent container)
 
-    (apply-filters sprite filters)
+    ;(apply-filters sprite filters)
     (apply-filters container filters)
 
     (when-not (nil? on-click) (utils/set-handler container "click" on-click))

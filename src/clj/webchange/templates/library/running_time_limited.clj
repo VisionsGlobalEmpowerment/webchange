@@ -201,6 +201,7 @@
                                                   :skippable            true}
                         :dialog-2-intro-concept  {:type               "sequence-data"
                                                   :editor-type        "dialog"
+                                                  :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
@@ -211,6 +212,7 @@
                                                   :tags               ["instruction"]}
                         :dialog-3-intro-timer    {:type               "sequence-data"
                                                   :editor-type        "dialog"
+                                                  :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
@@ -221,6 +223,7 @@
                                                   :tags               ["instruction"]}
                         :dialog-4-ready-go       {:type               "sequence-data"
                                                   :editor-type        "dialog"
+                                                  :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
@@ -258,6 +261,7 @@
 
                         :dialog-6-correct        {:type               "sequence-data"
                                                   :editor-type        "dialog"
+                                                  :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
@@ -267,6 +271,7 @@
                                                   :dialog-track       "4 Options"}
                         :dialog-7-wrong          {:type               "sequence-data"
                                                   :editor-type        "dialog"
+                                                  :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
@@ -494,6 +499,7 @@
                                                   :data [{:type "action" :id "finish-activity-dialog"}
                                                          {:type "finish-activity"}]}
                         :finish-activity-dialog  (-> (dialog/default "Finish activity dialog")
+                                                     (assoc :concept-var "current-concept")
                                                      (assoc :available-activities ["highlight-target-letter", "highlight-timer", "highlight-counter"]))
                         :wait-for-box-animations {:type "empty" :duration 100}}
         :triggers      {:stop {:on "back" :action "stop-scene"} :start {:on "start" :action "start-scene"}}
