@@ -1,8 +1,13 @@
 (ns webchange.state.warehouse
   (:require
     [re-frame.core :as re-frame]
-    [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.editor-v2.layout.components.sync-status.state :as sync-status]))
+    [ajax.core :refer [json-request-format json-response-format]]))
+
+(defn- path-to-db
+  [relative-path]
+  (->> relative-path
+       (concat [:warehouse])
+       (vec)))
 
 (defn- get-form-data
   [form-params]
@@ -13,9 +18,9 @@
           form-params))
 
 (defn- create-request
-  [{:keys [method uri body params show-sync?] :as props} {:keys [on-success on-failure]}]
+  [{:keys [method uri body params request-type] :as props} {:keys [on-success on-failure]}]
   {:dispatch-n (cond-> []
-                       show-sync? (conj [::sync-status/show]))
+                       (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? true}]))
    :http-xhrio (cond-> {:method          method
                         :uri             uri
                         :format          (json-request-format)
@@ -27,17 +32,29 @@
 
 (re-frame/reg-event-fx
   ::generic-on-success-handler
-  (fn [{:keys [_]} [_ {:keys [show-sync?]} success-handler response]]
+  (fn [{:keys [_]} [_ {:keys [request-type]} success-handler response]]
     {:dispatch-n (cond-> []
-                         show-sync? (conj [::sync-status/hide])
+                         (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                          (some? success-handler) (conj (conj success-handler response)))}))
 
 (re-frame/reg-event-fx
   ::generic-failure-handler
-  (fn [{:keys [_]} [_ {:keys [key show-sync?]} failure-handler response]]
+  (fn [{:keys [_]} [_ {:keys [key request-type]} failure-handler response]]
     {:dispatch-n (cond-> [[:api-request-error key response]]
-                         show-sync? (conj [::sync-status/hide])
+                         (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                          (some? failure-handler) (conj (conj failure-handler response)))}))
+
+(def sync-status-path (path-to-db [:sync-status]))
+
+(re-frame/reg-event-fx
+  ::set-sync-status
+  (fn [{:keys [db]} [_ {:keys [key in-progress?]}]]
+    {:db (assoc-in db (conj sync-status-path key) in-progress?)}))
+
+(re-frame/reg-sub
+  ::sync-status
+  (fn [db [_ key]]
+    (get-in db (conj sync-status-path key))))
 
 ;; Templates
 
@@ -52,11 +69,11 @@
 (re-frame/reg-event-fx
   ::update-activity
   (fn [{:keys [_]} [_ {:keys [course-id scene-id data]} handlers]]
-    (create-request {:key        :update-activity
-                     :method     :post
-                     :uri        (str "/api/courses/" course-id "/update-activity/" scene-id)
-                     :params     data
-                     :show-sync? true}
+    (create-request {:key          :update-activity
+                     :method       :post
+                     :uri          (str "/api/courses/" course-id "/update-activity/" scene-id)
+                     :params       data
+                     :request-type :update-activity}
                     handlers)))
 
 ;; Courses
@@ -139,11 +156,21 @@
 (re-frame/reg-event-fx
   ::save-scene
   (fn [{:keys [_]} [_ {:keys [course-id scene-id scene-data]} handlers]]
-    (create-request {:key        :save-scene
-                     :method     :put
-                     :uri        (str "/api/courses/" course-id "/scenes/" scene-id)
-                     :params     {:scene scene-data}
-                     :show-sync? true}
+    (create-request {:key          :save-scene
+                     :method       :put
+                     :uri          (str "/api/courses/" course-id "/scenes/" scene-id)
+                     :params       {:scene scene-data}
+                     :request-type :update-activity}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::save-scene-post
+  (fn [{:keys [_]} [_ {:keys [course-id scene-id scene-data]} handlers]]
+    (create-request {:key          :save-scene
+                     :method       :post
+                     :uri          (str "/api/courses/" course-id "/scenes/" scene-id)
+                     :params       {:scene scene-data}
+                     :request-type :update-activity}
                     handlers)))
 
 (re-frame/reg-event-fx
@@ -223,4 +250,30 @@
     (create-request {:key    :load-backgrounds
                      :method :get
                      :uri    (str "/api/courses/editor/assets")}
+                    handlers)))
+
+;; Scene History
+
+(re-frame/reg-event-fx
+  ::load-versions
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug]} handlers]]
+    (create-request {:key    :load-versions
+                     :method :get
+                     :uri    (str "/api/courses/" course-slug "/scenes/" scene-slug "/versions")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::restore-version
+  (fn [{:keys [_]} [_ {:keys [scene-version-id]} handlers]]
+    (create-request {:key    :restore-version
+                     :method :post
+                     :uri    (str "/api/scene-versions/" scene-version-id "/restore")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-template
+  (fn [{:keys [_]} [_ {:keys [template-id]} handlers]]
+    (create-request {:key    :load-template
+                     :method :get
+                     :uri    (str "/api/templates/" template-id "/metadata")}
                     handlers)))

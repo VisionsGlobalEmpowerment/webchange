@@ -39,7 +39,7 @@
      [ui/snackbar-content {:style   {:background-color (get-in-theme [:palette :background :paper])
                                      :cursor           "pointer"}
                            :message (r/as-element [bar-content])
-                           :action  [(r/as-element [ui/icon-button {:size     "small"
-                                                                    :style    {:padding 8}
-                                                                    :on-click handle-close-click}
-                                                    [ic/close {:style {:font-size 16}}]])]}]]))
+                           :action  (r/as-element [ui/icon-button {:size     "small"
+                                                                   :style    {:padding 8}
+                                                                   :on-click handle-close-click}
+                                                   [ic/close {:style {:font-size 16}}]])}]]))

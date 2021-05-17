@@ -7,7 +7,8 @@
     [webchange.editor-v2.concepts.subs :as concepts-subs]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]))
+    [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
+    [webchange.state.warehouse :as warehouse]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -125,16 +126,12 @@
 (defn save-scene
   [db course-id scene-id scene-data]
   (let [data (dissoc scene-data :animations)]
-    {:db         (-> db
-                     (assoc-in [:loading :save-scene] true)
-                     (update-in [:scenes scene-id] merge data))
-     :http-xhrio {:method          :post
-                  :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
-                  :params          {:scene data}
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::save-scene-success]
-                  :on-failure      [:api-request-error :save-scene]}}))
+    {:db       (update-in db [:scenes scene-id] merge data)
+     :dispatch [::warehouse/save-scene-post
+                {:course-id  course-id
+                 :scene-id   scene-id
+                 :scene-data data}
+                {:on-success [::save-scene-success]}]}))
 
 (re-frame/reg-event-fx
   ::save-current-scene
@@ -145,11 +142,11 @@
 
 (re-frame/reg-event-fx
   ::save-scene-success
-  (fn [{:keys [db]} [_ {:keys [scene-id data]}]]
-    (re-frame/dispatch [::ie/set-scene scene-id data])
-    (re-frame/dispatch [::ie/store-scene scene-id data])
-    (re-frame/dispatch [::translator-form.scene/init-state])
-    {:dispatch-n (list [:complete-request :save-scene])}))
+  (fn [{:keys [_]} [_ {:keys [scene-id data]}]]
+    {:dispatch-n (list [::ie/set-scene scene-id data]
+                       [::ie/store-scene scene-id data]
+                       [::translator-form.scene/init-state]
+                       [:complete-request :save-scene])}))
 
 (defn update-scene
   [db course-id scene-id scene-data-patch]
@@ -196,7 +193,7 @@
 (re-frame/reg-event-fx
   ::edit-dataset-success
   (fn [{:keys [db]} [_ response]]
-    {:db (assoc-in db [:editor :course-datasets] [response])
+    {:db         (assoc-in db [:editor :course-datasets] [response])
      :dispatch-n (list [:complete-request :edit-dataset]
                        [::load-datasets]
                        [::translator-form.concepts/reset-current-dataset response])}))

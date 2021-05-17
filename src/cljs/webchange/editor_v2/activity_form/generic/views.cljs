@@ -11,7 +11,6 @@
     [webchange.editor-v2.activity-form.generic.components.change-background.views-background :refer [change-background]]
     [webchange.editor-v2.activity-form.generic.components.change-skin.views :refer [change-skin]]
     [webchange.editor-v2.activity-form.generic.components.common-actions.views :refer [actions]]
-    [webchange.editor-v2.activity-form.generic.components.history.views :refer [history-button]]
     [webchange.editor-v2.activity-form.generic.components.object-selector.views :refer [object-selector]]
     [webchange.editor-v2.activity-form.generic.components.select-stage.views :refer [select-stage]]
     [webchange.editor-v2.scene-diagram.views-diagram :refer [dialogs-diagram]]
@@ -30,8 +29,7 @@
                                                                                        [object-selector]])
                                                      (not= activity-type "book") (concat [[change-background]
                                                                                           [actions]
-                                                                                          [change-skin]
-                                                                                          [history-button]])))
+                                                                                          [change-skin]])))
                   :top-right-component [interpreter-stage]
                   :bottom-component    [dialogs-diagram {:scene-data scene-data}]
                   :modals              [progress-panel]}]])))
