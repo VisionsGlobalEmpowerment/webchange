@@ -90,7 +90,7 @@
 (re-frame/reg-sub
   ::current-dataset-id
   (fn [db [_ lesson-set-name]]
-    (get-in db (current-dataset-id-path lesson-set-name) "")))
+    (get-in db (current-dataset-id-path lesson-set-name))))
 
 (re-frame/reg-event-fx
   ::set-current-dataset-id
