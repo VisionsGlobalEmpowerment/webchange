@@ -1,8 +1,8 @@
 (ns webchange.editor-v2.layout.components.sync-status.history.views
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.editor-v2.layout.components.sync-status.history.state :as state]
+    [webchange.state.core :as state-core]
     [webchange.ui-framework.components.index :refer [button dialog]]))
 
 (defn- update-template-button
@@ -71,11 +71,18 @@
 
 (defn history-button
   []
-  (r/with-let [_ (re-frame/dispatch [::state/load-versions])
-               handle-click #(re-frame/dispatch [::state/open])]
-    (let [last-update @(re-frame/subscribe [::state/last-update])]
-      [:div
-       [:div.history-button {:on-click handle-click}
-        [:span "Last saved: "]
-        [:span.date (get-date-time last-update)]]
-       [history-modal]])))
+  (let [course-slug @(re-frame/subscribe [::state-core/current-course-id])
+        scene-slug @(re-frame/subscribe [::state-core/current-scene-id])
+        last-update @(re-frame/subscribe [::state/last-update])
+        handle-click #(re-frame/dispatch [::state/open])]
+
+    (when-not (some? last-update)
+      (re-frame/dispatch [::state/load-versions course-slug scene-slug]))
+
+    [:div
+     (into [:div.history-button {:on-click handle-click}]
+           (if (some? last-update)
+             [[:span "Last saved: "]
+              [:span.date (get-date-time last-update)]]
+             [[:span "Show History"]]))
+     [history-modal]]))
