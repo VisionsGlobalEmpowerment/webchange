@@ -45,10 +45,12 @@
   (fn [{:keys [db]} [_]]
     (let [course-slug (:current-course db)
           scene-slug (:current-scene db)]
-      {:dispatch [::warehouse/load-versions
-                  {:course-slug course-slug
-                   :scene-slug  scene-slug}
-                  {:on-success [::load-versions-success]}]})))
+      (when (and (some? course-slug)
+                 (some? scene-slug))
+        {:dispatch [::warehouse/load-versions
+                    {:course-slug course-slug
+                     :scene-slug  scene-slug}
+                    {:on-success [::load-versions-success]}]}))))
 
 (re-frame/reg-event-fx
   ::load-versions-success

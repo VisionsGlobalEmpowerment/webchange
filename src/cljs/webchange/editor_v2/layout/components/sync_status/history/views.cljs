@@ -75,7 +75,9 @@
                handle-click #(re-frame/dispatch [::state/open])]
     (let [last-update @(re-frame/subscribe [::state/last-update])]
       [:div
-       [:div.history-button {:on-click handle-click}
-        [:span "Last saved: "]
-        [:span.date (get-date-time last-update)]]
+       (into [:div.history-button {:on-click handle-click}]
+             (if (some? last-update)
+               [[:span "Last saved: "]
+                [:span.date (get-date-time last-update)]]
+               [[:span "Show History"]]))
        [history-modal]])))
