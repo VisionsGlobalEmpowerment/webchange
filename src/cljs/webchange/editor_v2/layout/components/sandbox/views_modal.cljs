@@ -14,6 +14,11 @@
         current-dataset-items-ids @(re-frame/subscribe [::state/current-dataset-items-ids name])
         dataset-items-options @(re-frame/subscribe [::state/datasets-items-options name])
         handle-dataset-items-change #(re-frame/dispatch [::state/set-current-dataset-items-ids name %])]
+
+    (when (and (-> current-dataset-id some? not)
+               (-> dataset-options first :value some?))
+      (handle-dataset-change (-> dataset-options first :value)))
+
     [:div.lesson-set-row
      [:div.lesson-set-name name]
      [select {:value       current-dataset-id
@@ -22,13 +27,14 @@
               :type        "int"
               :variant     "outlined"
               :placeholder "Select Dataset"}]
-     [select {:value     current-dataset-items-ids
-              :options   dataset-items-options
-              :on-change handle-dataset-items-change
-              :multiple? true
-              :type      "int"
-              :variant   "outlined"
-              :placeholder "Select Dataset Items"}]]))
+     [:div
+      [select {:value       current-dataset-items-ids
+               :options     dataset-items-options
+               :on-change   handle-dataset-items-change
+               :multiple?   true
+               :type        "int"
+               :variant     "outlined"}]
+      [:span.help-message "Hold down the Ctrl (⌘ for Mac) button to select multiple options"]]]))
 
 (defn- select-lesson-sets-form
   []

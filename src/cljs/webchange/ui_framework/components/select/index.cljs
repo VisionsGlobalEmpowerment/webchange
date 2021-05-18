@@ -53,10 +53,10 @@
         options (fix-options options props)]
     [:div {:style      (if (some? width) {:width width} {})
            :class-name (get-class-name (cond-> (-> {"wc-select"  true
-                                                    "with-arrow" with-arrow?}
+                                                    "with-arrow" (and with-arrow? (not multiple?))}
                                                    (assoc class-name (some? class-name)))
                                                (some? variant) (assoc (str "variant-" variant) true)))}
-     [:select (cond-> {:value     value
+     [:select (cond-> {:value     (or value "")
                        :on-change handle-change}
                       multiple? (assoc :multiple true))
       (for [{:keys [text value disabled?]} options]

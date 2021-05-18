@@ -12,7 +12,8 @@
 
 (defn empty-value?
   [value]
-  (or (empty-string? value)
+  (or (nil? value)
+      (empty-string? value)
       (empty-seq? value)))
 
 (defn- fix-enable-prop
@@ -32,7 +33,8 @@
                                 options)
         add-empty-option (fn [options] (concat [{:text placeholder :value "" :disabled? true}] options))]
     (if (and (empty-value? value)
-             (not has-empty-option?))
+             (not has-empty-option?)
+             (some? placeholder))
       (add-empty-option options)
       options)))
 
