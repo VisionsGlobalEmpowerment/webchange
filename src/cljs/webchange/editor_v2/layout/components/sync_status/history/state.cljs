@@ -42,15 +42,13 @@
 
 (re-frame/reg-event-fx
   ::load-versions
-  (fn [{:keys [db]} [_]]
-    (let [course-slug (:current-course db)
-          scene-slug (:current-scene db)]
-      (when (and (some? course-slug)
-                 (some? scene-slug))
-        {:dispatch [::warehouse/load-versions
-                    {:course-slug course-slug
-                     :scene-slug  scene-slug}
-                    {:on-success [::load-versions-success]}]}))))
+  (fn [{:keys [_]} [_ course-slug scene-slug]]
+    (if (and (some? course-slug)
+             (some? scene-slug))
+      {:dispatch [::warehouse/load-versions
+                  {:course-slug course-slug
+                   :scene-slug  scene-slug}
+                  {:on-success [::load-versions-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-versions-success
@@ -116,12 +114,14 @@
 (re-frame/reg-event-fx
   ::open
   (fn [{:keys [db]} [_]]
-    (let [template-id (-> (subs/current-scene-data db) :metadata :template-id)]
+    (let [template-id (-> (subs/current-scene-data db) :metadata :template-id)
+          course-slug (core/current-course-id db)
+          scene-slug (core/current-scene-id db)]
       {:db         (-> db
                        (assoc-in modal-state-path true)
                        (assoc-in modal-versions-state-path {})
                        (assoc-in modal-template-state-path {}))
-       :dispatch-n (list [::load-versions]
+       :dispatch-n (list [::load-versions course-slug scene-slug]
                          [::load-template template-id])})))
 
 (re-frame/reg-event-fx
