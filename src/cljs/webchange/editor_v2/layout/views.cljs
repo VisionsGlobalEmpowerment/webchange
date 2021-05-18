@@ -6,9 +6,6 @@
     [webchange.editor-v2.layout.components.sandbox.views :refer [share-button]]
     [webchange.editor-v2.layout.components.sync-status.views :refer [sync-status]]))
 
-;[webchange.editor-v2.components.breadcrumbs.views :refer [course-breadcrumbs]]
-;:breadcrumbs (course-breadcrumbs course-id "Scene")
-
 (defn layout
   [{:keys [show-preview show-review?]
     :or   {show-preview true
