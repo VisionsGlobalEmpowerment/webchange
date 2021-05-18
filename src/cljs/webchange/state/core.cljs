@@ -6,6 +6,10 @@
   [db]
   (get db :current-course))
 
+(re-frame/reg-sub
+  ::current-course-id
+  current-course-id)
+
 (defn current-scene-id
   [db]
   (get db :current-scene))
