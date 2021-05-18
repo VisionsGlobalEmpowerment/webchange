@@ -61,7 +61,7 @@
 
 (re-frame/reg-event-fx
   ::add-new-phrase-action
-  (fn [{:keys [db]} [_ action relative-position node]]
+  (fn [{:keys [_]} [_ action relative-position node]]
     (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node)
           data-patch (-> base-action
                          (au/insert-child-action action target-position relative-position)
@@ -70,7 +70,7 @@
 
 (re-frame/reg-event-fx
   ::add-new-phrase-concept-action
-  (fn [{:keys [db]} [_ relative-position node]]
+  (fn [{:keys [_]} [_ relative-position node action-data]]
     (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node)
           concept-var (:concept-var base-action)
           field-name (actions/unique-var-name)
@@ -78,13 +78,15 @@
           concept-schema {:name     field-name
                           :type     "action"
                           :template defaults/default-concept-action}
+          action (cond-> defaults/default-concept-action
+                         (some? action-data) (defaults/update-inner-concept-action action-data))
 
           data-patch (-> base-action
                          (au/insert-child-action empty-action target-position relative-position)
                          (select-keys [:data]))]
       {:dispatch-n (list
                      [::dialog-form.concepts/add-concepts-schema-fields concept-schema]
-                     [::translator-form.concepts/update-current-concept [(keyword field-name)] defaults/default-concept-action]
+                     [::translator-form.concepts/update-current-concept [(keyword field-name)] action]
                      [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx

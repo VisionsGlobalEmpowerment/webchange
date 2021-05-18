@@ -26,12 +26,17 @@
 
 (defn- add-action
   [action relative-position number node path]
-  (re-frame/dispatch [::dialog-form.actions/add-new-phrase-action action relative-position number node path]))
-
+  (let [current-target (-> (actions-defaults/get-inner-action (:data number)) (get :target))
+        action (cond-> action
+                       (some? current-target) (actions-defaults/update-inner-action {:target current-target}))]
+    (re-frame/dispatch [::dialog-form.actions/add-new-phrase-action action relative-position number node path])))
 
 (defn- add-concept-action
-  [relative-position number node path]
-  (re-frame/dispatch [::dialog-form.actions/add-new-phrase-concept-action relative-position number node path]))
+  [relative-position number]
+  (let [current-target (-> (:data number) (actions-defaults/get-inner-action ) (get :target))
+        action-data (cond-> {}
+                       (some? current-target) (assoc :target current-target))]
+    (re-frame/dispatch [::dialog-form.actions/add-new-phrase-concept-action relative-position number action-data])))
 
 (defn- add-in-concept-action
   [action relative-position node]
