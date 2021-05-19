@@ -29,6 +29,14 @@
   [action]
   (get-in action [:data inner-action-position]))
 
+(defn update-inner-action
+  [action data-patch]
+  (update-in action [:data inner-action-position] merge data-patch))
+
+(defn update-inner-concept-action
+  [action data-patch]
+  (update-in action [:data 0 :data inner-action-position] merge data-patch))
+
 (defn get-action
   [name]
   {:type "sequence-data"
