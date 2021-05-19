@@ -19,7 +19,11 @@
      [image-selector]
      [preview]]))
 
-(defn- change-background-window
+(defn open-change-background-window
+  []
+  (re-frame/dispatch [::background/open-window]))
+
+(defn change-background-window
   []
   (let [window-open? @(re-frame/subscribe [::background/window-open?])
         handle-cancel (fn [] (re-frame/dispatch [::background/close-window]))
@@ -39,15 +43,3 @@
                   :variant  "contained"
                   :on-click handle-save}
        "Save"]]]))
-
-(defn change-background
-  []
-  (let [handle-click (fn []
-                       (re-frame/dispatch [::background/open-window]))]
-    [:div
-     [ui/form-control {:full-width true
-                       :margin     "normal"}
-      [ui/button
-       {:on-click handle-click}
-       "Change Background"]
-      [change-background-window]]]))

@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.activity-form.generic.components.common-actions.state
+(ns webchange.editor-v2.activity-form.generic.components.background-music.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.state.state-activity :as state-activity]))
@@ -10,4 +10,5 @@
       {:dispatch [::state-activity/call-activity-common-action
                   {:action type
                    :data   data}
-                  {:on-success on-success}]})))
+                  (cond-> {}
+                          (some? on-success) (assoc :on-success on-success))]})))

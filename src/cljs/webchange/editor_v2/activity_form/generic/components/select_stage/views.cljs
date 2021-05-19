@@ -3,7 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.state.state-flipbook :as state-flipbook]
+    [webchange.state.state-book :as state]
     [webchange.ui.utils :refer [deep-merge]]))
 
 (defn- get-styles
@@ -26,16 +26,17 @@
 (defn select-stage
   [{:keys [styles on-change]
     :or   {styles {}}}]
-  (let [stages @(re-frame/subscribe [::state-flipbook/stage-options])
+  (let [stages @(re-frame/subscribe [::state/stage-options])
         enabled? (seq stages)
-        current-stage @(re-frame/subscribe [::state-flipbook/current-stage-idx])
+        current-stage @(re-frame/subscribe [::state/current-stage-idx])
         styles (-> (get-styles)
                    (deep-merge styles))
         on-change (if on-change on-change
-                                #(re-frame/dispatch [::state-flipbook/select-stage (.. % -target -value)]))]
+                                #(re-frame/dispatch [::state/select-stage (.. % -target -value)]))]
     (when enabled?
-      [ui/form-control {:margin "normal"
-                        :style  (:container styles)}
+      [ui/form-control {:margin     "normal"
+                        :full-width true
+                        :style      (:container styles)}
        [ui/select {:value         (or current-stage "")
                    :display-empty true
                    :variant       "outlined"

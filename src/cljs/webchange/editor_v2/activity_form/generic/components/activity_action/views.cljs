@@ -1,6 +1,5 @@
 (ns webchange.editor-v2.activity-form.generic.components.activity-action.views
   (:require
-    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.subs :as subs]
@@ -20,7 +19,7 @@
            (into {})))
     {}))
 
-(defn action-modal
+(defn- action-modal-view
   []
   (r/with-let [scene-id (re-frame/subscribe [::subs/current-scene])
                scene-data @(re-frame/subscribe [::subs/scene @scene-id])
@@ -48,28 +47,17 @@
                 :data      data
                 :validator validator}]]))
 
-(defn action-modal-container
+(defn activity-action-modal
   []
   (let [open? @(re-frame/subscribe [::scene-action.events/modal-state])
         current-action-name @(re-frame/subscribe [::state-activity/current-action])]
     (when open?
       ^{:key current-action-name}
-      [action-modal])))
+      [action-modal-view])))
 
-(defn- action-button
-  [{:keys [name handle-click]}]
-  [ui/form-control {:full-width true
-                    :margin     "normal"}
-   [ui/button
-    {:on-click handle-click}
-    name]])
-
-(defn activity-actions
-  [{:keys [scene-data]}]
-  (let [actions (get-in scene-data [:metadata :actions])]
-    [:div
-     (for [[name action] actions]
-       ^{:key name}
-       [action-button {:name         (:title action)
-                       :handle-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])}])
-     [action-modal-container]]))
+(defn get-activity-actions-list
+  [scene-data]
+  (->> (get-in scene-data [:metadata :actions] [])
+       (map (fn [[name {:keys [title]}]]
+              {:text    title
+               :on-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])}))))

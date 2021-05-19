@@ -1,5 +1,34 @@
 @import "components/styles";
 
+.generic-editor {
+    display: grid;
+    grid-template-columns: 580px auto;
+    column-gap: 64px;
+    row-gap: 32px;
+
+    width: 100%;
+
+    .interpreter-wrapper {
+        position:relative;
+
+        .generic-interpreter {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .actions {
+            position: absolute;
+            top: 0;
+            right: -32px;
+        }
+    }
+
+   .generic-diagram {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}
+
 .generic-skeleton {
     height: 100%;
     display: flex;

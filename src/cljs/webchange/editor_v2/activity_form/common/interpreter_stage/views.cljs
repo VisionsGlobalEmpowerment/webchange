@@ -5,7 +5,8 @@
     [webchange.interpreter.components :as i]
     [webchange.interpreter.subs :as isubs]
     [webchange.state.state-flipbook :as state-flipbook]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def stage-width 1920)
 (def stage-height 1080)
@@ -39,13 +40,12 @@
                       :on-ready      #(scene-ready-handler {:scene-data scene-data})}]))
 
 (defn interpreter-stage
-  []
+  [{:keys [class-name]}]
   (let [scale 0.3
         width (* stage-width scale)
         height (* stage-height scale)]
-    [:div {:style {:position "relative"
-                   :top      0
-                   :left     0
-                   :width    width
-                   :height   height}}
+    [:div {:class-name (get-class-name (cond-> {"interpreter-stage" true}
+                                               (some? class-name) (assoc class-name true)))
+           :style      {:width  width
+                        :height height}}
      [stage]]))

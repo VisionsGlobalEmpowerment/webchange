@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.activity-form.generic.components.common-actions.background-music
+(ns webchange.editor-v2.activity-form.generic.components.background-music.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
@@ -8,11 +8,9 @@
     [webchange.editor-v2.dialog.dialog-form.views-volume :as views-volume]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block-button]]
     [webchange.ui-framework.components.index :refer [icon range-input]]
-    [webchange.editor-v2.activity-form.generic.components.common-actions.state :as state]))
+    [webchange.editor-v2.activity-form.generic.components.background-music.state :as state]))
 
 (def modal-state-path [:editor-v2 :sandbox :background-music-modal-state])
-
-(def modal-remove-state-path [:editor-v2 :sandbox :background-music-remove-modal-state])
 
 ;; Subs
 
@@ -21,13 +19,6 @@
   (fn [db]
     (-> db
         (get-in modal-state-path)
-        boolean)))
-
-(re-frame/reg-sub
-  ::modal-remove-state
-  (fn [db]
-    (-> db
-        (get-in modal-remove-state-path)
         boolean)))
 
 
@@ -43,18 +34,6 @@
   ::close
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db modal-state-path false)}))
-
-(re-frame/reg-event-fx
-  ::open-remove
-  (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (assoc-in modal-remove-state-path true))}))
-
-(re-frame/reg-event-fx
-  ::close-remove
-  (fn [{:keys [db]} [_]]
-    {:db (assoc-in db modal-remove-state-path false)}))
-
 
 (defn- background-music-form
   [form-data]
@@ -81,7 +60,11 @@
      )
    ])
 
-(defn- background-music-modal
+(defn open-set-music-window
+  []
+  (re-frame/dispatch [::open]))
+
+(defn set-music-window
   []
   (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
         action-name (get-in scene-data [:triggers :music :action])
@@ -91,8 +74,7 @@
         close #(re-frame/dispatch [::close])]
     (r/with-let [form-data (r/atom {:background-music
                                     {:volume volume
-                                     :src    src}})
-                 ]
+                                     :src    src}})]
                 (let [save #(re-frame/dispatch [::state/save :background-music @form-data [::close]])]
                   (println volume src @form-data)
                   (when open?
@@ -110,51 +92,9 @@
                        [ui/button {:color    "secondary"
                                    :variant  "contained"
                                    :on-click save}
-                        "Save"]]]
-                     ])))))
-
-(defn- background-remove-music-modal
-  []
-  (let [form-data (r/atom {})
-        open? @(re-frame/subscribe [::modal-remove-state])
-        close #(re-frame/dispatch [::close-remove])
-        save #(do
-                (re-frame/dispatch [::state/save :background-music-remove @form-data [::close]])
-                (re-frame/dispatch [::close-remove]))]
-    (when open?
-      [ui/dialog
-       {:open       true
-        :on-close   close
-        :full-width true}
-       [ui/dialog-title "Are you sure you want remove background music?"]
-       [ui/dialog-actions
-        [ui/button {:on-click close}
-         "Cancel"]
-        [:div {:style {:position "relative"}}
-         [ui/button {:color    "secondary"
-                     :variant  "contained"
-                     :on-click save}
-          "Save"]]]
-       ])))
-
-(defn background-music
-  []
-  (let [handle-click (fn [] (re-frame/dispatch [::open]))]
-    [ui/form-control {:full-width true
-                      :margin     "normal"}
-     [ui/button
-      {:on-click handle-click}
-      "Background music"]
-     [background-music-modal]]))
-
+                        "Save"]]]])))))
 
 (defn remove-background-music
   []
-  (let [handle-click-remove (fn [] (re-frame/dispatch [::open-remove]))]
-    [ui/form-control {:full-width true
-                      :margin     "normal"}
-     [ui/button
-      {:on-click handle-click-remove}
-      "Remove background music"]
-     [background-remove-music-modal]
-     ]))
+  (re-frame/dispatch [::state/save :background-music-remove {}]))
+
