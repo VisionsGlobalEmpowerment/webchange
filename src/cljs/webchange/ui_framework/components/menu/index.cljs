@@ -7,12 +7,12 @@
     [webchange.ui-framework.components.utils :refer [get-bounding-rect]]))
 
 (defn- menu-item
-  [{:keys [close-menu icon text on-click]}]
+  [{:keys [close-menu icon text on-click has-icon?]}]
   [:div.wc-menu-list-item {:on-click #(when (some? on-click)
                                         (on-click)
                                         (close-menu))}
-   (when (some? icon)
-     [icon-component/component {:icon       icon
+   (when has-icon?
+     [icon-component/component {:icon       (if (some? icon) icon "none")
                                 :class-name "wc-menu-list-item-icon"}])
    [:span text]])
 
@@ -33,7 +33,15 @@
      :left x}))
 
 (defn component
-  [{:keys [items]}]
+  [{:keys [items icon]
+    :or   {icon "horizontal"}}]
+  "Props:
+   :items - items list
+       .text - item text
+       .icon - icon name
+       .on-click - click handler, called after confirm if '.confirm' defined
+       .confirm - text message for confirm window
+   :icon - 'vertical' or 'horizontal'."
   (r/with-let [show-menu? (r/atom false)
                menu-ref (r/atom nil)
                menu-position (r/atom {:top  0
@@ -56,16 +64,20 @@
                handle-menu-button-click #(if @show-menu?
                                            (close-menu)
                                            (show-menu))]
-    [:div.wc-menu {:ref #(when (some? %) (reset! menu-ref %))}
-     [icon-button-component/component {:icon     "menu"
-                                       :on-click handle-menu-button-click
-                                       :ref      (fn [el]
-                                                   (reset! menu-button-ref el))}]
-     (when @show-menu?
-       [:div.wc-menu-list {:style {:top  (:top @menu-position)
-                                   :left (:left @menu-position)}}
-        (for [[idx {:keys [confirm] :as item}] (map-indexed vector items)]
-          (let [component (if (some? confirm) confirmed-menu-item menu-item)
-                props (merge item {:close-menu close-menu})]
-            ^{:key idx}
-            [component props]))])]))
+    (let [items-has-icon? (some #(:icon %) items)]
+      [:div.wc-menu {:ref #(when (some? %) (reset! menu-ref %))}
+       [icon-button-component/component {:icon     (case icon
+                                                     "horizontal" "menu"
+                                                     "vertical" "menu-vertical")
+                                         :on-click handle-menu-button-click
+                                         :ref      (fn [el]
+                                                     (reset! menu-button-ref el))}]
+       (when @show-menu?
+         [:div.wc-menu-list {:style {:top  (:top @menu-position)
+                                     :left (:left @menu-position)}}
+          (for [[idx {:keys [confirm] :as item}] (map-indexed vector items)]
+            (let [component (if (some? confirm) confirmed-menu-item menu-item)
+                  props (merge item {:close-menu close-menu
+                                     :has-icon?  items-has-icon?})]
+              ^{:key idx}
+              [component props]))])])))

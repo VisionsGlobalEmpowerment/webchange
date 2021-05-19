@@ -8,21 +8,8 @@
     [webchange.editor-v2.diagram-utils.diagram-widget :refer [diagram-widget]]
     [webchange.editor-v2.scene-diagram.nodes-factory.nodes-factory :refer [get-diagram-items]]
     [webchange.editor-v2.scene-diagram.scene-parser.scene-parser :refer [scene-data->actions-tracks]]
-    [webchange.editor-v2.state :as state]))
-
-(defn- get-styles
-  []
-  {:diagram-wrapper {:display   "flex"
-                     :flex-grow 1
-                     :position  "relative"}
-   :toolbar         {:background-color "rgba(0,0,0,0)"
-                     :right            "0"
-                     :padding          "8px"
-                     :position         "absolute"
-                     :text-align       "right"
-                     :top              "0"
-                     :width            "64px"
-                     :z-index          "10"}})
+    [webchange.editor-v2.state :as state]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- expand-diagram-button
   []
@@ -51,17 +38,16 @@
 
 (defn- diagram-toolbar
   []
-  (let [styles (get-styles)]
-    [:div {:style (:toolbar styles)}
-     [expand-diagram-button]]))
+  [:div.toolbar
+   [expand-diagram-button]])
 
 (defn dialogs-diagram
-  [{:keys [scene-data]}]
+  [{:keys [scene-data class-name]}]
   (let [actions-tracks (scene-data->actions-tracks scene-data)
         {:keys [nodes links]} (get-diagram-items scene-data actions-tracks)
-        {:keys [engine]} (init-diagram-model :phrases nodes links {:locked? true})
-        styles (get-styles)]
-    [:div {:style (:diagram-wrapper styles)}
+        {:keys [engine]} (init-diagram-model :phrases nodes links {:locked? true})]
+    [:div {:class-name (get-class-name (cond-> {"dialogs-diagram" true}
+                                               (some? class-name) (assoc class-name true)))}
      [diagram-toolbar]
      [diagram-widget {:engine engine
                       :zoom?  true}]]))
