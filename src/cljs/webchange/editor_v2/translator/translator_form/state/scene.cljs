@@ -87,6 +87,15 @@
             objects-data)))
 
 (re-frame/reg-sub
+  ::available-text-targets
+  (fn []
+    [(re-frame/subscribe [::text-objects])])
+  (fn [[objects]]
+    (->> objects
+         (map first)
+         (map name))))
+
+(re-frame/reg-sub
   ::available-animation-targets
   (fn []
     [(re-frame/subscribe [::objects-data])])

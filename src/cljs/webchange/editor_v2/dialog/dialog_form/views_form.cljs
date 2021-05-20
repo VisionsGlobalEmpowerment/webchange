@@ -8,7 +8,7 @@
     [webchange.editor-v2.dialog.dialog-form.views-form-diagram :refer [diagram-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-phrase :refer [node-options phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
-    [webchange.editor-v2.dialog.dialog-form.views-form-target :refer [target-block]]
+    [webchange.editor-v2.dialog.dialog-form.views-form-target :refer [target-block text-target-block]]
     [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
 
     [webchange.editor-v2.dialog.dialog-form.views-audio-actions :refer [audio-actions]]
@@ -18,11 +18,38 @@
     [webchange.editor-v2.dialog.dialog-form.views-upload-audio :refer [upload-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-volume :refer [volume]]))
 
+(defn- details
+  [type]
+  (case type
+    "animation-sequence" [:div
+                          [phrase-block]
+                          [target-block]
+                          [:div.audio-block
+                           [:div
+                            [volume]
+                            [upload-audio]]
+                           [record-audio]
+                           [audio-actions]]
+                          [audio-warning]
+                          [audios-list]]
+    "text-animation" [:div
+                      ;[phrase-block]
+                      [text-target-block]
+                      [:div.audio-block
+                       [:div
+                        [volume]
+                        [upload-audio]]
+                       [record-audio]
+                       [audio-actions]]
+                      [audio-warning]
+                      [audios-list]]
+    nil))
+
 (defn dialog-form
   []
   (let [current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
         concept-required? @(re-frame/subscribe [::translator-form.graph/concept-required])
-        action? (= "action" (get-in current-phrase-action [:data 1 :type]))]
+        type (get-in current-phrase-action [:data 1 :type])]
     [:div.dialog-form
      [description-block]
      (when concept-required?
@@ -32,18 +59,7 @@
      (if-not (nil? current-phrase-action)
        [:div
         [node-options]
-        (if-not action?
-          [:div
-           [phrase-block]
-           [target-block]
-           [:div.audio-block
-            [:div
-             [volume]
-             [upload-audio]]
-            [record-audio]
-            [audio-actions]]
-           [audio-warning]
-           [audios-list]])]
+        [details type]]
        [:div
         [:span "Select action on diagram"]])
      [text-chunks-modal]]))

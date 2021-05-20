@@ -30,8 +30,7 @@
 
 (defn- sign-data [api-key method uri query body nonce]
   (let [sign-str (clojure.string/join "|" [method uri query body nonce])]
-      (log/debug (str "String to sign " sign-str))
-      (-> (apply str (map #(format "%02x" %) (hmac api-key sign-str)))
+    (-> (apply str (map #(format "%02x" %) (hmac api-key sign-str)))
           base64-encode)))
 
 (defn signature-from-request [request key body]

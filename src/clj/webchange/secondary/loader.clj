@@ -63,7 +63,7 @@
     (let [user-input (read-line)]
       (when (= user-input "Y")
         (doseq [file to-upload]
-          (println "Uploading file" file)
+          (println "Uploading file" (:path file))
           (core/upload-file (:path file))))
       (println "Done!")
       )))

@@ -42,4 +42,5 @@
     [webchange.templates.library.writing-practice]
     [webchange.templates.library.writing-1]
     [webchange.templates.library.writing-2]
-    [webchange.templates.library.cinema]))
+    [webchange.templates.library.cinema]
+    [webchange.templates.library.first-words-book]))

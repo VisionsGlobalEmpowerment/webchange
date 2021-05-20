@@ -18,7 +18,9 @@
                             :data [{:type     "empty"
                                     :duration 0},
                                    {:type        "text-animation",
-                                    :phrase-text "New text animation",
+                                    :animation   "color"
+                                    :fill        0x00B2FF
+                                    :phrase-text "Text animation",
                                     :audio       nil}]})
 
 (defn get-empty-action
