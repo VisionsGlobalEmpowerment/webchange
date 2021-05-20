@@ -91,7 +91,8 @@
                              :set-draggable           [:draggable]
                              :set-children            [:children]
                              :set-font-size           [:font-size]
-                             :set-font-family         [:font-family]}
+                             :set-font-family         [:font-family]
+                             :set-animation-skin      [:skin]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys filtered-state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
@@ -260,3 +261,8 @@
   (fn [{:keys [db]} [_ object-name color]]
     (let [wrapper (get-scene-object db object-name)]
       (apply-to-wrapper w/set-traffic-light wrapper color))))
+
+(re-frame/reg-fx
+  :set-animation-skin
+  (fn [[object-wrapper {:keys [skin]}]]
+    (apply-to-wrapper w/set-skin object-wrapper skin)))

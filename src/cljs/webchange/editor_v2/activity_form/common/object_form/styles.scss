@@ -1,0 +1,11 @@
+.activity-object-form {
+    .object-form-content {
+        @import "text_form/styles";
+
+        position: relative;
+    }
+
+    .buttons-block {
+        margin-top: 64px;
+    }
+}

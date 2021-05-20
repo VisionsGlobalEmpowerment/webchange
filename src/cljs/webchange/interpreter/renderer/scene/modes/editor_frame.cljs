@@ -1,17 +1,32 @@
 (ns webchange.interpreter.renderer.scene.modes.editor-frame
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-form.generic.components.change-skin.state :as skin]
+    [webchange.editor.events :as edit-scene]
     [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE Text]]
     [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.subs :as subs]))
 
 (def frame-width 5)
 (def frame-padding 10)
 (def frame-default-color 0x59acff)
 (def frame-selected-color 0xFFA500)
+
+(re-frame/reg-event-fx
+  ::change-position
+  (fn [{:keys [db]} [_ x y]]
+    (let [name (editor/selected-object db)
+          current-scene (subs/current-scene db)
+          state (-> (subs/scene-object db current-scene name)
+                    (assoc :x x :y y))]
+      {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
+                                                      :target   name
+                                                      :state    state}]
+                         [::edit-scene/update-current-scene-object {:target name
+                                                                    :state  state}]
+                         [::edit-scene/save-current-scene current-scene])})))
 
 (defn- handle-frame-click
   [component]
@@ -21,7 +36,7 @@
   [container]
   (let [{:keys [x y] :as position} (utils/get-position container)]
     (logger/trace-folded "change position on drag end" position)
-    (re-frame/dispatch [::skin/change-position x y])))
+    (re-frame/dispatch [::change-position x y])))
 
 (defn- wrap
   [name sprite]
