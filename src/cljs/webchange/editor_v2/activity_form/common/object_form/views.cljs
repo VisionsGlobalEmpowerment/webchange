@@ -3,9 +3,20 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
+    [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
     [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
+    [webchange.logger.index :as logger]
     [webchange.ui-framework.components.index :refer [button with-confirmation]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
+
+(defn- empty-form-view
+  [{:keys [type objects-names objects-data]}]
+  (logger/warn "Form not defined")
+  (logger/warn "type" type)
+  (logger/warn "objects-names" objects-names)
+  (logger/warn "objects-data" objects-data)
+  [:div
+   (str "Form not defined for '" type "' object type")])
 
 (defn- object-form-view
   [{:keys [class-name objects-data objects-names on-destroy on-save-click]
@@ -20,7 +31,9 @@
                                              (assoc class-name (some? class-name))))}
        [:div.object-form-content
         (case object-type
-          "text" [text-form/form component-props])]
+          "text" [text-form/form component-props]
+          "image" [image-form/form component-props]
+          [empty-form-view (merge component-props {:type object-type})])]
        [:div.buttons-block
         [button {:variant   "contained"
                  :color     "primary"

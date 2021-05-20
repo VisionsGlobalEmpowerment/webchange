@@ -60,7 +60,8 @@
                                              :x          50
                                              :y          210
                                              :transition "left-gate"
-                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},}
+                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
+                                             :editable?  {:select true}}
                         :left-gate-text     {:type           "text"
                                              :text           "rhyme"
                                              :x              355
@@ -90,9 +91,8 @@
                                              :x          1380
                                              :y          210
                                              :transition "right-gate"
-                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},}
-
-                        },
+                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
+                                             :editable?  {:select true}}},
         :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text" "right-gate-text"]],
         :actions       {:start-drag           {:type "sequence-data"
                                                :data [{:type "set-variable", :var-name "left-selected", :var-value false}
