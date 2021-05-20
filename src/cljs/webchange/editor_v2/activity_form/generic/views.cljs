@@ -11,7 +11,6 @@
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.editor-v2.scene-diagram.views-diagram :refer [dialogs-diagram]]
 
-    [webchange.editor-v2.activity-form.generic.components.change-skin.views :refer [change-skin]]
     [webchange.editor-v2.activity-form.generic.components.object-selector.views :refer [object-selector]]
     [webchange.editor-v2.activity-form.generic.components.select-stage.views :refer [select-stage]]))
 
