@@ -50,6 +50,11 @@
   [scene-data]
   (get scene-data :objects {}))
 
+(defn get-scene-object
+  [scene-data object-name]
+  (-> (get-scene-objects scene-data)
+      (get object-name)))
+
 (defn get-scene-background
   [scene-data]
   (->> (get-scene-objects scene-data)

@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.state.editor
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-form.common.state :as state-activity-form]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]))
 
@@ -27,7 +28,8 @@
   ::select-object
   (fn [{:keys [db]} [_ current-target]]
     (let [previous-target (get-in db (path-to-db [:editor :selected-object]))]
-      {:db (assoc-in db (path-to-db [:editor :selected-object]) current-target)
+      {:db            (assoc-in db (path-to-db [:editor :selected-object]) current-target)
+       :dispatch      [::state-activity-form/select-objects current-target]
        :select-object [(->> previous-target (object-name->wrapper-name) (scene/get-scene-object db))
                        (->> current-target (object-name->wrapper-name) (scene/get-scene-object db))]})))
 

@@ -71,7 +71,8 @@
                                              :vertical-align "middle"
                                              :font-family    "Lexend Deca"
                                              :font-size      80
-                                             :fill           "#000000"}
+                                             :fill           "#000000"
+                                             :editable?      {:select true}}
                         :right-gate-text    {:type           "text"
                                              :text           "rhyme"
                                              :x              1590
@@ -82,7 +83,8 @@
                                              :vertical-align "middle"
                                              :font-family    "Lexend Deca"
                                              :font-size      80
-                                             :fill           "#000000"}
+                                             :fill           "#000000"
+                                             :editable?      {:select true}}
                         :right-gate         {:type       "image"
                                              :src        "/raw/img/rhyming/right-gate.png"
                                              :x          1380

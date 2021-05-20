@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.interpreter-stage.views :refer [interpreter-stage]]
+    [webchange.editor-v2.activity-form.common.object-form.views :refer [object-form]]
     [webchange.editor-v2.activity-form.generic.views-actions :refer [actions]]
     [webchange.editor-v2.activity-form.get-activity-type :refer [get-activity-type]]
     [webchange.editor-v2.creation-progress.state :as progress-state]
@@ -17,7 +18,7 @@
 (defn- asset-block
   [{:keys [activity-type]}]
   (into [:div]
-        (cond-> []
+        (cond-> [[object-form]]
                 (= activity-type "book") (concat [[select-stage]
                                                   [object-selector]])
                 (not= activity-type "book") (concat [[change-skin]]))))

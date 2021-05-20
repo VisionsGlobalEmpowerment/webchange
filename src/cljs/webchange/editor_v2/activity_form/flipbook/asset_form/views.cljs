@@ -16,8 +16,7 @@
     (-> object-data :text some?) :text))
 
 (defn- asset-form-view
-  [{:keys [class-name disabled? object-data on-destroy on-save-click]
-    :or   {disabled? false}}]
+  [{:keys [class-name object-data on-destroy on-save-click]}]
   (r/with-let [id (->> (random-uuid) (str) (take 8) (clojure.string/join ""))]
     (let [object-type (get-object-type object-data)
           component-props {:id          id
