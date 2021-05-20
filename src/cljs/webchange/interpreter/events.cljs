@@ -402,12 +402,14 @@
 (defn execute-transition
   [db {:keys [transition-id transition-tag to from skippable kill-after] :as action}]
   (let [scene-id (:current-scene db)
-        transition (get-in db [:transitions scene-id transition-id])
+        transition (or
+                     (some-> db (get-in [:transitions scene-id transition-id]) deref)
+                     (scene/get-scene-object db (keyword transition-id)))
         id (or transition-tag transition-id)]
     (when transition
       (let [transition-params [:duration :easing :loop :yoyo :repeat :speed]]
         {:transition {:id        id
-                      :component @transition
+                      :component transition
                       :to        (without-params to transition-params)
                       :from      from
                       :params    (select-keys to transition-params)

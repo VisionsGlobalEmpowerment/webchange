@@ -106,7 +106,7 @@
     :main         webchange.server-dev
     :repl-options {:init-ns webchange.server
                    :init (dev)}
-    :source-paths ["env/dev/clj"]}
+    :source-paths ["env/dev/clj" "env/dev/cljs"]}
    :prod {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths ["env/prod/clj"]
              :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]

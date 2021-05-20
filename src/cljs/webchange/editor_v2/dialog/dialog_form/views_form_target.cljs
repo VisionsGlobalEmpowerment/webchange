@@ -23,13 +23,9 @@
   {:text  (capitalize value)
    :value value})
 
-(defn- character-selector
-  []
-  (let [targets (->> @(re-frame/subscribe [::translator-form.scene/available-animation-targets])
-                     (map value->option)
-                     (concat [{:text "No Character" :value ""}])
-                     )
-        current-target (->> @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
+(defn- selector
+  [targets]
+  (let [current-target (->> @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
                             get-inner-action
                             :target)
         styles (get-styles)]
@@ -41,6 +37,19 @@
      (for [{:keys [text value]} targets]
        ^{:key value}
        [ui/menu-item {:value value} text])]))
+
+(defn- text-selector
+  []
+  (let [targets (->> @(re-frame/subscribe [::translator-form.scene/available-text-targets])
+                     (map value->option))]
+    [selector targets]))
+
+(defn- character-selector
+  []
+  (let [targets (->> @(re-frame/subscribe [::translator-form.scene/available-animation-targets])
+                     (map value->option)
+                     (concat [{:text "No Character" :value ""}]))]
+    [selector targets]))
 
 (defn target-block
   []
@@ -57,6 +66,26 @@
                         :style   (:title styles)}
          "Character:"]
         [character-selector]]
+       [ui/grid {:item true
+                 :xs   6}
+        (when (some? current-phrase-action)
+          [audios-filter])]])))
+
+(defn text-target-block
+  []
+  (let [settings @(re-frame/subscribe [::translator-form/components-settings :target])
+        current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
+        styles (get-styles)]
+    (when-not (:hide? settings)
+      [ui/grid {:container true
+                :spacing   16
+                :style     (:wrapper styles)}
+       [ui/grid {:item true
+                 :xs   6}
+        [ui/typography {:variant "h6"
+                        :style   (:title styles)}
+         "Text:"]
+         [text-selector]]
        [ui/grid {:item true
                  :xs   6}
         (when (some? current-phrase-action)
