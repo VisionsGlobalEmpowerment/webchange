@@ -252,6 +252,14 @@
                      :uri    (str "/api/courses/editor/assets")}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::load-animation-skins
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-animation-skins
+                     :method :get
+                     :uri    (str "/api/courses/editor/character-skin")}
+                    handlers)))
+
 ;; Scene History
 
 (re-frame/reg-event-fx

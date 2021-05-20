@@ -20,8 +20,7 @@
   (into [:div]
         (cond-> [[object-form]]
                 (= activity-type "book") (concat [[select-stage]
-                                                  [object-selector]])
-                (not= activity-type "book") (concat [[change-skin]]))))
+                                                  [object-selector]]))))
 
 (defn activity-form
   [{:keys [scene-data]}]
