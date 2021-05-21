@@ -56,17 +56,18 @@
                                                 :decoration {:src decoration}})))
 
 (defn background-form
-  [{:keys [on-change] :as props}]
+  [{:keys [change-on-init? on-change] :as props}]
   (r/with-let [data (r/atom (init-data props))
-
+               handle-changed #(-> @data data->background-props on-change)
                handle-type-changed (fn [value]
                                      (swap! data assoc :type value)
-                                     (-> @data data->background-props on-change))
+                                     (handle-changed))
                handle-background-changed (fn [type value]
                                            (swap! data assoc type value)
-                                           (-> @data data->background-props on-change))
+                                           (handle-changed))
 
-               _ (re-frame/dispatch [::state/init])]
+               _ (re-frame/dispatch [::state/init])
+               _ (when change-on-init? (handle-changed))]
     (let [background-type (get @data :type "")]
       [:div
        [type-selector {:value     background-type

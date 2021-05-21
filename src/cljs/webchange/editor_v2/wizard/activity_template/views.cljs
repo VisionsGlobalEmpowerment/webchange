@@ -12,8 +12,7 @@
     [webchange.editor-v2.wizard.activity-template.views-strings-list :refer [strings-list-option]]
     [webchange.editor-v2.wizard.activity-template.views-video :refer [video-option]]
     [webchange.editor-v2.wizard.activity-template.views-video-ranges :refer [video-ranges-option]]
-    [webchange.editor-v2.wizard.activity-template.view_delete :refer [delete-object-option]]
-    [webchange.logger.index :as logger]))
+    [webchange.editor-v2.wizard.activity-template.view_delete :refer [delete-object-option]]))
 
 (defn- undefined-option
   [{:keys [key option]}]
@@ -69,7 +68,6 @@
   [{:keys [options metadata data validator]}]
   (let [filtered-options (filter-options @data metadata options)]
     (set-default-values! data options)
-    (logger/trace-folded "template form data" @data)
     [:div.template-form
      (for [[key option] filtered-options]
        ^{:key key}
