@@ -10,8 +10,16 @@
          :ref        #(when (some? %) (reset! ref %))}
    (if value
      [:img {:src value}]
-     [:div.no-value])
+     [:div.no-value
+      "Select Image"])
    [:div.arrow]])
+
+(defn- options-list-empty-item
+  [{:keys [on-click]}]
+  (let [handle-click #(on-click nil)]
+    [:div {:class-name "options-list-item empty"
+           :on-click   handle-click}
+     "None"]))
 
 (defn- options-list-item
   [{:keys [on-click thumbnail value]}]
@@ -22,13 +30,15 @@
            :on-click   handle-click}]))
 
 (defn- options-list
-  [{:keys [on-click options dimensions ref]}]
+  [{:keys [allow-empty? on-click options dimensions ref]}]
   [:div {:class-name "options-list"
          :style      {:top   (:top dimensions)
                       :left  (:left dimensions)
                       :width (:width dimensions)}
          :ref        #(when (some? %) (reset! ref %))}
    [:div.items-wrapper
+    (when allow-empty?
+      [options-list-empty-item {:on-click on-click}])
     (for [{:keys [value] :as option} options]
       ^{:key value}
       [options-list-item (merge option
@@ -42,9 +52,10 @@
      :width width}))
 
 (defn component
-  [{:keys [on-change options value]
-    :or   {on-change #()
-           options   []}}]
+  [{:keys [allow-empty? on-change options value]
+    :or   {allow-empty? false
+           on-change    #()
+           options      []}}]
   (r/with-let [show-options-list? (r/atom false)
                options-list-ref (r/atom nil)
                options-list-dimensions (r/atom {:top  0
@@ -73,7 +84,8 @@
                      :on-click show-menu
                      :ref      current-value-ref}]
      (when @show-options-list?
-       [options-list {:options    options
-                      :on-click   handle-list-item-click
-                      :dimensions @options-list-dimensions
-                      :ref        options-list-ref}])]))
+       [options-list {:options      options
+                      :allow-empty? allow-empty?
+                      :on-click     handle-list-item-click
+                      :dimensions   @options-list-dimensions
+                      :ref          options-list-ref}])]))

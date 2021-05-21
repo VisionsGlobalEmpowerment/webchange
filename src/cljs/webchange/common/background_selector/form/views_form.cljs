@@ -21,9 +21,10 @@
   (let [options @(re-frame/subscribe [::state/background-options type])
         handle-change (fn [value]
                         (on-change type value))]
-    [select-image {:value     value
-                   :options   options
-                   :on-change handle-change}]))
+    [select-image {:value        value
+                   :options      options
+                   :allow-empty? true
+                   :on-change    handle-change}]))
 
 (defn- preview
   [{:keys [data]}]
