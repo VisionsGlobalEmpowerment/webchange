@@ -205,7 +205,7 @@
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration")})
-(s/defschema CharacterSkin {:name s/Str :width s/Num :height s/Num :skins [s/Str] :animations [s/Str]})
+(s/defschema CharacterSkin {:name s/Str :width s/Num :height s/Num :skins [{:name s/Str (s/optional-key :preview) s/Str}] :animations [s/Str]})
 
 (s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})
 (s/defschema CreateActivityVersion {:template-id s/Int s/Keyword s/Any})

@@ -32,6 +32,11 @@ $padding: 16px;
             font-size: 18px;
         }
 
+        .no-image {
+            padding: 8px;
+            margin-bottom: 4px;
+        }
+
         .arrow {
             width: 28px;
             height: calc(100% - 10px);
@@ -49,7 +54,7 @@ $padding: 16px;
 
     .options-list {
         position: fixed;
-        z-index: 10;
+        z-index: 11;
 
         background-color: #fff;
         padding: $padding 0 $padding $padding;
@@ -62,6 +67,7 @@ $padding: 16px;
             display: flex;
             flex-direction: column;
             gap: $padding;
+            padding: ($padding / 2);
             padding-right: $padding;
 
             max-height: 500px;
@@ -74,6 +80,10 @@ $padding: 16px;
 
                 &:hover {
                     box-shadow: 0px 0px 12px rgba(175, 175, 175, 0.5);
+                }
+
+                &.no-image {
+                    padding: 8px 16px;
                 }
 
                 &.empty {

@@ -66,9 +66,11 @@
          (some (fn [{:keys [name skins]}]
                  (and (= name animation-name)
                       skins)))
-         (map (fn [skin]
-                {:text  skin
-                 :value skin})))))
+         (map (fn [{:keys [name preview]}]
+                {:value     name
+                 :thumbnail preview}))
+         (sort-by :thumbnail)
+         (reverse))))
 
 (re-frame/reg-sub
   ::current-skin

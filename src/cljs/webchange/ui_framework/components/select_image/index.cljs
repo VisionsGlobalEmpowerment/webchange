@@ -4,14 +4,14 @@
     [webchange.ui-framework.components.utils :refer [get-bounding-rect]]))
 
 (defn- current-value
-  [{:keys [on-click ref value]}]
+  [{:keys [on-click ref show-image? value value-img]}]
   [:div {:class-name "current-value"
          :on-click   on-click
          :ref        #(when (some? %) (reset! ref %))}
-   (if value
-     [:img {:src value}]
-     [:div.no-value
-      "Select Image"])
+   (cond
+     (and (some? value-img) show-image?) [:img {:src value-img}]
+     (some? value) [:div.no-image value]
+     :else [:div.no-value])
    [:div.arrow]])
 
 (defn- options-list-empty-item
@@ -23,11 +23,14 @@
 
 (defn- options-list-item
   [{:keys [on-click thumbnail value]}]
-  (let [thumb (or thumbnail value)
-        handle-click #(on-click value)]
-    [:img {:src        thumb
-           :class-name "options-list-item"
-           :on-click   handle-click}]))
+  (let [handle-click #(on-click value)]
+    (if (some? thumbnail)
+      [:img {:src        thumbnail
+             :class-name "options-list-item"
+             :on-click   handle-click}]
+      [:div {:class-name "options-list-item no-image"
+             :on-click   handle-click}
+       value])))
 
 (defn- options-list
   [{:keys [allow-empty? on-click options dimensions ref]}]
@@ -51,11 +54,31 @@
      :left  x
      :width width}))
 
+(defn- img-src?
+  [current-value options]
+  (some (fn [{:keys [value thumbnail]}]
+          (and (= current-value value)
+               thumbnail))
+        options))
+
+(defn- current-value-in-options?
+  [options current-value]
+  (some (fn [{:keys [value]}]
+          (= value current-value))
+        options))
+
+(defn- add-to-options
+  [options value]
+  (concat [{:value     value
+            :thumbnail value}]
+          options))
+
 (defn component
-  [{:keys [allow-empty? on-change options value]
+  [{:keys [allow-empty? on-change options show-image? value]
     :or   {allow-empty? false
            on-change    #()
-           options      []}}]
+           options      []
+           show-image?  true}}]
   (r/with-let [show-options-list? (r/atom false)
                options-list-ref (r/atom nil)
                options-list-dimensions (r/atom {:top  0
@@ -79,13 +102,18 @@
                                         (on-change value))
 
                _ (reset! close-menu-ref close-menu)]
-    [:div.wc-select-image
-     [current-value {:value    value
-                     :on-click show-menu
-                     :ref      current-value-ref}]
-     (when @show-options-list?
-       [options-list {:options      options
-                      :allow-empty? allow-empty?
-                      :on-click     handle-list-item-click
-                      :dimensions   @options-list-dimensions
-                      :ref          options-list-ref}])]))
+    (let [options (if (current-value-in-options? options value)
+                    options
+                    (add-to-options options value))]
+      [:div.wc-select-image
+       [current-value {:value       value
+                       :value-img   (img-src? value options)
+                       :on-click    show-menu
+                       :ref         current-value-ref
+                       :show-image? show-image?}]
+       (when @show-options-list?
+         [options-list {:options      options
+                        :allow-empty? allow-empty?
+                        :on-click     handle-list-item-click
+                        :dimensions   @options-list-dimensions
+                        :ref          options-list-ref}])])))
