@@ -8,7 +8,7 @@
   [{:keys [data]}]
   (r/with-let [background-data (connect-data data [:background])]
     (let [{:keys [scene-slug course-slug]} (get @data :activity {})]
-      [background-selector {:scene-slug  scene-slug
-                            :course-slug course-slug
-                            :on-change   (fn [data]
-                                           (reset! background-data data))}])))
+      [background-selector {:scene-slug      scene-slug
+                            :course-slug     course-slug
+                            :on-change       #(reset! background-data %)
+                            :change-on-init? true}])))

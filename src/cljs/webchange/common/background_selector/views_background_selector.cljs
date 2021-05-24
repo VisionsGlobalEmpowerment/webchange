@@ -12,7 +12,7 @@
          (some? course-slug)) [::state/load-scene {:scene-slug scene-slug :course-slug course-slug}]))
 
 (defn background-selector
-  [{:keys [on-change] :as props}]
+  [{:keys [change-on-init? on-change] :as props}]
   (r/with-let [_ (re-frame/dispatch (get-init-event props))]
     (let [{:keys [name data]} @(re-frame/subscribe [::state/background-data])
           handle-change (fn [new-data]
@@ -20,4 +20,5 @@
                                       :data new-data}))]
       (when (some? data)
         [background-form (merge data
-                                {:on-change handle-change})]))))
+                                {:on-change       handle-change
+                                 :change-on-init? change-on-init?})]))))
