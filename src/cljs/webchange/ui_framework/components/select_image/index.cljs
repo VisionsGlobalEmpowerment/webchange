@@ -102,9 +102,10 @@
                                         (on-change value))
 
                _ (reset! close-menu-ref close-menu)]
-    (let [options (if (current-value-in-options? options value)
-                    options
-                    (add-to-options options value))]
+    (let [options (if (and (some? value)
+                           (->> value (current-value-in-options? options) (not)))
+                    (add-to-options options value)
+                    options)]
       [:div.wc-select-image
        [current-value {:value       value
                        :value-img   (img-src? value options)
