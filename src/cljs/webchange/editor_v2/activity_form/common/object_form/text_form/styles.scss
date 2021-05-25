@@ -21,7 +21,9 @@
 
     .text-control {
         .text-value-control {
-            padding-bottom: 64px;
+            &.with-footer {
+                padding-bottom: 64px;
+            }
         }
 
         .voice-over {

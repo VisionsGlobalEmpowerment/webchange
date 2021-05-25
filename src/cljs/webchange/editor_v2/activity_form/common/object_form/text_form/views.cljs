@@ -3,16 +3,20 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.object-form.text-form.state :as state]
+    [webchange.editor-v2.activity-form.common.object-form.voice-over-control.state :as state-voice-over]
     [webchange.editor-v2.activity-form.common.object-form.voice-over-control.views :refer [voice-over-control]]
-    [webchange.ui-framework.components.index :refer [icon select text-area]]))
+    [webchange.ui-framework.components.index :refer [icon select text-area]]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- text-component
   [{:keys [id]}]
   (let [value @(re-frame/subscribe [::state/current-text id])
-        handle-change (fn [value] (re-frame/dispatch [::state/set-current-text id value]))]
+        handle-change (fn [value] (re-frame/dispatch [::state/set-current-text id value]))
+        with-footer? @(re-frame/subscribe [::state-voice-over/visible? id])]
     [text-area {:value      value
                 :on-change  handle-change
-                :class-name "text-value-control"}]))
+                :class-name (get-class-name {"text-value-control" true
+                                             "with-footer"        with-footer?})}]))
 
 (defn- font-family-component
   [{:keys [id]}]
