@@ -9,7 +9,7 @@
 
 (defn show-overlay?
   [mode]
-  (some #{mode} [::modes/game]))
+  (some #{mode} [::modes/game ::modes/sandbox]))
 
 (def menu-padding {:y 20})
 (def button-name :skip-menu-button)
@@ -28,7 +28,7 @@
   [{:keys [viewport]}]
   (let [skip-button (merge {:type        "button"
                             :object-name button-name
-                            :on-click    #(re-frame/dispatch [::ce/skip])
+                            :on-click    ce/skip
                             :text        (t "skip")}
                            (get-button-position viewport))]
     {:type        "group"

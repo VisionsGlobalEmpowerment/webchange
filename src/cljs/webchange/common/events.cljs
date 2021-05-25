@@ -77,6 +77,7 @@
 (reg-simple-executor :callback ::execute-callback)
 (reg-simple-executor :hide-skip ::execute-hide-skip)
 (reg-simple-executor :workflow ::execute-workflow)
+(reg-simple-executor :skip ::execute-skip)
 
 (def on-skip-handlers
   "A list of functions to invoke on skip actions.
@@ -147,7 +148,8 @@
   [action prev]
   (-> action
       (assoc :var (:var prev))
-      (update-in [:params] merge (:params prev))))
+      (update-in [:params] merge (:params prev))
+      (update :tags concat (get-action-tags prev))))
 
 (defn apply-template
   [template value]
@@ -284,10 +286,10 @@
 (defn execute-action
   [db {:keys [unique-tag] :as action}]
   (when (flow-not-registered? unique-tag)
-    (let [{:keys [type return-immediately flow-id tags] :as action} (as-> action a
-                                                                          (assoc a :current-scene (:current-scene db))
-                                                                          (->with-flow a)
-                                                                          (->with-vars db a))
+    (let [{:keys [type return-immediately flow-id tags skippable] :as action} (as-> action a
+                                                                                    (assoc a :current-scene (:current-scene db))
+                                                                                    (->with-flow a)
+                                                                                    (->with-vars db a))
           handler (get @executors (keyword type))
           display-name (action->fold-name action)]
 
@@ -297,6 +299,11 @@
 
       (when tags
         (register-flow-tags! flow-id tags))
+
+      (when skippable
+        (on-skip! #(dispatch-success-fn action))
+        (re-frame/dispatch [::overlays/show-skip-menu]))
+
       (handler {:db db :action action})
       (when return-immediately
         (dispatch-success-fn action)))))
@@ -509,7 +516,6 @@
      (dispatch-success-fn action)
      (let [action (->with-vars db action)
            [current & rest] (:data action)
-           sequence-skippable? (:skippable action)
            skippable? (:skippable current)
            rest (if skippable? (into [{:type "hide-skip"}] rest) rest)
            next #(execute-sequence-data! db (-> action (assoc :data rest)) (inc sequence-position))
@@ -517,21 +523,14 @@
            action-id (random-uuid)
            current-scene (:current-scene db)
            flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
-                      :current-scene current-scene}
+                      :current-scene current-scene :on-remove (when (:on-interrupt action)
+                                                                [#(execute-action db (:on-interrupt action))])}
            current-action (-> current
                               (update :display-name #(or % (sequenced-action->display-name action sequence-position)))
                               (assoc :flow-id flow-id)
                               (assoc :action-id action-id)
                               (with-prev action))]
        (register-flow! flow-data)
-
-       (when skippable?
-         (on-skip! #(dispatch-success-fn current-action))
-         (re-frame/dispatch [::overlays/show-skip-menu]))
-
-       (when sequence-skippable?
-         (on-skip! (:on-skip action))
-         (on-skip! #(execute-remove-flows! {:flow-tag "skip"})))
        (execute-action db current-action)))))
 
 (re-frame/reg-event-fx
@@ -554,7 +553,6 @@
   [db action]
   (let [action (->with-vars db action)
         flow-id (random-uuid)
-        sequence-skippable? (:skippable action)
         actions (->> (:data action)
                      (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))))
                      (map (fn [v] (with-prev v action))))
@@ -565,10 +563,6 @@
                    :next          #(dispatch-success-fn action)
                    :current-scene current-scene}]
     (register-flow! flow-data)
-
-    (when sequence-skippable?
-      (on-skip! (:on-skip action))
-      (on-skip! #(execute-remove-flows! {:flow-tag "skip"})))
 
     (if (seq actions)
       (doall (map-indexed (fn [sequence-position child-action]
@@ -637,13 +631,25 @@
     (reset! on-skip-handlers [])
     {:dispatch [::overlays/hide-skip-menu]}))
 
+(defn skip
+  []
+  (let [[on-skip-list _] (reset-vals! on-skip-handlers [])]
+    (doseq [on-skip on-skip-list]
+      (on-skip)))
+  (execute-remove-flows! {:flow-tag "skip"})
+  (re-frame/dispatch [::overlays/hide-skip-menu]))
+
 (re-frame/reg-event-fx
-  ::skip
-  (fn [{:keys [db]} _]
-    (let [[on-skip-list _] (reset-vals! on-skip-handlers [])]
-      (doseq [on-skip on-skip-list]
-        (on-skip)))
-    {:dispatch [::overlays/hide-skip-menu]}))
+  ::execute-skip
+  [event-as-action with-flow]
+  (fn [{:keys [db]} action]
+    "Immediately completes current skippable flow.
+    Should set all variables and complete transitions.
+
+    Example:
+    {:type 'skip'}"
+    (skip)
+    (dispatch-success-fn action)))
 
 (defn- init-workflow-indexes
   [{:keys [data] :as action}]

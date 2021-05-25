@@ -16,13 +16,17 @@
 
 (defn- validate
   [data validation-data validation-map]
-  (doseq [[field validators] validation-map]
-    (let [value (if (= field :root)
+  (doseq [[field validation] validation-map]
+    (let [{:keys [optional? validators]} (if (map? validation)
+                                           validation
+                                           {:validators validation})
+          value (if (= field :root)
                   @data
                   (get @data field))
-          result (->> validators
-                      (map (fn [validator] (validator value)))
-                      (remove empty?))]
+          validation-required? (or (not optional?) (not-empty value))
+          result (if validation-required? (->> validators
+                                               (map (fn [validator] (validator value)))
+                                               (remove empty?)))]
       (if-not (empty? result)
         (swap! validation-data assoc field (->> result (map #(str "* " %)) (clojure.string/join "; ")))
         (swap! validation-data dissoc field)))))

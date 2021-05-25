@@ -414,10 +414,12 @@
      :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
     (let [test (map core/get-variable var-names)]
       (if (= values test)
-        {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
+        (if success
+          {:dispatch [::e/execute-action (cond-action db action :success)]}
+          {:dispatch (e/success-event action)})
         (if fail
-          {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
-          {:dispatch-n (list (e/success-event action))})))))
+          {:dispatch [::e/execute-action (cond-action db action :fail)]}
+          {:dispatch (e/success-event action)})))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-list-at-least-one-true
