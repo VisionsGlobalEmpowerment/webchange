@@ -9,8 +9,9 @@
         {course-id :id} (db/get-course {:slug course-slug})]
     course-id)
 
-  (let [course-slug "t-t-uzovdwpu"
-        scene-slug "t"
+  (let [course-slug "english"
+        scene-slug "first-words-book"
         latest-version (course/get-scene-latest-version course-slug scene-slug)]
     (-> latest-version
-        :assets)))
+        :actions
+        :open-page)))

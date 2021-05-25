@@ -4,7 +4,8 @@
     [webchange.student-dashboard.subs :as subs]
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    [webchange.logger.index :as logger]))
 
 (re-frame/reg-event-fx
   ::show-navigation-menu
@@ -77,11 +78,13 @@
 (re-frame/reg-event-fx
   ::show-skip-menu
   (fn [_]
+    (logger/trace "show skip menu")
     {:dispatch [::scene/change-scene-object :skip-menu [[:set-visibility {:visible true}]]]}))
 
 (re-frame/reg-event-fx
   ::hide-skip-menu
   (fn [_]
+    (logger/trace "hide skip menu")
     {:dispatch [::scene/change-scene-object :skip-menu [[:set-visibility {:visible false}]]]}))
 
 (re-frame/reg-event-fx

@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.dialog.dialog-form.views-form-target
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
     [clojure.string :refer [capitalize]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
@@ -40,8 +41,9 @@
 
 (defn- text-selector
   []
-  (let [targets (->> @(re-frame/subscribe [::translator-form.scene/available-text-targets])
-                     (map value->option))]
+  (let [targets (->> @(re-frame/subscribe [::translator-form.scene/text-objects])
+                     (map (fn [[id data]] {:text  (str "(" (name id) ") " (:text data))
+                                           :value (name id)})))]
     [selector targets]))
 
 (defn- character-selector
@@ -51,8 +53,8 @@
                      (concat [{:text "No Character" :value ""}]))]
     [selector targets]))
 
-(defn target-block
-  []
+(defn- block
+  [name selector]
   (let [settings @(re-frame/subscribe [::translator-form/components-settings :target])
         current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
         styles (get-styles)]
@@ -64,29 +66,17 @@
                  :xs   6}
         [ui/typography {:variant "h6"
                         :style   (:title styles)}
-         "Character:"]
-        [character-selector]]
+         name]
+        [selector]]
        [ui/grid {:item true
                  :xs   6}
         (when (some? current-phrase-action)
           [audios-filter])]])))
 
+(defn target-block
+  []
+  [block "Characters:" character-selector])
+
 (defn text-target-block
   []
-  (let [settings @(re-frame/subscribe [::translator-form/components-settings :target])
-        current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
-        styles (get-styles)]
-    (when-not (:hide? settings)
-      [ui/grid {:container true
-                :spacing   16
-                :style     (:wrapper styles)}
-       [ui/grid {:item true
-                 :xs   6}
-        [ui/typography {:variant "h6"
-                        :style   (:title styles)}
-         "Text:"]
-         [text-selector]]
-       [ui/grid {:item true
-                 :xs   6}
-        (when (some? current-phrase-action)
-          [audios-filter])]])))
+  [block "Text:" text-selector])

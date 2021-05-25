@@ -4,12 +4,15 @@
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
     [webchange.ui-framework.components.index :refer [label text-area]]))
 
-(def string-validation-map {:root [(fn [value] (when (= value "") "Required field"))]})
+(def string-validation-map {:root {:valitarots [(fn [value] (when (= value "") "Required field"))]}})
 
 (defn string-option
   [{:keys [key option data validator]}]
   (r/with-let [string-data (connect-data data [key] "")
-               {:keys [error-message destroy]} (v/init string-data string-validation-map validator)]
+               {:keys [error-message destroy]} (v/init
+                                                 string-data
+                                                 (assoc-in string-validation-map [:root :optional?] (:optional? option))
+                                                 validator)]
     (let [{:keys [description]} option]
       [:div {:style {:width 416}}
        (when (some? description)

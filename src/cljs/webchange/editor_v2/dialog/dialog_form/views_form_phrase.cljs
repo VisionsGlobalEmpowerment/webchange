@@ -19,9 +19,6 @@
                            :margin      "normal"
                            :multiline   true
                            :full-width  true}
-        {:keys [path]} @(re-frame/subscribe [::translator-form.actions/current-phrase-action-info])
-        parallel? (= 3 (count path))
-        main-parallel? (= 0 (last path))
         current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
         offset-text (-> current-phrase-action get-empty-action :duration str trim-text)
         handle-offset-change (fn [event]
@@ -31,14 +28,13 @@
     [ui/grid {:container true
               :spacing   16
               :justify   "space-between"}
-     (if (and parallel? (not main-parallel?))
-       [ui/grid {:item true :xs 12}
-        [text-field (merge text-input-params
-                           {:label           "Delay"
-                            :value           (or offset-text "")
-                            :on-change       handle-offset-change
-                            :InputLabelProps {:shrink  true
-                                              :focused true}})]])]))
+     [ui/grid {:item true :xs 12}
+      [text-field (merge text-input-params
+                         {:label           "Delay"
+                          :value           (or offset-text "")
+                          :on-change       handle-offset-change
+                          :InputLabelProps {:shrink  true
+                                            :focused true}})]]]))
 
 (defn- label-with-warning
   [{:keys [label show-warning?]}]

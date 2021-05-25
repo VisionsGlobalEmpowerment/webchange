@@ -679,11 +679,10 @@
                                (reduce #(templates/update-activity-from-template %1 %2) a updated))
 
         preserve-actions (->> preserve-actions
-                              (map (fn [[key action]] (let [available-activies (get-in created-activity [:actions key :available-activities])
-                                                            concept-var (get-in created-activity [:actions key :concept-var])]
-                                                        [key (cond-> action
-                                                                     available-activies (assoc :available-activities available-activies)
-                                                                     concept-var (assoc :concept-var concept-var))])))
+                              (map (fn [[key action]] (let [preserved-action-keys [:available-activities :concept-var :tags :skippable]
+                                                            created-action (-> (get-in created-activity [:actions key])
+                                                                               (select-keys preserved-action-keys))]
+                                                        [key (merge action created-action)])))
                               (into {}))
         activity (-> created-activity
                      (update :actions merge preserve-actions)

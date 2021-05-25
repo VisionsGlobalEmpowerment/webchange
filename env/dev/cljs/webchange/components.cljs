@@ -22,21 +22,17 @@
     prepared-data))
 
 (comment
-  (redraw "spread-1-title-text" {:type           "text",
-                                 :x              940,
-                                 :y              164,
-                                 :width          600,
-                                 :height         800,
+  (redraw "spread-0-title-text" {:type           "text",
+                                 :x              929,
+                                 :y              264,
+                                 :width          680,
+                                 :height         200,
                                  :align          "center",
-                                 :chunks         [{:end 3, :start 0}
-                                                  {:end 10, :start 4}
-                                                  {:end 12, :start 11}
-                                                  {:end 15, :start 13}
-                                                  {:end 22, :start 16}]
-                                 :fill           "black",
+                                 :chunks         [{:end 6, :start 0}]
+                                 :fill           "white",
                                  :font-family    "Lexend Deca",
-                                 :font-size      90,
-                                 :text           "The letter a is for...",
+                                 :font-size      120,
+                                 :text           "Letter",
                                  :vertical-align "middle"})
 
   {:type    "image",

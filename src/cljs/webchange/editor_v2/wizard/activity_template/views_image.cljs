@@ -8,7 +8,7 @@
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
     [webchange.ui-framework.components.index :refer [file label]]))
 
-(def image-validation-map {:src [(fn [value] (when-not (some? value) "Image is required"))]})
+(def image-validation-map {:src {:validators [(fn [value] (when-not (some? value) "Image is required"))]}})
 
 (defn- get-styles
   []
@@ -64,7 +64,10 @@
   [{:keys [key data validator option]}]
   (r/with-let [page-data (connect-data data [key] nil)
                {:keys [description]} option
-               {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
+               {:keys [error-message destroy]} (v/init
+                                                 page-data
+                                                 (assoc-in image-validation-map [:src :optional?] (:optional? option))
+                                                 validator)]
     [:div.image-option
      (when (some? description)
        [label {:class-name "field-label"} description])

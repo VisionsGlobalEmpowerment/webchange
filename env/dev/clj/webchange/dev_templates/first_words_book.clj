@@ -7,6 +7,8 @@
   (def test-course-slug (-> (t/create-test-course) :slug))
   (def scene-slug "test-activity")
 
+  (def test-course-slug "english")
+  (def scene-slug "first-words-book")
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 
