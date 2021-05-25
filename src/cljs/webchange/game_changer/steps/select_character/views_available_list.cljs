@@ -39,7 +39,7 @@
 
 (defn- skins-list
   [{:keys [group on-click]}]
-  (let [skins @(re-frame/subscribe [::state/available-skins group])]
+  (let [skins @(re-frame/subscribe [::state/available-characters-skins group])]
     [:div
      [:div.list-title
       "Select skin:"]
