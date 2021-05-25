@@ -17,7 +17,6 @@
   ::init
   (fn [{:keys [db]} [_ id object-name]]
     (let [actions-data (get-actions-data db object-name)]
-      (print "---  ::init actions-data" actions-data)
       {:dispatch [::set-action-data id actions-data]})))
 
 ;; Action Data
