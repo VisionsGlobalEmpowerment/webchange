@@ -24,3 +24,8 @@
           prepared-data (prepare-selected-objects {:objects-names selected-objects
                                                    :scene-data    scene-data})]
       {:db (assoc-in db selected-objects-path prepared-data)})))
+
+(re-frame/reg-event-fx
+  ::reset-selection
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db selected-objects-path nil)}))

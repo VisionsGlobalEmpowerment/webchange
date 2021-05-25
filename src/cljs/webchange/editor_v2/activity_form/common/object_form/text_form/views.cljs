@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.object-form.text-form.state :as state]
+    [webchange.editor-v2.activity-form.common.object-form.voice-over-control.views :refer [voice-over-control]]
     [webchange.ui-framework.components.index :refer [icon select text-area]]))
 
 (defn- text-component
@@ -57,4 +58,6 @@
       [font-family-component {:id id}]
       [font-size-component {:id id}]]
      [:div.text-control
-      [text-component {:id id}]]]))
+      [text-component {:id id}]
+      [voice-over-control {:id          id
+                           :object-name (first objects-names)}]]]))

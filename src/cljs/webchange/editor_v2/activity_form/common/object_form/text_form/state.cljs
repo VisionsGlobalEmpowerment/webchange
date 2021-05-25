@@ -8,7 +8,7 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [text-data (select-keys objects-data [:text :chunks :font-family])]
+    (let [text-data (select-keys objects-data [:text :chunks :font-family :font-size])]
       {:dispatch [::state/init id {:data  text-data
                                    :names objects-names}]})))
 
