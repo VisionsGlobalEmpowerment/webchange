@@ -338,16 +338,24 @@
   (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "book"})
        (map ->website-course)))
 
-(defn read-character-data [dir]
-  (let [filename (str dir "/skeleton.json")
-        data (json/read-str (slurp filename) :key-fn keyword)]
+(defn read-character-data [character-dir public-dir]
+  (let [character-name (-> character-dir .getName)
+        character-skeleton (str character-dir "/skeleton.json")
+        data (json/read-str (slurp character-skeleton) :key-fn keyword)]
     (as-> {} character-data
-          (assoc character-data :name (last (string/split dir #"/")))
+          (assoc character-data :name (last (string/split (str character-dir) #"/")))
           (assoc character-data :width (get-in data [:skeleton :width]))
           (assoc character-data :height (get-in data [:skeleton :height]))
           (if (vector? (:skins data))
             (assoc character-data :skins (vec (map #(:name %) (:skins data))))
             (assoc character-data :skins (vec (map #(name (get % 0)) (vec (:skins data))))))
+          (assoc character-data :skins (map (fn [skin]
+                                              (let [preview-path (-> (str "/images/characters/" character-name "/" skin ".png")
+                                                                     (string/replace " " "_"))
+                                                    preview-file-path (f/relative->absolute-path preview-path public-dir)]
+                                                (cond-> {:name skin}
+                                                        (->> preview-file-path clojure.java.io/file .isFile) (assoc :preview preview-path))))
+                                            (:skins character-data)))
           (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data))))))))
 
 (defn find-all-character-skins []
@@ -362,7 +370,7 @@
          file-seq
          (filter #(.isDirectory %))
          (filter #(.isFile (clojure.java.io/file (str % "/skeleton.json"))))
-         (map #(read-character-data (str %))))))
+         (map #(read-character-data % {:public-dir dir})))))
 
 (defn update-character-skins [config]
   (let [character-skins (read-character-skins config)
@@ -668,7 +676,7 @@
                              :actions
                              (select-keys actions))
         created-activity (as-> (templates/activity-from-template created) a
-                             (reduce #(templates/update-activity-from-template %1 %2) a updated))
+                               (reduce #(templates/update-activity-from-template %1 %2) a updated))
 
         preserve-actions (->> preserve-actions
                               (map (fn [[key action]] (let [available-activies (get-in created-activity [:actions key :available-activities])
