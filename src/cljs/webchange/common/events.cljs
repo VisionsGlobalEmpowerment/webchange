@@ -90,6 +90,16 @@
   (when handler
     (swap! on-skip-handlers conj handler)))
 
+(def on-action-finished-handlers
+  "A list of function to invoke when action is finished.
+  Is used to hide skip button after skippable action is finished"
+  (atom {}))
+
+(defn on-action-finished!
+  "Register function to invoke on flow success event for specified action"
+  [action-id handler]
+  (swap! on-action-finished-handlers update action-id conj handler))
+
 (defn success-event
   [{:keys [flow-id action-id]}]
   [::flow-success flow-id action-id])
@@ -286,7 +296,7 @@
 (defn execute-action
   [db {:keys [unique-tag] :as action}]
   (when (flow-not-registered? unique-tag)
-    (let [{:keys [type return-immediately flow-id tags skippable] :as action} (as-> action a
+    (let [{:keys [type return-immediately flow-id action-id tags skippable] :as action} (as-> action a
                                                                                     (assoc a :current-scene (:current-scene db))
                                                                                     (->with-flow a)
                                                                                     (->with-vars db a))
@@ -302,6 +312,7 @@
 
       (when skippable
         (on-skip! #(dispatch-success-fn action))
+        (on-action-finished! action-id #(re-frame/dispatch [::overlays/hide-skip-menu]) )
         (re-frame/dispatch [::overlays/show-skip-menu]))
 
       (handler {:db db :action action})
@@ -395,14 +406,6 @@
                       (update-in [:tags] conj (str "scene-" current-scene)))]
     (swap! flows assoc flow-id flow-data)))
 
-(defn discard-flow!
-  [flow-id]
-  (let [flow (get @flows flow-id)
-        handler (:on-remove flow)]
-    (when handler
-      (handler))
-    (swap! flows dissoc flow-id)))
-
 (defn register-flow-remove-handler!
   [flow-id handler]
   (swap! flows update-in [flow-id :on-remove] conj handler))
@@ -434,7 +437,13 @@
   (when flow-id
     (let [succeeded (get-in @flows [flow-id :succeeded] #{})]
       (swap! flows assoc-in [flow-id :succeeded] (conj succeeded action-id))
-      (check-flow! flow-id))))
+      (check-flow! flow-id)))
+  (when action-id
+    (let [on-action-finished (get @on-action-finished-handlers action-id)]
+      (swap! on-action-finished-handlers dissoc action-id)
+      (doseq [handler on-action-finished]
+        (when handler
+          (handler))))))
 
 (defn execute-remove-flows!
   [{:keys [flow-tag] :as action}]
@@ -516,8 +525,6 @@
      (dispatch-success-fn action)
      (let [action (->with-vars db action)
            [current & rest] (:data action)
-           skippable? (:skippable current)
-           rest (if skippable? (into [{:type "hide-skip"}] rest) rest)
            next #(execute-sequence-data! db (-> action (assoc :data rest)) (inc sequence-position))
            flow-id (random-uuid)
            action-id (random-uuid)

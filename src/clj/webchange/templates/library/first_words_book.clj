@@ -389,6 +389,16 @@
                                                               :from-var [{:template "spread-%", :var-name "current-spread", :action-property "transition-id"}]}
                                                              {:type "action" :id "show-navigation"}]}
                         :turn-open-page              {:type "sequence-data"
+                                                      :on-interrupt {:type "sequence-data"
+                                                                     :data [{:type "action" :id "hide-navigation"}
+                                                                            {:type     "set-attribute" :attr-name "opacity", :attr-value 0 :target "spread-0"}
+                                                                            {:type     "set-attribute" :attr-name "visible", :attr-value false :target "spread-0"}
+                                                                            {:id "open", :type "state", :target "background"}
+                                                                            {:id "idle", :type "add-animation", :target "book"}
+                                                                            {:type "set-variable", :var-name "current-spread", :var-value 1}
+                                                                            {:type     "set-attribute" :attr-name "visible", :attr-value true :target "spread-1"}
+                                                                            {:type     "set-attribute" :attr-name "opacity", :attr-value 1 :target "spread-1"}
+                                                                            {:type "action" :id "show-navigation"}]}
                                                       :data [{:type "action" :id "hide-navigation"}
                                                              {:to       {:opacity 0, :duration 0.5}, :type "transition"
                                                               :from-var [{:template "spread-%", :var-name "current-spread", :action-property "transition-id"}]}
@@ -405,6 +415,16 @@
                                                               :from-var [{:template "spread-%", :var-name "current-spread", :action-property "transition-id"}]}
                                                              {:type "action" :id "show-navigation"}]}
                         :turn-close-page             {:type "sequence-data"
+                                                      :on-interrupt {:type "sequence-data"
+                                                                     :data [{:type "action" :id "hide-navigation"}
+                                                                            {:type     "set-attribute" :attr-name "opacity", :attr-value 0 :target "spread-1"}
+                                                                            {:type     "set-attribute" :attr-name "visible", :attr-value false :target "spread-1"}
+                                                                            {:id "closed", :type "state", :target "background"}
+                                                                            {:id "close_idle", :type "add-animation", :target "book"}
+                                                                            {:type "set-variable", :var-name "current-spread", :var-value 0}
+                                                                            {:type     "set-attribute" :attr-name "visible", :attr-value true :target "spread-0"}
+                                                                            {:type     "set-attribute" :attr-name "opacity", :attr-value 1 :target "spread-0"}
+                                                                            {:type "action" :id "show-navigation"}]}
                                                       :data [{:type "action" :id "hide-navigation"}
                                                              {:to       {:opacity 0, :duration 0.5}, :type "transition"
                                                               :from-var [{:template "spread-%", :var-name "current-spread", :action-property "transition-id"}]}
@@ -420,7 +440,6 @@
                                                              {:to       {:opacity 1, :duration 0.5}, :type "transition"
                                                               :from-var [{:template "spread-%", :var-name "current-spread", :action-property "transition-id"}]}
                                                              {:type "action" :id "show-navigation"}]}
-
                         :hide-navigation             {:type "parallel"
                                                       :data [{:type "set-attribute" :attr-name "visible", :attr-value false :target "prev-button"}
                                                              {:type "set-attribute" :attr-name "visible", :attr-value false :target "next-button"}
