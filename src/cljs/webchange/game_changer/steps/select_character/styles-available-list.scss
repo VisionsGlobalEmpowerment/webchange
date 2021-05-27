@@ -11,8 +11,9 @@ $card-size: 150px;
 @mixin list() {
     width: 100%;
     display: flex;
-    padding: $padding 0;
+    flex-wrap: wrap;
     gap: $padding;
+    padding: $padding 0;
 }
 
 .available-characters-list {

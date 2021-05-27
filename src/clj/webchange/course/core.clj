@@ -341,11 +341,18 @@
 (defn read-character-data [character-dir public-dir]
   (let [character-name (-> character-dir .getName)
         character-skeleton (str character-dir "/skeleton.json")
-        data (json/read-str (slurp character-skeleton) :key-fn keyword)]
+        data (json/read-str (slurp character-skeleton) :key-fn keyword)
+
+        preview-path (-> (str "/images/characters/" character-name "/character_preview.png")
+                         (string/replace " " "_"))
+        preview-file-path (f/relative->absolute-path preview-path public-dir)]
     (as-> {} character-data
           (assoc character-data :name (last (string/split (str character-dir) #"/")))
           (assoc character-data :width (get-in data [:skeleton :width]))
           (assoc character-data :height (get-in data [:skeleton :height]))
+          (if (->> preview-file-path clojure.java.io/file .isFile)
+            (assoc character-data :preview preview-path)
+            character-data)
           (if (vector? (:skins data))
             (assoc character-data :skins (vec (map #(:name %) (:skins data))))
             (assoc character-data :skins (vec (map #(name (get % 0)) (vec (:skins data))))))

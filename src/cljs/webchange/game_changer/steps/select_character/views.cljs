@@ -1,9 +1,10 @@
 (ns webchange.game-changer.steps.select-character.views
   (:require
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.characters.library :refer [characters]]
     [webchange.editor-v2.wizard.validator :refer [connect-data]]
     [webchange.game-changer.steps.fill-template.template-options :refer [data->character-option]]
+    [webchange.game-changer.steps.select-character.state :as state]
     [webchange.game-changer.steps.select-character.views-available-list :refer [available-characters-list]]
     [webchange.game-changer.steps.select-character.views-selected-list :refer [selected-characters-list]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
@@ -31,7 +32,9 @@
 
 (defn select-character
   [{:keys [data]}]
-  (r/with-let [open-available-characters? (r/atom false)
+  (r/with-let [_ (re-frame/dispatch [::state/init])
+
+               open-available-characters? (r/atom false)
 
                {max-count :max} (data->character-option @data)
                characters-data (connect-data data (get-character-option-path @data) [])
