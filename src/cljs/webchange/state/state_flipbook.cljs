@@ -7,6 +7,7 @@
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
+    [webchange.editor-v2.activity-form.common.state :as state-activity-form]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.state-activity :as state-activity]
     [webchange.utils.flipbook :as flipbook-utils]))
@@ -17,7 +18,7 @@
        (concat [:flipbook])
        (state/path-to-db)))
 
-(defn- get-current-stage-idx
+(defn get-current-stage-idx
   [db]
   (get-in db (state-layout/path-to-db [:current-stage]) 0))
 
@@ -292,7 +293,8 @@
           stage (-> (get-in db [:current-scene-data :metadata])
                     (get-in [:stages idx]))]
       {:db       (set-current-stage-idx db idx)
-       :dispatch [::show-flipbook-stage (:idx stage) {:hide-generated-pages? (not show-generated-pages?)}]})))
+       :dispatch-n [[::show-flipbook-stage (:idx stage) {:hide-generated-pages? (not show-generated-pages?)}]
+                    [::state-activity-form/reset-selection]]})))
 
 (re-frame/reg-event-fx
   ::show-flipbook-stage

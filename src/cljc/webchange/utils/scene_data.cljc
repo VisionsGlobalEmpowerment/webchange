@@ -61,3 +61,15 @@
        (some (fn [[object-name {:keys [type] :as object-data}]]
                (and (some #{type} ["background" "layered-background"])
                     [object-name object-data])))))
+
+;; Metadata
+
+(defn get-metadata
+  [scene-data]
+  (get scene-data :metadata {}))
+
+(defn get-template-name
+  [scene-data]
+  (-> scene-data
+      (get-metadata)
+      (get :template-name)))

@@ -11,9 +11,9 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def form-components
-  {"animation"  animation-form/form
-   "text"  text-form/form
-   "image" image-form/form})
+  {"animation" animation-form/form
+   "text"      text-form/form
+   "image"     image-form/form})
 
 (defn- available-object-type?
   [object-type]
