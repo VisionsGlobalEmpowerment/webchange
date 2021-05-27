@@ -62,8 +62,8 @@
           scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
           current-scene-data (core/get-scene-data db scene-id)
           scene-data (merge current-scene-data scene-data-patch)]
-      {:dispatch [::warehouse/save-scene {:course-id  course-id
-                                          :scene-id   scene-id
+      {:dispatch [::warehouse/save-scene {:course-slug  course-id
+                                          :scene-slug   scene-id
                                           :scene-data scene-data}
                   {:on-success [::update-scene-success on-success]}]})))
 
@@ -73,6 +73,8 @@
     {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
                                                   :scene-data data}]]
                          (some? on-success) (conj (conj on-success response)))}))
+
+; Objects
 
 (re-frame/reg-event-fx
   ::update-scene-objects
@@ -97,6 +99,8 @@
                                         :scene-id     scene-id
                                         :patches-list [{:object-name       object-name
                                                         :object-data-patch object-data-patch}]} handlers]}))
+
+; Metadata
 
 (re-frame/reg-event-fx
   ::update-scene-metadata

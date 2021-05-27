@@ -1,8 +1,10 @@
 (ns webchange.game-changer.steps.fill-template.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.game-changer.steps.state-common]
     [webchange.state.state-activity :as state-activity]
-    [webchange.state.state-course :as state-course]))
+    [webchange.state.state-course :as state-course]
+    [webchange.state.warehouse :as warehouse]))
 
 (defn- data->course-data
   [data]
@@ -36,9 +38,12 @@
   (fn [{:keys [_]} [_ data callback course-data activity-data]]
     (swap! data update :course merge course-data)
     (swap! data update :activity merge activity-data)
-    {:callback callback}))
+    {:dispatch [::warehouse/load-scene
+                (select-keys activity-data [:course-slug :scene-slug])
+                {:on-success [::create-activity-step-4 data callback]}]}))
 
-(re-frame/reg-fx
-  :callback
-  (fn [callback]
-    (when (fn? callback) (callback))))
+(re-frame/reg-event-fx
+  ::create-activity-step-4
+  (fn [{:keys [_]} [_ data callback scene-data]]
+    (swap! data assoc :scene-data scene-data)
+    {:callback callback}))

@@ -155,10 +155,10 @@
 
 (re-frame/reg-event-fx
   ::save-scene
-  (fn [{:keys [_]} [_ {:keys [course-id scene-id scene-data]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug scene-data]} handlers]]
     (create-request {:key          :save-scene
                      :method       :put
-                     :uri          (str "/api/courses/" course-id "/scenes/" scene-id)
+                     :uri          (str "/api/courses/" course-slug "/scenes/" scene-slug)
                      :params       {:scene scene-data}
                      :request-type :update-activity}
                     handlers)))

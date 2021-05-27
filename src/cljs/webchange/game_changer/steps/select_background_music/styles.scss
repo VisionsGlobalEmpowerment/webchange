@@ -1,0 +1,53 @@
+.select-background-music {
+    .block-label {
+        margin-left: 8px;
+        margin-bottom: 8px;
+    }
+
+    .upload-form-wrapper {
+        padding: 8px 16px;
+        margin-bottom: 16px;
+
+        .upload-form {
+            gap: 16px;
+        }
+    }
+
+    .current-value {
+        margin-bottom: 32px;
+        width: 300px;
+
+        .current-value-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            gap: 16px;
+
+            .name {
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 8px 0;
+            }
+        }
+    }
+
+    .music-options-list {
+        .music-option {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            gap: 16px;
+            margin-bottom: 1px;
+            cursor: pointer;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            &:hover {
+                background-color: rgba(0, 113, 227, 0.1);
+            }
+        }
+    }
+}

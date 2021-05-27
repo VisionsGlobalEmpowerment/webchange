@@ -72,7 +72,7 @@
       (.removeEventListener @drop-area "drop" handle-area-drop))))
 
 (defn component
-  [{:keys [button-text disabled? drag-and-drop? type on-change show-file-name? show-icon? upload-options with-upload?]
+  [{:keys [button-text class-name disabled? drag-and-drop? type on-change show-file-name? show-icon? upload-options with-upload?]
     :or   {button-text     "Choose File"
            disabled?       false
            drag-and-drop?  false
@@ -95,7 +95,8 @@
                                                                 (reset! uploading? false)
                                                                 (on-change (:url %)))}))
                                  (on-change file)))]
-    [:div.wc-file
+    [:div {:class-name (get-class-name (cond-> {"wc-file" true}
+                                               (some? class-name) (assoc class-name true)))}
      [:input {:type      "file"
               :accept    (get-accept-extensions type)
               :on-change #(-> % change-event->file handle-change)
