@@ -46,6 +46,38 @@
 
 ;; Scene Data
 
+; Assets
+
+(defn- add-asset
+  [scene-data asset-data]
+  (->> (fn [assets]
+         (->> assets
+              (concat [asset-data])
+              (vec)))
+       (update scene-data :assets)))
+
+(defn- update-asset
+  [scene-data predicate asset-data-patch]
+  (->> (fn [assets]
+         (->> assets
+              (map (fn [asset-data]
+                     (if (predicate {:data asset-data})
+                       (merge asset-data asset-data-patch)
+                       asset-data)))
+              (vec)))
+       (update scene-data :assets)))
+
+(defn- remove-asset
+  [scene-data predicate]
+  (->> (fn [assets]
+         (->> assets
+              (filter (fn [asset-data]
+                        (-> {:data asset-data} (predicate) (not))))
+              (vec)))
+       (update scene-data :assets)))
+
+; Objects
+
 (defn- get-scene-objects
   [scene-data]
   (get scene-data :objects {}))
@@ -62,6 +94,58 @@
                (and (some #{type} ["background" "layered-background"])
                     [object-name object-data])))))
 
+; Actions
+
+(defn- get-scene-actions
+  [scene-data]
+  (get scene-data :actions {}))
+
+(defn- get-action
+  [scene-data action-name]
+  (->> (get-scene-actions scene-data)
+       (some (fn [[name data]]
+               (and (= name action-name)
+                    data)))))
+
+(defn- add-action
+  [scene-data action-name action-data]
+  (assoc-in scene-data [:actions action-name] action-data))
+
+(defn- update-action
+  [scene-data predicate action-data-patch]
+  (->> (fn [actions]
+         (->> actions
+              (map (fn [[action-name actions-data]]
+                     (if (predicate {:name action-name
+                                     :data actions-data})
+                       [action-name (merge actions-data action-data-patch)]
+                       [action-name actions-data])))
+              (into {})))
+       (update scene-data :actions)))
+
+; Triggers
+
+(def background-music-trigger-name :music)
+
+(defn- get-scene-triggers
+  [scene-data]
+  (get scene-data :triggers {}))
+
+(defn- get-trigger
+  [scene-data trigger-name]
+  (->> (get-scene-triggers scene-data)
+       (some (fn [[name data]]
+               (and (= name trigger-name)
+                    data)))))
+
+(defn- get-background-music-trigger
+  [scene-data]
+  (get-trigger scene-data :music))
+
+(defn- add-trigger
+  [scene-data trigger-name trigger-data]
+  (assoc-in scene-data [:triggers trigger-name] trigger-data))
+
 ;; Metadata
 
 (defn get-metadata
@@ -73,3 +157,42 @@
   (-> scene-data
       (get-metadata)
       (get :template-name)))
+
+; General
+
+(defn- get-background-music-action
+  [scene-data]
+  (let [action-name (->> (get-background-music-trigger scene-data)
+                         (:action)
+                         (keyword))]
+    [action-name (get-action scene-data action-name)]))
+
+(defn get-background-music-src
+  [scene-data]
+  (->> (get-background-music-action scene-data)
+       (second)
+       (:id)))
+
+(defn- add-background-music
+  [scene-data music-src]
+  (let [action-name :start-background-music-action
+        trigger-name :music]
+    (-> scene-data
+        (add-asset {:url music-src :size 10 :type "audio"})
+        (add-action action-name {:type "audio" :id music-src :loop true})
+        (add-trigger trigger-name {:on "start" :action (clojure.core/name action-name)}))))
+
+(defn- change-background-music
+  [scene-data old-music-src new-music-src]
+  (let [action-name (-> (get-background-music-action scene-data) (first))]
+    (-> scene-data
+        (remove-asset (fn [{:keys [data]}] (= (:url data) old-music-src)))
+        (add-asset {:url new-music-src :size 10 :type "audio"})
+        (update-action (fn [{:keys [name]}] (= name action-name)) {:id new-music-src}))))
+
+(defn set-background-music
+  [scene-data music-src]
+  (let [current-music-src (get-background-music-src scene-data)]
+    (if (some? current-music-src)
+      (change-background-music scene-data current-music-src music-src)
+      (add-background-music scene-data music-src))))

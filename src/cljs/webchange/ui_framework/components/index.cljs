@@ -1,6 +1,8 @@
 (ns webchange.ui-framework.components.index
   (:require
+    [webchange.ui-framework.components.audio.index :as audio]
     [webchange.ui-framework.components.button.index :as button]
+    [webchange.ui-framework.components.card.index :as card]
     [webchange.ui-framework.components.chip.index :as chip]
     [webchange.ui-framework.components.circular-progress.index :as circular-progress]
     [webchange.ui-framework.components.confirm.index :as confirm]
@@ -21,7 +23,9 @@
     [webchange.ui-framework.components.timeline.index :as timeline]
     [webchange.ui-framework.components.tooltip.index :as tooltip]))
 
+(def audio audio/component)
 (def button button/component)
+(def card card/component)
 (def chip chip/component)
 (def circular-progress circular-progress/component)
 (def dialog dialog/component)
