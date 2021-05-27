@@ -4,6 +4,7 @@
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
     [webchange.interpreter.renderer.scene.components.animation.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :refer [set-handler]]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.resources.manager :as resources]))
 
 (def default-props {:x                {}
@@ -22,7 +23,8 @@
                     :speed            {:default 1}
                     :skin-name        {:alias :skin :default "default"}
                     :animation-name   {:alias :anim}
-                    :position         {:alias :anim-offset}})
+                    :position         {:alias :anim-offset}
+                    :filters          {}})
 
 (defn- create-spine-animation
   [animation-resource {:keys [animation-start? speed offset position skin-name animation-name scale loop]}]
@@ -70,7 +72,7 @@
   :speed - animation speed
   :skin-name - alias for :skin. Default default
   "
-  [{:keys [parent name on-click on-mount ref type] :as props}]
+  [{:keys [parent name on-click on-mount ref type filters] :as props}]
   (let [resource (resources/get-resource name)]
     (when (nil? resource)
       (-> (str "Resource for animation <" name "> is not defined") js/Error. throw))
@@ -87,5 +89,7 @@
 
       (-> animation
           (.update 0))
+
+      (apply-filters animation-container filters)
 
       wrapped-animation)))
