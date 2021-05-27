@@ -408,13 +408,13 @@
         id (or transition-tag transition-id)]
     (when transition
       (let [transition-params [:duration :easing :loop :yoyo :repeat :speed]]
-        {:transition {:id        id
-                      :component transition
-                      :to        (without-params to transition-params)
-                      :from      from
-                      :params    (select-keys to transition-params)
-                      :on-ended  #(ce/dispatch-success-fn action)
-                      :skippable skippable
+        {:transition {:id         id
+                      :component  transition
+                      :to         (without-params to transition-params)
+                      :from       from
+                      :params     (select-keys to transition-params)
+                      :on-ended   #(ce/dispatch-success-fn action)
+                      :skippable  skippable
                       :kill-after kill-after}}))))
 
 (defn point->transition
@@ -1188,8 +1188,8 @@
 (re-frame/reg-event-fx
   ::start-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-             (if (not= course-id (:loaded-course db))
-               {:dispatch-n (list [::load-course course-id scene-id])})))
+    (if (not= course-id (:loaded-course db))
+      {:dispatch-n (list [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::load-course
@@ -1230,10 +1230,10 @@
 (re-frame/reg-event-fx
   ::load-course-data
   (fn-traced [{:keys [db]} [_ course-id]]
-             (if (not= course-id (:loaded-course db))
-               {:dispatch         [::load-scenes-with-skills course-id]
-                :load-course-data {:course-id course-id}
-                :load-lessons     [course-id]})))
+    (if (not= course-id (:loaded-course db))
+      {:dispatch         [::load-scenes-with-skills course-id]
+       :load-course-data {:course-id course-id}
+       :load-lessons     [course-id]})))
 
 (re-frame/reg-event-fx
   ::set-current-course
@@ -1519,12 +1519,14 @@
      :success      'check-box3',
      :fail         'box-3-revert',
      :transition   'box3'}"
-    (let [transition-wrapper (->> transition keyword (scene/get-scene-object db))
-          success (ce/get-action success db action)
-          fail (ce/get-action fail db action)]
+    (let [transition-wrapper (->> transition keyword (scene/get-scene-object db))]
       (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
-        {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
-        {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))
+        (if success
+          {:dispatch [::ce/execute-action (vars.events/cond-action db action :success)]}
+          {:dispatch [::ce/execute-action (ce/success-event action)]})
+        (if fail
+          {:dispatch [::ce/execute-action (vars.events/cond-action db action :fail)]}
+          {:dispatch [::ce/execute-action (ce/success-event action)]})))))
 
 
 (re-frame/reg-event-fx
@@ -1542,27 +1544,25 @@
      :success     'highlight',
      :fail        'unhighlight',
      :transition ['transition-1' 'transition-2' 'transition-3']}]}"
-    (let [transition-wrappers (into {} (map (fn [transition] [transition (->> transition keyword (scene/get-scene-object db))]) transitions))
-          success (ce/get-action success db action)
-          fail (ce/get-action fail db action)
-          actions (remove nil? (doall (map-indexed (fn [idx [transition transition-wrapper]]
-                                                     (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
-                                                       (let [data ((:get-object-data transition-wrapper))
-                                                             collide? (get data :collide?)
-                                                             data-collide (merge data {:collide? true})
-                                                             ]
-                                                         (if (not collide?)
-                                                           (do
-                                                             ((:set-object-data transition-wrapper) data-collide)
-                                                             [::ce/execute-action (assoc success :params (merge (get action-params idx) {:transition transition} (:params action)))])))
-                                                       (let [data ((:get-object-data transition-wrapper))
-                                                             collide? (get data :collide?)
-                                                             data-collide (merge data {:collide? false})]
-                                                         (if (or collide? (nil? collide?))
-                                                           (do
-                                                             ((:set-object-data transition-wrapper) data-collide)
-                                                             [::ce/execute-action (assoc fail :params (merge (get action-params idx) {:transition transition} (:params action)))])))
-                                                       )) transition-wrappers)))]
+    (let [get-transition-wrapper #(->> % keyword (scene/get-scene-object db))
+          actions (->> transitions
+                       (map-indexed (fn [idx transition]
+                                      (let [{:keys [object get-object-data set-object-data]} (get-transition-wrapper transition)
+                                            data (get-object-data)
+                                            collide? (get data :collide?)
+                                            params (merge (get action-params idx) {:transition transition} (:params action))]
+                                        (if (i/collide-with-coords? object (dg/get-mouse-position))
+                                          (let [data-collide (merge data {:collide? true})]
+                                            (when (not collide?)
+                                              (set-object-data data-collide)
+                                              (when success
+                                                [::ce/execute-action (assoc (vars.events/cond-action db action :success) :params params)])))
+                                          (let [data-collide (merge data {:collide? false})]
+                                            (when (or collide? (nil? collide?))
+                                              (set-object-data data-collide)
+                                              (when fail
+                                                [::ce/execute-action (assoc (vars.events/cond-action db action :fail) :params params)])))))))
+                       (remove nil?))]
       {:dispatch-n (vec (conj actions (ce/success-event action)))})))
 
 (re-frame/reg-event-fx
