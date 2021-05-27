@@ -245,11 +245,20 @@
                                              ["blob-type" "image"]]} handlers]}))
 
 (re-frame/reg-event-fx
-  ::load-backgrounds
+  ::load-assets
+  (fn [{:keys [_]} [_ {:keys [tag]} handlers]]
+    (create-request {:key    :load-backgrounds
+                     :method :get
+                     :uri    (cond-> (str "/api/courses/editor/assets")
+                                     (some? tag) (str "?tag=" tag))}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-assets-tags
   (fn [{:keys [_]} [_ handlers]]
     (create-request {:key    :load-backgrounds
                      :method :get
-                     :uri    (str "/api/courses/editor/assets")}
+                     :uri    (str "/api/courses/editor/tags")}
                     handlers)))
 
 (re-frame/reg-event-fx
