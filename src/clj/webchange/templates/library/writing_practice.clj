@@ -25,95 +25,90 @@
                    {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10, :type "image"}
                    {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
                    {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}
-                   {:url "/raw/img/letters/a.png" :size 1 :type "image"}],
+                   {:url "/raw/img/ui/circle.png" :size 1 :type "image"}
+                   {:url "/raw/img/ui/checkmark.png" :size 1 :type "image"}],
         :objects
-                  {:background {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
-
+                  {:background  {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
                    :letter-tutorial-image
-                               {:type "image", :x 1065, :y 75, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
+                                {:type "image", :x 1065, :y 75, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
                    :letter-tutorial-path
-                               {:type         "animated-svg-path",
-                                :x            600,
-                                :y            25,
-                                :width        225,
-                                :height       225,
-                                :duration     5000,
-                                :fill         "transparent",
-                                :line-cap     "round",
-                                :path         "",
-                                :scale-x      1.8,
-                                :scale-y      1.8,
-                                :states       {:hidden {:visible false}, :visible {:visible true}},
-                                :stroke       "#323232",
-                                :stroke-width 10},
+                                {:type         "animated-svg-path",
+                                 :x            600,
+                                 :y            25,
+                                 :width        225,
+                                 :height       225,
+                                 :duration     5000,
+                                 :fill         "transparent",
+                                 :line-cap     "round",
+                                 :path         "",
+                                 :scale-x      1.8,
+                                 :scale-y      1.8,
+                                 :states       {:hidden {:visible false}, :visible {:visible true}},
+                                 :stroke       "#323232",
+                                 :stroke-width 10},
                    :letter-tutorial-trace
-                               {:type         "svg-path",
-                                :x            600,
-                                :y            25,
-                                :width        225,
-                                :height       225,
-                                :scene-name   "letter-tutorial-trace",
-                                :dash         [7 7],
-                                :data         "",
-                                :line-cap     "round",
-                                :rotation     0,
-                                :scale-x      1.8,
-                                :scale-y      1.8,
-                                :states       {:hidden {:visible false}, :visible {:visible true}},
-                                :stroke       "#898989",
-                                :stroke-width 4},
+                                {:type         "svg-path",
+                                 :x            600,
+                                 :y            25,
+                                 :width        225,
+                                 :height       225,
+                                 :scene-name   "letter-tutorial-trace",
+                                 :dash         [7 7],
+                                 :data         "",
+                                 :line-cap     "round",
+                                 :rotation     0,
+                                 :scale-x      1.8,
+                                 :scale-y      1.8,
+                                 :states       {:hidden {:visible false}, :visible {:visible true}},
+                                 :stroke       "#898989",
+                                 :stroke-width 4},
                    :text-tracing-pattern
-                               {:type        "text-tracing-pattern"
-                                :traceable   true
-                                :repeat-text 3
-                                :text        " "
-                                :actions     {:next-letter {:on "next-letter-activated" :type "action" :id "letter-finished-dialog"}
-                                              :finish      {:on "finish" :type "action" :id "text-finished"}
-                                              :click       {:on "click" :type "action" :id "timeout-timer"}}}
+                                {:type        "text-tracing-pattern"
+                                 :traceable   true
+                                 :repeat-text 3
+                                 :text        " "
+                                 :actions     {:next-letter {:on "next-letter-activated" :type "action" :id "letter-finished-dialog"}
+                                               :finish      {:on "finish" :type "action" :id "text-finished"}
+                                               :click       {:on "click" :type "action" :id "timeout-timer"}}}
 
                    :practice-canvas
-                               {:type    "painting-area"
-                                :tool    "felt-tip"
-                                :color   "#4479bb"
-                                :visible false
-                                :change  {:on "click" :type "action" :id "timeout-timer"}}
+                                {:type    "painting-area"
+                                 :tool    "felt-tip"
+                                 :color   "#4479bb"
+                                 :visible false
+                                 :change  {:on "click" :type "action" :id "timeout-timer"}}
                    :painting-toolset
-                               {:type       "painting-toolset"
-                                :transition "painting-toolset"
-                                :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}
-                                :visible    false}
+                                {:type       "painting-toolset"
+                                 :transition "painting-toolset"
+                                 :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}
+                                 :visible    false}
                    :colors-palette
-                               {:type       "colors-palette",
-                                :transition "colors-palette"
-                                :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}
-                                :visible    false}
+                                {:type       "colors-palette",
+                                 :transition "colors-palette"
+                                 :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}
+                                 :visible    false}
                    :mari
-                               {:type       "animation",
-                                :x          1600,
-                                :y          225,
-                                :width      473,
-                                :height     511,
-                                :scene-name "mari",
-                                :transition "mari",
-                                :anim       "idle",
-                                :name       "mari",
-                                :scale-x    0.5,
-                                :scale-y    0.5,
-                                :speed      0.35,
-                                :start      true
-                                :actions    {:click {:on "click" :type "action" :id "tap-instructions"}}},
-                   :next-button
-                               {:type     "image",
-                                :x        1800,
-                                :y        915,
-                                :width    97,
-                                :height   99,
-                                :actions  {:click {:id "finish-activity", :on "click", :type "action"}},
-                                :rotation 0,
-                                :scale-x  -1,
-                                :scale-y  1,
-                                :src      "/raw/img/ui/back_button_01.png"
-                                :visible  false}},
+                                {:type       "animation",
+                                 :x          1600,
+                                 :y          225,
+                                 :width      473,
+                                 :height     511,
+                                 :scene-name "mari",
+                                 :transition "mari",
+                                 :anim       "idle",
+                                 :name       "mari",
+                                 :scale-x    0.5,
+                                 :scale-y    0.5,
+                                 :speed      0.35,
+                                 :start      true
+                                 :actions    {:click {:on "click" :type "action" :id "tap-instructions"}}},
+                   :next-button {:type     "image"
+                                 :x        1776 :y 48
+                                 :actions  {:click {:id "finish-activity", :on "click", :type "action"}}
+                                 :filters  [{:name "brightness" :value 0}
+                                            {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                 :visible  false
+                                 :src "/raw/img/ui/checkmark.png"}},
         :scene-objects
                   [["background"]
                    ["letter-tutorial-trace"
@@ -159,9 +154,11 @@
                                                  :data [{:type "remove-interval" :id "instructions-timeout"}
                                                         {:type "finish-activity"}]},
                    :dialog-instructions         (-> (dialog/default "Instructions")
+                                                    (assoc :concept-var "current-concept")
                                                     (assoc :available-activities ["show-example"]))
                    :dialog-instructions-second-stage
                                                 (-> (dialog/default "Instructions second stage")
+                                                    (assoc :concept-var "current-concept")
                                                     (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
                    :show-example                {:type "sequence-data"
                                                  :data [{:to {:x 1080, :y 360, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
@@ -189,9 +186,8 @@
                    :highlight-next              {:type               "transition"
                                                  :transition-id      "next-button"
                                                  :return-immediately true
-                                                 :from               {:brightness 0},
-                                                 :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                 :kill-after         3000}
+                                                 :from               {:brightness 0 :glow 0}
+                                                 :to                 {:brightness 0.1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
                    :set-current-tool            {:type "sequence-data"
                                                  :data [{:type        "set-attribute",
                                                          :target      "practice-canvas"
@@ -215,7 +211,8 @@
                    :dialog-color-15569322       (dialog/default "color pink")
                    :dialog-color-16631089       (dialog/default "color yellow")
                    :dialog-color-65793          (dialog/default "color black")
-                   :letter-finished-dialog      (dialog/default "letter finished")
+                   :letter-finished-dialog      (-> (dialog/default "letter finished")
+                                                    (assoc :concept-var "current-concept"))
                    :text-finished               {:type "sequence-data"
                                                  :data [{:type "remove-interval" :id "instructions-timeout"}
                                                         {:type "action" :id "letter-finished-dialog"}
@@ -228,11 +225,13 @@
                                                         {:type "set-attribute" :target "practice-canvas" :attr-name "visible" :attr-value true}
                                                         {:type "set-attribute" :target "painting-toolset" :attr-name "visible" :attr-value true}
                                                         {:type "set-attribute" :target "colors-palette" :attr-name "visible" :attr-value true}
+                                                        {:type "set-attribute" :target "next-button" :attr-name "visible" :attr-value true}
 
                                                         {:type "set-variable" :var-name "second-stage" :var-value true}
                                                         {:type "action" :id "dialog-instructions-second-stage"}
                                                         {:type "action" :id "timeout-timer"}]}
-                   :text-finished-dialog        (dialog/default "text finished")
+                   :text-finished-dialog        (-> (dialog/default "text finished")
+                                                    (assoc :concept-var "current-concept"))
                    :timeout-timer               {:type     "set-interval",
                                                  :id       "instructions-timeout",
                                                  :action   "timeout-instructions",
@@ -250,15 +249,19 @@
                                                  :from-var [{:var-name "second-stage", :action-property "value1"}]}
 
                    :dialog-timeout-instructions (-> (dialog/default "Timeout instructions")
+                                                    (assoc :concept-var "current-concept")
                                                     (assoc :available-activities ["show-example"]))
                    :dialog-timeout-instructions-second-stage
                                                 (-> (dialog/default "Timeout instructions second stage")
+                                                    (assoc :concept-var "current-concept")
                                                     (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
 
                    :dialog-tap-instructions     (-> (dialog/default "Tap instructions")
+                                                    (assoc :concept-var "current-concept")
                                                     (assoc :available-activities ["show-example"]))
                    :dialog-tap-instructions-second-stage
                                                 (-> (dialog/default "Tap instructions second stage")
+                                                    (assoc :concept-var "current-concept")
                                                     (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
                    },
         :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
