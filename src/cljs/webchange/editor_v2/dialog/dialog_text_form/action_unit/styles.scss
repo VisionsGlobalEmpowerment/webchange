@@ -1,0 +1,32 @@
+.action-unit {
+    padding: 2px 8px;
+    margin: 4px 0;
+    border-radius: 4px;
+
+    .targets-menu {
+        display: inline-block;
+    }
+
+    .target-value {
+        display: inline-block;
+        font-weight: bold;
+        margin-right: 8px;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:after {
+            content: ":";
+        }
+    }
+
+    .text {
+        outline: none;
+    }
+
+    &.concept-unit {
+        background-color: rgba(255, 223, 130, 0.25);
+    }
+}

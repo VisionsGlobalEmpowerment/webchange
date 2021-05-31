@@ -2,9 +2,8 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer :as audio-analyzer]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as defaults]
+    [webchange.editor-v2.dialog.utils.dialog-action :as defaults]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as au]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
@@ -113,15 +112,26 @@
                              [::update-scene-action base-path data-patch])})
             {:dispatch-n (list [::update-scene-action base-path data-patch])}))))))
 
+(re-frame/reg-event-fx
+  ::update-inner-action-by-path
+  (fn [{:keys [_]} [_ {:keys [action-path action-type data-patch]}]]
+    {:dispatch [(cond
+                  (= action-type :concept) ::translator-form.concepts/update-current-concept
+                  (= action-type :scene) ::translator-form.scene/update-action)
+                action-path
+                data-patch]}))
 
 (re-frame/reg-event-fx
   ::update-inner-action
   (fn [{:keys [db]} [_ data-patch position]]
     (let [{:keys [path type]} (translator-form.actions/current-phrase-action-info db)
           action-path (concat (au/node-path->action-path path) [:data position])]
-      (cond
-        (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}
-        (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action action-path data-patch])}))))
+      {:dispatch [::update-inner-action-by-path {:action-path action-path
+                                                 :action-type (cond
+                                                                (= type :concept-action) :concept
+                                                                (= type :scene-action) :scene
+                                                                :else type)
+                                                 :data-patch  data-patch}]})))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-offset

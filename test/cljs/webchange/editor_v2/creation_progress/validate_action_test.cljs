@@ -2,7 +2,7 @@
   (:require
     [cljs.test :refer [deftest testing is]]
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as actions]))
+    [webchange.editor-v2.dialog.utils.dialog-action :as actions]))
 
 (deftest test-origin-text-defined__default-text
   (let [action-data {:phrase-text actions/default-phrase-text}]

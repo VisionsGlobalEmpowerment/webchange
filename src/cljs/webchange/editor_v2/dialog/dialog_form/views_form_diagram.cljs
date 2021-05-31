@@ -5,7 +5,7 @@
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as actions-defaults]
+    [webchange.editor-v2.dialog.utils.dialog-action :as actions-defaults]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.translator-form.diagram.views :refer [diagram]]
     [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [get-diagram-items]]

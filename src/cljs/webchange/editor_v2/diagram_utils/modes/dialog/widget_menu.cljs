@@ -6,7 +6,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as actions-defaults]
+    [webchange.editor-v2.dialog.utils.dialog-action :as actions-defaults]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as dialog.au]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 

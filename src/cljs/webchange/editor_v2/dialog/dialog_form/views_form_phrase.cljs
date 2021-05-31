@@ -7,7 +7,7 @@
     [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action get-empty-action]]
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action get-empty-action]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.translator.translator-form.utils :refer [trim-text]]
     [webchange.editor-v2.translator.translator-form.common.views-text-field :refer [text-field]]))

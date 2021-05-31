@@ -4,7 +4,7 @@
     [webchange.editor-v2.concepts.utils :refer [resource-type?]]
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
     [webchange.editor-v2.dialog.dialog-form.state.concepts-utils :as concepts-utils]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as defaults]
+    [webchange.editor-v2.dialog.utils.dialog-action :as defaults]
     [webchange.editor-v2.history.state :as history]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
@@ -163,14 +163,14 @@
                        (assoc-in (path-to-db [:concepts :data]) concepts)
                        (assoc-in (path-to-db [:current-dataset-concept]) dataset-concept)
                        (assoc-in (path-to-db [:current-dataset-concept-patch]) {:add [] :remove []}))
-       :dispatch-n (list [::prepare-concept (:id current-concept)]
-                         [::set-current-concept (:id current-concept)]
+       :dispatch-n (list [::set-current-concept (:id current-concept)]
                          [::set-edited-concepts []])})))
 
 (re-frame/reg-event-fx
   ::set-current-concept
   (fn [{:keys [db]} [_ concept-id]]
-    {:db (assoc-in db (path-to-db [:concepts :current-concept]) concept-id)}))
+    (cond-> {:db (assoc-in db (path-to-db [:concepts :current-concept]) concept-id)}
+            (some? concept-id) (assoc :dispatch [::prepare-concept concept-id]))))
 
 (re-frame/reg-event-fx
   ::reset-current-concept

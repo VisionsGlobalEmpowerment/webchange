@@ -3,7 +3,7 @@
     [clojure.string :refer [capitalize]]
     [webchange.editor-v2.diagram-utils.modes.dialog.widget-phrase :as dialog.widget-phrase]
     [webchange.editor-v2.translator.translator-form.utils :refer [node-data->phrase-data]]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]))
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]))
 
 (defn- get-styles
   []

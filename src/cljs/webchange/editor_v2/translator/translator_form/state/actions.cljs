@@ -9,6 +9,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+
     [webchange.subs :as subs]))
 
 (defn- get-object-by-name
@@ -258,8 +259,8 @@
                        :duration duration}]
       {:dispatch-n (list [::update-action :phrase region-data]
                          (if (current-phrase-action-animation-sequence? db :phrase)
-                         [::load-lip-sync-data audio-url start duration]
-                         ))})))
+                           [::load-lip-sync-data audio-url start duration]
+                           ))})))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data

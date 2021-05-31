@@ -7,7 +7,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.dialog.dialog-form.audio-assets.views-filter :refer [audios-filter]]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 

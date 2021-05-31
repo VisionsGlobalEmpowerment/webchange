@@ -145,9 +145,9 @@
                               (if (get-in node [:concept])
                                 (create-concept-action-node current-concept (:node-path node) scene-data (:action-path node)
                                                             {:x (index->coordinate-x (:x node))
-                                                            :y (index->coordinate-y (:y node))})
-                                (create-action-node scene-data (:action-path node)  {:x (index->coordinate-x (:x node))
-                                                                                            :y (index->coordinate-y (:y node))})))
-                                    prepare-nodes))]
+                                                             :y (index->coordinate-y (:y node))})
+                                (create-action-node scene-data (:action-path node) {:x (index->coordinate-x (:x node))
+                                                                                    :y (index->coordinate-y (:y node))})))
+                            prepare-nodes))]
     {:nodes nodes
      :links []}))
