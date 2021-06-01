@@ -191,6 +191,17 @@
     (core/clear-vars! true)
     {:dispatch-n (list (e/success-event action))}))
 
+(defn cond-action [db {:keys [display-name flow-id action-id] :as action} handler-type]
+  (let [handler (get action handler-type)
+        action-data (if (string? handler)
+                      (e/get-action handler db action)
+                      (-> handler
+                          (assoc :display-name [display-name handler-type])))]
+    (cond-> action-data
+            flow-id (assoc :flow-id flow-id)
+            action-id (assoc :action-id action-id)
+            :always (e/with-prev action))))
+
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
@@ -228,7 +239,7 @@
 ;TODO: level get lessons from levels
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
-  (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [from variables provider-id] :as action}]]
     "Execute `lesson-var-provider` action - provides one concept from a lesson set for each call
 
     Action params:
@@ -245,17 +256,12 @@
      :shuffled  false,
      :variables   ['item-1' 'item-2' 'item-3']}"
     (let [items (lessons/lesson-dataset-items db from)
-          has-next (core/has-next items provider-id action)
-          scene-id (:current-scene db)
-          on-end-action (->> on-end
-                             keyword
-                             (vector :scenes scene-id :actions)
-                             (get-in db))]
+          has-next (core/has-next items provider-id action)]
       (if has-next
         (do
           (core/provide! items variables provider-id action)
           {:dispatch (e/success-event action)})
-        {:dispatch [::e/execute-action on-end-action]}))))
+        {:dispatch [::e/execute-action (cond-action db action :on-end)]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-var
@@ -282,17 +288,6 @@
       (if (= (key var) (key test))
         {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
         {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
-
-(defn cond-action [db {:keys [display-name flow-id action-id] :as action} handler-type]
-  (let [handler (get action handler-type)
-        action-data (if (string? handler)
-                      (e/get-action handler db action)
-                      (-> handler
-                          (assoc :display-name [display-name handler-type])))]
-    (cond-> action-data
-            flow-id (assoc :flow-id flow-id)
-            action-id (assoc :action-id action-id)
-            :always (e/with-prev action))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-scalar
