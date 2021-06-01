@@ -39,3 +39,17 @@
                              (assoc-in (path-to-db [:translator-dialog-modal-params]) {}))
      :dispatch-n         (list [::translator-form/reset-state])
      :reset-before-leave true}))
+
+;; Mode
+
+(def mode-path (path-to-db [:translator-dialog-modal-mode]))
+
+(re-frame/reg-sub
+  ::mode
+  (fn [db]
+    (get-in db mode-path :classic)))
+
+(re-frame/reg-event-fx
+  ::set-mode
+  (fn [{:keys [db]} [_ mode]]
+    {:db (assoc-in db mode-path mode)}))

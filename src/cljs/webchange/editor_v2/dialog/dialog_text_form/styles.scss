@@ -1,0 +1,36 @@
+.dialog-form {
+    .dialog-form-header {
+        margin-bottom: 16px;
+
+        .control-block {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+    }
+
+    .work-field {
+        @import "action_unit/styles";
+
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        height: 50vh;
+        overflow: auto;
+
+        padding: 16px;
+
+        background-color: #aeaeae;
+        border-radius: 8px;
+
+        .sheet {
+            width: 80%;
+            max-width: 700px;
+
+            padding: 16px 32px;
+
+            background-color: #fff;
+            border-radius: 4px;
+        }
+    }
+}

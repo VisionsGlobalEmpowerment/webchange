@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.creation-progress.translation-progress.validate-action
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as actions]
+    [webchange.editor-v2.dialog.utils.dialog-action :as actions]
     [webchange.editor-v2.subs :as editor-subs]))
 
 (defn- audio-defined?

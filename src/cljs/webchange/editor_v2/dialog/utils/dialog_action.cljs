@@ -1,7 +1,9 @@
-(ns webchange.editor-v2.dialog.dialog-form.state.actions-defaults)
+(ns webchange.editor-v2.dialog.utils.dialog-action)
 
 (def empty-action-position 0)
 (def inner-action-position 1)
+
+(def inner-action-path [:data inner-action-position])
 
 (def default-phrase-text "New action")
 (def default-action {:type "sequence-data"
@@ -29,11 +31,11 @@
 
 (defn get-inner-action
   [action]
-  (get-in action [:data inner-action-position]))
+  (get-in action inner-action-path))
 
 (defn update-inner-action
   [action data-patch]
-  (update-in action [:data inner-action-position] merge data-patch))
+  (update-in action inner-action-path merge data-patch))
 
 (defn update-inner-concept-action
   [action data-patch]

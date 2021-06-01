@@ -5,7 +5,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [actions size title on-enter on-exit on-close open?]
+  [{:keys [actions size title title-actions on-enter on-exit on-close open?]
     :or   {title    ""
            on-enter #()
            on-exit  #()
@@ -17,11 +17,15 @@
       [:div.wc-dialog-wrapper
        [:div {:class-name (get-class-name (-> {"dialog" true}
                                               (assoc (str "size-" size) true)))}
-        [:h1 title]
-        [icon-button/component {:icon       "close"
-                                :class-name "close-button"
-                                :on-click   #(do (on-exit)
-                                                 (on-close))}]
+        [:div.header
+         [:h1 title]
+         (when (some? title-actions)
+           (into [:div.title-actions]
+                 title-actions))
+         [icon-button/component {:icon       "close"
+                                 :class-name "close-button"
+                                 :on-click   #(do (on-exit)
+                                                  (on-close))}]]
         (into [:div.dialog-content]
               (r/children this))
         (when (some? actions)

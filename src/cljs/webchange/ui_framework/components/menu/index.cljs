@@ -4,7 +4,7 @@
     [webchange.ui-framework.components.confirm.index :as confirm-component]
     [webchange.ui-framework.components.icon.index :as icon-component]
     [webchange.ui-framework.components.icon-button.index :as icon-button-component]
-    [webchange.ui-framework.components.utils :refer [get-bounding-rect]]))
+    [webchange.ui-framework.components.utils :refer [get-bounding-rect get-class-name]]))
 
 (defn- menu-item
   [{:keys [close-menu icon text on-click has-icon?]}]
@@ -33,7 +33,7 @@
      :left x}))
 
 (defn component
-  [{:keys [items icon]
+  [{:keys [class-name items icon el]
     :or   {icon "horizontal"}}]
   "Props:
    :items - items list
@@ -47,9 +47,7 @@
                menu-position (r/atom {:top  0
                                       :left 0})
 
-               menu-button-ref (atom nil)
                close-menu-ref (atom nil)
-
                handle-document-click #(when-not (.contains @menu-ref (.-target %)) (@close-menu-ref))
                set-document-click-handler #(js/document.addEventListener "click" handle-document-click)
                reset-document-click-handler #(js/document.removeEventListener "click" handle-document-click)
@@ -57,7 +55,7 @@
                close-menu #(do (reset! show-menu? false)
                                (reset-document-click-handler))
                show-menu #(do (reset! show-menu? true)
-                              (reset! menu-position (get-menu-position @menu-button-ref))
+                              (reset! menu-position (get-menu-position @menu-ref))
                               (set-document-click-handler))
                _ (reset! close-menu-ref close-menu)
 
@@ -65,13 +63,15 @@
                                            (close-menu)
                                            (show-menu))]
     (let [items-has-icon? (some #(:icon %) items)]
-      [:div.wc-menu {:ref #(when (some? %) (reset! menu-ref %))}
-       [icon-button-component/component {:icon     (case icon
-                                                     "horizontal" "menu"
-                                                     "vertical" "menu-vertical")
-                                         :on-click handle-menu-button-click
-                                         :ref      (fn [el]
-                                                     (reset! menu-button-ref el))}]
+      [:div {:class-name (get-class-name (cond-> {"wc-menu" true}
+                                                 (some? class-name) (assoc class-name true)))
+             :ref        #(when (some? %) (reset! menu-ref %))}
+       (if (some? el)
+         [:div {:on-click handle-menu-button-click} el]
+         [icon-button-component/component {:icon     (case icon
+                                                       "horizontal" "menu"
+                                                       "vertical" "menu-vertical")
+                                           :on-click handle-menu-button-click}])
        (when @show-menu?
          [:div.wc-menu-list {:style {:top  (:top @menu-position)
                                      :left (:left @menu-position)}}

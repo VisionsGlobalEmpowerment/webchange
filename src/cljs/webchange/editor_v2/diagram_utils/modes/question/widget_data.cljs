@@ -13,7 +13,7 @@
     [webchange.editor-v2.diagram-utils.modes.translation.widget-loop-icon :refer [loop-icon]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node? get-node-type]]
     [webchange.editor-v2.question.question-form.state.actions :as question-form.actions]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]))
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]))
 
 (defn get-node-color
   [node-data]
