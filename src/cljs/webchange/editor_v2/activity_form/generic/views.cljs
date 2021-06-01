@@ -16,7 +16,7 @@
 
 (defn- asset-block
   [{:keys [activity-type]}]
-  (into [:div]
+  (into [:div.asset-block]
         (cond-> [[object-form]]
                 (= activity-type "book") (concat [[select-stage]
                                                   [object-selector]]))))

@@ -19,7 +19,7 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]}]
-    {:dispatch [::warehouse/load-backgrounds {:on-success [::set-available-backgrounds]}]}))
+    {:dispatch [::warehouse/load-assets {} {:on-success [::set-available-backgrounds]}]}))
 
 (re-frame/reg-event-fx
   ::set-available-backgrounds
