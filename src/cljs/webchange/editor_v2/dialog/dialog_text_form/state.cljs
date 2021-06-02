@@ -103,5 +103,5 @@
 
 (re-frame/reg-event-fx
   ::add-concept-action
-  (fn [{:keys [db]} [_ action-data]]
-    (print "::add-concept-action" action-data)))
+  (fn [{:keys [_]} [_ {:keys [node-data]}]]
+    {:dispatch [::state-actions/add-new-empty-phrase-concept-action {:node-data node-data}]}))
