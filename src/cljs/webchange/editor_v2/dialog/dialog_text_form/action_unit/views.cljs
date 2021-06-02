@@ -61,7 +61,7 @@
                    :on-click   handle-add-concept-click}]]))
 
 (defn action-unit
-  [{:keys [text character path type concept-name]}]
+  [{:keys [text character path type concept-name node-data]}]
   (r/with-let [show-controls? (r/atom false)
                mouse-over-text (atom false)
                mouse-over-controls (atom false)
@@ -90,6 +90,7 @@
                       :path  path
                       :type  type}]
        (when @show-controls?
-         [side-controls {:action-data {:path path
-                                       :type type}
+         [side-controls {:action-data {:path      path
+                                       :type      type
+                                       :node-data node-data}
                          :ref         #(when (some? %) (handle-controls-ref %))}])])))

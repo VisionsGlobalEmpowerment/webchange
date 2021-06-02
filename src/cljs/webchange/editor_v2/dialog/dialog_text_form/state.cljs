@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
+    [webchange.editor-v2.dialog.dialog-form.state.common :as state-actions-common]
     [webchange.editor-v2.dialog.dialog-text-form.prepare-phrase-actions :refer [prepare-phrase-actions]]
     [webchange.editor-v2.dialog.state :as parent-state]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
@@ -91,8 +92,9 @@
 
 (re-frame/reg-event-fx
   ::remove-action
-  (fn [{:keys [db]} [_ action-data]]
-    (print "::remove-action" action-data)))
+  (fn [{:keys [_]} [_ {:keys [node-data type]}]]
+    {:dispatch [::state-actions-common/remove-action {:concept-action? (= type :concept)
+                                                      :node-data       node-data}]}))
 
 (re-frame/reg-event-fx
   ::add-scene-action
@@ -100,6 +102,6 @@
     (print "::add-scene-action" action-data)))
 
 (re-frame/reg-event-fx
-  ::add-concepts-action
+  ::add-concept-action
   (fn [{:keys [db]} [_ action-data]]
-    (print "::add-concepts-action" action-data)))
+    (print "::add-concept-action" action-data)))

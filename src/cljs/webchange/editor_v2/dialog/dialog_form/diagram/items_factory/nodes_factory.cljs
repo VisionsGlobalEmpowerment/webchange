@@ -36,29 +36,25 @@
 (defn- clean-path [path]
   (vec (filter (fn [key] (not= key :data)) path)))
 
-(defn- create-concept-action-node
-  [concept node-path scene-data action-path position]
-  (let [action-data (-> (get-in concept (concat [:data] action-path))
-                    (assoc :concept-action true))
-        node-data (get-in scene-data (concat [:actions] node-path))
-        ]
-  (create-node {:data     {:data action-data
-                           :entity :action
-                           :path (clean-path action-path)
-                           :action-node-data {
-                                              :data node-data
-                                              :path (clean-path node-path)
-                                              }
-                           }
-                :position position})
-  ))
+(defn get-node-data
+  [{:keys [concept-node? current-concept scene-data action-path node-path]}]
+  (if concept-node?
+    (let [action-data (-> (get-in current-concept (concat [:data] action-path))
+                          (assoc :concept-action true))
+          node-data (get-in scene-data (concat [:actions] node-path))]
+      {:data             action-data
+       :entity           :action
+       :path             (clean-path action-path)
+       :action-node-data {:data node-data
+                          :path (clean-path node-path)}})
+    (let [action-data (get-in scene-data (concat [:actions] action-path))]
+      {:data action-data
+       :path (clean-path action-path)})))
 
-(defn- create-action-node
-  [scene-data action-path position]
-  (let [action-data (get-in scene-data (concat [:actions] action-path))]
-    (create-node {:data     {:data action-data
-                             :path (clean-path action-path)}
-                  :position position})))
+(defn- create-node-object
+  [{:keys [position] :as props}]
+  (create-node {:data     (get-node-data props)
+                :position position}))
 
 (defn get-nodes-from-concept
   ([concept var-name node-path] (get-nodes-from-concept concept var-name node-path 0 0))
@@ -140,14 +136,15 @@
 (defn get-diagram-items
   [scene-data path]
   (let [current-concept @(re-frame/subscribe [::translator-form.concepts/current-concept])
-        prepare-nodes (prepare-nodes scene-data current-concept path)
-        nodes (flatten (map (fn [node]
-                              (if (get-in node [:concept])
-                                (create-concept-action-node current-concept (:node-path node) scene-data (:action-path node)
-                                                            {:x (index->coordinate-x (:x node))
-                                                             :y (index->coordinate-y (:y node))})
-                                (create-action-node scene-data (:action-path node) {:x (index->coordinate-x (:x node))
-                                                                                    :y (index->coordinate-y (:y node))})))
-                            prepare-nodes))]
+        nodes (->> (prepare-nodes scene-data current-concept path)
+                   (map (fn [node]
+                          (create-node-object {:concept-node?   (get-in node [:concept])
+                                               :current-concept current-concept
+                                               :node-path       (:node-path node)
+                                               :scene-data      scene-data
+                                               :action-path     (:action-path node)
+                                               :position        {:x (index->coordinate-x (:x node))
+                                                                 :y (index->coordinate-y (:y node))}})))
+                   (flatten))]
     {:nodes nodes
      :links []}))

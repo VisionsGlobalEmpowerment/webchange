@@ -59,6 +59,16 @@
      :target-node target-node
      :target-path target-path}))
 
+(defn delete-in-concept-available?
+  [node-data]
+  (let [{:keys [base-action item-position parent-action]} (get-concept-node-data node-data)
+        items (count (:data base-action))]
+    (not (and
+           (or
+             (and (node-parallel? parent-action) (= 0 item-position))
+             (not (node-parallel? parent-action)))
+           (= 1 items)))))
+
 (defn get-node-data
   [node]
   (if (get-in node [:data :concept-action])
