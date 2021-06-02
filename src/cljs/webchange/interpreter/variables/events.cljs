@@ -6,7 +6,8 @@
     [webchange.common.events :as e]
     [webchange.auth.subs :as as]
     [webchange.state.lessons.subs :as lessons]
-    [webchange.interpreter.variables.core :as core]))
+    [webchange.interpreter.variables.core :as core]
+    [webchange.logger.index :as logger]))
 
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
 (e/reg-simple-executor :vars-var-provider ::execute-vars-var-provider)
@@ -462,12 +463,14 @@
                     (-> options
                         (get :default)
                         (assoc :display-name [display-name :default])))]
+      (logger/trace "execute case" value)
       (if default
         (if success
           {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
           {:dispatch-n (list [::e/execute-action default] (e/success-event action))})
         (if value
-          {:dispatch-n (list [::e/execute-action success] (e/success-event action))})))))
+          {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
+          {:dispatch-n (list (e/success-event action))})))))
 
 (re-frame/reg-event-fx
   ::execute-counter

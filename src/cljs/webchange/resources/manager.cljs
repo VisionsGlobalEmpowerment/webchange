@@ -1,6 +1,7 @@
 (ns webchange.resources.manager
   (:require
-    [webchange.interpreter.pixi :refer [clear-texture-cache]]))
+    [webchange.interpreter.pixi :refer [clear-texture-cache]]
+    [webchange.logger.index :as logger]))
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
 (defonce loader (atom nil))
@@ -45,6 +46,7 @@
   ([resources]
    (load-resources resources {}))
   ([resources callbacks]
+   (logger/trace "load resources" resources)
    (set-callbacks @loader callbacks)
    (->> resources
         (reduce (fn [loader resource]
