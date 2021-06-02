@@ -24,7 +24,7 @@
                        :type "string"}]})
 
 (def t {:assets        [{:url "/raw/img/park/sandbox/Background.png", :size 10, :type "image"}
-                        {:url "/raw/img/park/sandbox/Surface", :size 10, :type "image"}
+                        {:url "/raw/img/park/sandbox/Surface.png", :size 10, :type "image"}
                         {:url "/raw/img/park/sandbox/Decoration.png", :size 10, :type "image"}
                         {:url "/raw/img/park/sandbox/Skirting.png", :size 1 :type "image"}
                         {:url "/raw/img/park/sandbox/Sandbox.png", :size 1, :type "image"}

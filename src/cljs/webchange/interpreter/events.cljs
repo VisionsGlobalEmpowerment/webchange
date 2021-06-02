@@ -28,7 +28,8 @@
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.editor-v2.assets.events :as assets-events]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.logger.index :as logger]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :start-audio-recording ::execute-start-audio-recording)
@@ -1894,6 +1895,7 @@
   ::start-sandbox
   (fn [{:keys [db]} [_ course-id scene-id encoded-lessons]]
     (let [lessons (some-> encoded-lessons js/decodeURIComponent js/atob js/JSON.parse (js->clj :keywordize-keys true))]
+      (logger/trace "sandbox started with" lessons)
       {:db         (cond-> db
                            (seq lessons) (assoc-in [:sandbox :loaded-lessons] lessons))
        :dispatch-n (list [::load-course course-id scene-id])})))

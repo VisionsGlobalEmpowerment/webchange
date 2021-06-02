@@ -4,7 +4,8 @@
     [webchange.resources.default-resources :refer [default-game-assets]]
     [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [get-animations-resource-path
                                                                                         get-animations-resources]]
-    [webchange.interpreter.subs :as subs]))
+    [webchange.interpreter.subs :as subs]
+    [webchange.logger.index :as logger]))
 
 (defn- get-concept-fields
   [scene-id dataset-id]
@@ -37,6 +38,7 @@
 
 (defn- parse-lesson-sets-data
   [scene-id lesson-sets-data]
+  (logger/trace "parse lesson sets data" scene-id lesson-sets-data)
   (->> lesson-sets-data
        (mapcat (fn [{:keys [item-ids dataset-id]}]
                  (for [item-id item-ids
