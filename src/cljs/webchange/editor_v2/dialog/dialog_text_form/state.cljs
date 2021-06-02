@@ -98,8 +98,8 @@
 
 (re-frame/reg-event-fx
   ::add-scene-action
-  (fn [{:keys [db]} [_ action-data]]
-    (print "::add-scene-action" action-data)))
+  (fn [{:keys [_]} [_ {:keys [node-data]}]]
+    {:dispatch [::state-actions/add-new-empty-phrase-action {:node-data node-data}]}))
 
 (re-frame/reg-event-fx
   ::add-concept-action

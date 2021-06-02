@@ -68,6 +68,15 @@
       {:dispatch-n (list [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx
+  ::add-new-empty-phrase-action
+  (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
+    (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node-data)
+          data-patch (-> base-action
+                         (au/insert-child-action defaults/default-action target-position relative-position)
+                         (select-keys [:data]))]
+      {:dispatch-n (list [::update-scene-action base-path data-patch])})))
+
+(re-frame/reg-event-fx
   ::add-new-phrase-concept-action
   (fn [{:keys [_]} [_ relative-position node action-data]]
     (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node)

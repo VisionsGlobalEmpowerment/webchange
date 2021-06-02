@@ -26,6 +26,14 @@
 
 (defn- add-action
   [action relative-position number node path]
+
+  (print ">> add-action")
+  (print "action" action)
+  (print "relative-position" relative-position)
+  (print "number" number)
+  (print "node" node)
+  (print "path" path)
+
   (let [current-target (-> (actions-defaults/get-inner-action (:data number)) (get :target))
         action (cond-> action
                        (some? current-target) (actions-defaults/update-inner-action {:target current-target}))]
