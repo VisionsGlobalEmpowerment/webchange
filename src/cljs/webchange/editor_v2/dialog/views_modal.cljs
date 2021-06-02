@@ -50,7 +50,8 @@
       :on-enter      enable-hot-keys
       :on-exit       disable-hot-keys
       :actions       [[form-actions]]
-      :title-actions [[change-mode-control]]}
+      :title-actions [[change-mode-control]]
+      :full-screen?  true}
      (case mode
        :dialog-text [text-form/dialog-form]
        [dialog-form])]))

@@ -68,6 +68,14 @@
       {:dispatch-n (list [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx
+  ::add-new-empty-phrase-action
+  (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
+    (let [current-target (-> (:data node-data) (defaults/get-inner-action) (get :target))
+          new-action-data (cond-> defaults/default-action
+                                  (some? current-target) (defaults/update-inner-action {:target current-target}))]
+      {:dispatch [::add-new-phrase-action new-action-data relative-position node-data]})))
+
+(re-frame/reg-event-fx
   ::add-new-phrase-concept-action
   (fn [{:keys [_]} [_ relative-position node action-data]]
     (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node)
@@ -87,6 +95,14 @@
                      [::dialog-form.concepts/add-concepts-schema-fields concept-schema]
                      [::translator-form.concepts/update-current-concept [(keyword field-name)] action]
                      [::update-scene-action base-path data-patch])})))
+
+(re-frame/reg-event-fx
+  ::add-new-empty-phrase-concept-action
+  (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
+    (let [current-target (-> (:data node-data) (defaults/get-inner-action) (get :target))
+          new-action-data (cond-> {}
+                                  (some? current-target) (assoc :target current-target))]
+      {:dispatch [::add-new-phrase-concept-action relative-position node-data new-action-data]})))
 
 (re-frame/reg-event-fx
   ::delete-phrase-action

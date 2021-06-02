@@ -1,17 +1,22 @@
 (ns webchange.editor-v2.dialog.dialog-text-form.prepare-phrase-actions
   (:require
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action inner-action-path]]
-    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes]]))
+    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes get-node-data]]))
 
 (defn- set-action-data
   [actions {:keys [concept-data scene-data]}]
-  (map (fn [{:keys [action-path concept]}]
+  (map (fn [{:keys [action-path concept] :as node}]
          {:concept      concept
           :concept-name (:name concept-data)
           :data         (if concept
                           (get-in (:data concept-data) action-path)
                           (get-in (:actions scene-data) action-path))
-          :path         action-path})
+          :path         action-path
+          :node-data    (get-node-data {:concept-node?   concept
+                                        :current-concept concept-data
+                                        :scene-data      scene-data
+                                        :action-path     (:action-path node)
+                                        :node-path       (:node-path node)})})
        actions))
 
 (defn- get-inner-action-data
@@ -24,11 +29,12 @@
 
 (defn- get-component-data
   [actions]
-  (map (fn [{:keys [concept concept-name data path]}]
+  (map (fn [{:keys [concept concept-name data path node-data]}]
          (cond-> {:character (:target data)
                   :text      (:phrase-text data)
                   :path      path
-                  :type      (if concept :concept :scene)}
+                  :type      (if concept :concept :scene)
+                  :node-data node-data}
                  concept (assoc :concept-name concept-name)))
        actions))
 

@@ -27,19 +27,28 @@
         width: 80%;
         min-width: 900px;
 
+        &.full-screen {
+            width: 99%;
+            height: 99%;
+            max-height: 100%;
+        }
+
         .header {
             display: flex;
+            align-items: center;
             justify-content: space-between;
 
             h1 {
                 display: inline-block;
                 flex: 1;
+                margin: 0;
 
                 font-family: Roboto;
                 font-style: normal;
                 font-weight: bold;
                 font-size: 22px;
                 line-height: 26px;
+                text-align: left;
             }
 
             .close-button {

@@ -103,13 +103,9 @@
                        [:insert-concept-after :insert-after]
                        [])
         concept-delete (if concept-action?
-                         (if (and
-                               (or
-                                 (and (dialog.au/node-parallel? parent-action) (= 0 item-position))
-                                 (not (dialog.au/node-parallel? parent-action)))
-                               (= 1 items))
-                           [:delete]
-                           [:delete-in-concept-action])
+                         (if (dialog.au/delete-in-concept-available? node)
+                           [:delete-in-concept-action]
+                           [:delete])
                          [])]
     (concat margin-before non-concept-items text-animation-items concept-items margin-after concept-delete)))
 

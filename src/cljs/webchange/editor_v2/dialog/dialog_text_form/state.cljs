@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
+    [webchange.editor-v2.dialog.dialog-form.state.common :as state-actions-common]
     [webchange.editor-v2.dialog.dialog-text-form.prepare-phrase-actions :refer [prepare-phrase-actions]]
     [webchange.editor-v2.dialog.state :as parent-state]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
@@ -86,3 +87,21 @@
     {:dispatch [::state-actions/update-inner-action-by-path {:action-path action-path
                                                              :action-type action-type
                                                              :data-patch  {:phrase-text text}}]}))
+
+;; Actions
+
+(re-frame/reg-event-fx
+  ::remove-action
+  (fn [{:keys [_]} [_ {:keys [node-data type]}]]
+    {:dispatch [::state-actions-common/remove-action {:concept-action? (= type :concept)
+                                                      :node-data       node-data}]}))
+
+(re-frame/reg-event-fx
+  ::add-scene-action
+  (fn [{:keys [_]} [_ {:keys [node-data]}]]
+    {:dispatch [::state-actions/add-new-empty-phrase-action {:node-data node-data}]}))
+
+(re-frame/reg-event-fx
+  ::add-concept-action
+  (fn [{:keys [_]} [_ {:keys [node-data]}]]
+    {:dispatch [::state-actions/add-new-empty-phrase-concept-action {:node-data node-data}]}))
