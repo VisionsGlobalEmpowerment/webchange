@@ -5,11 +5,11 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [class-name color icon disabled? on-click ref size variant]
+  [{:keys [class-name color icon disabled? on-click ref size title variant]
     :or   {disabled? false
            color     "default"
            on-click  #()
-           size      "default"
+           size      "normal"
            variant   "default"}}]
   (let [this (r/current-component)
         children (r/children this)
@@ -19,11 +19,12 @@
                                                       (assoc class-name (some? class-name))
                                                       (assoc color true)
                                                       (assoc icon true)
-                                                      (assoc size true)
+                                                      (assoc (str "size-" size) true)
                                                       (assoc variant true)))
                       :disabled   disabled?
                       :on-click   on-click}
-                     (fn? ref) (assoc :ref handle-ref))
+                     (fn? ref) (assoc :ref handle-ref)
+                     (some? title) (assoc :title title))
      [icon/component {:icon icon}]
      (when (some? children)
        (into [:span]

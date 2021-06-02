@@ -1,7 +1,11 @@
 @import "../../styles/colors";
 
+$size-small: 24px;
+$size-small-svg: 14px;
 $size-normal: 36px;
+$size-normal-svg: 16px;
 $size-big: 80px;
+$size-big-svg: 36px;
 
 .wc-icon-button {
     background: rgba(0, 0, 0, 0);
@@ -12,15 +16,12 @@ $size-big: 80px;
     outline: none;
     padding: 0;
 
-    height: $size-normal;
-    min-width: $size-normal;
-    border-radius: $size-normal / 2;
-
     & > * {
         display: inline-block;
         padding: 0;
         position: relative;
-        top: 1px;
+        top: 2px;
+        left: 0;
     }
 
     &:hover {
@@ -70,16 +71,42 @@ $size-big: 80px;
         }
     }
 
-    &.big {
+    /* Size */
+
+    &.size-small {
+        height: $size-small;
+        min-width: $size-small;
+        border-radius: $size-small / 2;
+
+        svg {
+            height: $size-small-svg;
+            width: $size-small-svg;
+        }
+    }
+
+    &.size-normal {
+        height: $size-normal;
+        min-width: $size-normal;
+        border-radius: $size-normal / 2;
+
+        svg {
+            height: $size-normal-svg;
+            width: $size-normal-svg;
+        }
+    }
+
+    &.size-big {
         height: $size-big;
         min-width: $size-big;
         border-radius: $size-big / 2;
 
         svg {
-            height: 36px;
-            width: 36px;
+            height: $size-big-svg;
+            width: $size-big-svg;
         }
     }
+
+    /* Variant */
 
     &.outlined {
         background-color: rgba(0, 0, 0, 0);

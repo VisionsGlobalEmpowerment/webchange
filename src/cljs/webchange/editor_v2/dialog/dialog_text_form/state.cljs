@@ -86,3 +86,20 @@
     {:dispatch [::state-actions/update-inner-action-by-path {:action-path action-path
                                                              :action-type action-type
                                                              :data-patch  {:phrase-text text}}]}))
+
+;; Actions
+
+(re-frame/reg-event-fx
+  ::remove-action
+  (fn [{:keys [db]} [_ action-data]]
+    (print "::remove-action" action-data)))
+
+(re-frame/reg-event-fx
+  ::add-scene-action
+  (fn [{:keys [db]} [_ action-data]]
+    (print "::add-scene-action" action-data)))
+
+(re-frame/reg-event-fx
+  ::add-concepts-action
+  (fn [{:keys [db]} [_ action-data]]
+    (print "::add-concepts-action" action-data)))

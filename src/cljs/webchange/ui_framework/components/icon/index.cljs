@@ -1,6 +1,7 @@
 (ns webchange.ui-framework.components.icon.index
   (:require
     [webchange.ui-framework.components.icon.icon-add :as add]
+    [webchange.ui-framework.components.icon.icon-add_box :as add-box]
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
     [webchange.ui-framework.components.icon.icon-arrow-right :as arrow-right]
     [webchange.ui-framework.components.icon.icon-audio :as audio]
@@ -32,6 +33,7 @@
 
 (def icons
   {"add"           add/data
+   "add-box"       add-box/data
    "arrow-left"    arrow-left/data
    "arrow-right"   arrow-right/data
    "audio"         audio/data
