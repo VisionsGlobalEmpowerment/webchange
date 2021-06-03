@@ -1,8 +1,10 @@
+$units-margin: 6px;
+
 .action-unit {
     position: relative;
     border-radius: 4px;
     padding: 2px 8px;
-    margin: 6px 0;
+    margin: $units-margin 0;
 
     .targets-menu {
         display: inline-block;
@@ -48,6 +50,45 @@
 
             svg {
                 fill: #a6a6a6;
+            }
+        }
+    }
+
+    &.parallel {
+        &:before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: -12px;
+
+            width: 6px;
+
+            border-style: solid;
+            border-color: #a6a6a6;
+        }
+
+        &.parallel-start {
+            &:before {
+                height: calc(100% + #{$units-margin});
+                border-radius: 8px 0 0 0;
+                border-width: 1px 0 0 1px;
+            }
+        }
+
+        &.parallel-middle {
+            &:before {
+                height: calc(100% + #{$units-margin});
+                border-radius: 0;
+                border-width: 0 0 0 1px;
+            }
+        }
+
+        &.parallel-end {
+            &:before {
+                height: 100%;
+                border-radius: 0 0 0 8px;
+                border-width: 0 0 1px 1px;
             }
         }
     }

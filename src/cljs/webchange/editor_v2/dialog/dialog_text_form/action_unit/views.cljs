@@ -61,7 +61,7 @@
                    :on-click   handle-add-concept-click}]]))
 
 (defn- phrase-unit
-  [{:keys [text character path type concept-name node-data]}]
+  [{:keys [text character path type concept-name node-data parallel-mark class-name]}]
   (r/with-let [show-controls? (r/atom false)
                mouse-over-text (atom false)
                mouse-over-controls (atom false)
@@ -80,8 +80,9 @@
                                      (.addEventListener @controls-ref "mouseleave" (fn [] (reset! mouse-over-controls false) (check-mouse-position))))]
     (let [concept? (= type :concept-phrase)]
       [:div (cond-> {:ref        #(when (some? %) (handle-text-ref %))
-                     :class-name (get-class-name {"action-unit"  true
-                                                  "concept-unit" concept?})}
+                     :class-name (get-class-name (merge class-name
+                                                        {"action-unit"  true
+                                                         "concept-unit" concept?}))}
                     concept? (assoc :title (str "Concept «" concept-name "»")))
        [target-control {:value character
                         :path  path
@@ -95,16 +96,23 @@
                          :ref         #(when (some? %) (handle-controls-ref %))}])])))
 
 (defn- effect-unit
-  [{:keys [effect]}]
+  [{:keys [effect class-name]}]
   (let [effect-name (clojure.string/replace effect "-" " ")]
-    [:div {:class-name (get-class-name {"action-unit" true
-                                        "effect-unit" true})}
-     [icon {:icon "effect"
+    [:div {:class-name (get-class-name (merge class-name
+                                              {"action-unit" true
+                                               "effect-unit" true}))}
+     [icon {:icon       "effect"
             :class-name "effect-icon"}]
      effect-name]))
 
 (defn action-unit
-  [{:keys [type] :as props}]
-  (cond
-    (= type :effect) [effect-unit props]
-    :else [phrase-unit props]))
+  [{:keys [type parallel-mark] :as props}]
+  (let [class-name {"parallel"        (not= parallel-mark :none)
+                    "parallel-start"  (= parallel-mark :start)
+                    "parallel-middle" (= parallel-mark :middle)
+                    "parallel-end"    (= parallel-mark :end)}
+        unit-props (merge props
+                          {:class-name class-name})]
+    (cond
+      (= type :effect) [effect-unit unit-props]
+      :else [phrase-unit unit-props])))
