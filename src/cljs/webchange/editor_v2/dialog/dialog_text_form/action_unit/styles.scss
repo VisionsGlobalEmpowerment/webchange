@@ -30,6 +30,27 @@
     &.concept-unit {
         background-color: rgba(255, 223, 130, 0.25);
     }
+
+    &.effect-unit {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        user-select: none;
+
+        font-size: 12px;
+        font-family: monospace;
+        font-style: italic;
+        color: #a6a6a6;
+
+        .effect-icon {
+            padding: 4px;
+
+            svg {
+                fill: #a6a6a6;
+            }
+        }
+    }
 }
 
 .side-controls {

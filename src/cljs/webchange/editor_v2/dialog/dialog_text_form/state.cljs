@@ -93,7 +93,7 @@
 (re-frame/reg-event-fx
   ::remove-action
   (fn [{:keys [_]} [_ {:keys [node-data type]}]]
-    {:dispatch [::state-actions-common/remove-action {:concept-action? (= type :concept)
+    {:dispatch [::state-actions-common/remove-action {:concept-action? (= type :concept-phrase)
                                                       :node-data       node-data}]}))
 
 (re-frame/reg-event-fx

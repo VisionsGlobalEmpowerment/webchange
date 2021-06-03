@@ -4,6 +4,10 @@
   [node-data]
   (get-in node-data [:data :type]))
 
+(defn get-node-tags
+  [node-data]
+  (get-in node-data [:data :tags] []))
+
 (defn parallel-node-data?
   [node-data]
   (= "parallel" (get-node-type node-data)))

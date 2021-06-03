@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
-    [webchange.ui-framework.components.index :refer [icon-button menu select]]
+    [webchange.ui-framework.components.index :refer [icon icon-button menu select]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- target-control
@@ -60,7 +60,7 @@
                    :class-name "add-concept-button"
                    :on-click   handle-add-concept-click}]]))
 
-(defn action-unit
+(defn- phrase-unit
   [{:keys [text character path type concept-name node-data]}]
   (r/with-let [show-controls? (r/atom false)
                mouse-over-text (atom false)
@@ -78,7 +78,7 @@
                                      (reset! controls-ref ref)
                                      (.addEventListener @controls-ref "mouseenter" (fn [] (reset! mouse-over-controls true) (check-mouse-position)))
                                      (.addEventListener @controls-ref "mouseleave" (fn [] (reset! mouse-over-controls false) (check-mouse-position))))]
-    (let [concept? (= type :concept)]
+    (let [concept? (= type :concept-phrase)]
       [:div (cond-> {:ref        #(when (some? %) (handle-text-ref %))
                      :class-name (get-class-name {"action-unit"  true
                                                   "concept-unit" concept?})}
@@ -90,7 +90,21 @@
                       :path  path
                       :type  type}]
        (when @show-controls?
-         [side-controls {:action-data {:path      path
-                                       :type      type
+         [side-controls {:action-data {:type      type
                                        :node-data node-data}
                          :ref         #(when (some? %) (handle-controls-ref %))}])])))
+
+(defn- effect-unit
+  [{:keys [effect]}]
+  (let [effect-name (clojure.string/replace effect "-" " ")]
+    [:div {:class-name (get-class-name {"action-unit" true
+                                        "effect-unit" true})}
+     [icon {:icon "effect"
+            :class-name "effect-icon"}]
+     effect-name]))
+
+(defn action-unit
+  [{:keys [type] :as props}]
+  (cond
+    (= type :effect) [effect-unit props]
+    :else [phrase-unit props]))

@@ -41,10 +41,20 @@
   [action data-patch]
   (update-in action [:data 0 :data inner-action-position] merge data-patch))
 
-(defn get-action
-  [name]
+(defn get-action-data
+  [{:keys [action-name action-data]}]
+  {:pre [(string? action-name)
+         (or (nil? action-data)
+             (map? action-data))]}
   {:type "sequence-data"
    :data [{:type     "empty"
            :duration 0}
-          {:type "action"
-           :id   name}]})
+          (cond-> {:type "action"
+                   :id   action-name}
+                  (some? action-data) (merge action-data))]})
+
+(defn get-effect-action-data
+  [{:keys [action-name]}]
+  {:pre [(string? action-name)]}
+  (get-action-data {:action-name action-name
+                    :action-data {:tags ["effect"]}}))

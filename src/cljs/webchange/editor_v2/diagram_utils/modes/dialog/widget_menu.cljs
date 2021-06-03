@@ -118,17 +118,16 @@
                                                  {:key     (keyword (str "insert-" activity "-" pos))
                                                   :text    (str "Add effect " activity " " pos)
                                                   :handler (if concept-action?
-                                                             (partial add-in-concept-action (actions-defaults/get-action activity) (keyword pos))
-                                                             (partial add-action (actions-defaults/get-action activity) (keyword pos))
-                                                             )}])
+                                                             (partial add-in-concept-action (actions-defaults/get-effect-action-data {:action-name activity}) (keyword pos))
+                                                             (partial add-action (actions-defaults/get-effect-action-data {:action-name activity}) (keyword pos)))}])
                                       ["before", "after"]))
                                available-activities))
                  (map (fn [activity]
                         {:key     (keyword (str "insert-" activity "-parallel"))
                          :text    (str "Add effect " activity " parallel")
                          :handler (if concept-action?
-                                    (partial add-new-phrase-in-concept-parallel-action (actions-defaults/get-action activity))
-                                    (partial add-parallel-action (actions-defaults/get-action activity)))})
+                                    (partial add-new-phrase-in-concept-parallel-action (actions-defaults/get-effect-action-data {:action-name activity}))
+                                    (partial add-parallel-action (actions-defaults/get-effect-action-data {:action-name activity})))})
                       available-activities))
          (map (fn [item] [(:key item) item]))
          (into {}))))

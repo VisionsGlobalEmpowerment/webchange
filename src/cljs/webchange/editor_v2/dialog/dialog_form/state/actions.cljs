@@ -132,8 +132,8 @@
   ::update-inner-action-by-path
   (fn [{:keys [_]} [_ {:keys [action-path action-type data-patch]}]]
     {:dispatch [(cond
-                  (= action-type :concept) ::translator-form.concepts/update-current-concept
-                  (= action-type :scene) ::translator-form.scene/update-action)
+                  (= action-type :concept-phrase) ::translator-form.concepts/update-current-concept
+                  (= action-type :scene-phrase) ::translator-form.scene/update-action)
                 action-path
                 data-patch]}))
 
@@ -144,8 +144,8 @@
           action-path (concat (au/node-path->action-path path) [:data position])]
       {:dispatch [::update-inner-action-by-path {:action-path action-path
                                                  :action-type (cond
-                                                                (= type :concept-action) :concept
-                                                                (= type :scene-action) :scene
+                                                                (= type :concept-action) :concept-phrase
+                                                                (= type :scene-action) :scene-phrase
                                                                 :else type)
                                                  :data-patch  data-patch}]})))
 
