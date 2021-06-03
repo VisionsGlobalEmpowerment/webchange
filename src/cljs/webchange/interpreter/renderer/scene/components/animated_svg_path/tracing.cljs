@@ -6,7 +6,7 @@
     [webchange.interpreter.renderer.scene.components.debug :as debug]
     [webchange.logger.index :as logger]))
 
-(def touch-distance 5)
+(def touch-distance 7)
 
 (defn- scale-distance
   [distance {:keys [x]}]
@@ -40,7 +40,7 @@
         touch? {:updated? true :path-finished true}
         :else {:updated? updated? :next-point-idx point-idx}))))
 
-(defn- draw
+(defn draw
   [state {:keys [path-idx point-idx]}]
   (let [{:keys [ctx texture paths width height]} @state
         idx (atom 0)]
@@ -52,10 +52,18 @@
         (.stroke ctx (js/Path2D. path))
         (swap! idx inc)))
 
-    (when-let [{:keys [path length]} (get paths path-idx)]
+    (when-let [{:keys [path length points]} (get paths path-idx)]
       (when (> point-idx 0)
         (.setLineDash ctx #js [(* point-idx precision) length])
-        (.stroke ctx (js/Path2D. path))))
+        (.stroke ctx (js/Path2D. path)))
+
+      (let [{:keys [x y]} (-> points (nth point-idx))
+            radius 4
+            color "#1e90ff"]
+        (.beginPath ctx)
+        (.arc ctx x y radius 0 (* 2 js/Math.PI) false)
+        (set! ctx -fillStyle color)
+        (.fill ctx)))
 
     (.update texture)))
 
@@ -118,6 +126,8 @@
 
 (defn create-trigger
   [state {:keys [width height scale] :as props}]
+  (when (:active @state)
+    (draw state {:path-idx 0 :point-idx 0}))
   (doto (Sprite. (.-EMPTY Texture))
     (utils/set-size {:width (* width (:x scale)) :height (* height (:y scale))})
     (set! -interactive true)
