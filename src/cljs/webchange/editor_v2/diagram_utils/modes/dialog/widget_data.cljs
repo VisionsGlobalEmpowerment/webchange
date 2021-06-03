@@ -11,7 +11,7 @@
     [webchange.editor-v2.diagram-utils.modes.dialog.widget-play-button :refer [play-button]]
     [webchange.editor-v2.diagram-utils.modes.translation.widget-config-button :refer [config-button]]
     [webchange.editor-v2.diagram-utils.modes.translation.widget-loop-icon :refer [loop-icon]]
-    [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node? get-node-type]]
+    [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node? get-node-tags get-node-type]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]))
@@ -23,8 +23,10 @@
 
 (defn effect-action?
   [node-data]
-  (let [node-type (get-node-type node-data)]
-    (= node-type "action")))
+  (let [node-type (get-node-type node-data)
+        node-tags (get-node-tags node-data)]
+    (or (some #{"effect"} node-tags)  ;; preferable way
+        (= node-type "action"))))     ;; legacy
 
 (defn get-node-color
   [node-data]

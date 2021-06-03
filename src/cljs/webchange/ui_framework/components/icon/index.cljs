@@ -1,7 +1,7 @@
 (ns webchange.ui-framework.components.icon.index
   (:require
     [webchange.ui-framework.components.icon.icon-add :as add]
-    [webchange.ui-framework.components.icon.icon-add_box :as add-box]
+    [webchange.ui-framework.components.icon.icon-add-box :as add-box]
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
     [webchange.ui-framework.components.icon.icon-arrow-right :as arrow-right]
     [webchange.ui-framework.components.icon.icon-audio :as audio]
@@ -11,6 +11,7 @@
     [webchange.ui-framework.components.icon.icon-close :as close]
     [webchange.ui-framework.components.icon.icon-drop-place :as drop-place]
     [webchange.ui-framework.components.icon.icon-edit :as edit]
+    [webchange.ui-framework.components.icon.icon-effect :as effect]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
     [webchange.ui-framework.components.icon.icon-image :as image]
@@ -43,6 +44,7 @@
    "close"         close/data
    "drop-place"    drop-place/data
    "edit"          edit/data
+   "effect"        effect/data
    "font-family"   font-family/data
    "font-size"     font-size/data
    "image"         image/data
