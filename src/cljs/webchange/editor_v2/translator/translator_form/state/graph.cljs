@@ -28,6 +28,7 @@
 (re-frame/reg-sub
   ::concept-required
   (fn []
-    [(re-frame/subscribe [::graph-data])])
-  (fn [[graph]]
-    (:has-concepts? graph)))
+    [(re-frame/subscribe [::graph-data])
+     (re-frame/subscribe [::translator-form.concepts/has-concepts?])])
+  (fn [[graph course-has-concepts?]]
+    (and course-has-concepts? (:has-concepts? graph))))

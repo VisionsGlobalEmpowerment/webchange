@@ -10,6 +10,7 @@
     [webchange.editor-v2.question.question-form.state.actions :as question-form.actions]
     [webchange.editor-v2.text-animation-editor.chunks-editor.state :as translator.text]
     [webchange.state.state-course :as state-course]
+    [webchange.state.warehouse :as warehouse]
     [webchange.subs :as subs]))
 
 (re-frame/reg-event-fx
@@ -21,24 +22,24 @@
 
 (re-frame/reg-event-fx
   ::load-lesson-sets
-  (fn [{:keys [db]} [_ course-id]]
-    {:db         (-> db
-                     (assoc-in [:loading :lesson-sets] true))
-     :http-xhrio {:method          :get
-                  :uri             (str "/api/courses/" course-id "/lesson-sets")
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::load-lesson-sets-success]
-                  :on-failure      [:api-request-error :lesson-sets]}}))
+  (fn [{:keys [_]} [_ course-slug]]
+    {:dispatch [::warehouse/load-lesson-sets
+                {:course-slug course-slug}
+                {:on-success [::load-lesson-sets-success]}]}))
 
 (re-frame/reg-event-fx
   ::load-lesson-sets-success
-  (fn [{:keys [db]} [_ result]]
-    {:db         (-> db
-                     (assoc-in [:editor :course-datasets] (:datasets result))
-                     (assoc-in [:editor :course-dataset-items] (:items result))
-                     (assoc-in [:editor :course-lesson-sets] (:lesson-sets result)))
-     :dispatch-n (list [:complete-request :lesson-sets])}))
+  (fn [{:keys [db]} [_ {:keys [datasets items lesson-sets]}]]
+    (let [course-has-concepts? (-> (and (empty? datasets)
+                                        (empty? items)
+                                        (empty? lesson-sets))
+                                   (not))]
+      {:db         (-> db
+                       (assoc-in [:editor :course-has-concepts?] course-has-concepts?)
+                       (assoc-in [:editor :course-datasets] datasets)
+                       (assoc-in [:editor :course-dataset-items] items)
+                       (assoc-in [:editor :course-lesson-sets] lesson-sets))
+       :dispatch-n (list [:complete-request :lesson-sets])})))
 
 (re-frame/reg-event-fx
   ::show-translator-form

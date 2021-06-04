@@ -8,6 +8,7 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.dialog.utils.dialog-action :as actions-defaults]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as dialog.au]
+    [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 
@@ -78,7 +79,8 @@
                                      :handler (partial delete-in-concept-action)}})
 (defn- available-menu-items
   [node]
-  (let [{:keys [concept-action? base-action parent-action item-position]} (dialog.au/get-concept-node-data node)
+  (let [{:keys [concept-action? base-action]} (dialog.au/get-concept-node-data node)
+        has-concepts? @(re-frame/subscribe [::translator-form.concepts/has-concepts?])
         scene-contains-texts? (->> @(re-frame/subscribe [::translator-form.scene/text-objects]) (empty?) (not))
         concept-list-position (get-in node [:path 1])
         items (count (:data base-action))
@@ -88,9 +90,12 @@
                          :add-in-concept-parallel-action]
                         [])
         non-concept-items (if (not concept-action?)
-                            [:add-parallel-activity :delete
-                             :insert-concept-before :insert-concept-after
-                             :insert-before :insert-after]
+                            (cond-> [:add-parallel-activity
+                                     :delete
+                                     :insert-before
+                                     :insert-after]
+                                    has-concepts? (concat [:insert-concept-before
+                                                           :insert-concept-after]))
                             [])
         text-animation-items (if scene-contains-texts?
                                [:insert-text-animation-before

@@ -39,3 +39,8 @@
   (fn [db]
     (get-in db [:editor :course-info])))
 
+(re-frame/reg-sub
+  ::course-has-concepts?
+  (fn [db]
+    (get-in db [:editor :course-has-concepts?] false)))
+

@@ -31,6 +31,13 @@
 ;; Concepts
 
 (re-frame/reg-sub
+  ::show-concepts?
+  (fn []
+    (re-frame/subscribe [::translator-form.concepts/has-concepts?]))
+  (fn [has-concepts?]
+    has-concepts?))
+
+(re-frame/reg-sub
   ::current-concept
   (fn []
     [(re-frame/subscribe [::translator-form.concepts/current-concept])])
