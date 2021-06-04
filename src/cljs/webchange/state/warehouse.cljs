@@ -184,6 +184,14 @@
 ;; Lesson sets
 
 (re-frame/reg-event-fx
+  ::load-lesson-sets
+  (fn [{:keys [_]} [_ {:keys [course-slug]} handlers]]
+    (create-request {:key    ::load-lesson-sets
+                     :method :get
+                     :uri    (str "/api/courses/" course-slug "/lesson-sets")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::create-lesson-set
   (fn [{:keys [_]} [_ {:keys [dataset-id name data]} handlers]]
     (create-request {:key    :create-lesson-set

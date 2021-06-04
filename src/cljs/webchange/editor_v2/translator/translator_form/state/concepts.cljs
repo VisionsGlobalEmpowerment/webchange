@@ -166,6 +166,13 @@
        :dispatch-n (list [::set-current-concept (:id current-concept)]
                          [::set-edited-concepts []])})))
 
+(re-frame/reg-sub
+  ::has-concepts?
+  (fn []
+    (re-frame/subscribe [::editor-subs/course-has-concepts?]))
+  (fn [has-concepts?]
+    has-concepts?))
+
 (re-frame/reg-event-fx
   ::set-current-concept
   (fn [{:keys [db]} [_ concept-id]]
