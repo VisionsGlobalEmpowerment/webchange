@@ -19,12 +19,14 @@
   ::phrase-actions
   (fn []
     [(re-frame/subscribe [::translator-form.actions/current-dialog-action-info])
+     (re-frame/subscribe [::translator-form.actions/current-dialog-action-data])
      (re-frame/subscribe [::translator-form.concepts/current-concept])
      (re-frame/subscribe [::translator-form.scene/scene-data])])
-  (fn [[current-dialog-action current-concept scene-data]]
+  (fn [[current-dialog-action {:keys [available-activities]} current-concept scene-data]]
     (prepare-phrase-actions {:dialog-action-path (:path current-dialog-action)
                              :concept-data       current-concept
-                             :scene-data         scene-data})))
+                             :scene-data         scene-data
+                             :available-effects  available-activities})))
 
 ;; Concepts
 

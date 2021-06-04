@@ -57,4 +57,4 @@
   [{:keys [action-name]}]
   {:pre [(string? action-name)]}
   (get-action-data {:action-name action-name
-                    :action-data {:tags ["effect"]}}))
+                    :action-data {}}))

@@ -13,7 +13,7 @@
                           (and (> y 0) (> next-y 0)) :middle
                           (and (> y 0) (= next-y 0)) :end
                           :else :none)
-                     (assoc data :parallel-mark ))))
+                        (assoc data :parallel-mark))))
                actions))
 
 (defn- set-action-data
@@ -42,14 +42,13 @@
        actions))
 
 (defn set-action-type
-  [actions]
+  [actions {:keys [available-effects]}]
   {:post [(every? (fn [{:keys [type]}] (some #{type} [:effect :concept-phrase :scene-phrase])) %)]}
   (map (fn [{:keys [action-data concept-acton?] :as data}]
-         (assoc data :type (let [tags (get action-data :tags [])]
-                             (cond
-                               (some #{"effect"} tags) :effect
-                               concept-acton? :concept-phrase
-                               :else :scene-phrase))))
+         (assoc data :type (cond
+                             (some #{(:id action-data)} available-effects) :effect
+                             concept-acton? :concept-phrase
+                             :else :scene-phrase)))
        actions))
 
 (defn- get-component-data
@@ -72,11 +71,11 @@
        actions))
 
 (defn prepare-phrase-actions
-  [{:keys [dialog-action-path concept-data scene-data]}]
+  [{:keys [dialog-action-path concept-data scene-data available-effects]}]
   (-> (prepare-nodes scene-data concept-data dialog-action-path)
       (set-parallel-marks)
       (set-action-data {:concept-data concept-data
                         :scene-data   scene-data})
       (get-inner-action-data)
-      (set-action-type)
+      (set-action-type {:available-effects available-effects})
       (get-component-data {:concept-data concept-data})))
