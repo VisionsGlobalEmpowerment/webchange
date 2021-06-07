@@ -235,14 +235,15 @@
                    :timeout-timer               {:type     "set-interval",
                                                  :id       "instructions-timeout",
                                                  :action   "timeout-instructions",
-                                                 :interval 15000}
+                                                 :interval 25000}
 
                    :timeout-instructions        {:type     "test-value",
                                                  :value2   true,
                                                  :success  {:type "action" :id "dialog-timeout-instructions-second-stage"},
                                                  :fail     {:type "action" :id "dialog-timeout-instructions"},
                                                  :from-var [{:var-name "second-stage", :action-property "value1"}]}
-                   :tap-instructions            {:type     "test-value",
+                   :tap-instructions            {:unique-tag "instruction"
+                                                 :type     "test-value",
                                                  :value2   true,
                                                  :success  {:type "action" :id "dialog-tap-instructions-second-stage"},
                                                  :fail     {:type "action" :id "dialog-tap-instructions"},
