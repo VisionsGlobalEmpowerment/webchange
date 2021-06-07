@@ -148,10 +148,22 @@ $units-margin: 6px;
             padding: 4px;
             background-color: #fff;
             border-radius: 4px;
+            white-space: nowrap;
+
+            &.sub-items-column {
+                flex-direction: column;
+            }
+
+            .effect-button {
+                border: none;
+                font-size: 11px;
+                font-weight: 400;
+                padding: 6px 10px;
+            }
         }
 
         &:hover {
-            .sub-items {
+            & > .sub-items {
                 display: flex;
             }
         }

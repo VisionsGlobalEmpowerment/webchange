@@ -121,3 +121,10 @@
   (fn [{:keys [_]} [_ {:keys [node-data relative-position]}]]
     {:dispatch [::state-actions/add-new-empty-phrase-concept-action {:node-data         node-data
                                                                      :relative-position relative-position}]}))
+
+(re-frame/reg-event-fx
+  ::add-effect-action
+  (fn [{:keys [_]} [_ {:keys [effect node-data relative-position]}]]
+    {:dispatch [::state-actions/add-effect-action {:node-data         node-data
+                                                   :effect            effect
+                                                   :relative-position relative-position}]}))

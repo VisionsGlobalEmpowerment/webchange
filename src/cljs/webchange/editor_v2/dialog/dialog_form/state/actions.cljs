@@ -84,6 +84,14 @@
       {:dispatch [::add-new-phrase-action new-action-data relative-position node-data]})))
 
 (re-frame/reg-event-fx
+  ::add-effect-action
+  (fn [{:keys [_]} [_ {:keys [effect node-data relative-position] :or {relative-position :after}}]]
+    (let [effect-action-data (defaults/get-effect-action-data {:action-name effect})]
+      {:dispatch (if (= relative-position :parallel)
+                   [::add-new-phrase-parallel-action effect-action-data node-data]
+                   [::add-new-phrase-action effect-action-data relative-position node-data])})))
+
+(re-frame/reg-event-fx
   ::add-new-phrase-concept-action
   (fn [{:keys [_]} [_ relative-position node action-data]]
     (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node)

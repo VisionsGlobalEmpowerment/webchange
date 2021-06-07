@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-menu :refer [unit-menu]]
+    [webchange.editor-v2.dialog.dialog-text-form.action-unit.utils :refer [get-effect-name]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
     [webchange.ui-framework.components.index :refer [icon menu]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
@@ -54,7 +55,7 @@
 
 (defn- effect-unit
   [{:keys [effect class-name]}]
-  (let [effect-name (clojure.string/replace effect "-" " ")]
+  (let [effect-name (get-effect-name effect)]
     [:div {:class-name (get-class-name (merge class-name
                                               {"effect-unit" true}))}
      [icon {:icon       "effect"
