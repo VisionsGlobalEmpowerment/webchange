@@ -133,4 +133,27 @@ $units-margin: 6px;
             height: 16px;
         }
     }
+
+    .menu-item-wrapper {
+        position: relative;
+
+        .sub-items {
+            display: none;
+            gap: 4px;
+
+            position: absolute;
+            left: 100%;
+            top: -4px;
+
+            padding: 4px;
+            background-color: #fff;
+            border-radius: 4px;
+        }
+
+        &:hover {
+            .sub-items {
+                display: flex;
+            }
+        }
+    }
 }

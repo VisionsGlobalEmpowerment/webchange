@@ -8,31 +8,77 @@
 
 (defn- get-phrase-controls
   [{:keys [type] :as action-data}]
-  (cond
-    (or (= type :scene-phrase)
-        (= type :concept-phrase)) (let [handle-remove-click #(re-frame/dispatch [::state/remove-action action-data])
-                                        handle-add-scene-click #(re-frame/dispatch [::state/add-scene-action action-data])
-                                        handle-add-concept-click #(re-frame/dispatch [::state/add-concept-action action-data])]
-                                    [[icon-button {:icon       "remove"
-                                                   :size       "small"
-                                                   :title      "Remove action"
-                                                   :class-name "remove-button"
-                                                   :on-click   handle-remove-click}]
-                                     [icon-button {:icon       "add"
-                                                   :size       "small"
-                                                   :title      "Add activity action"
-                                                   :class-name "add-scene-button"
-                                                   :on-click   handle-add-scene-click}]
-                                     [icon-button {:icon       "add-box"
-                                                   :size       "small"
-                                                   :title      "Add concept action"
-                                                   :class-name "add-concept-button"
-                                                   :on-click   handle-add-concept-click}]])
-    :else []))
+  (let [show-concepts? @(re-frame/subscribe [::state/show-concepts?])
+
+        remove-action (fn []
+                        (re-frame/dispatch [::state/remove-action action-data]))
+        add-scene-action (fn [{:keys [relative-position] :or {relative-position :after}}]
+                           (re-frame/dispatch [::state/add-scene-action (merge action-data
+                                                                               {:relative-position relative-position})]))
+        add-scene-parallel-action (fn []
+                                    (re-frame/dispatch [::state/add-scene-parallel-action action-data]))
+        add-concept-action (fn [{:keys [relative-position] :or {relative-position :after}}]
+                             (re-frame/dispatch [::state/add-concept-action (merge action-data
+                                                                                   {:relative-position relative-position})]))]
+    (cond-> [;; Remove
+             {:control [icon-button {:icon       "remove"
+                                     :size       "small"
+                                     :title      "Remove action"
+                                     :class-name "remove-button"
+                                     :on-click   remove-action}]}
+             ;; Add scene action
+             {:control   [icon-button {:icon       "add"
+                                       :size       "small"
+                                       :title      "Add activity action"
+                                       :class-name "add-scene-button"
+                                       :on-click   add-scene-action}]
+              :sub-items [[icon-button {:icon     "insert-before"
+                                        :size     "small"
+                                        :title    "Before"
+                                        :on-click #(add-scene-action {:relative-position :before})}]
+                          [icon-button {:icon     "insert-after"
+                                        :size     "small"
+                                        :title    "After"
+                                        :on-click #(add-scene-action {:relative-position :after})}]
+                          [icon-button {:icon     "insert-parallel"
+                                        :size     "small"
+                                        :title    "Parallel"
+                                        :on-click add-scene-parallel-action}]]}]
+            ;; Add concept action
+            show-concepts? (concat [{:control   [icon-button {:icon       "add-box"
+                                                              :size       "small"
+                                                              :title      "Add concept action"
+                                                              :class-name "add-concept-button"
+                                                              :on-click   add-concept-action}]
+                                     :sub-items [[icon-button {:icon     "insert-before"
+                                                               :size     "small"
+                                                               :title    "Before"
+                                                               :on-click #(add-concept-action {:relative-position :before})}]
+                                                 [icon-button {:icon     "insert-after"
+                                                               :size     "small"
+                                                               :title    "After"
+                                                               :on-click #(add-concept-action {:relative-position :after})}]]}]))))
 
 (defn- get-controls
   [props]
   (get-phrase-controls props))
+
+;; Render
+
+(defn- menu-parent-control
+  [{:keys [control sub-items]}]
+  [:div.menu-item-wrapper
+   control
+   (into [:div.sub-items]
+         sub-items)])
+
+(defn- render-controls
+  [controls]
+  (map (fn [{:keys [control sub-items] :as item}]
+         (if (some? sub-items)
+           [menu-parent-control item]
+           control))
+       controls))
 
 (defn- subscribe-handlers
   [menu-ref parent-ref events-handlers]
@@ -59,10 +105,10 @@
                menu-ref (atom nil)
                parent-ref (atom nil)
 
-               events-handlers {:menu-enter   (fn [e] (print ":menu-enter") (.stopPropagation e) (reset! mouse-over-menu true) (check-mouse-position))
-                                :menu-leave   (fn [e] (print ":menu-leave") (.stopPropagation e) (reset! mouse-over-menu false) (check-mouse-position))
-                                :parent-enter (fn [e] (print ":parent-enter") (.stopPropagation e) (reset! mouse-over-parent true) (check-mouse-position))
-                                :parent-leave (fn [e] (print ":parent-leave") (.stopPropagation e) (reset! mouse-over-parent false) (check-mouse-position))}
+               events-handlers {:menu-enter   (fn [e] (.stopPropagation e) (reset! mouse-over-menu true) (check-mouse-position))
+                                :menu-leave   (fn [e] (.stopPropagation e) (reset! mouse-over-menu false) (check-mouse-position))
+                                :parent-enter (fn [e] (.stopPropagation e) (reset! mouse-over-parent true) (check-mouse-position))
+                                :parent-leave (fn [e] (.stopPropagation e) (reset! mouse-over-parent false) (check-mouse-position))}
 
                handle-menu-ref (fn [ref]
                                  (reset! menu-ref ref)
@@ -74,6 +120,6 @@
                                                 "menu-active"      (and @show-controls? (-> controls empty? not))})
                    :style      {:z-index (- 1000 idx)}
                    :ref        #(when (some? %) (handle-menu-ref %))}]
-            (if @show-controls? controls [])))
+            (if @show-controls? (render-controls controls) [])))
     (finally
       (unsubscribe-handlers menu-ref parent-ref events-handlers))))
