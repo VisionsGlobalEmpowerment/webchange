@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-menu :refer [unit-menu]]
+    [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-menu :refer [add-concept-action add-scene-action unit-menu]]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.utils :refer [get-effect-name]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
     [webchange.ui-framework.components.index :refer [icon menu]]
@@ -23,12 +23,24 @@
                                       :on-click #(handle-target-change target)})))}])))
 
 (defn- text-control
-  []
-  (let []
+  [{:keys [action-data]}]
+  (let [ref (atom nil)
+        handle-key-down (fn [e]
+                          (when (= (.-key e) "Enter")
+                            (.preventDefault e)
+                            (if (.-ctrlKey e)
+                              (add-concept-action {:action-data action-data})
+                              (add-scene-action {:action-data action-data}))))]
     (r/create-class
       {:display-name "text-control"
        :should-component-update
                      (constantly false)
+       :component-did-mount
+                     (fn []
+                       (.addEventListener @ref "keydown" handle-key-down false))
+       :component-will-unmount
+                     (fn []
+                       (.removeEventListener @ref "keydown" handle-key-down))
        :reagent-render
                      (fn [{:keys [path type value]}]
                        (let [handle-change (fn [event]
@@ -36,12 +48,13 @@
                                                (re-frame/dispatch [::state/set-phrase-action-text path type new-value])))]
                          [:span {:class-name                        "text"
                                  :on-input                          handle-change
+                                 :ref                               #(when (some? %) (reset! ref %))
                                  :content-editable                  true
                                  :suppress-content-editable-warning true}
                           value]))})))
 
 (defn- phrase-unit
-  [{:keys [text character path type concept-name]}]
+  [{:keys [text character path type concept-name action-data]}]
   (let [concept? (= type :concept-phrase)]
     [:div (cond-> {:class-name (get-class-name {"phrase-unit"  true
                                                 "concept-unit" concept?})}
@@ -49,9 +62,10 @@
      [target-control {:value character
                       :path  path
                       :type  type}]
-     [text-control {:value text
-                    :path  path
-                    :type  type}]]))
+     [text-control {:value       text
+                    :path        path
+                    :type        type
+                    :action-data action-data}]]))
 
 (defn- effect-unit
   [{:keys [effect class-name]}]
@@ -65,16 +79,18 @@
 (defn action-unit
   [{:keys [idx node-data parallel-mark type] :as props}]
   (r/with-let [container-ref (r/atom nil)]
-    [:div {:ref        #(when (some? %) (reset! container-ref %))
-           :class-name (get-class-name {"action-unit"     true
-                                        "parallel"        (not= parallel-mark :none)
-                                        "parallel-start"  (= parallel-mark :start)
-                                        "parallel-middle" (= parallel-mark :middle)
-                                        "parallel-end"    (= parallel-mark :end)})}
-     (cond
-       (= type :effect) [effect-unit props]
-       :else [phrase-unit props])
-     [unit-menu {:idx         idx
-                 :parent-ref  @container-ref
-                 :action-data {:type      type
-                               :node-data node-data}}]]))
+    (let [action-data {:type      type
+                       :node-data node-data}]
+      [:div {:ref        #(when (some? %) (reset! container-ref %))
+             :class-name (get-class-name {"action-unit"     true
+                                          "parallel"        (not= parallel-mark :none)
+                                          "parallel-start"  (= parallel-mark :start)
+                                          "parallel-middle" (= parallel-mark :middle)
+                                          "parallel-end"    (= parallel-mark :end)})}
+       (cond
+         (= type :effect) [effect-unit props]
+         :else [phrase-unit (merge props
+                                   {:action-data action-data})])
+       [unit-menu {:idx         idx
+                   :parent-ref  @container-ref
+                   :action-data action-data}]])))
