@@ -72,12 +72,25 @@
       (.removeEventListener @drop-area "drop" handle-area-drop))))
 
 (defn component
-  [{:keys [button-text class-name disabled? drag-and-drop? type on-change show-file-name? show-icon? upload-options with-upload?]
-    :or   {button-text     "Choose File"
+  [{:keys [button-props
+           button-text
+           class-name
+           disabled?
+           drag-and-drop?
+           on-change
+           show-file-name?
+           show-icon?
+           show-input?
+           type
+           upload-options
+           with-upload?]
+    :or   {button-props    {}
+           button-text     "Choose File"
            disabled?       false
            drag-and-drop?  false
            on-change       #()
            show-icon?      true
+           show-input?     true
            upload-options  {}
            with-upload?    true
            show-file-name? true}}]
@@ -103,13 +116,17 @@
               :ref       #(reset! file-input %)}]
      (when (and show-icon? (some? type))
        [icon/component {:icon type}])
-     [:div {:class-name "file-name-wrapper"
-            :on-click   #(when-not disabled? (.click @file-input))}
-      [text-input/component {:value      (if @uploading? "Uploading..." @text-value)
-                             :class-name "file-name"
-                             :disabled?  true}]]
-     [button/component {:on-click  #(.click @file-input)
-                        :disabled? (or disabled? @uploading?)}
+
+     (when show-input?
+       [:div {:class-name "file-name-wrapper"
+              :on-click   #(when-not disabled? (.click @file-input))}
+        [text-input/component {:value      (if @uploading? "Uploading..." @text-value)
+                               :class-name "file-name"
+                               :disabled?  true}]])
+
+     [button/component (merge {:on-click  #(.click @file-input)
+                               :disabled? (or disabled? @uploading?)}
+                              button-props)
       button-text]
      (when drag-and-drop?
        [drag-and-drop {:on-drop #(-> % drop-event->file handle-change)}])]))

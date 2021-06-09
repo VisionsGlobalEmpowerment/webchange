@@ -7,6 +7,7 @@
     [webchange.ui-framework.components.icon.icon-audio :as audio]
     [webchange.ui-framework.components.icon.icon-background :as background]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
+    [webchange.ui-framework.components.icon.icon-check :as check]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
     [webchange.ui-framework.components.icon.icon-drop-place :as drop-place]
@@ -19,9 +20,11 @@
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
     [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
     [webchange.ui-framework.components.icon.icon-link :as link]
+    [webchange.ui-framework.components.icon.icon-match :as match]
     [webchange.ui-framework.components.icon.icon-menu :as menu]
     [webchange.ui-framework.components.icon.icon-menu-vertical :as menu-vertical]
     [webchange.ui-framework.components.icon.icon-mic :as mic]
+    [webchange.ui-framework.components.icon.icon-mismatch :as mismatch]
     [webchange.ui-framework.components.icon.icon-music :as music]
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
@@ -43,6 +46,7 @@
    "audio"           audio/data
    "background"      background/data
    "bring-to-top"    bring-to-top/data
+   "check"           check/data
    "clear"           clear/data
    "close"           close/data
    "drop-place"      drop-place/data
@@ -55,9 +59,11 @@
    "insert-before"   insert-before/data
    "insert-parallel" insert-parallel/data
    "link"            link/data
+   "match"           match/data
    "menu"            menu/data
    "menu-vertical"   menu-vertical/data
    "mic"             mic/data
+   "mismatch"        mismatch/data
    "music"           music/data
    "music-off"       music-off/data
    "play"            play/data

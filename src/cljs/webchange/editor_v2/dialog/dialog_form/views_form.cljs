@@ -11,10 +11,10 @@
     [webchange.editor-v2.dialog.dialog-form.views-form-target :refer [target-block text-target-block]]
     [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
 
+    [webchange.editor-v2.dialog.components.record-audio.views :refer [record-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-audio-actions :refer [audio-actions]]
     [webchange.editor-v2.dialog.dialog-form.views-audio-warning :refer [audio-warning]]
     [webchange.editor-v2.dialog.dialog-form.views-audios-list :refer [audios-list]]
-    [webchange.editor-v2.dialog.dialog-form.views-record-audio :refer [record-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-upload-audio :refer [upload-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-volume :refer [volume]]))
 

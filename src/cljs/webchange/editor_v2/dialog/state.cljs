@@ -1,6 +1,4 @@
-(ns webchange.editor-v2.dialog.state
-  (:require
-    [re-frame.core :as re-frame]))
+(ns webchange.editor-v2.dialog.state)
 
 (defn path-to-db
   [relative-path]

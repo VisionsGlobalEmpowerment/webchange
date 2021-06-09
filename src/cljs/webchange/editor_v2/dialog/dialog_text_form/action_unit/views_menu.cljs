@@ -5,6 +5,7 @@
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.utils :refer [get-effect-name]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :refer [get-available-effects]]
+    [webchange.editor-v2.dialog.phrase-voice-over.audios-menu.views :refer [audios-menu]]
     [webchange.ui-framework.components.index :refer [button icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -46,8 +47,8 @@
   {:pre [(pre-action-data action-data)]}
   (re-frame/dispatch [::state/remove-action action-data]))
 
-(defn- get-phrase-controls
-  [{:keys [node-data] :as action-data}]
+(defn- get-controls
+  [{:keys [type node-data] :as action-data}]
   (let [show-concepts? @(re-frame/subscribe [::state/show-concepts?])
         available-effects (get-available-effects node-data)]
     (cond-> [;; Remove
@@ -126,11 +127,12 @@
                                                                                        :on-click #(add-effect-action {:action-data       action-data
                                                                                                                       :relative-position :parallel
                                                                                                                       :effect            effect})}]}]})
-                                                available-effects)}]))))
-
-(defn- get-controls
-  [props]
-  (get-phrase-controls props))
+                                                available-effects)}])
+            (some #{type} [:concept-phrase :scene-phrase])
+            (concat [{:control   [icon-button {:icon  "mic"
+                                               :size  "small"
+                                               :title "Voice-over"}]
+                      :sub-items [{:control [audios-menu {:action-data action-data}]}]}]))))
 
 ;; Render
 

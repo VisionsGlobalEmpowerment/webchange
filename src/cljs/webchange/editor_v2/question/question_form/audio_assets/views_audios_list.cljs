@@ -169,8 +169,7 @@
                     :start (or start 0)
                     :end   (+ start duration)}
         styles (get-styles)
-        on-audio-data-change #(re-frame/dispatch [::translator-form.actions/update-phrase-region-data url])
-        ]
+        on-audio-data-change #(re-frame/dispatch [::translator-form.actions/update-phrase-region-data {:audio-url url}])]
     [ui/card {:on-click handle-select
               :style    (if selected?
                           (:block-wrapper-selected styles)

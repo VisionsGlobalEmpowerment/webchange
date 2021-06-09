@@ -47,7 +47,7 @@
 (re-frame/reg-sub
   ::mode
   (fn [db]
-    (get-in db mode-path :classic)))
+    (get-in db mode-path :dialog-text)))
 
 (re-frame/reg-event-fx
   ::set-mode

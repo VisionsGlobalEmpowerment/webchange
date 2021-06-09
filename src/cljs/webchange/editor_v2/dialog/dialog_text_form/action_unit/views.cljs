@@ -77,9 +77,10 @@
      effect-name]))
 
 (defn action-unit
-  [{:keys [idx node-data parallel-mark type] :as props}]
+  [{:keys [idx node-data parallel-mark path type] :as props}]
   (r/with-let [container-ref (r/atom nil)]
     (let [action-data {:type      type
+                       :path      path
                        :node-data node-data}]
       [:div {:ref        #(when (some? %) (reset! container-ref %))
              :class-name (get-class-name {"action-unit"     true

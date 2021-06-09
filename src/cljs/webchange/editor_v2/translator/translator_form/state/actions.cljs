@@ -4,6 +4,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.audio-analyzer :as audio-analyzer]
     [webchange.utils.text :refer [text->chunks]]
+    [webchange.editor-v2.components.audio-wave-form.state :as state-wave-form]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.actions-shared :as actions-shared]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
@@ -148,15 +149,15 @@
 
 (re-frame/reg-event-fx
   ::update-phrase-region-data
-  (fn [{:keys [db]} [_ audio-url sub-path force]]
+  (fn [{:keys [db]} [_ {:keys [audio-url sub-path force?]}]]
     (let [action-path-data (get-action-path-data db :phrase sub-path)
           action (get-action-data db action-path-data)]
-      (if (or force (and (= (:audio action) audio-url) (not (and (:start action) (:duration action)))))
+      (if (or force? (and (= (:audio action) audio-url) (not (and (:start action) (:duration action)))))
         (let [phrase-text (get-phrase-text db action action-path-data)
-              region-data (audio-analyzer/get-region-data-if-possible
-                            phrase-text
-                            audio-url)]
-          (if (contains? region-data :end)
+              script-data @(re-frame/subscribe [::state-wave-form/audio-script-data audio-url])
+              {:keys [matched? region-data]} (audio-analyzer/get-region-data-if-possible {:text   phrase-text
+                                                                                          :script script-data})]
+          (if matched?
             {:dispatch-n (list [::update-action :phrase
                                 (cond-> {:audio    audio-url
                                          :start    (:start region-data)
@@ -170,8 +171,7 @@
                                         (update-talk-animation-data? action)
                                         (assoc :data
                                                (audio-analyzer/get-talk-data-if-possible
-                                                 phrase-text audio-url region-data))
-                                        ) sub-path])}))))))
+                                                 phrase-text audio-url region-data))) sub-path])}))))))
 
 (re-frame/reg-event-fx
   ::update-action
@@ -248,7 +248,7 @@
   ::set-phrase-action-audio
   (fn [{:keys [_]} [_ audio-url]]
     {:dispatch-n (list
-                   [::update-phrase-region-data audio-url nil true]
+                   [::update-phrase-region-data {:audio-url audio-url :force? true}]
                    [::update-action :phrase {:audio audio-url}])}))
 
 (re-frame/reg-event-fx
