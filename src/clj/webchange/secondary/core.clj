@@ -92,8 +92,8 @@
   (doseq [version course-versions]
     (let [current-latest (db/get-latest-course-version {:course_id (:course-id version)})
           version (-> version
-              (assoc :created-at (dt/iso-str2date-time (:created-at version))))]
-      (if-not (.equals (:data version) (:data current-latest))
+                      (assoc :created-at (jt/local-date-time)))]
+      (when-not (.equals (:data version) (:data current-latest))
         (-> version
             (#(db/transform-keys-one-level ->snake_case_keyword %))
             (db/save-course!)))))
@@ -145,8 +145,8 @@
   (doseq [scene-version scene-versions]
     (let [current-latest (db/get-latest-scene-version {:scene_id (:scene-id scene-version)})
           scene-version (-> scene-version
-                      (assoc :created-at (dt/iso-str2date-time (:created-at scene-version))))]
-      (if-not (= (:data scene-version) (:data current-latest))
+                            (assoc :created-at (dt/iso-str2date-time (:created-at scene-version))))]
+      (when-not (= (:data scene-version) (:data current-latest))
         (-> scene-version
             (#(db/transform-keys-one-level ->snake_case_keyword %))
             (assoc :data (:data scene-version))
@@ -423,7 +423,7 @@
 (defn delete-not-in-guid-list [guids entries extract-guid delete-entry]
   (doseq [entry entries]
     (if-not (contains? (set guids) (extract-guid entry))
-        (delete-entry (db/transform-keys-one-level ->snake_case_keyword entry))
+      (delete-entry (db/transform-keys-one-level ->snake_case_keyword entry))
       nil)))
 
 (defn delete-teacher [teacher]
@@ -531,7 +531,7 @@
         dataset-items-guid (guid/guids-from-entries (:dataset-items data) guid/guid-is-id)
         lesson-sets-guid (guid/guids-from-entries (:lesson-sets data) guid/guid-is-id)
         scenes-guid (guid/guids-from-entries (:scenes data) guid/guid-is-id)
-        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)scene-skills-guid (guid/guids-from-entries (:scene-skills data) guid/guid-from-scene-skill)
+        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id) scene-skills-guid (guid/guids-from-entries (:scene-skills data) guid/guid-from-scene-skill)
         ]
     (delete-not-in-guid-list lesson-sets-guid lesson-sets :id db/delete-lesson-set-by-id!)
     (delete-not-in-guid-list dataset-items-guid dataset-items :id db/delete-dataset-item-by-id!)
@@ -591,10 +591,10 @@
   (let [asset-hashes (db/get-all-asset-hash)
         hashes (map (fn [item] {:path-hash (:path-hash item) :file-hash (:file-hash item)}) asset-hashes)
         url (make-url-absolute "api/school/asset/difference/")
-        response (client/post url { :body (json/json-str hashes)
-                                    :body-encoding "UTF-8"
-                                    :content-type  "application/json"
-                                    :accept        :json })
+        response (client/post url {:body          (json/json-str hashes)
+                                   :body-encoding "UTF-8"
+                                   :content-type  "application/json"
+                                   :accept        :json})
         update (-> response :body (json/read-str :key-fn keyword))
         remove (fill-additional-data (:remove update))
         download (:update update)
@@ -604,10 +604,10 @@
 (defn update-assets!
   ([] (update-assets! true))
   ([remove-files?]
-  (let [{remove :remove download :download} (get-difference-data)]
-    (if remove-files? (doseq [item remove]
-      (assets/remove-file-with-hash! item)))
-    (download-files download))))
+   (let [{remove :remove download :download} (get-difference-data)]
+     (if remove-files? (doseq [item remove]
+                         (assets/remove-file-with-hash! item)))
+     (download-files download))))
 
 (defn calc-upload-assets []
   (let [{remove :remove download :download} (get-difference-data)]

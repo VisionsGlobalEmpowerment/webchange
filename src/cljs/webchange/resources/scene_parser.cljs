@@ -49,11 +49,13 @@
 
 (defn- parse-concept-resources
   [scene-id]
+  (logger/trace "parse concept resourses")
   (->> @(re-frame/subscribe [::subs/current-lesson-sets-data])
        (parse-lesson-sets-data scene-id)))
 
 (defn- parse-lesson-sets-resources
   [scene-id lesson-sets]
+  (logger/trace "parse lesson sets resourses")
   (->> @(re-frame/subscribe [::subs/lesson-sets-data lesson-sets])
        (parse-lesson-sets-data scene-id)))
 

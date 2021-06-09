@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.collisions
   (:require
-    [webchange.interpreter.pixi :refer [shared-ticker]]
+    [webchange.interpreter.renderer.scene.app :as app]
     [webchange.logger.index :as logger]))
 
 (def objects (atom {}))
@@ -8,6 +8,11 @@
 (defn has-collision-handler?
   [props]
   (contains? props :on-collide))
+
+(defn reset-objects
+  []
+  (logger/trace "reset collisions")
+  (reset! objects {}))
 
 (defn register-object
   [object {:keys [transition-name] :as props}]
@@ -58,7 +63,8 @@
 (defn- test-objects
   [object object-name bumped-into collide-test on-collide]
   (doseq [[target-name target-object target-props] (get-objects-to-test)]
-    (if (and (collided? object target-object)
+    (if (and (.-parent object) (.-parent target-object)
+             (collided? object target-object)
              (interested-target? object-name target-name collide-test))
       (do (when-not (get @bumped-into target-name)
             (logger/trace)
@@ -69,5 +75,6 @@
 
 (defn enable-collisions!
   [object {:keys [object-name collide-test on-collide]}]
+  (logger/trace "enable-collisions! for" object)
   (let [bumped-into (atom {})]
-    (.add shared-ticker (fn [] (test-objects object object-name bumped-into collide-test on-collide)))))
+    (app/add-ticker (fn [] (test-objects object object-name bumped-into collide-test on-collide)))))

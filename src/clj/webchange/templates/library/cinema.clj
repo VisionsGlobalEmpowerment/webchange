@@ -46,7 +46,7 @@
                                      :visible true}},
         :scene-objects [["background"] ["letter-video" "screen-overlay" "play-button"]],
         :actions
-                       {:finish-activity             {:type "finish-activity", :id "cinema-video"},
+                       {:finish-activity             {:type "finish-activity"},
                         :play-video                  {:type "sequence-data",
                                                       :data [{:type "action" :id "stop-timeout"}
                                                              {:type "set-attribute" :attr-name "visible", :attr-value false :target "play-button"}
@@ -70,7 +70,7 @@
                                                                     {:type "action" :id "dialog-intro"}
                                                                     {:type "action" :id "start-timeout"}],
                                                       :description "Initial action"},
-                        :stop-activity               {:type "stop-activity", :id "cinema-video"}
+                        :stop-activity               {:type "stop-activity"}
                         :start-timeout        {:type      "start-timeout-counter",
                                                :id        "inactive-counter",
                                                :action    "continue-try",

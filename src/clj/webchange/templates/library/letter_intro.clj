@@ -169,7 +169,7 @@
                    {
                     :finish-activity
                                              {:type "sequence-data", :data [{:id "inactive-counter", :type "remove-interval"}
-                                                                            {:id "letter-intro", :type "finish-activity"}]},
+                                                                            {:type "finish-activity"}]},
                     :mari-init-wand          {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
                     :mari-wand-hit
                                              {:type "sequence-data",
@@ -177,8 +177,8 @@
                                                     [{:id "wand_hit", :type "animation", :track 2, :target "mari"}
                                                      {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}]},
 
-                    :start-activity          {:type "start-activity", :id "letter-intro"},
-                    :stop-activity           {:type "stop-activity", :id "letter-intro"},
+                    :start-activity          {:type "start-activity"},
+                    :stop-activity           {:type "stop-activity"},
 
                     :renew-concept           {:type      "lesson-var-provider", :from "concepts-single", :provider-id "concepts",
                                               :variables ["current-concept"]},
