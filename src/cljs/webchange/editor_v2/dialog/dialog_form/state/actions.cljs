@@ -59,6 +59,14 @@
       {:dispatch-n (list [::update-scene-action (actions/complete-path base-path) data-patch])})))
 
 (re-frame/reg-event-fx
+  ::add-new-empty-phrase-parallel-action
+  (fn [{:keys [_]} [_ {:keys [node-data]}]]
+    (let [current-target (-> (:data node-data) (defaults/get-inner-action) (get :target))
+          new-action-data (cond-> defaults/default-action
+                                  (some? current-target) (defaults/update-inner-action {:target current-target}))]
+      {:dispatch [::add-new-phrase-parallel-action new-action-data node-data]})))
+
+(re-frame/reg-event-fx
   ::add-new-phrase-action
   (fn [{:keys [_]} [_ action relative-position node]]
     (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node)
@@ -74,6 +82,14 @@
           new-action-data (cond-> defaults/default-action
                                   (some? current-target) (defaults/update-inner-action {:target current-target}))]
       {:dispatch [::add-new-phrase-action new-action-data relative-position node-data]})))
+
+(re-frame/reg-event-fx
+  ::add-effect-action
+  (fn [{:keys [_]} [_ {:keys [effect node-data relative-position] :or {relative-position :after}}]]
+    (let [effect-action-data (defaults/get-effect-action-data {:action-name effect})]
+      {:dispatch (if (= relative-position :parallel)
+                   [::add-new-phrase-parallel-action effect-action-data node-data]
+                   [::add-new-phrase-action effect-action-data relative-position node-data])})))
 
 (re-frame/reg-event-fx
   ::add-new-phrase-concept-action

@@ -2,38 +2,41 @@ $units-margin: 6px;
 
 .action-unit {
     position: relative;
-    border-radius: 4px;
-    padding: 2px 8px;
     margin: $units-margin 0;
 
-    .targets-menu {
-        display: inline-block;
-    }
+    .phrase-unit {
+        padding: 2px 8px;
+        border-radius: 4px;
 
-    .target-value {
-        display: inline-block;
-        font-weight: bold;
-        margin-right: 8px;
-        cursor: pointer;
-
-        &:hover {
-            text-decoration: underline;
+        &.concept-unit {
+            background-color: rgba(255, 223, 130, 0.25);
         }
 
-        &:after {
-            content: ":";
+        .targets-menu {
+            display: inline-block;
+        }
+
+        .target-value {
+            display: inline-block;
+            font-weight: bold;
+            margin-right: 8px;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &:after {
+                content: ":";
+            }
+        }
+
+        .text {
+            outline: none;
         }
     }
 
-    .text {
-        outline: none;
-    }
-
-    &.concept-unit {
-        background-color: rgba(255, 223, 130, 0.25);
-    }
-
-    &.effect-unit {
+    .effect-unit {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -104,6 +107,17 @@ $units-margin: 6px;
     right: -34px;
     padding: 6px;
 
+    &.menu-placeholder {
+        min-width: 40px;
+        min-height: 100%;
+    }
+
+    &.menu-active {
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
+    }
+
     .remove-button {}
 
     .add-scene-button {
@@ -117,6 +131,41 @@ $units-margin: 6px;
         svg {
             width: 16px;
             height: 16px;
+        }
+    }
+
+    .menu-item-wrapper {
+        position: relative;
+
+        .sub-items {
+            display: none;
+            gap: 4px;
+
+            position: absolute;
+            left: 100%;
+            top: -4px;
+
+            padding: 4px;
+            background-color: #fff;
+            border-radius: 4px;
+            white-space: nowrap;
+
+            &.sub-items-column {
+                flex-direction: column;
+            }
+
+            .effect-button {
+                border: none;
+                font-size: 11px;
+                font-weight: 400;
+                padding: 6px 10px;
+            }
+        }
+
+        &:hover {
+            & > .sub-items {
+                display: flex;
+            }
         }
     }
 }

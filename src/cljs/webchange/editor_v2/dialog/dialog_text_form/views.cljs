@@ -34,6 +34,7 @@
      [:div.work-field
       ^{:key current-concept}
       [:div.sheet
-       (for [{:keys [path] :as action} actions]
+       (for [[idx {:keys [path] :as action}] (map-indexed vector actions)]
          ^{:key path}
-         [action-unit action])]]]))
+         [action-unit (merge action
+                             {:idx idx})])]]]))

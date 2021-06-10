@@ -59,6 +59,11 @@
      :target-node target-node
      :target-path target-path}))
 
+(defn get-available-effects
+  [node]
+  (-> (get-dialog-node-data node)
+      (get-in [:base-action :available-activities] [])))
+
 (defn delete-in-concept-available?
   [node-data]
   (let [{:keys [base-action item-position parent-action]} (get-concept-node-data node-data)

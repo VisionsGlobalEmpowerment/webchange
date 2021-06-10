@@ -15,6 +15,9 @@
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
     [webchange.ui-framework.components.icon.icon-image :as image]
+    [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
+    [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
+    [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
     [webchange.ui-framework.components.icon.icon-link :as link]
     [webchange.ui-framework.components.icon.icon-menu :as menu]
     [webchange.ui-framework.components.icon.icon-menu-vertical :as menu-vertical]
@@ -33,35 +36,38 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def icons
-  {"add"           add/data
-   "add-box"       add-box/data
-   "arrow-left"    arrow-left/data
-   "arrow-right"   arrow-right/data
-   "audio"         audio/data
-   "background"    background/data
-   "bring-to-top"  bring-to-top/data
-   "clear"         clear/data
-   "close"         close/data
-   "drop-place"    drop-place/data
-   "edit"          edit/data
-   "effect"        effect/data
-   "font-family"   font-family/data
-   "font-size"     font-size/data
-   "image"         image/data
-   "link"          link/data
-   "menu"          menu/data
-   "menu-vertical" menu-vertical/data
-   "mic"           mic/data
-   "music"         music/data
-   "music-off"     music-off/data
-   "play"          play/data
-   "remove"        remove/data
-   "settings"      settings/data
-   "stop"          stop/data
-   "sync"          sync/data
-   "undo"          undo/data
-   "volume"        volume/data
-   "warning"       warning/data})
+  {"add"             add/data
+   "add-box"         add-box/data
+   "arrow-left"      arrow-left/data
+   "arrow-right"     arrow-right/data
+   "audio"           audio/data
+   "background"      background/data
+   "bring-to-top"    bring-to-top/data
+   "clear"           clear/data
+   "close"           close/data
+   "drop-place"      drop-place/data
+   "edit"            edit/data
+   "effect"          effect/data
+   "font-family"     font-family/data
+   "font-size"       font-size/data
+   "image"           image/data
+   "insert-after"    insert-after/data
+   "insert-before"   insert-before/data
+   "insert-parallel" insert-parallel/data
+   "link"            link/data
+   "menu"            menu/data
+   "menu-vertical"   menu-vertical/data
+   "mic"             mic/data
+   "music"           music/data
+   "music-off"       music-off/data
+   "play"            play/data
+   "remove"          remove/data
+   "settings"        settings/data
+   "stop"            stop/data
+   "sync"            sync/data
+   "undo"            undo/data
+   "volume"          volume/data
+   "warning"         warning/data})
 
 (defn component
   [{:keys [icon rotate? class-name]}]
