@@ -9,11 +9,6 @@
   [props]
   (contains? props :on-collide))
 
-(defn reset-objects
-  []
-  (logger/trace "reset collisions")
-  (reset! objects {}))
-
 (defn register-object
   [object {:keys [transition-name] :as props}]
   (when (some? transition-name)

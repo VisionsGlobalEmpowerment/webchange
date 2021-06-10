@@ -5,6 +5,18 @@
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]))
 
+(def editor-objects (atom {}))
+
+(defn hide-frames
+  []
+  (doseq [[_name {hide :hide}] @editor-objects]
+    (hide)))
+
+(defn show-frames
+  []
+  (doseq [[_name {show :show}] @editor-objects]
+    (show)))
+
 (defn- object-name->wrapper-name
   [object-name]
   (if-not (nil? object-name)
@@ -21,6 +33,7 @@
 (re-frame/reg-event-fx
   ::register-object
   (fn [{:keys [_]} [_ object-wrapper]]
+    (swap! editor-objects assoc (:name object-wrapper) object-wrapper)
     (let [wrapper-name (object-name->wrapper-name (:name object-wrapper))]
       {:dispatch [::scene/register-object (assoc object-wrapper :name wrapper-name)]})))
 

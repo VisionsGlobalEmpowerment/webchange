@@ -146,6 +146,14 @@
     (-> (core/create-activity-version! activity metadata course-slug scene-slug user-id)
         handle)))
 
+(defn handle-set-activity-preview
+  [course-slug scene-slug data request]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/set-activity-preview! course-slug scene-slug data user-id)
+        handle)))
+
 (defn handle-update-activity
   [course-slug scene-slug data request]
   (let [user-id (current-user request)]
@@ -210,6 +218,7 @@
 (s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})
 (s/defschema CreateActivityVersion {:template-id s/Int s/Keyword s/Any})
 (s/defschema CreateActivityPlaceholder {:name s/Str})
+(s/defschema SetActivityPreview {:preview s/Str})
 (s/defschema Activity {:id s/Int :name s/Str :scene-slug s/Str :course-slug s/Str})
 
 (s/defschema Topic {:name s/Str :strand s/Keyword})
@@ -351,7 +360,13 @@
       :tags ["skill"]
       :return [ActivityWithSkills]
       :summary "Returns list of skills for each scene inside given course"
-      (-> course-slug core/get-course-scene-skills response)))
+      (-> course-slug core/get-course-scene-skills response))
+    (PUT "/:course-slug/scenes/:scene-slug/preview" request
+      :path-params [course-slug :- s/Str scene-slug :- s/Str]
+      :return Activity
+      :body [data SetActivityPreview]
+      :summary "Sets activity preview image url"
+      (handle-set-activity-preview course-slug scene-slug data request)))
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills

@@ -31,7 +31,7 @@
   ::init
   (fn [{:keys [_]} [_ course-slug]]
     {:dispatch-n [[::set-current-course course-slug]
-                  [::warehouse/load-course course-slug]]}))
+                  [::state-course/load-course-data course-slug]]}))
 
 ;; Course slug
 

@@ -148,6 +148,22 @@
                             :test)]
     (is (= edited-value retrieved-value))))
 
+(deftest set-scene-preview
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        edited-value "test-edited"
+        _ (f/save-activity-preview! (:course-slug scene) (:name scene) user-id {:preview edited-value})
+        retrieved-value (-> (f/get-course (:course-slug scene))
+                            :body
+                            slurp
+                            (json/read-str :key-fn keyword)
+                            :scene-list
+                            (get (keyword (:name scene)))
+                            :preview)]
+    (testing "Scene preview can be set"
+      (is (= edited-value retrieved-value)))))
+
 (deftest course-versions-can-be-retrieved
   (let [{user-id :id} (f/website-user-created)
                course (f/course-created {:owner-id user-id})

@@ -90,15 +90,15 @@
 (defn update-course-versions!
   [course-versions]
   (doseq [version course-versions]
-    (let [current-latest (db/get-latest-course-version {:course_id (:course-id version)})
+    (let [current-latest (-> (db/get-latest-course-version {:course_id (:course-id version)})
+                             doall)
           version (-> version
                       (assoc :created-at (jt/local-date-time)))]
-      (when-not (.equals (:data version) (:data current-latest))
+      (when-not (= (:data version) (:data current-latest))
         (-> version
             (#(db/transform-keys-one-level ->snake_case_keyword %))
             (db/save-course!)))))
   (db/reset-course-versions-seq!))
-
 
 (defn update-progress!
   [course-progresses]
@@ -112,9 +112,7 @@
         (assoc :created-at (dt/iso-str2date-time (:created-at event)))
         (assoc :guid (java.util.UUID/fromString (:guid event)))
         (#(db/transform-keys-one-level ->snake_case_keyword %))
-        (db/create-or-update-event!)
-        )
-    ))
+        (db/create-or-update-event!))))
 
 (defn update-dataset!
   [datasets]

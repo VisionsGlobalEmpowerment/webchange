@@ -210,6 +210,13 @@
                      :uri    (str "/api/courses/" course-id "/scenes/" scene-id "/skills")
                      :params {:skills skills-ids}} handlers)))
 
+(re-frame/reg-event-fx
+  ::set-activity-preview
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug preview]} handlers]]
+    (create-request {:key    :set-activity-preview
+                     :method :put
+                     :uri    (str "/api/courses/" course-slug "/scenes/" scene-slug "/preview")
+                     :params {:preview preview}} handlers)))
 ;; Lesson sets
 
 (re-frame/reg-event-fx
