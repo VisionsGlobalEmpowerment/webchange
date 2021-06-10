@@ -12,7 +12,7 @@
 (defn path-to-db
   [relative-path]
   (->> relative-path
-       (concat [:core])
+       (concat [:dialog-text-form])
        (parent-state/path-to-db)))
 
 (re-frame/reg-sub

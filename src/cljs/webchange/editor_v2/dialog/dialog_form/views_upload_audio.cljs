@@ -2,14 +2,16 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
-    [webchange.ui-framework.components.index :refer [file]]))
+    [webchange.ui-framework.components.index :refer [file]]
+    [webchange.ui.utils :refer [deep-merge]]))
 
 (defn upload-audio
-  []
+  [{:keys [input-props]}]
   (let [handle-change #(re-frame/dispatch [::translator-form.audios/upload-audio % {}])]
-    [file {:type            "audio"
-           :on-change       handle-change
-           :show-file-name? false
-           :with-upload?    false
-           :drag-and-drop?  true
-           :button-text     "Choose File"}]))
+    [file (deep-merge {:type            "audio"
+                       :on-change       handle-change
+                       :show-file-name? false
+                       :with-upload?    false
+                       :drag-and-drop?  true
+                       :button-text     "Choose File"}
+                      input-props)]))

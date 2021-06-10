@@ -1,7 +1,8 @@
 (ns webchange.state.warehouse
   (:require
     [re-frame.core :as re-frame]
-    [ajax.core :refer [json-request-format json-response-format]]))
+    [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.config :as config]))
 
 (defn- path-to-db
   [relative-path]
@@ -18,7 +19,7 @@
           form-params))
 
 (defn- create-request
-  [{:keys [method uri body params request-type] :as props} {:keys [on-success on-failure]}]
+  [{:keys [method uri body params request-type] :as props} {:keys [on-success on-failure suppress-api-error?] :or {suppress-api-error? false}}]
   {:dispatch-n (cond-> []
                        (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? true}]))
    :http-xhrio (cond-> {:method          method
@@ -26,8 +27,8 @@
                         :format          (json-request-format)
                         :response-format (json-response-format {:keywords? true})
                         :on-success      [::generic-on-success-handler props on-success]
-                        :on-failure      [::generic-failure-handler props on-failure]}
-                       (some? params) (assoc :params params)
+                        :on-failure      [::generic-failure-handler props on-failure suppress-api-error?]}
+                       (some? params) (assoc (if (= method :get) :url-params :params) params)
                        (some? body) (assoc :body body))})
 
 (re-frame/reg-event-fx
@@ -39,8 +40,9 @@
 
 (re-frame/reg-event-fx
   ::generic-failure-handler
-  (fn [{:keys [_]} [_ {:keys [key request-type]} failure-handler response]]
-    {:dispatch-n (cond-> [[:api-request-error key response]]
+  (fn [{:keys [_]} [_ {:keys [key request-type]} failure-handler suppress-api-error? response]]
+    {:dispatch-n (cond-> []
+                         (not suppress-api-error?) (conj [:api-request-error key response])
                          (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                          (some? failure-handler) (conj (conj failure-handler response)))}))
 
@@ -55,6 +57,33 @@
   ::sync-status
   (fn [db [_ key]]
     (get-in db (conj sync-status-path key))))
+
+;; Poll
+
+(defn- with-poll
+  [event {:keys [timeout attempts] :or {timeout  (if config/debug? 3000 1000)
+                                        attempts (if config/debug? 3 400)}}]
+  (re-frame/dispatch (vec (concat [::poll-attempt] event [{:timeout timeout :attempts (dec attempts)}]))))
+
+(re-frame/reg-event-fx
+  ::poll-attempt
+  (fn [{:keys [_]} [_ event data handlers poll-params]]
+    {:dispatch [event data {:on-success          (:on-success handlers)
+                            :on-failure          [::poll-attempt-failed event data handlers poll-params]
+                            :suppress-api-error? true}]}))
+
+(re-frame/reg-event-fx
+  ::poll-attempt-failed
+  (fn [{:keys [_]} [_ event data handlers {:keys [timeout attempts] :as poll-params}]]
+    (if (= attempts 0)
+      {:dispatch (:on-failure handlers)}
+      {:poll-timeout {:event [::poll-attempt event data handlers (update poll-params :attempts dec)]
+                      :time  timeout}})))
+
+(re-frame.core/reg-fx
+  :poll-timeout
+  (fn [{:keys [event time]}]
+    (js/setTimeout #(re-frame.core/dispatch event) time)))
 
 ;; Templates
 
@@ -251,6 +280,22 @@
     {:dispatch [::upload-file {:file        blob
                                :form-params [["type" "blob"]
                                              ["blob-type" "image"]]} handlers]}))
+
+(re-frame/reg-event-fx
+  ::load-audio-script
+  (fn [{:keys [_]} [_ {:keys [file start duration]} handlers]]
+    (create-request {:key    :load-audio-script
+                     :method :get
+                     :uri    (str "/api/actions/get-subtitles")
+                     :params (cond-> {:file file}
+                                     (some? start) (assoc :start start)
+                                     (some? duration) (assoc :duration duration))}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-audio-script-polled
+  (fn [{:keys [_]} [_ data handlers poll-params]]
+    (with-poll [::load-audio-script data handlers] poll-params)))
 
 (re-frame/reg-event-fx
   ::load-assets

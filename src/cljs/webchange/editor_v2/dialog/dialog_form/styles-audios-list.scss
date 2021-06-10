@@ -1,5 +1,5 @@
 .audios-list {
-    .audios-list-item {
+    & > .audios-list-item {
         background: #fff;
         border-radius: 8px;
         box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);

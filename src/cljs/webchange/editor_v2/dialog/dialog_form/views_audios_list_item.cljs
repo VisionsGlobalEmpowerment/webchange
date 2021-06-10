@@ -26,7 +26,7 @@
         audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
-        on-audio-data-change #(re-frame/dispatch [::translator-form.actions/update-phrase-region-data url])]
+        on-audio-data-change #(re-frame/dispatch [::translator-form.actions/update-phrase-region-data {:audio-url url}])]
     [:div {:on-click   handle-select
            :class-name (get-class-name {"audios-list-item" true
                                         "selected"         selected?})}

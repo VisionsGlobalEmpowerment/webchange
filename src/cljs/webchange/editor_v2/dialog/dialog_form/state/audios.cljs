@@ -1,11 +1,9 @@
 (ns webchange.editor-v2.dialog.dialog-form.state.audios
   (:require
-    [ajax.core :refer [json-response-format]]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-        [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.editor-v2.translator.translator-form.state.audios-utils :refer [get-audio-assets-data
-                                                                               get-form-data]]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.editor-v2.translator.translator-form.state.audios-utils :refer [get-audio-assets-data]]))
 
 ;; Subs
 

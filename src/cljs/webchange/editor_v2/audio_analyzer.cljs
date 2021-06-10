@@ -5,8 +5,7 @@
     [clojure.string :as s]
     [clojure.edn :as edn]
     [webchange.utils.forty-two :as forty-two]
-    [webchange.editor-v2.components.audio-wave-form.state :as state]
-    ))
+    [webchange.editor-v2.components.audio-wave-form.state :as state]))
 
 (defn- next-row
   [previous current other-seq]
@@ -57,7 +56,7 @@
         text-numbers (into {} (map (fn [number] [number (forty-two/words (edn/read-string number))]) numbers))
         numbers-to-search (reduce (fn [result number] (str result "|" number)) numbers)
         text (cond-> (or text "")
-                 true (clojure.string/replace #"[\s]" " ")
+                     true (clojure.string/replace #"[\s]" " ")
                      true (clojure.string/replace #"[^A-Za-z 0-9]" "")
                      true (clojure.string/replace #" +" " ")
                      true (clojure.string/lower-case)
@@ -112,14 +111,14 @@
                              (let [text-to-search (subs text (- text-length analize-string-length) text-length)
                                    candidates-end (get-candidates text-to-search-length data-text text-to-search data-text-length)
                                    ; End should not be far from start
-                                   candidates-end (filter (fn [candidate] (> max-supposed-end (:end candidate)) ) candidates-end)
+                                   candidates-end (filter (fn [candidate] (> max-supposed-end (:end candidate))) candidates-end)
                                    best-candidate (select-best-candidate candidates-end)]
                                ;Check that end fragment found and looks good, if not fallback to default logic
                                (if (and (contains? best-candidate :start)
                                         (contains? best-candidate :end)
                                         (>= (:end best-candidate) (:end best-candidate-start)))
-                                        best-candidate
-                                        (assoc best-candidate-start :end supposed-end))))
+                                 best-candidate
+                                 (assoc best-candidate-start :end supposed-end))))
         final-result (reduce (fn [result item]
                                (if (and (contains? best-candidate-start :start)
                                         (contains? best-candidate-start :end)
@@ -145,9 +144,9 @@
 (defn- pack-talk-data
   [items]
   (map-indexed (fn [_idx item]
-                 {:end      (:end item),
-                  :start    (:start item),
-                  :anim "talk"})
+                 {:end   (:end item),
+                  :start (:start item),
+                  :anim  "talk"})
                items))
 
 (defn get-chunks
@@ -227,7 +226,7 @@
   [text data region]
   (let [items (->> data
                    (filter (fn [item]
-                              (and (<= (:start region) (:start item)) (>= (:end region) (:end item)))))
+                             (and (<= (:start region) (:start item)) (>= (:end region) (:end item)))))
                    (vec))
         prepared-text (-> text (prepare-text) (clojure.string/split " "))]
     (-> (get-chunks prepared-text items)
@@ -254,10 +253,12 @@
     (get-talk-data-for-text text script-data region)))
 
 (defn get-region-data-if-possible
-  [text url]
+  [{:keys [text script]}]
   (if (= 0 (count text))
     {}
-    (let [script-data @(re-frame/subscribe [::state/audio-script-data url])
-          region (get-start-end-for-text text script-data)]
+    (let [region (get-start-end-for-text text script)
+          matched? (contains? region :end)]
       (logger/trace "region-data" region text)
-      region)))
+      (cond-> {:matched? matched?}
+              matched? (assoc :region-data (merge region
+                                                  {:duration (- (:end region) (:start region))}))))))

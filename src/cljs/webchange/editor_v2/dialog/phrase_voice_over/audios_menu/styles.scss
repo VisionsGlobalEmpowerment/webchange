@@ -1,0 +1,112 @@
+.audios-side-menu {
+    & > .add-audio-block {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 6px 0;
+        padding-left: 22px;
+
+        .record-audio-component {
+            min-width: auto;
+
+            button {
+                width: 36px;
+                height: 36px;
+                min-width: auto;
+
+                svg {
+                    height: 15px;
+                    width: 15px;
+                }
+            }
+
+            .info {
+                margin-left: 14px;
+
+                .name {
+                    font-size: 14px;
+                }
+
+                .time {
+                    font-size: 13px;
+                    margin-top: 0px;
+                }
+            }
+        }
+    }
+
+    & > .side-menu-audios-list {
+        & > .audios-list-item {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            padding: 2px 8px;
+
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #ddd;
+            }
+
+            .selected-icon-wrapper {
+                width: 12px;
+                height: 12px;
+
+                .selected-icon {
+                    width: 100%;
+                    height: 100%;
+                    padding: 2px;
+
+                    svg {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+
+            .match-status {
+                .loading {
+                    position: absolute;
+                    top: -16px;
+                }
+
+                .match-icon {
+                    padding: 0;
+                    margin-left: 8px;
+                }
+
+                .matched {
+                    svg {
+                        fill: #2a9802;
+                    }
+                }
+
+                .mismatched {
+                    svg {
+                        fill: #f79a00;
+                    }
+                }
+            }
+
+            .settings-button {
+                display: none;
+                padding: 4px;
+                height: auto;
+                min-width: auto;
+
+                svg {
+                    width: 12px;
+                    height: 12px;
+                }
+            }
+
+            &:hover {
+                .settings-button {
+                    display: none;
+                }
+            }
+        }
+    }
+}

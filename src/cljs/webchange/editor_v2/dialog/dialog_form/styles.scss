@@ -8,7 +8,6 @@
         margin: 0 -20px;
 
         & > * {
-            display: inline-block;
             padding: 20px;
             width: 50%;
 
@@ -37,32 +36,6 @@
 
             .volume-input {
                 flex: 1 1;
-            }
-        }
-
-        .record-audio {
-            display: flex;
-            min-width: 250px;
-
-            .info {
-                justify-content: center;
-                display: flex;
-                flex-direction: column;
-                margin-left: 24px;
-
-                .name {
-                    font-weight: 500;
-                    font-size: 18px;
-                    line-height: 21px;
-                }
-
-                .time {
-                    color: #929292;
-                    font-weight: 500;
-                    font-size: 14px;
-                    line-height: 16px;
-                    margin-top: 6px;
-                }
             }
         }
 

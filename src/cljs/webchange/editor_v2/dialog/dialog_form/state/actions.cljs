@@ -194,11 +194,12 @@
 
 (re-frame/reg-event-fx
   ::set-phrase-dialog-action-audio
-  (fn [{:keys [db]} [_ audio-url]]
+  (fn [{:keys [_]} [_ audio-url]]
     {:dispatch-n (list
                    [::update-dialog-audio-action :phrase {:audio audio-url}]
-                   [::translator-form.actions/update-phrase-region-data audio-url dialog-sub-path true]
-                   )}))
+                   [::translator-form.actions/update-phrase-region-data {:audio-url audio-url
+                                                                         :sub-path  dialog-sub-path
+                                                                         :force?    true}])}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-audio-region
