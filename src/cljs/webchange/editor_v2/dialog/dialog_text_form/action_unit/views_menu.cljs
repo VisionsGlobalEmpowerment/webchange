@@ -8,64 +8,91 @@
     [webchange.ui-framework.components.index :refer [button icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
+(defn- pre-effect [value] (string? value))
+(defn- pre-relative-position [value] (or (nil? value) (some #{value} [:after :before :parallel])))
+(defn- pre-action-data [{:keys [node-data type]}] (and (some #{type} [:effect :concept-phrase :scene-phrase])
+                                                       (some? node-data)))
+
+(defn add-effect-action
+  [{:keys [action-data effect relative-position] :or {relative-position :after}}]
+  {:pre [(pre-action-data action-data)
+         (pre-effect effect)
+         (pre-relative-position relative-position)]}
+  (re-frame/dispatch [::state/add-effect-action (merge action-data
+                                                       {:effect            effect
+                                                        :relative-position relative-position})]))
+
+(defn add-scene-action
+  [{:keys [action-data relative-position] :or {relative-position :after}}]
+  {:pre [(pre-action-data action-data)
+         (pre-relative-position relative-position)]}
+  (re-frame/dispatch [::state/add-scene-action (merge action-data
+                                                      {:relative-position relative-position})]))
+
+(defn add-scene-parallel-action
+  [{:keys [action-data]}]
+  {:pre [(pre-action-data action-data)]}
+  (re-frame/dispatch [::state/add-scene-parallel-action action-data]))
+
+(defn add-concept-action
+  [{:keys [action-data relative-position] :or {relative-position :after}}]
+  {:pre [(pre-action-data action-data)
+         (pre-relative-position relative-position)]}
+  (re-frame/dispatch [::state/add-concept-action (merge action-data
+                                                        {:relative-position relative-position})]))
+
+(defn remove-action
+  [{:keys [action-data]}]
+  {:pre [(pre-action-data action-data)]}
+  (re-frame/dispatch [::state/remove-action action-data]))
+
 (defn- get-phrase-controls
   [{:keys [node-data] :as action-data}]
   (let [show-concepts? @(re-frame/subscribe [::state/show-concepts?])
-        available-effects (get-available-effects node-data)
-
-        remove-action (fn []
-                        (re-frame/dispatch [::state/remove-action action-data]))
-        add-scene-action (fn [{:keys [relative-position] :or {relative-position :after}}]
-                           (re-frame/dispatch [::state/add-scene-action (merge action-data
-                                                                               {:relative-position relative-position})]))
-        add-scene-parallel-action (fn []
-                                    (re-frame/dispatch [::state/add-scene-parallel-action action-data]))
-        add-concept-action (fn [{:keys [relative-position] :or {relative-position :after}}]
-                             (re-frame/dispatch [::state/add-concept-action (merge action-data
-                                                                                   {:relative-position relative-position})]))
-        add-effect-action (fn [{:keys [effect relative-position] :or {relative-position :after}}]
-                            (re-frame/dispatch [::state/add-effect-action (merge action-data
-                                                                                 {:effect            effect
-                                                                                  :relative-position relative-position})]))]
+        available-effects (get-available-effects node-data)]
     (cond-> [;; Remove
              {:control [icon-button {:icon       "remove"
                                      :size       "small"
                                      :title      "Remove action"
                                      :class-name "remove-button"
-                                     :on-click   remove-action}]}
+                                     :on-click   #(remove-action {:action-data action-data})}]}
              ;; Add scene action
              {:control   [icon-button {:icon       "add"
                                        :size       "small"
                                        :title      "Add activity action"
                                        :class-name "add-scene-button"
-                                       :on-click   add-scene-action}]
+                                       :on-click   #(add-scene-action {:action-data action-data})}]
               :sub-items [{:control [icon-button {:icon     "insert-before"
                                                   :size     "small"
                                                   :title    "Before"
-                                                  :on-click #(add-scene-action {:relative-position :before})}]}
+                                                  :on-click #(add-scene-action {:action-data       action-data
+                                                                                :relative-position :before})}]}
                           {:control [icon-button {:icon     "insert-after"
                                                   :size     "small"
                                                   :title    "After"
-                                                  :on-click #(add-scene-action {:relative-position :after})}]}
+                                                  :on-click #(add-scene-action {:action-data       action-data
+                                                                                :relative-position :after})}]}
                           {:control [icon-button {:icon     "insert-parallel"
                                                   :size     "small"
                                                   :title    "Parallel"
-                                                  :on-click add-scene-parallel-action}]}]}]
+                                                  :on-click #(add-scene-parallel-action {:action-data action-data})}]}]}]
             ;; Add concept action
             show-concepts?
             (concat [{:control   [icon-button {:icon       "add-box"
                                                :size       "small"
                                                :title      "Add concept action"
                                                :class-name "add-concept-button"
-                                               :on-click   add-concept-action}]
+                                               :on-click   #(add-concept-action {:action-data action-data})}]
                       :sub-items [{:control [icon-button {:icon     "insert-before"
                                                           :size     "small"
                                                           :title    "Before"
-                                                          :on-click #(add-concept-action {:relative-position :before})}]}
+                                                          :on-click #(add-concept-action {:action-data       action-data
+                                                                                          :relative-position :before})}]}
                                   {:control [icon-button {:icon     "insert-after"
                                                           :size     "small"
                                                           :title    "After"
-                                                          :on-click #(add-concept-action {:relative-position :after})}]}]}])
+                                                          :on-click #(add-concept-action {:action-data       action-data
+                                                                                          :relative-position :after})}]}]}])
 
             ;; Add effects
             (-> available-effects empty? not)
@@ -78,22 +105,26 @@
                                                                        :class-name "effect-button"
                                                                        :color      "default"
                                                                        :variant    "outlined"
-                                                                       :on-click   #(add-effect-action {:effect effect})}
+                                                                       :on-click   #(add-effect-action {:action-data action-data
+                                                                                                        :effect      effect})}
                                                                (get-effect-name effect)]
                                                    :sub-items [{:control [icon-button {:icon     "insert-before"
                                                                                        :size     "small"
                                                                                        :title    "Before"
-                                                                                       :on-click #(add-effect-action {:relative-position :before
+                                                                                       :on-click #(add-effect-action {:action-data       action-data
+                                                                                                                      :relative-position :before
                                                                                                                       :effect            effect})}]}
                                                                {:control [icon-button {:icon     "insert-after"
                                                                                        :size     "small"
                                                                                        :title    "After"
-                                                                                       :on-click #(add-effect-action {:relative-position :after
+                                                                                       :on-click #(add-effect-action {:action-data       action-data
+                                                                                                                      :relative-position :after
                                                                                                                       :effect            effect})}]}
                                                                {:control [icon-button {:icon     "insert-parallel"
                                                                                        :size     "small"
                                                                                        :title    "Parallel"
-                                                                                       :on-click #(add-effect-action {:relative-position :parallel
+                                                                                       :on-click #(add-effect-action {:action-data       action-data
+                                                                                                                      :relative-position :parallel
                                                                                                                       :effect            effect})}]}]})
                                                 available-effects)}]))))
 

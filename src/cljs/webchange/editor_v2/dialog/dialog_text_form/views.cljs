@@ -35,6 +35,6 @@
       ^{:key current-concept}
       [:div.sheet
        (for [[idx {:keys [path] :as action}] (map-indexed vector actions)]
-         ^{:key path}
+         ^{:key (concat [(count actions)] path)}
          [action-unit (merge action
                              {:idx idx})])]]]))
