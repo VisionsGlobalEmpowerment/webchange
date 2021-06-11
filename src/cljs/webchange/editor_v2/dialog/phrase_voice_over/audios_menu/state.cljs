@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.audio-analyzer :refer [get-region-data-if-possible]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
+    [webchange.editor-v2.dialog.phrase-voice-over.state :as state-voice-over]
     [webchange.editor-v2.dialog.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
@@ -14,10 +15,14 @@
        (concat [:audio-menu])
        (parent-state/path-to-db)))
 
+(defn- get-audios-script-match-status
+  [db phrase-action-path]
+  (get-in db (path-to-db [phrase-action-path])))
+
 (re-frame/reg-sub
   ::audios-script-match-status
   (fn [db [_ phrase-action-path]]
-    (get-in db (path-to-db [phrase-action-path]))))
+    (get-audios-script-match-status db phrase-action-path)))
 
 (re-frame/reg-event-fx
   ::set-audio-script-match-status
@@ -67,3 +72,8 @@
                                                                     :data-patch  region-data}]
                       [::set-audio-script-match-status action-path audio-url :matched]]}
         {:dispatch [::set-audio-script-match-status action-path audio-url :mismatched]}))))
+
+(re-frame/reg-event-fx
+  ::open-voice-over-modal
+  (fn [{:keys [_]} [_ action-data]]
+    (re-frame/dispatch [::state-voice-over/open-modal action-data])))

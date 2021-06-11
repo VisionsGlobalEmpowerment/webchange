@@ -33,8 +33,7 @@
 
 (defn create-wavesurfer
   [element key {:keys [height zoom]
-                :or   {height 256
-                       zoom   300}}]
+                :or   {zoom 300}}]
   (while (.-firstChild element) (-> element .-firstChild .remove))
   (let [font-color (get-in-theme [:palette :text :primary])
         script-div (.insertBefore element (js/document.createElement "div") nil)
@@ -42,7 +41,7 @@
         timeline-div (.insertBefore element (js/document.createElement "div") nil)
 
         wavesurfer (.create WaveSurfer (clj->js {:container    ws-div
-                                                 :height       (or height 256)
+                                                 :height       height
                                                  :minPxPerSec  75
                                                  :scrollParent true
                                                  :plugins      [(.create RegionsPlugin (clj->js {:dragSelection false
