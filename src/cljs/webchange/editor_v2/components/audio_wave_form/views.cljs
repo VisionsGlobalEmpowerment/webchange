@@ -19,11 +19,14 @@
 
        :component-did-mount
                      (fn [this]
-                       (let [{:keys [url start end on-change height]} (r/props this)]
+                       (let [{:keys [url start end on-change height script] :or {height 64}} (r/props this)]
                          (reset! ws (create-wavesurfer @element url {:height height}))
                          (reset! region {:start start :end end})
                          (handle-audio-region! @ws region url on-change)
                          (init-audio-region! @ws region true url)
+
+                         (when (some? script)
+                           (update-script! @ws script))
                          (re-frame/dispatch [::state/init-audio-script url])))
 
        :component-did-update

@@ -5,14 +5,13 @@
     [webchange.editor-v2.dialog.components.record-audio.views :refer [record-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-upload-audio :refer [upload-audio]]
     [webchange.editor-v2.dialog.phrase-voice-over.audios-menu.state :as state]
-    [webchange.editor-v2.dialog.phrase-voice-over.state :as state-voice-over]
     [webchange.ui-framework.components.index :refer [circular-progress icon icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- audios-list-item
   [{:keys [action-data alias match-status selected? url]}]
   (let [handle-click #(re-frame/dispatch [::state/audio-selected {:url url :action-data action-data}])
-        handle-settings-click #(re-frame/dispatch [::state-voice-over/open-modal])]
+        handle-settings-click #(re-frame/dispatch [::state/open-voice-over-modal action-data])]
     [:div {:on-click   handle-click
            :class-name (get-class-name {"audios-list-item" true
                                         "selected"         selected?})}
@@ -28,10 +27,11 @@
           :matched [icon {:icon "match" :class-name "match-icon matched"}]
           :mismatched [icon {:icon "mismatch" :class-name "match-icon mismatched"}]
           nil))]
-     [icon-button {:icon       "settings"
-                   :title      "Manual voice-over settings"
-                   :class-name "settings-button"
-                   :on-click   handle-settings-click}]]))
+     (when selected?
+       [icon-button {:icon       "settings"
+                     :title      "Manual voice-over settings"
+                     :class-name "settings-button"
+                     :on-click   handle-settings-click}])]))
 
 (defn- audios-list
   [{:keys [action-data]}]
