@@ -21,7 +21,7 @@
                          (re-frame/dispatch [::assets-events/upload-asset file {:type      "image"
                                                                                 :on-finish set-activity-preview}]))]
       (editor-state/hide-frames)
-      (app/take-screenshot upload-asset {:extract-canvas? false}))))
+      (app/take-screenshot upload-asset {:extract-canvas? false :render? true}))))
 
 (defn create-preview
   []

@@ -82,7 +82,9 @@
 (defn take-screenshot
   ([callback]
    (take-screenshot callback {}))
-  ([callback {:keys [extract-canvas?] :or {extract-canvas? true}}]
+  ([callback {:keys [extract-canvas? render?]  :or {extract-canvas? true render? false}}]
+   (when render?
+     (.render @pixi-app))
    (let [renderer (get-renderer)
          canvas (if extract-canvas?
                   (.canvas (.-extract renderer) (get-stage))
