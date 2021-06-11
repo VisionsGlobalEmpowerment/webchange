@@ -614,6 +614,21 @@
            :scene-slug  scene-slug
            :course-slug course-slug}]))
 
+(defn set-activity-preview!
+  [course-slug scene-slug {:keys [preview]} owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        {scene-id :id} (db/get-scene {:course_id course-id :name scene-slug})
+        {course-data :data} (db/get-latest-course-version {:course_id course-id})
+        created-at (jt/local-date-time)]
+    (db/save-course! {:course_id  course-id
+                      :data       (assoc-in course-data [:scene-list (keyword scene-slug) :preview] preview)
+                      :owner_id   owner-id
+                      :created_at created-at})
+    [true {:id          scene-id
+           :name        (get-in course-data [:scene-list (keyword scene-slug) :name])
+           :scene-slug  scene-slug
+           :course-slug course-slug}]))
+
 (defn- is-placeholder
   [scene-id]
   (let [latest-version (db/get-latest-scene-version {:scene_id scene-id})]

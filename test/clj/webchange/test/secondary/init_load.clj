@@ -59,18 +59,21 @@
 (deftest can-import-course-and-version
   (let [course (f/course-created)
         course-old (db/get-course {:slug (:slug course)})
-        course-version-old (db/get-course-version {:id (:version-id course)})
+        course-version-old (-> (db/get-course-version {:id (:version-id course)})
+                               (dissoc :id)
+                               (dissoc :created-at))
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data dump)
     (let [course-new (db/get-course {:slug (:slug course)})
-          course-version-new (db/get-latest-course-version {:course_id (:id course)})]
-      (assert (= course-old course-new))
-      (assert (= (dissoc course-version-old :id) (dissoc course-version-new :id)))
-      (assert (not (nil? course-old)))
-      (assert (not (nil? course-version-old)))
-      )))
+          course-version-new (-> (db/get-latest-course-version {:course_id (:id course)})
+                                 (dissoc :id)
+                                 (dissoc :created-at))]
+      (is (= course-old course-new))
+      (is (= course-version-old course-version-new))
+      (is (not (nil? course-old)))
+      (is (not (nil? course-version-old))))))
 
 (deftest can-import-course-stats
   (let [course (f/course-created)

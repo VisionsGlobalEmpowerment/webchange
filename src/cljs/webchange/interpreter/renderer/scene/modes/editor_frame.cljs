@@ -41,6 +41,8 @@
 (defn- wrap
   [name sprite]
   {:name     name
+   :hide     (fn [] (aset sprite "visible" false))
+   :show     (fn [] (aset sprite "visible" true))
    :select   (fn [] (aset sprite "tint" frame-selected-color))
    :deselect (fn [] (aset sprite "tint" frame-default-color))})
 

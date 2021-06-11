@@ -33,12 +33,13 @@
                    :set-position            (fn [position]
                                               (utils/set-position container position))
                    :set-src                 (fn [src]
-                                              (resources/load-resource
-                                                src
-                                                (fn [resource]
-                                                  (let [texture (.-texture resource)]
-                                                    (aset sprite-object "texture" texture)
-                                                    (image-utils/set-image-size sprite-object @state)
-                                                    (image-utils/set-image-position sprite-object @state)
-                                                    (image-utils/apply-boundaries container @state)
-                                                    (image-utils/apply-origin container @state)))))}))
+                                              (when src
+                                                (resources/load-resource
+                                                  src
+                                                  (fn [resource]
+                                                    (let [texture (.-texture resource)]
+                                                      (aset sprite-object "texture" texture)
+                                                      (image-utils/set-image-size sprite-object @state)
+                                                      (image-utils/set-image-position sprite-object @state)
+                                                      (image-utils/apply-boundaries container @state)
+                                                      (image-utils/apply-origin container @state))))))}))

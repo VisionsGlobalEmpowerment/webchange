@@ -2,7 +2,6 @@
   (:require
     [webchange.common.events :as ce]
     [re-frame.core :as re-frame]
-    [webchange.interpreter.renderer.scene.app :as app]
     [reagent.core :as r]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.resources.manager :as resources]
