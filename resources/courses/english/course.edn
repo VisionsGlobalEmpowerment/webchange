@@ -295,9 +295,9 @@
    [{:x 1447, :y 860, :name "park", :object "park"}
     {:x 181, :y 419, :name "library", :object "library"}
     {:x 1581, :y 269, :name "stadium", :object "stadium"}
-    {:x 881, :y 490, :name "letter-into-1", :object "home"}
-    {:x 881, :y 490, :name "cinema-new", :object "cinema"}
-    {:x 520, :y 200, :name "recording-summary-1", :object "music-hall"}
+    {:x 881, :y 490, :name "home", :object "home"}
+    {:x 881, :y 490, :name "cinema", :object "cinema"}
+    {:x 520, :y 200, :name "music-hall", :object "music-hall"}
     {:x 1120, :y 190, :name "shopping-mall", :object "shopping-mall"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
@@ -352,11 +352,16 @@
   "magic-hat"
   "pinata"],
  :locations
- {:home [{:level 0, :scene "home"} {:level 1, :scene "letter-intro"}],
+ {:home [{:level 0, :lesson 0 :scene "letter-intro-1"} {:level 1, :scene "letter-intro"}],
+  :running [{:level 0, :scene "running-with-letters"}]
+  :cinema [{:level 0, :scene "cinema-new"}]
+  :magic-hat [{:level 0, :scene "magic-hat-v-2"}]
+  :book [{:level 0, :scene "first-words-book-letter-a"}]
   :cycling [{:level 0, :scene "cycling"} {:level 1, :scene "cycling-letters"}],
-  :sandbox [{:level 0, :scene "sandbox"} {:level 1, :scene "park-poem"}],
-  :volleyball [{:level 0, :scene "volleyball"} {:level 1, :scene "volleyball-letters"}],
-  :painting-tablet [{:level 0, :scene "painting-tablet"} {:level 1, :scene "writing-practice"}]},
+  :sandbox [{:level 0, :scene "alliteration-v-2"} {:level 1, :scene "park-poem"}],
+  :volleyball [{:level 0, :scene "volleyball-v-3"} {:level 1, :scene "volleyball-letters"}],
+  :painting-tablet [{:level 0, :scene "writing-practice"} {:level 1, :scene "writing-practice"}]
+  :music-hall [{:level 0 :lesson 0 :scene "recording-summary-1"}]},
  :levels
  [{:name "Level 1",
    :level 1,
