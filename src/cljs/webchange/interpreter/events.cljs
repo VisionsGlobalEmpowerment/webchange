@@ -29,7 +29,8 @@
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.warehouse :as warehouse]
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.interpreter.subs :as interpreter-subs]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :start-audio-recording ::execute-start-audio-recording)
@@ -535,15 +536,16 @@
       {:dispatch [::ce/execute-sequence-data (merge action {:data data})]})))
 
 (defn resolve-scene-id
-  [location-data {:keys [level]}]
-  (->> location-data
-       (reduce
-         (fn [result item]
-           (if (<= (:level item) level)
-             item
-             result))
-         (first location-data))
-       (:scene)))
+  [location-data {:keys [level lesson]}]
+  (if lesson
+    (->> location-data
+         (filter #(and (<= (:level %) level) (<= (:lesson %) lesson)))
+         (last)
+         (:scene))
+    (->> location-data
+         (filter #(<= (:level %) level))
+         (last)
+         (:scene))))
 
 (re-frame/reg-event-fx
   ::execute-location
@@ -577,7 +579,18 @@
     Example:
     {:type     'scene',
      :scene-id 'map'}"
-    {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))}))
+    (let [next (get-in db [:progress-data :next])
+          location-scene-id (some-> (get-in db [:course-data :locations])
+                                    (get (keyword scene-id))
+                                    (resolve-scene-id next))
+          current-scene (get-in db [:current-scene])
+          scene (get-in db [:course-data :scene-list (keyword current-scene)])
+          exit-scene-id (some->> scene
+                                 :outs
+                                 (filter #(= (:object %) scene-id))
+                                 first
+                                 :name)]
+      {:dispatch-n (list [::set-current-scene (or location-scene-id exit-scene-id scene-id)] (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-scene-exit
@@ -1359,7 +1372,7 @@
   [db]
   (let [next-activity (next-activity-name db)
         current-scene (get-in db [:current-scene])
-        scene-list (get-in db [:course-data :scene-list])]
+        scene-list (interpreter-subs/navigation-scene-list db)]
     (->> (find-path current-scene next-activity scene-list)
          (drop 1)
          (take-last 3)
@@ -1369,7 +1382,7 @@
   [db]
   (let [next-activity (next-activity-name db)
         current-scene (get-in db [:current-scene])
-        scene-list (get-in db [:course-data :scene-list])]
+        scene-list (interpreter-subs/navigation-scene-list db)]
     (find-exit-position current-scene next-activity scene-list)))
 
 (re-frame/reg-event-fx

@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.utils.find-exit :refer [find-path]]
     [webchange.subs :as subs]
+    [webchange.interpreter.subs :as interpreter-subs]
     [webchange.student-dashboard.subs :as student-dashboard-subs]))
 
 (defn- lock-object [o]
@@ -25,13 +26,18 @@
     activities))
 
 (defn with-navigation-params [scene-id object-name o]
-  (if (some? scene-id)
-    (let [navigation-mode @(re-frame/subscribe [::subs/navigation-mode])
-          activity-names (if (= navigation-mode :lesson) (get-lesson-based-open-activity-names) (get-activity-based-open-activity))
-          scene-list @(re-frame/subscribe [::subs/scene-list])
-          all-activities (set (flatten (map #(find-path scene-id % scene-list) activity-names)))
-          outs (set (flatten (map #(:name %) (:outs ((keyword scene-id) scene-list)))))]
-      (if (contains? outs object-name)
-        (if (contains? all-activities object-name) o (lock-object o))
-        o))
-    o))
+  (let [scene-list @(re-frame/subscribe [::interpreter-subs/navigation-scene-list])
+        navigation-mode @(re-frame/subscribe [::subs/navigation-mode])
+        scene-outs (->> scene-id keyword (get scene-list) :outs)
+        out-objects (-> (map :object scene-outs) set)
+        is-out? (contains? out-objects object-name)
+        out-names (->> scene-outs
+                       (filter #(= object-name (:object %)))
+                       (map :name)
+                       set)
+        activity-names (if (= navigation-mode :lesson) (get-lesson-based-open-activity-names) (get-activity-based-open-activity))
+        all-activities (set (flatten (map #(find-path scene-id % scene-list) activity-names)))
+        is-locked? (empty? (clojure.set/intersection out-names all-activities))]
+    (if (and is-out? is-locked?)
+      (lock-object o)
+      o)))

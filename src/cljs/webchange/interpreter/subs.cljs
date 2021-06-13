@@ -19,6 +19,73 @@
   (fn [[datasets] [_ dataset-id]]
     (some (fn [{:keys [id] :as dataset}] (and (= id dataset-id) dataset)) datasets)))
 
+(defn- has-out?
+  "Check if scene data from scene-list has out with given object name"
+  [scene-data object-key]
+  (->> scene-data
+       :outs
+       (some #(= (name object-key) (:object %)))))
+
+(defn- with-locations
+  "Return scene data from scene-list with updated outs"
+  [scene-data locations]
+  (let [location->out (fn [object-key location] {:object (name object-key) :name (:scene location)})]
+    (reduce (fn [scene-data [object-key lx]]
+              (if (has-out? scene-data object-key)
+                (update scene-data :outs concat (map #(location->out object-key %) lx))
+                scene-data))
+            scene-data
+            locations)))
+
+(defn navigation-scene-list
+  "Returns scene list with updated outs for navigation.
+  Outs are updated according to next activity."
+  [db]
+  (let [locations (get-in db [:course-data :locations])]
+    (->> (get-in db [:course-data :scene-list])
+         (filter #(-> % second :outs))
+         (map (fn [[scene-id data]] [scene-id (with-locations data locations)]))
+         (into {}))))
+
+(comment
+  (let [db @re-frame.db/app-db
+        locations (get-in db [:course-data :locations])]
+    (->> (get-in db [:course-data :scene-list])
+         (filter #(-> % second :outs))
+         (map (fn [[scene-id data]] [scene-id (with-locations data locations)]))
+         ))
+
+  (let [db @re-frame.db/app-db
+        data (-> (get-in db [:course-data :scene-list])
+                 :map)]
+    (has-out? data :cycling))
+
+  (let [db @re-frame.db/app-db
+        data (-> (get-in db [:course-data :scene-list])
+                 :map)]
+    (->> data
+         :outs
+         (some #(= :cycling (:object %)))))
+
+  (let [db @re-frame.db/app-db
+        locations (get-in db [:course-data :locations])
+        data (-> (get-in db [:course-data :scene-list])
+                 :map)
+        location->out (fn [name location] {:object name :name (:scene location)})]
+    (reduce (fn [scene-data [name lx]]
+              (println name lx)
+              (if (has-out? scene-data name)
+                #_(update scene-data concat (map #(location->out name %) lx))
+                scene-data
+                scene-data))
+            data
+            locations)))
+
+(re-frame/reg-sub
+  ::navigation-scene-list
+  (fn [db]
+    (navigation-scene-list db)))
+
 (re-frame/reg-sub
   ::course-scenes
   (fn [db]
@@ -103,3 +170,4 @@
     [(re-frame/subscribe [::dataset-items])])
   (fn [[dataset-items] [_ dataset-item-id]]
     (get dataset-items dataset-item-id)))
+
