@@ -12,7 +12,8 @@
                          :font-size      "40pt"
                          :font-family    "Roboto"
                          :user-select    "none"
-                         :text-transform "uppercase"}
+                         :text-transform "uppercase"
+                         :margin-bottom  "20px"}
    :student-access-form {:background-image "url(/images/dashboard/bg_02.jpg)"
                          :height           "100%"
                          :display          "flex"
@@ -39,7 +40,20 @@
                          :display        "inline-block"
                          :font-size      "40pt"
                          :line-height    "23px"}
-   :num-pad             {:width "400px"}})
+   :num-pad             {:width          "400px"}
+  :bckspc-div           {:margin-left    "86px"
+                         :display        "flex"
+                         :align-items    "center"
+                         :justify-content "space-between"}
+   :bckspc-btn          {:background     "#fff"
+                         :border-radius  "40px"
+                         :margin-left    "10px"
+                         :height         "78px"
+                         :width          "78px"
+                         :padding        "18px 0px 0px 18px"
+                         :cursor         "pointer"}
+   :bckspc-img          {:width          "40px"
+                         :height         "40px"}})
 
 (defn teacher-login
   [& args]
@@ -92,7 +106,8 @@
   (r/with-let [code (r/atom "")]
               (let [loading @(re-frame/subscribe [:loading])
                     errors @(re-frame/subscribe [:errors])
-                    styles (get-styles)]
+                    styles (get-styles)
+                    img-src "/icons/backspace.svg"]
                 (cond
                   (:init-current-school loading) [ui/circular-progress]
                   (:student-login loading) [ui/circular-progress]
@@ -106,8 +121,15 @@
                       [ui/chip {:color "secondary"
                                 :label (-> errors :student-login :form)}])]
 
-                   [:div
-                    [code-form @code]]
+                   ;;  Back Button
+                   [:div {:style (:bckspc-div styles)}
+                    [code-form @code]
+                    [:div {:style (:bckspc-btn styles)
+                           :onClick (fn [e]
+                                      (.preventDefault e)
+                                      (reset! code (subs @code 0 (- (count @code) 1))))}
+                     [:img {:style (:bckspc-img styles)
+                            :src img-src}]]]
 
                    [:div {:style (:num-pad styles)}
                     [ui/grid {:container     true
