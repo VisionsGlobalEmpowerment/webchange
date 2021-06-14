@@ -6,7 +6,7 @@
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.icon.index :as icon]
-    [webchange.ui-framework.components.text-input.index :as text-input]
+    [webchange.ui-framework.components.input.index :as input]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- get-accept-extensions
@@ -120,7 +120,7 @@
      (when show-input?
        [:div {:class-name "file-name-wrapper"
               :on-click   #(when-not disabled? (.click @file-input))}
-        [text-input/component {:value      (if @uploading? "Uploading..." @text-value)
+        [input/component {:value      (if @uploading? "Uploading..." @text-value)
                                :class-name "file-name"
                                :disabled?  true}]])
 

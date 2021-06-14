@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.game-changer.steps.select-character.state :as state]
-    [webchange.ui-framework.components.index :refer [icon-button text-input]]))
+    [webchange.ui-framework.components.index :refer [icon-button input]]))
 
 (defn- character-name
   [{:keys [name on-change]}]
@@ -14,10 +14,10 @@
                                     (on-change new-value))
                handle-esc-press #(reset! edit-mode? false)]
     (if @edit-mode?
-      [text-input {:default-value  name
-                   :on-enter-press handle-enter-press
-                   :on-esc-press   handle-esc-press
-                   :class-name     "edit-name"}]
+      [input {:default-value  name
+              :on-enter-press handle-enter-press
+              :on-esc-press   handle-esc-press
+              :class-name     "edit-name"}]
       [:div {:class-name "title"
              :on-click   handle-title-click}
        name])))

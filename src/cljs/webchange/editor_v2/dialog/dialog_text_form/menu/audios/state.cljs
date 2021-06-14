@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.dialog.phrase-voice-over.audios-menu.state
+(ns webchange.editor-v2.dialog.dialog-text-form.menu.audios.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.audio-analyzer :refer [get-region-data-if-possible]]
@@ -47,7 +47,7 @@
   ::audio-selected
   (fn [{:keys []} [_ {:keys [action-data url]}]]
     (let [phrase-text (-> (get-in action-data [:node-data :data]) (get-inner-action) (get :phrase-text ""))
-          action-type (get action-data :type)
+          action-type (get action-data :source)
           action-path (get action-data :path)]
       {:dispatch-n [[::state-actions/update-inner-action-by-path {:action-path action-path
                                                                   :action-type action-type

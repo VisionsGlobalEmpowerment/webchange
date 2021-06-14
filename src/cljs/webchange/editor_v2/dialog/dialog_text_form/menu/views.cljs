@@ -1,51 +1,53 @@
-(ns webchange.editor-v2.dialog.dialog-text-form.action-unit.views-menu
+(ns webchange.editor-v2.dialog.dialog-text-form.menu.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.utils :refer [get-effect-name]]
+    [webchange.editor-v2.dialog.dialog-text-form.menu.audios.views :refer [audios-menu]]
+    [webchange.editor-v2.dialog.dialog-text-form.menu.views-delay :refer [delay-menu]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
+    [webchange.editor-v2.dialog.dialog-text-form.state-actions :as state-actions]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :refer [get-available-effects]]
-    [webchange.editor-v2.dialog.phrase-voice-over.audios-menu.views :refer [audios-menu]]
     [webchange.ui-framework.components.index :refer [button icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- pre-effect [value] (string? value))
 (defn- pre-relative-position [value] (or (nil? value) (some #{value} [:after :before :parallel])))
-(defn- pre-action-data [{:keys [node-data type]}] (and (some #{type} [:effect :concept-phrase :scene-phrase])
-                                                       (some? node-data)))
+(defn- pre-action-data [{:keys [node-data source]}] (and (some #{source} [:concept :scene])
+                                                         (some? node-data)))
 
 (defn add-effect-action
   [{:keys [action-data effect relative-position] :or {relative-position :after}}]
   {:pre [(pre-action-data action-data)
          (pre-effect effect)
          (pre-relative-position relative-position)]}
-  (re-frame/dispatch [::state/add-effect-action (merge action-data
-                                                       {:effect            effect
-                                                        :relative-position relative-position})]))
+  (re-frame/dispatch [::state-actions/add-effect-action (merge action-data
+                                                               {:effect            effect
+                                                                :relative-position relative-position})]))
 
 (defn add-scene-action
   [{:keys [action-data relative-position] :or {relative-position :after}}]
   {:pre [(pre-action-data action-data)
          (pre-relative-position relative-position)]}
-  (re-frame/dispatch [::state/add-scene-action (merge action-data
-                                                      {:relative-position relative-position})]))
+  (re-frame/dispatch [::state-actions/add-scene-action (merge action-data
+                                                              {:relative-position relative-position})]))
 
 (defn add-scene-parallel-action
   [{:keys [action-data]}]
   {:pre [(pre-action-data action-data)]}
-  (re-frame/dispatch [::state/add-scene-parallel-action action-data]))
+  (re-frame/dispatch [::state-actions/add-scene-parallel-action action-data]))
 
 (defn add-concept-action
   [{:keys [action-data relative-position] :or {relative-position :after}}]
   {:pre [(pre-action-data action-data)
          (pre-relative-position relative-position)]}
-  (re-frame/dispatch [::state/add-concept-action (merge action-data
-                                                        {:relative-position relative-position})]))
+  (re-frame/dispatch [::state-actions/add-concept-action (merge action-data
+                                                                {:relative-position relative-position})]))
 
 (defn remove-action
   [{:keys [action-data]}]
   {:pre [(pre-action-data action-data)]}
-  (re-frame/dispatch [::state/remove-action action-data]))
+  (re-frame/dispatch [::state-actions/remove-action action-data]))
 
 (defn- get-controls
   [{:keys [type node-data] :as action-data}]
@@ -128,11 +130,16 @@
                                                                                                                       :relative-position :parallel
                                                                                                                       :effect            effect})}]}]})
                                                 available-effects)}])
-            (some #{type} [:concept-phrase :scene-phrase])
+            (= type :phrase)
             (concat [{:control   [icon-button {:icon  "mic"
                                                :size  "small"
                                                :title "Voice-over"}]
-                      :sub-items [{:control [audios-menu {:action-data action-data}]}]}]))))
+                      :sub-items [{:control [audios-menu {:action-data action-data}]}]}])
+            (= type :effect)
+            (concat [{:control   [icon-button {:icon  "delay"
+                                               :size  "small"
+                                               :title "Delay"}]
+                      :sub-items [{:control [delay-menu {:action-data action-data}]}]}]))))
 
 ;; Render
 

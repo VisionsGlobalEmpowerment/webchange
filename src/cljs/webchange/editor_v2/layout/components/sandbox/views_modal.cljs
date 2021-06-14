@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.components.sandbox.state :as state]
     [webchange.editor-v2.layout.components.sandbox.state-modal :as state-modal]
-    [webchange.ui-framework.components.index :refer [button dialog icon-button select text-input]]))
+    [webchange.ui-framework.components.index :refer [button dialog icon-button select input]]))
 
 (defn- select-lesson-set-form
   [{:keys [name]}]
@@ -51,9 +51,9 @@
     [:div.share-form
      [select-lesson-sets-form]
      [:div.link-row
-      [text-input {:value       link
-                   :disabled?   true
-                   :placeholder "Fill form above to get share link"}]]]))
+      [input {:value       link
+              :disabled?   true
+              :placeholder "Fill form above to get share link"}]]]))
 
 (defn- copy-link-button
   []

@@ -145,25 +145,39 @@
             {:dispatch-n (list [::update-scene-action base-path data-patch])}))))))
 
 (re-frame/reg-event-fx
-  ::update-inner-action-by-path
+  ::update-action-by-path
   (fn [{:keys [_]} [_ {:keys [action-path action-type data-patch]}]]
-    {:dispatch [(cond
-                  (= action-type :concept-phrase) ::translator-form.concepts/update-current-concept
-                  (= action-type :scene-phrase) ::translator-form.scene/update-action)
+    {:dispatch [(case action-type
+                  :concept ::translator-form.concepts/update-current-concept
+                  :scene ::translator-form.scene/update-action)
                 action-path
                 data-patch]}))
+
+(re-frame/reg-event-fx
+  ::update-empty-action-by-path
+  (fn [{:keys [_]} [_ {:keys [action-path action-type data-patch]}]]
+    {:dispatch [::update-action-by-path {:action-path (concat action-path defaults/empty-action-path)
+                                         :action-type action-type
+                                         :data-patch  data-patch}]}))
+
+(re-frame/reg-event-fx
+  ::update-inner-action-by-path
+  (fn [{:keys [_]} [_ {:keys [action-path action-type data-patch]}]]
+    {:dispatch [::update-action-by-path {:action-path (concat action-path defaults/inner-action-path)
+                                         :action-type action-type
+                                         :data-patch  data-patch}]}))
 
 (re-frame/reg-event-fx
   ::update-inner-action
   (fn [{:keys [db]} [_ data-patch position]]
     (let [{:keys [path type]} (translator-form.actions/current-phrase-action-info db)
           action-path (concat (au/node-path->action-path path) [:data position])]
-      {:dispatch [::update-inner-action-by-path {:action-path action-path
-                                                 :action-type (cond
-                                                                (= type :concept-action) :concept-phrase
-                                                                (= type :scene-action) :scene-phrase
-                                                                :else type)
-                                                 :data-patch  data-patch}]})))
+      {:dispatch [::update-action-by-path {:action-path action-path
+                                           :action-type (cond
+                                                          (= type :concept-action) :concept
+                                                          (= type :scene-action) :scene
+                                                          :else type)
+                                           :data-patch  data-patch}]})))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-offset
@@ -180,8 +194,6 @@
    (get-action-path-data db target-action dialog-sub-path))
   ([db target-action sub-path]
    (translator-form.actions/get-action-path-data db target-action sub-path)))
-
-
 
 (re-frame/reg-event-fx
   ::update-dialog-audio-action
