@@ -1,14 +1,5 @@
 {:assets
-                [{:url "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3", :size 2, :type "audio", :alias "lion - 1"}
-                 {:url "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3", :size 2, :type "audio", :alias "lion - 2"}
-                 {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio", :alias "librarian books intro"}
-                 {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio", :alias "vera books intro"}
-                 {:url    "/upload/JIYLCZMSNOSYYKMI.mp3",
-                  :date   1588347058413,
-                  :size   4787,
-                  :type   "audio",
-                  :alias  "Lion_Aaron",
-                  :target "box1"}
+                [{:url "/raw/audio/background/POL-daily-special-short.mp3", :size 2, :type "audio", :alias "background"}
                  {:url "/raw/img/library/main/background.jpg", :size 10, :type "image"}
                  {:url "/raw/img/library/main/Books_Enabled.png", :size 1, :type "image"}
                  {:url "/raw/img/library/main/Easel_Enabled.png", :size 1, :type "image"}
@@ -17,38 +8,12 @@
  :objects
                 {:background {:type "background", :brightness -0.2, :filter "brighten", :src "/raw/img/library/main/background.jpg"},
                  :book
-                             {:type       "image",
-                              :x          1292,
-                              :y          681,
-                              :width      163,
-                              :height     106,
-                              :transition "book",
-                              :actions    {:click {:id "start-book-scene", :on "click", :type "action"}},
-                              :filter     "brighten",
-                              :highlight  true,
-                              :src        "/raw/img/library/main/Books_Enabled.png"},
-                 :writing-lesson
-                             {:type       "image",
-                              :x          791,
-                              :y          319,
-                              :width      287,
-                              :height     430,
-                              :transition "writing-lesson",
-                              :actions    {:click {:on "click", :type "scene", :scene-id "writing-lesson"}},
-                              :filter     "brighten",
-                              :highlight  true,
-                              :src        "/raw/img/library/main/Easel_Enabled.png"},
-                 :magic-hat
-                             {:type       "image",
-                              :x          1635,
-                              :y          535,
-                              :width      227,
-                              :height     228,
-                              :transition "magic-hat",
-                              :actions    {:click {:on "click", :type "scene", :scene-id "magic-hat"}},
-                              :filter     "brighten",
-                              :highlight  true,
-                              :src        "/raw/img/library/main/Hat_Enabled.png"},
+                             {:type      "image",
+                              :x         1292,
+                              :y         681,
+                              :actions   {:click {:on "click", :type "scene", :scene-id "book"}},
+                              :highlight true,
+                              :src       "/raw/img/library/main/Books_Enabled.png"},
                  :librarian
                              {:type       "animation",
                               :x          451,
@@ -62,17 +27,20 @@
                               :skin       "lion",
                               :speed      0.3,
                               :start      true},
+                 :magic-hat
+                             {:type      "image",
+                              :x         1635,
+                              :y         535,
+                              :actions   {:click {:on "click", :type "scene", :scene-id "magic-hat"}},
+                              :highlight true,
+                              :src       "/raw/img/library/main/Hat_Enabled.png"},
                  :painting-tablet
-                             {:type       "image",
-                              :x          926,
-                              :y          657,
-                              :width      224,
-                              :height     155,
-                              :transition "painting-tablet",
-                              :actions    {:click {:on "click", :type "location", :location-id "painting-tablet"}},
-                              :filter     "brighten",
-                              :highlight  true,
-                              :src        "/raw/img/library/main/Tablet_Enabled.png"},
+                             {:type      "image",
+                              :x         926,
+                              :y         657,
+                              :actions   {:click {:on "click", :type "location", :location-id "painting-tablet"}},
+                              :highlight true,
+                              :src       "/raw/img/library/main/Tablet_Enabled.png"},
                  :vera
                              {:type   "animation",
                               :x      725,
@@ -83,10 +51,15 @@
                               :anim   "idle",
                               :name   "vera",
                               :speed  0.3,
-                              :start  true}},
+                              :start  true},
+                 :writing-lesson
+                             {:type      "image",
+                              :x         791,
+                              :y         319,
+                              :actions   {:click {:on "click", :type "scene", :scene-id "writing-lesson"}},
+                              :highlight true,
+                              :src       "/raw/img/library/main/Easel_Enabled.png"}},
  :scene-objects [["background" "book" "writing-lesson" "magic-hat" "painting-tablet"] ["librarian" "vera"]],
- :actions       {:start-background-music {:type "audio", :id "background", :loop true},
-                 :start-book-scene       {:type "scene", :scene-id "book"}},
+ :actions       {:start-background-music {:type "audio", :id "/raw/audio/background/POL-daily-special-short.mp3", :loop true}},
  :triggers      {:music {:on "start", :action "start-background-music"}},
- :metadata      {:prev "map", :autostart true},
- :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"}}
+ :metadata      {:prev "map", :autostart true},}

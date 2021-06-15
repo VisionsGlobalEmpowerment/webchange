@@ -2,10 +2,14 @@
   (:require
     [reagent.core :as r]))
 
+(def empty-position {:x 0 :y 0})
 (def mouse-position-data (r/atom {:x 0 :y 0}))
 
 (defn get-mouse-position []
   @mouse-position-data)
+
+(defn position-empty? []
+  (= empty-position @mouse-position-data))
 
 (defn- on-drag-start
   [event]
@@ -29,7 +33,7 @@
   (this-as this
     (when (and (.-dragging this) (.-on-drag-end-handler this))
       ((.-on-drag-end-handler this)))
-    (reset! mouse-position-data {:x (.-x 0) :y (.-y 0)})
+    (reset! mouse-position-data empty-position)
     (set! (.-data this) nil)
     (set! (.-alpha this) 1)
     (set! (.-dragging this) false)))

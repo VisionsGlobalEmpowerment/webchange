@@ -6,23 +6,22 @@
     [webchange.interpreter.renderer.scene.filters.filters :as f]
     [webchange.resources.manager :as resources]))
 
-
 (defn wrap
   [type name container sprite-object state]
   (create-wrapper {:name                    name
                    :type                    type
                    :object                  container
                    :set-highlight           (fn [highlight]
-                                              (let [highlight-filter-set (f/has-filter-by-name sprite-object "glow")]
+                                              (let [highlight-filter-set (f/has-filter-by-name container "glow")]
                                                 (when (and (not highlight) highlight-filter-set)
-                                                  (f/set-filter sprite-object "" {}))
+                                                  (f/set-filter container "" {}))
                                                 (when (and highlight (not highlight-filter-set))
-                                                  (f/set-filter sprite-object "glow" {}))))
+                                                  (f/set-filter container "glow" {}))))
                    :set-permanent-pulsation (fn [permanent-pulsation]
-                                              (let [pulsation-filter-set (f/has-filter-by-name sprite-object "pulsation")]
-                                                (if (and (not permanent-pulsation) pulsation-filter-set) (f/set-filter sprite-object "" {}))
+                                              (let [pulsation-filter-set (f/has-filter-by-name container "pulsation")]
+                                                (if (and (not permanent-pulsation) pulsation-filter-set) (f/set-filter container "" {}))
                                                 (if (and permanent-pulsation (not pulsation-filter-set))
-                                                  (f/set-filter sprite-object "pulsation" (assoc permanent-pulsation :no-interval true))))
+                                                  (f/set-filter container "pulsation" (assoc permanent-pulsation :no-interval true))))
                                               )
                    :set-on-click-handler    #(utils/set-handler sprite-object "click" %)
                    :set-draggable           (fn [draggable]
