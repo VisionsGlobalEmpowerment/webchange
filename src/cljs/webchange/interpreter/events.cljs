@@ -1556,26 +1556,29 @@
      :success     'highlight',
      :fail        'unhighlight',
      :transition ['transition-1' 'transition-2' 'transition-3']}]}"
-    (let [get-transition-wrapper #(->> % keyword (scene/get-scene-object db))
-          actions (->> transitions
-                       (map-indexed (fn [idx transition]
-                                      (let [{:keys [object get-object-data set-object-data]} (get-transition-wrapper transition)
-                                            data (get-object-data)
-                                            collide? (get data :collide?)
-                                            params (merge (get action-params idx) {:transition transition} (:params action))]
-                                        (if (i/collide-with-coords? object (dg/get-mouse-position))
-                                          (let [data-collide (merge data {:collide? true})]
-                                            (when (not collide?)
-                                              (set-object-data data-collide)
-                                              (when success
-                                                [::ce/execute-action (assoc (vars.events/cond-action db action :success) :params params)])))
-                                          (let [data-collide (merge data {:collide? false})]
-                                            (when (or collide? (nil? collide?))
-                                              (set-object-data data-collide)
-                                              (when fail
-                                                [::ce/execute-action (assoc (vars.events/cond-action db action :fail) :params params)])))))))
-                       (remove nil?))]
-      {:dispatch-n (vec (conj actions (ce/success-event action)))})))
+    (if (dg/position-empty?)
+      {:dispatch (ce/success-event action)}
+      (let [get-transition-wrapper #(->> % keyword (scene/get-scene-object db))
+            pointer-position (dg/get-mouse-position)
+            actions (->> transitions
+                         (map-indexed (fn [idx transition]
+                                        (let [{:keys [object get-object-data set-object-data]} (get-transition-wrapper transition)
+                                              data (get-object-data)
+                                              collide? (get data :collide?)
+                                              params (merge (get action-params idx) {:transition transition} (:params action))]
+                                          (if (i/collide-with-coords? object pointer-position)
+                                            (let [data-collide (merge data {:collide? true})]
+                                              (when (not collide?)
+                                                (set-object-data data-collide)
+                                                (when success
+                                                  [::ce/execute-action (assoc (vars.events/cond-action db action :success) :params params)])))
+                                            (let [data-collide (merge data {:collide? false})]
+                                              (when (or collide? (nil? collide?))
+                                                (set-object-data data-collide)
+                                                (when fail
+                                                  [::ce/execute-action (assoc (vars.events/cond-action db action :fail) :params params)])))))))
+                         (remove nil?))]
+        {:dispatch-n (vec (conj actions (ce/success-event action)))}))))
 
 (re-frame/reg-event-fx
   ::execute-set-text
