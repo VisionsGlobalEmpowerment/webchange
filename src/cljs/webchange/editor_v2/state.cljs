@@ -4,7 +4,9 @@
 
 (defn path-to-db
   [relative-path]
-  (concat [:editor-v2] relative-path))
+  (->> relative-path
+       (concat [:editor-v2])
+       (vec)))
 
 ;; Diagram state
 

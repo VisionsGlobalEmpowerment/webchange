@@ -236,18 +236,24 @@
 
                         }
 
-        :triggers
-                       {:back  {:on "back", :action "stop-activity"},
+        :triggers      {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "init-activity"}},
-        :metadata      {
-                        :tracks [{:title "Track left"
+        :metadata      {:tracks [{:id    "main"
+                                  :title "Main Track"
+                                  :nodes [{:type      "dialog"
+                                           :action-id "intro"}
+                                          {:type       "track"
+                                           :track-link "left-track"}
+                                          {:type       "track"
+                                           :track-link "right-track"}
+                                          {:type      "dialog"
+                                           :action-id "finish-dialog"}]}
+                                 {:id    "left-track"
+                                  :title "Track left"
                                   :nodes []}
-                                 {:title "Track right"
-                                  :nodes []}
-                                 ]
-
-                        }}
-  )
+                                 {:id    "right-track"
+                                  :title "Track right"
+                                  :nodes []}]}})
 
 (defn park-ball-position
   [side balls-number]

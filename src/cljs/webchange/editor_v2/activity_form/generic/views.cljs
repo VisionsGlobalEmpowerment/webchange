@@ -12,7 +12,9 @@
     [webchange.editor-v2.scene-diagram.views-diagram :refer [dialogs-diagram]]
 
     [webchange.editor-v2.activity-form.generic.components.object-selector.views :refer [object-selector]]
-    [webchange.editor-v2.activity-form.generic.components.select-stage.views :refer [select-stage]]))
+    [webchange.editor-v2.activity-form.generic.components.select-stage.views :refer [select-stage]]
+    [webchange.editor-v2.components.activity-tracks.views :refer [activity-tracks]]
+    [webchange.ui-framework.components.index :refer [icon-button]]))
 
 (defn- asset-block
   [{:keys [activity-type]}]
@@ -23,7 +25,8 @@
 
 (defn activity-form
   [{:keys [scene-data]}]
-  (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])]
+  (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])
+               show-new-diagram? (r/atom true)]
     (let [activity-type (get-activity-type scene-data)]
       [layout
        [:div.generic-editor
@@ -31,6 +34,12 @@
          [interpreter-stage {:class-name "generic-interpreter"}]
          [actions {:scene-data scene-data}]]
         [asset-block {:activity-type activity-type}]
-        [dialogs-diagram {:class-name "generic-diagram"
-                          :scene-data scene-data}]]
+        [:div.swap-diagram-mode
+         [icon-button {:icon     "swap"
+                       :title    "Change Diagram Mode"
+                       :on-click #(swap! show-new-diagram? not)}]]
+        (if @show-new-diagram?
+          [activity-tracks {:class-name "generic-diagram"}]
+          [dialogs-diagram {:class-name "generic-diagram"
+                            :scene-data scene-data}])]
        [progress-panel]])))

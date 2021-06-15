@@ -100,7 +100,7 @@
   [scene-data]
   (get scene-data :actions {}))
 
-(defn- get-action
+(defn get-action
   [scene-data action-name]
   (->> (get-scene-actions scene-data)
        (some (fn [[name data]]
@@ -154,9 +154,23 @@
 
 (defn get-template-name
   [scene-data]
-  (-> scene-data
-      (get-metadata)
+  (-> (get-metadata scene-data)
       (get :template-name)))
+
+(defn get-tracks
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :tracks)))
+
+(defn get-track
+  [scene-data track-id]
+  (->> (get-tracks scene-data)
+       (some (fn [{:keys [id] :as track}]
+               (and (= id track-id) track)))))
+
+(defn get-main-track
+  [scene-data]
+  (get-track scene-data "main"))
 
 ; General
 
