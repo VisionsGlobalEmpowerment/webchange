@@ -1,9 +1,8 @@
 (ns webchange.editor-v2.dialog.dialog-text-form.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
-    [webchange.editor-v2.dialog.dialog-form.state.common :as state-actions-common]
     [webchange.editor-v2.dialog.dialog-text-form.prepare-phrase-actions :refer [prepare-phrase-actions]]
+    [webchange.editor-v2.dialog.dialog-text-form.state-actions :as state-actions]
     [webchange.editor-v2.dialog.state :as parent-state]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
@@ -84,47 +83,6 @@
   ::set-phrase-action-target
   (fn [{:keys [_]} [_ action-path action-type target]]
     {:dispatch-n [[::set-current-target action-path target]
-                  [::state-actions/update-inner-action-by-path {:action-path action-path
-                                                                :action-type action-type
-                                                                :data-patch  {:target target}}]]}))
-
-;; Text
-
-(re-frame/reg-event-fx
-  ::set-phrase-action-text
-  (fn [{:keys [_]} [_ action-path action-type text]]
-    {:dispatch [::state-actions/update-inner-action-by-path {:action-path action-path
-                                                             :action-type action-type
-                                                             :data-patch  {:phrase-text text}}]}))
-
-;; Actions
-
-(re-frame/reg-event-fx
-  ::remove-action
-  (fn [{:keys [_]} [_ {:keys [node-data type]}]]
-    {:dispatch [::state-actions-common/remove-action {:concept-action? (= type :concept-phrase)
-                                                      :node-data       node-data}]}))
-
-(re-frame/reg-event-fx
-  ::add-scene-action
-  (fn [{:keys [_]} [_ {:keys [node-data relative-position]}]]
-    {:dispatch [::state-actions/add-new-empty-phrase-action {:node-data         node-data
-                                                             :relative-position relative-position}]}))
-
-(re-frame/reg-event-fx
-  ::add-scene-parallel-action
-  (fn [{:keys [_]} [_ {:keys [node-data]}]]
-    {:dispatch [::state-actions/add-new-empty-phrase-parallel-action {:node-data node-data}]}))
-
-(re-frame/reg-event-fx
-  ::add-concept-action
-  (fn [{:keys [_]} [_ {:keys [node-data relative-position]}]]
-    {:dispatch [::state-actions/add-new-empty-phrase-concept-action {:node-data         node-data
-                                                                     :relative-position relative-position}]}))
-
-(re-frame/reg-event-fx
-  ::add-effect-action
-  (fn [{:keys [_]} [_ {:keys [effect node-data relative-position]}]]
-    {:dispatch [::state-actions/add-effect-action {:node-data         node-data
-                                                   :effect            effect
-                                                   :relative-position relative-position}]}))
+                  [::state-actions/set-phrase-target {:action-path action-path
+                                                      :action-type action-type
+                                                      :value       target}]]}))

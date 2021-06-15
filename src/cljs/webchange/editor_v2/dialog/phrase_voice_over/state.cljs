@@ -82,7 +82,7 @@
 (re-frame/reg-event-fx
   ::update-audio-region
   (fn [{:keys [db]} [_ region-data]]
-    (let [{:keys [path type]} (get-current-phrase-action-data db)]
+    (let [{:keys [path source]} (get-current-phrase-action-data db)]
       {:dispatch [::state-actions/update-inner-action-by-path {:action-path path
-                                                               :action-type type
+                                                               :action-type source
                                                                :data-patch  region-data}]})))

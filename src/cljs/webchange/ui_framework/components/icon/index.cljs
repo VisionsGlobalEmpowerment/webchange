@@ -10,6 +10,7 @@
     [webchange.ui-framework.components.icon.icon-check :as check]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
+    [webchange.ui-framework.components.icon.icon-delay :as delay]
     [webchange.ui-framework.components.icon.icon-drop-place :as drop-place]
     [webchange.ui-framework.components.icon.icon-edit :as edit]
     [webchange.ui-framework.components.icon.icon-effect :as effect]
@@ -49,6 +50,7 @@
    "check"           check/data
    "clear"           clear/data
    "close"           close/data
+   "delay"           delay/data
    "drop-place"      drop-place/data
    "edit"            edit/data
    "effect"          effect/data

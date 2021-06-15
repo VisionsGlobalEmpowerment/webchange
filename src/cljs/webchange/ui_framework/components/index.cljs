@@ -10,6 +10,7 @@
     [webchange.ui-framework.components.file.index :as file]
     [webchange.ui-framework.components.icon.index :as icon]
     [webchange.ui-framework.components.icon-button.index :as icon-button]
+    [webchange.ui-framework.components.input.index :as input]
     [webchange.ui-framework.components.label.index :as label]
     [webchange.ui-framework.components.range-input.index :as range-input]
     [webchange.ui-framework.components.menu.index :as menu]
@@ -19,7 +20,6 @@
     [webchange.ui-framework.components.select-image.index :as select-image]
     [webchange.ui-framework.components.switcher.index :as switcher]
     [webchange.ui-framework.components.text-area.index :as text-area]
-    [webchange.ui-framework.components.text-input.index :as text-input]
     [webchange.ui-framework.components.timeline.index :as timeline]
     [webchange.ui-framework.components.tooltip.index :as tooltip]))
 
@@ -32,6 +32,7 @@
 (def file file/component)
 (def icon icon/component)
 (def icon-button icon-button/component)
+(def input input/component)
 (def label label/component)
 (def menu menu/component)
 (def message message/component)
@@ -40,7 +41,6 @@
 (def select-image select-image/component)
 (def switcher switcher/component)
 (def text-area text-area/component)
-(def text-input text-input/component)
 (def timeline timeline/component)
 (def tooltip tooltip/component)
 (def with-confirmation confirm/with-confirmation)

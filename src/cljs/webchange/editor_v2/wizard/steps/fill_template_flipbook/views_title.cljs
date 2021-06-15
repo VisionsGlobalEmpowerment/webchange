@@ -3,7 +3,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-control-row :refer [control-row]]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
-    [webchange.ui-framework.components.index :refer [text-input]]))
+    [webchange.ui-framework.components.index :refer [input]]))
 
 (def validation-map {:root [(fn [value] (when (empty? value) "Required field"))]})
 
@@ -14,7 +14,7 @@
     [:div
      [control-row {:label         "Title"
                    :error-message [error-message {:field-name :root}]
-                   :control       [text-input {:value     @data
-                                               :on-change #(reset! data %)}]}]]
+                   :control       [input {:value     @data
+                                          :on-change #(reset! data %)}]}]]
     (finally
       (destroy))))

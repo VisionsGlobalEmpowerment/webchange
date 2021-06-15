@@ -2,7 +2,7 @@
   (:require
     [reagent.core :as r]
     [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
-    [webchange.ui-framework.components.index :refer [button chip text-input]]))
+    [webchange.ui-framework.components.index :refer [button chip input]]))
 
 (defn audio-data
   [{:keys [target]}]
@@ -18,9 +18,9 @@
      [audio-target-selector {:value                    (or (:target @current-data) "")
                              :on-change                #(swap! current-data assoc :target %)
                              :custom-option-available? true}]
-     [text-input {:value       (or (:alias @current-data) "")
-                  :placeholder "File Name"
-                  :on-change   #(swap! current-data assoc :alias %)}]
+     [input {:value       (or (:alias @current-data) "")
+             :placeholder "File Name"
+             :on-change   #(swap! current-data assoc :alias %)}]
      [button {:shape    "rectangle"
               :variant  "outlined"
               :on-click on-cancel}

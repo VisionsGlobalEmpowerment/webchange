@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.dialog.dialog-text-form.prepare-phrase-actions
   (:require
-    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action inner-action-path]]
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action]]
     [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes get-node-data]]))
 
 (defn- set-parallel-marks
@@ -33,41 +33,34 @@
                                             :node-path       node-path})}))
        actions))
 
-(defn- get-inner-action-data
-  [actions]
-  (map (fn [{:keys [action-data action-path] :as action}]
-         (-> action
-             (assoc :action-data (get-inner-action action-data))
-             (assoc :action-path (concat action-path inner-action-path))))
-       actions))
-
 (defn set-action-type
   [actions {:keys [available-effects]}]
-  {:post [(every? (fn [{:keys [type]}] (some #{type} [:effect :concept-phrase :scene-phrase])) %)]}
+  {:post [(every? (fn [{:keys [type]}] (some #{type} [:effect :phrase])) %)
+          (every? (fn [{:keys [source]}] (some #{source} [:concept :scene])) %)]}
   (map (fn [{:keys [action-data concept-acton?] :as data}]
-         (assoc data :type (cond
-                             (some #{(:id action-data)} available-effects) :effect
-                             concept-acton? :concept-phrase
-                             :else :scene-phrase)))
+         (-> data
+             (assoc :type (if (some #{(-> action-data (get-inner-action) (get :id))} available-effects)
+                            :effect
+                            :phrase))
+             (assoc :source (if concept-acton? :concept :scene))))
        actions))
 
 (defn- get-component-data
   [actions {:keys [concept-data]}]
-  (map (fn [{:keys [type action-data action-path node-data parallel-mark]}]
-         (let [one-of (partial some #{type})
-
-               character (:target action-data)
-               concept-name (:name concept-data)
-               effect (:id action-data)
-               text (:phrase-text action-data)]
+  (map (fn [{:keys [type source action-data action-path node-data parallel-mark]}]
+         (let [concept-name (:name concept-data)
+               {:keys [duration]} (get-empty-action action-data)
+               {:keys [id phrase-text target]} (get-inner-action action-data)]
            (cond-> {:type          type
+                    :source        source
+                    :delay         duration
                     :path          action-path
                     :node-data     node-data
                     :parallel-mark parallel-mark}
-                   (one-of [:scene-phrase :concept-phrase]) (merge {:character character
-                                                                    :text      text})
-                   (one-of [:concept-phrase]) (merge {:concept-name concept-name})
-                   (one-of [:effect]) (merge {:effect effect}))))
+                   (= type :phrase) (merge {:character target
+                                            :text      phrase-text})
+                   (= type :effect) (merge {:effect id})
+                   (= source :concept) (merge {:concept-name concept-name}))))
        actions))
 
 (defn prepare-phrase-actions
@@ -76,6 +69,5 @@
       (set-parallel-marks)
       (set-action-data {:concept-data concept-data
                         :scene-data   scene-data})
-      (get-inner-action-data)
       (set-action-type {:available-effects available-effects})
       (get-component-data {:concept-data concept-data})))

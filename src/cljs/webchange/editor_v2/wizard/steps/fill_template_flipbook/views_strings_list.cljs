@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.wizard.steps.fill-template-flipbook.views-strings-list
   (:require
     [webchange.editor-v2.wizard.steps.fill-template-flipbook.views-control-row :refer [control-row]]
-    [webchange.ui-framework.components.index :refer [button icon-button text-input]]
+    [webchange.ui-framework.components.index :refer [button icon-button input]]
     [webchange.utils.list :refer [remove-at-position replace-at-position]]))
 
 (defn strings-list
@@ -21,8 +21,8 @@
                             :error-message (when (= idx 0) error-message)
                             :control       [:div.controls-container
                                             [:div.input-container
-                                             [text-input {:value     value
-                                                          :on-change #(handle-input-change idx %)}]
+                                             [input {:value     value
+                                                     :on-change #(handle-input-change idx %)}]
                                              [icon-button {:icon       "remove"
                                                            :class-name "remove-button"
                                                            :on-click   #(handle-remove-click idx)}]]
