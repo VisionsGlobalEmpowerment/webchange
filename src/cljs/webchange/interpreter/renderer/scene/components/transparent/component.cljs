@@ -2,7 +2,8 @@
   (:require
     [webchange.interpreter.pixi :refer [Container Sprite Texture]]
     [webchange.interpreter.renderer.scene.components.transparent.wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.logger.index :as logger]))
 
 (def default-props {:x        {}
                     :y        {}
@@ -52,7 +53,9 @@
 
     (when on-click (utils/set-handler container "click" on-click))
     (when on-pointerdown (utils/set-handler container "pointerdown" on-pointerdown))
-    (when on-pointerover (utils/set-handler container "pointerover" on-pointerover))
+    (when on-pointerover (utils/set-handler container "pointermove"
+                                            #(when (and (.-target %) (= (name object-name) (.. % -target -name)))
+                                                                       (on-pointerover))))
     (when ref (ref wrapped-container))
 
     (.addChild container sprite)
