@@ -52,7 +52,8 @@
 (defn- get-controls
   [{:keys [type node-data] :as action-data}]
   (let [show-concepts? @(re-frame/subscribe [::state/show-concepts?])
-        available-effects (get-available-effects node-data)]
+        scene-available-actions @(re-frame/subscribe [::state/scene-available-actions])
+        available-effects (concat (get-available-effects node-data) scene-available-actions)]
     (cond-> [;; Remove
              {:control [icon-button {:icon       "remove"
                                      :size       "small"

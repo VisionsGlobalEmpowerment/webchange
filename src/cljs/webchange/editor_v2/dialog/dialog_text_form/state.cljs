@@ -14,6 +14,12 @@
        (concat [:dialog-text-form])
        (parent-state/path-to-db)))
 
+(defn- scene-available-actions
+  [scene-data]
+  (as-> scene-data x
+        (get-in x [:metadata :available-actions])
+        (map :action x)))
+
 (re-frame/reg-sub
   ::phrase-actions
   (fn []
@@ -22,10 +28,18 @@
      (re-frame/subscribe [::translator-form.concepts/current-concept])
      (re-frame/subscribe [::translator-form.scene/scene-data])])
   (fn [[current-dialog-action {:keys [available-activities]} current-concept scene-data]]
-    (prepare-phrase-actions {:dialog-action-path (:path current-dialog-action)
-                             :concept-data       current-concept
-                             :scene-data         scene-data
-                             :available-effects  available-activities})))
+    (let [available-actions (concat available-activities (scene-available-actions scene-data))]
+      (prepare-phrase-actions {:dialog-action-path (:path current-dialog-action)
+                               :concept-data       current-concept
+                               :scene-data         scene-data
+                               :available-effects  available-actions}))))
+
+(re-frame/reg-sub
+  ::scene-available-actions
+  (fn []
+    [(re-frame/subscribe [::translator-form.scene/scene-data])])
+  (fn [[scene-data]]
+    (scene-available-actions scene-data)))
 
 ;; Concepts
 
