@@ -4,6 +4,7 @@
     [webchange.editor-v2.activity-form.generic.components.background-music.views :as background-music]
     [webchange.editor-v2.activity-form.generic.components.change-background.views-background :as background]
     [webchange.editor-v2.activity-form.generic.components.activity-preview.state :as activity-preview]
+    [webchange.editor-v2.activity-form.generic.components.add-image.views :as add-image]
     [webchange.ui-framework.components.index :refer [menu]]))
 
 (defn actions
@@ -13,6 +14,7 @@
      [activity-action/activity-action-modal]
      [background/change-background-window]
      [background-music/set-music-window]
+     [add-image/add-image-window]
      [menu {:icon  "vertical"
             :items (concat activity-actions
                            [{:icon     "background"
@@ -28,4 +30,7 @@
                             {:icon ""
                              :text "Create preview image"
                              :confirm "Are you sure you want to update activity preview image?"
-                             :on-click activity-preview/create-preview}])}]]))
+                             :on-click activity-preview/create-preview}
+                            {:icon     ""
+                             :text     "Add image"
+                             :on-click add-image/open-add-image-window}])}]]))
