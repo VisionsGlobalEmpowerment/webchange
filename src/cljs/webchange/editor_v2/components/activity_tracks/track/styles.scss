@@ -1,6 +1,6 @@
 .track {
     display: flex;
-    height: 100px;
+    min-height: 100px;
     padding: 16px 8px;
     gap: 16px;
     overflow: auto;
@@ -44,6 +44,22 @@
             font-family: monospace;
             color: rgba(0, 0, 0, 0.2);
             text-align: right;
+        }
+
+        &.type-prompt {
+            background-color: #e3e3e3;
+
+            & > .title {
+                color: #7b7b7e;
+            }
+        }
+
+        &.type-dialog {
+            background-color: #6bc784;
+        }
+
+        &.type-track {
+            background-color: #b7e7ee;
         }
     }
 }

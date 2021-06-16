@@ -4,12 +4,13 @@
 
 (defn- track-node
   [{:keys [node on-click]}]
-  (let [{:keys [selected? title type]} node
+  (let [{:keys [selected? text title type]} node
         handle-click (fn [] (on-click node))]
-    [:div (cond-> {:class-name (get-class-name {"track-node" true
-                                                "selected"   selected?})}
+    [:div (cond-> {:class-name (get-class-name (-> {"track-node" true
+                                                    "selected"   selected?}
+                                                   (assoc (str "type-" type) true)))}
                   (fn? on-click) (assoc :on-click handle-click))
-     [:div.title title]
+     [:div.title (or title text)]
      [:div.type type]]))
 
 (defn track
