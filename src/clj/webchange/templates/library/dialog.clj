@@ -7,6 +7,7 @@
         :name        "dialog"
         :tags        ["Direct Instruction - Educational Video"]
         :description "Simple dialog"
+        :props       {:game-changer? true}
         :options     {:characters {:label "Characters"
                                    :type  "characters"
                                    :max   3}}})
