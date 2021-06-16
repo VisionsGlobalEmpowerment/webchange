@@ -86,6 +86,7 @@
                    drop-last
                    (concat [last-layer]))]
     (-> scene-data
+        (update-in [:assets] concat [{:url (:src image) :type "image" :size 1}])
         (assoc-in [:objects (keyword object-name)] image-object)
         (assoc-in [:scene-objects] layers)
         (assoc-in [:actions (keyword show-action-name)] show-action)

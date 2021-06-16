@@ -93,18 +93,15 @@
                  (or (some? action)
                      (some? text-name))) (add-text-animation-action new-page-position content-data page-data))))
 
-(defn- add-pages-to-book
-  [activity-data content-data pages-data]
-  (if (sequential? pages-data)
-    (reduce (fn [activity-data page-data]
-              (add-page-to-book activity-data content-data page-data))
-            activity-data
-            pages-data)
-    (add-page-to-book activity-data content-data pages-data)))
-
 (defn add-page
   ([activity-data page-constructor page-params]
    (add-page activity-data page-constructor page-params {}))
   ([activity-data page-constructor page-params content-data]
-   (->> (page-constructor page-params content-data)
-        (add-pages-to-book activity-data content-data))))
+   (let [next-page-id (-> activity-data
+                          (get-in [:metadata :next-page-id] 0)
+                          inc)
+         content-data (assoc content-data :next-page-id next-page-id)
+         page-data (page-constructor page-params content-data)]
+     (-> activity-data
+         (add-page-to-book content-data page-data)
+         (assoc-in [:metadata :next-page-id] next-page-id)))))

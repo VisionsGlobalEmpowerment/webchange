@@ -244,24 +244,26 @@
 
 (defn- add-page-action
   [activity-data {:keys [type page-layout spread-layout image text]}]
-  (let [[constructor layout] (case type
-                               "page" [custom-page/create (keyword page-layout)]
-                               "spread" [custom-spread/create (keyword spread-layout)])
-        add-flip-node-to-sequence? (-> (get-in activity-data [:objects :book :pages] []) count even?)
-        add-show? (not (get-in activity-data [:metadata :flipbook-pages :visible]))]
-    (cond-> activity-data
-            add-show? (add-show-to-sequence)
-            add-flip-node-to-sequence? (add-flip-page)
-            :always (add-page
-                      constructor
-                      page-params
-                      {:page-type                layout
-                       :image-src                (:src image)
-                       :text                     text
-                       :with-action?             true
-                       :with-page-number?        true
-                       :shift-from-end           1
-                       :on-text-animation-action add-read-page-to-sequence}))))
+  (let [constructors (case type
+                       "page" (custom-page/constructors (keyword page-layout))
+                       "spread" (custom-spread/constructors (keyword spread-layout)))]
+    (reduce (fn [activity-data constructor]
+              (let [add-flip-node-to-sequence? (-> (get-in activity-data [:objects :book :pages] []) count even?)
+                    add-show? (not (get-in activity-data [:metadata :flipbook-pages :visible]))]
+                (cond-> activity-data
+                        add-show? (add-show-to-sequence)
+                        add-flip-node-to-sequence? (add-flip-page)
+                        :always (add-page
+                                  constructor
+                                  page-params
+                                  {:image-src                (:src image)
+                                   :text                     text
+                                   :with-action?             true
+                                   :with-page-number?        true
+                                   :shift-from-end           1
+                                   :on-text-animation-action add-read-page-to-sequence}))))
+            activity-data
+            constructors)))
 
 (defn- apply-page-size
   [activity-data {:keys [width height padding background-color]}]

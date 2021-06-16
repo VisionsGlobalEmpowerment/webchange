@@ -132,18 +132,16 @@
 
 (defn add-page-handler
   [activity-data {:keys [type page-layout spread-layout image text]}]
-  (let [[constructor layout] (case type
-                               "page" [custom-page/create (keyword page-layout)]
-                               "spread" [custom-spread/create (keyword spread-layout)])]
-    (-> activity-data
-        (add-page
-          constructor
-          page-params
-          {:page-type      layout
-           :image-src      (:src image)
-           :text           text
-           :with-action?   true
-           :shift-from-end 1}))))
+  (let [constructors (case type
+                       "page" (custom-page/constructors (keyword page-layout))
+                       "spread" (custom-spread/constructors (keyword spread-layout)))]
+    (reduce (fn [activity-data constructor]
+              (add-page activity-data constructor page-params {:image-src      (:src image)
+                                                               :text           text
+                                                               :with-action?   true
+                                                               :shift-from-end 1}))
+            activity-data
+            constructors)))
 
 (defn update-activity
   [activity-data {action-name :action-name :as props}]
