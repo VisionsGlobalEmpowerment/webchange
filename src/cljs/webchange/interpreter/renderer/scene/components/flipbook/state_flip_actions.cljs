@@ -3,7 +3,8 @@
     ["gsap/umd/TweenMax" :refer [TweenMax]]
     [re-frame.core :as re-frame]
     [webchange.interpreter.pixi :refer [Graphics]]
-    [webchange.interpreter.renderer.scene.components.utils :as components-utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as components-utils]
+    [webchange.interpreter.renderer.state.scene :as scene]))
 
 (defn- interpolate
   [{:keys [from to duration on-progress on-end]
@@ -59,9 +60,11 @@
 (defn- get-container
   [db transition-id]
   (let [scene-id (:current-scene db)
-        transition (get-in db [:transitions scene-id transition-id])]
+        transition (or
+                     (some-> db (get-in [:transitions scene-id transition-id]) deref)
+                     (scene/get-scene-object db (keyword transition-id)))]
     (when (some? transition)
-      (:object @transition))))
+      (:object transition))))
 
 (defn- spread-names->containers
   [db {:keys [left right]}]
