@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.components.activity-tracks.state
   (:require
+    [clojure.set :refer [difference]]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.state :as parent-state]
     [webchange.editor-v2.events :as events]
@@ -61,9 +62,9 @@
     [(re-frame/subscribe [::subs/current-scene-data])
      (re-frame/subscribe [::second-track-data])])
   (fn [[scene-data second-track-data]]
-    (let [main-track (or (utils/get-main-track scene-data)
-                         (generate-main-track scene-data))]
-      (meta-track->track-nodes main-track scene-data second-track-data))))
+    (-> (or (utils/get-main-track scene-data)
+            (generate-main-track scene-data))
+        (meta-track->track-nodes scene-data second-track-data))))
 
 ;; Second track
 
@@ -98,6 +99,34 @@
     (when (some? second-track-data)
       (-> (get-track-by-data scene-data second-track-data)
           (meta-track->track-nodes scene-data)))))
+
+;; Untracked Actions
+
+(defn- collect-untracked-actions
+  [scene-data]
+  (let [all-actions (->> (utils/get-dialog-actions scene-data)
+                         (map clojure.core/name))
+        tracked-actions (->> (utils/get-tracks scene-data)
+                             (map :nodes)
+                             (flatten)
+                             (filter #(= (:type %) "dialog"))
+                             (map :action-id))]
+    (->> (difference (set all-actions)
+                     (set tracked-actions))
+         (vec))))
+
+(re-frame/reg-sub
+  ::untracked-actions
+  (fn []
+    (re-frame/subscribe [::subs/current-scene-data]))
+  (fn [scene-data]
+    (let [untracked-actions (collect-untracked-actions scene-data)]
+      (when-not (empty? untracked-actions)
+        (-> {:nodes (map (fn [action-name]
+                           {:type      "dialog"
+                            :action-id action-name})
+                         untracked-actions)}
+            (meta-track->track-nodes scene-data))))))
 
 ;; Actions
 

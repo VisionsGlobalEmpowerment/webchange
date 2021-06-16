@@ -96,6 +96,10 @@
 
 ; Actions
 
+(defn- dialog-action?
+  [action-data]
+  (contains? action-data :phrase))
+
 (defn- get-scene-actions
   [scene-data]
   (get scene-data :actions {}))
@@ -106,6 +110,12 @@
        (some (fn [[name data]]
                (and (= name action-name)
                     data)))))
+
+(defn get-dialog-actions
+  [scene-data]
+  (->> (get-scene-actions scene-data)
+       (filter (fn [[_ action-data]] (dialog-action? action-data)))
+       (map first)))
 
 (defn- add-action
   [scene-data action-name action-data]
@@ -122,6 +132,8 @@
                        [action-name actions-data])))
               (into {})))
        (update scene-data :actions)))
+
+
 
 ; Triggers
 
