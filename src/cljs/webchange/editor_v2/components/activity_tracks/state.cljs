@@ -12,69 +12,91 @@
        (concat [:activity-tracks])
        (parent-state/path-to-db)))
 
+(defn- equal
+  [value1 value2]
+  (and (some? value1)
+       (some? value2)
+       (= value1 value2)))
+
+(defn- get-track-by-data
+  [scene-data track-data]
+  (or (utils/get-track-by-id scene-data (:id track-data))
+      (utils/get-track-by-index scene-data (:idx track-data))))
+
+;; ---
+
 (defn- meta-track->track-nodes
   ([track scene-data]
    (meta-track->track-nodes track scene-data nil))
-  ([track scene-data second-track-name]
+  ([track scene-data second-track-data]
    (->> (get track :nodes [])
-        (map (fn [{:keys [track-link type] :as node}]
+        (map (fn [{:keys [track-id track-idx type] :as node}]
                (case type
                  "dialog" (let [action-name (-> node :action-id keyword)
                                 action (utils/get-action scene-data action-name)]
                             (-> node
                                 (assoc :action-path [action-name])
                                 (assoc :title (or (:phrase-description action) (:phrase action)))))
-                 "track" (assoc node :selected? (= track-link second-track-name))
+                 "track" (-> node
+                             (assoc :selected? (or (equal track-id (:id second-track-data))
+                                                   (equal track-idx (:idx second-track-data))))
+                             (assoc :title (-> (get-track-by-data scene-data {:id track-id :idx track-idx})
+                                               (get :title "Untitled Track"))))
                  node))))))
 
 ;; Main track
+
+(defn- generate-main-track
+  [scene-data]
+  {:title "Main Track"
+   :nodes (->> (utils/get-tracks scene-data)
+               (map-indexed (fn [idx _]
+                              {:type      "track"
+                               :track-idx idx}))
+               (vec))})
 
 (re-frame/reg-sub
   ::main-track
   (fn []
     [(re-frame/subscribe [::subs/current-scene-data])
-     (re-frame/subscribe [::second-track-name])])
-  (fn [[scene-data second-track-name]]
-    (-> (utils/get-main-track scene-data)
-        (meta-track->track-nodes scene-data second-track-name))))
+     (re-frame/subscribe [::second-track-data])])
+  (fn [[scene-data second-track-data]]
+    (let [main-track (or (utils/get-main-track scene-data)
+                         (generate-main-track scene-data))]
+      (meta-track->track-nodes main-track scene-data second-track-data))))
 
 ;; Second track
 
-(def second-track-name-path (path-to-db [:second-track-name]))
+(def second-track-data-path (path-to-db [:second-track-name]))
 
 (re-frame/reg-sub
-  ::second-track-name
+  ::second-track-data
   (fn [db]
-    (get-in db second-track-name-path)))
+    (get-in db second-track-data-path)))
 
 (re-frame/reg-sub
   ::second-track-display-name
   (fn []
     [(re-frame/subscribe [::subs/current-scene-data])
-     (re-frame/subscribe [::second-track-name])])
-  (fn [[scene-data second-track-name]]
-    (when (some? second-track-name)
-      (-> (utils/get-track scene-data second-track-name)
+     (re-frame/subscribe [::second-track-data])])
+  (fn [[scene-data second-track-data]]
+    (when (some? second-track-data)
+      (-> (get-track-by-data scene-data second-track-data)
           (get :title "Untitled track")))))
 
 (re-frame/reg-event-fx
-  ::set-second-track-name
+  ::set-second-track-data
   (fn [{:keys [db]} [_ track-name]]
-    {:db (assoc-in db second-track-name-path track-name)}))
-
-(re-frame/reg-event-fx
-  ::reset-second-track-name
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::set-second-track-name nil]}))
+    {:db (assoc-in db second-track-data-path track-name)}))
 
 (re-frame/reg-sub
   ::second-track
   (fn []
     [(re-frame/subscribe [::subs/current-scene-data])
-     (re-frame/subscribe [::second-track-name])])
-  (fn [[scene-data second-track-name]]
-    (when (some? second-track-name)
-      (-> (utils/get-track scene-data second-track-name)
+     (re-frame/subscribe [::second-track-data])])
+  (fn [[scene-data second-track-data]]
+    (when (some? second-track-data)
+      (-> (get-track-by-data scene-data second-track-data)
           (meta-track->track-nodes scene-data)))))
 
 ;; Actions

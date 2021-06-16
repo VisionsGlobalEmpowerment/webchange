@@ -6,10 +6,10 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- node-click-handler
-  [{:keys [action-path track-link type]}]
+  [{:keys [action-path track-id track-idx type]}]
   (case type
     "dialog" (re-frame/dispatch [::state/open-dialog-window action-path])
-    "track" (re-frame/dispatch [::state/set-second-track-name track-link])))
+    "track" (re-frame/dispatch [::state/set-second-track-data {:id track-id :idx track-idx}])))
 
 (defn activity-tracks
   [{:keys [class-name]}]

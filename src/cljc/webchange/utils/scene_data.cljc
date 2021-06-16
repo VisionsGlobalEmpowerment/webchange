@@ -162,15 +162,22 @@
   (-> (get-metadata scene-data)
       (get :tracks)))
 
-(defn get-track
+(defn get-track-by-id
   [scene-data track-id]
-  (->> (get-tracks scene-data)
-       (some (fn [{:keys [id] :as track}]
-               (and (= id track-id) track)))))
+  (when (some? track-id)
+    (->> (get-tracks scene-data)
+         (some (fn [{:keys [id] :as track}]
+                 (and (= id track-id) track))))))
+
+(defn get-track-by-index
+  [scene-data track-index]
+  (when (some? track-index)
+    (-> (get-tracks scene-data)
+        (nth track-index))))
 
 (defn get-main-track
   [scene-data]
-  (get-track scene-data "main"))
+  (get-track-by-id scene-data "main"))
 
 ; General
 

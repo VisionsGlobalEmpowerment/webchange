@@ -242,10 +242,10 @@
                                   :title "Main Track"
                                   :nodes [{:type      "dialog"
                                            :action-id "intro"}
-                                          {:type       "track"
-                                           :track-link "left-track"}
-                                          {:type       "track"
-                                           :track-link "right-track"}
+                                          {:type     "track"
+                                           :track-id "left-track"}
+                                          {:type     "track"
+                                           :track-id "right-track"}
                                           {:type      "dialog"
                                            :action-id "finish-dialog"}]}
                                  {:id    "left-track"
