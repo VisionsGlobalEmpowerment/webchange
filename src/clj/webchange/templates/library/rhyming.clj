@@ -21,27 +21,24 @@
                       :preview          "/images/templates/previews/rhyming.png"
                       :preview-activity {:course-slug   "q-q-nzvzixrf"
                                          :activity-slug "q"}}
-        :actions     {
-                      :add-ball    {:title   "Add ball",
-                                    :options {
-                                              :side {:label   "Correct ball side"
-                                                     :type    "lookup"
-                                                     :options [{:name "Left" :value "left"}
-                                                               {:name "Right" :value "right"}]}
-                                              :text {:label       "Name"
-                                                     :placeholder "Place your word here"
-                                                     :type        "string"}
-                                              :img  {:label   "Dialog"
-                                                     :type    "image"
-                                                     :options {:max-width  50
-                                                               :max-height 50
-                                                               :min-height 20
-                                                               :min-width  20}}
-                                              }}
-                      :remove-ball {:title   "Remove ball",
+        :actions     {:add-ball    {:title    "Add ball"
+                                    :track-id "main"
+                                    :options  {:side {:label   "Correct ball side"
+                                                      :type    "lookup"
+                                                      :options [{:name "Left" :value "left"}
+                                                                {:name "Right" :value "right"}]}
+                                               :text {:label       "Name"
+                                                      :placeholder "Place your word here"
+                                                      :type        "string"}
+                                               :img  {:label   "Dialog"
+                                                      :type    "image"
+                                                      :options {:max-width  50
+                                                                :max-height 50
+                                                                :min-height 20
+                                                                :min-width  20}}}}
+                      :remove-ball {:title   "Remove ball"
                                     :options {:remove-ball {:label "Remove ball"
-                                                            :type  "remove-editable-object"}}}
-                      }})
+                                                            :type  "remove-editable-object"}}}}})
 
 (def t {:assets        [
                         {:url "/raw/img/rhyming/background.png", :size 10 :type "image"}

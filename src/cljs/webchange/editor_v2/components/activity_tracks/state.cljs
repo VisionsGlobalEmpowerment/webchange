@@ -2,6 +2,7 @@
   (:require
     [clojure.set :refer [difference]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-form.generic.components.activity-action.state :as scene-action.events]
     [webchange.editor-v2.state :as parent-state]
     [webchange.editor-v2.events :as events]
     [webchange.subs :as subs]
@@ -65,6 +66,16 @@
     (-> (or (utils/get-main-track scene-data)
             (generate-main-track scene-data))
         (meta-track->track-nodes scene-data second-track-data))))
+
+(re-frame/reg-sub
+  ::main-track-actions
+  (fn []
+    (re-frame/subscribe [::subs/current-scene-data]))
+  (fn [scene-data]
+    (->> (utils/get-track-actions scene-data "main")
+         (map (fn [[name {:keys [title]}]]
+                {:text     title
+                 :on-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])})))))
 
 ;; Second track
 

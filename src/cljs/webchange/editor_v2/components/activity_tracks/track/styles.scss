@@ -1,65 +1,76 @@
-.track {
+.track-wrapper {
     display: flex;
-    min-height: 100px;
-    padding: 16px 8px;
+    align-items: center;
     gap: 16px;
-    overflow: auto;
 
-    &::-webkit-scrollbar {
-        -webkit-appearance: none;
-        height: 6px;
-    }
-
-    & > .track-node {
+    .track {
         display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
-        width: 150px;
+        min-height: 100px;
+        padding: 16px 8px;
+        gap: 16px;
+        overflow: auto;
 
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(175, 175, 175, 0.25);
-        padding: 8px 16px;
-        background-color: #fff;
-        cursor: pointer;
-
-        &:hover {
-            box-shadow: 4px 8px 12px rgba(175, 175, 175, 0.25);
+        &::-webkit-scrollbar {
+            -webkit-appearance: none;
+            height: 6px;
         }
 
-        &.selected {
-            border: solid 2px #0071E3;
-        }
+        & > .track-node {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            width: 150px;
 
-        & > .title {
-            flex: 1 1;
-            color: #1D1D1F;
-            font-weight: 500;
-            font-size: 14px;
-            text-align: center;
-            text-transform: capitalize;
-        }
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(175, 175, 175, 0.25);
+            padding: 8px 16px;
+            background-color: #fff;
+            cursor: pointer;
 
-        & > .type {
-            font-size: 10px;
-            font-family: monospace;
-            color: rgba(0, 0, 0, 0.2);
-            text-align: right;
-        }
+            &:hover {
+                box-shadow: 4px 8px 12px rgba(175, 175, 175, 0.25);
+            }
 
-        &.type-prompt {
-            background-color: #e3e3e3;
+            &.selected {
+                border: solid 2px #0071E3;
+            }
 
             & > .title {
-                color: #7b7b7e;
+                flex: 1 1;
+                color: #1D1D1F;
+                font-weight: 500;
+                font-size: 14px;
+                text-align: center;
+                text-transform: capitalize;
+            }
+
+            & > .type {
+                font-size: 10px;
+                font-family: monospace;
+                color: rgba(0, 0, 0, 0.2);
+                text-align: right;
+            }
+
+            &.type-prompt {
+                background-color: #e3e3e3;
+
+                & > .title {
+                    color: #7b7b7e;
+                }
+            }
+
+            &.type-dialog {
+                background-color: #6bc784;
+            }
+
+            &.type-track {
+                background-color: #b7e7ee;
             }
         }
+    }
 
-        &.type-dialog {
-            background-color: #6bc784;
-        }
-
-        &.type-track {
-            background-color: #b7e7ee;
-        }
+    .track-actions {
+        width: 100px;
+        flex: 0 0;
     }
 }

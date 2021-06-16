@@ -14,6 +14,7 @@
 (defn activity-tracks
   [{:keys [class-name]}]
   (let [main-track @(re-frame/subscribe [::state/main-track])
+        main-track-actions @(re-frame/subscribe [::state/main-track-actions])
         second-track @(re-frame/subscribe [::state/second-track])
         second-track-name @(re-frame/subscribe [::state/second-track-display-name])
         untracked-actions @(re-frame/subscribe [::state/untracked-actions])
@@ -21,8 +22,10 @@
         handle-main-node-click #(node-click-handler %)]
     (into [:div {:class-name (get-class-name (cond-> {"activity-track" true}
                                                      (some? class-name) (assoc class-name true)))}]
-          (cond-> [[track {:nodes         main-track
-                           :on-node-click handle-main-node-click}]]
+          (cond-> [[:div.track-name "Main track"]
+                   [track {:nodes         main-track
+                           :on-node-click handle-main-node-click
+                           :actions main-track-actions}]]
                   (some? second-track) (concat [[:div.track-name second-track-name]
                                                 [track {:nodes         second-track
                                                         :on-node-click handle-node-click}]])

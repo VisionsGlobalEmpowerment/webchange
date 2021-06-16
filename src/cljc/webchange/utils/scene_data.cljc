@@ -169,6 +169,11 @@
   (-> (get-metadata scene-data)
       (get :template-name)))
 
+(defn- get-metadata-actions
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :actions)))
+
 (defn get-tracks
   [scene-data]
   (-> (get-metadata scene-data)
@@ -190,6 +195,17 @@
 (defn get-main-track
   [scene-data]
   (get-track-by-id scene-data "main"))
+
+(defn get-track-actions
+  [scene-data track-id]
+  (->> (get-metadata-actions scene-data)
+       (filter (fn [[_ data]]
+                 (= (:track-id data) track-id)))
+       (into {})))
+
+(defn get-metadata-untracked-actions
+  [scene-data]
+  (get-track-actions scene-data nil))
 
 ; General
 
