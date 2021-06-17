@@ -8,9 +8,10 @@
         :tags        ["Direct Instruction - Educational Video"]
         :description "Simple dialog"
         :props       {:game-changer? true}
-        :options     {:characters {:label "Characters"
-                                   :type  "characters"
-                                   :max   3}}})
+        :options     [{:key   "characters"
+                       :label "Characters"
+                       :type  "characters"
+                       :max   4}]})
 
 (def t {:assets        [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
                         {:url "/raw/img/casa/decoration_casa.png", :size 10, :type "image"}
@@ -58,7 +59,21 @@
                               :speed  1
                               :meshes true
                               :name   "mari"
-                              :skin   "01 mari"}})
+                              :skin   "01 mari"}
+                 :teacher    {:width  630,
+                              :height 1308,
+                              :scale  {:x 0.5, :y 0.5}
+                              :speed  1
+                              :meshes true
+                              :name   "teacher"
+                              :skin   "default"}
+                 :guide      {:width  591,
+                              :height 591,
+                              :scale  {:x 0.5, :y 0.5}
+                              :speed  1
+                              :meshes true
+                              :name   "guide"
+                              :skin   "default"}})
 
 (def character-positions
   [{:x 428
@@ -66,6 +81,8 @@
    {:x 928
     :y 960}
    {:x 1428
+    :y 960}
+   {:x 1628
     :y 960}])
 
 (defn f
