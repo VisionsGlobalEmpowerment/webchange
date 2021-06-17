@@ -96,16 +96,26 @@
 
 ; Actions
 
+(defn- dialog-action?
+  [action-data]
+  (contains? action-data :phrase))
+
 (defn- get-scene-actions
   [scene-data]
   (get scene-data :actions {}))
 
-(defn- get-action
+(defn get-action
   [scene-data action-name]
   (->> (get-scene-actions scene-data)
        (some (fn [[name data]]
                (and (= name action-name)
                     data)))))
+
+(defn get-dialog-actions
+  [scene-data]
+  (->> (get-scene-actions scene-data)
+       (filter (fn [[_ action-data]] (dialog-action? action-data)))
+       (map first)))
 
 (defn- add-action
   [scene-data action-name action-data]
@@ -122,6 +132,8 @@
                        [action-name actions-data])))
               (into {})))
        (update scene-data :actions)))
+
+
 
 ; Triggers
 
@@ -154,9 +166,46 @@
 
 (defn get-template-name
   [scene-data]
-  (-> scene-data
-      (get-metadata)
+  (-> (get-metadata scene-data)
       (get :template-name)))
+
+(defn- get-metadata-actions
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :actions)))
+
+(defn get-tracks
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :tracks)))
+
+(defn get-track-by-id
+  [scene-data track-id]
+  (when (some? track-id)
+    (->> (get-tracks scene-data)
+         (some (fn [{:keys [id] :as track}]
+                 (and (= id track-id) track))))))
+
+(defn get-track-by-index
+  [scene-data track-index]
+  (when (some? track-index)
+    (-> (get-tracks scene-data)
+        (nth track-index))))
+
+(defn get-main-track
+  [scene-data]
+  (get-track-by-id scene-data "main"))
+
+(defn get-track-actions
+  [scene-data track-id]
+  (->> (get-metadata-actions scene-data)
+       (filter (fn [[_ data]]
+                 (= (:track-id data) track-id)))
+       (into {})))
+
+(defn get-metadata-untracked-actions
+  [scene-data]
+  (get-track-actions scene-data nil))
 
 ; General
 

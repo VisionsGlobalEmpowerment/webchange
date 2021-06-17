@@ -32,6 +32,7 @@
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
+    [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-volume :as volume]
@@ -72,6 +73,7 @@
    "remove"          remove/data
    "settings"        settings/data
    "stop"            stop/data
+   "swap"            swap/data
    "sync"            sync/data
    "undo"            undo/data
    "volume"          volume/data

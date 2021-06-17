@@ -25,6 +25,7 @@
 (re-frame/reg-event-fx
   ::open
   (fn [{:keys [db]} [_ params]]
+    (print "::open" params)
     {:db         (-> db
                      (assoc-in (path-to-db [:translator-dialog-modal-state]) true)
                      (assoc-in (path-to-db [:translator-dialog-modal-params]) params))

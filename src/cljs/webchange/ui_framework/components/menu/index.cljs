@@ -27,15 +27,20 @@
    [menu-item (dissoc props :on-click)]])
 
 (defn- get-menu-position
-  [menu-button]
-  (let [{:keys [x y height]} (get-bounding-rect menu-button)]
-    {:top  (+ y height)
-     :left x}))
+  [menu-button list-position]
+  (let [{:keys [x y width height]} (get-bounding-rect menu-button)]
+    (case list-position
+      "bottom" {:top  (+ y height)
+                :left x}
+      "right" {:top  y
+               :left (+ x width)})))
 
 (defn component
-  [{:keys [class-name items icon el]
-    :or   {icon "horizontal"}}]
+  [{:keys [class-name items icon el list-position title]
+    :or   {icon          "horizontal"
+           list-position "bottom"}}]
   "Props:
+   :list-position - menu position relative to button. 'bottom' | 'right'
    :items - items list
        .text - item text
        .icon - icon name
@@ -55,7 +60,7 @@
                close-menu #(do (reset! show-menu? false)
                                (reset-document-click-handler))
                show-menu #(do (reset! show-menu? true)
-                              (reset! menu-position (get-menu-position @menu-ref))
+                              (reset! menu-position (get-menu-position @menu-ref list-position))
                               (set-document-click-handler))
                _ (reset! close-menu-ref close-menu)
 
@@ -63,14 +68,16 @@
                                            (close-menu)
                                            (show-menu))]
     (let [items-has-icon? (some #(:icon %) items)]
-      [:div {:class-name (get-class-name (cond-> {"wc-menu" true}
-                                                 (some? class-name) (assoc class-name true)))
-             :ref        #(when (some? %) (reset! menu-ref %))}
+      [:div (cond-> {:class-name (get-class-name (cond-> {"wc-menu" true}
+                                                         (some? class-name) (assoc class-name true)))
+                     :ref        #(when (some? %) (reset! menu-ref %))}
+                    (some? title) (assoc :title title))
        (if (some? el)
          [:div {:on-click handle-menu-button-click} el]
          [icon-button-component/component {:icon     (case icon
                                                        "horizontal" "menu"
-                                                       "vertical" "menu-vertical")
+                                                       "vertical" "menu-vertical"
+                                                       icon)
                                            :on-click handle-menu-button-click}])
        (when @show-menu?
          [:div.wc-menu-list {:style {:top  (:top @menu-position)

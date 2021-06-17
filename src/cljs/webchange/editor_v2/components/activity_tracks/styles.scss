@@ -1,0 +1,16 @@
+.activity-track {
+    @import "track/styles";
+
+    overflow: hidden;
+
+    & > .track-name {
+        color: #1D1D1F;
+        font-weight: 500;
+        font-size: 16px;
+        margin: 8px 0;
+
+        &:after {
+            content: ":";
+        }
+    }
+}

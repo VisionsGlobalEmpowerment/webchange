@@ -7,7 +7,8 @@
     [webchange.state.state-activity :as state-activity]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
     [webchange.editor-v2.wizard.validator :as validator]
-    [webchange.ui-framework.components.index :refer [dialog button]]))
+    [webchange.ui-framework.components.index :refer [dialog button]]
+    [webchange.utils.scene-data :as utils]))
 
 (defn- get-action-default-data
   [scene-data action-data]
@@ -57,7 +58,7 @@
 
 (defn get-activity-actions-list
   [scene-data]
-  (->> (get-in scene-data [:metadata :actions] [])
+  (->> (utils/get-metadata-untracked-actions scene-data)
        (map (fn [[name {:keys [title]}]]
               {:text    title
                :on-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])}))))
