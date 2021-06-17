@@ -1,4 +1,6 @@
-(ns webchange.interpreter.renderer.scene.components.animation.animation-params)
+(ns webchange.interpreter.renderer.scene.components.animation.animation-params
+  (:require
+    [webchange.logger.index :as logger]))
 
 (def animations-params {:vera       {:width  380,
                                      :height 537,
@@ -12,16 +14,29 @@
                                      :speed  1
                                      :meshes true
                                      :skin   "vaca"}
+                        :teacher    {:width  630,
+                                     :height 1308,
+                                     :scale  {:x 0.5, :y 0.5}
+                                     :speed  1
+                                     :meshes true
+                                     :skin   "default"}
                         :mari       {:width  910,
                                      :height 601,
                                      :scale  {:x 0.5, :y 0.5}
                                      :speed  0.8
                                      :meshes true
                                      :skin   "01 mari"}
+                        :guide      {:width  591,
+                                     :height 591,
+                                     :scale  {:x 0.5, :y 0.5}
+                                     :speed  1
+                                     :meshes true
+                                     :skin   "default"}
                         :boxes      {:speed 1}})
 
 (defn get-animations-resource-path
   [anim-name file]
+  (logger/trace "get animations resouce path" anim-name file)
   (let [resources-prefix "/raw/anim/"]
     (str resources-prefix (name anim-name) "/" file)))
 
