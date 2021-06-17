@@ -7,12 +7,12 @@
     [webchange.ui-framework.components.index :refer [button file label]]))
 
 (defn form
-  [{:keys [id objects-data objects-names]}]
+  [{:keys [class-name id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
     (let [image-tag @(re-frame/subscribe [::state/image-tag id])
           handle-change (fn [src]
                           (re-frame/dispatch [::state/set-image-src id src]))]
-      [:div
+      [:div (cond-> {} (some? class-name) (assoc :class-name class-name))
        [:div.control-block
         [label "Pick image from library:"]
         [with-image-modal {:tag       image-tag

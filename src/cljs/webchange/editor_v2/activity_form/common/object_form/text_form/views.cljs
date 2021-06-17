@@ -55,9 +55,10 @@
               :class-name          "font-size-selector"}]]))
 
 (defn form
-  [{:keys [id objects-data objects-names]}]
+  [{:keys [class-name id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
-    [:div.text-form
+    [:div {:class-name (get-class-name (cond-> {"text-form" true}
+                                               (some? class-name) (assoc class-name true)))}
      [:div.font-controls
       [font-family-component {:id id}]
       [font-size-component {:id id}]]
