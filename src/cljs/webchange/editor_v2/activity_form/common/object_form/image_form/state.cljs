@@ -20,6 +20,14 @@
 
 ;; Image Src
 
+(re-frame/reg-sub
+  ::image-src
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :src)))
+
 (re-frame/reg-event-fx
   ::set-image-src
   (fn [{:keys [_]} [_ id src]]
