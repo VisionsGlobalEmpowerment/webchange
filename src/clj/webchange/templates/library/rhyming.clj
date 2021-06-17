@@ -315,7 +315,7 @@
                        :scale-x    1
                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
                        :transition (name ball-name)
-                       }
+                       :alias      "Concept wrapper"}
 
       ball-img-name   {:type    "image"
                        :src     (:src img)
@@ -323,7 +323,7 @@
                        :y       25
                        :scale-y 1
                        :scale-x 1
-                       }
+                       :alias   "Concept image"}
 
       ball-text-name  {:type           "text"
                        :text           text
@@ -333,7 +333,8 @@
                        :vertical-align "middle"
                        :font-family    "Lexend Deca"
                        :font-size      30
-                       :fill           "#000000"}
+                       :fill           "#000000"
+                       :alias          "Concept text"}
       ball-group-name {:type       "group"
                        :x          500
                        :y          500
