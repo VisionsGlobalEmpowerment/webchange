@@ -11,3 +11,36 @@
         margin-top: 64px;
     }
 }
+
+.group-form {
+    display: flex;
+    gap: 32px;
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        .menu-item {
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+
+            font-family: Roboto;
+            font-weight: 500;
+            font-size: 12px;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            &.selected {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+}

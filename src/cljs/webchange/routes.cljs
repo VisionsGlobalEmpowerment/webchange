@@ -13,7 +13,7 @@
                   "register"          :register-user
                   "wizard"            :wizard               ;deprecated
                   "game-changer-beta" :game-changer
-                  "game-changer"      {[""]                                                         :wizard ;migrating full wizard to /game-changer address
+                  "game-changer"      {[""]                                                         :game-changer
                                        ["/" [#"[\w-%]+" :course-slug] "/" [#"[\w-%]+" :scene-slug]] :wizard-configured}
                   "book-creator"      :book-creator
                   "s"                 {["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox

@@ -1,3 +1,5 @@
+@import "menu/styles";
+
 .dialog-form {
     .dialog-form-header {
         margin-bottom: 16px;
@@ -30,6 +32,16 @@
 
             background-color: #fff;
             border-radius: 4px;
+        }
+    }
+
+    &.dialog-text-form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .work-field {
+            flex: 1 1;
         }
     }
 }

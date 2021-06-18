@@ -6,12 +6,12 @@
     [webchange.ui-framework.components.index :refer [label select-image]]))
 
 (defn form
-  [{:keys [id objects-data objects-names]}]
+  [{:keys [class-name id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
     (let [value @(re-frame/subscribe [::state/current-skin id])
           options @(re-frame/subscribe [::state/skin-options id])
           handle-change #(re-frame/dispatch [::state/set-current-skin id %])]
-      [:div
+      [:div (cond-> {} (some? class-name) (assoc :class-name class-name))
        [label "Select Skin:"]
        [select-image {:value       (or value "")
                       :on-change   handle-change

@@ -2,19 +2,20 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-menu :refer [add-concept-action add-scene-action unit-menu]]
+    [webchange.editor-v2.dialog.dialog-text-form.menu.views :refer [add-concept-action add-scene-action unit-menu]]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.utils :refer [get-effect-name]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
+    [webchange.editor-v2.dialog.dialog-text-form.state-actions :as state-actions]
     [webchange.ui-framework.components.index :refer [icon menu]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- target-control
-  [{:keys [path type value]}]
-  (r/with-let [_ (re-frame/dispatch [::state/set-current-target path value])]
+  [{:keys [path source character]}]
+  (r/with-let [_ (re-frame/dispatch [::state/set-current-target path character])]
     (let [current-target @(re-frame/subscribe [::state/current-target path])
           available-targets @(re-frame/subscribe [::state/available-targets])
           handle-target-change (fn [target]
-                                 (re-frame/dispatch [::state/set-phrase-action-target path type target]))]
+                                 (re-frame/dispatch [::state/set-phrase-action-target path source target]))]
       [menu {:class-name "targets-menu"
              :el         (r/as-element [:span.target-value (if-not (empty? current-target) current-target "___")])
              :items      (->> available-targets
@@ -42,30 +43,27 @@
                      (fn []
                        (.removeEventListener @ref "keydown" handle-key-down))
        :reagent-render
-                     (fn [{:keys [path type value]}]
+                     (fn [{:keys [path source text]}]
                        (let [handle-change (fn [event]
                                              (let [new-value (.. event -target -innerText)]
-                                               (re-frame/dispatch [::state/set-phrase-action-text path type new-value])))]
+                                               (re-frame/dispatch [::state-actions/set-phrase-text {:action-path path
+                                                                                                    :action-type source
+                                                                                                    :value       new-value}])))]
                          [:span {:class-name                        "text"
                                  :on-input                          handle-change
                                  :ref                               #(when (some? %) (reset! ref %))
                                  :content-editable                  true
                                  :suppress-content-editable-warning true}
-                          value]))})))
+                          text]))})))
 
 (defn- phrase-unit
-  [{:keys [text character path type concept-name action-data]}]
-  (let [concept? (= type :concept-phrase)]
+  [{:keys [source concept-name] :as props}]
+  (let [concept? (= source :concept)]
     [:div (cond-> {:class-name (get-class-name {"phrase-unit"  true
                                                 "concept-unit" concept?})}
                   concept? (assoc :title (str "Concept «" concept-name "»")))
-     [target-control {:value character
-                      :path  path
-                      :type  type}]
-     [text-control {:value       text
-                    :path        path
-                    :type        type
-                    :action-data action-data}]]))
+     [target-control props]
+     [text-control props]]))
 
 (defn- effect-unit
   [{:keys [effect class-name]}]
@@ -77,21 +75,17 @@
      effect-name]))
 
 (defn action-unit
-  [{:keys [idx node-data parallel-mark path type] :as props}]
+  [{:keys [idx parallel-mark type] :as props}]
   (r/with-let [container-ref (r/atom nil)]
-    (let [action-data {:type      type
-                       :path      path
-                       :node-data node-data}]
-      [:div {:ref        #(when (some? %) (reset! container-ref %))
-             :class-name (get-class-name {"action-unit"     true
-                                          "parallel"        (not= parallel-mark :none)
-                                          "parallel-start"  (= parallel-mark :start)
-                                          "parallel-middle" (= parallel-mark :middle)
-                                          "parallel-end"    (= parallel-mark :end)})}
-       (cond
-         (= type :effect) [effect-unit props]
-         :else [phrase-unit (merge props
-                                   {:action-data action-data})])
-       [unit-menu {:idx         idx
-                   :parent-ref  @container-ref
-                   :action-data action-data}]])))
+    [:div {:ref        #(when (some? %) (reset! container-ref %))
+           :class-name (get-class-name {"action-unit"     true
+                                        "parallel"        (not= parallel-mark :none)
+                                        "parallel-start"  (= parallel-mark :start)
+                                        "parallel-middle" (= parallel-mark :middle)
+                                        "parallel-end"    (= parallel-mark :end)})}
+     (cond
+       (= type :effect) [effect-unit props]
+       :else [phrase-unit props])
+     [unit-menu {:idx         idx
+                 :parent-ref  @container-ref
+                 :action-data props}]]))

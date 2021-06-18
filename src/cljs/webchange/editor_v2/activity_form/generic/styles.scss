@@ -24,13 +24,21 @@
     }
 
     .asset-block {
-        align-self: center;
+        align-self: start;
     }
 
    .generic-diagram {
         grid-column-start: 1;
         grid-column-end: 3;
     }
+
+   .swap-diagram-mode {
+       position: relative;
+       grid-column-start: 1;
+       grid-column-end: 3;
+       height: 16px;
+       text-align: end;
+   }
 }
 
 .generic-skeleton {

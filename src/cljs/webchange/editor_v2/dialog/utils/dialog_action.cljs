@@ -3,6 +3,7 @@
 (def empty-action-position 0)
 (def inner-action-position 1)
 
+(def empty-action-path [:data empty-action-position])
 (def inner-action-path [:data inner-action-position])
 
 (def default-phrase-text "New action")
@@ -27,7 +28,7 @@
 
 (defn get-empty-action
   [action]
-  (get-in action [:data empty-action-position]))
+  (get-in action empty-action-path))
 
 (defn get-inner-action
   [action]

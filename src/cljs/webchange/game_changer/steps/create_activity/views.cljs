@@ -2,7 +2,7 @@
   (:require
     [camel-snake-kebab.core :refer [->Camel_Snake_Case]]
     [reagent.core :as r]
-    [webchange.ui-framework.components.index :refer [label text-input]]))
+    [webchange.ui-framework.components.index :refer [label input]]))
 
 (defn- generate-language
   []
@@ -48,11 +48,11 @@
                    (handle-activity-name-change (generate-activity-name @data)))]
     [:div.create-activity-from
      [label {:class-name "label"} "Activity Name"]
-     [text-input {:value       (get-activity-name @data)
-                  :on-change   handle-activity-name-change
-                  :placeholder "Enter Activity Name"}]
+     [input {:value       (get-activity-name @data)
+             :on-change   handle-activity-name-change
+             :placeholder "Enter Activity Name"}]
 
      [label {:class-name "label"} "Language"]
-     [text-input {:value       (get-language @data)
-                  :on-change   handle-language-change
-                  :placeholder "Enter Language"}]]))
+     [input {:value       (get-language @data)
+             :on-change   handle-language-change
+             :placeholder "Enter Language"}]]))

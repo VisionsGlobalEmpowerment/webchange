@@ -1,10 +1,10 @@
-(ns webchange.editor-v2.dialog.phrase-voice-over.audios-menu.views
+(ns webchange.editor-v2.dialog.dialog-text-form.menu.audios.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.dialog.components.record-audio.views :refer [record-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-upload-audio :refer [upload-audio]]
-    [webchange.editor-v2.dialog.phrase-voice-over.audios-menu.state :as state]
+    [webchange.editor-v2.dialog.dialog-text-form.menu.audios.state :as state]
     [webchange.ui-framework.components.index :refer [circular-progress icon icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 

@@ -21,27 +21,24 @@
                       :preview          "/images/templates/previews/rhyming.png"
                       :preview-activity {:course-slug   "q-q-nzvzixrf"
                                          :activity-slug "q"}}
-        :actions     {
-                      :add-ball    {:title   "Add ball",
-                                    :options {
-                                              :side {:label   "Correct ball side"
-                                                     :type    "lookup"
-                                                     :options [{:name "Left" :value "left"}
-                                                               {:name "Right" :value "right"}]}
-                                              :text {:label       "Name"
-                                                     :placeholder "Place your word here"
-                                                     :type        "string"}
-                                              :img  {:label   "Dialog"
-                                                     :type    "image"
-                                                     :options {:max-width  50
-                                                               :max-height 50
-                                                               :min-height 20
-                                                               :min-width  20}}
-                                              }}
-                      :remove-ball {:title   "Remove ball",
+        :actions     {:add-ball    {:title    "Add ball"
+                                    :track-id "main"
+                                    :options  {:side {:label   "Correct ball side"
+                                                      :type    "lookup"
+                                                      :options [{:name "Left" :value "left"}
+                                                                {:name "Right" :value "right"}]}
+                                               :text {:label       "Name"
+                                                      :placeholder "Place your word here"
+                                                      :type        "string"}
+                                               :img  {:label   "Dialog"
+                                                      :type    "image"
+                                                      :options {:max-width  50
+                                                                :max-height 50
+                                                                :min-height 20
+                                                                :min-width  20}}}}
+                      :remove-ball {:title   "Remove ball"
                                     :options {:remove-ball {:label "Remove ball"
-                                                            :type  "remove-editable-object"}}}
-                      }})
+                                                            :type  "remove-editable-object"}}}}})
 
 (def t {:assets        [
                         {:url "/raw/img/rhyming/background.png", :size 10 :type "image"}
@@ -236,18 +233,24 @@
 
                         }
 
-        :triggers
-                       {:back  {:on "back", :action "stop-activity"},
+        :triggers      {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "init-activity"}},
-        :metadata      {
-                        :tracks [{:title "Track left"
+        :metadata      {:tracks [{:id    "main"
+                                  :title "Main Track"
+                                  :nodes [{:type      "dialog"
+                                           :action-id "intro"}
+                                          {:type     "track"
+                                           :track-id "left-track"}
+                                          {:type     "track"
+                                           :track-id "right-track"}
+                                          {:type      "dialog"
+                                           :action-id "finish-dialog"}]}
+                                 {:id    "left-track"
+                                  :title "Track left"
                                   :nodes []}
-                                 {:title "Track right"
-                                  :nodes []}
-                                 ]
-
-                        }}
-  )
+                                 {:id    "right-track"
+                                  :title "Track right"
+                                  :nodes []}]}})
 
 (defn park-ball-position
   [side balls-number]
@@ -312,7 +315,7 @@
                        :scale-x    1
                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
                        :transition (name ball-name)
-                       }
+                       :alias      "Concept wrapper"}
 
       ball-img-name   {:type    "image"
                        :src     (:src img)
@@ -320,7 +323,7 @@
                        :y       25
                        :scale-y 1
                        :scale-x 1
-                       }
+                       :alias   "Concept image"}
 
       ball-text-name  {:type           "text"
                        :text           text
@@ -330,7 +333,8 @@
                        :vertical-align "middle"
                        :font-family    "Lexend Deca"
                        :font-size      30
-                       :fill           "#000000"}
+                       :fill           "#000000"
+                       :alias          "Concept text"}
       ball-group-name {:type       "group"
                        :x          500
                        :y          500

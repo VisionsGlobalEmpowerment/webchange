@@ -10,6 +10,7 @@
     [webchange.ui-framework.components.icon.icon-check :as check]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
+    [webchange.ui-framework.components.icon.icon-delay :as delay]
     [webchange.ui-framework.components.icon.icon-drop-place :as drop-place]
     [webchange.ui-framework.components.icon.icon-edit :as edit]
     [webchange.ui-framework.components.icon.icon-effect :as effect]
@@ -31,6 +32,7 @@
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
+    [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-volume :as volume]
@@ -49,6 +51,7 @@
    "check"           check/data
    "clear"           clear/data
    "close"           close/data
+   "delay"           delay/data
    "drop-place"      drop-place/data
    "edit"            edit/data
    "effect"          effect/data
@@ -70,6 +73,7 @@
    "remove"          remove/data
    "settings"        settings/data
    "stop"            stop/data
+   "swap"            swap/data
    "sync"            sync/data
    "undo"            undo/data
    "volume"          volume/data
