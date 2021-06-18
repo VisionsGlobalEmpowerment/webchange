@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.editor-v2.layout.state :refer [path-to-db]]
     [webchange.subs :as subs]
     [webchange.editor.events :as edit-scene]
@@ -200,4 +201,4 @@
                          [::edit-scene/update-current-scene-object {:target (:name background)
                                                                    :state  background-state}]
                          [::edit-scene/save-current-scene current-scene]
-                         [::state-flipbook/reset-stage])})))
+                         [::state-stage/reset-stage])})))

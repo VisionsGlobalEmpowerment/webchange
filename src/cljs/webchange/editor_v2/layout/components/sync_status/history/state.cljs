@@ -2,6 +2,7 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.interpreter.events :as interpreter.events]
     [webchange.state.core :as core]
     [webchange.state.warehouse :as warehouse]
@@ -38,7 +39,8 @@
     {:dispatch-n [[::core/set-scene-data {:scene-id   name
                                           :scene-data data}]
                   [::interpreter.events/set-scene name data]
-                  [::interpreter.events/store-scene name data]]}))
+                  [::interpreter.events/store-scene name data]
+                  [::state-stage/reset-stage]]}))
 
 (re-frame/reg-event-fx
   ::load-versions
