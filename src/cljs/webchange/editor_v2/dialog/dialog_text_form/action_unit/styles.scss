@@ -3,6 +3,7 @@ $units-margin: 6px;
 .action-unit {
     position: relative;
     margin: $units-margin 0;
+    border-bottom: solid 1px rgba(0,0,0,0);
 
     .phrase-unit {
         padding: 2px 8px;
@@ -94,6 +95,10 @@ $units-margin: 6px;
                 border-width: 0 0 1px 1px;
             }
         }
+    }
+
+    &:hover {
+        border-bottom: dashed 1px #d7d7d7;
     }
 }
 
