@@ -1,6 +1,7 @@
 (ns webchange.state.state-flipbook
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.editor-v2.layout.state :as state-layout]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.interpreter.renderer.state.overlays :as overlays]
@@ -402,16 +403,6 @@
     (let [available-current-stage-idx? (->> (get-current-stage-idx db)
                                             (available-stage-idx? db))]
       {:dispatch-n (cond-> []
-                           available-current-stage-idx? (conj [::reset-stage])
+                           available-current-stage-idx? (conj [::state-stage/reset-stage])
                            (not available-current-stage-idx?) (conj [::select-prev-stage])
                            (some? on-success) (conj on-success))})))
-
-(re-frame/reg-sub
-  ::stage-key
-  (fn [db]
-    (get-in db (path-to-db [:stage-key]) "default")))
-
-(re-frame/reg-event-fx
-  ::reset-stage
-  (fn [{:keys [db]} [_]]
-    {:db (assoc-in db (path-to-db [:stage-key]) (-> (random-uuid) str))}))
