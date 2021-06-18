@@ -16,9 +16,9 @@
     (when show-window?
       (on-enter)
       [:div.wc-dialog-wrapper
-       [:div {:class-name (get-class-name (-> {"dialog"      true
-                                               "full-screen" full-screen?}
-                                              (assoc (str "size-" size) true)))}
+       [:div {:class-name (get-class-name (cond-> {"dialog"      true
+                                                   "full-screen" full-screen?}
+                                                  (some? size) (assoc (str "size-" size) true)))}
         [:div.header
          [:h1 title]
          (when (some? title-actions)

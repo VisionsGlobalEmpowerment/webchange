@@ -32,23 +32,26 @@
     (.format date-format date-obj)))
 
 (defn- history-list-item
-  [{:keys [created-at description id on-click]}]
+  [{:keys [created-at description first-item? id on-click]}]
   [:div.history-list-item
    [:div.date
     (get-date-time created-at)]
    [:div.description
     description]
-   [button {:class-name "restore"
-            :on-click   #(on-click id)}
-    "Restore"]])
+   (if first-item?
+     [:div.current-state "Current Version"]
+     [button {:class-name "restore"
+              :on-click   #(on-click id)}
+      "Restore"])])
 
 (defn- history-list
   [{:keys [data on-click]}]
   [:ul.history-list
-   (for [{:keys [id] :as item} data]
+   (for [[idx {:keys [id] :as item}] (map-indexed vector data)]
      ^{:key id}
      [history-list-item (merge item
-                               {:on-click on-click})])])
+                               {:on-click    on-click
+                                :first-item? (= idx 0)})])])
 
 (defn- history-form
   []
@@ -66,7 +69,8 @@
       [dialog
        {:title    "History"
         :on-close close
-        :actions  [[update-template-button]]}
+        :actions  [[update-template-button]]
+        :size     "small"}
        [history-form]])))
 
 (defn history-button

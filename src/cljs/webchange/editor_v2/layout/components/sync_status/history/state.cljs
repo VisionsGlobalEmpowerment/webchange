@@ -14,8 +14,10 @@
 (re-frame/reg-sub
   ::versions
   (fn [db]
-    (get-in db (concat modal-versions-state-path [:versions]) {})))
-
+    (->> (concat modal-versions-state-path [:versions])
+         (get-in db )
+         (sort-by :created-at)
+         (reverse))))
 
 (re-frame/reg-sub
   ::last-update
