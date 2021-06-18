@@ -74,6 +74,11 @@
             }
         }
 
+        &.size-small {
+            min-width: auto;
+            width: 530px;
+        }
+
         &.size-message {
             min-width: 300px;
             padding: 16px;
