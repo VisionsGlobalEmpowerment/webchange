@@ -34,4 +34,14 @@
             border-radius: 4px;
         }
     }
+
+    &.dialog-text-form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .work-field {
+            flex: 1 1;
+        }
+    }
 }

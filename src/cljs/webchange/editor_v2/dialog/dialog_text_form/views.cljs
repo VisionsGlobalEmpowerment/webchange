@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views :refer [action-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
-    [webchange.ui-framework.components.index :refer [label select]]))
+    [webchange.ui-framework.components.index :refer [label select]]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- concepts-control
   []
@@ -29,7 +30,8 @@
   []
   (let [actions @(re-frame/subscribe [::state/phrase-actions])
         current-concept @(re-frame/subscribe [::state/current-concept])]
-    [:div.dialog-form
+    [:div {:class-name (get-class-name {"dialog-form"      true
+                                        "dialog-text-form" true})}
      [header]
      [:div.work-field
       ^{:key current-concept}
