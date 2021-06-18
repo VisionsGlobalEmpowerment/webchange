@@ -59,7 +59,8 @@
                       (map keyword)
                       (map (fn [child-name]
                              (let [object-data (utils/get-scene-object scene-data child-name)]
-                               {:object-type   (get object-data :type)
+                               {:alias         (get object-data :alias)
+                                :object-type   (get object-data :type)
                                 :objects-data  object-data
                                 :objects-names [child-name]})))
                       (filter (fn [{:keys [object-type]}]
@@ -67,18 +68,18 @@
           current-asset (nth assets @current-asset-idx nil)]
       [:div.group-form
        [:ul.menu
-        (doall (for [[idx {:keys [objects-names]}] (map-indexed vector assets)]
+        (doall (for [[idx {:keys [alias object-type]}] (map-indexed vector assets)]
                  ^{:key idx}
                  [:li {:class-name (get-class-name {"menu-item" true
                                                     "selected"  (= idx @current-asset-idx)})
                        :on-click   #(reset! current-asset-idx idx)}
-                  (first objects-names)]))]
+                  (or alias object-type)]))]
        (when (some? current-asset)
          ^{:key (->> (get current-asset :objects-names)
                      (map clojure.core/name)
                      (clojure.string/join "--")
                      (str component-key "--"))}
-         [object-form-view (merge props current-asset)])])))
+         [object-form-view (merge props (select-keys current-asset [:object-type :objects-data :objects-names]))])])))
 
 (defn object-form
   []
