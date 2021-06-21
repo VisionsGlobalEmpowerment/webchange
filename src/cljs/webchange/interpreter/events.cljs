@@ -195,13 +195,8 @@
                 ....
             ]
         }
-    }
-
-
-    "
-    (let [scene-id (:current-scene db)
-          wrappers (scene/get-object-name db :question-overlay)
-          ]
+    }"
+    (let [wrappers (scene/get-object-name db :question-overlay)]
       (question-component/create (assoc data :parent (:object wrappers)) db)
       {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/show-question]
                          (ce/success-event action))})))

@@ -121,39 +121,6 @@
                                                    :current-side "right"
                                                    :visible      true}}})
 
-(def animations {:vera       {:width  380,
-                              :height 537,
-                              :scale  {:x 1, :y 1},
-                              :speed  0.5
-                              :meshes true
-                              :name   "vera"
-                              :skin   "01 Vera_1"}
-                 :senoravaca {:width  351,
-                              :height 717,
-                              :scale  {:x 1, :y 1}
-                              :speed  0.5
-                              :meshes true
-                              :name   "senoravaca"
-                              :skin   "vaca"}
-                 :mari       {:width  910,
-                              :height 601,
-                              :scale  {:x 0.5, :y 0.5}
-                              :speed  1
-                              :meshes true
-                              :name   "mari"
-                              :skin   "01 mari"}})
-
-(def character-positions
-  [{:x 310
-    :y 960}
-   {:x 730
-    :y 960}
-   {:x 1200
-    :y 960}
-   {:x 1560
-    :y 960}
-   ])
-
 (def page-params {:width            960
                   :height           1080
                   :padding          50
@@ -283,7 +250,7 @@
 (defn- create-template
   [{:keys [authors illustrators cover-layout cover-image cover-title] :as props}]
   (-> template
-      (characters/add-characters (:characters props) character-positions animations)
+      (characters/add-characters (:characters props))
       (update :scene-objects concat [["book-background"] ["book"]])
       (apply-page-size page-params)
       (add-page front-cover/create page-params {:layout                   (keyword cover-layout)
