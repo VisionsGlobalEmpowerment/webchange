@@ -136,7 +136,7 @@
 
 
 
-(defn create-type-1-answers
+(defn- create-type-1-answers
   [answers parent success-action fail-action]
   (let [answers (:data answers)
         total (count answers)

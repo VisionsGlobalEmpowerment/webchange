@@ -2,7 +2,50 @@
   (:require [clojure.string :refer [lower-case]]
             [camel-snake-kebab.core :refer [->kebab-case]]))
 
-(defn create-character
+(def animations {:vera       {:width  380,
+                              :height 537,
+                              :scale  {:x 1, :y 1},
+                              :speed  0.5
+                              :meshes true
+                              :name   "vera"
+                              :skin   "01 Vera_1"}
+                 :senoravaca {:width  351,
+                              :height 717,
+                              :scale  {:x 1, :y 1}
+                              :speed  0.5
+                              :meshes true
+                              :name   "senoravaca"
+                              :skin   "vaca"}
+                 :mari       {:width  910,
+                              :height 601,
+                              :scale  {:x 0.5, :y 0.5}
+                              :speed  1
+                              :meshes true
+                              :name   "mari"
+                              :skin   "01 mari"}
+                 :teacher    {:width  630,
+                              :height 1308,
+                              :scale  {:x 0.5, :y 0.5}
+                              :speed  1
+                              :meshes true
+                              :name   "teacher"
+                              :skin   "default"}
+                 :guide      {:width  591,
+                              :height 591,
+                              :scale  {:x 0.5, :y 0.5}
+                              :speed  1
+                              :meshes true
+                              :name   "guide"
+                              :skin   "default"}})
+
+(def character-positions
+  [{:x 176 :y 960}
+   {:x 543 :y 960}
+   {:x 918 :y 960}
+   {:x 1294 :y 960}
+   {:x 1664 :y 960}])
+
+(defn- create-character
   [character animations]
   (if-let [c (get animations (-> character :skeleton keyword))]
     (merge c
@@ -15,7 +58,7 @@
                                           (-> character :skin some?) (conj :skin))))))
 
 (defn add-characters
-  [t characters character-positions animations]
+  [t characters]
   (let [cs (->> characters
                 (map (fn [c] (assoc c :name (->kebab-case (:name c)))))
                 (map-indexed (fn [idx c] (merge c (get character-positions idx))))

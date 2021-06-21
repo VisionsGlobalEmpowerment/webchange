@@ -6,12 +6,10 @@
 
 (defn- create-answer
   [{:keys [text checked img]}]
-  (cond-> {:text       text
-           :correct    (if checked true false)
-           :chunks     (text-utils/text->chunks text)
+  (cond-> {:correct    (if checked true false)
            :audio-data empty-audio}
           img (assoc :image img)
-          ))
+          text (assoc :text text :chunks (text-utils/text->chunks text))))
 
 (defn get-assets
   [{:keys [img answers] :as args}]

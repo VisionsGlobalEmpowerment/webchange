@@ -48,40 +48,10 @@
                         :last-insert "placeholder"
                         :prev        "map"}})
 
-(def animations {:vera       {:width  380,
-                              :height 537,
-                              :scale  {:x 1, :y 1},
-                              :speed  0.5
-                              :meshes true
-                              :name   "vera"
-                              :skin   "01 Vera_1"}
-                 :senoravaca {:width  351,
-                              :height 717,
-                              :scale  {:x 1, :y 1}
-                              :speed  0.5
-                              :meshes true
-                              :name   "senoravaca"
-                              :skin   "vaca"}
-                 :mari       {:width  910,
-                              :height 601,
-                              :scale  {:x 0.5, :y 0.5}
-                              :speed  1
-                              :meshes true
-                              :name   "mari"
-                              :skin   "01 mari"}})
-
-(def character-positions
-  [{:x 176 :y 960}
-   {:x 543 :y 960}
-   {:x 918 :y 960}
-   {:x 1294 :y 960}
-   {:x 1664 :y 960}])
-
 (defn f
   [args]
   (-> (common/init-metadata m t args)
-      (characters/add-characters (:characters args) character-positions animations))
-  )
+      (characters/add-characters (:characters args))))
 
 (defn fu
   [old-data args]
