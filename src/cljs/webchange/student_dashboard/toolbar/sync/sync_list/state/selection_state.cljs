@@ -47,10 +47,9 @@
 (re-frame/reg-sub
   ::loading
   (fn []
-    [(re-frame/subscribe [::lessons-resources/loading])
-     (re-frame/subscribe [::sw/state-loading])])
-  (fn [[resources-loading state-loading]]
-    (or resources-loading state-loading)))
+    [(re-frame/subscribe [::lessons-resources/loading])])
+  (fn [[resources-loading]]
+    resources-loading))
 
 (re-frame/reg-sub
   ::lessons

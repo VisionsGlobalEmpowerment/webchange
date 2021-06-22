@@ -5,6 +5,7 @@
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.sw-utils.state.status :as status]
+    [webchange.student-dashboard.toolbar.sync.state :as state]
     [webchange.student-dashboard.toolbar.sync.sync-list.state.window :as window]
     [webchange.student-dashboard.toolbar.sync.sync-list.views-sync-window :refer [sync-list-modal]]
     [webchange.student-dashboard.toolbar.sync.icons.icon-ready :refer [icon-ready]]
@@ -31,29 +32,35 @@
 
 (defn current-version-data
   [{:keys [update-date-str version app-version]}]
-  (let [update (js/Date. update-date-str)
-        update-date (.toLocaleDateString update)
-        update-time (.toLocaleTimeString update)]
+  [:div
+   ;; App version
+   [:div {:style {:display   "flex"
+                  :font-size 10
+                  :height    15}}
+    [:div {:style {:width 60}} "App Version:"]
     [:div
-     [:div {:style {:display   "flex"
-                    :font-size 10
-                    :height    15}}
-      [:div {:style {:width 60}} "App Version:"]
-      [:div
-       [:span {:style {:height 14}} app-version]]]
-     [:div {:style {:display   "flex"
-                    :font-size 10
-                    :height    15}}
-      [:div {:style {:width 60}} "SW Version:"]
-      [:div
-       [:span {:style {:height 14}} version]]]
-     [:div {:style {:display   "flex"
-                    :font-size 10}}
-      [:div {:style {:width 60}} "Updated:"]
-      [:div {:style {:display        "flex"
-                     :flex-direction "column"}}
-       [:span {:style {:height 14}} update-time]
-       [:span {:style {:height 14}} update-date]]]]))
+     [:span {:style {:height 14}} app-version]]]
+
+   ;; SW Version
+   [:div {:style {:display   "flex"
+                  :font-size 10
+                  :height    15}}
+    [:div {:style {:width 60}} "SW Version:"]
+    [:div
+     [:span {:style {:height 14}}
+      (if (some? version) version "SW version is not available")]]]
+
+   ;; SW update date
+   [:div {:style {:display   "flex"
+                  :font-size 10}}
+    [:div {:style {:width 60}} "Updated:"]
+    (into [:div {:style {:display        "flex"
+                         :flex-direction "column"}}]
+          (if (some? update-date-str)
+            (let [update (js/Date. update-date-str)]
+              [[:span {:style {:height 14}} (.toLocaleTimeString update)]
+               [:span {:style {:height 14}} (.toLocaleDateString update)]])
+            [[:span {:style {:height 14}} "SW update date is not available"]]))]])
 
 (defn- progress-bar
   []
@@ -122,7 +129,8 @@
 
 (defn sync
   []
-  (r/with-let [menu-anchor (r/atom nil)]
+  (r/with-let [_ (re-frame/dispatch [::state/init])
+               menu-anchor (r/atom nil)]
     (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
           offline? @(re-frame/subscribe [::status/sync-offline?])
           sync-status @(re-frame/subscribe [::status/sync-status])

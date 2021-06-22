@@ -53,17 +53,27 @@
 
 ;; Parsing
 
+(defn- get-lesson-name
+  [{:keys [level level-idx lesson lesson-idx]}]
+  (let [level-name "Level "
+        lesson-type (-> lesson :type keyword)
+        lesson-name (get-in level [:scheme lesson-type :name] "Lesson ")]
+    (str level-name (inc level-idx) " - "  lesson-name (inc lesson-idx))))
+
 (defn- get-lessons-data
   [levels navigation-activities]
   (->> levels
-       (map (fn [level]
-              (map (fn [lesson]
-                     {:name        (str (:name level) " - " (:name lesson))
-                      :level-id    (:level level)
-                      :lesson-id   (:lesson lesson)
-                      :activities  (->> (:activities lesson) (map :activity) (concat navigation-activities))
-                      :lesson-sets (->> (:lesson-sets lesson) (vals))})
-                   (:lessons level))))
+       (map-indexed (fn [level-idx level]
+                      (map-indexed (fn [lesson-idx lesson]
+                                     {:name        (get-lesson-name {:level      level
+                                                                     :level-idx  level-idx
+                                                                     :lesson     lesson
+                                                                     :lesson-idx lesson-idx})
+                                      :level-id    level-idx
+                                      :lesson-id   lesson-idx
+                                      :activities  (->> (:activities lesson) (map :activity) (concat navigation-activities))
+                                      :lesson-sets (->> (:lesson-sets lesson) (vals))})
+                                   (:lessons level))))
        (flatten)))
 
 (defn- get-lessons-list
