@@ -8,7 +8,7 @@
     [webchange.interpreter.sound :as sound]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.core :as vars.core]
-    [webchange.resources.scene-parser :refer [get-scene-resources]]
+    [webchange.resources.scene-parser :refer [get-activity-resources]]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
@@ -46,7 +46,7 @@
     (nil? dataset-items) nil                                ;; ToDo: actually do not start scene until datasets are loaded, there might be no datasets at all
     :else {:scene-id  scene-id
            :objects   (get-scene-objects-data scene-id (:scene-objects scene-data))
-           :resources (get-scene-resources scene-id scene-data)
+           :resources (get-activity-resources scene-id scene-data)
            :started?  (scene-started? scene-id)}))
 
 (defn- start-scene

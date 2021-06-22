@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.core :as i]
+    [webchange.logger.index :as logger]
     [webchange.resources.scene-parser :refer [get-lesson-resources get-lesson-endpoints]]
     [webchange.student-dashboard.toolbar.sync.sync-list.state.db :as db]))
 
@@ -55,10 +56,10 @@
 
 (defn- get-lesson-name
   [{:keys [level level-idx lesson lesson-idx]}]
-  (let [level-name "Level "
-        lesson-type (-> lesson :type keyword)
-        lesson-name (get-in level [:scheme lesson-type :name] "Lesson ")]
-    (str level-name (inc level-idx) " - "  lesson-name (inc lesson-idx))))
+  (let [level-name (str "Level " (inc level-idx))
+        lesson-type (get-in level [:scheme (-> lesson :type keyword) :name] "Lesson")
+        lesson-name (str lesson-type " " (inc lesson-idx))]
+    (str level-name " - " lesson-name)))
 
 (defn- get-lessons-data
   [levels navigation-activities]
@@ -78,6 +79,7 @@
 
 (defn- get-lessons-list
   [levels navigation-activities scenes-data current-course]
+  (logger/group-folded "Prepare lessons list")
   (->> (get-lessons-data levels navigation-activities)
        (map (fn [{:keys [level-id lesson-id] :as lesson}]
               (let [resources (get-lesson-resources lesson scenes-data)
@@ -85,7 +87,8 @@
                 (merge lesson
                        {:id        (+ lesson-id (* level-id 1000))
                         :resources resources
-                        :endpoints endpoints}))))))
+                        :endpoints endpoints}))))
+       (logger/->>with-group-end "Prepare lessons list")))
 
 (defn- get-navigation-activities
   [course-data]

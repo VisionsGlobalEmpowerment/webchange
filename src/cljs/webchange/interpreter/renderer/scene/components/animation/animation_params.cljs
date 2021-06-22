@@ -36,12 +36,13 @@
 
 (defn get-animations-resource-path
   [anim-name file]
-  (logger/trace "get animations resouce path" anim-name file)
+  (logger/trace "get animations resource path" anim-name file)
   (let [resources-prefix "/raw/anim/"]
     (str resources-prefix (name anim-name) "/" file)))
 
 (defn get-animations-resources
   []
+  (logger/group-folded "get animations resources")
   (let [animations {:book       {:skeleton-images 3}
                     :boxes      {:skeleton-images 3}
                     :hat        {:skeleton-images 1}
@@ -60,4 +61,5 @@
                                (get-animations-resource-path (name anim) "skeleton.png")]
                               (map #(get-animations-resource-path (name anim) (str "skeleton" % ".png"))
                                    (range 2 (inc skeleton-images))))]))
-         (into {}))))
+         (into {})
+         (logger/->>with-group-end "get animations resources"))))

@@ -7,6 +7,13 @@
     [webchange.interpreter.subs :as subs]
     [webchange.logger.index :as logger]))
 
+(defn- cleanup-resources
+  [resources]
+  (->> resources
+       (remove #(or (nil? %) (empty? %)))
+       (distinct)
+       (doall)))
+
 (defn- get-concept-fields
   [scene-id dataset-id]
   (let [dataset-fields (-> @(re-frame/subscribe [::subs/course-dataset dataset-id])
@@ -38,26 +45,32 @@
 
 (defn- parse-lesson-sets-data
   [scene-id lesson-sets-data]
-  (logger/trace "parse lesson sets data" scene-id lesson-sets-data)
+  (logger/trace "lesson-sets-data" lesson-sets-data)
   (->> lesson-sets-data
        (mapcat (fn [{:keys [item-ids dataset-id]}]
                  (for [item-id item-ids
                        [field-name field-type] (get-concept-fields scene-id dataset-id)]
                    (let [item @(re-frame/subscribe [::subs/dataset-item item-id])]
                      (parse-concept-field field-type (get-in item [:data field-name]))))))
-       (flatten)))
+       (flatten)
+       (cleanup-resources)))
 
 (defn- parse-concept-resources
   [scene-id]
-  (logger/trace "parse concept resourses")
+  (logger/group-folded (str "get concept resources: " scene-id))
   (->> @(re-frame/subscribe [::subs/current-lesson-sets-data])
-       (parse-lesson-sets-data scene-id)))
+       (parse-lesson-sets-data scene-id)
+       (logger/with-trace-list)
+       (logger/->>with-group-end (str "get concept resources: " scene-id))))
 
 (defn- parse-lesson-sets-resources
   [scene-id lesson-sets]
-  (logger/trace "parse lesson sets resourses")
+  (logger/group-folded (str "get lesson sets resources: " scene-id))
+  (logger/trace-list-folded "lesson-sets" lesson-sets)
   (->> @(re-frame/subscribe [::subs/lesson-sets-data lesson-sets])
-       (parse-lesson-sets-data scene-id)))
+       (parse-lesson-sets-data scene-id)
+       (logger/->>with-trace-list-folded "lesson sets resources")
+       (logger/->>with-group-end (str "get lesson sets resources: " scene-id))))
 
 (defn- parse-default-assets
   []
@@ -69,8 +82,11 @@
 
 (defn- parse-scene-assets
   [scene-data]
+  (logger/group-folded "get scene assets resources")
   (->> (:assets scene-data)
-       (map :url)))
+       (map :url)
+       (logger/with-trace-list)
+       (logger/->>with-group-end "get scene assets resources")))
 
 (defn- get-animation-url
   [animation-name]
@@ -87,6 +103,7 @@
 (defn- parse-scene-objects
   [scene-data {:keys [expand-animation-resources?]
                :or   {expand-animation-resources? false}}]
+  (logger/group-folded "get scene objects resources")
   (->> (:objects scene-data)
        (reduce (fn [result [_ {:keys [type] :as object-data}]]
                  (case type
@@ -98,20 +115,29 @@
                    "animation" (let [animation-name (:name object-data)]
                                  (concat result (get-animation-resources animation-name expand-animation-resources?)))
                    result))
-               [])))
+               [])
+       (logger/with-trace-list)
+       (logger/->>with-group-end "get scene objects resources")))
 
 (defn- parse-scene-audio
   [scene-data]
+  (logger/group-folded "get scene audio resources")
   (->> (:audio scene-data)
-       (vals)))
+       (vals)
+       (logger/with-trace-list)
+       (logger/->>with-group-end "get scene audio resources")))
 
 (defn- parse-scene-metadata
   [scene-data]
-  (get-in scene-data [:metadata :resources]))
+  (logger/group-folded "get scene metadata resources")
+  (-> scene-data
+      (get-in [:metadata :resources])
+      (logger/with-trace-list)
+      (logger/->with-group-end "get scene metadata resources")))
 
-(defn- parse-scene
+(defn- get-scene-resources
   ([scene-data]
-   (parse-scene scene-data {}))
+   (get-scene-resources scene-data {}))
   ([scene-data options]
    (concat (parse-scene-assets scene-data)
            (parse-scene-objects scene-data options)
@@ -146,50 +172,69 @@
    "/raw/img/ui/logo.png"
    "/raw/img/questions/sound-icon.png"
    "/raw/img/questions/sound-icon-white.png"
-   "/raw/img/questions/skip.png"
-   ])
+   "/raw/img/questions/skip.png"])
 
-(defn- cleanup-resources
-  [resources]
-  (->> resources
-       (remove #(or (nil? %) (empty? %)))
-       (distinct)))
-
-(defn get-scene-resources
+(defn get-activity-resources
   [scene-id scene-data]
+  (logger/group-folded (str "get activity resources: " scene-id))
   (->> (concat (parse-concept-resources scene-id)
-               (parse-scene scene-data)
+               (get-scene-resources scene-data)
                (parse-default-assets)
                (parse-next-activity-preview)
                (parse-additional-resources))
-       (cleanup-resources)))
+       (cleanup-resources)
+       (logger/->>with-group-end (str "get activity resources: " scene-id))))
 
 (defn get-lesson-resources
   [lesson scenes-data]
+  (logger/group-folded (str "get lesson resources: " (:name lesson)))
   (let [scenes-resources (->> (:activities lesson)
                               (map (fn [scene-name]
+                                     (logger/group-folded (str "get scene resources: " scene-name))
                                      (-> (get scenes-data scene-name)
-                                         (parse-scene {:expand-animation-resources? true}))))
-                              (flatten))
+                                         (get-scene-resources {:expand-animation-resources? true})
+                                         (logger/->with-group-end (str "get scene resources: " scene-name)))))
+                              (flatten)
+                              (cleanup-resources))
         concepts-resources (->> (:activities lesson)
                                 (map (fn [scene-id]
                                        (parse-lesson-sets-resources scene-id (:lesson-sets lesson))))
-                                (flatten))
-        default-assets (parse-default-assets)
-        scenes-previews (parse-scenes-previews)
-        additional-resources (parse-additional-resources)]
+                                (flatten)
+                                (cleanup-resources))
+        default-assets (-> (parse-default-assets)
+                           (cleanup-resources))
+        scenes-previews (-> (parse-scenes-previews)
+                            (cleanup-resources))
+        additional-resources (-> (parse-additional-resources)
+                                 (cleanup-resources))]
+
+    (logger/group-folded "result")
+    (logger/trace-list-folded "scenes-resources" scenes-resources)
+    (logger/trace-list-folded "concepts resources" concepts-resources)
+    (logger/trace-list-folded "default assets" default-assets)
+    (logger/trace-list-folded "scenes previews" scenes-previews)
+    (logger/trace-list-folded "additional resources" additional-resources)
+    (logger/group-end "result")
+
     (->> (concat scenes-resources
                  concepts-resources
                  default-assets
                  scenes-previews
                  additional-resources)
-         (cleanup-resources))))
+         (cleanup-resources)
+         (logger/->>with-group-end (str "get lesson resources: " (:name lesson))))))
 
 (defn get-lesson-endpoints
   [course-slug {:keys [activities]}]
+  (logger/group-folded (str "get lesson endpoints" ))
+  (logger/trace "course-slug" course-slug)
+  (logger/trace "activities" activities)
   (->> activities
        (map (fn [activity-name]
               (str "/api/courses/" course-slug "/scenes/" activity-name)))
        (concat ["/api/schools/current"
                 (str "/api/courses/" course-slug)
-                (str "/api/courses/" course-slug "/lesson-sets")])))
+                (str "/api/courses/" course-slug "/lesson-sets")])
+       (doall)
+       (logger/->>with-trace-list-folded "result")
+       (logger/->>with-group-end "get lesson endpoints")))
