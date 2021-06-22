@@ -20,8 +20,9 @@
   []
   {:main        {:width          "120px"
                  :margin         "0 20px"}
-   :div-course  {:margin-bottom  "30px"}
-   :spn-course  {:margin-left    "45px"
+   :div-course  {:margin-bottom  "5px"
+                 :margin-top     "30px"}
+   :spn-course  {:margin-left    "20px"
                  :font-family    "Roboto, Helvetica, Arial, sans-serif"
                  :color          "#595959"}})
 
@@ -50,20 +51,37 @@
 ;;       (for [course courses]
 ;;         (menu-item course))]]))
 
-(defn course-selector[current-course]
-  (let [
-        ;; current-course @(re-frame/subscribe [::subs/current-course])
-        ;; current-course (r/atom "spanish")
-        styles (get-styles)]
-    (js/console.log "Current Course --->" @current-course)
+;; (defn course-selector[current-course]
+;;   (let [
+;;         ;; current-course @(re-frame/subscribe [::subs/current-course])
+;;         ;; current-course (r/atom "spanish")
+;;         styles (get-styles)]
+;;     ;; (js/console.log "Current Course --->" @current-course)
+;;     [:div {:style  (:div-course styles)}
+;;      [:span {:style  (:spn-course styles)} "Course"]
+;;      [ui/select {
+;;                  :value     @current-course
+;;                  :variant   "outlined"
+;;                  :on-change (fn [e]
+;;                               ;; (js/console.log "Course Chnaged" (.-value (.-target e)))
+;;                               (reset! current-course (.-value (.-target e)))
+;;                               )
+;;                  :style     (:main styles)}
+;;       (for [course courses]
+;;         (menu-item course))]]))
+
+(defn course-selector[props flag course]
+  (let [styles (get-styles)]
     [:div {:style  (:div-course styles)}
      [:span {:style  (:spn-course styles)} "Course"]
      [ui/select {
-                 :value     @current-course
+                 :value     (if (= :edit flag)
+                              (:course @props)
+                              @course)
                  :variant   "outlined"
                  :on-change (fn [e]
-                              ;; (js/console.log "Course Chnaged" (.-value (.-target e)))
-                              (reset! current-course (.-value (.-target e)))
+                              (reset! course (.-value (.-target e)))
+                              (swap! props assoc :course (.-value (.-target e)))
                               )
                  :style     (:main styles)}
       (for [course courses]
@@ -83,13 +101,17 @@
         class-data (r/atom current-class)
         class-modal-state @(re-frame/subscribe [::classes-subs/class-modal-state])
         handle-save (if (= :edit class-modal-state)
-                      (fn [class-data] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
-                      (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data])))
+                      (fn [class-data current-course] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
+                      (fn [class-data current-course] (re-frame/dispatch [::classes-events/add-class class-data current-course])))
         handle-close #(re-frame/dispatch [::classes-events/close-class-modal])
         loading @(re-frame/subscribe [:loading])
         ;; current-course (r/atom "spanish")
-        current-course (r/atom(:current-course db/default-db))
+        default-course (r/atom(:current-course db/default-db))
         ]
+    ;; (assoc class-data :course current-course)
+    ;; (swap! class-data assoc :course current-course)
+    ;; (js/console.log "Current Class---------" current-class)
+    ;; (js/console.log "Class Data--------->>>>>>>>>>" class-data)
     [ui/dialog
      {:open     (boolean class-modal-state)
       :on-close handle-close}
@@ -104,8 +126,14 @@
          [ui/circular-progress
           {:size  80
            :color "secondary"}]
-         [class-form-inputs class-data])]
-      [course-selector current-course]
+        ;;  [class-form-inputs class-data]
+         [:div
+          [class-form-inputs class-data]
+          ;; [course-selector current-course]
+          [course-selector class-data class-modal-state default-course ]
+          ]
+         )]
+      ;; [course-selector current-course]
       [ui/dialog-actions
        [ui/button
         {:on-click handle-close}
@@ -116,6 +144,7 @@
          :color    "primary"
          :on-click #(do (.preventDefault %)
                         (handle-save @class-data)
+                        ;; (handle-save @class-data @current-course)
                         (handle-close))}
         "Save"]]]]))
 
