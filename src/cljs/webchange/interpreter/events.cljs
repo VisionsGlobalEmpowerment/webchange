@@ -118,7 +118,7 @@
 
 (re-frame/reg-event-fx
   ::execute-show-question
-  (fn [{:keys [db]} [_ {:keys [data] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [data continue-flow] :as action}]]
     "Execute `show-question` action - allows to popup with question functionality
 
     Action params:
@@ -197,9 +197,9 @@
         }
     }"
     (let [wrappers (scene/get-object-name db :question-overlay)]
-      (question-component/create (assoc data :parent (:object wrappers)) db)
+      (question-component/create (assoc data :parent (:object wrappers)) db action)
       {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/show-question]
-                         (ce/success-event action))})))
+                         (when-not continue-flow (ce/success-event action)))})))
 
 
 (re-frame/reg-event-fx
@@ -1529,10 +1529,10 @@
     (let [transition-wrapper (->> transition keyword (scene/get-scene-object db))]
       (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
         (if success
-          {:dispatch [::ce/execute-action (vars.events/cond-action db action :success)]}
+          {:dispatch [::ce/execute-action (ce/cond-action db action :success)]}
           {:dispatch [::ce/execute-action (ce/success-event action)]})
         (if fail
-          {:dispatch [::ce/execute-action (vars.events/cond-action db action :fail)]}
+          {:dispatch [::ce/execute-action (ce/cond-action db action :fail)]}
           {:dispatch [::ce/execute-action (ce/success-event action)]})))))
 
 
@@ -1566,12 +1566,12 @@
                                               (when (not collide?)
                                                 (set-object-data data-collide)
                                                 (when success
-                                                  [::ce/execute-action (assoc (vars.events/cond-action db action :success) :params params)])))
+                                                  [::ce/execute-action (assoc (ce/cond-action db action :success) :params params)])))
                                             (let [data-collide (merge data {:collide? false})]
                                               (when (or collide? (nil? collide?))
                                                 (set-object-data data-collide)
                                                 (when fail
-                                                  [::ce/execute-action (assoc (vars.events/cond-action db action :fail) :params params)])))))))
+                                                  [::ce/execute-action (assoc (ce/cond-action db action :fail) :params params)])))))))
                          (remove nil?))]
         {:dispatch-n (vec (conj actions (ce/success-event action)))}))))
 
