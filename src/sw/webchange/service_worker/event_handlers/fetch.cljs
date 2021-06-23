@@ -30,6 +30,16 @@
   (strategy/network-or-cache {:request    request
                               :cache-name cache-name}))
 
+(defn- app-build?
+  [request]
+  (let [pathname (request-pathname request)]
+    (starts-with? pathname "/js/compiled/app.js")))
+
+(defn- serve-app-build
+  []
+  (strategy/network-or-cache {:request    "/js/compiled/app.js"
+                              :cache-name (get-cache-name :static)}))
+
 (defn- serve-rest-content
   [request]
   (if (online?)
@@ -52,6 +62,7 @@
   (cond
     (vs/api-request? request) (vs/handle-request request)
     (belong-paths? request pages-paths) (serve-page-skeleton)
+    (app-build? request) (serve-app-build)
     :else (serve-rest-content request)))
 
 (defn handle

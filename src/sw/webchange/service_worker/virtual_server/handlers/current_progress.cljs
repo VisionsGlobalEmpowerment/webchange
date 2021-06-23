@@ -7,7 +7,7 @@
     [webchange.service-worker.db.users :as db-users]
     [webchange.service-worker.virtual-server.logger :as logger]
     [webchange.service-worker.requests.api :as api]
-    [webchange.service-worker.wrappers :refer [request-clone js-fetch promise-all promise-resolve promise-reject body-json require-status-ok! then catch data->response]]))
+    [webchange.service-worker.wrappers :refer [request-clone js-fetch online? promise-all promise-resolve promise-reject body-json require-status-ok! then catch data->response]]))
 
 (defn- store-current-progress!
   [{progress :progress events :events offline :offline}]
@@ -101,16 +101,18 @@
                               (db-events/get-events current-user)])
                 (promise-reject "Cant not flush progress data. User is undefined."))))
       (then (fn [[progress-data events-data]]
-              (if (is-dirty? progress-data)
-                (let [progress (merge progress-data {:events (map :data events-data)})]
-                  (logger/debug "Flush progress" (clj->js progress))
-                  (-> (api/post-current-progress progress)
-                      (then (fn []
-                              (doseq [event events-data]
-                                (logger/debug "Remove stored event" (clj->js event))
-                                (db-events/remove-by-date (get-in event [:data :created-at])))))))
-                (do (logger/debug "Progress is empty. Skip flush")
-                    (promise-resolve)))))
+              (cond
+                (not (is-dirty? progress-data)) (do (logger/debug "Progress is empty. Skip flush")
+                                                    (promise-resolve))
+                (not (online?)) (do (logger/debug "App is offline. Skip flush")
+                                    (promise-resolve))
+                :else (let [progress (merge progress-data {:events (map :data events-data)})]
+                        (logger/debug "Flush progress" (clj->js progress))
+                        (-> (api/post-current-progress progress)
+                            (then (fn []
+                                    (doseq [event events-data]
+                                      (logger/debug "Remove stored event" (clj->js event))
+                                      (db-events/remove-by-date (get-in event [:data :created-at]))))))))))
       (catch (fn [error]
                (logger/warn "Flush progress failed" error)))))
 
