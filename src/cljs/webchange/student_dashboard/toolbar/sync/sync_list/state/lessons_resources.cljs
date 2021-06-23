@@ -19,7 +19,10 @@
   (fn [{:keys [db]} [_]]
     (let [should-parse? (->> (path-to-db [:ready?]) (get-in db) (not))]
       (if should-parse?
-        (let [scenes (get-in db [:course-data :scenes])]
+        (let [scenes (->> (get-in db [:course-data])
+                          (:scene-list)
+                          (keys)
+                          (map clojure.core/name))]
           {:db         (assoc-in db (path-to-db [:scenes]) {:done 0 :total (count scenes)})
            :dispatch-n (map (fn [scene] [::load-scene-resources scene])
                             scenes)})
