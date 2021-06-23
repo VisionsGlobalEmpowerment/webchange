@@ -96,8 +96,10 @@
 ;; --- Response ---
 
 (defn response-new
-  [body headers]
-  (js/Response. (json-stringify body) #js{"headers" headers}))
+  ([body headers]
+   (response-new body headers 200))
+  ([body headers status]
+   (js/Response. (json-stringify body) #js{"headers" headers "status" status})))
 
 (defn response-clone
   [response]
@@ -172,6 +174,13 @@
   [data]
   (let [headers {"Content-Type" "application/json"}]
     (response-new (clj->js data) (clj->js headers))))
+
+(defn data->response-error
+  ([data]
+   (data->response-error data 400))
+  ([data status]
+   (let [headers {"Content-Type" "application/json"}]
+     (response-new (clj->js data) (clj->js headers) status))))
 
 (defn require-status-ok!
   [response]

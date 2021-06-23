@@ -88,4 +88,4 @@
   ::student-login-failure
   [(re-frame/inject-cofx :redirect-param)]
   (fn [{:keys [_]} []]
-    {:api-request-error :student-login}))
+    {:dispatch [:api-request-error :student-login]}))
