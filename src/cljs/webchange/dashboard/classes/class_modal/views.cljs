@@ -6,15 +6,13 @@
    [webchange.dashboard.classes.subs :as classes-subs]
    [webchange.dashboard.students.subs :as students-subs]
    [webchange.dashboard.classes.events :as classes-events]
-   [webchange.subs :as subs]
-   [webchange.interpreter.events :as ie]
-   [webchange.db :as db]
-   ))
+   [webchange.subs :as subs]))
 
 ;; ---------------------- My Work ------------------
+
 (def courses
-  [{:key "en" :value "english" :text "English"}
-   {:key "es" :value "spanish" :text "Español"}])
+  [{:id 4 :name "english"}
+   {:id 2 :name "spanish"}])
 
 (defn- get-styles
   []
@@ -27,62 +25,31 @@
                  :color          "#595959"}})
 
 (defn- menu-item
-  [{:keys [key value text]}]
-  [ui/menu-item {:key value :value value}
+  [{:keys [id name]}]
+  [ui/menu-item {:key id :value name}
    [ui/typography {:inline  true
                    :variant "inherit"}
-    text]])
+    name]])
 
-;; (defn course-selector[]
-;;   (let [
-;;         current-course @(re-frame/subscribe [::subs/current-course])
-;;         ;; current-course (r/atom (:current-course db/default-db))
-;;         styles (get-styles)]
-;;     (js/console.log "Current Course --->" current-course)
-;;     [:div {:style  (:div-course styles)}
-;;      [:span {:style  (:spn-course styles)} "Course"]
-;;      [ui/select {:value     current-course
-;;                  :variant   "outlined"
-;;                  :on-change (fn [e]
-;;                               (js/console.log "Course Chnaged" (.-value (.-target e)))
-;;                               ;; (reset! @current-course (.-value (.-target e)))
-;;                               )
-;;                  :style     (:main styles)}
-;;       (for [course courses]
-;;         (menu-item course))]]))
+(defn my-filter [str-input return-value filter-key]
+  ((keyword return-value) (first
+                           (filter (comp #{str-input} (keyword filter-key)) courses))))
 
-;; (defn course-selector[current-course]
-;;   (let [
-;;         ;; current-course @(re-frame/subscribe [::subs/current-course])
-;;         ;; current-course (r/atom "spanish")
-;;         styles (get-styles)]
-;;     ;; (js/console.log "Current Course --->" @current-course)
-;;     [:div {:style  (:div-course styles)}
-;;      [:span {:style  (:spn-course styles)} "Course"]
-;;      [ui/select {
-;;                  :value     @current-course
-;;                  :variant   "outlined"
-;;                  :on-change (fn [e]
-;;                               ;; (js/console.log "Course Chnaged" (.-value (.-target e)))
-;;                               (reset! current-course (.-value (.-target e)))
-;;                               )
-;;                  :style     (:main styles)}
-;;       (for [course courses]
-;;         (menu-item course))]]))
-
-(defn course-selector[props flag course]
+(defn course-selector [props flag course]
   (let [styles (get-styles)]
+    (if (= :add flag)
+      (swap! props assoc :course-id
+             (js/parseInt (my-filter @course "id" "name"))))
     [:div {:style  (:div-course styles)}
      [:span {:style  (:spn-course styles)} "Course"]
-     [ui/select {
-                 :value     (if (= :edit flag)
-                              (:course @props)
+     [ui/select {:value     (if (= :edit flag)
+                              (my-filter (:course-id @props) "name" "id")
                               @course)
                  :variant   "outlined"
                  :on-change (fn [e]
                               (reset! course (.-value (.-target e)))
-                              (swap! props assoc :course (.-value (.-target e)))
-                              )
+                              (swap! props assoc :course-id
+                                     (js/parseInt (my-filter (.-value (.-target e)) "id" "name"))))
                  :style     (:main styles)}
       (for [course courses]
         (menu-item course))]]))
@@ -105,13 +72,8 @@
                       (fn [class-data current-course] (re-frame/dispatch [::classes-events/add-class class-data current-course])))
         handle-close #(re-frame/dispatch [::classes-events/close-class-modal])
         loading @(re-frame/subscribe [:loading])
-        ;; current-course (r/atom "spanish")
-        default-course (r/atom(:current-course db/default-db))
-        ]
-    ;; (assoc class-data :course current-course)
-    ;; (swap! class-data assoc :course current-course)
-    ;; (js/console.log "Current Class---------" current-class)
-    ;; (js/console.log "Class Data--------->>>>>>>>>>" class-data)
+        current-course @(re-frame/subscribe [::subs/current-course])
+        default-course (r/atom current-course)]
     [ui/dialog
      {:open     (boolean class-modal-state)
       :on-close handle-close}
@@ -126,14 +88,9 @@
          [ui/circular-progress
           {:size  80
            :color "secondary"}]
-        ;;  [class-form-inputs class-data]
          [:div
           [class-form-inputs class-data]
-          ;; [course-selector current-course]
-          [course-selector class-data class-modal-state default-course ]
-          ]
-         )]
-      ;; [course-selector current-course]
+          [course-selector class-data class-modal-state default-course]])]
       [ui/dialog-actions
        [ui/button
         {:on-click handle-close}
@@ -144,7 +101,6 @@
          :color    "primary"
          :on-click #(do (.preventDefault %)
                         (handle-save @class-data)
-                        ;; (handle-save @class-data @current-course)
                         (handle-close))}
         "Save"]]]]))
 
@@ -171,5 +127,4 @@
              :color    "primary"
              :disabled (boolean (not-empty students))
              :on-click #(re-frame/dispatch [::classes-events/confirm-delete class-id])}
-            "Confirm"]]])
-       ])))
+            "Confirm"]]])])))

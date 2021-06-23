@@ -7,13 +7,13 @@ VALUES (:id, :name) RETURNING id
 -- :name create-class! :<!
 -- :doc creates a new class record
 INSERT INTO classes
-(name, school_id)
-VALUES (:name, :school_id) RETURNING id
+(name, course_id, school_id)
+VALUES (:name, :course_id, :school_id) RETURNING id
 
 -- :name update-class! :! :n
 -- :doc updates an existing class record
 UPDATE classes
-SET name = :name
+SET name = :name, course_id = :course_id
 WHERE id = :id
 
 -- :name delete-class! :! :n
