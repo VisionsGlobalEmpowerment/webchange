@@ -25,20 +25,14 @@
 (re-frame/reg-event-fx
   ::add-class
   (fn [{:keys [db]} [_ data]]
-    ;; (assoc data :course course)
-    ;; (swap! data assoc :course course)
-    ;; (js/console.log "Course Data ========>>>>>" course)
-    (js/console.log "Class Data ==========>>>>" data)
-
-    ;; {:db (assoc-in db [:loading :add-class] true)
-    ;;  :http-xhrio {:method          :post
-    ;;               :uri             (str "/api/classes")
-    ;;               :params          data
-    ;;               :format          (json-request-format)
-    ;;               :response-format (json-response-format {:keywords? true})
-    ;;               :on-success      [::add-class-success]
-    ;;               :on-failure      [:api-request-error :add-class]}}
-    ))
+    {:db (assoc-in db [:loading :add-class] true)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/classes")
+                  :params          data
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::add-class-success]
+                  :on-failure      [:api-request-error :add-class]}}))
 
 
 (re-frame/reg-event-fx
