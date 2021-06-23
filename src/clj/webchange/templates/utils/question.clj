@@ -28,6 +28,7 @@
         fail-answer-dialog (str action-name "-fail-answer-dialog")]
     {(keyword action-name)        {:type        "show-question"
                                    :description question
+                                   :continue-flow (nil? next-action-name)
                                    :data        {:type        (if question-type question-type "type-1")
                                                  :text        question
                                                  :chunks      (text-utils/text->chunks question)
@@ -43,7 +44,9 @@
                                           {:type "action" :id success-dialog}
                                           {:type "hide-question"}
                                           {:type "empty" :duration 2000}
-                                          {:type "action" :id next-action-name}]}
+                                          (if next-action-name
+                                            {:type "action" :id next-action-name}
+                                            {:type "empty" :duration 100})]}
 
      (keyword success-dialog)     {:type               "sequence-data",
                                    :data               [{:type "sequence-data"

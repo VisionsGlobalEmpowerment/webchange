@@ -19,12 +19,12 @@
 
 (defn object-name [name object-name] (keyword (str name "-" object-name)))
 
-(defn create-page [page db]
+(defn create-page [page db action]
   (case (:type page)
-    "type-1" (type-1/create-page page db)
-    "type-2" (type-2/create-page page db)
-    "type-3" (type-3/create-page page db)))
+    "type-1" (type-1/create-page page db action)
+    "type-2" (type-2/create-page page db action)
+    "type-3" (type-3/create-page page db action)))
 
 (defn create
-  [props db]
-  (create-page props db))
+  [props db action]
+  (create-page props db action))

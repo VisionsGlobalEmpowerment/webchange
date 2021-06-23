@@ -192,17 +192,6 @@
     (core/clear-vars! true)
     {:dispatch-n (list (e/success-event action))}))
 
-(defn cond-action [db {:keys [display-name flow-id action-id] :as action} handler-type]
-  (let [handler (get action handler-type)
-        action-data (if (string? handler)
-                      (e/get-action handler db action)
-                      (-> handler
-                          (assoc :display-name [display-name handler-type])))]
-    (cond-> action-data
-            flow-id (assoc :flow-id flow-id)
-            action-id (assoc :action-id action-id)
-            :always (e/with-prev action))))
-
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
@@ -262,7 +251,7 @@
         (do
           (core/provide! items variables provider-id action)
           {:dispatch (e/success-event action)})
-        {:dispatch [::e/execute-action (cond-action db action :on-end)]}))))
+        {:dispatch [::e/execute-action (e/cond-action db action :on-end)]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-var
@@ -309,8 +298,8 @@
      :fail     'pick-wrong'}"
     (let [test (core/get-variable var-name)]
       (if (= value test)
-        {:dispatch [::e/execute-action (cond-action db action :success)]}
-        (if fail {:dispatch [::e/execute-action (cond-action db action :fail)]}
+        {:dispatch [::e/execute-action (e/cond-action db action :success)]}
+        (if fail {:dispatch [::e/execute-action (e/cond-action db action :fail)]}
                  {:dispatch (e/success-event action)})))))
 
 (re-frame/reg-event-fx
@@ -336,8 +325,8 @@
       (if (case (keyword inequality)
             :<= (<= test value)
             :>= (>= test value))
-        {:dispatch [::e/execute-action (cond-action db action :success)]}
-        (if fail {:dispatch [::e/execute-action (cond-action db action :fail)]}
+        {:dispatch [::e/execute-action (e/cond-action db action :success)]}
+        (if fail {:dispatch [::e/execute-action (e/cond-action db action :fail)]}
                  {:dispatch-n (list (e/success-event action))})))))
 
 
@@ -362,10 +351,10 @@
      :fail        'pick-wrong'}"
     (if (= value1 value2)
       (if success
-        {:dispatch-n (list [::e/execute-action (cond-action db action :success)])}
+        {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
         {:dispatch-n (list (e/success-event action))})
       (if fail
-        {:dispatch-n (list [::e/execute-action (cond-action db action :fail)])}
+        {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
         {:dispatch-n (list (e/success-event action))}
         ))))
 
@@ -386,9 +375,9 @@
      :success 'pick-correct'
      :fail    'pick-wrong'}"
     (if (<= (rand) chance)
-      {:dispatch-n (list [::e/execute-action (cond-action db action :success)])}
+      {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
       (if fail
-        {:dispatch-n (list [::e/execute-action (cond-action db action :fail)])}
+        {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
         {:dispatch-n (list (e/success-event action))}))))
 
 (re-frame/reg-event-fx
@@ -411,10 +400,10 @@
     (let [test (map core/get-variable var-names)]
       (if (= values test)
         (if success
-          {:dispatch [::e/execute-action (cond-action db action :success)]}
+          {:dispatch [::e/execute-action (e/cond-action db action :success)]}
           {:dispatch (e/success-event action)})
         (if fail
-          {:dispatch [::e/execute-action (cond-action db action :fail)]}
+          {:dispatch [::e/execute-action (e/cond-action db action :fail)]}
           {:dispatch (e/success-event action)})))))
 
 (re-frame/reg-event-fx
