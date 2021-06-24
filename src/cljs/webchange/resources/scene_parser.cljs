@@ -232,8 +232,7 @@
   (->> activities
        (map (fn [activity-name]
               (str "/api/courses/" course-slug "/scenes/" activity-name)))
-       (concat ["/api/schools/current"
-                (str "/api/courses/" course-slug)
+       (concat [(str "/api/courses/" course-slug)
                 (str "/api/courses/" course-slug "/lesson-sets")])
        (doall)
        (logger/->>with-trace-list-folded "result")

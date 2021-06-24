@@ -71,4 +71,4 @@
 (defn get-web-app-resources
   []
   {:resources (get-resources)
-   :endpoints []})
+   :endpoints ["/api/schools/current"]})
