@@ -4,7 +4,7 @@
     [webchange.service-worker.db.general :as db-general-state]
     [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
     [webchange.service-worker.virtual-server.logger :as logger]
-    [webchange.service-worker.wrappers :refer [js-fetch promise-all request-clone response-clone body-json then catch data->response require-status-ok!]]))
+    [webchange.service-worker.wrappers :refer [js-fetch data->response-error promise-all request-clone response-clone body-json then catch data->response require-status-ok!]]))
 
 (defn post-offline
   [request]
@@ -14,7 +14,10 @@
       (then #(get % :access-code))
       (then db-general-state/set-current-code)
       (then db-users/get-current-user)
-      (then data->response)))
+      (then (fn [current-user]
+              (if (some? current-user)
+                (data->response current-user)
+                (data->response-error {"errors" {"form" "Invalid credentials"}}))))))
 
 (defn post-online
   [request]

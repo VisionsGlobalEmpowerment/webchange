@@ -3,6 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.db :refer [default-db]]
     [webchange.events :as events]
     [webchange.interpreter.events :as ie]
     [webchange.ui.theme :refer [get-in-theme]]))
@@ -31,7 +32,7 @@
 
 (defn login-switch
   []
-  (r/with-let [current-course (r/atom "spanish")]
+  (r/with-let [current-course (r/atom (:current-course default-db))]
     (let [translation-module-url (str "/courses/" @current-course "/editor-v2")
           styles (get-styles)]
       [ui/card {:style (:card styles)}

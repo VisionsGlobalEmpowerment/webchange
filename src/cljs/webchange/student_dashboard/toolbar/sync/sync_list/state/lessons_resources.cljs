@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.core :as i]
+    [webchange.logger.index :as logger]
     [webchange.resources.scene-parser :refer [get-lesson-resources get-lesson-endpoints]]
     [webchange.student-dashboard.toolbar.sync.sync-list.state.db :as db]))
 
@@ -18,7 +19,10 @@
   (fn [{:keys [db]} [_]]
     (let [should-parse? (->> (path-to-db [:ready?]) (get-in db) (not))]
       (if should-parse?
-        (let [scenes (get-in db [:course-data :scenes])]
+        (let [scenes (->> (get-in db [:course-data])
+                          (:scene-list)
+                          (keys)
+                          (map clojure.core/name))]
           {:db         (assoc-in db (path-to-db [:scenes]) {:done 0 :total (count scenes)})
            :dispatch-n (map (fn [scene] [::load-scene-resources scene])
                             scenes)})
@@ -53,21 +57,32 @@
 
 ;; Parsing
 
+(defn- get-lesson-name
+  [{:keys [level level-idx lesson lesson-idx]}]
+  (let [level-name (str "Level " (inc level-idx))
+        lesson-type (get-in level [:scheme (-> lesson :type keyword) :name] "Lesson")
+        lesson-name (str lesson-type " " (inc lesson-idx))]
+    (str level-name " - " lesson-name)))
+
 (defn- get-lessons-data
   [levels navigation-activities]
   (->> levels
-       (map (fn [level]
-              (map (fn [lesson]
-                     {:name        (str (:name level) " - " (:name lesson))
-                      :level-id    (:level level)
-                      :lesson-id   (:lesson lesson)
-                      :activities  (->> (:activities lesson) (map :activity) (concat navigation-activities))
-                      :lesson-sets (->> (:lesson-sets lesson) (vals))})
-                   (:lessons level))))
+       (map-indexed (fn [level-idx level]
+                      (map-indexed (fn [lesson-idx lesson]
+                                     {:name        (get-lesson-name {:level      level
+                                                                     :level-idx  level-idx
+                                                                     :lesson     lesson
+                                                                     :lesson-idx lesson-idx})
+                                      :level-id    level-idx
+                                      :lesson-id   lesson-idx
+                                      :activities  (->> (:activities lesson) (map :activity) (concat navigation-activities))
+                                      :lesson-sets (->> (:lesson-sets lesson) (vals))})
+                                   (:lessons level))))
        (flatten)))
 
 (defn- get-lessons-list
   [levels navigation-activities scenes-data current-course]
+  (logger/group-folded "Prepare lessons list")
   (->> (get-lessons-data levels navigation-activities)
        (map (fn [{:keys [level-id lesson-id] :as lesson}]
               (let [resources (get-lesson-resources lesson scenes-data)
@@ -75,7 +90,8 @@
                 (merge lesson
                        {:id        (+ lesson-id (* level-id 1000))
                         :resources resources
-                        :endpoints endpoints}))))))
+                        :endpoints endpoints}))))
+       (logger/->>with-group-end "Prepare lessons list")))
 
 (defn- get-navigation-activities
   [course-data]
