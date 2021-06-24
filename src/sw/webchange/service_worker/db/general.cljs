@@ -29,7 +29,7 @@
                  (then (fn [current-course]
                          (if-not (nil? current-course)
                            (resolve current-course)
-                           (reject "Course is not defined"))))))))
+                           (resolve "english"))))))))
 
 (defn set-current-course
   [course]
