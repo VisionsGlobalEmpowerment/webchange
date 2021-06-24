@@ -5,10 +5,7 @@
    [reagent.core :as r]
    [webchange.dashboard.classes.subs :as classes-subs]
    [webchange.dashboard.students.subs :as students-subs]
-   [webchange.dashboard.classes.events :as classes-events]
-   [webchange.subs :as subs]))
-
-;; ---------------------- My Work ------------------
+   [webchange.dashboard.classes.events :as classes-events]))
 
 (def courses
   [{:id 4 :name "english"}
@@ -31,29 +28,36 @@
                    :variant "inherit"}
     name]])
 
-(defn my-filter [str-input return-value filter-key]
-  ((keyword return-value) (first
-                           (filter (comp #{str-input} (keyword filter-key)) courses))))
+(defn get-course-id
+  [props]  (->> courses
+                (filter #(= props (:name %)))
+                (first)
+                (:id)))
+
+(defn get-course-name
+  [props]  (->> courses
+                (filter #(= props (:id %)))
+                (first)
+                (:name)))
 
 (defn course-selector [props flag course]
   (let [styles (get-styles)]
     (if (= :add flag)
       (swap! props assoc :course-id
-             (js/parseInt (my-filter @course "id" "name"))))
+             (js/parseInt (get-course-id @course))))
     [:div {:style  (:div-course styles)}
      [:span {:style  (:spn-course styles)} "Course"]
      [ui/select {:value     (if (= :edit flag)
-                              (my-filter (:course-id @props) "name" "id")
+                              (get-course-name (:course-id @props))
                               @course)
                  :variant   "outlined"
                  :on-change (fn [e]
                               (reset! course (.-value (.-target e)))
                               (swap! props assoc :course-id
-                                     (js/parseInt (my-filter (.-value (.-target e)) "id" "name"))))
+                                     (js/parseInt (get-course-id (.-value (.-target e))))))
                  :style     (:main styles)}
       (for [course courses]
         (menu-item course))]]))
-;; ---------------------- My work ends --------------
 
 (defn- class-form-inputs
   [props]
@@ -68,12 +72,13 @@
         class-data (r/atom current-class)
         class-modal-state @(re-frame/subscribe [::classes-subs/class-modal-state])
         handle-save (if (= :edit class-modal-state)
-                      (fn [class-data current-course] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
-                      (fn [class-data current-course] (re-frame/dispatch [::classes-events/add-class class-data current-course])))
+                      (fn [class-data] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
+                      (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data])))
         handle-close #(re-frame/dispatch [::classes-events/close-class-modal])
         loading @(re-frame/subscribe [:loading])
-        current-course @(re-frame/subscribe [::subs/current-course])
-        default-course (r/atom current-course)]
+        default-course (r/atom (->> courses
+                                    (first)
+                                    (:name)))]
     [ui/dialog
      {:open     (boolean class-modal-state)
       :on-close handle-close}
