@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views :refer [action-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
+    [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
     [webchange.ui-framework.components.index :refer [label select]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -39,4 +40,5 @@
        (for [[idx {:keys [path] :as action}] (map-indexed vector actions)]
          ^{:key (concat [(count actions)] path)}
          [action-unit (merge action
-                             {:idx idx})])]]]))
+                             {:idx idx})])]]
+     [text-chunks-modal]]))

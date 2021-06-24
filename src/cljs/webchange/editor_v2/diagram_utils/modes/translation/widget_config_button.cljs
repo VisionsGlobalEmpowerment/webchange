@@ -12,7 +12,7 @@
 (defn- get-styles
   []
   {:config-button {:right    "0"
-                   :top      "0"
+                   :bottom   "0"
                    :position "absolute"
                    :margin   "10px"
                    :width    "36px"

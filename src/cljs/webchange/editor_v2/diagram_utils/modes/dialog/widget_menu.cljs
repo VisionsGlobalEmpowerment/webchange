@@ -30,7 +30,7 @@
   (let [current-target (-> (actions-defaults/get-inner-action (:data number)) (get :target))
         action (cond-> action
                        (some? current-target) (actions-defaults/update-inner-action {:target current-target}))]
-    (re-frame/dispatch [::dialog-form.actions/add-new-phrase-action action relative-position number node path])))
+    (re-frame/dispatch [::dialog-form.actions/add-new-scene-action action relative-position number node path])))
 
 (defn- add-concept-action
   [relative-position number]
