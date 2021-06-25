@@ -170,7 +170,7 @@
                                                :size  "small"
                                                :title "Voice-over"}]
                       :sub-items [{:control [audios-menu {:action-data action-data}]}]}])
-            (= type :effect)
+            true
             (concat [{:control   [icon-button {:icon  "delay"
                                                :size  "small"
                                                :title "Delay"}]
