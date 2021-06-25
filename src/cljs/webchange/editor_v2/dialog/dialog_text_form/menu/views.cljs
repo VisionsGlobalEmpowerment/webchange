@@ -165,7 +165,7 @@
                                                                                                                       :relative-position :parallel
                                                                                                                       :effect            effect})}]}]})
                                                 available-effects)}])
-            (= type :phrase)
+            (some #{type} [:phrase :text-animation])
             (concat [{:control   [icon-button {:icon  "mic"
                                                :size  "small"
                                                :title "Voice-over"}]

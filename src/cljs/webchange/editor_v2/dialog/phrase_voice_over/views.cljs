@@ -12,14 +12,15 @@
     [:div
      (when (some? url)
        [audio-wave-form (merge audio-data
-                               {:on-change handle-change-region})])]))
+                               {:show-controls? true
+                                :on-change      handle-change-region})])]))
 
 (defn phrase-voice-over-modal
   []
   (let [open? @(re-frame/subscribe [::state/modal-open?])
         handle-close #(re-frame/dispatch [::state/close-modal])]
     [dialog
-     {:title    "Phrase Voice-over"
+     {:title    "Select Audio Form"
       :open?    open?
       :on-close handle-close}
      [phrase-voice-over-form]]))
