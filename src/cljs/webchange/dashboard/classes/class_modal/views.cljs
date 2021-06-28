@@ -8,8 +8,8 @@
    [webchange.dashboard.classes.events :as classes-events]))
 
 (def courses
-  [{:id 4 :name "english"}
-   {:id 2 :name "spanish"}])
+  [{:course-id 4 :name "english"}
+   {:course-id 2 :name "spanish"}])
 
 (defn- get-styles
   []
@@ -22,8 +22,8 @@
                  :color          "#595959"}})
 
 (defn- menu-item
-  [{:keys [id name]}]
-  [ui/menu-item {:key id :value name}
+  [{:keys [course-id name]}]
+  [ui/menu-item {:key course-id :value name}
    [ui/typography {:inline  true
                    :variant "inherit"}
     name]])
@@ -32,29 +32,21 @@
   [props]  (->> courses
                 (filter #(= props (:name %)))
                 (first)
-                (:id)))
+                (:course-id)))
 
 (defn get-course-name
   [props]  (->> courses
-                (filter #(= props (:id %)))
+                (filter #(= props (:course-id %)))
                 (first)
                 (:name)))
 
-(defn course-selector [props flag course]
+(defn course-selector [props]
   (let [styles (get-styles)]
-    (if (= :add flag)
-      (swap! props assoc :course-id
-             (js/parseInt (get-course-id @course))))
     [:div {:style  (:div-course styles)}
      [:span {:style  (:spn-course styles)} "Course"]
-     [ui/select {:value     (if (= :edit flag)
-                              (get-course-name (:course-id @props))
-                              @course)
+     [ui/select {:value     (get-course-name (:course-id @props))
                  :variant   "outlined"
-                 :on-change (fn [e]
-                              (reset! course (.-value (.-target e)))
-                              (swap! props assoc :course-id
-                                     (js/parseInt (get-course-id (.-value (.-target e))))))
+                 :on-change #(swap! props assoc :course-id (get-course-id (->> % .-target .-value)))
                  :style     (:main styles)}
       (for [course courses]
         (menu-item course))]]))
@@ -69,16 +61,15 @@
 (defn class-modal
   []
   (let [current-class @(re-frame/subscribe [::classes-subs/current-class])
-        class-data (r/atom current-class)
         class-modal-state @(re-frame/subscribe [::classes-subs/class-modal-state])
+        class-data (r/atom (if (= :edit class-modal-state)
+                             current-class
+                             {:course-id 4 :name nil}))
         handle-save (if (= :edit class-modal-state)
                       (fn [class-data] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
                       (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data])))
         handle-close #(re-frame/dispatch [::classes-events/close-class-modal])
-        loading @(re-frame/subscribe [:loading])
-        default-course (r/atom (->> courses
-                                    (first)
-                                    (:name)))]
+        loading @(re-frame/subscribe [:loading])]
     [ui/dialog
      {:open     (boolean class-modal-state)
       :on-close handle-close}
@@ -95,7 +86,7 @@
            :color "secondary"}]
          [:div
           [class-form-inputs class-data]
-          [course-selector class-data class-modal-state default-course]])]
+          [course-selector class-data]])]
       [ui/dialog-actions
        [ui/button
         {:on-click handle-close}
