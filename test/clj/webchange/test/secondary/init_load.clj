@@ -43,13 +43,13 @@
 (deftest can-import-student-and-class
   (let [student (f/student-created)
         student-old (dissoc (db/get-student-by-user {:user_id (:user-id student)}) :id)
-        class-old (dissoc (db/get-class {:id (:class-id student)}) :id)
+        class-old (dissoc (db/get-class {:id (:class-id student)}) :id :course-id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data dump)
     (let [student-new (dissoc (db/get-student-by-user {:user_id (:user-id student)}) :id)
-          class-new (dissoc (db/get-class {:id (:class-id student)}) :id)]
+          class-new (dissoc (db/get-class {:id (:class-id student)}) :id :course-id)]
       (assert (= student-old student-new))
       (assert (= class-old class-new))
       (assert (not (nil? student-old)))

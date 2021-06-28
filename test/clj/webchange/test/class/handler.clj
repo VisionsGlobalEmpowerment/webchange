@@ -35,7 +35,8 @@
 (deftest class-can-be-updated
   (let [{class-id :id} (f/class-created)
         updated-name "edited"
-        _ (f/update-class! class-id {:name updated-name})
+        updated-course-id 4
+        _ (f/update-class! class-id {:name updated-name :course-id updated-course-id})
         retrieved (-> class-id f/get-class :body slurp (json/read-str :key-fn keyword) :class)]
     (is (= updated-name (:name retrieved)))))
 
