@@ -9,6 +9,7 @@
   [{:keys [action-path track-id track-idx type]}]
   (case type
     "dialog" (re-frame/dispatch [::state/open-dialog-window action-path])
+    "question" (re-frame/dispatch [::state/open-question-window action-path])
     "track" (re-frame/dispatch [::state/set-second-track-data {:id track-id :idx track-idx}])))
 
 (defn activity-tracks
