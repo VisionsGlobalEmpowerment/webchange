@@ -138,7 +138,7 @@
                                                          :x       52
                                                          :y       42
                                                          :fill    "#FFFFFF",
-                                                         :actions {:click {:id "run-playback-click" :on "click" :type "action" :unique-tag "intro"}}
+                                                         :actions {:click {:id "run-playback-click" :on "click" :type "action"}}
                                                          :data    "M34.2834 17.57L6.05798 0.63479C3.39189 -0.964869 0 0.955583 0 4.06476V37.9352C0 41.0444 3.39189 42.9649 6.05798 41.3652L34.2834 24.43C36.8727 22.8764 36.8727 19.1236 34.2834 17.57"}
                                :stop-playback-button    {:type          "rectangle"
                                                          :x             45
@@ -227,7 +227,8 @@
                                                                                       :from-var [{:var-name        "recording-studio-audio"
                                                                                                   :action-property "var-value"}]}
                                                                                      {:type "action" :id "show-playback-group"}
-                                                                                     {:type "action" :id "remove-timeout-timer"}]}]}
+                                                                                     {:type "action" :id "remove-timeout-timer"}
+                                                                                     {:type "action" :id "stop-recording-dialog"}]}]}
                                                            :fail     {:type "sequence-data"
                                                                       :data [{:type "set-variable" :var-name "record-button-state" :var-value "stop"}
                                                                              {:type "start-audio-recording"}
@@ -235,24 +236,24 @@
                                                                              {:type "action" :id "show-button-stop"}]}}
 
                                :show-playback-group       {:type "parallel"
-                                                           :data [{:type "state" :target "approve-group" :id "visible"}
-                                                                  {:type "state" :target "playback-group" :id "visible"}]}
+                                                           :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value true}
+                                                                  {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value true}]}
 
                                :hide-playback-group       {:type "parallel"
-                                                           :data [{:type "state" :target "approve-group" :id "hidden"}
-                                                                  {:type "state" :target "playback-group" :id "hidden"}]}
+                                                           :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value false}
+                                                                  {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value false}]}
 
                                :run-record-playing        {:type "parallel"
-                                                           :data [{:type "state" :target "run-playback-button" :id "hidden"}
-                                                                  {:type "state" :target "stop-playback-button" :id "visible"}
+                                                           :data [{:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value false}
+                                                                  {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value true}
                                                                   {:type     "audio"
                                                                    :tags     ["recorded-audio-flow"]
                                                                    :from-var [{:var-name        "recording-studio-audio"
                                                                                :action-property "id"}]}]}
                                :stop-record-playing       {:type "parallel"
                                                            :data [{:type "remove-flows" :flow-tag "recorded-audio-flow"}
-                                                                  {:type "state" :target "run-playback-button" :id "visible"}
-                                                                  {:type "state" :target "stop-playback-button" :id "hidden"}]}
+                                                                  {:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value true}
+                                                                  {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value false}]}
                                :run-playback-click        {:type "sequence-data"
                                                            :data [{:type "action" :id "remove-timeout-timer"}
                                                                   {:type "action" :id "run-record-playing"}
@@ -274,10 +275,11 @@
                                                                      :target     "concept-image"
                                                                      :attr-name  "visible"
                                                                      :attr-value true}
-                                                                    {:type "action" :id "demo-dialog"}]
+                                                                    {:type "action" :id "demo-dialog"}
+                                                                    {:type "action" :id "reset-controls"}]
                                                            :on-end "finish"}
-                               :reset-controls            {:type "sequnce-data"
-                                                           :data []}
+                               :reset-controls            {:type "sequence-data"
+                                                           :data [{:type "action" :id "hide-playback-group"}]}
                                :approve-playback-click    {:type "action" :id "script"}
                                :finish                    {:type "sequence-data"
                                                            :data [{:type "action" :id "remove-timeout-timer"}
@@ -298,6 +300,7 @@
                                :empty                     {:type "empty" :duration 100}
                                :intro-dialog              (-> (dialog/default "Intro")
                                                               (assoc :unique-tag "intro"))
+                               :stop-recording-dialog     (dialog/default "Stop recording")
                                :finish-dialog             (dialog/default "Finish")
                                :demo-dialog               (-> (dialog/default "Demo")
                                                               (assoc :unique-tag "intro"))}
@@ -312,6 +315,8 @@
                                                              :action-id "intro-dialog"}
                                                             {:type      "dialog"
                                                              :action-id "demo-dialog"}
+                                                            {:type      "dialog"
+                                                             :action-id "stop-recording-dialog"}
                                                             {:type      "dialog"
                                                              :action-id "finish-dialog"}]}]
                                :available-actions [{:action "highlight-record-button"
