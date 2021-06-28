@@ -1,0 +1,10 @@
+.current-audio {
+    .audio-wave-form {
+        display: flex;
+        gap: 8px;
+
+        .body {
+            flex: 1 1;
+        }
+    }
+}

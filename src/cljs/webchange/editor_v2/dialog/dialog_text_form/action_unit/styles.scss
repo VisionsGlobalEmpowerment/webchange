@@ -71,6 +71,23 @@ $units-margin: 6px;
         }
     }
 
+    &.selected {
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 4px;
+
+        &:after {
+            content: "→";
+
+            display: block;
+            position: absolute;
+            top: 50%;
+            margin-top: -11px;
+            left: -12px;
+
+            font-weight: bold;
+        }
+    }
+
     &.parallel {
         &:before {
             content: " ";
@@ -108,10 +125,6 @@ $units-margin: 6px;
                 border-width: 0 0 1px 1px;
             }
         }
-    }
-
-    &:hover {
-        border-bottom: dashed 1px #d7d7d7;
     }
 }
 

@@ -81,7 +81,9 @@
     (let [current-target (-> (:data node-data) (defaults/get-inner-action) (get :target))
           new-action-data (cond-> defaults/default-action
                                   (some? current-target) (defaults/update-inner-action {:target current-target}))]
-      {:dispatch [::add-new-scene-action new-action-data relative-position node-data]})))
+      (if (= relative-position :parallel)
+        {:dispatch [::add-new-phrase-parallel-action new-action-data node-data]}
+        {:dispatch [::add-new-scene-action new-action-data relative-position node-data]}))))
 
 (re-frame/reg-event-fx
   ::add-new-empty-text-animation-action

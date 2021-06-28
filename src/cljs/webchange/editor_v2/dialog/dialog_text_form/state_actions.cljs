@@ -11,16 +11,6 @@
                                   (vector? (:path value))
                                   (map? (:data value))))
 
-;; Delay
-
-(re-frame/reg-event-fx
-  ::set-action-delay
-  (fn [{:keys []} [_ {:keys [action-path action-type value]}]]
-    {:pre [(pre_action-type action-type)]}
-    {:dispatch [::state-actions/update-empty-action-by-path {:action-path action-path
-                                                             :action-type action-type
-                                                             :data-patch  {:duration (float value)}}]}))
-
 ;; Phrase
 
 (re-frame/reg-event-fx

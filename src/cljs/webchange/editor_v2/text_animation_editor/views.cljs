@@ -16,7 +16,7 @@
         parts (chunks->parts (:text text-object-data) (:chunks text-object-data))
         handle-chunks-change (fn [text-name text-data-patch]
                                (re-frame/dispatch [::state/set-current-text-data text-name text-data-patch]))]
-    [:div.text-animation-form
+    [:div.text-animation-editor
      [chunks-editor-form (merge (select-keys text-object-data [:text :chunks])
                                  {:on-change             (fn [data] (handle-chunks-change (keyword text-object-name) data))
                                   :show-chunks?          false

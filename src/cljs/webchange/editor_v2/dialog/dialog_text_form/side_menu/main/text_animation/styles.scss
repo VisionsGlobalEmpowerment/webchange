@@ -1,0 +1,17 @@
+.text-animation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .settings {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+}

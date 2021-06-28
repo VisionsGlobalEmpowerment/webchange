@@ -121,14 +121,17 @@
   [:div.unknown-unit "Not editable action"])
 
 (defn action-unit
-  [{:keys [idx parallel-mark type] :as props}]
-  (r/with-let [container-ref (r/atom nil)]
+  [{:keys [idx parallel-mark type selected?] :as props}]
+  (r/with-let [container-ref (r/atom nil)
+               handle-click #(re-frame/dispatch [::state/set-selected-action props])]
     [:div {:ref        #(when (some? %) (reset! container-ref %))
+           :on-click   handle-click
            :class-name (get-class-name {"action-unit"     true
                                         "parallel"        (not= parallel-mark :none)
                                         "parallel-start"  (= parallel-mark :start)
                                         "parallel-middle" (= parallel-mark :middle)
-                                        "parallel-end"    (= parallel-mark :end)})}
+                                        "parallel-end"    (= parallel-mark :end)
+                                        "selected"        selected?})}
      (case type
        :effect [effect-unit props]
        :phrase [phrase-unit props]
