@@ -44,4 +44,5 @@
     [webchange.templates.library.writing-2]
     [webchange.templates.library.cinema]
     [webchange.templates.library.first-words-book]
-    [webchange.templates.library.interactive-read-aloud-import]))
+    [webchange.templates.library.interactive-read-aloud-import]
+    [webchange.templates.library.recording-studio-rounds]))
