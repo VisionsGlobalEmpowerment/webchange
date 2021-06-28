@@ -59,3 +59,9 @@
   {:pre [(string? action-name)]}
   (get-action-data {:action-name action-name
                     :action-data {}}))
+
+(defn text-animation-action?
+  [action-data]
+  (-> (get-inner-action action-data)
+      (get :type)
+      (= "text-animation")))

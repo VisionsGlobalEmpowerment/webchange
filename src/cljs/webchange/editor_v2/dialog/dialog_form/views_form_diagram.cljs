@@ -21,7 +21,7 @@
         node {:path (concat path [(if (= node-list-count 0) 0 (dec node-list-count))])}
         relative-position (if (= node-list-count 0) :before :after)
         ]
-    (re-frame/dispatch [::dialog-form.actions/add-new-phrase-action action relative-position node]))
+    (re-frame/dispatch [::dialog-form.actions/add-new-scene-action action relative-position node]))
   )
 
 (defn- add-concept-action

@@ -34,6 +34,7 @@
     [webchange.ui-framework.components.icon.icon-stop :as stop]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
+    [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-volume :as volume]
     [webchange.ui-framework.components.icon.icon-warning :as warning]
@@ -75,6 +76,7 @@
    "stop"            stop/data
    "swap"            swap/data
    "sync"            sync/data
+   "text-animation"  text-animation/data
    "undo"            undo/data
    "volume"          volume/data
    "warning"         warning/data})

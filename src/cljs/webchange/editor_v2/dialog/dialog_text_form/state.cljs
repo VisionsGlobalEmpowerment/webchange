@@ -100,3 +100,34 @@
                   [::state-actions/set-phrase-target {:action-path action-path
                                                       :action-type action-type
                                                       :value       target}]]}))
+
+;; Text animation target
+
+(re-frame/reg-sub
+  ::available-text-animation-targets
+  (fn [_]
+    [(re-frame/subscribe [::translator-form.scene/text-objects])])
+  (fn [[targets]]
+    (->> targets
+         (map first)
+         (map clojure.core/name))))
+
+(def current-text-animation-target-path :current-target)
+
+(re-frame/reg-sub
+  ::current-text-animation-target
+  (fn [db [_ action-path]]
+    (get-in db (path-to-db [current-text-animation-target-path action-path]))))
+
+(re-frame/reg-event-fx
+  ::set-current-text-animation-target
+  (fn [{:keys [db]} [_ action-path target]]
+    {:db (assoc-in db (path-to-db [current-text-animation-target-path action-path]) target)}))
+
+(re-frame/reg-event-fx
+  ::set-text-animation-action-target
+  (fn [{:keys [_]} [_ action-path action-type target]]
+    {:dispatch-n [[::set-current-text-animation-target action-path target]
+                  [::state-actions/set-phrase-target {:action-path action-path
+                                                      :action-type action-type
+                                                      :value       target}]]}))

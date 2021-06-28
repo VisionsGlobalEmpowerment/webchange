@@ -3,37 +3,14 @@ $units-margin: 6px;
 .action-unit {
     position: relative;
     margin: $units-margin 0;
+    padding: 2px 8px;
     border-bottom: solid 1px rgba(0,0,0,0);
 
     .phrase-unit {
-        padding: 2px 8px;
         border-radius: 4px;
 
         &.concept-unit {
             background-color: rgba(255, 223, 130, 0.25);
-        }
-
-        .targets-menu {
-            display: inline-block;
-        }
-
-        .target-value {
-            display: inline-block;
-            font-weight: bold;
-            margin-right: 8px;
-            cursor: pointer;
-
-            &:hover {
-                text-decoration: underline;
-            }
-
-            &:after {
-                content: ":";
-            }
-        }
-
-        .text {
-            outline: none;
         }
     }
 
@@ -55,6 +32,42 @@ $units-margin: 6px;
             svg {
                 fill: #a6a6a6;
             }
+        }
+    }
+
+    .text-animation-unit {
+
+    }
+
+    .unknown-unit {
+        font-size: 12px;
+        font-weight: 200;
+    }
+
+    .targets-menu {
+        display: inline-block;
+
+        .target-value {
+            display: inline-block;
+            font-weight: bold;
+            margin-right: 8px;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &:after {
+                content: ":";
+            }
+        }
+    }
+
+    .text {
+        outline: none;
+
+        &.text-disabled {
+            cursor: default;
         }
     }
 
