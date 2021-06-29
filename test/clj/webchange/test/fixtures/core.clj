@@ -104,7 +104,7 @@
   ([] (course-created {}))
   ([options]
    (let [defaults {:name "test-course"
-                   :slug "test-course-slug"
+                   :slug (apply str (take 6 (repeatedly #(char (+ (rand 26) 97)))))
                    :lang nil
                    :image-src nil
                    :status "draft"

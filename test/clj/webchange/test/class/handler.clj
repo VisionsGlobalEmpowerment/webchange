@@ -20,23 +20,19 @@
         retrieved (-> class :id f/get-class :body slurp (json/read-str :key-fn keyword) :class)]
     (is (= (:name class) (:name retrieved)))))
 
-;; (deftest class-can-be-created
-;;   (let [test-name "test-name"
-;;         class (f/create-class! {:name test-name})
-;;         retrieved (-> class :id f/get-class :body slurp (json/read-str :key-fn keyword) :class)]
-;;     (is (= test-name (:name retrieved)))))
 (deftest class-can-be-created
   (let [test-name "test-name"
+        {course-id :id} (f/course-created)
         class (f/create-class! {:name test-name
-                                :course-id 4})
+                                :course-id course-id})
         retrieved (-> class :id f/get-class :body slurp (json/read-str :key-fn keyword) :class)]
     (is (= test-name (:name retrieved)))))
 
 (deftest class-can-be-updated
   (let [{class-id :id} (f/class-created)
         updated-name "edited"
-        updated-course-id 4
-        _ (f/update-class! class-id {:name updated-name :course-id updated-course-id})
+        {course-id :id} (f/course-created)
+        _ (f/update-class! class-id {:name updated-name :course-id course-id})
         retrieved (-> class-id f/get-class :body slurp (json/read-str :key-fn keyword) :class)]
     (is (= updated-name (:name retrieved)))))
 
