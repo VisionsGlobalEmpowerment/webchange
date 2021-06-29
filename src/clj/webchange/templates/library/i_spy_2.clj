@@ -253,7 +253,7 @@
                                              :transition "icon-post",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy/transparent.png"
-                                             :actions    {:click {:id "icon-post-click", :on "click", :type "action"}}}
+                                             :actions    {:click {:id "icon-post-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-street-closed {:type       "image",
                                              :x          1800,
                                              :y          660,
@@ -262,7 +262,7 @@
                                              :transition "icon-street-closed",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy/transparent.png"
-                                             :actions    {:click {:id "icon-street-closed-click", :on "click", :type "action"}}}
+                                             :actions    {:click {:id "icon-street-closed-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-2942          {:type       "image",
                                              :x          610,
                                              :y          508,
@@ -271,7 +271,7 @@
                                              :transition "icon-2942",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy/transparent.png"
-                                             :actions    {:click {:id "icon-2942-click", :on "click", :type "action"}}}
+                                             :actions    {:click {:id "icon-2942-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :t-shirt-2
                                             {:type           "text",
                                              :x              823,
@@ -568,7 +568,8 @@
                                                    :data [
                                                           {:type "action" :id "init-items"}
                                                           {:type "action" :id "intro-dialog"}
-                                                          ]}
+                                                          ]
+                                                   :unique-tag "speech"}
                         :intro-dialog             {:type               "sequence-data",
                                                    :editor-type        "dialog",
                                                    :data               [{:type "sequence-data"
@@ -607,7 +608,7 @@
                                               :action-id :item-4-next-dialog}
                                              {:type      "dialog"
                                               :action-id :item-5-next-dialog}]}
-                                    {:title "Wrong answers"
+                                    {:title "Other Print"
                                      :nodes [{:type      "dialog"
                                               :action-id :icon-post-click}
                                              {:type      "dialog"
