@@ -199,7 +199,7 @@
                                              :transition "icon-max",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy/transparent.png"
-                                             :actions    {:click {:id "icon-max-click", :on "click", :type "action"}}}
+                                             :actions    {:click {:id "icon-max-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-park          {:type       "image",
                                             :x          575,
                                             :y          230,
@@ -208,7 +208,7 @@
                                             :transition "icon-park",
                                             :filter     "brighten",
                                             :src        "/raw/img/i-spy/transparent.png"
-                                            :actions    {:click {:id "icon-park-click", :on "click", :type "action"}}}
+                                            :actions    {:click {:id "icon-park-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-1       {:type       "image",
                                        :x          700,
                                        :y          940,
@@ -560,7 +560,8 @@
                                              :data [
                                                     {:type "action" :id "init-items"}
                                                     {:type "action" :id "intro-dialog"}
-                                                    ]}
+                                                    ]
+                                             :unique-tag "speech"}
                         :intro-dialog       {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
@@ -599,7 +600,7 @@
                                               :action-id :item-4-next-dialog}
                                              {:type      "dialog"
                                               :action-id :item-5-next-dialog}]}
-                                    {:title "Wrong answers"
+                                    {:title "Other Print"
                                      :nodes [{:type      "dialog"
                                               :action-id :icon-max-click}
                                              {:type      "dialog"
