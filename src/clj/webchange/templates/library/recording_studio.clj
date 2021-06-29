@@ -26,9 +26,7 @@
                         {:url "/raw/clipart/recording_studio/recording_studio_decoration.png" :type "image"}
                         {:url "/raw/clipart/recording_studio/recording_studio_surface.png" :type "image"}
                         {:url "/raw/clipart/recording_studio/mic.png" :type "image"}
-                        {:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}
-                        {:url "/raw/audio/l2/a11/L2_A11_Mari.m4a" :type "audio"}
-                        {:url "/raw/audio/l2/mari-chants.m4a" :size 5 :type "audio" :alias "mari chants"}]
+                        {:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}]
         :objects       {:background              {:type       "layered-background"
                                                   :background {:src "/raw/clipart/recording_studio/recording_studio_background.png"}
                                                   :decoration {:src "/raw/clipart/recording_studio/recording_studio_decoration.png"}

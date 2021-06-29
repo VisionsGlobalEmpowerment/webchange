@@ -277,6 +277,17 @@
            (with-prev prev))
        (-> (str "Action '" id "' was not found") js/Error. throw)))))
 
+(defn cond-action [db {:keys [display-name flow-id action-id] :as action} handler-type]
+  (let [handler (get action handler-type)
+        action-data (if (string? handler)
+                      (get-action handler db action)
+                      (-> handler
+                          (assoc :display-name [display-name handler-type])))]
+    (cond-> action-data
+            flow-id (assoc :flow-id flow-id)
+            action-id (assoc :action-id action-id)
+            :always (with-prev action))))
+
 (declare discard-flow!)
 (declare register-flow-tags!)
 
@@ -521,7 +532,7 @@
   ([db action]
    (execute-sequence-data! db action 0))
   ([db action sequence-position]
-   (if (empty? (:data action))
+   (if (empty? (remove nil? (:data action)))
      (dispatch-success-fn action)
      (let [action (->with-vars db action)
            [current & rest] (:data action)

@@ -76,7 +76,7 @@
                                  :tool    "felt-tip"
                                  :color   "#4479bb"
                                  :visible false
-                                 :change  {:on "click" :type "action" :id "timeout-timer"}}
+                                 :actions {:change {:on "click" :type "action" :id "timeout-timer"}}}
                    :painting-toolset
                                 {:type       "painting-toolset"
                                  :transition "painting-toolset"
@@ -102,13 +102,13 @@
                                  :speed      0.35,
                                  :start      true
                                  :actions    {:click {:on "click" :type "action" :id "tap-instructions"}}},
-                   :next-button {:type     "image"
-                                 :x        1776 :y 48
-                                 :actions  {:click {:id "finish-activity", :on "click", :type "action"}}
-                                 :filters  [{:name "brightness" :value 0}
-                                            {:name "glow" :outer-strength 0 :color 0xffd700}]
-                                 :visible  false
-                                 :src "/raw/img/ui/checkmark.png"}},
+                   :next-button {:type    "image"
+                                 :x       1776 :y 48
+                                 :actions {:click {:id "finish-activity", :on "click", :type "action"}}
+                                 :filters [{:name "brightness" :value 0}
+                                           {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                 :visible false
+                                 :src     "/raw/img/ui/checkmark.png"}},
         :scene-objects
                   [["background"]
                    ["letter-tutorial-trace"
@@ -243,11 +243,11 @@
                                                  :fail     {:type "action" :id "dialog-timeout-instructions"},
                                                  :from-var [{:var-name "second-stage", :action-property "value1"}]}
                    :tap-instructions            {:unique-tag "instruction"
-                                                 :type     "test-value",
-                                                 :value2   true,
-                                                 :success  {:type "action" :id "dialog-tap-instructions-second-stage"},
-                                                 :fail     {:type "action" :id "dialog-tap-instructions"},
-                                                 :from-var [{:var-name "second-stage", :action-property "value1"}]}
+                                                 :type       "test-value",
+                                                 :value2     true,
+                                                 :success    {:type "action" :id "dialog-tap-instructions-second-stage"},
+                                                 :fail       {:type "action" :id "dialog-tap-instructions"},
+                                                 :from-var   [{:var-name "second-stage", :action-property "value1"}]}
 
                    :dialog-timeout-instructions (-> (dialog/default "Timeout instructions")
                                                     (assoc :concept-var "current-concept")

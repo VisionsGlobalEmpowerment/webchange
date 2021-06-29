@@ -52,13 +52,12 @@
   ::sync-offline?
   sync-offline?)
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
   ::set-sync-status
-  (fn [db [_ status]]
-    (if (valid-sync-status? status)
-      (assoc-in db (path-to-db [:sync-status]) status)
-      (do (logger/error (str "Sync status '" status "' is not valid"))
-          db))))
+  (fn [{:keys [db]} [_ status]]
+    (when-not (valid-sync-status? status)
+      (logger/error (str "Sync status '" status "' is not valid")))
+    {:db (assoc-in db (path-to-db [:sync-status]) status)}))
 
 ;; Current Course
 

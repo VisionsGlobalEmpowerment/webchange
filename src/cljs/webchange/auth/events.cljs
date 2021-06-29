@@ -72,7 +72,7 @@
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::student-login-success]
-                    :on-failure      [:api-request-error :student-login]}})))
+                    :on-failure      [::student-login-failure]}})))
 
 (re-frame/reg-event-fx
   ::student-login-success
@@ -83,3 +83,9 @@
                        (if redirect
                          [::events/redirect redirect]
                          [::ie/open-student-dashboard]))}))
+
+(re-frame/reg-event-fx
+  ::student-login-failure
+  [(re-frame/inject-cofx :redirect-param)]
+  (fn [{:keys [_]} []]
+    {:dispatch [:api-request-error :student-login]}))

@@ -3,14 +3,17 @@
     [clojure.edn :as edn]
     [clojure.java.io :as io]
     [clojure.string :as s]
-    [config.core :refer [env]]))
+    [config.core :refer [env]]
+    [clojure.tools.logging :as log]))
 
 (def prefix "resources/")
 (def public-fold "public/")
+(def icons-fold (str public-fold "icons/"))
 (def js-fold (str public-fold "js/compiled/"))
 (def css-fold (str public-fold "css/"))
 (def img-fold (str public-fold "images/"))
 (def fonts-fold (str public-fold "fonts/"))
+(def raw-fold (str public-fold "raw/"))
 
 (defn- remove-prefix
   [s]
@@ -30,6 +33,12 @@
          (mapv str)
          (map remove-prefix))))
 
+(defn- get-raw-files
+  []
+  (->> ["img/ui/logo.png"
+        "img/bg.png"]
+       (map #(str raw-fold %))))
+
 (defn get-resources-file-path
   []
   "sw/web_app_resources.edn")
@@ -41,7 +50,9 @@
         (get-files-list (str js-fold "out/"))
         (get-files-list css-fold)
         (get-files-list img-fold)
-        (get-files-list fonts-fold)]
+        (get-files-list icons-fold)
+        (get-files-list fonts-fold)
+        (get-raw-files)]
        (flatten)
        (remove nil?)
        (vec)))
@@ -60,4 +71,4 @@
 (defn get-web-app-resources
   []
   {:resources (get-resources)
-   :endpoints []})
+   :endpoints ["/api/schools/current"]})

@@ -10,19 +10,13 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [db]} [_]]
-    {:db                (assoc-in db (path-to-db [:state-loading?]) true)
-     :get-current-state nil}))
+  (fn [{:keys [_]} [_]]
+    {:get-current-state nil}))
 
 (re-frame/reg-fx
   :get-current-state
   (fn []
     (get-current-state)))
-
-(re-frame/reg-sub
-  ::state-loading
-  (fn [db]
-    (get-in db (path-to-db [:state-loading?]) false)))
 
 (defn cached-resources
   [db]

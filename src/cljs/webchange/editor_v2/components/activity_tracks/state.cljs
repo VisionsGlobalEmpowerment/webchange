@@ -39,6 +39,11 @@
                             (-> node
                                 (assoc :action-path [action-name])
                                 (assoc :title (or (:phrase-description action) (:phrase action)))))
+                 "question" (let [action-name (-> node :action-id keyword)
+                                  action (utils/get-action scene-data action-name)]
+                              (-> node
+                                  (assoc :action-path [action-name])
+                                  (assoc :title (:description action))))
                  "track" (-> node
                              (assoc :selected? (or (equal track-id (:id second-track-data))
                                                    (equal track-idx (:idx second-track-data))))
@@ -145,3 +150,8 @@
   ::open-dialog-window
   (fn [{:keys [_]} [_ dialog-action-path]]
     {:dispatch [::events/show-dialog-translator-form {:path dialog-action-path}]}))
+
+(re-frame/reg-event-fx
+  ::open-question-window
+  (fn [{:keys [_]} [_ dialog-action-path]]
+    {:dispatch [::events/show-question-form {:path dialog-action-path}]}))

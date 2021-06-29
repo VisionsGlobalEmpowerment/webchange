@@ -12,20 +12,33 @@
 
 (def question-validation-map {:answers [(fn [value] (when (= (count value) 0) "answers are required"))]
                               :question-type [(fn [value] (when (empty? value) "select layout type"))]})
-(def answer-option-validation-map {:text [(fn [value] (when (empty? value) "Text is required"))]})
+
+(defn- get-answer-option-validation-map
+  [with-image with-text]
+  (cond-> {}
+          with-image (assoc :img [(fn [value] (when (empty? value) "Image is required"))])
+          with-text (assoc :text [(fn [value] (when (empty? value) "Text is required"))])))
 
 (def types-options [{:text "--Select question type--" :value ""}
                     {:text "Answers without images" :value "type-1"}
-                    {:text "Answers with images" :value "type-2"}])
+                    {:text "Answers with images" :value "type-2"}
+                    {:text "Answers images only" :value "type-3"}])
 
 (defn- image-enabled
-  [type with-image]
-  (if with-image
-    with-image
-    (case type
-      "" false
-      "type-1" false
-      "type-2" true)))
+  [type]
+  (case type
+    "" false
+    "type-1" false
+    "type-2" true
+    "type-3" true))
+
+(defn- text-enabled
+  [type]
+  (case type
+    "" true
+    "type-1" true
+    "type-2" true
+    "type-3" false))
 
 (defn- form-block
   [{:keys [title]}]
@@ -43,7 +56,7 @@
            (r/children this))]))
 
 (defn- question-block
-  [{:keys [question-page option error-message with-image]}]
+  [{:keys [question-page option error-message]}]
   [form-block {:title (:label option)}
    [ui/grid {:container true
              :spacing   16}
@@ -67,8 +80,7 @@
                 :variant   "outlined"
                 :on-change #(reset! question-page (assoc @question-page :question-type %))
                 :width     160}]
-       [error-message {:field-name :question-type}]
-       ]
+       [error-message {:field-name :question-type}]]
 
     [ui/grid {:item true :xs 12}
      [ui/text-field {:label     "Question text"
@@ -87,8 +99,11 @@
      [error-message {:field-name :img}]]]])
 
 (defn- answer-option
-  [{:keys [idx data validator on-remove last? with-image]}]
-  (r/with-let [page-data (connect-data data [:answers idx])
+  [{:keys [idx data validator on-remove last?]}]
+  (r/with-let [with-image (image-enabled (get @data :question-type ""))
+               with-text (text-enabled (get @data :question-type ""))
+               answer-option-validation-map (get-answer-option-validation-map with-image with-text)
+               page-data (connect-data data [:answers idx])
                {:keys [error-message destroy]} (v/init
                                                  page-data
                                                  answer-option-validation-map
@@ -97,15 +112,15 @@
               :spacing     16
               :align-items "center"}
 
-     [ui/grid {:item true :xs 9}
-      [ui/form-control {:full-width true}
-       [ui/text-field {:label     "Text"
-                       :variant   "outlined"
-                       :value     (get @page-data :text "")
-                       :on-change #(swap! page-data assoc :text (-> % .-target .-value))
-                       :style     {:min-width "500px"}}]
-       [error-message {:field-name :text}]]]
-
+     (when with-text
+       [ui/grid {:item true :xs 9}
+        [ui/form-control {:full-width true}
+         [ui/text-field {:label     "Text"
+                         :variant   "outlined"
+                         :value     (get @page-data :text "")
+                         :on-change #(swap! page-data assoc :text (-> % .-target .-value))
+                         :style     {:min-width "500px"}}]
+         [error-message {:field-name :text}]]])
 
      [ui/grid {:item  true :xs 2
                :style {:text-align "end"}}
@@ -128,14 +143,13 @@
         [image-field/image-field (get @page-data :img "") #(swap! page-data assoc :img %)]
         [select-stage {:on-change #(re-frame/dispatch [::state-flipbook/upload-stage-screenshot (.. % -target -value)
                                                        (fn [result] (swap! page-data assoc :img (:url result)))])}]
-        [error-message {:field-name :img}]]
-       )]
+        [error-message {:field-name :img}]])]
 
     (finally
       (destroy))))
 
 (defn- answers-block
-  [{:keys [question-page option error-message validator with-image]}]
+  [{:keys [question-page option error-message validator]}]
   (r/with-let [add-tooltip-open? (r/atom false)
                handle-add-page (fn []
                                  (if (< (count (:answers @question-page)) (:max-answers option))
@@ -174,11 +188,10 @@
                               :data       question-page
                               :validator  validator
                               :on-remove  handle-remove-page
-                              :with-image with-image
                               :last?      (->> (count answers-list) (dec) (= idx))}]))]])]]))
 
 (defn answers-option
-  [{:keys [key option data validator]} with-image]
+  [{:keys [key option data validator]}]
   (r/with-let [question-page (connect-data data ["question-page"] {})
                {:keys [error-message destroy] :as validator} (v/init question-page question-validation-map validator)
                ]
@@ -187,12 +200,10 @@
      [ui/divider]
      [question-block {:question-page question-page
                       :option        option
-                      :error-message error-message
-                      :with-image    with-image}]
+                      :error-message error-message}]
      [answers-block {:question-page question-page
                      :option        option
                      :error-message error-message
-                     :validator     validator
-                     :with-image    (image-enabled (get @question-page :question-type "") with-image)}]]
+                     :validator     validator}]]
     (finally
       (destroy))))

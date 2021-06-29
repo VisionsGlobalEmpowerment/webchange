@@ -82,8 +82,7 @@
                                                       (count resources))))
                                  (cache-add-all cache current)))
                          (catch (fn [error]
-                                  (logger/error "Caching error" error)
-                                  (cache-add-all cache current))))]
+                                  (logger/error "Caching error: " current error))))]
        (if (> (count next) 0)
          (recur next current-p)
          current-p)))))
@@ -105,17 +104,17 @@
   ([cache-name resources]
    (reset-resources cache-name resources {}))
   ([cache-name resources options]
-  (logger/debug-folded (str "Reset cache " cache-name " resources (" (count resources) ")") resources)
-  (-> (cache-open cache-name)
-      (then (fn [cache] (promise-all [(promise-resolve cache)
-                                      (get-diff-resources resources cache)])))
-      (then (fn [[cache {new-resources      :add
-                         outdated-resources :remove}]]
-              (logger/debug-folded (str "Removing outdated resources from " cache-name " (" (count outdated-resources) ")") outdated-resources)
-              (-> (remove-resources cache outdated-resources)
-                  (then (fn []
-                          (logger/debug-folded (str "Caching new resources into " cache-name " (" (count new-resources) ")") new-resources)
-                          (cache-partially cache new-resources 5 options)))
-                  (then (fn []
-                          (logger/debug (str "Reset cache resources done"))
-                          (promise-resolve)))))))))
+   (logger/debug-folded (str "Reset cache " cache-name " resources (" (count resources) ")") resources)
+   (-> (cache-open cache-name)
+       (then (fn [cache] (promise-all [(promise-resolve cache)
+                                       (get-diff-resources resources cache)])))
+       (then (fn [[cache {new-resources      :add
+                          outdated-resources :remove}]]
+               (logger/debug-folded (str "Removing outdated resources from " cache-name " (" (count outdated-resources) ")") outdated-resources)
+               (-> (remove-resources cache outdated-resources)
+                   (then (fn []
+                           (logger/debug-folded (str "Caching new resources into " cache-name " (" (count new-resources) ")") new-resources)
+                           (cache-partially cache new-resources 1 options)))
+                   (then (fn []
+                           (logger/debug (str "Reset cache resources done"))
+                           (promise-resolve)))))))))

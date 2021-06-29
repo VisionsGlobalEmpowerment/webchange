@@ -136,7 +136,7 @@
 
 
 
-(defn create-type-1-answers
+(defn- create-type-1-answers
   [answers parent success-action fail-action]
   (let [answers (:data answers)
         total (count answers)
@@ -201,13 +201,13 @@
         answers))))
 
 (defn create-page
-  [{:keys [image parent text chunks answers success fail skip audio-data screenshot?]} db]
+  [{:keys [image parent text chunks answers success fail skip audio-data screenshot?]} db action]
 
   (reset! answer-rectangle [])
   (reset! audio-icons [])
   (reset! audio-sleep-icons [])
   (create-page-background parent)
-  (let [success-action (ce/get-action success db)
+  (let [success-action (ce/cond-action db (assoc action :success success) :success)
         fail-action (ce/get-action fail db)
         skip-action (if skip (ce/get-action skip db))]
     (if screenshot?

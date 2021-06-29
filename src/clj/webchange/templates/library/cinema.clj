@@ -89,40 +89,10 @@
         :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata      {:prev "map", :autostart true}})
 
-(def animations {:vera       {:width  380,
-                              :height 537,
-                              :scale  {:x 1, :y 1},
-                              :speed  0.5
-                              :meshes true
-                              :name   "vera"
-                              :skin   "01 Vera_1"}
-                 :senoravaca {:width  351,
-                              :height 717,
-                              :scale  {:x 1, :y 1}
-                              :speed  0.5
-                              :meshes true
-                              :name   "senoravaca"
-                              :skin   "vaca"}
-                 :mari       {:width  910,
-                              :height 601,
-                              :scale  {:x 0.5, :y 0.5}
-                              :speed  1
-                              :meshes true
-                              :name   "mari"
-                              :skin   "01 mari"}})
-
-(def character-positions
-  [{:x 428
-    :y 960}
-   {:x 928
-    :y 960}
-   {:x 1428
-    :y 960}])
-
 (defn f
   [t args]
   (-> t
-      (characters/add-characters (:characters args) character-positions animations)))
+      (characters/add-characters (:characters args))))
 
 (core/register-template
   m
