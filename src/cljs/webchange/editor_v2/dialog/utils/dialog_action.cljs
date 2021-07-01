@@ -60,8 +60,22 @@
   (get-action-data {:action-name action-name
                     :action-data {}}))
 
-(defn text-animation-action?
+(defn get-inner-action-type
   [action-data]
   (-> (get-inner-action action-data)
-      (get :type)
+      (get :type)))
+
+(defn dialog-phrase-action?
+  [action-data]
+  (-> (get-inner-action-type action-data)
+      (= "animation-sequence")))
+
+(defn text-animation-action?
+  [action-data]
+  (-> (get-inner-action-type action-data)
       (= "text-animation")))
+
+(defn effect-action?
+  [action-data]
+  (-> (get-inner-action-type action-data)
+      (= "action")))

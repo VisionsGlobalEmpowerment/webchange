@@ -29,4 +29,18 @@
             font-weight: 400;
         }
     }
+
+    .no-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        padding: 16px;
+        color: #929292;
+
+        .icon {
+            font-size: 24px;
+            padding-bottom: 8px;
+        }
+    }
 }

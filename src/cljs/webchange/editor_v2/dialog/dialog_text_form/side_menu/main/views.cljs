@@ -8,15 +8,23 @@
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.views :as voice-over]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as state]))
 
+(defn- no-section
+  []
+  [:div.no-section
+   [:div.icon "←"]
+   [:div.message "Select Menu section"]])
+
 (defn main
   []
-  (let [{:keys [id name]} @(re-frame/subscribe [::state/current-section])]
-    [:div.main
-     [:div.section-title name]
-     (case id
-       :delay [delay/form]
-       :effects [effects/form]
-       :phrase [phrase/form]
-       :text-animation [text-animation/form]
-       :voice-over [voice-over/form]
-       nil)]))
+  (let [{:keys [id name] :as current-section} @(re-frame/subscribe [::state/current-section])]
+    (into [:div.main]
+          (if (some? current-section)
+            [[:div.section-title name]
+             (case id
+               :delay [delay/form]
+               :effects [effects/form]
+               :phrase [phrase/form]
+               :text-animation [text-animation/form]
+               :voice-over [voice-over/form]
+               nil)]
+            [[no-section]]))))

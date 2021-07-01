@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :refer [get-available-effects]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as parent-state]
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [dialog-phrase-action? effect-action? text-animation-action?]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-translator]))
 
 (defn path-to-db
@@ -25,7 +26,8 @@
     [(re-frame/subscribe [::state-translator/actions-data])
      (re-frame/subscribe [::parent-state/selected-action])])
   (fn [[actions-data {:keys [path]}]]
-    (get-in actions-data path)))
+    (when (some? path)
+      (get-in actions-data path))))
 
 ;; Available Sections
 
@@ -38,6 +40,21 @@
     (-> (get-available-effects node-data)
         (concat scene-available-actions))))
 
+(def sections {:delay          {:name "Delay"
+                                :icon "delay"}
+               :effects        {:name "Effects"
+                                :icon "effect"}
+               :phrase         {:name "Phrase Action"
+                                :icon "add"}
+               :text-animation {:name "Text Animation Action"
+                                :icon "text-animation"}
+               :voice-over     {:name "Voice-over"
+                                :icon "mic"}})
+(defn- get-section
+  [id]
+  (-> (get sections id)
+      (assoc :id id)))
+
 (re-frame/reg-sub
   ::available-sections
   (fn []
@@ -45,26 +62,16 @@
      (re-frame/subscribe [::available-effects])
      (re-frame/subscribe [::current-section])])
   (fn [[selected-action available-effects current-section]]
-    (->> (cond-> [[{:id   :phrase
-                    :name "Phrase Action"
-                    :icon "add"}
-                   {:id   :text-animation
-                    :name "Text Animation Action"
-                    :icon "text-animation"}]]
+    (->> (cond-> [[(get-section :phrase)
+                   (get-section :text-animation)]]
                  (some? selected-action)
-                 (conj (cond-> [{:id   :delay
-                                 :name "Delay"
-                                 :icon "delay"}]
+                 (conj (cond-> [(get-section :delay)]
                                ;; Effects
                                (-> available-effects empty? not)
-                               (conj {:id   :effects
-                                      :name "Effects"
-                                      :icon "effect"})
+                               (conj (get-section :effects))
                                ;; Voice-over
                                (some #{(:type selected-action)} [:phrase :text-animation])
-                               (conj {:id   :voice-over
-                                      :name "Voice-over"
-                                      :icon "mic"}))))
+                               (conj (get-section :voice-over)))))
          (map (fn [section-group]
                 (map (fn [{:keys [id] :as section}]
                        (->> (= id (:id current-section))
@@ -76,9 +83,22 @@
 (def current-section-path (path-to-db [:current-section]))
 
 (re-frame/reg-sub
-  ::current-section
+  ::current-section-manual-selected
   (fn [db]
     (get-in db current-section-path)))
+
+(re-frame/reg-sub
+  ::current-section
+  (fn []
+    [(re-frame/subscribe [::current-section-manual-selected])
+     (re-frame/subscribe [::selected-action-data])])
+  (fn [[manual-selection selected-action-data]]
+    (cond
+      (some? manual-selection) manual-selection
+      (dialog-phrase-action? selected-action-data) (get-section :phrase)
+      (effect-action? selected-action-data) (get-section :effects)
+      (text-animation-action? selected-action-data) (get-section :text-animation)
+      :default (get-section :phrase))))
 
 (re-frame/reg-event-fx
   ::set-current-section
