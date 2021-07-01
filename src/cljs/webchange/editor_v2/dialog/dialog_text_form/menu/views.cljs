@@ -97,7 +97,7 @@
       (into [:div {:class-name (get-class-name {"side-controls"    true
                                                 "menu-placeholder" (not @show-controls?)
                                                 "menu-active"      (and @show-controls? (-> controls empty? not))})
-                   :style      {:z-index (- 1000 idx)}
+                   :style      {:z-index (- 300 idx)}
                    :ref        #(when (some? %) (handle-menu-ref %))}]
             (if @show-controls? (render-controls controls) [])))
     (finally
