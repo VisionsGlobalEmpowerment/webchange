@@ -163,9 +163,15 @@
 
 (re-frame/reg-event-fx
   ::update-object
-  (fn [{:keys [db]} [_ object-path data-patch]]
+  (fn [{:keys [db]} [_ object-path data-patch {:keys [suppress-history?]}]]
     (let [objects-data (objects-data db)
           object-data (get-in objects-data object-path)
           updated-data (merge object-data data-patch)]
       {:db         (assoc-in db (path-to-db (concat [:scene :data :objects] object-path)) updated-data)
-       :dispatch-n (list [::set-changes])})))
+       :dispatch-n (->> (list [::set-changes]
+                              (when-not suppress-history?
+                                [::history/add-history-event {:type :scene-object
+                                                              :path object-path
+                                                              :from (->> data-patch (keys) (select-keys object-data))
+                                                              :to   data-patch}]))
+                        (remove nil?))})))
