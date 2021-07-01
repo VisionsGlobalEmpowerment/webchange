@@ -130,8 +130,8 @@
     [(re-frame/subscribe [::translator-form.scene/text-objects])])
   (fn [[targets]]
     (->> targets
-         (map first)
-         (map clojure.core/name))))
+         (map (fn [[object-name {:keys [text]}]]
+                (str text " (" (clojure.core/name object-name) ")"))))))
 
 (def current-text-animation-target-path :current-target)
 
