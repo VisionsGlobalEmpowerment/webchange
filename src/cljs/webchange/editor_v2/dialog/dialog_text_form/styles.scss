@@ -33,6 +33,23 @@
 
             background-color: #fff;
             border-radius: 4px;
+
+            .actions-block {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 16px;
+
+                .action-button {
+                    border-width: 1px;
+                }
+
+                .actions-label {
+                    margin: 0;
+                    font-weight: 400;
+                }
+            }
         }
     }
 
