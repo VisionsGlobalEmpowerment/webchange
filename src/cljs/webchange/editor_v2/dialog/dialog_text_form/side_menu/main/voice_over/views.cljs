@@ -8,17 +8,10 @@
 
 (defn form
   []
-  (r/with-let [add-audio-open? (r/atom false)
-               select-audio-open? (r/atom false)
-               open-add-audio #(reset! add-audio-open? true)
-               open-select-audio #(reset! select-audio-open? true)]
-    [:div.voice-over-form
-     [section-block {:title "Current selection"}
-      [current-audio {:on-add-click open-add-audio
-                      :on-select-click open-select-audio}]]
-     [section-block {:title "Add audio"
-                     :open? @add-audio-open?}
-      [add-audio]]
-     [section-block {:title "Select available audio"
-                     :open? @select-audio-open?}
-      [audios-list]]]))
+  [:div.voice-over-form
+   [section-block {:title "Current selection"}
+    [current-audio]]
+   [section-block {:title "Add audio"}
+    [add-audio]]
+   [section-block {:title "Select available audio"}
+    [audios-list]]])

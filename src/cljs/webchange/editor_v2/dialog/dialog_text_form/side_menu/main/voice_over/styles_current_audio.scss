@@ -25,11 +25,6 @@
         .clickable {
             color: #333;
             font-weight: 500;
-
-            &:hover {
-                text-decoration: underline;
-                cursor: pointer;
-            }
         }
     }
 }
