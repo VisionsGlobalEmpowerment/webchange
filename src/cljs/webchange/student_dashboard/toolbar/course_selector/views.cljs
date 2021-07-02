@@ -1,18 +1,20 @@
-(ns webchange.student-dashboard.toolbar.course.views
+(ns webchange.student-dashboard.toolbar.course-selector.views
   (:require
+   [cljs-react-material-ui.reagent :as ui]
    [re-frame.core :as re-frame]
    [webchange.subs :as subs]))
 
 (defn- get-styles
   []
-  {:main {:width          "150px"
-          :margin         "0 20px"
-          :color          "black"
-          :text-transform "capitalize"
-          :font-family    "Roboto, Helvetica, Arial, sans-serif"}})
+  {:main      {:width          "150px"
+               :margin         "0 20px"
+               :text-transform "capitalize"
+               :font-weight    "bold"}})
 
-(defn course
+(defn course-selector
   []
   (let [current-course @(re-frame/subscribe [::subs/current-course])
         styles (get-styles)]
-    [:h3 {:style (:main styles)} current-course]))
+    [ui/typography {:variant "h6"
+                    :style   (:main styles)}
+     (str current-course)]))
