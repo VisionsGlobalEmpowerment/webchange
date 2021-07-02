@@ -2,29 +2,13 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.dialog.dialog-text-form.action-unit.utils :refer [get-effect-name]]
-    [webchange.editor-v2.dialog.dialog-text-form.menu.audios.views :refer [audios-menu]]
-    [webchange.editor-v2.dialog.dialog-text-form.menu.views-delay :refer [delay-menu]]
-    [webchange.editor-v2.dialog.dialog-text-form.state :as state]
     [webchange.editor-v2.dialog.dialog-text-form.state-actions :as state-actions]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-utils :refer [get-available-effects]]
-    [webchange.editor-v2.dialog.utils.dialog-action :refer [text-animation-action?]]
-    [webchange.ui-framework.components.index :refer [button icon-button]]
+    [webchange.ui-framework.components.index :refer [icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
-(defn- pre-effect [value] (string? value))
 (defn- pre-relative-position [value] (or (nil? value) (some #{value} [:after :before :parallel])))
 (defn- pre-action-data [{:keys [node-data source]}] (and (some #{source} [:concept :scene])
                                                          (some? node-data)))
-
-(defn add-effect-action
-  [{:keys [action-data effect relative-position] :or {relative-position :after}}]
-  {:pre [(pre-action-data action-data)
-         (pre-effect effect)
-         (pre-relative-position relative-position)]}
-  (re-frame/dispatch [::state-actions/add-effect-action (merge action-data
-                                                               {:effect            effect
-                                                                :relative-position relative-position})]))
 
 (defn add-scene-action
   [{:keys [action-data relative-position] :or {relative-position :after}}]
@@ -32,17 +16,6 @@
          (pre-relative-position relative-position)]}
   (re-frame/dispatch [::state-actions/add-scene-action (merge action-data
                                                               {:relative-position relative-position})]))
-
-(defn add-scene-parallel-action
-  [{:keys [action-data]}]
-  {:pre [(pre-action-data action-data)]}
-  (re-frame/dispatch [::state-actions/add-scene-parallel-action action-data]))
-
-(defn add-text-animation-action
-  [{:keys [action-data relative-position] :or {relative-position :after}}]
-  {:pre [(pre-action-data action-data)]}
-  (re-frame/dispatch [::state-actions/add-text-animation-action (merge action-data
-                                                                       {:relative-position relative-position})]))
 
 (defn add-concept-action
   [{:keys [action-data relative-position] :or {relative-position :after}}]
@@ -56,125 +29,14 @@
   {:pre [(pre-action-data action-data)]}
   (re-frame/dispatch [::state-actions/remove-action action-data]))
 
-(defn open-text-animation-window
-  [{:keys [action-data]}]
-  (re-frame/dispatch [::state-actions/open-text-animation-window action-data]))
-
 (defn- get-controls
-  [{:keys [type node-data] :as action-data}]
-  (let [show-concepts? @(re-frame/subscribe [::state/show-concepts?])
-        text-animation? (text-animation-action? (:data node-data))
-        scene-available-actions @(re-frame/subscribe [::state/scene-available-actions])
-        available-effects (concat (get-available-effects node-data) scene-available-actions)]
-    (cond-> [;; Remove
-             {:control [icon-button {:icon       "remove"
-                                     :size       "small"
-                                     :title      "Remove action"
-                                     :class-name "remove-button"
-                                     :on-click   #(remove-action {:action-data action-data})}]}
-             ;; Add dialog scene action
-             {:control   [icon-button {:icon       "add"
-                                       :size       "small"
-                                       :title      "Add dialog activity action"
-                                       :class-name "add-scene-button"
-                                       :on-click   #(add-scene-action {:action-data action-data})}]
-              :sub-items [{:control [icon-button {:icon     "insert-before"
-                                                  :size     "small"
-                                                  :title    "Before"
-                                                  :on-click #(add-scene-action {:action-data       action-data
-                                                                                :relative-position :before})}]}
-                          {:control [icon-button {:icon     "insert-after"
-                                                  :size     "small"
-                                                  :title    "After"
-                                                  :on-click #(add-scene-action {:action-data       action-data
-                                                                                :relative-position :after})}]}
-                          {:control [icon-button {:icon     "insert-parallel"
-                                                  :size     "small"
-                                                  :title    "Parallel"
-                                                  :on-click #(add-scene-parallel-action {:action-data action-data})}]}]}]
-            ;; Add dialog concept action
-            show-concepts?
-            (concat [{:control   [icon-button {:icon       "add-box"
-                                               :size       "small"
-                                               :title      "Add dialog concept action"
-                                               :class-name "add-concept-button"
-                                               :on-click   #(add-concept-action {:action-data action-data})}]
-                      :sub-items [{:control [icon-button {:icon     "insert-before"
-                                                          :size     "small"
-                                                          :title    "Before"
-                                                          :on-click #(add-concept-action {:action-data       action-data
-                                                                                          :relative-position :before})}]}
-                                  {:control [icon-button {:icon     "insert-after"
-                                                          :size     "small"
-                                                          :title    "After"
-                                                          :on-click #(add-concept-action {:action-data       action-data
-                                                                                          :relative-position :after})}]}]}])
-
-            true
-            ;; Add text animation action
-            (concat [{:control   [icon-button {:icon       "text-animation"
-                                               :size       "small"
-                                               :title      "Text animation"
-                                               :class-name "add-scene-button"
-                                               :on-click   #(add-text-animation-action {:action-data action-data})}]
-                      :sub-items (cond-> [{:control [icon-button {:icon     "insert-before"
-                                                                  :size     "small"
-                                                                  :title    "Add before"
-                                                                  :on-click #(add-text-animation-action {:action-data       action-data
-                                                                                                         :relative-position :before})}]}
-                                          {:control [icon-button {:icon     "insert-after"
-                                                                  :size     "small"
-                                                                  :title    "Add after"
-                                                                  :on-click #(add-text-animation-action {:action-data       action-data
-                                                                                                         :relative-position :after})}]}]
-                                         text-animation? (conj {:control [icon-button {:icon     "settings"
-                                                                                       :size     "small"
-                                                                                       :title    "Configure"
-                                                                                       :on-click #(open-text-animation-window {:action-data action-data})}]}))}])
-
-            ;; Add effects
-            (-> available-effects empty? not)
-            (concat [{:control             [icon-button {:icon  "effect"
-                                                         :size  "small"
-                                                         :title "Add effect"}]
-                      :sub-items-direction "column"
-                      :sub-items           (map (fn [effect]
-                                                  {:control   [button {:size       "small"
-                                                                       :class-name "effect-button"
-                                                                       :color      "default"
-                                                                       :variant    "outlined"
-                                                                       :on-click   #(add-effect-action {:action-data action-data
-                                                                                                        :effect      effect})}
-                                                               (get-effect-name effect)]
-                                                   :sub-items [{:control [icon-button {:icon     "insert-before"
-                                                                                       :size     "small"
-                                                                                       :title    "Before"
-                                                                                       :on-click #(add-effect-action {:action-data       action-data
-                                                                                                                      :relative-position :before
-                                                                                                                      :effect            effect})}]}
-                                                               {:control [icon-button {:icon     "insert-after"
-                                                                                       :size     "small"
-                                                                                       :title    "After"
-                                                                                       :on-click #(add-effect-action {:action-data       action-data
-                                                                                                                      :relative-position :after
-                                                                                                                      :effect            effect})}]}
-                                                               {:control [icon-button {:icon     "insert-parallel"
-                                                                                       :size     "small"
-                                                                                       :title    "Parallel"
-                                                                                       :on-click #(add-effect-action {:action-data       action-data
-                                                                                                                      :relative-position :parallel
-                                                                                                                      :effect            effect})}]}]})
-                                                available-effects)}])
-            (some #{type} [:phrase :text-animation])
-            (concat [{:control   [icon-button {:icon  "mic"
-                                               :size  "small"
-                                               :title "Voice-over"}]
-                      :sub-items [{:control [audios-menu {:action-data action-data}]}]}])
-            true
-            (concat [{:control   [icon-button {:icon  "delay"
-                                               :size  "small"
-                                               :title "Delay"}]
-                      :sub-items [{:control [delay-menu {:action-data action-data}]}]}]))))
+  [{:keys [node-data] :as action-data}]
+  (cond-> [;; Remove
+           {:control [icon-button {:icon       "remove"
+                                   :size       "small"
+                                   :title      "Remove action"
+                                   :class-name "remove-button"
+                                   :on-click   #(remove-action {:action-data action-data})}]}]))
 
 ;; Render
 
@@ -235,7 +97,7 @@
       (into [:div {:class-name (get-class-name {"side-controls"    true
                                                 "menu-placeholder" (not @show-controls?)
                                                 "menu-active"      (and @show-controls? (-> controls empty? not))})
-                   :style      {:z-index (- 1000 idx)}
+                   :style      {:z-index (- 300 idx)}
                    :ref        #(when (some? %) (handle-menu-ref %))}]
             (if @show-controls? (render-controls controls) [])))
     (finally

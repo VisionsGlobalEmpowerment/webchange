@@ -1,0 +1,15 @@
+.side-menu {
+    width: 300px;
+    display: flex;
+
+    .side-menu-sections {
+        flex: 0 0;
+    }
+
+    .main {
+        flex: 1 1;
+    }
+
+    @import "sections/styles";
+    @import "main/styles";
+}

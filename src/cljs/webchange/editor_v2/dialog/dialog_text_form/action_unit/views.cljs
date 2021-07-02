@@ -16,9 +16,9 @@
          :el         (r/as-element [:span.target-value
                                     (if-not (empty? value) value "select target")])
          :items      (->> options
-                          (map (fn [target]
-                                 {:text     target
-                                  :on-click #(on-change target)})))}])
+                          (map (fn [{:keys [text value]}]
+                                 {:text     text
+                                  :on-click #(on-change value)})))}])
 
 (defn- phrase-target-control
   [{:keys [path source character]}]
@@ -108,11 +108,16 @@
      effect-name]))
 
 (defn- text-animation-unit
-  [{:keys [text] :as props}]
-  [:div {:class-name "text-animation-unit"}
-   [text-animation-target-control props]
-   [text-control {:value     text
-                  :editable? false}]])
+  [{:keys [text text-object] :as props}]
+  (let [handle-text-change (fn [new-value]
+                             (re-frame/dispatch [::state-actions/set-object-text {:object-name (keyword text-object)
+                                                                                  :text        new-value}]))]
+    [:div {:class-name "text-animation-unit"}
+     [text-animation-target-control props]
+     ^{:key text-object}
+     [text-control {:value     text
+                    :editable? true
+                    :on-change handle-text-change}]]))
 
 (defn- unknown-element
   [{:keys [type] :as props}]
@@ -121,14 +126,17 @@
   [:div.unknown-unit "Not editable action"])
 
 (defn action-unit
-  [{:keys [idx parallel-mark type] :as props}]
-  (r/with-let [container-ref (r/atom nil)]
+  [{:keys [idx parallel-mark type selected?] :as props}]
+  (r/with-let [container-ref (r/atom nil)
+               handle-click #(re-frame/dispatch [::state/set-selected-action props])]
     [:div {:ref        #(when (some? %) (reset! container-ref %))
+           :on-click   handle-click
            :class-name (get-class-name {"action-unit"     true
                                         "parallel"        (not= parallel-mark :none)
                                         "parallel-start"  (= parallel-mark :start)
                                         "parallel-middle" (= parallel-mark :middle)
-                                        "parallel-end"    (= parallel-mark :end)})}
+                                        "parallel-end"    (= parallel-mark :end)
+                                        "selected"        selected?})}
      (case type
        :effect [effect-unit props]
        :phrase [phrase-unit props]

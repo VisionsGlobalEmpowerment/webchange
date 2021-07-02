@@ -14,6 +14,8 @@
     [webchange.ui-framework.components.icon.icon-drop-place :as drop-place]
     [webchange.ui-framework.components.icon.icon-edit :as edit]
     [webchange.ui-framework.components.icon.icon-effect :as effect]
+    [webchange.ui-framework.components.icon.icon-expand-arrow-down :as expand-arrow-down]
+    [webchange.ui-framework.components.icon.icon-expand-arrow-right :as expand-arrow-right]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
     [webchange.ui-framework.components.icon.icon-image :as image]
@@ -42,49 +44,53 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def icons
-  {"add"             add/data
-   "add-box"         add-box/data
-   "arrow-left"      arrow-left/data
-   "arrow-right"     arrow-right/data
-   "audio"           audio/data
-   "background"      background/data
-   "bring-to-top"    bring-to-top/data
-   "check"           check/data
-   "clear"           clear/data
-   "close"           close/data
-   "delay"           delay/data
-   "drop-place"      drop-place/data
-   "edit"            edit/data
-   "effect"          effect/data
-   "font-family"     font-family/data
-   "font-size"       font-size/data
-   "image"           image/data
-   "insert-after"    insert-after/data
-   "insert-before"   insert-before/data
-   "insert-parallel" insert-parallel/data
-   "link"            link/data
-   "match"           match/data
-   "menu"            menu/data
-   "menu-vertical"   menu-vertical/data
-   "mic"             mic/data
-   "mismatch"        mismatch/data
-   "music"           music/data
-   "music-off"       music-off/data
-   "play"            play/data
-   "remove"          remove/data
-   "settings"        settings/data
-   "stop"            stop/data
-   "swap"            swap/data
-   "sync"            sync/data
-   "text-animation"  text-animation/data
-   "undo"            undo/data
-   "volume"          volume/data
-   "warning"         warning/data})
+  {"add"                add/data
+   "add-box"            add-box/data
+   "arrow-left"         arrow-left/data
+   "arrow-right"        arrow-right/data
+   "audio"              audio/data
+   "background"         background/data
+   "bring-to-top"       bring-to-top/data
+   "check"              check/data
+   "clear"              clear/data
+   "close"              close/data
+   "delay"              delay/data
+   "drop-place"         drop-place/data
+   "edit"               edit/data
+   "effect"             effect/data
+   "expand-arrow-down"  expand-arrow-down/data
+   "expand-arrow-right" expand-arrow-right/data
+   "font-family"        font-family/data
+   "font-size"          font-size/data
+   "image"              image/data
+   "insert-after"       insert-after/data
+   "insert-before"      insert-before/data
+   "insert-parallel"    insert-parallel/data
+   "link"               link/data
+   "match"              match/data
+   "menu"               menu/data
+   "menu-vertical"      menu-vertical/data
+   "mic"                mic/data
+   "mismatch"           mismatch/data
+   "music"              music/data
+   "music-off"          music-off/data
+   "play"               play/data
+   "remove"             remove/data
+   "settings"           settings/data
+   "stop"               stop/data
+   "swap"               swap/data
+   "sync"               sync/data
+   "text-animation"     text-animation/data
+   "undo"               undo/data
+   "volume"             volume/data
+   "warning"            warning/data})
 
 (defn component
-  [{:keys [icon rotate? class-name]}]
-  [:div {:class-name (get-class-name (cond-> {"wc-icon"          true
-                                              (str "icon-" icon) true}
-                                             (some? rotate?) (assoc "rotating" rotate?)
-                                             (some? class-name) (assoc class-name true)))}
+  [{:keys [icon on-click rotate? title class-name]}]
+  [:div (cond-> {:class-name (get-class-name (cond-> {"wc-icon"          true
+                                                      (str "icon-" icon) true}
+                                                     (some? rotate?) (assoc "rotating" rotate?)
+                                                     (some? class-name) (assoc class-name true)))}
+                (fn? on-click) (assoc :on-click on-click)
+                (some? title) (assoc :title title))
    (get icons icon)])

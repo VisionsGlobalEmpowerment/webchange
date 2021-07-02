@@ -1,0 +1,32 @@
+.available-audios-list {
+    & > .available-audios-list-item {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        padding: 2px 8px;
+
+        font-size: 12px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ddd;
+        }
+
+        & > .selected-icon-wrapper {
+            width: 12px;
+            height: 12px;
+
+            .selected-icon {
+                width: 100%;
+                height: 100%;
+                padding: 2px;
+
+                svg {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+    }
+}

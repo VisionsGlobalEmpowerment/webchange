@@ -107,7 +107,7 @@
   ::current-scene-objects
   current-scene-objects)
 
-(defn- current-scene-actions
+(defn current-scene-actions
   [db]
   (let [current-scene-id (current-scene db)]
     (get-in db [:scenes current-scene-id :actions] {})))
