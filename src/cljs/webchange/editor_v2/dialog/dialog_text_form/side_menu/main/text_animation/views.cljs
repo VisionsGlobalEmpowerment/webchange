@@ -14,26 +14,28 @@
      (for [[idx [text icon handler]] (map-indexed vector available-actions)]
        ^{:key idx}
        [icon-button
-        {:icon     icon
-         :size     "small"
-         :on-click handler}
+        {:icon       icon
+         :size       "small"
+         :variant    "outlined"
+         :class-name "action-button"
+         :on-click   handler}
         text])]))
 
 (defn- settings
   []
-  (let [show-settings? @(re-frame/subscribe [::state/show-settings?])
-        handle-click #(re-frame/dispatch [::state/open-text-animation-window])]
-    (when show-settings?
-      [:div.settings
-       [:span.input-label "Settings:"]
-       [icon-button {:icon     "settings"
-                     :size     "small"
-                     :on-click handle-click}
-        "Open"]])))
+  (let [handle-click #(re-frame/dispatch [::state/open-text-animation-window])]
+    [:div.settings
+     [icon-button {:icon     "settings"
+                   :size     "small"
+                   :on-click handle-click}
+      "Open Settings"]]))
 
 (defn form
   []
-  [:div.text-animation-form
-   [section-block {:title "Add text animation"}
-    [actions]
-    [settings]]])
+  (let [show-current? @(re-frame/subscribe [::state/show-current?])]
+    [:div.text-animation-form
+     (when show-current?
+       [section-block {:title "Current selection"}
+        [settings]])
+     [section-block {:title "Add text animation"}
+      [actions]]]))

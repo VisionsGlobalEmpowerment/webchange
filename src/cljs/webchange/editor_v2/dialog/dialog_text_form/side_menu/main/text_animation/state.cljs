@@ -9,7 +9,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
 
 (re-frame/reg-sub
-  ::show-settings?
+  ::show-current?
   (fn []
     (re-frame/subscribe [::parent-state/selected-action-data]))
   (fn [selected-action-data]
