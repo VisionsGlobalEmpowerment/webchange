@@ -7,4 +7,25 @@
             flex: 1 1;
         }
     }
+
+    .no-audio-placeholder {
+        font-size: 14px;
+        color: #737373;
+
+        & > span {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .clickable {
+            color: #333;
+            font-weight: 500;
+
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
+    }
 }

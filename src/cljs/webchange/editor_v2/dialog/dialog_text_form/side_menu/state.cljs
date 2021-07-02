@@ -95,7 +95,7 @@
   (fn [[manual-selection selected-action-data]]
     (cond
       (some? manual-selection) manual-selection
-      (dialog-phrase-action? selected-action-data) (get-section :phrase)
+      (dialog-phrase-action? selected-action-data) (get-section :voice-over)
       (effect-action? selected-action-data) (get-section :effects)
       (text-animation-action? selected-action-data) (get-section :text-animation)
       :default (get-section :phrase))))
