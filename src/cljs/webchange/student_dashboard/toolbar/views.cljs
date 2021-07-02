@@ -2,7 +2,7 @@
   (:require
    [cljs-react-material-ui.reagent :as ui]
    [webchange.student-dashboard.toolbar.auth.views :refer [auth]]
-   [webchange.student-dashboard.toolbar.course-selector.views :refer [course-selector]]
+   [webchange.student-dashboard.toolbar.course-slug.views :refer [course-slug]]
    [webchange.student-dashboard.toolbar.logo.views :refer [logo]]
    [webchange.student-dashboard.toolbar.sync.views :refer [sync]]
    [webchange.ui.theme :refer [get-in-theme]]))
@@ -20,5 +20,5 @@
       [ui/toolbar {:style (:toolbar styles)}
        [logo]
        [auth]
-       [course-selector]
+       [course-slug]
        [sync]]]]))
