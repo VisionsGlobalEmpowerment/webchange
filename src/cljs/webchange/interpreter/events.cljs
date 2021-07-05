@@ -1121,20 +1121,22 @@
     Example:
     {:type 'finish-activity',
      :id   'cinema'}"
-    (let [show-goodbye (and (not (lesson-activity-finished? db action)) (not (has-next-activity? db)))
-          events (cond-> (list)
-                         (lesson-activity-finished? db action) (conj [::finish-next-activity])
-                         show-goodbye (conj [::goodbye-activity])
-                         (not show-goodbye) (conj [::overlays/show-activity-finished])
-                         :always (conj (activity-finished-event db action))
-                         :always (conj [::reset-navigation]))
-          activity-started? (:activity-started db)
-          lesson-activity-tags (get-lesson-activity-tags db action)]
-      (when activity-started?
-        {:db         (-> db
-                         lessons-activity/clear-loaded-activity
-                         (assoc :activity-started false)
-                         (assoc-in [:progress-data :current-tags] lesson-activity-tags))
+    (when (:activity-started db)
+      (let [show-goodbye (and (not (lesson-activity-finished? db action)) (not (has-next-activity? db)))
+            events (cond-> (list)
+                           (lesson-activity-finished? db action) (conj [::finish-next-activity])
+                           show-goodbye (conj [::goodbye-activity])
+                           (not show-goodbye) (conj [::overlays/show-activity-finished])
+                           :always (conj (activity-finished-event db action))
+                           :always (conj [::reset-navigation]))
+            lesson-activity-tags (get-lesson-activity-tags db action)
+            finished (get-in db [:progress-data :next])
+            db (cond-> db
+                       :always lessons-activity/clear-loaded-activity
+                       :always (assoc :activity-started false)
+                       :always (assoc-in [:progress-data :current-tags] lesson-activity-tags)
+                       (lesson-activity-finished? db action) (lessons-activity/finish finished))]
+        {:db         db
          :dispatch-n events}))))
 
 (defn activity-progress-event
@@ -1145,9 +1147,7 @@
 (re-frame/reg-event-fx
   ::finish-next-activity
   (fn [{:keys [db]} _]
-    (let [finished (get-in db [:progress-data :next])]
-      {:db         (lessons-activity/finish db finished)
-       :dispatch-n (list (activity-progress-event db))})))
+    {:dispatch-n (list (activity-progress-event db))}))
 
 (re-frame/reg-event-fx
   :progress-data-changed

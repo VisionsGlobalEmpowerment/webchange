@@ -7,7 +7,8 @@
   {"spanish" {"play" "juega"
               "next" "sigue"
               "watch" "mira"
-              "skip" "omitir"}})
+              "skip" "omitir"
+              "continue" "seguir"}})
 (defn t
   [text]
   (let [current-course @(re-frame/subscribe [::subs/current-course])

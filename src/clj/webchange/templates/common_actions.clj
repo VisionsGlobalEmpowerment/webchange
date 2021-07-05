@@ -61,7 +61,7 @@
         show-action-name (str "show-uploaded-image-" image-idx)
         hide-action-name (str "hide-uploaded-image-" image-idx)
         image-object {:type    "image"
-                      :aliad   name
+                      :alias   name
                       :links   [{:type "action" :id show-action-name}
                                 {:type "action" :id hide-action-name}]
                       :src     (:src image)
