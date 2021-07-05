@@ -2,9 +2,11 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views :refer [action-unit]]
+    [webchange.editor-v2.dialog.dialog-text-form.side-menu.views :refer [side-menu]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
+    [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
-    [webchange.ui-framework.components.index :refer [label select]]
+    [webchange.ui-framework.components.index :refer [button label select]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- concepts-control
@@ -27,6 +29,20 @@
      (when show-concepts?
        [concepts-control])]))
 
+(defn- actions-block
+  []
+  (let [actions [["Phrase" #(re-frame/dispatch [::state-actions/append-empty-phrase-action])]
+                 ["Text Animation" #(re-frame/dispatch [::state-actions/append-empty-text-animation-action])]]]
+    [:div.actions-block
+     [label {:class-name "actions-label"} "Add:"]
+     (for [[idx [title click-handler]] (map-indexed vector actions)]
+       ^{:key idx}
+       [button {:on-click   click-handler
+                :class-name "action-button"
+                :variant    "outlined"
+                :color      "default"}
+        title])]))
+
 (defn dialog-form
   []
   (let [actions @(re-frame/subscribe [::state/phrase-actions])
@@ -40,5 +56,7 @@
        (for [[idx {:keys [path] :as action}] (map-indexed vector actions)]
          ^{:key (concat [(count actions)] path)}
          [action-unit (merge action
-                             {:idx idx})])]]
+                             {:idx idx})])
+       [actions-block]]
+      [side-menu]]
      [text-chunks-modal]]))

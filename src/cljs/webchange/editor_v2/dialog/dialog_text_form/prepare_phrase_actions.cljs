@@ -74,12 +74,20 @@
                    (= source :concept) (merge {:concept-name concept-name}))))
        actions))
 
+(defn- set-selected
+  [actions current-action-path]
+  (map (fn [{:keys [path] :as data}]
+         (->> (= path current-action-path)
+              (assoc data :selected?)))
+       actions))
+
 (defn prepare-phrase-actions
-  [{:keys [dialog-action-path concept-data scene-data available-effects]}]
+  [{:keys [dialog-action-path concept-data scene-data available-effects current-action-path]}]
   (-> (prepare-nodes scene-data concept-data dialog-action-path)
       (set-parallel-marks)
       (set-action-data {:concept-data concept-data
                         :scene-data   scene-data})
       (set-action-type {:available-effects available-effects})
       (get-component-data {:concept-data concept-data
-                           :scene-data   scene-data})))
+                           :scene-data   scene-data})
+      (set-selected current-action-path)))

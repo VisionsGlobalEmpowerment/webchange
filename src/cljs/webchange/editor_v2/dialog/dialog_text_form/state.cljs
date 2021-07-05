@@ -20,19 +20,40 @@
         (get-in x [:metadata :available-actions])
         (map :action x)))
 
+;; Selected Action
+
+(def selected-action-path (path-to-db [:selected-action]))
+
+(defn get-selected-action
+  [db]
+  (get-in db selected-action-path))
+
+(re-frame/reg-sub
+  ::selected-action
+  get-selected-action)
+
+(re-frame/reg-event-fx
+  ::set-selected-action
+  (fn [{:keys [db]} [_ action-data]]
+    {:db (assoc-in db selected-action-path action-data)}))
+
+;; ---
+
 (re-frame/reg-sub
   ::phrase-actions
   (fn []
     [(re-frame/subscribe [::translator-form.actions/current-dialog-action-info])
      (re-frame/subscribe [::translator-form.actions/current-dialog-action-data])
      (re-frame/subscribe [::translator-form.concepts/current-concept])
-     (re-frame/subscribe [::translator-form.scene/scene-data])])
-  (fn [[current-dialog-action {:keys [available-activities]} current-concept scene-data]]
+     (re-frame/subscribe [::translator-form.scene/scene-data])
+     (re-frame/subscribe [::selected-action])])
+  (fn [[current-dialog-action {:keys [available-activities]} current-concept scene-data selected-action]]
     (let [available-actions (concat available-activities (scene-available-actions scene-data))]
-      (prepare-phrase-actions {:dialog-action-path (:path current-dialog-action)
-                               :concept-data       current-concept
-                               :scene-data         scene-data
-                               :available-effects  available-actions}))))
+      (prepare-phrase-actions {:dialog-action-path  (:path current-dialog-action)
+                               :concept-data        current-concept
+                               :scene-data          scene-data
+                               :available-effects   available-actions
+                               :current-action-path (:path selected-action)}))))
 
 (re-frame/reg-sub
   ::scene-available-actions
@@ -79,7 +100,10 @@
   (fn [_]
     [(re-frame/subscribe [::translator-form.scene/available-animation-targets])])
   (fn [[targets]]
-    targets))
+    (->> targets
+         (map (fn [target]
+                {:text  target
+                 :value target})))))
 
 (def current-target-path :current-target)
 
@@ -109,8 +133,9 @@
     [(re-frame/subscribe [::translator-form.scene/text-objects])])
   (fn [[targets]]
     (->> targets
-         (map first)
-         (map clojure.core/name))))
+         (map (fn [[object-name {:keys [text]}]]
+                {:text  (str text " (" (clojure.core/name object-name) ")")
+                 :value (clojure.core/name object-name)})))))
 
 (def current-text-animation-target-path :current-target)
 

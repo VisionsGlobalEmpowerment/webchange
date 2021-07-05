@@ -26,6 +26,12 @@
   ::current-dialog-action-info
   actions-shared/current-dialog-action-info)
 
+(defn current-dialog-action-data
+  [db]
+  (let [{:keys [path]} (current-dialog-action-info db)
+        actions (translator-form.scene/actions-data db)]
+    (get-in actions path)))
+
 (re-frame/reg-sub
   ::current-dialog-action-data
   (fn []

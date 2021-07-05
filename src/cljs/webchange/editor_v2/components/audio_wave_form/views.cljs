@@ -54,8 +54,8 @@
                             [:span.file-name file-name])]
                          (into [:div]
                                right-side-controls)]
-                        [:div {:ref #(when (and % (nil? @element))
-                                       (reset! element %))}]])})))
+                        [:div.body {:ref #(when (and % (nil? @element))
+                                            (reset! element %))}]])})))
 
 (defn audio-wave-form
   [_]

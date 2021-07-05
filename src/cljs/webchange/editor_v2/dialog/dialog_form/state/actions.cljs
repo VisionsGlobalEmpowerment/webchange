@@ -15,7 +15,7 @@
 
 (def dialog-sub-path [:data 1])
 
-;; Evenst
+;; Events
 (re-frame/reg-event-fx
   ::update-scene-action
   (fn [{:keys [db]} [_ action-path data-patch]]
@@ -76,12 +76,36 @@
       {:dispatch-n (list [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx
+  ::append-child-action
+  (fn [{:keys [db]} [_ child-action]]
+    (let [dialog-action-info (translator-form.actions/current-dialog-action-info db)
+          dialog-action-data (translator-form.actions/current-dialog-action-data db)
+
+          dialog-action-path (:path dialog-action-info)
+          data-patch (-> (au/insert-child-action-at-index dialog-action-data child-action :last)
+                         (select-keys [:data]))]
+
+      {:dispatch-n (list [::update-scene-action dialog-action-path data-patch])})))
+
+(re-frame/reg-event-fx
+  ::append-empty-phrase-action
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::append-child-action defaults/default-action]}))
+
+(re-frame/reg-event-fx
+  ::append-empty-text-animation-action
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::append-child-action defaults/text-animation-action]}))
+
+(re-frame/reg-event-fx
   ::add-new-empty-phrase-action
   (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
     (let [current-target (-> (:data node-data) (defaults/get-inner-action) (get :target))
           new-action-data (cond-> defaults/default-action
                                   (some? current-target) (defaults/update-inner-action {:target current-target}))]
-      {:dispatch [::add-new-scene-action new-action-data relative-position node-data]})))
+      (if (= relative-position :parallel)
+        {:dispatch [::add-new-phrase-parallel-action new-action-data node-data]}
+        {:dispatch [::add-new-scene-action new-action-data relative-position node-data]}))))
 
 (re-frame/reg-event-fx
   ::add-new-empty-text-animation-action

@@ -40,12 +40,20 @@
     (or (= parent-action-type "sequence-data")
         (= parent-action-type "parallel"))))
 
+(defn insert-child-action-at-index
+  [parent-action child-action index]
+  (let [position (cond
+                   (number? index) index
+                   (= index :first) 0
+                   (= index :last) (-> parent-action (get :data) (count)))]
+    (update-in parent-action [:data] insert-by-index position child-action)))
+
 (defn insert-child-action
   [parent-action child-action target-position relative-position]
   (let [position (case relative-position
                    :before target-position
                    :after (inc target-position))]
-    (update-in parent-action [:data] insert-by-index position child-action)))
+    (insert-child-action-at-index parent-action child-action position)))
 
 (defn delete-child-action
   [parent-action child-position]

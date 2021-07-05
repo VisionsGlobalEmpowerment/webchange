@@ -9,8 +9,9 @@
   ::apply-undo
   (fn [{:keys [db]} [_]]
     (let [{:keys [concept-id type path from]} (-> db (history/history) (last))
-          edit-action-options {:suppress-history? true}]
+          options {:suppress-history? true}]
       {:dispatch-n (list (case type
-                           :scene-action [::scene/update-action path from edit-action-options]
-                           :concept-action [::concepts/update-concept concept-id path from edit-action-options])
+                           :scene-action [::scene/update-action path from options]
+                           :scene-object [::scene/update-object path from options]
+                           :concept-action [::concepts/update-concept concept-id path from options])
                          [::history/remove-history-event])})))

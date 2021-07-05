@@ -4,22 +4,13 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.dialog.dialog-form.state.common :as state-actions-common]
     [webchange.editor-v2.text-animation-editor.state :as chunks]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 (defn- pre_action-type [value] (some #{value} [:concept :scene]))
 (defn- pre_node-data [value] (and (map? value)
                                   (vector? (:path value))
                                   (map? (:data value))))
-
-;; Delay
-
-(re-frame/reg-event-fx
-  ::set-action-delay
-  (fn [{:keys []} [_ {:keys [action-path action-type value]}]]
-    {:pre [(pre_action-type action-type)]}
-    {:dispatch [::state-actions/update-empty-action-by-path {:action-path action-path
-                                                             :action-type action-type
-                                                             :data-patch  {:duration (float value)}}]}))
 
 ;; Phrase
 
@@ -38,6 +29,13 @@
     {:dispatch [::state-actions/update-inner-action-by-path {:action-path action-path
                                                              :action-type action-type
                                                              :data-patch  {:target value}}]}))
+
+;; Text Animation
+
+(re-frame/reg-event-fx
+  ::set-object-text
+  (fn [{:keys [_]} [_ {:keys [object-name text]}]]
+    {:dispatch [::translator-form.scene/update-object [object-name] {:text text}]}))
 
 ;; Actions
 
