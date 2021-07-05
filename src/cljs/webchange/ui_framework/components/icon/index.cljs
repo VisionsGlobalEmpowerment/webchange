@@ -7,6 +7,7 @@
     [webchange.ui-framework.components.icon.icon-audio :as audio]
     [webchange.ui-framework.components.icon.icon-background :as background]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
+    [webchange.ui-framework.components.icon.icon-cancel :as cancel]
     [webchange.ui-framework.components.icon.icon-check :as check]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
@@ -51,6 +52,7 @@
    "audio"              audio/data
    "background"         background/data
    "bring-to-top"       bring-to-top/data
+   "cancel"             cancel/data
    "check"              check/data
    "clear"              clear/data
    "close"              close/data

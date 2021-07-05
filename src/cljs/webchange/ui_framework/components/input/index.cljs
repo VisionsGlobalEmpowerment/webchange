@@ -26,12 +26,14 @@
            on-enter-press
            on-esc-press
            placeholder
+           select-on-focus?
            type]
     :as   props
-    :or   {disabled?   false
-           on-change   #()
-           placeholder ""
-           type        "str"}}]
+    :or   {disabled?        false
+           on-change        #()
+           placeholder      ""
+           select-on-focus? false
+           type             "str"}}]
   (r/with-let [handle-document-key-down (fn [event]
                                           (case (.-keyCode event)
                                             27 (when (fn? on-esc-press) (on-esc-press))
@@ -39,6 +41,9 @@
                _ (when (subscribe-document? props)
                    (subscribe-document handle-document-key-down))]
     (let [handle-change #(-> % (.. -target -value) (on-change))
+          handle-click (fn [event]
+                         (when select-on-focus? (.select (.-target event)))
+                         (when (fn? on-click) (on-click event)))
           handle-key-press (fn [event]
                              (case (.-key event)
                                "Enter" (when (fn? on-enter-press) (on-enter-press (.. event -target -value)))
@@ -47,12 +52,12 @@
                                                         (assoc class-name (some? class-name))))
                        :disabled    disabled?
                        :placeholder placeholder
-                       :on-change   handle-change}
+                       :on-change   handle-change
+                       :on-click    handle-click}
                       (= type "int") (assoc :type "number")
                       (some? id) (assoc :id id)
                       (some? value) (assoc :value value)
                       (some? default-value) (assoc :default-value default-value)
-                      (fn? on-click) (assoc :on-click on-click)
                       (fn? on-enter-press) (assoc :on-key-press handle-key-press))])
     (finally
       (unsubscribe-document handle-document-key-down))))

@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.audio-analyzer :refer [get-region-data-if-possible]]
+    [webchange.editor-v2.dialog.components.audio-assets.state :as audio-assets]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state-dialog]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
@@ -67,11 +68,24 @@
 (re-frame/reg-sub
   ::audios-list
   (fn []
-    [(re-frame/subscribe [::state-scene/audio-assets])
+    [(re-frame/subscribe [::audio-assets/audios-list])
      (re-frame/subscribe [::current-audio])])
-  (fn [[audio-assets {:keys [audio]}]]
-    (map (fn [{:keys [alias url]}]
-           {:alias     (or alias url)
-            :url       url
-            :selected? (= url audio)})
-         audio-assets)))
+  (fn [[audios-list {:keys [audio]}]]
+    (->> audios-list
+         (map (fn [{:keys [url] :as audio-asset}]
+                (assoc audio-asset :selected? (= url audio)))))))
+
+(re-frame/reg-event-fx
+  ::set-audio-alias
+  (fn [{:keys [_]} [_ url alias]]
+    {:dispatch [::state-scene/update-asset-alias url alias]}))
+
+(re-frame/reg-event-fx
+  ::remove-audio
+  (fn [{:keys [_]} [_ url]]
+    {:dispatch [::state-scene/delete-asset url]}))
+
+(re-frame/reg-event-fx
+  ::bring-to-top
+  (fn [{:keys [_]} [_ url]]
+    {:dispatch [::state-scene/update-asset-date url (.now js/Date)]}))
