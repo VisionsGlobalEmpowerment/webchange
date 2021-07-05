@@ -152,7 +152,7 @@
    :children    [{:x           0
                   :y           50
                   :type        "text"
-                  :text        "Featured Content"
+                  :text        "Next"
                   :object-name :featured-content-text
                   :align       "left"
                   :font-size   42
@@ -170,7 +170,7 @@
      :object-name :overall-progress-menu
      :x           x
      :y           (- y (/ menu-height 2))
-     :children    [{:type        "image"
+     :children    [#_{:type        "image"
                     :src         "/raw/img/ui/reload_button_01.png"
                     :object-name :overall-progress-menu-reset
                     :x           0
@@ -178,9 +178,9 @@
                     :on-click    on-restart-click}
                    {:type        "button"
                     :object-name :overall-progress-menu-next
-                    :x           130
+                    :x           60
                     :on-click    on-next-click
-                    :text        (t "next")}]}))
+                    :text        (t "continue")}]}))
 
 (defn- get-score-window
   [viewport]
@@ -218,7 +218,7 @@
      :object-name :activity-finished-overlay
      :visible     false
      :children    [(get-background)
-                   (get-top-menu {:viewport       viewport
+                   #_(get-top-menu {:viewport       viewport
                                   :on-close-click close-screen})
                    (get-score-window viewport)]}))
 

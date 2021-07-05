@@ -306,11 +306,11 @@
 
 (defn execute-action
   [db {:keys [unique-tag] :as action}]
-  (when (flow-not-registered? unique-tag)
+  (if (flow-not-registered? unique-tag)
     (let [{:keys [type return-immediately flow-id action-id tags skippable] :as action} (as-> action a
-                                                                                    (assoc a :current-scene (:current-scene db))
-                                                                                    (->with-flow a)
-                                                                                    (->with-vars db a))
+                                                                                              (assoc a :current-scene (:current-scene db))
+                                                                                              (->with-flow a)
+                                                                                              (->with-vars db a))
           handler (get @executors (keyword type))
           display-name (action->fold-name action)]
 
@@ -323,12 +323,13 @@
 
       (when skippable
         (on-skip! #(dispatch-success-fn action))
-        (on-action-finished! action-id #(re-frame/dispatch [::overlays/hide-skip-menu]) )
+        (on-action-finished! action-id #(re-frame/dispatch [::overlays/hide-skip-menu]))
         (re-frame/dispatch [::overlays/show-skip-menu]))
 
       (handler {:db db :action action})
       (when return-immediately
-        (dispatch-success-fn action)))))
+        (dispatch-success-fn action)))
+    (dispatch-success-fn action)))
 
 (re-frame/reg-event-fx
   ::execute-action
@@ -580,14 +581,16 @@
                    :parent        (:flow-id action) :tags (get-action-tags action)
                    :next          #(dispatch-success-fn action)
                    :current-scene current-scene}]
-    (register-flow! flow-data)
+
 
     (if (seq actions)
-      (doall (map-indexed (fn [sequence-position child-action]
-                            (->> (sequenced-action->display-name action sequence-position)
-                                 (assoc child-action :display-name)
-                                 (execute-action db)))
-                          actions))
+      (do
+        (register-flow! flow-data)
+        (doall (map-indexed (fn [sequence-position child-action]
+                                (->> (sequenced-action->display-name action sequence-position)
+                                     (assoc child-action :display-name)
+                                     (execute-action db)))
+                              actions)))
       (dispatch-success-fn action))))
 
 (re-frame/reg-event-fx
