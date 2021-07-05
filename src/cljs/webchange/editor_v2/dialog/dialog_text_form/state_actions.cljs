@@ -5,7 +5,8 @@
     [webchange.editor-v2.dialog.dialog-form.state.common :as state-actions-common]
     [webchange.editor-v2.text-animation-editor.state :as chunks]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.utils.text :refer [text->chunks]]))
 
 (defn- pre_action-type [value] (some #{value} [:concept :scene]))
 (defn- pre_node-data [value] (and (map? value)
@@ -35,7 +36,8 @@
 (re-frame/reg-event-fx
   ::set-object-text
   (fn [{:keys [_]} [_ {:keys [object-name text]}]]
-    {:dispatch [::translator-form.scene/update-object [object-name] {:text text}]}))
+    {:dispatch [::translator-form.scene/update-object [object-name] {:text   text
+                                                                     :chunks (text->chunks text)}]}))
 
 ;; Actions
 
