@@ -1,7 +1,7 @@
 .voice-over-form {
-    @import "styles_add_audio";
+    @import "add_audio/styles";
     @import "audios_list/styles";
-    @import "styles_current_audio";
+    @import "current_audio/styles";
 
     display: flex;
     flex-direction: column;

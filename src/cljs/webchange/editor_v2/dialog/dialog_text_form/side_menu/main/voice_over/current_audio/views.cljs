@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.views-current-audio
+(ns webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.current-audio.views
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
