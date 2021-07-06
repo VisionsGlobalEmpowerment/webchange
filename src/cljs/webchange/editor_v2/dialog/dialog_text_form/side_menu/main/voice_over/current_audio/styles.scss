@@ -1,4 +1,10 @@
 .current-audio {
+    & > .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 8px;
+    }
+
     .audio-wave-form {
         display: flex;
         gap: 8px;

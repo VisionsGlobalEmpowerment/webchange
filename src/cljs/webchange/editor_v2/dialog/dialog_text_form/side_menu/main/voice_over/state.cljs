@@ -1,14 +1,13 @@
 (ns webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer :refer [get-region-data-if-possible]]
+    [webchange.editor-v2.audio-analyzer.region-data :refer [get-region-data-if-possible]]
     [webchange.editor-v2.dialog.components.audio-assets.state :as audio-assets]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state-dialog]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
-    [webchange.state.warehouse :as warehouse]
     [webchange.state.warehouse-recognition :as recognition]))
 
 (defn path-to-db
@@ -54,6 +53,23 @@
 
 (re-frame/reg-event-fx
   ::set-current-audio-region
+  (fn [{:keys [db]} [_ region-data]]
+    (let [{:keys [path source]} (state-dialog/get-selected-action db)]
+      {:dispatch [::state-actions/update-inner-action-by-path {:action-path path
+                                                               :action-type source
+                                                               :data-patch  region-data}]})))
+
+(re-frame/reg-event-fx
+  ::recognition-retry
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [audio phrase-text]} (get-current-audio db)]
+      {:dispatch [::recognition/get-audio-script-region
+                  {:audio-url   audio
+                   :script-text phrase-text}
+                  {:on-success [::recognition-retry-success]}]})))
+
+(re-frame/reg-event-fx
+  ::recognition-retry-success
   (fn [{:keys [db]} [_ region-data]]
     (let [{:keys [path source]} (state-dialog/get-selected-action db)]
       {:dispatch [::state-actions/update-inner-action-by-path {:action-path path

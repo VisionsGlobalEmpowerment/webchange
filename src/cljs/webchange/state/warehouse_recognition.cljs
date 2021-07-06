@@ -1,7 +1,7 @@
 (ns webchange.state.warehouse-recognition
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer :refer [get-region-data-if-possible]]
+    [webchange.editor-v2.audio-analyzer.region-data :refer [get-region-data-if-possible]]
     [webchange.state.warehouse :as warehouse]))
 
 (defn- dispatch-if-defined

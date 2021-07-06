@@ -33,6 +33,7 @@
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
+    [webchange.ui-framework.components.icon.icon-restart :as restart]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
@@ -78,6 +79,7 @@
    "music-off"          music-off/data
    "play"               play/data
    "remove"             remove/data
+   "restart"            restart/data
    "settings"           settings/data
    "stop"               stop/data
    "swap"               swap/data
