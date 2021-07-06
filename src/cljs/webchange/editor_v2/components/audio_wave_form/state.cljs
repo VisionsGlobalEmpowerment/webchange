@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.state :as parent-state]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse-recognition :as recognition]))
 
 (defn path-to-db
   [relative-path]
@@ -14,8 +14,10 @@
   ::init-audio-script
   (fn [{:keys [db]} [_ file]]
     {:db       (assoc-in db (path-to-db [file :loading]) true)
-     :dispatch [::warehouse/load-audio-script-polled {:file file} {:on-success [::set-audio-script file]
-                                                                   :on-failure [::reset-script-loading file]}]}))
+     :dispatch [::recognition/get-audio-script-data
+                {:audio-url file}
+                {:on-success [::set-audio-script file]
+                 :on-failure [::reset-script-loading file]}]}))
 
 (re-frame/reg-event-fx
   ::set-audio-script

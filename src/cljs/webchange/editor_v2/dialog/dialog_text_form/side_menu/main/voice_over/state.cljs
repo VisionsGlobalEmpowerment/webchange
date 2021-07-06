@@ -8,7 +8,8 @@
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.state.warehouse-recognition :as recognition]))
 
 (defn path-to-db
   [relative-path]
@@ -38,22 +39,18 @@
       {:dispatch-n [[::state-actions/update-inner-action-by-path {:action-path path
                                                                   :action-type source
                                                                   :data-patch  {:audio url}}]
-                    [::warehouse/load-audio-script-polled
-                     {:file url}
-                     {:on-success [::audio-script-loaded {:phrase-text phrase-text
-                                                          :action-path path
+                    [::recognition/get-audio-script-region
+                     {:audio-url   url
+                      :script-text phrase-text}
+                     {:on-success [::audio-script-loaded {:action-path path
                                                           :action-type source}]}]]})))
 
 (re-frame/reg-event-fx
   ::audio-script-loaded
-  (fn [{:keys []} [_ {:keys [phrase-text action-path action-type]} script-data]]
-    (let [{:keys [matched? region-data]} (get-region-data-if-possible {:text   phrase-text
-                                                                       :script script-data})]
-      (if matched?
-        {:dispatch [::state-actions/update-inner-action-by-path {:action-path action-path
-                                                                 :action-type action-type
-                                                                 :data-patch  region-data}]}
-        {}))))
+  (fn [{:keys []} [_ {:keys [action-path action-type]} region-data]]
+    {:dispatch [::state-actions/update-inner-action-by-path {:action-path action-path
+                                                             :action-type action-type
+                                                             :data-patch  region-data}]}))
 
 (re-frame/reg-event-fx
   ::set-current-audio-region
