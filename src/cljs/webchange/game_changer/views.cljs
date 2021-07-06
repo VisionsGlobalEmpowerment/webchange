@@ -11,10 +11,13 @@
     [webchange.game-changer.steps.select-background-music.index :as select-background-music]
     [webchange.game-changer.steps.select-character.index :as select-character]
     [webchange.game-changer.steps.select-template.index :as select-template]
+    [webchange.game-changer.steps.welcome-message.index :as welcome-message]
 
     [webchange.logger.index :as logger]))
 
-(def game-changer-steps [select-template/data
+(def game-changer-steps [
+                         welcome-message/data
+                         select-template/data
                          select-character/data
                          create-activity/data
                          fill-template/data
