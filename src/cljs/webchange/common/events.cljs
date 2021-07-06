@@ -307,12 +307,13 @@
 (defn execute-action
   [db {:keys [unique-tag] :as action}]
   (if (flow-not-registered? unique-tag)
-    (let [{:keys [type return-immediately flow-id action-id tags skippable] :as action} (as-> action a
+    (let [{:keys [type return-immediately flow-id action-id skippable] :as action} (as-> action a
                                                                                               (assoc a :current-scene (:current-scene db))
                                                                                               (->with-flow a)
                                                                                               (->with-vars db a))
           handler (get @executors (keyword type))
-          display-name (action->fold-name action)]
+          display-name (action->fold-name action)
+          tags (get-action-tags action)]
 
       (if (some? handler)
         (logger/trace-folded ["execute action" display-name (str "(" type ")")] "action data:" action)
