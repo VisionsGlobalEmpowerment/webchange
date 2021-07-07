@@ -44,18 +44,26 @@
                                            :min-height 50
                                            :min-width  50}}}})
 
-(def t {:assets        [{:url "/raw/img/park/sandbox/Background.png", :size 10, :type "image"}
-                        {:url "/raw/img/park/sandbox/Surface.png", :size 10, :type "image"}
-                        {:url "/raw/img/park/sandbox/Decoration.png", :size 10, :type "image"}
-                        {:url "/raw/img/park/sandbox/Skirting.png", :size 1 :type "image"}
-                        {:url "/raw/img/park/sandbox/Sandbox.png", :size 1, :type "image"}
-                        {:url "/raw/img/park/sandbox/Shadow.png", :size 1, :type "image"}
+(def t {:assets        [{:url "/raw/img/park/sandbox-castle/background.png", :size 10, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/surface.png", :size 10, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/decoration.png", :size 10, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sandbox_face.png", :size 1 :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sandbox.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/shadow.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/window.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sand_01.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sand_02.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sand_03.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sand_04.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sand_05.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/sand_06.png", :size 1, :type "image"}
+                        {:url "/raw/img/park/sandbox-castle/castle.png", :size 1, :type "image"}
                         {:url "/raw/img/onset-and-rime/cloud.png", :size 1, :type "image"}],
         :objects
                        {:background    {:type       "layered-background"
-                                        :background {:src "/raw/img/park/sandbox/Background.png"}
-                                        :decoration {:src "/raw/img/park/sandbox/Surface.png"}
-                                        :surface    {:src "/raw/img/park/sandbox/Decoration.png"}},
+                                        :background {:src "/raw/img/park/sandbox-castle/background.png"}
+                                        :decoration {:src "/raw/img/park/sandbox-castle/surface.png"}
+                                        :surface    {:src "/raw/img/park/sandbox-castle/decoration.png"}},
                         :mari          {:type       "animation"
                                         :x          1600
                                         :y          520
@@ -77,50 +85,45 @@
                                         :height  200
                                         :actions {:dig {:id "dig1" :on "pointerover" :type "action"}}}
                         :box1-group    {:type     "group"
-                                        :x        304 :y 826
+                                        :x        492
+                                        :y        720
                                         :children ["box1" "sand1" "sand1-trigger"]}
+                        :box2-group    {:type     "group"
+                                        :x        764,
+                                        :y        685,
+                                        :children ["box2" "sand2" "sand2-trigger"]}
+                        :box3-group    {:type     "group"
+                                        :x        1079,
+                                        :y        727,
+                                        :children ["box3" "sand3" "sand3-trigger"]}
                         :sand1         {:type     "group"
                                         :filters  [{:name "brightness" :value 0}
                                                    {:name "glow" :outer-strength 0 :color 0xffd700}]
                                         :children ["sand1-1" "sand1-2" "sand1-3" "sand1-4" "sand1-5" "sand1-6"]}
-                        :sand1-1       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation -30
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand1-2       {:type   "image"
-                                        :scale  {:x 0.5 :y 0.5}
-                                        :x      50
-                                        :src    "/raw/img/onset-and-rime/cloud.png"
+                        :sand1-1       {:type   "image"
+                                        :y      10
+                                        :src    "/raw/img/park/sandbox-castle/sand_01.png"
                                         :origin {:type "center-center"}}
-                        :sand1-3       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation 30
-                                        :x        100
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand1-4       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation 15
-                                        :y        -50
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand1-5       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation -15
-                                        :y        50
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
+                        :sand1-2       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_02.png"
+                                        :origin {:type "center-center"}}
+                        :sand1-3       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_03.png"
+                                        :origin {:type "center-center"}}
+                        :sand1-4       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_04.png"
+                                        :origin {:type "center-center"}}
+                        :sand1-5       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_05.png"
+                                        :origin {:type "center-center"}}
                         :sand1-6       {:type   "image"
-                                        :scale  {:x 0.5 :y 0.5}
-                                        :x      50
-                                        :y      50
-                                        :src    "/raw/img/onset-and-rime/cloud.png"
+                                        :src    "/raw/img/park/sandbox-castle/sand_06.png"
                                         :origin {:type "center-center"}}
                         :box1
                                        {:type        "animation",
                                         :width       771,
                                         :height      1033,
+                                        :y           60
                                         :scale       {:x 0.25, :y 0.25},
                                         :scene-name  "box1",
                                         :anim        "idle2",
@@ -138,53 +141,35 @@
                                         :width   200
                                         :height  200
                                         :actions {:dig {:id "dig2" :on "pointerover" :type "action"}}}
-                        :box2-group    {:type     "group"
-                                        :x        411,
-                                        :y        659,
-                                        :children ["box2" "sand2" "sand2-trigger"]}
+
                         :sand2         {:type     "group"
                                         :filters  [{:name "brightness" :value 0}
                                                    {:name "glow" :outer-strength 0 :color 0xffd700}]
                                         :children ["sand2-1" "sand2-2" "sand2-3" "sand2-4" "sand2-5" "sand2-6"]}
-                        :sand2-1       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation -30
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
+                        :sand2-1       {:type   "image"
+                                        :y      10
+                                        :src    "/raw/img/park/sandbox-castle/sand_01.png"
+                                        :origin {:type "center-center"}}
                         :sand2-2       {:type   "image"
-                                        :scale  {:x 0.5 :y 0.5}
-                                        :x      50
-                                        :src    "/raw/img/onset-and-rime/cloud.png"
+                                        :src    "/raw/img/park/sandbox-castle/sand_02.png"
                                         :origin {:type "center-center"}}
-                        :sand2-3       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation 30
-                                        :x        100
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand2-4       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation 15
-                                        :y        -50
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand2-5       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation -15
-                                        :y        50
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
+                        :sand2-3       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_03.png"
+                                        :origin {:type "center-center"}}
+                        :sand2-4       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_04.png"
+                                        :origin {:type "center-center"}}
+                        :sand2-5       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_05.png"
+                                        :origin {:type "center-center"}}
                         :sand2-6       {:type   "image"
-                                        :scale  {:x 0.5 :y 0.5}
-                                        :x      50
-                                        :y      50
-                                        :src    "/raw/img/onset-and-rime/cloud.png"
+                                        :src    "/raw/img/park/sandbox-castle/sand_06.png"
                                         :origin {:type "center-center"}}
-
                         :box2
                                        {:type        "animation",
                                         :width       771,
                                         :height      1033,
+                                        :y           60
                                         :scale       {:x 0.25, :y 0.25},
                                         :scene-name  "box2",
                                         :transition  "box2",
@@ -203,53 +188,36 @@
                                         :width   200
                                         :height  200
                                         :actions {:dig {:id "dig3" :on "pointerover" :type "action"}}}
-                        :box3-group    {:type     "group"
-                                        :x        700,
-                                        :y        654,
-                                        :children ["box3" "sand3" "sand3-trigger"]}
+
                         :sand3         {:type     "group"
                                         :filters  [{:name "brightness" :value 0}
                                                    {:name "glow" :outer-strength 0 :color 0xffd700}]
                                         :children ["sand3-1" "sand3-2" "sand3-3" "sand3-4" "sand3-5" "sand3-6"]}
-                        :sand3-1       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation -30
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand3-2       {:type   "image"
-                                        :scale  {:x 0.5 :y 0.5}
-                                        :x      50
-                                        :src    "/raw/img/onset-and-rime/cloud.png"
+                        :sand3-1       {:type   "image"
+                                        :y      10
+                                        :src    "/raw/img/park/sandbox-castle/sand_01.png"
                                         :origin {:type "center-center"}}
-                        :sand3-3       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation 30
-                                        :x        100
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand3-4       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation 15
-                                        :y        -50
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
-                        :sand3-5       {:type     "image"
-                                        :scale    {:x 0.5 :y 0.5}
-                                        :rotation -15
-                                        :y        50
-                                        :src      "/raw/img/onset-and-rime/cloud.png"
-                                        :origin   {:type "center-center"}}
+                        :sand3-2       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_02.png"
+                                        :origin {:type "center-center"}}
+                        :sand3-3       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_03.png"
+                                        :origin {:type "center-center"}}
+                        :sand3-4       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_04.png"
+                                        :origin {:type "center-center"}}
+                        :sand3-5       {:type   "image"
+                                        :src    "/raw/img/park/sandbox-castle/sand_05.png"
+                                        :origin {:type "center-center"}}
                         :sand3-6       {:type   "image"
-                                        :scale  {:x 0.5 :y 0.5}
-                                        :x      50
-                                        :y      50
-                                        :src    "/raw/img/onset-and-rime/cloud.png"
+                                        :src    "/raw/img/park/sandbox-castle/sand_06.png"
                                         :origin {:type "center-center"}}
 
                         :box3
                                        {:type        "animation",
                                         :width       771,
                                         :height      1033,
+                                        :y           60
                                         :scale       {:x 0.25, :y 0.25},
                                         :scene-name  "box3",
                                         :anim        "idle2",
@@ -264,18 +232,18 @@
                                         :states      {:init-position {:x 600, :y 674}}}
 
                         :sandbox       {:type "image",
-                                        :x    219,
-                                        :y    655,
-                                        :src  "/raw/img/park/sandbox/Sandbox.png"}
+                                        :x    176,
+                                        :y    636,
+                                        :src  "/raw/img/park/sandbox-castle/sandbox.png"}
                         :skirting      {:type "image",
-                                        :x    208,
-                                        :y    618,
-                                        :src  "/raw/img/park/sandbox/Skirting.png"}
+                                        :x    192,
+                                        :y    667,
+                                        :src  "/raw/img/park/sandbox-castle/sandbox_face.png"}
                         :shadow        {:type "image",
-                                        :x    141,
-                                        :y    743,
-                                        :src  "/raw/img/park/sandbox/Shadow.png"}},
-        :scene-objects [["background"] ["shadow" "sandbox" "skirting" "box3-group" "box2-group" "box1-group" "mari"]],
+                                        :x    100,
+                                        :y    741,
+                                        :src  "/raw/img/park/sandbox-castle/shadow.png"}},
+        :scene-objects [["background"] ["shadow" "skirting" "sandbox" "box3-group" "box2-group" "box1-group" "mari"]],
         :actions
                        {:dig1                {:type "sequence-data"
                                               :data [{:type           "counter"
@@ -291,37 +259,37 @@
                         :sand1-state2        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 3}
                                                      {:type "set-variable", :var-name "sand1-next-state-value", :var-value 30}
-                                                     {:type "set-attribute", :target "sand1-1", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand1-6", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state3        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 4}
                                                      {:type "set-variable", :var-name "sand1-next-state-value", :var-value 60}
-                                                     {:type "set-attribute", :target "sand1-2", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand1-5", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state4        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 5}
                                                      {:type "set-variable", :var-name "sand1-next-state-value", :var-value 90}
-                                                     {:type "set-attribute", :target "sand1-3", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand1-4", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state5        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 6}
                                                      {:type "set-variable", :var-name "sand1-next-state-value", :var-value 120}
-                                                     {:type "set-attribute", :target "sand1-4", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand1-3", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state6        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 7}
                                                      {:type "set-variable", :var-name "sand1-next-state-value", :var-value 150}
-                                                     {:type "set-attribute", :target "sand1-5", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand1-2", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state7        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 8}
                                                      {:type "set-variable", :var-name "sand1-next-state-value", :var-value 150}
-                                                     {:type "set-attribute", :target "sand1-6", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand1-1", :attr-name "visible" :attr-value false}
                                                      {:type     "action"
                                                       :from-var [{:template "fact1-round%-dialog" :var-name "round-counter", :action-property "id"}]}
                                                      {:type "set-variable" :var-name "sand1-finished" :var-value true}
@@ -342,37 +310,37 @@
                         :sand2-state2        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 3}
                                                      {:type "set-variable", :var-name "sand2-next-state-value", :var-value 30}
-                                                     {:type "set-attribute", :target "sand2-1", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand2-6", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state3        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 4}
                                                      {:type "set-variable", :var-name "sand2-next-state-value", :var-value 60}
-                                                     {:type "set-attribute", :target "sand2-2", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand2-5", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state4        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 5}
                                                      {:type "set-variable", :var-name "sand2-next-state-value", :var-value 90}
-                                                     {:type "set-attribute", :target "sand2-3", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand2-4", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state5        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 6}
                                                      {:type "set-variable", :var-name "sand2-next-state-value", :var-value 120}
-                                                     {:type "set-attribute", :target "sand2-4", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand2-3", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state6        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 7}
                                                      {:type "set-variable", :var-name "sand2-next-state-value", :var-value 150}
-                                                     {:type "set-attribute", :target "sand2-5", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand2-2", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state7        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 8}
                                                      {:type "set-variable", :var-name "sand2-next-state-value", :var-value 150}
-                                                     {:type "set-attribute", :target "sand2-6", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand2-1", :attr-name "visible" :attr-value false}
                                                      {:type     "action"
                                                       :from-var [{:template "fact2-round%-dialog" :var-name "round-counter", :action-property "id"}]}
                                                      {:type "set-variable" :var-name "sand2-finished" :var-value true}
@@ -394,37 +362,37 @@
                         :sand3-state2        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 3}
                                                      {:type "set-variable", :var-name "sand3-next-state-value", :var-value 30}
-                                                     {:type "set-attribute", :target "sand3-1", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand3-6", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state3        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 4}
                                                      {:type "set-variable", :var-name "sand3-next-state-value", :var-value 60}
-                                                     {:type "set-attribute", :target "sand3-2", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand3-5", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state4        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 5}
                                                      {:type "set-variable", :var-name "sand3-next-state-value", :var-value 90}
-                                                     {:type "set-attribute", :target "sand3-3", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand3-4", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state5        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 6}
                                                      {:type "set-variable", :var-name "sand3-next-state-value", :var-value 120}
-                                                     {:type "set-attribute", :target "sand3-4", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand3-3", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state6        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 7}
                                                      {:type "set-variable", :var-name "sand3-next-state-value", :var-value 150}
-                                                     {:type "set-attribute", :target "sand3-5", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand3-2", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state7        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 8}
                                                      {:type "set-variable", :var-name "sand3-next-state-value", :var-value 150}
-                                                     {:type "set-attribute", :target "sand3-6", :attr-name "visible" :attr-value false}
+                                                     {:type "set-attribute", :target "sand3-1", :attr-name "visible" :attr-value false}
                                                      {:type     "action"
                                                       :from-var [{:template "fact3-round%-dialog" :var-name "round-counter", :action-property "id"}]}
                                                      {:type "set-variable" :var-name "sand3-finished" :var-value true}
@@ -497,45 +465,61 @@
                                                      {:type     "action"
                                                       :from-var [{:template "round%-started-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :stop-activity       {:type "stop-activity"},
-                        :set-images-round1 {:type "parallel"
-                                            :data [{:type "action" :id "set-image1-1"}
-                                                   {:type "action" :id "set-image1-2"}
-                                                   {:type "action" :id "set-image1-3"}]}
-                        :set-images-round2 {:type "parallel"
-                                            :data [{:type "action" :id "set-image2-1"}
-                                                   {:type "action" :id "set-image2-2"}
-                                                   {:type "action" :id "set-image2-3"}]}
+                        :set-images-round1   {:type "parallel"
+                                              :data [{:type "action" :id "set-image1-1"}
+                                                     {:type "action" :id "set-image1-2"}
+                                                     {:type "action" :id "set-image1-3"}]}
+                        :set-images-round2   {:type "parallel"
+                                              :data [{:type "action" :id "set-image2-1"}
+                                                     {:type "action" :id "set-image2-2"}
+                                                     {:type "action" :id "set-image2-3"}]}
 
-                        :set-image1-1 {:type       "set-slot",
-                                       :image ""
-                                       :target     "box1"
-                                       :attachment {:x 40, :scale-x 4, :scale-y 4},
-                                       :slot-name  "box1"}
-                        :set-image1-2 {:type       "set-slot",
-                                       :image ""
-                                       :target     "box2"
-                                       :attachment {:x 40, :scale-x 4, :scale-y 4},
-                                       :slot-name  "box1"}
-                        :set-image1-3 {:type       "set-slot",
-                                       :image ""
-                                       :target     "box3"
-                                       :attachment {:x 40, :scale-x 4, :scale-y 4},
-                                       :slot-name  "box1"}
-                        :set-image2-1 {:type       "set-slot",
-                                       :image ""
-                                       :target     "box1"
-                                       :attachment {:x 40, :scale-x 4, :scale-y 4},
-                                       :slot-name  "box1"}
-                        :set-image2-2 {:type       "set-slot",
-                                       :image ""
-                                       :target     "box2"
-                                       :attachment {:x 40, :scale-x 4, :scale-y 4},
-                                       :slot-name  "box1"}
-                        :set-image2-3 {:type       "set-slot",
-                                       :image ""
-                                       :target     "box3"
-                                       :attachment {:x 40, :scale-x 4, :scale-y 4},
-                                       :slot-name  "box1"}
+                        :set-image1-1        {:type       "set-slot",
+                                              :image      ""
+                                              :target     "box1"
+                                              :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                              :slot-name  "box1"}
+                        :set-image1-2        {:type       "set-slot",
+                                              :image      ""
+                                              :target     "box2"
+                                              :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                              :slot-name  "box1"}
+                        :set-image1-3        {:type       "set-slot",
+                                              :image      ""
+                                              :target     "box3"
+                                              :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                              :slot-name  "box1"}
+                        :set-image2-1        {:type       "set-slot",
+                                              :image      ""
+                                              :target     "box1"
+                                              :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                              :slot-name  "box1"}
+                        :set-image2-2        {:type       "set-slot",
+                                              :image      ""
+                                              :target     "box2"
+                                              :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                              :slot-name  "box1"}
+                        :set-image2-3        {:type       "set-slot",
+                                              :image      ""
+                                              :target     "box3"
+                                              :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                              :slot-name  "box1"}
+                        :highlight-sand      {:type "parallel"
+                                              :data [{:type               "transition"
+                                                      :transition-id      "sand1"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0 :glow 0}
+                                                      :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
+                                                     {:type               "transition"
+                                                      :transition-id      "sand2"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0 :glow 0}
+                                                      :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
+                                                     {:type               "transition"
+                                                      :transition-id      "sand3"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0 :glow 0}
+                                                      :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}]}
                         :intro-dialog        (dialog/default "Intro")
                         :round1-started-dialog
                                              (dialog/default "Start Round 1")
@@ -560,40 +544,42 @@
                         :word2-round2-dialog (dialog/default "Round 2 Word 2")
                         :word3-round2-dialog (dialog/default "Round 2 Word 3")},
         :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
-        :metadata      {:prev   "park", :autostart true
-                        :tracks [{:title "Intro"
-                                  :nodes [{:type      "dialog"
-                                           :action-id :intro-dialog}
-                                          {:type "prompt"
-                                           :text "Guide gives instruction. New round begins"}
-                                          {:type      "dialog"
-                                           :action-id :finish-activity-dialog}]}
-                                 {:title "Round 1"
-                                  :nodes [{:type      "dialog"
-                                           :action-id :word1-round1-dialog}
-                                          {:type      "dialog"
-                                           :action-id :word2-round1-dialog}
-                                          {:type      "dialog"
-                                           :action-id :word3-round1-dialog}
-                                          {:type      "dialog"
-                                           :action-id :fact1-round1-dialog}
-                                          {:type      "dialog"
-                                           :action-id :fact2-round1-dialog}
-                                          {:type      "dialog"
-                                           :action-id :fact3-round1-dialog}]}
-                                 {:title "Round 2"
-                                  :nodes [{:type      "dialog"
-                                           :action-id :word1-round2-dialog}
-                                          {:type      "dialog"
-                                           :action-id :word2-round2-dialog}
-                                          {:type      "dialog"
-                                           :action-id :word3-round2-dialog}
-                                          {:type      "dialog"
-                                           :action-id :fact1-round2-dialog}
-                                          {:type      "dialog"
-                                           :action-id :fact2-round2-dialog}
-                                          {:type      "dialog"
-                                           :action-id :fact3-round2-dialog}]}]}})
+        :metadata      {:prev              "park", :autostart true
+                        :tracks            [{:title "Intro"
+                                             :nodes [{:type      "dialog"
+                                                      :action-id :intro-dialog}
+                                                     {:type "prompt"
+                                                      :text "Guide gives instruction. New round begins"}
+                                                     {:type      "dialog"
+                                                      :action-id :finish-activity-dialog}]}
+                                            {:title "Round 1"
+                                             :nodes [{:type      "dialog"
+                                                      :action-id :word1-round1-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :word2-round1-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :word3-round1-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :fact1-round1-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :fact2-round1-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :fact3-round1-dialog}]}
+                                            {:title "Round 2"
+                                             :nodes [{:type      "dialog"
+                                                      :action-id :word1-round2-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :word2-round2-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :word3-round2-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :fact1-round2-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :fact2-round2-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :fact3-round2-dialog}]}]
+                        :available-actions [{:action "highlight-sand"
+                                             :name   "Highlight sand"}]}})
 
 (defn add-images
   [activity-data args]
