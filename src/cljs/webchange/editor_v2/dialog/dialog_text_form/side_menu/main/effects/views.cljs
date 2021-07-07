@@ -13,8 +13,11 @@
         handle-click #(re-frame/dispatch [::state/set-selected-effect %])]
     [:div
      [:span.input-label "Select effect:"]
-     [options-list {:options  available-effects
-                    :on-click handle-click}]]))
+     [options-list {:options       available-effects
+                    :on-click      handle-click
+                    :get-drag-data (fn [{:keys [value]}]
+                                     {:action "add-effect-action"
+                                      :id     value})}]]))
 
 (defn- actions
   []

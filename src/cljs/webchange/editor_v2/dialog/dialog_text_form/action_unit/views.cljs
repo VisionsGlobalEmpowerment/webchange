@@ -8,7 +8,8 @@
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-text-animation :refer [text-animation-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
     [webchange.logger.index :as logger]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.utils.drag-and-drop :as utils]))
 
 (defn- unknown-element
   [{:keys [type] :as props}]
@@ -16,18 +17,52 @@
   (logger/trace-folded "Props" props)
   [:div.unknown-unit "Not editable action"])
 
+(defn drag-event->drop-target
+  [event]
+  (if-let [target (.. event -target)]
+    (let [offset-y (.-offsetY event)
+          target-height (.. target -clientHeight)]
+      (if (< offset-y (/ target-height 2))
+        "before"
+        "after"))))
+
 (defn action-unit
-  [{:keys [idx parallel-mark type selected?] :as props}]
+  [{:keys [idx parallel-mark path type selected?] :as props}]
   (r/with-let [container-ref (r/atom nil)
-               handle-click #(re-frame/dispatch [::state/set-selected-action props])]
-    [:div {:ref        #(when (some? %) (reset! container-ref %))
+               handle-click #(re-frame/dispatch [::state/set-selected-action props])
+
+               ;; d&d
+               drop-target (r/atom nil)
+
+               prevent-defaults #(do (.preventDefault %)
+                                     (.stopPropagation %))
+               handle-drag-enter #(prevent-defaults %)
+               handle-drag-leave #(do (prevent-defaults %) (reset! drop-target nil))
+               handle-drag-over #(do (prevent-defaults %) (reset! drop-target (drag-event->drop-target %)))
+               handle-drop #(do (prevent-defaults %)
+                                (print ">> data" (merge (utils/get-transfer-data %)
+                                                        {:target-type       type
+                                                         :target-path       path
+                                                         :relative-position @drop-target}))
+                                (reset! drop-target nil))
+
+               init-dnd (fn []
+                          (.addEventListener @container-ref "dragenter" handle-drag-enter)
+                          (.addEventListener @container-ref "dragleave" handle-drag-leave)
+                          (.addEventListener @container-ref "dragover" handle-drag-over)
+                          (.addEventListener @container-ref "drop" handle-drop))]
+    [:div {:ref        #(when (some? %)
+                          (reset! container-ref %)
+                          (init-dnd))
            :on-click   handle-click
            :class-name (get-class-name {"action-unit"     true
                                         "parallel"        (not= parallel-mark :none)
                                         "parallel-start"  (= parallel-mark :start)
                                         "parallel-middle" (= parallel-mark :middle)
                                         "parallel-end"    (= parallel-mark :end)
-                                        "selected"        selected?})}
+                                        "selected"        selected?
+                                        "drop-before"     (= @drop-target "before")
+                                        "drop-after"      (= @drop-target "after")})}
      (case type
        :effect [effect-unit props]
        :phrase [phrase-unit props]
@@ -35,4 +70,9 @@
        [unknown-element props])
      [unit-menu {:idx         idx
                  :parent-ref  @container-ref
-                 :action-data props}]]))
+                 :action-data props}]]
+    (finally
+      (.removeEventListener @container-ref "dragenter" handle-drag-enter)
+      (.removeEventListener @container-ref "dragleave" handle-drag-leave)
+      (.removeEventListener @container-ref "dragover" handle-drag-over)
+      (.removeEventListener @container-ref "drop" handle-drop))))
