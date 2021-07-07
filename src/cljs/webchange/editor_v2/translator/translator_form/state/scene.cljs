@@ -135,6 +135,11 @@
        :dispatch-n (list [::set-changes])})))
 
 (re-frame/reg-event-fx
+  ::update-asset-alias
+  (fn [_ [_ asset-url alias]]
+    {:dispatch-n (list [::update-asset asset-url {:alias alias}])}))
+
+(re-frame/reg-event-fx
   ::update-asset-date
   (fn [_ [_ asset-url date]]
     {:dispatch-n (list [::update-asset asset-url {:date date}])}))

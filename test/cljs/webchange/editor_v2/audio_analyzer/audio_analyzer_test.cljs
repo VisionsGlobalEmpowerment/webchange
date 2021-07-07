@@ -1,19 +1,20 @@
 (ns webchange.editor-v2.audio-analyzer.audio-analyzer-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.editor-v2.audio-analyzer :as aa]
-    [webchange.editor-v2.audio-analyzer.data :refer [script-data]]))
+    [webchange.editor-v2.audio-analyzer.data :refer [script-data]]
+    [webchange.editor-v2.audio-analyzer.region-data :refer [get-start-end-for-text]]
+    [webchange.editor-v2.audio-analyzer.talk-data :refer [get-chunks-for-text]]))
 
 (deftest test-get-action-audio-data-region
   (let [text "This branch looks lovely! It seems perfect for me. What do you think? Do you agree?"
-        {start :start end :end} (aa/get-start-end-for-text text script-data)]
+        {start :start end :end} (get-start-end-for-text text script-data)]
       (is (= start 49.98))
       (is (= end 55.86))))
 
 
 (deftest test-short-text-region
   (let [text "This branch looks lovely!"
-        {start :start end :end} (aa/get-start-end-for-text text script-data)]
+        {start :start end :end} (get-start-end-for-text text script-data)]
     (is (= start 49.98))
     (is (= end 51.81))))
 
@@ -50,7 +51,7 @@
                      {:conf 1.0, :end 59, :start 58, :word "you"}
                      {:conf 1.0, :end 61, :start 60, :word "agree"}
                      ]
-        {start :start end :end} (aa/get-start-end-for-text text script-data)]
+        {start :start end :end} (get-start-end-for-text text script-data)]
     (is (= start 1))
     (is (= end 32))))
 
@@ -86,7 +87,7 @@
                      {:conf 1.0, :end 57, :start 56, :word "do"}
                      {:conf 1.0, :end 59, :start 58, :word "you"}
                      {:conf 1.0, :end 61, :start 60, :word "agree"}]
-        chunks (aa/get-chunks-for-text text script-data {:start 1 :end 34})]
+        chunks (get-chunks-for-text text script-data {:start 1 :end 34})]
     (is (= 1 (:at (first chunks))))
     (is (= 31 (:at (last chunks))))
     (is (= 16 (count chunks)))))
@@ -94,8 +95,8 @@
 
 (deftest test-get-action-audio-data-region
   (let [text "This branch looks lovely! It seems perfect for me. What do you think? Do you agree?"
-        region (aa/get-start-end-for-text text script-data)
-        chunks (aa/get-chunks-for-text text script-data region)]
+        region (get-start-end-for-text text script-data)
+        chunks (get-chunks-for-text text script-data region)]
     (is (= 49.98 (:at (first chunks))))
     (is (= 55.32 (:at (last chunks))))
     (is (= 16 (count chunks)))))

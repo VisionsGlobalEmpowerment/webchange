@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.views-add-audio
+(ns webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.add-audio.views
   (:require
     [reagent.core :as r]
     [webchange.editor-v2.dialog.components.record-audio.views :refer [record-audio]]

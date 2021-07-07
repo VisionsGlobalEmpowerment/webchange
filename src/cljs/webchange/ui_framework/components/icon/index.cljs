@@ -2,11 +2,14 @@
   (:require
     [webchange.ui-framework.components.icon.icon-add :as add]
     [webchange.ui-framework.components.icon.icon-add-box :as add-box]
+    [webchange.ui-framework.components.icon.icon-arrow-first :as arrow-first]
+    [webchange.ui-framework.components.icon.icon-arrow-last :as arrow-last]
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
     [webchange.ui-framework.components.icon.icon-arrow-right :as arrow-right]
     [webchange.ui-framework.components.icon.icon-audio :as audio]
     [webchange.ui-framework.components.icon.icon-background :as background]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
+    [webchange.ui-framework.components.icon.icon-cancel :as cancel]
     [webchange.ui-framework.components.icon.icon-check :as check]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
@@ -32,6 +35,7 @@
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
+    [webchange.ui-framework.components.icon.icon-restart :as restart]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
@@ -46,11 +50,14 @@
 (def icons
   {"add"                add/data
    "add-box"            add-box/data
+   "arrow-first"        arrow-first/data
+   "arrow-last"         arrow-last/data
    "arrow-left"         arrow-left/data
    "arrow-right"        arrow-right/data
    "audio"              audio/data
    "background"         background/data
    "bring-to-top"       bring-to-top/data
+   "cancel"             cancel/data
    "check"              check/data
    "clear"              clear/data
    "close"              close/data
@@ -76,6 +83,7 @@
    "music-off"          music-off/data
    "play"               play/data
    "remove"             remove/data
+   "restart"            restart/data
    "settings"           settings/data
    "stop"               stop/data
    "swap"               swap/data
