@@ -17,33 +17,44 @@
 (defn text-control
   [{:keys [on-change on-enter-press on-ctrl-enter-press]}]
   (let [ref (atom nil)
+        current-value (atom nil)
         handle-key-down (fn [e]
                           (when (= (.-key e) "Enter")
                             (.preventDefault e)
                             (if (.-ctrlKey e)
                               (on-ctrl-enter-press)
-                              (on-enter-press))))]
+                              (on-enter-press))))
+        handle-click (fn []
+                       (when (= @current-value nil)
+                         (set! (.-innerText @ref) "")
+                         (on-change "")))]
     (r/create-class
       {:display-name "text-control"
        :should-component-update
                      (constantly false)
        :component-did-mount
                      (fn [this]
-                       (let [{:keys [editable?]} (r/props this)]
+                       (let [{:keys [editable? value]} (r/props this)]
+                         (reset! current-value value)
                          (when editable?
                            (.addEventListener @ref "keydown" handle-key-down false))))
        :component-will-unmount
                      (fn []
                        (.removeEventListener @ref "keydown" handle-key-down))
        :reagent-render
-                     (fn [{:keys [value editable?]}]
-                       (let [handle-change (fn [event]
+                     (fn [{:keys [value editable? placeholder]}]
+                       (let [show-placeholder? (nil? value)
+                             handle-change (fn [event]
                                              (let [new-value (.. event -target -innerText)]
+                                               (reset! current-value new-value)
                                                (on-change new-value)))]
                          [:span (cond-> {:class-name (get-class-name {"text"          true
                                                                       "text-disabled" (not editable?)})
-                                         :ref        #(when (some? %) (reset! ref %))}
+                                         :ref        #(when (some? %) (reset! ref %))
+                                         :on-click   handle-click}
                                         editable? (merge {:on-input                          handle-change
                                                           :content-editable                  true
                                                           :suppress-content-editable-warning true}))
-                          value]))})))
+                          (if show-placeholder?
+                            placeholder
+                            value)]))})))

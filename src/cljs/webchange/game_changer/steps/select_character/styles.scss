@@ -3,9 +3,10 @@
 @import "styles-available-list";
 @import "styles-selected-list";
 
-.placeholder {
-    @include image-placeholder($message: "No Preview");
-    width: 100%;
-    height: 100%;
+.available-characters-list {
+    .placeholder {
+        @include image-placeholder($message: "No Preview");
+        width: 100%;
+        height: 100%;
+    }
 }
-

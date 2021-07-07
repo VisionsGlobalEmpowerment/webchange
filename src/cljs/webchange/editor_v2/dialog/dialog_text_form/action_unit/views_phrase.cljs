@@ -6,6 +6,7 @@
     [webchange.editor-v2.dialog.dialog-text-form.menu.views :refer [add-concept-action add-scene-action]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
     [webchange.editor-v2.dialog.dialog-text-form.state-actions :as state-actions]
+    [webchange.editor-v2.dialog.utils.dialog-action :as dialog-action]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- phrase-target-control
@@ -20,13 +21,14 @@
                        :on-change handle-target-change}])))
 
 (defn- phrase-text-control
-  [{:keys [action-data path source text]}]
+  [{:keys [action-data path source text placeholder]}]
   (let [handle-enter-press (fn [] (add-scene-action {:action-data action-data}))
         handle-ctrl-enter-press (fn [] (add-concept-action {:action-data action-data}))
         handle-text-change (fn [new-value] (re-frame/dispatch [::state-actions/set-phrase-text {:action-path path
                                                                                                 :action-type source
                                                                                                 :value       new-value}]))]
-    [text-control {:value               text
+    [text-control {:value               (if (= text dialog-action/default-phrase-text) nil text)
+                   :placeholder         placeholder
                    :editable?           true
                    :on-change           handle-text-change
                    :on-enter-press      handle-enter-press
