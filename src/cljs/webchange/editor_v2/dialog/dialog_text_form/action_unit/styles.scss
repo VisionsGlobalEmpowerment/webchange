@@ -8,6 +8,7 @@ $units-margin: 6px;
     cursor: pointer;
 
     .phrase-unit {
+        display: flex;
         border-radius: 4px;
 
         &.concept-unit {
@@ -65,6 +66,7 @@ $units-margin: 6px;
     }
 
     .text {
+        flex: 1 1;
         cursor: text;
         outline: none;
 
