@@ -6,14 +6,22 @@
                                                                  handle-audio-region!
                                                                  init-audio-region!
                                                                  update-script!]]
+    [webchange.editor-v2.components.audio-wave-form.utils :refer [inc-zoom]]
     [webchange.editor-v2.components.audio-wave-form.views-controls :refer [float-control]]
     [webchange.editor-v2.components.audio-wave-form.state :as state]))
+
+(def delta-zoom 15)
 
 (defn- audio-wave-form-core
   [{:keys [start end]}]
   (let [ws (r/atom nil)
         region (r/atom {:start start :end end})
-        element (r/atom nil)]
+        element (r/atom nil)
+        handle-wheel (fn [e]
+                       (when (some? @ws)
+                         (let [client-delta (.-deltaY e)
+                               client-delta-sign (/ client-delta (Math/abs client-delta))]
+                           (inc-zoom @ws (* client-delta-sign delta-zoom)))))]
     (r/create-class
       {:display-name "audio-wave-form"
 
@@ -58,8 +66,9 @@
                             [:span.file-name file-name])]
                          (into [:div]
                                right-side-controls)]
-                        [:div.body {:ref #(when (and % (nil? @element))
-                                            (reset! element %))}]])})))
+                        [:div.body {:on-wheel handle-wheel
+                                    :ref      #(when (and % (nil? @element))
+                                                 (reset! element %))}]])})))
 
 (defn audio-wave-form
   [_]
