@@ -8,16 +8,15 @@
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
     [webchange.editor-v2.wizard.validator :as validator]
     [webchange.ui-framework.components.index :refer [dialog button]]
-    [webchange.utils.scene-data :as utils]))
+    [webchange.utils.scene-data :as utils]
+    [webchange.logger.index :as logger]))
 
 (defn- get-action-default-data
   [scene-data action-data]
   (if (contains? action-data :default-props)
     (let [props-key (-> action-data (get :default-props) (keyword))
           saved-props (get-in scene-data [:metadata :saved-props] {})]
-      (->> (get saved-props props-key {})
-           (map (fn [[key value]] [(clojure.core/name key) value]))
-           (into {})))
+      (get saved-props props-key {}))
     {}))
 
 (defn- action-modal-view

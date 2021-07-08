@@ -5,7 +5,8 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.file-input.views :as file-input]
     [webchange.editor-v2.concepts.events :as concepts-events]
-    [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
+    [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
+    [webchange.logger.index :as logger]))
 
 (def video-validation-map {:root [(fn [value] (when-not (some? value) "video is required"))]})
 

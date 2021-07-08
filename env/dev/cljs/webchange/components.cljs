@@ -22,18 +22,12 @@
     prepared-data))
 
 (comment
-  (redraw "spread-0-title-text" {:type           "text",
-                                 :x              929,
-                                 :y              264,
-                                 :width          680,
-                                 :height         200,
-                                 :align          "center",
-                                 :chunks         [{:end 6, :start 0}]
-                                 :fill           "white",
-                                 :font-family    "Lexend Deca",
-                                 :font-size      120,
-                                 :text           "Letter",
-                                 :vertical-align "middle"})
+  (redraw "spot" {:type       "image",
+                                 :x             826,
+                                 :y          524,
+                                 :filters     [{:name "brightness" :value 0}
+                                               {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                 :src        "/raw/img/park/slide/line_01.png",})
 
   {:type    "image",
    :x       1690,
