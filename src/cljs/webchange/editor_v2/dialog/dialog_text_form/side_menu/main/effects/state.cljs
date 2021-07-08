@@ -42,6 +42,13 @@
 
 ;; Actions
 
+(re-frame/reg-sub
+  ::show-actions?
+  (fn []
+    (re-frame/subscribe [::state-dialog/selected-action]))
+  (fn [selected-action]
+    (some? selected-action)))
+
 (re-frame/reg-event-fx
   ::add-current-effect-action
   (fn [{:keys [db]} [_ relative-position]]

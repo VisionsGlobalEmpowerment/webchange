@@ -23,8 +23,8 @@
     (let [offset-y (.-offsetY event)
           target-height (.. target -clientHeight)]
       (if (< offset-y (/ target-height 2))
-        "before"
-        "after"))))
+        :before
+        :after))))
 
 (defn action-unit
   [{:keys [idx parallel-mark path type selected?] :as props}]
@@ -40,10 +40,10 @@
                handle-drag-leave #(do (prevent-defaults %) (reset! drop-target nil))
                handle-drag-over #(do (prevent-defaults %) (reset! drop-target (drag-event->drop-target %)))
                handle-drop #(do (prevent-defaults %)
-                                (print ">> data" (merge (utils/get-transfer-data %)
-                                                        {:target-type       type
-                                                         :target-path       path
-                                                         :relative-position @drop-target}))
+                                (re-frame/dispatch [::state/handle-drag-n-drop (merge (utils/get-transfer-data %)
+                                                                                      {:target-type       type
+                                                                                       :target-path       path
+                                                                                       :relative-position @drop-target})])
                                 (reset! drop-target nil))
 
                init-dnd (fn []
@@ -61,8 +61,8 @@
                                         "parallel-middle" (= parallel-mark :middle)
                                         "parallel-end"    (= parallel-mark :end)
                                         "selected"        selected?
-                                        "drop-before"     (= @drop-target "before")
-                                        "drop-after"      (= @drop-target "after")})}
+                                        "drop-before"     (= @drop-target :before)
+                                        "drop-after"      (= @drop-target :after)})}
      (case type
        :effect [effect-unit props]
        :phrase [phrase-unit props]

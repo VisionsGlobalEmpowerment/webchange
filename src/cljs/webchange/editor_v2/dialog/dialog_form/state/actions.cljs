@@ -76,16 +76,21 @@
       {:dispatch-n (list [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx
-  ::append-child-action
-  (fn [{:keys [db]} [_ child-action]]
+  ::insert-child-action
+  (fn [{:keys [db]} [_ child-action position]]
     (let [dialog-action-info (translator-form.actions/current-dialog-action-info db)
           dialog-action-data (translator-form.actions/current-dialog-action-data db)
 
           dialog-action-path (:path dialog-action-info)
-          data-patch (-> (au/insert-child-action-at-index dialog-action-data child-action :last)
+          data-patch (-> (au/insert-child-action-at-index dialog-action-data child-action position)
                          (select-keys [:data]))]
 
-      {:dispatch-n (list [::update-scene-action dialog-action-path data-patch])})))
+      {:dispatch [::update-scene-action dialog-action-path data-patch]})))
+
+(re-frame/reg-event-fx
+  ::append-child-action
+  (fn [{:keys [_]} [_ child-action]]
+    {:dispatch [::insert-child-action child-action :last]}))
 
 (re-frame/reg-event-fx
   ::append-empty-phrase-action
@@ -112,6 +117,20 @@
   (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
     (let [new-action-data defaults/text-animation-action]
       {:dispatch [::add-new-scene-action new-action-data relative-position node-data]})))
+
+(defn- get-exact-position
+  [position relative-position]
+  (case relative-position
+    :before position
+    :after (inc position)
+    position))
+
+(re-frame/reg-event-fx
+  ::insert-effect-action
+  (fn [{:keys [_]} [_ {:keys [effect-id position relative-position] :or {relative-position :exact}}]]
+    (let [effect-action-data (defaults/get-effect-action-data {:action-name effect-id})
+          exact-position (get-exact-position position relative-position)]
+      {:dispatch [::insert-child-action effect-action-data exact-position]})))
 
 (re-frame/reg-event-fx
   ::add-effect-action

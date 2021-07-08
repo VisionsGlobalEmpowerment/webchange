@@ -4,6 +4,7 @@
     [webchange.editor-v2.dialog.dialog-text-form.prepare-phrase-actions :refer [prepare-phrase-actions]]
     [webchange.editor-v2.dialog.dialog-text-form.state-actions :as state-actions]
     [webchange.editor-v2.dialog.state :as parent-state]
+    [webchange.editor-v2.dialog.dialog-form.state.actions :as state-dialog-form]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
@@ -156,3 +157,20 @@
                   [::state-actions/set-phrase-target {:action-path action-path
                                                       :action-type action-type
                                                       :value       target}]]}))
+
+;; Actions
+
+(re-frame/reg-event-fx
+  ::handle-drag-n-drop
+  (fn [{:keys [_]} [_ {:keys [action] :as data}]]
+    (case action
+      "add-effect-action" {:dispatch [::add-effect-action data]}
+      {})))
+
+(re-frame/reg-event-fx
+  ::add-effect-action
+  (fn [{:keys [_]} [_ {:keys [id target-path relative-position]}]]
+    (let [target-position (last target-path)]
+      {:dispatch [::state-dialog-form/insert-effect-action {:effect-id         id
+                                                            :position          target-position
+                                                            :relative-position relative-position}]})))

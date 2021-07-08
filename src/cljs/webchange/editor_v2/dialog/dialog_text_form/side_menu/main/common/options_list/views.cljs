@@ -12,7 +12,10 @@
                                        (utils/set-transfer-data %))
                init-dnd (fn [ref]
                           (reset! el ref)
-                          (.addEventListener @el "dragstart" handle-drag-start))]
+                          (.addEventListener @el "dragstart" handle-drag-start))
+               destroy-dnd (fn []
+                             (when (some? @el)
+                               (.removeEventListener @el "dragstart" handle-drag-start)))]
     (let [{:keys [text value selected?]} data
           handle-click #(on-click value)]
       [:li (cond-> {:class-name (get-class-name {"options-list-item" true
@@ -22,7 +25,7 @@
                                            (assoc :ref #(when (some? %) (init-dnd %)))))
        text])
     (finally
-      (.removeEventListener @el "dragstart" handle-drag-start))))
+      (destroy-dnd))))
 
 (defn options-list
   [{:keys [options on-click get-drag-data]}]

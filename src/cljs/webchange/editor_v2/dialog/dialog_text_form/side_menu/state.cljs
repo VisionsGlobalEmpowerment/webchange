@@ -62,13 +62,13 @@
      (re-frame/subscribe [::available-effects])
      (re-frame/subscribe [::current-section])])
   (fn [[selected-action available-effects current-section]]
-    (->> (cond-> [[(get-section :phrase)
-                   (get-section :text-animation)]]
+    (->> (cond-> [(cond-> [(get-section :phrase)
+                           (get-section :text-animation)]
+                          ;; Effects
+                          (-> available-effects empty? not)
+                          (conj (get-section :effects)))]
                  (some? selected-action)
                  (conj (cond-> [(get-section :delay)]
-                               ;; Effects
-                               (-> available-effects empty? not)
-                               (conj (get-section :effects))
                                ;; Voice-over
                                (some #{(:type selected-action)} [:phrase :text-animation])
                                (conj (get-section :voice-over)))))

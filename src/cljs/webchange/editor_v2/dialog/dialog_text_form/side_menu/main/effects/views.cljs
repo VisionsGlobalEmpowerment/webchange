@@ -38,7 +38,9 @@
 
 (defn form
   []
-  [:div.effects-form
-   [section-block {:title "Add effect"}
-    [effects-list]
-    [actions]]])
+  (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
+    [:div.effects-form
+     [section-block {:title "Add effect"}
+      [effects-list]
+      (when show-actions?
+        [actions])]]))
