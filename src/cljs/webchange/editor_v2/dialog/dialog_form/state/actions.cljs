@@ -75,6 +75,14 @@
                          (select-keys [:data]))]
       {:dispatch-n (list [::update-scene-action base-path data-patch])})))
 
+(defn- get-parent-data
+  [db parent-path]
+  (if (some? parent-path)
+    {:path parent-path
+     :data (translator-form.scene/get-action-data db parent-path)}
+    {:path (:path (translator-form.actions/current-dialog-action-info db))
+     :data (translator-form.actions/current-dialog-action-data db)}))
+
 (re-frame/reg-event-fx
   ::insert-child-action
   (fn [{:keys [db]} [_ {:keys [child-action parent-path position]}]]
@@ -82,28 +90,24 @@
     - child-action - Action data to insert;
     - position - Position number (:first or :last) in parent's data;
     - parent-path - Parent action path in scene ':actions' block.
-                    Current dialog action is used if 'parent-path' is not defined".
-    (let [[parent-action-path parent-action-data] (if (some? parent-path)
-                                                    [parent-path
-                                                     (translator-form.scene/get-action-data db parent-path)]
-                                                    [(:path (translator-form.actions/current-dialog-action-info db))
-                                                     (translator-form.actions/current-dialog-action-data db)])
-
+                    Current dialog action is used if 'parent-path' is not defined" .
+    (let [{parent-action-path :path parent-action-data :data} (get-parent-data db parent-path)
           data-patch (-> (au/insert-child-action-at-index parent-action-data child-action position)
                          (select-keys [:data]))]
-      {:dispatch [::update-scene-action parent-action-path data-patch]})))
+      {:dispatch [::translator-form.scene/update-action parent-action-path data-patch]})))
 
 (re-frame/reg-event-fx
   ::replace-child-action
-  (fn [{:keys [db]} [_ child-action position]]
-    (let [dialog-action-info (translator-form.actions/current-dialog-action-info db)
-          dialog-action-data (translator-form.actions/current-dialog-action-data db)
-
-          dialog-action-path (:path dialog-action-info)
-          data-patch (-> (au/replace-child-action-at-index dialog-action-data child-action position)
+  (fn [{:keys [db]} [_ {:keys [child-action parent-path position]}]]
+    "Replace child action in parent.
+    - child-action - Action data to replace;
+    - position - Position number (:first or :last) in parent's data;
+    - parent-path - Parent action path in scene ':actions' block.
+                    Current dialog action is used if 'parent-path' is not defined"
+    (let [{parent-action-path :path parent-action-data :data} (get-parent-data db parent-path)
+          data-patch (-> (au/replace-child-action-at-index parent-action-data child-action position)
                          (select-keys [:data]))]
-
-      {:dispatch [::update-scene-action dialog-action-path data-patch]})))
+      {:dispatch [::translator-form.scene/update-action parent-action-path data-patch]})))
 
 (re-frame/reg-event-fx
   ::insert-child-action-parallel
@@ -114,7 +118,8 @@
           updated-target-action (if (-> target-action (get :type) (= "parallel"))
                                   (update target-action :data conj child-action)
                                   {:type "parallel" :data [target-action child-action]})]
-      {:dispatch [::replace-child-action updated-target-action position]})))
+      {:dispatch [::replace-child-action {:child-action updated-target-action
+                                          :position     position}]})))
 
 (re-frame/reg-event-fx
   ::append-child-action
