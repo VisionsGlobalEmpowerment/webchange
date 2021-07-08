@@ -538,7 +538,8 @@
 
                         :stop-activity      {:type "stop-activity", :id "home"},
                         :intro              {:type "sequence-data",
-                                             :data [{:type "action" :id "init-items"}
+                                             :data [{:type "start-activity"}
+                                                    {:type "action" :id "init-items"}
                                                     {:type "action" :id "intro-dialog"}]
                                              :unique-tag "speech"}
                         :intro-dialog       {:type               "sequence-data",

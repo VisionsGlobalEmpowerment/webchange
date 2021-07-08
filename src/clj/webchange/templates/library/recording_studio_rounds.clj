@@ -401,7 +401,8 @@
     (-> template
         (add-round image)
         (assoc-in [:actions :set-demo-image-src :attr-value] demo-image)
-        (update-in [:metadata :resources] conj image))))
+        (update-in [:metadata :resources] conj image)
+        (assoc-in [:metadata :actions] (:actions m)))))
 
 (defn update
   [old-data {:keys [action-name image]}]
