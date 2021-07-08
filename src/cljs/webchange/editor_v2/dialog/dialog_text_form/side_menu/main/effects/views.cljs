@@ -12,7 +12,7 @@
   (let [available-effects @(re-frame/subscribe [::state/available-effects])
         handle-click #(re-frame/dispatch [::state/set-selected-effect %])]
     [:div
-     [:span.input-label "Select effect:"]
+     [:span.input-label "Available effects:"]
      [options-list {:options       available-effects
                     :on-click      handle-click
                     :get-drag-data (fn [{:keys [value]}]
@@ -36,11 +36,19 @@
            :on-click handler}
           text])])))
 
+(defn- actions-placeholder
+  []
+  [:div.placeholder
+   [:span "Drag and drop available effect"]
+   [:span "or"]
+   [:span "Select effect and phrase action to insert effect relative to phrase"]])
+
 (defn form
   []
   (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
     [:div.effects-form
      [section-block {:title "Add effect"}
       [effects-list]
-      (when show-actions?
-        [actions])]]))
+      (if show-actions?
+        [actions]
+        [actions-placeholder])]]))

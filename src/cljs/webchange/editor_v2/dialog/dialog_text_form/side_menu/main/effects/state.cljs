@@ -45,9 +45,11 @@
 (re-frame/reg-sub
   ::show-actions?
   (fn []
-    (re-frame/subscribe [::state-dialog/selected-action]))
-  (fn [selected-action]
-    (some? selected-action)))
+    [(re-frame/subscribe [::selected-effect])
+     (re-frame/subscribe [::state-dialog/selected-action])])
+  (fn [[selected-effect selected-action]]
+    (and (some? selected-effect)
+         (some? selected-action))))
 
 (re-frame/reg-event-fx
   ::add-current-effect-action
