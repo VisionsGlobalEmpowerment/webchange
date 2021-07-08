@@ -2,7 +2,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 32px;
+    gap: 10px; //Added
+    // gap: 32px; //Removed
     padding: 32px;
 
     @import "styles-list-item";

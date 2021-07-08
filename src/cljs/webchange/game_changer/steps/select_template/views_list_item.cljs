@@ -34,8 +34,8 @@
          (when (and (some? preview-anim)
                     @slideshow-visible?)
            [activity-preview {:slides preview-anim}])]
-        [:div.title name]
-        [:div.description
-         description
+        [:div.title name
          (when (some? preview-activity)
-           [preview-button preview-activity])]]])))
+           [preview-button preview-activity])]
+        [:div.description
+         description]]])))

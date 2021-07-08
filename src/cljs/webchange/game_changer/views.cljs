@@ -15,8 +15,7 @@
 
     [webchange.logger.index :as logger]))
 
-(def game-changer-steps [
-                         welcome-message/data
+(def game-changer-steps [welcome-message/data
                          select-template/data
                          select-character/data
                          create-activity/data
@@ -65,75 +64,7 @@
 (defn- form
   []
   (r/with-let [current-step (r/atom 0)
-               current-data (r/atom {}
-                              ;{:template   {:id      32
-                              ;              :name    "Interactive Read Aloud"
-                              ;              :options [{:key   "characters"
-                              ;                         :label "Characters"
-                              ;                         :type  "characters"
-                              ;                         :max   4}
-                              ;                        {:key         "cover-layout"
-                              ;                         :label       "Cover layout"
-                              ;                         :type        "lookup-image"
-                              ;                         :description "Cover layout"
-                              ;                         :options     [{:name  "Title at top"
-                              ;                                        :value "title-top"
-                              ;                                        :src   "/images/templates/cover_layout/title_at_top.svg"}
-                              ;                                       {:name  "Title at bottom"
-                              ;                                        :value "title-bottom"
-                              ;                                        :src   "/images/templates/cover_layout/title_at_bottom.svg"}]}
-                              ;                        {:key         "cover-title"
-                              ;                         :label       "Title"
-                              ;                         :placeholder "Type title here"
-                              ;                         :description "Cover title"
-                              ;                         :type        "string"}
-                              ;                        {:key         "cover-image"
-                              ;                         :label       "Cover image"
-                              ;                         :description "Cover image"
-                              ;                         :type        "image"}
-                              ;                        {:key   "authors"
-                              ;                         :label "Authors"
-                              ;                         :type  "strings-list"
-                              ;                         :max   3}
-                              ;                        {:key       "illustrators"
-                              ;                         :label     "Illustrators"
-                              ;                         :type      "strings-list"
-                              ;                         :optional? true
-                              ;                         :max       3}]}
-                              ; :options    {:characters   [{:name     "Adult Cow"
-                              ;                              :skeleton :senoravaca
-                              ;                              :skin     "vaca"}]
-                              ;              :valid?       true
-                              ;              :cover-layout "title-top"
-                              ;              :cover-title  111
-                              ;              :cover-image  {:src "/upload/SNXXDKDHTVCTHFQF.png"}
-                              ;              :authors      [3]
-                              ;              :illustrators [2]}
-                              ; :lang       "English"
-                              ; :course     {:name       "Interactive Read Aloud Course"
-                              ;              :slug       "interactive-read-aloud-course-english-gzgtgixt"
-                              ;              :status     "draft"
-                              ;              :updated-at ""
-                              ;              :lang       "English"
-                              ;              :image-src  "https://webchange.local/images/default-course.jpg"
-                              ;              :id         554
-                              ;              :url        "/courses/interactive-read-aloud-course-english-gzgtgixt/editor-v2"}
-                              ; :activity   {:name        "Interactive Read Aloud Activity"
-                              ;              :id          567
-                              ;              :scene-slug  "interactive-read-aloud-activity"
-                              ;              :course-slug "interactive-read-aloud-course-english-gzgtgixt"}
-                              ; :background {:name :layered-background
-                              ;              :data {:type       "layered-background"
-                              ;                     :surface    {:src "/raw/img/casa/surface_casa.png"}
-                              ;                     :background {:src "/raw/img/casa/background_casa.png"}
-                              ;                     :decoration {:src "/raw/img/casa/decoration_casa.png"}}}
-                              ; :scene-data {:assets   [{:url "/raw/audio/background/Map.mp3", :size 10, :type "audio"}]
-                              ;              :actions  {:start-background-music {:type "audio", :id "/raw/audio/background/Map.mp3", :loop true}}
-                              ;              :metadata {}
-                              ;              :triggers {:start {:on "start" :action "script"}
-                              ;                         :music {:on "start" :action "start-background-music"}}}}
-
-                              )
+               current-data (r/atom {})
                steps (r/atom game-changer-steps)
 
                handle-prev-step (fn [step-idx] (reset! current-step step-idx))
@@ -142,9 +73,6 @@
                                     (handle-next {:data     current-data
                                                   :callback #(reset! current-step next-idx)})
                                     (reset! current-step next-idx)))]
-
-    ;(print "current-step" @current-step)
-    ;(print "current-data" @current-data)
 
     (logger/trace-folded "Game changer data" @current-data)
 
@@ -162,10 +90,11 @@
                                                        :text    "Previous"
                                                        :handler #(handle-prev-step prev-step-idx)
                                                        :props   {:variant "outlined"}}]))]
+      
       [game-changer/layout {:title          title
                             :timeline-items timeline
                             :actions        actions}
-       [component {:data current-data}]])))
+       [component {:data current-data :actions actions}]])))
 
 (defn index
   []

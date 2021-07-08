@@ -4,4 +4,5 @@
 
 (def data {:title          "Welcome"
            :timeline-label "Welcome"
-           :component      welcome-form})
+           :component      welcome-form
+           :passed?        {:keys [data]}})

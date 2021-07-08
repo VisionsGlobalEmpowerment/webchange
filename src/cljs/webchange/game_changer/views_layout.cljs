@@ -18,8 +18,9 @@
            (r/children this))
      [:div.actions
       (for [{:keys [id text handler props] :or {props {}}} actions]
-        ^{:key id}
-        [button (merge {:on-click handler
-                        :size     "big"}
-                       props)
-         text])]]))
+        (if (not= "Welcome" title)
+          ^{:key id}
+          [button (merge {:on-click handler
+                          :size     "big"}
+                         props)
+           text]))]]))
