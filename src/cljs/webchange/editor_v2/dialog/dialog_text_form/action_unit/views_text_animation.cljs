@@ -18,13 +18,14 @@
                        :on-change handle-target-change}])))
 
 (defn text-animation-unit
-  [{:keys [text text-object] :as props}]
-  (let [handle-text-change (fn [new-value]
+  [{:keys [path text text-object] :as props}]
+  (let [current-target @(re-frame/subscribe [::state/current-text-animation-target path])
+        handle-text-change (fn [new-value]
                              (re-frame/dispatch [::state-actions/set-object-text {:object-name (keyword text-object)
                                                                                   :text        new-value}]))]
     [:div {:class-name "text-animation-unit"}
      [text-animation-target-control props]
      ^{:key text-object}
      [text-control {:value     text
-                    :editable? true
+                    :editable? (some? current-target)
                     :on-change handle-text-change}]]))

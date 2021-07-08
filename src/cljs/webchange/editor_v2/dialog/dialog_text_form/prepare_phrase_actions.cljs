@@ -57,15 +57,16 @@
   (map (fn [{:keys [type source action-data action-path node-data parallel-mark]}]
          (let [concept-name (:name concept-data)
                {:keys [duration]} (get-empty-action action-data)
-               {:keys [id phrase-text target]} (get-inner-action action-data)]
+               {:keys [id phrase-text phrase-placeholder target]} (get-inner-action action-data)]
            (cond-> {:type          type
                     :source        source
                     :delay         duration
                     :path          action-path
                     :node-data     node-data
                     :parallel-mark parallel-mark}
-                   (= type :phrase) (merge {:character target
-                                            :text      phrase-text})
+                   (= type :phrase) (merge {:character   target
+                                            :text        phrase-text
+                                            :placeholder phrase-placeholder})
                    (= type :text-animation) (merge {:text-object target
                                                     :text        (->> (keyword target)
                                                                       (get-scene-object scene-data)

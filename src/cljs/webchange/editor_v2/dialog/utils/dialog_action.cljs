@@ -9,21 +9,22 @@
 (def default-phrase-text "New action")
 (def default-action {:type "sequence-data"
                      :data [{:type     "empty"
-                             :duration 0},
-                            {:type        "animation-sequence",
-                             :phrase-text default-phrase-text,
-                             :audio       nil}]})
+                             :duration 0}
+                            {:type               "animation-sequence"
+                             :phrase-text        default-phrase-text
+                             :phrase-placeholder "Enter phrase text"
+                             :audio              nil}]})
 
-(def default-concept-action {:type "sequence-data",
+(def default-concept-action {:type "sequence-data"
                              :data [default-action]})
 
 (def text-animation-action {:type "sequence-data"
                             :data [{:type     "empty"
-                                    :duration 0},
-                                   {:type        "text-animation",
+                                    :duration 0}
+                                   {:type        "text-animation"
                                     :animation   "color"
                                     :fill        0x00B2FF
-                                    :phrase-text "Text animation",
+                                    :phrase-text "Text animation"
                                     :audio       nil}]})
 
 (defn get-empty-action
