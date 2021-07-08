@@ -3,6 +3,7 @@ $units-margin: 6px;
 .action-unit {
     position: relative;
     padding: (2px + $units-margin) 8px;
+    border-left: solid 1px rgba(0,0,0,0);
     border-top: solid 1px rgba(0,0,0,0);
     border-bottom: solid 1px rgba(0,0,0,0);
     cursor: pointer;
@@ -128,6 +129,10 @@ $units-margin: 6px;
 
     &.drop-after {
         border-bottom: solid 1px #333;
+    }
+
+    &.drop-parallel {
+        border-left: solid 1px #333;
     }
 }
 

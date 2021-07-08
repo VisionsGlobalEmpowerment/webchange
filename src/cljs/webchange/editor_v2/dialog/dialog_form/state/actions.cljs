@@ -77,20 +77,50 @@
 
 (re-frame/reg-event-fx
   ::insert-child-action
+  (fn [{:keys [db]} [_ {:keys [child-action parent-path position]}]]
+    "Insert new child action into parent.
+    - child-action - Action data to insert;
+    - position - Position number (:first or :last) in parent's data;
+    - parent-path - Parent action path in scene ':actions' block.
+                    Current dialog action is used if 'parent-path' is not defined".
+    (let [[parent-action-path parent-action-data] (if (some? parent-path)
+                                                    [parent-path
+                                                     (translator-form.scene/get-action-data db parent-path)]
+                                                    [(:path (translator-form.actions/current-dialog-action-info db))
+                                                     (translator-form.actions/current-dialog-action-data db)])
+
+          data-patch (-> (au/insert-child-action-at-index parent-action-data child-action position)
+                         (select-keys [:data]))]
+      {:dispatch [::update-scene-action parent-action-path data-patch]})))
+
+(re-frame/reg-event-fx
+  ::replace-child-action
   (fn [{:keys [db]} [_ child-action position]]
     (let [dialog-action-info (translator-form.actions/current-dialog-action-info db)
           dialog-action-data (translator-form.actions/current-dialog-action-data db)
 
           dialog-action-path (:path dialog-action-info)
-          data-patch (-> (au/insert-child-action-at-index dialog-action-data child-action position)
+          data-patch (-> (au/replace-child-action-at-index dialog-action-data child-action position)
                          (select-keys [:data]))]
 
       {:dispatch [::update-scene-action dialog-action-path data-patch]})))
 
 (re-frame/reg-event-fx
+  ::insert-child-action-parallel
+  (fn [{:keys [db]} [_ child-action position]]
+    (let [dialog-action-data (translator-form.actions/current-dialog-action-data db)
+
+          target-action (get-in dialog-action-data [:data position])
+          updated-target-action (if (-> target-action (get :type) (= "parallel"))
+                                  (update target-action :data conj child-action)
+                                  {:type "parallel" :data [target-action child-action]})]
+      {:dispatch [::replace-child-action updated-target-action position]})))
+
+(re-frame/reg-event-fx
   ::append-child-action
   (fn [{:keys [_]} [_ child-action]]
-    {:dispatch [::insert-child-action child-action :last]}))
+    {:dispatch [::insert-child-action {:child-action child-action
+                                       :position     :last}]}))
 
 (re-frame/reg-event-fx
   ::append-empty-phrase-action
@@ -125,12 +155,17 @@
     :after (inc position)
     position))
 
+;; >>
+
 (re-frame/reg-event-fx
   ::insert-effect-action
-  (fn [{:keys [_]} [_ {:keys [effect-id position relative-position] :or {relative-position :exact}}]]
-    (let [effect-action-data (defaults/get-effect-action-data {:action-name effect-id})
-          exact-position (get-exact-position position relative-position)]
-      {:dispatch [::insert-child-action effect-action-data exact-position]})))
+  (fn [{:keys [_]} [_ {:keys [effect-id position parent-path relative-position] :or {relative-position :exact}}]]
+    (let [effect-action-data (defaults/get-effect-action-data {:action-name effect-id})]
+      (if (= relative-position :parallel)
+        {:dispatch [::insert-child-action-parallel effect-action-data position]}
+        {:dispatch [::insert-child-action {:parent-path  parent-path
+                                           :child-action effect-action-data
+                                           :position     (get-exact-position position relative-position)}]}))))
 
 (re-frame/reg-event-fx
   ::add-effect-action

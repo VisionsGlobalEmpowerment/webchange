@@ -23,7 +23,7 @@
 
 (defn- change-character
   [list idx data]
-  (reset! list (replace-at-position @list idx data)))
+  (reset! list (replace-at-position @list data idx)))
 
 (defn get-character-option-path
   [data]

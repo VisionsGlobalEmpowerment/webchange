@@ -170,7 +170,9 @@
 (re-frame/reg-event-fx
   ::add-effect-action
   (fn [{:keys [_]} [_ {:keys [id target-path relative-position]}]]
-    (let [target-position (last target-path)]
+    (let [target-parent-action-path (drop-last 2 target-path)
+          target-position (last target-path)]
       {:dispatch [::state-dialog-form/insert-effect-action {:effect-id         id
                                                             :position          target-position
+                                                            :parent-path       target-parent-action-path
                                                             :relative-position relative-position}]})))

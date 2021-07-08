@@ -18,13 +18,18 @@
   [:div.unknown-unit "Not editable action"])
 
 (defn drag-event->drop-target
-  [event]
+  [event parallel-available?]
   (if-let [target (.. event -target)]
     (let [offset-y (.-offsetY event)
           target-height (.. target -clientHeight)]
-      (if (< offset-y (/ target-height 2))
-        :before
-        :after))))
+      (if parallel-available?
+        (cond
+          (< offset-y (/ target-height 3)) :before
+          (> offset-y (* (/ target-height 3) 2)) :after
+          :else :parallel)
+        (if (< offset-y (/ target-height 2))
+          :before
+          :after)))))
 
 (defn action-unit
   [{:keys [idx parallel-mark path type selected?] :as props}]
@@ -38,7 +43,10 @@
                                      (.stopPropagation %))
                handle-drag-enter #(prevent-defaults %)
                handle-drag-leave #(do (prevent-defaults %) (reset! drop-target nil))
-               handle-drag-over #(do (prevent-defaults %) (reset! drop-target (drag-event->drop-target %)))
+               handle-drag-over (fn [event]
+                                  (let [parallel-action-available? (= parallel-mark :none)]
+                                    (prevent-defaults event)
+                                    (reset! drop-target (drag-event->drop-target event parallel-action-available?))))
                handle-drop #(do (prevent-defaults %)
                                 (re-frame/dispatch [::state/handle-drag-n-drop (merge (utils/get-transfer-data %)
                                                                                       {:target-type       type
@@ -62,7 +70,8 @@
                                         "parallel-end"    (= parallel-mark :end)
                                         "selected"        selected?
                                         "drop-before"     (= @drop-target :before)
-                                        "drop-after"      (= @drop-target :after)})}
+                                        "drop-after"      (= @drop-target :after)
+                                        "drop-parallel"   (= @drop-target :parallel)})}
      (case type
        :effect [effect-unit props]
        :phrase [phrase-unit props]
