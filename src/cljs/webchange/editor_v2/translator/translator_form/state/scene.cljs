@@ -44,6 +44,11 @@
   (fn [[scene-data]]
     (:actions scene-data)))
 
+(defn get-action-data
+  [db action-path]
+  (-> (actions-data db)
+      (get-in action-path)))
+
 (defn assets-data
   [db]
   (-> db scene-data :assets))

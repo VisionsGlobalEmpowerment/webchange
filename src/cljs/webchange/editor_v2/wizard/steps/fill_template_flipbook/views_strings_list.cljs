@@ -9,7 +9,7 @@
     :or   {max 5}}]
   (let [handle-add-click (fn [] (swap! data conj ""))
         handle-input-change (fn [idx value]
-                              (swap! data replace-at-position idx value))
+                              (swap! data replace-at-position value idx))
         handle-remove-click (fn [idx]
                               (if (> (count @data) 1)
                                 (swap! data remove-at-position idx)

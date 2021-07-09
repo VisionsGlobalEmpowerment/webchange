@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.translator.translator-form.state.actions-utils
   (:require
-    [webchange.editor-v2.translator.translator-form.state.utils :refer [insert-by-index
-                                                                        remove-by-index]]))
+    [webchange.utils.list :as utils]))
 
 (defn node->info
   [action-node]
@@ -46,7 +45,15 @@
                    (number? index) index
                    (= index :first) 0
                    (= index :last) (-> parent-action (get :data) (count)))]
-    (update-in parent-action [:data] insert-by-index position child-action)))
+    (update-in parent-action [:data] utils/insert-at-position child-action position)))
+
+(defn replace-child-action-at-index
+  [parent-action child-action index]
+  (let [position (cond
+                   (number? index) index
+                   (= index :first) 0
+                   (= index :last) (-> parent-action (get :data) (count)))]
+    (update-in parent-action [:data] utils/replace-at-position child-action position)))
 
 (defn insert-child-action
   [parent-action child-action target-position relative-position]
@@ -57,4 +64,4 @@
 
 (defn delete-child-action
   [parent-action child-position]
-  (update-in parent-action [:data] remove-by-index child-position))
+  (update-in parent-action [:data] utils/remove-at-position child-position))
