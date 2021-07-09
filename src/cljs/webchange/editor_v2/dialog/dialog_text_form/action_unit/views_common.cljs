@@ -14,8 +14,12 @@
                                  {:text     text
                                   :on-click #(on-change value)})))}])
 
+(defn- empty-text-value?
+  [value]
+  (or (= value nil) (= value "")))
+
 (defn text-control
-  [{:keys [on-change on-enter-press on-ctrl-enter-press]}]
+  [{:keys [on-change on-enter-press on-ctrl-enter-press placeholder]}]
   (let [ref (atom nil)
         current-value (atom nil)
         handle-key-down (fn [e]
@@ -24,10 +28,14 @@
                             (if (.-ctrlKey e)
                               (on-ctrl-enter-press)
                               (on-enter-press))))
-        handle-click (fn []
-                       (when (= @current-value nil)
+        handle-focus (fn []
+                       (when (empty-text-value? @current-value)
                          (set! (.-innerText @ref) "")
-                         (on-change "")))]
+                         (on-change "")))
+
+        handle-blur (fn []
+                      (when (empty-text-value? @current-value)
+                        (set! (.-innerText @ref) placeholder)))]
     (r/create-class
       {:display-name "text-control"
        :should-component-update
@@ -51,7 +59,8 @@
                          [:span (cond-> {:class-name (get-class-name {"text"          true
                                                                       "text-disabled" (not editable?)})
                                          :ref        #(when (some? %) (reset! ref %))
-                                         :on-click   handle-click}
+                                         :on-focus   handle-focus
+                                         :on-blur    handle-blur}
                                         editable? (merge {:on-input                          handle-change
                                                           :content-editable                  true
                                                           :suppress-content-editable-warning true}))
