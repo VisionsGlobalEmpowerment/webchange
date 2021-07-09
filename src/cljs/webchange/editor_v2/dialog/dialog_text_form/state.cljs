@@ -16,6 +16,11 @@
        (concat [:dialog-text-form])
        (parent-state/path-to-db)))
 
+(re-frame/reg-event-fx
+  ::reset-form
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::reset-selected-action]]}))
+
 ;; Selected Action
 
 (def selected-action-path (path-to-db [:selected-action]))
@@ -32,6 +37,11 @@
   ::set-selected-action
   (fn [{:keys [db]} [_ action-data]]
     {:db (assoc-in db selected-action-path action-data)}))
+
+(re-frame/reg-event-fx
+  ::reset-selected-action
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db selected-action-path nil)}))
 
 ;; ---
 
