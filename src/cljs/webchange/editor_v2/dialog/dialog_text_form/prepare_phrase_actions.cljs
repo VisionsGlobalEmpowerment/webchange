@@ -38,22 +38,23 @@
   [actions {:keys [available-effects]}]
   {:post [(every? (fn [{:keys [type]}] (some #{type} [:effect :phrase :text-animation :unknown])) %)
           (every? (fn [{:keys [source]}] (some #{source} [:concept :scene])) %)]}
-  (map (fn [{:keys [action-data concept-acton?] :as data}]
-         (let [inner-action-id (-> action-data (get-inner-action) (get :id))
-               inner-action-type (-> action-data (get-inner-action) (get :type))
-               inner-action-phrase-text (-> action-data (get-inner-action) (get :phrase-text))
-               action-type (cond
-                             (some #{inner-action-id} available-effects) :effect
-                             (= inner-action-type "text-animation") :text-animation
-                             (some? inner-action-phrase-text) :phrase
-                             :else :unknown)]
-           (-> data
-               (assoc :type action-type)
-               (assoc :source (if concept-acton? :concept :scene)))))
-       actions))
+  (let [available-effects-ids (map :action available-effects)]
+    (map (fn [{:keys [action-data concept-acton?] :as data}]
+           (let [inner-action-id (-> action-data (get-inner-action) (get :id))
+                 inner-action-type (-> action-data (get-inner-action) (get :type))
+                 inner-action-phrase-text (-> action-data (get-inner-action) (get :phrase-text))
+                 action-type (cond
+                               (some #{inner-action-id} available-effects-ids) :effect
+                               (= inner-action-type "text-animation") :text-animation
+                               (some? inner-action-phrase-text) :phrase
+                               :else :unknown)]
+             (-> data
+                 (assoc :type action-type)
+                 (assoc :source (if concept-acton? :concept :scene)))))
+         actions)))
 
 (defn- get-component-data
-  [actions {:keys [concept-data scene-data]}]
+  [actions {:keys [available-effects concept-data scene-data]}]
   (map (fn [{:keys [type source action-data action-path node-data parallel-mark]}]
          (let [concept-name (:name concept-data)
                {:keys [duration]} (get-empty-action action-data)
@@ -71,7 +72,12 @@
                                                     :text        (->> (keyword target)
                                                                       (get-scene-object scene-data)
                                                                       (:text))})
-                   (= type :effect) (merge {:effect id})
+                   (= type :effect) (merge {:effect      id
+                                            :effect-name (->> available-effects
+                                                              (some (fn [available-effect]
+                                                                      (and (= (:action available-effect) id)
+                                                                           available-effect)))
+                                                              (:name))})
                    (= source :concept) (merge {:concept-name concept-name}))))
        actions))
 
@@ -89,6 +95,7 @@
       (set-action-data {:concept-data concept-data
                         :scene-data   scene-data})
       (set-action-type {:available-effects available-effects})
-      (get-component-data {:concept-data concept-data
-                           :scene-data   scene-data})
+      (get-component-data {:concept-data      concept-data
+                           :scene-data        scene-data
+                           :available-effects available-effects})
       (set-selected current-action-path)))

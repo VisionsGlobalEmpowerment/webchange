@@ -4,7 +4,8 @@
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.utils :refer [insert-by-index
-                                                                        remove-by-index]]))
+                                                                        remove-by-index]]
+    [webchange.utils.scene-action-data :as action-utils]))
 
 
 (defn complete-path
@@ -31,9 +32,9 @@
     {:concept-action? concept-action?
      :parent-action   parent-action
      :parent-path     parent-path
-     :base-action base-action
-     :base-path base-path
-     :item-position item-position
+     :base-action     base-action
+     :base-path       base-path
+     :item-position   item-position
      :target-position target-position}))
 
 (defn get-dialog-node-data
@@ -48,21 +49,22 @@
         item-position (last target-path)
         base-action (if (node-parallel? parent-action) (get-in (:actions scene-data) (complete-path base-path)) parent-action)
         target-node (get-in (:actions scene-data) (complete-path target-path))
-        parent-action  (get-in (:actions scene-data) (complete-path parent-path))]
+        parent-action (get-in (:actions scene-data) (complete-path parent-path))]
     {:concept-action? concept-action?
-     :base-action base-action
-     :base-path base-path
+     :base-action     base-action
+     :base-path       base-path
      :parent-action   parent-action
      :parent-path     parent-path
      :target-position target-position
-     :item-position item-position
-     :target-node target-node
-     :target-path target-path}))
+     :item-position   item-position
+     :target-node     target-node
+     :target-path     target-path}))
 
 (defn get-available-effects
   [node]
   (-> (get-dialog-node-data node)
-      (get-in [:base-action :available-activities] [])))
+      (get :base-action)
+      (action-utils/get-available-effects)))
 
 (defn delete-in-concept-available?
   [node-data]

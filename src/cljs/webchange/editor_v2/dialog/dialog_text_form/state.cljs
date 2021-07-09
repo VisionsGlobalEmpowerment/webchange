@@ -7,19 +7,14 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-dialog-form]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.utils.scene-data :as scene-utils]))
 
 (defn path-to-db
   [relative-path]
   (->> relative-path
        (concat [:dialog-text-form])
        (parent-state/path-to-db)))
-
-(defn- scene-available-actions
-  [scene-data]
-  (as-> scene-data x
-        (get-in x [:metadata :available-actions])
-        (map :action x)))
 
 ;; Selected Action
 
@@ -49,7 +44,8 @@
      (re-frame/subscribe [::translator-form.scene/scene-data])
      (re-frame/subscribe [::selected-action])])
   (fn [[current-dialog-action {:keys [available-activities]} current-concept scene-data selected-action]]
-    (let [available-actions (concat available-activities (scene-available-actions scene-data))]
+    (let [available-actions (->> (scene-utils/get-available-effects scene-data)
+                                 (concat available-activities))]
       (prepare-phrase-actions {:dialog-action-path  (:path current-dialog-action)
                                :concept-data        current-concept
                                :scene-data          scene-data
@@ -61,7 +57,7 @@
   (fn []
     [(re-frame/subscribe [::translator-form.scene/scene-data])])
   (fn [[scene-data]]
-    (scene-available-actions scene-data)))
+    (scene-utils/get-available-effects scene-data)))
 
 ;; Concepts
 
