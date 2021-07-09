@@ -34,10 +34,10 @@
     [(re-frame/subscribe [::parent-state/available-effects])
      (re-frame/subscribe [::selected-effect])])
   (fn [[available-effects selected-effect]]
-    (map (fn [effect]
-           {:text      (clojure.string/replace effect "-" " ")
-            :value     effect
-            :selected? (= effect selected-effect)})
+    (map (fn [{:keys [name action]}]
+           {:text      name
+            :value     action
+            :selected? (= action selected-effect)})
          available-effects)))
 
 ;; Actions
