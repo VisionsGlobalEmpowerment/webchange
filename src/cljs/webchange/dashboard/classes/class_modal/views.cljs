@@ -29,16 +29,18 @@
     name]])
 
 (defn get-course-id
-  [course-name]  (->> courses
-                      (filter #(= course-name (:name %)))
-                      (first)
-                      (:course-id)))
+  [course-name]
+  (->> courses
+       (filter #(= course-name (:name %)))
+       (first)
+       (:course-id)))
 
 (defn get-course-name
-  [course-id]  (->> courses
-                    (filter #(= course-id (:course-id %)))
-                    (first)
-                    (:name)))
+  [course-id]
+  (->> courses
+       (filter #(= course-id (:course-id %)))
+       (first)
+       (:name)))
 
 (defn course-selector [props]
   (let [styles (get-styles)]
