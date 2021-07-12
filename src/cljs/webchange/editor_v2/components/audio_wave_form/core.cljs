@@ -2,13 +2,13 @@
   (:require
     ["wavesurfer.js/dist/plugin/wavesurfer.regions.js" :as RegionsPlugin]
     ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]
-    ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]
     [audio-script :as AudioScriptPlugin]
     [wavesurfer.js :as WaveSurfer]
     [webchange.editor-v2.components.audio-wave-form.audio-loader :as loader]
     [webchange.ui.theme :refer [get-in-theme]]))
 
 (def audio-color "rgba(0, 0, 0, 0.1)")
+(def edgeScrollWidth 50)
 
 (defonce last-positions (atom {}))
 
@@ -85,7 +85,8 @@
                              0)]
         (.seekTo wave-surfer progress)
         (.recenter (.-drawer wave-surfer) (+ progress recenter-shift)))
-      (.addRegion wave-surfer (clj->js region-data)))))
+      (.addRegion wave-surfer (clj->js (merge region-data
+                                              {:edgeScrollWidth edgeScrollWidth}))))))
 
 (defn init-audio-region!
   [wave-surfer region-atom edit key]
@@ -116,6 +117,6 @@
                           (reset! region-atom (assoc data :region e))))
          remove-region #(when (:region @region-atom) (-> @region-atom :region .remove))]
 
-     (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
+     (.enableDragSelection wavesurfer (clj->js {:color audio-color :edgeScrollWidth edgeScrollWidth}))
      (.on wavesurfer "region-created" (fn [e] (remove-region) (handle-event e)))
      (.on wavesurfer "region-update-end" handle-event))))
