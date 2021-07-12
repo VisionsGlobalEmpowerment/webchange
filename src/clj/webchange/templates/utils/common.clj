@@ -124,3 +124,17 @@
                                           :action-id  action-name
                                           })
             ) scene-data action-names))
+
+(defn add-highlight
+  [scene-data object-name effect-name]
+  (let [action-name (str "highlight-" object-name)]
+    (-> scene-data
+        (update-in [:objects (keyword object-name) :filters] concat [{:name "brightness" :value 0}
+                                                                     {:name "glow" :outer-strength 0 :color 0xffd700}])
+        (assoc-in [:actions (keyword action-name)] {:type               "transition"
+                                                    :transition-id      object-name
+                                                    :return-immediately true
+                                                    :from               {:brightness 0 :glow 0}
+                                                    :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}})
+        (update-in [:metadata :available-actions] concat [{:action action-name
+                                                           :name   effect-name}]))))

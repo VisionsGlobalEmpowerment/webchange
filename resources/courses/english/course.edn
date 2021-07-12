@@ -37,7 +37,7 @@
   :name-writing {:name "Name Writing", :lesson-sets nil},
   :alliteration-o {:name "Alliteration o"},
   :rhyme-karaoke-twinkle {:name "Rhyme Karaoke: Twinkle", :lesson-sets nil},
-  :i-spy-1 {:name "I Spy 1", :lesson-sets nil},
+  :i-spy-1 {:name "I Spy 1", :preview "/upload/TTREOHTMWLHEBYEQ.png", :lesson-sets nil},
   :alliteration-b {:name "Alliteration b"},
   :interactive-read-aloud-3 {:name "Interactive Read-Aloud 3", :lesson-sets nil},
   :sandbox-body-parts-2 {:name "Sandbox: body parts 2"},
@@ -53,8 +53,11 @@
   :first-words-book-letter-f {:name "First Words Book: Letter F", :lesson-sets nil},
   :storybook-reading {:name "Storybook Reading"},
   :interactive-read-aloud-4 {:name "Interactive Read-Aloud 4"},
-  :cinema-new {:name "Cinema New", :lesson-sets ["concepts-single"]
-               :outs [{:x 100, :y 100, :name "map", :object "back"}]},
+  :cinema-new
+  {:name "Cinema New",
+   :outs [{:x 100, :y 100, :name "map", :object "back"}],
+   :preview "/upload/GVDDIVMNLIZXBOAZ.png",
+   :lesson-sets ["concepts-single"]},
   :onset--rime-%22-en%22 {:name "Onset & Rime: \"-en\""},
   :sandbox-colors {:name "Sandbox: colors", :lesson-sets ["concepts"]},
   :first-words-book {:name "First Words Book", :lesson-sets nil},
@@ -123,14 +126,20 @@
    :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg",
    :lesson-sets ["concepts"]},
   :rhyme-karaoke-head {:name "Rhyme Karaoke: Head"},
-  :running-with-letters {:name "Running with Letters", :lesson-sets ["concepts-group" "concepts-single"]
-                         :outs [{:x 100, :y 100, :name "stadium", :object "back"}]},
+  :running-with-letters
+  {:name "Running with Letters",
+   :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
+   :preview "/upload/LXTYFJHLJYTJQCVV.png",
+   :lesson-sets ["concepts-group" "concepts-single"]},
   :rhyme-karaoke-happy {:name "Rhyme Karaoke: Happy"},
   :interactive-read-aloud-10 {:name "Interactive Read-Aloud 10"},
   :recording-summary-6 {:name "Recording Summary 6", :lesson-sets ["concepts-recording"]},
   :alliteration-z {:name "Alliteration z"},
-  :magic-hat-v-2 {:name "Magic Hat: v2", :lesson-sets ["concepts-magic-hat-rounds" "concepts-all"]
-                  :outs [{:x 100, :y 100, :name "map", :object "library"}]},
+  :magic-hat-v-2
+  {:name "Magic Hat: v2",
+   :outs [{:x 100, :y 100, :name "map", :object "library"}],
+   :preview "/upload/YUVNWPYXCGVUXYLF.png",
+   :lesson-sets ["concepts-magic-hat-rounds" "concepts-all"]},
   :slide-wild-animals {:name "Slide: wild animals"},
   :running
   {:name "Running",
@@ -165,6 +174,7 @@
    :lesson-sets ["concepts-single"]},
   :alliteration-r {:name "Alliteration r"},
   :recording-studio-1-biii {:name "Recording Studio 1Biii", :lesson-sets ["concepts-recording"]},
+  :ira-test {:name "IRA Test", :lesson-sets nil},
   :cycling-letters
   {:name "Cycling",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
@@ -173,6 +183,7 @@
    :lesson-sets ["concepts-group"]},
   :first-words-book-letter-j {:name "First Words Book: Letter J", :lesson-sets nil},
   :first-words-book-letter-b {:name "First Words Book: Letter B", :lesson-sets nil},
+  :sandbox-vocabulary-colors {:name "Sandbox Vocabulary: Colors", :lesson-sets nil},
   :syllables-3 {:name "Syllables 3"},
   :rhyme-%2fat%2f--%2fig%2f {:name "Rhyme: /at/ & /ig/"},
   :first-words-book-letter-n {:name "First Words Book: Letter N", :lesson-sets nil},
@@ -198,6 +209,7 @@
    :preview "/images/dashboard/scene-preview/Park_See-Saw.jpg",
    :lesson-sets ["concepts"]},
   :recording-2-cii {:name "Recording: 2Cii"},
+  :interactive-read-aloud-import-2 {:name "Interactive Read-Aloud import 2", :lesson-sets nil},
   :alliteration-m {:name "Alliteration m"},
   :alliteration-n {:name "Alliteration n"},
   :slide
@@ -206,15 +218,20 @@
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Park_Slide.jpg",
    :lesson-sets ["concepts-group"]},
+  :interactive-read-aloud-import-2-2
+  {:name "Interactive Read Aloud import#2 2", :preview "/upload/MCCWPUFWPLOTKCBV.png", :lesson-sets nil},
   :interactive-read-aloud-1 {:name "Interactive Read-Aloud 1", :lesson-sets nil},
   :conversation-school-2 {:name "Conversation: school 2", :lesson-sets nil},
   :first-words-book-letter-q {:name "First Words Book: Letter Q", :lesson-sets nil},
   :alliteration-a {:name "Alliteration A", :lesson-sets ["concepts" "concepts-incorrect"]},
   :writing-2-on {:name "Writing 2: on", :lesson-sets nil},
   :sandbox-emotions {:name "Sandbox: emotions"},
-  :recording-studio-1-ai {:name "Recording Studio 1Ai", :lesson-sets ["concepts-recording"]},
-  :letter-intro-1 {:name "Letter Intro 1", :lesson-sets ["concepts-single"]
-                   :outs [{:x 100, :y 100, :name "map", :object "back"}]},
+  :recording-studio-1-ai {:name "Recording Studio 1 Ai", :lesson-sets nil},
+  :letter-intro-1
+  {:name "Letter Intro 1",
+   :outs [{:x 100, :y 100, :name "map", :object "back"}],
+   :preview "/upload/IKHYGUUGTYCSSAAU.png",
+   :lesson-sets ["concepts-single"]},
   :conversation {:name "Conversation", :lesson-sets nil},
   :rhyme-%2fog%2f--%2fan%2f {:name "Rhyme: /og/ & /an/"},
   :first-words-book-letter-d {:name "First Words Book: Letter D", :lesson-sets nil},
@@ -223,7 +240,7 @@
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
-  :writing-1 {:name "Writing 1", :lesson-sets nil},
+  :writing-1 {:name "Writing 1", :preview "/upload/WLSCUSXADHZEUCRI.png", :lesson-sets nil},
   :alliteration-h {:name "Alliteration h"},
   :recording-2-bi {:name "Recording: 2Bi"},
   :pinata
@@ -235,18 +252,27 @@
   :categorize-shapes {:name "Categorize: shapes", :lesson-sets nil},
   :first-words-book-letter-k {:name "First Words Book: Letter K", :lesson-sets nil},
   :interactive-read-aloud-2 {:name "Interactive Read-Aloud 2", :lesson-sets nil},
-  :writing-practice {:name "Writing Practice", :lesson-sets ["concepts-single"]
-                     :outs [{:x 100, :y 100, :name "library", :object "back"}]},
+  :writing-practice
+  {:name "Writing Practice",
+   :outs [{:x 100, :y 100, :name "library", :object "back"}],
+   :preview "/upload/DZFHRIOPFYOBPVGP.png",
+   :lesson-sets ["concepts-single"]},
   :alliteration-x {:name "Alliteration x"},
   :interactive-read-aloud-9 {:name "Interactive Read-Aloud 9"},
   :first-words-book-letter-h {:name "First Words Book: Letter H", :lesson-sets nil},
   :first-words-book-letter-s {:name "First Words Book: Letter S", :lesson-sets nil},
-  :alliteration-v-2 {:name "Alliteration V2", :lesson-sets ["concepts" "concepts-incorrect"]
-                     :outs [{:x 100, :y 100, :name "park", :object "back"}]},
+  :alliteration-v-2
+  {:name "Alliteration V2",
+   :outs [{:x 100, :y 100, :name "park", :object "back"}],
+   :preview "/upload/QLXVXLXNSXTEPXAU.png",
+   :lesson-sets ["concepts" "concepts-incorrect"]},
   :recording-summary-4 {:name "Recording Summary 4", :lesson-sets ["concepts-recording"]},
   :first-words-book-letter-mm {:name "First Words Book: Letter Mm", :lesson-sets nil},
-  :first-words-book-letter-a {:name "First Words Book: Letter A", :lesson-sets nil
-                              :outs [{:x 100, :y 100, :name "library", :object "back"}]},
+  :first-words-book-letter-a
+  {:name "First Words Book: Letter A",
+   :outs [{:x 100, :y 100, :name "library", :object "back"}],
+   :preview "/upload/MQPFCHTRQALFZBEJ.png",
+   :lesson-sets nil},
   :recording-summary-2 {:name "Recording Summary 2", :lesson-sets ["concepts-recording"]},
   :writing-2-dog {:name "Writing 2: dog", :lesson-sets nil},
   :letter-intro
@@ -283,8 +309,11 @@
   :slide-food {:name "Slide: food", :lesson-sets nil},
   :first-words-book-letter-r {:name "First Words Book: Letter R", :lesson-sets nil},
   :sandbox-clothing {:name "Sandbox: clothing"},
-  :volleyball-v-3 {:name "Volleyball: v3", :lesson-sets ["volleyball-concepts" "volleyball-incorrect"]
-                   :outs [{:x 100, :y 100, :name "stadium", :object "back"}]},
+  :volleyball-v-3
+  {:name "Volleyball: v3",
+   :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
+   :preview "/upload/BSBLLLJUGNZRHWOV.png",
+   :lesson-sets ["volleyball-concepts" "volleyball-incorrect"]},
   :first-words-book-letter-w {:name "First Words Book: Letter W", :lesson-sets nil},
   :alliteration-j {:name "Alliteration j"},
   :first-words-book-letter-g {:name "First Words Book: Letter G", :lesson-sets nil},
@@ -321,8 +350,11 @@
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Library_Room.jpg",
    :lesson-sets ["concepts-single"]},
-  :recording-summary-1 {:name "Recording Summary 1", :lesson-sets ["concepts-recording"]
-                        :outs [{:x 100, :y 100, :name "map", :object "back"}]},
+  :recording-summary-1
+  {:name "Recording Summary 1",
+   :outs [{:x 100, :y 100, :name "map", :object "back"}],
+   :preview "/upload/XWULSQDSZTIMGPDJ.png",
+   :lesson-sets ["concepts-recording"]},
   :recording-2-dii {:name "Recording: 2Dii"},
   :onset--rime-%22-ug%22 {:name "Onset & Rime: \"-ug\""}},
  :scenes
@@ -352,16 +384,17 @@
   "magic-hat"
   "pinata"],
  :locations
- {:home [{:level 0, :lesson 0 :scene "letter-intro-1"} {:level 1, :scene "letter-intro"}],
-  :running [{:level 0, :scene "running-with-letters"}]
-  :cinema [{:level 0, :scene "cinema-new"}]
-  :magic-hat [{:level 0, :scene "magic-hat-v-2"}]
-  :book [{:level 0, :scene "first-words-book-letter-a"}]
-  :cycling [{:level 0, :scene "cycling"} {:level 1, :scene "cycling-letters"}],
-  :sandbox [{:level 0, :scene "alliteration-v-2"} {:level 1, :scene "park-poem"}],
+ {:home [{:level 0, :scene "letter-intro-1", :lesson 0} {:level 0, :scene "interactive-read-aloud-import-2-2", :lesson 1} {:level 1, :scene "letter-intro"}],
+  :cinema [{:level 0, :scene "cinema-new"}],
+  :music-hall [{:level 0, :scene "recording-summary-1", :lesson 0}],
+  :book [{:level 0, :scene "first-words-book-letter-a"}],
   :volleyball [{:level 0, :scene "volleyball-v-3"} {:level 1, :scene "volleyball-letters"}],
-  :painting-tablet [{:level 0, :scene "writing-practice"} {:level 1, :scene "writing-practice"}]
-  :music-hall [{:level 0 :lesson 0 :scene "recording-summary-1"}]},
+  :magic-hat [{:level 0, :scene "magic-hat-v-2"}],
+  :sandbox [{:level 0, :scene "alliteration-v-2"} {:level 1, :scene "park-poem"}],
+  :running [{:level 0, :scene "running-with-letters"}],
+  :cycling [{:level 0, :scene "cycling"} {:level 1, :scene "cycling-letters"}],
+  :shopping-mall [{:level 0, :scene "i-spy-1", :lesson 0}]
+  :painting-tablet [{:level 0, :scene "writing-practice"} {:level 0, :scene "writing-1", :lesson 1}]},
  :levels
  [{:name "Level 1",
    :level 1,
@@ -394,34 +427,37 @@
      :type "lesson",
      :lesson 2,
      :activities
-     [{:activity "interactive-read-aloud-1", :time-expected 300}
+     [{:activity "interactive-read-aloud-import-2-2", :time-expected 300}
       {:activity "recording-summary-1", :time-expected 300}
       {:activity "writing-1", :time-expected 300}
       {:activity "i-spy-1", :time-expected 300}],
-     :lesson-sets {}}
+     :lesson-sets {:concepts-recording "ls-concepts-recording-0ae51fb7"}}
     {:name "Lesson 3",
      :type "lesson",
      :lesson 3,
      :activities
-     [{:only nil, :activity "letter-intro", :tags-by-score {:new-tag-0 [0 100]}, :time-expected 300}
+     [{:only nil, :activity "letter-intro-1", :tags-by-score {:new-tag-0 [0 100]}, :time-expected 300}
       {:only nil, :activity "running", :time-expected 300}
       {:activity "cinema-video", :time-expected 300}
       {:activity "magic-hat-v-2", :time-expected 300}
       {:scored true, :activity "first-words-book-letter-mm", :time-expected 300}
-      {:activity "alliteration-m"}
-      {:activity "writing-lesson"}
-      {:scored true, :activity "volleyball-v-2", :time-expected 300}],
+      {:activity "alliteration-v-2"}
+      {:activity "writing-practice"}
+      {:scored true, :activity "volleyball-v-3", :time-expected 300}],
      :lesson-sets
-     {:concepts "ls3",
+     {:concepts "ls-concepts-aed9b662",
       :concepts-all "ls-concepts-all-b6300ff7",
       :concepts-group "ls-concepts-group-d3b23022",
       :concepts-single "ls-concepts-single-7c50f865",
+      :concepts-incorrect "ls-concepts-incorrect-99f18bef",
+      :volleyball-concepts "ls-volleyball-concepts-923686e1",
+      :volleyball-incorrect "ls-volleyball-incorrect-d0c2a00e",
       :concepts-magic-hat-rounds "ls-concepts-magic-hat-rounds-3f073b6d"}}
     {:name "Assessment 1",
      :type "assessment",
      :lesson 4,
      :activities
-     [{:scored true, :activity "sandbox-colors", :time-expected 300, :expected-score-percentage 90}
+     [{:scored true, :activity "sandbox-vocabulary-colors", :time-expected 300, :expected-score-percentage 90}
       {:activity "slide-colors"}
       {:activity "rhyme-karaoke-twinkle"}
       {:activity "recording-studio-1-ai"}],
@@ -473,11 +509,11 @@
       :concepts-magic-hat-rounds "ls-concepts-magic-hat-rounds-a6568678"}}
     {:type "assessment",
      :activities
-     [{:scored true, :activity "interactive-read-aloud-2", :time-expected 300, :expected-score-percentage 90}
+     [{:scored true, :activity "interactive-read-aloud-import-2-2", :time-expected 300, :expected-score-percentage 90}
       {:activity "recording-summary-2"}
       {:activity "writing-1"}
       {:activity "i-spy-2"}],
-     :lesson-sets {}}
+     :lesson-sets {:concepts-recording "ls-concepts-recording-bb3d9dd7"}}
     {:name "Lesson 7",
      :type "lesson",
      :lesson 8,

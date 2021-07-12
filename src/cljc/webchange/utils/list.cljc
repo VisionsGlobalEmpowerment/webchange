@@ -33,9 +33,9 @@
       (vec)))
 
 (defn replace-at-position
-  ([list position new-item]
-   (replace-at-position list position new-item {}))
-  ([list position new-item options]
+  ([list new-item position]
+   (replace-at-position list new-item position {}))
+  ([list new-item position options]
    "Replace item in list at specific position."
    {:pre [(sequential? list)
           (number? position) (>= position 0) (< position (count list))]}

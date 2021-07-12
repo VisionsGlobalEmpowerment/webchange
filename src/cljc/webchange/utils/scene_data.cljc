@@ -1,4 +1,6 @@
-(ns webchange.utils.scene-data)
+(ns webchange.utils.scene-data
+  (:require
+    [webchange.utils.scene-action-data :as action-data]))
 
 (defn- gen-uuid []
   #?(:clj  (java.util.UUID/randomUUID)
@@ -96,10 +98,6 @@
 
 ; Actions
 
-(defn- dialog-action?
-  [action-data]
-  (contains? action-data :phrase))
-
 (defn- get-scene-actions
   [scene-data]
   (get scene-data :actions {}))
@@ -114,7 +112,7 @@
 (defn get-dialog-actions
   [scene-data]
   (->> (get-scene-actions scene-data)
-       (filter (fn [[_ action-data]] (dialog-action? action-data)))
+       (filter (fn [[_ action-data]] (action-data/dialog-action? action-data)))
        (map first)))
 
 (defn- add-action
@@ -206,6 +204,13 @@
 (defn get-metadata-untracked-actions
   [scene-data]
   (get-track-actions scene-data nil))
+
+(defn get-available-effects
+  [scene-data]
+  (as-> (get-metadata scene-data) x
+        (get x :available-actions)
+        (map action-data/fix-available-effect
+             x)))
 
 ; General
 

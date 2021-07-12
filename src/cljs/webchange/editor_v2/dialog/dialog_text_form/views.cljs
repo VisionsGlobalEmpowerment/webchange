@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.dialog.dialog-text-form.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views :refer [action-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.views :refer [side-menu]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
@@ -45,18 +46,21 @@
 
 (defn dialog-form
   []
-  (let [actions @(re-frame/subscribe [::state/phrase-actions])
-        current-concept @(re-frame/subscribe [::state/current-concept])]
-    [:div {:class-name (get-class-name {"dialog-form"      true
-                                        "dialog-text-form" true})}
-     [header]
-     [:div.work-field
-      ^{:key current-concept}
-      [:div.sheet
-       (for [[idx {:keys [path] :as action}] (map-indexed vector actions)]
-         ^{:key (concat [(count actions)] path)}
-         [action-unit (merge action
-                             {:idx idx})])
-       [actions-block]]
-      [side-menu]]
-     [text-chunks-modal]]))
+  (r/with-let []
+    (let [actions @(re-frame/subscribe [::state/phrase-actions])
+          current-concept @(re-frame/subscribe [::state/current-concept])]
+      [:div {:class-name (get-class-name {"dialog-form"      true
+                                          "dialog-text-form" true})}
+       [header]
+       [:div.work-field
+        ^{:key current-concept}
+        [:div.sheet
+         (for [[idx {:keys [path] :as action}] (map-indexed vector actions)]
+           ^{:key (concat [(count actions)] path)}
+           [action-unit (merge action
+                               {:idx idx})])
+         [actions-block]]
+        [side-menu]]
+       [text-chunks-modal]])
+    (finally
+      (re-frame/dispatch [::state/reset-form]))))

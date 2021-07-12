@@ -43,4 +43,19 @@
             padding-bottom: 8px;
         }
     }
+
+    .placeholder {
+        background-color: #f3f3f3;
+        border-radius: 6px;
+        padding: 6px;
+        font-size: 14px;
+        color: #737373;
+        margin: 4px 0;
+
+        & > span {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+    }
 }

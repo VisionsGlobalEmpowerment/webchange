@@ -8,10 +8,8 @@
         :name        "Slide riddle (no concept)"
         :tags        ["listening comprehension" "rhyming"]
         :description "Slide riddle (no concept)"
-        :actions     {
-                      :add-round {:title   "Add round",
-                                  :options {
-                                            :image-correct {:label   "Correct image"
+        :actions     {:add-round {:title   "Add round",
+                                  :options {:image-correct {:label   "Correct image"
                                                             :type    "image"
                                                             :options {:max-width  100
                                                                       :max-height 100
@@ -31,378 +29,380 @@
                                                                       :min-width  50}}}}}})
 
 (def t {:assets
-                       [{:url "/raw/img/park/slide/background2.jpg", :type "image"}
-                        {:url "/raw/img/park/slide/slide.png", :type "image"}
-                        {:url "/raw/img/park/slide/side.png", :type "image"}
-                        {:url "/raw/img/alliteration/spot.png", :size 10, :type "image"}
-                        ],
+        [{:url "/raw/img/park/slide/background2.jpg", :type "image"}
+         {:url "/raw/img/park/slide/slide.png", :type "image"}
+         {:url "/raw/img/park/slide/side.png", :type "image"}
+         {:url "/raw/img/park/slide/line_01.png", :size 1, :type "image"}
+         {:url "/raw/img/park/slide/line_02.png", :size 1, :type "image"}
+         {:url "/raw/img/park/slide/line_03.png", :size 1, :type "image"}],
         :objects
-                       {:background {:type "background", :src "/raw/img/park/slide/background2.jpg"},
-                        :box1
-                                    {:type       "animation",
-                                     :x          810,
-                                     :y          216,
-                                     :width      671,
-                                     :height     633,
-                                     :scale      {:x 0.25, :y 0.25},
-                                     :scene-name "box1",
-                                     :transition "box1",
-                                     :anim       "idle2",
-                                     :loop       true,
-                                     :name       "boxes",
-                                     :skin       "qwestion",
-                                     :speed      0.3,
-                                     :start      true,
-                                     :draggable  true,
-                                     :actions    {:click
-                                                              {:on     "click",
-                                                               :type   "action",
-                                                               :id     "box-clicked",
-                                                               :params {:target "box1"}},
-                                                  :drag-end   {
-                                                               :on     "drag-end",
-                                                               :type   "action",
-                                                               :id     "stop-drag",
-                                                               :params {:box           "box1"
-                                                                        :init-position {:x 810, :y 216 :duration 1}}
-                                                               },
-                                                  :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
-                                     :states     {:hidden {:visible false}, :visible {:visible true}, :init-position {:x 810, :y 216}}},
-                        :box2
-                                    {:type       "animation",
-                                     :x          500,
-                                     :y          287,
-                                     :width      671,
-                                     :height     633,
-                                     :scale      {:x 0.25, :y 0.25},
-                                     :scene-name "box2",
-                                     :transition "box2",
-                                     :anim       "idle2",
-                                     :loop       true,
-                                     :name       "boxes",
-                                     :skin       "qwestion",
-                                     :speed      0.3,
-                                     :start      true,
-                                     :draggable  true,
-                                     :actions    {:click
-                                                              {:on     "click",
-                                                               :type   "action",
-                                                               :id     "box-clicked",
-                                                               :params {:target "box2"}},
-                                                  :drag-end   {:on     "drag-end",
-                                                               :type   "action",
-                                                               :id     "stop-drag",
-                                                               :params {:box           "box2"
-                                                                        :init-position {:x 500, :y 287 :duration 1}}},
-                                                  :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
-                                     :states     {:hidden {:visible false}, :visible {:visible true}, :init-position {:x 500, :y 287}}},
-                        :box3
-                                    {:type       "animation",
-                                     :x          655,
-                                     :y          212,
-                                     :width      671,
-                                     :height     633,
-                                     :scale      {:x 0.25, :y 0.25},
-                                     :scene-name "box3",
-                                     :transition "box3",
-                                     :anim       "idle2",
-                                     :loop       true,
-                                     :name       "boxes",
-                                     :skin       "qwestion",
-                                     :speed      0.3,
-                                     :start      true,
-                                     :draggable  true,
-                                     :actions    {:click
-                                                              {:on     "click",
-                                                               :type   "action",
-                                                               :id     "box-clicked",
-                                                               :params {:target "box3"}},
-                                                  :drag-end   {
-                                                               :on     "drag-end",
-                                                               :type   "action",
-                                                               :id     "stop-drag",
-                                                               :params {:box           "box3"
-                                                                        :init-position {:x 655, :y 212 :duration 1}}
-                                                               },
-                                                  :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
-                                     :states     {:hidden {:visible false}, :visible {:visible true}, :init-position {:x 655, :y 212}}},
-                        :spot
-                                    {:type       "image",
-                                     :x          586,
-                                     :y          354,
-                                     :scale      0.6,
-                                     :transition "spot",
-                                     :src        "/raw/img/alliteration/spot.png",
-                                     :states     {:highlighted {:highlight true}, :not-highlighted {:highlight false}}},
-                        :mari
-                                    {:type       "animation",
-                                     :x          1600,
-                                     :y          580,
-                                     :width      473,
-                                     :height     511,
-                                     :transition "mari",
-                                     :anim       "idle",
-                                     :name       "mari",
-                                     :scale-x    0.5,
-                                     :scale-y    0.5,
-                                     :speed      0.35,
-                                     :start      true},
-                        :slide      {:type "image", :x 200, :y 190, :width 997, :height 758, :src "/raw/img/park/slide/slide.png"},
-                        :slide-side {:type "image", :x 591, :y 450, :width 234, :height 497, :src "/raw/img/park/slide/side.png"}},
-        :scene-objects [["background"] ["slide" "slide-side" "spot" "mari" "box1" "box3" "box2"]],
-        :actions       {
-                        :start-drag           {:type "sequence-data",
-                                               :data [{:id       "check-collide-2",
-                                                       :type     "set-interval",
-                                                       :action   "check-collide",
-                                                       :interval 100}]},
-                        :highlight            {:type "sequence-data",
-                                               :data
-                                                     [{:type "set-variable", :var-name "spot-selected", :var-value true}
-                                                      {:id "highlighted", :type "state", :target "spot"}]}
-                        :unhighlight          {:type "sequence-data",
-                                               :data
-                                                     [{:type "set-variable", :var-name "spot-selected", :var-value false}
-                                                      {:id "not-highlighted", :type "state", :target "spot"}]},
-                        :check-collide        {:type "sequence-data",
-                                               :data
-                                                     [{:fail        "unhighlight",
-                                                       :type        "test-transitions-and-pointer-collide",
-                                                       :success     "highlight",
-                                                       :transitions ["spot"]}
-                                                      ]},
-                        :stop-drag            {:type "sequence-data",
-                                               :data [{:id "check-collide-2", :type "remove-interval"}
-                                                      {:type     "test-var-scalar",
-                                                       :value    true,
-                                                       :success  "spot-selected",
-                                                       :fail     "revert-position"
-                                                       :var-name "spot-selected"}
-                                                      {:id "unhighlight", :type "action", :params {:transition "spot"}}
-                                                      ]},
-                        :revert-position      {:type        "transition"
-                                               :from-params [{:param-property "box", :action-property "transition-id"}
-                                                             {:param-property "init-position", :action-property "to"}]}
-                        :pick-wrong           {:type "sequence-data",
-                                               :data [{:type "action" :id "dialog-wrong"}
-                                                      {:type "action" :id "revert-position"}]},
-                        :pick-correct         {:type "sequence-data",
-                                               :data
-                                                     [{:id "dialog-correct", :type "action"}
-                                                      {:id "slide-current-target", :type "action"}
-                                                      {:type "empty", :duration 1000}
-                                                      {:id "next-round", :type "action"}]},
-                        :spot-selected        {:type "sequence-data",
-                                               :data
-                                                     [{:fail        "pick-wrong",
-                                                       :type        "test-var-scalar",
-                                                       :success     "pick-correct",
-                                                       :from-var    [{:var-name "current-concept", :action-property "value"}],
-                                                       :from-params [{:param-property "box", :action-property "var-name"}]}
-                                                      {:id "unhighlight", :type "action", :params {:transition "spot"}}
-                                                      ]},
-                        :dialog-welcome       {:type               "sequence-data",
-                                               :editor-type        "dialog",
-                                               :data               [{:type "sequence-data"
-                                                                     :data [{:type "empty" :duration 0}
-                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                               :phrase             "welcome",
-                                               :phrase-description "Welcome dialog",
-                                               :dialog-track       "1 Welcome"},
-                        :box-clicked          {:type "sequence-data",
-                                               :data [
-                                                      {:type "action" :id "next-counter"}
-                                                      {:type        "copy-variable"
-                                                       :var-name    "clicked-item"
-                                                       :from-params [{:action-property "from" :param-property "target"}]}
-                                                      {:type     "test-var-scalar",
-                                                       :value    false,
-                                                       :var-name "spot-selected"
-                                                       :success  "",
-                                                       :from-var [{:var-name "clicked-item",
-                                                                   :var-property "click-dialog",
-                                                                   :action-property "success"}]}
-                                                      ]}
-                        :dialog-correct       {:type               "sequence-data",
-                                               :editor-type        "dialog",
-                                               :concept-var        "current-concept",
-                                               :data               [{:type "sequence-data"
-                                                                     :data [{:type "empty" :duration 0}
-                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                               :phrase             "correct",
-                                               :phrase-description "Dialog correct"},
-                        :dialog-wrong
-                                              {:type               "sequence-data",
-                                               :editor-type        "dialog",
-                                               :concept-var        "current-concept",
-                                               :data               [{:type "sequence-data"
-                                                                     :data [{:type "empty" :duration 0}
-                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                               :phrase             "wrong",
-                                               :phrase-description "Dialog wrong"},
-                        :dialog-x-finish
-                                              {:type               "sequence-data",
-                                               :editor-type        "dialog",
-                                               :concept-var        "current-concept",
-                                               :data               [{:type "sequence-data"
-                                                                     :data [{:type "empty" :duration 0}
-                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                               :phrase             "finish",
-                                               :phrase-description "Finish dialog",
-                                               :dialog-track       "4 Finish"},
-                        :reset-boxes
-                                              {:type "sequence-data",
-                                               :data
-                                                     [{:id "hidden", :type "state", :target "box1"}
-                                                      {:id "hidden", :type "state", :target "box2"}
-                                                      {:id "hidden", :type "state", :target "box3"}
-                                                      {:type "empty", :duration 100}
-                                                      {:id "init-position", :type "state", :target "box1"}
-                                                      {:id "init-position", :type "state", :target "box2"}
-                                                      {:id "init-position", :type "state", :target "box3"}
-                                                      {:skin "qwestion", :type "set-skin", :target "box1"}
-                                                      {:skin "qwestion", :type "set-skin", :target "box2"}
-                                                      {:skin "qwestion", :type "set-skin", :target "box3"}
-                                                      {:id "visible", :type "state", :target "box1"}
-                                                      {:id "visible", :type "state", :target "box2"}
-                                                      {:id "visible", :type "state", :target "box3"}]},
-                        :slide-current-target {:type "sequence-data",
-                                               :data
-                                                     [{:to          {:ease [0.1 0.1], :bezier [{:x 770, :y 90} {:x 865, :y 460}], :duration 1.0},
-                                                       :type        "transition",
-                                                       :from-params [{:param-property "box", :action-property "transition-id"}]
-                                                       }
-                                                      {:to          {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
-                                                       :type        "transition",
-                                                       :from-params [{:param-property "box", :action-property "transition-id"}]}
-                                                      {:type "empty", :duration 1000}]},
-                        :renew-words          {:type "sequence-data",
-                                               :data [{:type "action" :id "init-word-items"}
-                                                      {:from      ["item-1" "item-2" "item-3"],
-                                                       :type      "vars-var-provider",
-                                                       :shuffled  true,
-                                                       :variables ["box1" "box2" "box3"]}
-                                                      {:from "item-1", :type "copy-variable", :var-name "current-concept"}]},
-                        :init-word-items      {:from      [],
-                                               :type      "vars-var-provider",
-                                               :on-end      "finish-activity",
-                                               :provider-id "riddle-items"
-                                               :variables ["item-1" "item-2" "item-3"]}
+        {:background {:type "background", :src "/raw/img/park/slide/background2.jpg"},
+         :box1
+                     {:type       "animation",
+                      :x          810,
+                      :y          216,
+                      :width      671,
+                      :height     633,
+                      :scale      {:x 0.25, :y 0.25},
+                      :scene-name "box1",
+                      :anim       "idle2",
+                      :loop       true,
+                      :name       "boxes",
+                      :skin       "qwestion",
+                      :speed      0.3,
+                      :start      true,
+                      :draggable  true,
+                      :actions    {:click      {:on     "click",
+                                                :type   "action",
+                                                :id     "box-clicked",
+                                                :params {:target "box1"}},
+                                   :drag-end   {:on     "drag-end",
+                                                :type   "action",
+                                                :id     "stop-drag",
+                                                :params {:box           "box1"
+                                                         :init-position {:x 810, :y 216 :duration 1}}},
+                                   :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+                      :states     {:init-position {:x 810, :y 216}}},
+         :box2
+                     {:type       "animation",
+                      :x          500,
+                      :y          287,
+                      :width      671,
+                      :height     633,
+                      :scale      {:x 0.25, :y 0.25},
+                      :scene-name "box2",
+                      :transition "box2",
+                      :anim       "idle2",
+                      :loop       true,
+                      :name       "boxes",
+                      :skin       "qwestion",
+                      :speed      0.3,
+                      :start      true,
+                      :draggable  true,
+                      :actions    {:click      {:on     "click",
+                                                :type   "action",
+                                                :id     "box-clicked",
+                                                :params {:target "box2"}},
+                                   :drag-end   {:on     "drag-end",
+                                                :type   "action",
+                                                :id     "stop-drag",
+                                                :params {:box           "box2"
+                                                         :init-position {:x 500, :y 287 :duration 1}}},
+                                   :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+                      :states     {:init-position {:x 500, :y 287}}},
+         :box3
+                     {:type       "animation",
+                      :x          655,
+                      :y          212,
+                      :width      671,
+                      :height     633,
+                      :scale      {:x 0.25, :y 0.25},
+                      :scene-name "box3",
+                      :transition "box3",
+                      :anim       "idle2",
+                      :loop       true,
+                      :name       "boxes",
+                      :skin       "qwestion",
+                      :speed      0.3,
+                      :start      true,
+                      :draggable  true,
+                      :actions    {:click      {:on     "click",
+                                                :type   "action",
+                                                :id     "box-clicked",
+                                                :params {:target "box3"}},
+                                   :drag-end   {:on     "drag-end",
+                                                :type   "action",
+                                                :id     "stop-drag",
+                                                :params {:box           "box3"
+                                                         :init-position {:x 655, :y 212 :duration 1}}},
+                                   :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+                      :states     {:init-position {:x 655, :y 212}}},
+         :spot
+                     {:type    "image",
+                      :x       826,
+                      :y       524,
+                      :filters [{:name "brightness" :value 0}
+                                {:name "glow" :outer-strength 0 :color 0xffd700}]
+                      :src     "/raw/img/park/slide/line_01.png",},
+         :mari
+                     {:type       "animation",
+                      :x          1600,
+                      :y          580,
+                      :width      473,
+                      :height     511,
+                      :transition "mari",
+                      :anim       "idle",
+                      :name       "mari",
+                      :scale-x    0.5,
+                      :scale-y    0.5,
+                      :speed      0.35,
+                      :start      true
+                      :actions    {:click {:id "guide-click" :on "click" :type "action"}}},
+         :slide      {:type "image", :x 200, :y 190, :width 997, :height 758, :src "/raw/img/park/slide/slide.png"},
+         :slide-side {:type "image", :x 591, :y 450, :width 234, :height 497, :src "/raw/img/park/slide/side.png"}},
+        :scene-objects
+        [["background"] ["slide" "slide-side" "spot" "mari" "box1" "box3" "box2"]],
+        :actions
+        {:start-drag           {:type "sequence-data",
+                                :data [{:type        "copy-variable" :var-name "active-box"
+                                        :from-params [{:param-property "box", :action-property "from"}]}
+                                       {:id       "check-collide-2",
+                                        :type     "set-interval",
+                                        :action   "check-collide",
+                                        :interval 100}]},
+         :stop-drag            {:type "sequence-data",
+                                :data [{:id "check-collide-2", :type "remove-interval"}
+                                       {:type     "test-var-scalar", :value true,
+                                        :success  "spot-selected", :fail "revert-position"
+                                        :var-name "spot-selected"}
+                                       {:type "set-attribute", :target "spot", :attr-value false :attr-name "highlight"}]}
+         :highlight            {:type "sequence-data",
+                                :data
+                                      [{:type "set-variable", :var-name "spot-selected", :var-value true}
+                                       {:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value true}]}
+         :unhighlight          {:type "sequence-data",
+                                :data
+                                      [{:type "set-variable", :var-name "spot-selected", :var-value false}
+                                       {:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value false}]},
+         :check-collide        {:type "sequence-data",
+                                :data
+                                      [{:fail        "unhighlight",
+                                        :type        "test-transitions-and-pointer-collide",
+                                        :success     "highlight",
+                                        :transitions ["spot"]}]},
+         :revert-position
+                               {:type        "transition"
+                                :from-params [{:param-property "box", :action-property "transition-id"}
+                                              {:param-property "init-position", :action-property "to"}]}
+         :pick-wrong           {:type "sequence-data",
+                                :data [{:type     "action"
+                                        :from-var [{:var-name        "dragged-item"
+                                                    :var-property    "dragged-dialog"
+                                                    :action-property "id"}]}
+                                       {:type "action" :id "revert-position"}]},
+         :pick-correct         {:type "sequence-data",
+                                :data
+                                      [{:type     "action"
+                                        :from-var [{:var-name        "dragged-item"
+                                                    :var-property    "dragged-dialog"
+                                                    :action-property "id"}]}
+                                       {:id "slide-current-target", :type "action"}
+                                       {:type "empty", :duration 1000}
+                                       {:type "action" :id "script"}]},
+         :spot-selected        {:type "sequence-data",
+                                :data
+                                      [{:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value false}
+                                       {:type "action" :id "timeout-timer"}
+                                       {:type        "copy-variable"
+                                        :var-name    "dragged-item"
+                                        :from-params [{:action-property "from" :param-property "box"}]}
+                                       {:fail     "pick-wrong",
+                                        :value1   true
+                                        :type     "test-value",
+                                        :success  "pick-correct",
+                                        :from-var [{:var-name        "dragged-item"
+                                                    :var-property    "correct"
+                                                    :action-property "value2"}]}]}
 
-                        :next-round           {:type "sequence-data",
-                                               :data [
-                                                      {:type "action" :id "renew-words"}
-                                                      {:type "action" :id "reset-boxes"}
-                                                      {:type "action" :id "assign-boxes"}
-                                                      {:type "action" :id ""
-                                                       :from-var [{:var-name "current-concept",
-                                                                   :var-property "riddle-dialog",
-                                                                   :action-property "id"}]
-                                                       }]}
-                        :assign-boxes         {:type "sequence-data",
-                                               :data
-                                                     [{:type       "set-slot",
-                                                       :target     "box1",
-                                                       :from-var   [{:var-name "box1", :var-property "image-src", :action-property "image"}],
-                                                       :slot-name  "box1",
-                                                       :attachment {:x 40, :scale-x 4, :scale-y 4}}
-                                                      {:type       "set-slot",
-                                                       :target     "box2",
-                                                       :from-var   [{:var-name "box2", :var-property "image-src", :action-property "image"}],
-                                                       :slot-name  "box1",
-                                                       :attachment {:x 40, :scale-x 4, :scale-y 4}}
-                                                      {:type       "set-slot",
-                                                       :target     "box3",
-                                                       :from-var   [{:var-name "box3", :var-property "image-src", :action-property "image"}],
-                                                       :slot-name  "box1",
-                                                       :attachment {:x 40, :scale-x 4, :scale-y 4}}]}
-                        :start-timeout        {:type      "start-timeout-counter",
-                                               :id        "inactive-counter",
-                                               :action    "continue-try",
-                                               :autostart true
-                                               :interval  10000}
-                        :next-counter         {:type "next-timeout-counter"
-                                               :id   "inactive-counter",}
-                        :continue-try         {:type "sequence",
-                                               :data ["start-timeout"
-                                                      "dialog-continue-try"]},
-                        :dialog-continue-try  {:type               "sequence-data",
-                                               :editor-type        "dialog",
-                                               :data               [{:type "sequence-data"
-                                                                     :data [{:type "empty" :duration 0}
-                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                               :phrase             "dialog-continue-try",
-                                               :phrase-description "Dialog continue try"},
-                        :start-scene          {:type "sequence",
-                                               :tags ["clickable"]
-                                               :data ["start-activity"
-                                                      "init-vars"
-                                                      "dialog-welcome"
-                                                      "start-timeout"
-                                                      "next-round"
-                                                      "start-timeout"
-                                                      ]},
-                        :init-vars            {:type "sequence-data"
-                                               :data []}
+         :box-clicked          {:type "sequence-data",
+                                :data [{:type "action" :id "timeout-timer"}
+                                       {:type        "copy-variable"
+                                        :var-name    "clicked-item"
+                                        :from-params [{:action-property "from" :param-property "target"}]}
+                                       {:type     "test-var-scalar",
+                                        :value    false,
+                                        :var-name "spot-selected"
+                                        :success  "",
+                                        :from-var [{:var-name        "clicked-item",
+                                                    :var-property    "click-dialog",
+                                                    :action-property "success"}]}]}
 
-                        :finish-activity      {:type "sequence-data"
-                                               :data [{:id "inactive-counter", :type "remove-interval"}
-                                                      {:type "action" :id "dialog-x-finish"}
-                                                      {:type "finish-activity"}]},
-                        :start-activity       {:type "start-activity"},
-                        :stop-activity        {:type "stop-activity"}
-                        },
-        :triggers      {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
-        :metadata      {:autostart true}})
+         :reset-boxes
+                               {:type "sequence-data",
+                                :data
+                                      [{:type "set-attribute" :target "box1" :attr-name "visible" :attr-value false}
+                                       {:type "set-attribute" :target "box2" :attr-name "visible" :attr-value false}
+                                       {:type "set-attribute" :target "box3" :attr-name "visible" :attr-value false}
+                                       {:type "empty", :duration 100}
+                                       {:id "init-position", :type "state", :target "box1"}
+                                       {:id "init-position", :type "state", :target "box2"}
+                                       {:id "init-position", :type "state", :target "box3"}
+                                       {:skin "qwestion", :type "set-skin", :target "box1"}
+                                       {:skin "qwestion", :type "set-skin", :target "box2"}
+                                       {:skin "qwestion", :type "set-skin", :target "box3"}
+                                       {:type "set-attribute" :target "box1" :attr-name "visible" :attr-value true}
+                                       {:type "set-attribute" :target "box2" :attr-name "visible" :attr-value true}
+                                       {:type "set-attribute" :target "box3" :attr-name "visible" :attr-value true}]},
+         :slide-current-target
+                               {:type "sequence-data",
+                                :data [{:to          {:ease [0.1 0.1], :bezier [{:x 770, :y 90} {:x 865, :y 460}], :duration 1.0},
+                                        :type        "transition",
+                                        :from-params [{:param-property "box", :action-property "transition-id"}]
+                                        }
+                                       {:to          {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
+                                        :type        "transition",
+                                        :from-params [{:param-property "box", :action-property "transition-id"}]}
+                                       {:type "empty", :duration 1000}]},
+         :assign-boxes         {:type "sequence-data",
+                                :data
+                                      [{:type       "set-slot",
+                                        :target     "box1",
+                                        :from-var   [{:var-name "box1", :var-property "image-src", :action-property "image"}],
+                                        :slot-name  "box1",
+                                        :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                       {:type       "set-slot",
+                                        :target     "box2",
+                                        :from-var   [{:var-name "box2", :var-property "image-src", :action-property "image"}],
+                                        :slot-name  "box1",
+                                        :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                       {:type       "set-slot",
+                                        :target     "box3",
+                                        :from-var   [{:var-name "box3", :var-property "image-src", :action-property "image"}],
+                                        :slot-name  "box1",
+                                        :attachment {:x 40, :scale-x 4, :scale-y 4}}]}
+         :remove-timeout-timer {:type "remove-interval"
+                                :id   "timeout-timer"}
+         :timeout-timer        {:type     "set-interval"
+                                :id       "timeout-timer"
+                                :interval 25000
+                                :action   "timeout"}
+         :timeout              {:type       "action"
+                                :unique-tag "instructions"
+                                :from-var   [{:var-name        "timeout-instructions-action"
+                                              :action-property "id"}]},
+         :script               {:type   "workflow"
+                                :data   [{:type "start-activity"}
+                                         {:type "parallel"
+                                          :data [{:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
+                                                 {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
+                                         {:type "action" :id "intro-dialog"}]
+                                :on-end "finish-activity"}
+         :empty                {:type "empty" :duration 100}
+         :guide-click          {:type       "action"
+                                :unique-tag "instructions"
+                                :from-var   [{:var-name        "tap-instructions-action"
+                                              :action-property "id"}]}
 
-(defn round
-  [scene args]
-  (let [round (common/get-unique-suffix scene)]
-  {
-   :actions {
-             (common/make-name-unique scene "dialog-item-correct-click") (dialog/default "Item correct click dialog")
-             (common/make-name-unique scene "dialog-item-wrong-1-click") (dialog/default "item wrong 1 click dialog")
-             (common/make-name-unique scene "dialog-item-wrong-2-click") (dialog/default "item wrong 2 click dialog")
-             (common/make-name-unique scene "dialog-riddle") (dialog/default (str "dialog-riddle, round " round))}
-   :variables [{:type "set-variable" :var-name (common/make-name-unique scene "item-1")
-                :var-value {:id (common/make-name-unique scene "item-1")
-                            :image-src (get-in args [:image-correct :src])
-                            :click-dialog (common/make-name-unique scene "dialog-item-correct-click")
-                            :riddle-dialog (common/make-name-unique scene "dialog-riddle")
-                            }}
-               {:type "set-variable" :var-name (common/make-name-unique scene "item-2")
-                :var-value {:id (common/make-name-unique scene "item-2")
-                            :image-src (get-in args [:image-wrong-1 :src])
-                            :click-dialog (common/make-name-unique scene "dialog-item-wrong-1-click")
-                            }}
-               {:type "set-variable" :var-name (common/make-name-unique scene "item-3")
-                :var-value {:id (common/make-name-unique scene "item-3")
-                            :image-src (get-in args [:image-wrong-2 :src])
-                            :click-dialog (common/make-name-unique scene "dialog-item-wrong-2-click")
-                            }}]
-   } ))
+         :highlight-spot       {:type               "transition"
+                                :transition-id      "spot"
+                                :return-immediately true
+                                :from               {:brightness 0 :glow 0}
+                                :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
+         :finish-activity
+                               {:type "sequence-data"
+                                :data [{:id "timeout-timer", :type "remove-interval"}
+                                       {:type "action" :id "finish-dialog"}
+                                       {:type "finish-activity"}]},
+         :start-activity       {:type "start-activity"},
+         :stop-activity        {:type "stop-activity"}
+         :intro-dialog         (dialog/default "Intro")
+         :finish-dialog
+                               (dialog/default "Finish dialog")}
+        :triggers
+        {:stop  {:on "back", :action "stop-activity"},
+         :start {:on "start", :action "script"}},
+        :metadata
+        {:autostart true
+         :tracks    [{:id    "main"
+                      :title "Main Track"
+                      :nodes [{:type      "dialog"
+                               :action-id "intro-dialog"}
+                              {:type      "dialog"
+                               :action-id "finish-dialog"}]}]
+         :available-actions [{:action "highlight-spot"
+                              :name   "Highlight spot"}]}})
 
+(defn- round
+  [activity-data args]
+  (let [next-round (-> activity-data
+                       (get-in [:metadata :next-round-id])
+                       (or 0)
+                       (inc))
+        round-action-name (str "round-" next-round)
+        riddle-name (str "round-" next-round "-riddle")
+        tap-name (str "round-" next-round "-tap")
+        timeout-name (str "round-" next-round "-timeout")
+        item1-click-name (str "round-" next-round "-item1-clicked")
+        item2-click-name (str "round-" next-round "-item2-clicked")
+        item3-click-name (str "round-" next-round "-item3-clicked")
+        item1-drag-name (str "round-" next-round "-item1-dragged")
+        item2-drag-name (str "round-" next-round "-item2-dragged")
+        item3-drag-name (str "round-" next-round "-item3-dragged")
+        main-track (-> activity-data
+                       (get-in [:metadata :tracks])
+                       (first)
+                       (update :nodes concat [{:type "track" :track-id round-action-name}]))
+        round-track {:id    round-action-name
+                     :title (str "Round " next-round)
+                     :nodes [{:type      "dialog"
+                              :action-id riddle-name}
+                             {:type      "dialog"
+                              :action-id item1-click-name}
+                             {:type      "dialog"
+                              :action-id item2-click-name}
+                             {:type      "dialog"
+                              :action-id item3-click-name}
+                             {:type      "dialog"
+                              :action-id item1-drag-name}
+                             {:type      "dialog"
+                              :action-id item2-drag-name}
+                             {:type      "dialog"
+                              :action-id item3-drag-name}
+                             {:type      "dialog"
+                              :action-id tap-name}
+                             {:type      "dialog"
+                              :action-id timeout-name}]}
+        tracks (as-> activity-data x
+                     (get-in x [:metadata :tracks])
+                     (drop 1 x)
+                     (concat [main-track] x [round-track]))]
+    (-> activity-data
+        (assoc-in [:actions (keyword item1-click-name)] (dialog/default "Item correct click"))
+        (assoc-in [:actions (keyword item2-click-name)] (dialog/default "Item 1 incorrect click"))
+        (assoc-in [:actions (keyword item3-click-name)] (dialog/default "Item 2 incorrect click"))
+        (assoc-in [:actions (keyword item1-drag-name)] (dialog/default "Item correct picked"))
+        (assoc-in [:actions (keyword item2-drag-name)] (dialog/default "Item 1 incorrect picked"))
+        (assoc-in [:actions (keyword item3-drag-name)] (dialog/default "Item 2 incorrect picked"))
+        (assoc-in [:actions (keyword riddle-name)] (dialog/default "Riddle"))
+        (assoc-in [:actions (keyword tap-name)] (dialog/default "Tap instructions"))
+        (assoc-in [:actions (keyword timeout-name)] (dialog/default "Timeout instructions"))
+        (assoc-in [:actions (keyword round-action-name)] {:type "sequence-data"
+                                                          :data [{:type "set-variable" :var-name "item-1" :var-value {:dragged-dialog item1-drag-name
+                                                                                                                      :click-dialog   item1-click-name
+                                                                                                                      :image-src      (get-in args [:image-correct :src])
+                                                                                                                      :correct        true}}
+                                                                 {:type "set-variable" :var-name "item-2" :var-value {:dragged-dialog item2-drag-name
+                                                                                                                      :click-dialog   item2-click-name
+                                                                                                                      :image-src      (get-in args [:image-wrong-1 :src])
+                                                                                                                      :correct        false}}
+                                                                 {:type "set-variable" :var-name "item-3" :var-value {:dragged-dialog item3-drag-name
+                                                                                                                      :click-dialog   item3-click-name
+                                                                                                                      :image-src      (get-in args [:image-wrong-2 :src])
+                                                                                                                      :correct        false}}
+                                                                 {:type "set-variable" :var-name "tap-instructions-action" :var-value tap-name}
+                                                                 {:type "set-variable" :var-name "timeout-instructions-action" :var-value timeout-name}
+                                                                 {:from      ["item-1" "item-2" "item-3"],
+                                                                  :type      "vars-var-provider",
+                                                                  :shuffled  true,
+                                                                  :variables ["box1" "box2" "box3"]}
+                                                                 {:type "action" :id "reset-boxes"}
+                                                                 {:type "action" :id "assign-boxes"}
+                                                                 {:type "action" :id riddle-name}
+                                                                 {:type "action" :id "timeout-timer"}]})
+        (update-in [:actions :script :data] concat [{:type "action" :id round-action-name :workflow-user-input true}])
+        (assoc-in [:metadata :tracks] tracks)
+        (assoc-in [:metadata :next-round-id] next-round)
+        (update :assets concat [{:url (get-in args [:image-correct :src]), :size 1, :type "image"}
+                                {:url (get-in args [:image-wrong-1 :src]), :size 1, :type "image"}
+                                {:url (get-in args [:image-wrong-2 :src]), :size 1, :type "image"}]))))
 
-(defn f
+(defn create
   [args]
   (common/init-metadata m t args))
 
-(defn fu
-  [scene args]
-  (let [
-        {actions :actions variables :variables} (round scene args)
-        ]
+(defn update-activity
+  [old-data args]
+  (case (:action-name args)
+    "add-round" (round old-data args)))
 
-    (println "fu" args actions variables)
-    (-> scene
-        (update-in [:actions :init-vars :data] concat variables)
-        (update-in [:actions] merge actions)
-        (update-in [:actions :init-word-items :from] concat (map (fn [var] (:var-name var)) variables))
-        (update-in [:assets] concat (map (fn [var]
-                                           {:url (get-in var [:var-value :image-src]), :size 10, :type "image"}
-                                           ) variables))
-        (common/add-track-actions (vec (map name (keys actions))) "dialog" (str "Round " (common/get-unique-suffix scene)))
-        (common/update-unique-suffix))))
-
-
-(core/register-template m f fu)
+(core/register-template m create update-activity)

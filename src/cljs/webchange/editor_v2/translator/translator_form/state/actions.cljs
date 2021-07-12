@@ -2,7 +2,8 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer :as audio-analyzer]
+    [webchange.editor-v2.audio-analyzer.region-data :as region-data]
+    [webchange.editor-v2.audio-analyzer.talk-data :as talk-data]
     [webchange.utils.text :refer [text->chunks]]
     [webchange.editor-v2.components.audio-wave-form.state :as state-wave-form]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
@@ -161,8 +162,8 @@
       (if (or force? (and (= (:audio action) audio-url) (not (and (:start action) (:duration action)))))
         (let [phrase-text (get-phrase-text db action action-path-data)
               script-data @(re-frame/subscribe [::state-wave-form/audio-script-data audio-url])
-              {:keys [matched? region-data]} (audio-analyzer/get-region-data-if-possible {:text   phrase-text
-                                                                                          :script script-data})]
+              {:keys [matched? region-data]} (region-data/get-region-data-if-possible {:text   phrase-text
+                                                                                       :script script-data})]
           (if matched?
             {:dispatch-n (list [::update-action :phrase
                                 (cond-> {:audio    audio-url
@@ -171,12 +172,12 @@
                                          :end      (:end region-data)}
                                         (update-text-animation-data? action)
                                         (assoc :data
-                                               (audio-analyzer/get-chunks-data-if-possible
+                                               (talk-data/get-chunks-data-if-possible
                                                  phrase-text audio-url region-data))
 
                                         (update-talk-animation-data? action)
                                         (assoc :data
-                                               (audio-analyzer/get-talk-data-if-possible
+                                               (talk-data/get-talk-data-if-possible
                                                  phrase-text audio-url region-data))) sub-path])}))))))
 
 (re-frame/reg-event-fx

@@ -44,6 +44,11 @@
   (fn [[scene-data]]
     (:actions scene-data)))
 
+(defn get-action-data
+  [db action-path]
+  (-> (actions-data db)
+      (get-in action-path)))
+
 (defn assets-data
   [db]
   (-> db scene-data :assets))
@@ -133,6 +138,11 @@
     (let [assets (assets-data db)]
       {:db         (assoc-in db (path-to-db [:scene :data :assets]) (update-by-key assets :url asset-url data-patch))
        :dispatch-n (list [::set-changes])})))
+
+(re-frame/reg-event-fx
+  ::update-asset-alias
+  (fn [_ [_ asset-url alias]]
+    {:dispatch-n (list [::update-asset asset-url {:alias alias}])}))
 
 (re-frame/reg-event-fx
   ::update-asset-date
