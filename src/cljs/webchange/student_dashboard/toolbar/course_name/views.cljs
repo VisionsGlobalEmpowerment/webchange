@@ -4,13 +4,6 @@
    [re-frame.core :as re-frame]
    [webchange.subs :as subs]))
 
-(defn- get-styles
-  []
-  {:main      {:width          "150px"
-               :margin         "0 20px"
-               :text-transform "capitalize"
-               :font-weight    "bold"}})
-
 (def courses
   [{:course-id 4 :slug "english" :name "english"}
    {:course-id 2 :slug "spanish" :name "español"}])
@@ -23,8 +16,9 @@
 
 (defn course-name
   []
-  (let [current-course (get-course-name  @(re-frame/subscribe [::subs/current-course]))
-        styles (get-styles)]
+  (let [current-course (get-course-name  @(re-frame/subscribe [::subs/current-course]))]
     [ui/typography {:variant "h6"
-                    :style   (:main styles)}
+                    ;; :class-name "main"
+                    ;; :classes {:root "main"}
+                    :classes {:h6 "main"}}
      (str current-course)]))
