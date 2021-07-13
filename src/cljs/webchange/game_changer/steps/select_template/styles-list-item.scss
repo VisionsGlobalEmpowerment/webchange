@@ -1,93 +1,3 @@
-// @import "../../_list-items";
-
-// $width: 200px;
-// $height: 212px;
-
-// $hover-increase: 0.3;
-
-// $border-radius: $card-border-radius;
-// $border-width: $card-border-width;
-// $padding: $card-padding;
-
-// $preview-height: 100px;
-
-// $description-collapsed-height: 60px;
-
-// .templates-list-item-place-holder {
-//     @include list-item-placeholder($width: $width, $height: $height);
-// }
-
-// .templates-list-item {
-//     @include list-item-card();
-
-//      &:hover {
-//         width: (100% * (1 + $hover-increase));
-//         height: auto;
-//         left: -0.5 * (100% * $hover-increase);
-//         z-index: 10;
-
-//         .preview {
-//             height: $preview-height * (1 + $hover-increase);
-//         }
-
-//         .description {
-//             display: block;
-//             height: auto;
-//             -webkit-line-clamp: none;
-//         }
-//     }
-
-//     &.selected {
-//         border: solid $border-width #0071E3;
-//     }
-// }
-
-// .title {
-//     text-transform: capitalize;
-//     color: #1D1D1F;
-//     font-weight: 500;
-//     font-size: 16px;
-//     margin-bottom: $padding;
-// }
-
-// .description {
-//     height: $description-collapsed-height;
-//     display: -webkit-box;
-//     -webkit-line-clamp: 3;
-//     -webkit-box-orient: vertical;
-
-//     overflow: hidden;
-
-//     background-color: #fff;
-// }
-
-// .preview-button {
-//     float: right;
-//     margin-top: $padding;
-// }
-
-// .preview {
-//     position: relative;
-//     height: $preview-height;
-
-//     background-size: cover;
-//     background-position: center;
-//     margin-top: -$padding;
-//     margin-left: -$padding;
-//     margin-right: -$padding;
-//     margin-bottom: $padding;
-
-//     border-radius: ($border-radius - $border-width) ($border-radius - $border-width) 0 0;
-
-//     &.placeholder {
-//         @include image-placeholder($message: "No Preview");
-//         width: auto;
-//     }
-
-//     @import "styles-preview";
-// }
-
-
 @import "../../_list-items";
 
 $width: 100%;
@@ -135,11 +45,8 @@ $description-collapsed-height: 60px;
     }
 }
 
-
-
 .description {
     height: $description-collapsed-height;
-    // display: -webkit-box;
     margin-top: 20px;
     font-weight: 400;
     display: block;
@@ -157,7 +64,6 @@ $description-collapsed-height: 60px;
 .title-button{
     float: right;
 }
-
 
 .preview {
     position: relative;
@@ -184,12 +90,3 @@ $description-collapsed-height: 60px;
     position:relative;
     width:100%;
   }
-
-@media(max-width:991px){
-    .title {
-        span {
-            max-width: 125px;
-        }
-    }
-}
-

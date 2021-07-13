@@ -14,6 +14,15 @@
              :class-name "preview-button"}
      "Preview"]))
 
+(defn- start-button
+  [handler props]
+  [button
+   (merge {:class-name "preview-button"
+           :on-click   handler
+           :color      "primary"}
+          props)
+   "Start"])
+
 (defn template-list-item
   [{:keys [template on-click selected? actions]}]
   (r/with-let [slideshow-visible? (r/atom false)
@@ -36,22 +45,12 @@
            [activity-preview {:slides preview-anim}])]
         [:div.title
          [:span name]
-
          [:div.title-button
           (when (some? preview-activity)
             [preview-button preview-activity])
-
           (when selected?
             (for [{:keys [id text handler props] :or {props {}}} actions]
               ^{:key id}
-              [button
-               (merge {:class-name "preview-button"
-                       :on-click   handler
-                       :color      "primary"}
-                      props)
-               "Start"]))]
-
+              [start-button handler props]))]
          [:div.description.clearfix
-          description]
-         ;;;
-         ]]])))
+          description]]]])))
