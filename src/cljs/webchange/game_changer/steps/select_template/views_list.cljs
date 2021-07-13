@@ -7,7 +7,7 @@
    [webchange.game-changer.steps.select_template.views-list-item :refer [template-list-item]]))
 
 (defn templates-list
-  [{:keys [data]}]
+  [{:keys [data actions]}]
   (r/with-let [_ (re-frame/dispatch [::state/init])
                handle-click (fn [template]
                               (->> (select-keys template [:id :name :options])
@@ -21,11 +21,13 @@
         "Start with this..."]
        [template-list-item {:template  tutorial-activity
                             :selected? (= (:id tutorial-activity) current-template-id)
-                            :on-click  handle-click}]
+                            :on-click  handle-click
+                            :actions   actions}]
        [ui/typography {:variant "h5"}
         "Choose from other activities..."]
        (for [{:keys [id] :as template} filtered-templates]
          ^{:key id}
          [template-list-item {:template  template
                               :selected? (= id current-template-id)
-                              :on-click  handle-click}])])))
+                              :on-click  handle-click
+                              :actions   actions}])])))

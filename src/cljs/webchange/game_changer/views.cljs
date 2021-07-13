@@ -1,19 +1,19 @@
 (ns webchange.game-changer.views
   (:require
-    [reagent.core :as r]
-    [webchange.ui-framework.components.index :refer [button message timeline]]
-    [webchange.ui-framework.layout.views :refer [layout]]
-    [webchange.game-changer.views-layout :as game-changer]
+   [reagent.core :as r]
+   [webchange.ui-framework.components.index :refer [button message timeline]]
+   [webchange.ui-framework.layout.views :refer [layout]]
+   [webchange.game-changer.views-layout :as game-changer]
 
-    [webchange.game-changer.steps.create-activity.index :as create-activity]
-    [webchange.game-changer.steps.fill-template.index :as fill-template]
-    [webchange.game-changer.steps.select-background.index :as select-background]
-    [webchange.game-changer.steps.select-background-music.index :as select-background-music]
-    [webchange.game-changer.steps.select-character.index :as select-character]
-    [webchange.game-changer.steps.select-template.index :as select-template]
-    [webchange.game-changer.steps.welcome-message.index :as welcome-message]
+   [webchange.game-changer.steps.create-activity.index :as create-activity]
+   [webchange.game-changer.steps.fill-template.index :as fill-template]
+   [webchange.game-changer.steps.select-background.index :as select-background]
+   [webchange.game-changer.steps.select-background-music.index :as select-background-music]
+   [webchange.game-changer.steps.select-character.index :as select-character]
+   [webchange.game-changer.steps.select-template.index :as select-template]
+   [webchange.game-changer.steps.welcome-message.index :as welcome-message]
 
-    [webchange.logger.index :as logger]))
+   [webchange.logger.index :as logger]))
 
 (def game-changer-steps [welcome-message/data
                          select-template/data
@@ -81,16 +81,15 @@
 
           first-step? (= @current-step 0)
           last-step? (= @current-step (dec (count timeline)))
-
+          select-template-step? (= title "Choose Activity")
           actions (cond->> [{:id      :next-step
                              :text    (if last-step? "Finish" "Next")
                              :props   {:disabled? (not next-enabled?)}
                              :handler #(handle-next-step next-step-idx handle-next)}]
-                           (not first-step?) (concat [{:id      :prev-step
-                                                       :text    "Previous"
-                                                       :handler #(handle-prev-step prev-step-idx)
-                                                       :props   {:variant "outlined"}}]))]
-      
+                    (and (not first-step?) (not select-template-step?)) (concat [{:id      :prev-step
+                                                                                  :text    "Previous"
+                                                                                  :handler #(handle-prev-step prev-step-idx)
+                                                                                  :props   {:variant "outlined"}}]))]
       [game-changer/layout {:title          title
                             :timeline-items timeline
                             :actions        actions}
