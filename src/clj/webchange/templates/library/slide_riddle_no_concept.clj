@@ -10,18 +10,21 @@
         :description "Slide riddle (no concept)"
         :actions     {:add-round {:title   "Add round",
                                   :options {:image-correct {:label   "Correct image"
+                                                            :description "Correct image"
                                                             :type    "image"
                                                             :options {:max-width  100
                                                                       :max-height 100
                                                                       :min-height 50
                                                                       :min-width  50}}
                                             :image-wrong-1 {:label   "Wrong image 1"
+                                                            :description "Wrong image 1"
                                                             :type    "image"
                                                             :options {:max-width  100
                                                                       :max-height 100
                                                                       :min-height 50
                                                                       :min-width  50}}
                                             :image-wrong-2 {:label   "Wrong image 2"
+                                                            :description "Wrong image 2"
                                                             :type    "image"
                                                             :options {:max-width  100
                                                                       :max-height 100
