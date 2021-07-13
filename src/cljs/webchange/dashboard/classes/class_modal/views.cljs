@@ -42,13 +42,14 @@
        (first)
        (:name)))
 
-(defn course-selector [props]
+(defn course-selector
+  [props handle-course-change]
   (let [styles (get-styles)]
     [:div {:style  (:div-course styles)}
      [:span {:style  (:spn-course styles)} "Course"]
      [ui/select {:value     (get-course-name (:course-id @props))
                  :variant   "outlined"
-                 :on-change #(swap! props assoc :course-id (get-course-id (->> % .-target .-value)))
+                 :on-change #(handle-course-change (->> % .-target .-value))
                  :style     (:main styles)}
       (for [course courses]
         (menu-item course))]]))
@@ -71,7 +72,8 @@
                       (fn [class-data] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
                       (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data])))
         handle-close #(re-frame/dispatch [::classes-events/close-class-modal])
-        loading @(re-frame/subscribe [:loading])]
+        loading @(re-frame/subscribe [:loading])
+        handle-course-change (fn [course-name] (swap! class-data assoc :course-id (get-course-id course-name)))]
     [ui/dialog
      {:open     (boolean class-modal-state)
       :on-close handle-close}
@@ -88,7 +90,7 @@
            :color "secondary"}]
          [:div
           [class-form-inputs class-data]
-          [course-selector class-data]])]
+          [course-selector class-data handle-course-change]])]
       [ui/dialog-actions
        [ui/button
         {:on-click handle-close}

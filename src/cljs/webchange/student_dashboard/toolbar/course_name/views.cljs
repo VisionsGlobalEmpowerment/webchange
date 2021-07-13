@@ -18,7 +18,5 @@
   []
   (let [current-course (get-course-name  @(re-frame/subscribe [::subs/current-course]))]
     [ui/typography {:variant "h6"
-                    ;; :class-name "main"
-                    ;; :classes {:root "main"}
-                    :classes {:h6 "main"}}
+                    :class-name "main"}
      (str current-course)]))
