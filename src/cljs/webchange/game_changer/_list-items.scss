@@ -1,7 +1,8 @@
 $card-border-color_selected: #0071E3;
 $card-border-radius: 8px;
 $card-border-width: 2px;
-$card-padding: 12px;
+// $card-padding: 12px;
+$card-padding: 25px; //Added
 
 @mixin common-list {
     display: flex;
@@ -23,7 +24,8 @@ $card-padding: 12px;
     background-color: #fff;
     border-radius: $card-border-radius;
     box-shadow: 0px 4px 6px rgba(175, 175, 175, 0.25);
-    padding: $card-padding;
+    // padding: $card-padding;
+    padding: 7px 25px 0px 25px; //added
 
     &:hover {
         box-shadow: 4px 8px 12px rgba(175, 175, 175, 0.25);
@@ -35,7 +37,8 @@ $card-padding: 12px;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 120px; //Added
 
     @include list-item-card-appearance();
 }
@@ -52,7 +55,9 @@ $card-padding: 12px;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100%;
+        // height: 100%;
+        height: 100px; //Added
+        width: 150px; //Added
         color: #cecece;
         font-weight: 100;
         font-size: 18px;

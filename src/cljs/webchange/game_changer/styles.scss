@@ -1,3 +1,4 @@
+@import "steps/welcome_message/styles";
 @import "steps/create_activity/styles";
 @import "steps/fill_template/styles";
 @import "steps/select_background_music/styles";
@@ -36,6 +37,7 @@
         background-color: #fff;
         border-radius: 8px;
         padding: 16px;
+        position: relative;
 
         .template-form {
             padding: 16px;

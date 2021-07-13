@@ -1,7 +1,7 @@
 (ns webchange.game-changer.views-layout
   (:require
-    [reagent.core :as r]
-    [webchange.ui-framework.components.index :refer [button timeline]]))
+   [reagent.core :as r]
+   [webchange.ui-framework.components.index :refer [button timeline]]))
 
 (defn layout
   [{:keys [title title-action timeline-items actions]
@@ -18,8 +18,12 @@
            (r/children this))
      [:div.actions
       (for [{:keys [id text handler props] :or {props {}}} actions]
-        ^{:key id}
-        [button (merge {:on-click handler
-                        :size     "big"}
-                       props)
-         text])]]))
+        (if
+         (and
+          (not= "Welcome" title)
+          (not= "Choose Activity" title))
+          ^{:key id}
+          [button (merge {:on-click handler
+                          :size     "big"}
+                         props)
+           text]))]]))
