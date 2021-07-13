@@ -1,11 +1,58 @@
 (ns webchange.dashboard.classes.class-modal.views
   (:require
-    [cljs-react-material-ui.reagent :as ui]
-    [re-frame.core :as re-frame]
-    [reagent.core :as r]
-    [webchange.dashboard.classes.subs :as classes-subs]
-    [webchange.dashboard.students.subs :as students-subs]
-    [webchange.dashboard.classes.events :as classes-events]))
+   [cljs-react-material-ui.reagent :as ui]
+   [re-frame.core :as re-frame]
+   [reagent.core :as r]
+   [webchange.dashboard.classes.subs :as classes-subs]
+   [webchange.dashboard.students.subs :as students-subs]
+   [webchange.dashboard.classes.events :as classes-events]))
+
+(def courses
+  [{:course-id 4 :name "english"}
+   {:course-id 2 :name "spanish"}])
+
+(defn- get-styles
+  []
+  {:main        {:width          "120px"
+                 :margin         "0 20px"}
+   :div-course  {:margin-bottom  "5px"
+                 :margin-top     "30px"}
+   :spn-course  {:margin-left    "20px"
+                 :font-family    "Roboto, Helvetica, Arial, sans-serif"
+                 :color          "#595959"}})
+
+(defn- menu-item
+  [{:keys [course-id name]}]
+  [ui/menu-item {:key course-id :value name}
+   [ui/typography {:inline  true
+                   :variant "inherit"}
+    name]])
+
+(defn get-course-id
+  [course-name]
+  (->> courses
+       (filter #(= course-name (:name %)))
+       (first)
+       (:course-id)))
+
+(defn get-course-name
+  [course-id]
+  (->> courses
+       (filter #(= course-id (:course-id %)))
+       (first)
+       (:name)))
+
+(defn course-selector
+  [props handle-course-change]
+  (let [styles (get-styles)]
+    [:div {:style  (:div-course styles)}
+     [:span {:style  (:spn-course styles)} "Course"]
+     [ui/select {:value     (get-course-name (:course-id @props))
+                 :variant   "outlined"
+                 :on-change #(handle-course-change (->> % .-target .-value))
+                 :style     (:main styles)}
+      (for [course courses]
+        (menu-item course))]]))
 
 (defn- class-form-inputs
   [props]
@@ -17,13 +64,16 @@
 (defn class-modal
   []
   (let [current-class @(re-frame/subscribe [::classes-subs/current-class])
-        class-data (r/atom current-class)
         class-modal-state @(re-frame/subscribe [::classes-subs/class-modal-state])
+        class-data (r/atom (if (= :edit class-modal-state)
+                             current-class
+                             {:course-id 4 :name nil}))
         handle-save (if (= :edit class-modal-state)
                       (fn [class-data] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
                       (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data])))
         handle-close #(re-frame/dispatch [::classes-events/close-class-modal])
-        loading @(re-frame/subscribe [:loading])]
+        loading @(re-frame/subscribe [:loading])
+        handle-course-change (fn [course-name] (swap! class-data assoc :course-id (get-course-id course-name)))]
     [ui/dialog
      {:open     (boolean class-modal-state)
       :on-close handle-close}
@@ -38,7 +88,9 @@
          [ui/circular-progress
           {:size  80
            :color "secondary"}]
-         [class-form-inputs class-data])]
+         [:div
+          [class-form-inputs class-data]
+          [course-selector class-data handle-course-change]])]
       [ui/dialog-actions
        [ui/button
         {:on-click handle-close}
@@ -75,5 +127,4 @@
              :color    "primary"
              :disabled (boolean (not-empty students))
              :on-click #(re-frame/dispatch [::classes-events/confirm-delete class-id])}
-            "Confirm"]]])
-       ])))
+            "Confirm"]]])])))

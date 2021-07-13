@@ -86,10 +86,10 @@
          email (:email data)
          password (:password data)]
      (if-let [user (db/find-user-by-email {:email email})]
-      (assoc user :password password)
-      (let [[{user-id :id}] (auth/create-user-with-credentials! data)]
-        (auth/activate-user! user-id)
-        (assoc data :id user-id))))))
+       (assoc user :password password)
+       (let [[{user-id :id}] (auth/create-user-with-credentials! data)]
+         (auth/activate-user! user-id)
+         (assoc data :id user-id))))))
 
 (defn student-user-created
   ([] (student-user-created {}))
@@ -104,7 +104,7 @@
   ([] (course-created {}))
   ([options]
    (let [defaults {:name "test-course"
-                   :slug "test-course-slug"
+                   :slug (apply str (take 6 (repeatedly #(char (+ (rand 26) 97)))))
                    :lang nil
                    :image-src nil
                    :status "draft"
@@ -117,9 +117,9 @@
          data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
          [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id (:owner_id course-data) :created_at (jt/local-date-time)})]
      (->> (assoc course-data
-           :id course-id
-           :data data
-           :version-id version-id)
+                 :id course-id
+                 :data data
+                 :version-id version-id)
           (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn scene-created
@@ -127,18 +127,18 @@
    (let [course (course-created)]
      (scene-created course)))
   ([course]
-  (let [{course-id :id course-name :name course-slug :slug} course
-        scene-name "test-scene"
-        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
-        data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
-        [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time) :description "test"})]
-    {:id scene-id
-     :course-name course-name
-     :course-slug course-slug
-     :name scene-name
-     :data data
-     :course-id course-id
-     :version-id version-id})))
+   (let [{course-id :id course-name :name course-slug :slug} course
+         scene-name "test-scene"
+         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
+         data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
+         [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time) :description "test"})]
+     {:id scene-id
+      :course-name course-name
+      :course-slug course-slug
+      :name scene-name
+      :data data
+      :course-id course-id
+      :version-id version-id})))
 
 (defn scene-skills-created
   [scene-id skill-id]
@@ -151,12 +151,12 @@
    (let [{course-id :id} (course-created)]
      (dataset-created {:course-id course-id})))
   ([options]
-    (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "image"} {:name "width" :type "number"}]}}
-          data (->> options
-                    (merge defaults)
-                    (db/transform-keys-one-level ->snake_case_keyword))
-          [{id :id}] (db/create-dataset! data)]
-      (assoc data :id id :version 1))))
+   (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "image"} {:name "width" :type "number"}]}}
+         data (->> options
+                   (merge defaults)
+                   (db/transform-keys-one-level ->snake_case_keyword))
+         [{id :id}] (db/create-dataset! data)]
+     (assoc data :id id :version 1))))
 
 (defn dataset-item-created
   ([]
@@ -201,7 +201,8 @@
   ([]
    (class-created {}))
   ([options]
-   (let [defaults {:name "test-class" :school-id default-school-id}
+   (let [{course-id :id} (course-created)
+         defaults {:name "test-class" :school-id default-school-id :course-id course-id}
          data (->> options
                    (merge defaults)
                    (db/transform-keys-one-level ->snake_case_keyword))
@@ -415,7 +416,7 @@
 
 (defn get-scene
   [course-name scene-name]
-  (let [scene-url (str "/api/courses/"course-name "/scenes/" scene-name)
+  (let [scene-url (str "/api/courses/" course-name "/scenes/" scene-name)
         request (-> (mock/request :get scene-url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
@@ -716,50 +717,40 @@
 (defn asset-hash-created [options]
   (let [params (merge {:path_hash (assets/md5 "test/clj/webchange/resources/raw/background.png")
                        :path "test/clj/webchange/resources/raw/background.png"
-                       :file_hash (assets/crc32 "test content")
-                       } options)]
+                       :file_hash (assets/crc32 "test content")} options)]
     (db/create-asset-hash!  params)
     {:path-hash (:path_hash params)
      :path (:path params)
-     :file-hash (:file_hash params)}
-  ))
+     :file-hash (:file_hash params)}))
 
 (defn is-created-asset-hash?
   [hash]
   (let [id (db/get-asset-hash {:path_hash hash})]
-    (not (nil? id))
-    ))
+    (not (nil? id))))
 
 (defn create-test-file! []
   (let [content "Hello"
         filename "/test.jpg"
         public-dir (:public-dir env)
-        file (str public-dir filename)
-        ]
+        file (str public-dir filename)]
     (spit file content)
-    file
-    )
-  )
+    file))
 
 (defn extract-filename
   [path]
   (let [filename-start (inc (clojure.string/last-index-of path "/"))
         file-extension-start (clojure.string/last-index-of path ".")
         file-name (subs path filename-start file-extension-start)]
-    file-name)
-  )
+    file-name))
 (defn extract-extension
   [path]
-  (let [
-        file-extension-start (clojure.string/last-index-of path ".")
+  (let [file-extension-start (clojure.string/last-index-of path ".")
         file-extension (subs path file-extension-start)]
-    file-extension
-  ))
+    file-extension))
 
 (defn create-temp-file
   [file-path]
-  (let [
-        file-name (extract-filename file-path)
+  (let [file-name (extract-filename file-path)
         file-extension (extract-extension file-path)
         temp-file (java.io.File/createTempFile file-name file-extension)]
     (io/copy (io/file file-path) temp-file)
@@ -767,21 +758,18 @@
 
 (defn upload-file!
   [file-path]
-    (let [
-          file-extension (extract-extension file-path)
-          filecontent {:tempfile (create-temp-file file-path)
-                       :content-type (mime/ext-mime-type file-path),
-                       :filename      (str (extract-filename file-path) "." file-extension)
-                       :size (.length (io/file file-path))
-                       }
-          response (handler/dev-handler (-> (assoc
-                              (mock/request :post "/api/assets/")
-                              :params {:filecontent filecontent}
-                              :multipart-params {"file" filecontent})
-                                             (teacher-logged-in)
-                                            ))]
-      (is (= (:status response) 200))
-      response))
+  (let [file-extension (extract-extension file-path)
+        filecontent {:tempfile (create-temp-file file-path)
+                     :content-type (mime/ext-mime-type file-path)
+                     :filename      (str (extract-filename file-path) "." file-extension)
+                     :size (.length (io/file file-path))}
+        response (handler/dev-handler (-> (assoc
+                                           (mock/request :post "/api/assets/")
+                                           :params {:filecontent filecontent}
+                                           :multipart-params {"file" filecontent})
+                                          (teacher-logged-in)))]
+    (is (= (:status response) 200))
+    response))
 
 (defn get-difference
   [data]
@@ -792,10 +780,8 @@
                     (mock/header :accept "application/json")
                     (mock/body (json/write-str data))
                     teacher-logged-in)
-        response (handler/dev-handler request)
-        ]
-    (json/read-str (slurp (:body response)) :key-fn keyword)
-    ))
+        response (handler/dev-handler request)]
+    (json/read-str (slurp (:body response)) :key-fn keyword)))
 
 (defn get-school-dump
   [id]
@@ -805,33 +791,27 @@
     (-> (handler/dev-handler request)
         :body
         (slurp)
-        (json/read-str :key-fn keyword)
-        )
-    ))
+        (json/read-str :key-fn keyword))))
 
 (defn course-stat-created [course]
   (let [user (student-created)
         [{course-stat-id :id}] (db/create-course-stat! {:user_id (:user-id user)
-                                 :class_id (:class-id user)
-                                 :course_id (:id course)
-                                 :data {}
-                                 })]
+                                                        :class_id (:class-id user)
+                                                        :course_id (:id course)
+                                                        :data {}})]
     {:id course-stat-id
      :class-id (:class-id user)
      :user-id (:user-id user)
      :student-id (:id user)
-     :course-id (:id course)
-     }))
+     :course-id (:id course)}))
 
 (defn course-progresses-created [options]
   (let [[{course-progress-id :id}] (db/create-progress! {:user_id (:user-id options)
-                                                :course_id (:course-id options)
-                                                :data {}
-                                                })]
+                                                         :course_id (:course-id options)
+                                                         :data {}})]
     {:id course-progress-id
      :user-id (:user-id options)
-     :course-id (:course-id options)
-     }))
+     :course-id (:course-id options)}))
 
 (defn course-events-created [options]
   (let [course (course-created)
@@ -840,47 +820,39 @@
                                                     :course_id (:id course)
                                                     :type "test"
                                                     :created_at (jt/local-date-time)
-                                                    :data {}
-                                                })]
+                                                    :data {}})]
     {:id course-events-id
      :user-id (:user-id options)
-     :course-id (:id course)
-     }))
+     :course-id (:id course)}))
 
 (defn datasets-created []
   (let [course (course-created)
         [{datasets-id :id}] (db/create-dataset! {:course_id (:id course)
-                                                :name "test"
-                                                :scheme {}
-                                                })]
+                                                 :name "test"
+                                                 :scheme {}})]
     {:id datasets-id
-     :course-id (:id course)
-     }))
+     :course-id (:id course)}))
 
 (defn activity-stat-created [user]
   (let [activity_id "Test"
         course (course-created)
-        [{id :id}] (db/create-activity-stat! {
-                                             :user_id (:id user)
-                                             :course_id (:id course)
+        [{id :id}] (db/create-activity-stat! {:user_id (:id user)
+                                              :course_id (:id course)
                                               :activity_id activity_id
-                                              :data {:hello "world"}
-                                             })
-        ] {:id id :course_id (:id course) :user_id (:id user) :activity_id activity_id}))
+                                              :data {:hello "world"}})] {:id id :course_id (:id course) :user_id (:id user) :activity_id activity_id}))
 
 (defn editor-tag-created [name]
-   (let [[{id :id}] (db/create-editor-tag! {:name name})]
-     {:id id
-      :name name}))
+  (let [[{id :id}] (db/create-editor-tag! {:name name})]
+    {:id id
+     :name name}))
 
 (defn editor-asset-created
   ([type] (editor-asset-created type "hello/example.png"))
   ([type path]
-  (let [[{id :id}] (db/create-editor-assets! {:path path :thumbnail_path path :type type})]
-    {:id id
-     :path path
-     :type type
-     })))
+   (let [[{id :id}] (db/create-editor-assets! {:path path :thumbnail_path path :type type})]
+     {:id id
+      :path path
+      :type type})))
 
 (defn link-editor-asset-tag [tag_id asset_id]
   (let [path "hello/example.png"]

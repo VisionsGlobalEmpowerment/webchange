@@ -78,7 +78,9 @@
   ::student-login-success
   [(re-frame/inject-cofx :redirect-param)]
   (fn [{:keys [db redirect]} [_ user]]
-    {:db (update-in db [:user] merge user)
+    {:db (-> db
+             (assoc-in [:current-course] (:course-slug user))
+             (update-in [:user] merge user))
      :dispatch-n (list [:complete-request :student-login]
                        (if redirect
                          [::events/redirect redirect]

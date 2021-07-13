@@ -66,8 +66,11 @@
 (defn student-login!
   [{:keys [school-id access-code]}]
   (if-let [student (db/find-student-by-code {:school_id school-id :access_code access-code})]
-    (let [user (-> (db/get-user {:id (:user-id student)}) visible-user)]
+    (let [user (-> (db/get-user {:id (:user-id student)}) visible-user)
+          class (-> (db/get-class {:id (:class-id student)}))
+          course (-> (db/get-course-by-id {:id (:course-id class)}))]
       [true {:id         (:user-id student)
+             :course-slug   (:slug course)
              :school-id  (:school-id student)
              :first-name (:first-name user)
              :last-name  (:last-name user)}])
