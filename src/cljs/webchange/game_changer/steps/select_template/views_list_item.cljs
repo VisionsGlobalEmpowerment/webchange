@@ -34,17 +34,24 @@
          (when (and (some? preview-anim)
                     @slideshow-visible?)
            [activity-preview {:slides preview-anim}])]
-        [:div.title name
-         (when (some? preview-activity)
-           [preview-button preview-activity])]
-        (when selected?
-          (for [{:keys [id text handler props] :or {props {}}} actions]
-            ^{:key id}
-            [button
-             (merge {:class-name "preview-button"
-                     :on-click   handler
-                     :color      "primary"}
-                    props)
-             "Start"]))
-        [:div.description
-         description]]])))
+        [:div.title
+         [:span name]
+
+         [:div.title-button
+          (when (some? preview-activity)
+            [preview-button preview-activity])
+
+          (when selected?
+            (for [{:keys [id text handler props] :or {props {}}} actions]
+              ^{:key id}
+              [button
+               (merge {:class-name "preview-button"
+                       :on-click   handler
+                       :color      "primary"}
+                      props)
+               "Start"]))]
+
+         [:div.description.clearfix
+          description]
+         ;;;
+         ]]])))

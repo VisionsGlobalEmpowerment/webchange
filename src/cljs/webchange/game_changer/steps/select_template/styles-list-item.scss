@@ -124,11 +124,25 @@ $description-collapsed-height: 60px;
     font-weight: 500;
     font-size: 16px;
     margin-bottom: 18px;
+    float: left;
+    width:calc( 100% - 175px );
+
+    span {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
+
+
 
 .description {
     height: $description-collapsed-height;
-    display: -webkit-box;
+    // display: -webkit-box;
+    margin-top: 20px;
+    font-weight: 400;
+    display: block;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -137,7 +151,13 @@ $description-collapsed-height: 60px;
 
 .preview-button {
     float: right;
+    margin-left: 5px;
 }
+
+.title-button{
+    float: right;
+}
+
 
 .preview {
     position: relative;
@@ -156,3 +176,20 @@ $description-collapsed-height: 60px;
 
     @import "styles-preview";
 }
+
+.clearfix::before, .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+    position:relative;
+    width:100%;
+  }
+
+@media(max-width:991px){
+    .title {
+        span {
+            max-width: 125px;
+        }
+    }
+}
+
