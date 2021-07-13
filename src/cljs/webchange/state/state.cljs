@@ -76,6 +76,13 @@
 
 ; Objects
 
+(re-frame/reg-sub
+  ::objects-data
+  (fn [[_ scene-id]]
+    [(re-frame/subscribe [::scene-data scene-id])])
+  (fn [[scene-data]]
+    (get scene-data :objects {})))
+
 (re-frame/reg-event-fx
   ::update-scene-objects
   (fn [{:keys [db]} [_ {:keys [course-id scene-id patches-list]} handlers]]

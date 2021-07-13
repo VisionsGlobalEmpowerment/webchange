@@ -34,6 +34,7 @@
     [webchange.ui-framework.components.icon.icon-music :as music]
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
+    [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
@@ -42,6 +43,8 @@
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
+    [webchange.ui-framework.components.icon.icon-visibility-off :as visibility-off]
+    [webchange.ui-framework.components.icon.icon-visibility-on :as visibility-on]
     [webchange.ui-framework.components.icon.icon-volume :as volume]
     [webchange.ui-framework.components.icon.icon-warning :as warning]
 
@@ -82,6 +85,7 @@
    "music"              music/data
    "music-off"          music-off/data
    "play"               play/data
+   "preview"            preview/data
    "remove"             remove/data
    "restart"            restart/data
    "settings"           settings/data
@@ -90,6 +94,8 @@
    "sync"               sync/data
    "text-animation"     text-animation/data
    "undo"               undo/data
+   "visibility-off"     visibility-off/data
+   "visibility-on"      visibility-on/data
    "volume"             volume/data
    "warning"            warning/data})
 
