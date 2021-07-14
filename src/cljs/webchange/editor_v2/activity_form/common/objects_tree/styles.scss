@@ -1,8 +1,17 @@
 .scene-objects-tree {
+    flex: 0 0;
+    min-width: 200px;
+    max-height: 320px;
+    overflow: auto;
+
     border: solid 1px #ccc;
     border-radius: 4px;
 
     .scene-objects-tree-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
         background-color: #fff;
         border-bottom: solid 1px #ccc;
         border-radius: 3px;
@@ -11,6 +20,14 @@
 
         &:last-child {
             border-bottom: none;
+        }
+
+        & > .actions {
+            button {
+                width: 24px;
+                height: 24px;
+                min-width: auto;
+            }
         }
     }
 }

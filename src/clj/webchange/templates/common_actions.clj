@@ -70,6 +70,7 @@
                       :y         540
                       :visible   false
                       :editable? {:select        true
+                                  :drag          true
                                   :show-in-tree? true}}
         show-action {:type "set-attribute" :attr-name "visible", :attr-value true :target object-name}
         hide-action {:type "set-attribute" :attr-name "visible", :attr-value false :target object-name}

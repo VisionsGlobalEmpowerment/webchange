@@ -116,8 +116,8 @@
   (.sortChildren object))
 
 (defn emit
-  [object event]
-  (.emit object event))
+  [object event & args]
+  (.apply (.-emit object) object (-> [event] (concat args) (clj->js))))
 
 (defn set-text
   [text-object value]

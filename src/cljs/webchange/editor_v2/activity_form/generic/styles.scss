@@ -24,6 +24,10 @@
     }
 
     .asset-block {
+        display: flex;
+        align-items: flex-start;
+        gap: 32px;
+
         align-self: start;
     }
 

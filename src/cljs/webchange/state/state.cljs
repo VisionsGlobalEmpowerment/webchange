@@ -61,10 +61,11 @@
     (let [course-id (or course-id (core/current-course-id db))
           scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
           current-scene-data (core/get-scene-data db scene-id)
-          scene-data (merge current-scene-data scene-data-patch)]
-      {:dispatch [::warehouse/save-scene {:course-slug  course-id
-                                          :scene-slug   scene-id
-                                          :scene-data scene-data}
+          scene-data (-> (merge current-scene-data scene-data-patch)
+                         (select-keys [:assets :objects :scene-objects :actions :triggers :skills :metadata]))]
+      {:dispatch [::warehouse/save-scene {:course-slug course-id
+                                          :scene-slug  scene-id
+                                          :scene-data  scene-data}
                   {:on-success [::update-scene-success on-success]}]})))
 
 (re-frame/reg-event-fx
