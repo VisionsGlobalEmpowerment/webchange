@@ -23,7 +23,8 @@
     }
 
     .section-block-body {
-
+        max-height: 280px;
+        overflow-y: auto;
         padding: 4px;
     }
 }
