@@ -20,8 +20,6 @@
       (for [{:keys [id text handler props] :or {props {}}} actions]
         (if
          (and
-          ;; (not= "Welcome" title)
-          ;; (not= "Choose Activity" title)
           (not= 1 step-id)
           (not= 2 step-id))
           ^{:key id}
