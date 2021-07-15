@@ -15,10 +15,12 @@
      "Preview"]))
 
 (defn- start-button
-  [handler props]
+  ;; [handler props]
+  [props]
+  (js/console.log "props------------------->>>>>>>>" props)
   [button
    (merge {:class-name "preview-button"
-           :on-click   handler
+           :on-click   (:on-click props)
            :color      "primary"}
           props)
    "Start"])
@@ -51,6 +53,7 @@
           (when selected?
             (for [{:keys [id text handler props] :or {props {}}} actions]
               ^{:key id}
-              [start-button handler props]))]
+              ;; [start-button handler props]
+              [start-button (merge props {:on-click handler})]))]
          [:div.description.clearfix
           description]]]])))

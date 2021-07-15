@@ -42,7 +42,8 @@
   (let [step-data (nth steps step-idx)
         next-enabled-handler (get step-data :passed? (constantly true))
         timeline (get-timeline-items step-idx steps data)]
-    {:title         (get step-data :title "")
+    {:step-id       (get step-data :step-id)
+     :title         (get step-data :title "")
      :timeline      timeline
      :component     (get step-data :component not-defined-component)
      :handle-next   (get step-data :handle-next)
@@ -73,10 +74,10 @@
                                     (reset! current-step next-idx)))]
     (logger/trace-folded "Game changer data" @current-data)
     (let [current-step-data (get-current-step-data @current-data @current-step @steps)
-          {:keys [component title timeline handle-next next-enabled? next-step-idx prev-step-idx]} current-step-data
+          {:keys [component step-id title timeline handle-next next-enabled? next-step-idx prev-step-idx]} current-step-data
           first-step? (= @current-step 0)
           last-step? (= @current-step (dec (count timeline)))
-          select-template-step? (= title "Choose Activity")
+          select-template-step? (= step-id 2)
           actions (cond->> [{:id      :next-step
                              :text    (if last-step? "Finish" "Next")
                              :props   {:disabled? (not next-enabled?)}
@@ -85,7 +86,8 @@
                                                                                   :text    "Previous"
                                                                                   :handler #(handle-prev-step prev-step-idx)
                                                                                   :props   {:variant "outlined"}}]))]
-      [game-changer/layout {:title          title
+      [game-changer/layout {:step-id        step-id
+                            :title          title
                             :timeline-items timeline
                             :actions        actions}
        [component {:data current-data :actions actions}]])))
