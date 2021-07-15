@@ -1,16 +1,13 @@
 @import "../../_list-items";
 
-$width: 200px;
-$height: 212px;
-
-$hover-increase: 0.3;
-
+$width: 100%;
+$height: 120px;
+$hover-increase: 0.05;
 $border-radius: $card-border-radius;
 $border-width: $card-border-width;
 $padding: $card-padding;
-
 $preview-height: 100px;
-
+$preview-width:  150px;
 $description-collapsed-height: 60px;
 
 .templates-list-item-place-holder {
@@ -22,19 +19,8 @@ $description-collapsed-height: 60px;
 
      &:hover {
         width: (100% * (1 + $hover-increase));
-        height: auto;
         left: -0.5 * (100% * $hover-increase);
         z-index: 10;
-
-        .preview {
-            height: $preview-height * (1 + $hover-increase);
-        }
-
-        .description {
-            display: block;
-            height: auto;
-            -webkit-line-clamp: none;
-        }
     }
 
     &.selected {
@@ -47,37 +33,47 @@ $description-collapsed-height: 60px;
     color: #1D1D1F;
     font-weight: 500;
     font-size: 16px;
-    margin-bottom: $padding;
+    margin-bottom: 18px;
+    float: left;
+    width:calc( 100% - 175px );
+
+    span {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 .description {
     height: $description-collapsed-height;
-    display: -webkit-box;
+    margin-top: 20px;
+    font-weight: 400;
+    display: block;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-
     overflow: hidden;
-
     background-color: #fff;
 }
 
 .preview-button {
     float: right;
-    margin-top: $padding;
+    margin-left: 5px;
+}
+
+.title-button{
+    float: right;
 }
 
 .preview {
     position: relative;
+    float: left;
     height: $preview-height;
-
+    width: $preview-width;
     background-size: cover;
     background-position: center;
-    margin-top: -$padding;
-    margin-left: -$padding;
-    margin-right: -$padding;
-    margin-bottom: $padding;
-
-    border-radius: ($border-radius - $border-width) ($border-radius - $border-width) 0 0;
+    margin-right: $padding;
+    border-radius: ($border-radius - $border-width) ($border-radius - $border-width) ($border-radius - $border-width) ($border-radius - $border-width);
 
     &.placeholder {
         @include image-placeholder($message: "No Preview");
@@ -86,3 +82,11 @@ $description-collapsed-height: 60px;
 
     @import "styles-preview";
 }
+
+.clearfix::before, .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+    position:relative;
+    width:100%;
+  }

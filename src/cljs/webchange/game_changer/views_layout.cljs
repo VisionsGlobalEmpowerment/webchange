@@ -4,7 +4,7 @@
     [webchange.ui-framework.components.index :refer [button timeline]]))
 
 (defn layout
-  [{:keys [title title-action timeline-items actions]
+  [{:keys [step-id title title-action timeline-items actions]
     :or   {actions []}}]
   (r/with-let [this (r/current-component)]
     [:div.game-changer-form
@@ -18,8 +18,12 @@
            (r/children this))
      [:div.actions
       (for [{:keys [id text handler props] :or {props {}}} actions]
-        ^{:key id}
-        [button (merge {:on-click handler
-                        :size     "big"}
-                       props)
-         text])]]))
+        (if
+         (and
+          (not= 1 step-id)
+          (not= 2 step-id))
+          ^{:key id}
+          [button (merge {:on-click handler
+                          :size     "big"}
+                         props)
+           text]))]]))
