@@ -1,10 +1,10 @@
 (ns webchange.game-changer.steps.select_template.views-list-item
   (:require
-   [reagent.core :as r]
-   [webchange.game-changer.steps.select_template.views-preview :refer [activity-preview]]
-   [webchange.editor-v2.layout.components.sandbox.create-link :refer [create-link]]
-   [webchange.ui-framework.components.index :refer [button]]
-   [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [reagent.core :as r]
+    [webchange.game-changer.steps.select_template.views-preview :refer [activity-preview]]
+    [webchange.editor-v2.layout.components.sandbox.create-link :refer [create-link]]
+    [webchange.ui-framework.components.index :refer [button]]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- preview-button
   [{:keys [activity-slug course-slug]}]
@@ -15,9 +15,7 @@
      "Preview"]))
 
 (defn- start-button
-  ;; [handler props]
   [props]
-  (js/console.log "props------------------->>>>>>>>" props)
   [button
    (merge {:class-name "preview-button"
            :on-click   (:on-click props)
@@ -53,7 +51,6 @@
           (when selected?
             (for [{:keys [id text handler props] :or {props {}}} actions]
               ^{:key id}
-              ;; [start-button handler props]
               [start-button (merge props {:on-click handler})]))]
          [:div.description.clearfix
           description]]]])))

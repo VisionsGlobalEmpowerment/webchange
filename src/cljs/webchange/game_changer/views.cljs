@@ -1,17 +1,17 @@
 (ns webchange.game-changer.views
   (:require
-   [reagent.core :as r]
-   [webchange.ui-framework.components.index :refer [button message timeline]]
-   [webchange.ui-framework.layout.views :refer [layout]]
-   [webchange.game-changer.views-layout :as game-changer]
-   [webchange.game-changer.steps.create-activity.index :as create-activity]
-   [webchange.game-changer.steps.fill-template.index :as fill-template]
-   [webchange.game-changer.steps.select-background.index :as select-background]
-   [webchange.game-changer.steps.select-background-music.index :as select-background-music]
-   [webchange.game-changer.steps.select-character.index :as select-character]
-   [webchange.game-changer.steps.select-template.index :as select-template]
-   [webchange.game-changer.steps.welcome-message.index :as welcome-message]
-   [webchange.logger.index :as logger]))
+    [reagent.core :as r]
+    [webchange.ui-framework.components.index :refer [button message timeline]]
+    [webchange.ui-framework.layout.views :refer [layout]]
+    [webchange.game-changer.views-layout :as game-changer]
+    [webchange.game-changer.steps.create-activity.index :as create-activity]
+    [webchange.game-changer.steps.fill-template.index :as fill-template]
+    [webchange.game-changer.steps.select-background.index :as select-background]
+    [webchange.game-changer.steps.select-background-music.index :as select-background-music]
+    [webchange.game-changer.steps.select-character.index :as select-character]
+    [webchange.game-changer.steps.select-template.index :as select-template]
+    [webchange.game-changer.steps.welcome-message.index :as welcome-message]
+    [webchange.logger.index :as logger]))
 
 (def game-changer-steps [welcome-message/data
                          select-template/data

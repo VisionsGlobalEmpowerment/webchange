@@ -1,7 +1,7 @@
 (ns webchange.game-changer.views-layout
   (:require
-   [reagent.core :as r]
-   [webchange.ui-framework.components.index :refer [button timeline]]))
+    [reagent.core :as r]
+    [webchange.ui-framework.components.index :refer [button timeline]]))
 
 (defn layout
   [{:keys [step-id title title-action timeline-items actions]
