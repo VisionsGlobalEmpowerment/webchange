@@ -60,15 +60,18 @@
         object-name (str "uploaded-image-" image-idx)
         show-action-name (str "show-uploaded-image-" image-idx)
         hide-action-name (str "hide-uploaded-image-" image-idx)
-        image-object {:type    "image"
-                      :alias   name
-                      :links   [{:type "action" :id show-action-name}
-                                {:type "action" :id hide-action-name}]
-                      :src     (:src image)
-                      :origin  {:type "center-center"}
-                      :x       960
-                      :y       540
-                      :visible false}
+        image-object {:type      "image"
+                      :alias     name
+                      :links     [{:type "action" :id show-action-name}
+                                  {:type "action" :id hide-action-name}]
+                      :src       (:src image)
+                      :origin    {:type "center-center"}
+                      :x         960
+                      :y         540
+                      :visible   false
+                      :editable? {:select        true
+                                  :drag          true
+                                  :show-in-tree? true}}
         show-action {:type "set-attribute" :attr-name "visible", :attr-value true :target object-name}
         hide-action {:type "set-attribute" :attr-name "visible", :attr-value false :target object-name}
         available-actions [{:action show-action-name
