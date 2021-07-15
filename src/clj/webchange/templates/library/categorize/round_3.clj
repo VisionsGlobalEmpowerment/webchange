@@ -14,19 +14,15 @@
                        :objects       {:layered-background {:type       "layered-background",
                                                             :background {:src "/raw/img/categorize/background-3.png"},
                                                             :surface    {:src "/raw/img/categorize/02.png"},
-                                                            :decoration {:src "/raw/img/categorize/03.png"}
-                                                            }
-                                       :yellow-group       {
-                                                            :type       "group",
+                                                            :decoration {:src "/raw/img/categorize/03.png"}}
+                                       :yellow-group       {:type       "group",
                                                             :children   [],
                                                             :draggable  true,
                                                             :transition "yellow-group",
                                                             :states     {:group-all {:children ["yellow-box" "yellow-crayon"]}
-                                                                         :ungroup   {:children []}
-                                                                         :hidden    {:visible false}},
+                                                                         :ungroup   {:children []}},
 
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
+                                                            :actions    {:drag-start {:type   "action",
                                                                                       :on     "drag-start",
                                                                                       :id     "start-drag",
                                                                                       :params {:colliders ["blue-box" "red-box"
@@ -35,14 +31,11 @@
                                                                                                :self      "yellow-group"
                                                                                                :crayon    "yellow-crayon"
                                                                                                :say-color "yellow-group"
-                                                                                               :target        "purple-table"
-                                                                                               }}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
+                                                                                               :target        "purple-table"}}
+                                                                         :drag-end   {:id     "stop-drag-hide",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["blue-box" "red-box"
+                                                                                      :params {:colliders     ["blue-box" "red-box"
                                                                                                                "purple-table" "orange-table"
                                                                                                                "green-table"]
                                                                                                :self          "yellow-group"
@@ -50,11 +43,8 @@
                                                                                                :crayon        "yellow-crayon"
                                                                                                :init-position {:x        100,
                                                                                                                :y        600,
-                                                                                                               :duration 1}}}},
-
-                                                            }
-                                       :yellow-group-1     {
-                                                            :type       "group",
+                                                                                                               :duration 1}}}}}
+                                       :yellow-group-1     {:type       "group",
                                                             :children   [],
                                                             :draggable  true,
                                                             :transition "yellow-group-1",
@@ -163,50 +153,26 @@
                                                            {:type       "image",
                                                             :x          943,
                                                             :y          628,
-                                                            :width      151,
-                                                            :height     193,
-                                                            :src        "/raw/img/categorize/yellow_box_small.png",
-                                                            :transition "yellow-box",
-                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :init-position {:x 943, :y 628, :visible true}
-                                                                         },
-                                                            },
+                                                            :src        "/raw/img/categorize/yellow_box_small.png"}
                                        :blue-box           {:type       "image",
                                                             :x          1352,
                                                             :y          490,
-                                                            :width      151,
-                                                            :height     193,
-                                                            :transition "blue-box",
-                                                            :src        "/raw/img/categorize/blue_box_small.png",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
+                                                            :src        "/raw/img/categorize/blue_box_small.png"}
                                        :red-box            {:type       "image",
                                                             :x          500,
                                                             :y          506,
-                                                            :width      151,
-                                                            :height     193,
-                                                            :scale      1,
-                                                            :transition "red-box",
-                                                            :src        "/raw/img/categorize/red_box_small.png",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            },
-                                       :red-crayon         {
-                                                            :type       "image",
+                                                            :src        "/raw/img/categorize/red_box_small.png"},
+                                       :red-crayon         {:type       "image",
                                                             :x          776,
                                                             :y          501,
-                                                            :width      23,
-                                                            :height     224,
                                                             :rotation   -90,
+                                                            :scale 0.35
                                                             :src        "/raw/img/categorize/red_crayons.png",
-                                                            :transition "red-crayon",
-                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden        {:visible false}, :init-position {:x 776,
+                                                            :states     {:hidden        {:visible false}, :init-position {:x 776,
                                                                                                                           :y 501,}
-                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                         },
+                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}},
                                                             :draggable  true,
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
+                                                            :actions    {:drag-start {:type   "action",
                                                                                       :on     "drag-start",
                                                                                       :id     "start-drag",
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
@@ -214,36 +180,28 @@
                                                                                                            "green-table"]
                                                                                                :self      "red-crayon"
                                                                                                :say-color "red-color"
-                                                                                               :target        "red-box"
-                                                                                               }}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
+                                                                                               :target        "red-box"}}
+                                                                         :drag-end   {:id     "stop-drag-hide",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["yellow-box" "blue-box" "red-box"
+                                                                                      :params {:colliders     ["yellow-box" "blue-box" "red-box"
                                                                                                                "purple-table" "orange-table"
                                                                                                                "green-table"]
                                                                                                :self          "red-crayon"
                                                                                                :target        "red-box"
                                                                                                :init-position {:x        776,
                                                                                                                :y        501,
-                                                                                                               :duration 1}}}},},
-                                       :purple-crayon      {
-                                                            :type       "image",
+                                                                                                               :duration 1}}}}}
+                                       :purple-crayon      {:type       "image",
                                                             :x          60,
                                                             :y          1054,
-                                                            :width      221.64,
-                                                            :height     23,
+                                                            :rotation 90
+                                                            :scale 0.35
                                                             :src        "/raw/img/categorize/purple_crayons.png",
-                                                            :transition "purple-crayon",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden      {:visible false}, :init-position {:x 60,
-                                                                                                                        :y 1054,}
-                                                                         },
+                                                            :states     {:hidden      {:visible false}, :init-position {:x 60,
+                                                                                                                        :y 1054}},
                                                             :draggable  true,
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
+                                                            :actions    {:drag-start {:type   "action",
                                                                                       :on     "drag-start",
                                                                                       :id     "start-drag",
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
@@ -251,39 +209,29 @@
                                                                                                            "green-table"]
                                                                                                :self      "purple-crayon"
                                                                                                :say-color "purple-color"
-                                                                                               :target        "purple-table"
-                                                                                               }}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
+                                                                                               :target        "purple-table"}}
+                                                                         :drag-end   {:id     "stop-drag-hide",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["yellow-box" "blue-box" "red-box"
+                                                                                      :params {:colliders     ["yellow-box" "blue-box" "red-box"
                                                                                                                "purple-table" "orange-table"
                                                                                                                "green-table"]
                                                                                                :self          "purple-crayon"
                                                                                                :target        "purple-table"
                                                                                                :init-position {:x        60,
                                                                                                                :y        1054,
-                                                                                                               :duration 1}}}}
-                                                            },
-                                       :yellow-crayon      {
-                                                            :type       "image",
+                                                                                                               :duration 1}}}}}
+                                       :yellow-crayon      {:type       "image",
                                                             :x          154,
                                                             :y          139,
-                                                            :width      22.9,
-                                                            :height     224,
                                                             :rotation   -90,
+                                                            :scale 0.35
                                                             :src        "/raw/img/categorize/yellow_crayons.png",
-                                                            :transition "yellow-crayon",
-                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden        {:visible false}, :init-position {:x 154,
+                                                            :states     {:hidden        {:visible false}, :init-position {:x 154,
                                                                                                                           :y 139, :visible true}
-                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                         },
+                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}},
                                                             :draggable  true,
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
+                                                            :actions    {:drag-start {:type   "action",
                                                                                       :on     "drag-start",
                                                                                       :id     "start-drag",
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
@@ -291,37 +239,28 @@
                                                                                                            "green-table"]
                                                                                                :say-color "yellow-color"
                                                                                                :self      "yellow-crayon"
-                                                                                               :target        "yellow-box"
-                                                                                               }}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
+                                                                                               :target        "yellow-box"}}
+                                                                         :drag-end   {:id     "stop-drag-hide",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["yellow-box" "blue-box" "red-box"
+                                                                                      :params {:colliders     ["yellow-box" "blue-box" "red-box"
                                                                                                                "purple-table" "orange-table"
                                                                                                                "green-table"]
                                                                                                :self          "yellow-crayon"
                                                                                                :target        "yellow-box"
                                                                                                :init-position {:x        154,
                                                                                                                :y        139,
-                                                                                                               :duration 1}}}}
-                                                            },
-                                       :green-crayon       {
-                                                            :type       "image",
+                                                                                                               :duration 1}}}}}
+                                       :green-crayon       {:type       "image",
                                                             :x          19,
                                                             :y          463,
-                                                            :width      221.64,
-                                                            :height     23,
+                                                            :rotation 90
+                                                            :scale 0.35
                                                             :src        "/raw/img/categorize/green_crayons.png",
-                                                            :transition "green-crayon",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden      {:visible false}, :init-position {:x 19,
-                                                                                                                        :y 463,}
-                                                                         },
+                                                            :states     {:hidden      {:visible false}, :init-position {:x 19,
+                                                                                                                        :y 463}},
                                                             :draggable  true,
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
+                                                            :actions    {:drag-start {:type   "action",
                                                                                       :on     "drag-start",
                                                                                       :id     "start-drag",
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
@@ -329,40 +268,29 @@
                                                                                                            "green-table"]
                                                                                                :self      "green-crayon"
                                                                                                :say-color "green-color"
-                                                                                               :target        "green-table"
-                                                                                               }}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
+                                                                                               :target        "green-table"}}
+                                                                         :drag-end   {:id     "stop-drag-hide",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["yellow-box" "blue-box" "red-box"
+                                                                                      :params {:colliders     ["yellow-box" "blue-box" "red-box"
                                                                                                                "purple-table" "orange-table"
                                                                                                                "green-table"]
                                                                                                :self          "green-crayon"
                                                                                                :target        "green-table"
                                                                                                :init-position {:x        19,
                                                                                                                :y        463,
-                                                                                                               :duration 1}}}}
-                                                            },
-                                       :blue-crayon        {
-                                                            :type       "image",
+                                                                                                               :duration 1}}}}}
+                                       :blue-crayon        {:type       "image",
                                                             :x          1611,
                                                             :y          440,
-                                                            :width      23,
-                                                            :height     224,
                                                             :rotation   -90,
                                                             :scale      0.35,
                                                             :src        "/raw/img/categorize/blue_crayons.png",
-                                                            :transition "blue-crayon",
-                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden        {:visible false}, :init-position {:x 1611,
+                                                            :states     {:hidden        {:visible false}, :init-position {:x 1611,
                                                                                                                           :y 440,}
-                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                         },
+                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}},
                                                             :draggable  true,
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
+                                                            :actions    {:drag-start {:type   "action",
                                                                                       :on     "drag-start",
                                                                                       :id     "start-drag",
                                                                                       :params {:colliders ["yellow-box" "blue-box" "red-box"
@@ -370,34 +298,27 @@
                                                                                                            "green-table"]
                                                                                                :self      "blue-crayon"
                                                                                                :say-color "blue-color"
-                                                                                               :target        "blue-box"
-                                                                                               }}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
+                                                                                               :target        "blue-box"}}
+                                                                         :drag-end   {:id     "stop-drag-hide",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["yellow-box" "blue-box" "red-box"
+                                                                                      :params {:colliders     ["yellow-box" "blue-box" "red-box"
                                                                                                                "purple-table" "orange-table"
                                                                                                                "green-table"]
                                                                                                :self          "blue-crayon"
                                                                                                :target        "blue-box"
                                                                                                :init-position {:x        1611,
                                                                                                                :y        440,
-                                                                                                               :duration 1}}}}
-                                                            },
-                                       :orange-crayon      {
-                                                            :type       "image",
+                                                                                                               :duration 1}}}}}
+                                       :orange-crayon      {:type       "image",
                                                             :x          1495,
                                                             :y          914,
-                                                            :width      224,
-                                                            :height     23,
+                                                            :rotation 90
+                                                            :scale 0.35
                                                             :src        "/raw/img/categorize/orange_crayons.png",
-                                                            :transition "orange-crayon",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
                                                                          :hidden      {:visible false}, :init-position {:x 1495,
-                                                                                                                        :y 914,}
-                                                                         },
+                                                                                                                        :y 914,}}
                                                             :draggable  true,
                                                             :actions    {:drag-start {
                                                                                       :type   "action",
@@ -422,40 +343,25 @@
                                                                                                :target        "orange-table"
                                                                                                :init-position {:x        1495,
                                                                                                                :y        914,
-                                                                                                               :duration 1}}}}
-                                                            },
+                                                                                                               :duration 1}}}}}
                                        :purple-table
                                                            {:type       "image",
                                                             :x          1120,
                                                             :y          652,
-                                                            :width      547,
-                                                            :height     297,
                                                             :src        "/raw/img/categorize/purple_table.png",
-                                                            :transition "purple-table",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},}
                                        :green-table
                                                            {:type       "image",
                                                             :x          330,
                                                             :y          667,
-                                                            :width      547,
-                                                            :height     297,
                                                             :src        "/raw/img/categorize/green_table.png",
-                                                            :transition "green-table",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},}
                                        :orange-table
                                                            {:type       "image",
                                                             :x          745,
                                                             :y          773,
-                                                            :width      547,
-                                                            :height     297,
                                                             :src        "/raw/img/categorize/orange_table.png",
-                                                            :transition "orange-table",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
-
-                                       },
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},}},
 
                        :scene-objects [["layered-background"]
                                        ["purple-table" "green-table" "orange-table"]
@@ -495,9 +401,6 @@
                                                                             {:type        "state",
                                                                              :id          "init-position"
                                                                              :from-params [{:action-property "target" :param-property "self"}]}
-                                                                            ;{:type        "state"
-                                                                            ; :id          "hidden"
-                                                                            ; :from-params [{:action-property "target" :param-property "self"}]}
                                                                             {:type "action"
                                                                              :id   "correct-answer-dialog"}
                                                                             {:type     "action"
@@ -534,26 +437,15 @@
                                                                             ]
                                                                      },
                                        :blink-objects               {:type "sequence-data"
-                                                                     :data [
-                                                                            {:type     "state"
-                                                                             :id       "highlighted"
-                                                                             :from-var [{:var-name "object-1", :action-property "target"}]
-                                                                             }
-                                                                            {:type     "state"
-                                                                             :id       "highlighted"
-                                                                             :from-var [{:var-name "object-2", :action-property "target"}]
-                                                                             }
+                                                                     :data [{:type     "set-attribute" :attr-name "highlight" :attr-value true
+                                                                             :from-var [{:var-name "object-1", :action-property "target"}]}
+                                                                            {:type     "set-attribute" :attr-name "highlight" :attr-value true
+                                                                             :from-var [{:var-name "object-2", :action-property "target"}]}
                                                                             {:type "empty", :duration 2000}
-                                                                            {:type     "state"
-                                                                             :id       "not-highlighted"
-                                                                             :from-var [{:var-name "object-1", :action-property "target"}]
-                                                                             }
-                                                                            {:type     "state"
-                                                                             :id       "not-highlighted"
-                                                                             :from-var [{:var-name "object-2", :action-property "target"}]
-                                                                             }
-                                                                            ]
-                                                                     },
+                                                                            {:type     "set-attribute" :attr-name "highlight" :attr-value false
+                                                                             :from-var [{:var-name "object-1", :action-property "target"}]}
+                                                                            {:type     "set-attribute" :attr-name "highlight" :attr-value false
+                                                                             :from-var [{:var-name "object-2", :action-property "target"}]}]}
                                        :wrong-answer                {:type "sequence-data"
                                                                      :data [{:type "action", :id "object-revert"}
                                                                             {:type           "counter"
@@ -647,34 +539,24 @@
                                                                              :var-value   true
                                                                              :from-params [{:action-property "var-name",
                                                                                             :template        "colliding-raw-%",
-                                                                                            :param-property  "transition"}]
-                                                                             }
-                                                                            {:type        "state"
-                                                                             :id          "highlighted"
-                                                                             :from-params [{:action-property "target" :param-property "transition"}]
-                                                                             }
-
+                                                                                            :param-property  "transition"}]}
+                                                                            {:type        "set-attribute" :attr-name "highlight" :attr-value true
+                                                                             :from-params [{:action-property "target" :param-property "transition"}]}
                                                                             {:type        "test-var-scalar",
                                                                              :success     "wrong-answer-dialog",
                                                                              :value false
                                                                              :from-params [{:action-property "var-name",
                                                                                             :template        "colliding-raw-%",
-                                                                                            :param-property  "target"}]},
-
-                                                                            ]
-                                                                     }
+                                                                                            :param-property  "target"}]}]}
                                        :unhighlight                 {:type "sequence-data"
                                                                      :data [
                                                                             {:type        "set-variable",
                                                                              :var-value   false
                                                                              :from-params [{:action-property "var-name",
                                                                                             :template        "colliding-raw-%",
-                                                                                            :param-property  "transition"}]
-                                                                             }
-                                                                            {:type        "state"
-                                                                             :id          "not-highlighted"
+                                                                                            :param-property  "transition"}]}
+                                                                            {:type        "set-attribute" :attr-name "highlight" :attr-value false
                                                                              :from-params [{:action-property "target" :param-property "transition"}]}]}
-
                                        :intro                       {:type               "sequence-data",
                                                                      :editor-type        "dialog",
                                                                      :data               [{:type "sequence-data"

@@ -251,9 +251,8 @@
 (re-frame/reg-event-fx
   ::stop-audio-recording-success
   (fn [{:keys [_]} [_ var-name on-ended {:keys [url]}]]
-    {:dispatch       [::vars.events/execute-set-variable {:var-name  var-name
-                                                          :var-value url}]
-     :load-resources {:urls     [url]
+    (vars.core/set-variable! var-name url)
+    {:load-resources {:urls     [url]
                       :on-ended on-ended}}))
 
 (re-frame/reg-fx
