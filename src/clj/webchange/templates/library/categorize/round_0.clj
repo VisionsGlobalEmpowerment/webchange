@@ -42,8 +42,10 @@
                        :scene-objects [["layered-background"]
                                        ["yellow-table" "blue-table" "red-table"]
                                        ["librarian"]]
-                       :actions       {:init-activity {:type "sequence",
-                                                       :data ["voiceover" "next-round"]}
+                       :actions       {:init-activity {:type "sequence-data",
+                                                       :data [{:type "start-activity"}
+                                                              {:type "action" :id "voiceover"}
+                                                              {:type "action" :id "next-round"}]}
                                        :voiceover     {:type               "sequence-data",
                                                        :editor-type        "dialog",
                                                        :data               [{:type "sequence-data"
@@ -51,10 +53,11 @@
                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                        :phrase             "Introduce Game",
                                                        :phrase-description "Introduce Game"}
-                                       :stop-activity {:type "stop-activity", :id "categorize"},
+                                       :stop-activity {:type "stop-activity"},
+                                       :finish-activity {:type "finish-activity"}
                                        :next-round    {:type "action" :id "finish-scene"}
                                        :finish-scene  {:type "sequence",
-                                                       :data ["stop-activity"]}}
+                                                       :data ["finish-activity"]}}
 
                        :triggers
                                       {:back  {:on "back", :action "stop-activity"},

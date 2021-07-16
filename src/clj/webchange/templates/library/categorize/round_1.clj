@@ -414,17 +414,19 @@
                                        ["yellow-crayon-3" "red-crayon-3" "blue-crayon-3"]
                                        ["green-crayon-3" "orange-crayon-3" "purple-crayon-3"]
                                        ],
-                       :actions       {:crayon-in-right-box {:type        "set-attribue", :attr-name "visible" :attr-value false
+                       :actions       {:crayon-in-right-box {:type        "set-attribute", :attr-name "visible" :attr-value false
                                                              :from-params [{:action-property "target" :param-property "target"}]},
                                        :crayon-revert       {:type        "transition",
                                                              :from-params [{:action-property "transition-id" :param-property "target"}
                                                                            {:action-property "to" :param-property "init-position"}]}
-                                       :wrong-option        {:type "sequence-data",
-                                                             :data [{:id "crayon-revert", :type "action"}
+                                       :wrong-option        {:type "parallel",
+                                                             :data [{:id "unhighlight-all" :type "action"}
+                                                                    {:id "crayon-revert", :type "action"}
                                                                     {:id "wrong-answer", :type "action"}],}
 
                                        :correct-option      {:type "sequence-data",
-                                                             :data [{:type "counter" :counter-action "increase" :counter-id "sorted-crayons"}
+                                                             :data [{:id "unhighlight-all" :type "action"}
+                                                                    {:type "counter" :counter-action "increase" :counter-id "sorted-crayons"}
                                                                     {:id "crayon-in-right-box", :type "action"}
                                                                     {:id "correct-answer", :type "action"}
                                                                     {:type       "test-var-inequality"
@@ -433,10 +435,6 @@
                                                                      :inequality ">=",
                                                                      :success    "finish-scene",
                                                                      :fail       "continue-sorting"}]}
-                                       :check-option        {:type      "test-var-list-at-least-one-true"
-                                                             :var-names ["yellow-box-selected" "blue-box-selected" "red-box-selected"
-                                                                         "purple-box-selected" "orange-box-selected" "green-box-selected"]
-                                                             :success   "wrong-answer",}
                                        :drag-crayon         {:type "sequence-data"
                                                              :data [{:type        "copy-variable",
                                                                      :var-name    "current-selection-state"
@@ -446,26 +444,28 @@
                                                                     {:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                                     {:type     "test-var-scalar",
                                                                      :success  "correct-option",
-                                                                     :fail     "crayon-revert",
+                                                                     :fail     "wrong-option",
                                                                      :value    true,
                                                                      :var-name "current-selection-state"}]}
                                        :highlight           {:type "sequence-data"
                                                              :data [{:type        "set-variable",
                                                                      :var-value   true
                                                                      :from-params [{:action-property "var-name" :param-property "check-variable"}]}
-                                                                    {:type        "set-attribue" :attr-name "highlight" :attr-value true
-                                                                     :from-params [{:action-property "target" :param-property "transition"}]}
-                                                                    {:type        "test-var-scalar",
-                                                                     :success     "check-option",
-                                                                     :value       false,
-                                                                     :from-params [{:template        "%-box-selected"
-                                                                                    :action-property "var-name" :param-property "crayon-color"}]}]}
+                                                                    {:type        "set-attribute" :attr-name "highlight" :attr-value true
+                                                                     :from-params [{:action-property "target" :param-property "transition"}]}]}
                                        :unhighlight         {:type "sequence-data"
                                                              :data [{:type        "set-variable",
                                                                      :var-value   false
                                                                      :from-params [{:action-property "var-name" :param-property "check-variable"}]}
-                                                                    {:type        "set-attribue" :attr-name "highlight" :attr-value false
+                                                                    {:type        "set-attribute" :attr-name "highlight" :attr-value false
                                                                      :from-params [{:action-property "target" :param-property "transition"}]}]}
+                                       :unhighlight-all     {:type "parallel"
+                                                             :data [{:type "set-attribute" :attr-name "highlight" :attr-value false :target "yellow-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "blue-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "red-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "purple-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "orange-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "green-box"}]}
                                        :next-check-collide  {:type "sequence-data"
                                                              :data [{:type     "set-timeout"
                                                                      :action   "check-collide"
@@ -550,7 +550,7 @@
                                        :finish-scene        {:type "sequence-data",
                                                              :data [{:type "action" :id "finish-dialog"}
                                                                     {:type "set-variable", :var-name "next-check-collide", :var-value false}
-                                                                    {:type "action", :id "stop-activity"}]}
+                                                                    {:type "action", :id "finish-activity"}]}
                                        :finish-dialog       {:type               "sequence-data",
                                                              :editor-type        "dialog",
                                                              :data               [{:type "sequence-data"
@@ -565,7 +565,8 @@
                                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                              :phrase             "continue-sorting",
                                                              :phrase-description "Continue sorting"}
-                                       :stop-activity       {:type "stop-activity", :id "categorize"}}
+                                       :stop-activity       {:type "stop-activity"}
+                                       :finish-activity     {:type "finish-activity"}}
                        :triggers
                                       {:back  {:on "back", :action "stop-activity"},
                                        :start {:on "start", :action "init-activity"}},

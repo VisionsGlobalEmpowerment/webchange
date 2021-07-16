@@ -844,9 +844,11 @@
      :id     'wand_hit',
      :track  2
      :loop   true}"
-    (let [scene-id (:current-scene db)]
+    (let [scene-id (:current-scene db)
+          animation-wrapper (or (get-in db [:scenes scene-id :animations (:target action)])
+                                (->> (:target action) keyword (scene/get-scene-object db)))]
       {:switch-animation (-> action
-                             (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+                             (assoc :state animation-wrapper))
        :dispatch-n       (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -897,9 +899,11 @@
      :target 'box1',
      :id     'idle2',
      :loop   true}"
-    (let [scene-id (:current-scene db)]
+    (let [scene-id (:current-scene db)
+          animation-wrapper (or (get-in db [:scenes scene-id :animations (:target action)])
+                                (->> (:target action) keyword (scene/get-scene-object db)))]
       {:add-animation (-> action
-                          (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+                          (assoc :state animation-wrapper))
        :dispatch-n    (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -915,8 +919,9 @@
     {:type   'start-animation',
      :target 'book'}"
     (let [scene-id (:current-scene db)
-          state (get-in db [:scenes scene-id :animations (:target action)])]
-      (w/start-animation state)
+          animation-wrapper (or (get-in db [:scenes scene-id :animations (:target action)])
+                                (->> (:target action) keyword (scene/get-scene-object db)))]
+      (w/start-animation animation-wrapper)
       {:dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -931,9 +936,10 @@
     Example:
     {:type   'remove-animation'
      :target 'book'}"
-    (let [scene-id (:current-scene db)]
-      {:remove-animation (-> action
-                             (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+    (let [scene-id (:current-scene db)
+          animation-wrapper (or (get-in db [:scenes scene-id :animations (:target action)])
+                                (->> (:target action) keyword (scene/get-scene-object db)))]
+      {:remove-animation (-> action (assoc :state animation-wrapper))
        :dispatch-n       (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -949,9 +955,10 @@
     {:type   'set-skin',
      :target 'senoravaca'
      :skin   'idle'}"
-    (let [scene-id (:current-scene db)]
-      {:set-skin   (-> action
-                       (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+    (let [scene-id (:current-scene db)
+          animation-wrapper (or (get-in db [:scenes scene-id :animations (:target action)])
+                                (->> (:target action) keyword (scene/get-scene-object db)))]
+      {:set-skin   (-> action (assoc :state animation-wrapper))
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -971,18 +978,20 @@
      :slot-name  'box1',
      :image      '/raw/img/elements/axe.png'
      :attachment {:x 40, :scale-x 4, :scale-y 4}}"
-    (let [scene-id (:current-scene db)]
-      {:set-slot   (-> action
-                       (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+    (let [scene-id (:current-scene db)
+          animation-wrapper (or (get-in db [:scenes scene-id :animations (:target action)])
+                                (->> (:target action) keyword (scene/get-scene-object db)))]
+      {:set-slot   (-> action (assoc :state animation-wrapper))
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-set-animation-props
   (fn [{:keys [db]} [_ action]]
     "Execute `animation-props` action - set properties of `animation` component. Deprecated. Use `set-attribute` instead."
-    (let [scene-id (:current-scene db)]
-      {:animation-props (-> action
-                            (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+    (let [scene-id (:current-scene db)
+          animation-wrapper (or (get-in db [:scenes scene-id :animations (:target action)])
+                                (->> (:target action) keyword (scene/get-scene-object db)))]
+      {:animation-props (-> action (assoc :state animation-wrapper))
        :dispatch-n      (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx

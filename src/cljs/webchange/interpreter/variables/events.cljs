@@ -23,9 +23,6 @@
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :calc ::execute-calc)
 (e/reg-simple-executor :string-operation ::execute-string-operation)
-;(e/reg-simple-executor :set-variable ::execute-set-variable)
-
-
 (e/reg-simple-executor :set-random ::execute-set-random)
 (e/reg-simple-executor :set-variable-list ::execute-set-variable-list)
 (e/reg-simple-executor :set-progress ::execute-set-progress)

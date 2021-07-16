@@ -9,11 +9,11 @@
   (create-wrapper {:name             name
                    :type             type
                    :object           container
-                   :set-highlight           (fn [highlight]
-                                              (let [highlight-filter-set (f/has-filter-by-name spine-object "glow")]
-                                                (if (and (not highlight) highlight-filter-set) (f/set-filter spine-object "" {}))
-                                                (if (and highlight (not highlight-filter-set))
-                                                  (f/set-filter spine-object "glow" {}))))
+                   :set-highlight    (fn [highlight]
+                                       (let [highlight-filter-set (f/has-filter-by-name spine-object "glow")]
+                                         (if (and (not highlight) highlight-filter-set) (f/set-filter spine-object "" {}))
+                                         (if (and highlight (not highlight-filter-set))
+                                           (f/set-filter spine-object "glow" {}))))
                    :set-slot         (fn [slot-name image-src slot-params]
                                        ;; ToDo: Remove double set-animation-slot call
                                        ;; Without this slot is not updated if new skin is created inside the method
@@ -23,6 +23,9 @@
                                        (utils/set-animation-slot image-src spine-object slot-name slot-params))
                    :set-skin         (fn [skin-name]
                                        (utils/set-skin spine-object skin-name))
+                   :set-combined-skin
+                                     (fn [skin-names]
+                                       (utils/set-combined-skin spine-object skin-names))
                    :add-animation    (fn [track animation-name loop? delay]
                                        (utils/add-animation spine-object animation-name {:track-index track
                                                                                          :delay       delay

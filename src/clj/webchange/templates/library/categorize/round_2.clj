@@ -89,7 +89,7 @@
                                                                                               :check-variable "blue-box-selected"}}}},
                                        :blue-crayon-3      {:type      "image",
                                                             :x         17,
-                                                            :y         438,
+                                                            :y         143,
                                                             :rotation  -90,
                                                             :scale     0.35,
                                                             :src       "/raw/img/categorize/blue_crayons.png",
@@ -105,11 +105,11 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "blue-box"
                                                                                               :target         "blue-crayon-3"
-                                                                                              :init-position  {:x 17, :y 438, :duration 1}
+                                                                                              :init-position  {:x 17, :y 143, :duration 1}
                                                                                               :check-variable "blue-box-selected"}}}},
 
                                        :orange-crayon-1    {:type      "image",
-                                                            :x         46,
+                                                            :x         746,
                                                             :y         850,
                                                             :scale     0.35
                                                             :rotation  90
@@ -126,10 +126,10 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "orange-table"
                                                                                               :target         "orange-crayon-1"
-                                                                                              :init-position  {:x 46, :y 850, :duration 1}
+                                                                                              :init-position  {:x 746, :y 850, :duration 1}
                                                                                               :check-variable "orange-table-selected"}}}},
                                        :orange-crayon-2    {:type      "image",
-                                                            :x         692,
+                                                            :x         892,
                                                             :y         400,
                                                             :scale     0.35
                                                             :rotation  90
@@ -146,11 +146,11 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "orange-table"
                                                                                               :target         "orange-crayon-2"
-                                                                                              :init-position  {:x 692, :y 400, :duration 1}
+                                                                                              :init-position  {:x 892, :y 400, :duration 1}
                                                                                               :check-variable "orange-table-selected"}}}},
                                        :orange-crayon-3    {:type      "image",
-                                                            :x         117,
-                                                            :y         338,
+                                                            :x         317,
+                                                            :y         238,
                                                             :scale     0.35
                                                             :rotation  90
                                                             :src       "/raw/img/categorize/orange_crayons.png",
@@ -166,7 +166,7 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "orange-table"
                                                                                               :target         "orange-crayon-3"
-                                                                                              :init-position  {:x 117, :y 338, :duration 1}
+                                                                                              :init-position  {:x 317, :y 238, :duration 1}
                                                                                               :check-variable "orange-table-selected"}}}},
 
                                        :yellow-crayon-1    {:type      "image",
@@ -247,7 +247,7 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "purple-table"
                                                                                               :target         "purple-crayon-1"
-                                                                                              :init-position  {:x 764, :y 691, :duration 1}
+                                                                                              :init-position  {:x 664, :y 541, :duration 1}
                                                                                               :check-variable "purple-table-selected"}}}},
                                        :purple-crayon-2    {:type      "image",
                                                             :x         1271,
@@ -267,7 +267,7 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "purple-table"
                                                                                               :target         "purple-crayon-2"
-                                                                                              :init-position  {:x 1171, :y 126, :duration 1}
+                                                                                              :init-position  {:x 1271, :y 236, :duration 1}
                                                                                               :check-variable "purple-table-selected"}}}},
                                        :purple-crayon-3    {:type      "image",
                                                             :x         1418,
@@ -287,7 +287,7 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "purple-table"
                                                                                               :target         "purple-crayon-3"
-                                                                                              :init-position  {:x 1618, :y 440, :duration 1}
+                                                                                              :init-position  {:x 1418, :y 310, :duration 1}
                                                                                               :check-variable "purple-table-selected"}}}},
                                        :red-crayon-1       {:type      "image",
                                                             :x         924,
@@ -387,7 +387,7 @@
                                                                                      :type   "action",
                                                                                      :params {:box            "green-table"
                                                                                               :target         "green-crayon-2"
-                                                                                              :init-position  {:x 1418, :y 981858, :duration 1}
+                                                                                              :init-position  {:x 1418, :y 818, :duration 1}
                                                                                               :check-variable "green-table-selected"}}}}
                                        :green-crayon-3     {:type      "image",
                                                             :x         1678,
@@ -410,7 +410,7 @@
                                                                                               :init-position  {:x 1678, :y 364, :duration 1}
                                                                                               :check-variable "green-table-selected"}}}}
                                        :librarian        {:type   "animation",
-                                                          :x      380,
+                                                          :x      250,
                                                           :y      1000,
                                                           :width  351,
                                                           :height 717,
@@ -435,11 +435,13 @@
                                        :crayon-revert                  {:type        "transition",
                                                                         :from-params [{:action-property "transition-id" :param-property "target"}
                                                                                       {:action-property "to" :param-property "init-position"}]}
-                                       :wrong-option                   {:type "sequence-data",
-                                                                        :data [{:id "crayon-revert", :type "action"}
+                                       :wrong-option                   {:type "parallel",
+                                                                        :data [{:id "unhighlight-all" :type "action"}
+                                                                               {:id "crayon-revert", :type "action"}
                                                                                {:id "wrong-answer", :type "action"}],}
                                        :correct-option                 {:type "sequence-data",
-                                                                        :data [{:type "counter" :counter-action "increase" :counter-id "sorted-crayons"}
+                                                                        :data [{:id "unhighlight-all" :type "action"}
+                                                                               {:type "counter" :counter-action "increase" :counter-id "sorted-crayons"}
                                                                                {:id "crayon-in-right-box", :type "action"}
                                                                                {:id "correct-answer", :type "action"}
                                                                                {:type       "test-var-inequality"
@@ -456,7 +458,7 @@
 
                                                                                {:type     "test-var-scalar",
                                                                                 :success  "correct-option",
-                                                                                :fail     "crayon-revert",
+                                                                                :fail     "wrong-option",
                                                                                 :value    true,
                                                                                 :var-name "current-selection-state"}]}
                                        :highlight                      {:type "sequence-data"
@@ -464,19 +466,20 @@
                                                                                 :var-value   true
                                                                                 :from-params [{:action-property "var-name" :param-property "check-variable"}]}
                                                                                {:type        "set-attribute" :attr-name "highlight" :attr-value true
-                                                                                :from-params [{:action-property "target" :param-property "transition"}]}
-                                                                               {:type        "test-var-scalar",
-                                                                                :success     "wrong-answer",
-                                                                                :value       false,
-                                                                                :from-params [{:template        "%-selected"
-                                                                                               :action-property "var-name" :param-property "crayon-target"}]}]}
+                                                                                :from-params [{:action-property "target" :param-property "transition"}]}]}
                                        :unhighlight                    {:type "sequence-data"
                                                                         :data [{:type        "set-variable",
                                                                                 :var-value   false
                                                                                 :from-params [{:action-property "var-name" :param-property "check-variable"}]}
                                                                                {:type        "set-attribute" :attr-name "highlight" :attr-value false
                                                                                 :from-params [{:action-property "target" :param-property "transition"}]}]}
-
+                                       :unhighlight-all     {:type "parallel"
+                                                             :data [{:type "set-attribute" :attr-name "highlight" :attr-value false :target "yellow-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "blue-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "red-box"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "purple-table"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "orange-table"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "green-table"}]}
                                        :next-check-collide             {:type "sequence-data"
                                                                         :data [{:type     "set-timeout"
                                                                                 :action   "check-collide"
@@ -554,8 +557,7 @@
                                                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                         :phrase             "wrong-answer",
                                                                         :phrase-description "wrong answer"}
-                                       :scene-question                 {
-                                                                        :type        "show-question"
+                                       :scene-question                 {:type        "show-question"
                                                                         :description "What is the same about these two groups?"
                                                                         :data        {:type       "type-1"
                                                                                       :text       "What is the same about these two groups?"
@@ -658,8 +660,9 @@
                                        :finish-scene                   {:type "sequence-data",
                                                                         :data [{:type "remove-interval"
                                                                                 :id   "check-collide-2"}
-                                                                               {:type "action", :id "stop-activity"}]}
-                                       :stop-activity                  {:type "stop-activity", :id "categorize"}}
+                                                                               {:type "action", :id "finish-activity"}]}
+                                       :finish-activity                {:type "finish-activity"}
+                                       :stop-activity                  {:type "stop-activity"}}
 
                        :triggers
                                       {:back  {:on "back", :action "stop-activity"},
