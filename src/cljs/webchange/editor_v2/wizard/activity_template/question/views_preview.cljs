@@ -1,4 +1,16 @@
-(ns webchange.editor-v2.wizard.activity-template.question.views-preview)
+(ns webchange.editor-v2.wizard.activity-template.question.views-preview
+  (:require
+    [webchange.ui-framework.components.index :refer [label]]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+
+(def default-option [{:img  "/images/questions/option1.png"
+                      :text "cow"}
+                     {:img  "/images/questions/option2.png"
+                      :text "deer"}
+                     {:img  "/images/questions/option3.png"
+                      :text "fox"}
+                     {:img  "/images/questions/option4.png"
+                      :text "skunk"}])
 
 (defn- play-audio
   []
@@ -12,23 +24,44 @@
    [play-audio]
    [:span "Who do you think the main character, or most important character is going to be in this book?"]])
 
+(defn- done-button
+  []
+  [:div.done-button
+   [:img {:src "/images/questions/done.png"}]])
+
 (defn- option
-  [{:keys [idx]}]
-  [:div.option
-   [:img {:src (str "/images/questions/option" idx ".png")}]])
+  [{:keys [idx option-label]}]
+  (let [{:keys [img text]} (nth default-option (dec idx))]
+    (into [:div {:class-name (get-class-name (-> {"option" true}
+                                                 (assoc (str "label--" option-label) true)))}]
+          (cond-> [[:img {:src img}]]
+                  (= option-label "audio") (conj [:div.option-label [play-audio]])
+                  (= option-label "audio-text") (conj [:div.option-label [play-audio] [:div.option-text text]])))))
 
 (defn- options
-  []
+  [{:keys [options-number] :as data}]
   [:div.options
-   (for [idx [1 2 3 4]]
+   (for [idx (->> (inc options-number)
+                  (range 1)
+                  (into []))]
      ^{:key idx}
-     [option {:idx idx}])])
+     [option (merge {:idx idx}
+                    data)])])
 
 (defn- primary-block
-  []
-  [:div.primary-block
-   [task]
-   [options]])
+  [{:keys [correct-answers-count layout task-type] :as data}]
+  (into [:div {:class-name (get-class-name {"primary-block" true
+                                            "done-in-row"   (and (= task-type "text-image")
+                                                                 (= layout "vertical")
+                                                                 (= correct-answers-count "multiple"))})}]
+        (cond-> (cond
+                  (= task-type "text") [[task] [options data]]
+                  (and (= task-type "text-image")
+                       (= layout "horizontal")) [[task] [options data]]
+                  (and (= task-type "text-image")
+                       (= layout "vertical")) [[options data]]
+                  :else [])
+                (= correct-answers-count "multiple") (conj [done-button]))))
 
 (defn- task-image
   []
@@ -36,18 +69,27 @@
    [:img {:src (str "/images/questions/question.png")}]])
 
 (defn- secondary-block
-  []
-  [:div.secondary-block
-   [task-image]])
+  [{:keys [layout]}]
+  (into [:div.secondary-block]
+        (case layout
+          "horizontal" [[task-image]]
+          "vertical" [[task-image]
+                      [task]]
+          [])))
 
 (defn- template
-  []
-  [:div.template
-   [secondary-block]
-   [primary-block]])
+  [{:keys [layout task-type] :as data}]
+  (into [:div {:class-name (get-class-name (-> {"template" true}
+                                               (assoc (str "type--" task-type) true)
+                                               (assoc (str "layout--" layout) true)))}]
+        (case task-type
+          "text" [[primary-block data]]
+          "text-image" [[secondary-block data]
+                        [primary-block data]]
+          [])))
 
 (defn question-preview
   [{:keys [data]}]
   (print "data" data)
   [:div.preview-wrapper
-   [template]])
+   [template data]])

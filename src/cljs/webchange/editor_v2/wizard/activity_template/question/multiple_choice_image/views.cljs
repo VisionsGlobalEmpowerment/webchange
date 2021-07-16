@@ -4,46 +4,34 @@
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
     [webchange.ui-framework.components.index :refer [label select]]))
 
-(defn- correct-answers-count
-  []
-  (r/with-let [value (r/atom :one)
-               handle-change #(reset! value %)
-               options [{:text  "One answer"
-                         :value "one"}
-                        {:text  "Multiple choice"
-                         :value "multiple"}]]
-    [:div.option-group
-     [label "Number of correct answers:"]
-     [select {:value     @value
-              :on-change handle-change
-              :options   options
-              :variant   "outlined"}]]))
-
-(def params {:task-type             {:label         "Task"
-                                     :default-value "text-image"
+(def params {:task-type             {:title         "Task"
+                                     :default-value "text"
                                      :options       [{:text  "Text with image"
                                                       :value "text-image"}
                                                      {:text  "Text only"
                                                       :value "text"}]}
-             :layout                {:label         "Layout"
-                                     :default-value "horizontal"
+             :layout                {:title         "Layout"
+                                     :default-value "vertical"
                                      :options       [{:text  "Horizontal"
                                                       :value "horizontal"}
                                                      {:text  "Vertical"
                                                       :value "vertical"}]}
-             :options-number        {:label         "Options number"
+             :options-number        {:title         "Options number"
                                      :default-value 2
+                                     :type          "int"
                                      :options       (map (fn [number]
                                                            {:text  number
                                                             :value number})
                                                          [2 3 4])}
-             :option-label          {:label         "Option label"
-                                     :default-value "audio"
+             :option-label          {:title         "Option label"
+                                     :default-value "none"
                                      :options       [{:text  "Audio only"
                                                       :value "audio"}
                                                      {:text  "Audio + text"
-                                                      :value "audio-text"}]}
-             :correct-answers-count {:label         "Number of correct answers"
+                                                      :value "audio-text"}
+                                                     {:text  "Empty"
+                                                      :value "none"}]}
+             :correct-answers-count {:title         "Number of correct answers"
                                      :default-value "one"
                                      :options       [{:text  "One answer"
                                                       :value "one"}
@@ -52,21 +40,21 @@
 
 (defn param-select
   [{:keys [data key]}]
-  (r/with-let [param-label (get-in params [key :label])
-               value (connect-data data [key] (get-in params [key :default-value]))
-               options (get-in params [key :options])
+  (r/with-let [{:keys [default-value options title type]} (get params key)
+               value (connect-data data [key] default-value)
                handle-change #(reset! value %)]
     [:div.option-group
-     [label param-label]
-     [select {:value     @value
-              :on-change handle-change
-              :options   options
-              :variant   "outlined"}]]))
+     [label {:class-name "label"} title]
+     [select (cond-> {:value     @value
+                      :on-change handle-change
+                      :options   options
+                      :variant   "outlined"}
+                     (some? type) (assoc :type type))]]))
 
 (defn multiple-choice-image
   [{:keys [data]}]
   (let [current-task-type (get-in @data [:task-type])]
-    [:div
+    [:div.options-groups
      [param-select {:key :task-type :data data}]
      (when (= current-task-type "text-image")
        [param-select {:key :layout :data data}])

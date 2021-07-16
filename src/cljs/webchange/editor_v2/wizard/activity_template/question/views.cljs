@@ -25,7 +25,6 @@
 
 (defn question-option
   [{:keys [key option data validator] :as props}]
-  ;(print "data" @data)
   (r/with-let [option-data (connect-data data [key] {})]
     (let [current-question-type (get @option-data :question-type)
           current-question-component (get-in question-types [current-question-type :component])]
