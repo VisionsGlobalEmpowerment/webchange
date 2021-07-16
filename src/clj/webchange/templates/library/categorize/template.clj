@@ -25,14 +25,12 @@
         pt (utils-merge/prepare-template template-round-1 "r1" [:say-color :target] [] [])
         pt1 (utils-merge/prepare-template template-round-2 "r2" [:say-color :target :box] [] [])
         pt2 (utils-merge/prepare-template template-round-3 "r3" [:say-color :target :self :colliders :crayon]
-                              ["object-1" "object-2" "check-collide" "group-name" "ungroup-object-1" "ungroup-object-2"]
-                              ["next-task" "correct-answer"])
-        rounds [
-                pt0
+                              ["object-1" "object-2" "check-collide"]
+                              ["next-task" "correct-answer" "instruction"])
+        rounds [pt0
                 pt
                 pt1
-                pt2
-                ]]
+                pt2]]
     (utils-merge/basic-merge rounds)))
 
 (defn f

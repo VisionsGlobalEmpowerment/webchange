@@ -23,7 +23,6 @@
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :calc ::execute-calc)
 (e/reg-simple-executor :string-operation ::execute-string-operation)
-(e/reg-simple-executor :set-variable ::execute-set-variable)
 (e/reg-simple-executor :set-random ::execute-set-random)
 (e/reg-simple-executor :set-variable-list ::execute-set-variable-list)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
@@ -66,10 +65,8 @@
     (core/set-variable! var-name (+ start (rand-int (- (inc end) start))))
     {:dispatch (e/success-event action)}))
 
-(re-frame/reg-event-fx
-  ::execute-set-variable
-  (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
-    "Execute `set-variable` action - allow to set value to corresponding variable.
+(defn execute-set-variable
+  "Execute `set-variable` action - allow to set value to corresponding variable.
 
     Action params:
     :var-name - variable name to set.
@@ -79,8 +76,11 @@
     {:type 'set-variable'
      :var-name 'answer-clickable'
      :var-value false}"
-    (core/set-variable! var-name var-value)
-    {:dispatch (e/success-event action)}))
+  [{{:keys [var-name var-value] :as action} :action}]
+  (core/set-variable! var-name var-value)
+  (e/dispatch-success-fn action))
+
+(e/reg-executor :set-variable execute-set-variable)
 
 (re-frame/reg-event-fx
   ::execute-set-variable-list

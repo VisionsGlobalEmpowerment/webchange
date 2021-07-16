@@ -121,6 +121,23 @@
   ;;        See https://trello.com/c/zCet3flh
   (.update spine-object 0))
 
+(defn set-combined-skin
+  [spine-object skin-names]
+  (let [skeleton (get-skeleton spine-object)
+        skeleton-data (.-data skeleton)
+        skins (map #(.findSkin skeleton-data %) skin-names)
+        new-skin (Skin. "combined-skin")]
+    (doall (for [skin skins]
+             (.addSkin new-skin skin)))
+    (.setSkin skeleton new-skin)
+    (.setSlotsToSetupPose skeleton)))
+
+(defn set-or-combine-skin
+  [spine-object skin-names skin-name]
+  (if (seq skin-names)
+    (set-combined-skin spine-object skin-names)
+    (set-skin spine-object skin-name)))
+
 (defn add-animation
   ([spine-object animation-name]
    (add-animation spine-object animation-name {}))

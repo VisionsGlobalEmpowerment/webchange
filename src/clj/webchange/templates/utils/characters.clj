@@ -36,7 +36,14 @@
                               :speed  1
                               :meshes true
                               :name   "guide"
-                              :skin   "default"}})
+                              :skin   "default"}
+                 :child      {:width      342,
+                              :height     691,
+                              :scale      {:x 1 :y 1}
+                              :speed      1
+                              :meshes     true
+                              :name       "child"
+                              :skin-names ["BODY/ChildTon-02" "CLOTHES/Girl-01-Clothes-03" "HEAD/Head-Girl-01-Ton-05"]}})
 
 (def character-positions
   [{:x 176 :y 960}

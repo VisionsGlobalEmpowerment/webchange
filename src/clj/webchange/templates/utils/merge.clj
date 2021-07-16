@@ -160,7 +160,7 @@
   [template rounds]
   (vec (map-indexed (fn [idx round]
                       [(keyword (str "init-technical-" idx))
-                       {:type "sequence-data"
+                       {:type "parallel"
                         :data (concat
                                 (if-not (= 0 idx) (set-state-actions (:objects (get rounds (dec idx))) "hide-technical") [])
                                 (set-state-actions (:objects round) "show-technical"))}]
@@ -175,7 +175,7 @@
 (defn- extract-stop-actions
   [rounds]
   (vec (map-indexed (fn [idx round]
-                      (-> (filter (fn [[name action]] (= (:type action) "stop-activity")) (:actions round)) first first name)
+                      (-> (filter (fn [[name action]] (= (:type action) "finish-activity")) (:actions round)) first first name)
                       ) rounds)))
 
 (defn- prepare-intermediate-action
@@ -228,13 +228,11 @@
         init-round-actions (init-actions merged rounds)
         start-actions (exctract-start-actions rounds)
         stop-actions (extract-stop-actions rounds)
-        intermediate-action (prepare-intermediate-action init-round-actions start-actions)
-        ]
+        intermediate-action (prepare-intermediate-action init-round-actions start-actions)]
     (-> merged
         (add-intermidiate-actions init-round-actions intermediate-action)
         (add-start-trigger-actions intermediate-action)
         (replace-stop-actions stop-actions intermediate-action)
         (add-technical-states)
         (hide-all-objects)
-        (add-stages rounds))
-    ))
+        (add-stages rounds))))
