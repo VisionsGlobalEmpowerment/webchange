@@ -4,7 +4,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.state.state-book :as state]
-    [webchange.ui.utils :refer [deep-merge]]))
+    [webchange.utils.deep-merge :refer [deep-merge]]))
 
 (defn- get-styles
   []

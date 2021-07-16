@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.activity-form.generic.components.activity-action.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.state.state-activity :as state-activity]))
 
@@ -24,7 +25,8 @@
   ::close
   (fn [{:keys [db]} [_]]
     {:db       (assoc-in db actions-modal-state-path false)
-     :dispatch [::translator-form/reset-state]}))
+     :dispatch-n [[::translator-form/reset-state]
+                  [::state-stage/reset-stage]]}))
 
 (re-frame/reg-event-fx
   ::show-actions-form

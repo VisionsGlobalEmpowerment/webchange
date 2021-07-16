@@ -15,10 +15,10 @@
   [{:keys [img answers] :as args}]
   (let [image-from-question (if img
                               [{:url img, :size 10, :type "image"}] [])]
-   (vec (reduce (fn [result {:keys [img]}]
-              (if img (conj result {:url img, :size 10, :type "image"}) result))
-            image-from-question
-            answers))))
+    (vec (reduce (fn [result {:keys [img]}]
+                   (if img (conj result {:url img, :size 10, :type "image"}) result))
+                 image-from-question
+                 answers))))
 
 (defn create
   [{:keys [question-type question question-screenshot answers img] :as args} {:keys [suffix action-name next-action-name]}]
@@ -26,18 +26,18 @@
         success (str action-name "-correct-answer")
         success-dialog (str action-name "-correct-answer-dialog")
         fail-answer-dialog (str action-name "-fail-answer-dialog")]
-    {(keyword action-name)        {:type        "show-question"
-                                   :description question
+    {(keyword action-name)        {:type          "show-question"
+                                   :description   question
                                    :continue-flow (nil? next-action-name)
-                                   :data        {:type        (if question-type question-type "type-1")
-                                                 :text        question
-                                                 :chunks      (text-utils/text->chunks question)
-                                                 :success     success
-                                                 :fail        fail-answer-dialog
-                                                 :audio-data  empty-audio
-                                                 :image       img
-                                                 :screenshot? question-screenshot
-                                                 :answers     {:data (map create-answer answers)}}}
+                                   :data          {:type        (if question-type question-type "type-1")
+                                                   :text        question
+                                                   :chunks      (text-utils/text->chunks question)
+                                                   :success     success
+                                                   :fail        fail-answer-dialog
+                                                   :audio-data  empty-audio
+                                                   :image       img
+                                                   :screenshot? question-screenshot
+                                                   :answers     {:data (map create-answer answers)}}}
 
      (keyword success)            {:type "sequence-data",
                                    :data [{:type "empty" :duration 500}

@@ -89,7 +89,7 @@
                                                              :viewport viewport}))
 
                          (re-frame/dispatch [::state/set-rendering-state false])
-                         (on-ready)))
+                         (when (fn? on-ready) (on-ready))))
 
        :component-will-unmount
                      (fn []

@@ -1,0 +1,13 @@
+(ns webchange.question.params)
+
+(def font-size 48)
+(def block-padding 60)
+(def check-button-size 80)
+(def main-content-blocks-ratio 0.3)
+(def options-gap 30)
+(def option-border-radius 20)
+(def option-border-width 2)
+(def option-font-size font-size)
+(def option-padding 10)
+(def task-font-size font-size)
+(def voice-over-margin 30)

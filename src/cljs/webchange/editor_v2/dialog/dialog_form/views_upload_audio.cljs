@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
     [webchange.ui-framework.components.index :refer [file]]
-    [webchange.ui.utils :refer [deep-merge]]))
+    [webchange.utils.deep-merge :refer [deep-merge]]))
 
 (defn upload-audio
   [{:keys [input-props]}]
