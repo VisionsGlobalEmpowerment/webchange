@@ -17,3 +17,22 @@
                   :or   {props {}}}]
               (get props :game-changer? false))
             templates)))
+
+(re-frame/reg-sub
+  ::tutorial-activity
+  (fn []
+    [(re-frame/subscribe [::templates-list])])
+  (fn [[templates]]
+    (first
+     (filter (fn [{:keys [id]}]
+               (= 4 id))
+             templates))))
+
+(re-frame/reg-sub
+  ::templates-list-without-tutorial-activity
+  (fn []
+    [(re-frame/subscribe [::templates-list])])
+  (fn [[templates]]
+    (filterv (fn [{:keys [id]}]
+               (not= 4 id))
+             templates)))

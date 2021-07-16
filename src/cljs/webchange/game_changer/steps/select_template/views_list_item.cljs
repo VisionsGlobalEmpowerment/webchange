@@ -14,8 +14,17 @@
              :class-name "preview-button"}
      "Preview"]))
 
+(defn- start-button
+  [props]
+  [button
+   (merge {:class-name "preview-button"
+           :on-click   (:on-click props)
+           :color      "primary"}
+          props)
+   "Start"])
+
 (defn template-list-item
-  [{:keys [template on-click selected?]}]
+  [{:keys [template on-click selected? actions]}]
   (r/with-let [slideshow-visible? (r/atom false)
                handle-mouse-enter (fn [] (reset! slideshow-visible? true))
                handle-mouse-leave (fn [] (reset! slideshow-visible? false))]
@@ -30,12 +39,18 @@
         [:div {:class-name (get-class-name {"preview"     true
                                             "placeholder" (not (some? preview))})
                :style      (cond-> {}
-                                   (some? preview) (assoc :background-image (str "url(" preview ")")))}
+                             (some? preview) (assoc :background-image (str "url(" preview ")")))}
          (when (and (some? preview-anim)
                     @slideshow-visible?)
            [activity-preview {:slides preview-anim}])]
-        [:div.title name]
-        [:div.description
-         description
-         (when (some? preview-activity)
-           [preview-button preview-activity])]]])))
+        [:div.title
+         [:span name]
+         [:div.title-button
+          (when (some? preview-activity)
+            [preview-button preview-activity])
+          (when selected?
+            (for [{:keys [id text handler props] :or {props {}}} actions]
+              ^{:key id}
+              [start-button (merge props {:on-click handler})]))]
+         [:div.description.clearfix
+          description]]]])))
