@@ -13,6 +13,7 @@
     [webchange.interpreter.renderer.scene.components.layered-background.component :as layered-background]
     [webchange.interpreter.renderer.scene.components.painting-area.component :as painting-area]
     [webchange.interpreter.renderer.scene.components.progress.component :as progress]
+    [webchange.interpreter.renderer.scene.components.question.component :as question]
     [webchange.interpreter.renderer.scene.components.rectangle.component :as rectangle]
     [webchange.interpreter.renderer.scene.components.slider.component :as slider]
     [webchange.interpreter.renderer.scene.components.svg-path.component :as svg-path]
@@ -50,6 +51,8 @@
                                                                :default-props painting-area/default-props}
                                  progress/component-type {:constructor   progress/create
                                                           :default-props progress/default-props}
+                                 question/component-type {:constructor   question/create
+                                                          :default-props question/default-props}
                                  rectangle/component-type {:constructor   rectangle/create
                                                            :default-props rectangle/default-props}
                                  slider/component-type {:constructor   slider/create
@@ -66,7 +69,7 @@
                                                        :default-props video/default-props}
                                  traffic-light/component-type {:constructor   traffic-light/create
                                                                :default-props traffic-light/default-props}
-                                 painting-toolset/component-type {:constructor painting-toolset/create
+                                 painting-toolset/component-type {:constructor   painting-toolset/create
                                                                   :default-props painting-toolset/default-props}
-                                 text-tracing-pattern/component-type {:constructor text-tracing-pattern/create
+                                 text-tracing-pattern/component-type {:constructor   text-tracing-pattern/create
                                                                       :default-props text-tracing-pattern/default-props}]))

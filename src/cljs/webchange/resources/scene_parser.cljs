@@ -114,6 +114,14 @@
                    "image" (conj result (:src object-data))
                    "animation" (let [animation-name (:name object-data)]
                                  (concat result (get-animation-resources animation-name expand-animation-resources?)))
+                   "question" (let [question-task (get-in object-data [:task])
+                                    question-options (get-in object-data [:options :data])
+                                    question-resources (->> [(:img question-task)
+                                                             (map :img question-options)]
+                                                            (flatten)
+                                                            (remove nil?)
+                                                            (distinct))]
+                                (concat result question-resources))
                    result))
                [])
        (logger/with-trace-list)
@@ -226,7 +234,7 @@
 
 (defn get-lesson-endpoints
   [course-slug {:keys [activities]}]
-  (logger/group-folded (str "get lesson endpoints" ))
+  (logger/group-folded (str "get lesson endpoints"))
   (logger/trace "course-slug" course-slug)
   (logger/trace "activities" activities)
   (->> activities

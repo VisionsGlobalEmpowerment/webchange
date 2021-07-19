@@ -5,26 +5,26 @@
     [webchange.ui-framework.components.index :refer [label select]]))
 
 (def params {:task-type             {:title         "Task"
-                                     :default-value "text"
+                                     :default-value "text-image"
                                      :options       [{:text  "Text with image"
                                                       :value "text-image"}
                                                      {:text  "Text only"
                                                       :value "text"}]}
              :layout                {:title         "Layout"
-                                     :default-value "vertical"
+                                     :default-value "horizontal"
                                      :options       [{:text  "Horizontal"
                                                       :value "horizontal"}
                                                      {:text  "Vertical"
                                                       :value "vertical"}]}
              :options-number        {:title         "Options number"
-                                     :default-value 2
+                                     :default-value 4
                                      :type          "int"
                                      :options       (map (fn [number]
                                                            {:text  number
                                                             :value number})
                                                          [2 3 4])}
              :option-label          {:title         "Option label"
-                                     :default-value "none"
+                                     :default-value "audio-text"
                                      :options       [{:text  "Audio only"
                                                       :value "audio"}
                                                      {:text  "Audio + text"
