@@ -604,8 +604,7 @@
                                                                                                                   {:start 29, :end 32},
                                                                                                                   {:start 33, :end 36},
                                                                                                                   {:start 37, :end 39},
-                                                                                                                  {:start 40, :end 45}
-                                                                                                                  ],
+                                                                                                                  {:start 40, :end 45}],
                                                                                                      :audio-data {:audio     ""
                                                                                                                   :start     0,
                                                                                                                   :duration  0,
@@ -682,6 +681,7 @@
                                                                :action-id :wrong-answer}
                                                               {:type      "dialog"
                                                                :action-id :tap-instructions}
+                                                              {:type "question" :action-id :scene-question}
                                                               {:type      "dialog"
                                                                :action-id :correct-answer-dialog}
                                                               {:type      "dialog"

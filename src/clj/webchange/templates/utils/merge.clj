@@ -106,7 +106,7 @@
   (map (fn [track]
          (assoc track :nodes
                       (vec (map (fn [node]
-                                  (if (= (:type node) "dialog")
+                                  (if (some #{(:type node)} ["dialog" "question"])
                                     (assoc node :action-id (keyword (action-key-fn (:action-id node))))
                                     node))
                                 (:nodes track))))
