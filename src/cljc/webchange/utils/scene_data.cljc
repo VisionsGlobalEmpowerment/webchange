@@ -89,6 +89,11 @@
   (-> (get-scene-objects scene-data)
       (get object-name)))
 
+(defn get-scene-object-by-path
+  [scene-data object-path]
+  (-> (get-scene-objects scene-data)
+      (get-in object-path)))
+
 (defn get-scene-background
   [scene-data]
   (->> (get-scene-objects scene-data)

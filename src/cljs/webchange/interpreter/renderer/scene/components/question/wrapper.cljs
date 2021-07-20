@@ -15,4 +15,8 @@
                    :type         type
                    :object       container
                    :container    container
-                   :get-children #(get-children props)}))
+                   :get-children #(get-children props)
+                   :set-src (fn [src options]
+                              (print "Set question src")
+                              (print "src" src)
+                              (print "options" options))}))

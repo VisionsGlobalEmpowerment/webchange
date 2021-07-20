@@ -34,17 +34,17 @@
   [{:keys [src object-name raw]}]
   (let [resource (resources/get-resource src)]
     (if raw
-        (doto (Sprite. (.from Texture raw))
-          (aset "name" (str object-name "-sprite")))
-        (do
-          (when (and (-> resource nil?)
-                     (-> src nil? not)
-                     (-> src empty? not))
-            (logger/warn (js/Error. (str "Resources for " src " were not loaded"))))
-          (doto (if (-> resource nil? not)
-                  (Sprite. (.-texture resource))
-                  (Sprite.))
-            (aset "name" (str object-name "-sprite")))))))
+      (doto (Sprite. (.from Texture raw))
+        (aset "name" (str object-name "-sprite")))
+      (do
+        (when (and (-> resource nil?)
+                   (-> src nil? not)
+                   (-> src empty? not))
+          (logger/warn (js/Error. (str "Resources for " src " were not loaded"))))
+        (doto (if (-> resource nil? not)
+                (Sprite. (.-texture resource))
+                (Sprite.))
+          (aset "name" (str object-name "-sprite")))))))
 
 
 (defn- create-sprite-mask

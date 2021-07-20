@@ -14,6 +14,34 @@
                               :actions   {:click {:on "click", :type "scene", :scene-id "book"}},
                               :highlight true,
                               :src       "/raw/img/library/main/Books_Enabled.png"},
+                 :question-1 {:alias                 "Q: Who is the main character?"
+                              :type                  "question"
+
+                              :question-type         "multiple-choice-image"
+                              :layout                "horizontal"
+
+                              :task                  {:type  "text-image"
+                                                      :text  "Who do you think the main character, or most important character is going to be in this book?"
+                                                      :image {:type "image"
+                                                              :src  "/images/questions/question.png"}}
+
+                              :options               {:label "audio-text"
+                                                      :data  [{:image {:type "image"
+                                                                       :src  "/images/questions/option1.png"}
+                                                               :text  "Cow"}
+                                                              {:image {:type "image"
+                                                                       :src  "/images/questions/option2.png"}
+                                                               :text  "Deer"}
+                                                              {:image {:type "image"
+                                                                       :src  "/images/questions/option3.png"}
+                                                               :text  "Fox"}
+                                                              {:image {:type "image"
+                                                                       :src  "/images/questions/option4.png"}
+                                                               :text  "Skunk"}]}
+
+                              :correct-answers-count "one"
+
+                              :editable?             {:show-in-tree? true}}
                  :librarian
                              {:type       "animation",
                               :x          451,
@@ -43,7 +71,7 @@
                               :src       "/raw/img/library/main/Tablet_Enabled.png"},
                  :vera
                              {:type   "animation",
-                              :x      725,
+                              :x      1725,
                               :y      1000,
                               :width  1800,
                               :height 2558,
@@ -59,7 +87,7 @@
                               :actions   {:click {:on "click", :type "scene", :scene-id "writing-lesson"}},
                               :highlight true,
                               :src       "/raw/img/library/main/Easel_Enabled.png"}},
- :scene-objects [["background" "book" "writing-lesson" "magic-hat" "painting-tablet"] ["librarian" "vera"]],
+ :scene-objects [["background" "book" "writing-lesson" "magic-hat" "painting-tablet"] ["librarian" "vera"] ["question-1"]],
  :actions       {:start-background-music {:type "audio", :id "/raw/audio/background/POL-daily-special-short.mp3", :loop true}},
  :triggers      {:music {:on "start", :action "start-background-music"}},
  :metadata      {:prev "map", :autostart true},}

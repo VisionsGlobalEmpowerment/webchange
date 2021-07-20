@@ -49,7 +49,7 @@
 
 (defn- get-task-image
   [parent-name {:keys [width height sides-ratio-h padding]} {:keys [task]}]
-  (let [{:keys [img]} task
+  (let [{:keys [image]} task
 
         container-width (* sides-ratio-h width)
         container-height height
@@ -60,12 +60,13 @@
         image-height (- container-height (* padding 2))]
     {:type        "image"
      :object-name (add-name-suffix parent-name "task-image")
-     :src         img
+     :src         (:src image)
      :x           image-x
      :y           image-y
      :max-width   image-width
      :max-height  image-height
-     :origin      {:type "center-center"}}))
+     :origin      {:type "center-center"}
+     :editable?   {:select true}}))
 
 (defn- get-task
   [{:keys [object-name x y width text]}]
@@ -87,10 +88,8 @@
                   :vertical-align "top"}]})
 
 (defn- get-options
-  [parent-name {:keys [width height sides-ratio-h padding]} {:keys [options]}]
-  (let [group-name (add-name-suffix parent-name "options")
-
-        options-x (* sides-ratio-h width)
+  [{:keys [object-name question-name]} parent-name {:keys [width height sides-ratio-h padding]} {:keys [options]}]
+  (let [options-x (* sides-ratio-h width)
         options-y 500
         options-width (- width options-x)
         option-padding 10
@@ -101,19 +100,20 @@
                                 (let [option-width (/ (- options-width option-padding) options-count)
                                       option-height 500]
                                   (merge option
-                                         {:idx    idx
-                                          :x      (+ (/ option-padding 2) (* idx option-width) option-padding)
-                                          :y      option-padding
-                                          :width  (- option-width (* 2 option-padding))
-                                          :height (- option-height (* 2 option-padding))})))
+                                         {:idx           idx
+                                          :x             (+ (/ option-padding 2) (* idx option-width) option-padding)
+                                          :y             option-padding
+                                          :width         (- option-width (* 2 option-padding))
+                                          :height        (- option-height (* 2 option-padding))
+                                          :question-name question-name})))
                               (:data options))]
     {:type        "group"
-     :object-name group-name
+     :object-name object-name
      :x           options-x
      :y           options-y
      :children    (map (fn [{:keys [idx] :as option}]
                          (option-image/create (merge option
-                                                     {:object-name (add-name-suffix group-name (str "option-" idx))})))
+                                                     {:object-name (add-name-suffix object-name (str "option-" idx))})))
                        children)}))
 
 (defn create
@@ -126,9 +126,6 @@
                                                          :primary-color 0xFFA301
                                                          :sides-ratio-h 0.4
                                                          :padding       10}]
-
-    (print ">> text" (:text task))
-
     [{:type        "group"
       :object-name group-name
       :x           (:x common-params)
@@ -141,4 +138,5 @@
                                :y           100
                                :width       (- width (* sides-ratio-h width))
                                :text        (:text task)})
-                    (get-options group-name common-params props)]}]))
+                    (get-options {:object-name   (add-name-suffix group-name "options")
+                                  :question-name object-name} group-name common-params props)]}]))
