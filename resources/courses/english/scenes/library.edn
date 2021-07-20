@@ -20,24 +20,19 @@
                               :question-type         "multiple-choice-image"
                               :layout                "horizontal"
 
-                              :task                  {:type  "text-image"
-                                                      :text  "Who do you think the main character, or most important character is going to be in this book?"
-                                                      :image {:type "image"
-                                                              :src  "/images/questions/question.png"}}
+                              :task                  {:type "text-image"
+                                                      :text "Who do you think the main character, or most important character is going to be in this book?"
+                                                      :img  "/images/questions/question.png"}
 
                               :options               {:label "audio-text"
-                                                      :data  [{:image {:type "image"
-                                                                       :src  "/images/questions/option1.png"}
-                                                               :text  "Cow"}
-                                                              {:image {:type "image"
-                                                                       :src  "/images/questions/option2.png"}
-                                                               :text  "Deer"}
-                                                              {:image {:type "image"
-                                                                       :src  "/images/questions/option3.png"}
-                                                               :text  "Fox"}
-                                                              {:image {:type "image"
-                                                                       :src  "/images/questions/option4.png"}
-                                                               :text  "Skunk"}]}
+                                                      :data  [{:img  "/images/questions/option1.png"
+                                                               :text "Cow"}
+                                                              {:img  "/images/questions/option2.png"
+                                                               :text "Deer"}
+                                                              {:img  "/images/questions/option3.png"
+                                                               :text "Fox"}
+                                                              {:img  "/images/questions/option4.png"
+                                                               :text "Skunk"}]}
 
                               :correct-answers-count "one"
 

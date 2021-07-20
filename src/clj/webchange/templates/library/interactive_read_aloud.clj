@@ -1,6 +1,8 @@
 (ns webchange.templates.library.interactive-read-aloud
   (:require
+    [clojure.tools.logging :as log]
     [webchange.templates.utils.question :as question]
+    [webchange.templates.utils.question-object :as question-object]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.core :as core]
 
@@ -27,19 +29,24 @@
                                       :type  "characters"
                                       :max   4}]
                                     book-options)
-               :actions     {:add-dialog   {:title   "Add dialogue",
-                                            :options {:dialog {:label       "Dialogue"
-                                                               :placeholder "Name the dialogue"
-                                                               :type        "string"}}}
-                             :add-page     {:title   "Add page"
-                                            :options page-options}
-                             :add-question {:title   "Add question",
-                                            :options {:question-page {:label         "Question"
-                                                                      :type          "question"
-                                                                      :answers-label "Answers"
-                                                                      :max-answers   4}}}
-                             :config-title {:title   "Frontpage"
-                                            :options book-options}}})
+               :actions     {:add-dialog          {:title   "Add dialogue",
+                                                   :options {:dialog {:label       "Dialogue"
+                                                                      :placeholder "Name the dialogue"
+                                                                      :type        "string"}}}
+                             :add-page            {:title   "Add page"
+                                                   :options page-options}
+                             :add-question        {:title   "Add question",
+                                                   :options {:question-page {:label         "Question"
+                                                                             :type          "question"
+                                                                             :answers-label "Answers"
+                                                                             :max-answers   4}}}
+                             :add-question-object {:title   "Add question object",
+                                                   :options {:question-page-object {:label         "Question"
+                                                                                    :type          "question-object"
+                                                                                    :answers-label "Answers"
+                                                                                    :max-answers   4}}}
+                             :config-title        {:title   "Frontpage"
+                                                   :options book-options}}})
 
 (def empty-audio {:audio "" :start 0 :duration 0 :animation "color" :fill 0x00B2FF :data []})
 (def template {:assets        [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
@@ -143,6 +150,20 @@
       (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})
       (update-in [:metadata :tracks 0 :nodes] conj {:type "question" :action-id action-name})))
 
+(defn- conj-vec
+  [list element]
+  (conj (if (vector? list) list (vec list))
+        element))
+
+(defn- place-question-object
+  [activity-data {:keys [action-name actions object-name objects]}]
+  (-> activity-data
+      (update :actions merge actions)
+      (update :objects merge objects)
+      (update-in [:scene-objects] conj-vec [object-name])
+      (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "question" :action-id action-name})))
+
 (defn- place-dialog
   [activity-data actions action-name]
   (-> activity-data
@@ -208,6 +229,41 @@
         (increase-next-action-index)
         (place-question question-actions action-name)
         (add-assets question-assets))))
+
+(defn- add-question-object
+  [activity-data args]
+  (let [index (get-next-action-index activity-data)
+        next-action-name "script"
+        action-name (str "question-" index)
+        object-name (str "question-" index)
+
+        question-args {:alias                 "Q: Who is the main character?"
+                       :question-type         "multiple-choice-image"
+                       :layout                "horizontal"
+                       :task                  {:type "text-image"
+                                               :text "Who do you think the main character, or most important character is going to be in this book?"
+                                               :img  "/images/questions/question.png"}
+                       :options               {:label "audio-text"
+                                               :data  [{:img  "/images/questions/option1.png"
+                                                        :text "Cow"}
+                                                       {:img  "/images/questions/option2.png"
+                                                        :text "Deer"}
+                                                       {:img  "/images/questions/option3.png"
+                                                        :text "Fox"}
+                                                       {:img  "/images/questions/option4.png"
+                                                        :text "Skunk"}]}
+                       :correct-answers-count "one"}
+
+        question-data (question-object/create
+                        question-args
+                        ;(:question-page args)
+                        {:suffix           index
+                         :action-name      action-name
+                         :object-name      object-name
+                         :next-action-name next-action-name})]
+    (-> activity-data
+        (increase-next-action-index)
+        (place-question-object question-data))))
 
 (defn- add-page-action
   [activity-data {:keys [type page-layout spread-layout image text]}]
@@ -287,6 +343,7 @@
     :add-dialog (add-dialog activity-data args)
     :add-page (add-page-action activity-data args)
     :add-question (add-question activity-data args)
+    :add-question-object (add-question-object activity-data args)
     :config-title (config-frontpage activity-data args)))
 
 (core/register-template
