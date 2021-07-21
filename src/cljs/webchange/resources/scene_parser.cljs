@@ -114,14 +114,6 @@
                    "image" (conj result (:src object-data))
                    "animation" (let [animation-name (:name object-data)]
                                  (concat result (get-animation-resources animation-name expand-animation-resources?)))
-                   "question" (let [question-task (get-in object-data [:task])
-                                    question-options (get-in object-data [:options :data])
-                                    question-resources (->> [(get-in question-task [:image :src] )
-                                                             (map #(get-in % [:image :src]) question-options)]
-                                                            (flatten)
-                                                            (remove nil?)
-                                                            (distinct))]
-                                (concat result question-resources))
                    result))
                [])
        (logger/with-trace-list)

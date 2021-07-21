@@ -48,7 +48,7 @@
 
 (defn- container-component?
   [component-type]
-  (some #{component-type} ["flipbook" "group" "question"]))
+  (some #{component-type} ["flipbook" "group"]))
 
 (defn- set-component-name!
   [component-wrapper component-props]
@@ -66,7 +66,6 @@
                    (let [group-instance (:container component-wrapper)]
                      (->> (case type
                             "flipbook" (->> (:pages props) (map first))
-                            "question" ((:get-children component-wrapper))
                             (:children props))
                           (map (fn [child]
                                  (create-component (assoc child :parent group-instance))))
