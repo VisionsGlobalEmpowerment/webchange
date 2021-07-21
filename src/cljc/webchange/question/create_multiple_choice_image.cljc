@@ -1,7 +1,8 @@
 (ns webchange.question.create-multiple-choice-image
   (:require
     [webchange.question.create-common-option-image :as option-image]
-    [webchange.question.create-common-voice-over :as voice-over]))
+    [webchange.question.create-common-voice-over :as voice-over]
+    [webchange.question.params :as p]))
 
 (def common-params {:x             0
                     :y             0
@@ -58,11 +59,11 @@
                                    :children [button-name text-name]}
             (keyword text-name)   {:type           "text"
                                    :text           text
-                                   :x              voice-over/default-size
+                                   :x              (+ voice-over/default-size p/voice-over-margin)
                                    :y              0
-                                   :width          (- width voice-over/default-size)
+                                   :width          (- width voice-over/default-size p/voice-over-margin)
                                    :word-wrap      true
-                                   :font-size      60
+                                   :font-size      p/task-font-size
                                    :vertical-align "top"
                                    :editable?      {:select true}}}
            (voice-over/create {:object-name button-name
@@ -71,22 +72,20 @@
                                :on-click    on-task-voice-over-click}))))
 
 (defn- create-options
-  [{:keys [object-name x y width height options gap on-option-click on-option-voice-over-click]
-    :or   {gap 15}}]
+  [{:keys [object-name x y width height options on-option-click on-option-voice-over-click]}]
   (let [options-count (count options)
-        option-width (/ (- width gap) options-count)
+        option-width (/ (- width p/options-gap) options-count)
         option-height height]
     (->> (map-indexed vector options)
          (reduce (fn [result [idx {:keys [img text value]}]]
                    (let [option-name (str object-name "-option-" idx)
                          option-data (option-image/create {:object-name                option-name
-                                                           :x                          (+ (/ gap 2) (* idx option-width) gap)
-                                                           :y                          gap
-                                                           :width                      (- option-width (* 2 gap))
-                                                           :height                     (- option-height (* 2 gap))
+                                                           :x                          (* idx (+ option-width p/options-gap))
+                                                           :y                          0
+                                                           :width                      (- option-width p/options-gap)
+                                                           :height                     option-height
                                                            :img                        img
                                                            :text                       text
-                                                           :idx                        idx
                                                            :on-option-click            on-option-click
                                                            :on-option-voice-over-click on-option-voice-over-click
                                                            :value                      value})]
@@ -120,15 +119,15 @@
         task-image-container-width (* sides-ratio-h width)
         task-image-container-height (:height common-params)
 
-        task-text-container-x main-content-x
-        task-text-container-y 0
-        task-text-container-width main-content-width
-        task-text-container-height (* main-content-height sides-ratio-h)
+        task-text-container-x (+ main-content-x p/block-padding)
+        task-text-container-y p/block-padding
+        task-text-container-width (- main-content-width (* 2 p/block-padding))
+        task-text-container-height (- (* main-content-height sides-ratio-h) (* 2 p/block-padding))
 
-        options-text-container-x main-content-x
-        options-text-container-y task-text-container-height
-        options-text-container-width main-content-width
-        options-text-container-height (- main-content-height task-text-container-height)]
+        options-text-container-x (+ main-content-x p/block-padding)
+        options-text-container-y (+ task-text-container-height p/block-padding)
+        options-text-container-width (- main-content-width (* 2 p/block-padding))
+        options-text-container-height (- main-content-height task-text-container-height (* 2 p/block-padding))]
     (merge {(keyword object-name) {:type      "group"
                                    :alias     alias
                                    :x         (:x common-params)
