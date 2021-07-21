@@ -4,19 +4,17 @@
     [webchange.templates.utils.question-object.common-voice-over :as voice-over]))
 
 (defn- create-image
-  [{:keys [object-name x y width height src]
+  [{:keys [object-name x y width height src idx on-click]
     :or   {x 0
            y 0}}]
-
-  (log/debug "> src" src)
-
   (let [background-name (str object-name "-background")
         image-name (str object-name "-image")]
     {(keyword object-name)     {:type        "group"
                                 :object-name object-name
                                 :x           x
                                 :y           y
-                                :children    [background-name image-name]}
+                                :children    [background-name image-name]
+                                :actions     {:click {:type "action" :on "click" :id on-click :params {:option (str "option-" idx)}}}}
      (keyword background-name) {:type          "rectangle"
                                 :x             0
                                 :y             0
@@ -47,7 +45,7 @@
                           :editable?      {:select true}}})
 
 (defn create
-  [{:keys [object-name x y width height img text gap]
+  [{:keys [object-name x y width height img text gap idx on-option-click on-option-voice-over-click value]
     :or   {x   0
            y   0
            gap 20}
@@ -75,12 +73,16 @@
            (create-image {:object-name image-name
                           :src         img
                           :width       image-width
-                          :height      image-height})
+                          :height      image-height
+                          :idx         idx
+                          :on-click    on-option-click})
            (create-text {:object-name text-name
                          :x           text-x
                          :y           text-y
                          :width       text-width
                          :text        text})
-           (voice-over/create {:object-name button-name
-                               :x           0
-                               :y           (+ image-height gap)}))))
+           (voice-over/create {:object-name     button-name
+                               :x               0
+                               :y               (+ image-height gap)
+                               :on-click        on-option-voice-over-click
+                               :on-click-params {:value value}}))))

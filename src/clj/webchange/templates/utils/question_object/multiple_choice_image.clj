@@ -71,24 +71,25 @@
                                :y           0}))))
 
 (defn- create-options
-  [{:keys [object-name x y width height options gap]
+  [{:keys [object-name x y width height options gap on-option-click on-option-voice-over-click]
     :or   {gap 15}}]
-
-  (log/debug "options" options)
-
   (let [options-count (count options)
         option-width (/ (- width gap) options-count)
         option-height height]
     (->> (map-indexed vector options)
-         (reduce (fn [result [idx {:keys [img text]}]]
+         (reduce (fn [result [idx {:keys [img text value]}]]
                    (let [option-name (str object-name "-option-" idx)
-                         option-data (option-image/create {:object-name option-name
-                                                           :x           (+ (/ gap 2) (* idx option-width) gap)
-                                                           :y           gap
-                                                           :width       (- option-width (* 2 gap))
-                                                           :height      (- option-height (* 2 gap))
-                                                           :img         img
-                                                           :text        text})]
+                         option-data (option-image/create {:object-name                option-name
+                                                           :x                          (+ (/ gap 2) (* idx option-width) gap)
+                                                           :y                          gap
+                                                           :width                      (- option-width (* 2 gap))
+                                                           :height                     (- option-height (* 2 gap))
+                                                           :img                        img
+                                                           :text                       text
+                                                           :idx                        idx
+                                                           :on-option-click            on-option-click
+                                                           :on-option-voice-over-click on-option-voice-over-click
+                                                           :value                      value})]
                      (-> result
                          (update-in [(keyword object-name) :children] conj option-name)
                          (merge option-data))))
@@ -98,7 +99,7 @@
                                          :children []}}))))
 
 (defn create
-  [{:keys [object-name]} args]
+  [{:keys [object-name on-option-click on-option-voice-over-click]} args]
   (let [{:keys [sides-ratio-h width] :as common-params} common-params
 
         substrate-name (str object-name "-substrate")
@@ -128,18 +129,14 @@
         options-text-container-y task-text-container-height
         options-text-container-width main-content-width
         options-text-container-height (- main-content-height task-text-container-height)]
-
-    (log/debug "alias" alias)
-    (log/debug "task-image" task-image)
-    (log/debug "task-text" task-text)
-    (log/debug "options" options)
-
     (merge {(keyword object-name) {:type      "group"
                                    :alias     alias
                                    :x         (:x common-params)
                                    :y         (:y common-params)
                                    :children  [substrate-name background-name task-image-name task-text-name options-name]
                                    :visible   false
+                                   :states    {:invisible {:visible false}
+                                               :visible   {:visible true}}
                                    :editable? {:show-in-tree? true}}}
            (create-substrate {:object-name substrate-name
                               :width       (:width common-params)
@@ -160,9 +157,11 @@
                               :width       task-text-container-width
                               :height      task-text-container-height
                               :text        task-text})
-           (create-options {:object-name options-name
-                            :x           options-text-container-x
-                            :y           options-text-container-y
-                            :width       options-text-container-width
-                            :height      options-text-container-height
-                            :options     options}))))
+           (create-options {:object-name                options-name
+                            :x                          options-text-container-x
+                            :y                          options-text-container-y
+                            :width                      options-text-container-width
+                            :height                     options-text-container-height
+                            :options                    options
+                            :on-option-click            on-option-click
+                            :on-option-voice-over-click on-option-voice-over-click}))))

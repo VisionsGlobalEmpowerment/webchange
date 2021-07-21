@@ -25,14 +25,19 @@
                                                       :img  "/images/questions/question.png"}
 
                               :options               {:label "audio-text"
-                                                      :data  [{:img  "/images/questions/option1.png"
-                                                               :text "Cow"}
-                                                              {:img  "/images/questions/option2.png"
-                                                               :text "Deer"}
-                                                              {:img  "/images/questions/option3.png"
-                                                               :text "Fox"}
-                                                              {:img  "/images/questions/option4.png"
-                                                               :text "Skunk"}]}
+                                                      :data  [{:img   "/images/questions/option1.png"
+                                                               :text  "Cow"
+                                                               :value "cow"}
+                                                              {:img     "/images/questions/option2.png"
+                                                               :text    "Deer"
+                                                               :correct true
+                                                               :value   "deer"}
+                                                              {:img   "/images/questions/option3.png"
+                                                               :text  "Fox"
+                                                               :value "fox"}
+                                                              {:img   "/images/questions/option4.png"
+                                                               :text  "Skunk"
+                                                               :value "skunk"}]}
 
                               :correct-answers-count "one"
 

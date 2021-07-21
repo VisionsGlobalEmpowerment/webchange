@@ -156,13 +156,13 @@
         element))
 
 (defn- place-question-object
-  [activity-data {:keys [action-name actions object-name objects]}]
+  [activity-data {:keys [action-name actions object-name objects track]}]
   (-> activity-data
       (update :actions merge actions)
       (update :objects merge objects)
       (update-in [:scene-objects] conj-vec [object-name])
       (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})
-      (update-in [:metadata :tracks 0 :nodes] conj {:type "question" :action-id action-name})))
+      (update-in [:metadata :tracks] conj track)))
 
 (defn- place-dialog
   [activity-data actions action-name]
@@ -244,14 +244,19 @@
                                                :text "Who do you think the main character, or most important character is going to be in this book?"
                                                :img  "/images/questions/question.png"}
                        :options               {:label "audio-text"
-                                               :data  [{:img  "/images/questions/option1.png"
-                                                        :text "Cow"}
-                                                       {:img  "/images/questions/option2.png"
-                                                        :text "Deer"}
-                                                       {:img  "/images/questions/option3.png"
-                                                        :text "Fox"}
-                                                       {:img  "/images/questions/option4.png"
-                                                        :text "Skunk"}]}
+                                               :data  [{:img   "/images/questions/option1.png"
+                                                        :text  "Cow"
+                                                        :value "cow"}
+                                                       {:img     "/images/questions/option2.png"
+                                                        :text    "Deer"
+                                                        :correct true
+                                                        :value   "deer"}
+                                                       {:img   "/images/questions/option3.png"
+                                                        :text  "Fox"
+                                                        :value "fox"}
+                                                       {:img   "/images/questions/option4.png"
+                                                        :text  "Skunk"
+                                                        :value "skunk"}]}
                        :correct-answers-count "one"}
 
         question-data (question-object/create

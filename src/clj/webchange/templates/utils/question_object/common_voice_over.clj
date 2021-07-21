@@ -13,7 +13,7 @@
                           :fill          0xFFFFFF}})
 
 (defn create
-  [{:keys [object-name x y size]
+  [{:keys [object-name x y size on-click on-click-params]
     :or   {x    0
            y    0
            size default-size}}]
@@ -21,6 +21,7 @@
     (merge {(keyword object-name) {:type     "group"
                                    :x        x
                                    :y        y
-                                   :children [background-name]}}
+                                   :children [background-name]
+                                   :actions  {:click {:type "action" :on "click" :id on-click :params on-click-params}}}}
            (create-background {:object-name background-name
                                :size        size}))))
