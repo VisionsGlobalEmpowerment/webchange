@@ -43,9 +43,9 @@
                               :speed      1
                               :meshes     true
                               :name       "child"
-                              :skin-names {:body "BODY/ChildTon-02"
-                                           :clothes "CLOTHES/Girl-01-Clothes-03"
-                                           :head "HEAD/Head-Girl-01-Ton-05"}}})
+                              :skin-names {:body "BODY/ChildTon-01"
+                                           :clothes "CLOTHES/Girl-01-Clothes-01"
+                                           :head "HEAD/Head-Girl-01-Ton-01"}}})
 
 (def character-positions
   [{:x 176 :y 960}
