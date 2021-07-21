@@ -1,7 +1,6 @@
-(ns webchange.templates.utils.question-object.common-option-image
+(ns webchange.question.create-common-option-image
   (:require
-    [clojure.tools.logging :as log]
-    [webchange.templates.utils.question-object.common-voice-over :as voice-over]))
+    [webchange.question.create-common-voice-over :as voice-over]))
 
 (defn- create-image
   [{:keys [object-name x y width height src on-click on-click-params]

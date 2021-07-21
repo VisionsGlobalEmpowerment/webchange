@@ -2,7 +2,6 @@
   (:require
     [clojure.tools.logging :as log]
     [webchange.templates.utils.question :as question]
-    [webchange.templates.utils.question-object :as question-object]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.core :as core]
 
@@ -17,7 +16,10 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.templates.library.flipbook.stages :refer [update-stages]]))
+    [webchange.templates.library.flipbook.stages :refer [update-stages]]
+
+    [webchange.question.create :as question-object]
+    [webchange.question.get-question-data :refer [form->question-data]]))
 
 (def metadata {:id          32
                :name        "Interactive Read Aloud"
@@ -150,20 +152,6 @@
       (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})
       (update-in [:metadata :tracks 0 :nodes] conj {:type "question" :action-id action-name})))
 
-(defn- conj-vec
-  [list element]
-  (conj (if (vector? list) list (vec list))
-        element))
-
-(defn- place-question-object
-  [activity-data {:keys [action-name actions object-name objects track]}]
-  (-> activity-data
-      (update :actions merge actions)
-      (update :objects merge objects)
-      (update-in [:scene-objects] conj-vec [object-name])
-      (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})
-      (update-in [:metadata :tracks] conj track)))
-
 (defn- place-dialog
   [activity-data actions action-name]
   (-> activity-data
@@ -231,44 +219,20 @@
         (add-assets question-assets))))
 
 (defn- add-question-object
-  [activity-data args]
+  [activity-data {:keys [question-page-object]}]
   (let [index (get-next-action-index activity-data)
         next-action-name "script"
         action-name (str "question-" index)
         object-name (str "question-" index)
-
-        question-args {:alias                 "Q: Who is the main character?"
-                       :question-type         "multiple-choice-image"
-                       :layout                "horizontal"
-                       :task                  {:type "text-image"
-                                               :text "Who do you think the main character, or most important character is going to be in this book?"
-                                               :img  "/images/questions/question.png"}
-                       :options               {:label "audio-text"
-                                               :data  [{:img   "/images/questions/option1.png"
-                                                        :text  "Cow"
-                                                        :value "cow"}
-                                                       {:img     "/images/questions/option2.png"
-                                                        :text    "Deer"
-                                                        :correct true
-                                                        :value   "deer"}
-                                                       {:img   "/images/questions/option3.png"
-                                                        :text  "Fox"
-                                                        :value "fox"}
-                                                       {:img   "/images/questions/option4.png"
-                                                        :text  "Skunk"
-                                                        :value "skunk"}]}
-                       :correct-answers-count "one"}
-
         question-data (question-object/create
-                        question-args
-                        ;(:question-page args)
+                        (form->question-data question-page-object)
                         {:suffix           index
                          :action-name      action-name
                          :object-name      object-name
                          :next-action-name next-action-name})]
     (-> activity-data
         (increase-next-action-index)
-        (place-question-object question-data))))
+        (question-object/add-to-scene question-data))))
 
 (defn- add-page-action
   [activity-data {:keys [type page-layout spread-layout image text]}]
@@ -340,7 +304,6 @@
                     (dissoc :layered-background))]
     (-> activity-data
         (update-in [:objects] merge objects))))
-
 
 (defn- update-template
   [activity-data {action-name :action-name :as args}]

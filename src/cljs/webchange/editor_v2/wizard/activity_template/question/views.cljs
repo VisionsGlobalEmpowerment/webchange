@@ -35,4 +35,4 @@
          [current-question-component (merge props
                                             {:data option-data})])
        [:hr]
-       [question-preview {:data @option-data}]])))
+       [question-preview @option-data]])))

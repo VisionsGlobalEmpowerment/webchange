@@ -1,8 +1,7 @@
-(ns webchange.templates.utils.question-object.multiple-choice-image
+(ns webchange.question.create-multiple-choice-image
   (:require
-    [clojure.tools.logging :as log]
-    [webchange.templates.utils.question-object.common-option-image :as option-image]
-    [webchange.templates.utils.question-object.common-voice-over :as voice-over]))
+    [webchange.question.create-common-option-image :as option-image]
+    [webchange.question.create-common-voice-over :as voice-over]))
 
 (def common-params {:x             0
                     :y             0
@@ -100,7 +99,7 @@
                                          :children []}}))))
 
 (defn create
-  [{:keys [object-name on-option-click on-option-voice-over-click on-task-voice-over-click]} args]
+  [{:keys [object-name on-option-click on-option-voice-over-click on-task-voice-over-click visible?]} args]
   (let [{:keys [sides-ratio-h width] :as common-params} common-params
 
         substrate-name (str object-name "-substrate")
@@ -135,7 +134,7 @@
                                    :x         (:x common-params)
                                    :y         (:y common-params)
                                    :children  [substrate-name background-name task-image-name task-text-name options-name]
-                                   :visible   false
+                                   :visible   visible?
                                    :states    {:invisible {:visible false}
                                                :visible   {:visible true}}
                                    :editable? {:show-in-tree? true}}}

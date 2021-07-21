@@ -4,7 +4,8 @@
             [webchange.course.core :as core]))
 
 (comment
-  (def test-course-slug (-> (t/create-test-course) :slug))
+  ;(def test-course-slug (-> (t/create-test-course) :slug))
+  (def test-course-slug "test-course-english-lfuhzeep")
   (def scene-slug "test-activity")
 
   (t/update-activity test-course-slug scene-slug)

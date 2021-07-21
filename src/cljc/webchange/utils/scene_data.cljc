@@ -48,6 +48,13 @@
 
 ;; Scene Data
 
+(def empty-data {:assets        []
+                 :objects       {}
+                 :scene-objects []
+                 :actions       {}
+                 :triggers      {}
+                 :metadata      {}})
+
 ; Assets
 
 (defn- add-asset

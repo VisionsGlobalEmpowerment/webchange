@@ -1,4 +1,4 @@
-(ns webchange.templates.utils.question-object.common-voice-over)
+(ns webchange.question.create-common-voice-over)
 
 (def default-size 80)
 
