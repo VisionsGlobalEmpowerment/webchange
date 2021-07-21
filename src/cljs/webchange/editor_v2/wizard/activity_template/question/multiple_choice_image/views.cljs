@@ -8,14 +8,16 @@
                                      :default-value "text-image"
                                      :options       [{:text  "Text with image"
                                                       :value "text-image"}
-                                                     {:text  "Text only"
-                                                      :value "text"}]}
+                                                     {:text      "Text only"
+                                                      :value     "text"
+                                                      :disabled? true}]}
              :layout                {:title         "Layout"
                                      :default-value "horizontal"
                                      :options       [{:text  "Horizontal"
                                                       :value "horizontal"}
-                                                     {:text  "Vertical"
-                                                      :value "vertical"}]}
+                                                     {:text      "Vertical"
+                                                      :value     "vertical"
+                                                      :disabled? true}]}
              :options-number        {:title         "Options number"
                                      :default-value 4
                                      :type          "int"
@@ -25,18 +27,21 @@
                                                          [2 3 4])}
              :option-label          {:title         "Option label"
                                      :default-value "audio-text"
-                                     :options       [{:text  "Audio only"
-                                                      :value "audio"}
+                                     :options       [{:text      "Audio only"
+                                                      :value     "audio"
+                                                      :disabled? true}
                                                      {:text  "Audio + text"
                                                       :value "audio-text"}
-                                                     {:text  "Empty"
-                                                      :value "none"}]}
+                                                     {:text      "Empty"
+                                                      :value     "none"
+                                                      :disabled? true}]}
              :correct-answers-count {:title         "Number of correct answers"
                                      :default-value "one"
                                      :options       [{:text  "One answer"
                                                       :value "one"}
-                                                     {:text  "Multiple choice"
-                                                      :value "multiple"}]}})
+                                                     {:text      "Multiple choice"
+                                                      :value     "multiple"
+                                                      :disabled? true}]}})
 
 (defn param-select
   [{:keys [data key]}]

@@ -72,5 +72,3 @@
   (when (not (nil? @loader))
     (clear-texture-cache)
     (.reset @loader)))
-
-

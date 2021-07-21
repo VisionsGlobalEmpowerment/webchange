@@ -93,6 +93,7 @@
                           (when (and (some? viewport)
                                      (:done @loading)
                                      (or (= mode ::modes/editor)
+                                         (= mode ::modes/preview)
                                          (:started? scene-data)))
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)
@@ -102,7 +103,8 @@
                           (when (and (some? viewport)
                                      (or (not (:done @loading))
                                          (and (not (:started? scene-data))
-                                              (not= mode ::modes/editor))))
+                                              (not= mode ::modes/editor)
+                                              (not= mode ::modes/preview))))
                             [overlay-wrapper {:viewport viewport}
                              [loader-screen {:on-start-click on-start-click
                                              :loading        @loading}]])

@@ -20,7 +20,8 @@
            objects (get-scene-objects-data-by-scene-data scene-data)
            resources (get-activity-resources nil scene-data)]
        ^{:key id}
-       [stage {:mode       ::modes/editor
+       [stage {:mode       ::modes/preview
                :scene-data {:scene-id  (str "question-preview-" id)
                             :objects   objects
-                            :resources resources}}]))])
+                            :resources resources}}]))
+   [:div.preview-overlay]])
