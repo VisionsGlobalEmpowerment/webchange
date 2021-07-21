@@ -92,7 +92,8 @@
                              :set-children            [:children]
                              :set-font-size           [:font-size]
                              :set-font-family         [:font-family]
-                             :set-animation-skin      [:skin]}
+                             :set-animation-skin      [:skin]
+                             :set-combined-skin       [:skin-names]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys filtered-state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
@@ -266,3 +267,8 @@
   :set-animation-skin
   (fn [[object-wrapper {:keys [skin]}]]
     (apply-to-wrapper w/set-skin object-wrapper skin)))
+
+(re-frame/reg-fx
+  :set-combined-skin
+  (fn [[object-wrapper {:keys [skin-names]}]]
+    (apply-to-wrapper w/set-combined-skin object-wrapper skin-names)))

@@ -35,7 +35,7 @@
                         :boxes      {:speed 1}
                         :child      {:width  342,
                                      :height 691,
-                                     :scale  {:x 1 :y 1}
+                                     :scale  {:x 0.5 :y 0.5}
                                      :speed  1
                                      :meshes true}})
 
