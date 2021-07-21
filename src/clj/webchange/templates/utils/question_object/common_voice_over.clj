@@ -17,11 +17,16 @@
     :or   {x    0
            y    0
            size default-size}}]
-  (let [background-name (str object-name "-background")]
+  (let [background-name (str object-name "-background")
+        actions (cond-> {}
+                        (some? on-click) (assoc :click (cond-> {:type "action"
+                                                                :on   "click"
+                                                                :id   on-click}
+                                                               (some? on-click-params) (assoc :params on-click-params))))]
     (merge {(keyword object-name) {:type     "group"
                                    :x        x
                                    :y        y
                                    :children [background-name]
-                                   :actions  {:click {:type "action" :on "click" :id on-click :params on-click-params}}}}
+                                   :actions  actions}}
            (create-background {:object-name background-name
                                :size        size}))))

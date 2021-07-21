@@ -50,7 +50,7 @@
                             :editable?  {:select true}}}))
 
 (defn- create-task-text
-  [{:keys [object-name x y width height text]}]
+  [{:keys [object-name x y width height text on-task-voice-over-click]}]
   (let [button-name (str object-name "-button")
         text-name (str object-name "-text")]
     (merge {(keyword object-name) {:type     "group"
@@ -68,7 +68,8 @@
                                    :editable?      {:select true}}}
            (voice-over/create {:object-name button-name
                                :x           0
-                               :y           0}))))
+                               :y           0
+                               :on-click    on-task-voice-over-click}))))
 
 (defn- create-options
   [{:keys [object-name x y width height options gap on-option-click on-option-voice-over-click]
@@ -99,7 +100,7 @@
                                          :children []}}))))
 
 (defn create
-  [{:keys [object-name on-option-click on-option-voice-over-click]} args]
+  [{:keys [object-name on-option-click on-option-voice-over-click on-task-voice-over-click]} args]
   (let [{:keys [sides-ratio-h width] :as common-params} common-params
 
         substrate-name (str object-name "-substrate")
@@ -151,12 +152,13 @@
                                :src         task-image
                                :width       task-image-container-width
                                :height      task-image-container-height})
-           (create-task-text {:object-name task-text-name
-                              :x           task-text-container-x
-                              :y           task-text-container-y
-                              :width       task-text-container-width
-                              :height      task-text-container-height
-                              :text        task-text})
+           (create-task-text {:object-name              task-text-name
+                              :x                        task-text-container-x
+                              :y                        task-text-container-y
+                              :width                    task-text-container-width
+                              :height                   task-text-container-height
+                              :text                     task-text
+                              :on-task-voice-over-click on-task-voice-over-click})
            (create-options {:object-name                options-name
                             :x                          options-text-container-x
                             :y                          options-text-container-y

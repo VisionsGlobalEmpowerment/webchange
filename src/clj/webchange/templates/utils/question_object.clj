@@ -99,5 +99,6 @@
                                   (:track option-voice-over-data))}
      :objects     (multiple-choice-image/create {:object-name                object-name
                                                  :on-option-click            option-click-name
-                                                 :on-option-voice-over-click option-voice-over-name}
+                                                 :on-option-voice-over-click option-voice-over-name
+                                                 :on-task-voice-over-click   task-dialog-name}
                                                 args)}))
