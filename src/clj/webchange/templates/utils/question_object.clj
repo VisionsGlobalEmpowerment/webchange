@@ -27,27 +27,23 @@
 (defn create
   [{:keys [alias options task] :as args}
    {:keys [action-name object-name next-action-name]}]
-  (log/debug "create-question-object")
-  (log/debug "args" args)
-  (let [
-        show-question-name (str action-name "-show")
+  (let [show-question-name (str action-name "-show")
         hide-question-name (str action-name "-hide")
 
         task-dialog-name (str action-name "-task-dialog")
-        option-click-name (str action-name "-option-click-handler")
-
-
-        ;success (str action-name "-correct-answer")
-        ;success-dialog (str action-name "-correct-answer-dialog")
-        ;fail-answer-dialog (str action-name "-fail-answer-dialog")
 
         option-voice-over-name (str action-name "-option-voice-over")
         option-voice-over-data (create-voice-over-handlers {:action-name option-voice-over-name
                                                             :options     (:data options)})
-        ]
+        correct-value (->> (:data options)
+                           (some (fn [{:keys [correct value]}]
+                                   (and correct value))))
+        option-click-name (str action-name "-option-click-handler")
 
-    (log/debug ":text" (:text task))
-
+        on-correct (str action-name "-correct-answer")
+        on-correct-dialog (str action-name "-correct-answer-dialog")
+        on-wrong (str action-name "-wrong-answer")
+        on-wrong-dialog (str action-name "-wrong-answer-dialog")]
     {:action-name action-name
      :object-name object-name
      :actions     (merge {(keyword action-name)        {:type          "sequence-data"
@@ -67,35 +63,48 @@
                                                                                       :audio       nil}]}]
                                                         :phrase-description "Question text"}
 
+                          (keyword option-click-name)  {:type        "test-value"
+                                                        :value1      correct-value
+                                                        :from-params [{:action-property "value2" :param-property "value"}]
+                                                        :success     on-correct
+                                                        :fail        on-wrong}
 
+                          (keyword on-correct)         {:type "sequence-data",
+                                                        :data [{:type "empty" :duration 500}
+                                                               {:type "action" :id on-correct-dialog}
+                                                               {:type "action" :id hide-question-name}
+                                                               {:type "empty" :duration 2000}
+                                                               (if next-action-name
+                                                                 {:type "action" :id next-action-name}
+                                                                 {:type "empty" :duration 100})]}
 
+                          (keyword on-correct-dialog)  {:type               "sequence-data"
+                                                        :data               [{:type "sequence-data"
+                                                                              :data [{:type "empty" :duration 0}
+                                                                                     {:type        "animation-sequence"
+                                                                                      :phrase-text ""
+                                                                                      :audio       nil}]}]
+                                                        :phrase-description "Correct answer"}
 
+                          (keyword on-wrong)           {:type "sequence-data",
+                                                        :data [{:type "empty" :duration 500}
+                                                               {:type "action" :id on-wrong-dialog}]}
 
-                          ;(keyword success)            {:type "sequence-data",
-                          ;                              :data [{:type "empty" :duration 500}
-                          ;                                     {:type "action" :id success-dialog}
-                          ;                                     {:type "hide-question"}
-                          ;                                     {:type "empty" :duration 2000}
-                          ;                                     (if next-action-name
-                          ;                                       {:type "action" :id next-action-name}
-                          ;                                       {:type "empty" :duration 100})]}
-
-                          ;(keyword success-dialog)     {:type               "sequence-data",
-                          ;                              :data               [{:type "sequence-data"
-                          ;                                                    :data [{:type "empty" :duration 0}
-                          ;                                                           {:type "animation-sequence", :phrase-text "success dialog", :audio nil}]}],
-                          ;                              :phrase-description "success dialog"}
-
-                          ;(keyword fail-answer-dialog) {:type               "sequence-data",
-                          ;                              :data               [{:type "sequence-data"
-                          ;                                                    :data [{:type "empty" :duration 0}
-                          ;                                                           {:type "animation-sequence", :phrase-text "fail answer dialog", :audio nil}]}],
-                          ;                              :phrase-description "fail answer dialog"}
-                          }
+                          (keyword on-wrong-dialog)    {:type               "sequence-data"
+                                                        :data               [{:type "sequence-data"
+                                                                              :data [{:type "empty" :duration 0}
+                                                                                     {:type        "animation-sequence"
+                                                                                      :phrase-text ""
+                                                                                      :audio       nil}]}]
+                                                        :phrase-description "Wrong answer"}}
                          (:actions option-voice-over-data))
      :track       {:title alias
                    :nodes (concat [{:type      "dialog"
-                                    :action-id (keyword task-dialog-name)}]
+                                    :action-id (keyword task-dialog-name)}
+                                   {:type      "dialog"
+                                    :action-id (keyword on-correct-dialog)}
+                                   {:type      "dialog"
+                                    :action-id (keyword on-wrong-dialog)}]
                                   (:track option-voice-over-data))}
      :objects     (multiple-choice-image/create {:object-name                object-name
                                                  :on-option-click            option-click-name
