@@ -8,9 +8,8 @@
                                      :default-value "text-image"
                                      :options       [{:text  "Text with image"
                                                       :value "text-image"}
-                                                     {:text      "Text only"
-                                                      :value     "text"
-                                                      :disabled? true}]}
+                                                     {:text  "Text only"
+                                                      :value "text"}]}
              :layout                {:title         "Layout"
                                      :default-value "horizontal"
                                      :options       [{:text  "Horizontal"

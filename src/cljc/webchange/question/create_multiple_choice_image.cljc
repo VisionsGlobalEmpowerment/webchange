@@ -97,27 +97,47 @@
                                          :y        y
                                          :children []}}))))
 
-(defn create
-  [{:keys [object-name on-option-click on-option-voice-over-click on-task-voice-over-click visible?]} args]
-  (let [{:keys [sides-ratio-h width] :as common-params} common-params
+(defn- add-task-image
+  [result parent-name {:keys [task]}]
+  (let [{task-image :img} task
+        task-image-name (str parent-name "-task-image")
 
-        substrate-name (str object-name "-substrate")
-        background-name (str object-name "-background")
-        task-image-name (str object-name "-task-image")
-        task-text-name (str object-name "-task-text")
-        options-name (str object-name "-options")
-
-        alias (get args :alias object-name)
-        task-image (get-in args [:task :img])
-        task-text (get-in args [:task :text])
-        options (get-in args [:options :data])
-
-        main-content-x (* sides-ratio-h width)
-        main-content-width (- width main-content-x)
-        main-content-height (:height common-params)
-
+        {:keys [sides-ratio-h width height]} common-params
         task-image-container-width (* sides-ratio-h width)
-        task-image-container-height (:height common-params)
+        task-image-container-height height]
+    (-> result
+        (update-in [(keyword parent-name) :children] conj task-image-name)
+        (merge (create-task-image {:object-name task-image-name
+                                   :src         task-image
+                                   :width       task-image-container-width
+                                   :height      task-image-container-height})))))
+
+(defn- add-main-content
+  [result parent-name
+   {:keys [on-option-click on-option-voice-over-click on-task-voice-over-click]}
+   {:keys [options task]}]
+  (let [{:keys [sides-ratio-h width]} common-params
+
+        background-name (str parent-name "-background")
+        task-text-name (str parent-name "-task-text")
+        options-name (str parent-name "-options")
+
+        {task-text :text task-type :type} task
+        options (:data options)
+
+        {main-content-x      :x
+         main-content-y      :y
+         main-content-width  :width
+         main-content-height :height} (if (= task-type "text-image")
+                                        (let [x (* sides-ratio-h width)]
+                                          {:x      x
+                                           :y      0
+                                           :width  (- width x)
+                                           :height (:height common-params)})
+                                        {:x      0
+                                         :y      0
+                                         :width  width
+                                         :height (:height common-params)})
 
         task-text-container-x (+ main-content-x p/block-padding)
         task-text-container-y p/block-padding
@@ -125,43 +145,53 @@
         task-text-container-height (- (* main-content-height sides-ratio-h) (* 2 p/block-padding))
 
         options-text-container-x (+ main-content-x p/block-padding)
-        options-text-container-y (+ task-text-container-height p/block-padding)
+        options-text-container-y (+ task-text-container-y task-text-container-height p/block-padding task-text-container-y)
         options-text-container-width (- main-content-width (* 2 p/block-padding))
-        options-text-container-height (- main-content-height task-text-container-height (* 2 p/block-padding))]
-    (merge {(keyword object-name) {:type      "group"
-                                   :alias     alias
-                                   :x         (:x common-params)
-                                   :y         (:y common-params)
-                                   :children  [substrate-name background-name task-image-name task-text-name options-name]
-                                   :visible   visible?
-                                   :states    {:invisible {:visible false}
-                                               :visible   {:visible true}}
-                                   :editable? {:show-in-tree? true}}}
-           (create-substrate {:object-name substrate-name
-                              :width       (:width common-params)
-                              :height      (:height common-params)})
-           (create-background {:object-name background-name
-                               :x           main-content-x
-                               :y           0
-                               :width       main-content-width
-                               :height      (:height common-params)
-                               :color       (:primary-color common-params)})
-           (create-task-image {:object-name task-image-name
-                               :src         task-image
-                               :width       task-image-container-width
-                               :height      task-image-container-height})
-           (create-task-text {:object-name              task-text-name
-                              :x                        task-text-container-x
-                              :y                        task-text-container-y
-                              :width                    task-text-container-width
-                              :height                   task-text-container-height
-                              :text                     task-text
-                              :on-task-voice-over-click on-task-voice-over-click})
-           (create-options {:object-name                options-name
-                            :x                          options-text-container-x
-                            :y                          options-text-container-y
-                            :width                      options-text-container-width
-                            :height                     options-text-container-height
-                            :options                    options
-                            :on-option-click            on-option-click
-                            :on-option-voice-over-click on-option-voice-over-click}))))
+        options-text-container-height (- main-content-height options-text-container-y p/block-padding)]
+    (-> result
+        (update-in [(keyword parent-name) :children] conj background-name)
+        (merge (create-background {:object-name background-name
+                                   :x           main-content-x
+                                   :y           main-content-y
+                                   :width       main-content-width
+                                   :height      (:height common-params)
+                                   :color       (:primary-color common-params)}))
+
+        (update-in [(keyword parent-name) :children] conj task-text-name)
+        (merge (create-task-text {:object-name              task-text-name
+                                  :x                        task-text-container-x
+                                  :y                        task-text-container-y
+                                  :width                    task-text-container-width
+                                  :height                   task-text-container-height
+                                  :text                     task-text
+                                  :on-task-voice-over-click on-task-voice-over-click}))
+
+        (update-in [(keyword parent-name) :children] conj options-name)
+        (merge (create-options {:object-name                options-name
+                                :x                          options-text-container-x
+                                :y                          options-text-container-y
+                                :width                      options-text-container-width
+                                :height                     options-text-container-height
+                                :options                    options
+                                :on-option-click            on-option-click
+                                :on-option-voice-over-click on-option-voice-over-click})))))
+
+(defn create
+  [{:keys [object-name visible?] :as props}
+   {:keys [alias task] :as args}]
+  (let [substrate-name (str object-name "-substrate")
+        {task-type :type} task]
+    (cond-> (merge {(keyword object-name) {:type      "group"
+                                           :alias     alias
+                                           :x         (:x common-params)
+                                           :y         (:y common-params)
+                                           :children  [substrate-name]
+                                           :visible   visible?
+                                           :states    {:invisible {:visible false}
+                                                       :visible   {:visible true}}
+                                           :editable? {:show-in-tree? true}}}
+                   (create-substrate {:object-name substrate-name
+                                      :width       (:width common-params)
+                                      :height      (:height common-params)}))
+            :always (add-main-content object-name props args)
+            (= task-type "text-image") (add-task-image object-name args))))

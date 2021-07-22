@@ -1,5 +1,7 @@
 (ns webchange.question.get-question-data)
 
+(def default-task-text "Who do you think the main character, or most important character is going to be in this book?")
+
 (def default-options [{:img     "/images/questions/option1.png"
                        :text    "Cow"
                        :value   "cow"
@@ -15,12 +17,12 @@
                        :value "skunk"}])
 
 (defn form->question-data
-  [{:keys [alias options-number]}]
+  [{:keys [alias options-number task-type]}]
   {:alias                 (or alias "New question")
    :question-type         "multiple-choice-image"
    :layout                "horizontal"
-   :task                  {:type "text-image"
-                           :text "Who do you think the main character, or most important character is going to be in this book?"
+   :task                  {:type task-type
+                           :text default-task-text
                            :img  "/images/questions/question.png"}
    :options               {:label "audio-text"
                            :data  (take options-number default-options)}
