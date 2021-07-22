@@ -12,8 +12,15 @@
        (filter (fn [option] (.-selected option)))
        (map (fn [option] (.-value option)))))
 
+(defn- apply-max-values-number
+  [max-values-number values]
+  (if (number? max-values-number)
+    (take max-values-number values)
+    values))
+
 (defn component
   [{:keys [class-name
+           max-values-number
            multiple?
            on-arrow-down-click
            on-arrow-up-click
@@ -45,7 +52,8 @@
   (let [handle-change (fn [event]
                         (let [selected-options (->> (get-selected-options event)
                                                     (map #(parse-value % type))
-                                                    (doall))]
+                                                    (doall)
+                                                    (apply-max-values-number max-values-number))]
                           (-> (if multiple?
                                 selected-options
                                 (first selected-options))

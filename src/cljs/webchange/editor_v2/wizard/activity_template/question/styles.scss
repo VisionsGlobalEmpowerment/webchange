@@ -11,11 +11,13 @@
     }
 
     .option-group {
+        display: flex;
         margin-bottom: 8px;
 
         & > span {
             display: inline-block;
             padding-right: 16px;
+            padding-top: 6px;
             text-align: right;
             width: 200px;
         }

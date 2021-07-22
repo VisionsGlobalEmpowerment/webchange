@@ -1,5 +1,6 @@
 (ns webchange.question.create-multiple-choice-image
   (:require
+    [webchange.question.create-common-check-button :as check-button]
     [webchange.question.create-common-option-image :as option-image]
     [webchange.question.create-common-voice-over :as voice-over]
     [webchange.question.params :as p]))
@@ -112,10 +113,27 @@
                                    :width       task-image-container-width
                                    :height      task-image-container-height})))))
 
+; p/check-button-size
+
+(defn- add-check-button
+  [result parent-name
+   props
+   args
+   {:keys [x y]}]
+  (let [button-name (str parent-name "-check-button")]
+    (-> result
+        (update-in [(keyword parent-name) :children] conj button-name)
+        (merge (check-button/create {:object-name button-name
+                                     :x           x
+                                     :y           y
+                                     ;:on-click
+                                     ;:on-click-params
+                                     })))))
+
 (defn- add-main-content
   [result parent-name
-   {:keys [on-option-click on-option-voice-over-click on-task-voice-over-click]}
-   {:keys [options task]}]
+   {:keys [on-option-click on-option-voice-over-click on-task-voice-over-click] :as props}
+   {:keys [answers-number options task] :as args}]
   (let [{:keys [sides-ratio-h width]} common-params
 
         background-name (str parent-name "-background")
@@ -147,34 +165,42 @@
         options-text-container-x (+ main-content-x p/block-padding)
         options-text-container-y (+ task-text-container-y task-text-container-height p/block-padding task-text-container-y)
         options-text-container-width (- main-content-width (* 2 p/block-padding))
-        options-text-container-height (- main-content-height options-text-container-y p/block-padding)]
-    (-> result
-        (update-in [(keyword parent-name) :children] conj background-name)
-        (merge (create-background {:object-name background-name
-                                   :x           main-content-x
-                                   :y           main-content-y
-                                   :width       main-content-width
-                                   :height      (:height common-params)
-                                   :color       (:primary-color common-params)}))
+        options-text-container-height (- main-content-height options-text-container-y p/block-padding)
 
-        (update-in [(keyword parent-name) :children] conj task-text-name)
-        (merge (create-task-text {:object-name              task-text-name
-                                  :x                        task-text-container-x
-                                  :y                        task-text-container-y
-                                  :width                    task-text-container-width
-                                  :height                   task-text-container-height
-                                  :text                     task-text
-                                  :on-task-voice-over-click on-task-voice-over-click}))
+        check-button-x (- (+ main-content-x (/ main-content-width 2))
+                          (/ p/check-button-size 2))
+        check-button-y (- (+ main-content-y main-content-height)
+                          p/block-padding p/check-button-size)]
+    (cond-> (-> result
+                (update-in [(keyword parent-name) :children] conj background-name)
+                (merge (create-background {:object-name background-name
+                                           :x           main-content-x
+                                           :y           main-content-y
+                                           :width       main-content-width
+                                           :height      (:height common-params)
+                                           :color       (:primary-color common-params)}))
 
-        (update-in [(keyword parent-name) :children] conj options-name)
-        (merge (create-options {:object-name                options-name
-                                :x                          options-text-container-x
-                                :y                          options-text-container-y
-                                :width                      options-text-container-width
-                                :height                     options-text-container-height
-                                :options                    options
-                                :on-option-click            on-option-click
-                                :on-option-voice-over-click on-option-voice-over-click})))))
+                (update-in [(keyword parent-name) :children] conj task-text-name)
+                (merge (create-task-text {:object-name              task-text-name
+                                          :x                        task-text-container-x
+                                          :y                        task-text-container-y
+                                          :width                    task-text-container-width
+                                          :height                   task-text-container-height
+                                          :text                     task-text
+                                          :on-task-voice-over-click on-task-voice-over-click}))
+
+                (update-in [(keyword parent-name) :children] conj options-name)
+                (merge (create-options {:object-name                options-name
+                                        :x                          options-text-container-x
+                                        :y                          options-text-container-y
+                                        :width                      options-text-container-width
+                                        :height                     options-text-container-height
+                                        :options                    options
+                                        :on-option-click            on-option-click
+                                        :on-option-voice-over-click on-option-voice-over-click})))
+            (= answers-number "many") (add-check-button parent-name props args
+                                                        {:x check-button-x
+                                                         :y check-button-y}))))
 
 (defn create
   [{:keys [object-name visible?] :as props}

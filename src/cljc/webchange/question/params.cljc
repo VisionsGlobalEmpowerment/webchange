@@ -6,6 +6,8 @@
 
 (def block-padding 60)
 
+(def check-button-size 60)
+
 (def options-gap 30)
 (def option-border-radius 20)
 (def option-border-width 2)

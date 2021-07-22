@@ -28,5 +28,6 @@
                :stage-name "question-preview"
                :scene-data {:scene-id  (str "question-preview-" id)
                             :objects   objects
-                            :resources resources}}]))
+                            :resources resources}}]
+       ))
    [:div.preview-overlay]])

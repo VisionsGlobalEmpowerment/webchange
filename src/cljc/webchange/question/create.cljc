@@ -13,7 +13,8 @@
                                                                                                   {:type        "animation-sequence"
                                                                                                    :phrase-text (:text option)
                                                                                                    :audio       nil}]}]
-                                                                     :phrase-description (str "Option \"" (:text option) "\" voice-over")})
+                                                                     :phrase-description (str "Option \"" (:text option) "\" voice-over")
+                                                                     :editor-type        "dialog"})
                   (assoc-in [:actions (keyword action-name) :options (keyword (:value option))] {:type "action" :id option-dialog-name})
                   (update-in [:track] conj {:type      "dialog"
                                             :action-id (keyword option-dialog-name)}))))
@@ -26,7 +27,7 @@
 (defn create
   ([question-params activity-params]
    (create question-params activity-params {}))
-  ([{:keys [alias options task] :as args}
+  ([{:keys [alias answers-number correct-answers options task] :as args}
     {:keys [action-name object-name next-action-name]}
     {:keys [visible?] :or {visible? false}}]
    (let [show-question-name (str action-name "-show")
@@ -37,10 +38,11 @@
          option-voice-over-name (str action-name "-option-voice-over")
          option-voice-over-data (create-voice-over-handlers {:action-name option-voice-over-name
                                                              :options     (:data options)})
-         correct-value (->> (:data options)
-                            (some (fn [{:keys [correct value]}]
-                                    (and correct value))))
+
          option-click-name (str action-name "-option-click-handler")
+
+         question-id (str action-name "-question-id")
+         check-answers (str action-name "-check-answers")
 
          on-correct (str action-name "-correct-answer")
          on-correct-dialog (str action-name "-correct-answer-dialog")
@@ -63,15 +65,28 @@
                                                                                       {:type        "animation-sequence"
                                                                                        :phrase-text (:text task)
                                                                                        :audio       nil}]}]
-                                                         :phrase-description "Question text"}
+                                                         :phrase-description "Question text"
+                                                         :editor-type        "dialog"}
 
-                           (keyword option-click-name)  {:type        "test-value"
-                                                         :value1      correct-value
-                                                         :from-params [{:action-property "value2" :param-property "value"}]
-                                                         :success     on-correct
-                                                         :fail        on-wrong}
+                           (keyword option-click-name)  {:type "sequence-data"
+                                                         :data [{:type        "question-pick"
+                                                                 :id          question-id
+                                                                 :from-params [{:action-property "value" :param-property "value"}]}
+                                                                {:type    "test-value"
+                                                                 :value1  answers-number
+                                                                 :value2  "one"
+                                                                 :success check-answers}]}
 
-                           (keyword on-correct)         {:type "sequence-data",
+                           (keyword check-answers)      {:type "sequence-data"
+                                                         :data [{:type    "question-check"
+                                                                 :id      question-id
+                                                                 :answer  correct-answers
+                                                                 :success on-correct
+                                                                 :fail    on-wrong}
+                                                                {:type "question-reset"
+                                                                 :id   question-id}]}
+
+                           (keyword on-correct)         {:type "sequence-data"
                                                          :data [{:type "empty" :duration 500}
                                                                 {:type "action" :id on-correct-dialog}
                                                                 {:type "action" :id hide-question-name}
@@ -86,7 +101,8 @@
                                                                                       {:type        "animation-sequence"
                                                                                        :phrase-text ""
                                                                                        :audio       nil}]}]
-                                                         :phrase-description "Correct answer"}
+                                                         :phrase-description "Correct answer"
+                                                         :editor-type        "dialog"}
 
                            (keyword on-wrong)           {:type "sequence-data",
                                                          :data [{:type "empty" :duration 500}
@@ -98,7 +114,8 @@
                                                                                       {:type        "animation-sequence"
                                                                                        :phrase-text ""
                                                                                        :audio       nil}]}]
-                                                         :phrase-description "Wrong answer"}}
+                                                         :phrase-description "Wrong answer"
+                                                         :editor-type        "dialog"}}
                           (:actions option-voice-over-data))
       :track       {:title alias
                     :nodes (concat [{:type      "dialog"
