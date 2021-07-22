@@ -4,16 +4,26 @@
     [webchange.logger.index :as logger]))
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
-(defonce loader (atom nil))
+(defonce loaders (atom {}))
+
+(def default-loader-id "default")
+
+(defn get-loader
+  ([] (get-loader default-loader-id))
+  ([id] (get @loaders (or id default-loader-id))))
+
+(defn set-loader
+  ([instance] (set-loader default-loader-id instance))
+  ([id instance] (swap! loaders assoc (or id default-loader-id) instance)))
 
 (defn init
-  [loader-instance]
-  (when (nil? @loader)
-    (reset! loader loader-instance)))
+  [instance id]
+  (when (nil? (get-loader id))
+    (set-loader id instance)))
 
 (defn- get-resources-store
   []
-  (.-resources @loader))
+  (.-resources (get-loader)))
 
 (defn get-resource
   [resource-name]
@@ -32,13 +42,14 @@
   (.detachAll (.-onComplete loader)))
 
 (defn- set-callbacks
-  [loader {:keys [on-progress on-error on-load on-complete]}]
+  [loader {:keys [on-progress on-error on-load on-complete]} id]
   (when-not (nil? on-progress) (.add (.-onProgress loader)
                                      (fn [loader] (on-progress (-> loader (.-progress) (/ 100))))))
   (when-not (nil? on-error) (.add (.-onError loader) on-error))
   (when-not (nil? on-load) (.add (.-onLoad loader) on-load))
   (.add (.-onComplete loader) (fn []
-                                (when-not (nil? on-complete)
+                                (logger/trace "load complete" id)
+                                (when (fn? on-complete)
                                   (on-complete))
                                 (reset-callbacks loader))))
 
@@ -46,18 +57,21 @@
   ([resources]
    (load-resources resources {}))
   ([resources callbacks]
-   (logger/trace "load resources" resources)
-   (set-callbacks @loader callbacks)
-   (->> resources
-        (reduce (fn [loader resource]
-                  (let [[key src] (if (sequential? resource)
-                                    [(first resource) (second resource)]
-                                    [resource resource])]
-                    (if-not (has-resource? key)
-                      (.add loader key src)
-                      loader)))
-                @loader)
-        (.load))))
+   (load-resources resources callbacks nil))
+  ([resources callbacks id]
+   (logger/trace "load resources" resources id)
+   (let [loader (get-loader id)]
+     (set-callbacks loader callbacks id)
+     (->> resources
+          (reduce (fn [loader resource]
+                    (let [[key src] (if (sequential? resource)
+                                      [(first resource) (second resource)]
+                                      [resource resource])]
+                      (if-not (has-resource? key)
+                        (.add loader key src)
+                        loader)))
+                  loader)
+          (.load)))))
 
 (defn load-resource
   [src callback]
@@ -68,7 +82,7 @@
                       (callback resource)))}))
 
 (defn reset-loader!
-  []
-  (when (not (nil? @loader))
+  [id]
+  (when-not (nil? (get-loader id))
     (clear-texture-cache)
-    (.reset @loader)))
+    (.reset (get-loader id))))
