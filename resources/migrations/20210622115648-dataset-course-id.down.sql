@@ -1,0 +1,1 @@
+ALTER TABLE ONLY classes DROP COLUMN course_id;

@@ -64,7 +64,8 @@
 
 (defn update-class!
   [id data]
-  (let [prepared-data (assoc data :id id)]
+  (let [prepared-data (-> (db/transform-keys-one-level ->snake_case_keyword data)
+                          (assoc :id id))]
     (db/update-class! prepared-data)
     [true {:id id}]))
 
