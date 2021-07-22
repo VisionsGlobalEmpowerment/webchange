@@ -84,7 +84,7 @@
                        (let [{:keys [scene-data stage-name]} (r/props this)]
                          (init-scene scene-data current-scene-id loading stage-name)))
        :reagent-render
-                     (fn [{:keys [mode on-ready on-start-click scene-data]}]
+                     (fn [{:keys [mode on-ready on-start-click scene-data stage-name]}]
                        (let [viewport (-> (element->viewport @container)
                                           (get-stage-params))
                              show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])]
@@ -96,6 +96,7 @@
                                      (or (= mode ::modes/editor)
                                          (= mode ::modes/preview)
                                          (:started? scene-data)))
+                            (print "render scene" stage-name)
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)
                                     :viewport viewport

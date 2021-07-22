@@ -42,13 +42,14 @@
   (.detachAll (.-onComplete loader)))
 
 (defn- set-callbacks
-  [loader {:keys [on-progress on-error on-load on-complete]}]
+  [loader {:keys [on-progress on-error on-load on-complete]} id]
   (when-not (nil? on-progress) (.add (.-onProgress loader)
                                      (fn [loader] (on-progress (-> loader (.-progress) (/ 100))))))
   (when-not (nil? on-error) (.add (.-onError loader) on-error))
   (when-not (nil? on-load) (.add (.-onLoad loader) on-load))
   (.add (.-onComplete loader) (fn []
-                                (when-not (nil? on-complete)
+                                (logger/trace "load complete" id)
+                                (when (fn? on-complete)
                                   (on-complete))
                                 (reset-callbacks loader))))
 
@@ -58,9 +59,9 @@
   ([resources callbacks]
    (load-resources resources callbacks nil))
   ([resources callbacks id]
-   (logger/trace "load resources" resources)
+   (logger/trace "load resources" resources id)
    (let [loader (get-loader id)]
-     (set-callbacks loader callbacks)
+     (set-callbacks loader callbacks id)
      (->> resources
           (reduce (fn [loader resource]
                     (let [[key src] (if (sequential? resource)
