@@ -1,6 +1,8 @@
 .side-menu {
     width: 300px;
     display: flex;
+    position: sticky;
+    top: 0;
 
     .side-menu-sections {
         flex: 0 0;
