@@ -15,8 +15,8 @@
                        :value "skunk"}])
 
 (defn form->question-data
-  [{:keys [options-number]}]
-  {:alias                 "Q: Who is the main character?"
+  [{:keys [alias options-number]}]
+  {:alias                 (or alias "New question")
    :question-type         "multiple-choice-image"
    :layout                "horizontal"
    :task                  {:type "text-image"

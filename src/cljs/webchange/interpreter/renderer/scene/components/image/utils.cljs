@@ -28,17 +28,10 @@
 (defn apply-origin
   [container {{origin :type} :origin {x :x y :x} :offset}]
 
-  (print ">> apply-origin" origin x y)
-
   (when (and origin (= 0 (int x)) (= 0 (int y)))
     (let [[h v] (clojure.string/split origin #"-")
           pivot (.-pivot container)
           local-bounds (.getLocalBounds container)]
-
-      (print "h v" h v)
-      (print "pivot" pivot)
-      (print "local-bounds" local-bounds)
-
       (case h
         "left" (set! (.-x pivot) 0)
         "center" (set! (.-x pivot) (/ (+ (.-x local-bounds) (.-width local-bounds)) 2))

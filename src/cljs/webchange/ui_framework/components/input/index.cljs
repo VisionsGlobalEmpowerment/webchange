@@ -21,6 +21,7 @@
            disabled?
            id
            value
+           on-blur
            on-click
            on-change
            on-enter-press
@@ -47,7 +48,8 @@
           handle-key-press (fn [event]
                              (case (.-key event)
                                "Enter" (when (fn? on-enter-press) (on-enter-press (.. event -target -value)))
-                               "default"))]
+                               "default"))
+          handle-blur #(on-blur (.. % -target -value))]
       [:input (cond-> {:class-name  (get-class-name (-> {"wc-input" true}
                                                         (assoc class-name (some? class-name))))
                        :disabled    disabled?
@@ -58,6 +60,7 @@
                       (some? id) (assoc :id id)
                       (some? value) (assoc :value value)
                       (some? default-value) (assoc :default-value default-value)
-                      (fn? on-enter-press) (assoc :on-key-press handle-key-press))])
+                      (fn? on-enter-press) (assoc :on-key-press handle-key-press)
+                      (fn? on-blur) (assoc :on-blur handle-blur))])
     (finally
       (unsubscribe-document handle-document-key-down))))
