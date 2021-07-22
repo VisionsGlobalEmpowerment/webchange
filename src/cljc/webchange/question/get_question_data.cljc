@@ -2,10 +2,9 @@
 
 (def default-task-text "Who do you think the main character, or most important character is going to be in this book?")
 
-(def default-options [{:img     "/images/questions/option1.png"
-                       :text    "Cow"
-                       :value   "cow"
-                       :correct true}
+(def default-options [{:img   "/images/questions/option1.png"
+                       :text  "Cow"
+                       :value "cow"}
                       {:img   "/images/questions/option2.png"
                        :text  "Deer"
                        :value "deer"}
@@ -17,7 +16,7 @@
                        :value "skunk"}])
 
 (defn form->question-data
-  [{:keys [alias options-number task-type]}]
+  [{:keys [alias correct-answer options-number task-type]}]
   {:alias                 (or alias "New question")
    :question-type         "multiple-choice-image"
    :layout                "horizontal"
@@ -25,7 +24,10 @@
                            :text default-task-text
                            :img  "/images/questions/question.png"}
    :options               {:label "audio-text"
-                           :data  (take options-number default-options)}
+                           :data  (->> (take options-number default-options)
+                                       (map-indexed (fn [idx option]
+                                                      (cond-> option
+                                                              (= correct-answer (inc idx)) (assoc :correct true)))))}
    :correct-answers-count "one"})
 
 ;{:alias                 "Q: Who is the main character?"

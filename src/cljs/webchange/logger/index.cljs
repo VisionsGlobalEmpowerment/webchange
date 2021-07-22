@@ -20,6 +20,9 @@
 (defn trace-list [list] (if (empty? list) (trace "--empty--") (doseq [item list] (trace item))))
 (defn trace-list-folded [message list] (group-folded message) (trace-list list) (group-end message))
 
+(defn ->>with-trace [message value] (trace message value) value)
+(defn ->>with-trace-folded [message value] (group-folded message) (trace value) (group-end message) value)
+
 (defn with-trace-list [list] (trace-list list) list)
 (defn ->>with-trace-list-folded [message list] (group-folded message) (trace-list list) (group-end message) list)
 
