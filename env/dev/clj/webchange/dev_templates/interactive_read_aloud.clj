@@ -5,11 +5,12 @@
 
 (comment
   ;(def test-course-slug (-> (t/create-test-course) :slug))
-  (def test-course-slug "test-course-english-lfuhzeep")
+  (def test-course-slug "test-course-english-ykielyaf")
   (def scene-slug "test-activity")
 
   (t/update-activity test-course-slug scene-slug)
   (t/update-activity test-course-slug scene-slug :actions [:dialog-intro :page-cover-action])
+  (t/update-activity test-course-slug scene-slug :keep-dialogs true)
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Book"
