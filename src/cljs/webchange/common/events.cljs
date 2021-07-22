@@ -2,7 +2,6 @@
   (:require
     [clojure.string :as s]
     [re-frame.core :as re-frame]
-    [day8.re-frame.tracing :refer-macros [fn-traced]]
     [webchange.interpreter.variables.core :refer [variables]]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.overlays :as overlays]
@@ -335,7 +334,7 @@
 (re-frame/reg-event-fx
   ::execute-action
   [event-as-action]
-  (fn-traced [{:keys [db]} action]
+  (fn [{:keys [db]} action]
     (execute-action db action)
     {}))
 
@@ -514,7 +513,7 @@
 (re-frame/reg-event-fx
   ::execute-sequence
   [event-as-action with-vars]
-  (fn-traced [{:keys [db]} action]
+  (fn [{:keys [db]} action]
     "Execute `sequence` action - run a sequence of actions defined by their names.
 
     Action params:
@@ -556,7 +555,7 @@
 (re-frame/reg-event-fx
   ::execute-sequence-data
   [event-as-action]
-  (fn-traced [{:keys [db]} action]
+  (fn [{:keys [db]} action]
     "Execute `sequence-data` action - run a sequence of actions defined by their data.
 
     Action params:
@@ -597,7 +596,7 @@
 (re-frame/reg-event-fx
   ::execute-parallel
   [event-as-action]
-  (fn-traced [{:keys [db]} action]
+  (fn [{:keys [db]} action]
     "Execute `parallel` action - run in parallel several actions defined by their data.
 
     Action params:
@@ -742,7 +741,7 @@
 (re-frame/reg-event-fx
   ::execute-workflow
   [event-as-action]
-  (fn-traced [{:keys [db]} action]
+  (fn [{:keys [db]} action]
     "Execute `workflow` action - run a sequence of actions defined by their data.
     Each finished action is marked as completed. Next time this workflow sequence is executed all
     completed actions will be skipped. This allows executing workflow several times.

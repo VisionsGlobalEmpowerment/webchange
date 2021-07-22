@@ -22,17 +22,18 @@
                     :animation-start? {:alias :start}
                     :speed            {:default 1}
                     :skin-name        {:alias :skin :default "default"}
+                    :skin-names       {}
                     :animation-name   {:alias :anim}
                     :position         {:alias :anim-offset}
                     :filters          {}})
 
 (defn- create-spine-animation
-  [animation-resource {:keys [animation-start? speed offset position skin-name animation-name scale loop]}]
+  [animation-resource {:keys [animation-start? speed offset position skin-name skin-names animation-name scale loop]}]
   (let [spine-data (.-spineData animation-resource)
         coordinates {:x (* (- (:x position) (:x offset)) (:x scale))
                      :y (* (- (:y position) (:y offset)) (:y scale))}]
     (doto (Spine. spine-data)
-      (utils/set-skin skin-name)
+      (utils/set-or-combine-skin skin-names skin-name)
       (utils/set-animation animation-name)
       (utils/set-position coordinates)
       (utils/set-scale scale)

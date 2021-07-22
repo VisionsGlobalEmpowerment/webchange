@@ -701,7 +701,7 @@
                                (reduce #(templates/update-activity-from-template %1 %2) a updated))
 
         preserve-actions (->> preserve-actions
-                              (map (fn [[key action]] (let [preserved-action-keys [:available-activities :concept-var :tags :skippable]
+                              (map (fn [[key action]] (let [preserved-action-keys [:available-activities :concept-var :tags :skippable :unique-tag]
                                                             created-action (-> (get-in created-activity [:actions key])
                                                                                (select-keys preserved-action-keys))]
                                                         [key (merge action created-action)])))

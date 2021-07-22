@@ -32,7 +32,12 @@
                                      :speed  1
                                      :meshes true
                                      :skin   "default"}
-                        :boxes      {:speed 1}})
+                        :boxes      {:speed 1}
+                        :child      {:width  342,
+                                     :height 691,
+                                     :scale  {:x 0.5 :y 0.5}
+                                     :speed  1
+                                     :meshes true}})
 
 (defn get-animations-resource-path
   [anim-name file]

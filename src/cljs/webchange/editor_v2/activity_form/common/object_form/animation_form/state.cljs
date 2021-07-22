@@ -13,7 +13,7 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [animation-data (select-keys objects-data [:skin])
+    (let [animation-data (select-keys objects-data [:skin :skin-names])
           animation-name (get objects-data :name)]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
@@ -83,4 +83,20 @@
 (re-frame/reg-event-fx
   ::set-current-skin
   (fn [{:keys [_]} [_ id skin]]
+    (js/console.log "set current-skin" id skin)
     {:dispatch [::state/update-current-data id {:skin skin}]}))
+
+(re-frame/reg-sub
+  ::current-skin-names
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (js/console.log "current data" current-data)
+    (get current-data :skin-names {:body nil})))
+
+(re-frame/reg-event-fx
+  ::set-current-skin-names
+  (fn [{:keys [_]} [_ id skin-names]]
+    (js/console.log "set skin names" id skin-names)
+    {:dispatch [::state/update-current-data id {:skin-names skin-names}]}))

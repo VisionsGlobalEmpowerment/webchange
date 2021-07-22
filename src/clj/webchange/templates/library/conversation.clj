@@ -3,7 +3,6 @@
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.question :as question]
     [webchange.templates.utils.dialog :as dialog]
-    [webchange.templates.utils.image :as image]
     [webchange.templates.utils.characters :as characters]
     [webchange.templates.core :as core]))
 
@@ -14,67 +13,95 @@
         :options     {:characters {:label "Characters"
                                    :type  "characters"
                                    :max   5}}
-        :actions     {:add-dialog   {:title   "Add dialog",
-                                     :options {:dialog {:label "Dialog name"
+        :actions     {:add-dialog   {:title   "Add dialogue",
+                                     :options {:dialog {:label       "Dialog name"
+                                                        :description "Dialog name"
                                                         :placeholder "(ex. Conversation about ball)"
-                                                        :type  "string"}}}
+                                                        :type        "string"}}}
                       :add-question {:title   "Add question",
-                                     :options {:question-page {:label       "Question"
-                                                               :type        "questions-no-image"
-                                                               :max-answers 5}}}
-                      :add-image    {:title   "Set image",
-                                     :options {:scene-image {:label       "Image"
-                                                             :type        "image"
-                                                             :options {:max-width 300
-                                                                       :max-height 300
-                                                                       :min-height 100
-                                                                       :min-width 100}}}}
-                      }})
-(def t {:assets
-                       [
-                        {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
-                        ],
-        :objects
-                       {:background  {:type "background", :src "/raw/img/casa/background.jpg"}},
+                                     :options {:question-page {:label         "Question"
+                                                               :type          "question"
+                                                               :answers-label "Answers"
+                                                               :max-answers   4}}}}})
+(def t {:assets        [{:url "/raw/img/casa/background.jpg", :size 10 :type "image"}],
+        :objects       {:background {:type "background", :src "/raw/img/casa/background.jpg"}},
         :scene-objects [["background"]],
-        :actions       {
+        :actions       {:script        {:type   "workflow"
+                                        :data   [{:type "start-activity"}
+                                                 {:type "action" :id "dialog-main"}]
+                                        :on-end "finish"}
+                        :dialog-main   (dialog/default "Main")
                         :placeholder   {:type "empty" :duration 200}
-                        :stop-activity {:type "stop-activity", :id "conversation"},
-                        }
-        :triggers
-                       {:back  {:on "back", :action "stop-activity"},
-                        :start {:on "start", :action "placeholder"}},
-        :metadata      {:autostart   true
-                        :last-insert "placeholder"
-                        :prev        "map"}})
+                        :finish        {:type "finish-activity"}
+                        :stop-activity {:type "stop-activity"}}
+        :triggers      {:back  {:on "back", :action "stop-activity"},
+                        :start {:on "start", :action "script"}},
+        :metadata      {:autostart         true
+                        :tracks            [{:title "Sequence"
+                                             :nodes [{:type      "dialog"
+                                                      :action-id "dialog-main"}]}]
+                        :next-action-index 0}})
 
-(defn f
+(defn create-template
   [args]
   (-> (common/init-metadata m t args)
       (characters/add-characters (:characters args))))
 
-(defn fu
-  [old-data args]
-  (if (or (contains? args :dialog) (contains? args :question-page))
-    (let [params (common/get-replace-params old-data)
-          [action-name actions assets] (if (contains? args :dialog)
-                                         (dialog/create-and-place-before (:dialog args) params)
-                                         (question/create-and-place-before (:question-page args) params))
-          old-data (-> old-data
-                       (common/add-track-action {:track-name "Dialog"
-                                                 :action-id  (keyword action-name)
-                                                 :type       (if (contains? args :dialog) "dialog" "question")})
-                       (update-in [:assets] concat assets))]
-      (common/merge-new-action old-data actions params))
-    (if (contains? args :scene-image)
-      (let [objects (if (contains? args :scene-image)
-                      (image/create (:scene-image args) {:name "scene-image" :editable true})
-                      {})]
-        (-> old-data
-            (update-in [:objects] merge objects)
-            (common/add-scene-object (vec (map (fn [key] (name key)) (keys objects))))))
-      old-data)))
+(defn- get-next-action-index
+  [activity-data]
+  (get-in activity-data [:metadata :next-action-index]))
+
+(defn- increase-next-action-index
+  [activity-data]
+  (update-in activity-data [:metadata :next-action-index] inc))
+
+(defn- place-question
+  [activity-data actions action-name]
+  (-> activity-data
+      (update :actions merge actions)
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "question" :action-id action-name})
+      (update-in [:metadata :available-actions] concat [{:action action-name
+                                                         :name   (str "Ask " action-name)}])))
+
+(defn- place-dialog
+  [activity-data actions action-name]
+  (-> activity-data
+      (update :actions merge actions)
+      (update-in [:actions :script :data] conj {:type "action" :id action-name})
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "dialog" :action-id action-name})))
+
+(defn- add-assets
+  [activity-data assets]
+  (-> activity-data
+      (update :assets concat assets)))
+
+(defn- add-dialog
+  [activity-data args]
+  (let [index (get-next-action-index activity-data)
+        action-name (str "dialog-" index)
+        default-dialog (dialog/default (str "dialog-" index))]
+    (cond-> activity-data
+            :always (increase-next-action-index)
+            :always (place-dialog {(keyword action-name) default-dialog} action-name))))
+
+(defn- add-question
+  [activity-data args]
+  (let [index (get-next-action-index activity-data)
+        action-name (str "question-" index)
+        question-actions (question/create (:question-page args) {:suffix      index
+                                                                 :action-name action-name})
+        question-assets (question/get-assets (:question-page args))]
+    (-> activity-data
+        (increase-next-action-index)
+        (place-question question-actions action-name)
+        (add-assets question-assets))))
+
+(defn- update-template
+  [activity-data {action-name :action-name :as args}]
+  (case (keyword action-name)
+    :add-dialog (add-dialog activity-data args)
+    :add-question (add-question activity-data args)))
 
 (core/register-template
-  m f fu)
+  m create-template update-template)
 
