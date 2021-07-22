@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.state.warehouse :as warehouse]))
 
-(def available-skeletons ["senoravaca" "vera" "mari" "teacher" "guide" "child"])
+(def available-skeletons ["senoravaca" "vera" "mari" "teacher" "student" "guide" "child"])
 
 (defn path-to-db
   [relative-path]

@@ -1,0 +1,156 @@
+{:assets
+                [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
+                 {:url "/raw/img/casa/decoration_casa.png", :size 10, :type "image"}
+                 {:url "/raw/img/casa/surface_casa.png", :size 10, :type "image"}
+                 {:url "/upload/WCIKBMAEVUIPZLCQ.mp3", :date 1626963560070, :size 247, :type "audio"}],
+ :objects
+                {:guide-default-3
+                 {:type       "animation",
+                  :x          1448.5936686197915,
+                  :y          720.118408203125,
+                  :width      591,
+                  :height     591,
+                  :scale      {:x 0.5, :y 0.5},
+                  :scene-name "guide-default-3",
+                  :anim       "idle-fast",
+                  :editable?  true,
+                  :meshes     true,
+                  :name       "guide",
+                  :skin       "default",
+                  :speed      1,
+                  :start      true},
+                 :layered-background
+                 {:type       "layered-background",
+                  :background {:src "/raw/img/casa/background_casa.png"},
+                  :decoration {:src "/raw/img/casa/decoration_casa.png"},
+                  :surface    {:src "/raw/img/casa/surface_casa.png"}},
+                 :student-default
+                 {:type       "animation",
+                  :x          360.4527994791667,
+                  :y          971.659647623698,
+                  :width      654,
+                  :height     1022,
+                  :scale      {:x 0.5, :y 0.5},
+                  :scene-name "student-default",
+                  :anim       "Idle-Fast",
+                  :editable?  true,
+                  :meshes     true,
+                  :name       "student",
+                  :skin       "default",
+                  :speed      1,
+                  :start      true},
+                 :teacher-default-2
+                 {:type       "animation",
+                  :x          903.6009928385415,
+                  :y          989.0097045898438,
+                  :width      630,
+                  :height     1308,
+                  :scale      {:x 0.5, :y 0.5},
+                  :scene-name "teacher-default-2",
+                  :anim       "Idle-Fast",
+                  :editable?  true,
+                  :meshes     true,
+                  :name       "teacher",
+                  :skin       "default",
+                  :speed      1,
+                  :start      true}},
+ :scene-objects [["layered-background"] ["student-default" "teacher-default-2" "guide-default-3"]],
+ :actions
+                {:dialog-1
+                 {:type               "sequence-data",
+                  :data
+                                      [{:data
+                                              [{:type "empty", :duration 0}
+                                               {:end         2.391,
+                                                :data        [{:end 2.09, :anim "talk", :start 0.4}],
+                                                :type        "animation-sequence",
+                                                :audio       "/upload/WCIKBMAEVUIPZLCQ.mp3",
+                                                :start       0.283,
+                                                :target      "student-default",
+                                                :duration    2.108,
+                                                :phrase-text "the letter a is for"}],
+                                        :type "sequence-data"}
+                                       {:data
+                                              [{:type "empty", :duration 0}
+                                               {:phrase-text        "test text",
+                                                :start              5.735,
+                                                :type               "animation-sequence",
+                                                :duration           15.805,
+                                                :audio              "/upload/WCIKBMAEVUIPZLCQ.mp3",
+                                                :target             "teacher-default-2",
+                                                :end                21.54,
+                                                :phrase-placeholder "Enter phrase text",
+                                                :data
+                                                                    [{:end 6.44, :anim "talk", :start 5.94}
+                                                                     {:end 7.76, :anim "talk", :start 7.18}
+                                                                     {:end 9.13, :anim "talk", :start 8.4}
+                                                                     {:end 10.64, :anim "talk", :start 9.84}
+                                                                     {:end 11.99, :anim "talk", :start 11.39}
+                                                                     {:end 13.23, :anim "talk", :start 12.63}
+                                                                     {:end 14.68, :anim "talk", :start 14.04}
+                                                                     {:end 16.49, :anim "talk", :start 15.97}
+                                                                     {:end 18.06, :anim "talk", :start 17.45}
+                                                                     {:end 19.48, :anim "talk", :start 18.77}
+                                                                     {:end 20.89, :anim "talk", :start 20.19}]}],
+                                        :type "sequence-data"}
+                                       {:data
+                                              [{:type "empty", :duration 0}
+                                               {:phrase-text        "test text",
+                                                :start              25.608,
+                                                :type               "animation-sequence",
+                                                :duration           28.73,
+                                                :audio              "/upload/WCIKBMAEVUIPZLCQ.mp3",
+                                                :target             "guide-default-3",
+                                                :end                54.338,
+                                                :phrase-placeholder "Enter phrase text",
+                                                :data
+                                                                    [{:end 27.54, :anim "talk", :start 27.06}
+                                                                     {:end 29.23, :anim "talk", :start 28.46}
+                                                                     {:end 30.38, :anim "talk", :start 29.89}
+                                                                     {:end 32.16, :anim "talk", :start 31.29}
+                                                                     {:end 33.49, :anim "talk", :start 32.78}
+                                                                     {:end 34.64, :anim "talk", :start 34.25}
+                                                                     {:end 35.04, :anim "talk", :start 34.78}
+                                                                     {:end 36.61, :anim "talk", :start 35.73}
+                                                                     {:end 38.69, :anim "talk", :start 37.93}
+                                                                     {:end 40.21, :anim "talk", :start 39.42}
+                                                                     {:end 41.73, :anim "talk", :start 40.89}
+                                                                     {:end 43.32, :anim "talk", :start 42.5}
+                                                                     {:end 44.75, :anim "talk", :start 44.09}
+                                                                     {:end 46.3, :anim "talk", :start 45.59}
+                                                                     {:end 47.9, :anim "talk", :start 47.28}
+                                                                     {:end 49.76, :anim "talk", :start 49.27}
+                                                                     {:end 51.4, :anim "talk", :start 50.67}
+                                                                     {:end 52.86, :anim "talk", :start 52.08}
+                                                                     {:end 54.17, :anim "talk", :start 53.62}]}],
+                                        :type "sequence-data"}],
+                  :phrase             "dialog",
+                  :phrase-description "Dialog",
+                  :concept-var        "current-word",
+                  :dialog-track       "1 Dialog",
+                  :editor-type        "dialog"},
+                 :intro
+                 {:type "sequence-data",
+                  :data
+                        [{:type "empty", :duration 2000}
+                         {:type "start-activity"}
+                         {:id "dialog-1", :type "action"}
+                         {:type "finish-activity"}]}},
+ :triggers      {:start {:on "start", :action "intro"}},
+ :metadata
+                {:history
+                                   {:created
+                                             {:name        "Dialog Activity",
+                                              :skills      [],
+                                              :valid?      true,
+                                              :characters
+                                                           [{:name "student default", :skin "default", :skeleton "student"}
+                                                            {:name "teacher default 2", :skin "default", :skeleton "teacher"}
+                                                            {:name "guide default 3", :skin "default", :skeleton "guide"}],
+                                              :template-id 4},
+                                    :updated []},
+                 :template-id      4,
+                 :lip-not-sync     false,
+                 :template-name    "dialog",
+                 :template-version nil},
+ :skills        []}

@@ -20,6 +20,12 @@
                                      :speed  1
                                      :meshes true
                                      :skin   "default"}
+                        :student    {:width  654,
+                                     :height 1022,
+                                     :scale  {:x 0.5, :y 0.5}
+                                     :speed  1
+                                     :meshes true
+                                     :skin   "default"}
                         :mari       {:width  910,
                                      :height 601,
                                      :scale  {:x 0.5, :y 0.5}

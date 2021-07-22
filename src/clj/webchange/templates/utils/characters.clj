@@ -30,6 +30,13 @@
                               :meshes true
                               :name   "teacher"
                               :skin   "default"}
+                 :student    {:width  654,
+                              :height 1022,
+                              :scale  {:x 0.5, :y 0.5}
+                              :speed  1
+                              :meshes true
+                              :name   "student"
+                              :skin   "default"}
                  :guide      {:width  591,
                               :height 591,
                               :scale  {:x 0.5, :y 0.5}
