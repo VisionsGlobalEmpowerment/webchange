@@ -38,7 +38,7 @@
   {:type           "text"
    :word-wrap      true
    :vertical-align "top"
-   :align          "center"
+   :align          "left"
    :font-size      38
    :font-family    "Lexend Deca"
    :chunks         "---"
@@ -117,11 +117,11 @@
   (let [text (or text "")
         text-height (-> height (* size) int)
         y (if (= pos :top)
-            0
+            padding
             (- height text-height))
         page-text (assoc page-text-template
                     :x padding
-                    :y (+ y padding)
+                    :y y
                     :width (- width (* padding 2))
                     :height (- text-height (* padding 2))
                     :fill text-color

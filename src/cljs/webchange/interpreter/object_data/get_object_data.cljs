@@ -6,7 +6,8 @@
     [webchange.interpreter.object-data.group-params :refer [with-group-params]]
     [webchange.interpreter.object-data.navigation-param :refer [with-navigation-params]]
     [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]
-    [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]))
+    [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]
+    [webchange.interpreter.renderer.scene.components.flipbook.decorations :as flipbook-decorations]))
 
 (defn- prepare-anim-object-params
   "Overwrite animation properties. Set default skin if no skin provided."
@@ -74,6 +75,9 @@
                                                                     (dissoc :x)
                                                                     (dissoc :y))
                                                                 action]))
+                                                        (map-indexed (fn [idx [object-params action]]
+                                                                       [(update object-params :children concat (flipbook-decorations/create-for idx))
+                                                                        action]))
                                                         (remove nil?))]
                                   (-> (merge object
                                              group-params

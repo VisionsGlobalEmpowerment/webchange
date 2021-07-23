@@ -9,39 +9,29 @@
 (def resources [])
 
 (def template
-  {:credits-page                   {:type       "group"
-                                    :transition "credits-page"
-                                    :children   ["credits-page-background"
-                                                 "credits-page-title"
-                                                 "credits-page-authors"
-                                                 "credits-page-illustrators"]
-                                    :generated? true}
-   :credits-page-background        {:type     "group"
-                                    :x        0
-                                    :y        0
-                                    :children ["credits-page-background-border"
-                                               "credits-page-background-back"]}
-   :credits-page-background-border {:type   "rectangle"
-                                    :x      0
-                                    :y      0
-                                    :width  "---"
-                                    :height "---"
-                                    :fill   "---"}
-   :credits-page-background-back   {:type   "rectangle"
-                                    :x      "---"
-                                    :y      "---"
-                                    :width  "---"
-                                    :height "---"
-                                    :fill   "---"}
-   :credits-page-title             {:type        "text"
-                                    :x           "---"
-                                    :y           200
-                                    :fill        "black"
-                                    :font-size   60
-                                    :font-family "Lexend Deca"
-                                    :align       "center"
-                                    :text        "---"
-                                    :editable?   {:select true}}})
+  {:credits-page            {:type       "group"
+                             :transition "credits-page"
+                             :children   ["credits-page-background"
+                                          "credits-page-title"
+                                          "credits-page-authors"
+                                          "credits-page-illustrators"]
+                             :generated? true}
+   :credits-page-background {:type   "rectangle"
+                             :x      0
+                             :y      0
+                             :width  "---"
+                             :height "---"
+                             :fill   "---"}
+
+   :credits-page-title      {:type        "text"
+                             :x           "---"
+                             :y           304
+                             :fill        "black"
+                             :font-size   64
+                             :font-family "Lexend Deca"
+                             :align       "center"
+                             :text        "---"
+                             :editable?   {:select true}}})
 
 (defn- get-action-data
   [{:keys [action-name texts-data]}]
@@ -68,7 +58,7 @@
                                                                   :y           (* index vertical-step)
                                                                   :width       value-width
                                                                   :fill        "black"
-                                                                  :font-size   32
+                                                                  :font-size   24
                                                                   :font-family "Lexend Deca"
                                                                   :text        text
                                                                   :editable?   {:select true}
@@ -85,7 +75,7 @@
                                                                :y           0
                                                                :width       label-width
                                                                :fill        "black"
-                                                               :font-size   32
+                                                               :font-size   24
                                                                :font-family "Lexend Deca"
                                                                :text        label
                                                                :editable?   {:select true}
@@ -93,44 +83,36 @@
 
 (defn- generate-authors-block
   [{:keys [data]}]
-  (let [block-params {:label-width   250
+  (let [block-params {:label-width   200
                       :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
                                 {:name     "credits-page-authors"
                                  :label    "Written By"
-                                 :data     data
-                                 :position {:x "---"
-                                            :y 400}}))))
+                                 :data     data}))))
 
 (defn- generate-illustrators-block
   [{:keys [data]}]
-  (let [block-params {:label-width   250
+  (let [block-params {:label-width   200
                       :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
                                 {:name     "credits-page-illustrators"
                                  :label    (if (empty? data) "" "Illustrated By")
-                                 :data     data
-                                 :position {:x "---"
-                                            :y 600}}))))
+                                 :data     data}))))
 
 (defn- apply-page-size
-  [page-data {:keys [width height padding]}]
+  [page-data {:keys [width height]}]
   (let [page-center (/ width 2)
-        credits-x 230]
+        credits-x 232]
     (-> page-data
-        (assoc-in [:credits-page-background-border :width] width)
-        (assoc-in [:credits-page-background-border :height] height)
-        (assoc-in [:credits-page-background-back :x] padding)
-        (assoc-in [:credits-page-background-back :y] padding)
-        (assoc-in [:credits-page-background-back :width] (- width (* 2 padding)))
-        (assoc-in [:credits-page-background-back :height] (- height (* 2 padding)))
+        (assoc-in [:credits-page-background :width] width)
+        (assoc-in [:credits-page-background :height] height)
         (assoc-in [:credits-page-title :x] page-center)
         (assoc-in [:credits-page-authors :x] credits-x)
-        (assoc-in [:credits-page-authors :y] 400)
+        (assoc-in [:credits-page-authors :y] 456)
         (assoc-in [:credits-page-illustrators :x] credits-x)
-        (assoc-in [:credits-page-illustrators :y] 600))))
+        (assoc-in [:credits-page-illustrators :y] 656))))
 
 (defn- set-content
   [page-data {:keys [title]}]
@@ -138,10 +120,9 @@
       (assoc-in [:credits-page-title :text] title)))
 
 (defn- set-colors
-  [page-data {:keys [background-color border-color]}]
+  [page-data {:keys [background-color]}]
   (-> page-data
-      (assoc-in [:credits-page-background-back :fill] background-color)
-      (assoc-in [:credits-page-background-border :fill] border-color)))
+      (assoc-in [:credits-page-background :fill] background-color)))
 
 (defn create
   [page-params {:keys [authors illustrators] :as content-params}]
