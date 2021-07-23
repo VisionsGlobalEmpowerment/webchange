@@ -7,6 +7,11 @@
     [webchange.ui-framework.components.index :refer [icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
+(def event-type
+  [{:id 1 :type "Default"}
+   {:id 2 :type "Image"}
+   {:id 3 :type "Questions"}])
+
 (defn- effects-list
   []
   (let [available-effects @(re-frame/subscribe [::state/available-effects])
@@ -43,12 +48,24 @@
    [:span "or"]
    [:span "Select effect and phrase action to insert effect relative to phrase"]])
 
+;; (defn form
+;;   []
+;;   (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
+;;     [:div.effects-form
+;;      [section-block {:title "Add effect"}
+;;       [effects-list]
+;;       (if show-actions?
+;;         [actions]
+;;         [actions-placeholder])]]))
+
 (defn form
   []
   (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
     [:div.effects-form
-     [section-block {:title "Add effect"}
-      [effects-list]
-      (if show-actions?
-        [actions]
-        [actions-placeholder])]]))
+     (for [{:keys [id type]} event-type]
+       ^{:key id}
+       [section-block {:title type}
+        [effects-list]
+        (if show-actions?
+          [actions]
+          [actions-placeholder])])]))
