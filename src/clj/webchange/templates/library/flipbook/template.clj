@@ -115,7 +115,7 @@
 
 (def page-params {:width            960
                   :height           1080
-                  :padding          50
+                  :padding          64
                   :background-color 0xffffff
                   :border-color     0xdadada
                   :text-color       0x000000})

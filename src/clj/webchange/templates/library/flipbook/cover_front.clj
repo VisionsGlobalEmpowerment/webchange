@@ -20,8 +20,8 @@
    :page-cover-image      {:type       "image"
                            :x          "---"
                            :y          "---"
-                           :width      600
-                           :height     600
+                           :width      832
+                           :height     744
                            :image-size "contain"
                            :origin     {:type "center-center"}
                            :src        "---"
@@ -32,9 +32,9 @@
                            :children ["page-cover-title-text" "page-cover-authors"]}
    :page-cover-title-text {:type           "text"
                            :y              0
-                           :font-size      60
+                           :font-size      48
                            :font-family    "Lexend Deca"
-                           :align          "center"
+                           :align          "left"
                            :vertical-align "top"
                            :editable?      {:select true}
                            :x              "---"
@@ -44,11 +44,12 @@
                            :text           "---"}
    :page-cover-authors    {:type           "text"
                            :x              0
-                           :y              150
+                           :y              76
                            :vertical-align "top"
                            :fill           "---"
-                           :align          "center"
-                           :font-size      28
+                           :align          "left"
+                           :font-size      24
+                           :font-family    "Lexend Deca"
                            :text           "---"}})
 
 (defn- apply-page-size
@@ -57,17 +58,17 @@
     (-> page-data
         (assoc-in [:page-cover-background :width] width)
         (assoc-in [:page-cover-background :height] height)
-        (assoc-in [:page-cover-title :x] page-center)
+        (assoc-in [:page-cover-title :x] 64)
         (assoc-in [:page-cover-image :x] page-center)
-        (assoc-in [:page-cover-title-text :x] (- (/ width 4)))
+        (assoc-in [:page-cover-title-text :x] 0)
         (assoc-in [:page-cover-title-text :width] (/ width 2)))))
 
 (defn- set-layout
   [page-data {:keys [layout]}]
   (let [title-top-y 150
-        title-bottom-y 750
-        image-top-y 350
-        image-bottom-y 650]
+        title-bottom-y 900
+        image-top-y 436
+        image-bottom-y 850]
     (case layout
       :title-top (-> page-data
                      (assoc-in [:page-cover-title :y] title-top-y)
