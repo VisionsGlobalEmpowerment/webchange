@@ -34,6 +34,8 @@
     [(re-frame/subscribe [::parent-state/available-effects])
      (re-frame/subscribe [::selected-effect])])
   (fn [[available-effects selected-effect]]
+    (js/console.log "available-effects: " available-effects)
+    (js/console.log "selected-effect: " selected-effect)
     (map (fn [{:keys [name action]}]
            {:text      name
             :value     action

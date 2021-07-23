@@ -37,6 +37,7 @@
     [(re-frame/subscribe [::parent-state/selected-action])
      (re-frame/subscribe [::parent-state/scene-available-actions])])
   (fn [[{:keys [node-data]} scene-available-actions]]
+    (js/console.log "scene-available-actions: " scene-available-actions)
     (-> (get-available-effects node-data)
         (concat scene-available-actions))))
 
