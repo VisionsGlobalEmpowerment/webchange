@@ -5,7 +5,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.text-animation-editor.state :as chunks]
-    [webchange.ui.utils :refer [deep-merge]]))
+    [webchange.utils.deep-merge :refer [deep-merge]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 

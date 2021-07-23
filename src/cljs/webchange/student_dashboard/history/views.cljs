@@ -10,7 +10,7 @@
     [webchange.student-dashboard.events :as sde]
     [webchange.student-dashboard.history.views-filter :refer [history-filter]]
     [webchange.student-dashboard.history.views-history-list :refer [history-list]]
-    [webchange.ui.utils :refer [deep-merge]]))
+    [webchange.utils.deep-merge :refer [deep-merge]]))
 
 (defn- get-styles
   []

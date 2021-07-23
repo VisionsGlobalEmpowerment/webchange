@@ -4,7 +4,7 @@
     [webchange.editor-v2.components.toolbar.views :refer [toolbar]]
     [webchange.editor-v2.creation-progress.views :refer [progress-panel]]
     [webchange.views-modals :refer [modal-windows]]
-    [webchange.ui.utils :refer [deep-merge]]))
+    [webchange.utils.deep-merge :refer [deep-merge]]))
 
 (defn- get-styles
   []

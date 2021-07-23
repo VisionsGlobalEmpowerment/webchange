@@ -3,7 +3,7 @@
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.core :refer [create-mui-theme]]
-    [webchange.ui.utils :refer [deep-merge]]))
+    [webchange.utils.deep-merge :refer [deep-merge]]))
 
 (def current-theme (atom nil))                              ;; "dark" / "light"
 

@@ -3,7 +3,8 @@
     [webchange.question.create-common-check-button :as check-button]
     [webchange.question.create-common-option-image :as option-image]
     [webchange.question.create-common-voice-over :as voice-over]
-    [webchange.question.params :as p]))
+    [webchange.question.params :as p]
+    [webchange.question.utils :refer [merge-data]]))
 
 (def common-params {:x             0
                     :y             0
@@ -15,62 +16,44 @@
 
 (defn- create-substrate
   [{:keys [object-name width height]}]
-  {(keyword object-name) {:type   "rectangle"
-                          :x      0
-                          :y      0
-                          :width  width
-                          :height height
-                          :fill   0xFFFFFF}})
+  {:objects {(keyword object-name) {:type   "rectangle"
+                                    :x      0
+                                    :y      0
+                                    :width  width
+                                    :height height
+                                    :fill   0xFFFFFF}}})
 
 (defn- create-background
   [{:keys [object-name x y width height color]}]
-  {(keyword object-name) {:type        "rectangle"
-                          :object-name object-name
-                          :x           x
-                          :y           y
-                          :width       width
-                          :height      height
-                          :fill        color}})
-
-(defn- create-task-image
-  [{:keys [object-name src x y width height padding]
-    :or   {x       0
-           y       0
-           padding (:padding common-params)}}]
-  (let [image-x (+ x (/ width 2))
-        image-y (+ y (/ height 2))
-        image-width (- width (* padding 2))
-        image-height (- height (* padding 2))]
-    {(keyword object-name) {:type       "image"
-                            :src        src
-                            :x          image-x
-                            :y          image-y
-                            :max-width  image-width
-                            :max-height image-height
-                            :origin     {:type "center-center"}
-                            :editable?  {:select true}}}))
+  {:objects {(keyword object-name) {:type        "rectangle"
+                                    :object-name object-name
+                                    :x           x
+                                    :y           y
+                                    :width       width
+                                    :height      height
+                                    :fill        color}}})
 
 (defn- create-task-text
   [{:keys [object-name x y width height text on-task-voice-over-click]}]
   (let [button-name (str object-name "-button")
         text-name (str object-name "-text")]
-    (merge {(keyword object-name) {:type     "group"
-                                   :x        x
-                                   :y        y
-                                   :children [button-name text-name]}
-            (keyword text-name)   {:type           "text"
-                                   :text           text
-                                   :x              (+ voice-over/default-size p/voice-over-margin)
-                                   :y              0
-                                   :width          (- width voice-over/default-size p/voice-over-margin)
-                                   :word-wrap      true
-                                   :font-size      p/task-font-size
-                                   :vertical-align "top"
-                                   :editable?      {:select true}}}
-           (voice-over/create {:object-name button-name
-                               :x           0
-                               :y           0
-                               :on-click    on-task-voice-over-click}))))
+    (merge-data {:objects {(keyword object-name) {:type     "group"
+                                                  :x        x
+                                                  :y        y
+                                                  :children [button-name text-name]}
+                           (keyword text-name)   {:type           "text"
+                                                  :text           text
+                                                  :x              (+ voice-over/default-size p/voice-over-margin)
+                                                  :y              0
+                                                  :width          (- width voice-over/default-size p/voice-over-margin)
+                                                  :word-wrap      true
+                                                  :font-size      p/task-font-size
+                                                  :vertical-align "top"
+                                                  :editable?      {:select true}}}}
+                (voice-over/create {:object-name button-name
+                                    :x           0
+                                    :y           0
+                                    :on-click    on-task-voice-over-click}))))
 
 (defn- create-options
   [{:keys [object-name x y width height options on-option-click on-option-voice-over-click]}]
@@ -79,8 +62,10 @@
         option-height height]
     (->> (map-indexed vector options)
          (reduce (fn [result [idx {:keys [img text value]}]]
-                   (let [option-name (str object-name "-option-" idx)
-                         option-data (option-image/create {:object-name                option-name
+                   (let [option-name (str object-name "-option-" idx)]
+                     (-> result
+                         (update-in [:objects (keyword object-name) :children] conj option-name)
+                         (merge-data (option-image/create {:object-name                option-name
                                                            :x                          (* idx (+ option-width p/options-gap))
                                                            :y                          0
                                                            :width                      (- option-width p/options-gap)
@@ -89,56 +74,43 @@
                                                            :text                       text
                                                            :on-option-click            on-option-click
                                                            :on-option-voice-over-click on-option-voice-over-click
-                                                           :value                      value})]
-                     (-> result
-                         (update-in [(keyword object-name) :children] conj option-name)
-                         (merge option-data))))
-                 {(keyword object-name) {:type     "group"
-                                         :x        x
-                                         :y        y
-                                         :children []}}))))
+                                                           :value                      value})))))
+                 {:objects {(keyword object-name) {:type     "group"
+                                                   :x        x
+                                                   :y        y
+                                                   :children []}}}))))
 
-(defn- add-task-image
-  [result parent-name {:keys [task]}]
+(defn- create-task-image
+  [{:keys [x y object-name] :or {x 0 y 0}}
+   {:keys [task]}]
   (let [{task-image :img} task
-        task-image-name (str parent-name "-task-image")
 
         {:keys [sides-ratio-h width height]} common-params
         task-image-container-width (* sides-ratio-h width)
-        task-image-container-height height]
-    (-> result
-        (update-in [(keyword parent-name) :children] conj task-image-name)
-        (merge (create-task-image {:object-name task-image-name
-                                   :src         task-image
-                                   :width       task-image-container-width
-                                   :height      task-image-container-height})))))
+        task-image-container-height height
 
-; p/check-button-size
+        image-x (+ x (/ task-image-container-width 2))
+        image-y (+ y (/ task-image-container-height 2))
+        image-width (- task-image-container-width (* (:padding common-params) 2))
+        image-height (- task-image-container-height (* (:padding common-params) 2))]
+    {:objects {(keyword object-name) {:type       "image"
+                                      :src        task-image
+                                      :x          image-x
+                                      :y          image-y
+                                      :max-width  image-width
+                                      :max-height image-height
+                                      :origin     {:type "center-center"}
+                                      :editable?  {:select true}}}}))
 
-(defn- add-check-button
-  [result parent-name
-   props
-   args
-   {:keys [x y]}]
-  (let [button-name (str parent-name "-check-button")]
-    (-> result
-        (update-in [(keyword parent-name) :children] conj button-name)
-        (merge (check-button/create {:object-name button-name
-                                     :x           x
-                                     :y           y
-                                     ;:on-click
-                                     ;:on-click-params
-                                     })))))
-
-(defn- add-main-content
-  [result parent-name
-   {:keys [on-option-click on-option-voice-over-click on-task-voice-over-click] :as props}
+(defn- create-main-content
+  [{:keys [object-name]}
+   {:keys [on-check-click on-option-click on-option-voice-over-click on-task-voice-over-click]}
    {:keys [answers-number options task] :as args}]
   (let [{:keys [sides-ratio-h width]} common-params
 
-        background-name (str parent-name "-background")
-        task-text-name (str parent-name "-task-text")
-        options-name (str parent-name "-options")
+        background-name (str object-name "-background")
+        task-text-name (str object-name "-task-text")
+        options-name (str object-name "-options")
 
         {task-text :text task-type :type} task
         options (:data options)
@@ -167,57 +139,63 @@
         options-text-container-width (- main-content-width (* 2 p/block-padding))
         options-text-container-height (- main-content-height options-text-container-y p/block-padding)
 
+        show-check-button? (= answers-number "many")
+        check-button-name (str object-name "-check-button")
         check-button-x (- (+ main-content-x (/ main-content-width 2))
                           (/ p/check-button-size 2))
         check-button-y (- (+ main-content-y main-content-height)
                           p/block-padding p/check-button-size)]
-    (cond-> (-> result
-                (update-in [(keyword parent-name) :children] conj background-name)
-                (merge (create-background {:object-name background-name
-                                           :x           main-content-x
-                                           :y           main-content-y
-                                           :width       main-content-width
-                                           :height      (:height common-params)
-                                           :color       (:primary-color common-params)}))
-
-                (update-in [(keyword parent-name) :children] conj task-text-name)
-                (merge (create-task-text {:object-name              task-text-name
-                                          :x                        task-text-container-x
-                                          :y                        task-text-container-y
-                                          :width                    task-text-container-width
-                                          :height                   task-text-container-height
-                                          :text                     task-text
-                                          :on-task-voice-over-click on-task-voice-over-click}))
-
-                (update-in [(keyword parent-name) :children] conj options-name)
-                (merge (create-options {:object-name                options-name
-                                        :x                          options-text-container-x
-                                        :y                          options-text-container-y
-                                        :width                      options-text-container-width
-                                        :height                     options-text-container-height
-                                        :options                    options
-                                        :on-option-click            on-option-click
-                                        :on-option-voice-over-click on-option-voice-over-click})))
-            (= answers-number "many") (add-check-button parent-name props args
-                                                        {:x check-button-x
-                                                         :y check-button-y}))))
+    (cond-> {:objects {(keyword object-name) {:type     "group"
+                                              :x        0 :y 0
+                                              :children (cond-> [background-name task-text-name options-name]
+                                                                show-check-button? (conj check-button-name))}}}
+            :always (merge-data (create-background {:object-name background-name
+                                                    :x           main-content-x
+                                                    :y           main-content-y
+                                                    :width       main-content-width
+                                                    :height      (:height common-params)
+                                                    :color       (:primary-color common-params)}))
+            :always (merge-data (create-task-text {:object-name              task-text-name
+                                                   :x                        task-text-container-x
+                                                   :y                        task-text-container-y
+                                                   :width                    task-text-container-width
+                                                   :height                   task-text-container-height
+                                                   :text                     task-text
+                                                   :on-task-voice-over-click on-task-voice-over-click}))
+            :always (merge-data (create-options {:object-name                options-name
+                                                 :x                          options-text-container-x
+                                                 :y                          options-text-container-y
+                                                 :width                      options-text-container-width
+                                                 :height                     options-text-container-height
+                                                 :options                    options
+                                                 :on-option-click            on-option-click
+                                                 :on-option-voice-over-click on-option-voice-over-click}))
+            show-check-button? (merge-data (check-button/create {:object-name check-button-name
+                                                                 :x           check-button-x
+                                                                 :y           check-button-y
+                                                                 :on-click    on-check-click})))))
 
 (defn create
   [{:keys [object-name visible?] :as props}
    {:keys [alias task] :as args}]
   (let [substrate-name (str object-name "-substrate")
-        {task-type :type} task]
-    (cond-> (merge {(keyword object-name) {:type      "group"
-                                           :alias     alias
-                                           :x         (:x common-params)
-                                           :y         (:y common-params)
-                                           :children  [substrate-name]
-                                           :visible   visible?
-                                           :states    {:invisible {:visible false}
-                                                       :visible   {:visible true}}
-                                           :editable? {:show-in-tree? true}}}
-                   (create-substrate {:object-name substrate-name
-                                      :width       (:width common-params)
-                                      :height      (:height common-params)}))
-            :always (add-main-content object-name props args)
-            (= task-type "text-image") (add-task-image object-name args))))
+        main-content-name (str object-name "-main-content")
+
+        {task-type :type} task
+        show-task-image? (= task-type "text-image")
+        task-image-name (str object-name "-task-image")]
+    (cond-> {:objects {(keyword object-name) {:type      "group"
+                                              :alias     alias
+                                              :x         (:x common-params)
+                                              :y         (:y common-params)
+                                              :children  (cond-> [substrate-name main-content-name]
+                                                                 show-task-image? (conj task-image-name))
+                                              :visible   visible?
+                                              :states    {:invisible {:visible false} ;; change to 'set-attribute'
+                                                          :visible   {:visible true}}
+                                              :editable? {:show-in-tree? true}}}}
+            :always (merge-data (create-substrate {:object-name substrate-name
+                                                   :width       (:width common-params)
+                                                   :height      (:height common-params)}))
+            :always (merge-data (create-main-content {:object-name main-content-name} props args))
+            show-task-image? (merge-data (create-task-image {:object-name task-image-name} args)))))
