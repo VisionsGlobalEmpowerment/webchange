@@ -76,10 +76,12 @@
         hide-action {:type "set-attribute" :attr-name "visible", :attr-value false :target object-name}
         available-actions [{:action show-action-name
                             :links  [{:type "object" :id object-name}]
-                            :name   (str "Show " name)}
+                            :name   (str "Show " name)
+                            :type   "image"}
                            {:action hide-action-name
                             :links  [{:type "object" :id object-name}]
-                            :name   (str "Hide " name)}]
+                            :name   (str "Hide " name)
+                            :type   "image"}]
         last-layer (-> scene-data
                        :scene-objects
                        last
