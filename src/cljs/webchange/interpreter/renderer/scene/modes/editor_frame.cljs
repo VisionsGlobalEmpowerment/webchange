@@ -57,11 +57,12 @@
 (defn- get-frame-position
   [object object-props]
   (let [local-bounds (get-object-local-bounds object)
+        {offset-x :x offset-y :y} (:offset object-props)
         [origin-x origin-y] (-> (get-in object-props [:origin :type] "none-none")
                                 (clojure.string/split #"-"))]
     (cond-> local-bounds
-            (= origin-x "center") (update :x - (/ (:width local-bounds) 2))
-            (= origin-y "center") (update :y - (/ (:height local-bounds) 2)))))
+            (and (= 0 (int offset-x)) (= origin-x "center")) (update :x - (/ (:width local-bounds) 2))
+            (and (= 0 (int offset-y)) (= origin-y "center")) (update :y - (/ (:height local-bounds) 2)))))
 
 (defn- draw-border
   [mask width height padding]
