@@ -73,25 +73,22 @@
 
 (defn- sequence-for
   ([action-name on-end]
-   (cond-> {:type "sequence-data" :data []}
-           (some? action-name)
-           (update :data conj {:type "action" :id action-name})
-
-           :always
-           (update :data conj {:type "callback" :callback on-end})))
+   (sequence-for nil action-name on-end))
   ([left right on-end]
-   (cond-> {:type "sequence-data" :data []}
-           (some? left)
-           (update :data conj {:type "action" :id left})
+   {:type "sequence-data"
+    :data [{:type "remove-flows" :flow-tag "flipbook-read-spread"}
+           (cond-> {:type "sequence-data" :data [] :tags ["flipbook-read-spread"]}
+                   (some? left)
+                   (update :data conj {:type "action" :id left})
 
-           (and (some? left) (some? right))
-           (update :data conj {:type "empty" :duration 1000})
+                   (and (some? left) (some? right))
+                   (update :data conj {:type "empty" :duration 1000})
 
-           (some? right)
-           (update :data conj {:type "action" :id right})
+                   (some? right)
+                   (update :data conj {:type "action" :id right})
 
-           :always
-           (update :data conj {:type "callback" :callback on-end}))))
+                   :always
+                   (update :data conj {:type "callback" :callback on-end}))]}))
 
 (defn- flip
   [state direction on-end read]

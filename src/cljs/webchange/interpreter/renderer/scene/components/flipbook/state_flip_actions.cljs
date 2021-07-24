@@ -168,9 +168,15 @@
   :flip-backward
   (fn [{:keys [current-spread next-spread page-dimensions on-end]}]
     (let [{:keys [left-page-position right-page-position page-size]} page-dimensions
-          flipped-page-front-mask (create-mask page-size)
-          flipped-page-back-mask (create-mask page-size)]
 
+          current-left-mask-params page-size
+          current-left-mask (create-mask current-left-mask-params)
+
+          next-right-mask-params (assoc page-size :width 0)
+          next-right-mask (create-mask next-right-mask-params)
+
+          next-right-initial-position (- (:x left-page-position) (:width page-size))
+          next-right-destination-position (:x right-page-position)]
       (set-z-indexes {:current current-spread
                       :next    next-spread}
                      {:current {:left  2
@@ -179,7 +185,7 @@
                                 :right 3}})
 
       ;; current left page
-      (apply-mask (:left current-spread) flipped-page-front-mask)
+      (apply-mask (:left current-spread) current-left-mask)
       (set-position (:left current-spread) left-page-position)
       (set-visibility (:left current-spread) true)
 
@@ -192,41 +198,25 @@
       (set-visibility (:left next-spread) true)
 
       ;; next right page
-      (set-position (:right next-spread) left-page-position)
-      (apply-mask (:right next-spread) flipped-page-back-mask)
+      (apply-mask (:right next-spread) next-right-mask)
+      (set-position (:right next-spread) (assoc left-page-position :x next-right-initial-position))
       (set-visibility (:right next-spread) true)
 
       ; Animate
-      (interpolate {:from        {;; Flipped front side
-                                  :front-page-mask-x     0
-                                  :front-page-mask-width (:width page-size)
-                                  ;; Flipped back side
-                                  :back-page-x           (:x left-page-position)
-                                  :back-page-mask-x      (:width page-size)
-                                  :back-page-mask-width  0}
-                    :to          {;; Flipped front side
-                                  :front-page-mask-x     (:width page-size)
-                                  :front-page-mask-width 0
-                                  ;; Flipped back side
-                                  :back-page-x           (:x right-page-position)
-                                  :back-page-mask-x      0
-                                  :back-page-mask-width  (:width page-size)}
-                    :on-progress (fn [{:keys [front-page-mask-x
-                                              front-page-mask-width
-
-                                              back-page-x
-                                              back-page-mask-x
-                                              back-page-mask-width]}]
-                                   ;; Flipped front side
-                                   (update-mask flipped-page-front-mask (-> page-size
-                                                                            (assoc :x front-page-mask-x)
-                                                                            (assoc :width front-page-mask-width)))
-
-                                   ;; Flipped back side
-                                   (components-utils/set-position (:right next-spread) {:x (- back-page-x back-page-mask-x)})
-                                   (update-mask flipped-page-back-mask (-> page-size
-                                                                           (assoc :x back-page-mask-x)
-                                                                           (assoc :width back-page-mask-width))))
+      (interpolate {:from        {:flipped-page-width         (:width current-left-mask-params)
+                                  :flipped-page-back-position next-right-initial-position
+                                  :flipped-page-back-width    0}
+                    :to          {:flipped-page-width         0
+                                  :flipped-page-back-position next-right-destination-position
+                                  :flipped-page-back-width    (:width page-size)}
+                    :on-progress (fn [{:keys [flipped-page-width flipped-page-back-position flipped-page-back-width]}]
+                                   (update-mask current-left-mask (-> next-right-mask-params
+                                                                      (assoc :x flipped-page-back-width)
+                                                                      (assoc :width flipped-page-width)))
+                                   (update-mask next-right-mask (-> next-right-mask-params
+                                                                    (assoc :x flipped-page-width)
+                                                                    (assoc :width flipped-page-back-width)))
+                                   (set-position (:right next-spread) {:x flipped-page-back-position}))
                     :on-end      (fn []
                                    (set-visibility (:left current-spread) false)
                                    (set-visibility (:right current-spread) false)
