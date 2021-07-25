@@ -1,7 +1,7 @@
 (ns webchange.handler
   (:require [compojure.api.sweet :refer [api context ANY GET POST PUT DELETE PATCH defroutes routes swagger-routes]]
             [compojure.route :refer [resources files not-found]]
-            [ring.util.response :refer [resource-response response redirect status]]
+            [ring.util.response :refer [resource-response response redirect status header]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.middleware.params :refer [wrap-params]]
@@ -214,6 +214,11 @@
       (muuntaja.middleware/wrap-exception)
       (sign/wrap-body-as-byte-array)))
 
+(defn wrap-connection-close
+  [handler]
+  (fn [request]
+    (some-> (handler request) (header "Connection" "close"))))
+
 (def dev-handler
   (-> #'app
       wrap-reload
@@ -221,6 +226,7 @@
       (wrap-authentication auth-backend)
       (wrap-session {:store dev-store})
       wrap-body-as-string
+      wrap-connection-close
       (muuntaja.middleware/wrap-params)
       (muuntaja.middleware/wrap-format)
       (muuntaja.middleware/wrap-exception)
