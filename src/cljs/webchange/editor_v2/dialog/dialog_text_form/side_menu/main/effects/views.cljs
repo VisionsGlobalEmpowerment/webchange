@@ -13,12 +13,18 @@
    {:id 3 :type "Questions"}])
 
 (defn- effects-list
-  []
+  [{:keys [effect-type]}]
   (let [available-effects @(re-frame/subscribe [::state/available-effects])
+        default-effects @(re-frame/subscribe [::state/default-effects])
+        image-effects @(re-frame/subscribe [::state/image-effects])
+        question-effects @(re-frame/subscribe [::state/question-effects])
         handle-click #(re-frame/dispatch [::state/set-selected-effect %])]
     [:div
      [:span.input-label "Available effects:"]
-     [options-list {:options       available-effects
+     [options-list {:options      (case effect-type
+                                    "Default"   default-effects
+                                    "Image"     image-effects
+                                    "Questions" question-effects)
                     :on-click      handle-click
                     :get-drag-data (fn [{:keys [value]}]
                                      {:action "add-effect-action"
@@ -65,7 +71,7 @@
      (for [{:keys [id type]} event-type]
        ^{:key id}
        [section-block {:title type}
-        [effects-list]
+        [effects-list {:effect-type type}]
         (if show-actions?
           [actions]
           [actions-placeholder])])]))

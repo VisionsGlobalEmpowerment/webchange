@@ -34,11 +34,39 @@
     [(re-frame/subscribe [::parent-state/available-effects])
      (re-frame/subscribe [::selected-effect])])
   (fn [[available-effects selected-effect]]
-    (map (fn [{:keys [name action]}]
+    (map (fn [{:keys [name action type]}]
            {:text      name
             :value     action
-            :selected? (= action selected-effect)})
+            :selected? (= action selected-effect)
+            :type       type})
          available-effects)))
+
+(re-frame/reg-sub
+ ::default-effects
+ (fn []
+   [(re-frame/subscribe [::available-effects])])
+ (fn [[available-effects]]
+   (filter (fn [{:keys [text value selected? type]}]
+              (or (= nil type) (= "default" type)))
+            available-effects)))
+
+(re-frame/reg-sub
+ ::image-effects
+ (fn []
+   [(re-frame/subscribe [::available-effects])])
+ (fn [[available-effects]]
+   (filter (fn [{:keys [text value selected? type]}]
+              (= "image" type))
+            available-effects)))
+
+(re-frame/reg-sub
+ ::question-effects
+ (fn []
+   [(re-frame/subscribe [::available-effects])])
+ (fn [[available-effects]]
+   (filter (fn [{:keys [text value selected? type]}]
+              (= "question" type))
+            available-effects)))
 
 ;; Actions
 
