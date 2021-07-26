@@ -56,7 +56,7 @@
                                     :on-click    on-task-voice-over-click}))))
 
 (defn- create-options
-  [{:keys [object-name x y width height options on-option-click on-option-voice-over-click]}]
+  [{:keys [object-name x y width height label-type options on-option-click on-option-voice-over-click]}]
   (let [options-count (count options)
         max-option-width 440
         option-width (Math/min (-> (- width p/options-gap)
@@ -80,6 +80,7 @@
                                                            :height                     option-height
                                                            :img                        img
                                                            :text                       text
+                                                           :label-type                 label-type
                                                            :on-option-click            on-option-click
                                                            :on-option-voice-over-click on-option-voice-over-click
                                                            :value                      value})))))
@@ -121,7 +122,7 @@
         options-name (str object-name "-options")
 
         {task-text :text task-type :type} task
-        options (:data options)
+        {options :data options-label :label} options
 
         {main-content-x      :x
          main-content-y      :y
@@ -176,6 +177,7 @@
                                                  :y                          options-text-container-y
                                                  :width                      options-text-container-width
                                                  :height                     options-text-container-height
+                                                 :label-type                 options-label
                                                  :options                    options
                                                  :on-option-click            on-option-click
                                                  :on-option-voice-over-click on-option-voice-over-click}))

@@ -27,14 +27,12 @@
                                              :disabled? true}]}
              :option-label {:title         "Option label"
                             :default-value (:option-label default-values)
-                            :options       [{:text      "Audio only"
-                                             :value     "audio"
-                                             :disabled? true}
+                            :options       [{:text  "Audio only"
+                                             :value "audio"}
                                             {:text  "Audio + text"
                                              :value "audio-text"}
-                                            {:text      "Empty"
-                                             :value     "none"
-                                             :disabled? true}]}})
+                                            {:text  "Empty"
+                                             :value "none"}]}})
 
 (defn- param-select
   [{:keys [data key]}]

@@ -59,19 +59,26 @@
                                     :x              x
                                     :y              (+ y (/ height 2))
                                     :width          width
+                                    :word-wrap      true
                                     :font-size      p/option-font-size
                                     :vertical-align "middle"
                                     :editable?      {:select true}}}})
 
 (defn create
-  [{:keys [object-name x y width height img text on-option-click on-option-voice-over-click value]
+  [{:keys [object-name x y width height img text label-type on-option-click on-option-voice-over-click value]
     :or   {x 0
            y 0}}]
-  (let [label-height 80
+  (let [show-text? (= label-type "audio-text")
+        show-voice-over? (not= label-type "none")
+
+        label-height 80
 
         image-name (str object-name "-image")
         text-name (str object-name "-text")
         button-name (str object-name "-button")
+
+        button-x (if show-text? 0 (- (/ width 2)
+                                     (/ voice-over/default-size 2)))
 
         image-ratio 1.25
         image-width width
@@ -82,25 +89,27 @@
         text-y (+ image-height p/options-gap)
         text-width (- width text-x)
         text-height label-height]
-    (merge-data {:objects {(keyword object-name) {:type        "group"
-                                                  :object-name object-name
-                                                  :x           x
-                                                  :y           y
-                                                  :children    [image-name text-name button-name]}}}
-                (create-image {:object-name image-name
-                               :src         img
-                               :width       image-width
-                               :height      image-height
-                               :on-click    on-option-click
-                               :value       value})
-                (create-text {:object-name text-name
-                              :x           text-x
-                              :y           text-y
-                              :width       text-width
-                              :height      text-height
-                              :text        text})
-                (voice-over/create {:object-name     button-name
-                                    :x               0
-                                    :y               (+ image-height p/options-gap)
-                                    :on-click        on-option-voice-over-click
-                                    :on-click-params {:value value}}))))
+    (cond-> {:objects {(keyword object-name) {:type        "group"
+                                              :object-name object-name
+                                              :x           x
+                                              :y           y
+                                              :children    (cond-> [image-name]
+                                                                   show-text? (conj text-name)
+                                                                   show-voice-over? (conj button-name))}}}
+            :always (merge-data (create-image {:object-name image-name
+                                               :src         img
+                                               :width       image-width
+                                               :height      image-height
+                                               :on-click    on-option-click
+                                               :value       value}))
+            show-text? (merge-data (create-text {:object-name text-name
+                                                 :x           text-x
+                                                 :y           text-y
+                                                 :width       text-width
+                                                 :height      text-height
+                                                 :text        text}))
+            show-voice-over? (merge-data (voice-over/create {:object-name     button-name
+                                                             :x               button-x
+                                                             :y               (+ image-height p/options-gap)
+                                                             :on-click        on-option-voice-over-click
+                                                             :on-click-params {:value value}})))))

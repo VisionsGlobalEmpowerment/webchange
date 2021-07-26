@@ -16,14 +16,14 @@
                        :value "option-4"}])
 
 (defn form->question-data
-  [{:keys [alias answers-number correct-answers options-number task-type]}]
+  [{:keys [alias answers-number correct-answers layout option-label options-number task-type]}]
   {:alias           (or alias "New question")
    :question-type   "multiple-choice-image"
-   :layout          "horizontal"
+   :layout          layout
    :task            {:type task-type
                      :text default-task-text
                      :img  "/images/questions/question.png"}
-   :options         {:label "audio-text"
+   :options         {:label option-label
                      :data  (take options-number default-options)}
    :answers-number  answers-number
    :correct-answers (->> correct-answers

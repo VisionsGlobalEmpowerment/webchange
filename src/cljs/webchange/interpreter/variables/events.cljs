@@ -576,7 +576,6 @@
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [id value success fail] :as action}]
     (let [current-set (set (core/get-variable id))]
-      (print "> execute-question-test" id value current-set (contains? current-set value))
       (if (contains? current-set value)
         (if success
           {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
