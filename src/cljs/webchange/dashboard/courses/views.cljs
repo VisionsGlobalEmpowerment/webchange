@@ -4,6 +4,7 @@
     [webchange.dashboard.common.views :refer [content-page]]
     [webchange.dashboard.courses.subs :as courses-subs]
     [webchange.dashboard.courses.events :as courses-events]
+    [webchange.editor-v2.layout.components.sandbox.create-link :refer [create-link]]
     [cljs-react-material-ui.reagent :as ui]))
 
 (def styles
@@ -19,12 +20,14 @@
   (get-in {:title     "Courses"
            :actions   {:approve "Approve"
                        :decline  "Decline"
-                       :request-changes  "Request changes"}}
+                       :request-changes  "Request changes"
+                       :preview "Preview"}}
           path))
 
 (defn- course-list-item
-  [{:keys [id name]}]
+  [{:keys [id name slug image-src]}]
   [ui/table-row {:hover true}
+   [ui/table-cell {} [:img {:src image-src}]]
    [ui/table-cell {} name]
    [ui/table-cell {:align "right"
                    :style {:white-space "nowrap"}}
@@ -32,11 +35,12 @@
      {:title (translate [:actions :edit])}
      [ui/button {:on-click #(re-frame/dispatch [::courses-events/approve id])} "Approve"]]
     [ui/tooltip
-     {:title (translate [:actions :sync])}
-     [ui/button {:on-click #(re-frame/dispatch [::courses-events/request-changes id])} "Requst changes"]]
-    [ui/tooltip
      {:title (translate [:actions :remove])}
-     [ui/button {:on-click #(re-frame/dispatch [::courses-events/decline id])} "Decline"]]]])
+     [ui/button {:on-click #(re-frame/dispatch [::courses-events/decline id])} "Decline"]]
+    [ui/tooltip
+     {:title (translate [:actions :preview])}
+     [ui/button {:href     (create-link {:course-slug slug :scene-slug "book"})} "Preview"]]
+    ]])
 
 (defn courses-list-page
   []
