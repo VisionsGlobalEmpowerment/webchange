@@ -48,6 +48,7 @@
     (:question-page updated-data) {:action "add-question" :data updated-data}
     (and (:type updated-data) (:text updated-data) (:image updated-data)) {:action "add-page" :data updated-data}
     (and (:stage updated-data) (:page-side updated-data)) {:action "remove-page" :data updated-data}
+    (and (:page-idx-from updated-data) (:page-idx-to updated-data)) {:action "move-page" :data updated-data}
     :else (throw (Exception. (str "unknown update history" updated-data)))))
 
 (defn- try-restore-history

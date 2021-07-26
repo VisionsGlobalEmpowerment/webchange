@@ -150,6 +150,7 @@
 (defn- image-only
   [page-params content-params]
   (let [objects-data (-> (get-page-template content-params)
+                         (add-background page-params content-params)
                          (add-image {:pos :top :size 1} page-params content-params))]
     (create-page objects-data content-params)))
 
