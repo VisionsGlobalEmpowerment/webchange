@@ -4,7 +4,9 @@
     [webchange.templates.utils.question :as question]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.utils.characters :as characters]
-    [webchange.templates.core :as core]))
+    [webchange.templates.core :as core]
+    [webchange.question.create :as question-object]
+    [webchange.question.get-question-data :refer [form->question-data]]))
 
 (def m {:id          26
         :name        "Conversation"
@@ -18,11 +20,11 @@
                                                         :description "Dialog name"
                                                         :placeholder "(ex. Conversation about ball)"
                                                         :type        "string"}}}
-                      :add-question {:title   "Add question",
-                                     :options {:question-page {:label         "Question"
-                                                               :type          "question"
-                                                               :answers-label "Answers"
-                                                               :max-answers   4}}}}})
+                      :add-question-object {:title   "Add question",
+                                            :options {:question-page-object {:label         "Question"
+                                                                             :type          "question-object"
+                                                                             :answers-label "Answers"
+                                                                             :max-answers   4}}}}})
 (def t {:assets        [{:url "/raw/img/casa/background.jpg", :size 10 :type "image"}],
         :objects       {:background {:type "background", :src "/raw/img/casa/background.jpg"}},
         :scene-objects [["background"]],
@@ -96,11 +98,28 @@
         (place-question question-actions action-name)
         (add-assets question-assets))))
 
+(defn- add-question-object
+  [activity-data {:keys [question-page-object]}]
+  (let [index (get-next-action-index activity-data)
+        next-action-name "script"
+        action-name (str "question-" index)
+        object-name (str "question-" index)
+        question-data (question-object/create
+                        (form->question-data question-page-object)
+                        {:suffix           index
+                         :action-name      action-name
+                         :object-name      object-name
+                         :next-action-name next-action-name})]
+    (-> activity-data
+        (increase-next-action-index)
+        (question-object/add-to-scene question-data))))
+
 (defn- update-template
   [activity-data {action-name :action-name :as args}]
   (case (keyword action-name)
     :add-dialog (add-dialog activity-data args)
-    :add-question (add-question activity-data args)))
+    :add-question (add-question activity-data args)
+    :add-question-object (add-question-object activity-data args)))
 
 (core/register-template
   m create-template update-template)

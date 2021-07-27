@@ -3,10 +3,10 @@
     [webchange.templates.utils.question :as question]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.core :as core]
-
     [webchange.templates.utils.characters :as characters]
-
-    [webchange.course.core :as course]))
+    [webchange.course.core :as course]
+    [webchange.question.create :as question-object]
+    [webchange.question.get-question-data :refer [form->question-data]]))
 
 (def metadata {:id          45
                :name        "Interactive Read Aloud (Import)"
@@ -24,11 +24,11 @@
                                             :options {:dialog {:label       "Dialogue"
                                                                :placeholder "Name the dialogue"
                                                                :type        "string"}}}
-                             :add-question {:title   "Add question",
-                                            :options {:question-page {:label         "Question"
-                                                                      :type          "question"
-                                                                      :answers-label "Answers"
-                                                                      :max-answers   4}}}}})
+                             :add-question-object {:title   "Add question",
+                                                   :options {:question-page-object {:label         "Question"
+                                                                                    :type          "question-object"
+                                                                                    :answers-label "Answers"
+                                                                                    :max-answers   4}}}}})
 
 (def empty-audio {:audio "" :start 0 :duration 0 :animation "color" :fill 0x00B2FF :data []})
 (def template {:assets        [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
@@ -161,6 +161,22 @@
         (place-question question-actions action-name)
         (add-assets question-assets))))
 
+(defn- add-question-object
+  [activity-data {:keys [question-page-object]}]
+  (let [index (get-next-action-index activity-data)
+        next-action-name "script"
+        action-name (str "question-" index)
+        object-name (str "question-" index)
+        question-data (question-object/create
+                        (form->question-data question-page-object)
+                        {:suffix           index
+                         :action-name      action-name
+                         :object-name      object-name
+                         :next-action-name next-action-name})]
+    (-> activity-data
+        (increase-next-action-index)
+        (question-object/add-to-scene question-data))))
+
 (defn- apply-page-size
   [activity-data {:keys [width height background-color]}]
   (-> activity-data
@@ -193,7 +209,8 @@
   [activity-data {action-name :action-name :as args}]
   (case (keyword action-name)
     :add-dialog (add-dialog activity-data args)
-    :add-question (add-question activity-data args)))
+    :add-question (add-question activity-data args)
+    :add-question-object (add-question-object activity-data args)))
 
 (core/register-template
   metadata

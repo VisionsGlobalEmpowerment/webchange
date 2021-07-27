@@ -46,7 +46,8 @@
          on-correct-dialog (str action-name "-correct-answer-dialog")
          on-wrong (str action-name "-wrong-answer")
          on-wrong-dialog (str action-name "-wrong-answer-dialog")]
-     (merge {:action-name action-name
+     (merge {:alias alias
+             :action-name action-name
              :object-name object-name}
             (merge-data {:actions {(keyword action-name)        {:type          "sequence-data"
                                                                  :description   "-- Description --"
@@ -155,11 +156,12 @@
                                                       args))))))
 
 (defn add-to-scene
-  [activity-data {:keys [action-name actions object-name objects track]}]
+  [activity-data {:keys [alias action-name actions object-name objects track]}]
   (let [conj-vec (fn [list element] (conj (if (vector? list) list (vec list)) element))]
     (-> activity-data
         (update :actions merge actions)
         (update :objects merge objects)
         (update-in [:scene-objects] conj-vec [object-name])
-        (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})
-        (update-in [:metadata :tracks] conj track))))
+        (update-in [:metadata :tracks] conj track)
+        (update-in [:metadata :available-actions] concat [{:action action-name
+                                                           :name   (str "Ask " alias)}]))))
