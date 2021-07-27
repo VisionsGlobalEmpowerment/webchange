@@ -201,8 +201,6 @@
                                               :children  (cond-> [substrate-name background-name task-text-name options-name]
                                                                  show-task-image? (conj task-image-name))
                                               :visible   visible?
-                                              :states    {:invisible {:visible false} ;; change to 'set-attribute'
-                                                          :visible   {:visible true}}
                                               :editable? {:show-in-tree? true}}}}
             :always (merge-data (create-substrate {:object-name substrate-name
                                                    :width       (:width common-params)

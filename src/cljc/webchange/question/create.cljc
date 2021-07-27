@@ -54,8 +54,14 @@
                                                                  :data          [{:type "action" :id show-question-name}
                                                                                  {:type "action" :id task-dialog-name}]}
 
-                                   (keyword show-question-name) {:type "state" :target object-name :id "visible"}
-                                   (keyword hide-question-name) {:type "state" :target object-name :id "invisible"}
+                                   (keyword show-question-name) {:type       "set-attribute"
+                                                                 :target     object-name
+                                                                 :attr-name  "visible"
+                                                                 :attr-value true}
+                                   (keyword hide-question-name) {:type       "set-attribute"
+                                                                 :target     object-name
+                                                                 :attr-name  "visible"
+                                                                 :attr-value false}
 
                                    (keyword task-dialog-name)   {:type               "sequence-data",
                                                                  :data               [{:type "sequence-data"
