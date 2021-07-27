@@ -1,12 +1,12 @@
 (ns webchange.editor-v2.wizard.activity-template.question.multiple-choice-image.views
   (:require
     [reagent.core :as r]
-    [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]
+    [webchange.editor-v2.wizard.validator :refer [connect-data]]
     [webchange.ui-framework.components.index :refer [label select]]))
 
 (def default-values
-  {:task-type       "text"
-   :layout          "horizontal"
+  {:task-type       "text-image"
+   :layout          "vertical"
    :option-label    "audio-text"
    :options-number  2
    :answers-number  "many"
@@ -18,13 +18,6 @@
                                              :value "text-image"}
                                             {:text  "Text only"
                                              :value "text"}]}
-             :layout       {:title         "Layout"
-                            :default-value (:layout default-values)
-                            :options       [{:text  "Horizontal"
-                                             :value "horizontal"}
-                                            {:text      "Vertical"
-                                             :value     "vertical"
-                                             :disabled? true}]}
              :option-label {:title         "Option label"
                             :default-value (:option-label default-values)
                             :options       [{:text  "Audio only"
@@ -46,6 +39,21 @@
                       :options   options
                       :variant   "outlined"}
                      (some? type) (assoc :type type))]]))
+
+(defn- layout-control
+  [{:keys [data]}]
+  (r/with-let [value (connect-data data [:layout] nil (:layout default-values))
+               handle-change #(reset! value %)]
+    (let [options [{:text  "Horizontal"
+                    :value "horizontal"}
+                   {:text      "Vertical"
+                    :value     "vertical"}]]
+      [:div.option-group
+       [label {:class-name "label"} "Layout"]
+       [select {:value     @value
+                :on-change handle-change
+                :options   options
+                :variant   "outlined"}]])))
 
 (defn- options-number-control
   [{:keys [data]}]
@@ -107,7 +115,7 @@
      [:div
       [param-select {:key :task-type :data data}]
       (when (= current-task-type "text-image")
-        [param-select {:key :layout :data data}])
+        [layout-control {:data data}])
       [param-select {:key :option-label :data data}]]
      [:div
       [options-number-control {:data data}]

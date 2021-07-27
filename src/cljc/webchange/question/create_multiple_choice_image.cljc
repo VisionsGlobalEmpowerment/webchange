@@ -38,14 +38,14 @@
   (let [button-name (str object-name "-button")
         text-name (str object-name "-text")]
     (merge-data {:objects {(keyword object-name) {:type     "group"
-                                                  :x        x
-                                                  :y        y
+                                                  :x        (+ x p/block-padding)
+                                                  :y        (+ y p/block-padding)
                                                   :children [button-name text-name]}
                            (keyword text-name)   {:type           "text"
                                                   :text           text
                                                   :x              (+ voice-over/default-size p/voice-over-margin)
                                                   :y              0
-                                                  :width          (- width voice-over/default-size p/voice-over-margin)
+                                                  :width          (- width voice-over/default-size p/voice-over-margin (* 2 p/block-padding))
                                                   :word-wrap      true
                                                   :font-size      p/task-font-size
                                                   :vertical-align "top"
@@ -56,16 +56,27 @@
                                     :on-click    on-task-voice-over-click}))))
 
 (defn- create-options
-  [{:keys [object-name x y width height label-type options on-option-click on-option-voice-over-click]}]
-  (let [options-count (count options)
+  [{:keys [object-name x y width height label-type options on-check-click on-option-click on-option-voice-over-click]}
+   {:keys [answers-number]}]
+  (let [check-button-name (str object-name "-check-button")
+        check-button-height (+ p/check-button-size (* p/block-padding 2))
+        check-button-x (- (/ width 2) (/ p/check-button-size 2))
+        check-button-y (+ (- height check-button-height) p/block-padding)
+
+        list-x p/block-padding
+        list-y p/block-padding
+        list-width (- width (* 2 p/block-padding))
+        list-height (- height p/block-padding check-button-height)
+
+        show-check-button? (= answers-number "many")
+        options-count (count options)
         max-option-width 440
-        option-width (Math/min (-> (- width p/options-gap)
+        option-width (Math/min (-> (- list-width p/options-gap)
                                    (/ options-count))
                                max-option-width)
         offset-left (->> (* option-width options-count)
-                         (- width)
-                         (* 0.5))
-        option-height height]
+                         (- list-width)
+                         (* 0.5))]
     (->> (map-indexed vector options)
          (reduce (fn [result [idx {:keys [img text value]}]]
                    (let [option-name (str object-name "-option-" idx)]
@@ -74,34 +85,35 @@
                          (merge-data (option-image/create {:object-name                option-name
                                                            :x                          (->> (+ option-width p/options-gap)
                                                                                             (* idx)
-                                                                                            (+ offset-left))
-                                                           :y                          0
+                                                                                            (+ offset-left)
+                                                                                            (+ list-x))
+                                                           :y                          list-y
                                                            :width                      (- option-width p/options-gap)
-                                                           :height                     option-height
+                                                           :height                     list-height
                                                            :img                        img
                                                            :text                       text
                                                            :label-type                 label-type
                                                            :on-option-click            on-option-click
                                                            :on-option-voice-over-click on-option-voice-over-click
                                                            :value                      value})))))
-                 {:objects {(keyword object-name) {:type     "group"
-                                                   :x        x
-                                                   :y        y
-                                                   :children []}}}))))
+                 (cond-> {:objects {(keyword object-name) {:type     "group"
+                                                           :x        x
+                                                           :y        y
+                                                           :children (cond-> []
+                                                                             show-check-button? (conj check-button-name))}}}
+                         show-check-button? (merge-data (check-button/create {:object-name check-button-name
+                                                                              :x           check-button-x
+                                                                              :y           check-button-y
+                                                                              :on-click    on-check-click})))))))
 
 (defn- create-task-image
-  [{:keys [x y object-name] :or {x 0 y 0}}
+  [{:keys [x y width height object-name]}
    {:keys [task]}]
   (let [{task-image :img} task
-
-        {:keys [sides-ratio-h width height]} common-params
-        task-image-container-width (* sides-ratio-h width)
-        task-image-container-height height
-
-        image-x (+ x (/ task-image-container-width 2))
-        image-y (+ y (/ task-image-container-height 2))
-        image-width (- task-image-container-width (* (:padding common-params) 2))
-        image-height (- task-image-container-height (* (:padding common-params) 2))]
+        image-x (+ x (/ width 2))
+        image-y (+ y (/ height 2))
+        image-width (- width (* p/block-padding 2))
+        image-height (- height (* p/block-padding 2))]
     {:objects {(keyword object-name) {:type       "image"
                                       :src        task-image
                                       :x          image-x
@@ -111,95 +123,81 @@
                                       :origin     {:type "center-center"}
                                       :editable?  {:select true}}}}))
 
-(defn- create-main-content
-  [{:keys [object-name]}
-   {:keys [on-check-click on-option-click on-option-voice-over-click on-task-voice-over-click]}
-   {:keys [answers-number options task] :as args}]
-  (let [{:keys [sides-ratio-h width]} common-params
-
-        background-name (str object-name "-background")
-        task-text-name (str object-name "-task-text")
-        options-name (str object-name "-options")
-
-        {task-text :text task-type :type} task
-        {options :data options-label :label} options
-
-        {main-content-x      :x
-         main-content-y      :y
-         main-content-width  :width
-         main-content-height :height} (if (= task-type "text-image")
-                                        (let [x (* sides-ratio-h width)]
-                                          {:x      x
-                                           :y      0
-                                           :width  (- width x)
-                                           :height (:height common-params)})
-                                        {:x      0
-                                         :y      0
-                                         :width  width
-                                         :height (:height common-params)})
-
-        task-text-container-x (+ main-content-x p/block-padding)
-        task-text-container-y p/block-padding
-        task-text-container-width (- main-content-width (* 2 p/block-padding))
-        task-text-container-height (- (* main-content-height p/main-content-blocks-ratio) (* 2 p/block-padding))
-
-        show-check-button? (= answers-number "many")
-        check-button-block-height (+ p/check-button-size p/block-padding)
-        check-button-name (str object-name "-check-button")
-        check-button-x (- (+ main-content-x (/ main-content-width 2))
-                          (/ p/check-button-size 2))
-        check-button-y (- (+ main-content-y main-content-height)
-                          p/block-padding p/check-button-size)
-
-        options-text-container-x (+ main-content-x p/block-padding)
-        options-text-container-y (+ task-text-container-y task-text-container-height p/block-padding task-text-container-y)
-        options-text-container-width (- main-content-width (* 2 p/block-padding))
-        options-text-container-height (- main-content-height options-text-container-y check-button-block-height p/block-padding)]
-    (cond-> {:objects {(keyword object-name) {:type     "group"
-                                              :x        0 :y 0
-                                              :children (cond-> [background-name task-text-name options-name]
-                                                                show-check-button? (conj check-button-name))}}}
-            :always (merge-data (create-background {:object-name background-name
-                                                    :x           main-content-x
-                                                    :y           main-content-y
-                                                    :width       main-content-width
-                                                    :height      (:height common-params)
-                                                    :color       (:primary-color common-params)}))
-            :always (merge-data (create-task-text {:object-name              task-text-name
-                                                   :x                        task-text-container-x
-                                                   :y                        task-text-container-y
-                                                   :width                    task-text-container-width
-                                                   :height                   task-text-container-height
-                                                   :text                     task-text
-                                                   :on-task-voice-over-click on-task-voice-over-click}))
-            :always (merge-data (create-options {:object-name                options-name
-                                                 :x                          options-text-container-x
-                                                 :y                          options-text-container-y
-                                                 :width                      options-text-container-width
-                                                 :height                     options-text-container-height
-                                                 :label-type                 options-label
-                                                 :options                    options
-                                                 :on-option-click            on-option-click
-                                                 :on-option-voice-over-click on-option-voice-over-click}))
-            show-check-button? (merge-data (check-button/create {:object-name check-button-name
-                                                                 :x           check-button-x
-                                                                 :y           check-button-y
-                                                                 :on-click    on-check-click})))))
+(defn- get-layout-coordinates
+  [{:keys [layout task]}]
+  (let [{:keys [width height]} common-params
+        small-side (->> 1.618 (inc) (/ 1))
+        big-side (- 1 small-side)
+        {task-type :type} task]
+    (if (= task-type "text")
+      {:text       {:x      0
+                    :y      0
+                    :width  width
+                    :height (* small-side height)}
+       :options    {:x      0
+                    :y      (* small-side height)
+                    :width  width
+                    :height (* big-side height)}
+       :background {:x      0
+                    :y      0
+                    :width  width
+                    :height height}}
+      (case layout
+        "horizontal" (let [left-side-width (* small-side width)]
+                       {:image      {:x      0
+                                     :y      0
+                                     :width  left-side-width
+                                     :height height}
+                        :text       {:x      left-side-width
+                                     :y      0
+                                     :width  (- width left-side-width)
+                                     :height (* small-side height)}
+                        :options    {:x      left-side-width
+                                     :y      (* small-side height)
+                                     :width  (- width left-side-width)
+                                     :height (* big-side height)}
+                        :background {:x      left-side-width
+                                     :y      0
+                                     :width  (- width left-side-width)
+                                     :height height}})
+        "vertical" (let [top-side-height (* small-side height)]
+                     {:image      {:x      0
+                                   :y      0
+                                   :width  (* small-side width)
+                                   :height top-side-height}
+                      :text       {:x      (* small-side width)
+                                   :y      0
+                                   :width  (* big-side width)
+                                   :height top-side-height}
+                      :options    {:x      0
+                                   :y      top-side-height
+                                   :width  width
+                                   :height (- height top-side-height)}
+                      :background {:x      0
+                                   :y      top-side-height
+                                   :width  width
+                                   :height (- height top-side-height)}})))))
 
 (defn create
   [{:keys [object-name visible?] :as props}
-   {:keys [alias task] :as args}]
-  (let [substrate-name (str object-name "-substrate")
-        main-content-name (str object-name "-main-content")
+   {:keys [alias options task] :as form-data}]
+  (let [{task-text :text task-type :type} task
+        {options :data options-label :label} options
 
-        {task-type :type} task
         show-task-image? (= task-type "text-image")
-        task-image-name (str object-name "-task-image")]
+
+        substrate-name (str object-name "-substrate")
+        background-name (str object-name "-background")
+        task-text-name (str object-name "-task-text")
+        options-name (str object-name "-options")
+        task-image-name (str object-name "-task-image")
+
+        layout-coordinates (get-layout-coordinates form-data)]
     (cond-> {:objects {(keyword object-name) {:type      "group"
                                               :alias     alias
                                               :x         (:x common-params)
                                               :y         (:y common-params)
-                                              :children  (cond-> [substrate-name main-content-name]
+                                              :children  (cond-> [substrate-name background-name task-text-name options-name]
                                                                  show-task-image? (conj task-image-name))
                                               :visible   visible?
                                               :states    {:invisible {:visible false} ;; change to 'set-attribute'
@@ -208,5 +206,20 @@
             :always (merge-data (create-substrate {:object-name substrate-name
                                                    :width       (:width common-params)
                                                    :height      (:height common-params)}))
-            :always (merge-data (create-main-content {:object-name main-content-name} props args))
-            show-task-image? (merge-data (create-task-image {:object-name task-image-name} args)))))
+            :always (merge-data (create-background (merge {:object-name background-name
+                                                           :color       (:primary-color common-params)}
+                                                          (:background layout-coordinates))))
+            :always (merge-data (create-task-text (merge props
+                                                         (:text layout-coordinates)
+                                                         {:object-name task-text-name
+                                                          :text        task-text})))
+            :always (merge-data (create-options (merge props
+                                                       (:options layout-coordinates)
+                                                       {:object-name options-name
+                                                        :label-type  options-label
+                                                        :options     options})
+                                                form-data))
+            show-task-image? (merge-data (create-task-image (merge props
+                                                                   (:image layout-coordinates)
+                                                                   {:object-name task-image-name})
+                                                            form-data)))))

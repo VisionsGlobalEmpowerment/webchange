@@ -19,7 +19,7 @@
   [{:keys [alias answers-number correct-answers layout option-label options-number task-type]}]
   {:alias           (or alias "New question")
    :question-type   "multiple-choice-image"
-   :layout          layout
+   :layout          (or layout "horizontal")
    :task            {:type task-type
                      :text default-task-text
                      :img  "/images/questions/question.png"}
