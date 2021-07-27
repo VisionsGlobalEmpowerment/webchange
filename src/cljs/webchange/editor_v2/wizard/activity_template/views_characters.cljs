@@ -5,7 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
-(def animation-names ["senoravaca" "vera" "mari" "teacher" "student" "child"])
+(def animation-names ["senoravaca" "vera" "mari" "teacher" "student" "guide" "child"])
 
 (def characters-validation-map {:root [(fn [value] (when (= (count value) 0) "Characters are required"))]})
 
