@@ -639,7 +639,7 @@
 (re-frame/reg-event-fx
   ::execute-parallel-by-tag
   [event-as-action]
-  (fn-traced [{:keys [db]} action]
+  (fn [{:keys [db]} action]
     (execute-parallel-by-tag! db action)
     {}))
 
