@@ -75,11 +75,11 @@
                                                                          :from-params [{:action-property "value"
                                                                                         :param-property  "value"}]
                                                                          :success     {:type        "parallel-by-tag"
-                                                                                       :from-params [{:template        "activate-option-%"
+                                                                                       :from-params [{:template        (str "activate-option-%-" question-id)
                                                                                                       :action-property "tag"
                                                                                                       :param-property  "value"}]}
                                                                          :fail        {:type        "parallel-by-tag"
-                                                                                       :from-params [{:template        "inactivate-option-%"
+                                                                                       :from-params [{:template        (str "inactivate-option-%-" question-id)
                                                                                                       :action-property "tag"
                                                                                                       :param-property  "value"}]}}
 
@@ -97,7 +97,7 @@
                                                                         {:type "question-reset"
                                                                          :id   question-id}
                                                                         {:type "parallel-by-tag"
-                                                                         :tag  "inactivate-options"}]}
+                                                                         :tag  (str "inactivate-options-" question-id)}]}
 
                                    (keyword on-correct)         {:type "sequence-data"
                                                                  :data [{:type "empty" :duration 500}
@@ -139,7 +139,8 @@
                          :objects {}}
                         (create-voice-over-handlers {:action-name option-voice-over-name
                                                      :options     (:data options)})
-                        (multiple-choice-image/create {:object-name                object-name
+                        (multiple-choice-image/create {:question-id                question-id
+                                                       :object-name                object-name
                                                        :on-check-click             check-answers
                                                        :on-option-click            option-click-name
                                                        :on-option-voice-over-click option-voice-over-name

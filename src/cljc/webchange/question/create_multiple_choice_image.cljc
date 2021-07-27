@@ -56,7 +56,7 @@
                                     :on-click    on-task-voice-over-click}))))
 
 (defn- create-options
-  [{:keys [object-name x y width height label-type options on-check-click on-option-click on-option-voice-over-click]}
+  [{:keys [object-name x y width height label-type options on-check-click on-option-click on-option-voice-over-click question-id]}
    {:keys [answers-number]}]
   (let [check-button-name (str object-name "-check-button")
         check-button-height (+ p/check-button-size (* p/block-padding 2))
@@ -71,9 +71,9 @@
         show-check-button? (= answers-number "many")
         options-count (count options)
         max-option-width 440
-        option-width (Math/min (-> (- list-width p/options-gap)
-                                   (/ options-count))
-                               max-option-width)
+        option-width (min (-> (- list-width p/options-gap)
+                              (/ options-count))
+                          max-option-width)
         offset-left (->> (* option-width options-count)
                          (- list-width)
                          (* 0.5))]
@@ -95,7 +95,8 @@
                                                            :label-type                 label-type
                                                            :on-option-click            on-option-click
                                                            :on-option-voice-over-click on-option-voice-over-click
-                                                           :value                      value})))))
+                                                           :value                      value
+                                                           :question-id                question-id})))))
                  (cond-> {:objects {(keyword object-name) {:type     "group"
                                                            :x        x
                                                            :y        y

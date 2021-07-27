@@ -5,7 +5,7 @@
     [webchange.question.utils :refer [merge-data]]))
 
 (defn- create-image
-  [{:keys [object-name x y width height src on-click value]
+  [{:keys [object-name x y width height src on-click value question-id]
     :or   {x 0
            y 0}}]
   (let [background-name (str object-name "-background")
@@ -46,11 +46,12 @@
      :actions {(keyword image-activate-name)   {:type   "state"
                                                 :target background-name
                                                 :id     "active"
-                                                :tags   [(str "activate-option-" value)]}
+                                                :tags   [(str "activate-option-" value "-" question-id)]}
                (keyword image-inactivate-name) {:type   "state"
                                                 :target background-name
                                                 :id     "default"
-                                                :tags   ["inactivate-options" (str "inactivate-option-" value)]}}}))
+                                                :tags   [(str "inactivate-options-" question-id)
+                                                         (str "inactivate-option-" value "-" question-id)]}}}))
 
 (defn- create-text
   [{:keys [object-name x y width height text]}]
@@ -65,7 +66,7 @@
                                     :editable?      {:select true}}}})
 
 (defn create
-  [{:keys [object-name x y width height img text label-type on-option-click on-option-voice-over-click value]
+  [{:keys [object-name x y width height img text label-type on-option-click on-option-voice-over-click value question-id]
     :or   {x 0
            y 0}}]
   (let [show-text? (= label-type "audio-text")
@@ -101,7 +102,8 @@
                                                :width       image-width
                                                :height      image-height
                                                :on-click    on-option-click
-                                               :value       value}))
+                                               :value       value
+                                               :question-id question-id}))
             show-text? (merge-data (create-text {:object-name text-name
                                                  :x           text-x
                                                  :y           text-y
