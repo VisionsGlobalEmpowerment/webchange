@@ -30,6 +30,10 @@
 (e/reg-simple-executor :copy-variables ::execute-copy-variables)
 (e/reg-simple-executor :clear-vars ::execute-clear-vars)
 (e/reg-simple-executor :map-value ::execute-map-value)
+(e/reg-simple-executor :question-check ::execute-question-check)
+(e/reg-simple-executor :question-pick ::execute-question-pick)
+(e/reg-simple-executor :question-reset ::execute-question-reset)
+(e/reg-simple-executor :question-test ::execute-question-test)
 
 
 (re-frame/reg-event-fx
@@ -131,7 +135,7 @@
      :values   [false false]
      :var-names ['var1' [var2]}]\n                                                               }"
     (let [values (cond-> (map (fn [from] (core/get-variable from)) from-list)
-                            shuffled (shuffle)
+                         shuffled (shuffle)
                          true (vec))]
       (doall (map-indexed (fn [idx var-name]
                             (core/set-variable! var-name (get values idx))) var-names)))
@@ -536,3 +540,46 @@
                    :right-pad (apply str string (repeat (- options (count string)) " ")))]
       (core/set-variable! var-name result)
       {:dispatch (e/success-event action)})))
+
+(re-frame/reg-event-fx
+  ::execute-question-pick
+  (fn [{:keys [_]} [_ {:keys [id value] :as action}]]
+    (let [current-set (set (core/get-variable id))
+          new-set (if (contains? current-set value)
+                    (remove #{value} current-set)
+                    (conj current-set value))]
+      (core/set-variable! id new-set)
+      {:dispatch (e/success-event action)})))
+
+(re-frame/reg-event-fx
+  ::execute-question-reset
+  (fn [{:keys [_]} [_ {:keys [id] :as action}]]
+    (core/set-variable! id #{})
+    {:dispatch (e/success-event action)}))
+
+(re-frame/reg-event-fx
+  ::execute-question-check
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [id answer success fail] :as action}]
+    (let [value1 (set (core/get-variable id))
+          value2 (set answer)]
+      (if (= value1 value2)
+        (if success
+          {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
+          {:dispatch-n (list (e/success-event action))})
+        (if fail
+          {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
+          {:dispatch-n (list (e/success-event action))})))))
+
+(re-frame/reg-event-fx
+  ::execute-question-test
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [id value success fail] :as action}]
+    (let [current-set (set (core/get-variable id))]
+      (if (contains? current-set value)
+        (if success
+          {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
+          {:dispatch-n (list (e/success-event action))})
+        (if fail
+          {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
+          {:dispatch-n (list (e/success-event action))})))))

@@ -48,6 +48,13 @@
 
 ;; Scene Data
 
+(def empty-data {:assets        []
+                 :objects       {}
+                 :scene-objects []
+                 :actions       {}
+                 :triggers      {}
+                 :metadata      {}})
+
 ; Assets
 
 (defn- add-asset
@@ -88,6 +95,11 @@
   [scene-data object-name]
   (-> (get-scene-objects scene-data)
       (get object-name)))
+
+(defn get-scene-object-by-path
+  [scene-data object-path]
+  (-> (get-scene-objects scene-data)
+      (get-in object-path)))
 
 (defn get-scene-background
   [scene-data]
@@ -131,7 +143,19 @@
               (into {})))
        (update scene-data :actions)))
 
+(defn find-actions
+  [scene-data predicate]
+  (->> (get-scene-actions scene-data)
+       (filter (fn [[action-name action-data]]
+                 (predicate {:name action-name
+                             :data action-data})))))
 
+(defn find-actions-by-tag
+  [scene-data tag]
+  (->> (fn [{:keys [data]}]
+         (->> (get data :tags [])
+              (some #{tag})))
+       (find-actions scene-data)))
 
 ; Triggers
 

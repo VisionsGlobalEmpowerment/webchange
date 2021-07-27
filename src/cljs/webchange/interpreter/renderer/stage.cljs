@@ -14,17 +14,18 @@
     [webchange.interpreter.variables.core :as vars.core]))
 
 (defn- init-scene
-  [{:keys [scene-id resources]} current-scene-id loading]
+  [{:keys [scene-id resources]} current-scene-id loading stage-name]
   (when (or (vars.core/get-global-variable :force-scene-update)
             (not= scene-id @current-scene-id))
     (vars.core/set-global-variable! :force-scene-update false)
     (reset! current-scene-id scene-id)
     (reset! loading {:done false :progress 0})
     (reset-app!)
-    (resources/reset-loader!)
+    (resources/reset-loader! stage-name)
     (resources/load-resources resources
                               {:on-complete #(swap! loading assoc :done true)
-                               :on-progress #(swap! loading assoc :progress %)})))
+                               :on-progress #(swap! loading assoc :progress %)}
+                              stage-name)))
 
 (defn- element->viewport
   [el]
@@ -72,16 +73,16 @@
        :component-did-mount
                      (fn [this]
                        (.addEventListener js/window "resize" handle-resize)
-                       (resources/init (.-shared Loader))
-                       (let [{:keys [scene-data]} (r/props this)]
-                         (init-scene scene-data current-scene-id loading)))
+                       (let [{:keys [scene-data stage-name]} (r/props this)]
+                         (resources/init (.-shared Loader) stage-name)
+                         (init-scene scene-data current-scene-id loading stage-name)))
        :component-will-unmount
                      (fn []
                        (.removeEventListener js/window "resize" handle-resize))
        :component-did-update
                      (fn [this]
-                       (let [{:keys [scene-data]} (r/props this)]
-                         (init-scene scene-data current-scene-id loading)))
+                       (let [{:keys [scene-data stage-name]} (r/props this)]
+                         (init-scene scene-data current-scene-id loading stage-name)))
        :reagent-render
                      (fn [{:keys [mode on-ready on-start-click scene-data]}]
                        (let [viewport (-> (element->viewport @container)
@@ -93,6 +94,7 @@
                           (when (and (some? viewport)
                                      (:done @loading)
                                      (or (= mode ::modes/editor)
+                                         (= mode ::modes/preview)
                                          (:started? scene-data)))
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)
@@ -102,7 +104,8 @@
                           (when (and (some? viewport)
                                      (or (not (:done @loading))
                                          (and (not (:started? scene-data))
-                                              (not= mode ::modes/editor))))
+                                              (not= mode ::modes/editor)
+                                              (not= mode ::modes/preview))))
                             [overlay-wrapper {:viewport viewport}
                              [loader-screen {:on-start-click on-start-click
                                              :loading        @loading}]])

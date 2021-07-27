@@ -1,4 +1,4 @@
-(ns webchange.ui.utils)
+(ns webchange.utils.deep-merge)
 
 (defn deep-merge [v & vs]
   (letfn [(rec-merge [v1 v2]

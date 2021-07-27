@@ -52,6 +52,12 @@
     (-> (.-scale display-object)
         (.set x y))))
 
+(defn get-pivot
+  [display-object]
+  (let [scale (.-pivot display-object)]
+    {:x (.-x scale)
+     :y (.-y scale)}))
+
 (defn set-visibility
   [display-object visible?]
   (aset display-object "visible" visible?))

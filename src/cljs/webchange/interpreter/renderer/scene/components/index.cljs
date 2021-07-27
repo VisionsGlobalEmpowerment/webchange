@@ -66,7 +66,7 @@
                                                        :default-props video/default-props}
                                  traffic-light/component-type {:constructor   traffic-light/create
                                                                :default-props traffic-light/default-props}
-                                 painting-toolset/component-type {:constructor painting-toolset/create
+                                 painting-toolset/component-type {:constructor   painting-toolset/create
                                                                   :default-props painting-toolset/default-props}
-                                 text-tracing-pattern/component-type {:constructor text-tracing-pattern/create
+                                 text-tracing-pattern/component-type {:constructor   text-tracing-pattern/create
                                                                       :default-props text-tracing-pattern/default-props}]))

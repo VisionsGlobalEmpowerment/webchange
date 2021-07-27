@@ -2,6 +2,7 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.wizard.activity-template.utils :refer [check-conditions]]
+    [webchange.editor-v2.wizard.activity-template.question.views :refer [question-option]]
     [webchange.editor-v2.wizard.activity-template.views-answers :refer [answers-option]]
     [webchange.editor-v2.wizard.activity-template.views-characters :refer [characters-option]]
     [webchange.editor-v2.wizard.activity-template.views-image :refer [image-option]]
@@ -32,6 +33,7 @@
     "strings-list" [strings-list-option props]
     "questions-no-image" [answers-option props]
     "question" [answers-option props]
+    "question-object" [question-option props]
     "remove-editable-object" [delete-object-option props]
     "video" [video-option props]
     "video-ranges" [video-ranges-option props]

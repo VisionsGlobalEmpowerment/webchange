@@ -6,7 +6,8 @@
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.utils.scene-data :as utils]))
 
 (def executors (atom {}))
 (def flows (atom {}))
@@ -71,6 +72,7 @@
 (reg-simple-executor :sequence ::execute-sequence)
 (reg-simple-executor :sequence-data ::execute-sequence-data)
 (reg-simple-executor :parallel ::execute-parallel)
+(reg-simple-executor :parallel-by-tag ::execute-parallel-by-tag)
 (reg-simple-executor :remove-flows ::execute-remove-flows)
 (reg-simple-executor :remove-flow-tag ::execute-remove-flow-tag)
 (reg-simple-executor :callback ::execute-callback)
@@ -265,16 +267,28 @@
                     action (->with-vars db event)]
                 (assoc-in context [:coeffects :event] action)))))
 
+(defn- get-scene-data
+  [db]
+  (get-in db [:scenes (:current-scene db)]))
+
 (defn get-action
   ([id db]
    (get-action id db {}))
   ([id db prev]
-   (let [action (get-in db [:scenes (:current-scene db) :actions (keyword id)])]
+   (let [scene-data (get-scene-data db)
+         action (get-in scene-data [:actions (keyword id)])]
      (if-not (nil? action)
        (-> action
            (assoc :display-name id)
            (with-prev prev))
        (-> (str "Action '" id "' was not found") js/Error. throw)))))
+
+(defn get-actions-by-tag
+  [db tag]
+  (if-not (nil? tag)
+    (-> (get-scene-data db)
+        (utils/find-actions-by-tag tag))
+    nil))
 
 (defn cond-action [db {:keys [display-name flow-id action-id] :as action} handler-type]
   (let [handler (get action handler-type)
@@ -307,9 +321,9 @@
   [db {:keys [unique-tag] :as action}]
   (if (flow-not-registered? unique-tag)
     (let [{:keys [type return-immediately flow-id action-id skippable] :as action} (as-> action a
-                                                                                              (assoc a :current-scene (:current-scene db))
-                                                                                              (->with-flow a)
-                                                                                              (->with-vars db a))
+                                                                                         (assoc a :current-scene (:current-scene db))
+                                                                                         (->with-flow a)
+                                                                                         (->with-vars db a))
           handler (get @executors (keyword type))
           display-name (action->fold-name action)
           tags (get-action-tags action)]
@@ -583,14 +597,15 @@
                    :current-scene current-scene}]
 
 
+
     (if (seq actions)
       (do
         (register-flow! flow-data)
         (doall (map-indexed (fn [sequence-position child-action]
-                                (->> (sequenced-action->display-name action sequence-position)
-                                     (assoc child-action :display-name)
-                                     (execute-action db)))
-                              actions)))
+                              (->> (sequenced-action->display-name action sequence-position)
+                                   (assoc child-action :display-name)
+                                   (execute-action db)))
+                            actions)))
       (dispatch-success-fn action))))
 
 (re-frame/reg-event-fx
@@ -607,6 +622,25 @@
      :data [{:type 'state', :id 'hidden', :target 'letter-trace'}
             {:type 'state', :id 'hidden', :target 'letter-tutorial-path'}]}"
     (execute-parallel! db action)
+    {}))
+
+(defn execute-parallel-by-tag!
+  [db action]
+  (let [action (->with-vars db action)
+        actions (->> (:tag action)
+                     (get-actions-by-tag db)
+                     (map (fn [[action-name]]
+                            {:type "action"
+                             :id   action-name})))]
+    (execute-parallel! db (-> action
+                              (assoc :type "parallel")
+                              (assoc :data actions)))))
+
+(re-frame/reg-event-fx
+  ::execute-parallel-by-tag
+  [event-as-action]
+  (fn [{:keys [db]} action]
+    (execute-parallel-by-tag! db action)
     {}))
 
 (defn execute-callback!

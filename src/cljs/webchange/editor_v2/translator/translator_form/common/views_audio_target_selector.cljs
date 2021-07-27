@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
-    [webchange.ui.utils :refer [deep-merge]]
+    [webchange.utils.deep-merge :refer [deep-merge]]
     [webchange.ui-framework.components.index :refer [select]]))
 
 (defn- get-styles

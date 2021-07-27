@@ -1,0 +1,54 @@
+.question-option {
+    hr {
+        border: none;
+        border-bottom: solid 1px #e5e5e5;
+        margin: 16px 0;
+    }
+
+    .options-groups {
+        display: grid;
+        grid-template-columns: 50% 50%;
+    }
+
+    .option-group {
+        display: flex;
+        margin-bottom: 8px;
+
+        & > span {
+            display: inline-block;
+            padding-right: 16px;
+            padding-top: 6px;
+            text-align: right;
+            width: 200px;
+        }
+
+        .wc-select {
+            display: inline-block;
+
+            select {
+                min-width: 200px;
+            }
+        }
+    }
+
+    .preview-wrapper {
+        $origin-width: 1920px;
+        $origin-height: 1080px;
+        $scale: 0.35;
+
+        position: relative;
+        left: 50%;
+        margin-left: -1 * ($origin-width * $scale * 0.5);
+
+        width: $origin-width * $scale;
+        height: $origin-height * $scale;
+
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

@@ -8,7 +8,7 @@
     [webchange.interpreter.sound :as sound]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.core :as vars.core]
-    [webchange.resources.scene-parser :refer [get-activity-resources]]
+    [webchange.resources.scene-parser :as scene-parser]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
@@ -21,12 +21,20 @@
        (map #(get-object-data scene-id %))
        (into [])))
 
+(def get-activity-resources scene-parser/get-activity-resources)
+
 (defn- get-scene-objects-data
   [scene-id scene-layers]
   (->> scene-layers
        (mapcat #(get-layer-objects-data scene-id %))
        (remove nil?)
        (into [])))
+
+(defn get-scene-objects-data-by-scene-data
+  [scene-data]
+  (->> (get scene-data :scene-objects)
+       (flatten)
+       (map #(get-object-data nil % (:objects scene-data)))))
 
 (defn- scene-started?
   [scene-id]

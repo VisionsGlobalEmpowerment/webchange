@@ -226,7 +226,7 @@
 
 (defn get-lesson-endpoints
   [course-slug {:keys [activities]}]
-  (logger/group-folded (str "get lesson endpoints" ))
+  (logger/group-folded (str "get lesson endpoints"))
   (logger/trace "course-slug" course-slug)
   (logger/trace "activities" activities)
   (->> activities

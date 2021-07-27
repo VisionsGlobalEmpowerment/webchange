@@ -55,14 +55,15 @@
      :height (.-height bounds)}))
 
 (defn- get-frame-position
-  [object object-props]
+  [object]
   (let [local-bounds (get-object-local-bounds object)
-        {offset-x :x offset-y :y} (:offset object-props)
-        [origin-x origin-y] (-> (get-in object-props [:origin :type] "none-none")
-                                (clojure.string/split #"-"))]
-    (cond-> local-bounds
-            (and (= 0 (int offset-x)) (= origin-x "center")) (update :x - (/ (:width local-bounds) 2))
-            (and (= 0 (int offset-y)) (= origin-y "center")) (update :y - (/ (:height local-bounds) 2)))))
+        pivot (utils/get-pivot object)
+        scale (utils/get-scale object)]
+    (-> local-bounds
+             (update :width * (:x scale))
+             (update :height * (:y scale))
+             (update :x - (* (:x pivot) (:x scale)))
+             (update :y - (* (:y pivot) (:y scale))))))
 
 (defn- draw-border
   [mask width height padding]
@@ -84,8 +85,8 @@
       (.lineTo (:x top-left) (- (:y top-left) (/ frame-width 2))))))
 
 (defn- get-sprite-dimensions
-  [object object-props]
-  (let [{:keys [x y width height]} (get-frame-position object object-props)]
+  [object]
+  (let [{:keys [x y width height]} (get-frame-position object)]
     {:x      (- x frame-padding frame-width)
      :y      (- y frame-padding frame-width)
      :width  (+ width (* 2 (+ frame-padding frame-width)))
@@ -100,13 +101,13 @@
                          :y (- y frame-padding frame-width)})))
 
 (defn- update-sprite-dimensions!
-  [sprite object object-props]
-  (->> (get-sprite-dimensions object object-props)
+  [sprite object]
+  (->> (get-sprite-dimensions object)
        (set-sprite-dimensions! sprite)))
 
 (defn- get-mask-dimensions
-  [object object-props]
-  (let [{:keys [x y]} (get-frame-position object object-props)]
+  [object]
+  (let [{:keys [x y]} (get-frame-position object)]
     {:x (- x frame-padding)
      :y (- y frame-padding)}))
 
@@ -115,43 +116,41 @@
   (utils/set-position mask position))
 
 (defn- update-mask-dimensions!
-  [mask object object-props]
-  (->> (get-mask-dimensions object object-props)
+  [mask object]
+  (->> (get-mask-dimensions object)
        (set-mask-dimensions! mask)))
 
 (defn- update-editor-frame
-  [object object-props sprite mask component-container]
-  (let [{:keys [x y width height]} (get-frame-position object object-props)]
-    (update-sprite-dimensions! sprite object object-props)
+  [object sprite mask component-container]
+  (let [{:keys [x y width height]} (get-frame-position object)]
+    (update-sprite-dimensions! sprite object)
 
     (doto mask
       (draw-border width height frame-padding)
-      (update-mask-dimensions! object object-props))
+      (update-mask-dimensions! object))
 
     (draw-border mask width height frame-padding)
     (aset component-container "hitArea" (Rectangle. x y width height))))
 
 (defn- create-frame
   [component-container object-props object]
-  (let [{:keys [x y width height]} (get-frame-position object object-props)
+  (let [{:keys [x y width height]} (get-frame-position object)
         sprite (doto (Sprite. WHITE)
                  (aset "tint" frame-default-color)
-                 (update-sprite-dimensions! object object-props))
+                 (update-sprite-dimensions! object))
 
         mask (doto (Graphics.)
-               (update-mask-dimensions! object object-props)
+               (update-mask-dimensions! object)
                (draw-border width height frame-padding))]
 
     (when (instance? Container object)
-      (utils/set-handler object "childAdded" #(update-editor-frame object object-props sprite mask component-container))
+      (utils/set-handler object "childAdded" #(update-editor-frame object sprite mask component-container))
       (utils/set-handler object "visibilityChanged" (fn [visible?] (utils/set-visibility component-container visible?))))
 
     (when (instance? Text object)
-      (utils/set-handler object "textChanged" #(update-editor-frame object object-props sprite mask component-container))
-      (utils/set-handler object "fontSizeChanged" #(update-editor-frame object object-props sprite mask component-container))
-      (utils/set-handler object "fontFamilyChanged" #(update-editor-frame object object-props sprite mask component-container)))
-
-    (print "object-props" object-props)
+      (utils/set-handler object "textChanged" #(update-editor-frame object sprite mask component-container))
+      (utils/set-handler object "fontSizeChanged" #(update-editor-frame object sprite mask component-container))
+      (utils/set-handler object "fontFamilyChanged" #(update-editor-frame object sprite mask component-container)))
 
     (when (some? (:visible object-props))
       (utils/set-visibility component-container (:visible object-props)))

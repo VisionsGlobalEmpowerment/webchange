@@ -1,11 +1,9 @@
 (ns webchange.templates.library.interactive-read-aloud
   (:require
-    [webchange.templates.utils.question :as question]
-    [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.core :as core]
-
+    [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.utils.characters :as characters]
-
+    [webchange.templates.utils.question :as question]
     [webchange.templates.library.flipbook.template :refer [book-options page-options]]
     [webchange.templates.library.flipbook.add-page :refer [add-page]]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
@@ -15,7 +13,9 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.templates.library.flipbook.stages :refer [update-stages]]))
+    [webchange.templates.library.flipbook.stages :refer [update-stages]]
+    [webchange.question.create :as question-object]
+    [webchange.question.get-question-data :refer [form->question-data]]))
 
 (def metadata {:id          32
                :name        "Interactive Read Aloud"
@@ -27,19 +27,24 @@
                                       :type  "characters"
                                       :max   4}]
                                     book-options)
-               :actions     {:add-dialog   {:title   "Add dialogue",
-                                            :options {:dialog {:label       "Dialogue"
-                                                               :placeholder "Name the dialogue"
-                                                               :type        "string"}}}
-                             :add-page     {:title   "Add page"
-                                            :options page-options}
-                             :add-question {:title   "Add question",
-                                            :options {:question-page {:label         "Question"
-                                                                      :type          "question"
-                                                                      :answers-label "Answers"
-                                                                      :max-answers   4}}}
-                             :config-title {:title   "Frontpage"
-                                            :options book-options}}})
+               :actions     {:add-dialog          {:title   "Add dialogue",
+                                                   :options {:dialog {:label       "Dialogue"
+                                                                      :placeholder "Name the dialogue"
+                                                                      :type        "string"}}}
+                             :add-page            {:title   "Add page"
+                                                   :options page-options}
+                             :add-question        {:title   "Add question",
+                                                   :options {:question-page {:label         "Question"
+                                                                             :type          "question"
+                                                                             :answers-label "Answers"
+                                                                             :max-answers   4}}}
+                             :add-question-object {:title   "Add question object",
+                                                   :options {:question-page-object {:label         "Question"
+                                                                                    :type          "question-object"
+                                                                                    :answers-label "Answers"
+                                                                                    :max-answers   4}}}
+                             :config-title        {:title   "Frontpage"
+                                                   :options book-options}}})
 
 (def empty-audio {:audio "" :start 0 :duration 0 :animation "color" :fill 0x00B2FF :data []})
 (def template {:assets        [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
@@ -209,6 +214,22 @@
         (place-question question-actions action-name)
         (add-assets question-assets))))
 
+(defn- add-question-object
+  [activity-data {:keys [question-page-object]}]
+  (let [index (get-next-action-index activity-data)
+        next-action-name "script"
+        action-name (str "question-" index)
+        object-name (str "question-" index)
+        question-data (question-object/create
+                        (form->question-data question-page-object)
+                        {:suffix           index
+                         :action-name      action-name
+                         :object-name      object-name
+                         :next-action-name next-action-name})]
+    (-> activity-data
+        (increase-next-action-index)
+        (question-object/add-to-scene question-data))))
+
 (defn- add-page-action
   [activity-data {:keys [type page-layout spread-layout image text]}]
   (let [constructors (case type
@@ -280,13 +301,13 @@
     (-> activity-data
         (update-in [:objects] merge objects))))
 
-
 (defn- update-template
   [activity-data {action-name :action-name :as args}]
   (case (keyword action-name)
     :add-dialog (add-dialog activity-data args)
     :add-page (add-page-action activity-data args)
     :add-question (add-question activity-data args)
+    :add-question-object (add-question-object activity-data args)
     :config-title (config-frontpage activity-data args)))
 
 (core/register-template
