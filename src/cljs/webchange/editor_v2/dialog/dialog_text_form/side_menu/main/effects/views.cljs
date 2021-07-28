@@ -16,7 +16,7 @@
   [{:keys [available-effects effect-type]}]
   (filter (fn [{:keys [text value selected? type]}]
             (if (= "default" effect-type)
-              (or (= nil type) (= "default" type))
+              (or (= nil type) (= effect-type type))
               (= effect-type type)))
           available-effects))
 
