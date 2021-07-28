@@ -1,29 +1,18 @@
 (ns webchange.resources.manager
   (:require
-    [webchange.interpreter.pixi :refer [clear-texture-cache]]
     [webchange.logger.index :as logger]))
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
-(defonce loaders (atom {}))
-
-(def default-loader-id "default")
-
-(defn get-loader
-  ([] (get-loader default-loader-id))
-  ([id] (get @loaders (or id default-loader-id))))
-
-(defn set-loader
-  ([instance] (set-loader default-loader-id instance))
-  ([id instance] (swap! loaders assoc (or id default-loader-id) instance)))
+(defonce loader (atom nil))
 
 (defn init
-  [instance id]
-  (when (nil? (get-loader id))
-    (set-loader id instance)))
+  [loader-instance]
+  (when (nil? @loader)
+    (reset! loader loader-instance)))
 
 (defn- get-resources-store
   []
-  (.-resources (get-loader)))
+  (.-resources @loader))
 
 (defn get-resource
   [resource-name]
@@ -36,42 +25,46 @@
 
 (defn- reset-callbacks
   [loader]
-  (.detachAll (.-onProgress loader))
+  (.detachAll (.-onComplete loader))
   (.detachAll (.-onError loader))
   (.detachAll (.-onLoad loader))
-  (.detachAll (.-onComplete loader)))
+  (.detachAll (.-onProgress loader))
+  (.detachAll (.-onStart loader)))
 
 (defn- set-callbacks
-  [loader {:keys [on-progress on-error on-load on-complete]} id]
-  (when-not (nil? on-progress) (.add (.-onProgress loader)
-                                     (fn [loader] (on-progress (-> loader (.-progress) (/ 100))))))
-  (when-not (nil? on-error) (.add (.-onError loader) on-error))
-  (when-not (nil? on-load) (.add (.-onLoad loader) on-load))
+  [loader {:keys [on-progress on-start on-error on-load on-complete]}]
+  (when (fn? on-error) (.add loader.onError on-error))
+  (when (fn? on-load) (.add loader.onLoad on-load))
+  (when (fn? on-start) (.add loader.onStart on-start))
+  (when (fn? on-progress) (.add loader.onProgress (fn [loader] (on-progress (-> loader (.-progress) (/ 100))))))
+
   (.add (.-onComplete loader) (fn []
-                                (logger/trace "load complete" id)
-                                (when (fn? on-complete)
-                                  (on-complete))
+                                (when (fn? on-complete) (on-complete))
                                 (reset-callbacks loader))))
+
+(defonce loading-que (atom {}))
+(defn- add-to-que [key] (swap! loading-que assoc key true))
+(defn- remove-from-que [key] (swap! loading-que dissoc key))
+(defn- in-que? [key] (contains? @loading-que key))
 
 (defn load-resources
   ([resources]
    (load-resources resources {}))
   ([resources callbacks]
-   (load-resources resources callbacks nil))
-  ([resources callbacks id]
-   (logger/trace "load resources" resources id)
-   (let [loader (get-loader id)]
-     (set-callbacks loader callbacks id)
-     (->> resources
-          (reduce (fn [loader resource]
-                    (let [[key src] (if (sequential? resource)
-                                      [(first resource) (second resource)]
-                                      [resource resource])]
-                      (if-not (has-resource? key)
-                        (.add loader key src)
-                        loader)))
-                  loader)
-          (.load)))))
+   (logger/trace "load resources" resources)
+   (set-callbacks @loader callbacks)
+   (->> resources
+        (reduce (fn [loader resource]
+                  (let [[key src] (if (sequential? resource)
+                                    [(first resource) (second resource)]
+                                    [resource resource])]
+                    (if-not (or (has-resource? key)
+                                (in-que? key))
+                      (do (add-to-que key)
+                          (.add loader key src))
+                      loader)))
+                @loader)
+        (.load))))
 
 (defn load-resource
   [src callback]
@@ -82,7 +75,6 @@
                       (callback resource)))}))
 
 (defn reset-loader!
-  [id]
-  (when-not (nil? (get-loader id))
-    (clear-texture-cache)
-    (.reset (get-loader id))))
+  []
+  (when (not (nil? @loader))
+    (.reset @loader)))
