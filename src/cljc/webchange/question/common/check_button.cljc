@@ -1,6 +1,6 @@
-(ns webchange.question.create-common-check-button
+(ns webchange.question.common.check-button
   (:require
-    [webchange.question.params :as p]
+    [webchange.question.common.params :as common-params]
     [webchange.question.utils :refer [merge-data]]))
 
 (defn- create-background
@@ -18,13 +18,17 @@
 (defn- create-icon
   [{:keys [object-name size]}]
   (let [icon-width 48
-        icon-height 48]
+        icon-height 48
+        scale-x 2
+        scale-y 2]
     {:objects {(keyword object-name) {:type         "svg-path"
                                       :data         "M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
                                       :x            (- (/ size 2) (/ icon-width 2))
                                       :y            (- (/ size 2) (/ icon-height 2))
-                                      :scale-x      2
-                                      :scale-y      2
+                                      :width        (/ icon-width scale-x)
+                                      :height       (/ icon-height scale-y)
+                                      :scale-x      scale-x
+                                      :scale-y      scale-y
                                       :stroke       0x000000
                                       :stroke-width 2}}}))
 
@@ -32,7 +36,7 @@
   [{:keys [object-name x y on-click on-click-params]
     :or   {x 0
            y 0}}]
-  (let [size p/check-button-size
+  (let [size common-params/check-button-size
         background-name (str object-name "-background")
         icon-name (str object-name "-icon")
         actions (cond-> {}
