@@ -41,33 +41,6 @@
             :type       type})
          available-effects)))
 
-(re-frame/reg-sub
- ::default-effects
- (fn []
-   [(re-frame/subscribe [::available-effects])])
- (fn [[available-effects]]
-   (filter (fn [{:keys [text value selected? type]}]
-              (or (= nil type) (= "default" type)))
-            available-effects)))
-
-(re-frame/reg-sub
- ::image-effects
- (fn []
-   [(re-frame/subscribe [::available-effects])])
- (fn [[available-effects]]
-   (filter (fn [{:keys [text value selected? type]}]
-              (= "image" type))
-            available-effects)))
-
-(re-frame/reg-sub
- ::question-effects
- (fn []
-   [(re-frame/subscribe [::available-effects])])
- (fn [[available-effects]]
-   (filter (fn [{:keys [text value selected? type]}]
-              (= "question" type))
-            available-effects)))
-
 ;; Actions
 
 (re-frame/reg-sub

@@ -5,7 +5,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn section-block
-  [{:keys [open?] :or {open? false}}]
+  [{:keys [open?] :or {open? true}}]
   (let [show-body? (r/atom open?)
         handle-header-click #(swap! show-body? not)]
     (r/create-class

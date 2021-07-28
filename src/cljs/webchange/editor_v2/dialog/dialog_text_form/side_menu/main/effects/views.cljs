@@ -8,27 +8,33 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def event-type
-  [{:id 1 :type "Default"}
-   {:id 2 :type "Image"}
-   {:id 3 :type "Questions"}])
+  [{:id 1 :title "Default" :type "default"}
+   {:id 2 :title "Image" :type "image"}
+   {:id 3 :title "Questions" :type "question"}])
+
+(defn- get-current-effects-list
+  [{:keys [available-effects effect-type]}]
+  (filter (fn [{:keys [text value selected? type]}]
+            (if (= "default" effect-type)
+              (or (= nil type) (= "default" type))
+              (= effect-type type)))
+          available-effects))
 
 (defn- effects-list
   [{:keys [effect-type]}]
   (let [available-effects @(re-frame/subscribe [::state/available-effects])
-        default-effects @(re-frame/subscribe [::state/default-effects])
-        image-effects @(re-frame/subscribe [::state/image-effects])
-        question-effects @(re-frame/subscribe [::state/question-effects])
+        current-effects-list (get-current-effects-list {:available-effects available-effects :effect-type effect-type})
         handle-click #(re-frame/dispatch [::state/set-selected-effect %])]
-    [:div
-     [:span.input-label "Available effects:"]
-     [options-list {:options      (case effect-type
-                                    "Default"   default-effects
-                                    "Image"     image-effects
-                                    "Questions" question-effects)
-                    :on-click      handle-click
-                    :get-drag-data (fn [{:keys [value]}]
-                                     {:action "add-effect-action"
-                                      :id     value})}]]))
+    (if (not-empty current-effects-list)
+      [:div
+       [:span.input-label "Available effects:"]
+       [options-list {:options      current-effects-list
+                      :on-click      handle-click
+                      :get-drag-data (fn [{:keys [value]}]
+                                       {:action "add-effect-action"
+                                        :id     value})}]]
+      [:div
+       [:span.input-label "No Available effects"]])))
 
 (defn- actions
   []
@@ -54,23 +60,13 @@
    [:span "or"]
    [:span "Select effect and phrase action to insert effect relative to phrase"]])
 
-;; (defn form
-;;   []
-;;   (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
-;;     [:div.effects-form
-;;      [section-block {:title "Add effect"}
-;;       [effects-list]
-;;       (if show-actions?
-;;         [actions]
-;;         [actions-placeholder])]]))
-
 (defn form
   []
   (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
     [:div.effects-form
-     (for [{:keys [id type]} event-type]
+     (for [{:keys [id title type]} event-type]
        ^{:key id}
-       [section-block {:title type}
+       [section-block {:title title}
         [effects-list {:effect-type type}]
         (if show-actions?
           [actions]
