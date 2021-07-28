@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.pixi :refer [clear-texture-cache Loader]]
+    [webchange.interpreter.pixi :refer [Loader]]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
     [webchange.interpreter.renderer.waiting-screen :refer [waiting-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
@@ -14,18 +14,18 @@
     [webchange.interpreter.variables.core :as vars.core]))
 
 (defn- init-scene
-  [{:keys [scene-id resources]} current-scene-id loading reset-resources?]
+  [{:keys [scene-id resources]} current-scene-id loading stage-name]
   (when (or (vars.core/get-global-variable :force-scene-update)
             (not= scene-id @current-scene-id))
     (vars.core/set-global-variable! :force-scene-update false)
     (reset! current-scene-id scene-id)
     (reset! loading {:done false :progress 0})
-    (reset-app! {:reset-textures? reset-resources?})
-    (when reset-resources?
-      (resources/reset-loader!))
+    (reset-app!)
+    (resources/reset-loader! stage-name)
     (resources/load-resources resources
-                              {:on-complete (fn [] (swap! loading assoc :done true))
-                               :on-progress (fn [progress] (swap! loading assoc :progress progress))})))
+                              {:on-complete #(swap! loading assoc :done true)
+                               :on-progress #(swap! loading assoc :progress %)}
+                              stage-name)))
 
 (defn- element->viewport
   [el]
@@ -61,25 +61,6 @@
                          :height    (:target-height viewport)}}]
           (r/children this))))
 
-(defn- get-screens-state
-  [{:keys [loading-state props scene-data show-waiting-screen? viewport]}]
-  (let [{:keys [mode show-loader-screen?]
-         :or   {show-loader-screen? true}} props]
-    {:show-scene?          (and (some? viewport)
-                                (:done loading-state)
-                                (or (= mode ::modes/editor)
-                                    (= mode ::modes/preview)
-                                    (:started? scene-data)))
-     :show-loader-screen?  (and show-loader-screen?
-                                (some? viewport)
-                                (or (not (:done loading-state))
-                                    (and (not (:started? scene-data))
-                                         (not= mode ::modes/editor)
-                                         (not= mode ::modes/preview))))
-     :show-waiting-screen? (and (some? viewport)
-                                (:done loading-state)
-                                show-waiting-screen?)}))
-
 (defn stage
   []
   (let [container (r/atom nil)
@@ -92,40 +73,45 @@
        :component-did-mount
                      (fn [this]
                        (.addEventListener js/window "resize" handle-resize)
-                       (resources/init (.-shared Loader))
-                       (let [{:keys [reset-resources? scene-data]} (r/props this)]
-                         (init-scene scene-data current-scene-id loading reset-resources?)))
+                       (let [{:keys [scene-data stage-name]} (r/props this)]
+                         (resources/init (.-shared Loader) stage-name)
+                         (init-scene scene-data current-scene-id loading stage-name)))
        :component-will-unmount
                      (fn []
                        (.removeEventListener js/window "resize" handle-resize))
        :component-did-update
                      (fn [this]
-                       (let [{:keys [reset-resources? scene-data]} (r/props this)]
-                         (init-scene scene-data current-scene-id loading reset-resources?)))
+                       (let [{:keys [scene-data stage-name]} (r/props this)]
+                         (init-scene scene-data current-scene-id loading stage-name)))
        :reagent-render
-                     (fn [{:keys [mode on-ready on-start-click scene-data] :as props}]
+                     (fn [{:keys [mode on-ready on-start-click scene-data]}]
                        (let [viewport (-> (element->viewport @container)
                                           (get-stage-params))
-                             show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])
-                             {:keys [show-loader-screen? show-scene? show-waiting-screen?]} (get-screens-state {:loading-state        @loading
-                                                                                                                :props                props
-                                                                                                                :scene-data           scene-data
-                                                                                                                :show-waiting-screen? show-waiting-screen?
-                                                                                                                :viewport             viewport})]
+                             show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])]
                          [:div {:ref   #(when % (reset! container (.-parentNode %)))
                                 :style {:width  "100%"
                                         :height "100%"}}
-                          (when show-scene?
+                          (when (and (some? viewport)
+                                     (:done @loading)
+                                     (or (= mode ::modes/editor)
+                                         (= mode ::modes/preview)
+                                         (:started? scene-data)))
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)
                                     :viewport viewport
                                     :on-ready on-ready
                                     :started? (:started? scene-data)}])
-                          (when show-loader-screen?
+                          (when (and (some? viewport)
+                                     (or (not (:done @loading))
+                                         (and (not (:started? scene-data))
+                                              (not= mode ::modes/editor)
+                                              (not= mode ::modes/preview))))
                             [overlay-wrapper {:viewport viewport}
                              [loader-screen {:on-start-click on-start-click
                                              :loading        @loading}]])
-                          (when show-waiting-screen?
+                          (when (and (some? viewport)
+                                     (:done @loading)
+                                     show-waiting-screen?)
                             [overlay-wrapper {:viewport viewport}
                              [waiting-screen {:on-start-click on-start-click
                                               :loading        @loading}]])]))})))

@@ -30,22 +30,19 @@
   (reset! ticker-handlers {}))
 
 (defn reset-app!
-  [{:keys [reset-textures?]
-    :or   {reset-textures? true}}]
+  []
   (when (app-exists?)
     (kill-transitions!)
     (remove-all-tickers)
     (let [stage (.-stage @pixi-app)
           children (.removeChildren stage)]
       (doall (for [child children]
-               (.destroy child (-> (cond-> {:children true}
-                                           reset-textures? (merge {:texture     true
-                                                                   :baseTexture true}))
-                                   (clj->js)))))
+               (.destroy child (clj->js {:children    true
+                                         :texture     true
+                                         :baseTexture true}))))
       (.render @pixi-app))
-    (when reset-textures?
-      (destroy-texture-cache)
-      (clear-texture-cache))
+    (destroy-texture-cache)
+    (clear-texture-cache)
     (-> sound (.removeAll))
     (filters/destroy)))
 
@@ -85,7 +82,7 @@
 (defn take-screenshot
   ([callback]
    (take-screenshot callback {}))
-  ([callback {:keys [extract-canvas? render?] :or {extract-canvas? true render? false}}]
+  ([callback {:keys [extract-canvas? render?]  :or {extract-canvas? true render? false}}]
    (when render?
      (.render @pixi-app))
    (let [renderer (get-renderer)
