@@ -24,9 +24,9 @@
            objects (get-scene-objects-data-by-scene-data scene-data)
            resources (get-activity-resources nil scene-data)]
        ^{:key id}
-       [stage {:mode                ::modes/preview
-               :scene-data          {:scene-id  (str "question-preview-" id)
-                                     :objects   objects
-                                     :resources resources}
-               :show-loader-screen? false}]))
+       [stage {:mode       ::modes/preview
+               :stage-name "question-preview"
+               :scene-data {:scene-id  (str "question-preview-" id)
+                            :objects   objects
+                            :resources resources}}]))
    [:div.preview-overlay]])
