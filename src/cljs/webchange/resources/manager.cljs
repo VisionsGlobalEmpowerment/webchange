@@ -1,6 +1,5 @@
 (ns webchange.resources.manager
   (:require
-    [webchange.interpreter.pixi :refer [clear-texture-cache]]
     [webchange.logger.index :as logger]))
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
@@ -26,21 +25,27 @@
 
 (defn- reset-callbacks
   [loader]
-  (.detachAll (.-onProgress loader))
+  (.detachAll (.-onComplete loader))
   (.detachAll (.-onError loader))
   (.detachAll (.-onLoad loader))
-  (.detachAll (.-onComplete loader)))
+  (.detachAll (.-onProgress loader))
+  (.detachAll (.-onStart loader)))
 
 (defn- set-callbacks
-  [loader {:keys [on-progress on-error on-load on-complete]}]
-  (when-not (nil? on-progress) (.add (.-onProgress loader)
-                                     (fn [loader] (on-progress (-> loader (.-progress) (/ 100))))))
-  (when-not (nil? on-error) (.add (.-onError loader) on-error))
-  (when-not (nil? on-load) (.add (.-onLoad loader) on-load))
+  [loader {:keys [on-progress on-start on-error on-load on-complete]}]
+  (when (fn? on-error) (.add loader.onError on-error))
+  (when (fn? on-load) (.add loader.onLoad on-load))
+  (when (fn? on-start) (.add loader.onStart on-start))
+  (when (fn? on-progress) (.add loader.onProgress (fn [loader] (on-progress (-> loader (.-progress) (/ 100))))))
+
   (.add (.-onComplete loader) (fn []
-                                (when-not (nil? on-complete)
-                                  (on-complete))
+                                (when (fn? on-complete) (on-complete))
                                 (reset-callbacks loader))))
+
+(defonce loading-que (atom {}))
+(defn- add-to-que [key] (swap! loading-que assoc key true))
+(defn- remove-from-que [key] (swap! loading-que dissoc key))
+(defn- in-que? [key] (contains? @loading-que key))
 
 (defn load-resources
   ([resources]
@@ -53,8 +58,10 @@
                   (let [[key src] (if (sequential? resource)
                                     [(first resource) (second resource)]
                                     [resource resource])]
-                    (if-not (has-resource? key)
-                      (.add loader key src)
+                    (if-not (or (has-resource? key)
+                                (in-que? key))
+                      (do (add-to-que key)
+                          (.add loader key src))
                       loader)))
                 @loader)
         (.load))))
@@ -70,5 +77,4 @@
 (defn reset-loader!
   []
   (when (not (nil? @loader))
-    (clear-texture-cache)
     (.reset @loader)))

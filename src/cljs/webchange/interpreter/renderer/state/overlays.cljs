@@ -99,8 +99,7 @@
 
 (re-frame/reg-sub
   ::show-waiting-screen?
-  (fn scene-data
-    [db]
+  (fn [db]
     (get-in db (path-to-db [:overlays :waiting-screen]) false)))
 
 
