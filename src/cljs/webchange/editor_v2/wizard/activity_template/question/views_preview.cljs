@@ -25,7 +25,6 @@
            resources (get-activity-resources nil scene-data)]
        ^{:key id}
        [stage {:mode       ::modes/preview
-               :stage-name "question-preview"
                :scene-data {:scene-id  (str "question-preview-" id)
                             :objects   objects
                             :resources resources}}]))
