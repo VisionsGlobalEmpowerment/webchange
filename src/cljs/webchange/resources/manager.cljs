@@ -44,8 +44,8 @@
 
 (defonce loading-que (atom {}))
 (defn- add-to-que [key] (swap! loading-que assoc key true))
-(defn- remove-from-que [key] (swap! loading-que dissoc key))
 (defn- in-que? [key] (contains? @loading-que key))
+(defn- reset-que [] (reset! loading-que {}))
 
 (defn load-resources
   ([resources]
@@ -77,4 +77,5 @@
 (defn reset-loader!
   []
   (when (not (nil? @loader))
+    (reset-que)
     (.reset @loader)))
