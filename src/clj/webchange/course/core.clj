@@ -708,8 +708,9 @@
        (map first)))
 
 (defn- preserve-objects
-  [scene-data _created-activity]
-  (let [object-names (editable-object-names scene-data)
+  [scene-data created-activity]
+  (let [object-names (->> (editable-object-names scene-data)
+                          (filter #(contains? (:objects created-activity) %)))
         preserve-objects (-> scene-data
                              :objects
                              (select-keys object-names))]
