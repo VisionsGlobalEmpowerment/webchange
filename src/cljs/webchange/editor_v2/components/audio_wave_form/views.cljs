@@ -21,6 +21,7 @@
                        (when (some? @ws)
                          (let [client-delta (.-deltaY e)
                                client-delta-sign (/ client-delta (Math/abs client-delta))]
+                           (.preventDefault e)
                            (inc-zoom @ws (* client-delta-sign delta-zoom)))))]
     (r/create-class
       {:display-name "audio-wave-form"
