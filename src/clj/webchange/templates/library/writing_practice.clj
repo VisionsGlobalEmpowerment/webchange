@@ -85,6 +85,8 @@
                    :colors-palette
                                 {:type       "colors-palette",
                                  :transition "colors-palette"
+                                 :y          100
+                                 :width      150
                                  :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}
                                  :visible    false}
                    :mari
@@ -103,7 +105,7 @@
                                  :start      true
                                  :actions    {:click {:on "click" :type "action" :id "tap-instructions"}}},
                    :next-button {:type    "image"
-                                 :x       1776 :y 48
+                                 :x       1706 :y 132
                                  :actions {:click {:id "finish-activity", :on "click", :type "action"}}
                                  :filters [{:name "brightness" :value 0}
                                            {:name "glow" :outer-strength 0 :color 0xffd700}]
