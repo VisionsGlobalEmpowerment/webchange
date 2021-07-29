@@ -99,8 +99,8 @@
                                                          :border-radius 32
                                                          :fill          0xFFFFFF}
                                :approve-group           {:type     "group"
-                                                         :x        1776
-                                                         :y        48
+                                                         :x        1706
+                                                         :y        132
                                                          :width    96 :height 96
                                                          :filters  [{:name "brightness" :value 0}
                                                                     {:name "glow" :outer-strength 0 :color 0xffd700}]

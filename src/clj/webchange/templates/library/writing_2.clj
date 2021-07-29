@@ -12,21 +12,19 @@
         :options     {:text {:label "Text" :type "string"}}})
 
 (def t {:assets        [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
-                        {:url "/raw/img/ui/back_button_01.png", :type "image"}
+                        {:url "/raw/img/ui/checkmark.png", :type "image"}
                         {:url "/raw/img/library/painting-tablet/brush.png", :size 10, :type "image"}
                         {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10, :type "image"}
                         {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
                         {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}
                         {:url "/raw/img/ui/star_03.png", :size 10, :type "image"}]
         :objects       {:background {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
-                        :next-button
-                                    {:type    "image",
-                                     :x       1800,
-                                     :y       955,
-                                     :actions {:click {:id "finish-activity", :on "click", :type "action"}},
-                                     :scale-x -1,
-                                     :scale-y 1,
-                                     :src     "/raw/img/ui/back_button_01.png"},
+                        :next-button {:type    "image"
+                                      :x       1706 :y 132
+                                      :actions {:click {:id "finish-activity", :on "click", :type "action"}}
+                                      :filters [{:name "brightness" :value 0}
+                                                {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                      :src     "/raw/img/ui/checkmark.png"},
                         :outline    {:type           "text",
                                      :x              960,
                                      :y              150,
@@ -60,7 +58,8 @@
                                      :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}}
                         :colors-palette
                                     {:type       "colors-palette",
-                                     :x          1830
+                                     :y          100
+                                     :width      150
                                      :transition "colors-palette"
                                      :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}}
                         :mari

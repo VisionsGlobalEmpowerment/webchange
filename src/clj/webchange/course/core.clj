@@ -688,26 +688,45 @@
        (filter (fn [[_ action]] (= "dialog" (:editor-type action))))
        (map first)))
 
+(defn- preserve-actions
+  [scene-data created-activity]
+  (let [action-names (dialog-names scene-data)
+        preserve-actions (-> scene-data
+                             :actions
+                             (select-keys action-names))]
+    (->> preserve-actions
+         (map (fn [[key action]] (let [preserved-action-keys [:available-activities :concept-var :tags :skippable :unique-tag]
+                                       created-action (-> (get-in created-activity [:actions key])
+                                                          (select-keys preserved-action-keys))]
+                                   [key (merge action created-action)])))
+         (into {}))))
+
+(defn- editable-object-names
+  [{:keys [objects]}]
+  (->> objects
+       (filter (fn [[_ object]] (:editable? object)))
+       (map first)))
+
+(defn- preserve-objects
+  [scene-data _created-activity]
+  (let [object-names (editable-object-names scene-data)
+        preserve-objects (-> scene-data
+                             :objects
+                             (select-keys object-names))]
+    preserve-objects))
+
 (defn update-activity-template!
   [course-slug scene-slug user-id]
   (let [scene-data (get-scene-latest-version course-slug scene-slug)
         {:keys [created updated]} (-> scene-data templates/prepare-history (get-in [:metadata :history]))
-        actions (dialog-names scene-data)
-        original-assets (:assets scene-data)
-        preserve-actions (-> scene-data
-                             :actions
-                             (select-keys actions))
         created-activity (as-> (templates/activity-from-template created) a
                                (reduce #(templates/update-activity-from-template %1 %2) a updated))
-
-        preserve-actions (->> preserve-actions
-                              (map (fn [[key action]] (let [preserved-action-keys [:available-activities :concept-var :tags :skippable :unique-tag]
-                                                            created-action (-> (get-in created-activity [:actions key])
-                                                                               (select-keys preserved-action-keys))]
-                                                        [key (merge action created-action)])))
-                              (into {}))
+        original-assets (:assets scene-data)
+        preserved-actions (preserve-actions scene-data created-activity)
+        preserved-objects (preserve-objects scene-data created-activity)
         activity (-> created-activity
-                     (update :actions merge preserve-actions)
+                     (update :actions merge preserved-actions)
+                     (update :objects merge preserved-objects)
                      (update :assets #(->> (concat original-assets %)
                                            (flatten)
                                            (distinct))))]
