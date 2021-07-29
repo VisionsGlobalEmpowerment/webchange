@@ -34,10 +34,11 @@
     [(re-frame/subscribe [::parent-state/available-effects])
      (re-frame/subscribe [::selected-effect])])
   (fn [[available-effects selected-effect]]
-    (map (fn [{:keys [name action]}]
+    (map (fn [{:keys [name action type]}]
            {:text      name
             :value     action
-            :selected? (= action selected-effect)})
+            :selected? (= action selected-effect)
+            :type       type})
          available-effects)))
 
 ;; Actions

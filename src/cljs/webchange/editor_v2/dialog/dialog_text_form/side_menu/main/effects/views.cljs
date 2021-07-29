@@ -7,17 +7,34 @@
     [webchange.ui-framework.components.index :refer [icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
+(def event-type
+  [{:id 1 :title "Default" :type "default"}
+   {:id 2 :title "Image" :type "image"}
+   {:id 3 :title "Questions" :type "question"}])
+
+(defn- get-current-effects-list
+  [{:keys [available-effects effect-type]}]
+  (filter (fn [{:keys [text value selected? type]}]
+            (if (= "default" effect-type)
+              (or (= nil type) (= effect-type type))
+              (= effect-type type)))
+          available-effects))
+
 (defn- effects-list
-  []
+  [{:keys [effect-type]}]
   (let [available-effects @(re-frame/subscribe [::state/available-effects])
+        current-effects-list (get-current-effects-list {:available-effects available-effects :effect-type effect-type})
         handle-click #(re-frame/dispatch [::state/set-selected-effect %])]
-    [:div
-     [:span.input-label "Available effects:"]
-     [options-list {:options       available-effects
-                    :on-click      handle-click
-                    :get-drag-data (fn [{:keys [value]}]
-                                     {:action "add-effect-action"
-                                      :id     value})}]]))
+    (if (not-empty current-effects-list)
+      [:div
+       [:span.input-label "Available effects:"]
+       [options-list {:options      current-effects-list
+                      :on-click      handle-click
+                      :get-drag-data (fn [{:keys [value]}]
+                                       {:action "add-effect-action"
+                                        :id     value})}]]
+      [:div
+       [:span.input-label "No Available effects"]])))
 
 (defn- actions
   []
@@ -47,8 +64,10 @@
   []
   (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
     [:div.effects-form
-     [section-block {:title "Add effect"}
-      [effects-list]
-      (if show-actions?
-        [actions]
-        [actions-placeholder])]]))
+     (for [{:keys [id title type]} event-type]
+       ^{:key id}
+       [section-block {:title title}
+        [effects-list {:effect-type type}]
+        (if show-actions?
+          [actions]
+          [actions-placeholder])])]))
