@@ -16,9 +16,9 @@
                        :value "option-4"}])
 
 (defn form->question-data
-  [{:keys [alias answers-number correct-answers layout option-label options-number task-type]}]
+  [{:keys [alias answers-number correct-answers layout option-label options-number task-type question-type]}]
   {:alias           (or alias "New question")
-   :question-type   "multiple-choice-image"
+   :question-type   (or question-type "multiple-choice-text")
    :layout          (or layout "horizontal")
    :task            {:type task-type
                      :text default-task-text

@@ -1,7 +1,11 @@
 (ns webchange.question.create
   (:require
     [webchange.question.create-multiple-choice-image :as multiple-choice-image]
+    [webchange.question.create-multiple-choice-text :as multiple-choice-text]
     [webchange.question.utils :refer [merge-data]]))
+
+(def question-types {"multiple-choice-image" multiple-choice-image/create
+                     "multiple-choice-text"  multiple-choice-text/create})
 
 (defn- create-voice-over-handlers
   [{:keys [action-name options]}]
@@ -28,7 +32,7 @@
 (defn create
   ([question-params activity-params]
    (create question-params activity-params {}))
-  ([{:keys [alias answers-number correct-answers options task] :as args}
+  ([{:keys [alias answers-number correct-answers options task question-type] :as args}
     {:keys [action-name object-name]}
     {:keys [visible?] :or {visible? false}}]
    (let [show-question-name (str action-name "-show")
@@ -45,7 +49,9 @@
          on-correct (str action-name "-correct-answer")
          on-correct-dialog (str action-name "-correct-answer-dialog")
          on-wrong (str action-name "-wrong-answer")
-         on-wrong-dialog (str action-name "-wrong-answer-dialog")]
+         on-wrong-dialog (str action-name "-wrong-answer-dialog")
+
+         create-question (get question-types question-type)]
      (merge {:alias       alias
              :action-name action-name
              :object-name object-name}
@@ -144,14 +150,14 @@
                          :objects {}}
                         (create-voice-over-handlers {:action-name option-voice-over-name
                                                      :options     (:data options)})
-                        (multiple-choice-image/create {:question-id                question-id
-                                                       :object-name                object-name
-                                                       :on-check-click             check-answers
-                                                       :on-option-click            option-click-name
-                                                       :on-option-voice-over-click option-voice-over-name
-                                                       :on-task-voice-over-click   task-dialog-name
-                                                       :visible?                   visible?}
-                                                      args))))))
+                        (create-question {:question-id                question-id
+                                          :object-name                object-name
+                                          :on-check-click             check-answers
+                                          :on-option-click            option-click-name
+                                          :on-option-voice-over-click option-voice-over-name
+                                          :on-task-voice-over-click   task-dialog-name
+                                          :visible?                   visible?}
+                                         args))))))
 
 (defn add-to-scene
   [activity-data {:keys [alias action-name actions object-name objects track]}]
