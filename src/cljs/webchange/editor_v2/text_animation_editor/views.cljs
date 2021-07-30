@@ -54,3 +54,4 @@
          [message {:type    "warn"
                    :message "Select audio region in translation dialog to configure text animation"}]
          [text-animation-form])])))
+;;Working
