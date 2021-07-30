@@ -1,6 +1,6 @@
 (ns webchange.question.get-question-data)
 
-(def default-task-text "Who do you think the main character, or most important character is going to be in this book?")
+(def default-task-text "Question placeholder")
 
 (def default-options [{:img   "/images/questions/option1.png"
                        :text  "Option 1"

@@ -74,6 +74,7 @@
 (reg-simple-executor :parallel ::execute-parallel)
 (reg-simple-executor :parallel-by-tag ::execute-parallel-by-tag)
 (reg-simple-executor :remove-flows ::execute-remove-flows)
+(reg-simple-executor :finish-flows ::execute-finish-flows)
 (reg-simple-executor :remove-flow-tag ::execute-remove-flow-tag)
 (reg-simple-executor :callback ::execute-callback)
 (reg-simple-executor :hide-skip ::execute-hide-skip)
@@ -414,13 +415,18 @@
     :any (if (not-empty succeeded) true false)
     false))
 
+(defn- finish-flow!
+  [flow-id]
+  (let [{:keys [next]} (get @flows flow-id)]
+    (swap! flows dissoc flow-id)
+    (when next
+      (next))))
+
 (defn check-flow!
   [flow-id]
-  (let [{:keys [next] :as flow} (get @flows flow-id)]
+  (let [flow (get @flows flow-id)]
     (when (flow-finished? flow)
-      (swap! flows dissoc flow-id)
-      (when next
-        (next)))))
+      (finish-flow! flow-id))))
 
 (defn register-flow!
   [{:keys [flow-id current-scene] :as flow}]
@@ -525,6 +531,27 @@
     {}))
 
 (re-frame/reg-event-fx
+  ::execute-finish-flows
+  (fn [{:keys [db]} [_ {:keys [tag] :as action}]]
+    "Execute `finish-flows` action - removes flows with given tag, and continues flows stuck on removed flows.
+
+    Action params:
+    :tag - tag name.
+
+    Example:
+    {:type 'finish-flows',
+     :tag  'question-1'}"
+    (let [flows-to-remove (->> @flows
+                               (filter (fn [[k v]] (contains? (:tags v) tag))))]
+      (doseq [[_flow-id flow] flows-to-remove
+              handler (:on-remove flow)]
+        (handler))
+      (doseq [[flow-id _flow] flows-to-remove]
+        (finish-flow! flow-id)))
+    (dispatch-success-fn action)
+    {}))
+
+(re-frame/reg-event-fx
   ::execute-sequence
   [event-as-action with-vars]
   (fn [{:keys [db]} action]
@@ -548,7 +575,8 @@
    (execute-sequence-data! db action 0))
   ([db action sequence-position]
    (if (empty? (remove nil? (:data action)))
-     (dispatch-success-fn action)
+     (when-not (:workflow-user-input action)
+       (dispatch-success-fn action))
      (let [action (->with-vars db action)
            [current & rest] (:data action)
            next #(execute-sequence-data! db (-> action (assoc :data rest)) (inc sequence-position))
