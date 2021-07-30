@@ -30,7 +30,9 @@
   [menu-button list-position]
   (let [{:keys [x y width height]} (get-bounding-rect menu-button)]
     (case list-position
-      "bottom" {:top  (+ y height)
+      "bottom" {:top  (if (> 371 y)
+                        (+ y height)
+                        (- y 191))
                 :left x}
       "right" {:top  y
                :left (+ x width)})))
