@@ -164,15 +164,13 @@
 (defn- add-question-object
   [activity-data {:keys [question-page-object]}]
   (let [index (get-next-action-index activity-data)
-        next-action-name "script"
         action-name (str "question-" index)
         object-name (str "question-" index)
         question-data (question-object/create
                         (form->question-data question-page-object)
                         {:suffix           index
                          :action-name      action-name
-                         :object-name      object-name
-                         :next-action-name next-action-name})]
+                         :object-name      object-name})]
     (-> activity-data
         (increase-next-action-index)
         (question-object/add-to-scene question-data))))

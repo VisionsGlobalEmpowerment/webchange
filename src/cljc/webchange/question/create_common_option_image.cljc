@@ -15,7 +15,8 @@
         actions (cond-> {}
                         (some? on-click) (assoc :click (cond-> {:type "action"
                                                                 :on   "click"
-                                                                :id   on-click}
+                                                                :id   on-click
+                                                                :unique-tag "question-action"}
                                                                (some? value) (assoc :params {:value value}))))]
     {:objects {(keyword object-name)     {:type        "group"
                                           :object-name object-name

@@ -29,7 +29,7 @@
   ([question-params activity-params]
    (create question-params activity-params {}))
   ([{:keys [alias answers-number correct-answers options task] :as args}
-    {:keys [action-name object-name next-action-name]}
+    {:keys [action-name object-name]}
     {:keys [visible?] :or {visible? false}}]
    (let [show-question-name (str action-name "-show")
          hide-question-name (str action-name "-hide")
@@ -46,14 +46,15 @@
          on-correct-dialog (str action-name "-correct-answer-dialog")
          on-wrong (str action-name "-wrong-answer")
          on-wrong-dialog (str action-name "-wrong-answer-dialog")]
-     (merge {:alias alias
+     (merge {:alias       alias
              :action-name action-name
              :object-name object-name}
-            (merge-data {:actions {(keyword action-name)        {:type          "sequence-data"
-                                                                 :description   "-- Description --"
-                                                                 :continue-flow (nil? next-action-name)
-                                                                 :data          [{:type "action" :id show-question-name}
-                                                                                 {:type "action" :id task-dialog-name}]}
+            (merge-data {:actions {(keyword action-name)        {:type                "sequence-data"
+                                                                 :description         "-- Description --"
+                                                                 :workflow-user-input true
+                                                                 :tags                [question-id]
+                                                                 :data                [{:type "action" :id show-question-name}
+                                                                                       {:type "action" :id task-dialog-name}]}
 
                                    (keyword show-question-name) {:type       "set-attribute"
                                                                  :target     object-name
@@ -65,6 +66,7 @@
                                                                  :attr-value false}
 
                                    (keyword task-dialog-name)   {:type               "sequence-data",
+                                                                 :tags ["question-action"]
                                                                  :data               [{:type "sequence-data"
                                                                                        :data [{:type "empty" :duration 0}
                                                                                               {:type        "animation-sequence"
@@ -107,13 +109,9 @@
                                                                          :tag  (str "inactivate-options-" question-id)}]}
 
                                    (keyword on-correct)         {:type "sequence-data"
-                                                                 :data [{:type "empty" :duration 500}
-                                                                        {:type "action" :id on-correct-dialog}
+                                                                 :data [{:type "action" :id on-correct-dialog}
                                                                         {:type "action" :id hide-question-name}
-                                                                        {:type "empty" :duration 2000}
-                                                                        (if next-action-name
-                                                                          {:type "action" :id next-action-name}
-                                                                          {:type "empty" :duration 100})]}
+                                                                        {:type "finish-flows" :tag question-id}]}
 
                                    (keyword on-correct-dialog)  {:type               "sequence-data"
                                                                  :data               [{:type "sequence-data"
