@@ -8,7 +8,8 @@
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
-    [webchange.state.warehouse-recognition :as recognition]))
+    [webchange.state.warehouse-recognition :as recognition]
+    [webchange.editor-v2.voice-over-display.state :as chunks]))
 
 (defn path-to-db
   [relative-path]
@@ -102,3 +103,9 @@
   ::bring-to-top
   (fn [{:keys [_]} [_ url]]
     {:dispatch [::state-scene/update-asset-date url (.now js/Date)]}))
+
+(re-frame/reg-event-fx
+ ::open-voice-over-audio-window
+ (fn [{:keys [db]} [_]]
+     (js/console.log "open-voice-over-audio-window")
+     {:dispatch-n [[::chunks/open]]}))

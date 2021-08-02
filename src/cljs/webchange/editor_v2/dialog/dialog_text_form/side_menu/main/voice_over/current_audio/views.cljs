@@ -16,6 +16,15 @@
     " audio or "
     [:span.clickable "select from available"]]])
 
+(defn- settings
+  []
+  (let [handle-click #(re-frame/dispatch [::state/open-voice-over-audio-window])]
+    [:div.settings
+     [icon-button {:icon     "settings"
+                   :size     "small"
+                   :on-click handle-click}
+      ""]]))
+
 (defn current-audio
   [props]
   (r/with-let [ws (atom nil)
@@ -33,6 +42,7 @@
       (into [:div.current-audio]
             (if (some? audio)
               [[:div.actions
+                [settings]
                 [icon-button {:icon     "restart"
                               :title    "Recognition retry"
                               :size     "small"

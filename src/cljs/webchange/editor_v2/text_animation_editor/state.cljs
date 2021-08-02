@@ -35,6 +35,7 @@
 (re-frame/reg-sub
   ::modal-state
   (fn [db]
+    (js/console.log "modal-state")
     (-> db
         (get-in modal-state-path)
         boolean)))
@@ -98,10 +99,11 @@
                            (get :chunks)
                            count)
           filtered-data (remove #(<= chunks-count (:chunk %)) data)]
-      (js/console.log "open current-phrase-action: " current-phrase-action)
       ;; (js/console.log "open current-phrase-action: " current-phrase-action)
-      (js/console.log "open chunks-count: " chunks-count)
-      (js/console.log "open filtered-data: " filtered-data)
+      ;; (js/console.log "open current-phrase-action: " current-phrase-action)
+      ;; (js/console.log "open chunks-count: " chunks-count)
+      ;; (js/console.log "open filtered-data: " filtered-data)
+      (js/console.log "modal-state-path")
       {:db       (-> db
                      (assoc-in modal-state-path true)
                      (assoc-in data-path filtered-data)

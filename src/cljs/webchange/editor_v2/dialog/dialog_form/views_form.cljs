@@ -10,6 +10,7 @@
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-target :refer [target-block text-target-block]]
     [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
+    ;; [webchange.editor-v2.voice-over-display.views :refer [voice-over-display-modal]]
 
     [webchange.editor-v2.dialog.components.record-audio.views :refer [record-audio]]
     [webchange.editor-v2.dialog.dialog-form.views-audio-actions :refer [audio-actions]]
@@ -62,4 +63,6 @@
         [details type]]
        [:div
         [:span "Select action on diagram"]])
-     [text-chunks-modal]]))
+     [text-chunks-modal]
+    ;;  [voice-over-display-modal]
+     ]))

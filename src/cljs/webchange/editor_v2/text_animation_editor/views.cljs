@@ -35,7 +35,9 @@
         cancel #(re-frame/dispatch [::state/cancel])
         apply #(re-frame/dispatch [::state/apply])
         form-available? @(re-frame/subscribe [::state/form-available?])
-        selected-audio @(re-frame/subscribe [::state/selected-audio])]
+        selected-audio @(re-frame/subscribe [::state/selected-audio])
+        ;; testing @(re-frame/subscribe [::state/testing])
+        ]
     (when open?
       [dialog
        {:title    "Edit text animation chunks"

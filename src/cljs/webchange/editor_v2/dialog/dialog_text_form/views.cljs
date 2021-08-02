@@ -7,6 +7,7 @@
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
+    [webchange.editor-v2.voice-over-display.views :refer [voice-over-display-modal]]
     [webchange.ui-framework.components.index :refer [button label select]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -61,6 +62,7 @@
                                {:idx idx})])
          [actions-block]]
         [side-menu]]
+       [voice-over-display-modal]
        [text-chunks-modal]])
     (finally
       (re-frame/dispatch [::state/reset-form]))))
