@@ -704,8 +704,26 @@
 (defn- editable-object-names
   [{:keys [objects]}]
   (->> objects
-       (filter (fn [[_ object]] (:editable? object)))
+       (filter (fn [[_ object]] (or
+                                  (:editable? object)
+                                  (= "background" (:type object))
+                                  (= "layered-background" (:type object)))))
        (map first)))
+
+
+(defn- get-object-keys-to-update
+  [{:keys [editable?]}]
+  (cond
+    (and (map? editable?) (not (contains? editable? :drag))) [:x :y :width :height]
+    :else []))
+
+(defn- update-object
+  [created-activity]
+  (fn [[key object]]
+    (let [created-object (get-in created-activity [:objects key])
+          object-keys-to-update (get-object-keys-to-update created-object)
+          object-props-to-update (select-keys created-object object-keys-to-update)]
+      [key (merge object object-props-to-update)])))
 
 (defn- preserve-objects
   [scene-data created-activity]
@@ -714,7 +732,9 @@
         preserve-objects (-> scene-data
                              :objects
                              (select-keys object-names))]
-    preserve-objects))
+    (->> preserve-objects
+         (map (update-object created-activity))
+         (into {}))))
 
 (defn update-activity-template!
   [course-slug scene-slug user-id]

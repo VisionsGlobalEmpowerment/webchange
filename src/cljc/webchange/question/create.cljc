@@ -168,4 +168,5 @@
         (update-in [:scene-objects] conj-vec [object-name])
         (update-in [:metadata :tracks] conj track)
         (update-in [:metadata :available-actions] concat [{:action action-name
+                                                           :type "question"
                                                            :name   (str "Ask " alias)}]))))
