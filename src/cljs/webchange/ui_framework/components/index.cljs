@@ -3,6 +3,7 @@
     [webchange.ui-framework.components.audio.index :as audio]
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.card.index :as card]
+    [webchange.ui-framework.components.checkbox.index :as checkbox]
     [webchange.ui-framework.components.chip.index :as chip]
     [webchange.ui-framework.components.circular-progress.index :as circular-progress]
     [webchange.ui-framework.components.confirm.index :as confirm]
@@ -26,6 +27,7 @@
 (def audio audio/component)
 (def button button/component)
 (def card card/component)
+(def checkbox checkbox/component)
 (def chip chip/component)
 (def circular-progress circular-progress/component)
 (def dialog dialog/component)

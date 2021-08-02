@@ -41,11 +41,30 @@
       ^{:key (str options-number "-" answers-number)}
       [controls/correct-answer {:data data}]]]))
 
+(defn thumbs-up-n-down
+  [{:keys [data]}]
+  (let [current-task-type (get-in @data [:task-type])
+        answers-number (get-in @data [:answers-number])]
+    [:div.options-groups
+     [:div
+      [controls/task-type {:data data}]
+      (when (= current-task-type "text-image")
+        [controls/layout {:data data}])]
+     [:div
+      [controls/mark-options {:data data}]
+      [controls/answers-count {:data data
+                               :any? true}]
+      (when-not (= answers-number "any")
+        ^{:key answers-number}
+        [controls/correct-answer {:data data}])]]))
+
 (def question-types
   {"multiple-choice-image" {:name      "Multiple choice image"
                             :component multiple-choice-image}
    "multiple-choice-text"  {:name      "Multiple choice text"
-                            :component multiple-choice-text}})
+                            :component multiple-choice-text}
+   "thumbs-up-n-down"      {:name      "Thumbs up & thumbs down"
+                            :component thumbs-up-n-down}})
 
 (defn- question-type-control
   [{:keys [data]}]

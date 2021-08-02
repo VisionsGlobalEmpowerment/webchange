@@ -2,26 +2,29 @@
   (:require
     [reagent.core :as r]
     [webchange.editor-v2.wizard.validator :refer [connect-data]]
-    [webchange.ui-framework.components.index :refer [label select]]))
+    [webchange.question.get-question-data :refer [available-mark-options default-options]]
+    [webchange.ui-framework.components.index :refer [checkbox label select]]))
 
 (def default-values
-  {:question-type   "multiple-choice-image"
-   :task-type       "text-image"
-   :layout          "vertical"
-   :option-label    "audio-text"
-   :options-number  2
-   :answers-number  "many"
-   :correct-answers [0]})
-
+  {:question-type  "multiple-choice-text"
+   :task-type      "text-image"
+   :layout         "vertical"
+   :option-label   "audio-text"
+   :options-number 2
+   :answers-number "many"
+   :mark-options   ["thumbs-up" "thumbs-down"]})
 
 (defn answers-count
-  [{:keys [data]}]
+  [{:keys [any? data]
+    :or   {any? false}}]
   (r/with-let [value (connect-data data [:answers-number] nil (:answers-number default-values))
                handle-change #(reset! value %)]
-    (let [options [{:text  "One"
-                    :value "one"}
-                   {:text  "Many"
-                    :value "many"}]]
+    (let [options (cond-> [{:text  "One"
+                            :value "one"}
+                           {:text  "Many"
+                            :value "many"}]
+                          any? (conj {:text  "Any"
+                                      :value "any"}))]
       [:div.option-group
        [label {:class-name "label"} "Correct answers number"]
        [select {:value     @value
@@ -31,23 +34,29 @@
 
 (defn correct-answer
   [{:keys [data]}]
-  (r/with-let [answers-number (get-in @data [:answers-number])
-               value (connect-data data [:correct-answers] nil (:correct-answers default-values))
+  (r/with-let [question-type (get-in @data [:question-type])
+               answers-number (get-in @data [:answers-number])
+               value (connect-data data [:correct-answers] nil [])
                handle-change #(reset! value (if (= answers-number "one") [%] %))]
     (let [options-number (get-in @data [:options-number])
-
-          options (->> (range options-number)
-                       (map (fn [number]
-                              {:text  (str "Option " (inc number))
-                               :value number})))]
+          options (if (= question-type "thumbs-up-n-down")
+                    (->> available-mark-options
+                         (filter (fn [{:keys [value]}]
+                                   (some #{value} (get @data :mark-options [])))))
+                    (->> default-options
+                         (take options-number)
+                         (map-indexed vector)
+                         (map (fn [[number {:keys [value]}]]
+                                {:text  (str "Option " (inc number))
+                                 :value value}))))]
       [:div.option-group
        [label {:class-name "label"} (str "Correct answer" (if (= answers-number "one") "s" ""))]
-       [select {:value     (if (= answers-number "one") (first @value) @value)
-                :on-change handle-change
-                :options   options
-                :type      "int"
-                :variant   "outlined"
-                :multiple? (not= answers-number "one")}]])))
+       [select (cond-> {:value     (if (= answers-number "one") (first @value) @value)
+                        :on-change handle-change
+                        :options   options
+                        :variant   "outlined"
+                        :multiple? (not= answers-number "one")}
+                       (= answers-number "one") (assoc :placeholder "Select correct answers"))]])))
 
 (defn layout
   [{:keys [data]}]
@@ -63,6 +72,44 @@
                 :on-change handle-change
                 :options   options
                 :variant   "outlined"}]])))
+
+(defn- get-mark-option
+  [{:keys [value on-change parent-value text]}]
+  (let [checked? (->> @parent-value (some #{value}) (boolean))]
+    [[label {:class-name "mark-option-label"} text]
+     [checkbox {:value     value
+                :checked?  checked?
+                :on-change on-change}]]))
+
+(defn mark-options
+  [{:keys [data]}]
+  (let [options-list (map :value available-mark-options)
+        list->map (fn [values-list]
+                    (->> options-list
+                         (map (fn [option-value]
+                                [option-value (->> values-list (some #{option-value}) (boolean))]))
+                         (into {})))
+        map->list (fn [value]
+                    (->> value
+                         (filter second)
+                         (map first)
+                         (vec)))
+
+        param-key :mark-options
+        option-value (connect-data data [param-key] (get default-values param-key))
+        handle-change (fn [{:keys [value checked?]}]
+                        (reset! option-value (-> (list->map @option-value)
+                                                 (assoc value checked?)
+                                                 (map->list))))]
+    [:div.option-group
+     [label {:class-name "label"} "Options"]
+     (into [:div.mark-options]
+           (reduce (fn [result option]
+                     (concat result (get-mark-option (merge option
+                                                            {:on-change    handle-change
+                                                             :parent-value option-value}))))
+                   []
+                   available-mark-options))]))
 
 (defn option-label
   [{:keys [data]}]
