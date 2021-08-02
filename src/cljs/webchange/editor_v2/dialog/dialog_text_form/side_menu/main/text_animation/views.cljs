@@ -39,4 +39,3 @@
         [settings]])
      [section-block {:title "Add text animation"}
       [actions]]]))
-;;Working

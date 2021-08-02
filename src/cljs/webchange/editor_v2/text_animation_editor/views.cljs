@@ -35,9 +35,7 @@
         cancel #(re-frame/dispatch [::state/cancel])
         apply #(re-frame/dispatch [::state/apply])
         form-available? @(re-frame/subscribe [::state/form-available?])
-        selected-audio @(re-frame/subscribe [::state/selected-audio])
-        ;; testing @(re-frame/subscribe [::state/testing])
-        ]
+        selected-audio @(re-frame/subscribe [::state/selected-audio])]
     (when open?
       [dialog
        {:title    "Edit text animation chunks"
@@ -56,4 +54,3 @@
          [message {:type    "warn"
                    :message "Select audio region in translation dialog to configure text animation"}]
          [text-animation-form])])))
-;;Working

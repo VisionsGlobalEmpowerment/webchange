@@ -79,4 +79,3 @@
           (reset! data script-data)
           (on-audio-data-change))
         [audio-wave-form-core (merge props {:script script-data})]))))
-;;Working

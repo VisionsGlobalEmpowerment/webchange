@@ -35,7 +35,6 @@
 (re-frame/reg-sub
   ::modal-state
   (fn [db]
-    (js/console.log "modal-state")
     (-> db
         (get-in modal-state-path)
         boolean)))
@@ -86,7 +85,6 @@
 (re-frame/reg-event-fx
   ::select-chunk
   (fn [{:keys [db]} [_ index]]
-    (js/console.log "select-chunk index: " index)
     {:db (assoc-in db selected-chunk-path index)}))
 
 (re-frame/reg-event-fx
@@ -99,11 +97,6 @@
                            (get :chunks)
                            count)
           filtered-data (remove #(<= chunks-count (:chunk %)) data)]
-      ;; (js/console.log "open current-phrase-action: " current-phrase-action)
-      ;; (js/console.log "open current-phrase-action: " current-phrase-action)
-      ;; (js/console.log "open chunks-count: " chunks-count)
-      ;; (js/console.log "open filtered-data: " filtered-data)
-      (js/console.log "modal-state-path")
       {:db       (-> db
                      (assoc-in modal-state-path true)
                      (assoc-in data-path filtered-data)
@@ -146,4 +139,3 @@
                        (conj c chunk)
                        (sort-by :chunk c))]
       {:db (assoc-in db data-path chunks)})))
-

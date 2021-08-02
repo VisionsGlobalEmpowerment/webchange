@@ -19,7 +19,6 @@
   ::open-text-animation-window
   (fn [{:keys [db]} [_]]
     (let [{:keys [node-data]} (state-dialog/get-selected-action db)]
-      (js/console.log "open-text-animation-window node-data: " node-data)
       {:dispatch-n [[::translator-form.actions/set-current-phrase-action node-data]
                     [::chunks/open]]})))
 

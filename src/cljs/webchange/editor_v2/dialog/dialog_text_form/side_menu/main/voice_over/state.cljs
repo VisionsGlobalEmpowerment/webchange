@@ -107,5 +107,4 @@
 (re-frame/reg-event-fx
  ::open-voice-over-audio-window
  (fn [{:keys [db]} [_]]
-     (js/console.log "open-voice-over-audio-window")
      {:dispatch-n [[::chunks/open]]}))

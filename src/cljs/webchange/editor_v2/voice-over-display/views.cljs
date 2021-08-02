@@ -18,12 +18,12 @@
         handle-change-region #(re-frame/dispatch [::voice-over-state/set-current-audio-region %])
         handle-recognition-retry #(re-frame/dispatch [::voice-over-state/recognition-retry %])
         handle-scroll-start (fn []
-                                (let [{:keys [start]} audio-data]
-                                  (ws-utils/center-to-time @ws start)))
-          handle-scroll-finish (fn []
-                                 (let [{:keys [start end duration]} audio-data
-                                       end-time (or end (+ start duration))]
-                                   (ws-utils/center-to-time @ws end-time)))]
+                              (let [{:keys [start]} audio-data]
+                                (ws-utils/center-to-time @ws start)))
+        handle-scroll-finish (fn []
+                               (let [{:keys [start end duration]} audio-data
+                                     end-time (or end (+ start duration))]
+                                 (ws-utils/center-to-time @ws end-time)))]
     (when open?
       [dialog
        {:title    "Edit current selection"
@@ -32,21 +32,20 @@
                             :variant  "outlined"
                             :size     "big"}
                     "Close"]]}
-       
        [:div.actions-icn
-                [icon-button {:icon     "restart"
-                              :title    "Recognition retry"
-                              :size     "small"
-                              :on-click handle-recognition-retry}
-                 "Recognition"]
-                [icon-button {:icon     "arrow-first"
-                              :title    "Scroll to region start"
-                              :size     "small"
-                              :on-click handle-scroll-start}]
-                [icon-button {:icon     "arrow-last"
-                              :title    "Scroll to region end"
-                              :size     "small"
-                              :on-click handle-scroll-finish}]]
+        [icon-button {:icon     "restart"
+                      :title    "Recognition retry"
+                      :size     "small"
+                      :on-click handle-recognition-retry}
+         "Recognition"]
+        [icon-button {:icon     "arrow-first"
+                      :title    "Scroll to region start"
+                      :size     "small"
+                      :on-click handle-scroll-start}]
+        [icon-button {:icon     "arrow-last"
+                      :title    "Scroll to region end"
+                      :size     "small"
+                      :on-click handle-scroll-finish}]]
        [audio-wave-form (merge {:url audio}
                                (select-keys audio-data [:start :end :duration])
                                {:on-change      handle-change-region
