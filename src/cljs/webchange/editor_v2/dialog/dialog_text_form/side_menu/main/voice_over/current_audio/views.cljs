@@ -22,8 +22,7 @@
     [:div.settings
      [icon-button {:icon     "settings"
                    :size     "small"
-                   :on-click handle-click}
-      ""]]))
+                   :on-click handle-click}]]))
 
 (defn current-audio
   [props]
