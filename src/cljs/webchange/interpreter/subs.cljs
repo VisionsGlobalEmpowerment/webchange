@@ -1,7 +1,6 @@
 (ns webchange.interpreter.subs
   (:require
     [re-frame.core :as re-frame]
-    [webchange.progress.activity :as common.activity]
     [webchange.interpreter.lessons.activity :as activity]))
 
 (defn course-datasets
@@ -46,40 +45,6 @@
          (filter #(-> % second :outs))
          (map (fn [[scene-id data]] [scene-id (with-locations data locations)]))
          (into {}))))
-
-(comment
-  (let [db @re-frame.db/app-db
-        locations (get-in db [:course-data :locations])]
-    (->> (get-in db [:course-data :scene-list])
-         (filter #(-> % second :outs))
-         (map (fn [[scene-id data]] [scene-id (with-locations data locations)]))
-         ))
-
-  (let [db @re-frame.db/app-db
-        data (-> (get-in db [:course-data :scene-list])
-                 :map)]
-    (has-out? data :cycling))
-
-  (let [db @re-frame.db/app-db
-        data (-> (get-in db [:course-data :scene-list])
-                 :map)]
-    (->> data
-         :outs
-         (some #(= :cycling (:object %)))))
-
-  (let [db @re-frame.db/app-db
-        locations (get-in db [:course-data :locations])
-        data (-> (get-in db [:course-data :scene-list])
-                 :map)
-        location->out (fn [name location] {:object name :name (:scene location)})]
-    (reduce (fn [scene-data [name lx]]
-              (println name lx)
-              (if (has-out? scene-data name)
-                #_(update scene-data concat (map #(location->out name %) lx))
-                scene-data
-                scene-data))
-            data
-            locations)))
 
 (re-frame/reg-sub
   ::navigation-scene-list
@@ -171,3 +136,36 @@
   (fn [[dataset-items] [_ dataset-item-id]]
     (get dataset-items dataset-item-id)))
 
+(comment
+  (let [db @re-frame.db/app-db
+        locations (get-in db [:course-data :locations])]
+    (->> (get-in db [:course-data :scene-list])
+         (filter #(-> % second :outs))
+         (map (fn [[scene-id data]] [scene-id (with-locations data locations)]))
+         ))
+
+  (let [db @re-frame.db/app-db
+        data (-> (get-in db [:course-data :scene-list])
+                 :map)]
+    (has-out? data :cycling))
+
+  (let [db @re-frame.db/app-db
+        data (-> (get-in db [:course-data :scene-list])
+                 :map)]
+    (->> data
+         :outs
+         (some #(= :cycling (:object %)))))
+
+  (let [db @re-frame.db/app-db
+        locations (get-in db [:course-data :locations])
+        data (-> (get-in db [:course-data :scene-list])
+                 :map)
+        location->out (fn [name location] {:object name :name (:scene location)})]
+    (reduce (fn [scene-data [name lx]]
+              (println name lx)
+              (if (has-out? scene-data name)
+                #_(update scene-data concat (map #(location->out name %) lx))
+                scene-data
+                scene-data))
+            data
+            locations)))

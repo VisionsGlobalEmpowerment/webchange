@@ -97,7 +97,9 @@
                                       :init-feria   {:x 590, :y 960, :visible true},
                                       :init-cinema  {:x 1627, :y 672, :visible true},
                                       :init-library {:x 299, :y 576, :visible true},
-                                      :init-stadium {:x 1488, :y 399, :visible true}},
+                                      :init-stadium {:x 1488, :y 399, :visible true}
+                                      :init-shopping-mall {:x 1080 :y 339 :visible true}
+                                      :init-music-hall {:x 490 :y 339 :visible true}},
                          :visible    false}},
  :scene-objects
            [["background"] ["home" "feria" "park" "library" "music-hall" "shopping-mall" "stadium" "cinema"] ["vera"]],
@@ -114,10 +116,12 @@
                                                         :park       {:id "init-park", :type "state", :target "vera"},
                                                         :feria      {:id "init-feria", :type "state", :target "vera"},
                                                         :cinema     {:id "init-cinema", :type "state", :target "vera"},
-                                                        :default    {:id "init-home", :type "state", :target "vera"},
                                                         :library    {:id "init-library", :type "state", :target "vera"},
                                                         :stadium    {:id "init-stadium", :type "state", :target "vera"},
-                                                        :volleyball {:id "init-stadium", :type "state", :target "vera"}},
+                                                        :volleyball {:id "init-stadium", :type "state", :target "vera"}
+                                                        :shopping-mall {:id "init-shopping-mall" :type "state" :target "vera"}
+                                                        :music-hall {:id "init-music-hall" :type "state" :target "vera"}
+                                                        :default    {:id "init-home", :type "state", :target "vera"},},
                                              :from-var [{:var-name "last-location", :action-property "value"}]}]},
             :move
                                     {:type               "move",
@@ -145,7 +149,7 @@
                                                           :library-4 {:x 975, :y 771, :links ["library-3" "library-5"]},
                                                           :park-3    {:x 975, :y 771, :links ["park-2" "park-4"]},
                                                           :feria-1   {:x 875, :y 938, :links ["feria" "feria-2"]},
-                                                          :stadium-2 {:x 1169, :y 454, :links ["stadium-1" "stadium-3"]},
+                                                          :stadium-2 {:x 1169, :y 454, :links ["stadium-1" "stadium-3" "shopping-mall" "music-hall"]},
                                                           :feria-4   {:x 940, :y 725, :links ["feria-3" "road-1"]},
                                                           :stadium-3 {:x 1054, :y 531, :links ["stadium-2" "stadium-4"]},
                                                           :park      {:x 1325, :y 960, :links ["park-1"]},
@@ -153,7 +157,9 @@
                                                           :library-2 {:x 691, :y 829, :links ["library-1" "library-3"]},
                                                           :feria-2   {:x 895, :y 851, :links ["feria-1" "feria-3"]},
                                                           :park-2    {:x 895, :y 851, :links ["park-1" "park-3" "library-3"]},
-                                                          :park-4    {:x 940, :y 725, :links ["park-3" "road-1"]}},
+                                                          :park-4    {:x 940, :y 725, :links ["park-3" "road-1"]}
+                                                          :shopping-mall {:x 1080 :y 339 :links ["stadium-2"]}
+                                                          :music-hall {:x 490 :y 339 :links ["stadium-2"]}},
                                      :move-speed         160,
                                      :transition-id      "vera-transition"},
             :navigate-to-scene

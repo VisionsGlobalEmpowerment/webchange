@@ -595,10 +595,8 @@
                             :outs
                             (filter #(= (:object %) exit-point))
                             first
-                            :name
-                            )
-          current-course (:current-course db)
-          ]
+                            :name)
+          current-course (:current-course db)]
       (if out-scene-id
         {:dispatch-n (list [::set-current-scene out-scene-id] (ce/success-event action))}
         {:dispatch-n (list [::open-student-course-dashboard current-course])}
@@ -1266,7 +1264,8 @@
   ::clear-current-scene
   (fn [{:keys [db]} _]
     (let [current-scene (:current-scene db)]
-      {:dispatch-n (list [::vars.events/clear-vars {:keep-running true}]
+      {:db (assoc db :activity-started false)
+       :dispatch-n (list [::vars.events/clear-vars {:keep-running true}]
                          [::execute-stop-audio]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
                          [::ce/execute-remove-timers])})))
@@ -1299,6 +1298,7 @@
                        (assoc :current-scene scene-id)
                        (assoc-in [:scenes scene-id] merged-scene)
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
+                       (assoc :activity-started false)
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
        :dispatch-n (list [::load-scene scene-id]
@@ -1926,3 +1926,14 @@
   :history-back
   (fn [_]
     (.back (.-history js/window))))
+
+
+(comment
+  (let [db @re-frame.db/app-db
+        next-activity "letter-intro-1"
+        current-scene "i-spy-1"
+        scene-list (interpreter-subs/navigation-scene-list db)]
+    (->> (find-path current-scene next-activity scene-list)
+         (drop 1)
+         (take-last 3)
+         (first))))
