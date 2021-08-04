@@ -139,6 +139,8 @@
             show-voice-over? (merge-data (voice-over/create {:object-name     button-name
                                                              :x               button-x
                                                              :y               (+ image-height p/options-gap)
+                                                             :question-id     question-id
+                                                             :value           value
                                                              :on-click        on-option-voice-over-click
                                                              :on-click-params {:value value}})))))
 
@@ -182,6 +184,8 @@
                               :text        text
                               :actions     actions})
                 (voice-over/create {:object-name     voice-over-name
+                                    :question-id     question-id
+                                    :value           value
                                     :on-click        on-option-voice-over-click
                                     :on-click-params {:value value}}))))
 

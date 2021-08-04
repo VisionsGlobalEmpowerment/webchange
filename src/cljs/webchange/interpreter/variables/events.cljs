@@ -459,10 +459,10 @@
       (logger/trace "execute case" value)
       (if default
         (if success
-          {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
-          {:dispatch-n (list [::e/execute-action default] (e/success-event action))})
+          {:dispatch-n (list [::e/execute-action (e/cond-action-data action success)])}
+          {:dispatch-n (list [::e/execute-action (e/cond-action-data action default)])})
         (if value
-          {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
+          {:dispatch-n (list [::e/execute-action (e/cond-action-data action success)])}
           {:dispatch-n (list (e/success-event action))})))))
 
 (re-frame/reg-event-fx

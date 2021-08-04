@@ -26,25 +26,14 @@
     (utils/set-position {:x x :y y})))
 
 (defn- create-graphics
-  [{:keys [data width height stroke stroke-width line-cap dash fill scale]}]
+  [{:keys [width height scale] :as props}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
                  (set! -width (* width (:x scale)))
                  (set! -height (* height (:y scale))))
-        ctx (doto
-              (.getContext canvas "2d")
-              (set! -strokeStyle stroke)
-              (set! -lineWidth stroke-width)
-              (set! -lineCap line-cap)
-              (.scale (:x scale) (:y scale)))
+        ctx (.getContext canvas "2d")
         texture (.from Texture canvas)]
-    (when (and fill  (not (boolean? fill)))
-      (doto
-            (.getContext canvas "2d")
-            (set! -fillStyle fill)))
-    (svg-utils/set-svg-path texture ctx {:data data
-                                         :fill fill
-                                         :dash dash})
+    (svg-utils/re-draw ctx texture props)
     {:sprite         (Sprite. texture)
      :texture        texture
      :canvas-context ctx}))
@@ -71,9 +60,10 @@
               'round' The ends of lines are rounded.
               'square' The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness."
   [{:keys [parent type object-name group-name on-click] :as props}]
-  (let [container (create-container props)
+  (let [state (atom props)
+        container (create-container props)
         {:keys [sprite texture canvas-context]} (create-graphics props)
-        wrapped-container (wrap type object-name group-name container texture canvas-context)]
+        wrapped-container (wrap type object-name group-name container texture canvas-context state)]
     (logger/trace-folded "Create svg-path" props)
     (.addChild container sprite)
     (.addChild parent container)

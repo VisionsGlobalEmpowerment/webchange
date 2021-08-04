@@ -5,7 +5,7 @@
     [webchange.question.utils :refer [merge-data]]))
 
 (defn create
-  [{:keys [object-name x y width height text on-task-voice-over-click]}]
+  [{:keys [object-name x y width height text question-id on-task-voice-over-click]}]
   (let [button-name (str object-name "-button")
         text-name (str object-name "-text")]
     (merge-data {:objects {(keyword object-name) {:type     "group"
@@ -27,4 +27,5 @@
                 (voice-over/create {:object-name button-name
                                     :x           0
                                     :y           0
-                                    :on-click    on-task-voice-over-click}))))
+                                    :on-click    on-task-voice-over-click
+                                    :question-id question-id}))))

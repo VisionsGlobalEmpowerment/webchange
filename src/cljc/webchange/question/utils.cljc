@@ -5,7 +5,7 @@
 
 (defn- error
   [message]
-  #?(:clj (new Exception message)
+  #?(:clj  (new Exception message)
      :cljs (new js/Error message)))
 
 (defn- check-keys!
@@ -18,7 +18,7 @@
 (defn- merge-data-simple
   [param1 param2]
   (doseq [field [:actions :objects]]
-    (check-keys! (get param1 field {}) (get  param2 field {})))
+    (check-keys! (get param1 field {}) (get param2 field {})))
   (-> param1
       (update :actions merge (get param2 :actions {}))
       (update :objects merge (get param2 :objects {}))
@@ -30,3 +30,11 @@
             (merge-data-simple result param-n))
           param-1
           params))
+
+(defn get-voice-over-tag
+  [{:keys [question-id value] :or {value "task"}}]
+  {:activate            (str "activate-voice-over-" value "-" question-id)
+   :inactivate          (str "inactivate-voice-over-" value "-" question-id)
+   :inactivate-all      (str "inactivate-voice-overs-" question-id)
+   :activate-template   (str "activate-voice-over-%-" question-id)
+   :inactivate-template (str "inactivate-voice-over-%-" question-id)})

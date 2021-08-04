@@ -88,7 +88,7 @@
     (options-list/create (merge props {:frame frame}) form-data)))
 
 (defn create
-  [{:keys [object-name visible?] :as props}
+  [{:keys [object-name question-id visible?] :as props}
    {:keys [alias layout options task] :as form-data}]
   (let [{task-text :text task-type :type} task
         {options :data options-label :label} options
@@ -119,7 +119,8 @@
             :always (merge-data (task-text/create (merge props
                                                          (:text layout-coordinates)
                                                          {:object-name task-text-name
-                                                          :text        task-text})))
+                                                          :text        task-text
+                                                          :question-id question-id})))
             :always (merge-data (create-options (merge props
                                                        (:options layout-coordinates)
                                                        {:object-name options-name
