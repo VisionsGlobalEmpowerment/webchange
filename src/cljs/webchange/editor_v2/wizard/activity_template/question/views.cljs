@@ -230,15 +230,19 @@
              :on-change   handle-change
              :on-blur     handle-blur
              :placeholder "Enter question name"
-             :variant     "outlined"}]]))
+             :variant     "outlined"}]
+     [label {:class-name "explanation-label"}
+      "Name your question so you can find and drag it into the correct place in the script editor."]]))
 
 (defn question-option
-  [{:keys [key option data validator] :as props}]
+  [{:keys [key option data validator]}]
   (r/with-let [option-data (connect-data data [key] {})]
     [:div.question-option
      [question-alias-control {:data option-data}]
      [question-type-control {:data option-data}]
      [:hr]
      [question-params-form {:data option-data}]
+     [label {:class-name "explanation-label"}
+      "After you hit save, use the script editor boxes to fill in your actual question and answers."]
      [:hr]
      [question-preview @option-data]]))
