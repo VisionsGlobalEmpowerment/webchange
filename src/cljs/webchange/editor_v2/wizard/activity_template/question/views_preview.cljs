@@ -9,24 +9,23 @@
     [webchange.logger.index :as logger]))
 
 (defn question-preview
-  [{:keys [options-number] :as data}]
+  [data]
+  (logger/trace "Form data" data)
   [:div.preview-wrapper
-   (when (number? options-number)
-     (logger/trace "Form data" data)
-     (let [id (random-uuid)
-           scene-data (->> (question/create (logger/->>with-trace "Question data"
-                                                                  (form->question-data data))
-                                            {:action-name "question-action" :object-name "question"}
-                                            {:visible? true})
-                           (question/add-to-scene scene-utils/empty-data)
-                           (logger/->>with-trace-folded "Scene data"))
+   (let [id (random-uuid)
+         scene-data (->> (question/create (logger/->>with-trace "Question data"
+                                                                (form->question-data data))
+                                          {:action-name "question-action" :object-name "question"}
+                                          {:visible? true})
+                         (question/add-to-scene scene-utils/empty-data)
+                         (logger/->>with-trace-folded "Scene data"))
 
-           objects (get-scene-objects-data-by-scene-data scene-data)
-           resources (get-activity-resources nil scene-data)]
-       ^{:key id}
-       [stage {:mode                ::modes/preview
-               :scene-data          {:scene-id  (str "question-preview-" id)
-                                     :objects   objects
-                                     :resources resources}
-               :show-loader-screen? false}]))
+         objects (get-scene-objects-data-by-scene-data scene-data)
+         resources (get-activity-resources nil scene-data)]
+     ^{:key id}
+     [stage {:mode                ::modes/preview
+             :scene-data          {:scene-id  (str "question-preview-" id)
+                                   :objects   objects
+                                   :resources resources}
+             :show-loader-screen? false}])
    [:div.preview-overlay]])

@@ -1,6 +1,8 @@
 (ns webchange.question.common.params)
 
-(def template-size {:width  1920
+(def template-size {:x      0
+                    :y      0
+                    :width  1920
                     :height 1080})
 
 (def background-color 0xFFA301)
@@ -29,7 +31,8 @@
              :padding          {:text 20}
              :text             {:height    100
                                 :min-width 0
-                                :max-width 1920}})
+                                :max-width 1920}
+             :mark-size        250})
 
 (def check-button {:size 80})
 

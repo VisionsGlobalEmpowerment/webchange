@@ -1,4 +1,4 @@
-(ns webchange.question.create-multiple-choice-text
+(ns webchange.question.create-thumbs-up-n-down
   (:require
     [webchange.question.common.background :as background]
     [webchange.question.common.layout-markup :refer [get-layout-coordinates]]
@@ -9,73 +9,20 @@
     [webchange.question.common.params :as params]
     [webchange.question.utils :refer [merge-data]]))
 
-(defn- get-options-horizontal-frame
+(defn- get-options-frame
   [{:keys [width options-number]}]
-  (let [{option-height    :height
-         option-max-width :max-width
-         option-min-width :min-width} (:text params/option)
-        {:keys [gap]} params/options
-
-        option-width (-> (-> (+ width gap) (/ 2) (- gap))
-                         (max option-min-width)
-                         (min option-max-width))]
-    (-> (case options-number
-          1 {:list-width  option-width
-             :list-height option-height
-             :positions   {0 {:x 0
-                              :y 0}}}
-          2 {:list-width  (-> (* 2 option-width) (+ gap))
-             :list-height option-height
-             :positions   {0 {:x 0
-                              :y 0}
-                           1 {:x (+ option-width gap)
-                              :y 0}}}
-          3 {:list-width  (-> (* 2 option-width) (+ gap))
-             :list-height (-> (* 2 option-height) (+ gap))
-             :positions   {0 {:x 0
-                              :y 0}
-                           1 {:x (+ option-width gap)
-                              :y 0}
-                           2 {:x (-> (+ option-width gap) (/ 2))
-                              :y (+ option-height gap)}}}
-          4 {:list-width  (-> (* 2 option-width) (+ gap))
-             :list-height (-> (* 2 option-height) (+ gap))
-             :positions   {0 {:x 0
-                              :y 0}
-                           1 {:x (+ option-width gap)
-                              :y 0}
-                           2 {:x 0
-                              :y (+ option-height gap)}
-                           3 {:x (+ option-width gap)
-                              :y (+ option-height gap)}}})
-        (merge {:option-width  option-width
-                :option-height option-height}))))
-
-(defn- get-options-vertical-frame
-  [{:keys [width options-number]}]
-  (let [{option-height    :height
-         option-max-width :max-width
-         option-min-width :min-width} (:text params/option)
-        {:keys [gap]} params/options
-
-        option-width (-> width
-                         (max option-min-width)
-                         (min option-max-width))]
-    {:list-width    option-width
-     :list-height   (-> (+ option-height gap) (* options-number) (- gap))
+  (let [{:keys [gap]} params/options
+        option-width (:mark-size params/option)
+        option-height (:mark-size params/option)]
+    {:list-width    (-> (+ option-width gap) (* options-number) (- gap))
+     :list-height   option-height
      :positions     (->> (range options-number)
                          (map (fn [idx]
-                                [idx {:x 0
-                                      :y (-> (+ option-height gap) (* idx))}]))
+                                [idx {:x (-> (+ option-width gap) (* idx))
+                                      :y 0}]))
                          (into {}))
      :option-width  option-width
      :option-height option-height}))
-
-(defn- get-options-frame
-  [{:keys [layout] :as props}]
-  (case layout
-    "horizontal" (get-options-vertical-frame props)
-    "vertical" (get-options-horizontal-frame props)))
 
 (defn- create-options
   [{:keys [width height options] :as props}

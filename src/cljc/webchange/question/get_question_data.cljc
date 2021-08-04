@@ -15,18 +15,34 @@
                        :text  "Option 4"
                        :value "option-4"}])
 
+(def available-mark-options [{:value "thumbs-up"
+                              :text  "Thumbs Up"
+                              :img   "/images/questions/thumbs_up.png"}
+                             {:value "ok"
+                              :text  "Ok"
+                              :img   "/images/questions/ok.png"}
+                             {:value "thumbs-down"
+                              :text  "Thumbs Down"
+                              :img   "/images/questions/thumbs_down.png"}])
+
 (defn form->question-data
-  [{:keys [alias answers-number correct-answers layout option-label options-number task-type question-type]}]
-  {:alias           (or alias "New question")
-   :question-type   (or question-type "multiple-choice-text")
-   :layout          (or layout "horizontal")
-   :task            {:type task-type
-                     :text default-task-text
-                     :img  "/images/questions/question.png"}
-   :options         {:label option-label
-                     :data  (take options-number default-options)}
-   :answers-number  answers-number
-   :correct-answers (->> correct-answers
-                         (map #(nth default-options %))
-                         (map :value)
-                         (doall))})
+  [{:keys [alias answers-number correct-answers layout mark-options option-label options-number task-type question-type]
+    :or   {alias          "New question"
+           layout         "horizontal"
+           options-number 2
+           question-type  "multiple-choice-text"}}]
+  (let [marks-question? (= question-type "thumbs-up-n-down")]
+    {:alias           alias
+     :question-type   question-type
+     :layout          layout
+     :task            {:type task-type
+                       :text default-task-text
+                       :img  "/images/questions/question.png"}
+     :options         {:label option-label
+                       :data  (if marks-question?
+                                (filter (fn [{:keys [value]}]
+                                          (some #{value} mark-options))
+                                        available-mark-options)
+                                (take options-number default-options))}
+     :answers-number  answers-number
+     :correct-answers correct-answers}))

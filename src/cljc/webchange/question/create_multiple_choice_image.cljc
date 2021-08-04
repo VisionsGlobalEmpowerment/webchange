@@ -9,14 +9,6 @@
     [webchange.question.common.params :as params]
     [webchange.question.utils :refer [merge-data]]))
 
-(def common-params {:x             0
-                    :y             0
-                    :width         1920
-                    :height        1080
-                    :primary-color 0xFFA301
-                    :sides-ratio-h 0.4
-                    :padding       10})
-
 (defn- get-options-frame
   [{:keys [width options-number]}]
   (let [{:keys [gap]} params/options
@@ -59,8 +51,8 @@
                                                     :with-image? (= task-type "text-image")})]
     (cond-> {:objects {(keyword object-name) {:type      "group"
                                               :alias     alias
-                                              :x         (:x common-params)
-                                              :y         (:y common-params)
+                                              :x         (:x params/template-size)
+                                              :y         (:y params/template-size)
                                               :children  (cond-> [substrate-name background-name task-text-name options-name]
                                                                  show-task-image? (conj task-image-name))
                                               :visible   visible?

@@ -50,7 +50,9 @@
 (defn- create-sprite-mask
   [{:keys [border-radius width height image-size mask-width mask-height]}]
   (cond
-    (some? border-radius) (let [[lt rt rb lb] border-radius]
+    (some? border-radius) (let [[lt rt rb lb] (cond
+                                                (number? border-radius) [border-radius border-radius border-radius border-radius]
+                                                :default border-radius)]
                             (doto (Graphics.)
                               (.beginFill 0x000000)
                               (.moveTo lt 0)

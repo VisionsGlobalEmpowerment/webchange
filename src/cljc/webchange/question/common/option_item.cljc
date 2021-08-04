@@ -6,24 +6,26 @@
     [webchange.question.utils :refer [merge-data]]))
 
 (defn- create-image
-  [{:keys [object-name x y width height src]
-    :or   {x 0
-           y 0}}]
+  [{:keys [object-name x y width height border-radius src]
+    :or   {x             0
+           y             0
+           border-radius 0}}]
   (let [image-name (str object-name "-image")]
     {:objects {(keyword object-name) {:type        "group"
                                       :object-name object-name
                                       :x           x
                                       :y           y
                                       :children    [image-name]}
-               (keyword image-name)  {:type       "image"
-                                      :src        src
-                                      :x          (/ width 2)
-                                      :y          (/ height 2)
-                                      :width      (- width (* p/option-padding 2))
-                                      :height     (- height (* p/option-padding 2))
-                                      :image-size "contain"
-                                      :origin     {:type "center-center"}
-                                      :editable?  {:select true}}}}))
+               (keyword image-name)  {:type          "image"
+                                      :src           src
+                                      :x             (/ width 2)
+                                      :y             (/ height 2)
+                                      :width         (- width (* p/option-padding 2))
+                                      :height        (- height (* p/option-padding 2))
+                                      :border-radius border-radius
+                                      :image-size    "contain"
+                                      :origin        {:type "center-center"}
+                                      :editable?     {:select true}}}}))
 
 (defn- create-substrate
   [{:keys [object-name x y width height border-radius question-id value actions]}]
@@ -183,8 +185,37 @@
                                     :on-click        on-option-voice-over-click
                                     :on-click-params {:value value}}))))
 
+(defn- create-thumbs-option
+  [{:keys [object-name x y width height
+           img question-id value]
+    :as   props}]
+  (let [substrate-name (str object-name "-substrate")
+        image-name (str object-name "-image")
+        border-radius (/ width 2)
+        actions (get-option-actions props)]
+    (merge-data {:objects {(keyword object-name) {:type     "group"
+                                                  :x        x
+                                                  :y        y
+                                                  :children [substrate-name image-name]}}}
+                (create-substrate {:object-name   substrate-name
+                                   :x             0
+                                   :y             0
+                                   :width         width
+                                   :height        height
+                                   :border-radius border-radius
+                                   :question-id   question-id
+                                   :value         value
+                                   :actions       actions})
+                (create-image {:object-name   image-name
+                               :src           img
+                               :width         width
+                               :height        height
+                               :border-radius (- border-radius 10)
+                               :actions       actions}))))
+
 (defn create
   [{:keys [question-type] :as props}]
   (case question-type
     "multiple-choice-image" (create-image-with-text-options props)
-    "multiple-choice-text" (create-text-option props)))
+    "multiple-choice-text" (create-text-option props)
+    "thumbs-up-n-down" (create-thumbs-option props)))
