@@ -5,7 +5,7 @@
     [webchange.editor-v2.components.audio-wave-form.utils :as ws-utils]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.state :as state]
-    [webchange.ui-framework.components.index :refer [button icon-button]]))
+    [webchange.ui-framework.components.index :refer [icon-button]]))
 
 (defn- no-audio-placeholder
   []
@@ -20,9 +20,10 @@
   []
   (let [handle-click #(re-frame/dispatch [::state/open-voice-over-audio-window])]
     [:div.settings
-     [icon-button {:icon     "settings"
+     [icon-button {:icon     "expand"
                    :size     "small"
-                   :on-click handle-click}]]))
+                   :on-click handle-click}
+      "Expand"]]))
 
 (defn current-audio
   [props]

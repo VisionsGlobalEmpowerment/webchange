@@ -9,7 +9,8 @@
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
     [webchange.state.warehouse-recognition :as recognition]
-    [webchange.editor-v2.voice-over-display.state :as chunks]))
+    [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.current-audio-modal.state :as chunks]
+   ))
 
 (defn path-to-db
   [relative-path]

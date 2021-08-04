@@ -1,14 +1,14 @@
-(ns webchange.editor-v2.voice-over-display.views
+(ns webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.current-audio-modal.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.ui-framework.components.index :refer [button dialog icon-button]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.components.audio-wave-form.utils :as ws-utils]
-    [webchange.editor-v2.voice-over-display.state :as state]
+    [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.current-audio-modal.state :as state]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.state :as voice-over-state]))
 
-(defn voice-over-display-modal
+(defn current-audio-modal
   []
   (r/with-let [ws (atom nil)
                handle-ref #(reset! ws %)]
