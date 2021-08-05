@@ -143,7 +143,8 @@ VALUES (:scene_id, :data, :owner_id, :created_at, :description) RETURNING id
 -- :name get-scene :? :1
 -- :doc retrieve a scene record given the course id and the name
 SELECT * from scenes
-WHERE course_id = :course_id AND name = :name;
+WHERE course_id = :course_id AND name = :name
+ORDER BY id ASC LIMIT 1;
 
 -- :name get-scene-by-id :? :1
 -- :doc retrieve a scene record given the id
