@@ -40,7 +40,9 @@
   :sandbox-body-parts-1 {:name "Sandbox: body parts 1"},
   :name-writing {:name "Name Writing", :lesson-sets nil},
   :alliteration-o {:name "Alliteration o"},
-  :rhyme-karaoke-twinkle {:name "Rhyme Karaoke: Twinkle", :lesson-sets nil},
+  :rhyme-karaoke-twinkle {:name "Rhyme Karaoke: Twinkle",
+                          :outs [{:x 100, :y 100, :name "map", :object "back"}],
+                          :preview "/upload/POEPDUWHHHJUMJSR.png", :lesson-sets nil},
   :i-spy-1
   {:name "I Spy 1",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
@@ -197,9 +199,14 @@
    :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg",
    :lesson-sets ["concepts-group"]},
   :first-words-book-letter-j {:name "First Words Book: Letter J", :lesson-sets nil},
-  :riddle-colors-3 {:name "Riddle Colors 3", :lesson-sets nil},
+  :riddle-colors-3 {:name "Riddle Colors 3",
+                    :outs [{:x 100, :y 100, :name "park", :object "back"}],
+                    :preview "/upload/KVDHSFRIBSBRKEOQ.png", :lesson-sets nil},
   :first-words-book-letter-b {:name "First Words Book: Letter B", :lesson-sets nil},
-  :sandbox-vocabulary-colors {:name "Sandbox Vocabulary: Colors", :lesson-sets nil},
+  :sandbox-vocabulary-colors
+  {:name "Sandbox Vocabulary: Colors",
+   :outs [{:x 100, :y 100, :name "park", :object "back"}],
+   :preview "/upload/PLVFPHAXUKDEUUBJ.png", :lesson-sets nil},
   :syllables-3 {:name "Syllables 3"},
   :rhyme-%2fat%2f--%2fig%2f {:name "Rhyme: /at/ & /ig/"},
   :first-words-book-letter-n {:name "First Words Book: Letter N", :lesson-sets nil},
@@ -245,7 +252,9 @@
   :alliteration-a {:name "Alliteration A", :lesson-sets ["concepts" "concepts-incorrect"]},
   :writing-2-on {:name "Writing 2: on", :lesson-sets nil},
   :sandbox-emotions {:name "Sandbox: emotions"},
-  :recording-studio-1-ai {:name "Recording Studio 1 Ai", :lesson-sets nil},
+  :recording-studio-1-ai {:name "Recording Studio 1 Ai",
+                          :outs [{:x 100, :y 100, :name "map", :object "back"}],
+                          :preview "/upload/BTNVASMVMVKUBYGB.png", :lesson-sets nil},
   :letter-intro-1
   {:name "Letter Intro 1",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
@@ -297,7 +306,8 @@
   :first-words-book-letter-mm
   {:name "First Words Book: Letter Mm",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
-   :preview "/upload/FTYLSRIANGTZDTNE.png", :lesson-sets nil},
+   :preview "/upload/FTYLSRIANGTZDTNE.png",
+   :lesson-sets nil},
   :first-words-book-letter-a
   {:name "First Words Book: Letter A",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
@@ -423,13 +433,19 @@
    {:level 0, :scene "interactive-read-aloud-import-2-2", :lesson 1}
    {:level 0, :scene "letter-intro-1", :lesson 2}
    {:level 1, :scene "letter-intro"}],
-  :cinema [{:level 0, :scene "cinema-new"}],
-  :music-hall [{:level 0, :scene "recording-summary-new-1", :lesson 0}],
-  :book [{:level 0, :scene "first-words-book-letter-a"}
-         {:level 0, :scene "first-words-book-letter-mm" :lesson 2}],
+  :cinema [{:level 0, :scene "cinema-new"},
+           {:level 0, :scene "rhyme-karaoke-twinkle" :lesson 3},
+           {:level 0, :scene "cinema-new" :lesson 4}],
+  :music-hall [{:level 0, :scene "recording-summary-new-1", :lesson 0},
+               {:level 0, :scene "recording-studio-1-ai", :lesson 3}],
+  :book [{:level 0, :scene "first-words-book-letter-a"},
+         {:level 0, :scene "first-words-book-letter-mm", :lesson 2}],
   :volleyball [{:level 0, :scene "volleyball-v-3"} {:level 1, :scene "volleyball-letters"}],
   :magic-hat [{:level 0, :scene "magic-hat-v-2"}],
-  :sandbox [{:level 0, :scene "alliteration-v-2"} {:level 1, :scene "park-poem"}],
+  :sandbox [{:level 0, :scene "alliteration-v-2"}
+            {:level 0, :scene "sandbox-vocabulary-colors", :lesson 3}
+            {:level 0, :scene "alliteration-v-2" :lesson 4}],
+  :slide [{:level 0 :scene "riddle-colors-3" :lesson 3}]
   :running [{:level 0, :scene "running-with-letters"}],
   :cycling [{:level 0, :scene "cycling"} {:level 1, :scene "cycling-letters"}],
   :painting-tablet

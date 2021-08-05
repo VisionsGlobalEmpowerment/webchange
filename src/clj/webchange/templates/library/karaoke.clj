@@ -96,8 +96,8 @@
                                                   :fill          0xFFFFFF}
 
                         :approve-group           {:type     "group"
-                                                  :x        1776
-                                                  :y        48
+                                                  :x        1706
+                                                  :y        132
                                                   :width    96 :height 96
                                                   :visible  false
                                                   :children ["approve-background"
