@@ -124,6 +124,7 @@
 
          task-voice-over-click (str action-name "-task-voice-over-click")
          task-dialog-name (str action-name "-task-dialog")
+         task-text-name (str action-name "-task-text")
          {activate-tag-task   :activate
           inactivate-tag-task :inactivate} (get-voice-over-tag {:question-id question-id})
 
@@ -165,9 +166,12 @@
                                                                 :tags               ["question-action"]
                                                                 :data               [{:type "sequence-data"
                                                                                       :data [{:type "empty" :duration 0}
-                                                                                             {:type        "animation-sequence"
+                                                                                             {:type        "text-animation"
                                                                                               :phrase-text (:text task)
-                                                                                              :audio       nil}]}]
+                                                                                              :target      task-text-name
+                                                                                              :audio       nil
+                                                                                              :animation   "bounce"
+                                                                                              :data        []}]}]
                                                                 :phrase-description "Question text"
                                                                 :editor-type        "dialog"}
 
@@ -208,6 +212,7 @@
                                                                                       :question-id question-id}))
                     :always (merge-data (create-question (cond-> {:question-id              question-id
                                                                   :object-name              object-name
+                                                                  :task-text-name           task-text-name
                                                                   :on-option-click          option-click-name
                                                                   :on-task-voice-over-click task-voice-over-click
                                                                   :visible?                 visible?}
