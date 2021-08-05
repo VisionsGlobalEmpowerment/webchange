@@ -139,4 +139,3 @@
                        (conj c chunk)
                        (sort-by :chunk c))]
       {:db (assoc-in db data-path chunks)})))
-

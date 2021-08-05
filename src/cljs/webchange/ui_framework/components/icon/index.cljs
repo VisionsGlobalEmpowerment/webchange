@@ -19,6 +19,7 @@
     [webchange.ui-framework.components.icon.icon-effect :as effect]
     [webchange.ui-framework.components.icon.icon-expand-arrow-down :as expand-arrow-down]
     [webchange.ui-framework.components.icon.icon-expand-arrow-right :as expand-arrow-right]
+    [webchange.ui-framework.components.icon.icon-expand :as expand]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
     [webchange.ui-framework.components.icon.icon-image :as image]
@@ -70,6 +71,7 @@
    "effect"             effect/data
    "expand-arrow-down"  expand-arrow-down/data
    "expand-arrow-right" expand-arrow-right/data
+   "expand"             expand/data
    "font-family"        font-family/data
    "font-size"          font-size/data
    "image"              image/data

@@ -6,6 +6,9 @@
     [webchange.ui-framework.components.icon-button.index :as icon-button-component]
     [webchange.ui-framework.components.utils :refer [get-bounding-rect get-class-name]]))
 
+(def max-height 371)
+(def fixed-height 191)
+
 (defn- menu-item
   [{:keys [close-menu icon text on-click has-icon?]}]
   [:div.wc-menu-list-item {:on-click #(when (some? on-click)
@@ -30,7 +33,9 @@
   [menu-button list-position]
   (let [{:keys [x y width height]} (get-bounding-rect menu-button)]
     (case list-position
-      "bottom" {:top  (+ y height)
+      "bottom" {:top  (if (> max-height y)
+                        (+ y height)
+                        (- y fixed-height))
                 :left x}
       "right" {:top  y
                :left (+ x width)})))
