@@ -10,8 +10,8 @@
     :or   {show-navigation? true}}]
   (let [this (r/current-component)]
     [:div.page-layout
-     [:div.header
-      [toolbar {:actions actions}]]
+    ;;  [:div.header
+    ;;   [toolbar {:actions actions}]]
      [:div.body
       (when show-navigation?
         [:div.side-menu

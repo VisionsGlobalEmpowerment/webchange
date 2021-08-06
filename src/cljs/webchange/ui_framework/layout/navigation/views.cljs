@@ -4,7 +4,9 @@
     [webchange.routes :refer [location redirect-to]]
     [webchange.state.core :as state]
     [webchange.ui-framework.components.index :refer [button]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.ui-framework.layout.avatar.views :refer [avatar]]
+    [webchange.ui-framework.layout.logo.views :refer [logo]]))
 
 (declare menu)
 
@@ -40,16 +42,43 @@
 (defn navigation-menu
   []
   (let [current-course-id @(re-frame/subscribe [::state/current-course-id])
-        menu-items [{:title         "My Profile"
-                     :location-name :profile}
-                    (cond-> {:title         "Courses"
-                             :location-name :courses}
-                            (some? current-course-id) (assoc :children [{:title        "Current course"
-                                                                         :route-name   :course-editor-v2
-                                                                         :route-params [:id current-course-id]}]))
-                    {:title         "Books"
-                     :location-name :books}
-                    {:title      "Create new book"
-                     :route-name :book-creator}]]
+        menu-items [{:title         "Welcome Screen"
+                     :location-name :welcome-screen}
+                    {:title         "Create"
+                     :location-name :title}
+                    {:title         "Game library"
+                     :location-name :game-library}
+                    {:title         "Books library"
+                     :location-name :book-library}
+                    {:title         "Translate"
+                     :location-name :translate}
+                    {:title         "My Profile"
+                     :location-name :my-profile}
+                    {:title         "My Books"
+                     :location-name :my-books}
+                    {:title         "My Games"
+                     :location-name :my-games}]]
     [:div.navigation-menu
-     [menu {:items menu-items}]]))
+     [:div.logo-div
+      [logo]]
+     [:div
+      [menu {:items menu-items}]]
+     [:div.avatar-div
+      [avatar]]]))
+
+;; (defn navigation-menu
+;;   []
+;;   (let [current-course-id @(re-frame/subscribe [::state/current-course-id])
+;;         menu-items [{:title         "My Profile"
+;;                      :location-name :profile}
+;;                     (cond-> {:title         "Courses"
+;;                              :location-name :courses}
+;;                             (some? current-course-id) (assoc :children [{:title        "Current course"
+;;                                                                          :route-name   :course-editor-v2
+;;                                                                          :route-params [:id current-course-id]}]))
+;;                     {:title         "Books"
+;;                      :location-name :books}
+;;                     {:title      "Create new book"
+;;                      :route-name :book-creator}]]
+;;     [:div.navigation-menu
+;;      [menu {:items menu-items}]]))
