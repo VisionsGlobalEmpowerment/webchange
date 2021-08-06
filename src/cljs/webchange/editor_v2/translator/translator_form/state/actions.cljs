@@ -11,8 +11,8 @@
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-
-    [webchange.subs :as subs]))
+    [webchange.subs :as subs]
+    [webchange.utils.scene-action-data :refer [text-animation-action?]]))
 
 (defn- get-object-by-name
   [db object-name]
@@ -117,17 +117,13 @@
       (= type :concept-action) (get-in (translator-form.concepts/current-concept db) (concat [:data] action-path))
       (= type :scene-action) (get-in (translator-form.scene/actions-data db) action-path))))
 
-(defn text-animation?
-  [action]
-  (= (:type action) "text-animation"))
-
 (defn question-audio-data?
   [action]
   (not (:type action)))
 
 (defn update-text-animation-data?
   [action]
-  (or (question-audio-data? action) (text-animation? action)))
+  (or (question-audio-data? action) (text-animation-action? action)))
 
 (defn animation-sequence?
   [action]
@@ -149,7 +145,7 @@
   [db action action-path-data]
   (cond
     (question-audio-data? action) (:text (get-action-data db (update action-path-data 0 drop-last)))
-    (text-animation? action) (:text (get-object-by-name db (:target action)))
+    (text-animation-action? action) (:text (get-object-by-name db (:target action)))
     (:phrase-text-translated action) (:phrase-text-translated action)
     (:phrase-text action) (:phrase-text action)
     :else nil))
@@ -172,13 +168,16 @@
                                          :end      (:end region-data)}
                                         (update-text-animation-data? action)
                                         (assoc :data
-                                               (talk-data/get-chunks-data-if-possible
-                                                 phrase-text audio-url region-data))
+                                               (talk-data/get-chunks-data-if-possible {:text   phrase-text
+                                                                                       :region region-data
+                                                                                       :script script-data}))
 
                                         (update-talk-animation-data? action)
                                         (assoc :data
-                                               (talk-data/get-talk-data-if-possible
-                                                 phrase-text audio-url region-data))) sub-path])}))))))
+                                               (talk-data/get-talk-data-if-possible {:text   phrase-text
+                                                                                     :region region-data
+                                                                                     :script script-data})))
+                                sub-path])}))))))
 
 (re-frame/reg-event-fx
   ::update-action

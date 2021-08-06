@@ -1,4 +1,6 @@
-(ns webchange.editor-v2.dialog.utils.dialog-action)
+(ns webchange.editor-v2.dialog.utils.dialog-action
+  (:require
+    [webchange.utils.scene-action-data :as action-utils]))
 
 (def empty-action-position 0)
 (def inner-action-position 1)
@@ -73,8 +75,8 @@
 
 (defn text-animation-action?
   [action-data]
-  (-> (get-inner-action-type action-data)
-      (= "text-animation")))
+  (-> (get-inner-action action-data)
+      (action-utils/text-animation-action?)))
 
 (defn effect-action?
   [action-data]

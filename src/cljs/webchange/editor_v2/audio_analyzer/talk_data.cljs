@@ -1,9 +1,7 @@
 (ns webchange.editor-v2.audio-analyzer.talk-data
   (:require
-    [re-frame.core :as re-frame]
     [webchange.editor-v2.audio-analyzer.config :refer [confidence-chunk-threshold]]
-    [webchange.editor-v2.audio-analyzer.utils :refer [levenshtein-distance prepare-text]]
-    [webchange.editor-v2.components.audio-wave-form.state :as state]))
+    [webchange.editor-v2.audio-analyzer.utils :refer [levenshtein-distance prepare-text]]))
 
 (defn get-chunks
   [orig-text rec-text]
@@ -117,11 +115,9 @@
         (pack-chunks))))
 
 (defn get-chunks-data-if-possible
-  [text url region]
-  (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
-    (get-chunks-for-text text script-data region)))
+  [{:keys [script text region]}]
+  (get-chunks-for-text text script region))
 
 (defn get-talk-data-if-possible
-  [text url region]
-  (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
-    (get-talk-data-for-text text script-data region)))
+  [{:keys [script text region]}]
+  (get-talk-data-for-text text script region))

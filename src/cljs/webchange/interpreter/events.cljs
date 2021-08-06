@@ -27,6 +27,7 @@
     [webchange.resources.manager :as resources-manager]
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
     [webchange.interpreter.renderer.scene.app :as app]
+    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as stage]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.warehouse :as warehouse]
     [webchange.logger.index :as logger]
@@ -1327,7 +1328,8 @@
           merged-scene (merge-with-templates db scene)]
       {:db       (cond-> (assoc-in db [:scenes scene-id] merged-scene)
                          (= current-scene scene-id) (assoc :current-scene-data merged-scene))
-       :dispatch [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))]})))
+       :dispatch-n [[::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))]
+                    [::stage/reset-stage]]})))
 
 (re-frame/reg-event-fx
   ::set-scenes-data

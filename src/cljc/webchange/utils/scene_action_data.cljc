@@ -2,6 +2,15 @@
   (:require
     [clojure.string :as string]))
 
+(defn get-action-type
+  [action-data]
+  (get action-data :type))
+
+(defn text-animation-action?
+  [action-data]
+  (-> (get-action-type action-data)
+      (= "text-animation")))
+
 (defn dialog-action?
   [action-data]
   (contains? action-data :phrase))
