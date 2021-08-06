@@ -75,12 +75,17 @@
   [db]
   (-> db scene-data :metadata))
 
+(defn object-data
+  [db object-id]
+  (-> (objects-data db)
+      (get object-id)))
+
 (re-frame/reg-sub
   ::objects-data
   (fn []
     [(re-frame/subscribe [::scene-data])])
   (fn [[scene-data]]
-    (:objects scene-data)))
+    (get scene-data :objects)))
 
 (re-frame/reg-sub
   ::text-objects

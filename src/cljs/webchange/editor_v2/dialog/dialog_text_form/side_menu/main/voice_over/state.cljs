@@ -1,16 +1,15 @@
 (ns webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer.region-data :refer [get-region-data-if-possible]]
     [webchange.editor-v2.dialog.components.audio-assets.state :as audio-assets]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state-dialog]
+    [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.current-audio-modal.state :as chunks]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
     [webchange.state.warehouse-recognition :as recognition]
-    [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.voice-over.current-audio-modal.state :as chunks]
-   ))
+    [webchange.utils.scene-action-data :refer [text-animation-action?]]))
 
 (defn path-to-db
   [relative-path]
@@ -36,13 +35,17 @@
   ::set-current-audio
   (fn [{:keys [db]} [_ url]]
     (let [{:keys [path source]} (state-dialog/get-selected-action db)
-          phrase-text (-> (get-current-audio db) (get :phrase-text ""))]
+          {:keys [target] :as action-data} (get-current-audio db)
+          target-text (->> (keyword target)
+                           (state-scene/object-data db)
+                           (:text))]
       {:dispatch-n [[::state-actions/update-inner-action-by-path {:action-path path
                                                                   :action-type source
                                                                   :data-patch  {:audio url}}]
                     [::recognition/get-audio-script-region
-                     {:audio-url   url
-                      :script-text phrase-text}
+                     {:audio-url              url
+                      :script-text            target-text
+                      :update-text-animation? (text-animation-action? action-data)}
                      {:on-success [::audio-script-loaded {:action-path path
                                                           :action-type source}]}]]})))
 
@@ -64,10 +67,14 @@
 (re-frame/reg-event-fx
   ::recognition-retry
   (fn [{:keys [db]} [_]]
-    (let [{:keys [audio phrase-text]} (get-current-audio db)]
+    (let [{:keys [audio target] :as action-data} (get-current-audio db)
+          target-text (->> (keyword target)
+                           (state-scene/object-data db)
+                           (:text))]
       {:dispatch [::recognition/get-audio-script-region
-                  {:audio-url   audio
-                   :script-text phrase-text}
+                  {:audio-url              audio
+                   :script-text            target-text
+                   :update-text-animation? (text-animation-action? action-data)}
                   {:on-success [::recognition-retry-success]}]})))
 
 (re-frame/reg-event-fx

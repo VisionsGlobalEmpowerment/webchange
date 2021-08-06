@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.audio-analyzer.region-data :refer [get-region-data-if-possible]]
+    [webchange.editor-v2.audio-analyzer.talk-data :refer [get-chunks-data-if-possible get-talk-data-if-possible]]
     [webchange.state.warehouse :as warehouse]))
 
 (defn- dispatch-if-defined
@@ -50,17 +51,23 @@
 (re-frame/reg-event-fx
   ::get-audio-script-region
   [(re-frame/inject-cofx :audio-scripts)]
-  (fn [{:keys [_]} [_ {:keys [audio-url script-text]} {:keys [on-failure] :as handlers}]]
+  (fn [{:keys [_]} [_ {:keys [audio-url script-text update-text-animation?]} {:keys [on-failure] :as handlers}]]
     {:dispatch [::get-audio-script-data
                 {:audio-url audio-url}
-                {:on-success [::parse-audio-script-region {:script-text script-text} handlers]
+                {:on-success [::parse-audio-script-region {:script-text            script-text
+                                                           :update-text-animation? update-text-animation?} handlers]
                  :on-failure on-failure}]}))
 
 (re-frame/reg-event-fx
   ::parse-audio-script-region
   [(re-frame/inject-cofx :audio-scripts)]
-  (fn [{:keys [_]} [_ {:keys [script-text]} {:keys [on-success on-failure]} script-data]]
-    (let [{:keys [matched? region-data]} (get-region-data-if-possible {:text script-text :script script-data})]
+  (fn [{:keys [_]} [_ {:keys [script-text update-text-animation? update-talk-animation?]} {:keys [on-success on-failure]} script-data]]
+    (let [{:keys [matched? region-data]} (get-region-data-if-possible {:text script-text :script script-data})
+          match-data {:region region-data
+                      :script script-data
+                      :text   script-text}]
       (if matched?
-        (dispatch-if-defined on-success region-data)
+        (dispatch-if-defined on-success (cond-> region-data
+                                                update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
+                                                update-talk-animation? (assoc :data (get-talk-data-if-possible match-data))))
         (dispatch-if-defined on-failure)))))
