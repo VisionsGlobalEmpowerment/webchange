@@ -1328,8 +1328,7 @@
           merged-scene (merge-with-templates db scene)]
       {:db       (cond-> (assoc-in db [:scenes scene-id] merged-scene)
                          (= current-scene scene-id) (assoc :current-scene-data merged-scene))
-       :dispatch-n [[::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))]
-                    [::stage/reset-stage]]})))
+       :dispatch-n [[::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))]]})))
 
 (re-frame/reg-event-fx
   ::set-scenes-data
