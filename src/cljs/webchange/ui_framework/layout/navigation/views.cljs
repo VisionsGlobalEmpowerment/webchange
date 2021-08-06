@@ -6,7 +6,8 @@
     [webchange.ui-framework.components.index :refer [button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.layout.avatar.views :refer [avatar]]
-    [webchange.ui-framework.layout.logo.views :refer [logo]]))
+    [webchange.ui-framework.layout.logo.views :refer [logo]]
+    [webchange.ui-framework.layout.navigation.svg :as user-icn]))
 
 (declare menu)
 
@@ -25,10 +26,14 @@
         handle-click #(goto props)]
     [:li {:class-name (get-class-name {"menu-item" true
                                        "active"    active?})}
-     [button {:on-click handle-click
-              :color    "default"
-              :variant  "outlined"}
-      title]
+     [:span.usericn
+      [user-icn/data]]
+     [:span.title
+      [button {:on-click handle-click
+               :color    "default"
+               :variant  "outlined"}
+       title]]
+     [:div.clear]
      (when-not (empty? children)
        [menu {:items children}])]))
 

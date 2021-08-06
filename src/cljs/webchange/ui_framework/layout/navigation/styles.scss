@@ -18,22 +18,36 @@
 
         .menu-item {
             list-style: none;
+            display: flex;
             // border-left: solid 1px #cecece;
 
             &:last-child {
                 margin-bottom: 0;
             }
 
-            button {
-                border: none !important;
-                border-radius: 4px;
-                font-size: 14px !important;
-                justify-content: flex-start;
-                height: 40px;
-                width: 100%;
-                margin-bottom: 16px;
-                color: #FFFFFF;
+            .usericn {
+                position: relative;
+                top: 10px;
             }
+
+            .title {
+                
+            
+                button {
+                    border: none !important;
+                    border-radius: 4px;
+                    font-size: 14px !important;
+                    justify-content: flex-start;
+                    height: 40px;
+                    width: 100%;
+                    margin-bottom: 16px;
+                    color:#9e9fa0;
+                }
+            
+            .clear {
+                clear: both;
+            }    
+        }
 
             &.active {
                 button {
