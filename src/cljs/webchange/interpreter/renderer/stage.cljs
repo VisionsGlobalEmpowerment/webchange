@@ -88,7 +88,7 @@
         current-scene-id (r/atom nil)
         handle-resize (get-handler handle-screen-resize container)]
     (r/create-class
-      {:display-name "web-gl-scene"
+      {:display-name "web-gl-stage"
        :component-did-mount
                      (fn [this]
                        (.addEventListener js/window "resize" handle-resize)

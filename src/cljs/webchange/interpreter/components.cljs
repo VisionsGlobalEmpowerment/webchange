@@ -76,7 +76,7 @@
 (defn stage-wrapper
   [{:keys [mode scene-id scene-data dataset-items on-ready reset-resources?]
     :or   {on-ready         #()
-           reset-resources? false}}]
+           reset-resources? true}}]
   ^{:key scene-id}
   [stage {:mode             mode
           :scene-data       (get-scene-data scene-id scene-data dataset-items)
@@ -105,9 +105,8 @@
                      :width    "100%"
                      :height   "100%"}}
        [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-       [stage-wrapper {:mode             mode
-                       :scene-id         scene-id
-                       :scene-data       scene-data
-                       :dataset-items    dataset-items
-                       :reset-resources? true}]])
+       [stage-wrapper {:mode          mode
+                       :scene-id      scene-id
+                       :scene-data    scene-data
+                       :dataset-items dataset-items}]])
     (finally (component-will-unmount))))

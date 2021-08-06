@@ -24,8 +24,8 @@
                             :style        {:margin-bottom "24px"}}
                  (when @in
                    [ui/list
-                    (for [lesson (:lessons level)]
-                      ^{:key (:lesson lesson)}
+                    (for [[idx lesson] (map-indexed vector (:lessons level))]
+                      ^{:key idx}
                       [ui/list-item
                        [ui/list-item-text {:primary (:name lesson)}]
                        [ui/list-item-secondary-action
@@ -38,6 +38,6 @@
   (let [levels @(re-frame/subscribe [::subs/course-levels])]
     [list-card {:title title
                 :full-height  true}
-     (for [level levels]
-        ^{:key (:level level)}
+     (for [[idx level] (map-indexed vector levels)]
+        ^{:key idx}
         [level-item level])]))
