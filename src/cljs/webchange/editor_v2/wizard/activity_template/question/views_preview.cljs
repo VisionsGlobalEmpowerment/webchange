@@ -27,5 +27,6 @@
              :scene-data          {:scene-id  (str "question-preview-" id)
                                    :objects   objects
                                    :resources resources}
-             :show-loader-screen? false}])
+             :show-loader-screen? false
+             :reset-resources?    false}])
    [:div.preview-overlay]])
