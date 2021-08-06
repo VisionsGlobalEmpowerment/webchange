@@ -3,33 +3,44 @@
     [webchange.question.create-multiple-choice-image :as multiple-choice-image]
     [webchange.question.create-multiple-choice-text :as multiple-choice-text]
     [webchange.question.create-thumbs-up-n-down :as thumbs-up-n-down]
-    [webchange.question.utils :refer [merge-data]]))
+    [webchange.question.utils :refer [get-voice-over-tag merge-data]]))
 
 (def question-types {"multiple-choice-image" multiple-choice-image/create
                      "multiple-choice-text"  multiple-choice-text/create
                      "thumbs-up-n-down"      thumbs-up-n-down/create})
 
 (defn- create-voice-over-handlers
-  [{:keys [action-name options]}]
-  (reduce (fn [result option]
-            (let [option-dialog-name (str action-name "-voice-over-" (:value option))]
-              (-> result
-                  (assoc-in [:actions (keyword option-dialog-name)] {:type               "sequence-data",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type        "animation-sequence"
-                                                                                                   :phrase-text (:text option)
-                                                                                                   :audio       nil}]}]
-                                                                     :phrase-description (str "Option \"" (:text option) "\" voice-over")
-                                                                     :editor-type        "dialog"})
-                  (assoc-in [:actions (keyword action-name) :options (keyword (:value option))] {:type "action" :id option-dialog-name})
-                  (update-in [:track :nodes] conj {:type      "dialog"
-                                                   :action-id (keyword option-dialog-name)}))))
-          {:actions {(keyword action-name) {:type        "case",
-                                            :from-params [{:action-property "value" :param-property "value"}]
-                                            :options     {}}}
-           :track   {:nodes []}}
-          options))
+  [{:keys [action-name options question-id]}]
+  (let [{activate-tag-template   :activate-template
+         inactivate-tag-template :inactivate-template} (get-voice-over-tag {:question-id question-id})]
+    (reduce (fn [result option]
+              (let [option-dialog-name (str action-name "-voice-over-" (:value option))]
+                (-> result
+                    (assoc-in [:actions (keyword option-dialog-name)] {:type               "sequence-data",
+                                                                       :data               [{:type "sequence-data"
+                                                                                             :data [{:type "empty" :duration 0}
+                                                                                                    {:type        "animation-sequence"
+                                                                                                     :phrase-text (:text option)
+                                                                                                     :audio       nil}]}]
+                                                                       :phrase-description (str "Option \"" (:text option) "\" voice-over")
+                                                                       :editor-type        "dialog"})
+                    (assoc-in [:actions (keyword action-name) :data 1 :options (keyword (:value option))] {:type "action" :id option-dialog-name})
+                    (update-in [:track :nodes] conj {:type      "dialog"
+                                                     :action-id (keyword option-dialog-name)}))))
+            {:actions {(keyword action-name) {:type "sequence-data"
+                                              :data [{:type        "parallel-by-tag"
+                                                      :from-params [{:template        activate-tag-template
+                                                                     :action-property "tag"
+                                                                     :param-property  "value"}]}
+                                                     {:type        "case"
+                                                      :from-params [{:action-property "value" :param-property "value"}]
+                                                      :options     {}}
+                                                     {:type        "parallel-by-tag"
+                                                      :from-params [{:template        inactivate-tag-template
+                                                                     :action-property "tag"
+                                                                     :param-property  "value"}]}]}}
+             :track   {:nodes []}}
+            options)))
 
 (defn- add-check-correct-answer
   [{:keys [action-name correct-answers hide-question-name question-id]}]
@@ -107,14 +118,18 @@
    (let [show-question-name (str action-name "-show")
          hide-question-name (str action-name "-hide")
 
-         task-dialog-name (str action-name "-task-dialog")
-
-         option-voice-over-name (str action-name "-option-voice-over")
-         option-click-name (str action-name "-option-click-handler")
-
          question-id (str action-name "-question-id")
          check-answers (str action-name "-check-answers")
          finish-dialog (str action-name "-finish-dialog")
+
+         task-voice-over-click (str action-name "-task-voice-over-click")
+         task-dialog-name (str action-name "-task-dialog")
+         task-text-name (str action-name "-task-text")
+         {activate-tag-task   :activate
+          inactivate-tag-task :inactivate} (get-voice-over-tag {:question-id question-id})
+
+         option-voice-over-name (str action-name "-option-voice-over")
+         option-click-name (str action-name "-option-click-handler")
 
          options-have-voice-over? (not (= question-type "thumbs-up-n-down"))
          has-correct-answer? (not (and (= question-type "thumbs-up-n-down")
@@ -123,53 +138,64 @@
      (merge {:alias       alias
              :action-name action-name
              :object-name object-name}
-            (cond-> {:actions {(keyword action-name)        {:type                "sequence-data"
-                                                             :description         "-- Description --"
-                                                             :workflow-user-input true
-                                                             :tags                [question-id]
-                                                             :data                [{:type "action" :id show-question-name}
-                                                                                   {:type "action" :id task-dialog-name}]}
+            (cond-> {:actions {(keyword action-name)           {:type                "sequence-data"
+                                                                :description         "-- Description --"
+                                                                :workflow-user-input true
+                                                                :tags                [question-id]
+                                                                :data                [{:type "action" :id show-question-name}
+                                                                                      {:type "action" :id task-dialog-name}]}
 
-                               (keyword show-question-name) {:type       "set-attribute"
-                                                             :target     object-name
-                                                             :attr-name  "visible"
-                                                             :attr-value true}
-                               (keyword hide-question-name) {:type       "set-attribute"
-                                                             :target     object-name
-                                                             :attr-name  "visible"
-                                                             :attr-value false}
+                               (keyword show-question-name)    {:type       "set-attribute"
+                                                                :target     object-name
+                                                                :attr-name  "visible"
+                                                                :attr-value true}
+                               (keyword hide-question-name)    {:type       "set-attribute"
+                                                                :target     object-name
+                                                                :attr-name  "visible"
+                                                                :attr-value false}
 
-                               (keyword task-dialog-name)   {:type               "sequence-data",
-                                                             :tags               ["question-action"]
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type        "animation-sequence"
-                                                                                           :phrase-text (:text task)
-                                                                                           :audio       nil}]}]
-                                                             :phrase-description "Question text"
-                                                             :editor-type        "dialog"}
+                               (keyword task-voice-over-click) {:type "sequence-data"
+                                                                :data [{:type "parallel-by-tag"
+                                                                        :tag  activate-tag-task}
+                                                                       {:type "action"
+                                                                        :id   task-dialog-name}
+                                                                       {:type "parallel-by-tag"
+                                                                        :tag  inactivate-tag-task}]}
 
-                               (keyword option-click-name)  {:type "sequence-data"
-                                                             :data (cond-> [{:type        "question-pick"
-                                                                             :id          question-id
-                                                                             :from-params [{:action-property "value" :param-property "value"}]}
-                                                                            {:type        "question-test"
-                                                                             :id          question-id
-                                                                             :from-params [{:action-property "value"
-                                                                                            :param-property  "value"}]
-                                                                             :success     {:type        "parallel-by-tag"
-                                                                                           :from-params [{:template        (str "activate-option-%-" question-id)
-                                                                                                          :action-property "tag"
-                                                                                                          :param-property  "value"}]}
-                                                                             :fail        {:type        "parallel-by-tag"
-                                                                                           :from-params [{:template        (str "inactivate-option-%-" question-id)
-                                                                                                          :action-property "tag"
-                                                                                                          :param-property  "value"}]}}]
-                                                                           has-correct-answer? (conj {:type    "test-value"
-                                                                                                      :value1  answers-number
-                                                                                                      :value2  "one"
-                                                                                                      :success check-answers})
-                                                                           (not has-correct-answer?) (conj {:type "action" :id finish-dialog}))}}
+                               (keyword task-dialog-name)      {:type               "sequence-data",
+                                                                :tags               ["question-action"]
+                                                                :data               [{:type "sequence-data"
+                                                                                      :data [{:type "empty" :duration 0}
+                                                                                             {:type        "text-animation"
+                                                                                              :phrase-text (:text task)
+                                                                                              :target      task-text-name
+                                                                                              :audio       nil
+                                                                                              :animation   "bounce"
+                                                                                              :data        []}]}]
+                                                                :phrase-description "Question text"
+                                                                :editor-type        "dialog"}
+
+                               (keyword option-click-name)     {:type "sequence-data"
+                                                                :data (cond-> [{:type        "question-pick"
+                                                                                :id          question-id
+                                                                                :from-params [{:action-property "value" :param-property "value"}]}
+                                                                               {:type        "question-test"
+                                                                                :id          question-id
+                                                                                :from-params [{:action-property "value"
+                                                                                               :param-property  "value"}]
+                                                                                :success     {:type        "parallel-by-tag"
+                                                                                              :from-params [{:template        (str "activate-option-%-" question-id)
+                                                                                                             :action-property "tag"
+                                                                                                             :param-property  "value"}]}
+                                                                                :fail        {:type        "parallel-by-tag"
+                                                                                              :from-params [{:template        (str "inactivate-option-%-" question-id)
+                                                                                                             :action-property "tag"
+                                                                                                             :param-property  "value"}]}}]
+                                                                              has-correct-answer? (conj {:type    "test-value"
+                                                                                                         :value1  answers-number
+                                                                                                         :value2  "one"
+                                                                                                         :success check-answers})
+                                                                              (not has-correct-answer?) (conj {:type "action" :id finish-dialog}))}}
                      :track   {:title alias
                                :nodes [{:type      "dialog"
                                         :action-id (keyword task-dialog-name)}]}
@@ -182,11 +208,13 @@
                                                                               :hide-question-name hide-question-name
                                                                               :question-id        question-id}))
                     options-have-voice-over? (merge-data (create-voice-over-handlers {:action-name option-voice-over-name
-                                                                                      :options     (:data options)}))
+                                                                                      :options     (:data options)
+                                                                                      :question-id question-id}))
                     :always (merge-data (create-question (cond-> {:question-id              question-id
                                                                   :object-name              object-name
+                                                                  :task-text-name           task-text-name
                                                                   :on-option-click          option-click-name
-                                                                  :on-task-voice-over-click task-dialog-name
+                                                                  :on-task-voice-over-click task-voice-over-click
                                                                   :visible?                 visible?}
                                                                  options-have-voice-over? (assoc :on-option-voice-over-click option-voice-over-name)
                                                                  has-correct-answer? (assoc :on-check-click check-answers))

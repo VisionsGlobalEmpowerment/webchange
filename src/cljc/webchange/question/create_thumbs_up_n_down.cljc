@@ -35,7 +35,7 @@
     (options-list/create (merge props {:frame frame}) form-data)))
 
 (defn create
-  [{:keys [object-name visible?] :as props}
+  [{:keys [object-name task-text-name question-id visible?] :as props}
    {:keys [alias layout options task] :as form-data}]
   (let [{task-text :text task-type :type} task
         {options :data options-label :label} options
@@ -44,9 +44,9 @@
 
         substrate-name (str object-name "-substrate")
         background-name (str object-name "-background")
-        task-text-name (str object-name "-task-text")
         options-name (str object-name "-options")
         task-image-name (str object-name "-task-image")
+        task-text-group-name (str object-name "-task-text-group")
 
         layout-coordinates (get-layout-coordinates {:layout      layout
                                                     :with-image? (= task-type "text-image")})]
@@ -56,7 +56,8 @@
                                               :y         (:y params/template-size)
                                               :children  (cond-> [substrate-name
                                                                   background-name
-                                                                  task-text-name options-name]
+                                                                  task-text-group-name
+                                                                  options-name]
                                                                  show-task-image? (conj task-image-name))
                                               :visible   visible?
                                               :editable? {:show-in-tree? true}}}}
@@ -65,8 +66,10 @@
                                                           (:background layout-coordinates))))
             :always (merge-data (task-text/create (merge props
                                                          (:text layout-coordinates)
-                                                         {:object-name task-text-name
-                                                          :text        task-text})))
+                                                         {:object-name      task-text-group-name
+                                                          :text-object-name task-text-name
+                                                          :text             task-text
+                                                          :question-id      question-id})))
             :always (merge-data (create-options (merge props
                                                        (:options layout-coordinates)
                                                        {:object-name options-name

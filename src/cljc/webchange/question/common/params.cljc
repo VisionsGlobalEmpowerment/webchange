@@ -7,6 +7,7 @@
 
 (def background-color 0xFFA301)
 (def substrate-color 0xFFFFFF)
+(def active-color 0x00B2FF)
 
 (def block-padding 60)
 
@@ -18,7 +19,11 @@
 (def check-button-size 80)
 
 (def voice-over {:size   80
-                 :margin 30})
+                 :margin 30
+                 :color  {:default {:background 0xFFFFFF
+                                    :icon       "#000000"}
+                          :active  {:background active-color
+                                    :icon       "#FFFFFF"}}})
 
 (def options {:gap 60})
 
@@ -27,7 +32,7 @@
              :border-radius    {:text  20
                                 :image 20}
              :border-color     {:default 0x000000
-                                :active  0x00c3ff}
+                                :active  active-color}
              :padding          {:text 20}
              :text             {:height    100
                                 :min-width 0
@@ -41,5 +46,3 @@
 
 (def option-font-size font-size)
 (def option-padding 10)
-
-

@@ -291,16 +291,20 @@
         (utils/find-actions-by-tag tag))
     nil))
 
-(defn cond-action [db {:keys [display-name flow-id action-id] :as action} handler-type]
+(defn cond-action-data
+  [{:keys [flow-id action-id] :as action} handler]
+  (cond-> handler
+          flow-id (assoc :flow-id flow-id)
+          action-id (assoc :action-id action-id)
+          :always (with-prev action)))
+
+(defn cond-action [db {:keys [display-name] :as action} handler-type]
   (let [handler (get action handler-type)
         action-data (if (string? handler)
                       (get-action handler db action)
                       (-> handler
                           (assoc :display-name [display-name handler-type])))]
-    (cond-> action-data
-            flow-id (assoc :flow-id flow-id)
-            action-id (assoc :action-id action-id)
-            :always (with-prev action))))
+    (cond-action-data action action-data)))
 
 (declare discard-flow!)
 (declare register-flow-tags!)
@@ -623,9 +627,6 @@
                    :parent        (:flow-id action) :tags (get-action-tags action)
                    :next          #(dispatch-success-fn action)
                    :current-scene current-scene}]
-
-
-
     (if (seq actions)
       (do
         (register-flow! flow-data)
@@ -659,10 +660,13 @@
                      (get-actions-by-tag db)
                      (map (fn [[action-name]]
                             {:type "action"
-                             :id   action-name})))]
-    (execute-parallel! db (-> action
+                             :id   action-name})))
+        action-to-execute (-> action
                               (assoc :type "parallel")
-                              (assoc :data actions)))))
+                              (assoc :data actions))]
+    (if (seq actions)
+      (execute-action db action-to-execute)
+      (dispatch-success-fn action))))
 
 (re-frame/reg-event-fx
   ::execute-parallel-by-tag
