@@ -10,12 +10,9 @@
     :or   {show-navigation? true}}]
   (let [this (r/current-component)]
     [:div.page-layout
-    ;;  [:div.header
-    ;;   [toolbar {:actions actions}]]
      [:div.body
       (when show-navigation?
-        [:div.side-menu
-         [navigation-menu]])
+         [navigation-menu])
       (into [:div.content]
             (r/children this))]
      [modal-windows]]))

@@ -4,5 +4,7 @@
 
 (defn logo
   []
-  [:div.logo
-   [svg/data]])
+  ;; [:div.logo
+   [svg/data]
+  ;; ]
+)
