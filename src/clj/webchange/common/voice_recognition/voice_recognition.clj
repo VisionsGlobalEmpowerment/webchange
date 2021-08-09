@@ -22,7 +22,8 @@
 
 (defn try-voice-recognition-audio
   [file-path model]
-  (mq/send :voice-recognition {:file-path file-path :model model}))
+  (let [model (or (some #{model} ["english" "spanish"]) "english")]
+    (mq/send :voice-recognition {:file-path file-path :model model})))
 
 (defn get-subtitles
   [filename]
