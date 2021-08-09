@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
+    [webchange.logger.index :as logger]
     [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
@@ -13,11 +14,9 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [animation-data (select-keys objects-data [:skin :skin-names])
-          animation-name (get objects-data :name)]
+    (let [animation-data (select-keys objects-data [:name :skin :skin-names])]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
-                    [::set-animation-name id animation-name]
                     [::load-available-skins id]]})))
 
 ;; Available skins
@@ -34,35 +33,54 @@
   (fn [{:keys [db]} [_ id skins]]
     {:db (assoc-in db (path-to-db id [available-skins-path]) skins)}))
 
+(defn- get-available-skeletons
+  [db id]
+  (get-in db (path-to-db id [available-skins-path])))
+
 (re-frame/reg-sub
-  ::available-skins
+  ::available-skeletons
   (fn [db [_ id]]
-    (get-in db (path-to-db id [available-skins-path]))))
+    (get-available-skeletons db id)))
 
-;; Animation Name
+;; Skeleton
 
-(def animation-name-path :animation-name)
+(re-frame/reg-sub
+  ::current-skeleton
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :name "")))
+
+
+(re-frame/reg-sub
+  ::skeletons-options
+  (fn [[_ id]]
+    (re-frame/subscribe [::available-skeletons id]))
+  (fn [available-skins]
+    (->> available-skins
+         (map (fn [{:keys [name]}]
+                {:text  name
+                 :value name})))))
 
 (re-frame/reg-event-fx
-  ::set-animation-name
-  (fn [{:keys [db]} [_ id animation-name]]
-    {:db (assoc-in db (path-to-db id [animation-name-path]) animation-name)}))
-
-(re-frame/reg-sub
-  ::animation-name
-  (fn [db [_ id]]
-    {:pre [(some? id)]}
-    (get-in db (path-to-db id [animation-name-path]))))
+  ::set-skeleton
+  (fn [{:keys [db]} [_ id skeleton-name]]
+    (let [skeleton (->> (get-available-skeletons db id)
+                        (some (fn [{:keys [name] :as skeleton}]
+                                (and (= name skeleton-name) skeleton))))]
+      {:dispatch [::state/update-current-data id {:name skeleton-name
+                                                  :skin (:default-skin skeleton)}]})))
 
 ;; Skin
 
 (re-frame/reg-sub
   ::skin-options
   (fn [[_ id]]
-    [(re-frame/subscribe [::animation-name id])
-     (re-frame/subscribe [::available-skins id])])
-  (fn [[animation-name available-skins]]
-    (->> available-skins
+    [(re-frame/subscribe [::current-skeleton id])
+     (re-frame/subscribe [::available-skeletons id])])
+  (fn [[animation-name available-skeletons]]
+    (->> available-skeletons
          (some (fn [{:keys [name skins]}]
                  (and (= name animation-name)
                       skins)))
@@ -71,6 +89,49 @@
                  :thumbnail preview}))
          (sort-by :thumbnail)
          (reverse))))
+
+(defn- check-skin-option
+  [option type]
+  (-> option
+      :value
+      (clojure.string/split #"/")
+      first
+      (clojure.string/lower-case)
+      keyword
+      (= type)))
+
+(re-frame/reg-sub
+  ::skin-body-options
+  (fn [[_ id]]
+    [(re-frame/subscribe [::skin-options id])])
+  (fn [[skin-options]]
+    (filter #(check-skin-option % :body) skin-options)))
+
+(re-frame/reg-sub
+  ::skin-clothes-options
+  (fn [[_ id]]
+    [(re-frame/subscribe [::skin-options id])])
+  (fn [[skin-options]]
+    (filter #(check-skin-option % :clothes) skin-options)))
+
+(re-frame/reg-sub
+  ::skin-head-options
+  (fn [[_ id]]
+    [(re-frame/subscribe [::skin-options id])])
+  (fn [[skin-options]]
+    (filter #(check-skin-option % :head) skin-options)))
+
+(re-frame/reg-sub
+  ::combined-skins?
+  (fn [[_ id]]
+    [(re-frame/subscribe [::skin-options id])])
+  (fn [[skin-options]]
+    (-> skin-options
+        first
+        :value
+        (clojure.string/split #"/")
+        count
+        (> 1))))
 
 (re-frame/reg-sub
   ::current-skin
@@ -83,7 +144,7 @@
 (re-frame/reg-event-fx
   ::set-current-skin
   (fn [{:keys [_]} [_ id skin]]
-    (js/console.log "set current-skin" id skin)
+    (logger/trace "set current-skin" id skin)
     {:dispatch [::state/update-current-data id {:skin skin}]}))
 
 (re-frame/reg-sub
@@ -92,11 +153,11 @@
     {:pre [(some? id)]}
     [(re-frame/subscribe [::state/current-data id])])
   (fn [[current-data]]
-    (js/console.log "current data" current-data)
+    (logger/trace "current data" current-data)
     (get current-data :skin-names {:body nil})))
 
 (re-frame/reg-event-fx
   ::set-current-skin-names
   (fn [{:keys [_]} [_ id skin-names]]
-    (js/console.log "set skin names" id skin-names)
+    (logger/trace "set skin names" id skin-names)
     {:dispatch [::state/update-current-data id {:skin-names skin-names}]}))

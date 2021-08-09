@@ -92,13 +92,15 @@
   [animation-name]
   (str "/raw/anim/" animation-name "/skeleton.json"))
 
-(defn- get-animation-resources
-  [animation-name expand?]
-  (if expand?
-    (let [animations-resources (get-animations-resources)]
-      (->> (keyword animation-name)
-           (get animations-resources)))
-    [[animation-name (get-animations-resource-path animation-name "skeleton.json")]]))
+(defn get-animation-resources
+  ([animation-name]
+   (get-animation-resources animation-name false))
+  ([animation-name expand?]
+   (if expand?
+     (let [animations-resources (get-animations-resources)]
+       (->> (keyword animation-name)
+            (get animations-resources)))
+     [[animation-name (get-animations-resource-path animation-name "skeleton.json")]])))
 
 (defn- parse-scene-objects
   [scene-data {:keys [expand-animation-resources?]

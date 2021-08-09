@@ -342,7 +342,7 @@
   (let [character-name (-> character-dir .getName)
         character-skeleton (str character-dir "/skeleton.json")
         data (json/read-str (slurp character-skeleton) :key-fn keyword)
-
+        atlas-data (-> character-dir (str "/skeleton.atlas") (slurp))
         preview-path (-> (str "/images/characters/" character-name "/character_preview.png")
                          (string/replace " " "_"))
         preview-file-path (f/relative->absolute-path preview-path public-dir)]
@@ -363,7 +363,11 @@
                                                 (cond-> {:name skin}
                                                         (->> preview-file-path clojure.java.io/file .isFile) (assoc :preview preview-path))))
                                             (:skins character-data)))
-          (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data))))))))
+          (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data)))))
+          (assoc character-data :default-skin (-> (:skins character-data) first :name))
+          (assoc character-data :resources (concat ["skeleton.json"
+                                                    "skeleton.atlas"]
+                                                   (->> (re-seq #"\n(skeleton\d*.png)" atlas-data) (map second)))))))
 
 (defn find-all-character-skins []
   (let [character-skins (db/find-character-skins)]

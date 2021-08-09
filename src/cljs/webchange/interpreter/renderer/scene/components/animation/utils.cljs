@@ -1,7 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.animation.utils
   (:require
-    [webchange.interpreter.pixi :refer [RegionAttachment Skin TextureAtlasRegion]]
+    [webchange.interpreter.pixi :refer [RegionAttachment Skin Spine TextureAtlasRegion]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.logger.index :as logger]
     [webchange.resources.manager :as resources]))
 
 (def default-region-params
@@ -109,17 +110,16 @@
 
 (defn set-skin
   [spine-object skin-name]
-  (when-not (has-skin? spine-object skin-name)
-    (-> (str "Can not set skin <" skin-name ">: Skin does not exist") js/Error. throw))
-
-  (doto (get-skeleton spine-object)
-    (reset-hacks) ;; ToDo: Remove it. See https://trello.com/c/zCet3flh
-    (.setSkinByName skin-name)
-    (.setSlotsToSetupPose))
-  ;; ToDo:  Update animation skin after setting skin by name.
-  ;;        Currently update works but skin is probably spoiled by set-animation-slot method
-  ;;        See https://trello.com/c/zCet3flh
-  (.update spine-object 0))
+  (if-not (has-skin? spine-object skin-name)
+    (-> (str "Can not set skin <" skin-name ">: Skin does not exist") js/Error. logger/error)
+    (do (doto (get-skeleton spine-object)
+          (reset-hacks)                                     ;; ToDo: Remove it. See https://trello.com/c/zCet3flh
+          (.setSkinByName skin-name)
+          (.setSlotsToSetupPose))
+        ;; ToDo:  Update animation skin after setting skin by name.
+        ;;        Currently update works but skin is probably spoiled by set-animation-slot method
+        ;;        See https://trello.com/c/zCet3flh
+        (.update spine-object 0))))
 
 (defn set-combined-skin
   [spine-object skin-names]
@@ -198,3 +198,28 @@
    (let [tracks (.. spine-object -state -tracks)
          track (aget tracks track-number)]
      (set! (.-loop track) loop?))))
+
+(defn create-spine-animation
+  [animation-resource {:keys [animation-start? speed offset position skin-name skin-names animation-name scale loop]}]
+  (let [spine-data (.-spineData animation-resource)
+        coordinates {:x (* (- (:x position) (:x offset)) (:x scale))
+                     :y (* (- (:y position) (:y offset)) (:y scale))}]
+    (doto (Spine. spine-data)
+      (set-or-combine-skin skin-names skin-name)
+      (set-animation animation-name)
+      (set-position coordinates)
+      (set-scale scale)
+      (set-animation-speed speed)
+      (set-auto-update animation-start?)
+      (set-track-loop loop))))
+
+(defn reset-skeleton
+  [container state]
+  (resources/get-or-load-resource
+    (get-in @state [:props :name])
+    {:animation?  true
+     :on-complete (fn [resource]
+                    (let [spine-animation (create-spine-animation resource (:props @state))]
+                      (swap! state assoc :animation spine-animation)
+                      (.removeChildren container)
+                      (.addChild container spine-animation)))}))

@@ -1,6 +1,7 @@
 (ns webchange.resources.manager
   (:require
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.resources.scene-parser :as parser]))
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
 (defonce loader (atom nil))
@@ -19,7 +20,7 @@
   (-> (get-resources-store)
       (aget resource-name)))
 
-(defn- has-resource?
+(defn has-resource?
   [resource-name]
   (-> resource-name get-resource nil? not))
 
@@ -79,3 +80,15 @@
   (when (not (nil? @loader))
     (reset-que)
     (.reset @loader)))
+
+(defn get-or-load-resource
+  [resource-name {:keys [animation? on-complete] :as params}]
+  (if (has-resource? resource-name)
+    (-> resource-name get-resource on-complete)
+    (let [resources-to-load (cond
+                              animation? (parser/get-animation-resources resource-name)
+                              :default resource-name)]
+      (load-resources resources-to-load (merge params
+                                               {:on-complete (fn []
+                                                               (when (fn? on-complete)
+                                                                 (-> resource-name get-resource on-complete)))})))))
