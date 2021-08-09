@@ -7,11 +7,12 @@ RUN apt -y install tzdata
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
 RUN dpkg-reconfigure --frontend noninteractive tzdata
 
-RUN apt -y install openjdk-8-jre leiningen net-tools libgfortran5 ffmpeg ruby-sass nodejs npm wget
+RUN apt -y install openjdk-16-jre leiningen net-tools libgfortran5 ffmpeg wget
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY ./docker ./docker
+COPY ./target ./target
 
 RUN ./docker/voice-recognition-dev/init.sh
 

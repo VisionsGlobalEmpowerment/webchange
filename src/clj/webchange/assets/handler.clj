@@ -72,10 +72,10 @@
           :else [type relative-path])))
 
 (defn- process-asset
-  [type path]
+  [type path {:strs [lang]}]
   (when (= type "audio")
     (future (try-recognize-audio path))
-    (try-voice-recognition-audio path)))
+    (try-voice-recognition-audio path lang)))
 
 (defn handle-parse-audio-subtitles
   [request]
@@ -98,7 +98,7 @@
         (io/copy xin xout))
       (let [[type relative-path] (convert-asset relative-path extension params)
             path (f/relative->absolute-path relative-path)]
-        (process-asset type relative-path)
+        (process-asset type relative-path params)
         (core/store-asset-hash! path)
         (merge
           {:url  relative-path

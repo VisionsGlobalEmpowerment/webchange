@@ -29,20 +29,20 @@
                                    (assoc :text (str (:text result) " " (get step-result "text"))))
                                result))
 
-(def recognizer-model (atom nil))
+(def recognizer-models (atom {}))
 
 (defn worker
-  [task]
-  (if-not @recognizer-model (reset! recognizer-model (org.kaldi.Model. (:voice-recognition-model env))))
+  [{:keys [file-path model]}]
   (let [_ (log/debug "Downloading file...")
-        local-file-path (download-file (:file-path task))
+        local-file-path (download-file file-path)
         _ (log/debug "Converting file...")
         local-file-path (converter/convert-to-wav local-file-path {:remove-origin? true
                                                                    :absolute-path? true
                                                                    :mono?          true
                                                                    :sample-rate    16000})
         input (io/input-stream local-file-path)
-        recognizer (org.kaldi.KaldiRecognizer. @recognizer-model 16000.0)
+        recognizer-model (get @recognizer-models (or model "english"))
+        recognizer (org.kaldi.KaldiRecognizer. recognizer-model 16000.0)
         buf (byte-array 4096)
         _ (log/debug "Recognizing...")
         result (-> (loop [nbytes (.read input buf), result {:result [], :text ""}]
@@ -53,6 +53,14 @@
                          (recur (.read input buf) result)
                          result)))
                    (collect-result (read-result (.FinalResult recognizer))))]
-    _ (log/debug "Recognized, sending result...")
+    (log/debug "Recognized, sending result...")
     (println result)
-    (assoc result :file-path (:file-path task))))
+    (assoc result :file-path file-path :model model)))
+
+(defn init-models!
+  []
+  (let [dir (:voice-recognition-models-dir env)
+        english-model (org.kaldi.Model. (str dir "/english"))
+        spanish-model (org.kaldi.Model. (str dir "/spanish"))]
+    (reset! recognizer-models {"english" english-model
+                               "spanish" spanish-model})))

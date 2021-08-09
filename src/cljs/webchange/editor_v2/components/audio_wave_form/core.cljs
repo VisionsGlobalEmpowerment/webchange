@@ -83,8 +83,9 @@
                                    client-width (.-offsetWidth drawer-wrapper)]
                                (-> (/ client-width full-width) (/ 2) (- 0.01)))
                              0)]
-        (.seekTo wave-surfer progress)
-        (.recenter (.-drawer wave-surfer) (+ progress recenter-shift)))
+        (when (and (< 0 progress) (> 1 progress))
+          (.seekTo wave-surfer progress)
+          (.recenter (.-drawer wave-surfer) (+ progress recenter-shift))))
       (.addRegion wave-surfer (clj->js (merge region-data
                                               {:edgeScrollWidth edgeScrollWidth}))))))
 

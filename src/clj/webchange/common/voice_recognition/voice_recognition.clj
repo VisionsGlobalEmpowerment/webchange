@@ -21,8 +21,8 @@
     (.write wrtr (json/write-str result))))
 
 (defn try-voice-recognition-audio
-  [file-path]
-  (mq/send :voice-recognition {:file-path file-path}))
+  [file-path model]
+  (mq/send :voice-recognition {:file-path file-path :model model}))
 
 (defn get-subtitles
   [filename]
