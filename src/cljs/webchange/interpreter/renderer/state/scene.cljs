@@ -165,7 +165,7 @@
 (re-frame/reg-fx
   :set-scale
   (fn [[object-wrapper scale]]
-    (apply-to-wrapper w/set-scale object-wrapper scale)))
+    (apply-to-wrapper w/set-scale object-wrapper (or (:scale scale) scale))))
 
 (re-frame/reg-fx
   :set-visibility

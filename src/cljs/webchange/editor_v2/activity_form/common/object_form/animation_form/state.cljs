@@ -14,7 +14,7 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [animation-data (select-keys objects-data [:name :skin :skin-names])]
+    (let [animation-data (select-keys objects-data [:name :skin :skin-names :scale])]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
                     [::load-available-skins id]]})))
@@ -51,7 +51,6 @@
     [(re-frame/subscribe [::state/current-data id])])
   (fn [[current-data]]
     (get current-data :name "")))
-
 
 (re-frame/reg-sub
   ::skeletons-options
@@ -161,3 +160,16 @@
   (fn [{:keys [_]} [_ id skin-names]]
     (logger/trace "set skin names" id skin-names)
     {:dispatch [::state/update-current-data id {:skin-names skin-names}]}))
+
+;; Flip
+
+(defn- get-scale-x
+  [db id]
+  (-> (state/get-current-data db id)
+      (get-in [:scale :x])))
+
+(re-frame/reg-event-fx
+  ::flip-animation
+  (fn [{:keys [db]} [_ id]]
+    (let [scale-x (get-scale-x db id)]
+      {:dispatch [::state/update-current-data id {:scale {:x (- scale-x)}}]})))

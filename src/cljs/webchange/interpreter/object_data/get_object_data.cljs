@@ -13,7 +13,7 @@
   "Overwrite animation properties. Set default skin if no skin provided."
   [object]
   (if-let [anim-data (get animations-params (-> object :name keyword))]
-    (merge object anim-data (select-keys object [:skin]))
+    (merge object anim-data (select-keys object [:skin :scale]))
     object))
 
 (defn- filter-extra-props

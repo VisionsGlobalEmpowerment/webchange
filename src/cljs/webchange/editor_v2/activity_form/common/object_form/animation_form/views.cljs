@@ -4,7 +4,14 @@
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.object-form.animation-form.state :as state]
     [webchange.editor-v2.activity-form.common.object-form.animation-form.views-skin :refer [skin]]
-    [webchange.ui-framework.components.index :refer [label select-image]]))
+    [webchange.ui-framework.components.index :refer [icon-button label select-image]]))
+
+(defn- flip
+  [{:keys [id]}]
+  (let [handle-click #(re-frame/dispatch [::state/flip-animation id])]
+    [icon-button {:icon     "flip"
+                  :on-click handle-click}
+     "Flip"]))
 
 (defn- skeleton
   [{:keys [class-name id]}]
@@ -24,5 +31,6 @@
   [{:keys [id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
     [:div
+     [flip {:id id}]
      [skeleton {:id id}]
      [skin {:id id}]]))

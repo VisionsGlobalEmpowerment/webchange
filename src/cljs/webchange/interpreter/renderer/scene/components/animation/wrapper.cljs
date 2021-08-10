@@ -14,6 +14,8 @@
                                          (if (and (not highlight) highlight-filter-set) (f/set-filter (:animation @state) "" {}))
                                          (if (and highlight (not highlight-filter-set))
                                            (f/set-filter (:animation @state) "glow" {}))))
+                   :set-scale        (fn [scale]
+                                       (utils/set-scale (:animation @state) scale))
                    :set-slot         (fn [slot-name image-src slot-params]
                                        ;; ToDo: Remove double set-animation-slot call
                                        ;; Without this slot is not updated if new skin is created inside the method

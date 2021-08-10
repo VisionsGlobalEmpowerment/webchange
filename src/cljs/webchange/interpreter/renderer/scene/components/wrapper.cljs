@@ -36,8 +36,7 @@
   [wrapper-object]
   (let [object-data (atom {})
         main-display-object (:object wrapper-object)
-        init-position (utils/get-position main-display-object)
-        ]
+        init-position (utils/get-position main-display-object)]
     (merge {:get-object-data   (fn [] @object-data)
             :set-object-data   (fn [data]
                                  (reset! object-data data))

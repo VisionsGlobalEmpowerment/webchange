@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
+    [webchange.utils.deep-merge :refer [deep-merge]]
     [webchange.utils.map :refer [ignore-keys]]))
 
 (defn path-to-db
@@ -98,7 +99,7 @@
     (logger/trace "data" data)
     (logger/group-end "Update current data" id)
 
-    {:db       (update-in db (path-to-db id [current-data-path]) merge data)
+    {:db       (update-in db (path-to-db id [current-data-path]) deep-merge data)
      :dispatch [::update-stage-objects id data]}))
 
 ;; Update stage
