@@ -43,6 +43,7 @@
     [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
+    [webchange.ui-framework.components.icon.icon-user :as user]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-visibility-off :as visibility-off]
     [webchange.ui-framework.components.icon.icon-visibility-on :as visibility-on]
@@ -96,6 +97,7 @@
    "sync"               sync/data
    "text-animation"     text-animation/data
    "undo"               undo/data
+   "user"               user/data
    "visibility-off"     visibility-off/data
    "visibility-on"      visibility-on/data
    "volume"             volume/data

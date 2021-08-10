@@ -6,6 +6,8 @@
 @import "toolbar/styles";
 
 $content-padding: 24px;
+$mid-section-padding: 120px;
+$content-left-padding: $left-menu-width + $mid-section-padding;
 
 .page-layout {
     background-color: $background-color;
@@ -37,7 +39,7 @@ $content-padding: 24px;
             align-items: flex-start;
             justify-content: center;
             flex-grow: 1;
-            padding: 120px 400px;
+            padding: $mid-section-padding 400px $mid-section-padding $content-left-padding;
         }
     }
 }

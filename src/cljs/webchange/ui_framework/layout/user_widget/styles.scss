@@ -1,0 +1,24 @@
+.icon-bottom {
+    display: inline-block;
+    font-size: 18px;
+    line-height: 24px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    position: absolute;
+    bottom: 48px;
+    left: 40px;
+
+    span.avatar-icn {
+        width: 40px;
+        float: left;
+    }
+
+    span.user-name {
+        text-transform: capitalize;
+        width: calc( 100% - 40px );
+        padding-top: 10px;
+        padding-left: 16px;
+        float: left;
+    }
+}

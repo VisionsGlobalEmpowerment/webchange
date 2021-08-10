@@ -5,26 +5,34 @@
     [webchange.auth.subs :as as]
     [webchange.routes :refer [location redirect-to]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.ui-framework.layout.avatar.views :refer [avatar]]
+    [webchange.ui-framework.layout.user-widget.views :refer [user-widget]]
     [webchange.ui-framework.layout.logo.views :refer [logo]]
-    [webchange.ui-framework.layout.navigation.svg :as user-icn]))
+    [webchange.ui-framework.components.icon.index :as icon]))
 
 (def menu-items
   [{:title         "Dashboard"
+    :icon          ""
     :location-name :welcome-screen}
    {:title         "Create"
+    :icon          ""
     :location-name :title}
    {:title         "Game library"
+    :icon          ""
     :location-name :game-library}
    {:title         "Books library"
+    :icon          ""
     :location-name :book-library}
    {:title         "Translate"
+    :icon          ""
     :location-name :translate}
    {:title         "My Profile"
+    :icon          ""
     :location-name :my-profile}
    {:title         "My Books"
+    :icon          ""
     :location-name :my-books}
    {:title         "My Games"
+    :icon          ""
     :location-name :my-games}])
 
 (declare menu)
@@ -45,7 +53,7 @@
     [:li {:class-name (get-class-name {"menu-item" true
                                        "active"    active?})}
      [:span
-      [user-icn/data]]
+      [icon/component {:icon "user"}]]
      [:span   {:on-click handle-click}
       title]
      (when-not (empty? children)
@@ -60,17 +68,10 @@
 
 (defn navigation-menu
   []
-  (let [current-user @(re-frame/subscribe [::as/user])
-        current-course-id @(re-frame/subscribe [::state/current-course-id])]
-    [:div.left-side-bar
-     [:div.pad-fit-l.mb-lg.d-inline
+  (let [current-user @(re-frame/subscribe [::as/user])]
+    [:div.left-menu
+     [:div.icon-top
       [logo]]
      [:div.nav-menu
       [menu {:items menu-items}]]
-     [:div.g-icon-bottom
-      [:span
-       [avatar]]
-      [:span
-       (str (:first-name current-user) " " (:last-name current-user))
-       [:small 
-        "Los Angeles, CA, USA"]]]]))
+      [user-widget]]))

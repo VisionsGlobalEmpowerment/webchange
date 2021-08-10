@@ -1,4 +1,8 @@
-.left-side-bar {
+@import "../user_widget/styles";
+
+$left-menu-width: 296px;
+
+.left-menu {
     max-width: 296px;
 	width:100%;
 	height: 100%;
@@ -8,21 +12,15 @@
 	position: fixed;
     left:0;
     top:0;
-    
+
     img {
         max-width: 100%;
         vertical-align: middle;
     }
 
-    .pad-fit-l {
+    .icon-top {
         padding-left: 16px;
-    }
-
-    .mb-lg {
         margin-bottom: 47px;
-    }
-
-    .d-inline {
         display: inline-block;
     }
 
@@ -70,37 +68,5 @@
             background: #4A4A4A;
             border-radius: 20px;
         }
-    }
-
-    .g-icon-bottom {
-        display: inline-block;
-        font-size: 18px;
-        line-height: 24px;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 500;
-        position: absolute;
-        bottom: 48px;
-        left: 40px;
-    }
-
-    .g-icon-bottom span:first-child {
-        width: 40px;
-        float: left;
-    }
-
-    .g-icon-bottom span:nth-child(2) {
-		text-transform: capitalize;
-        width: calc( 100% - 40px );
-        padding-left: 16px;
-        float: left;
-    }
-
-    .g-icon-bottom span:nth-child(2) small {
-        display: block;
-        font-size: 12px;
-        line-height: 14px;
-        color: #9E9E9E;
-        font-weight: normal;
     }
 }
