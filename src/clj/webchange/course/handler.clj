@@ -219,7 +219,6 @@
                             (s/optional-key :preview) s/Str
                             :skins                    [{:name                     s/Str
                                                         (s/optional-key :preview) s/Str}]
-                            :default-skin             s/Str
                             :resources                [s/Str]
                             :animations               [s/Str]})
 

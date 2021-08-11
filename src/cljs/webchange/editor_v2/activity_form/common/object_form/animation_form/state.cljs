@@ -17,25 +17,43 @@
     (let [animation-data (select-keys objects-data [:name :skin :skin-names :scale])]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
-                    [::load-available-skins id]]})))
+                    [::load-available-skeletons id]]})))
 
 ;; Available skins
 
-(def available-skins-path :available-skins)
+(def available-skeletons-path :available-skeletons)
 
 (re-frame/reg-event-fx
-  ::load-available-skins
+  ::load-available-skeletons
   (fn [{:keys [_]} [_ id]]
-    {:dispatch [::warehouse/load-animation-skins {:on-success [::set-available-skins id]}]}))
+    {:dispatch [::warehouse/load-animation-skins {:on-success [::set-available-skeletons id]}]}))
+
+(defn- set-default-skin
+  [skeletons]
+  (->> skeletons
+       (map (fn [{:keys [skins] :as skeleton-data}]
+              (let [first-skin (-> skins first :name)
+                    ;; Take first not 'default' skin because 'default' skin is broken in most old animations
+                    first-not-default-skin (some (fn [{:keys [name]}] (and (not= name "default") name)) skins)]
+                (->> (or first-not-default-skin first-skin)
+                     (assoc skeleton-data :default-skin)))))))
+
+(defn- filter-extra-skeletons
+  [skeletons]
+  (let [skeletons-to-avoid ["book" "boxes" "pinata" "vera-go" "vera-45" "vera-90"]]
+    (->> skeletons
+         (filter (fn [{:keys [name]}]
+                   (-> #{name} (some skeletons-to-avoid) not))))))
 
 (re-frame/reg-event-fx
-  ::set-available-skins
-  (fn [{:keys [db]} [_ id skins]]
-    {:db (assoc-in db (path-to-db id [available-skins-path]) skins)}))
+  ::set-available-skeletons
+  (fn [{:keys [db]} [_ id skeletons]]
+    (let [skeletons-data (->> skeletons set-default-skin filter-extra-skeletons)]
+      {:db (assoc-in db (path-to-db id [available-skeletons-path]) skeletons-data)})))
 
 (defn- get-available-skeletons
   [db id]
-  (get-in db (path-to-db id [available-skins-path])))
+  (get-in db (path-to-db id [available-skeletons-path])))
 
 (re-frame/reg-sub
   ::available-skeletons
@@ -58,9 +76,10 @@
     (re-frame/subscribe [::available-skeletons id]))
   (fn [available-skins]
     (->> available-skins
-         (map (fn [{:keys [name]}]
-                {:text  name
-                 :value name})))))
+         (map (fn [{:keys [name preview]}]
+                {:text      name
+                 :value     name
+                 :thumbnail preview})))))
 
 (re-frame/reg-event-fx
   ::set-skeleton

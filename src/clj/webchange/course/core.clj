@@ -364,7 +364,6 @@
                                                         (->> preview-file-path clojure.java.io/file .isFile) (assoc :preview preview-path))))
                                             (:skins character-data)))
           (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data)))))
-          (assoc character-data :default-skin (-> (:skins character-data) first :name))
           (assoc character-data :resources (concat ["skeleton.json"
                                                     "skeleton.atlas"]
                                                    (->> (re-seq #"\n(skeleton\d*.png)" atlas-data) (map second)))))))

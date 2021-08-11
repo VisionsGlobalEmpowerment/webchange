@@ -22,15 +22,17 @@
      "None"]))
 
 (defn- options-list-item
-  [{:keys [on-click thumbnail value]}]
-  (let [handle-click #(on-click value)]
+  [{:keys [on-click text thumbnail value]}]
+  (let [handle-click #(on-click value)
+        title (or text value)]
     (if (some? thumbnail)
-      [:img {:src        thumbnail
-             :class-name "options-list-item"
-             :on-click   handle-click}]
+      [:div.options-list-item
+       [:img {:src        thumbnail
+              :on-click   handle-click
+              :title      title}]]
       [:div {:class-name "options-list-item no-image"
              :on-click   handle-click}
-       value])))
+       title])))
 
 (defn- options-list
   [{:keys [allow-empty? on-click options dimensions ref]}]
