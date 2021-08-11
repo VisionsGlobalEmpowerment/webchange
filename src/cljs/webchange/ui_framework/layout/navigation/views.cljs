@@ -2,37 +2,36 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.state.core :as state]
-    [webchange.auth.subs :as as]
     [webchange.routes :refer [location redirect-to]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.layout.user-widget.views :refer [user-widget]]
     [webchange.ui-framework.layout.logo.views :refer [logo]]
-    [webchange.ui-framework.components.icon.index :as icon]))
+    [webchange.ui-framework.components.index :refer [icon]]))
 
 (def menu-items
   [{:title         "Dashboard"
-    :icon          ""
+    :icon-name     "user"
     :location-name :welcome-screen}
    {:title         "Create"
-    :icon          ""
+    :icon-name     "user"
     :location-name :title}
    {:title         "Game library"
-    :icon          ""
+    :icon-name     "user"
     :location-name :game-library}
    {:title         "Books library"
-    :icon          ""
+    :icon-name     "user"
     :location-name :book-library}
    {:title         "Translate"
-    :icon          ""
+    :icon-name     "user"
     :location-name :translate}
    {:title         "My Profile"
-    :icon          ""
+    :icon-name     "user"
     :location-name :my-profile}
    {:title         "My Books"
-    :icon          ""
+    :icon-name     "user"
     :location-name :my-books}
    {:title         "My Games"
-    :icon          ""
+    :icon-name     "user"
     :location-name :my-games}])
 
 (declare menu)
@@ -47,13 +46,14 @@
                          (redirect-to route-name))))
 
 (defn- menu-item
-  [{:keys [children title] :as props}]
+  [{:keys [children title icon-name] :as props}]
   (let [active? false
         handle-click #(goto props)]
     [:li {:class-name (get-class-name {"menu-item" true
                                        "active"    active?})}
      [:span
-      [icon/component {:icon "user"}]]
+      [icon {:icon       icon-name
+             :class-name "user-icon"}]]
      [:span   {:on-click handle-click}
       title]
      (when-not (empty? children)
@@ -68,10 +68,9 @@
 
 (defn navigation-menu
   []
-  (let [current-user @(re-frame/subscribe [::as/user])]
     [:div.left-menu
      [:div.icon-top
       [logo]]
      [:div.nav-menu
       [menu {:items menu-items}]]
-      [user-widget]]))
+      [user-widget]])

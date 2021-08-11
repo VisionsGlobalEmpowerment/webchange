@@ -49,6 +49,10 @@ $left-menu-width: 296px;
           span {
              height: 20px;
              display: inline-block;
+
+             .user-icon {
+                padding: 0;
+             }
           }
  
           span:first-child {

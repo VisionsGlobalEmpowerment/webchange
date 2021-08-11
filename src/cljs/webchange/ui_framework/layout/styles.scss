@@ -39,7 +39,7 @@ $content-left-padding: $left-menu-width + $mid-section-padding;
             align-items: flex-start;
             justify-content: center;
             flex-grow: 1;
-            padding: $mid-section-padding 400px $mid-section-padding $content-left-padding;
+            padding: $mid-section-padding $mid-section-padding $mid-section-padding $content-left-padding;
         }
     }
 }
