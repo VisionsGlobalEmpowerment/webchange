@@ -2,7 +2,8 @@
   (:require
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
     [webchange.interpreter.renderer.scene.filters.filters :as f]
-    [webchange.interpreter.renderer.scene.components.animation.utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.utils :as common-utils]))
 
 (defn wrap
   [type name container state]
@@ -15,7 +16,8 @@
                                          (if (and highlight (not highlight-filter-set))
                                            (f/set-filter (:animation @state) "glow" {}))))
                    :set-scale        (fn [scale]
-                                       (utils/set-scale (:animation @state) scale))
+                                       (utils/set-scale (:animation @state) scale)
+                                       (common-utils/emit (:container @state) "scaleChanged" scale))
                    :set-slot         (fn [slot-name image-src slot-params]
                                        ;; ToDo: Remove double set-animation-slot call
                                        ;; Without this slot is not updated if new skin is created inside the method

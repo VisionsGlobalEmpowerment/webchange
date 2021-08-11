@@ -152,6 +152,8 @@
       (utils/set-handler object "fontSizeChanged" #(update-editor-frame object sprite mask component-container))
       (utils/set-handler object "fontFamilyChanged" #(update-editor-frame object sprite mask component-container)))
 
+    (utils/set-handler object "scaleChanged" #(update-editor-frame object sprite mask component-container))
+
     (when (some? (:visible object-props))
       (utils/set-visibility component-container (:visible object-props)))
 
