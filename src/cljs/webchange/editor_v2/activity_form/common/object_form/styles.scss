@@ -1,5 +1,6 @@
 .activity-object-form {
     .object-form-content {
+        @import "animation_form/styles";
         @import "text_form/styles";
         @import "image_form/styles";
         @import "voice_over_control/styles";
