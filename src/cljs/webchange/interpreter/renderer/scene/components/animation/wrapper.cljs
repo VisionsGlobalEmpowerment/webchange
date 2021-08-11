@@ -31,9 +31,14 @@
                                      (fn [skin-names]
                                        (utils/set-combined-skin (:animation @state) skin-names))
                    :set-skeleton
-                                     (fn [{:keys [name skin]}]
-                                       (swap! state update :props merge {:name      name
-                                                                         :skin-name skin})
+                                     (fn [{:keys [name skin skin-names]}]
+                                       (swap! state update :props merge {:name name})
+                                       (if (some? skin-names)
+                                         (do (swap! state update :props merge {:skin-names skin-names})
+                                             (swap! state update :props dissoc :skin-name))
+                                         (do (swap! state update :props merge {:skin-name skin})
+                                             (swap! state update :props dissoc :skin-names)))
+
                                        (utils/reset-skeleton container state))
                    :add-animation    (fn [track animation-name loop? delay]
                                        (utils/add-animation (:animation @state) animation-name {:track-index track

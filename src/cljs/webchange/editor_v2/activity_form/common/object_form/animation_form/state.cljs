@@ -21,6 +21,15 @@
 
 ;; Available skins
 
+(defn- check-skin-option
+  [value type]
+  (-> value
+      (clojure.string/split #"/")
+      first
+      (clojure.string/lower-case)
+      keyword
+      (= type)))
+
 (def available-skeletons-path :available-skeletons)
 
 (re-frame/reg-event-fx
@@ -28,15 +37,34 @@
   (fn [{:keys [_]} [_ id]]
     {:dispatch [::warehouse/load-animation-skins {:on-success [::set-available-skeletons id]}]}))
 
+(defn- set-skins-type
+  [skeletons]
+  "Set if skeleton hes single or combined skins"
+  (->> skeletons
+       (map (fn [{:keys [skins] :as skeleton-data}]
+              (->> (if (-> skins first :name (clojure.string/split #"/") count (> 1))
+                     :combined :single)
+                   (assoc skeleton-data :skin-type))))))
+
 (defn- set-default-skin
   [skeletons]
   (->> skeletons
-       (map (fn [{:keys [skins] :as skeleton-data}]
-              (let [first-skin (-> skins first :name)
-                    ;; Take first not 'default' skin because 'default' skin is broken in most old animations
-                    first-not-default-skin (some (fn [{:keys [name]}] (and (not= name "default") name)) skins)]
-                (->> (or first-not-default-skin first-skin)
-                     (assoc skeleton-data :default-skin)))))))
+       (map (fn [{:keys [skins skin-type] :as skeleton-data}]
+              (case skin-type
+                :combined (let [get-first-suitable (partial (fn [options option-key]
+                                                              (->> options
+                                                                   (filter #(check-skin-option (:name %) option-key))
+                                                                   (first)
+                                                                   (:name)))
+                                                            skins)]
+                            (assoc skeleton-data :default-skins {:body    (get-first-suitable :body)
+                                                                 :clothes (get-first-suitable :clothes)
+                                                                 :head    (get-first-suitable :head)}))
+                :single (let [first-skin (-> skins first :name)
+                              ;; Take first not 'default' skin because 'default' skin is broken in most old animations
+                              first-not-default-skin (some (fn [{:keys [name]}] (and (not= name "default") name)) skins)]
+                          (->> (or first-not-default-skin first-skin)
+                               (assoc skeleton-data :default-skin))))))))
 
 (defn- filter-extra-skeletons
   [skeletons]
@@ -48,7 +76,7 @@
 (re-frame/reg-event-fx
   ::set-available-skeletons
   (fn [{:keys [db]} [_ id skeletons]]
-    (let [skeletons-data (->> skeletons set-default-skin filter-extra-skeletons)]
+    (let [skeletons-data (->> skeletons set-skins-type set-default-skin filter-extra-skeletons)]
       {:db (assoc-in db (path-to-db id [available-skeletons-path]) skeletons-data)})))
 
 (defn- get-available-skeletons
@@ -84,11 +112,13 @@
 (re-frame/reg-event-fx
   ::set-skeleton
   (fn [{:keys [db]} [_ id skeleton-name]]
-    (let [skeleton (->> (get-available-skeletons db id)
-                        (some (fn [{:keys [name] :as skeleton}]
-                                (and (= name skeleton-name) skeleton))))]
-      {:dispatch [::state/update-current-data id {:name skeleton-name
-                                                  :skin (:default-skin skeleton)}]})))
+    (let [{:keys [default-skin default-skins skin-type]} (->> (get-available-skeletons db id)
+                                                              (some (fn [{:keys [name] :as skeleton}]
+                                                                      (and (= name skeleton-name) skeleton))))
+          default-skin-params (case skin-type
+                                :combined {:skin-names default-skins}
+                                :single {:skin default-skin})]
+      {:dispatch [::state/update-current-data id (merge {:name skeleton-name} default-skin-params)]})))
 
 ;; Skin
 
@@ -97,10 +127,10 @@
   (fn [[_ id]]
     [(re-frame/subscribe [::current-skeleton id])
      (re-frame/subscribe [::available-skeletons id])])
-  (fn [[animation-name available-skeletons]]
+  (fn [[skeleton-name available-skeletons]]
     (->> available-skeletons
          (some (fn [{:keys [name skins]}]
-                 (and (= name animation-name)
+                 (and (= name skeleton-name)
                       skins)))
          (map (fn [{:keys [name preview]}]
                 {:value     name
@@ -108,48 +138,38 @@
          (sort-by :thumbnail)
          (reverse))))
 
-(defn- check-skin-option
-  [option type]
-  (-> option
-      :value
-      (clojure.string/split #"/")
-      first
-      (clojure.string/lower-case)
-      keyword
-      (= type)))
-
 (re-frame/reg-sub
   ::skin-body-options
   (fn [[_ id]]
     [(re-frame/subscribe [::skin-options id])])
   (fn [[skin-options]]
-    (filter #(check-skin-option % :body) skin-options)))
+    (filter #(check-skin-option (:value %) :body) skin-options)))
 
 (re-frame/reg-sub
   ::skin-clothes-options
   (fn [[_ id]]
     [(re-frame/subscribe [::skin-options id])])
   (fn [[skin-options]]
-    (filter #(check-skin-option % :clothes) skin-options)))
+    (filter #(check-skin-option (:value %) :clothes) skin-options)))
 
 (re-frame/reg-sub
   ::skin-head-options
   (fn [[_ id]]
     [(re-frame/subscribe [::skin-options id])])
   (fn [[skin-options]]
-    (filter #(check-skin-option % :head) skin-options)))
+    (filter #(check-skin-option (:value %) :head) skin-options)))
 
 (re-frame/reg-sub
   ::combined-skins?
   (fn [[_ id]]
-    [(re-frame/subscribe [::skin-options id])])
-  (fn [[skin-options]]
-    (-> skin-options
-        first
-        :value
-        (clojure.string/split #"/")
-        count
-        (> 1))))
+    [(re-frame/subscribe [::current-skeleton id])
+     (re-frame/subscribe [::available-skeletons id])])
+  (fn [[skeleton-name available-skeletons]]
+    (->> available-skeletons
+         (some (fn [{:keys [name skin-type]}]
+                 (and (= name skeleton-name)
+                      skin-type)))
+         (= :combined))))
 
 (re-frame/reg-sub
   ::current-skin
