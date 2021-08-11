@@ -2,8 +2,15 @@
   (:require
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
     [webchange.interpreter.renderer.scene.filters.filters :as f]
+    [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
     [webchange.interpreter.renderer.scene.components.utils :as common-utils]))
+
+(defn- get-default-skeleton-params
+  [skeleton-name]
+  (let [default-params (->> (keyword skeleton-name)
+                            (get animations-params))]
+    (select-keys default-params [:scale :speed])))
 
 (defn wrap
   [type name container state]
@@ -32,7 +39,8 @@
                                        (utils/set-combined-skin (:animation @state) skin-names))
                    :set-skeleton
                                      (fn [{:keys [name skin skin-names]}]
-                                       (swap! state update :props merge {:name name})
+
+                                       (swap! state update :props merge {:name name} (get-default-skeleton-params name))
                                        (if (some? skin-names)
                                          (do (swap! state update :props merge {:skin-names skin-names})
                                              (swap! state update :props dissoc :skin-name))
