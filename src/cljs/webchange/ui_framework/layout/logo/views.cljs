@@ -4,5 +4,4 @@
 
 (defn logo
   []
-  [:div.logo
-   [svg/data]])
+   [svg/data])

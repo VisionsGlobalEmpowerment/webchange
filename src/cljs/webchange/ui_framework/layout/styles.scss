@@ -6,6 +6,8 @@
 @import "toolbar/styles";
 
 $content-padding: 24px;
+$mid-section-padding: 120px;
+$content-left-padding: $left-menu-width + $mid-section-padding;
 
 .page-layout {
     background-color: $background-color;
@@ -22,20 +24,22 @@ $content-padding: 24px;
         display: flex;
         flex-grow: 1;
         overflow: auto;
+        overflow-x: hidden;
 
         & > .side-menu {
             flex-grow: 0;
             flex-shrink: 0;
             padding: $content-padding;
+            width: 296px;
+            background: #353535;
         }
 
         & > .content {
             display: flex;
             align-items: flex-start;
             justify-content: center;
-
             flex-grow: 1;
-            padding: $content-padding;
+            padding: $mid-section-padding $mid-section-padding $mid-section-padding $content-left-padding;
         }
     }
 }
