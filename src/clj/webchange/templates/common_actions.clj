@@ -1,6 +1,9 @@
 (ns webchange.templates.common-actions
   (:require
-    [clojure.data.json :as json]))
+    [clojure.data.json :as json]
+    [clojure.string :as string]
+    [clojure.tools.logging :as log]
+    [webchange.templates.utils.characters :refer [animations character-positions]]))
 
 (defn- file-used?
   [scene-data file]
@@ -51,6 +54,18 @@
                  (if (file-used? data file) data (remove-asset data file)))))
             true (update-in [:triggers] dissoc :music))))
 
+(defn- add-object-to-last-layer
+  [scene-data object-name]
+  (let [last-layer (-> scene-data
+                       :scene-objects
+                       last
+                       (concat [object-name]))
+        layers (-> scene-data
+                   :scene-objects
+                   drop-last
+                   (concat [last-layer]))]
+    (assoc-in scene-data [:scene-objects] layers)))
+
 (defn- add-image
   [scene-data {:keys [name image]}]
   (let [image-idx (-> scene-data
@@ -81,22 +96,57 @@
                            {:action hide-action-name
                             :type   "image"
                             :links  [{:type "object" :id object-name}]
-                            :name   (str "Hide " name)}]
-        last-layer (-> scene-data
-                       :scene-objects
-                       last
-                       (concat [object-name]))
-        layers (-> scene-data
-                   :scene-objects
-                   drop-last
-                   (concat [last-layer]))]
+                            :name   (str "Hide " name)}]]
     (-> scene-data
         (update-in [:assets] concat [{:url (:src image) :type "image" :size 1}])
         (assoc-in [:objects (keyword object-name)] image-object)
-        (assoc-in [:scene-objects] layers)
+        (add-object-to-last-layer object-name)
         (assoc-in [:actions (keyword show-action-name)] show-action)
         (assoc-in [:actions (keyword hide-action-name)] hide-action)
         (assoc-in [:metadata :uploaded-image-idx] image-idx)
+        (update-in [:metadata :available-actions] concat available-actions))))
+
+(defn- add-character
+  [scene-data {:keys [name skin] :as data}]
+  (let [character-idx (-> scene-data
+                          (get-in [:metadata :added-character-idx])
+                          (or 0)
+                          inc)
+        character-name (cond-> name
+                               (some? skin) (str "-" skin)
+                               :always (str "-" character-idx)
+                               :always (-> (string/replace " " "-")
+                                           (string/replace "_" "-")
+                                           (string/lower-case)))
+        character-data (merge {:type      "animation"
+                               :anim      "idle"
+                               :start     true
+                               :editable? {:select        true
+                                           :drag          true
+                                           :show-in-tree? true}}
+                              (get animations name {:scale {:x 1 :y 1}
+                                                    :speed 1})
+                              (nth character-positions character-idx {:x 500 :y 500})
+                              data)
+
+        show-action-name (str "show-character-" character-name)
+        hide-action-name (str "hide-character-" character-name)
+        show-action {:type "set-attribute" :attr-name "visible" :attr-value true :target character-name}
+        hide-action {:type "set-attribute" :attr-name "visible" :attr-value false :target character-name}
+        available-actions [{:action show-action-name
+                            :type   "image"
+                            :links  [{:type "object" :id character-name}]
+                            :name   (str "Show " character-name)}
+                           {:action hide-action-name
+                            :type   "image"
+                            :links  [{:type "object" :id character-name}]
+                            :name   (str "Hide " character-name)}]]
+    (-> scene-data
+        (assoc-in [:objects (keyword character-name)] character-data)
+        (add-object-to-last-layer character-name)
+        (assoc-in [:metadata :added-character-idx] character-idx)
+        (assoc-in [:actions (keyword show-action-name)] show-action)
+        (assoc-in [:actions (keyword hide-action-name)] hide-action)
         (update-in [:metadata :available-actions] concat available-actions))))
 
 (defn update-activity
@@ -104,4 +154,5 @@
   (case (keyword action)
     :background-music (update-background-music scene-data data)
     :background-music-remove (remove-background-music scene-data)
-    :add-image (add-image scene-data data)))
+    :add-image (add-image scene-data data)
+    :add-character (add-character scene-data data)))

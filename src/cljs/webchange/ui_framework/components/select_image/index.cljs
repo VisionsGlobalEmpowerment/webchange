@@ -1,7 +1,7 @@
 (ns webchange.ui-framework.components.select-image.index
   (:require
     [reagent.core :as r]
-    [webchange.ui-framework.components.utils :refer [get-bounding-rect]]))
+    [webchange.ui-framework.components.utils :refer [get-bounding-rect get-class-name]]))
 
 (defn- current-value
   [{:keys [on-click ref show-image? value value-img]}]
@@ -27,9 +27,9 @@
         title (or text value)]
     (if (some? thumbnail)
       [:div.options-list-item
-       [:img {:src        thumbnail
-              :on-click   handle-click
-              :title      title}]]
+       [:img {:src      thumbnail
+              :on-click handle-click
+              :title    title}]]
       [:div {:class-name "options-list-item no-image"
              :on-click   handle-click}
        title])))
@@ -76,8 +76,9 @@
           options))
 
 (defn component
-  [{:keys [allow-empty? on-change options show-image? value]
+  [{:keys [allow-empty? class-name disabled? on-change options show-image? title value]
     :or   {allow-empty? false
+           disabled?    false
            on-change    #()
            options      []
            show-image?  true}}]
@@ -95,20 +96,24 @@
 
                close-menu #(do (reset! show-options-list? false)
                                (reset-document-click-handler))
-               show-menu #(do (reset! show-options-list? true)
-                              (reset! options-list-dimensions (get-menu-position @current-value-ref))
-                              (set-document-click-handler))
 
                handle-list-item-click (fn [value]
                                         (close-menu)
                                         (on-change value))
 
                _ (reset! close-menu-ref close-menu)]
-    (let [options (if (and (some? value)
+    (let [show-menu #(when-not disabled?
+                       (reset! show-options-list? true)
+                       (reset! options-list-dimensions (get-menu-position @current-value-ref))
+                       (set-document-click-handler))
+          options (if (and (some? value)
                            (->> value (current-value-in-options? options) (not)))
                     (add-to-options options value)
                     options)]
-      [:div.wc-select-image
+      [:div (cond-> {:class-name (get-class-name (cond-> {"wc-select-image" true
+                                                          "disabled"        disabled?}
+                                                         (some? class-name) (assoc class-name true)))}
+                    (some? title) (assoc :title title))
        [current-value {:value       value
                        :value-img   (img-src? value options)
                        :on-click    show-menu

@@ -5,7 +5,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [actions full-screen? size title title-actions on-enter on-exit on-close open?]
+  [{:keys [actions content-class-name full-screen? size title title-actions on-enter on-exit on-close open?]
     :or   {full-screen? false
            title        ""
            on-enter     #()
@@ -28,7 +28,8 @@
                                  :class-name "close-button"
                                  :on-click   #(do (on-exit)
                                                   (on-close))}]]
-        (into [:div.dialog-content]
+        (into [:div {:class-name (get-class-name (cond-> {"dialog-content" true}
+                                                         (some? content-class-name) (assoc content-class-name true)))}]
               (r/children this))
         (when (some? actions)
           (into [:div.dialog-actions]

@@ -29,7 +29,7 @@
   (fn [[_ object-name]]
     [(re-frame/subscribe [::object-data object-name])])
   (fn [[object-data]]
-    (get object-data :visible)))
+    (get object-data :visible true)))
 
 (re-frame/reg-event-fx
   ::set-object-visibility
