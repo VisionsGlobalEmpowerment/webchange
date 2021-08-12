@@ -71,7 +71,6 @@
                                     {:volume volume
                                      :src    src}})]
       (let [save #(re-frame/dispatch [::state/save :background-music @form-data [::close]])]
-        (println volume src @form-data)
         (when open?
           [ui/dialog
            {:open       true

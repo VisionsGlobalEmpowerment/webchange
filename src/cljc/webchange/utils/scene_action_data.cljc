@@ -11,6 +11,11 @@
   (-> (get-action-type action-data)
       (= "text-animation")))
 
+(defn animation-sequence-action?
+  [action-data]
+  (-> (get-action-type action-data)
+      (= "animation-sequence")))
+
 (defn dialog-action?
   [action-data]
   (contains? action-data :phrase))

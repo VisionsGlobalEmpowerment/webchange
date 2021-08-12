@@ -2,7 +2,7 @@
   (:require
     [cljs.test :refer [deftest testing is]]
     [webchange.editor-v2.audio-analyzer.data :refer [script-data]]
-    [webchange.editor-v2.audio-analyzer.region-data :refer [get-start-end-for-text]]
+    [webchange.editor-v2.audio-analyzer.region-data :refer [get-start-end-for-text get-start-end-options-for-text]]
     [webchange.editor-v2.audio-analyzer.talk-data :refer [get-chunks-for-text]]))
 
 (deftest test-get-action-audio-data-region
@@ -11,6 +11,10 @@
       (is (= start 49.98))
       (is (= end 55.86))))
 
+(deftest test-get-options
+  (let [text "This branch looks lovely! It seems perfect for me. What do you think? Do you agree?"
+        options (get-start-end-options-for-text text script-data)]
+      (is (= (count options) 5))))
 
 (deftest test-short-text-region
   (let [text "This branch looks lovely!"
