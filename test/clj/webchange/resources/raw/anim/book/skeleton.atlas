@@ -1,0 +1,137 @@
+
+skeleton.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Book_04
+  rotate: true
+  xy: 624, 2
+  size: 620, 960
+  orig: 620, 960
+  offset: 0, 0
+  index: -1
+Book_05
+  rotate: false
+  xy: 2, 831
+  size: 620, 447
+  orig: 620, 447
+  offset: 0, 0
+  index: -1
+Book_052
+  rotate: false
+  xy: 624, 624
+  size: 620, 447
+  orig: 620, 447
+  offset: 0, 0
+  index: -1
+Book_06
+  rotate: true
+  xy: 1436, 769
+  size: 620, 482
+  orig: 620, 482
+  offset: 0, 0
+  index: -1
+Book_062
+  rotate: false
+  xy: 2, 347
+  size: 620, 482
+  orig: 620, 482
+  offset: 0, 0
+  index: -1
+Book_081
+  rotate: false
+  xy: 932, 1391
+  size: 715, 302
+  orig: 715, 302
+  offset: 0, 0
+  index: -1
+Book_082
+  rotate: false
+  xy: 719, 1073
+  size: 715, 316
+  orig: 715, 316
+  offset: 0, 0
+  index: -1
+Book_086
+  rotate: false
+  xy: 2, 1280
+  size: 715, 302
+  orig: 715, 302
+  offset: 0, 0
+  index: -1
+Book_09
+  rotate: true
+  xy: 2, 1747
+  size: 22, 200
+  orig: 22, 200
+  offset: 0, 0
+  index: -1
+Book_10
+  rotate: true
+  xy: 204, 1736
+  size: 33, 500
+  orig: 33, 500
+  offset: 0, 0
+  index: -1
+Book_11
+  rotate: true
+  xy: 2, 1584
+  size: 109, 928
+  orig: 109, 928
+  offset: 0, 0
+  index: -1
+Book_15
+  rotate: true
+  xy: 706, 1695
+  size: 74, 872
+  orig: 74, 872
+  offset: 0, 0
+  index: -1
+
+skeleton2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Book_07
+  rotate: true
+  xy: 2, 797
+  size: 620, 950
+  orig: 620, 950
+  offset: 0, 0
+  index: -1
+Book_08
+  rotate: true
+  xy: 2, 80
+  size: 715, 935
+  orig: 715, 935
+  offset: 0, 0
+  index: -1
+Book_083
+  rotate: true
+  xy: 939, 2
+  size: 715, 935
+  orig: 715, 935
+  offset: 0, 0
+  index: -1
+Book_14
+  rotate: true
+  xy: 954, 719
+  size: 698, 874
+  orig: 698, 874
+  offset: 0, 0
+  index: -1
+
+skeleton3.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Book_03
+  rotate: false
+  xy: 2, 2
+  size: 1432, 960
+  orig: 1432, 960
+  offset: 0, 0
+  index: -1

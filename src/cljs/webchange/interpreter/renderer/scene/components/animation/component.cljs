@@ -27,20 +27,6 @@
                     :position         {:alias :anim-offset}
                     :filters          {}})
 
-(defn- create-spine-animation
-  [animation-resource {:keys [animation-start? speed offset position skin-name skin-names animation-name scale loop]}]
-  (let [spine-data (.-spineData animation-resource)
-        coordinates {:x (* (- (:x position) (:x offset)) (:x scale))
-                     :y (* (- (:y position) (:y offset)) (:y scale))}]
-    (doto (Spine. spine-data)
-      (utils/set-or-combine-skin skin-names skin-name)
-      (utils/set-animation animation-name)
-      (utils/set-position coordinates)
-      (utils/set-scale scale)
-      (utils/set-animation-speed speed)
-      (utils/set-auto-update animation-start?)
-      (utils/set-track-loop loop))))
-
 (defn- create-animation-container
   [{:keys [x y]}]
   (let [position {:x x
@@ -77,9 +63,13 @@
   (let [resource (resources/get-resource name)]
     (when (nil? resource)
       (-> (str "Resource for animation <" name "> is not defined") js/Error. throw))
-    (let [animation (create-spine-animation resource props)
+    (let [animation (utils/create-spine-animation resource props)
           animation-container (create-animation-container props)
-          wrapped-animation (wrap type (:object-name props) animation-container animation)]
+          state (atom {:props     props
+                       :animation animation
+                       :container animation-container})
+
+          wrapped-animation (wrap type (:object-name props) animation-container state)]
 
       (.addChild animation-container animation)
       (.addChild parent animation-container)

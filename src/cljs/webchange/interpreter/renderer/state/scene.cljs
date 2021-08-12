@@ -66,39 +66,64 @@
        (filter (fn [[prop-name]] (not (some #{prop-name} extra-props-names))))
        (into {})))
 
+(def available-actions
+  [{:action :set-position :params [:x :y]}
+   {:action :set-scale :params [:scale :scale-x :scale-y]}
+   {:action :set-visibility :params [:visible]}
+   {:action :set-src :params [:src]}
+   {:action :set-text :params [:text]}
+   {:action :clear-area :params []}
+   {:action :set-filter :params [:filter :brightness :eager]}
+   {:action :set-opacity :params [:opacity]}
+   {:action :set-tool :params [:tool]}
+   {:action :set-color :params [:color]}
+   {:action :set-stroke :params [:stroke]}
+   {:action :set-data :params [:data]}
+   {:action :set-path :params [:path]}
+   {:action :set-fill :params [:fill]}
+   {:action :set-border-color :params [:border-color]}
+   {:action :set-highlight :params [:highlight]}
+   {:action :set-permanent-pulsation :params [:permanent-pulsation]}
+   {:action :set-alpha-pulsation :params [:alpha-pulsation]}
+   {:action :set-draggable :params [:draggable]}
+   {:action :set-children :params [:children]}
+   {:action :set-font-size :params [:font-size]}
+   {:action :set-font-family :params [:font-family]}
+   {:action :set-skeleton :params [:name] :accompany-params [:skin :skin-names]}
+   {:action :set-animation-skin :params [:skin]}
+   {:action :set-combined-skin :params [:skin-names]}])
+
+(defn- get-action-params
+  [{:keys [params accompany-params] :or {params [] accompany-params []}} overall-params]
+  ":params - used to get action params and determine if action is needed for current params set
+   :accompany-params - also needed for action but NOT used to determine if action is needed.
+   For example apply params 'name', 'skin' and 'skin-names' to 'set-skeleton' action only if 'name' is defined.
+   If 'skin' is defined but 'name' is undefined, use 'set-animation-skin' action instead."
+  (let [action-params (select-keys overall-params params)
+        action-used? (-> action-params empty? not)]
+    (if action-used?
+      {:action-used?  action-used?
+       :action-params (merge action-params (select-keys overall-params accompany-params))
+       :rest-params   (apply dissoc overall-params (concat params accompany-params))}
+      {:action-used?  action-used?
+       :action-params {}
+       :rest-params   overall-params})))
+
 (re-frame/reg-event-fx
   ::set-scene-object-state
   (fn [{:keys [_]} [_ object-name state]]
     (let [filtered-state (filter-extra-props state [:start :revert :target])
-          available-actions {:set-position            [:x :y]
-                             :set-scale               [:scale :scale-x :scale-y]
-                             :set-visibility          [:visible]
-                             :set-src                 [:src]
-                             :set-text                [:text]
-                             :clear-area              []
-                             :set-filter              [:filter :brightness :eager]
-                             :set-opacity             [:opacity]
-                             :set-tool                [:tool]
-                             :set-color               [:color]
-                             :set-stroke              [:stroke]
-                             :set-data                [:data]
-                             :set-path                [:path]
-                             :set-fill                [:fill]
-                             :set-border-color        [:border-color]
-                             :set-highlight           [:highlight]
-                             :set-permanent-pulsation [:permanent-pulsation]
-                             :set-alpha-pulsation     [:alpha-pulsation]
-                             :set-draggable           [:draggable]
-                             :set-children            [:children]
-                             :set-font-size           [:font-size]
-                             :set-font-family         [:font-family]
-                             :set-animation-skin      [:skin]
-                             :set-combined-skin       [:skin-names]}
-          execute-actions (->> available-actions
-                               (map (fn [[action params]] [action (select-keys filtered-state params)]))
-                               (filter (fn [[_ params]] (-> params empty? not))))
-          not-handled-params (clojure.set/difference (->> filtered-state (keys) (set))
-                                                     (->> available-actions (vals) (apply concat) (set)))]
+          [execute-actions not-handled-params] (loop [actions-to-execute []
+                                                      [{:keys [action] :as available-action} & rest-available-actions] available-actions
+                                                      current-state filtered-state]
+                                                 (if (nil? available-action)
+                                                   [actions-to-execute current-state]
+                                                   (let [{:keys [action-used? action-params rest-params]} (get-action-params available-action current-state)]
+                                                     (recur (if action-used?
+                                                              (conj actions-to-execute [action action-params])
+                                                              actions-to-execute)
+                                                            rest-available-actions
+                                                            rest-params))))]
       (when-not (empty? not-handled-params)
         (logger/warn (str "[Set object state] Not-processed-params for <" object-name "> object:") (clj->js not-handled-params)))
       {:dispatch [::change-scene-object object-name execute-actions]})))
@@ -140,7 +165,7 @@
 (re-frame/reg-fx
   :set-scale
   (fn [[object-wrapper scale]]
-    (apply-to-wrapper w/set-scale object-wrapper scale)))
+    (apply-to-wrapper w/set-scale object-wrapper (or (:scale scale) scale))))
 
 (re-frame/reg-fx
   :set-visibility
@@ -272,3 +297,8 @@
   :set-combined-skin
   (fn [[object-wrapper {:keys [skin-names]}]]
     (apply-to-wrapper w/set-combined-skin object-wrapper skin-names)))
+
+(re-frame/reg-fx
+  :set-skeleton
+  (fn [[object-wrapper params]]
+    (apply-to-wrapper w/set-skeleton object-wrapper params)))

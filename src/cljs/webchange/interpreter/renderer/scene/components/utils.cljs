@@ -42,11 +42,12 @@
 
 (defn set-scale
   [display-object scale]
-  (let [prepared-scale (if (number? scale)
+  (let [current-scale (get-scale display-object)
+        prepared-scale (if (number? scale)
                          {:x scale
                           :y scale}
-                         {:x (or (:x scale) (:scale-x scale))
-                          :y (or (:y scale) (:scale-y scale))})
+                         {:x (or (:x scale) (:scale-x scale) (:x current-scale))
+                          :y (or (:y scale) (:scale-y scale) (:y current-scale))})
         {:keys [x y]} (merge (get-scale display-object)
                              (remove-nil-fields prepared-scale))]
     (-> (.-scale display-object)

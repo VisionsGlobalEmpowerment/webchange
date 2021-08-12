@@ -36,8 +36,7 @@
   [wrapper-object]
   (let [object-data (atom {})
         main-display-object (:object wrapper-object)
-        init-position (utils/get-position main-display-object)
-        ]
+        init-position (utils/get-position main-display-object)]
     (merge {:get-object-data   (fn [] @object-data)
             :set-object-data   (fn [data]
                                  (reset! object-data data))
@@ -51,7 +50,8 @@
             :get-scale         (fn []
                                  (utils/get-scale main-display-object))
             :set-scale         (fn [scale]
-                                 (utils/set-scale main-display-object scale))
+                                 (utils/set-scale main-display-object scale)
+                                 (utils/emit main-display-object "scaleChanged" scale))
             :set-visibility    (fn [visible?]
                                  (utils/set-visibility main-display-object visible?)
                                  (utils/emit main-display-object "visibilityChanged" visible?))
