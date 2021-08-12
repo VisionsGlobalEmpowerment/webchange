@@ -28,12 +28,14 @@
            on-esc-press
            placeholder
            select-on-focus?
+           step
            type]
     :as   props
     :or   {disabled?        false
            on-change        #()
            placeholder      ""
            select-on-focus? false
+           step             1
            type             "str"}}]
   (r/with-let [handle-document-key-down (fn [event]
                                           (case (.-keyCode event)
@@ -41,7 +43,11 @@
                                             "default"))
                _ (when (subscribe-document? props)
                    (subscribe-document handle-document-key-down))]
-    (let [handle-change #(-> % (.. -target -value) (on-change))
+    (let [handle-change (fn [event]
+                          (when (fn? on-change)
+                            (on-change (cond->> (.. event -target -value)
+                                                (= type "int") (.parseInt js/Number)
+                                                (= type "float") (.parseFloat js/Number)))))
           handle-click (fn [event]
                          (when select-on-focus? (.select (.-target event)))
                          (when (fn? on-click) (on-click event)))
@@ -56,7 +62,9 @@
                        :placeholder placeholder
                        :on-change   handle-change
                        :on-click    handle-click}
-                      (= type "int") (assoc :type "number")
+                      (or (= type "int")
+                          (= type "float")) (-> (assoc :type "number")
+                                                (assoc :step step))
                       (some? id) (assoc :id id)
                       (some? value) (assoc :value value)
                       (some? default-value) (assoc :default-value default-value)

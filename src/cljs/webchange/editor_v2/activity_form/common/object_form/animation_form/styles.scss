@@ -1,0 +1,14 @@
+.animation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .scale-control {
+        display: flex;
+        gap: 8px;
+
+        .scale-input {
+            width: 80px;
+        }
+    }
+}

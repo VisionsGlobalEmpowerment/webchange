@@ -200,6 +200,21 @@
     (logger/trace "set skin names" id skin-names)
     {:dispatch [::state/update-current-data id {:skin-names skin-names}]}))
 
+;; Scale
+
+(re-frame/reg-sub
+  ::current-scale
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :scale)))
+
+(re-frame/reg-event-fx
+  ::set-scale
+  (fn [{:keys [_]} [_ id scale-key scale-value]]
+    {:dispatch [::state/update-current-data id {:scale {scale-key scale-value}}]}))
+
 ;; Flip
 
 (defn- get-scale-x
@@ -211,4 +226,4 @@
   ::flip-animation
   (fn [{:keys [db]} [_ id]]
     (let [scale-x (get-scale-x db id)]
-      {:dispatch [::state/update-current-data id {:scale {:x (- scale-x)}}]})))
+      {:dispatch [::set-scale id :x (- scale-x)]})))
