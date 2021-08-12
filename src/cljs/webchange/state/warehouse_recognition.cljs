@@ -1,8 +1,10 @@
 (ns webchange.state.warehouse-recognition
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer.region-data :refer [get-region-data-if-possible]]
-    [webchange.editor-v2.audio-analyzer.talk-data :refer [get-chunks-data-if-possible get-talk-data-if-possible]]
+    [webchange.editor-v2.audio-analyzer.region-data :refer [get-region-data-if-possible
+                                                            get-region-options]]
+    [webchange.editor-v2.audio-analyzer.talk-data :refer [get-chunks-data-if-possible
+                                                          get-talk-data-if-possible]]
     [webchange.state.warehouse :as warehouse]))
 
 (defn- dispatch-if-defined
@@ -40,7 +42,6 @@
 
 (re-frame/reg-event-fx
   ::audio-script-data-loaded
-  [(re-frame/inject-cofx :audio-scripts)]
   (fn [{:keys [_]} [_ {:keys [audio-url]} {:keys [on-success]} script-data]]
     {:dispatch           (conj on-success script-data)
      :store-audio-script {:audio-url    audio-url
@@ -50,24 +51,54 @@
 
 (re-frame/reg-event-fx
   ::get-audio-script-region
-  [(re-frame/inject-cofx :audio-scripts)]
-  (fn [{:keys [_]} [_ {:keys [audio-url script-text update-text-animation?]} {:keys [on-failure] :as handlers}]]
+  (fn [{:keys [_]} [_
+                    {:keys [audio-url script-text update-text-animation?]}
+                    {:keys [on-failure] :as handlers}]]
     {:dispatch [::get-audio-script-data
                 {:audio-url audio-url}
-                {:on-success [::parse-audio-script-region {:script-text            script-text
-                                                           :update-text-animation? update-text-animation?} handlers]
+                {:on-success [::parse-audio-script-region
+                              {:script-text            script-text
+                               :update-text-animation? update-text-animation?}
+                              handlers]
                  :on-failure on-failure}]}))
 
 (re-frame/reg-event-fx
   ::parse-audio-script-region
+  (fn [{:keys [_]} [_
+                    {:keys [script-text update-text-animation? update-talk-animation?]}
+                    {:keys [on-success on-failure]}
+                    script-data]]
+    (let [{:keys [matched? regions]} (get-region-options {:text script-text
+                                                          :script script-data})]
+      (if matched?
+        (let [region-data (first regions)
+              match-data {:region region-data
+                          :script script-data
+                          :text   script-text}]
+          (dispatch-if-defined
+           on-success
+           (cond-> region-data
+             update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
+             update-talk-animation? (assoc :data (get-talk-data-if-possible match-data)))
+           regions))
+        (dispatch-if-defined on-failure)))))
+
+
+(re-frame/reg-event-fx
+  ::parse-audio-script-option
   [(re-frame/inject-cofx :audio-scripts)]
-  (fn [{:keys [_]} [_ {:keys [script-text update-text-animation? update-talk-animation?]} {:keys [on-success on-failure]} script-data]]
-    (let [{:keys [matched? region-data]} (get-region-data-if-possible {:text script-text :script script-data})
+  (fn [{:keys [audio-scripts]}
+       [_
+        {:keys [audio-url script-text region-data update-text-animation? update-talk-animation?]}
+        {:keys [on-success on-failure]}]]
+    (let [script-data (get audio-scripts audio-url)
           match-data {:region region-data
                       :script script-data
                       :text   script-text}]
-      (if matched?
-        (dispatch-if-defined on-success (cond-> region-data
-                                                update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
-                                                update-talk-animation? (assoc :data (get-talk-data-if-possible match-data))))
+      (if script-data
+        (dispatch-if-defined
+         on-success
+         (cond-> region-data
+           update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
+           update-talk-animation? (assoc :data (get-talk-data-if-possible match-data))))
         (dispatch-if-defined on-failure)))))

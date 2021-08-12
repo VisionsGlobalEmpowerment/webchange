@@ -9,7 +9,8 @@
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
     [webchange.state.warehouse-recognition :as recognition]
-    [webchange.utils.scene-action-data :refer [text-animation-action?]]))
+    [webchange.utils.scene-action-data :refer [text-animation-action?
+                                               animation-sequence-action?]]))
 
 (defn path-to-db
   [relative-path]
@@ -31,21 +32,30 @@
   (fn [[selected-action-data]]
     (get-inner-action selected-action-data)))
 
+(defn- recognition-context
+  [db]
+  (let [{:keys [audio type phrase-text target] :as action-data} (get-current-audio db)
+          text (if (text-animation-action? action-data)
+                 (->> (keyword target)
+                      (state-scene/object-data db)
+                      (:text))
+                 phrase-text)]
+    {:audio-url audio
+     :script-text text
+     :update-text-animation? (text-animation-action? action-data)
+     :update-talk-animation? (animation-sequence-action? action-data)}))
+
 (re-frame/reg-event-fx
   ::set-current-audio
   (fn [{:keys [db]} [_ url]]
     (let [{:keys [path source]} (state-dialog/get-selected-action db)
-          {:keys [target] :as action-data} (get-current-audio db)
-          target-text (->> (keyword target)
-                           (state-scene/object-data db)
-                           (:text))]
+          context (-> (recognition-context db)
+                      (assoc :audio-url url))]
       {:dispatch-n [[::state-actions/update-inner-action-by-path {:action-path path
                                                                   :action-type source
                                                                   :data-patch  {:audio url}}]
                     [::recognition/get-audio-script-region
-                     {:audio-url              url
-                      :script-text            target-text
-                      :update-text-animation? (text-animation-action? action-data)}
+                     context
                      {:on-success [::audio-script-loaded {:action-path path
                                                           :action-type source}]}]]})))
 
@@ -67,23 +77,30 @@
 (re-frame/reg-event-fx
   ::recognition-retry
   (fn [{:keys [db]} [_]]
-    (let [{:keys [audio target] :as action-data} (get-current-audio db)
-          target-text (->> (keyword target)
-                           (state-scene/object-data db)
-                           (:text))]
+    (let [context (recognition-context db)]
       {:dispatch [::recognition/get-audio-script-region
-                  {:audio-url              audio
-                   :script-text            target-text
-                   :update-text-animation? (text-animation-action? action-data)}
+                  context
                   {:on-success [::recognition-retry-success]}]})))
 
 (re-frame/reg-event-fx
   ::recognition-retry-success
-  (fn [{:keys [db]} [_ region-data]]
+  (fn [{:keys [db]} [_ region-data regions]]
     (let [{:keys [path source]} (state-dialog/get-selected-action db)]
-      {:dispatch [::state-actions/update-inner-action-by-path {:action-path path
+      {:db (assoc-in db (path-to-db [:options source path]) regions)
+       :dispatch [::state-actions/update-inner-action-by-path {:action-path path
                                                                :action-type source
                                                                :data-patch  region-data}]})))
+(re-frame/reg-event-fx
+  ::recognition-select-option
+  (fn [{:keys [db]} [_ idx]]
+    (let [{:keys [path source]} (state-dialog/get-selected-action db)
+          region-data (-> (get-in db (path-to-db [:options source path]))
+                          (nth idx {}))
+          context (-> (recognition-context db)
+                      (assoc :region-data region-data))]
+      {:dispatch [::recognition/parse-audio-script-option
+                  context
+                  {:on-success [::set-current-audio-region]}]})))
 
 ;; Audios List
 
