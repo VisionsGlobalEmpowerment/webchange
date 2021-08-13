@@ -13,9 +13,9 @@
 
         check-button-name (str object-name "-check-button")
         {check-button-size :size} params/check-button
-        check-panel-height (+ check-button-size (* params/block-padding 2))
+        check-panel-height (+ check-button-size params/block-padding)
         check-button-x (- (/ width 2) (/ check-button-size 2))
-        check-button-y (+ (- height check-panel-height) params/block-padding)
+        check-button-y (+ (- height check-panel-height) (/ params/block-padding 2))
 
         {:keys [list-width
                 list-height

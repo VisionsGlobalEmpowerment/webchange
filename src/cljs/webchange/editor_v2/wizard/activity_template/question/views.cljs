@@ -12,7 +12,7 @@
    :layout         "vertical"
    :option-label   "audio-text"
    :options-number 2
-   :answers-number "many"
+   :answers-number "one"
    :mark-options   ["thumbs-up" "thumbs-down"]})
 
 (defn- answers-number-control
