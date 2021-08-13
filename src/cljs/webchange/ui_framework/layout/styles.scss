@@ -16,8 +16,9 @@ $content-left-padding: $left-menu-width + $mid-section-padding;
     height: 100%;
 
     & > .header {
-        flex-grow: 0;
-        flex-shrink: 0;
+        width: calc(100% - #{$left-menu-width});
+        position: relative;
+        left: $left-menu-width;
     }
 
     & > .body {
