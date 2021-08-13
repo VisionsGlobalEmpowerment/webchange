@@ -9,12 +9,19 @@
     [webchange.question.common.params :as params]
     [webchange.question.utils :refer [merge-data]]))
 
+(defn- option-scale
+  [{:keys [options-number task-type]}]
+  (cond-> 1
+    (> 4 options-number) (* 1.3)
+    (= task-type "text") (* 1.7)))
+
 (defn- get-options-frame
-  [{:keys [width options-number]}]
+  [{:keys [width options-number] :as props}]
   (let [{:keys [gap]} params/options
-        option-width 230
-        option-height 400]
-    {:list-width    (-> (+ option-width gap) (* options-number) (- gap))
+        scale (option-scale props)
+        option-width (* 230 scale)
+        option-height (* 400 scale)]
+    {:list-width    (-> option-width (+ gap) (* options-number) (- gap))
      :list-height   option-height
      :positions     (->> (range options-number)
                          (map (fn [idx]
@@ -26,11 +33,12 @@
 
 (defn- create-options
   [{:keys [width height options] :as props}
-   form-data]
+   {:keys [task] :as form-data}]
   (let [options-number (count options)
         frame (get-options-frame {:width          (- width (* 2 params/block-padding))
                                   :height         (- height (* 2 params/block-padding))
-                                  :options-number options-number})]
+                                  :options-number options-number
+                                  :task-type (:type task)})]
     (options-list/create (merge props {:frame frame}) form-data)))
 
 (defn create
