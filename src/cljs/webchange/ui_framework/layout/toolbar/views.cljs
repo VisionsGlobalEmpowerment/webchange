@@ -6,8 +6,6 @@
 (defn toolbar
   [{:keys [actions] :or {actions []}}]
   [:div.page-toolbar
-   [:div.left-side
-    [avatar]
-    [logo]]
+   [:div.left-side]
    (into [:div.right-side]
          actions)])
