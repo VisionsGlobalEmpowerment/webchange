@@ -1,0 +1,15 @@
+.add-character-form {
+    display: flex;
+    gap: 16px;
+
+    .select-group {
+        .select-label {
+            margin-bottom: 8px;
+        }
+
+        .select-control {
+            width: 200px;
+            height: 180px;
+        }
+    }
+}

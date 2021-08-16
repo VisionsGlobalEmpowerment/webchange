@@ -1,7 +1,6 @@
 (ns webchange.test.course.common-actions
   (:require
     [clojure.test :refer :all]
-    [webchange.templates.common-actions :as ca]
     [webchange.templates.core :as core]))
 
 (defn- has-asset
