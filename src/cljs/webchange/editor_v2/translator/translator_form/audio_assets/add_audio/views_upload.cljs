@@ -27,7 +27,7 @@
                                  :on-change (fn [file]
                                               (reset! text text-uploading)
                                               (reset! loading true)
-                                              (re-frame/dispatch [::translator-form.audios/upload-audio file {}
+                                              (re-frame/dispatch [::translator-form.audios/upload-audio file
                                                                   {:on-success (fn []
                                                                                  (reset! loading false)
                                                                                  (reset! text text-uploaded)

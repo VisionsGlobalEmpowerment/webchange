@@ -50,13 +50,14 @@
 (re-frame/reg-event-fx
   ::upload-audio
   (fn [{:keys [db]} [_ js-file-value audio-props form-params]]
-    (let [asset-data {:date (.now js/Date)}
-          lang (get-in db (path-to-db [:current-lang]))]
+    (let [lang (get-in db (path-to-db [:current-lang]))
+          asset-data {:date (.now js/Date)
+                      :lang lang}]
       {:db       (assoc-in db [:loading :upload-audio] true)
        :dispatch [::warehouse/upload-file
                   {:file        js-file-value
                    :form-params (concat [["lang" lang]] form-params)}
-                  {:on-success [::upload-audio-success (merge audio-props asset-data form-params)]
+                  {:on-success [::upload-audio-success (merge audio-props asset-data)]
                    :on-failure :on-failure}]})))
 
 (re-frame/reg-event-fx
