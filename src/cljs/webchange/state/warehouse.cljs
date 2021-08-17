@@ -4,7 +4,7 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.config :as config]))
 
-(defn- path-to-db
+(defn path-to-db
   [relative-path]
   (->> relative-path
        (concat [:warehouse])

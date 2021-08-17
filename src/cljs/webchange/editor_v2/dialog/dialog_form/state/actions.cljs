@@ -163,14 +163,13 @@
 ;; >>
 
 (re-frame/reg-event-fx
-  ::insert-effect-action
-  (fn [{:keys [_]} [_ {:keys [effect-id position parent-path relative-position] :or {relative-position :exact}}]]
-    (let [effect-action-data (defaults/get-effect-action-data {:action-name effect-id})]
-      (if (= relative-position :parallel)
-        {:dispatch [::insert-child-action-parallel effect-action-data position]}
-        {:dispatch [::insert-child-action {:parent-path  parent-path
-                                           :child-action effect-action-data
-                                           :position     (get-exact-position position relative-position)}]}))))
+  ::insert-action
+  (fn [{:keys [_]} [_ {:keys [action-data position parent-path relative-position] :or {relative-position :exact}}]]
+    (if (= relative-position :parallel)
+      {:dispatch [::insert-child-action-parallel action-data position]}
+      {:dispatch [::insert-child-action {:parent-path  parent-path
+                                         :child-action action-data
+                                         :position     (get-exact-position position relative-position)}]})))
 
 (re-frame/reg-event-fx
   ::add-effect-action

@@ -5,9 +5,11 @@
     [webchange.editor-v2.dialog.dialog-text-form.state-actions :as state-actions]
     [webchange.editor-v2.dialog.state :as parent-state]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-dialog-form]
+    [webchange.editor-v2.dialog.utils.dialog-action :as defaults]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as scene-utils]))
 
 (defn path-to-db
@@ -171,14 +173,31 @@
   (fn [{:keys [_]} [_ {:keys [action] :as data}]]
     (case action
       "add-effect-action" {:dispatch [::add-effect-action data]}
+      "set-target-animation" {:dispatch [::set-target-animation data]}
       {})))
+
+(defn- get-action-position-data
+  [{:keys [target-path relative-position]}]
+  (let [target-parent-action-path (drop-last 2 target-path)
+        target-position (last target-path)]
+    {:position          target-position
+     :parent-path       target-parent-action-path
+     :relative-position relative-position}))
 
 (re-frame/reg-event-fx
   ::add-effect-action
-  (fn [{:keys [_]} [_ {:keys [id target-path relative-position]}]]
-    (let [target-parent-action-path (drop-last 2 target-path)
-          target-position (last target-path)]
-      {:dispatch [::state-dialog-form/insert-effect-action {:effect-id         id
-                                                            :position          target-position
-                                                            :parent-path       target-parent-action-path
-                                                            :relative-position relative-position}]})))
+  (fn [{:keys [_]} [_ {:keys [id] :as data}]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-effect-action-data {:action-name id})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::set-target-animation
+  (fn [{:keys [_]} [_ {:keys [animation target track] :as data}]]
+    (let [position-data (get-action-position-data data)
+          action-data (action-utils/create-add-animation-action {:animation animation
+                                                                 :target    target
+                                                                 :track     track})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))

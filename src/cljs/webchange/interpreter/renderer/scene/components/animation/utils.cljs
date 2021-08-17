@@ -222,4 +222,7 @@
                     (let [spine-animation (create-spine-animation resource (:props @state))]
                       (swap! state assoc :animation spine-animation)
                       (.removeChildren container)
-                      (.addChild container spine-animation)))}))
+                      (.addChild container spine-animation)
+                      ;; Update pose:
+                      (.updateWorldTransform (get-skeleton spine-animation))
+                      (.update spine-animation 0)))}))

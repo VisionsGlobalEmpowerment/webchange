@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
     [webchange.logger.index :as logger]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse-animations :as warehouse-animations]))
 
 (defn path-to-db
   [id relative-path]
@@ -35,36 +35,8 @@
 (re-frame/reg-event-fx
   ::load-available-skeletons
   (fn [{:keys [_]} [_ id]]
-    {:dispatch [::warehouse/load-animation-skins {:on-success [::set-available-skeletons id]}]}))
+    {:dispatch [::warehouse-animations/load-available-animation {:on-success [::set-available-skeletons id]}]}))
 
-(defn- set-skins-type
-  [skeletons]
-  "Set if skeleton hes single or combined skins"
-  (->> skeletons
-       (map (fn [{:keys [skins] :as skeleton-data}]
-              (->> (if (-> skins first :name (clojure.string/split #"/") count (> 1))
-                     :combined :single)
-                   (assoc skeleton-data :skin-type))))))
-
-(defn- set-default-skin
-  [skeletons]
-  (->> skeletons
-       (map (fn [{:keys [skins skin-type] :as skeleton-data}]
-              (case skin-type
-                :combined (let [get-first-suitable (partial (fn [options option-key]
-                                                              (->> options
-                                                                   (filter #(check-skin-option (:name %) option-key))
-                                                                   (first)
-                                                                   (:name)))
-                                                            skins)]
-                            (assoc skeleton-data :default-skins {:body    (get-first-suitable :body)
-                                                                 :clothes (get-first-suitable :clothes)
-                                                                 :head    (get-first-suitable :head)}))
-                :single (let [first-skin (-> skins first :name)
-                              ;; Take first not 'default' skin because 'default' skin is broken in most old animations
-                              first-not-default-skin (some (fn [{:keys [name]}] (and (not= name "default") name)) skins)]
-                          (->> (or first-not-default-skin first-skin)
-                               (assoc skeleton-data :default-skin))))))))
 
 (defn- filter-extra-skeletons
   [skeletons]
@@ -76,7 +48,8 @@
 (re-frame/reg-event-fx
   ::set-available-skeletons
   (fn [{:keys [db]} [_ id skeletons]]
-    (let [skeletons-data (->> skeletons set-skins-type set-default-skin filter-extra-skeletons)]
+    (print "skeletons" skeletons)
+    (let [skeletons-data (filter-extra-skeletons skeletons)]
       {:db (assoc-in db (path-to-db id [available-skeletons-path]) skeletons-data)})))
 
 (defn- get-available-skeletons

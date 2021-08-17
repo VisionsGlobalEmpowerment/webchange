@@ -36,7 +36,9 @@
                                        (utils/set-skin (:animation @state) skin-name))
                    :set-combined-skin
                                      (fn [skin-names]
-                                       (utils/set-combined-skin (:animation @state) skin-names))
+                                       (swap! state update :props dissoc :skin-name)
+                                       (swap! state update :props merge {:skin-names skin-names})
+                                       (utils/reset-skeleton container state))
                    :set-skeleton
                                      (fn [{:keys [name skin skin-names]}]
 

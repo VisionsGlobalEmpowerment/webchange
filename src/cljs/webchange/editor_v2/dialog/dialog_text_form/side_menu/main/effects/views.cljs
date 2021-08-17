@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.common.section-block.views :refer [section-block]]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.common.options-list.views :refer [options-list]]
+    [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.effects.emotions.views :refer [available-emotions]]
     [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.effects.state :as state]
     [webchange.ui-framework.components.index :refer [icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
@@ -28,7 +29,7 @@
     (if (not-empty current-effects-list)
       [:div
        [:span.input-label "Available effects:"]
-       [options-list {:options      current-effects-list
+       [options-list {:options       current-effects-list
                       :on-click      handle-click
                       :get-drag-data (fn [{:keys [value]}]
                                        {:action "add-effect-action"
@@ -64,6 +65,7 @@
   []
   (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
     [:div.effects-form
+     [available-emotions]
      (for [{:keys [id title type]} event-type]
        ^{:key id}
        [section-block {:title title}
