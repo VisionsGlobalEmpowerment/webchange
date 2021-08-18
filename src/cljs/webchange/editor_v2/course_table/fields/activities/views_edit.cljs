@@ -42,8 +42,6 @@
                          :on-click    #(.stopPropagation %)
                          :on-change   #(reset! new-activity-name (->> % .-target .-value))}]
          [ui/icon-button {:on-click #(re-frame/dispatch [::state/create @new-activity-name component-id])}
-          [ic/add]]
-         ]]
-       ])
+          [ic/add]]]]])
     (finally
       (re-frame/dispatch [::state/save component-id]))))
