@@ -13,9 +13,23 @@
     (:viewport db)))
 
 (re-frame/reg-sub
+  ::scene-info
+  (fn [db [_ scene-id]]
+    (get-in db [:course-data :scene-list (keyword scene-id)])))
+
+(re-frame/reg-sub
   ::scene-list
   (fn [db]
     (get-in db [:course-data :scene-list])))
+
+
+(re-frame/reg-sub
+  ::scene-list-ordered
+  (fn [db]
+    (->> (get-in db [:course-data :scene-list])        
+        (remove #(-> % second :archived))
+        (map #(assoc (second %) :scene-id (first %)))
+        (sort-by :scene-id))))
 
 (re-frame/reg-sub
   ::navigation-mode
@@ -28,7 +42,9 @@
 (re-frame/reg-sub
   ::course-scenes
   (fn [db]
-    (->> db :course-data :scene-list keys
+    (->> db :course-data :scene-list
+         (remove #(-> % second :archived))
+         (map first)
          (map name)
          (into []))))
 

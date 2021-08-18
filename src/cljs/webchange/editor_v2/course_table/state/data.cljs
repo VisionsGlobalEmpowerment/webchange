@@ -58,7 +58,8 @@
     [(re-frame/subscribe [::subs/course-data])])
   (fn [[course-data]]
     (->> (:scene-list course-data)
-         (map (fn [[id {:keys [name]}]] {:id id :name name})))))
+         (map (fn [[id {:keys [name archived]}]] {:id id :name name :archived archived}))
+         (remove :archived))))
 
 (re-frame/reg-sub
   ::course-activity
