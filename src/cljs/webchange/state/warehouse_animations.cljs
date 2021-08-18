@@ -11,7 +11,7 @@
 
 (def available-animations-path (path-to-db []))
 
-(defn- get-available-animations
+(defn get-available-animations
   [db]
   (get-in db available-animations-path nil))
 

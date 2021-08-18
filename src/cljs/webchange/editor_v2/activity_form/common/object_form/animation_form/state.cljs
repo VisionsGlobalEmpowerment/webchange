@@ -17,7 +17,7 @@
     (let [animation-data (select-keys objects-data [:name :skin :skin-names :scale])]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
-                    [::warehouse-animations/load-available-animation {:on-success [::set-available-skeletons id]}]]})))
+                    [::warehouse-animations/load-available-animation]]})))
 
 ;; Available skins
 
@@ -30,30 +30,6 @@
       keyword
       (= type)))
 
-(def available-skeletons-path :available-skeletons)         ;; ToDo: use warehouse subscription
-
-(defn- filter-extra-skeletons
-  [skeletons]
-  (let [skeletons-to-avoid ["book" "boxes" "pinata" "vera-go" "vera-45" "vera-90"]]
-    (->> skeletons
-         (filter (fn [{:keys [name]}]
-                   (-> #{name} (some skeletons-to-avoid) not))))))
-
-(re-frame/reg-event-fx
-  ::set-available-skeletons
-  (fn [{:keys [db]} [_ id skeletons]]
-    (let [skeletons-data (filter-extra-skeletons skeletons)]
-      {:db (assoc-in db (path-to-db id [available-skeletons-path]) skeletons-data)})))
-
-(defn- get-available-skeletons
-  [db id]
-  (get-in db (path-to-db id [available-skeletons-path])))
-
-(re-frame/reg-sub
-  ::available-skeletons
-  (fn [db [_ id]]
-    (get-available-skeletons db id)))
-
 ;; Skeleton
 
 (re-frame/reg-sub
@@ -64,12 +40,19 @@
   (fn [[current-data]]
     (get current-data :name "")))
 
+(defn- filter-extra-skeletons
+  [skeletons]
+  (let [skeletons-to-avoid ["book" "boxes" "pinata" "vera-go" "vera-45" "vera-90"]]
+    (->> skeletons
+         (filter (fn [{:keys [name]}]
+                   (-> #{name} (some skeletons-to-avoid) not))))))
+
 (re-frame/reg-sub
   ::skeletons-options
-  (fn [[_ id]]
-    (re-frame/subscribe [::available-skeletons id]))
-  (fn [available-skins]
-    (->> available-skins
+  (fn []
+    (re-frame/subscribe [::warehouse-animations/available-animations]))
+  (fn [available-animations]
+    (->> (filter-extra-skeletons available-animations)
          (map (fn [{:keys [name preview]}]
                 {:text      name
                  :value     name
@@ -78,7 +61,7 @@
 (re-frame/reg-event-fx
   ::set-skeleton
   (fn [{:keys [db]} [_ id skeleton-name]]
-    (let [{:keys [default-skin default-skins skin-type]} (->> (get-available-skeletons db id)
+    (let [{:keys [default-skin default-skins skin-type]} (->> (warehouse-animations/get-available-animations db)
                                                               (some (fn [{:keys [name] :as skeleton}]
                                                                       (and (= name skeleton-name) skeleton))))
           default-skin-params (case skin-type
@@ -92,7 +75,7 @@
   ::skin-options
   (fn [[_ id]]
     [(re-frame/subscribe [::current-skeleton id])
-     (re-frame/subscribe [::available-skeletons id])])
+     (re-frame/subscribe [::warehouse-animations/available-animations])])
   (fn [[skeleton-name available-skeletons]]
     (->> available-skeletons
          (some (fn [{:keys [name skins]}]
@@ -129,7 +112,7 @@
   ::combined-skins?
   (fn [[_ id]]
     [(re-frame/subscribe [::current-skeleton id])
-     (re-frame/subscribe [::available-skeletons id])])
+     (re-frame/subscribe [::warehouse-animations/available-animations])])
   (fn [[skeleton-name available-skeletons]]
     (->> available-skeletons
          (some (fn [{:keys [name skin-type]}]
