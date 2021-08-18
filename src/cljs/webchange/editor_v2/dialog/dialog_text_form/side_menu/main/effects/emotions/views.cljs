@@ -11,11 +11,13 @@
   (let [value @(re-frame/subscribe [::state/current-target])
         handle-change #(re-frame/dispatch [::state/set-current-target %])
         options @(re-frame/subscribe [::state/available-characters-options])]
+    (print "Character" value)
     [:div
      [:span "Character"]
-     [select {:value     value
-              :on-change handle-change
-              :options   options}]]))
+     [select {:value       value
+              :on-change   handle-change
+              :options     options
+              :placeholder "Select character"}]]))
 
 (defn- emotions-component
   []
@@ -23,6 +25,7 @@
     [:div
      [:span "Emotions"]
      [options-list {:options       options
+                    :option-key    :animation
                     :get-drag-data (fn [{:keys [target animation]}]
                                      {:action    "set-target-animation"
                                       :target    target

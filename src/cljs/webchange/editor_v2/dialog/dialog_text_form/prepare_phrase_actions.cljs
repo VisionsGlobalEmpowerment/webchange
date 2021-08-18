@@ -36,7 +36,7 @@
 
 (defn set-action-type
   [actions {:keys [available-effects]}]
-  {:post [(every? (fn [{:keys [type]}] (some #{type} [:effect :phrase :text-animation :unknown])) %)
+  {:post [(every? (fn [{:keys [type]}] (some #{type} [:character-animation :effect :phrase :text-animation :unknown])) %)
           (every? (fn [{:keys [source]}] (some #{source} [:concept :scene])) %)]}
   (let [available-effects-ids (map :action available-effects)]
     (map (fn [{:keys [action-data concept-acton?] :as data}]
@@ -46,6 +46,7 @@
                  action-type (cond
                                (some #{inner-action-id} available-effects-ids) :effect
                                (= inner-action-type "text-animation") :text-animation
+                               (= inner-action-type "add-animation") :character-animation
                                (some? inner-action-phrase-text) :phrase
                                :else :unknown)]
              (-> data
@@ -58,7 +59,7 @@
   (map (fn [{:keys [type source action-data action-path node-data parallel-mark]}]
          (let [concept-name (:name concept-data)
                {:keys [duration]} (get-empty-action action-data)
-               {:keys [id phrase-text phrase-placeholder target]} (get-inner-action action-data)]
+               {:keys [id phrase-text phrase-placeholder target track]} (get-inner-action action-data)]
            (cond-> {:type          type
                     :source        source
                     :delay         duration
@@ -72,6 +73,9 @@
                                                     :text        (->> (keyword target)
                                                                       (get-scene-object scene-data)
                                                                       (:text))})
+                   (= type :character-animation) (merge {:animation-object target
+                                                         :animation-name   id
+                                                         :animation-track  track})
                    (= type :effect) (merge {:effect      id
                                             :effect-name (->> available-effects
                                                               (some (fn [available-effect]

@@ -17,7 +17,7 @@
     (let [animation-data (select-keys objects-data [:name :skin :skin-names :scale])]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
-                    [::load-available-skeletons id]]})))
+                    [::warehouse-animations/load-available-animation {:on-success [::set-available-skeletons id]}]]})))
 
 ;; Available skins
 
@@ -30,13 +30,7 @@
       keyword
       (= type)))
 
-(def available-skeletons-path :available-skeletons)
-
-(re-frame/reg-event-fx
-  ::load-available-skeletons
-  (fn [{:keys [_]} [_ id]]
-    {:dispatch [::warehouse-animations/load-available-animation {:on-success [::set-available-skeletons id]}]}))
-
+(def available-skeletons-path :available-skeletons)         ;; ToDo: use warehouse subscription
 
 (defn- filter-extra-skeletons
   [skeletons]
@@ -48,7 +42,6 @@
 (re-frame/reg-event-fx
   ::set-available-skeletons
   (fn [{:keys [db]} [_ id skeletons]]
-    (print "skeletons" skeletons)
     (let [skeletons-data (filter-extra-skeletons skeletons)]
       {:db (assoc-in db (path-to-db id [available-skeletons-path]) skeletons-data)})))
 

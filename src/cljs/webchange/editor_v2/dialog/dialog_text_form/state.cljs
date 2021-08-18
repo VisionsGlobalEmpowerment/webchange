@@ -9,7 +9,6 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as scene-utils]))
 
 (defn path-to-db
@@ -196,8 +195,10 @@
   ::set-target-animation
   (fn [{:keys [_]} [_ {:keys [animation target track] :as data}]]
     (let [position-data (get-action-position-data data)
-          action-data (action-utils/create-add-animation-action {:animation animation
-                                                                 :target    target
-                                                                 :track     track})]
+          action-data (defaults/get-emotion-action-data {:animation animation
+                                                         :target    target
+                                                         :track     track})]
+      (print "::set-target-animation")
+      (print "action-data" action-data)
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))

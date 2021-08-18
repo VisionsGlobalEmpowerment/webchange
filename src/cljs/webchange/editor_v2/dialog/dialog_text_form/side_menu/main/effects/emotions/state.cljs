@@ -34,7 +34,7 @@
 (re-frame/reg-sub
   ::current-target
   (fn [db]
-    (get-in db current-target-path)))
+    (get-in db current-target-path "")))
 
 (re-frame/reg-event-fx
   ::set-current-target

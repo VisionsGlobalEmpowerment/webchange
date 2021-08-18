@@ -28,10 +28,11 @@
       (destroy-dnd))))
 
 (defn options-list
-  [{:keys [options on-click get-drag-data]}]
+  [{:keys [options option-key on-click get-drag-data]
+    :or {option-key :value}}]
   [:ul.options-list
-   (for [{:keys [value] :as option} options]
-     ^{:key value}
+   (for [option options]
+     ^{:key (get option option-key)}
      [options-list-item {:data          option
                          :on-click      on-click
                          :get-drag-data get-drag-data}])])

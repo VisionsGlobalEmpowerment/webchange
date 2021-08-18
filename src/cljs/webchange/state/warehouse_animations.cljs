@@ -24,7 +24,9 @@
   (fn [{:keys [db]} [_ {:keys [on-success on-failure] :as handlers}]]
     (let [current-available-animations (get-available-animations db)]
       (if (some? current-available-animations)
-        {:dispatch (conj on-success current-available-animations)}
+        (if (some? on-success)
+          {:dispatch (conj on-success current-available-animations)}
+          {})
         {:dispatch [::warehouse/load-animation-skins {:on-success [::set-available-animation handlers]
                                                       :on-failure on-failure}]}))))
 
@@ -87,5 +89,5 @@
                                set-skins-type
                                set-default-skin
                                set-available-emotions)]
-      {:db       (assoc-in db available-animations-path animations-data)
-       :dispatch (conj on-success animations-data)})))
+      (cond-> {:db (assoc-in db available-animations-path animations-data)}
+              (some? on-success) (assoc :dispatch (conj on-success animations-data))))))

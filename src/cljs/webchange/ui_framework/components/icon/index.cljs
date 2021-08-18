@@ -2,6 +2,8 @@
   (:require
     [webchange.ui-framework.components.icon.icon-add :as add]
     [webchange.ui-framework.components.icon.icon-add-box :as add-box]
+    [webchange.ui-framework.components.icon.icon-animation-add :as animation-add]
+    [webchange.ui-framework.components.icon.icon-animation-remove :as animation-remove]
     [webchange.ui-framework.components.icon.icon-arrow-first :as arrow-first]
     [webchange.ui-framework.components.icon.icon-arrow-last :as arrow-last]
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
@@ -56,6 +58,8 @@
 (def icons
   {"add"                add/data
    "add-box"            add-box/data
+   "animation-add"      animation-add/data
+   "animation-remove"   animation-remove/data
    "arrow-first"        arrow-first/data
    "arrow-last"         arrow-last/data
    "arrow-left"         arrow-left/data

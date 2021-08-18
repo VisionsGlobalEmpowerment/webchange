@@ -45,23 +45,32 @@
   [action data-patch]
   (update-in action [:data 0 :data inner-action-position] merge data-patch))
 
-(defn get-action-data
+(defn- get-dialog-node
+  [action-data]
+  {:type "sequence-data"
+   :data [{:type     "empty"
+           :duration 0}
+          action-data]})
+
+(defn- get-action-data
   [{:keys [action-name action-data]}]
   {:pre [(string? action-name)
          (or (nil? action-data)
              (map? action-data))]}
-  {:type "sequence-data"
-   :data [{:type     "empty"
-           :duration 0}
-          (cond-> {:type "action"
-                   :id   action-name}
-                  (some? action-data) (merge action-data))]})
+  (get-dialog-node (cond-> {:type "action"
+                            :id   action-name}
+                           (some? action-data) (merge action-data))))
 
 (defn get-effect-action-data
   [{:keys [action-name]}]
   {:pre [(string? action-name)]}
   (get-action-data {:action-name action-name
                     :action-data {}}))
+
+(defn get-emotion-action-data
+  [props]
+  (-> (action-utils/create-add-animation-action props)
+      (get-dialog-node)))
 
 (defn get-inner-action-type
   [action-data]
