@@ -3,11 +3,13 @@
 @import "avatar/styles";
 @import "logo/styles";
 @import "navigation/styles";
+@import "right_menu/styles";
 @import "toolbar/styles";
 
 $content-padding: 24px;
 $mid-section-padding: 120px;
 $content-left-padding: $left-menu-width + $mid-section-padding;
+$content-right-padding: 360px + $mid-section-padding;
 
 .page-layout {
     background-color: $background-color;
@@ -40,7 +42,7 @@ $content-left-padding: $left-menu-width + $mid-section-padding;
             align-items: flex-start;
             justify-content: center;
             flex-grow: 1;
-            padding: $mid-section-padding $mid-section-padding $mid-section-padding $content-left-padding;
+            padding: $mid-section-padding $content-right-padding $mid-section-padding $content-left-padding;
         }
     }
 }
