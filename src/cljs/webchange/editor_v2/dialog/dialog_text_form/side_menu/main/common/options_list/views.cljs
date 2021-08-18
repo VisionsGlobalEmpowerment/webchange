@@ -17,7 +17,9 @@
                              (when (some? @el)
                                (.removeEventListener @el "dragstart" handle-drag-start)))]
     (let [{:keys [text value selected?]} data
-          handle-click #(on-click value)]
+          handle-click (fn []
+                         (when (fn? on-click)
+                           (on-click value)))]
       [:li (cond-> {:class-name (get-class-name {"options-list-item" true
                                                  "selected"          selected?})
                     :on-click   handle-click}
@@ -29,7 +31,7 @@
 
 (defn options-list
   [{:keys [options option-key on-click get-drag-data]
-    :or {option-key :value}}]
+    :or   {option-key :value}}]
   [:ul.options-list
    (for [option options]
      ^{:key (get option option-key)}

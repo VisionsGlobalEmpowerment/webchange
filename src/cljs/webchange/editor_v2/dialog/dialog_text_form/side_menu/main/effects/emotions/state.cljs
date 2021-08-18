@@ -34,7 +34,7 @@
 (re-frame/reg-sub
   ::current-target
   (fn [db]
-    (get-in db current-target-path "")))
+    (get-in db current-target-path)))
 
 (re-frame/reg-event-fx
   ::set-current-target
@@ -53,6 +53,13 @@
 ;; Emotions
 
 (re-frame/reg-sub
+  ::show-emotions?
+  (fn []
+    [(re-frame/subscribe [::current-target])])
+  (fn [[current-target-name]]
+    (some? current-target-name)))
+
+(re-frame/reg-sub
   ::available-emotions
   (fn []
     [(re-frame/subscribe [::current-target])
@@ -64,11 +71,11 @@
                                  (and (= name animation-name) data))
                                available-animations)]
       (-> (map (fn [{:keys [animation emotion]}]
-                 {:text      (str current-target-name ": " emotion)
+                 {:text      emotion
                   :target    current-target-name
                   :animation animation})
                (get animation-data :emotions []))
           (vec)
-          (conj {:text      (str current-target-name ": " "Reset emotion")
+          (conj {:text      "Reset emotions"
                  :target    current-target-name
                  :animation "reset"})))))

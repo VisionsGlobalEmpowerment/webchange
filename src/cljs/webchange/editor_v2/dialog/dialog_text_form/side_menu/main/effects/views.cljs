@@ -21,22 +21,6 @@
               (= effect-type type)))
           available-effects))
 
-(defn- effects-list
-  [{:keys [effect-type]}]
-  (let [available-effects @(re-frame/subscribe [::state/available-effects])
-        current-effects-list (get-current-effects-list {:available-effects available-effects :effect-type effect-type})
-        handle-click #(re-frame/dispatch [::state/set-selected-effect %])]
-    (if (not-empty current-effects-list)
-      [:div
-       [:span.input-label "Available effects:"]
-       [options-list {:options       current-effects-list
-                      :on-click      handle-click
-                      :get-drag-data (fn [{:keys [value]}]
-                                       {:action "add-effect-action"
-                                        :id     value})}]]
-      [:div
-       [:span.input-label "No Available effects"]])))
-
 (defn- actions
   []
   (let [selected-effect @(re-frame/subscribe [::state/selected-effect])
@@ -54,6 +38,23 @@
            :on-click handler}
           text])])))
 
+(defn- effects-list
+  [{:keys [effect-type title]}]
+  (let [available-effects @(re-frame/subscribe [::state/available-effects])
+        current-effects-list (get-current-effects-list {:available-effects available-effects :effect-type effect-type})
+        handle-click #(re-frame/dispatch [::state/set-selected-effect %])
+        show-actions? @(re-frame/subscribe [::state/show-actions?])]
+    (when (not-empty current-effects-list)
+      [section-block {:title title}
+       [:span.input-label "Available effects:"]
+       [options-list {:options       current-effects-list
+                      :on-click      handle-click
+                      :get-drag-data (fn [{:keys [value]}]
+                                       {:action "add-effect-action"
+                                        :id     value})}]
+       (when show-actions?
+         [actions])])))
+
 (defn- actions-placeholder
   []
   [:div.placeholder
@@ -63,13 +64,11 @@
 
 (defn form
   []
-  (let [show-actions? @(re-frame/subscribe [::state/show-actions?])]
-    [:div.effects-form
-     [available-emotions]
-     (for [{:keys [id title type]} event-type]
-       ^{:key id}
-       [section-block {:title title}
-        [effects-list {:effect-type type}]
-        (if show-actions?
-          [actions]
-          [actions-placeholder])])]))
+  [:div.effects-form
+   [actions-placeholder]
+   (for [{:keys [id title type]} event-type]
+     ^{:key id}
+     [effects-list {:title       title
+                     :effect-type type}])
+   [section-block {:title "Emotions"}
+    [available-emotions]]])
