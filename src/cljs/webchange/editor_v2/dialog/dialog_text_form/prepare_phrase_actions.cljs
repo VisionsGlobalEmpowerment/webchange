@@ -46,7 +46,7 @@
                  action-type (cond
                                (some #{inner-action-id} available-effects-ids) :effect
                                (= inner-action-type "text-animation") :text-animation
-                               (= inner-action-type "add-animation") :character-animation
+                               (some #{inner-action-type} ["add-animation" "remove-animation"]) :character-animation
                                (some? inner-action-phrase-text) :phrase
                                :else :unknown)]
              (-> data

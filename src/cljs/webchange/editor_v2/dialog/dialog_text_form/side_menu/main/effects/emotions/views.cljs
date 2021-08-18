@@ -11,7 +11,6 @@
   (let [value @(re-frame/subscribe [::state/current-target])
         handle-change #(re-frame/dispatch [::state/set-current-target %])
         options @(re-frame/subscribe [::state/available-characters-options])]
-    (print "Character" value)
     [:div
      [:span "Character"]
      [select {:value       value
@@ -27,10 +26,12 @@
      [options-list {:options       options
                     :option-key    :animation
                     :get-drag-data (fn [{:keys [target animation]}]
-                                     {:action    "set-target-animation"
-                                      :target    target
-                                      :animation animation
-                                      :track     "emotion"})}]]))
+                                     (print "> animation" animation)
+                                     (cond-> {:target target
+                                              :track  "emotion"}
+                                             (= animation "reset") (merge {:action "remove-target-animation"})
+                                             (not= animation "reset") (merge {:action    "set-target-animation"
+                                                                              :animation animation})))}]]))
 
 (defn available-emotions
   []

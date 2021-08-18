@@ -4,10 +4,11 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn animation-unit
-  [{:keys [animation-name animation-object class-name] :as props}]
-  (print "animation-unit" props)
+  [{:keys [animation-name animation-object class-name]}]
   [:div {:class-name (get-class-name (merge class-name
                                             {"effect-unit" true}))}
-   [icon {:icon       "animation-add"
+   [icon {:icon       (if (some? animation-name)
+                        "animation-add"
+                        "animation-remove")
           :class-name "effect-icon"}]
-   (str animation-object ": " animation-name)])
+   (str animation-object ": " (or animation-name "Reset animation"))])

@@ -173,6 +173,7 @@
     (case action
       "add-effect-action" {:dispatch [::add-effect-action data]}
       "set-target-animation" {:dispatch [::set-target-animation data]}
+      "remove-target-animation" {:dispatch [::remove-target-animation data]}
       {})))
 
 (defn- get-action-position-data
@@ -200,5 +201,15 @@
                                                          :track     track})]
       (print "::set-target-animation")
       (print "action-data" action-data)
+
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::remove-target-animation
+  (fn [{:keys [_]} [_ {:keys [target track] :as data}]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-remove-emotion-action-data {:target    target
+                                                                :track     track})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))

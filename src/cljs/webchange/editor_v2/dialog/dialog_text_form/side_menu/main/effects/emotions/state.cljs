@@ -63,8 +63,12 @@
           animation-data (some (fn [{:keys [name] :as data}]
                                  (and (= name animation-name) data))
                                available-animations)]
-      (map (fn [{:keys [animation emotion]}]
-             {:text      (str current-target-name ": " emotion)
-              :target    current-target-name
-              :animation animation})
-           (get animation-data :emotions [])))))
+      (-> (map (fn [{:keys [animation emotion]}]
+                 {:text      (str current-target-name ": " emotion)
+                  :target    current-target-name
+                  :animation animation})
+               (get animation-data :emotions []))
+          (vec)
+          (conj {:text      (str current-target-name ": " "Reset emotion")
+                 :target    current-target-name
+                 :animation "reset"})))))

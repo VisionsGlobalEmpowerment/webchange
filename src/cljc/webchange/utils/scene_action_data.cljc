@@ -54,3 +54,15 @@
      :loop   loop?
      :target target
      :track  track-number}))
+
+(defn create-remove-animation-action
+  [{:keys [target track]}]
+  {:pre [(string? target)]}
+  (let [track-number (cond
+                       (number? track) track
+                       (keyword? track) (get animation-tracks track)
+                       (string? track) (->> track (keyword) (get animation-tracks))
+                       :else (:default animation-tracks))]
+    {:type   "remove-animation"
+     :target target
+     :track  track-number}))

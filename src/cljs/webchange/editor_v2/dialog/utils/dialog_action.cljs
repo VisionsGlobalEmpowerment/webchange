@@ -72,6 +72,11 @@
   (-> (action-utils/create-add-animation-action props)
       (get-dialog-node)))
 
+(defn get-remove-emotion-action-data
+  [props]
+  (-> (action-utils/create-remove-animation-action props)
+      (get-dialog-node)))
+
 (defn get-inner-action-type
   [action-data]
   (-> (get-inner-action action-data)
