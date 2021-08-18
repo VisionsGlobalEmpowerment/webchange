@@ -99,7 +99,7 @@
     (logger/trace "data" data)
     (logger/group-end "Update current data" id)
 
-    {:db       (update-in db (path-to-db id [current-data-path]) deep-merge data)
+    {:db       (update-in db (path-to-db id [current-data-path]) merge data)
      :dispatch [::update-stage-objects id data]}))
 
 ;; Update stage

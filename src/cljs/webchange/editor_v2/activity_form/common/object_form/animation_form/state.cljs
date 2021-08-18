@@ -65,8 +65,10 @@
                                                               (some (fn [{:keys [name] :as skeleton}]
                                                                       (and (= name skeleton-name) skeleton))))
           default-skin-params (case skin-type
-                                :combined {:skin-names default-skins}
-                                :single {:skin default-skin})]
+                                :combined {:skin-names default-skins
+                                           :skin       nil}
+                                :single {:skin       default-skin
+                                         :skin-names nil})]
       {:dispatch [::state/update-current-data id (merge {:name skeleton-name} default-skin-params)]})))
 
 ;; Skin
@@ -151,6 +153,11 @@
 
 ;; Scale
 
+(defn- get-current-scale
+  [db id]
+  (-> (state/get-current-data db id)
+      (get :scale)))
+
 (re-frame/reg-sub
   ::current-scale
   (fn [[_ id]]
@@ -161,8 +168,9 @@
 
 (re-frame/reg-event-fx
   ::set-scale
-  (fn [{:keys [_]} [_ id scale-key scale-value]]
-    {:dispatch [::state/update-current-data id {:scale {scale-key scale-value}}]}))
+  (fn [{:keys [db]} [_ id scale-key scale-value]]
+    (let [current-scale (get-current-scale db id)]
+      {:dispatch [::state/update-current-data id {:scale (assoc current-scale scale-key scale-value)}]})))
 
 ;; Flip
 
