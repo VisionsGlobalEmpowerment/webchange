@@ -84,7 +84,7 @@
                              :on-click   #(handle-open-info (:scene-id scene))}
              [ic/info {:style (:action-icon list-styles)}]]
             [ui/icon-button {:aria-label "Edit"
-                             :on-click   #(redirect-to :course-editor-v2-scene :id course :scene-id (:scene-id scene))}
+                             :on-click   #(redirect-to :course-editor-v2-scene :id course :scene-id (-> scene :scene-id name))}
              [ic/edit {:style (:action-icon list-styles)}]]]])]
        [scene-info-window {:scene-id    @current-scene-info
                            :on-close handle-close-info}]])))

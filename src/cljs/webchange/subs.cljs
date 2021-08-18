@@ -27,9 +27,9 @@
   ::scene-list-ordered
   (fn [db]
     (->> (get-in db [:course-data :scene-list])        
-        (remove #(-> % second :archived))
-        (map #(assoc (second %) :scene-id (first %)))
-        (sort-by :scene-id))))
+         (remove #(-> % second :archived))
+         (map #(assoc (second %) :scene-id (first %)))
+         (sort-by :scene-id))))
 
 (re-frame/reg-sub
   ::navigation-mode
