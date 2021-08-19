@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
+    [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]
     [webchange.logger.index :as logger]
     [webchange.state.warehouse-animations :as warehouse-animations]))
 
@@ -58,17 +59,27 @@
                  :value     name
                  :thumbnail preview})))))
 
+(defn- get-default-skeleton-params
+  [skeleton-name]
+  (let [default-params (->> (keyword skeleton-name)
+                            (get animations-params))]
+    (select-keys default-params [:scale :speed])))
+
 (re-frame/reg-event-fx
   ::set-skeleton
   (fn [{:keys [db]} [_ id skeleton-name]]
     (let [{:keys [default-skin default-skins skin-type]} (->> (warehouse-animations/get-available-animations db)
                                                               (some (fn [{:keys [name] :as skeleton}]
                                                                       (and (= name skeleton-name) skeleton))))
-          default-skin-params (case skin-type
-                                :combined {:skin-names default-skins
-                                           :skin       nil}
-                                :single {:skin       default-skin
-                                         :skin-names nil})]
+          default-skin-params (merge (case skin-type
+                                       :combined {:skin-names default-skins
+                                                  :skin       nil}
+                                       :single {:skin       default-skin
+                                                :skin-names nil})
+                                     (get-default-skeleton-params skeleton-name))]
+
+      (print "default-skin-params" default-skin-params)
+
       {:dispatch [::state/update-current-data id (merge {:name skeleton-name} default-skin-params)]})))
 
 ;; Skin
