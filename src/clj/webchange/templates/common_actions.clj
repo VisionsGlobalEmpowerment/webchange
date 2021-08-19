@@ -3,7 +3,8 @@
     [clojure.data.json :as json]
     [clojure.string :as string]
     [clojure.tools.logging :as log]
-    [webchange.templates.utils.characters :refer [animations character-positions]]))
+    [webchange.templates.utils.characters :refer [animations character-positions]]
+    [webchange.utils.scene-common-actions :as common-actions-utils]))
 
 (defn- file-used?
   [scene-data file]
@@ -84,6 +85,7 @@
                       :x         960
                       :y         540
                       :visible   false
+                      :metadata  {:uploaded-image? true}
                       :editable? {:select        true
                                   :drag          true
                                   :show-in-tree? true}}
@@ -155,4 +157,5 @@
     :background-music (update-background-music scene-data data)
     :background-music-remove (remove-background-music scene-data)
     :add-image (add-image scene-data data)
+    :remove-image (common-actions-utils/remove-image scene-data data)
     :add-character (add-character scene-data data)))

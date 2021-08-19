@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state-renderer]
-    [webchange.state.state :as state]))
+    [webchange.state.state :as state]
+    [webchange.state.state-activity :as state-activity]))
 
 (re-frame/reg-sub
   ::objects
@@ -16,6 +17,11 @@
                 (let []
                   {:alias (or alias object-name)
                    :name  object-name}))))))
+
+(defn get-object-data
+  [db object-name]
+  (-> (state/get-objects-data db)
+      (get object-name)))
 
 (re-frame/reg-sub
   ::object-data
@@ -31,6 +37,19 @@
   (fn [[object-data]]
     (get object-data :visible true)))
 
+(defn- get-object-type
+  [object-data]
+  (cond
+    (get-in object-data [:metadata :uploaded-image?]) :uploaded-image
+    :default :unknown))
+
+(re-frame/reg-sub
+  ::show-remove-button?
+  (fn [[_ object-name]]
+    [(re-frame/subscribe [::object-data object-name])])
+  (fn [[object-data]]
+    (some #{(get-object-type object-data)} [:uploaded-image])))
+
 (re-frame/reg-event-fx
   ::set-object-visibility
   (fn [{:keys [_]} [_ object-name visible?]]
@@ -44,3 +63,21 @@
   ::update-scene-object-success
   (fn [{:keys [_]} [_ {:keys [object-name visible?]}]]
     {:dispatch [::state-renderer/change-scene-object object-name [[:set-visibility {:visible visible?}]]]}))
+
+(re-frame/reg-event-fx
+  ::remove-object
+  (fn [{:keys [db]} [_ name]]
+    (let [object-name (clojure.core/name name)
+          object-type (-> (get-object-data db name)
+                          (get-object-type))]
+      (case object-type
+        :uploaded-image {:dispatch [::remove-uploaded-image object-name]}
+        {}))))
+
+(re-frame/reg-event-fx
+  ::remove-uploaded-image
+  (fn [{:keys [_]} [_ object-name]]
+    (let [data {:name object-name}]
+      {:dispatch [::state-activity/call-activity-common-action
+                  {:action :remove-image
+                   :data   data}]})))

@@ -66,3 +66,15 @@
     {:type   "remove-animation"
      :target target
      :track  track-number}))
+
+;; Dialogs
+
+(def empty-action-position 0)
+(def inner-action-position 1)
+
+(def empty-action-path [:data empty-action-position])
+(def inner-action-path [:data inner-action-position])
+
+(defn get-inner-action
+  [action]
+  (get-in action inner-action-path))

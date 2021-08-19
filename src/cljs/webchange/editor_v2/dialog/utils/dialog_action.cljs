@@ -2,11 +2,8 @@
   (:require
     [webchange.utils.scene-action-data :as action-utils]))
 
-(def empty-action-position 0)
-(def inner-action-position 1)
-
-(def empty-action-path [:data empty-action-position])
-(def inner-action-path [:data inner-action-position])
+(def empty-action-path action-utils/empty-action-path)
+(def inner-action-path action-utils/inner-action-path)
 
 (def default-phrase-text "New action")
 (def default-action {:type "sequence-data"
@@ -31,19 +28,19 @@
 
 (defn get-empty-action
   [action]
-  (get-in action empty-action-path))
+  (get-in action action-utils/empty-action-path))
 
 (defn get-inner-action
   [action]
-  (get-in action inner-action-path))
+  (get-in action action-utils/inner-action-path))
 
 (defn update-inner-action
   [action data-patch]
-  (update-in action inner-action-path merge data-patch))
+  (update-in action action-utils/inner-action-path merge data-patch))
 
 (defn update-inner-concept-action
   [action data-patch]
-  (update-in action [:data 0 :data inner-action-position] merge data-patch))
+  (update-in action [:data 0 :data action-utils/inner-action-position] merge data-patch))
 
 (defn- get-dialog-node
   [action-data]

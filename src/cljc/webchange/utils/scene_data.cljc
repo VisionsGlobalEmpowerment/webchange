@@ -157,6 +157,24 @@
               (some #{tag})))
        (find-actions scene-data)))
 
+(defn- find-action-recursively-core
+  [action-data action-path predicate]
+  (cond
+    (predicate action-data) {:path action-path
+                             :data action-data}
+    (map? action-data) (some (fn [[field-name field-value]]
+                               (find-action-recursively-core field-value (conj action-path field-name) predicate))
+                             action-data)
+    (sequential? action-data) (some (fn [[idx data]]
+                                      (find-action-recursively-core data (conj action-path idx) predicate))
+                                    (map-indexed vector action-data))))
+
+(defn find-action-recursively
+  [scene-data predicate]
+  (find-action-recursively-core (get-scene-actions scene-data)
+                                []
+                                predicate))
+
 ; Triggers
 
 (def background-music-trigger-name :music)
@@ -229,12 +247,33 @@
   [scene-data]
   (get-track-actions scene-data nil))
 
+(defn get-available-actions
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :available-actions [])))
+
+(defn set-available-actions
+  [scene-data available-actions]
+  (assoc-in scene-data [:metadata :available-actions] available-actions))
+
 (defn get-available-effects
   [scene-data]
-  (as-> (get-metadata scene-data) x
-        (get x :available-actions)
-        (map action-data/fix-available-effect
-             x)))
+  (->> (get-available-actions scene-data)
+       (map action-data/fix-available-effect)))
+
+(defn get-history
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :history {})))
+
+(defn get-updates-history
+  [scene-data]
+  (-> (get-history scene-data)
+      (get :updated [])))
+
+(defn set-updates-history
+  [scene-data updates]
+  (assoc-in scene-data [:metadata :history :updated] updates))
 
 ; General
 
