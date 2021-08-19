@@ -8,7 +8,8 @@
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name chunk-animated-variable]]
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.utils.scene-action-data :as scene-action-data]))
 
 (def assets (atom {}))
 
@@ -309,16 +310,17 @@
          (< r2y (+ r1y r1height))
          (> r2y r1y))))
 
-(defn animation-sequence->actions [{audio-start :start :keys [target track data skippable] :or {track 1}}]
-  (into [] (map (fn [{:keys [start end anim]}]
-                  {:type         "sequence-data"
-                   :data         [{:type "empty" :duration (* (- start audio-start) 1000)}
-                                  {:type "animation" :target target :track track :id anim}
-                                  {:type "empty" :duration (* (- end start) 1000)}
-                                  {:type "remove-animation" :target target :track track}]
-                   :on-interrupt {:type "remove-animation" :target target :track track}
-                   :skippable    skippable})
-                data)))
+(defn animation-sequence->actions [{audio-start :start :keys [target track data skippable]}]
+  (let [track (or track (get scene-action-data/animation-tracks :mouth))]
+    (into [] (map (fn [{:keys [start end anim]}]
+                    {:type         "sequence-data"
+                     :data         [{:type "empty" :duration (* (- start audio-start) 1000)}
+                                    {:type "animation" :target target :track track :id anim}
+                                    {:type "empty" :duration (* (- end start) 1000)}
+                                    {:type "remove-animation" :target target :track track}]
+                     :on-interrupt {:type "remove-animation" :target target :track track}
+                     :skippable    skippable})
+                  data))))
 
 (defn animation-sequence->audio-action [{:keys [audio] :as action}]
   (if audio

@@ -199,6 +199,11 @@
          track (aget tracks track-number)]
      (set! (.-loop track) loop?))))
 
+(defn- set-animation-mix
+  [spine-object]
+  (doto (.. spine-object -state -data)
+    (set! -defaultMix 0.25)))
+
 (defn create-spine-animation
   [animation-resource {:keys [animation-start? speed offset position skin-name skin-names animation-name scale loop]}]
   (let [spine-data (.-spineData animation-resource)
@@ -210,6 +215,7 @@
       (set-position coordinates)
       (set-scale scale)
       (set-animation-speed speed)
+      (set-animation-mix)
       (set-auto-update animation-start?)
       (set-track-loop loop))))
 

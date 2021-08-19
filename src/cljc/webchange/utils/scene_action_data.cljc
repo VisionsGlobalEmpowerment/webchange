@@ -36,13 +36,13 @@
 
 (def animation-tracks
   {:main    0
-   :mouth   1
+   :mouth   3
    :hands   2
-   :emotion 3
+   :emotion 1
    :default 0})
 
 (defn create-add-animation-action
-  [{:keys [animation loop? target track] :or {loop? false}}]
+  [{:keys [animation loop? target track] :or {loop? true}}]
   {:pre [(string? animation) (string? target)]}
   (let [track-number (cond
                        (number? track) track

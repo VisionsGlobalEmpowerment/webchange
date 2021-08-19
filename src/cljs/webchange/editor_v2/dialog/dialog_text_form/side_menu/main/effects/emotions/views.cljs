@@ -29,7 +29,6 @@
        [options-list {:options       options
                       :option-key    :animation
                       :get-drag-data (fn [{:keys [target animation]}]
-                                       (print "> animation" animation)
                                        (cond-> {:target target
                                                 :track  "emotion"}
                                                (= animation "reset") (merge {:action "remove-target-animation"})

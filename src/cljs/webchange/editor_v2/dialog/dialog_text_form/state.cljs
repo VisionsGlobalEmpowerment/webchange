@@ -199,9 +199,6 @@
           action-data (defaults/get-emotion-action-data {:animation animation
                                                          :target    target
                                                          :track     track})]
-      (print "::set-target-animation")
-      (print "action-data" action-data)
-
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))
 
