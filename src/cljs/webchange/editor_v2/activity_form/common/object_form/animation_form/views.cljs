@@ -27,31 +27,19 @@
                     :with-arrow? false
                     :show-image? false}]]))
 
-(defn- scale-control
-  [{:keys [on-change title value]}]
-  (let [handle-change (fn [new-value]
-                        (when-not (= new-value 0)
-                          (on-change new-value)))]
-    [:div.scale-group
-     [label title]
-     [input {:value      value
-             :on-change  handle-change
-             :type       "float"
-             :step       0.1
-             :class-name "scale-input"}]]))
-
 (defn- scale
   [{:keys [id]}]
   (let [current-scale @(re-frame/subscribe [::state/current-scale id])
-        handle-change (fn [scale-key new-value]
-                        (re-frame/dispatch [::state/set-scale id scale-key new-value]))]
+        handle-change (fn [new-value]
+                        (when (> new-value 0)
+                          (re-frame/dispatch [::state/set-scale id new-value])))]
     [:div.scale-control
-     [scale-control {:value     (:x current-scale)
-                     :on-change #(handle-change :x %)
-                     :title     "Scale X:"}]
-     [scale-control {:value     (:y current-scale)
-                     :on-change #(handle-change :y %)
-                     :title     "Scale Y:"}]]))
+     [label "Scale:"]
+     [input {:value      current-scale
+             :on-change  handle-change
+             :type       "float"
+             :step       0.05
+             :class-name "scale-input"}]]))
 
 (defn form
   [{:keys [id objects-data objects-names]}]
@@ -59,5 +47,6 @@
     [:div.animation-form
      [skeleton {:id id}]
      [skin {:id id}]
-     [flip {:id id}]
-     [scale {:id id}]]))
+     [:div.scale-group
+      [scale {:id id}]
+      [flip {:id id}]]]))

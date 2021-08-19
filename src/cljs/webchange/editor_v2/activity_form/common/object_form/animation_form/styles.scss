@@ -3,12 +3,15 @@
     flex-direction: column;
     gap: 8px;
 
-    .scale-control {
+    .scale-group {
         display: flex;
+        align-items: flex-end;
         gap: 8px;
 
-        .scale-input {
-            width: 80px;
+        .scale-control {
+            .scale-input {
+                width: 80px;
+            }
         }
     }
 }

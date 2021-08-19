@@ -164,23 +164,22 @@
     {:pre [(some? id)]}
     [(re-frame/subscribe [::state/current-data id])])
   (fn [[current-data]]
-    (get current-data :scale)))
+    (let [{:keys [x y]} (get current-data :scale)]
+      (or (Math/abs x) (Math/abs y) 1))))
 
 (re-frame/reg-event-fx
   ::set-scale
-  (fn [{:keys [db]} [_ id scale-key scale-value]]
-    (let [current-scale (get-current-scale db id)]
-      {:dispatch [::state/update-current-data id {:scale (assoc current-scale scale-key scale-value)}]})))
+  (fn [{:keys [db]} [_ id scale-value]]
+    (let [{:keys [x]} (get-current-scale db id)
+          x-sign (/ x (Math/abs x))]
+      {:dispatch [::state/update-current-data id {:scale {:x (* scale-value x-sign)
+                                                          :y scale-value}}]})))
 
 ;; Flip
-
-(defn- get-scale-x
-  [db id]
-  (-> (state/get-current-data db id)
-      (get-in [:scale :x])))
 
 (re-frame/reg-event-fx
   ::flip-animation
   (fn [{:keys [db]} [_ id]]
-    (let [scale-x (get-scale-x db id)]
-      {:dispatch [::set-scale id :x (- scale-x)]})))
+    (let [{:keys [x y]} (get-current-scale db id)]
+      {:dispatch [::state/update-current-data id {:scale {:x (- x)
+                                                          :y y}}]})))
