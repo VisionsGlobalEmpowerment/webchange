@@ -1,0 +1,1294 @@
+{:assets
+ [{:url "/raw/img/park/slide-demo/slide_background.jpg", :type "image"}
+  {:url "/raw/img/park/slide-demo/slide_decoration.jpg", :type "image"}
+  {:url "/raw/img/park/slide-demo/slide_surface.jpg", :type "image"}
+  {:url "/raw/img/park/slide/background2.jpg", :type "image"}
+  {:url "/raw/img/park/slide/slide.png", :type "image"}
+  {:url "/raw/img/park/slide/side.png", :type "image"}
+  {:url "/raw/img/park/slide/line_01.png", :size 1, :type "image"}
+  {:url "/raw/img/park/slide/line_02.png", :size 1, :type "image"}
+  {:url "/raw/img/park/slide/line_03.png", :size 1, :type "image"}
+  {:url "/upload/WLVRCJSZJJIKUWSE.mp3", :date 1626461927362, :size 40, :type "audio", :alias "Are you ready Guide "}
+  {:url "/upload/WWVXDTVAJATJZYMM.mp3", :date 1626461933623, :size 141, :type "audio", :alias "Guide instructions"}
+  {:url "/upload/MZDLIZRSCIOHJDOZ.mp3", :date 1626462266281, :size 67, :type "audio", :alias "great job"}
+  {:url "/upload/OYHUBMXUATSNCTGD.png", :size 1, :type "image"}
+  {:url "/upload/NXGVZOMZXVFHSRIC.png", :size 1, :type "image"}
+  {:url "/upload/PTWXRHEDWPWNKOVT.png", :size 1, :type "image"}
+  {:url "/upload/XFLCGMYKPGCUCQET.mp3", :date 1626463339862, :size 333, :type "audio", :alias "game voice"}
+  {:url "/upload/PSDJJXCGKYXANUXW.mp3", :date 1626463365660, :size 550, :type "audio", :alias "colors"}
+  {:url "/upload/MMVBDNYZHXLGFIIN.mp3", :date 1626463516367, :size 1, :type "audio", :alias "correct sound"}
+  {:url "/upload/LRJGBAZZJCTVCOGF.mp3", :date 1626463636944, :size 10, :type "audio", :alias "incorrect sound"}
+  {:url "/upload/DFJLCJCZCTJZZTNG.mp3", :size 10, :type "audio"}
+  {:url "/upload/HCHUCMAQSWCKBDCZ.png", :size 1, :type "image"}
+  {:url "/upload/LLQCAVADHZDSKNXB.png", :size 1, :type "image"}
+  {:url "/upload/WGBWVSUNEEZSFPHD.png", :size 1, :type "image"}
+  {:url "/upload/TSAZAVBHLCMQXJMF.png", :size 1, :type "image"}
+  {:url "/upload/GGCMGJQRQBNAWFRX.png", :size 1, :type "image"}
+  {:url "/upload/ZPCKISROSHZRQFRB.png", :size 1, :type "image"}],
+ :objects
+ {:background
+  {:type "layered-background",
+   :background {:src "/raw/img/park/slide-demo/slide_background.png"},
+   :decoration {:src "/raw/img/park/slide-demo/slide_decoration.png"},
+   :surface {:src "/raw/img/park/slide-demo/slide_surface.png"}},
+  :box1
+  {:type "animation",
+   :x 810,
+   :y 216,
+   :width 671,
+   :height 633,
+   :scale {:x 0.25, :y 0.25},
+   :scene-name "box1",
+   :actions
+   {:click {:id "box-clicked", :on "click", :type "action", :params {:target "box1"}},
+    :drag-end
+    {:id "stop-drag",
+     :on "drag-end",
+     :type "action",
+     :params {:box "box1", :init-position {:x 810, :y 216, :duration 1}}},
+    :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+   :anim "idle2",
+   :draggable true,
+   :loop true,
+   :name "boxes",
+   :skin "qwestion",
+   :speed 0.3,
+   :start true,
+   :states {:init-position {:x 810, :y 216}}},
+  :box2
+  {:type "animation",
+   :x 500,
+   :y 287,
+   :width 671,
+   :height 633,
+   :scale {:x 0.25, :y 0.25},
+   :scene-name "box2",
+   :transition "box2",
+   :actions
+   {:click {:id "box-clicked", :on "click", :type "action", :params {:target "box2"}},
+    :drag-end
+    {:id "stop-drag",
+     :on "drag-end",
+     :type "action",
+     :params {:box "box2", :init-position {:x 500, :y 287, :duration 1}}},
+    :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+   :anim "idle2",
+   :draggable true,
+   :loop true,
+   :name "boxes",
+   :skin "qwestion",
+   :speed 0.3,
+   :start true,
+   :states {:init-position {:x 500, :y 287}}},
+  :box3
+  {:type "animation",
+   :x 655,
+   :y 212,
+   :width 671,
+   :height 633,
+   :scale {:x 0.25, :y 0.25},
+   :scene-name "box3",
+   :transition "box3",
+   :actions
+   {:click {:id "box-clicked", :on "click", :type "action", :params {:target "box3"}},
+    :drag-end
+    {:id "stop-drag",
+     :on "drag-end",
+     :type "action",
+     :params {:box "box3", :init-position {:x 655, :y 212, :duration 1}}},
+    :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+   :anim "idle2",
+   :draggable true,
+   :loop true,
+   :name "boxes",
+   :skin "qwestion",
+   :speed 0.3,
+   :start true,
+   :states {:init-position {:x 655, :y 212}}},
+  :leaf-frame-green-1
+  {:type "animation",
+   :x 924.4825439453125,
+   :y 1101.8505859375,
+   :scale {:x 1, :y 1},
+   :anim "idle",
+   :editable? {:drag true, :select true, :show-in-tree? true},
+   :meshes true,
+   :name "leaf",
+   :skin "Frame-Green",
+   :speed 1,
+   :start true,
+   :visible true},
+  :mari
+  {:type "animation",
+   :x 1600,
+   :y 580,
+   :width 473,
+   :height 511,
+   :transition "mari",
+   :actions {:click {:id "guide-click", :on "click", :type "action"}},
+   :anim "idle",
+   :name "mari",
+   :scale-x 0.5,
+   :scale-y 0.5,
+   :speed 0.35,
+   :start true},
+  :particle-leaf-green-3
+  {:type "animation",
+   :x 699.6876627604167,
+   :y 1108.0647786458333,
+   :scale {:x 1, :y 1},
+   :anim "idle",
+   :editable? {:drag true, :select true, :show-in-tree? true},
+   :meshes true,
+   :name "particle",
+   :skin "Leaf-Green",
+   :speed 1,
+   :start true,
+   :visible true},
+  :slide {:type "image", :x 200, :y 190, :width 997, :height 758, :src "/raw/img/park/slide/slide.png"},
+  :slide-side {:type "image", :x 591, :y 450, :width 234, :height 497, :src "/raw/img/park/slide/side.png"},
+  :spot
+  {:type "image",
+   :x 826,
+   :y 524,
+   :filters [{:name "brightness", :value 0} {:name "glow", :color 16766720, :outer-strength 0}],
+   :src "/raw/img/park/slide/line_01.png"},
+  :testlight3-default-6
+  {:type "animation",
+   :x 477.4810791015627,
+   :y 1001.379597981771,
+   :scale {:x 1, :y 1},
+   :anim "idle",
+   :editable? {:drag true, :select true, :show-in-tree? true},
+   :name "light",
+   :skin "default",
+   :speed 1,
+   :start true}},
+ :scene-objects
+ [["background"]
+  ["slide"
+   "slide-side"
+   "spot"
+   "mari"
+   "box1"
+   "box3"
+   "box2"
+   "testlight3-default-6"
+   "particle-leaf-green-3"
+   "leaf-frame-green-1"
+   ]],
+ :actions
+ {:assign-boxes
+  {:type "sequence-data",
+   :data
+   [{:type "set-slot",
+     :target "box1",
+     :from-var [{:var-name "box1", :var-property "image-src", :action-property "image"}],
+     :slot-name "box1",
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}
+    {:type "set-slot",
+     :target "box2",
+     :from-var [{:var-name "box2", :var-property "image-src", :action-property "image"}],
+     :slot-name "box1",
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}
+    {:type "set-slot",
+     :target "box3",
+     :from-var [{:var-name "box3", :var-property "image-src", :action-property "image"}],
+     :slot-name "box1",
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}]},
+  :box-clicked
+  {:type "sequence-data",
+   :data
+   [{:id "timeout-timer", :type "action"}
+    {:type "copy-variable",
+     :var-name "clicked-item",
+     :from-params [{:param-property "target", :action-property "from"}]}
+    {:type "test-var-scalar",
+     :value false,
+     :success "",
+     :from-var [{:var-name "clicked-item", :var-property "click-dialog", :action-property "success"}],
+     :var-name "spot-selected"}]},
+  :check-collide
+  {:type "sequence-data",
+   :data
+   [{:fail "unhighlight", :type "test-transitions-and-pointer-collide", :success "highlight", :transitions ["spot"]}]},
+  :empty {:type "empty", :duration 100},
+  :finish-activity
+  {:type "sequence-data",
+   :data
+   [{:id "timeout-timer", :type "remove-interval"} {:id "finish-dialog", :type "action"} {:type "finish-activity"}]},
+  :finish-dialog
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 24.9,
+       :data [{:end 24.78, :anim "talk", :start 23.69}],
+       :type "animation-sequence",
+       :audio "/upload/MZDLIZRSCIOHJDOZ.mp3",
+       :start 23.64,
+       :target "mari",
+       :duration 1.259999999999998,
+       :phrase-text "great job"}],
+     :type "sequence-data"}],
+   :phrase "Finish dialog",
+   :phrase-description "Finish dialog",
+   :editor-type "dialog"},
+  :guide-click
+  {:type "action",
+   :from-var [{:var-name "tap-instructions-action", :action-property "id"}],
+   :unique-tag "instructions"},
+  :hide-character-leaf-frame-green-1
+  {:type "set-attribute", :target "leaf-frame-green-1", :attr-name "visible", :attr-value false},
+  :hide-character-light-default-2
+  {:type "set-attribute", :target "light-default-2", :attr-name "visible", :attr-value false},
+  :hide-character-particle-leaf-green-3
+  {:type "set-attribute", :target "particle-leaf-green-3", :attr-name "visible", :attr-value false},
+  :hide-character-testlight-default-4
+  {:type "set-attribute", :target "testlight-default-4", :attr-name "visible", :attr-value false},
+  :hide-character-testlight2-default-5
+  {:type "set-attribute", :target "testlight2-default-5", :attr-name "visible", :attr-value false},
+  :hide-character-testlight3-default-6
+  {:type "set-attribute", :target "testlight3-default-6", :attr-name "visible", :attr-value false},
+  :highlight
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "spot-selected", :var-value true}
+    {:type "set-attribute", :target "spot", :attr-name "highlight", :attr-value true}]},
+  :highlight-spot
+  {:type "transition",
+   :from {:glow 0, :brightness 0},
+   :return-immediately true,
+   :to {:glow 10, :yoyo true, :repeat 5, :duration 0.5, :brightness 1},
+   :transition-id "spot"},
+  :intro-dialog
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:phrase-text
+       "Are you ready for fun in the sun?! Hey- that rhymed! Words that rhyme have the same sound at the end- Sun, Fun...they both end with “un”! A lot of songs and poems have rhyming words. And do you know what we call a fun rhyme with a mystery in the middle??  A RIDDLE!",
+       :start 0.18,
+       :type "animation-sequence",
+       :duration 24.27,
+       :volume "0.5",
+       :audio "/upload/WLVRCJSZJJIKUWSE.mp3",
+       :target "mari",
+       :end 24.45,
+       :data
+       [{:end 2.62, :anim "talk", :start 0.19}
+        {:end 3.55, :anim "talk", :start 3.04}
+        {:end 4.75, :anim "talk", :start 3.91}
+        {:end 8.35, :anim "talk", :start 5.27}
+        {:end 9.46, :anim "talk", :start 8.77}
+        {:end 10.71, :anim "talk", :start 10.12}
+        {:end 12.6, :anim "talk", :start 11.28}
+        {:end 13.66, :anim "talk", :start 13.06}
+        {:end 22.05, :anim "talk", :start 14.34}
+        {:end 24.42, :anim "talk", :start 23.45}]}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:phrase-text
+       "Here at the slide, we’ve got lots of riddles to solve. Listen closely to the words and then find the image that shows what it is describing ",
+       :start 29.01,
+       :type "animation-sequence",
+       :duration 8.492,
+       :volume "0.5",
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :target "mari",
+       :end 37.502,
+       :phrase-placeholder "Enter phrase text",
+       :data [{:end 34.21, :anim "talk", :start 29.02} {:end 37.23, :anim "talk", :start 34.4}]}],
+     :type "sequence-data"}
+    {:data
+     [{:data
+       [{:type "empty", :duration 0}
+        {:phrase-text "and drag it to the top of the slide so that it can have a turn sliding down! ",
+         :start 37.92,
+         :type "animation-sequence",
+         :duration 4.949999999999996,
+         :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+         :target "mari",
+         :end 42.87,
+         :phrase-placeholder "Enter phrase text",
+         :data
+         [{:end 39.49, :anim "talk", :start 37.93}
+          {:end 39.86, :anim "talk", :start 39.78}
+          {:end 42.85, :anim "talk", :start 40.17}]}],
+       :type "sequence-data"}
+      {:data [{:type "empty", :duration 0} {:id "highlight-spot", :type "action"}], :type "sequence-data"}],
+     :type "parallel"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:phrase-text "The rhymes in the riddles should help you find the answer!",
+       :start 43.32,
+       :type "animation-sequence",
+       :duration 3.0600000000000023,
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :target "mari",
+       :end 46.38,
+       :phrase-placeholder "Enter phrase text",
+       :data [{:end 46.36, :anim "talk", :start 43.38}]}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:phrase-text
+       "If you’re not sure what a word is, tap on it! When you think you know the answer to the riddle, drag it to the square at the top of the slide. If you want to hear the riddle again, tap on me!",
+       :start 51.9,
+       :type "animation-sequence",
+       :duration 13.050000000000004,
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :target "mari",
+       :end 64.95,
+       :phrase-placeholder "Enter phrase text",
+       :data
+       [{:end 54.74, :anim "talk", :start 52.24}
+        {:end 60.57, :anim "talk", :start 55.24}
+        {:end 63.45, :anim "talk", :start 61.66}
+        {:end 64.94, :anim "talk", :start 63.84}]}],
+     :type "sequence-data"}],
+   :phrase "Intro",
+   :phrase-description "Intro",
+   :editor-type "dialog"},
+  :pick-correct
+  {:type "sequence-data",
+   :data
+   [{:type "action", :from-var [{:var-name "dragged-item", :var-property "dragged-dialog", :action-property "id"}]}
+    {:id "slide-current-target", :type "action"}
+    {:type "empty", :duration 1000}
+    {:id "script", :type "action"}]},
+  :pick-wrong
+  {:type "sequence-data",
+   :data
+   [{:type "action", :from-var [{:var-name "dragged-item", :var-property "dragged-dialog", :action-property "id"}]}
+    {:id "revert-position", :type "action"}]},
+  :remove-timeout-timer {:type "remove-interval", :id "timeout-timer"},
+  :reset-boxes
+  {:type "sequence-data",
+   :data
+   [{:type "set-attribute", :target "box1", :attr-name "visible", :attr-value false}
+    {:type "set-attribute", :target "box2", :attr-name "visible", :attr-value false}
+    {:type "set-attribute", :target "box3", :attr-name "visible", :attr-value false}
+    {:type "empty", :duration 100}
+    {:id "init-position", :type "state", :target "box1"}
+    {:id "init-position", :type "state", :target "box2"}
+    {:id "init-position", :type "state", :target "box3"}
+    {:skin "qwestion", :type "set-skin", :target "box1"}
+    {:skin "qwestion", :type "set-skin", :target "box2"}
+    {:skin "qwestion", :type "set-skin", :target "box3"}
+    {:type "set-attribute", :target "box1", :attr-name "visible", :attr-value true}
+    {:type "set-attribute", :target "box2", :attr-name "visible", :attr-value true}
+    {:type "set-attribute", :target "box3", :attr-name "visible", :attr-value true}]},
+  :revert-position
+  {:type "transition",
+   :from-params
+   [{:param-property "box", :action-property "transition-id"}
+    {:param-property "init-position", :action-property "to"}]},
+  :round-1
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable",
+     :var-name "item-1",
+     :var-value
+     {:correct true,
+      :image-src "/upload/OYHUBMXUATSNCTGD.png",
+      :click-dialog "round-1-item1-clicked",
+      :dragged-dialog "round-1-item1-dragged"}}
+    {:type "set-variable",
+     :var-name "item-2",
+     :var-value
+     {:correct false,
+      :image-src "/upload/NXGVZOMZXVFHSRIC.png",
+      :click-dialog "round-1-item2-clicked",
+      :dragged-dialog "round-1-item2-dragged"}}
+    {:type "set-variable",
+     :var-name "item-3",
+     :var-value
+     {:correct false,
+      :image-src "/upload/PTWXRHEDWPWNKOVT.png",
+      :click-dialog "round-1-item3-clicked",
+      :dragged-dialog "round-1-item3-dragged"}}
+    {:type "set-variable", :var-name "tap-instructions-action", :var-value "round-1-tap"}
+    {:type "set-variable", :var-name "timeout-instructions-action", :var-value "round-1-timeout"}
+    {:from ["item-1" "item-2" "item-3"], :type "vars-var-provider", :shuffled true, :variables ["box1" "box2" "box3"]}
+    {:id "reset-boxes", :type "action"}
+    {:id "assign-boxes", :type "action"}
+    {:id "round-1-riddle", :type "action"}
+    {:id "timeout-timer", :type "action"}]},
+  :round-1-item1-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 13.41,
+       :data [{:end 13.06, :anim "talk", :start 12.81}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 12.72,
+       :duration 0.6899999999999995,
+       :phrase-text "red"}],
+     :type "sequence-data"}],
+   :phrase "Item correct click",
+   :phrase-description "Item correct click",
+   :editor-type "dialog"},
+  :round-1-item1-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.158,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/MMVBDNYZHXLGFIIN.mp3",
+       :start 0.052,
+       :duration 0.106,
+       :phrase-text "correct sound"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:end 13.41,
+       :data [{:end 13.06, :anim "talk", :start 12.81}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 12.72,
+       :duration 0.6899999999999995,
+       :phrase-text "red",
+       :phrase-placeholder "Enter phrase text"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration "1000"}
+      {:phrase-text "wheeee!",
+       :start 48.324,
+       :type "animation-sequence",
+       :duration 2.053,
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :target "mari",
+       :end 60.477,
+       :phrase-placeholder "Enter phrase text",
+       :data [{:end 50.16, :anim "talk", :start 48.34}]}],
+     :type "sequence-data"}],
+   :phrase "Item correct picked",
+   :phrase-description "Item correct picked",
+   :editor-type "dialog"},
+  :round-1-item2-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 28.98,
+       :data [{:end 28.97, :anim "talk", :start 28.18}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 28.14,
+       :duration 0.8399999999999999,
+       :phrase-text "green"}],
+     :type "sequence-data"}],
+   :phrase "Item 1 incorrect click",
+   :phrase-description "Item 1 incorrect click",
+   :editor-type "dialog"},
+  :round-1-item2-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.438,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/LRJGBAZZJCTVCOGF.mp3",
+       :start 0,
+       :duration 0.438,
+       :phrase-text "incorrect sound"}],
+     :type "sequence-data"}],
+   :phrase "Item 1 incorrect picked",
+   :phrase-description "Item 1 incorrect picked",
+   :editor-type "dialog"},
+  :round-1-item3-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 11.52,
+       :data [{:end 11.48, :anim "talk", :start 10.66}],
+       :type "animation-sequence",
+       :audio "/upload/PSDJJXCGKYXANUXW.mp3",
+       :start 10.65,
+       :duration 0.8699999999999992,
+       :phrase-text "yellow"}],
+     :type "sequence-data"}],
+   :phrase "Item 2 incorrect click",
+   :phrase-description "Item 2 incorrect click",
+   :editor-type "dialog"},
+  :round-1-item3-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.428,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/LRJGBAZZJCTVCOGF.mp3",
+       :start 0,
+       :duration 0.428,
+       :phrase-text "incorrect sound"}],
+     :type "sequence-data"}],
+   :phrase "Item 2 incorrect picked",
+   :phrase-description "Item 2 incorrect picked",
+   :editor-type "dialog"},
+  :round-1-riddle
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 12.15,
+       :data [{:end 12.08, :anim "talk", :start 0.46}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 0.45,
+       :duration 11.700000000000001,
+       :phrase-text
+       "I am the color of a sign that means stop On any rainbow, I’m the color on top! I’m the color of the strawberry jam you can spread, Do you know who I am? I’m the color"}],
+     :type "sequence-data"}],
+   :phrase "Riddle",
+   :phrase-description "Riddle",
+   :editor-type "dialog"},
+  :round-1-tap
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 12.15,
+       :data [{:end 12.08, :anim "talk", :start 0.46}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 0.45,
+       :duration 11.700000000000001,
+       :phrase-text
+       "I am the color of a sign that means stop On any rainbow, I’m the color on top! I’m the color of the strawberry jam you can spread, Do you know who I am? I’m the color"}],
+     :type "sequence-data"}],
+   :phrase "Tap instructions",
+   :phrase-description "Tap instructions",
+   :editor-type "dialog"},
+  :round-1-timeout
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:data
+       [{:type "empty", :duration 0}
+        {:end 79.59,
+         :data [{:end 76.42, :anim "talk", :start 75.2} {:end 79.57, :anim "talk", :start 76.54}],
+         :type "animation-sequence",
+         :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+         :start 75.15,
+         :target "mari",
+         :duration 4.439999999999998,
+         :phrase-text "Drag the image that answers the riddle to the square at the top of the slide. "}],
+       :type "sequence-data"}
+      {:data [{:type "empty", :duration 0} {:id "highlight-spot", :type "action"}], :type "sequence-data"}],
+     :type "parallel"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:end 86.88,
+       :data
+       [{:end 83.15, :anim "talk", :start 80.68}
+        {:end 85.35, :anim "talk", :start 83.59}
+        {:end 86.81, :anim "talk", :start 85.79}],
+       :type "animation-sequence",
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :start 80.07,
+       :duration 6.810000000000002,
+       :phrase-text
+       " If you are not sure what the image is, tap on it! If you want to hear the riddle again, tap on me!",
+       :phrase-placeholder "Enter phrase text"}],
+     :type "sequence-data"}],
+   :phrase "Timeout instructions",
+   :phrase-description "Timeout instructions",
+   :editor-type "dialog"},
+  :round-2
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable",
+     :var-name "item-1",
+     :var-value
+     {:correct true,
+      :image-src "/upload/HCHUCMAQSWCKBDCZ.png",
+      :click-dialog "round-2-item1-clicked",
+      :dragged-dialog "round-2-item1-dragged"}}
+    {:type "set-variable",
+     :var-name "item-2",
+     :var-value
+     {:correct false,
+      :image-src "/upload/LLQCAVADHZDSKNXB.png",
+      :click-dialog "round-2-item2-clicked",
+      :dragged-dialog "round-2-item2-dragged"}}
+    {:type "set-variable",
+     :var-name "item-3",
+     :var-value
+     {:correct false,
+      :image-src "/upload/WGBWVSUNEEZSFPHD.png",
+      :click-dialog "round-2-item3-clicked",
+      :dragged-dialog "round-2-item3-dragged"}}
+    {:type "set-variable", :var-name "tap-instructions-action", :var-value "round-2-tap"}
+    {:type "set-variable", :var-name "timeout-instructions-action", :var-value "round-2-timeout"}
+    {:from ["item-1" "item-2" "item-3"], :type "vars-var-provider", :shuffled true, :variables ["box1" "box2" "box3"]}
+    {:id "reset-boxes", :type "action"}
+    {:id "assign-boxes", :type "action"}
+    {:id "round-2-riddle", :type "action"}
+    {:id "timeout-timer", :type "action"}]},
+  :round-2-item1-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 28.98,
+       :data [{:end 28.97, :anim "talk", :start 28.18}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 28.14,
+       :duration 0.8399999999999999,
+       :phrase-text "green"}],
+     :type "sequence-data"}],
+   :phrase "Item correct click",
+   :phrase-description "Item correct click",
+   :editor-type "dialog"},
+  :round-2-item1-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.117,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/MMVBDNYZHXLGFIIN.mp3",
+       :start 0.048,
+       :duration 0.069,
+       :phrase-text "correct sound"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:end 28.98,
+       :data [{:end 28.97, :anim "talk", :start 28.18}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 28.14,
+       :duration 0.8399999999999999,
+       :phrase-text "green",
+       :phrase-placeholder "Enter phrase text"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration "1000"}
+      {:phrase-text "wheee",
+       :start 48.329,
+       :type "animation-sequence",
+       :duration 1.757,
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :target "mari",
+       :end 10.04997,
+       :phrase-placeholder "Enter phrase text",
+       :data [{:end 49.88, :anim "talk", :start 48.34}]}],
+     :type "sequence-data"}],
+   :phrase "Item correct picked",
+   :phrase-description "Item correct picked",
+   :editor-type "dialog"},
+  :round-2-item2-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 45.33,
+       :data [{:end 45.31, :anim "talk", :start 44.62}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 44.46,
+       :duration 0.8699999999999974,
+       :phrase-text "blue"}],
+     :type "sequence-data"}],
+   :phrase "Item 1 incorrect click",
+   :phrase-description "Item 1 incorrect click",
+   :editor-type "dialog"},
+  :round-2-item2-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.438,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/LRJGBAZZJCTVCOGF.mp3",
+       :start 0,
+       :duration 0.438,
+       :phrase-text "incorrect sound"}],
+     :type "sequence-data"}],
+   :phrase "Item 1 incorrect picked",
+   :phrase-description "Item 1 incorrect picked",
+   :editor-type "dialog"},
+  :round-2-item3-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 27.69,
+       :data [{:end 27.62, :anim "talk", :start 26.81}],
+       :type "animation-sequence",
+       :audio "/upload/PSDJJXCGKYXANUXW.mp3",
+       :start 26.76,
+       :duration 0.9299999999999997,
+       :phrase-text "purple"}],
+     :type "sequence-data"}],
+   :phrase "Item 2 incorrect click",
+   :phrase-description "Item 2 incorrect click",
+   :editor-type "dialog"},
+  :round-2-item3-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.425,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/LRJGBAZZJCTVCOGF.mp3",
+       :start 0,
+       :duration 0.425,
+       :phrase-text "incorrect sound"}],
+     :type "sequence-data"}],
+   :phrase "Item 2 incorrect picked",
+   :phrase-description "Item 2 incorrect picked",
+   :editor-type "dialog"},
+  :round-2-riddle
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 27.48,
+       :data
+       [{:end 17.32, :anim "talk", :start 14.87}
+        {:end 20.58, :anim "talk", :start 17.72}
+        {:end 25.89, :anim "talk", :start 21.01}
+        {:end 27.4, :anim "talk", :start 26.58}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 14.85,
+       :duration 12.63,
+       :phrase-text
+       "I am the color of the grass and the trees, Of lettuce, avocados, and even of peas! On frogs, limes, and broccoli I can be seen Do you know who I am? I’m the color"}],
+     :type "sequence-data"}],
+   :phrase "Riddle",
+   :phrase-description "Riddle",
+   :editor-type "dialog"},
+  :round-2-tap
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 27.48,
+       :data
+       [{:end 17.32, :anim "talk", :start 14.87}
+        {:end 20.58, :anim "talk", :start 17.72}
+        {:end 25.89, :anim "talk", :start 21.01}
+        {:end 27.4, :anim "talk", :start 26.58}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 14.85,
+       :duration 12.63,
+       :phrase-text
+       "I am the color of the grass and the trees, Of lettuce, avocados, and even of peas! On frogs, limes, and broccoli I can be seen Do you know who I am? I’m the color"}],
+     :type "sequence-data"}],
+   :phrase "Tap instructions",
+   :phrase-description "Tap instructions",
+   :editor-type "dialog"},
+  :round-2-timeout
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:data
+       [{:type "empty", :duration 0}
+        {:end 79.59,
+         :data [{:end 76.42, :anim "talk", :start 75.2} {:end 79.57, :anim "talk", :start 76.54}],
+         :type "animation-sequence",
+         :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+         :start 75.15,
+         :target "mari",
+         :duration 4.439999999999998,
+         :phrase-text "Drag the image that answers the riddle to the square at the top of the slide"}],
+       :type "sequence-data"}
+      {:data [{:type "empty", :duration 0} {:id "highlight-spot", :type "action"}], :type "sequence-data"}],
+     :type "parallel"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:phrase-text
+       "If you are not sure what the image is, tap on it! If you want to hear the riddle again, tap on me!",
+       :start 80.07,
+       :type "animation-sequence",
+       :duration 6.810000000000002,
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :target "mari",
+       :end 86.88,
+       :phrase-placeholder "Enter phrase text",
+       :data
+       [{:end 83.15, :anim "talk", :start 80.68}
+        {:end 85.35, :anim "talk", :start 83.59}
+        {:end 86.81, :anim "talk", :start 85.79}]}],
+     :type "sequence-data"}],
+   :phrase "Timeout instructions",
+   :phrase-description "Timeout instructions",
+   :editor-type "dialog"},
+  :round-3
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable",
+     :var-name "item-1",
+     :var-value
+     {:correct true,
+      :image-src "/upload/TSAZAVBHLCMQXJMF.png",
+      :click-dialog "round-3-item1-clicked",
+      :dragged-dialog "round-3-item1-dragged"}}
+    {:type "set-variable",
+     :var-name "item-2",
+     :var-value
+     {:correct false,
+      :image-src "/upload/GGCMGJQRQBNAWFRX.png",
+      :click-dialog "round-3-item2-clicked",
+      :dragged-dialog "round-3-item2-dragged"}}
+    {:type "set-variable",
+     :var-name "item-3",
+     :var-value
+     {:correct false,
+      :image-src "/upload/ZPCKISROSHZRQFRB.png",
+      :click-dialog "round-3-item3-clicked",
+      :dragged-dialog "round-3-item3-dragged"}}
+    {:type "set-variable", :var-name "tap-instructions-action", :var-value "round-3-tap"}
+    {:type "set-variable", :var-name "timeout-instructions-action", :var-value "round-3-timeout"}
+    {:from ["item-1" "item-2" "item-3"], :type "vars-var-provider", :shuffled true, :variables ["box1" "box2" "box3"]}
+    {:id "reset-boxes", :type "action"}
+    {:id "assign-boxes", :type "action"}
+    {:id "round-3-riddle", :type "action"}
+    {:id "timeout-timer", :type "action"}]},
+  :round-3-item1-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 45.33,
+       :data [{:end 45.31, :anim "talk", :start 44.62}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 44.46,
+       :duration 0.8699999999999974,
+       :phrase-text "blue"}],
+     :type "sequence-data"}],
+   :phrase "Item correct click",
+   :phrase-description "Item correct click",
+   :editor-type "dialog"},
+  :round-3-item1-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.113,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/MMVBDNYZHXLGFIIN.mp3",
+       :start 0.052,
+       :duration 0.061,
+       :phrase-text "correct sound"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:end 45.33,
+       :data [{:end 45.31, :anim "talk", :start 44.62}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 44.46,
+       :duration 0.8699999999999974,
+       :phrase-text "blue",
+       :phrase-placeholder "Enter phrase text"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration "1000"}
+      {:data [{:end 50.16, :anim "talk", :start 48.48}],
+       :type "animation-sequence",
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :start 48.371,
+       :target "mari",
+       :duration 1.827,
+       :phrase-text "wheeee",
+       :phrase-placeholder "Enter phrase text"}],
+     :type "sequence-data"}],
+   :phrase "Item correct picked",
+   :phrase-description "Item correct picked",
+   :editor-type "dialog"},
+  :round-3-item2-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 13.41,
+       :data [{:end 13.06, :anim "talk", :start 12.81}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 12.72,
+       :duration 0.6899999999999995,
+       :phrase-text "red"}],
+     :type "sequence-data"}],
+   :phrase "Item 1 incorrect click",
+   :phrase-description "Item 1 incorrect click",
+   :editor-type "dialog"},
+  :round-3-item2-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.423,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/LRJGBAZZJCTVCOGF.mp3",
+       :start 0,
+       :duration 0.423,
+       :phrase-text "incorrect sound"}],
+     :type "sequence-data"}],
+   :phrase "Item 1 incorrect picked",
+   :phrase-description "Item 1 incorrect picked",
+   :editor-type "dialog"},
+  :round-3-item3-clicked
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 11.52,
+       :data [{:end 11.48, :anim "talk", :start 10.66}],
+       :type "animation-sequence",
+       :audio "/upload/PSDJJXCGKYXANUXW.mp3",
+       :start 10.65,
+       :duration 0.8699999999999992,
+       :phrase-text "yellow"}],
+     :type "sequence-data"}],
+   :phrase "Item 2 incorrect click",
+   :phrase-description "Item 2 incorrect click",
+   :editor-type "dialog"},
+  :round-3-item3-dragged
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 0.455,
+       :data [],
+       :type "animation-sequence",
+       :audio "/upload/LRJGBAZZJCTVCOGF.mp3",
+       :start 0,
+       :duration 0.455,
+       :phrase-text "incorrect sound"}],
+     :type "sequence-data"}],
+   :phrase "Item 2 incorrect picked",
+   :phrase-description "Item 2 incorrect picked",
+   :editor-type "dialog"},
+  :round-3-riddle
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 43.92,
+       :data
+       [{:end 33.05, :anim "talk", :start 29.86}
+        {:end 36.5, :anim "talk", :start 33.67}
+        {:end 40.34, :anim "talk", :start 37.11}
+        {:end 42.25, :anim "talk", :start 40.84}
+        {:end 43.86, :anim "talk", :start 42.92}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 29.85,
+       :duration 14.07,
+       :phrase-text
+       "I’m the color of the sky on a bright, shiny day. I’m the color of water in the sea or the bay. I am the color of whales, was that a good clue? Do you know who I am? I’m the color"}],
+     :type "sequence-data"}],
+   :phrase "Riddle",
+   :phrase-description "Riddle",
+   :editor-type "dialog"},
+  :round-3-tap
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 43.92,
+       :data
+       [{:end 33.05, :anim "talk", :start 29.86}
+        {:end 36.5, :anim "talk", :start 33.67}
+        {:end 40.34, :anim "talk", :start 37.11}
+        {:end 42.25, :anim "talk", :start 40.84}
+        {:end 43.86, :anim "talk", :start 42.92}],
+       :type "animation-sequence",
+       :audio "/upload/XFLCGMYKPGCUCQET.mp3",
+       :start 29.85,
+       :duration 14.07,
+       :phrase-text
+       "I’m the color of the sky on a bright, shiny day. I’m the color of water in the sea or the bay. I am the color of whales, was that a good clue? Do you know who I am? I’m the color"}],
+     :type "sequence-data"}],
+   :phrase "Tap instructions",
+   :phrase-description "Tap instructions",
+   :editor-type "dialog"},
+  :round-3-timeout
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:data
+       [{:type "empty", :duration 0}
+        {:end 79.59,
+         :data [{:end 76.42, :anim "talk", :start 75.2} {:end 79.57, :anim "talk", :start 76.54}],
+         :type "animation-sequence",
+         :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+         :start 75.15,
+         :target "mari",
+         :duration 4.439999999999998,
+         :phrase-text "Drag the image that answers the riddle to the square at the top of the slide."}],
+       :type "sequence-data"}
+      {:data [{:type "empty", :duration 0} {:id "highlight-spot", :type "action"}], :type "sequence-data"}],
+     :type "parallel"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:phrase-text
+       "If you are not sure what the image is, tap on it! If you want to hear the riddle again, tap on me!",
+       :start 80.07,
+       :type "animation-sequence",
+       :duration 6.810000000000002,
+       :audio "/upload/WWVXDTVAJATJZYMM.mp3",
+       :target "mari",
+       :end 86.88,
+       :phrase-placeholder "Enter phrase text",
+       :data
+       [{:end 83.15, :anim "talk", :start 80.68}
+        {:end 85.35, :anim "talk", :start 83.59}
+        {:end 86.81, :anim "talk", :start 85.79}]}],
+     :type "sequence-data"}],
+   :phrase "Timeout instructions",
+   :phrase-description "Timeout instructions",
+   :editor-type "dialog"},
+  :script
+  {:type "workflow",
+   :data
+   [{:type "start-activity"}
+    {:data
+     [{:type "set-variable", :var-name "tap-instructions-action", :var-value "empty"}
+      {:type "set-variable", :var-name "timeout-instructions-action", :var-value "empty"}],
+     :type "parallel"}
+    {:id "intro-dialog", :type "action"}
+    {:id "round-1", :type "action", :workflow-user-input true}
+    {:id "round-2", :type "action", :workflow-user-input true}
+    {:id "round-3", :type "action", :workflow-user-input true}],
+   :on-end "finish-activity"},
+  :show-character-leaf-frame-green-1
+  {:type "set-attribute", :target "leaf-frame-green-1", :attr-name "visible", :attr-value true},
+  :show-character-light-default-2
+  {:type "set-attribute", :target "light-default-2", :attr-name "visible", :attr-value true},
+  :show-character-particle-leaf-green-3
+  {:type "set-attribute", :target "particle-leaf-green-3", :attr-name "visible", :attr-value true},
+  :show-character-testlight-default-4
+  {:type "set-attribute", :target "testlight-default-4", :attr-name "visible", :attr-value true},
+  :show-character-testlight2-default-5
+  {:type "set-attribute", :target "testlight2-default-5", :attr-name "visible", :attr-value true},
+  :show-character-testlight3-default-6
+  {:type "set-attribute", :target "testlight3-default-6", :attr-name "visible", :attr-value true},
+  :slide-current-target
+  {:type "sequence-data",
+   :data
+   [{:to {:ease [0.1 0.1], :bezier [{:x 770, :y 90} {:x 865, :y 460}], :duration 1},
+     :type "transition",
+     :from-params [{:param-property "box", :action-property "transition-id"}]}
+    {:to {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
+     :type "transition",
+     :from-params [{:param-property "box", :action-property "transition-id"}]}
+    {:type "empty", :duration 1000}]},
+  :spot-selected
+  {:type "sequence-data",
+   :data
+   [{:type "set-attribute", :target "spot", :attr-name "highlight", :attr-value false}
+    {:id "timeout-timer", :type "action"}
+    {:type "copy-variable", :var-name "dragged-item", :from-params [{:param-property "box", :action-property "from"}]}
+    {:fail "pick-wrong",
+     :type "test-value",
+     :value1 true,
+     :success "pick-correct",
+     :from-var [{:var-name "dragged-item", :var-property "correct", :action-property "value2"}]}]},
+  :start-activity {:type "start-activity"},
+  :start-background-music {:type "audio", :id "/upload/DFJLCJCZCTJZZTNG.mp3", :loop true, :volume "0.1"},
+  :start-drag
+  {:type "sequence-data",
+   :data
+   [{:type "copy-variable", :var-name "active-box", :from-params [{:param-property "box", :action-property "from"}]}
+    {:id "check-collide-2", :type "set-interval", :action "check-collide", :interval 100}]},
+  :stop-activity {:type "stop-activity"},
+  :stop-drag
+  {:type "sequence-data",
+   :data
+   [{:id "check-collide-2", :type "remove-interval"}
+    {:fail "revert-position", :type "test-var-scalar", :value true, :success "spot-selected", :var-name "spot-selected"}
+    {:type "set-attribute", :target "spot", :attr-name "highlight", :attr-value false}]},
+  :timeout
+  {:type "action",
+   :from-var [{:var-name "timeout-instructions-action", :action-property "id"}],
+   :unique-tag "instructions"},
+  :timeout-timer {:type "set-interval", :id "timeout-timer", :action "timeout", :interval 25000},
+  :unhighlight
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "spot-selected", :var-value false}
+    {:type "set-attribute", :target "spot", :attr-name "highlight", :attr-value false}]}},
+ :triggers
+ {:stop {:on "back", :action "stop-activity"},
+  :music {:on "start", :action "start-background-music"},
+  :start {:on "start", :action "script"}},
+ :metadata
+ {:next-round-id 3,
+  :template-name "Slide riddle (no concept)",
+  :tracks
+  [{:id "main",
+    :nodes
+    [{:type "dialog", :action-id "intro-dialog"}
+     {:type "dialog", :action-id "finish-dialog"}
+     {:type "track", :track-id "round-1"}
+     {:type "track", :track-id "round-2"}
+     {:type "track", :track-id "round-3"}],
+    :title "Main Track"}
+   {:id "round-1",
+    :nodes
+    [{:type "dialog", :action-id "round-1-riddle"}
+     {:type "dialog", :action-id "round-1-item1-clicked"}
+     {:type "dialog", :action-id "round-1-item2-clicked"}
+     {:type "dialog", :action-id "round-1-item3-clicked"}
+     {:type "dialog", :action-id "round-1-item1-dragged"}
+     {:type "dialog", :action-id "round-1-item2-dragged"}
+     {:type "dialog", :action-id "round-1-item3-dragged"}
+     {:type "dialog", :action-id "round-1-tap"}
+     {:type "dialog", :action-id "round-1-timeout"}],
+    :title "Round 1"}
+   {:id "round-2",
+    :nodes
+    [{:type "dialog", :action-id "round-2-riddle"}
+     {:type "dialog", :action-id "round-2-item1-clicked"}
+     {:type "dialog", :action-id "round-2-item2-clicked"}
+     {:type "dialog", :action-id "round-2-item3-clicked"}
+     {:type "dialog", :action-id "round-2-item1-dragged"}
+     {:type "dialog", :action-id "round-2-item2-dragged"}
+     {:type "dialog", :action-id "round-2-item3-dragged"}
+     {:type "dialog", :action-id "round-2-tap"}
+     {:type "dialog", :action-id "round-2-timeout"}],
+    :title "Round 2"}
+   {:id "round-3",
+    :nodes
+    [{:type "dialog", :action-id "round-3-riddle"}
+     {:type "dialog", :action-id "round-3-item1-clicked"}
+     {:type "dialog", :action-id "round-3-item2-clicked"}
+     {:type "dialog", :action-id "round-3-item3-clicked"}
+     {:type "dialog", :action-id "round-3-item1-dragged"}
+     {:type "dialog", :action-id "round-3-item2-dragged"}
+     {:type "dialog", :action-id "round-3-item3-dragged"}
+     {:type "dialog", :action-id "round-3-tap"}
+     {:type "dialog", :action-id "round-3-timeout"}],
+    :title "Round 3"}],
+  :history
+  {:created {:template-id 38},
+   :updated
+   [{:data
+     {:image-correct {:src "/upload/OYHUBMXUATSNCTGD.png"},
+      :image-wrong-1 {:src "/upload/NXGVZOMZXVFHSRIC.png"},
+      :image-wrong-2 {:src "/upload/PTWXRHEDWPWNKOVT.png"}},
+     :action "add-round"}
+    {:data {:background-music {:src "/upload/DFJLCJCZCTJZZTNG.mp3", :volume "0.1"}},
+     :action "background-music",
+     :common-action? true}
+    {:data
+     {:image-correct {:src "/upload/HCHUCMAQSWCKBDCZ.png"},
+      :image-wrong-1 {:src "/upload/LLQCAVADHZDSKNXB.png"},
+      :image-wrong-2 {:src "/upload/WGBWVSUNEEZSFPHD.png"}},
+     :action "add-round"}
+    {:data
+     {:image-correct {:src "/upload/TSAZAVBHLCMQXJMF.png"},
+      :image-wrong-1 {:src "/upload/GGCMGJQRQBNAWFRX.png"},
+      :image-wrong-2 {:src "/upload/ZPCKISROSHZRQFRB.png"}},
+     :action "add-round"}
+    {:data {:name "leaf", :skin "Frame-Green"}, :action "add-character", :common-action? true}
+    {:data {:name "light", :skin "default"}, :action "add-character", :common-action? true}
+    {:data {:name "particle", :skin "Leaf-Green"}, :action "add-character", :common-action? true}
+    {:data {:name "testlight", :skin "default"}, :action "add-character", :common-action? true}
+    {:data {:name "testlight2", :skin "default"}, :action "add-character", :common-action? true}
+    {:data {:name "testlight3", :skin "default"}, :action "add-character", :common-action? true}]},
+  :actions
+  {:add-round
+   {:title "Add round",
+    :options
+    {:image-correct
+     {:type "image",
+      :label "Correct image",
+      :options {:max-width 100, :min-width 50, :max-height 100, :min-height 50},
+      :description "Correct image"},
+     :image-wrong-1
+     {:type "image",
+      :label "Wrong image 1",
+      :options {:max-width 100, :min-width 50, :max-height 100, :min-height 50},
+      :description "Wrong image 1"},
+     :image-wrong-2
+     {:type "image",
+      :label "Wrong image 2",
+      :options {:max-width 100, :min-width 50, :max-height 100, :min-height 50},
+      :description "Wrong image 2"}}}},
+  :template-version nil,
+  :lip-not-sync false,
+  :autostart true,
+  :added-character-idx 6,
+  :unique-suffix 0,
+  :template-id 38,
+  :available-actions
+  [{:name "Highlight spot", :action "highlight-spot"}
+   {:name "Show leaf-frame-green-1",
+    :type "image",
+    :links [{:id "leaf-frame-green-1", :type "object"}],
+    :action "show-character-leaf-frame-green-1"}
+   {:name "Hide leaf-frame-green-1",
+    :type "image",
+    :links [{:id "leaf-frame-green-1", :type "object"}],
+    :action "hide-character-leaf-frame-green-1"}
+   {:name "Show light-default-2",
+    :type "image",
+    :links [{:id "light-default-2", :type "object"}],
+    :action "show-character-light-default-2"}
+   {:name "Hide light-default-2",
+    :type "image",
+    :links [{:id "light-default-2", :type "object"}],
+    :action "hide-character-light-default-2"}
+   {:name "Show particle-leaf-green-3",
+    :type "image",
+    :links [{:id "particle-leaf-green-3", :type "object"}],
+    :action "show-character-particle-leaf-green-3"}
+   {:name "Hide particle-leaf-green-3",
+    :type "image",
+    :links [{:id "particle-leaf-green-3", :type "object"}],
+    :action "hide-character-particle-leaf-green-3"}
+   {:name "Show testlight-default-4",
+    :type "image",
+    :links [{:id "testlight-default-4", :type "object"}],
+    :action "show-character-testlight-default-4"}
+   {:name "Hide testlight-default-4",
+    :type "image",
+    :links [{:id "testlight-default-4", :type "object"}],
+    :action "hide-character-testlight-default-4"}
+   {:name "Show testlight2-default-5",
+    :type "image",
+    :links [{:id "testlight2-default-5", :type "object"}],
+    :action "show-character-testlight2-default-5"}
+   {:name "Hide testlight2-default-5",
+    :type "image",
+    :links [{:id "testlight2-default-5", :type "object"}],
+    :action "hide-character-testlight2-default-5"}
+   {:name "Show testlight3-default-6",
+    :type "image",
+    :links [{:id "testlight3-default-6", :type "object"}],
+    :action "show-character-testlight3-default-6"}
+   {:name "Hide testlight3-default-6",
+    :type "image",
+    :links [{:id "testlight3-default-6", :type "object"}],
+    :action "hide-character-testlight3-default-6"}]},
+ :skills
+ [{:id 4,
+   :abbr "Headstart.Goal P-LIT 1.b",
+   :name "Produce the beginning sound in a spoken word, such as \"Dog begins with /d/.\"",
+   :tags ["letter sounds"],
+   :grade "Pre-K",
+   :topic "foundational-literacy--phonemic-awareness"}]}
