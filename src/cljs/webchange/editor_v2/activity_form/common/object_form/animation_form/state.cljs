@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
     [webchange.logger.index :as logger]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse-animations :as warehouse-animations]))
 
 (defn path-to-db
   [id relative-path]
@@ -17,7 +17,7 @@
     (let [animation-data (select-keys objects-data [:name :skin :skin-names :scale])]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
-                    [::load-available-skeletons id]]})))
+                    [::warehouse-animations/load-available-animation]]})))
 
 ;; Available skins
 
@@ -30,64 +30,6 @@
       keyword
       (= type)))
 
-(def available-skeletons-path :available-skeletons)
-
-(re-frame/reg-event-fx
-  ::load-available-skeletons
-  (fn [{:keys [_]} [_ id]]
-    {:dispatch [::warehouse/load-animation-skins {:on-success [::set-available-skeletons id]}]}))
-
-(defn- set-skins-type
-  [skeletons]
-  "Set if skeleton hes single or combined skins"
-  (->> skeletons
-       (map (fn [{:keys [skins] :as skeleton-data}]
-              (->> (if (-> skins first :name (clojure.string/split #"/") count (> 1))
-                     :combined :single)
-                   (assoc skeleton-data :skin-type))))))
-
-(defn- set-default-skin
-  [skeletons]
-  (->> skeletons
-       (map (fn [{:keys [skins skin-type] :as skeleton-data}]
-              (case skin-type
-                :combined (let [get-first-suitable (partial (fn [options option-key]
-                                                              (->> options
-                                                                   (filter #(check-skin-option (:name %) option-key))
-                                                                   (first)
-                                                                   (:name)))
-                                                            skins)]
-                            (assoc skeleton-data :default-skins {:body    (get-first-suitable :body)
-                                                                 :clothes (get-first-suitable :clothes)
-                                                                 :head    (get-first-suitable :head)}))
-                :single (let [first-skin (-> skins first :name)
-                              ;; Take first not 'default' skin because 'default' skin is broken in most old animations
-                              first-not-default-skin (some (fn [{:keys [name]}] (and (not= name "default") name)) skins)]
-                          (->> (or first-not-default-skin first-skin)
-                               (assoc skeleton-data :default-skin))))))))
-
-(defn- filter-extra-skeletons
-  [skeletons]
-  (let [skeletons-to-avoid ["book" "boxes" "pinata" "vera-go" "vera-45" "vera-90"]]
-    (->> skeletons
-         (filter (fn [{:keys [name]}]
-                   (-> #{name} (some skeletons-to-avoid) not))))))
-
-(re-frame/reg-event-fx
-  ::set-available-skeletons
-  (fn [{:keys [db]} [_ id skeletons]]
-    (let [skeletons-data (->> skeletons set-skins-type set-default-skin filter-extra-skeletons)]
-      {:db (assoc-in db (path-to-db id [available-skeletons-path]) skeletons-data)})))
-
-(defn- get-available-skeletons
-  [db id]
-  (get-in db (path-to-db id [available-skeletons-path])))
-
-(re-frame/reg-sub
-  ::available-skeletons
-  (fn [db [_ id]]
-    (get-available-skeletons db id)))
-
 ;; Skeleton
 
 (re-frame/reg-sub
@@ -98,12 +40,19 @@
   (fn [[current-data]]
     (get current-data :name "")))
 
+(defn- filter-extra-skeletons
+  [skeletons]
+  (let [skeletons-to-avoid ["book" "boxes" "pinata" "vera-go" "vera-45" "vera-90"]]
+    (->> skeletons
+         (filter (fn [{:keys [name]}]
+                   (-> #{name} (some skeletons-to-avoid) not))))))
+
 (re-frame/reg-sub
   ::skeletons-options
-  (fn [[_ id]]
-    (re-frame/subscribe [::available-skeletons id]))
-  (fn [available-skins]
-    (->> available-skins
+  (fn []
+    (re-frame/subscribe [::warehouse-animations/available-animations]))
+  (fn [available-animations]
+    (->> (filter-extra-skeletons available-animations)
          (map (fn [{:keys [name preview]}]
                 {:text      name
                  :value     name
@@ -112,12 +61,14 @@
 (re-frame/reg-event-fx
   ::set-skeleton
   (fn [{:keys [db]} [_ id skeleton-name]]
-    (let [{:keys [default-skin default-skins skin-type]} (->> (get-available-skeletons db id)
+    (let [{:keys [default-skin default-skins skin-type]} (->> (warehouse-animations/get-available-animations db)
                                                               (some (fn [{:keys [name] :as skeleton}]
                                                                       (and (= name skeleton-name) skeleton))))
           default-skin-params (case skin-type
-                                :combined {:skin-names default-skins}
-                                :single {:skin default-skin})]
+                                :combined {:skin-names default-skins
+                                           :skin       nil}
+                                :single {:skin       default-skin
+                                         :skin-names nil})]
       {:dispatch [::state/update-current-data id (merge {:name skeleton-name} default-skin-params)]})))
 
 ;; Skin
@@ -126,7 +77,7 @@
   ::skin-options
   (fn [[_ id]]
     [(re-frame/subscribe [::current-skeleton id])
-     (re-frame/subscribe [::available-skeletons id])])
+     (re-frame/subscribe [::warehouse-animations/available-animations])])
   (fn [[skeleton-name available-skeletons]]
     (->> available-skeletons
          (some (fn [{:keys [name skins]}]
@@ -163,7 +114,7 @@
   ::combined-skins?
   (fn [[_ id]]
     [(re-frame/subscribe [::current-skeleton id])
-     (re-frame/subscribe [::available-skeletons id])])
+     (re-frame/subscribe [::warehouse-animations/available-animations])])
   (fn [[skeleton-name available-skeletons]]
     (->> available-skeletons
          (some (fn [{:keys [name skin-type]}]
@@ -202,6 +153,11 @@
 
 ;; Scale
 
+(defn- get-current-scale
+  [db id]
+  (-> (state/get-current-data db id)
+      (get :scale)))
+
 (re-frame/reg-sub
   ::current-scale
   (fn [[_ id]]
@@ -212,8 +168,9 @@
 
 (re-frame/reg-event-fx
   ::set-scale
-  (fn [{:keys [_]} [_ id scale-key scale-value]]
-    {:dispatch [::state/update-current-data id {:scale {scale-key scale-value}}]}))
+  (fn [{:keys [db]} [_ id scale-key scale-value]]
+    (let [current-scale (get-current-scale db id)]
+      {:dispatch [::state/update-current-data id {:scale (assoc current-scale scale-key scale-value)}]})))
 
 ;; Flip
 
