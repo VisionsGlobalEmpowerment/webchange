@@ -77,6 +77,11 @@
 
 ; Objects
 
+(defn get-objects-data
+  [db]
+  (-> (scene-data db)
+      (get :objects {})))
+
 (re-frame/reg-sub
   ::objects-data
   (fn [[_ scene-id]]

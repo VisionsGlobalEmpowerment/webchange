@@ -7,10 +7,15 @@
 (defn- objects-tree-item
   [{:keys [alias name]}]
   (let [visible? @(re-frame/subscribe [::state/visible? name])
-        handle-visibility-click #(re-frame/dispatch [::state/set-object-visibility name (not visible?)])]
+        show-remove-button? @(re-frame/subscribe [::state/show-remove-button? name])
+        handle-visibility-click #(re-frame/dispatch [::state/set-object-visibility name (not visible?)])
+        handle-remove-click #(re-frame/dispatch [::state/remove-object name])]
     [:div.scene-objects-tree-item
      [:div alias]
      [:div.actions
+      (when show-remove-button?
+        [icon-button {:icon     "remove"
+                      :on-click handle-remove-click}])
       [icon-button {:icon     (if visible? "visibility-on" "visibility-off")
                     :title    (if visible? "Make invisible" "Make visible")
                     :on-click handle-visibility-click}]]]))
