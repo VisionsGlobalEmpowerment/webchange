@@ -145,6 +145,16 @@
     (set-combined-skin spine-object skin-names)
     (set-skin spine-object skin-name)))
 
+(defn set-empty-animation
+  ([spine-object]
+   (set-empty-animation spine-object {}))
+  ([spine-object params]
+   (let [{:keys [track-index mix-duration]} (merge {:track-index  0
+                                                    :mix-duration 0}
+                                                   params)]
+     (-> (.-state spine-object)
+         (.setEmptyAnimation track-index mix-duration)))))
+
 (defn add-animation
   ([spine-object animation-name]
    (add-animation spine-object animation-name {}))
@@ -155,6 +165,8 @@
                                                    :delay       0
                                                    :loop?       true}
                                                   params)]
+     (when (> track-index 0)
+       (set-empty-animation spine-object {:track-index track-index}))
      (-> (.-state spine-object)
          (.addAnimation track-index animation-name loop? delay)))))
 
@@ -169,16 +181,6 @@
                                             params)]
      (-> (.-state spine-object)
          (.setAnimation track-index animation-name loop?)))))
-
-(defn set-empty-animation
-  ([spine-object]
-   (set-empty-animation spine-object {}))
-  ([spine-object params]
-   (let [{:keys [track-index mix-duration]} (merge {:track-index  0
-                                                    :mix-duration 0}
-                                                   params)]
-     (-> (.-state spine-object)
-         (.setEmptyAnimation track-index mix-duration)))))
 
 (defn set-animation-speed
   [spine-object animation-speed]

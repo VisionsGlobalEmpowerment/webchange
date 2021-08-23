@@ -387,7 +387,17 @@
       (throw-unauthorized {:role :educator})))
   (resource-response "index.html" {:root "public"}))
 
+(defn- editor-url
+  [{:keys [course-slug scene-slug]}]
+  (str "/courses/" course-slug "/editor-v2/" scene-slug))
+
+(defn- sandbox-url
+  [{:keys [course-slug scene-slug]}]
+  (str "/s/" course-slug "/" scene-slug))
+
 (defroutes course-pages-routes
+  (GET "/courses/:course-slug/edit" [course-slug] (-> course-slug core/first-activity editor-url redirect))
+  (GET "/courses/:course-slug/play" [course-slug] (-> course-slug core/first-activity sandbox-url redirect))
   (GET "/courses/:course-slug/editor" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2/:scene-id" request (collaborator-route request))
