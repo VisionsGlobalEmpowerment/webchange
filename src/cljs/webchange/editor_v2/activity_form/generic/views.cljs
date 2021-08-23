@@ -30,7 +30,7 @@
   (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])
                show-new-diagram? (r/atom true)]
     (let [activity-type (get-activity-type scene-data)]
-      [layout
+      [layout {:scene-data scene-data}
        [:div.generic-editor
         [:div.interpreter-wrapper
          [interpreter-stage {:class-name "generic-interpreter"}]

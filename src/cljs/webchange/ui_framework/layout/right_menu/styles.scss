@@ -76,7 +76,7 @@
 			margin-right: 6px;
 		}
         
-		button.button-style.blue-button {
+		div.button-style.blue-button {
             background: #0071E3;
             color: #fff;
             border-color: #0071E3;
@@ -96,8 +96,18 @@
 
 		.plus-icon {
 			padding: 0;
+			cursor: pointer;
 		}
     }
+
+	.title.white {
+		background: #fff;
+		color: #1D1D1F;
+		font-size: 14px;
+		font-weight: 500;
+		padding: 24px 25px 11px;
+		border-top: 1px solid #CBCBCB;
+	}
 
 	.side-menu-r {
 		padding-bottom: 24px;

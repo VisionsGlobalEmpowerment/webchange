@@ -7,7 +7,7 @@
     [webchange.views-modals :refer [modal-windows]]))
 
 (defn layout
-  [{:keys [actions show-navigation?]
+  [{:keys [actions show-navigation? scene-data]
     :or   {show-navigation? true}}]
   (let [this (r/current-component)]
     [:div.page-layout
@@ -18,5 +18,6 @@
         [navigation-menu])
       (into [:div.content]
             (r/children this))
-      [right-menu {:actions actions}]]
+      [right-menu {:actions    actions
+                   :scene-data scene-data}]]
      [modal-windows]]))

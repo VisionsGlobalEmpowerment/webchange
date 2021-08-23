@@ -39,6 +39,7 @@
     [webchange.ui-framework.components.icon.icon-music :as music]
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
+    [webchange.ui-framework.components.icon.icon-plus-grey :as plus-grey]
     [webchange.ui-framework.components.icon.icon-plus :as plus]
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
@@ -100,6 +101,7 @@
    "music"              music/data
    "music-off"          music-off/data
    "play"               play/data
+   "plus-grey"          plus-grey/data
    "plus"               plus/data
    "preview"            preview/data
    "remove"             remove/data
