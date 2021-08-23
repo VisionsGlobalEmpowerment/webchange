@@ -786,3 +786,10 @@
   [type status]
   (let [courses (db/get-courses-by-status-and-type {:type type :status status})]
     [true (map ->website-course courses)]))
+
+(defn first-activity
+  [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        {scene-slug :name} (-> (db/get-scenes-by-course-id {:course_id course-id}) first)]
+    {:course-slug course-slug
+     :scene-slug scene-slug}))
