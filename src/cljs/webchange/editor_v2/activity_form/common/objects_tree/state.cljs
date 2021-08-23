@@ -41,6 +41,7 @@
   [object-data]
   (cond
     (get-in object-data [:metadata :uploaded-image?]) :uploaded-image
+    (get-in object-data [:metadata :added-character?]) :added-character
     :default :unknown))
 
 (re-frame/reg-sub
@@ -48,7 +49,7 @@
   (fn [[_ object-name]]
     [(re-frame/subscribe [::object-data object-name])])
   (fn [[object-data]]
-    (some #{(get-object-type object-data)} [:uploaded-image])))
+    (some #{(get-object-type object-data)} [:added-character :uploaded-image])))
 
 (re-frame/reg-event-fx
   ::set-object-visibility
@@ -72,6 +73,7 @@
                           (get-object-type))]
       (case object-type
         :uploaded-image {:dispatch [::remove-uploaded-image object-name]}
+        :added-character {:dispatch [::remove-added-character object-name]}
         {}))))
 
 (re-frame/reg-event-fx
@@ -80,4 +82,12 @@
     (let [data {:name object-name}]
       {:dispatch [::state-activity/call-activity-common-action
                   {:action :remove-image
+                   :data   data}]})))
+
+(re-frame/reg-event-fx
+  ::remove-added-character
+  (fn [{:keys [_]} [_ object-name]]
+    (let [data {:name object-name}]
+      {:dispatch [::state-activity/call-activity-common-action
+                  {:action :remove-character
                    :data   data}]})))

@@ -120,16 +120,6 @@
                                :always (-> (string/replace " " "-")
                                            (string/replace "_" "-")
                                            (string/lower-case)))
-        character-data (merge {:type      "animation"
-                               :anim      "idle"
-                               :start     true
-                               :editable? {:select        true
-                                           :drag          true
-                                           :show-in-tree? true}}
-                              (get animations name {:scale {:x 1 :y 1}
-                                                    :speed 1})
-                              (nth character-positions character-idx {:x 500 :y 500})
-                              data)
 
         show-action-name (str "show-character-" character-name)
         hide-action-name (str "hide-character-" character-name)
@@ -142,7 +132,21 @@
                            {:action hide-action-name
                             :type   "image"
                             :links  [{:type "object" :id character-name}]
-                            :name   (str "Hide " character-name)}]]
+                            :name   (str "Hide " character-name)}]
+
+        character-data (merge {:type      "animation"
+                               :anim      "idle"
+                               :start     true
+                               :editable? {:select        true
+                                           :drag          true
+                                           :show-in-tree? true}
+                               :metadata  {:added-character? true}
+                               :links     [{:type "action" :id show-action-name}
+                                           {:type "action" :id hide-action-name}]}
+                              (get animations name {:scale {:x 1 :y 1}
+                                                    :speed 1})
+                              (nth character-positions character-idx {:x 500 :y 500})
+                              data)]
     (-> scene-data
         (assoc-in [:objects (keyword character-name)] character-data)
         (add-object-to-last-layer character-name)
@@ -158,4 +162,5 @@
     :background-music-remove (remove-background-music scene-data)
     :add-image (add-image scene-data data)
     :remove-image (common-actions-utils/remove-image scene-data data)
-    :add-character (add-character scene-data data)))
+    :add-character (add-character scene-data data)
+    :remove-character (common-actions-utils/remove-character scene-data data)))
