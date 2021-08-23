@@ -26,12 +26,6 @@
                  (not= action action-name)))
        (set-available-actions scene-data)))
 
-;; Remove Image
-
-(defn- remove-from-assets
-  [scene-data image-src]
-  (update scene-data :assets lists/remove-by-predicate #(= (:url %) image-src)))
-
 (defn- remove-from-dialogs
   [scene-data target-action-name]
   (->> (:actions scene-data)
@@ -39,14 +33,35 @@
               [action-name
                (if (sequential? (:data action-data))
                  (->> (:data action-data)
+                      ;; Remove 'in-sequence' actions
                       (filter (fn [dialog-item]
                                 (let [{:keys [type id]} (get-inner-action dialog-item)]
                                   (not (and (= type "action")
                                             (= id target-action-name))))))
+                      ;; Remove actions in parallel sequences
+                      (map (fn [dialog-item]
+                             (if (= (:type dialog-item) "parallel")
+                               (->> (:data dialog-item)
+                                    (filter (fn [parallel-item]
+                                              (let [{:keys [type id]} (get-inner-action parallel-item)]
+                                                (not (and (= type "action")
+                                                          (= id target-action-name))))))
+                                    (assoc dialog-item :data))
+                               dialog-item)))
+                      (filter (fn [{:keys [data]}]
+                                (not (empty? data))))
                       (assoc action-data :data))
                  action-data)]))
        (into {})
        (assoc scene-data :actions)))
+
+;; Remove Image
+
+(defn- remove-from-assets
+  [scene-data image-src]
+  (let [assets (-> (get scene-data :assets)
+                   (vec))]
+    (assoc scene-data :assets (lists/remove-by-predicate assets #(= (:url %) image-src)))))
 
 (defn- remove-related-image-action
   [scene-data related-actions]
@@ -78,6 +93,7 @@
   (reduce (fn [scene-data action-name]
             (-> scene-data
                 (remove-from-actions action-name)
+                (remove-from-dialogs action-name)
                 (remove-from-available-actions action-name)))
           scene-data
           related-actions))
