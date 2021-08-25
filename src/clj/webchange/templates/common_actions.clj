@@ -163,4 +163,5 @@
     :add-image (add-image scene-data data)
     :remove-image (common-actions-utils/remove-image scene-data data)
     :add-character (add-character scene-data data)
-    :remove-character (common-actions-utils/remove-character scene-data data)))
+    :remove-character (common-actions-utils/remove-character scene-data data)
+    :remove-question (common-actions-utils/remove-question scene-data data)))

@@ -199,7 +199,8 @@
                      :track   {:title alias
                                :nodes [{:type      "dialog"
                                         :action-id (keyword task-dialog-name)}]}
-                     :objects {}}
+                     :objects {}
+                     :assets  []}
                     has-correct-answer? (merge-data (add-check-correct-answer {:action-name        check-answers
                                                                                :correct-answers    correct-answers
                                                                                :hide-question-name hide-question-name
@@ -221,13 +222,20 @@
                                                          args)))))))
 
 (defn add-to-scene
-  [activity-data {:keys [alias action-name actions object-name objects track]}]
-  (let [conj-vec (fn [list element] (conj (if (vector? list) list (vec list)) element))]
+  [activity-data {:keys [alias action-name actions object-name objects assets track] :as question-data}]
+  (let [conj-vec (fn [list element] (conj (if (vector? list) list (vec list)) element))
+        metadata {:question? true
+                  :assets    (map :url assets)
+                  :actions   (->> (keys actions) (map clojure.core/name))
+                  :objects   (->> (keys objects) (map clojure.core/name))}]
     (-> activity-data
         (update :actions merge actions)
         (update :objects merge objects)
+        (update-in [:objects (keyword object-name) :metadata] merge metadata)
+        (update :assets concat assets)
         (update-in [:scene-objects] conj-vec [object-name])
-        (update-in [:metadata :tracks] conj track)
+        (update-in [:metadata :tracks] conj (merge track
+                                                   {:question-id object-name}))
         (update-in [:metadata :available-actions] concat [{:action action-name
                                                            :type   "question"
                                                            :name   (str "Ask " alias)}]))))

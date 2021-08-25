@@ -25,7 +25,10 @@
                                       :border-radius border-radius
                                       :image-size    "contain"
                                       :origin        {:type "center-center"}
-                                      :editable?     {:select true}}}}))
+                                      :editable?     {:select true}}}
+     :assets  [{:url  src
+                :size 1
+                :type "image"}]}))
 
 (defn- create-substrate
   [{:keys [object-name x y width height border-radius question-id value actions]}]
