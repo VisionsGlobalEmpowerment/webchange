@@ -175,6 +175,25 @@
                                 []
                                 predicate))
 
+(defn- find-and-change-action-recursively-core
+  [action-data predicate modifier]
+  (cond
+    (predicate action-data) (modifier action-data)
+    (map? action-data) (->> action-data
+                            (map (fn [[field-name field-value]]
+                                   [field-name (find-and-change-action-recursively-core field-value predicate modifier)]))
+                            (into {}))
+    (sequential? action-data) (map (fn [data]
+                                     (find-and-change-action-recursively-core data predicate modifier))
+                                   action-data)
+    :else action-data))
+
+(defn find-and-change-action-recursively
+  [scene-data predicate modifier]
+  (find-and-change-action-recursively-core scene-data
+                                           predicate
+                                           modifier))
+
 ; Triggers
 
 (def background-music-trigger-name :music)
