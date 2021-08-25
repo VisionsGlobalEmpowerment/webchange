@@ -17,4 +17,7 @@
                                       :max-width  image-width
                                       :max-height image-height
                                       :origin     {:type "center-center"}
-                                      :editable?  {:select true}}}}))
+                                      :editable?  {:select true}}}
+     :assets  [{:url  task-image
+                :size 1
+                :type "image"}]}))

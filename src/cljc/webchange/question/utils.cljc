@@ -22,6 +22,7 @@
   (-> param1
       (update :actions merge (get param2 :actions {}))
       (update :objects merge (get param2 :objects {}))
+      (update :assets concat (get param2 :assets []))
       (update-in [:track :nodes] concat (get-in param2 [:track :nodes] []))))
 
 (defn merge-data
