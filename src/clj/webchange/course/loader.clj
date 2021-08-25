@@ -112,8 +112,15 @@
   ([config course-slug saved-name scene-name]
    (let [path-name (->snake_case_string scene-name)
          path (scene-path config saved-name path-name)
-         data (-> path io/reader java.io.PushbackReader. edn/read)]
-     (core/save-scene! course-slug scene-name data owner-id))))
+         data (-> path io/reader java.io.PushbackReader. edn/read)
+         course-data (core/get-course-data course-slug)
+         scene-exists? (get-in course-data [:scene-list (keyword scene-name)])]
+     (core/save-scene! course-slug scene-name data owner-id)
+     (when-not scene-exists?
+       (core/save-course! course-slug
+                          (-> course-data
+                              (assoc-in [:scene-list (keyword scene-name)] {:name scene-name}))
+                          owner-id)))))
 
 (defn merge-scene-info
   [config course-slug saved-name scene-name & fields]
