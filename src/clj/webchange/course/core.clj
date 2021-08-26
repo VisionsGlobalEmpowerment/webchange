@@ -231,7 +231,7 @@
 
 (defn- with-course-page
   [{slug :slug :as course}]
-  (let [url (str "/courses/" slug "/editor-v2")]
+  (let [url (str "/courses/" slug "/edit")]
     (assoc course :url url)))
 
 (defn- with-default-image
