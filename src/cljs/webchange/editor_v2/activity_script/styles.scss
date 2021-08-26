@@ -1,0 +1,33 @@
+.activity-script-form {
+    .work-field {
+        display: flex;
+        gap: 16px;
+
+        padding: 16px;
+        background-color: #aeaeae;
+        border-radius: 8px;
+
+        .track-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .track-button {
+                justify-content: center;
+            }
+        }
+
+        .actions-script {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1 1;
+
+            .sheet {
+                padding: 16px 32px;
+                background-color: #fff;
+                border-radius: 4px;
+            }
+        }
+    }
+}

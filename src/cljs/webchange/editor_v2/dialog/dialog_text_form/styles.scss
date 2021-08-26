@@ -1,3 +1,4 @@
+@import "action_unit/styles";
 @import "side_menu/styles";
 
 .dialog-form {
@@ -12,8 +13,6 @@
     }
 
     .work-field {
-        @import "action_unit/styles";
-
         position: relative;
         display: flex;
         align-items: flex-start;

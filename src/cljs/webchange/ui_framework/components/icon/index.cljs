@@ -41,6 +41,7 @@
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
+    [webchange.ui-framework.components.icon.icon-script :as script]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
@@ -97,6 +98,7 @@
    "preview"            preview/data
    "remove"             remove/data
    "restart"            restart/data
+   "script"             script/data
    "settings"           settings/data
    "stop"               stop/data
    "swap"               swap/data

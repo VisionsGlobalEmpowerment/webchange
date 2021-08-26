@@ -6,12 +6,15 @@
     [webchange.ui-framework.components.index :refer [button]]))
 
 (defn form-actions
-  []
-  (let [handle-save-and-close #(do
+  [{:keys [on-close]}]
+  (let [handle-close (fn []
+                       (re-frame/dispatch [::dialog-state-window/close])
+                       (when (fn? on-close)
+                         (on-close)))
+        handle-save-and-close #(do
                                  (re-frame/dispatch [::translator-form.form/save-changes])
-                                 (re-frame/dispatch [::dialog-state-window/close]))
-        handle-save #(re-frame/dispatch [::translator-form.form/save-changes])
-        handle-close #(re-frame/dispatch [::dialog-state-window/close])]
+                                 (handle-close))
+        handle-save #(re-frame/dispatch [::translator-form.form/save-changes])]
     [:div.form-actions.dialog-actions
      [button {:size     "big"
               :on-click handle-save-and-close}

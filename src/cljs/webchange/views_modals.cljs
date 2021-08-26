@@ -1,5 +1,6 @@
 (ns webchange.views-modals
   (:require
+    [webchange.editor-v2.activity-script.views :refer [script-modal]]
     [webchange.editor-v2.concepts.views :refer [delete-dataset-item-modal]]
     [webchange.editor-v2.translator.views-modal :refer [translator-modal]]
     [webchange.editor-v2.dialog.phrase-voice-over.views :refer [phrase-voice-over-modal]]
@@ -14,5 +15,6 @@
    [dialog-modal]
    [phrase-voice-over-modal]
    [translator-modal]
+   [script-modal]
    [configuration-modal]
    [delete-dataset-item-modal]])

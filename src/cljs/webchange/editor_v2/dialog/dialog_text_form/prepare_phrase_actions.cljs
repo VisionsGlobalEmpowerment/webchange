@@ -34,7 +34,7 @@
                                             :node-path       node-path})}))
        actions))
 
-(defn set-action-type
+(defn- set-action-type
   [actions {:keys [available-effects]}]
   {:post [(every? (fn [{:keys [type]}] (some #{type} [:character-animation :effect :phrase :text-animation :unknown])) %)
           (every? (fn [{:keys [source]}] (some #{source} [:concept :scene])) %)]}

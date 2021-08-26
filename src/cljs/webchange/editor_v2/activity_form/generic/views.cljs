@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.editor-v2.activity-script.state :as activity-script]
     [webchange.editor-v2.activity-form.common.interpreter-stage.views :refer [interpreter-stage]]
     [webchange.editor-v2.activity-form.common.object-form.views :refer [object-form]]
     [webchange.editor-v2.activity-form.common.objects-tree.views :refer [objects-tree]]
@@ -29,7 +30,8 @@
   [{:keys [scene-data]}]
   (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])
                show-new-diagram? (r/atom true)]
-    (let [activity-type (get-activity-type scene-data)]
+    (let [activity-type (get-activity-type scene-data)
+          handle-show-script #(re-frame/dispatch [::activity-script/open-window])]
       [layout
        [:div.generic-editor
         [:div.interpreter-wrapper
@@ -37,6 +39,9 @@
          [actions {:scene-data scene-data}]]
         [asset-block {:activity-type activity-type}]
         [:div.swap-diagram-mode
+         [icon-button {:icon     "script"
+                       :title    "Show activity script"
+                       :on-click handle-show-script}]
          [icon-button {:icon     "swap"
                        :title    "Change Diagram Mode"
                        :on-click #(swap! show-new-diagram? not)}]]
