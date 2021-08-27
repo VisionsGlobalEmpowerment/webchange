@@ -21,6 +21,13 @@
   (fn [db]
     (state-parent/get-selected-objects db)))
 
+(re-frame/reg-sub
+  ::show-edit-menu?
+  (fn []
+    [(re-frame/subscribe [::selected-objects])])
+  (fn [[{:keys [data]}]]
+    (some? data)))
+
 ;;
 
 (re-frame/reg-event-fx

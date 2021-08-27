@@ -10,7 +10,8 @@
   [{:keys [id]}]
   (let [handle-click #(re-frame/dispatch [::state/flip-animation id])]
     [icon-button {:icon     "flip"
-                  :on-click handle-click}
+                  :on-click handle-click
+                  :variant  "outlined"}
      "Flip"]))
 
 (defn- skeleton
@@ -25,7 +26,8 @@
                     :on-change   handle-change
                     :options     options
                     :with-arrow? false
-                    :show-image? false}]]))
+                    :show-image? false
+                    :variant     "outlined"}]]))
 
 (defn- scale
   [{:keys [id]}]

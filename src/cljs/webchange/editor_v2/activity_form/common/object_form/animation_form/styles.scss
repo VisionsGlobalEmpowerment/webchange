@@ -1,7 +1,7 @@
 .animation-form {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
 
     .scale-group {
         display: flex;
@@ -9,6 +9,10 @@
         gap: 8px;
 
         .scale-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
             .scale-input {
                 width: 80px;
             }

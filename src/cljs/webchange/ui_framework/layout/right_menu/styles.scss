@@ -1,12 +1,12 @@
 .right-side-bar {
-    max-width: 360px;
-    width: 100%;
-    height: 100%;
+    @import "edit_menu/styles";
+
     background: #fff;
     box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    right: 0;
+
+    .right-side-menu-content {
+        position: relative;
+    }
 
     .clear:before,
     .clear:after {

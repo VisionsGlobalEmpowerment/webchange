@@ -29,20 +29,33 @@ $content-right-padding: 360px + $mid-section-padding;
         overflow: auto;
         overflow-x: hidden;
 
-        & > .side-menu {
-            flex-grow: 0;
-            flex-shrink: 0;
-            padding: $content-padding;
-            width: 296px;
-            background: #353535;
+        & > .left-side-menu {
+            flex: 1 1;
+            min-width: 230px;
+            max-width: 296px;
         }
 
         & > .content {
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            flex-grow: 1;
-            padding: $mid-section-padding $content-right-padding $mid-section-padding $content-left-padding;
+            flex: 2 2;
+            overflow: auto;
+            padding: $mid-section-padding
+        }
+
+        & > .right-side-menu {
+            flex: 1 1;
+            min-width: 300px;
+            max-width: 360px;
+        }
+
+        & > .side-menu {
+            flex-grow: 0;
+            flex-shrink: 0;
+            padding: $content-padding;
+            width: 296px;
+            background: #353535;
         }
     }
 }

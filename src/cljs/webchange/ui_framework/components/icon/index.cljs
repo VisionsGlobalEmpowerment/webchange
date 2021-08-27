@@ -9,6 +9,7 @@
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
     [webchange.ui-framework.components.icon.icon-arrow-right :as arrow-right]
     [webchange.ui-framework.components.icon.icon-audio :as audio]
+    [webchange.ui-framework.components.icon.icon-back :as back]
     [webchange.ui-framework.components.icon.icon-background :as background]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
     [webchange.ui-framework.components.icon.icon-cancel :as cancel]
@@ -71,6 +72,7 @@
    "arrow-left"         arrow-left/data
    "arrow-right"        arrow-right/data
    "audio"              audio/data
+   "back"               back/data
    "background"         background/data
    "bring-to-top"       bring-to-top/data
    "cancel"             cancel/data

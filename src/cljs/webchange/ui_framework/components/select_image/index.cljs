@@ -4,8 +4,9 @@
     [webchange.ui-framework.components.utils :refer [get-bounding-rect get-class-name]]))
 
 (defn- current-value
-  [{:keys [on-click ref show-image? value value-img]}]
-  [:div {:class-name "current-value"
+  [{:keys [on-click ref show-image? value value-img variant]}]
+  [:div {:class-name (get-class-name {"current-value"          true
+                                      (str "variant-" variant) (some? variant)})
          :on-click   on-click
          :ref        #(when (some? %) (reset! ref %))}
    (cond
@@ -76,7 +77,7 @@
           options))
 
 (defn component
-  [{:keys [allow-empty? class-name disabled? on-change options show-image? title value]
+  [{:keys [allow-empty? class-name disabled? on-change options show-image? title value variant]
     :or   {allow-empty? false
            disabled?    false
            on-change    #()
@@ -118,7 +119,8 @@
                        :value-img   (img-src? value options)
                        :on-click    show-menu
                        :ref         current-value-ref
-                       :show-image? show-image?}]
+                       :show-image? show-image?
+                       :variant     variant}]
        (when @show-options-list?
          [options-list {:options      options
                         :allow-empty? allow-empty?
