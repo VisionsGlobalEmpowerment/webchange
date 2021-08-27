@@ -105,6 +105,8 @@
 
     ;; technical
     :test-ui [test-ui]
+
+    nil [:div]
     [page-404]))
 
 (defn main-panel []
