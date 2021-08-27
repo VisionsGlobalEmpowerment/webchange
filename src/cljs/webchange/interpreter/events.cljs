@@ -1619,7 +1619,7 @@
     (let [animation-actions (i/text-animation-sequence->actions db action)
           audio-action (i/animation-sequence->audio-action action)]
       (if audio-action
-        {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
+        {:dispatch [::ce/execute-parallel (assoc action :data (concat [audio-action] animation-actions))]}
         {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
 
 (re-frame/reg-event-fx

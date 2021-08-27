@@ -170,7 +170,8 @@
                                                                                               :phrase-text (:text task)
                                                                                               :target      task-text-name
                                                                                               :audio       nil
-                                                                                              :animation   "bounce"
+                                                                                              :animation   "color"
+                                                                                              :fill        45823
                                                                                               :data        []}]}]
                                                                 :phrase-description "Question text"
                                                                 :editor-type        "dialog"}
