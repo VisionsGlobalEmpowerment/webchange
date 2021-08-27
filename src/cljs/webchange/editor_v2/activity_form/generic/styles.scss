@@ -9,6 +9,10 @@
     width: 100%;
 
     .interpreter-wrapper {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        display: flex;
+        justify-content: center;
         position:relative;
 
         .generic-interpreter {

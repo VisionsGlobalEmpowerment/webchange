@@ -32,26 +32,15 @@
    {:text     "Add character"
     :on-click add-character/open-add-character-window}])
 
-;; (defn actions-menu
-;;   []
-;;   (for [{:keys [text on-click] :as props} activity-actions]
-;;     ^{:key text}
-;;     [:div.title.pos-r.clear
-;;      [:span.float-left text]
-;;      [:span.float-right.plus-icon-r
-;;       [icon {:icon       "plus"
-;;              :class-name "plus-icon"
-;;              :on-click   on-click}]]]))
-
 (defn right-menu
   [{:keys [actions class-name edit-menu-content on-edit-menu-back show-edit-menu? scene-data] :or {actions []}}]
   (let [activity-actions (activity-action/get-activity-actions-list scene-data)]
     [:div {:class-name (get-class-name (cond-> {"right-side-bar" true}
                                                (some? class-name) (assoc class-name true)))}
-     [:div.right-side-bar-top.clear
-      [:div.float-left
+     [:div.right-side-bar-top
+      [:div
        (first actions)]
-      [:div.float-right
+      [:div.actions
        [publish-button]
        (nth actions 1)]]
      [:div.right-side-menu-content
@@ -74,78 +63,10 @@
          [objects-tree]]]]
 
       (for [{:keys [text on-click] :as props} actions-list]
+        ^{:key text}
         [:div.title.pos-r.clear.white
          [:span.float-left text]
          [:span.float-right.plus-icon-r
           [icon {:icon       "plus-grey"
                  :class-name "plus-icon"
-                 :on-click   on-click}]]])
-      ]]))
-
-
-;; (defn right-menu
-;;   [{:keys [actions] :or {actions []}}]
-;;   [:div.right-side-bar
-;;    [:div.right-side-bar-top.clear
-;;     [:div.float-left
-;;      [:span
-;;       [icon {:icon       "sync"
-;;              :class-name "rotate-icon"}]]
-;;      [:span.font-style "Saving Process"]]
-;;     [:div.float-right
-;;      [:button.button-style.margin-right "Publish"]
-;;      [:button.button-style.blue-button "Preview"]]]
-
-;;    [:div.right-side-menu
-;;     [:div.title.pos-r.clear
-;;      [:span.float-left "Add Ball"]
-;;      [:span.float-right.plus-icon-r
-;;       [icon {:icon       "plus"
-;;              :class-name "plus-icon"}]]]
-
-;;     [:div.side-menu-r
-;;      [:h3 "Scene Layers"]
-;;      [:ul
-;;       [:li.clear
-;;        [:div.float-left
-;;         [:span.margin-right
-;;          [icon {:icon       "text"
-;;                 :class-name "text-icon"}]]
-;;         [:span "Text 01"]]
-;;        [:div.float-right
-;;         [:span.margin-right
-;;          [icon {:icon       "eye"
-;;                 :class-name "text-icon"}]]
-;;         [:span.margin-right
-;;          [icon {:icon       "slider"
-;;                 :class-name "text-icon"}]]
-;;         [:span.margin-zero
-;;          [icon {:icon       "trash"
-;;                 :class-name "text-icon"}]]]]]]
-
-;;     [:div.title.pos-r.clear.white
-;;      [:span.float-left "Add Image"]
-;;      [:span.float-right.plus-icon-r
-;;       [icon {:icon       "plus-grey"
-;;              :class-name "plus-icon"}]]]
-
-;;     [:div.side-menu-r
-;;      [:ul
-;;       [:li.clear
-;;        [:div.float-left
-;;         [:span.margin-right
-;;          [icon {:icon       "text"
-;;                 :class-name "text-icon"}]]
-;;         [:span "Text 01"]]
-;;        [:div.float-right
-;;         [:span.margin-right
-;;          [icon {:icon       "eye"
-;;                 :class-name "text-icon"}]]
-;;         [:span.margin-right
-;;          [icon {:icon       "slider"
-;;                 :class-name "text-icon"}]]
-;;         [:span.margin-zero
-;;          [icon {:icon       "trash"
-;;                 :class-name "text-icon"}]]]]]]
-
-;;     ]])
+                 :on-click   on-click}]]])]]))

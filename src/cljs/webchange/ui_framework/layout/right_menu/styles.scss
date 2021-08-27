@@ -10,6 +10,7 @@
     .right-side-menu-content {
         position: relative;
         flex: 1 1;
+        overflow-x: hidden;
         overflow-y: auto;
     }
 
@@ -55,6 +56,11 @@
     }
     
     .right-side-bar-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+
         flex: 0 0;
         padding: 20px 25px;
         font-size: 12px;
@@ -73,6 +79,11 @@
             color: #000000;
             outline: 0;
             font-family: 'Roboto', sans-serif;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
         }
 
         .rotate-icon {

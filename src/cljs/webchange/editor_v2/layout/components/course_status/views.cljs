@@ -8,7 +8,9 @@
 (defn publish-button
   []
   (let [handle-click #(re-frame/dispatch [::state/publish])]
-    [button {:on-click handle-click}
+    [button {:on-click handle-click
+             :variant  "outlined"
+             :color    "default"}
      "Publish"]))
 
 (defn- status-message
