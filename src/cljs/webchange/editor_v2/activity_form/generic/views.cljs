@@ -28,7 +28,7 @@
 
 (defn activity-form
   [{:keys [scene-data]}]
-  (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])
+  (r/with-let [                                             ;_ (re-frame/dispatch [::progress-state/show-translation-progress])
                show-new-diagram? (r/atom true)]
     (let [activity-type (get-activity-type scene-data)
           show-edit-menu? @(re-frame/subscribe [::object-form-state/show-edit-menu?])
