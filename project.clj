@@ -71,16 +71,16 @@
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
                                     "test/js"]
 
-  :figwheel {:css-dirs ["resources/public/css"]
-             :ring-handler webchange.handler/dev-handler
-             :server-ip   "0.0.0.0"
+  :figwheel {:css-dirs       ["resources/public/css"]
+             :ring-handler   webchange.handler/dev-handler
+             :server-ip      "0.0.0.0"
              :server-logfile "log/figwheel.log"}
 
 
-  :migratus {:store :database
+  :migratus {:store         :database
              :migration-dir "migrations"
-             :init-script "init.sql"
-             :db ~(get (System/getenv) "DATABASE_URL")}
+             :init-script   "init.sql"
+             :db            ~(get (System/getenv) "DATABASE_URL")}
 
   :sass {:src              "src/cljs/webchange/ui_framework/styles/index"
          :output-directory "resources/public/css"
@@ -91,41 +91,41 @@
            "cljs"   ["lein" "cljsbuild" "auto" "dev"]
            "clj"    ["lein" "run"]}
 
-  :aliases {"dev" ["cooper"]
+  :aliases {"dev"       ["cooper"]
             "resources" ["run" "-m" "webchange.resources.generate-resources-list"]}
 
   :profiles
   {:dev
-   {:dependencies [[binaryage/devtools "0.9.10"]
-                   [day8.re-frame/re-frame-10x "0.3.3"]
-                   [day8.re-frame/tracing "0.5.1"]
-                   [ring/ring-mock "0.3.2"]
-                   [mockery "0.1.4"]
-                   [figwheel-sidecar "0.5.20"]]
-    :plugins      [[lein-doo "0.1.8"]]
-    :main         webchange.server-dev
-    :repl-options {:init-ns webchange.server
-                   :init (dev)}
-    :source-paths ["env/dev/clj" "env/dev/cljs"]}
-   :prod {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
-   :uberjar {:source-paths ["env/prod/clj"]
-             :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]
-             :omit-source  false
-             :main         webchange.server
-             :aot          [webchange.server]
-             :uberjar-name "webchange.jar"
-             :jar-exclusions [#"public/raw/.*" #"public/upload/.*"]
+            {:dependencies [[binaryage/devtools "0.9.10"]
+                            [day8.re-frame/re-frame-10x "0.3.3"]
+                            [day8.re-frame/tracing "0.5.1"]
+                            [ring/ring-mock "0.3.2"]
+                            [mockery "0.1.4"]
+                            [figwheel-sidecar "0.5.20"]]
+             :plugins      [[lein-doo "0.1.8"]]
+             :main         webchange.server-dev
+             :repl-options {:init-ns webchange.server
+                            :init    (dev)}
+             :source-paths ["env/dev/clj" "env/dev/cljs"]}
+   :prod    {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
+   :uberjar {:source-paths       ["env/prod/clj"]
+             :dependencies       [[day8.re-frame/tracing-stubs "0.5.1"]]
+             :omit-source        false
+             :main               webchange.server
+             :aot                [webchange.server]
+             :uberjar-name       "webchange.jar"
+             :jar-exclusions     [#"public/raw/.*" #"public/upload/.*"]
              :uberjar-exclusions [#"public/raw/.*" #"public/upload/.*"]
-             :prep-tasks   ["compile" ["sass" "once"]
-                            "compile" ["cljsbuild" "once" "sw"]
-                            "compile" ["cljsbuild" "once" "min"]]}}
+             :prep-tasks         ["compile" ["sass" "once"]
+                                  "compile" ["cljsbuild" "once" "sw"]
+                                  "compile" ["cljsbuild" "once" "min"]]}}
 
   :cljsbuild
   {:builds
    [{:id           "dev"
      :source-paths ["src/cljs" "src/cljc"]
      :figwheel     {:websocket-host :js-client-host
-                    :on-jsload "webchange.core/mount-root"}
+                    :on-jsload      "webchange.core/mount-root"}
      :compiler     {:main                 webchange.core
                     :output-to            "resources/public/js/compiled/app.js"
                     :output-dir           "resources/public/js/compiled/out"
@@ -133,128 +133,98 @@
                     :source-map-timestamp true
                     :preloads             [devtools.preload
                                            day8.re-frame-10x.preload]
-                    :closure-defines      {"re_frame.trace.trace_enabled_QMARK_" true
+                    :closure-defines      {"re_frame.trace.trace_enabled_QMARK_"        true
                                            "day8.re_frame.tracing.trace_enabled_QMARK_" true}
                     :external-config      {:devtools/config {:features-to-install :all}}
-                    :npm-deps
-                                          {
-                                           :react "16.6.0"
-                                           :react-dom "16.6.0"
-                                           :gsap "2.1.2"
-                                           :wavesurfer.js "5.1.0"
-                                           :svg-arc-to-cubic-bezier "3.2.0"
-                                           :closest "0.0.1"
-                                           :pathfinding "^0.4.18"
-                                           :paths-js "^0.4.10"
-                                           :lodash "^4.17.15"
-                                           "@projectstorm/react-diagrams" "^5.3.2"}
+                    :npm-deps             {:react                   "16.6.0"
+                                           :react-dom               "16.6.0"
+                                           :gsap                    "2.1.2"
+                                           :wavesurfer.js           "5.1.0"
+                                           :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs [{:file "src/libs/dagre.js"
-                                    :provides ["dagre"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/spine-canvas.js"
-                                    :provides ["spine"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/spine-player.js"
-                                    :provides ["spine-player"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/pixi-build.js"
-                                    :provides ["pixi"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/audio-script.js"
-                                    :provides ["audio-script"]
-                                    :module-type :commonjs}]
-                    :install-deps true
-                    :optimizations   :none
-                    :language-in :ecmascript6}}
+                    :foreign-libs         [{:file        "src/libs/spine-canvas.js"
+                                            :provides    ["spine"]
+                                            :module-type :commonjs}
+                                           {:file        "src/libs/spine-player.js"
+                                            :provides    ["spine-player"]
+                                            :module-type :commonjs}
+                                           {:file        "src/libs/pixi-build.js"
+                                            :provides    ["pixi"]
+                                            :module-type :commonjs}
+                                           {:file        "src/libs/audio-script.js"
+                                            :provides    ["audio-script"]
+                                            :module-type :commonjs}]
+                    :install-deps         true
+                    :optimizations        :none
+                    :language-in          :ecmascript6}}
 
     {:id           "sw"
      :source-paths ["src/sw"]
-     :compiler {:main webchange.service-worker
-                :output-to "resources/public/js/compiled/service-worker.js"
-                :output-dir "resources/public/js/compiled/out-sw"
-                :optimizations :advanced
-                :pretty-print false}}
+     :compiler     {:main          webchange.service-worker
+                    :output-to     "resources/public/js/compiled/service-worker.js"
+                    :output-dir    "resources/public/js/compiled/out-sw"
+                    :optimizations :advanced
+                    :pretty-print  false}}
     {:id           "sw-dev"
      :source-paths ["src/sw"]
-     :compiler {:main webchange.service-worker
-                :output-to "resources/public/js/compiled/service-worker.js"
-                :output-dir "resources/public/js/compiled/out-sw-dev"
-                :optimizations :simple
-                :source-map "resources/public/js/compiled/service-worker.js.map"
-                :source-map-path "/js/compiled/out-sw-dev/"
-                :pretty-print true}}
+     :compiler     {:main            webchange.service-worker
+                    :output-to       "resources/public/js/compiled/service-worker.js"
+                    :output-dir      "resources/public/js/compiled/out-sw-dev"
+                    :optimizations   :simple
+                    :source-map      "resources/public/js/compiled/service-worker.js.map"
+                    :source-map-path "/js/compiled/out-sw-dev/"
+                    :pretty-print    true}}
     {:id           "min"
      :source-paths ["src/cljs"]
-     :jar true
+     :jar          true
      :compiler     {:main            webchange.core
                     :output-to       "resources/public/js/compiled/app.js"
                     :optimizations   :simple
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false
-                    :npm-deps
-                                     {
-                                      :react "16.6.0"
-                                      :react-dom "16.6.0"
-                                      :gsap "2.1.2"
-                                      :wavesurfer.js "5.1.0"
-                                      :svg-arc-to-cubic-bezier "3.2.0"
-                                      :closest "0.0.1"
-                                      :pathfinding "^0.4.18"
-                                      :paths-js "^0.4.10"
-                                      :lodash "^4.17.15"
-                                      "@projectstorm/react-diagrams" "^5.3.2"}
+                    :npm-deps        {:react                   "16.6.0"
+                                      :react-dom               "16.6.0"
+                                      :gsap                    "2.1.2"
+                                      :wavesurfer.js           "5.1.0"
+                                      :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs [{:file "src/libs/dagre.js"
-                                    :provides ["dagre"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/spine-canvas.js"
-                                    :provides ["spine"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/spine-player.js"
-                                    :provides ["spine-player"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/pixi-build.js"
-                                    :provides ["pixi"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/audio-script.js"
-                                    :provides ["audio-script"]
-                                    :module-type :commonjs}]
-                    :install-deps true
-                    :language-in :ecmascript6}}
+                    :foreign-libs    [{:file        "src/libs/spine-canvas.js"
+                                       :provides    ["spine"]
+                                       :module-type :commonjs}
+                                      {:file        "src/libs/spine-player.js"
+                                       :provides    ["spine-player"]
+                                       :module-type :commonjs}
+                                      {:file        "src/libs/pixi-build.js"
+                                       :provides    ["pixi"]
+                                       :module-type :commonjs}
+                                      {:file        "src/libs/audio-script.js"
+                                       :provides    ["audio-script"]
+                                       :module-type :commonjs}]
+                    :install-deps    true
+                    :language-in     :ecmascript6}}
 
     {:id           "test"
      :source-paths ["src/cljs" "src/cljc" "test/cljs" "test/cljc"]
      :compiler     {:main          webchange.runner
                     :output-to     "resources/public/js/compiled/test.js"
                     :output-dir    "resources/public/js/compiled/test/out"
-                    :npm-deps
-                                   {
-                                    :react "16.6.0"
-                                    :react-dom "16.6.0"
-                                    :gsap "2.1.2"
-                                    :wavesurfer.js "5.1.0"
-                                    :svg-arc-to-cubic-bezier "3.2.0"
-                                    :closest "0.0.1"
-                                    :pathfinding "^0.4.18"
-                                    :paths-js "^0.4.10"
-                                    :lodash "^4.17.15"
-                                    "@projectstorm/react-diagrams" "^5.3.2"}
+                    :npm-deps      {:react                   "16.6.0"
+                                    :react-dom               "16.6.0"
+                                    :gsap                    "2.1.2"
+                                    :wavesurfer.js           "5.1.0"
+                                    :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs [{:file "src/libs/dagre.js"
-                                    :provides ["dagre"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/spine-canvas.js"
-                                    :provides ["spine"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/spine-player.js"
-                                    :provides ["spine-player"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/pixi-build.js"
-                                    :provides ["pixi"]
-                                    :module-type :commonjs}
-                                   {:file "src/libs/audio-script.js"
-                                    :provides ["audio-script"]
-                                    :module-type :commonjs}]
-                    :install-deps true
+                    :foreign-libs  [{:file        "src/libs/spine-canvas.js"
+                                     :provides    ["spine"]
+                                     :module-type :commonjs}
+                                    {:file        "src/libs/spine-player.js"
+                                     :provides    ["spine-player"]
+                                     :module-type :commonjs}
+                                    {:file        "src/libs/pixi-build.js"
+                                     :provides    ["pixi"]
+                                     :module-type :commonjs}
+                                    {:file        "src/libs/audio-script.js"
+                                     :provides    ["audio-script"]
+                                     :module-type :commonjs}]
+                    :install-deps  true
                     :optimizations :none}}]})

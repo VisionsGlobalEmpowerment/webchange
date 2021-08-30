@@ -18,7 +18,8 @@
 
 (defn dialog-action?
   [action-data]
-  (contains? action-data :phrase))
+  (or (contains? action-data :phrase)
+      (contains? action-data :phrase-text)))
 
 (defn fix-available-effect
   [available-effect]

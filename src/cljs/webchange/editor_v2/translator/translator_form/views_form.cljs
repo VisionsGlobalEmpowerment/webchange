@@ -7,7 +7,6 @@
     [webchange.editor-v2.translator.translator-form.audio-assets.views :refer [audios-block]]
     [webchange.editor-v2.translator.translator-form.views-form-concepts :refer [concepts-block]]
     [webchange.editor-v2.translator.translator-form.views-form-description :refer [description-block]]
-    [webchange.editor-v2.translator.translator-form.views-form-diagram :refer [diagram-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-target :refer [target-block]]
@@ -26,7 +25,6 @@
      [description-block]
      (when concept-required?
        [concepts-block])
-     [diagram-block]
      [play-phrase-block]
      [target-block]
      (if-not (nil? current-phrase-action)
