@@ -62,6 +62,12 @@
         [:li.clear
          [objects-tree]]]]
 
+      [activity-action/activity-action-modal]
+      [add-character/add-character-window]
+      [background/change-background-window]
+      [background-music/set-music-window]
+      [add-image/add-image-window]
+      
       (for [{:keys [text on-click] :as props} actions-list]
         ^{:key text}
         [:div.title.pos-r.clear.white
