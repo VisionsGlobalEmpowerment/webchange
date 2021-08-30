@@ -6,7 +6,7 @@
 (re-frame/reg-event-fx
   ::load-courses
   (fn [{:keys [db]} _]
-    (let [type "book"
+    (let [type "course"
           status "in-review"]
       {:db         (-> db
                        (assoc-in [:loading :courses] true))
@@ -18,10 +18,30 @@
                     :on-failure      [:api-request-error :courses]}})))
 
 (re-frame/reg-event-fx
+  ::load-books
+  (fn [{:keys [db]} _]
+    (let [type "book"
+          status "in-review"]
+      {:db         (-> db
+                       (assoc-in [:loading :books] true))
+       :http-xhrio {:method          :get
+                    :uri             (str "/api/courses/list/" type "/" status)
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::load-books-success]
+                    :on-failure      [:api-request-error :courses]}})))
+
+(re-frame/reg-event-fx
   ::load-courses-success
   (fn [{:keys [db]} [_ result]]
-    {:db         (assoc-in db [:dashboard :courses] result)
+    {:db         (assoc-in db [:dashboard :courses :courses] result)
      :dispatch-n (list [:complete-request :courses])}))
+
+(re-frame/reg-event-fx
+  ::load-books-success
+  (fn [{:keys [db]} [_ result]]
+    {:db         (assoc-in db [:dashboard :courses :books] result)
+     :dispatch-n (list [:complete-request :books])}))
 
 (re-frame/reg-event-fx
   ::approve
@@ -41,7 +61,8 @@
   ::approve-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :approve-course]
-                       [::load-courses])}))
+                       [::load-courses]
+                       [::load-books])}))
 
 (re-frame/reg-event-fx
   ::request-changes
@@ -61,7 +82,8 @@
   ::request-changes-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :request-changes-course]
-                       [::load-courses])}))
+                       [::load-courses]
+                       [::load-books])}))
 
 (re-frame/reg-event-fx
   ::decline
@@ -81,4 +103,5 @@
   ::decline-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :decline-course]
-                       [::load-courses])}))
+                       [::load-courses]
+                       [::load-books])}))

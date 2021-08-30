@@ -52,7 +52,8 @@
   ::open-courses
   (fn [{:keys [db]} _]
     {:dispatch-n (list
-                   [::courses-events/load-courses])}))
+                  [::courses-events/load-courses]
+                  [::courses-events/load-books])}))
 
 (re-frame/reg-event-fx
   ::open-classes

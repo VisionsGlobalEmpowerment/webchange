@@ -4,7 +4,6 @@
     [webchange.dashboard.common.views :refer [content-page]]
     [webchange.dashboard.courses.subs :as courses-subs]
     [webchange.dashboard.courses.events :as courses-events]
-    [webchange.editor-v2.layout.components.sandbox.create-link :refer [create-link]]
     [cljs-react-material-ui.reagent :as ui]))
 
 (def styles
@@ -17,7 +16,7 @@
 
 (defn- translate
   [path]
-  (get-in {:title     "Courses"
+  (get-in {:title     "In review"
            :actions   {:approve "Approve"
                        :decline  "Decline"
                        :request-changes  "Request changes"
@@ -32,26 +31,35 @@
    [ui/table-cell {:align "right"
                    :style {:white-space "nowrap"}}
     [ui/tooltip
-     {:title (translate [:actions :edit])}
+     {:title (translate [:actions :approve])}
      [ui/button {:on-click #(re-frame/dispatch [::courses-events/approve id])} "Approve"]]
     [ui/tooltip
-     {:title (translate [:actions :remove])}
+     {:title (translate [:actions :decline])}
      [ui/button {:on-click #(re-frame/dispatch [::courses-events/decline id])} "Decline"]]
     [ui/tooltip
      {:title (translate [:actions :preview])}
-     [ui/button {:href     (create-link {:course-slug slug :scene-slug "book"})} "Preview"]]
+     [ui/button {:href     (str "/courses/" slug "/play")} "Preview"]]
     ]])
 
 (defn courses-list-page
   []
   (let [courses @(re-frame/subscribe [::courses-subs/courses-list])
+        books @(re-frame/subscribe [::courses-subs/books-list])
         is-loading? @(re-frame/subscribe [::courses-subs/courses-loading])]
     (if is-loading?
       [ui/linear-progress]
       [content-page {:title (translate [:title])}
        [:div
+        [:h2 "Games"]
         [ui/table
          [ui/table-body
           (for [course courses]
             ^{:key (:id course)}
-            [course-list-item course])]]]])))
+            [course-list-item course])]]]
+       [:div
+        [:h2 "Books"]
+        [ui/table
+         [ui/table-body
+          (for [book books]
+            ^{:key (:id book)}
+            [course-list-item book])]]]])))
