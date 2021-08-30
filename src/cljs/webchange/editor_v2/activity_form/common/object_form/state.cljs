@@ -21,6 +21,13 @@
   (fn [db]
     (state-parent/get-selected-objects db)))
 
+(re-frame/reg-sub
+  ::show-edit-menu?
+  (fn []
+    [(re-frame/subscribe [::selected-objects])])
+  (fn [[{:keys [data]}]]
+    (some? data)))
+
 ;;
 
 (re-frame/reg-event-fx
@@ -134,6 +141,7 @@
 (re-frame/reg-event-fx
   ::set-loading-status
   (fn [{:keys [db]} [_ id status]]
+    (print "::set-loading-status" id status)
     {:db (assoc-in db (path-to-db id loading-status-path) status)}))
 
 ;; Form States
@@ -169,21 +177,39 @@
 (re-frame/reg-event-fx
   ::save
   (fn [{:keys [db]} [_ id {:keys [reset?] :or {reset? false}}]]
-    (let [objects-names (get-selected-objects-names db id)
-          current-data (get-current-data db id)]
-      {:dispatch-n (cond-> [[::set-loading-status id :loading]
-                            [::state/update-scene-objects {:patches-list (map (fn [object-name]
-                                                                                {:object-name       object-name
-                                                                                 :object-data-patch current-data})
-                                                                              objects-names)}
-                             {:on-success [::save-success id current-data]}]]
-                           reset? (conj [::reset id {:reset-stage-object? false}]))})))
+    (let [saving-forms-ids (if (sequential? id) id [id])
+          patches-list (reduce (fn [patches-list form-id]
+                                 (let [objects-names (get-selected-objects-names db form-id)
+                                       current-data (get-current-data db form-id)]
+                                   (->> objects-names
+                                        (map (fn [object-name]
+                                               {:object-name       object-name
+                                                :object-data-patch current-data}))
+                                        (concat patches-list))))
+                               []
+                               saving-forms-ids)
+          forms-data (map (fn [form-id]
+                            {:id   form-id
+                             :data (get-current-data db form-id)})
+                          saving-forms-ids)]
+      {:dispatch-n (cond-> [[::state/update-scene-objects {:patches-list patches-list}
+                             {:on-success [::save-success forms-data]}]]
+                           :always (concat (map (fn [form-id]
+                                                  [::set-loading-status form-id :loading])
+                                                saving-forms-ids))
+                           reset? (concat (map (fn [form-id]
+                                                 [::reset form-id {:reset-stage-object? false}])
+                                               saving-forms-ids)))})))
 
 (re-frame/reg-event-fx
   ::save-success
-  (fn [{:keys [_]} [_ id data]]
-    {:dispatch-n [[::set-initial-data id data]
-                  [::set-loading-status id :done]]}))
+  (fn [{:keys [_]} [_ forms-data]]
+    {:dispatch-n (reduce (fn [result {:keys [id data]}]
+                           (->> [[::set-initial-data id data]
+                                 [::set-loading-status id :done]]
+                                (concat result)))
+                         []
+                         forms-data)}))
 
 ;; Reset
 

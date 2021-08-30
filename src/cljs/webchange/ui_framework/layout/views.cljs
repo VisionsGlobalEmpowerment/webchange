@@ -3,18 +3,24 @@
     [reagent.core :as r]
     [webchange.ui-framework.layout.navigation.views :refer [navigation-menu]]
     [webchange.ui-framework.layout.toolbar.views :refer [toolbar]]
+    [webchange.ui-framework.layout.right-menu.views :refer [right-menu]]
     [webchange.views-modals :refer [modal-windows]]))
 
 (defn layout
-  [{:keys [actions show-navigation?]
+  [{:keys [actions edit-menu-content on-edit-menu-back show-edit-menu? show-navigation? scene-data]
     :or   {show-navigation? true}}]
   (let [this (r/current-component)]
     [:div.page-layout
-     [:div.header
-      [toolbar {:actions actions}]]
      [:div.body
       (when show-navigation?
-        [navigation-menu])
+        [navigation-menu {:class-name "left-side-menu"}])
       (into [:div.content]
-            (r/children this))]
+            (r/children this))
+      (when show-navigation?
+        [right-menu {:actions           actions
+                     :edit-menu-content edit-menu-content
+                     :show-edit-menu?   show-edit-menu?
+                     :on-edit-menu-back on-edit-menu-back
+                     :scene-data        scene-data
+                     :class-name        "right-side-menu"}])]
      [modal-windows]]))

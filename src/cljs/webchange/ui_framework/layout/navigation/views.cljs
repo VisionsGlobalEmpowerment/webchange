@@ -1,12 +1,10 @@
 (ns webchange.ui-framework.layout.navigation.views
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.state.core :as state]
     [webchange.routes :refer [location redirect-to]]
+    [webchange.ui-framework.components.index :refer [icon]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.layout.user-widget.views :refer [user-widget]]
-    [webchange.ui-framework.layout.logo.views :refer [logo]]
-    [webchange.ui-framework.components.index :refer [icon]]))
+    [webchange.ui-framework.layout.logo.views :refer [logo]]))
 
 (def menu-items
   [{:title         "Dashboard"
@@ -54,7 +52,7 @@
      [:span
       [icon {:icon       icon-name
              :class-name "user-icon"}]]
-     [:span   {:on-click handle-click}
+     [:span {:on-click handle-click}
       title]
      (when-not (empty? children)
        [menu {:items children}])]))
@@ -67,10 +65,11 @@
      [menu-item props])])
 
 (defn navigation-menu
-  []
-    [:div.left-menu
-     [:div.icon-top
-      [logo]]
-     [:div.nav-menu
-      [menu {:items menu-items}]]
-      [user-widget]])
+  [{:keys [class-name]}]
+  [:div {:class-name (get-class-name (cond-> {"left-menu" true}
+                                             (some? class-name) (assoc class-name true)))}
+   [:div.icon-top
+    [logo]]
+   [:div.nav-menu
+    [menu {:items menu-items}]]
+   [user-widget]])

@@ -9,6 +9,7 @@
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
     [webchange.ui-framework.components.icon.icon-arrow-right :as arrow-right]
     [webchange.ui-framework.components.icon.icon-audio :as audio]
+    [webchange.ui-framework.components.icon.icon-back :as back]
     [webchange.ui-framework.components.icon.icon-background :as background]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
     [webchange.ui-framework.components.icon.icon-cancel :as cancel]
@@ -22,6 +23,7 @@
     [webchange.ui-framework.components.icon.icon-expand-arrow-down :as expand-arrow-down]
     [webchange.ui-framework.components.icon.icon-expand-arrow-right :as expand-arrow-right]
     [webchange.ui-framework.components.icon.icon-expand :as expand]
+    [webchange.ui-framework.components.icon.icon-eye :as eye]
     [webchange.ui-framework.components.icon.icon-flip :as flip]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
@@ -38,14 +40,19 @@
     [webchange.ui-framework.components.icon.icon-music :as music]
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
+    [webchange.ui-framework.components.icon.icon-plus-grey :as plus-grey]
+    [webchange.ui-framework.components.icon.icon-plus :as plus]
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
+    [webchange.ui-framework.components.icon.icon-slider :as slider]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
+    [webchange.ui-framework.components.icon.icon-text :as text]
+    [webchange.ui-framework.components.icon.icon-trash :as trash]
     [webchange.ui-framework.components.icon.icon-user :as user]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-visibility-off :as visibility-off]
@@ -65,6 +72,7 @@
    "arrow-left"         arrow-left/data
    "arrow-right"        arrow-right/data
    "audio"              audio/data
+   "back"               back/data
    "background"         background/data
    "bring-to-top"       bring-to-top/data
    "cancel"             cancel/data
@@ -78,6 +86,7 @@
    "expand-arrow-down"  expand-arrow-down/data
    "expand-arrow-right" expand-arrow-right/data
    "expand"             expand/data
+   "eye"                eye/data
    "flip"               flip/data
    "font-family"        font-family/data
    "font-size"          font-size/data
@@ -94,14 +103,19 @@
    "music"              music/data
    "music-off"          music-off/data
    "play"               play/data
+   "plus-grey"          plus-grey/data
+   "plus"               plus/data
    "preview"            preview/data
    "remove"             remove/data
    "restart"            restart/data
    "settings"           settings/data
+   "slider"             slider/data
    "stop"               stop/data
    "swap"               swap/data
    "sync"               sync/data
    "text-animation"     text-animation/data
+   "text"               text/data
+   "trash"              trash/data
    "undo"               undo/data
    "user"               user/data
    "visibility-off"     visibility-off/data

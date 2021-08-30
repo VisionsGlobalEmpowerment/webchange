@@ -3,16 +3,10 @@
 $left-menu-width: 296px;
 
 .left-menu {
-    max-width: 296px;
-    width: 100%;
-    height: 100%;
     background: #353535;
     padding: 40px 24px 88px;
     box-sizing: border-box;
-    position: fixed;
-    left: 0;
-    top: 0;
- 
+
     img {
        max-width: 100%;
        vertical-align: middle;

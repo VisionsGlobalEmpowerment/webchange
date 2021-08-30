@@ -23,10 +23,12 @@
   (contains? form-components object-type))
 
 (defn- object-form-view
-  [{:keys [class-name objects-data objects-names object-type on-destroy on-save-click]
-    :or   {on-save-click #()}}]
+  [{:keys [class-name objects-data objects-names object-type on-destroy on-save-click ref show-save-button? title]
+    :or   {on-save-click     #()
+           show-save-button? true}}]
   (if (available-object-type? object-type)
-    (r/with-let [id (->> (random-uuid) (str) (take 8) (clojure.string/join ""))]
+    (r/with-let [id (->> (random-uuid) (str) (take 8) (clojure.string/join ""))
+                 _ (when (fn? ref) (ref id))]
       (let [component (get form-components object-type)
             component-props {:id            id
                              :objects-data  objects-data
@@ -34,15 +36,18 @@
             disabled? @(re-frame/subscribe [::state/disabled? id])]
         [:div {:class-name (get-class-name (-> {"activity-object-form" true}
                                                (assoc class-name (some? class-name))))}
+         (when (some? title)
+           [:h3 title])
          [:div.object-form-content
           [component component-props]]
-         [:div.buttons-block
-          [button {:variant   "contained"
-                   :color     "primary"
-                   :size      "big"
-                   :disabled? disabled?
-                   :on-click  #(on-save-click id)}
-           "Apply"]]])
+         (when show-save-button?
+           [:div.buttons-block
+            [button {:variant   "contained"
+                     :color     "primary"
+                     :size      "big"
+                     :disabled? disabled?
+                     :on-click  #(on-save-click id)}
+             "Apply"]])])
       (finally
         (on-destroy id)))
     (do (logger/warn "Form not defined")
@@ -52,9 +57,12 @@
         nil)))
 
 (defn- group-form
-  [{:keys [component-key objects-data] :as props}]
-  (r/with-let [current-asset-idx (r/atom 0)]
+  [{:keys [component-key objects-data on-save-click] :as props
+    :or   {on-save-click #()}}]
+  (r/with-let [children-ids (atom [])]
     (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
+          handle-child-ref #(swap! children-ids conj %)
+          handle-group-save #(on-save-click @children-ids)
           assets (->> (get objects-data :children [])
                       (map keyword)
                       (map (fn [child-name]
@@ -64,22 +72,24 @@
                                 :objects-data  object-data
                                 :objects-names [child-name]})))
                       (filter (fn [{:keys [object-type]}]
-                                (available-object-type? object-type))))
-          current-asset (nth assets @current-asset-idx nil)]
+                                (available-object-type? object-type))))]
       [:div.group-form
-       [:ul.menu
-        (doall (for [[idx {:keys [alias object-type]}] (map-indexed vector assets)]
-                 ^{:key idx}
-                 [:li {:class-name (get-class-name {"menu-item" true
-                                                    "selected"  (= idx @current-asset-idx)})
-                       :on-click   #(reset! current-asset-idx idx)}
-                  (or alias object-type)]))]
-       (when (some? current-asset)
-         ^{:key (->> (get current-asset :objects-names)
+       (for [{:keys [alias object-type] :as asset} assets]
+         ^{:key (->> (get asset :objects-names)
                      (map clojure.core/name)
                      (clojure.string/join "--")
                      (str component-key "--"))}
-         [object-form-view (merge props (select-keys current-asset [:object-type :objects-data :objects-names]))])])))
+         [object-form-view (merge props
+                                  (select-keys asset [:object-type :objects-data :objects-names])
+                                  {:title             (or alias object-type)
+                                   :class-name        "group-form-item"
+                                   :show-save-button? false
+                                   :ref               handle-child-ref})])
+       [button {:variant  "contained"
+                :color    "primary"
+                :size     "big"
+                :on-click handle-group-save}
+        "Apply"]])))
 
 (defn object-form
   []

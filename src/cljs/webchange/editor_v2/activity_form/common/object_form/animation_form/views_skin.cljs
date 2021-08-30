@@ -14,7 +14,8 @@
                     :on-change   #(re-frame/dispatch [::state/set-current-skin id %])
                     :options     options
                     :with-arrow? false
-                    :show-image? false}]]))
+                    :show-image? false
+                    :variant     "outlined"}]]))
 
 (defn- multiple-skins
   [{:keys [class-name id]}]
@@ -28,19 +29,22 @@
                     :on-change   #(re-frame/dispatch [::state/set-current-skin-names id (assoc @value :body %)])
                     :options     body-options
                     :with-arrow? false
-                    :show-image? false}]
+                    :show-image? false
+                    :variant     "outlined"}]
      [label "Select Clothes:"]
      [select-image {:value       (or (:clothes @value) "")
                     :on-change   #(re-frame/dispatch [::state/set-current-skin-names id (assoc @value :clothes %)])
                     :options     clothes-options
                     :with-arrow? false
-                    :show-image? false}]
+                    :show-image? false
+                    :variant     "outlined"}]
      [label "Select Head:"]
      [select-image {:value       (or (:head @value) "")
                     :on-change   #(re-frame/dispatch [::state/set-current-skin-names id (assoc @value :head %)])
                     :options     head-options
                     :with-arrow? false
-                    :show-image? false}]]))
+                    :show-image? false
+                    :variant     "outlined"}]]))
 
 (defn skin
   [{:keys [id] :as props}]

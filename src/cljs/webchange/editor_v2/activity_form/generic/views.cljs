@@ -3,11 +3,11 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.interpreter-stage.views :refer [interpreter-stage]]
+    [webchange.editor-v2.activity-form.common.object-form.state :as object-form-state]
     [webchange.editor-v2.activity-form.common.object-form.views :refer [object-form]]
     [webchange.editor-v2.activity-form.common.objects-tree.views :refer [objects-tree]]
-    [webchange.editor-v2.activity-form.generic.views-actions :refer [actions]]
+    [webchange.editor-v2.activity-form.common.state :as activity-form-state]
     [webchange.editor-v2.activity-form.get-activity-type :refer [get-activity-type]]
-    [webchange.editor-v2.creation-progress.state :as progress-state]
     [webchange.editor-v2.creation-progress.views :refer [progress-panel]]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.editor-v2.scene-diagram.views-diagram :refer [dialogs-diagram]]
@@ -19,22 +19,25 @@
 
 (defn- asset-block
   [{:keys [activity-type]}]
-  (into [:div.asset-block]
-        (cond-> [[objects-tree]
-                 [object-form]]
-                (= activity-type "book") (concat [[select-stage]
-                                                  [object-selector]]))))
+  (when (= activity-type "book")
+    [:div.asset-block
+     [select-stage]
+     [object-selector]]))
 
 (defn activity-form
   [{:keys [scene-data]}]
-  (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])
+  (r/with-let [;_ (re-frame/dispatch [::progress-state/show-translation-progress])
                show-new-diagram? (r/atom true)]
-    (let [activity-type (get-activity-type scene-data)]
-      [layout
+    (let [activity-type (get-activity-type scene-data)
+          show-edit-menu? @(re-frame/subscribe [::object-form-state/show-edit-menu?])
+          handle-edit-menu-back #(re-frame/dispatch [::activity-form-state/reset-selection])]
+      [layout {:scene-data        scene-data
+               :show-edit-menu?   show-edit-menu?
+               :edit-menu-content [[object-form]]
+               :on-edit-menu-back handle-edit-menu-back}
        [:div.generic-editor
         [:div.interpreter-wrapper
-         [interpreter-stage {:class-name "generic-interpreter"}]
-         [actions {:scene-data scene-data}]]
+         [interpreter-stage {:class-name "generic-interpreter"}]]
         [asset-block {:activity-type activity-type}]
         [:div.swap-diagram-mode
          [icon-button {:icon     "swap"
