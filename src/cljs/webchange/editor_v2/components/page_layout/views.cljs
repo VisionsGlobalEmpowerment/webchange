@@ -38,4 +38,5 @@
                   :ref   content-ref}]
            (r/children this))
      [modal-windows]
-     [progress-panel]]))
+     ;[progress-panel]
+     ]))

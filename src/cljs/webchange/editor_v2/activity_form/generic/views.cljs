@@ -44,4 +44,5 @@
           [activity-tracks {:class-name "generic-diagram"}]
           [dialogs-diagram {:class-name "generic-diagram"
                             :scene-data scene-data}])]
-       [progress-panel]])))
+       ;[progress-panel]
+       ])))
