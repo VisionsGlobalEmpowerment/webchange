@@ -8,6 +8,7 @@
     [webchange.editor-v2.components.file-input.views :refer [select-file-form]]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.editor-v2.subs :as editor-subs]
+    [webchange.state.state-course :as state-course]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
 
@@ -68,11 +69,10 @@
 (defn course-info
   [{:keys [title]}]
   (let [course-id @(re-frame/subscribe [::subs/current-course])
-        loading @(re-frame/subscribe [:loading])]
-    (if (:course-info loading)
+        info @(re-frame/subscribe [::state-course/course-info])]
+    (if (empty? info)
       [ui/circular-progress]
-      (r/with-let [info @(re-frame/subscribe [::editor-subs/course-info])
-                   data (r/atom info)]
+      (r/with-let [data (r/atom info)]
         [ui/card {:style {:margin      "12px"
                           :flex-shrink "0"}}
          [ui/card-content {:style {:position "relative"}}
@@ -117,6 +117,4 @@
           [ui/button {:color    "secondary"
                       :style    {:margin-left "auto"}
                       :on-click #(re-frame/dispatch [::editor-events/edit-course-info @data])}
-           "Save"]
-          (when (:edit-course-info loading)
-            [ui/circular-progress])]]))))
+           "Save"]]]))))

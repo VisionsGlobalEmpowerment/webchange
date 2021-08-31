@@ -56,12 +56,12 @@
 (re-frame/reg-event-fx
   ::edit-course-info
   (fn [{:keys [db]} [_ data]]
-    (let [course-id (get-in db [:editor :course-info :id])]
+    (let [course-id (:id data)]
       {:db         (-> db
                        (assoc-in [:loading :edit-course-info] true))
        :http-xhrio {:method          :put
                     :uri             (str "/api/courses/" course-id "/info")
-                    :params          data
+                    :params          (select-keys data [:name :slug :image-src :lang])
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::edit-course-info-success]
