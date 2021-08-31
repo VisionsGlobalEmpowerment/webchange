@@ -37,12 +37,8 @@
   (let [activity-actions (activity-action/get-activity-actions-list scene-data)]
     [:div {:class-name (get-class-name (cond-> {"right-side-bar" true}
                                                (some? class-name) (assoc class-name true)))}
-     [:div.right-side-bar-top
-      [:div
-       (first actions)]
-      [:div.actions
-       [publish-button]
-       (nth actions 1)]]
+     (into [:div.right-side-bar-top]
+           actions)
      [:div.right-side-menu-content
       [edit-menu {:edit-menu-content edit-menu-content
                   :show-edit-menu?   show-edit-menu?
@@ -67,7 +63,7 @@
       [background/change-background-window]
       [background-music/set-music-window]
       [add-image/add-image-window]
-      
+
       (for [{:keys [text on-click] :as props} actions-list]
         ^{:key text}
         [:div.title.pos-r.clear.white
