@@ -1,6 +1,6 @@
-.activity-track {
-    @import "track/styles";
+@import "track/styles";
 
+.activity-track {
     overflow: hidden;
 
     & > .track-name {

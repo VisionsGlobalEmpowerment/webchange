@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.question.question-form.diagram.items-factory.nodes-factory
   (:require
     [clojure.string :refer [join]]
-    [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-model :refer [get-custom-model]]
     [webchange.editor-v2.scene-diagram.scene-parser.actions-tracks :refer [default-track]]
     [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer :refer [override-concept-actions]]
     [webchange.editor-v2.graph-builder.scene-parser.scene-parser :refer [parse-data]]
@@ -24,17 +23,11 @@
   [index]
   (index->coordinate index (:y-offset coordinate-params) (:y-step coordinate-params)))
 
-(defn- create-node
-  [{:keys [data position]}]
-  (let [node (get-custom-model data)]
-    (.setPosition node (:x position) (:y position))
-    node))
-
 (defn- create-action-node
   [action-data position]
-  (create-node {:data     {:data action-data
-                           :path (get-in action-data [:action-path])}
-                :position position}))
+  {:data     {:data action-data
+              :path (get-in action-data [:action-path])}
+   :position position})
 
 (defn- get-action-from-question
   [scene-data question-action action-type]

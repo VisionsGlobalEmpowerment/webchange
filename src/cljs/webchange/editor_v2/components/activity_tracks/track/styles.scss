@@ -21,6 +21,7 @@
             flex-shrink: 0;
             width: 150px;
 
+            border: solid 2px #fff;
             border-radius: 8px;
             box-shadow: 0px 4px 6px rgba(175, 175, 175, 0.25);
             padding: 8px 16px;
@@ -32,7 +33,7 @@
             }
 
             &.selected {
-                border: solid 2px #0071E3;
+                border-color: #0071E3 !important;
             }
 
             & > .title {
@@ -44,14 +45,34 @@
                 text-transform: capitalize;
             }
 
-            & > .type {
-                font-size: 10px;
-                font-family: monospace;
-                color: rgba(0, 0, 0, 0.2);
-                text-align: right;
+            & > .footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                & > .addition-action {
+                    button {
+                        height: 24px;
+                        min-width: 24px;
+
+                        svg {
+                            height: 12px;
+                            width: 12px;
+                        }
+                    }
+
+                }
+
+                & > .type {
+                    font-size: 10px;
+                    font-family: monospace;
+                    color: rgba(0, 0, 0, 0.2);
+                    text-align: right;
+                }
             }
 
             &.type-prompt {
+                border-color: #e3e3e3;
                 background-color: #e3e3e3;
 
                 & > .title {
@@ -60,14 +81,17 @@
             }
 
             &.type-dialog {
+                border-color: #6bc784;
                 background-color: #6bc784;
             }
 
             &.type-question {
+                border-color: #ffc784;
                 background-color: #ffc784;
             }
 
             &.type-track {
+                border-color: #b7e7ee;
                 background-color: #b7e7ee;
             }
         }

@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.fix-lodash]
     [webchange.editor-v2.activity-form.views :refer [activity-form]]
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form]]
     [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]

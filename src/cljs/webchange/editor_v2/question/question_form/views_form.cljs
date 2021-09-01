@@ -10,10 +10,6 @@
     [webchange.editor-v2.question.text.views-text-animation-editor :refer [text-chunks-modal]]
     [webchange.ui.theme :refer [get-in-theme]]))
 
-(defn- get-styles
-  []
-  {:error-wrapper {:background-color (get-in-theme [:palette :background :default])}})
-
 (defn question-form
   []
   (let [question-dialog-action? @(re-frame/subscribe [::question-form.actions/is-question-dialog-action])]
