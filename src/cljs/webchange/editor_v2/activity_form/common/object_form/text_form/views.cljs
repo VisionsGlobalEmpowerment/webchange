@@ -16,7 +16,8 @@
     [text-area {:value      value
                 :on-change  handle-change
                 :class-name (get-class-name {"text-value-control" true
-                                             "with-footer"        with-footer?})}]))
+                                             "with-footer"        with-footer?})
+                :variant    "outlined"}]))
 
 (defn- font-family-component
   [{:keys [id]}]
@@ -32,7 +33,8 @@
               :options             options
               :show-buttons?       true
               :with-arrow?         false
-              :class-name          "font-family-selector"}]]))
+              :class-name          "font-family-selector"
+              :variant             "outlined"}]]))
 
 (defn- font-size-component
   [{:keys [id]}]
@@ -52,7 +54,8 @@
               :with-arrow?         false
               :on-arrow-up-click   handle-inc-click
               :on-arrow-down-click handle-dec-click
-              :class-name          "font-size-selector"}]]))
+              :class-name          "font-size-selector"
+              :variant             "outlined"}]]))
 
 (defn form
   [{:keys [class-name id objects-data objects-names]}]

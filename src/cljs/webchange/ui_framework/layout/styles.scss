@@ -41,7 +41,7 @@ $content-right-padding: 360px + $mid-section-padding;
             justify-content: center;
             flex: 2 2;
             overflow: auto;
-            padding: $mid-section-padding
+            padding: 64px;
         }
 
         & > .right-side-menu {

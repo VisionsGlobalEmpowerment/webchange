@@ -21,8 +21,7 @@
   (let [prev-stage-available? @(re-frame/subscribe [::state-flipbook/prev-stage-available?])
         next-stage-available? @(re-frame/subscribe [::state-flipbook/next-stage-available?])
         show-prev-stage (fn [] (re-frame/dispatch [::state-flipbook/select-prev-stage]))
-        show-next-stage (fn [] (re-frame/dispatch [::state-flipbook/select-next-stage]))
-        this (r/current-component)]
+        show-next-stage (fn [] (re-frame/dispatch [::state-flipbook/select-next-stage]))]
     [content-block {:title         "Layout"
                     :left-controls (r/as-element [:div.left-controls-content
                                                   [icon-button {:icon      "arrow-left"
@@ -36,6 +35,4 @@
        {:style (interpreter/get-stage-size {:width 800})}
        [interpreter/stage]
        [remove-page {:side :left}]
-       [remove-page {:side :right}]]
-      (into [:div.stage-controls]
-            (r/children this))]]))
+       [remove-page {:side :right}]]]]))
