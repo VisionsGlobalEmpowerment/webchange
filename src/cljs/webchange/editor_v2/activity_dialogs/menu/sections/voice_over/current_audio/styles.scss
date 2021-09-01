@@ -1,0 +1,36 @@
+.current-audio {
+    & > .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 8px;
+    }
+
+    .audio-wave-form {
+        display: flex;
+        gap: 8px;
+
+        .body {
+            flex: 1 1;
+        }
+    }
+
+    .no-audio-placeholder {
+        background-color: #f3f3f3;
+        border-radius: 6px;
+        padding: 6px;
+
+        font-size: 14px;
+        color: #737373;
+
+        & > span {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .clickable {
+            color: #333;
+            font-weight: 500;
+        }
+    }
+}

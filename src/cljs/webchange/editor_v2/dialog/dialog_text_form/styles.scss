@@ -12,7 +12,6 @@
     }
 
     .work-field {
-        @import "action_unit/styles";
 
         position: relative;
         display: flex;
@@ -62,5 +61,7 @@
         .work-field {
             flex: 1 1;
         }
+
+        @import "action_unit/styles";
     }
 }

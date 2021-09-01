@@ -1,5 +1,7 @@
 .right-side-bar {
     @import "edit_menu/styles";
+    @import "styles-menu-section";
+    @import "styles-variables";
 
     display: flex;
     flex-direction: column;
@@ -130,6 +132,16 @@
         color: #1D1D1F;
         padding: 22px 25px 11px;
         margin: 0;
+    }
+
+    .menu-bottom-actions {
+        position: sticky;
+        bottom: 0;
+        background-color: #fff;
+
+        margin-left: -$menu-padding;
+        margin-right: -$menu-padding;
+        padding: 8px $menu-padding;
     }
 }
 

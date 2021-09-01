@@ -1,0 +1,23 @@
+.text-animation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .action-button {
+            border-width: 1px;
+            height: auto;
+            padding: 4px 10px 2px 8px;
+        }
+    }
+
+    .settings {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+}

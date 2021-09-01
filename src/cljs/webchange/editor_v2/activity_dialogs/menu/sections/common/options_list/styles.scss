@@ -1,0 +1,27 @@
+.options-list {
+    font-size: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 2px 0;
+    border: solid 1px #ccc;
+    border-radius: 4px;
+
+    .options-list-item {
+        background-color: #fff;
+        padding: 4px;
+        cursor: pointer;
+        border-bottom: solid 1px #ccc;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &.selected {
+            font-weight: 600;
+        }
+    }
+}

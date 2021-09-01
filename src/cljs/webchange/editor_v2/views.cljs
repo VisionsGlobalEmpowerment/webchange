@@ -1,12 +1,12 @@
 (ns webchange.editor-v2.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-form.views :refer [activity-form]]
-    [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form]]
-    [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]
-    [webchange.editor-v2.lessons.views :refer [add-lesson-form edit-lesson-form]]
     [webchange.editor-v2.components.page-layout.views :as current-layout]
     [webchange.editor-v2.components.breadcrumbs.views :refer [course-breadcrumbs]]
+    [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form]]
+    [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]
+    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.lessons.views :refer [add-lesson-form edit-lesson-form]]
     [webchange.subs :as subs]))
 
 (def course-view course-dashboard)
@@ -34,5 +34,5 @@
 (defn scene-view
   [course-id _]
   (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])]
-    [activity-form {:course-id  course-id
-                    :scene-data scene-data}]))
+    [layout {:course-id  course-id
+             :scene-data scene-data}]))

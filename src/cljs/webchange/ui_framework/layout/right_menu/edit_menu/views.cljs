@@ -13,7 +13,8 @@
   [{:keys [edit-menu-content show-edit-menu? on-edit-menu-back]}]
   [:div {:class-name (get-class-name {"edit-menu" true?
                                       "active"    show-edit-menu?})}
-   [header {:on-back-click on-edit-menu-back}]
+   (when (fn? on-edit-menu-back)
+     [header {:on-back-click on-edit-menu-back}])
    (when (some? edit-menu-content)
      (into [:div]
            edit-menu-content))])

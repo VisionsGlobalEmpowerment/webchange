@@ -1,0 +1,26 @@
+@import "form/styles";
+@import "menu/styles";
+
+.activity-script-form {
+    .work-field {
+        display: flex;
+        gap: 16px;
+
+        .track-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .track-button {
+                justify-content: center;
+            }
+        }
+
+        .actions-script {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1 1;
+        }
+    }
+}
