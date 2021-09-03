@@ -1,0 +1,22 @@
+@import "common/styles";
+@import "delay/styles";
+@import "effects/styles";
+@import "phrase/styles";
+@import "text_animation/styles";
+@import "voice_over/styles";
+
+.placeholder {
+    background-color: #f3f3f3;
+    border-radius: 6px;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #737373;
+    margin: 4px 0;
+
+    & > span {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+}

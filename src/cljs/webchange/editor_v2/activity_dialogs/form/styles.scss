@@ -1,0 +1,15 @@
+.activity-script-form {
+    @import "styles-variables";
+
+    .sheet {
+        padding: 16px 0;
+        background-color: #fff;
+        border-radius: 4px;
+
+        h3 {
+            padding: 0 $main-padding-horizontal;
+        }
+
+        @import "action_unit/styles";
+    }
+}

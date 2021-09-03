@@ -7,14 +7,17 @@
     [webchange.views-modals :refer [modal-windows]]))
 
 (defn layout
-  [{:keys [actions edit-menu-content on-edit-menu-back show-edit-menu? show-navigation? scene-data]
+  [{:keys [actions content-title title-actions edit-menu-content on-edit-menu-back show-edit-menu? show-navigation? scene-data]
     :or   {show-navigation? true}}]
   (let [this (r/current-component)]
     [:div.page-layout
      [:div.body
       (when show-navigation?
         [navigation-menu {:class-name "left-side-menu"}])
-      (into [:div.content]
+      (into [:div.content
+             (cond-> [:div.title
+                      [:h1 content-title]]
+                     (some? title-actions) (into title-actions))]
             (r/children this))
       (when show-navigation?
         [right-menu {:actions           actions

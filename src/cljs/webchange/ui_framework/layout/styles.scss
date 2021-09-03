@@ -37,11 +37,24 @@ $content-right-padding: 360px + $mid-section-padding;
 
         & > .content {
             display: flex;
-            align-items: flex-start;
-            justify-content: center;
+            align-items: stretch;
+            justify-content: flex-start;
+            flex-direction: column;
             flex: 2 2;
             overflow: auto;
             padding: 64px;
+
+            & > .title {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 16px;
+
+                & > h1 {
+                    font-size: 22px;
+                    line-height: 26px;
+                }
+            }
         }
 
         & > .right-side-menu {

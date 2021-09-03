@@ -1,0 +1,31 @@
+.section-block {
+    width: 100%;
+
+    .section-block-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        white-space: nowrap;
+
+        &:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .section-block-header-icon {
+            padding: 0;
+        }
+    }
+
+    .section-block-body {
+        max-height: 280px;
+        overflow-y: auto;
+        padding: 4px;
+        padding-left: 22px;
+    }
+}

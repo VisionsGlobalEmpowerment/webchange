@@ -5,9 +5,8 @@
     [webchange.editor-v2.activity-form.get-activity-type :refer [get-activity-type]]))
 
 (defn activity-form
-  [{:keys [scene-data]}]
-  (let [activity-type (get-activity-type scene-data)
-        form-props {:scene-data scene-data}]
+  [{:keys [scene-data] :as props}]
+  (let [activity-type (get-activity-type scene-data)]
     (case activity-type
-      "flipbook" [flipbook/activity-form form-props]
-      [generic/activity-form form-props])))
+      "flipbook" [flipbook/activity-form props]
+      [generic/activity-form props])))
