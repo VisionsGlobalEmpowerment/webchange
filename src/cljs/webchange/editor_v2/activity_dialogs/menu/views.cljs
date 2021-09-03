@@ -7,6 +7,7 @@
     [webchange.editor-v2.activity-dialogs.menu.sections.text-animation.views :as text-animation]
     [webchange.editor-v2.activity-dialogs.menu.sections.voice-over.views :as voice-over]
     [webchange.editor-v2.activity-dialogs.menu.state :as state]
+    [webchange.editor-v2.text-animation-editor.views :refer [text-chunks-modal]]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]
     [webchange.ui-framework.components.index :refer [button]]
     [webchange.ui-framework.layout.right-menu.views-menu-section :refer [menu-section]]))
@@ -31,4 +32,5 @@
       [button {:on-click   handle-save
                :size       "big"
                :class-name "apply-button"}
-       "Apply"]]]))
+       "Apply"]]
+     [text-chunks-modal]]))

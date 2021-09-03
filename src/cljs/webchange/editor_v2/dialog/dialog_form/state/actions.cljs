@@ -111,14 +111,14 @@
 
 (re-frame/reg-event-fx
   ::insert-child-action-parallel
-  (fn [{:keys [db]} [_ child-action position]]
-    (let [dialog-action-data (translator-form.actions/current-dialog-action-data db)
-
+  (fn [{:keys [db]} [_ child-action position parent-path]]
+    (let [dialog-action-data (:data (get-parent-data db parent-path))
           target-action (get-in dialog-action-data [:data position])
           updated-target-action (if (-> target-action (get :type) (= "parallel"))
                                   (update target-action :data conj child-action)
                                   {:type "parallel" :data [target-action child-action]})]
       {:dispatch [::replace-child-action {:child-action updated-target-action
+                                          :parent-path  parent-path
                                           :position     position}]})))
 
 (re-frame/reg-event-fx
@@ -166,7 +166,7 @@
   ::insert-action
   (fn [{:keys [_]} [_ {:keys [action-data position parent-path relative-position] :or {relative-position :exact}}]]
     (if (= relative-position :parallel)
-      {:dispatch [::insert-child-action-parallel action-data position]}
+      {:dispatch [::insert-child-action-parallel action-data position parent-path]}
       {:dispatch [::insert-child-action {:parent-path  parent-path
                                          :child-action action-data
                                          :position     (get-exact-position position relative-position)}]})))

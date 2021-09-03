@@ -1,8 +1,8 @@
 (ns webchange.editor-v2.activity-dialogs.menu.sections.delay.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.common.section-block.views :refer [section-block]]
-    [webchange.editor-v2.dialog.dialog-text-form.side-menu.main.delay.state :as state]
+    [webchange.editor-v2.activity-dialogs.menu.sections.common.section-block.views :refer [section-block]]
+    [webchange.editor-v2.activity-dialogs.menu.sections.delay.state :as state]
     [webchange.ui-framework.components.index :refer [input]]))
 
 (defn form

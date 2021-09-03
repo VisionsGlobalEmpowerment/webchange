@@ -5,7 +5,7 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.activity-dialogs.form.state :as state-dialog]
     [webchange.editor-v2.activity-dialogs.menu.sections.voice-over.current-audio-modal.state :as chunks]
-    [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
+    [webchange.editor-v2.activity-dialogs.menu.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
     [webchange.state.warehouse-recognition :as recognition]

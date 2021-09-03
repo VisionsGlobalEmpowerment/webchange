@@ -21,11 +21,13 @@
 
 (defn- emotions-component
   []
-  (let [show-component? @(re-frame/subscribe [::state/show-emotions?])
+  (let [current-target @(re-frame/subscribe [::state/current-target])
+        show-component? @(re-frame/subscribe [::state/show-emotions?])
         options @(re-frame/subscribe [::state/available-emotions])]
     (when show-component?
       [:div
        [label "Emotions"]
+       ^{:key current-target}
        [options-list {:options       options
                       :option-key    :animation
                       :get-drag-data (fn [{:keys [target animation]}]
