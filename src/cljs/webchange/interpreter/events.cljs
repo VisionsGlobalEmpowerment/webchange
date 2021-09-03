@@ -225,10 +225,6 @@
   (fn [{:keys [flow-id skippable] :as params}]
     (sound/init)
     (-> (sound/play-audio params)
-        (.then (fn [audio]
-                 (when skippable
-                   (ce/on-skip! #(.stop audio)))
-                 audio))
         (.then (fn [audio] (ce/register-flow-remove-handler! flow-id (fn [] (.stop audio))))))))
 
 (re-frame/reg-fx
@@ -852,7 +848,7 @@
 
 (re-frame/reg-event-fx
   ::execute-animation-sequence
-  (fn [{:keys [db]} [_ action]]
+  (fn [{:keys [db]} [_ {:keys [flow-id] :as action}]]
     "Execute `animation-sequence` action - play audio file and speaking animation simultaneously.
 
     Action params:
@@ -876,11 +872,13 @@
      :data     [{:anim 'talk', :start 21.28, :end 22.02}
                 {:anim 'talk', :start 22.32, :end 23.51}],
      :track    1}"
-    (let [animation-actions (i/animation-sequence->actions action)
-          audio-action (i/animation-sequence->audio-action action)]
-      (if audio-action
-        {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
-        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
+    (if-not (ce/skip-flow? flow-id)
+      (let [animation-actions (i/animation-sequence->actions action)
+            audio-action (i/animation-sequence->audio-action action)]
+        (if audio-action
+          {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
+          {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))
+      {:dispatch (ce/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-add-animation
@@ -1356,7 +1354,7 @@
       {:db (update-in db [:progress-data] merge progress default-progress)})))
 
 (def default-triggers
-  {:start [[::reset-navigation] [::ce/execute-reset-skip]]})
+  {:start [[::reset-navigation]]})
 
 (re-frame/reg-event-fx
   ::trigger
@@ -1598,7 +1596,7 @@
 
 (re-frame/reg-event-fx
   ::execute-text-animation
-  (fn [{:keys [db]} [_ action]]
+  (fn [{:keys [db]} [_ {:keys [flow-id] :as action}]]
     "Execute `text-animation` action - play audio file and text chunks animation simultaneously.
 
     Action params:
@@ -1616,11 +1614,13 @@
      :duration  2.999,
      :data      [{:at 2.826, :chunk 0}
                  {:at 3.092, :chunk 1}]}"
-    (let [animation-actions (i/text-animation-sequence->actions db action)
-          audio-action (i/animation-sequence->audio-action action)]
-      (if audio-action
-        {:dispatch [::ce/execute-parallel (assoc action :data (concat [audio-action] animation-actions))]}
-        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
+    (if-not (ce/skip-flow? flow-id)
+      (let [animation-actions (i/text-animation-sequence->actions db action)
+            audio-action (i/animation-sequence->audio-action action)]
+        (if audio-action
+          {:dispatch [::ce/execute-parallel (assoc action :data (concat [audio-action] animation-actions))]}
+          {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))
+      {:dispatch (ce/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-animate-next-text

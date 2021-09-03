@@ -492,7 +492,6 @@
                                                          (assoc :tags ["dialog"]))
                         :dialog-finish-activity      (dialog/default "Finish activity")
                         :dialog-intro                (-> (dialog/default "Intro")
-                                                         (assoc :skippable true)
                                                          (assoc :available-activities ["highlight-prev" "highlight-next" "turn-open-page" "turn-close-page"]))
                         :dialog-timeout-instructions (-> (dialog/default "Timeout instructions")
                                                          (assoc :available-activities ["highlight-prev" "highlight-next"]))

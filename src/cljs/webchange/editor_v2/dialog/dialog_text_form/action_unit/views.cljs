@@ -5,6 +5,7 @@
     [webchange.editor-v2.dialog.dialog-text-form.menu.views :refer [unit-menu]]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-animation :refer [animation-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-effect :refer [effect-unit]]
+    [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-skip :refer [skip-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-phrase :refer [phrase-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-text-animation :refer [text-animation-unit]]
     [webchange.editor-v2.dialog.dialog-text-form.state :as state]
@@ -78,6 +79,7 @@
        :effect [effect-unit props]
        :phrase [phrase-unit props]
        :text-animation [text-animation-unit props]
+       :skip [skip-unit props]
        [unknown-element props])
      [unit-menu {:idx         idx
                  :parent-ref  @container-ref
