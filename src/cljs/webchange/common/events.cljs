@@ -81,26 +81,10 @@
 (reg-simple-executor :workflow ::execute-workflow)
 (reg-simple-executor :skip ::execute-skip)
 
-(def on-skip-handlers
-  "A list of functions to invoke on skip actions.
-  Is used to cancel current action (e.g. stop audio, finish transition) and continue the flow (success event)."
-  (atom []))
-
-(defn on-skip!
-  "Register function to invoke on skip action"
-  [handler]
-  (when handler
-    (swap! on-skip-handlers conj handler)))
-
 (def on-action-finished-handlers
   "A list of function to invoke when action is finished.
   Is used to hide skip button after skippable action is finished"
   (atom {}))
-
-(defn on-action-finished!
-  "Register function to invoke on flow success event for specified action"
-  [action-id handler]
-  (swap! on-action-finished-handlers update action-id conj handler))
 
 (defn success-event
   [{:keys [flow-id action-id]}]
@@ -120,7 +104,7 @@
 
 (defn flow-not-registered?
   [tag]
-  (not-any? #(contains? (:tags %) tag) (vals @flows)))
+  (not-any? #(some #{tag} (:tags %)) (vals @flows)))
 
 (def event-as-action
   "Interceptor
@@ -325,26 +309,18 @@
 (defn execute-action
   [db {:keys [unique-tag] :as action}]
   (if (flow-not-registered? unique-tag)
-    (let [{:keys [type return-immediately flow-id action-id skippable] :as action} (as-> action a
-                                                                                         (assoc a :current-scene (:current-scene db))
-                                                                                         (->with-flow a)
-                                                                                         (->with-vars db a))
+    (let [action (as-> action a
+                       (assoc a :current-scene (:current-scene db))
+                       (->with-flow a)
+                       (->with-vars db a))
+          {:keys [type return-immediately flow-id action-id]} action
           handler (get @executors (keyword type))
           display-name (action->fold-name action)
           tags (get-action-tags action)]
-
       (if (some? handler)
         (logger/trace-folded ["execute action" display-name (str "(" type ")")] "action data:" action)
         (logger/error "Executor for action" display-name "is not defined" action))
-
-      (when tags
-        (register-flow-tags! flow-id tags))
-
-      (when skippable
-        (on-skip! #(dispatch-success-fn action))
-        (on-action-finished! action-id #(re-frame/dispatch [::overlays/hide-skip-menu]))
-        (re-frame/dispatch [::overlays/show-skip-menu]))
-
+      (when tags (register-flow-tags! flow-id tags))
       (handler {:db db :action action})
       (when return-immediately
         (dispatch-success-fn action)))
@@ -412,7 +388,7 @@
     (remove-timers!)
     {}))
 
-(defn flow-finished?
+(defn- flow-finished?
   [{:keys [type actions succeeded]}]
   (case type
     :all (if (= (into #{} actions) succeeded) true false)
@@ -421,18 +397,28 @@
 
 (defn- finish-flow!
   [flow-id]
-  (let [{:keys [next]} (get @flows flow-id)]
+  (let [{:keys [next] :as flow} (get @flows flow-id)]
     (swap! flows dissoc flow-id)
     (when next
-      (next))))
+      (next flow))))
 
-(defn check-flow!
+(defn- force-finish-flow!
+  [flow-id]
+  (let [flow (get @flows flow-id)
+        children (filter #(= flow-id (:parent %)) (vals @flows))]
+    (doseq [handler (:on-remove flow)]
+      (handler))
+    (finish-flow! flow-id)
+    (doseq [child children]
+      (force-finish-flow! (:flow-id child)))))
+
+(defn- check-flow!
   [flow-id]
   (let [flow (get @flows flow-id)]
     (when (flow-finished? flow)
       (finish-flow! flow-id))))
 
-(defn register-flow!
+(defn- register-flow!
   [{:keys [flow-id current-scene] :as flow}]
   (let [current-flow (get @flows flow-id)
         original-tags (into #{} (:tags current-flow))
@@ -446,12 +432,12 @@
   [flow-id handler]
   (swap! flows update-in [flow-id :on-remove] conj handler))
 
-(defn register-flow-tags!
+(defn- register-flow-tags!
   [flow-id tags]
   (when flow-id
     (swap! flows update flow-id add-tags tags)))
 
-(defn flow-ancestors
+(defn- flow-ancestors
   [flow-id]
   (let [flow (get @flows flow-id)
         parent (:parent flow)]
@@ -459,7 +445,7 @@
       (concat [flow] (flow-ancestors parent))
       [flow])))
 
-(defn execute-remove-flow-tag!
+(defn- execute-remove-flow-tag!
   [{:keys [flow-id tag] :as action}]
   (let [flow-ancestors (->> (flow-ancestors flow-id)
                             (map #(remove-tag % tag))
@@ -468,7 +454,7 @@
     (swap! flows merge flow-ancestors)
     (dispatch-success-fn action)))
 
-(defn flow-success!
+(defn- flow-success!
   [flow-id action-id]
   (when flow-id
     (let [succeeded (get-in @flows [flow-id :succeeded] #{})]
@@ -480,6 +466,14 @@
       (doseq [handler on-action-finished]
         (when handler
           (handler))))))
+
+(defn skip-flow?
+  "Check if action with given flow-id should be skipped.
+  Will return true if any ancestor flow has ':skip' set to 'true'"
+  [flow-id]
+  (->> flow-id
+       flow-ancestors
+       (some :skip)))
 
 (defn execute-remove-flows!
   [{:keys [flow-tag] :as action}]
@@ -534,25 +528,28 @@
     (flow-success! flow-id action-id)
     {}))
 
+(defn- execute-finish-flows!
+  "Execute `finish-flows` action. 
+   Removes flows with given tag, and continues flows stuck on removed flows.
+
+   Action params:
+   :tag - tag name.
+
+   Example:
+   {:type 'finish-flows',
+    :tag  'question-1'}"
+  [{:keys [tag] :as action}]
+  (let [flows-to-remove (->> @flows
+                             (filter (fn [[k v]] (contains? (:tags v) tag)))
+                             (map first))]
+    (doseq [flow-id flows-to-remove]
+      (force-finish-flow! flow-id)))
+  (dispatch-success-fn action))
+
 (re-frame/reg-event-fx
   ::execute-finish-flows
-  (fn [{:keys [db]} [_ {:keys [tag] :as action}]]
-    "Execute `finish-flows` action - removes flows with given tag, and continues flows stuck on removed flows.
-
-    Action params:
-    :tag - tag name.
-
-    Example:
-    {:type 'finish-flows',
-     :tag  'question-1'}"
-    (let [flows-to-remove (->> @flows
-                               (filter (fn [[k v]] (contains? (:tags v) tag))))]
-      (doseq [[_flow-id flow] flows-to-remove
-              handler (:on-remove flow)]
-        (handler))
-      (doseq [[flow-id _flow] flows-to-remove]
-        (finish-flow! flow-id)))
-    (dispatch-success-fn action)
+  (fn [{:keys [db]} [_ action]]
+    (execute-finish-flows! action)
     {}))
 
 (re-frame/reg-event-fx
@@ -575,23 +572,40 @@
       {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
 (defn execute-sequence-data!
-  ([db action]
-   (execute-sequence-data! db action 0))
+  ([db {:keys [flow-id] :as action}]
+   (if (and (skip-flow? flow-id) (:workflow-user-input action))
+     (dispatch-success-fn action)
+     (execute-sequence-data! db action 0)))
   ([db action sequence-position]
    (if (empty? (remove nil? (:data action)))
      (when-not (:workflow-user-input action)
        (dispatch-success-fn action))
      (let [action (->with-vars db action)
            [current & rest] (:data action)
-           next #(execute-sequence-data! db (-> action (assoc :data rest)) (inc sequence-position))
+           next #(execute-sequence-data! db
+                                         (-> action (assoc :data rest :previous-flow %))
+                                         (inc sequence-position))
            flow-id (random-uuid)
            action-id (random-uuid)
            current-scene (:current-scene db)
-           flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
-                      :current-scene current-scene :on-remove (when (:on-interrupt action)
-                                                                [#(execute-action db (:on-interrupt action))])}
+           skippable? (->> action :previous-flow :tags (some #{"skip"}))
+           flow-data {:flow-id flow-id
+                      :actions [action-id]
+                      :type :all
+                      :next next
+                      :parent (:flow-id action)
+                      :skip (get-in action [:previous-flow :skip])
+                      :tags (if skippable?
+                              (conj (get-action-tags action) "skip")
+                              (get-action-tags action))
+                      :dialog (= "dialog" (:editor-type action))
+                      :current-scene current-scene
+                      :on-remove (when (:on-interrupt action)
+                                   [#(execute-action db (:on-interrupt action))])}
            current-action (-> current
-                              (update :display-name #(or % (sequenced-action->display-name action sequence-position)))
+                              (update :display-name
+                                      #(or % (sequenced-action->display-name action
+                                                                             sequence-position)))
                               (assoc :flow-id flow-id)
                               (assoc :action-id action-id)
                               (with-prev action))]
@@ -700,43 +714,67 @@
     (execute-callback! db action)
     {}))
 
-(re-frame/reg-event-fx
-  ::execute-hide-skip
-  [event-as-action with-flow]
-  (fn [{:keys [db]} action]
-    "Execute `hide-skip` action - hide user interface button for actions flow skipping.
-    A technical function used for `:skippable` action parameter.
-
-    Example:
-    {:type 'hide-skip'}"
-    (dispatch-success-fn action)
-    {:dispatch [::overlays/hide-skip-menu]}))
-
-(re-frame/reg-event-fx
-  ::execute-reset-skip
-  (fn [{:keys [db]} _]
-    (reset! on-skip-handlers [])
-    {:dispatch [::overlays/hide-skip-menu]}))
+(defn- enable-skip-in-flows!
+  "Skip actions in skippable dialogs"
+  []
+  (swap! flows #(->> %
+                     (map (fn [[k v]] (if (some #{"skip"} (:tags v))
+                                        [k (assoc v :skip true)]
+                                        [k v])))
+                     (into {}))))
 
 (defn skip
+  "Immediately completes current skippable flow.
+   Should set all variables and complete transitions.
+
+   Example:
+   {:type 'skip'}"
   []
-  (let [[on-skip-list _] (reset-vals! on-skip-handlers [])]
-    (doseq [on-skip on-skip-list]
-      (on-skip)))
-  (execute-remove-flows! {:flow-tag "skip"})
+  (enable-skip-in-flows!)
+  (execute-finish-flows! {:tag "skip"})
   (re-frame/dispatch [::overlays/hide-skip-menu]))
 
 (re-frame/reg-event-fx
   ::execute-skip
   [event-as-action with-flow]
   (fn [{:keys [db]} action]
-    "Immediately completes current skippable flow.
-    Should set all variables and complete transitions.
-
-    Example:
-    {:type 'skip'}"
     (skip)
     (dispatch-success-fn action)))
+
+(defn- first-dialog-ancestor
+  [flow-id]
+  (let [flows-data @flows]
+    (->> flow-id
+         flow-ancestors
+         (filter :dialog)
+         first)))
+
+(defn- execute-start-skip-region
+  "Defines the starting point in dialogue where Skip is availeble
+   Example:
+   {:type 'start-skip-region'}"
+  [{{:keys [flow-id] :as action} :action}]
+  (let [dialog-flow-id (-> flow-id first-dialog-ancestor :flow-id)]
+    (swap! flows update-in [dialog-flow-id :tags] conj "skip"))
+  (re-frame/dispatch [::overlays/show-skip-menu])
+  (dispatch-success-fn action))
+
+(reg-executor :start-skip-region execute-start-skip-region)
+
+(defn- execute-end-skip-region
+  "Defines the end point in dialogue where Skip is availeble
+   Example:
+   {:type 'end-skip-region'}"
+  [{{:keys [flow-id] :as action} :action}]
+  (let [dialog-flow-id (-> flow-id first-dialog-ancestor :flow-id)
+        remove-skip (fn [flow] (-> flow
+                                   (remove-tag "skip")
+                                   (assoc :skip false)))]
+    (swap! flows update dialog-flow-id remove-skip))
+  (re-frame/dispatch [::overlays/hide-skip-menu])
+  (dispatch-success-fn action))
+
+(reg-executor :end-skip-region execute-end-skip-region)
 
 (defn- init-workflow-indexes
   [{:keys [data] :as action}]

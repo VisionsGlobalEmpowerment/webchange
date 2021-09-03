@@ -26,6 +26,10 @@
                                     :phrase-text "Text animation"
                                     :audio       nil}]})
 
+(def skip-effects {:start-skip-region {:text "Start skip"
+                                       :value "start-skip-region"}
+                   :end-skip-region {:text "End skip"
+                                     :value "end-skip-region"}})
 (defn get-empty-action
   [action]
   (get-in action action-utils/empty-action-path))
@@ -42,7 +46,7 @@
   [action data-patch]
   (update-in action [:data 0 :data action-utils/inner-action-position] merge data-patch))
 
-(defn- get-dialog-node
+(defn get-dialog-node
   [action-data]
   {:type "sequence-data"
    :data [{:type     "empty"

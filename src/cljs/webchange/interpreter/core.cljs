@@ -270,12 +270,7 @@
                      (:yoyo params) (merge {:yoyo   true
                                             :repeat (or (:repeat params) -1)}))
         tween (TweenMax.to container duration (clj->js vars))]
-
-    (when skippable
-      (ce/on-skip! #(.progress tween 1)))
-
     (register-transition! id #(.kill tween))
-
     (when kill-after
       (js/setTimeout #(kill-transition! id) kill-after))))
 
