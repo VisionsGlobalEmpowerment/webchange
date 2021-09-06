@@ -1,8 +1,7 @@
 (ns webchange.common.image-manipulation
   (:require
-    [clojure.java.io :as io]
-    [mikera.image.core :as imagez]
-    [clojure.tools.logging :as log])
+   [mikera.image.core :as imagez]
+   [clojure.tools.logging :as log])
   (:import [javax.imageio ImageIO]))
 
 (defn- try-image-size
@@ -17,8 +16,9 @@
     (finally
       (.dispose reader))))
 
-(defn get-image-info [file]
+(defn get-image-info
   "Get image size info without loading image into memory"
+  [file]
   (with-open [is (ImageIO/createImageInputStream file)]
     (let [readers (-> (ImageIO/getImageReaders is)
                       iterator-seq)]
@@ -31,8 +31,12 @@
 (defn calculate-scale
   [width height {:keys [max-width max-height min-width min-height]}]
   (cond
-    (and max-width max-height (or (> width max-width) (> height max-height))) (min (/ max-width width) (/ max-height height))
-    (and min-width min-height (or (< width min-width) (< height min-height))) (max (/ width min-width) (/ height min-height))
+    (and max-width max-height (or (> width max-width) (> height max-height)))
+    (min (/ max-width width) (/ max-height height))
+
+    (and min-width min-height (or (< width min-width) (< height min-height)))
+    (max (/ width min-width) (/ height min-height))
+    
     :else 1))
 
 (defn scale-to-window

@@ -1,21 +1,20 @@
 (ns webchange.assets.handler
-  (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
-            [compojure.route :refer [resources not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
-            [buddy.auth :refer [authenticated? throw-unauthorized]]
-            [webchange.common.handler :refer [handle current-user]]
-            [ring.middleware.params :refer [wrap-params]]
-            [clojure.java.io :as io]
-            [webchange.assets.core :as core]
-            [config.core :refer [env]]
-            [webchange.common.image-manipulation :as im]
-            [clojure.edn :as edn]
-            [webchange.common.hmac-sha256 :as sign]
-            [ring.middleware.multipart-params :refer [wrap-multipart-params]]
-            [webchange.common.audio-parser.converter :refer [convert-to-mp3 get-changed-extension]]
-            [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
-            [webchange.common.voice-recognition.voice-recognition :refer [try-voice-recognition-audio get-subtitles]]
-            [webchange.common.files :as f]))
+  (:require
+   [clojure.edn :as edn]
+   [clojure.java.io :as io]
+   [compojure.core :refer [GET POST defroutes]]
+   [config.core :refer [env]]
+   [ring.middleware.multipart-params :refer [wrap-multipart-params]]
+   [ring.middleware.params :refer [wrap-params]]
+   [ring.util.response :refer [response]]
+   [webchange.assets.core :as core]
+   [webchange.common.audio-parser.converter :refer [convert-to-mp3]]
+   [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
+   [webchange.common.files :as f]
+   [webchange.common.handler :refer [handle]]
+   [webchange.common.hmac-sha256 :as sign]
+   [webchange.common.image-manipulation :as im]
+   [webchange.common.voice-recognition.voice-recognition :refer [get-subtitles try-voice-recognition-audio]]))
 
 (def types
   {"image" ["jpg" "jpeg" "png"]
@@ -92,19 +91,18 @@
         new-name (gen-filename extension)
         path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") new-name)
         relative-path (str "/upload/" new-name)]
-    (try
-      (with-open [xin (io/input-stream tempfile)
-                  xout (io/output-stream path)]
-        (io/copy xin xout))
-      (let [[type relative-path] (convert-asset relative-path extension params)
-            path (f/relative->absolute-path relative-path)]
-        (process-asset type relative-path params)
-        (core/store-asset-hash! path)
-        (merge
-          {:url  relative-path
-           :type type
-           :size (normalize-size size)}
-          (get-additional-params type path))))))
+    (with-open [xin (io/input-stream tempfile)
+                xout (io/output-stream path)]
+      (io/copy xin xout))
+    (let [[type relative-path] (convert-asset relative-path extension params)
+          path (f/relative->absolute-path relative-path)]
+      (process-asset type relative-path params)
+      (core/store-asset-hash! path)
+      (merge
+        {:url  relative-path
+         :type type
+         :size (normalize-size size)}
+        (get-additional-params type path)))))
 
 (defn upload-asset-by-path [{{:keys [tempfile]} "file" target-path "target-path" :as request}]
   (let [full-path (f/relative->absolute-path target-path)]

@@ -1,24 +1,20 @@
 (ns webchange.course.handler
-  (:require [compojure.api.sweet :refer [api context GET POST PUT DELETE defroutes routes swagger-routes]]
-            [compojure.route :refer [resources not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
-            [webchange.course.core :as core]
-            [buddy.auth :refer [authenticated? throw-unauthorized]]
-            [clojure.tools.logging :as log]
-            [webchange.common.handler :refer [handle current-user current-school validation-error]]
-            [webchange.dataset.library :as datasets-library]
-            [webchange.course.skills :as skills]
-            [webchange.validation.validate :refer [validate]]
-            [webchange.auth.core :as auth]
-            [webchange.auth.website :as website]
-            [spec-tools.data-spec :as ds]
-            [schema.core :as s]
-            [config.core :refer [env]]
-            [webchange.common.hmac-sha256 :as sign]
-            [compojure.api.middleware :as mw]
-            [webchange.templates.core :as templates]
-            [webchange.db.core :refer [*db*] :as db]
-            [webchange.auth.roles :refer [is-admin?]]))
+  (:require
+   [buddy.auth :refer [throw-unauthorized]]
+   [clojure.tools.logging :as log]
+   [compojure.api.sweet :refer [GET POST PUT api context defroutes swagger-routes]]
+   [ring.util.response :refer [redirect resource-response response]]
+   [schema.core :as s]
+   [webchange.assets.core :as assets]
+   [webchange.auth.core :as auth]
+   [webchange.auth.roles :refer [is-admin?]]
+   [webchange.auth.website :as website]
+   [webchange.common.handler :refer [current-user handle]]
+   [webchange.common.hmac-sha256 :as sign]
+   [webchange.course.core :as core]
+   [webchange.course.skills :as skills]
+   [webchange.dataset.library :as datasets-library]
+   [webchange.templates.core :as templates]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
@@ -106,16 +102,21 @@
                          website/get-user-by-id
                          auth/get-user-id-by-website!)]
     (if owner-id
-      (-> (core/localize course-id {:lang language :owner-id owner-id :website-user-id website-user-id})
+      (-> (core/localize course-id {:lang language
+                                    :owner-id owner-id
+                                    :website-user-id website-user-id})
           handle)
       (handle [false {:message "User not found"}]))))
 
 (defn handle-create-course
-  [data request]
+  [{:keys [image-src concept-list-id] :as data} request]
   (let [owner-id (current-user request)
-        course (core/create-course data owner-id)]
-    (when (:concept-list-id data)
-      (datasets-library/create-dataset! (-> course second :slug) (:concept-list-id data)))
+        course (cond-> data
+                 (not-empty image-src) (assoc :image-src
+                                              (assets/make-thumbnail image-src :course))
+                 :always (core/create-course owner-id))]
+    (when concept-list-id
+      (datasets-library/create-dataset! (-> course second :slug) concept-list-id))
     (handle course)))
 
 (defn handle-create-activity
@@ -182,7 +183,7 @@
   [course-slug request]
   (let [user-id (current-user request)
         {owner-id :owner-id course-id :id} (core/get-course-info course-slug)]
-    (when-not (and (= user-id owner-id))
+    (when-not (= user-id owner-id)
       (throw-unauthorized {:role eduction}))
     (-> (core/archive-course! course-slug course-id)
         handle)))
@@ -246,7 +247,7 @@
 
 (s/defschema Error403 {:errors [{:message s/Str}]})
 
-(s/defschema CoursesOrError (s/either [Course] Error403))
+(s/defschema CoursesOrError (s/cond-pre [Course] Error403))
 
 (defroutes editor-api-routes
   (api
