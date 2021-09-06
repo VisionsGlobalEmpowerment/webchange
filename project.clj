@@ -140,13 +140,7 @@
                                            :wavesurfer.js           "5.1.0"
                                            :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs         [{:file        "src/libs/spine-canvas.js"
-                                            :provides    ["spine"]
-                                            :module-type :commonjs}
-                                           {:file        "src/libs/spine-player.js"
-                                            :provides    ["spine-player"]
-                                            :module-type :commonjs}
-                                           {:file        "src/libs/pixi-build.js"
+                    :foreign-libs         [{:file        "src/libs/pixi-build.js"
                                             :provides    ["pixi"]
                                             :module-type :commonjs}
                                            {:file        "src/libs/audio-script.js"
@@ -184,13 +178,7 @@
                                       :wavesurfer.js           "5.1.0"
                                       :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs    [{:file        "src/libs/spine-canvas.js"
-                                       :provides    ["spine"]
-                                       :module-type :commonjs}
-                                      {:file        "src/libs/spine-player.js"
-                                       :provides    ["spine-player"]
-                                       :module-type :commonjs}
-                                      {:file        "src/libs/pixi-build.js"
+                    :foreign-libs    [{:file        "src/libs/pixi-build.js"
                                        :provides    ["pixi"]
                                        :module-type :commonjs}
                                       {:file        "src/libs/audio-script.js"
@@ -208,13 +196,7 @@
                                     :wavesurfer.js           "5.1.0"
                                     :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs  [{:file        "src/libs/spine-canvas.js"
-                                     :provides    ["spine"]
-                                     :module-type :commonjs}
-                                    {:file        "src/libs/spine-player.js"
-                                     :provides    ["spine-player"]
-                                     :module-type :commonjs}
-                                    {:file        "src/libs/pixi-build.js"
+                    :foreign-libs  [{:file        "src/libs/pixi-build.js"
                                      :provides    ["pixi"]
                                      :module-type :commonjs}
                                     {:file        "src/libs/audio-script.js"
