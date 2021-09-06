@@ -9,8 +9,9 @@
 (defn- sync-progress
   []
   [:div.sync-progress
-   [icon {:icon    "sync"
-          :rotate? true}]
+   [icon {:icon       "sync"
+          :rotate?    true
+          :class-name "sync-icon"}]
    [:span "Saving Process.."]])
 
 (defn sync-status

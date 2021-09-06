@@ -29,13 +29,10 @@
          :list-position "right"}])
 
 (defn track
-  [{:keys [actions nodes on-node-click]}]
+  [{:keys [nodes on-node-click]}]
   [:div.track-wrapper
    [:div.track
     (for [[idx node] (map-indexed vector nodes)]
       ^{:key idx}
       [track-node (merge {:node     node
-                          :on-click on-node-click})])]
-   (when (some? actions)
-     [:div.track-actions
-      [actions-component {:actions actions}]])])
+                          :on-click on-node-click})])]])

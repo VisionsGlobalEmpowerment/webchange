@@ -1,22 +1,19 @@
 (ns webchange.ui-framework.layout.right-menu.views
   (:require
+    [re-frame.core :as re-frame]
     [webchange.ui-framework.components.index :refer [icon]]
-    [webchange.editor-v2.activity-form.common.objects-tree.views :refer [objects-tree]]
-
-    ;;for action
+    [webchange.ui-framework.layout.right-menu.object-tree-menu.views :refer [objects-tree-menu]]
     [webchange.editor-v2.activity-form.generic.components.activity-action.views :as activity-action]
     [webchange.editor-v2.activity-form.generic.components.add-character.views :as add-character]
     [webchange.editor-v2.activity-form.generic.components.background-music.views :as background-music]
     [webchange.editor-v2.activity-form.generic.components.change-background.views-background :as background]
     [webchange.editor-v2.activity-form.generic.components.activity-preview.state :as activity-preview]
     [webchange.editor-v2.activity-form.generic.components.add-image.views :as add-image]
-
-    [webchange.editor-v2.layout.components.course-status.views :refer [publish-button]]
-
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.ui-framework.layout.right-menu.edit-menu.views :refer [edit-menu]]))
+    [webchange.ui-framework.layout.right-menu.edit-menu.views :refer [edit-menu]]
+    [webchange.editor-v2.components.activity-tracks.state :as state]))
 
-(def actions-list
+(def default-actions-list
   [{:text     "Change Background"
     :on-click background/open-change-background-window}
    {:text     "Background music"
@@ -32,43 +29,46 @@
    {:text     "Add character"
     :on-click add-character/open-add-character-window}])
 
+(defn actions-item
+  [{:keys [text on-click]}]
+  [:div.actions-section.clear {:on-click on-click}
+   [:span.actions-name text]
+   [:span.add-actions
+    [icon {:icon       "add"
+           :class-name "add-actions-icon"}]]])
+
+(defn default-actions-item
+  [{:keys [text on-click]}]
+  [:div.default-actions-section.clear {:on-click on-click}
+   [:span.actions-name text]
+   [:span.add-actions
+    [icon {:icon       "add"
+           :class-name "add-default-actions-icon"}]]])
+
 (defn right-menu
   [{:keys [actions class-name edit-menu-content on-edit-menu-back show-edit-menu? scene-data] :or {actions []}}]
-  (let [activity-actions (activity-action/get-activity-actions-list scene-data)]
+  (let [activity-actions (activity-action/get-activity-actions-list scene-data)
+        main-track-actions @(re-frame/subscribe [::state/main-track-actions])
+        combined-actions (concat main-track-actions activity-actions)]
     [:div {:class-name (get-class-name (cond-> {"right-side-bar" true}
                                                (some? class-name) (assoc class-name true)))}
-     (into [:div.right-side-bar-top]
+     (into [:div.header-section]
            actions)
-     [:div.right-side-menu-content
+     [:div.content-section
       [edit-menu {:edit-menu-content edit-menu-content
                   :show-edit-menu?   show-edit-menu?
                   :on-edit-menu-back on-edit-menu-back}]
-      (for [{:keys [text on-click] :as props} activity-actions]
+      (for [{:keys [text on-click] :as props} combined-actions]
         ^{:key text}
-        [:div.title.pos-r.clear
-         [:span.float-left text]
-         [:span.float-right.plus-icon-r
-          [icon {:icon       "plus"
-                 :class-name "plus-icon"
-                 :on-click   on-click}]]])
-
-      [:div.side-menu-r
+        [actions-item props])
+      [:div.scene-section
        [:h3 "Scene Layers"]
-       [:ul
-        [:li.clear
-         [objects-tree]]]]
-
+         [objects-tree-menu]]
       [activity-action/activity-action-modal]
       [add-character/add-character-window]
       [background/change-background-window]
       [background-music/set-music-window]
       [add-image/add-image-window]
-
-      (for [{:keys [text on-click] :as props} actions-list]
+      (for [{:keys [text on-click] :as props} default-actions-list]
         ^{:key text}
-        [:div.title.pos-r.clear.white
-         [:span.float-left text]
-         [:span.float-right.plus-icon-r
-          [icon {:icon       "plus-grey"
-                 :class-name "plus-icon"
-                 :on-click   on-click}]]])]]))
+        [default-actions-item props])]]))

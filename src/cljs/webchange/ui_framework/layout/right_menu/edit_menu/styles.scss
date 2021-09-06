@@ -12,6 +12,13 @@
     z-index: 1;
     transition: left 0.3s;
 
+    .back-icon {
+        position: sticky;
+        top: 0px;
+        background: #fff;
+        z-index: 99;
+    }
+
     &.active {
         left: 0;
     }

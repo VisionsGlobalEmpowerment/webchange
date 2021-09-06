@@ -2,6 +2,7 @@
   (:require
     [webchange.ui-framework.components.icon.icon-add :as add]
     [webchange.ui-framework.components.icon.icon-add-box :as add-box]
+    [webchange.ui-framework.components.icon.icon-animation :as animation]
     [webchange.ui-framework.components.icon.icon-animation-add :as animation-add]
     [webchange.ui-framework.components.icon.icon-animation-remove :as animation-remove]
     [webchange.ui-framework.components.icon.icon-arrow-first :as arrow-first]
@@ -23,10 +24,10 @@
     [webchange.ui-framework.components.icon.icon-expand-arrow-down :as expand-arrow-down]
     [webchange.ui-framework.components.icon.icon-expand-arrow-right :as expand-arrow-right]
     [webchange.ui-framework.components.icon.icon-expand :as expand]
-    [webchange.ui-framework.components.icon.icon-eye :as eye]
     [webchange.ui-framework.components.icon.icon-flip :as flip]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
+    [webchange.ui-framework.components.icon.icon-group :as group]
     [webchange.ui-framework.components.icon.icon-image :as image]
     [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
@@ -40,8 +41,6 @@
     [webchange.ui-framework.components.icon.icon-music :as music]
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
-    [webchange.ui-framework.components.icon.icon-plus-grey :as plus-grey]
-    [webchange.ui-framework.components.icon.icon-plus :as plus]
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
@@ -52,7 +51,6 @@
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
     [webchange.ui-framework.components.icon.icon-text :as text]
-    [webchange.ui-framework.components.icon.icon-trash :as trash]
     [webchange.ui-framework.components.icon.icon-user :as user]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-visibility-off :as visibility-off]
@@ -65,6 +63,7 @@
 (def icons
   {"add"                add/data
    "add-box"            add-box/data
+   "animation"          animation/data
    "animation-add"      animation-add/data
    "animation-remove"   animation-remove/data
    "arrow-first"        arrow-first/data
@@ -86,10 +85,10 @@
    "expand-arrow-down"  expand-arrow-down/data
    "expand-arrow-right" expand-arrow-right/data
    "expand"             expand/data
-   "eye"                eye/data
    "flip"               flip/data
    "font-family"        font-family/data
    "font-size"          font-size/data
+   "group"              group/data
    "image"              image/data
    "insert-after"       insert-after/data
    "insert-before"      insert-before/data
@@ -103,8 +102,6 @@
    "music"              music/data
    "music-off"          music-off/data
    "play"               play/data
-   "plus-grey"          plus-grey/data
-   "plus"               plus/data
    "preview"            preview/data
    "remove"             remove/data
    "restart"            restart/data
@@ -115,7 +112,6 @@
    "sync"               sync/data
    "text-animation"     text-animation/data
    "text"               text/data
-   "trash"              trash/data
    "undo"               undo/data
    "user"               user/data
    "visibility-off"     visibility-off/data
