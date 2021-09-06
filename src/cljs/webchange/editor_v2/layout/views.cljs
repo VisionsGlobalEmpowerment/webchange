@@ -24,14 +24,14 @@
 (defn layout
   [{:keys [show-preview show-review? scene-data]
     :or   {show-preview true
-           show-review? false}}]
+           show-review? true}}]
   (let [show-object-form-menu? @(re-frame/subscribe [::object-form-state/show-edit-menu?])
         reset-selection #(re-frame/dispatch [::activity-form-state/reset-selection])
         current-content @(re-frame/subscribe [::state/current-content])
         content-props {:scene-data scene-data}]
     [ui/layout {:actions           (cond-> [[sync-status {:class-name "sync-status"}]]
-                                           show-review? (conj [review-status])
-                                           show-preview (conj [share-button]))
+                                     show-review? (conj [review-status])
+                                     show-preview (conj [share-button]))
                 :scene-data        scene-data
                 :edit-menu-content (case current-content
                                      :activity-dialogs [[activity-dialogs-menu]]

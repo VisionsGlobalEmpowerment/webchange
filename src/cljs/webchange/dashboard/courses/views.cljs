@@ -26,7 +26,7 @@
 (defn- course-list-item
   [{:keys [id name slug image-src]}]
   [ui/table-row {:hover true}
-   [ui/table-cell {} [:img {:src image-src}]]
+   [ui/table-cell {} [:img {:src image-src :width 300}]]
    [ui/table-cell {} name]
    [ui/table-cell {:align "right"
                    :style {:white-space "nowrap"}}
