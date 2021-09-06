@@ -9,7 +9,12 @@
     }
 
     .buttons-block {
+        padding: 10px 0;
         margin-top: 64px;
+        position: sticky;
+        bottom: 0px;
+        background: #fff;
+        z-index: 99;
     }
 }
 

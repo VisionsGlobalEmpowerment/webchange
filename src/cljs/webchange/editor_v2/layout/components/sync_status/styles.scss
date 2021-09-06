@@ -7,5 +7,12 @@
         display: flex;
         align-items: center;
         gap: 8px;
+
+        .sync-icon {
+            svg {
+                height: 12px;
+                width: 12px;
+            }
+        }
     }
 }

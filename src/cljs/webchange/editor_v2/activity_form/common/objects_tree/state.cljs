@@ -13,10 +13,11 @@
     (->> objects-data
          (filter (fn [[_ {:keys [editable?]}]]
                    (:show-in-tree? editable?)))
-         (map (fn [[object-name {:keys [alias]}]]
+         (map (fn [[object-name {:keys [alias type]}]]
                 (let []
                   {:alias (or alias object-name)
-                   :name  object-name}))))))
+                   :name  object-name
+                   :type  type}))))))
 
 (defn get-object-data
   [db object-name]

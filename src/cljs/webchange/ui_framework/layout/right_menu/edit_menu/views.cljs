@@ -5,9 +5,9 @@
 
 (defn- header
   [{:keys [on-back-click]}]
-  [:div.edit-menu-header
-   [icon-button {:icon     "back"
-                 :on-click on-back-click}]])
+  [:div.edit-menu-header.back-icon
+   [icon-button {:icon       "back"
+                 :on-click   on-back-click}]])
 
 (defn edit-menu
   [{:keys [edit-menu-content show-edit-menu? on-edit-menu-back]}]

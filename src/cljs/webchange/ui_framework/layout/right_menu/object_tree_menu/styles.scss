@@ -1,0 +1,36 @@
+.objects-tree-card {
+    .object-action-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .object-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            .object-type {
+                svg {
+                    height: 12px;
+                    width: 12px;
+                }
+            }
+        }
+
+        .object-actions {
+            display: flex;
+            gap: 2px;
+
+            .object-icon-style {
+                width: 24px;
+                height: 24px;
+                min-width: auto;
+
+                svg {
+                    height: 12px;
+                    width: 12px;
+                }
+            }
+        }
+    }
+}

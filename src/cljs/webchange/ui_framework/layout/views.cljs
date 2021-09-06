@@ -2,7 +2,6 @@
   (:require
     [reagent.core :as r]
     [webchange.ui-framework.layout.navigation.views :refer [navigation-menu]]
-    [webchange.ui-framework.layout.toolbar.views :refer [toolbar]]
     [webchange.ui-framework.layout.right-menu.views :refer [right-menu]]
     [webchange.views-modals :refer [modal-windows]]))
 
