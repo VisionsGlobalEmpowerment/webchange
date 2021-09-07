@@ -12,10 +12,8 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ tag]]
-    {:dispatch-n [[::set-current-tag tag]
-                  [::load-tags]
-                  [::load-assets tag]]}))
+  (fn [{:keys [_]} [_ tags-names]]
+    {:dispatch [::load-tags tags-names]}))
 
 ;; Tags
 
@@ -23,13 +21,19 @@
 
 (re-frame/reg-event-fx
   ::load-tags
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::warehouse/load-assets-tags {:on-success [::set-tags]}]}))
+  (fn [{:keys [_]} [_ current-tags-names]]
+    {:dispatch [::warehouse/load-assets-tags {:on-success [::set-tags current-tags-names]}]}))
 
 (re-frame/reg-event-fx
   ::set-tags
-  (fn [{:keys [db]} [_ tags]]
-    {:db (assoc-in db tags-path tags)}))
+  (fn [{:keys [db]} [_ current-tags-names tags]]
+    (let [current-tags-ids (map (fn [tag-name]
+                                  (some (fn [{:keys [name id]}]
+                                          (and (= name tag-name) id))
+                                        tags))
+                                current-tags-names)]
+      {:db       (assoc-in db tags-path tags)
+       :dispatch [::set-current-tags current-tags-ids]})))
 
 (re-frame/reg-sub
   ::tags-options
@@ -39,7 +43,8 @@
                 {:text  name
                  :value id}))
          (concat [{:text  "All"
-                   :value ""}]))))
+                   :value ""}])
+         (sort-by :text))))
 
 ;; Current Tag
 
@@ -51,9 +56,9 @@
     (get-in db current-tag-path)))
 
 (re-frame/reg-event-fx
-  ::set-current-tag
-  (fn [{:keys [db]} [_ tag]]
-    (let [value (if (and (string? tag) (empty? tag)) nil tag)]
+  ::set-current-tags
+  (fn [{:keys [db]} [_ tags]]
+    (let [value (if (and (string? tags) (empty? tags)) nil tags)]
       {:db       (assoc-in db current-tag-path value)
        :dispatch [::load-assets value]})))
 
@@ -63,8 +68,8 @@
 
 (re-frame/reg-event-fx
   ::load-assets
-  (fn [{:keys [_]} [_ tag]]
-    {:dispatch [::warehouse/load-assets {:tag tag} {:on-success [::set-assets]}]}))
+  (fn [{:keys [_]} [_ tags]]
+    {:dispatch [::warehouse/load-assets {:tags tags} {:on-success [::set-assets]}]}))
 
 (re-frame/reg-event-fx
   ::set-assets

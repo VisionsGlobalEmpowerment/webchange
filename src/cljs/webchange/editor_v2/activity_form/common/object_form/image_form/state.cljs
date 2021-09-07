@@ -13,10 +13,11 @@
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
     (let [image-data (select-keys objects-data [:src])
-          image-tag (get-in objects-data [:editable? :image-tag])]
+          image-tags (get-in objects-data [:editable? :image-tags])]
+      (print "image-tags" image-tags)
       {:dispatch-n [[::state/init id {:data  image-data
                                       :names objects-names}]
-                    [::set-image-tag id image-tag]]})))
+                    [::set-image-tags id image-tags]]})))
 
 ;; Image Src
 
@@ -35,14 +36,14 @@
 
 ;; Image Tag
 
-(def image-tag-path :image-tag)
+(def image-tags-path :image-tag)
 
 (re-frame/reg-event-fx
-  ::set-image-tag
+  ::set-image-tags
   (fn [{:keys [db]} [_ id tag]]
-    {:db (assoc-in db (path-to-db id [image-tag-path]) tag)}))
+    {:db (assoc-in db (path-to-db id [image-tags-path]) tag)}))
 
 (re-frame/reg-sub
-  ::image-tag
+  ::image-tags
   (fn [db [_ id]]
-    (get-in db (path-to-db id [image-tag-path]))))
+    (get-in db (path-to-db id [image-tags-path]))))

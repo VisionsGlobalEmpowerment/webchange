@@ -59,7 +59,7 @@
                                              :transition "left-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
                                              :editable?  {:select    true
-                                                          :image-tag 34}}
+                                                          :image-tags ["rhyming" "gate"]}}
                         :left-gate-text     {:type           "text"
                                              :text           "rhyme"
                                              :x              355
@@ -91,7 +91,7 @@
                                              :transition "right-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
                                              :editable?  {:select    true
-                                                          :image-tag 34}}},
+                                                          :image-tags ["rhyming" "gate"]}}},
         :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text" "right-gate-text"]],
         :actions       {:start-drag           {:type "sequence-data"
                                                :data [{:type "set-variable", :var-name "left-selected", :var-value false}

@@ -306,11 +306,12 @@
 
 (re-frame/reg-event-fx
   ::load-assets
-  (fn [{:keys [_]} [_ {:keys [tag]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [tag tags]} handlers]]
     (create-request {:key    :load-backgrounds
                      :method :get
                      :uri    (cond-> (str "/api/courses/editor/assets")
-                                     (some? tag) (str "?tag=" tag))}
+                                     (some? tag) (str "?tag=" tag)
+                                     (not (empty? tags)) (str "?tags=" (clojure.string/join "," tags)))}
                     handlers)))
 
 (re-frame/reg-event-fx

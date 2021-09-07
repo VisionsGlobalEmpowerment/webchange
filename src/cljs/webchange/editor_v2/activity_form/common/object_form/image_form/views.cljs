@@ -11,7 +11,7 @@
   [{:keys [class-name id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
     (let [image-src @(re-frame/subscribe [::state/image-src id])
-          image-tag @(re-frame/subscribe [::state/image-tag id])
+          image-tags @(re-frame/subscribe [::state/image-tags id])
           handle-change (fn [src]
                           (re-frame/dispatch [::state/set-image-src id src]))]
       [:div {:class-name (get-class-name (cond-> {"image-form" true}
@@ -22,7 +22,7 @@
        [:div.controls
         [:div.control-block
          [label "Pick image from library:"]
-         [with-image-modal {:tag       image-tag
+         [with-image-modal {:tags      image-tags
                             :on-change handle-change}
           [button {:variant "contained"
                    :color   "primary"}

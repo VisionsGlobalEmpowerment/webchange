@@ -9,7 +9,7 @@
   []
   (let [value @(re-frame/subscribe [::state/current-tag])
         options @(re-frame/subscribe [::state/tags-options])
-        handle-change #(re-frame/dispatch [::state/set-current-tag %])]
+        handle-change #(re-frame/dispatch [::state/set-current-tags %])]
     [:div.tag-selector
      [label "Tag:"]
      [select {:placeholder "Select tag"
@@ -17,7 +17,9 @@
               :class-name  "tag-selector-control"
               :value       value
               :options     options
-              :on-change   handle-change}]]))
+              :on-change   handle-change
+              :multiple?   true
+              :type        "int"}]]))
 
 (defn- assets-list-item
   [{:keys [on-click path thumbnail-path]}]
@@ -36,8 +38,8 @@
                                 {:on-click on-click})])]))
 
 (defn select-image-form
-  [{:keys [tag on-change]}]
-  (r/with-let [_ (re-frame/dispatch [::state/init tag])]
+  [{:keys [tags on-change]}]
+  (r/with-let [_ (re-frame/dispatch [::state/init tags])]
     [:div.select-image-form
      [tag-selector]
      [assets-list {:on-click on-change}]]))
