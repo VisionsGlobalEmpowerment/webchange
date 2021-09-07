@@ -2,8 +2,6 @@
   "dependencies": {
     "@cljs-oss/module-deps": "^1.1.1",
     "gsap": "^2.1.2",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
     "svg-arc-to-cubic-bezier": "^3.2.0",
     "wavesurfer.js": "^5.1.0"
   },

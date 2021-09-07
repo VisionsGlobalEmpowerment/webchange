@@ -136,19 +136,11 @@
                     :closure-defines      {"re_frame.trace.trace_enabled_QMARK_"        true
                                            "day8.re_frame.tracing.trace_enabled_QMARK_" true}
                     :external-config      {:devtools/config {:features-to-install :all}}
-                    :npm-deps             {:react                   "16.6.0"
-                                           :react-dom               "16.6.0"
-                                           :gsap                    "2.1.2"
+                    :npm-deps             {:gsap                    "2.1.2"
                                            :wavesurfer.js           "5.1.0"
                                            :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs         [{:file        "src/libs/spine-canvas.js"
-                                            :provides    ["spine"]
-                                            :module-type :commonjs}
-                                           {:file        "src/libs/spine-player.js"
-                                            :provides    ["spine-player"]
-                                            :module-type :commonjs}
-                                           {:file        "src/libs/pixi-build.js"
+                    :foreign-libs         [{:file        "src/libs/pixi-build.js"
                                             :provides    ["pixi"]
                                             :module-type :commonjs}
                                            {:file        "src/libs/audio-script.js"
@@ -182,19 +174,11 @@
                     :optimizations   :simple
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false
-                    :npm-deps        {:react                   "16.6.0"
-                                      :react-dom               "16.6.0"
-                                      :gsap                    "2.1.2"
+                    :npm-deps        {:gsap                    "2.1.2"
                                       :wavesurfer.js           "5.1.0"
                                       :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs    [{:file        "src/libs/spine-canvas.js"
-                                       :provides    ["spine"]
-                                       :module-type :commonjs}
-                                      {:file        "src/libs/spine-player.js"
-                                       :provides    ["spine-player"]
-                                       :module-type :commonjs}
-                                      {:file        "src/libs/pixi-build.js"
+                    :foreign-libs    [{:file        "src/libs/pixi-build.js"
                                        :provides    ["pixi"]
                                        :module-type :commonjs}
                                       {:file        "src/libs/audio-script.js"
@@ -208,19 +192,11 @@
      :compiler     {:main          webchange.runner
                     :output-to     "resources/public/js/compiled/test.js"
                     :output-dir    "resources/public/js/compiled/test/out"
-                    :npm-deps      {:react                   "16.6.0"
-                                    :react-dom               "16.6.0"
-                                    :gsap                    "2.1.2"
+                    :npm-deps      {:gsap                    "2.1.2"
                                     :wavesurfer.js           "5.1.0"
                                     :svg-arc-to-cubic-bezier "3.2.0"}
 
-                    :foreign-libs  [{:file        "src/libs/spine-canvas.js"
-                                     :provides    ["spine"]
-                                     :module-type :commonjs}
-                                    {:file        "src/libs/spine-player.js"
-                                     :provides    ["spine-player"]
-                                     :module-type :commonjs}
-                                    {:file        "src/libs/pixi-build.js"
+                    :foreign-libs  [{:file        "src/libs/pixi-build.js"
                                      :provides    ["pixi"]
                                      :module-type :commonjs}
                                     {:file        "src/libs/audio-script.js"
