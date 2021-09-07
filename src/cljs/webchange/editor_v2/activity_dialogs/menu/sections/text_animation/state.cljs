@@ -1,12 +1,12 @@
 (ns webchange.editor-v2.activity-dialogs.menu.sections.text-animation.state
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
-    [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
-    [webchange.editor-v2.activity-dialogs.form.state :as state-dialog]
-    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action text-animation-action?]]
-    [webchange.editor-v2.text-animation-editor.state :as chunks]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
+   [re-frame.core :as re-frame]
+   [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
+   [webchange.editor-v2.activity-dialogs.menu.state :as parent-state]
+   [webchange.editor-v2.activity-dialogs.form.state :as state-dialog]
+   [webchange.editor-v2.dialog.utils.dialog-action :refer [text-animation-action?]]
+   [webchange.editor-v2.text-animation-editor.state :as chunks]
+   [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
 
 (re-frame/reg-sub
   ::show-current?

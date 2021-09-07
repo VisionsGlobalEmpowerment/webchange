@@ -1,12 +1,12 @@
 (ns webchange.editor-v2.activity-dialogs.menu.sections.effects.views
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-dialogs.menu.sections.common.section-block.views :refer [section-block]]
-    [webchange.editor-v2.activity-dialogs.menu.sections.common.options-list.views :refer [options-list]]
-    [webchange.editor-v2.activity-dialogs.menu.sections.effects.emotions.views :refer [available-emotions]]
-    [webchange.editor-v2.activity-dialogs.menu.sections.effects.state :as state]
-    [webchange.ui-framework.components.index :refer [icon-button]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+   [re-frame.core :as re-frame]
+   [webchange.editor-v2.activity-dialogs.menu.sections.common.section-block.views :refer [section-block]]
+   [webchange.editor-v2.activity-dialogs.menu.sections.common.options-list.views :refer [options-list]]
+   [webchange.editor-v2.activity-dialogs.menu.sections.effects.emotions.views :refer [available-emotions]]
+   [webchange.editor-v2.activity-dialogs.menu.sections.effects.state :as state]
+   [webchange.ui-framework.components.index :refer [icon-button]]
+   [webchange.editor-v2.dialog.utils.dialog-action :refer [skip-effects]]))
 
 (def event-type
   [{:id 1 :title "Default" :type "default"}
@@ -55,6 +55,15 @@
        (when show-actions?
          [actions])])))
 
+
+(defn- skip-effects-list
+  []
+  (let [options (vals skip-effects)]
+    [:div
+     [options-list {:options       options
+                    :get-drag-data (fn [{:keys [value]}]
+                                     {:action value})}]]))
+
 (defn- actions-placeholder
   []
   [:div.placeholder
@@ -69,6 +78,8 @@
    (for [{:keys [id title type]} event-type]
      ^{:key id}
      [effects-list {:title       title
-                     :effect-type type}])
+                    :effect-type type}])
    [section-block {:title "Emotions"}
-    [available-emotions]]])
+    [available-emotions]]
+   [section-block {:title "Skip"}
+    [skip-effects-list]]])
