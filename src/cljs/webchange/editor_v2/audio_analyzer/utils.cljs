@@ -34,9 +34,10 @@
         text-numbers (into {} (map (fn [number] [number (forty-two/words (edn/read-string number))]) numbers))
         numbers-to-search (reduce (fn [result number] (str result "|" number)) numbers)
         text (cond-> (or text "")
-                     true (clojure.string/replace #"[\s]" " ")
-                     true (clojure.string/replace #"[^A-Za-z 0-9]" "")
-                     true (clojure.string/replace #" +" " ")
-                     true (clojure.string/lower-case)
-                     (not (empty? text-numbers)) (clojure.string/replace (re-pattern numbers-to-search) text-numbers))]
+               true (clojure.string/replace #"[\s]" " ")
+               true (clojure.string/replace #"[^A-Za-z 0-9]" "")
+               true (clojure.string/replace #" +" " ")
+               true (clojure.string/lower-case)
+               true (clojure.string/trim)
+               (not (empty? text-numbers)) (clojure.string/replace (re-pattern numbers-to-search) text-numbers))]
     text))

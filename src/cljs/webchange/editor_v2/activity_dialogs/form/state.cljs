@@ -240,6 +240,8 @@
       "add-effect-action" {:dispatch [::add-effect-action data]}
       "set-target-animation" {:dispatch [::set-target-animation data]}
       "remove-target-animation" {:dispatch [::remove-target-animation data]}
+      "start-skip-region"  {:dispatch [::start-skip-region data]}
+      "end-skip-region"  {:dispatch [::end-skip-region data]}
       {})))
 
 (defn- get-action-position-data
@@ -274,5 +276,21 @@
     (let [position-data (get-action-position-data data)
           action-data (defaults/get-remove-emotion-action-data {:target    target
                                                                 :track     track})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::start-skip-region
+  (fn [{:keys [_]} [_ data]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-dialog-node {:type "start-skip-region"})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::end-skip-region
+  (fn [{:keys [_]} [_ data]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-dialog-node {:type "end-skip-region"})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))

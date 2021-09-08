@@ -45,7 +45,7 @@
   (fn [{:keys [_]} [_ {:keys [audio-url]} {:keys [on-success]} script-data]]
     {:dispatch           (conj on-success script-data)
      :store-audio-script {:audio-url    audio-url
-                          :audio-script script-data}}))
+                          :audio-script (->> script-data (remove #(= "[unk]" (:word %))))}}))
 
 ;; Script region
 
@@ -76,11 +76,11 @@
                           :script script-data
                           :text   script-text}]
           (dispatch-if-defined
-           on-success
-           (cond-> region-data
-             update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
-             update-talk-animation? (assoc :data (get-talk-data-if-possible match-data)))
-           regions))
+            on-success
+            (cond-> region-data
+              update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
+              update-talk-animation? (assoc :data (get-talk-data-if-possible match-data)))
+            regions))
         (dispatch-if-defined on-failure)))))
 
 

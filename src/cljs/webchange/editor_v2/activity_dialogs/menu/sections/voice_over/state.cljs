@@ -32,14 +32,26 @@
   (fn [[selected-action-data]]
     (get-inner-action selected-action-data)))
 
+(re-frame/reg-sub
+  ::available-options
+  (fn [db]
+    (let [{:keys [path source]} (state-dialog/get-selected-action db)
+          regions (get-in db (path-to-db [:options source path]))]
+      regions)))
+
+(re-frame/reg-sub
+  ::selected-option
+  (fn [db]
+    (get-in db (path-to-db [:selected-option]) 0)))
+
 (defn- recognition-context
   [db]
   (let [{:keys [audio type phrase-text target] :as action-data} (get-current-audio db)
-          text (if (text-animation-action? action-data)
-                 (->> (keyword target)
-                      (state-scene/object-data db)
-                      (:text))
-                 phrase-text)]
+        text (if (text-animation-action? action-data)
+               (->> (keyword target)
+                    (state-scene/object-data db)
+                    (:text))
+               phrase-text)]
     {:audio-url audio
      :script-text text
      :update-text-animation? (text-animation-action? action-data)
@@ -98,7 +110,8 @@
                           (nth idx {}))
           context (-> (recognition-context db)
                       (assoc :region-data region-data))]
-      {:dispatch [::recognition/parse-audio-script-option
+      {:db (assoc-in db (path-to-db [:selected-option]) idx)
+       :dispatch [::recognition/parse-audio-script-option
                   context
                   {:on-success [::set-current-audio-region]}]})))
 
