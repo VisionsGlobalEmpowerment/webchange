@@ -58,7 +58,7 @@
   [object]
   (let [local-bounds (get-object-local-bounds object)
         pivot (utils/get-pivot object)
-        scale (utils/get-scale object)]
+        scale (utils/get-scale object {:abs? true})]
     (-> local-bounds
              (update :width * (:x scale))
              (update :height * (:y scale))

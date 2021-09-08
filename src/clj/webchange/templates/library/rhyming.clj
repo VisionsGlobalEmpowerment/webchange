@@ -54,12 +54,17 @@
                                              :surface    {:src "/raw/img/rhyming/surface.png"}}
                         :left-gate          {:type       "image"
                                              :src        "/raw/img/rhyming/left-gate.png"
-                                             :x          50
-                                             :y          210
+                                             :x          303
+                                             :y          600
+                                             :origin     {:type "center-center"}
                                              :transition "left-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
-                                             :editable?  {:select    true
-                                                          :image-tags ["rhyming" "gate"]}}
+                                             :editable?  {:select     true
+                                                          :drag       true
+                                                          :image-tags ["rhyming" "gate"]
+                                                          :edit-form  {:select-image true
+                                                                       :upload-image true
+                                                                       :flip         true}}}
                         :left-gate-text     {:type           "text"
                                              :text           "rhyme"
                                              :x              355
@@ -71,7 +76,8 @@
                                              :font-family    "Lexend Deca"
                                              :font-size      80
                                              :fill           "#000000"
-                                             :editable?      {:select true}}
+                                             :editable?      {:select true
+                                                              :drag   true}}
                         :right-gate-text    {:type           "text"
                                              :text           "rhyme"
                                              :x              1590
@@ -83,15 +89,21 @@
                                              :font-family    "Lexend Deca"
                                              :font-size      80
                                              :fill           "#000000"
-                                             :editable?      {:select true}}
+                                             :editable?      {:select true
+                                                              :drag   true}}
                         :right-gate         {:type       "image"
                                              :src        "/raw/img/rhyming/right-gate.png"
-                                             :x          1380
-                                             :y          210
+                                             :x          1633
+                                             :y          600
+                                             :origin     {:type "center-center"}
                                              :transition "right-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
-                                             :editable?  {:select    true
-                                                          :image-tags ["rhyming" "gate"]}}},
+                                             :editable?  {:select     true
+                                                          :drag       true
+                                                          :image-tags ["rhyming" "gate"]
+                                                          :edit-form  {:select-image true
+                                                                       :upload-image true
+                                                                       :flip         true}}}},
         :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text" "right-gate-text"]],
         :actions       {:start-drag           {:type "sequence-data"
                                                :data [{:type "set-variable", :var-name "left-selected", :var-value false}

@@ -240,6 +240,7 @@
 
 (defn editor-assets [tag tags type]
   (let [tags (->> (clojure.string/split tags #",")
+                  (remove empty?)
                   (map #(Integer/parseInt %)))]
     (response (core/editor-assets tag tags type))))
 
@@ -259,7 +260,7 @@
       :tags ["editor-assets"]
       (GET "/editor/assets" []
         :summary "Return list of available assets"
-        :query-params [{type :- s/Str nil}, {tag :- s/Int nil}, {tags :- s/Str []}]
+        :query-params [{type :- s/Str nil}, {tag :- s/Int nil}, {tags :- s/Str ""}]
         :return [EditorAsset]
         (editor-assets tag tags type))
       (GET "/editor/tags" []

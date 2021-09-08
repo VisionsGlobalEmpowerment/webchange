@@ -32,10 +32,30 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ id {:keys [data names]}]]
+  (fn [{:keys [_]} [_ id {:keys [data names form-params]}]]
     {:dispatch-n [[::set-selected-objects-names id names]
                   [::set-initial-data id data]
-                  [::set-current-data id data]]}))
+                  [::set-current-data id data]
+                  [::set-form-params id form-params]]}))
+
+;; Form params
+
+(def form-params-path :form-params)
+
+(re-frame/reg-event-fx
+  ::set-form-params
+  (fn [{:keys [db]} [_ id form-params]]
+    {:db (assoc-in db (path-to-db id [form-params-path]) (or form-params {}))}))
+
+(re-frame/reg-sub
+  ::form-component-available?
+  (fn [db [_ id component-key]]
+    {:pre [(some? id)]}
+    (let [form-params (get-in db (path-to-db id [form-params-path]))]
+      (cond
+        (nil? form-params) false
+        (empty? form-params) true
+        :else (get form-params component-key false)))))
 
 ;; Selected Objects
 

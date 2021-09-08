@@ -15,7 +15,8 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [animation-data (select-keys objects-data [:name :skin :skin-names :scale])]
+    (let [animation-data (merge {:scale {:x 1 :y 1}}
+                                (select-keys objects-data [:name :skin :skin-names :scale]))]
       {:dispatch-n [[::state/init id {:data  animation-data
                                       :names objects-names}]
                     [::warehouse-animations/load-available-animation]]})))
@@ -77,9 +78,6 @@
                                        :single {:skin       default-skin
                                                 :skin-names nil})
                                      (get-default-skeleton-params skeleton-name))]
-
-      (print "default-skin-params" default-skin-params)
-
       {:dispatch [::state/update-current-data id (merge {:name skeleton-name} default-skin-params)]})))
 
 ;; Skin
@@ -161,36 +159,3 @@
   (fn [{:keys [_]} [_ id skin-names]]
     (logger/trace "set skin names" id skin-names)
     {:dispatch [::state/update-current-data id {:skin-names skin-names}]}))
-
-;; Scale
-
-(defn- get-current-scale
-  [db id]
-  (-> (state/get-current-data db id)
-      (get :scale)))
-
-(re-frame/reg-sub
-  ::current-scale
-  (fn [[_ id]]
-    {:pre [(some? id)]}
-    [(re-frame/subscribe [::state/current-data id])])
-  (fn [[current-data]]
-    (let [{:keys [x y]} (get current-data :scale)]
-      (or (Math/abs x) (Math/abs y) 1))))
-
-(re-frame/reg-event-fx
-  ::set-scale
-  (fn [{:keys [db]} [_ id scale-value]]
-    (let [{:keys [x]} (get-current-scale db id)
-          x-sign (/ x (Math/abs x))]
-      {:dispatch [::state/update-current-data id {:scale {:x (* scale-value x-sign)
-                                                          :y scale-value}}]})))
-
-;; Flip
-
-(re-frame/reg-event-fx
-  ::flip-animation
-  (fn [{:keys [db]} [_ id]]
-    (let [{:keys [x y]} (get-current-scale db id)]
-      {:dispatch [::state/update-current-data id {:scale {:x (- x)
-                                                          :y y}}]})))
