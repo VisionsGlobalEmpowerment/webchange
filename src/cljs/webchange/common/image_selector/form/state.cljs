@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.common.image-selector.state :as parent]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.list :refer [without-item]]))
 
 (defn path-to-db
   [relative-path]
@@ -14,6 +15,34 @@
   ::init
   (fn [{:keys [_]} [_ tags-names]]
     {:dispatch [::load-tags tags-names]}))
+
+
+;; Current Tag
+
+(def current-tag-path (path-to-db [:current-tag]))
+
+(defn- get-current-tags
+  [db]
+  (get-in db current-tag-path))
+
+(re-frame/reg-sub
+  ::current-tags
+  get-current-tags)
+
+(re-frame/reg-event-fx
+  ::set-current-tags
+  (fn [{:keys [db]} [_ tags]]
+    (let [value (if (and (string? tags) (empty? tags)) nil tags)]
+      {:db       (assoc-in db current-tag-path value)
+       :dispatch [::load-assets value]})))
+
+(re-frame/reg-event-fx
+  ::update-current-tags
+  (fn [{:keys [db]} [_ tag-id selected?]]
+    (let [current-tags (get-current-tags db)]
+      {:dispatch [::set-current-tags (if selected?
+                                       (conj current-tags tag-id)
+                                       (without-item current-tags tag-id))]})))
 
 ;; Tags
 
@@ -36,31 +65,22 @@
        :dispatch [::set-current-tags current-tags-ids]})))
 
 (re-frame/reg-sub
-  ::tags-options
+  ::available-tags
   (fn [db]
-    (->> (get-in db tags-path)
-         (map (fn [{:keys [id name]}]
-                {:text  name
-                 :value id}))
-         (concat [{:text  "All"
-                   :value ""}])
-         (sort-by :text))))
-
-;; Current Tag
-
-(def current-tag-path (path-to-db [:current-tag]))
+    (get-in db tags-path)))
 
 (re-frame/reg-sub
-  ::current-tag
-  (fn [db]
-    (get-in db current-tag-path)))
-
-(re-frame/reg-event-fx
-  ::set-current-tags
-  (fn [{:keys [db]} [_ tags]]
-    (let [value (if (and (string? tags) (empty? tags)) nil tags)]
-      {:db       (assoc-in db current-tag-path value)
-       :dispatch [::load-assets value]})))
+  ::tags-options
+  (fn []
+    [(re-frame/subscribe [::available-tags])
+     (re-frame/subscribe [::current-tags])])
+  (fn [[available-tags current-tags]]
+    (->> available-tags
+         (map (fn [{:keys [id name]}]
+                {:text      name
+                 :value     id
+                 :selected? (or (some #{id} current-tags) false)}))
+         (sort-by :text))))
 
 ;; Assets
 
