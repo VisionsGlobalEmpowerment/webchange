@@ -6,60 +6,67 @@
     [webchange.ui-framework.layout.user-widget.views :refer [user-widget]]
     [webchange.ui-framework.layout.logo.views :refer [logo]]))
 
-(def menu-items
+(def dashboard-menu 
   [{:title         "Dashboard"
-    :icon-name     "user"
-    :location-name :welcome-screen}
-   {:title         "Create"
-    :icon-name     "user"
-    :location-name :title}
-   {:title         "Game library"
-    :icon-name     "user"
-    :location-name :game-library}
-   {:title         "Books library"
-    :icon-name     "user"
-    :location-name :book-library}
-   {:title         "Translate"
-    :icon-name     "user"
-    :location-name :translate}
-   {:title         "My Profile"
-    :icon-name     "user"
-    :location-name :my-profile}
-   {:title         "My Books"
-    :icon-name     "user"
-    :location-name :my-books}
+    :icon-name     "dashboard"
+    :location-name :welcome-screen
+    :url           "https://www.webchange.com/user/dashboard"
+    :icon-class    "menu-icon-style"}
    {:title         "My Games"
-    :icon-name     "user"
-    :location-name :my-games}])
+    :icon-name     "game"
+    :location-name :title
+    :url           "https://www.webchange.com/user/mygames"
+    :icon-class    "menu-icon-style"}
+   {:title         "My Books"
+    :icon-name     "book"
+    :location-name :game-library
+    :url           "https://www.webchange.com/user/mybooks"
+    :icon-class    "menu-icon-style"}])
 
-(declare menu)
+(def create-menu
+  [{:title         "Create a game"
+    :icon-name     "create-game"
+    :location-name :book-library
+    :url           "https://www.webchange.com/user/profile"
+    :icon-class    "menu-icon-style"}
+   {:title         "Create a book"
+    :icon-name     "create-book"
+    :location-name :translate
+    :url           "https://host.webchange.com/book-creator"
+    :icon-class    "menu-icon-style"}])
 
-(defn- goto
-  [{:keys [location-name route-name route-params]}]
-  (cond
-    (some? location-name) (location location-name)
-    (some? route-name) (if (sequential? route-params)
-                         (->> (concat [route-name] route-params)
-                              (apply redirect-to))
-                         (redirect-to route-name))))
+(def explore-menu
+  [{:title         "Game Library"
+    :icon-name     "game-library"
+    :location-name :my-profile
+    :url           "https://www.webchange.com/user/games"
+    :icon-class    "menu-icon-style"}
+   {:title         "Book Library"
+    :icon-name     "book-library"
+    :location-name :my-books
+    :url           "https://www.webchange.com/user/books"
+    :icon-class    "menu-icon-style"}])
+
+(def logout-menu
+  [{:title         "Logout"
+    :icon-name     "logout"
+    :location-name :my-profile
+    :url           ""
+    :icon-class    "menu-icon-style"}])
 
 (defn- menu-item
-  [{:keys [children title icon-name] :as props}]
-  (let [active? false
-        handle-click #(goto props)]
-    [:li {:class-name (get-class-name {"menu-item" true
-                                       "active"    active?})}
-     [:span
-      [icon {:icon       icon-name
-             :class-name "user-icon"}]]
-     [:span {:on-click handle-click}
-      title]
-     (when-not (empty? children)
-       [menu {:items children}])]))
+  [{:keys [title icon-name icon-class url] :as props}]
+  [:li
+   [:a {:href url}
+    [:span.menu-icon
+     [icon {:icon       icon-name
+            :class-name icon-class}]]
+    [:span.menu-label
+     title]]])
 
 (defn- menu
   [{:keys [items]}]
-  [:ul
+  [:ul.nav-item-section
    (for [{:keys [title] :as props} items]
      ^{:key title}
      [menu-item props])])
@@ -67,9 +74,17 @@
 (defn navigation-menu
   [{:keys [class-name]}]
   [:div {:class-name (get-class-name (cond-> {"left-menu" true}
-                                             (some? class-name) (assoc class-name true)))}
-   [:div.icon-top
+                                       (some? class-name) (assoc class-name true)))}
+   [:div.logo-icon
     [logo]]
-   [:div.nav-menu
-    [menu {:items menu-items}]]
-   [user-widget]])
+   [:section.nav-link-section
+     [menu {:items dashboard-menu}]
+    [:div.menu-title.sub-menu-title
+     "Create"]
+     [menu {:items create-menu}]
+    [:div.menu-title.sub-menu-title
+     "Explore"]
+     [menu {:items explore-menu}]
+    [:section.logout-section
+      [menu {:items logout-menu}]]
+    [user-widget]]])

@@ -63,12 +63,12 @@ $content-right-padding: 360px + $mid-section-padding;
             max-width: 360px;
         }
 
-        & > .side-menu {
-            flex-grow: 0;
-            flex-shrink: 0;
-            padding: $content-padding;
-            width: 296px;
-            background: #353535;
-        }
+        // & > .side-menu {
+        //     flex-grow: 0;
+        //     flex-shrink: 0;
+        //     padding: $content-padding;
+        //     width: 296px;
+        //     background: #353535;
+        // }
     }
 }
