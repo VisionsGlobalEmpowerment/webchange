@@ -19,8 +19,13 @@
 (def editor_asset_type_background "background")
 (def editor_asset_type_surface "surface")
 (def editor_asset_type_decoration "decoration")
+(def editor_asset_type_etc "etc")
 
-(def editor_asset_types [editor_asset_type_single-background editor_asset_type_background editor_asset_type_surface editor_asset_type_decoration])
+(def editor_asset_types [editor_asset_type_single-background
+                         editor_asset_type_background
+                         editor_asset_type_surface
+                         editor_asset_type_decoration
+                         editor_asset_type_etc])
 
 (def hardcoded (env :hardcoded-courses {}))
 
@@ -387,9 +392,16 @@
     (doseq [skin character-skins]
       (db/create-character-skins! {:name (:name skin) :data skin}))))
 
-(defn editor-assets [tag type]
-  (let [assets (db/find-editor-assets {:tag tag :type type})]
-    assets))
+(defn editor-assets [tag tags type]
+  (if (not (empty? tags))
+    (let [assets (map (fn [tag]
+                        (db/find-editor-assets {:tag tag :type type}))
+                      tags)]
+      (->> assets
+           (map clojure.core/set)
+           (apply clojure.set/intersection)
+           (into [])))
+    (db/find-editor-assets {:tag tag :type type})))
 
 (defn find-all-tags []
   (db/find-all-tags))
@@ -407,16 +419,32 @@
         string (clojure.string/replace-first string #"^/" "")]
     string))
 
+;; Editor assets
+
+(defn- get-asset-data
+  [file-name]
+  (if (re-matches #"([^-]+)--(([^-]+-?))+--([^-]+)" file-name)
+    (let [[type tags _] (clojure.string/split file-name #"--")
+          type (clojure.string/replace type "_" "-")
+          tags (->> (clojure.string/split tags #"-")
+                    (map (fn [tag]
+                           (-> tag
+                               (clojure.string/replace "_" " ")
+                               (clojure.string/trim)))))]
+      {:tags tags
+       :type type})
+    (let [parts (clojure.string/split file-name #"_")
+          type (last parts)
+          tag (->> (drop-last parts)
+                   (clojure.string/join " ")
+                   (clojure.string/trim))]
+      {:tags [tag]
+       :type type})))
+
 (defn store-editor-asset [source-path target-path public-dir file]
-  (let [parts (-> file java.io.File. .getName
-                  (clojure.string/split #"\.")
-                  first
-                  (clojure.string/split #"_"))
-        type (last parts)
-        tag (->> (drop-last parts)
-                 (clojure.string/join " ")
-                 (clojure.string/trim)
-                 (clojure.string/capitalize))
+  (let [{:keys [tags type]} (get-asset-data (-> file java.io.File. .getName
+                                                (clojure.string/split #"\.")
+                                                first))
         path-in-dir (remove-first-directory file source-path)
         thumbnail-file (str target-path "/" path-in-dir)
         file-public (str "/" (remove-first-directory file public-dir))
@@ -424,9 +452,10 @@
     (when (.contains editor_asset_types type)
       (clojure.java.io/make-parents thumbnail-file)
       (assets/make-thumbnail file thumbnail-file 180)
-      (let [created-tag (store-tag! tag)
-            created-editor-assets (store-editor-assets! file-public thumbnail-file-public type)]
-        (db/create-editor-asset-tag! {:tag_id (:id created-tag) :asset_id (:id created-editor-assets)})))))
+      (let [created-editor-assets (store-editor-assets! file-public thumbnail-file-public type)]
+        (doseq [tag tags]
+          (let [created-tag (store-tag! tag)]
+            (db/create-editor-asset-tag! {:tag_id (:id created-tag) :asset_id (:id created-editor-assets)})))))))
 
 (defn clear-before-update []
   (do
@@ -792,4 +821,4 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-slug :name} (-> (db/get-scenes-by-course-id {:course_id course-id}) first)]
     {:course-slug course-slug
-     :scene-slug scene-slug}))
+     :scene-slug  scene-slug}))

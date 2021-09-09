@@ -12,11 +12,44 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [image-data (select-keys objects-data [:src])
-          image-tag (get-in objects-data [:editable? :image-tag])]
-      {:dispatch-n [[::state/init id {:data  image-data
-                                      :names objects-names}]
-                    [::set-image-tag id image-tag]]})))
+    (let [image-data (merge {:scale {:x 1 :y 1}}
+                            (select-keys objects-data [:src :scale]))
+          image-tags (get-in objects-data [:editable? :image-tags])
+          form-params (get-in objects-data [:editable? :edit-form])
+          upload-options (select-keys objects-data [:max-width :max-height :min-width :min-height])]
+      {:dispatch-n [[::state/init id {:data        image-data
+                                      :names       objects-names
+                                      :form-params form-params}]
+                    [::set-image-tags id image-tags]
+                    [::set-upload-options id upload-options]]})))
+
+(re-frame/reg-sub
+  ::show-select-image-control?
+  (fn [[_ id]]
+    (re-frame/subscribe [::state/form-component-available? id :select-image]))
+  (fn [show-control?]
+    show-control?))
+
+(re-frame/reg-sub
+  ::show-upload-image-control?
+  (fn [[_ id]]
+    (re-frame/subscribe [::state/form-component-available? id :upload-image]))
+  (fn [show-control?]
+    show-control?))
+
+;; Upload options
+
+(def upload-options-path :upload-options)
+
+(re-frame/reg-event-fx
+  ::set-upload-options
+  (fn [{:keys [db]} [_ id options]]
+    {:db (assoc-in db (path-to-db id [upload-options-path]) options)}))
+
+(re-frame/reg-sub
+  ::upload-options
+  (fn [db [_ id]]
+    (get-in db (path-to-db id [upload-options-path]))))
 
 ;; Image Src
 
@@ -35,14 +68,15 @@
 
 ;; Image Tag
 
-(def image-tag-path :image-tag)
+(def image-tags-path :image-tag)
 
 (re-frame/reg-event-fx
-  ::set-image-tag
-  (fn [{:keys [db]} [_ id tag]]
-    {:db (assoc-in db (path-to-db id [image-tag-path]) tag)}))
+  ::set-image-tags
+  (fn [{:keys [db]} [_ id tags]]
+    (print "::set-image-tags" id tags)
+    {:db (assoc-in db (path-to-db id [image-tags-path]) tags)}))
 
 (re-frame/reg-sub
-  ::image-tag
+  ::image-tags
   (fn [db [_ id]]
-    (get-in db (path-to-db id [image-tag-path]))))
+    (get-in db (path-to-db id [image-tags-path]))))

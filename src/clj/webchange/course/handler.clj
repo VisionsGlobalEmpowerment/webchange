@@ -213,7 +213,7 @@
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int (s/optional-key :type) s/Str (s/optional-key :image-src) s/Str})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
-(s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration")})
+(s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration" "etc")})
 (s/defschema CharacterSkin {:name                     s/Str
                             :width                    s/Num
                             :height                   s/Num
@@ -239,8 +239,11 @@
 (defn character-skins []
   (response (core/find-all-character-skins)))
 
-(defn editor-assets [tag type]
-  (response (core/editor-assets tag type)))
+(defn editor-assets [tag tags type]
+  (let [tags (->> (clojure.string/split tags #",")
+                  (remove empty?)
+                  (map #(Integer/parseInt %)))]
+    (response (core/editor-assets tag tags type))))
 
 (defn find-all-tags []
   (response (core/find-all-tags)))
@@ -258,9 +261,9 @@
       :tags ["editor-assets"]
       (GET "/editor/assets" []
         :summary "Return list of available assets"
-        :query-params [{type :- s/Str nil}, {tag :- s/Int nil}]
+        :query-params [{type :- s/Str nil}, {tag :- s/Int nil}, {tags :- s/Str ""}]
         :return [EditorAsset]
-        (editor-assets tag type))
+        (editor-assets tag tags type))
       (GET "/editor/tags" []
         :summary "Return list of available assets"
         :return [EditorTag]

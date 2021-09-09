@@ -1,13 +1,26 @@
 .select-image-form {
-    .tag-selector {
-        display: flex;
-        gap: 16px;
-        align-items: center;
-        margin-bottom: 32px;
+    $max-height: 500px;
 
-        .tag-selector-control {
-            flex: 1;
-            max-width: 200px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    .tag-selector {
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: 4px;
+        row-gap: 4px;
+        min-width: 160px;
+        max-height: $max-height;
+        overflow: auto;
+        flex: 0 0;
+
+        & > * {
+            align-self: center;
+
+            &.tag-label {
+                margin-bottom: 0;
+            }
         }
     }
 
@@ -17,7 +30,8 @@
         column-gap: 16px;
         row-gap: 16px;
 
-        max-height: 500px;
+        width: 100%;
+        max-height: $max-height;
         overflow: auto;
 
         background-color: #f2f2f2;

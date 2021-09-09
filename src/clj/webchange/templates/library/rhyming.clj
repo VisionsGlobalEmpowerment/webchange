@@ -5,6 +5,11 @@
     [clojure.string :as str]
     [webchange.templates.utils.dialog :as dialog]))
 
+(def concept-image-options {:max-width  50
+                            :max-height 50
+                            :min-height 20
+                            :min-width  20})
+
 (def m {:id          27
         :name        "Rhyming"
         :tags        ["Independent Practice"]
@@ -32,10 +37,7 @@
                                                       :type        "string"}
                                                :img  {:label   "Dialog"
                                                       :type    "image"
-                                                      :options {:max-width  50
-                                                                :max-height 50
-                                                                :min-height 20
-                                                                :min-width  20}}}}
+                                                      :options concept-image-options}}}
                       :remove-ball {:title   "Remove ball"
                                     :options {:remove-ball {:label "Remove ball"
                                                             :type  "remove-editable-object"}}}}})
@@ -54,12 +56,17 @@
                                              :surface    {:src "/raw/img/rhyming/surface.png"}}
                         :left-gate          {:type       "image"
                                              :src        "/raw/img/rhyming/left-gate.png"
-                                             :x          50
-                                             :y          210
+                                             :x          303
+                                             :y          600
+                                             :origin     {:type "center-center"}
                                              :transition "left-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
-                                             :editable?  {:select    true
-                                                          :image-tag 34}}
+                                             :editable?  {:select     true
+                                                          :drag       true
+                                                          :image-tags ["rhyming" "gate"]
+                                                          :edit-form  {:select-image true
+                                                                       :upload-image true
+                                                                       :flip         true}}}
                         :left-gate-text     {:type           "text"
                                              :text           "rhyme"
                                              :x              355
@@ -71,7 +78,8 @@
                                              :font-family    "Lexend Deca"
                                              :font-size      80
                                              :fill           "#000000"
-                                             :editable?      {:select true}}
+                                             :editable?      {:select true
+                                                              :drag   true}}
                         :right-gate-text    {:type           "text"
                                              :text           "rhyme"
                                              :x              1590
@@ -83,15 +91,21 @@
                                              :font-family    "Lexend Deca"
                                              :font-size      80
                                              :fill           "#000000"
-                                             :editable?      {:select true}}
+                                             :editable?      {:select true
+                                                              :drag   true}}
                         :right-gate         {:type       "image"
                                              :src        "/raw/img/rhyming/right-gate.png"
-                                             :x          1380
-                                             :y          210
+                                             :x          1633
+                                             :y          600
+                                             :origin     {:type "center-center"}
                                              :transition "right-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
-                                             :editable?  {:select    true
-                                                          :image-tag 34}}},
+                                             :editable?  {:select     true
+                                                          :drag       true
+                                                          :image-tags ["rhyming" "gate"]
+                                                          :edit-form  {:select-image true
+                                                                       :upload-image true
+                                                                       :flip         true}}}},
         :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text" "right-gate-text"]],
         :actions       {:start-drag           {:type "sequence-data"
                                                :data [{:type "set-variable", :var-name "left-selected", :var-value false}
@@ -311,24 +325,28 @@
                        :src        "/raw/img/rhyming/ball.png"
                        :x          0
                        :y          0
-                       :scale-y    1
-                       :scale-x    1
+                       :width      200
+                       :height     200
+                       :image-size "contain"
                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
                        :transition (name ball-name)
-                       :alias      "Concept wrapper"}
+                       :alias      "Concept wrapper"
+                       :editable?  {:image-tags ["rhyming" "content wrapper"]
+                                    :edit-form  {:select-image true}}}
 
-      ball-img-name   {:type    "image"
-                       :src     (:src img)
-                       :x       65
-                       :y       25
-                       :scale-y 1
-                       :scale-x 1
-                       :alias   "Concept image"}
+      ball-img-name   (merge {:type    "image"
+                              :src     (:src img)
+                              :x       80
+                              :y       60
+                              :scale-y 1
+                              :scale-x 1
+                              :alias   "Concept image"}
+                             concept-image-options)
 
       ball-text-name  {:type           "text"
                        :text           text
-                       :x              85
-                       :y              90
+                       :x              98
+                       :y              130
                        :align          "center"
                        :vertical-align "middle"
                        :font-family    "Lexend Deca"

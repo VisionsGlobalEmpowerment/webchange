@@ -35,10 +35,13 @@
          (.set x y)))))
 
 (defn get-scale
-  [display-object]
-  (let [scale (.-scale display-object)]
-    {:x (.-x scale)
-     :y (.-y scale)}))
+  ([display-object]
+   (get-scale display-object {}))
+  ([display-object {:keys [abs?] :or {abs? false}}]
+   (let [scale (.-scale display-object)
+         with-abs #(if abs? (Math/abs %) %)]
+     {:x (with-abs (.-x scale))
+      :y (with-abs (.-y scale))})))
 
 (defn set-scale
   [display-object scale]

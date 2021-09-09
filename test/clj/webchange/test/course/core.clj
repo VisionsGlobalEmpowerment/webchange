@@ -52,7 +52,7 @@
   (let [_ (course/update-editor-assets {:public-dir "test/clj/webchange/resources"})]
     (is (.exists (clojure.java.io/as-file "test/clj/webchange/resources/raw/clipart-thumbs/casa_cut/casa_background.png")))
     (let [editor-asset (db/find-editor-assets-by-path {:path "/raw/clipart/casa_cut/casa_decoration.png"})
-          editor-tag (db/find-editor-tag-by-name {:name "Casa"})
+          editor-tag (db/find-editor-tag-by-name {:name "casa"})
           editor-assets (db/find-editor-assets {:tag (:id editor-tag)})]
       (is (= (:thumbnail-path editor-asset) "/raw/clipart-thumbs/casa_cut/casa_decoration.png"))
       (is (= (:type editor-asset) "decoration"))
