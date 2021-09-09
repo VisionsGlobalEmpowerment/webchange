@@ -51,24 +51,26 @@
         main-track-actions @(re-frame/subscribe [::state/main-track-actions])
         combined-actions (concat main-track-actions activity-actions)]
     [:div {:class-name (get-class-name (cond-> {"right-side-bar" true}
-                                               (some? class-name) (assoc class-name true)))}
+                                         (some? class-name) (assoc class-name true)))}
      (into [:div.header-section]
            actions)
      [:div.content-section
       [edit-menu {:edit-menu-content edit-menu-content
                   :show-edit-menu?   show-edit-menu?
                   :on-edit-menu-back on-edit-menu-back}]
-      (for [{:keys [text on-click] :as props} combined-actions]
-        ^{:key text}
-        [actions-item props])
-      [:div.scene-section
-       [:h3 "Scene Layers"]
-         [objects-tree-menu]]
       [activity-action/activity-action-modal]
       [add-character/add-character-window]
       [background/change-background-window]
       [background-music/set-music-window]
       [add-image/add-image-window]
-      (for [{:keys [text on-click] :as props} default-actions-list]
-        ^{:key text}
-        [default-actions-item props])]]))
+      (when-not show-edit-menu?
+        [:div
+         (for [{:keys [text on-click] :as props} combined-actions]
+           ^{:key text}
+           [actions-item props])
+         [:div.scene-section
+          [:h3 "Scene Layers"]
+          [objects-tree-menu]]
+         (for [{:keys [text on-click] :as props} default-actions-list]
+           ^{:key text}
+           [default-actions-item props])])]]))
