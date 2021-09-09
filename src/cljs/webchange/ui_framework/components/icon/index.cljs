@@ -12,11 +12,16 @@
     [webchange.ui-framework.components.icon.icon-audio :as audio]
     [webchange.ui-framework.components.icon.icon-back :as back]
     [webchange.ui-framework.components.icon.icon-background :as background]
+    [webchange.ui-framework.components.icon.icon-book :as book]
+    [webchange.ui-framework.components.icon.icon-book-library :as book-library]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
     [webchange.ui-framework.components.icon.icon-cancel :as cancel]
     [webchange.ui-framework.components.icon.icon-check :as check]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
+    [webchange.ui-framework.components.icon.icon-create-book :as create-book]
+    [webchange.ui-framework.components.icon.icon-create-game :as create-game]
+    [webchange.ui-framework.components.icon.icon-dashboard :as dashboard]
     [webchange.ui-framework.components.icon.icon-delay :as delay]
     [webchange.ui-framework.components.icon.icon-drop-place :as drop-place]
     [webchange.ui-framework.components.icon.icon-edit :as edit]
@@ -27,12 +32,15 @@
     [webchange.ui-framework.components.icon.icon-flip :as flip]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
+    [webchange.ui-framework.components.icon.icon-game :as game]
+    [webchange.ui-framework.components.icon.icon-game-library :as game-library]
     [webchange.ui-framework.components.icon.icon-group :as group]
     [webchange.ui-framework.components.icon.icon-image :as image]
     [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
     [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
     [webchange.ui-framework.components.icon.icon-link :as link]
+    [webchange.ui-framework.components.icon.icon-logout :as logout]
     [webchange.ui-framework.components.icon.icon-match :as match]
     [webchange.ui-framework.components.icon.icon-menu :as menu]
     [webchange.ui-framework.components.icon.icon-menu-vertical :as menu-vertical]
@@ -73,11 +81,16 @@
    "audio"              audio/data
    "back"               back/data
    "background"         background/data
+   "book"               book/data
+   "book-library"       book-library/data
    "bring-to-top"       bring-to-top/data
    "cancel"             cancel/data
    "check"              check/data
    "clear"              clear/data
    "close"              close/data
+   "create-book"        create-book/data
+   "create-game"        create-game/data
+   "dashboard"          dashboard/data
    "delay"              delay/data
    "drop-place"         drop-place/data
    "edit"               edit/data
@@ -88,12 +101,15 @@
    "flip"               flip/data
    "font-family"        font-family/data
    "font-size"          font-size/data
+   "game"               game/data
+   "game-library"       game-library/data
    "group"              group/data
    "image"              image/data
    "insert-after"       insert-after/data
    "insert-before"      insert-before/data
    "insert-parallel"    insert-parallel/data
    "link"               link/data
+   "logout"             logout/data
    "match"              match/data
    "menu"               menu/data
    "menu-vertical"      menu-vertical/data
