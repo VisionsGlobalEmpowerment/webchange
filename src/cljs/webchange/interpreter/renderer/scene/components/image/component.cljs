@@ -99,6 +99,7 @@
   :y - component y-position.
   :width - image width.
   :height - image height.
+  :image-size - can be 'contain' or 'cover';
   :scale - image scale.
   :name - component name that will be set to sprite and container with corresponding suffixes.
   :on-click - on click event handler.

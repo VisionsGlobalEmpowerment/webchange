@@ -7,9 +7,9 @@
     [webchange.ui-framework.components.index :refer [dialog]]))
 
 (defn select-image-modal
-  [{:keys [on-change] :as props}]
-  (let [open? @(re-frame/subscribe [::state/open?])
-        handle-close #(re-frame/dispatch [::state/close])
+  [{:keys [id on-change] :as props}]
+  (let [open? @(re-frame/subscribe [::state/open? id])
+        handle-close #(re-frame/dispatch [::state/close id])
         handle-change (fn [value]
                         (handle-close)
                         (when (fn? on-change)
@@ -18,12 +18,14 @@
              :on-close handle-close
              :title    "Select Image"}
      [select-image-form (merge props
-                               {:on-change handle-change})]]))
+                               {:id        id
+                                :on-change handle-change})]]))
 
 (defn with-image-modal
   [props]
-  (let [[component component-props & children] (-> (r/current-component) (r/children) (first))
-        handle-open #(re-frame/dispatch [::state/open])]
+  (r/with-let [id (->> (random-uuid) (str) (take 8) (clojure.string/join ""))
+               [component component-props & children] (-> (r/current-component) (r/children) (first))
+               handle-open #(re-frame/dispatch [::state/open id])]
     [:div
      (into [component (merge component-props {:on-click handle-open})] children)
-     [select-image-modal props]]))
+     [select-image-modal (assoc props :id id)]]))

@@ -325,16 +325,19 @@
                        :src        "/raw/img/rhyming/ball.png"
                        :x          0
                        :y          0
-                       :scale-y    1
-                       :scale-x    1
+                       :width      200
+                       :height     200
+                       :image-size "contain"
                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
                        :transition (name ball-name)
-                       :alias      "Concept wrapper"}
+                       :alias      "Concept wrapper"
+                       :editable?  {:image-tags ["rhyming" "content wrapper"]
+                                    :edit-form  {:select-image true}}}
 
       ball-img-name   (merge {:type    "image"
                               :src     (:src img)
-                              :x       65
-                              :y       25
+                              :x       80
+                              :y       60
                               :scale-y 1
                               :scale-x 1
                               :alias   "Concept image"}
@@ -342,8 +345,8 @@
 
       ball-text-name  {:type           "text"
                        :text           text
-                       :x              85
-                       :y              90
+                       :x              98
+                       :y              130
                        :align          "center"
                        :vertical-align "middle"
                        :font-family    "Lexend Deca"

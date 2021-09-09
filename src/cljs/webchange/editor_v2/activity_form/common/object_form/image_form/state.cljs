@@ -72,8 +72,9 @@
 
 (re-frame/reg-event-fx
   ::set-image-tags
-  (fn [{:keys [db]} [_ id tag]]
-    {:db (assoc-in db (path-to-db id [image-tags-path]) tag)}))
+  (fn [{:keys [db]} [_ id tags]]
+    (print "::set-image-tags" id tags)
+    {:db (assoc-in db (path-to-db id [image-tags-path]) tags)}))
 
 (re-frame/reg-sub
   ::image-tags

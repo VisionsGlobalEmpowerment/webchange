@@ -6,10 +6,10 @@
     [webchange.ui-framework.components.index :refer [checkbox label select]]))
 
 (defn- tag-selector
-  []
-  (let [options @(re-frame/subscribe [::state/tags-options])
+  [{:keys [id]}]
+  (let [options @(re-frame/subscribe [::state/tags-options id])
         handle-change (fn [{:keys [value checked?]}]
-                        (re-frame/dispatch [::state/update-current-tags value checked?]))]
+                        (re-frame/dispatch [::state/update-current-tags id value checked?]))]
     (into [:div.tag-selector]
           (->> options
                (reduce (fn [result {:keys [text value selected?]}]
@@ -27,8 +27,8 @@
      [:img {:src thumbnail-path}]]))
 
 (defn- assets-list
-  [{:keys [on-click]}]
-  (let [assets @(re-frame/subscribe [::state/assets])]
+  [{:keys [id on-click]}]
+  (let [assets @(re-frame/subscribe [::state/assets id])]
     [:div.assets-list
      (if-not (empty? assets)
        (for [{:keys [id] :as asset} assets]
@@ -39,8 +39,9 @@
         "No available images"])]))
 
 (defn select-image-form
-  [{:keys [tags on-change]}]
-  (r/with-let [_ (re-frame/dispatch [::state/init tags])]
+  [{:keys [id tags on-change]}]
+  (r/with-let [_ (re-frame/dispatch [::state/init id tags])]
     [:div.select-image-form
-     [tag-selector]
-     [assets-list {:on-click on-change}]]))
+     [tag-selector {:id id}]
+     [assets-list {:id       id
+                   :on-click on-change}]]))
