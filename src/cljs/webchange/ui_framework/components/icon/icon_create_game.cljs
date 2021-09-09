@@ -2,7 +2,7 @@
 
 (def data
   [:svg {:fill    "none"
-         :viewbox "0 0 18 18"
+         :viewBox "0 0 18 18"
          :height  "18"
          :width   "18"}
    [:path {:fill "white"

@@ -12,8 +12,8 @@
     [webchange.ui-framework.components.icon.icon-audio :as audio]
     [webchange.ui-framework.components.icon.icon-back :as back]
     [webchange.ui-framework.components.icon.icon-background :as background]
-    [webchange.ui-framework.components.icon.icon-book-library :as book-library]
     [webchange.ui-framework.components.icon.icon-book :as book]
+    [webchange.ui-framework.components.icon.icon-book-library :as book-library]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
     [webchange.ui-framework.components.icon.icon-cancel :as cancel]
     [webchange.ui-framework.components.icon.icon-check :as check]
@@ -32,8 +32,8 @@
     [webchange.ui-framework.components.icon.icon-flip :as flip]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
-    [webchange.ui-framework.components.icon.icon-game-library :as game-library]
     [webchange.ui-framework.components.icon.icon-game :as game]
+    [webchange.ui-framework.components.icon.icon-game-library :as game-library]
     [webchange.ui-framework.components.icon.icon-group :as group]
     [webchange.ui-framework.components.icon.icon-image :as image]
     [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
@@ -81,8 +81,8 @@
    "audio"              audio/data
    "back"               back/data
    "background"         background/data
-   "book-library"       book-library/data
    "book"               book/data
+   "book-library"       book-library/data
    "bring-to-top"       bring-to-top/data
    "cancel"             cancel/data
    "check"              check/data
@@ -101,8 +101,8 @@
    "flip"               flip/data
    "font-family"        font-family/data
    "font-size"          font-size/data
-   "game-library"       game-library/data
    "game"               game/data
+   "game-library"       game-library/data
    "group"              group/data
    "image"              image/data
    "insert-after"       insert-after/data

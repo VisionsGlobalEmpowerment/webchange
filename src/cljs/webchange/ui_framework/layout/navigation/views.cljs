@@ -27,12 +27,12 @@
   [{:title         "Create a game"
     :icon-name     "create-game"
     :location-name :book-library
-    :url           "https://www.webchange.com/user/profile"
+    :url           "/game-changer"
     :icon-class    "menu-icon-style"}
    {:title         "Create a book"
     :icon-name     "create-book"
     :location-name :translate
-    :url           "https://host.webchange.com/book-creator"
+    :url           "/book-creator"
     :icon-class    "menu-icon-style"}])
 
 (def explore-menu
