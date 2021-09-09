@@ -47,6 +47,5 @@
   ::flip-animation
   (fn [{:keys [db]} [_ id]]
     (let [{:keys [x y]} (get-current-scale db id)]
-      (print "current-scale" id (get-current-scale db id))
       {:dispatch [::state/update-current-data id {:scale {:x (- x)
                                                           :y y}}]})))

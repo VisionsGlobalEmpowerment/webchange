@@ -161,7 +161,6 @@
 (re-frame/reg-event-fx
   ::set-loading-status
   (fn [{:keys [db]} [_ id status]]
-    (print "::set-loading-status" id status)
     {:db (assoc-in db (path-to-db id loading-status-path) status)}))
 
 ;; Form States
