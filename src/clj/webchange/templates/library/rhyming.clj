@@ -311,16 +311,14 @@
 
 (defn add-ball
   [scene-data {:keys [side img text]}]
-  (let [
-        suffix (common/get-unique-suffix scene-data)
+  (let [suffix (common/get-unique-suffix scene-data)
         ball-dialog-name (ball-dialog suffix)
         ball-name (ball suffix)
         ball-group-name (ball-group suffix)
         balls (get-in scene-data [:metadata :balls (keyword side)])
         ball-img-name (ball-img suffix)
-        ball-text-name (ball-text suffix)
-        ]
-    [[(ball-group suffix)]
+        ball-text-name (ball-text suffix)]
+    [[(name (ball-group suffix))]
      {ball-name       {:type       "image"
                        :src        "/raw/img/rhyming/ball.png"
                        :x          0
@@ -370,22 +368,19 @@
                                                  :params {:tap-dialog ball-dialog-name}
                                                  }
                                     :drag-end
-                                                {:id     "end-dragging",
-                                                 :on     "drag-end",
-                                                 :type   "action",
-                                                 :params {:gate           (str side "-gate")
-                                                          :side           side
-                                                          :target         ball-group-name
-                                                          :check-variable (str side "-selected")
-                                                          }}}
-                       :states     {:park-position (park-ball-position side balls)}
-                       }}
+                                    {:id     "end-dragging",
+                                     :on     "drag-end",
+                                     :type   "action",
+                                     :params {:gate           (str side "-gate")
+                                              :side           side
+                                              :target         ball-group-name
+                                              :check-variable (str side "-selected")
+                                              }}}
+                       :states     {:park-position (park-ball-position side balls)}}}
      {ball-dialog-name (dialog/default text)}
      [{:url (:src img), :size 10, :type "image"}]
      ball-dialog-name
-     ball-name
-     ])
-  )
+     ball-name]))
 
 (defn f
   [args]
@@ -404,7 +399,7 @@
         (update-in [:actions] merge actions)
         (update-in [:actions (keyword (str "read-all-word-" side)) :data]
                    concat [{:type "state" :target ball-name :id "highlighted"}
-                           {:type "action" :id ball-dialog-name}
+                           {:type "action" :id (name ball-dialog-name)}
                            {:type "state" :target ball-name :id "not-highlighted"}])
         (common/add-track-action {:track-name (str "Track " side)
                                   :type       "dialog"
@@ -412,19 +407,17 @@
         (update-in [:metadata :balls (keyword side)] inc)
         (common/add-scene-object scene-objects)
         (common/update-unique-suffix)
-        (update-in [:actions :correct-option :data 4 :value] inc)
-        ))
-  )
+        (update-in [:actions :correct-option :data 4 :value] inc))))
 
 (defn- move-side-balls-to-remove-gaps
   [old-data side]
-  (let [
-        suffixes (as-> old-data dt
-                       (get-in dt [:actions (keyword (str "read-all-word-" side)) :data])
-                       (filter (fn [action]
-                                 (= (:type action) "action")) dt)
-                       (map (fn [action]
-                              (last (str/split (:id action) #"-"))) dt))
+  (let [suffixes (as-> old-data dt
+                   (get-in dt [:actions (keyword (str "read-all-word-" side)) :data])
+                   (filter (fn [action]
+                             (= (:type action) "action")) dt)
+                   (map (fn [action]
+                          (println (:id action))
+                          (last (str/split (:id action) #"-"))) dt))
         objects (into {} (map-indexed (fn [idx suffix]
                                         (let [ball-group-name (ball-group suffix)]
                                           [ball-group-name
@@ -443,8 +436,7 @@
         ball-group-name (ball-group suffix)
         ball-img-name (ball-img suffix)
         ball-text-name (ball-text suffix)
-        side (get-in old-data [:objects ball-group-name :actions :drag-end :params :side])
-        ]
+        side (get-in old-data [:objects ball-group-name :actions :drag-end :params :side])]
     (-> old-data
         (common/remove-asset (get-in old-data [:objects ball-img-name :src]))
         (common/remove-object ball-group-name)
@@ -457,9 +449,7 @@
         (update-in [:metadata :balls (keyword side)] dec)
         (update-in [:actions :correct-option :data 4 :value] dec)
         (move-side-balls-to-remove-gaps side)
-        (common/remove-action-from-tracks ball-dialog-name)
-        )
-    ))
+        (common/remove-action-from-tracks ball-dialog-name))))
 
 (defn fu
   [old-data {:keys [action-name] :as args}]

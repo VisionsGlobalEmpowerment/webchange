@@ -536,7 +536,10 @@
   [field scene-slug]
   (if (nil? (:scenes field))
     (assoc field :scenes [scene-slug])
-    (update field :scenes conj scene-slug)))
+    (-> field
+        (update :scenes conj scene-slug)
+        (update :scenes distinct)
+        (update :scenes vec))))
 
 (defn merge-fields
   [original fields scene-slug]
@@ -746,7 +749,7 @@
   [{:keys [editable?]}]
   (cond
     (and (map? editable?) (not (contains? editable? :drag))) [:x :y :width :height]
-    :else []))
+    :else [:editable?]))
 
 (defn- update-object
   [created-activity]
@@ -821,4 +824,4 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-slug :name} (-> (db/get-scenes-by-course-id {:course_id course-id}) first)]
     {:course-slug course-slug
-     :scene-slug  scene-slug}))
+     :scene-slug scene-slug}))

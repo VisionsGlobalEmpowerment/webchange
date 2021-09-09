@@ -52,16 +52,16 @@
 
 (defn remove-scene-object
   [scene-data scene-object]
-  (assoc scene-data :scene-objects (reduce (fn [result objects]
-                                             (let [current-objects (vec (remove nil? (map
-                                                                                       (fn [obj]
-                                                                                         (if (not (= obj scene-object)) obj)
-                                                                                         ) objects)
-                                                                                ))]
-                                               (if (= 0 (count current-objects))
-                                                 result
-                                                 (conj result current-objects))
-                                               )) [] (:scene-objects scene-data))))
+  (let [scene-objects (:scene-objects scene-data)]
+    (->> scene-objects
+         (reduce (fn [result objects]
+                   (if-let [current-objects (->> objects
+                                                 (remove #(= scene-object %))
+                                                 seq)]
+                     (conj result (vec current-objects))
+                     result)) [])
+         (assoc scene-data :scene-objects))))
+
 (defn remove-actions-by-key-value
   [actions key value]
   (vec (remove nil? (map (fn [action]
