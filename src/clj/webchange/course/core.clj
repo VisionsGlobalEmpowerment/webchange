@@ -19,13 +19,13 @@
 (def editor_asset_type_background "background")
 (def editor_asset_type_surface "surface")
 (def editor_asset_type_decoration "decoration")
-(def editor_asset_type_content-wrapper "etc")
+(def editor_asset_type_etc "etc")
 
 (def editor_asset_types [editor_asset_type_single-background
                          editor_asset_type_background
                          editor_asset_type_surface
                          editor_asset_type_decoration
-                         editor_asset_type_content-wrapper])
+                         editor_asset_type_etc])
 
 (def hardcoded (env :hardcoded-courses {}))
 
