@@ -31,6 +31,9 @@
                                               (.addChild (:object parent) container))
                    :set-position            (fn [position]
                                               (utils/set-position container position))
+                   :set-scale               (fn [scale]
+                                              (utils/set-scale sprite-object scale)
+                                              (utils/emit container "scaleChanged" scale))
                    :set-src                 (fn [src]
                                               (when src
                                                 (resources/load-resource
