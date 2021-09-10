@@ -249,7 +249,7 @@
   [scene-data track-index]
   (when (some? track-index)
     (-> (get-tracks scene-data)
-        (nth track-index))))
+        (nth track-index nil))))
 
 (defn get-main-track
   [scene-data]

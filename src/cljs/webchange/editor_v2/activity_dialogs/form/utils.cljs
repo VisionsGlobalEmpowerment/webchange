@@ -1,8 +1,9 @@
 (ns webchange.editor-v2.activity-dialogs.form.utils
   (:require
-   [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects]]
-   [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes get-node-data]]
-   [webchange.utils.scene-data :refer [get-scene-object]]))
+    [clojure.set :refer [difference]]
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects]]
+    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes get-node-data]]
+    [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]))
 
 (defn- set-parallel-marks
   [actions]
@@ -53,19 +54,19 @@
                  action-type (cond
                                (some #{inner-action-id} available-effects-ids)
                                :effect
-                               
+
                                (= inner-action-type "text-animation")
                                :text-animation
-                               
+
                                (some #{inner-action-type} ["add-animation" "remove-animation"])
                                :character-animation
-                               
+
                                (some? inner-action-phrase-text)
                                :phrase
 
                                (some #{inner-action-type} ["start-skip-region" "end-skip-region"])
                                :skip
-                               
+
                                :else :unknown)]
              (-> data
                  (assoc :type action-type)
@@ -78,46 +79,46 @@
          (let [concept-name (:name concept-data)
                {:keys [duration]} (get-empty-action action-data)
                {action-type :type
-                :keys [id
-                       phrase-text
-                       phrase-placeholder
-                       target
-                       track]} (get-inner-action action-data)]
+                :keys       [id
+                             phrase-text
+                             phrase-placeholder
+                             target
+                             track]} (get-inner-action action-data)]
            (cond-> {:type          type
                     :source        source
                     :delay         duration
                     :path          action-path
                     :node-data     node-data
                     :parallel-mark parallel-mark}
-             (= type :phrase)
-             (merge {:character   target
-                     :text        phrase-text
-                     :placeholder phrase-placeholder})
+                   (= type :phrase)
+                   (merge {:character   target
+                           :text        phrase-text
+                           :placeholder phrase-placeholder})
 
-             (= type :text-animation)
-             (merge {:text-object target
-                     :text        (->> (keyword target)
-                                       (get-scene-object scene-data)
-                                       (:text))})
+                   (= type :text-animation)
+                   (merge {:text-object target
+                           :text        (->> (keyword target)
+                                             (get-scene-object scene-data)
+                                             (:text))})
 
-             (= type :character-animation)
-             (merge {:animation-object target
-                     :animation-name   id
-                     :animation-track  track})
+                   (= type :character-animation)
+                   (merge {:animation-object target
+                           :animation-name   id
+                           :animation-track  track})
 
-             (= type :effect)
-             (merge {:effect      id
-                     :effect-name (->> available-effects
-                                       (some (fn [available-effect]
-                                               (and (= (:action available-effect) id)
-                                                    available-effect)))
-                                       (:name))})
+                   (= type :effect)
+                   (merge {:effect      id
+                           :effect-name (->> available-effects
+                                             (some (fn [available-effect]
+                                                     (and (= (:action available-effect) id)
+                                                          available-effect)))
+                                             (:name))})
 
-             (= type :skip)
-             (merge {:effect-name (get-in skip-effects [(keyword action-type) :text])})
-             
-             (= source :concept)
-             (merge {:concept-name concept-name}))))
+                   (= type :skip)
+                   (merge {:effect-name (get-in skip-effects [(keyword action-type) :text])})
+
+                   (= source :concept)
+                   (merge {:concept-name concept-name}))))
        actions))
 
 (defn- set-selected
@@ -138,3 +139,16 @@
                            :scene-data        scene-data
                            :available-effects available-effects})
       (set-selected current-action-path)))
+
+(defn collect-untracked-actions
+  [scene-data]
+  (let [all-actions (->> (get-dialog-actions scene-data)
+                         (map clojure.core/name))
+        tracked-actions (->> (get-tracks scene-data)
+                             (map :nodes)
+                             (flatten)
+                             (filter #(= (:type %) "dialog"))
+                             (map :action-id))]
+    (->> (difference (set all-actions)
+                     (set tracked-actions))
+         (vec))))
