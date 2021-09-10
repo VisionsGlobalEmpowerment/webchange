@@ -40,6 +40,23 @@
         grid-column-end: 3;
     }
 
+   .switch-activity-tracks {
+        display: block;
+        position: relative;
+        width: 150px;
+
+        svg {
+            fill: #000;
+        }
+
+        &.active {
+            background: rgba(0, 0, 0, 0.05);
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
 }
 
 .generic-skeleton {
