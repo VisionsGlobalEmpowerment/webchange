@@ -5,7 +5,7 @@
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-menu :refer [unit-menu]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-animation :refer [animation-unit]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-effect :refer [effect-unit]]
-   [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-skip :refer [skip-unit]]
+   [webchange.editor-v2.activity-dialogs.form.action-unit.views-skip :refer [skip-unit]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-phrase :refer [phrase-unit]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-text-animation :refer [text-animation-unit]]
    [webchange.editor-v2.activity-dialogs.form.state :as state]
