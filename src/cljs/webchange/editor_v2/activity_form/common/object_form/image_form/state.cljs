@@ -73,8 +73,10 @@
 
 (re-frame/reg-event-fx
   ::set-image-src
-  (fn [{:keys [_]} [_ id src]]
-    {:dispatch [::state/update-current-data id {:src src}]}))
+  (fn [{:keys [db]} [_ id src]]
+    (let [form-destroyed? (state/form-destroyed? db id)]
+      (when-not form-destroyed?
+        {:dispatch [::state/update-current-data id {:src src}]}))))
 
 ;; Image Tag
 

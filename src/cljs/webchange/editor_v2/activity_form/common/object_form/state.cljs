@@ -232,6 +232,22 @@
 
 ;; Reset
 
+(def destroy-status-path :destroy-status)
+
+(defn get-destroy-status
+  [db id]
+  (get-in db (path-to-db id [destroy-status-path])))
+
+(defn form-destroyed?
+  [db id]
+  (-> (get-destroy-status db id)
+      (= :destroyed)))
+
+(re-frame/reg-event-fx
+  ::set-destroyed-status
+  (fn [{:keys [db]} [_ id]]
+    {:db (assoc-in db (path-to-db id [destroy-status-path]) :destroyed)}))
+
 (re-frame/reg-event-fx
   ::reset
   (fn [{:keys [db]} [_ id {:keys [reset-stage-object?] :or {reset-stage-object? true}}]]
@@ -243,5 +259,6 @@
       (logger/group-end "Reset asset form" id)
 
       {:dispatch-n (cond-> [[::reset-initial-data id]
-                            [::reset-current-data id]]
+                            [::reset-current-data id]
+                            [::set-destroyed-status id]]
                            reset-stage-object? (conj [::update-stage-objects id initial-data]))})))
