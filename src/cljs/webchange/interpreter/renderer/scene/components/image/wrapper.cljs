@@ -41,4 +41,5 @@
                                                       (image-utils/set-image-size sprite-object @state)
                                                       (image-utils/set-image-position sprite-object @state)
                                                       (image-utils/apply-boundaries container @state)
-                                                      (image-utils/apply-origin container @state))))))}))
+                                                      (image-utils/apply-origin container @state)
+                                                      (utils/emit container "srcChanged"))))))}))

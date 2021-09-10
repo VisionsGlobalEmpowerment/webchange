@@ -35,14 +35,19 @@
 (defn- upload-image-control
   [{:keys [id]}]
   (let [show-upload-image? @(re-frame/subscribe [::state/show-upload-image-control? id])
-        upload-options @(re-frame/subscribe [::state/upload-options id])]
+        upload-options @(re-frame/subscribe [::state/upload-options id])
+        handle-upload-start #(re-frame/dispatch [::state/upload-start id])
+        handle-upload-finish (fn [src]
+                               (set-image-src id src)
+                               (re-frame/dispatch [::state/upload-finish id]))]
     (when show-upload-image?
       [:div.control-block
        [label "Or upload your own image:"]
-       [file {:type           "image"
-              :show-icon?     false
-              :on-change      #(set-image-src id %)
-              :upload-options upload-options}]])))
+       [file {:type            "image"
+              :show-icon?      false
+              :on-change       handle-upload-finish
+              :on-upload-start handle-upload-start
+              :upload-options  upload-options}]])))
 
 (defn- scale
   [{:keys [id]}]

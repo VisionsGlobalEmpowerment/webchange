@@ -58,6 +58,8 @@
                                              :src        "/raw/img/rhyming/left-gate.png"
                                              :x          303
                                              :y          600
+                                             :max-width  507
+                                             :max-height 780
                                              :origin     {:type "center-center"}
                                              :transition "left-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
@@ -97,6 +99,8 @@
                                              :src        "/raw/img/rhyming/right-gate.png"
                                              :x          1633
                                              :y          600
+                                             :max-width  507
+                                             :max-height 780
                                              :origin     {:type "center-center"}
                                              :transition "right-gate"
                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}

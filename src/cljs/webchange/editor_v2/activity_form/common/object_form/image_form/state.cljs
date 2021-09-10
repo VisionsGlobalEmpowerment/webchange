@@ -51,6 +51,16 @@
   (fn [db [_ id]]
     (get-in db (path-to-db id [upload-options-path]))))
 
+(re-frame/reg-event-fx
+  ::upload-start
+  (fn [{:keys [_]} [_ id]]
+    {:dispatch [::state/set-loading-status id :loading]}))
+
+(re-frame/reg-event-fx
+  ::upload-finish
+  (fn [{:keys [_]} [_ id]]
+    {:dispatch [::state/set-loading-status id :loaded]}))
+
 ;; Image Src
 
 (re-frame/reg-sub
@@ -73,7 +83,6 @@
 (re-frame/reg-event-fx
   ::set-image-tags
   (fn [{:keys [db]} [_ id tags]]
-    (print "::set-image-tags" id tags)
     {:db (assoc-in db (path-to-db id [image-tags-path]) tags)}))
 
 (re-frame/reg-sub
