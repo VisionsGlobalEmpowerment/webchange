@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.activity-dialogs.form.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-dialogs.form.utils :refer [prepare-phrase-actions]]
+    [webchange.editor-v2.activity-dialogs.form.utils :refer [collect-untracked-actions prepare-phrase-actions]]
     [webchange.editor-v2.activity-dialogs.form.state-actions :as state-actions]
     [webchange.editor-v2.state :as parent-state]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-dialog-form]
@@ -31,11 +31,20 @@
 ;; Track
 
 (re-frame/reg-sub
+  ::untracked-actions
+  (fn []
+    (re-frame/subscribe [::translator-form.scene/scene-data]))
+  (fn [scene-data]
+    (collect-untracked-actions scene-data)))
+
+(re-frame/reg-sub
   ::available-tracks
   (fn []
-    [(re-frame/subscribe [::translator-form.scene/scene-data])])
-  (fn [[scene-data]]
-    (->> (scene-utils/get-tracks scene-data)
+    [(re-frame/subscribe [::translator-form.scene/scene-data])
+     (re-frame/subscribe [::untracked-actions])])
+  (fn [[scene-data untracked-actions]]
+    (->> (cond-> (scene-utils/get-tracks scene-data)
+                 (not (empty? untracked-actions)) (conj {:title "Untracked"}))
          (map-indexed (fn [idx {:keys [title]}]
                         {:text title
                          :idx  idx})))))
@@ -201,14 +210,19 @@
   ::dialogs-to-show
   (fn []
     [(re-frame/subscribe [::current-track])
-     (re-frame/subscribe [::translator-form.scene/scene-data])])
-  (fn [[current-track scene-data]]
-    (->> (scene-utils/get-track-by-index scene-data current-track)
-         (:nodes)
-         (filter (fn [{:keys [type]}]
-                   (= type "dialog")))
-         (map (fn [{:keys [action-id]}]
-                [(keyword action-id)])))))
+     (re-frame/subscribe [::translator-form.scene/scene-data])
+     (re-frame/subscribe [::untracked-actions])])
+  (fn [[current-track-idx scene-data untracked-actions]]
+    (let [current-track (scene-utils/get-track-by-index scene-data current-track-idx)]
+      (if (some? current-track)
+        (->> (:nodes current-track)
+             (filter (fn [{:keys [type]}]
+                       (= type "dialog")))
+             (map (fn [{:keys [action-id]}]
+                    [(keyword action-id)])))
+        (map (fn [action-name]
+               [(keyword action-name)])
+             untracked-actions)))))
 
 (re-frame/reg-sub
   ::script-data
@@ -240,8 +254,8 @@
       "add-effect-action" {:dispatch [::add-effect-action data]}
       "set-target-animation" {:dispatch [::set-target-animation data]}
       "remove-target-animation" {:dispatch [::remove-target-animation data]}
-      "start-skip-region"  {:dispatch [::start-skip-region data]}
-      "end-skip-region"  {:dispatch [::end-skip-region data]}
+      "start-skip-region" {:dispatch [::start-skip-region data]}
+      "end-skip-region" {:dispatch [::end-skip-region data]}
       {})))
 
 (defn- get-action-position-data
@@ -274,8 +288,8 @@
   ::remove-target-animation
   (fn [{:keys [_]} [_ {:keys [target track] :as data}]]
     (let [position-data (get-action-position-data data)
-          action-data (defaults/get-remove-emotion-action-data {:target    target
-                                                                :track     track})]
+          action-data (defaults/get-remove-emotion-action-data {:target target
+                                                                :track  track})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))
 
