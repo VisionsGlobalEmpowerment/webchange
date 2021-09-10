@@ -78,6 +78,7 @@
            disabled?
            drag-and-drop?
            on-change
+           on-upload-start
            show-file-name?
            show-icon?
            show-input?
@@ -101,6 +102,7 @@
                                (when show-file-name? (reset! text-value (.-name file)))
                                (if with-upload?
                                  (do (reset! uploading? true)
+                                     (when (fn? on-upload-start) (on-upload-start))
                                      (upload-file {:file     file
                                                    :type     type
                                                    :options  upload-options

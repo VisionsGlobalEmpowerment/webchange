@@ -31,6 +31,9 @@
                                               (.addChild (:object parent) container))
                    :set-position            (fn [position]
                                               (utils/set-position container position))
+                   :set-scale               (fn [scale]
+                                              (utils/set-scale sprite-object scale)
+                                              (utils/emit container "scaleChanged" scale))
                    :set-src                 (fn [src]
                                               (when src
                                                 (resources/load-resource
@@ -41,4 +44,5 @@
                                                       (image-utils/set-image-size sprite-object @state)
                                                       (image-utils/set-image-position sprite-object @state)
                                                       (image-utils/apply-boundaries container @state)
-                                                      (image-utils/apply-origin container @state))))))}))
+                                                      (image-utils/apply-origin container @state)
+                                                      (utils/emit container "srcChanged"))))))}))
