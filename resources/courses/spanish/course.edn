@@ -14,7 +14,7 @@
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
-  :cinema-new {:name "cinema-new"},
+  :cinema-new {:name "cinema-new", :lesson-sets ["concepts-single"]},
   :letter-z-2-sample--delete-later {:name "Letter Z 2 Sample (Delete later)", :lesson-sets ["concepts-single"]},
   :park-poem
   {:name "Poem",
@@ -58,8 +58,8 @@
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg"},
-  :running-with-letters {:name "running-with-letters"},
-  :magic-hat-v-2 {:name "magic-hat-v-2"},
+  :running-with-letters {:name "running-with-letters", :lesson-sets ["concepts-group" "concepts-single"]},
+  :magic-hat-v-2 {:name "magic-hat-v-2", :lesson-sets ["concepts-magic-hat-rounds" "concepts-all"]},
   :running
   {:name "Running",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
@@ -111,7 +111,7 @@
    :preview "/images/dashboard/scene-preview/Park_Slide.jpg"},
   :interactive-read-aloud-import-2-2 {:name "interactive-read-aloud-import-2-2"},
   :recording-studio-1-ai {:name "recording-studio-1-ai"},
-  :letter-intro-1 {:name "letter-intro-1"},
+  :letter-intro-1 {:name "letter-intro-1", :lesson-sets ["concepts-single"]},
   :painting-tablet
   {:name "Painting",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
@@ -128,8 +128,9 @@
   {:name "Painting",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
-  :alliteration-v-2 {:name "alliteration-v-2"},
+   :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg",
+   :lesson-sets ["concepts-single"]},
+  :alliteration-v-2 {:name "alliteration-v-2", :lesson-sets ["concepts" "concepts-incorrect"]},
   :letter-intro
   {:name "Letter Intro",
    :outs [{:x 1457, :y 330, :name "map", :object "door"}],
@@ -147,7 +148,7 @@
     {:x 715, :y 250, :name "pinata", :object "pinata"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Park_Main.jpg"},
-  :volleyball-v-3 {:name "volleyball-v-3"},
+  :volleyball-v-3 {:name "volleyball-v-3", :lesson-sets ["volleyball-concepts" "volleyball-incorrect"]},
   :map
   {:name "Map",
    :outs

@@ -1,5 +1,23 @@
 {:fields
- [{:name "book-content-action",
+ [{:name "alliteration-correct-image-1",
+   :type "image",
+   :scenes ["alliteration-v-2"]}
+  {:name "alliteration-correct-image-2",
+   :type "image",
+   :scenes ["alliteration-v-2"]}
+  {:name "alliteration-correct-image-3",
+   :type "image",
+   :scenes ["alliteration-v-2"]}
+  {:name "alliteration-target-image-1",
+   :type "image",
+   :scenes ["alliteration-v-2"]}
+  {:name "alliteration-target-image-2",
+   :type "image",
+   :scenes ["alliteration-v-2"]}
+  {:name "alliteration-target-image-3",
+   :type "image",
+   :scenes ["alliteration-v-2"]}
+  {:name "book-content-action",
    :type "action",
    :scenes ["book"],
    :template
@@ -29,7 +47,7 @@
    :template {:type "audio", :scene-id "book"}}
   {:name "chanting-video-src",
    :type "video",
-   :scenes ["cinema-video"],
+   :scenes ["cinema-video" "cinema-new"],
    :template nil}
   {:name "concept-name",
    :type "string",
@@ -40,7 +58,8 @@
     "running"
     "volleyball"
     "volleyball-letters"
-    "writing-practice"]}
+    "writing-practice"
+    "running-with-letters"]}
   {:name "concept-rest", :type "string"}
   {:name "dialog-field-df7a73b6-64ac-4294-9971-5347edf7223d",
    :type "action",
@@ -161,7 +180,10 @@
     "letter-z-2-sample--delete-later"
     "letter-y-1-sample--delete-later"
     "letter-y-2-sample--delete-later"
-    "letter-intro-demo"],
+    "letter-intro-demo"
+    "magic-hat-v-2"
+    "letter-intro-1"
+    "running-with-letters"],
    :template nil}
   {:name "letter",
    :type "string",
@@ -177,7 +199,11 @@
     "letter-z-1-sample--delete-later"
     "letter-z-2-sample--delete-later"
     "letter-y-1-sample--delete-later"
-    "letter-y-2-sample--delete-later"]}
+    "letter-y-2-sample--delete-later"
+    "magic-hat-v-2"
+    "alliteration-v-2"
+    "writing-practice"
+    "running-with-letters"]}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",
    :type "action",
@@ -404,6 +430,24 @@
     :track 1,
     :target "senoravaca",
     :scene-id "cinema"}}
+  {:name "volleyball-image-1",
+   :type "image",
+   :scenes ["volleyball-v-3"]}
+  {:name "volleyball-image-2",
+   :type "image",
+   :scenes ["volleyball-v-3"]}
+  {:name "volleyball-image-3",
+   :type "image",
+   :scenes ["volleyball-v-3"]}
+  {:name "volleyball-image-4",
+   :type "image",
+   :scenes ["volleyball-v-3"]}
+  {:name "volleyball-image-5",
+   :type "image",
+   :scenes ["volleyball-v-3"]}
+  {:name "volleyball-image-6",
+   :type "image",
+   :scenes ["volleyball-v-3"]}
   {:name "word-image-1",
    :type "image",
    :scenes ["sandbox" "cycling" "volleyball"],
