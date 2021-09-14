@@ -49,9 +49,10 @@
                  [com.cemerick/url "0.1.1"]
                  [org.clojure/data.csv "1.0.0"]
                  [me.raynes/fs "1.4.6"]
-                 [io.djy/ezzmq "0.8.2"]]
+                 [io.djy/ezzmq "0.8.2"]
+                 [com.google.cloud/google-cloud-translate "2.1.0"]]
 
-  ;:node-dependencies [[source-map-support "0.2.8"]]
+                                        ;:node-dependencies [[source-map-support "0.2.8"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-cooper "1.2.2"]
@@ -96,17 +97,17 @@
 
   :profiles
   {:dev
-            {:dependencies [[binaryage/devtools "0.9.10"]
-                            [day8.re-frame/re-frame-10x "0.3.3"]
-                            [day8.re-frame/tracing "0.5.1"]
-                            [ring/ring-mock "0.3.2"]
-                            [mockery "0.1.4"]
-                            [figwheel-sidecar "0.5.20"]]
-             :plugins      [[lein-doo "0.1.8"]]
-             :main         webchange.server-dev
-             :repl-options {:init-ns webchange.server
-                            :init    (dev)}
-             :source-paths ["env/dev/clj" "env/dev/cljs"]}
+   {:dependencies [[binaryage/devtools "0.9.10"]
+                   [day8.re-frame/re-frame-10x "0.3.3"]
+                   [day8.re-frame/tracing "0.5.1"]
+                   [ring/ring-mock "0.3.2"]
+                   [mockery "0.1.4"]
+                   [figwheel-sidecar "0.5.20"]]
+    :plugins      [[lein-doo "0.1.8"]]
+    :main         webchange.server-dev
+    :repl-options {:init-ns webchange.server
+                   :init    (dev)}
+    :source-paths ["env/dev/clj" "env/dev/cljs"]}
    :prod    {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths       ["env/prod/clj"]
              :dependencies       [[day8.re-frame/tracing-stubs "0.5.1"]]
