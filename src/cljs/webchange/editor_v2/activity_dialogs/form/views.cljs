@@ -8,11 +8,11 @@
     [webchange.ui-framework.components.index :refer [button dialog icon-button]]))
 
 (defn- dialog-form
-  [{:keys [nodes title]}]
+  [{:keys [nodes title] :as dialog-data}]
   [:div.sheet
    [:h3 title]
-   (for [[idx {:keys [path] :as action}] (map-indexed vector nodes)]
-     ^{:key (concat [(count nodes)] path)}
+   (for [[idx {:keys [path concept-name] :as action}] (map-indexed vector nodes)]
+     ^{:key (concat [(count nodes)] path [concept-name])}
      [action-unit (merge action
                          {:idx idx})])])
 
