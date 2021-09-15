@@ -16,6 +16,9 @@ $units-margin: 6px;
     &:hover {
         .action-unit-menu {
             display: block;
+            position: absolute;
+            top: 5px;
+            right: 10px;
         }
     }
 
