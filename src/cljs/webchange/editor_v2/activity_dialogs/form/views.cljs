@@ -15,20 +15,6 @@
      [action-unit (merge action
                          {:idx idx})])])
 
-;; (defn- track-selector
-;;   []
-;;   (let [current-track @(re-frame/subscribe [::state/current-track])
-;;         tracks @(re-frame/subscribe [::state/available-tracks])
-;;         handle-click #(re-frame/dispatch [::state/set-current-track %])]
-;;     [:div.track-selector
-;;      (for [{:keys [text idx]} tracks]
-;;        ^{:key idx}
-;;        [button {:color      (if (= current-track idx) "primary" "default")
-;;                 :shape      "rectangle"
-;;                 :class-name "track-button"
-;;                 :on-click   #(handle-click idx)}
-;;         text])]))
-
 (defn- track-selector
   []
   (let [current-track @(re-frame/subscribe [::state/current-track])
