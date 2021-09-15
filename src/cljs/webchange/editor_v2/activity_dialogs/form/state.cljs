@@ -59,6 +59,7 @@
 (re-frame/reg-event-fx
   ::set-current-track
   (fn [{:keys [db]} [_ track-idx]]
+    (js/console.log "track-idx " track-idx)
     {:db (assoc-in db current-track-path track-idx)}))
 
 ;; Selected Action
