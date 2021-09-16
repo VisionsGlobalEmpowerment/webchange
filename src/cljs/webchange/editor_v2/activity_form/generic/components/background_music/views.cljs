@@ -1,15 +1,15 @@
 (ns webchange.editor-v2.activity-form.generic.components.background-music.views
   (:require
-    [cljs-react-material-ui.reagent :as ui]
-    [re-frame.core :as re-frame]
-    [reagent.core :as r]
-    [webchange.editor-v2.wizard.activity-template.views-audio :as views-audio]
-    [webchange.subs :as subs]
-    [webchange.editor-v2.dialog.dialog-form.views-volume :as views-volume]
-    [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block-button]]
-    [webchange.ui-framework.components.index :refer [icon range-input]]
-    [webchange.editor-v2.activity-form.generic.components.background-music.state :as state]))
+   [cljs-react-material-ui.reagent :as ui]
+   [re-frame.core :as re-frame]
+   [reagent.core :as r]
+   [webchange.editor-v2.wizard.activity-template.views-audio :as views-audio]
+   [webchange.subs :as subs]
+   [webchange.editor-v2.dialog.dialog-form.views-volume :as views-volume]
+   [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block-button]]
+   [webchange.editor-v2.activity-form.generic.components.background-music.state :as state]))
 
+(def default-volume 0.5)
 (def modal-state-path [:editor-v2 :sandbox :background-music-modal-state])
 
 ;; Subs
@@ -51,7 +51,7 @@
                          }]}]
      [:div
       [:div (play-phrase-block-button action [src] src {:hide? false})]
-      [:div [views-volume/volume-view {:value     current-value
+      [:div [views-volume/volume-view {:value     current-value 
                                        :on-change #(swap! form-data assoc-in [:background-music :volume] %)}]]
       [:span "To apply new volume and file to preview button, please stop and start playback"]])])
 
@@ -63,7 +63,7 @@
   []
   (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
         action-name (get-in scene-data [:triggers :music :action])
-        volume (get-in scene-data [:actions (keyword action-name) :volume])
+        volume (get-in scene-data [:actions (keyword action-name) :volume] default-volume)
         src (get-in scene-data [:actions (keyword action-name) :id])
         open? @(re-frame/subscribe [::modal-state])
         close #(re-frame/dispatch [::close])]
