@@ -75,11 +75,18 @@
                     (let [resource (get-resource src)]
                       (callback resource)))}))
 
+(defn- hack-parsing-resources-for-spine
+  "When loader is reset in the middle of loading spine resources
+  it will leave resource in the queue forever"
+  []
+  (-> @loader .-_resourcesParsing (.splice 0)))
+
 (defn reset-loader!
   []
   (when (not (nil? @loader))
     (reset-que)
-    (.reset @loader)))
+    (.reset @loader)
+    (hack-parsing-resources-for-spine)))
 
 (defn get-or-load-resource
   [resource-name {:keys [animation? on-complete] :as params}]
