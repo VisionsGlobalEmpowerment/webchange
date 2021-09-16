@@ -1,7 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.image.utils
   (:require
-    [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.logger.index :as logger]))
+   [clojure.string :as str]
+   [webchange.interpreter.renderer.scene.components.utils :as utils]
+   [webchange.logger.index :as logger]))
 
 (defn apply-boundaries
   [container {:keys [max-width max-height min-width min-height]}]
@@ -28,7 +29,7 @@
 (defn apply-origin
   [container {{origin :type} :origin {x :x y :x} :offset}]
   (when (and origin (= 0 (int x)) (= 0 (int y)))
-    (let [[h v] (clojure.string/split origin #"-")
+    (let [[h v] (str/split origin #"-")
           pivot (.-pivot container)
           local-bounds (.getLocalBounds container)]
       (case h
@@ -45,9 +46,9 @@
             (set! (.-y pivot) 0))))))
 
 (defn set-image-size
-  [sprite {:keys [image-size width height scale]}]
+  [container sprite {:keys [image-size width height scale]}]
   (cond
-    (some? scale) (utils/set-scale sprite scale)
+    (some? scale) (utils/set-scale container scale)
     (some? image-size) (let [sprite-size (utils/get-size sprite)
                              w-scale (/ width (:width sprite-size))
                              h-scale (/ height (:height sprite-size))
@@ -63,7 +64,7 @@
 
 (defn set-image-position
   [sprite {:keys [mask-width mask-height mask-align]}]
-  (when (and (every? some? [mask-width mask-height mask-align]))
+  (when (every? some? [mask-width mask-height mask-align])
     (let [{:keys [width]} (utils/get-size sprite)
           diff (- (/ width 2) mask-width)
           position (case mask-align

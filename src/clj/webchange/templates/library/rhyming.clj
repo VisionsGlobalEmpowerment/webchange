@@ -5,8 +5,8 @@
     [clojure.string :as str]
     [webchange.templates.utils.dialog :as dialog]))
 
-(def concept-image-options {:max-width  50
-                            :max-height 50
+(def concept-image-options {:max-width  100
+                            :max-height 100
                             :min-height 20
                             :min-width  20})
 
@@ -51,65 +51,65 @@
                         {:url "/raw/img/rhyming/img.jpg", :size 10 :type "image"}
                         ],
         :objects
-                       {:layered-background {:type       "layered-background"
-                                             :background {:src "/raw/img/rhyming/background.png"}
-                                             :surface    {:src "/raw/img/rhyming/surface.png"}}
-                        :left-gate          {:type       "image"
-                                             :src        "/raw/img/rhyming/left-gate.png"
-                                             :x          303
-                                             :y          600
-                                             :max-width  507
-                                             :max-height 780
-                                             :origin     {:type "center-center"}
-                                             :transition "left-gate"
-                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
-                                             :editable?  {:select     true
-                                                          :drag       true
-                                                          :image-tags ["rhyming" "gate"]
-                                                          :edit-form  {:select-image true
-                                                                       :upload-image true
-                                                                       :flip         true}}}
-                        :left-gate-text     {:type           "text"
-                                             :text           "rhyme"
-                                             :x              355
-                                             :y              330
-                                             :skew-x         0
-                                             :skew-y         0.19
-                                             :align          "center"
-                                             :vertical-align "middle"
-                                             :font-family    "Lexend Deca"
-                                             :font-size      80
-                                             :fill           "#000000"
-                                             :editable?      {:select true
-                                                              :drag   true}}
-                        :right-gate-text    {:type           "text"
-                                             :text           "rhyme"
-                                             :x              1590
-                                             :y              330
-                                             :skew-x         -0.05
-                                             :skew-y         -0.19
-                                             :align          "center"
-                                             :vertical-align "middle"
-                                             :font-family    "Lexend Deca"
-                                             :font-size      80
-                                             :fill           "#000000"
-                                             :editable?      {:select true
-                                                              :drag   true}}
-                        :right-gate         {:type       "image"
-                                             :src        "/raw/img/rhyming/right-gate.png"
-                                             :x          1633
-                                             :y          600
-                                             :max-width  507
-                                             :max-height 780
-                                             :origin     {:type "center-center"}
-                                             :transition "right-gate"
-                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
-                                             :editable?  {:select     true
-                                                          :drag       true
-                                                          :image-tags ["rhyming" "gate"]
-                                                          :edit-form  {:select-image true
-                                                                       :upload-image true
-                                                                       :flip         true}}}},
+        {:layered-background {:type       "layered-background"
+                              :background {:src "/raw/img/rhyming/background.png"}
+                              :surface    {:src "/raw/img/rhyming/surface.png"}}
+         :left-gate          {:type       "image"
+                              :src        "/raw/img/rhyming/left-gate.png"
+                              :x          303
+                              :y          600
+                              :max-width  700
+                              :max-height 850
+                              :origin     {:type "center-center"}
+                              :transition "left-gate"
+                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
+                              :editable?  {:select     true
+                                           :drag       true
+                                           :image-tags ["rhyming" "gate"]
+                                           :edit-form  {:select-image true
+                                                        :upload-image true
+                                                        :flip         true}}}
+         :left-gate-text     {:type           "text"
+                              :text           "rhyme"
+                              :x              355
+                              :y              330
+                              :skew-x         0
+                              :skew-y         0.19
+                              :align          "center"
+                              :vertical-align "middle"
+                              :font-family    "Lexend Deca"
+                              :font-size      80
+                              :fill           "#000000"
+                              :editable?      {:select true
+                                               :drag   true}}
+         :right-gate-text    {:type           "text"
+                              :text           "rhyme"
+                              :x              1590
+                              :y              330
+                              :skew-x         -0.05
+                              :skew-y         -0.19
+                              :align          "center"
+                              :vertical-align "middle"
+                              :font-family    "Lexend Deca"
+                              :font-size      80
+                              :fill           "#000000"
+                              :editable?      {:select true
+                                               :drag   true}}
+         :right-gate         {:type       "image"
+                              :src        "/raw/img/rhyming/right-gate.png"
+                              :x          1633
+                              :y          600
+                              :max-width  700
+                              :max-height 850
+                              :origin     {:type "center-center"}
+                              :transition "right-gate"
+                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
+                              :editable?  {:select     true
+                                           :drag       true
+                                           :image-tags ["rhyming" "gate"]
+                                           :edit-form  {:select-image true
+                                                        :upload-image true
+                                                        :flip         true}}}},
         :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text" "right-gate-text"]],
         :actions       {:start-drag           {:type "sequence-data"
                                                :data [{:type "set-variable", :var-name "left-selected", :var-value false}

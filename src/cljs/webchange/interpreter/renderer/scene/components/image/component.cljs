@@ -1,12 +1,12 @@
 (ns webchange.interpreter.renderer.scene.components.image.component
   (:require
-    [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE Texture]]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
-    [webchange.interpreter.renderer.scene.components.image.utils :as image-utils]
-    [webchange.interpreter.renderer.scene.components.image.wrapper :refer [wrap]]
-    [webchange.resources.manager :as resources]
-    [webchange.logger.index :as logger]))
+   [webchange.interpreter.pixi :refer [Container Graphics Sprite Texture]]
+   [webchange.interpreter.renderer.scene.components.utils :as utils]
+   [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
+   [webchange.interpreter.renderer.scene.components.image.utils :as image-utils]
+   [webchange.interpreter.renderer.scene.components.image.wrapper :refer [wrap]]
+   [webchange.resources.manager :as resources]
+   [webchange.logger.index :as logger]))
 
 (def default-props {:x             {}
                     :y             {}
@@ -39,7 +39,7 @@
       (do
         (when (and (-> resource nil?)
                    (-> src nil? not)
-                   (-> src empty? not))
+                   (-> src seq))
           (logger/warn (js/Error. (str "Resources for " src " were not loaded"))))
         (doto (if (-> resource nil? not)
                 (Sprite. (.-texture resource))
@@ -52,7 +52,7 @@
   (cond
     (some? border-radius) (let [[lt rt rb lb] (cond
                                                 (number? border-radius) [border-radius border-radius border-radius border-radius]
-                                                :default border-radius)]
+                                                :else border-radius)]
                             (doto (Graphics.)
                               (.beginFill 0x000000)
                               (.moveTo lt 0)
@@ -130,7 +130,7 @@
     (when-not (nil? on-click) (utils/set-handler image "click" on-click))
     (when-not (nil? ref) (ref wrapped-image))
 
-    (image-utils/set-image-size image props)
+    (image-utils/set-image-size image-container image props)
     (image-utils/set-image-position image props)
     (image-utils/apply-origin image-container props)
     (image-utils/apply-boundaries image-container props)

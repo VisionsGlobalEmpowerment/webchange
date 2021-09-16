@@ -60,10 +60,10 @@
         pivot (utils/get-pivot object)
         scale (utils/get-scale object {:abs? true})]
     (-> local-bounds
-             (update :width * (:x scale))
-             (update :height * (:y scale))
-             (update :x - (* (:x pivot) (:x scale)))
-             (update :y - (* (:y pivot) (:y scale))))))
+        (update :width * (:x scale))
+        (update :height * (:y scale))
+        (update :x - (* (:x pivot) (:x scale)))
+        (update :y - (* (:y pivot) (:y scale))))))
 
 (defn- draw-border
   [mask width height padding]

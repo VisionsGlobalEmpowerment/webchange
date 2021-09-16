@@ -32,7 +32,7 @@
 
 (defn with-debug
   [wrapped-object]
-  (when (= "animated-svg-path" (:type wrapped-object))
+  (when (and debug-enabled? (= "image" (:type wrapped-object)))
     (let [object (:object wrapped-object)]
       (show-bounds object)))
   wrapped-object)

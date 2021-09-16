@@ -32,7 +32,8 @@
                    :set-position            (fn [position]
                                               (utils/set-position container position))
                    :set-scale               (fn [scale]
-                                              (utils/set-scale sprite-object scale)
+                                              (swap! state assoc :scale scale)
+                                              (utils/set-scale container scale)
                                               (utils/emit container "scaleChanged" scale))
                    :set-src                 (fn [src]
                                               (when src
@@ -41,7 +42,7 @@
                                                   (fn [resource]
                                                     (let [texture (.-texture resource)]
                                                       (aset sprite-object "texture" texture)
-                                                      (image-utils/set-image-size sprite-object @state)
+                                                      (image-utils/set-image-size container sprite-object @state)
                                                       (image-utils/set-image-position sprite-object @state)
                                                       (image-utils/apply-boundaries container @state)
                                                       (image-utils/apply-origin container @state)

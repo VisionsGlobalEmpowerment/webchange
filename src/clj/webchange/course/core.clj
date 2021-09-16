@@ -747,9 +747,8 @@
 
 (defn- get-object-keys-to-update
   [{:keys [editable?]}]
-  (cond
-    (and (map? editable?) (not (contains? editable? :drag))) [:x :y :width :height]
-    :else [:editable?]))
+  (cond-> [:editable? :origin :max-width :max-height]
+    (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y :width :height])))
 
 (defn- update-object
   [created-activity]
