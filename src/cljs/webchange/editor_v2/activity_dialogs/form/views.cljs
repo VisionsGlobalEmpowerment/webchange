@@ -4,8 +4,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.activity-dialogs.form.state :as state]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views :refer [action-unit]]
-    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
-    [webchange.ui-framework.components.index :refer [button dialog icon-button]]))
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]))
 
 (defn- dialog-form
   [{:keys [nodes title] :as dialog-data}]
@@ -22,13 +21,12 @@
         tracks @(re-frame/subscribe [::state/available-tracks])
         handle-click #(re-frame/dispatch [::state/set-current-track %])]
     [:div.track-selector
-     (for [{:keys [text idx]} tracks]
-       ^{:key idx}
-       [button {:color      (if (= current-track idx) "primary" "default")
-                :shape      "rectangle"
-                :class-name "track-button"
-                :on-click   #(handle-click idx)}
-        text])]))
+     [:select.drop-down {:value     current-track
+                         :on-change #(handle-click (-> % .-target .-value js/parseInt))}
+      (for [{:keys [text idx]} tracks]
+        ^{:key idx}
+        [:option {:value idx}
+         text])]]))
 
 (defn activity-dialogs-form
   []
