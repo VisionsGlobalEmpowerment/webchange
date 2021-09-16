@@ -17,6 +17,16 @@
         .font-size-selector {
             width: 96px;
         }
+
+        .color-box {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            background-color: #ccc;
+            position: absolute;
+            left: 5px;
+            top: 5px;
+        }
     }
 
     .text-control {
