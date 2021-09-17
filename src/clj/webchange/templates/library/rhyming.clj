@@ -42,14 +42,12 @@
                                     :options {:remove-ball {:label "Remove ball"
                                                             :type  "remove-editable-object"}}}}})
 
-(def t {:assets        [
-                        {:url "/raw/img/rhyming/background.png", :size 10 :type "image"}
+(def t {:assets        [{:url "/raw/img/rhyming/background.png", :size 10 :type "image"}
                         {:url "/raw/img/rhyming/surface.png", :size 10 :type "image"}
                         {:url "/raw/img/rhyming/left-gate.png", :size 10 :type "image"}
                         {:url "/raw/img/rhyming/right-gate.png", :size 10 :type "image"}
                         {:url "/raw/img/rhyming/ball.png", :size 10 :type "image"}
-                        {:url "/raw/img/rhyming/img.jpg", :size 10 :type "image"}
-                        ],
+                        {:url "/raw/img/rhyming/img.jpg", :size 10 :type "image"}],
         :objects
         {:layered-background {:type       "layered-background"
                               :background {:src "/raw/img/rhyming/background.png"}
@@ -116,39 +114,31 @@
                                                       {:type "set-variable", :var-name "right-selected", :var-value false}
                                                       {:type "set-variable", :var-name "next-check-collide", :var-value true}
                                                       {:id "next-check-collide" :type "action"}
-                                                      {:type "action", :from-params [{:action-property "id" :param-property "tap-dialog"}]}
-                                                      ]
-                                               }
-
+                                                      {:type "action", :from-params [{:action-property "id" :param-property "tap-dialog"}]}]}
                         :next-check-collide   {:type "sequence-data"
                                                :data [{:type     "set-timeout"
                                                        :action   "check-collide"
                                                        :interval 10}]}
                         :check-collide        {:type "sequence-data"
-                                               :data [
-                                                      {:type          "test-transitions-and-pointer-collide",
+                                               :data [{:type          "test-transitions-and-pointer-collide",
                                                        :success       "highlight",
                                                        :fail          "unhighlight",
                                                        :transitions   ["right-gate" "left-gate"]
                                                        :action-params [{:target   "right-gate"
                                                                         :variable "right-selected"}
                                                                        {:target   "left-gate"
-                                                                        :variable "left-selected"}]
-                                                       }
+                                                                        :variable "left-selected"}]}
                                                       {:type     "test-var-scalar",
                                                        :success  "next-check-collide",
                                                        :value    true,
-                                                       :var-name "next-check-collide"}
-                                                      ]}
-
+                                                       :var-name "next-check-collide"}]}
                         :highlight            {:type "sequence-data"
                                                :data [{:type        "set-variable",
                                                        :var-value   true
                                                        :from-params [{:action-property "var-name" :param-property "variable"}]}
                                                       {:type        "state"
                                                        :id          "highlighted"
-                                                       :from-params [{:action-property "target" :param-property "target"}]}]
-                                               }
+                                                       :from-params [{:action-property "target" :param-property "target"}]}]}
                         :unhighlight          {:type "sequence-data"
                                                :data [{:type        "set-variable",
                                                        :var-value   false
@@ -160,8 +150,7 @@
                                                :data [{:id "wrong-answer-dialog", :type "action"}
                                                       {:to          {:init-position true :duration 0.5},
                                                        :from-params [{:action-property "transition-id" :param-property "target"}]
-                                                       :type        "transition"}
-                                                      ]}
+                                                       :type        "transition"}]}
                         :wrong-answer-dialog  {:type               "sequence-data",
                                                :editor-type        "dialog",
                                                :data               [{:type "sequence-data"
@@ -173,8 +162,7 @@
                                                :var-names ["saved-left-selected" "saved-right-selected"]
                                                :success   "wrong-option"}
                         :end-dragging         {:type "sequence-data"
-                                               :data [
-                                                      {:type      "copy-variables",
+                                               :data [{:type      "copy-variables",
                                                        :var-names ["saved-left-selected" "saved-right-selected"]
                                                        :from-list ["left-selected" "right-selected"]}
                                                       {:type        "test-var-scalar",
@@ -183,14 +171,11 @@
                                                        :value       true,
                                                        :from-params [{:param-property  "side",
                                                                       :template        "saved-%-selected",
-                                                                      :action-property "var-name"}]
-                                                       }
+                                                                      :action-property "var-name"}]}
                                                       {:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                       {:type        "state"
                                                        :id          "not-highlighted"
-                                                       :from-params [{:action-property "target" :param-property "gate"}]}
-                                                      ]
-                                               }
+                                                       :from-params [{:action-property "target" :param-property "gate"}]}]}
                         :correct-option       {:type "sequence-data",
                                                :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                       {:type "counter" :counter-action "increase" :counter-id "sorted-counter"}
@@ -200,20 +185,17 @@
                                                        :var-name   "sorted-counter",
                                                        :value      0,
                                                        :inequality ">=",
-                                                       :success    "finish-scene",
-                                                       }]}
+                                                       :success    "finish-scene",}]}
                         :init-activity        {:type "sequence-data"
-                                               :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-counter"}
-                                                      {:type "action" :id "intro"}]
-                                               }
+                                               :data [{:type "start-activity"}
+                                                      {:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-counter"}
+                                                      {:type "action" :id "intro"}]}
                         :intro                {:type               "sequence-data",
                                                :editor-type        "dialog",
                                                :tags               ["intro"],
                                                :data               [{:type "sequence-data"
                                                                      :data [{:type "empty" :duration 0}
-                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil,
-                                                                             }]}],
-
+                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                :phrase             "intro",
                                                :phrase-description "introduction"}
                         :object-in-right-gate {:id          "park-position",
@@ -227,10 +209,8 @@
                                                :phrase             "correct-answer",
                                                :phrase-description "correct answer"}
                         :stop-activity        {:type "sequence-data",
-                                               :data [
-                                                      {:type "set-variable", :var-name "next-check-collide", :var-value false}
-                                                      {:type "stop-activity", :id "rhyme"},
-                                                      ]}
+                                               :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
+                                                      {:type "stop-activity"},]}
                         :read-all-word-left   {:type "sequence-data",
                                                :data [],}
                         :read-all-word-right  {:type "sequence-data",
@@ -247,10 +227,7 @@
                                                                      :data [{:type "empty" :duration 0}
                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                :phrase             "finish-dialog",
-                                               :phrase-description "finish dialog"}
-
-                        }
-
+                                               :phrase-description "finish dialog"}}
         :triggers      {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "init-activity"}},
         :metadata      {:tracks [{:id    "main"
@@ -282,15 +259,11 @@
         step-right-x -160
         start-right-y 10
         start-right-x 1730]
-
-
     (case side
       "left" {:y (+ start-left-y (* step-left-y (int (/ balls-number balls-in-row))))
               :x (+ start-left-x (* step-left-x (int (mod balls-number balls-in-row))))}
       "right" {:y (+ start-right-y (* step-right-y (int (/ balls-number balls-in-row))))
-               :x (+ start-right-x (* step-right-x (int (mod balls-number balls-in-row))))}
-      ))
-  )
+               :x (+ start-right-x (* step-right-x (int (mod balls-number balls-in-row))))})))
 
 (defn- ball-dialog
   [suffix]
@@ -312,7 +285,6 @@
   [suffix]
   (common/make-name-unique-by-suffix "ball-text" suffix))
 
-
 (defn add-ball
   [scene-data {:keys [side img text]}]
   (let [suffix (common/get-unique-suffix scene-data)
@@ -325,30 +297,29 @@
     [[(name (ball-group suffix))]
      {ball-name       {:type       "image"
                        :src        "/raw/img/rhyming/ball.png"
-                       :x          0
-                       :y          0
-                       :width      200
-                       :height     200
-                       :image-size "contain"
+                       :x          100
+                       :y          100
+                       :origin {:type "center-center"}
                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}}
                        :transition (name ball-name)
                        :alias      "Concept wrapper"
                        :editable?  {:image-tags ["rhyming" "content wrapper"]
-                                    :edit-form  {:select-image true}}}
-
+                                    :edit-tags ["wrapper"]
+                                    :edit-form  {:select-image true
+                                                 :scale true
+                                                 :apply-to-all true}}}
       ball-img-name   (merge {:type    "image"
                               :src     (:src img)
-                              :x       80
-                              :y       60
-                              :scale-y 1
-                              :scale-x 1
+                              :x       100
+                              :y       85
+                              :origin {:type "center-center"}
                               :alias   "Concept image"}
                              concept-image-options)
-
       ball-text-name  {:type           "text"
                        :text           text
-                       :x              98
-                       :y              130
+                       :x              100
+                       :y              125
+                       :origin {:type "center-center"}
                        :align          "center"
                        :vertical-align "middle"
                        :font-family    "Lexend Deca"
@@ -358,19 +329,18 @@
       ball-group-name {:type       "group"
                        :x          500
                        :y          500
-                       :width      150
-                       :height     150
                        :children   [ball-name
                                     ball-img-name
                                     ball-text-name]
                        :draggable  true,
                        :editable?  true
                        :transition (name ball-group-name)
-                       :actions    {:drag-start {:type   "action",
-                                                 :on     "drag-start",
-                                                 :id     "start-drag"
-                                                 :params {:tap-dialog ball-dialog-name}
-                                                 }
+                       :actions    {:drag-start
+                                    {:type   "action",
+                                     :on     "drag-start",
+                                     :id     "start-drag"
+                                     :params {:tap-dialog ball-dialog-name}}
+
                                     :drag-end
                                     {:id     "end-dragging",
                                      :on     "drag-end",
@@ -378,8 +348,7 @@
                                      :params {:gate           (str side "-gate")
                                               :side           side
                                               :target         ball-group-name
-                                              :check-variable (str side "-selected")
-                                              }}}
+                                              :check-variable (str side "-selected")}}}
                        :states     {:park-position (park-ball-position side balls)}}}
      {ball-dialog-name (dialog/default text)}
      [{:url (:src img), :size 10, :type "image"}]
@@ -448,8 +417,14 @@
         (common/remove-object ball-img-name)
         (common/remove-object ball-name)
         (update-in [:actions] dissoc ball-dialog-name)
-        (update-in [:actions (keyword (str "read-all-word-" side)) :data] common/remove-actions-by-key-value :target (name ball-name))
-        (update-in [:actions (keyword (str "read-all-word-" side)) :data] common/remove-actions-by-key-value :id (name ball-dialog-name))
+        (update-in [:actions (keyword (str "read-all-word-" side)) :data]
+                   common/remove-actions-by-key-value
+                   :target
+                   (name ball-name))
+        (update-in [:actions (keyword (str "read-all-word-" side)) :data]
+                   common/remove-actions-by-key-value
+                   :id
+                   (name ball-dialog-name))
         (update-in [:metadata :balls (keyword side)] dec)
         (update-in [:actions :correct-option :data 4 :value] dec)
         (move-side-balls-to-remove-gaps side)

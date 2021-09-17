@@ -54,6 +54,17 @@
   [scale-component {:id         id
                     :class-name "control-block"}])
 
+(defn- apply-to-all
+  [{:keys [id]}]
+  (let [show-apply-to-all? @(re-frame/subscribe [::state/show-apply-to-all-control? id])
+        tags @(re-frame/subscribe [::state/edit-tags id])]
+    (when show-apply-to-all?
+      [:div.control-block
+       [button {:variant "contained"
+                :color "primary"
+                :on-click #(re-frame/dispatch [::state/apply-to-all id tags])}
+        "Apply to all"]])))
+
 (defn form
   [{:keys [class-name id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
@@ -63,4 +74,5 @@
      [:div.controls
       [select-image-control {:id id}]
       [upload-image-control {:id id}]
-      [scale {:id id}]]]))
+      [scale {:id id}]
+      [apply-to-all {:id id}]]]))

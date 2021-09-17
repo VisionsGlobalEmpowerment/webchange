@@ -1,7 +1,9 @@
 (ns webchange.editor-v2.activity-form.common.object-form.image-form.state
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-form.common.object-form.state :as state]))
+   [re-frame.core :as re-frame]
+   [webchange.state.state :as core-state]
+   [webchange.interpreter.renderer.state.scene :as state-renderer]
+   [webchange.editor-v2.activity-form.common.object-form.state :as state]))
 
 (defn path-to-db
   [id relative-path]
@@ -15,12 +17,14 @@
     (let [image-data (merge {:scale {:x 1 :y 1}}
                             (select-keys objects-data [:src :scale]))
           image-tags (get-in objects-data [:editable? :image-tags])
+          edit-tags (get-in objects-data [:editable? :edit-tags])
           form-params (get-in objects-data [:editable? :edit-form])
           upload-options (select-keys objects-data [:max-width :max-height :min-width :min-height])]
       {:dispatch-n [[::state/init id {:data        image-data
                                       :names       objects-names
                                       :form-params form-params}]
                     [::set-image-tags id image-tags]
+                    [::set-edit-tags id edit-tags]
                     [::set-upload-options id upload-options]]})))
 
 (re-frame/reg-sub
@@ -37,6 +41,12 @@
   (fn [show-control?]
     show-control?))
 
+(re-frame/reg-sub
+  ::show-apply-to-all-control?
+  (fn [[_ id]]
+    (re-frame/subscribe [::state/form-component-available? id :apply-to-all]))
+  (fn [show-control?]
+    show-control?))
 ;; Upload options
 
 (def upload-options-path :upload-options)
@@ -91,3 +101,42 @@
   ::image-tags
   (fn [db [_ id]]
     (get-in db (path-to-db id [image-tags-path]))))
+
+;; Apply to all
+(def edit-tag-path :edit-tag)
+
+(re-frame/reg-event-fx
+  ::set-edit-tags
+  (fn [{:keys [db]} [_ id tags]]
+    {:db (assoc-in db (path-to-db id [edit-tag-path]) tags)}))
+
+(re-frame/reg-sub
+  ::edit-tags
+  (fn [db [_ id]]
+    (get-in db (path-to-db id [edit-tag-path]))))
+
+(defn- get-object-keys-by-tag
+  "Return object names for each object in scene with given tag"
+  [db tag]
+  (let [objects (core-state/get-objects-data db)]
+    (->> objects
+         (filter (fn [[object-name object]]
+                   (some #{tag} (get-in object [:editable? :edit-tags]))))
+         (map first))))
+
+(re-frame/reg-event-fx
+  ::apply-to-all
+  (fn [{:keys [db]} [_ id tags]]
+    (let [current-data (state/get-current-data db id)
+          object-keys (get-object-keys-by-tag db (first tags))
+          patches-list (map (fn [object-key]
+                              {:object-name       object-key
+                               :object-data-patch current-data})
+                            object-keys)
+          render-events (map (fn [object-key]
+                               [::state-renderer/set-scene-object-state object-key current-data])
+                             object-keys)]
+
+      {:dispatch-n (conj render-events 
+                         [::core-state/update-scene-objects {:patches-list patches-list}])})))
+
