@@ -43,8 +43,8 @@
         handle-change (fn [font-color]
                         (re-frame/dispatch [::state/set-current-font-color id font-color]))]
     [:div
-     [icon {:icon       "image"
-            :class-name "image-icon"}]
+     [icon {:icon       "font-color"
+            :class-name "color-icon"}]
      [select {:value               (or value "")
               :on-change           handle-change
               :options-text-suffix "pt"
@@ -83,7 +83,7 @@
      [:div.font-controls
       [font-family-component {:id id}]
       [font-size-component {:id id}]]
-     [:div.font-controls
+     [:div.font-controls.font-color-section
       [font-color-component {:id id}]]
      [:div.text-control
       [text-component {:id id}]

@@ -4,6 +4,10 @@
         justify-content: space-between;
         margin-bottom: 24px;
 
+        .font-color-section {
+            width: 289px;
+        }
+
         & > * {
             align-items: center;
             display: flex;
@@ -26,6 +30,16 @@
             position: absolute;
             left: 5px;
             top: 5px;
+        }
+
+        .color-icon {
+            padding: 3px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+                padding: 0px;
+            }
         }
     }
 
