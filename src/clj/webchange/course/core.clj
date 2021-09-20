@@ -747,16 +747,19 @@
 
 (defn- get-object-keys-to-update
   [{:keys [editable?]}]
-  (cond-> [:editable? :origin :max-width :max-height]
-    (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y :width :height])))
+  (cond-> [:editable? :origin :max-width :max-height :width :height :image-size]
+    (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y])))
 
 (defn- update-object
   [created-activity]
   (fn [[key object]]
     (let [created-object (get-in created-activity [:objects key])
           object-keys-to-update (get-object-keys-to-update created-object)
-          object-props-to-update (select-keys created-object object-keys-to-update)]
-      [key (merge object object-props-to-update)])))
+          object-props-to-update (select-keys created-object object-keys-to-update)
+          dissoc-updated #(apply dissoc % object-keys-to-update)]
+      [key (-> object
+               (dissoc-updated)
+               (merge object-props-to-update))])))
 
 (defn- preserve-objects
   [scene-data created-activity]

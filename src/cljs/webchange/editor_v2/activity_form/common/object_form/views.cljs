@@ -1,17 +1,18 @@
 (ns webchange.editor-v2.activity-form.common.object-form.views
   (:require
-    [re-frame.core :as re-frame]
-    [reagent.core :as r]
-    [webchange.editor-v2.activity-form.common.object-form.state :as state]
-    [webchange.editor-v2.activity-form.common.object-form.animation-form.views :as animation-form]
-    [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
-    [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
-    [webchange.logger.index :as logger]
-    [webchange.ui-framework.components.index :refer [button with-confirmation]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]
+   [clojure.string :as str]
+   [re-frame.core :as re-frame]
+   [reagent.core :as r]
+   [webchange.editor-v2.activity-form.common.object-form.state :as state]
+   [webchange.editor-v2.activity-form.common.object-form.animation-form.views :as animation-form]
+   [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
+   [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
+   [webchange.logger.index :as logger]
+   [webchange.ui-framework.components.index :refer [button with-confirmation]]
+   [webchange.ui-framework.components.utils :refer [get-class-name]]
 
-    [webchange.subs :as subs]
-    [webchange.utils.scene-data :as utils]))
+   [webchange.subs :as subs]
+   [webchange.utils.scene-data :as utils]))
 
 (def form-components
   {"animation" animation-form/form
@@ -27,7 +28,7 @@
     :or   {on-save-click     #()
            show-save-button? true}}]
   (if (available-object-type? object-type)
-    (r/with-let [id (->> (random-uuid) (str) (take 8) (clojure.string/join ""))
+    (r/with-let [id (->> (random-uuid) (str) (take 8) (str/join ""))
                  _ (when (fn? ref) (ref id))]
       (let [component (get form-components object-type)
             component-props {:id            id

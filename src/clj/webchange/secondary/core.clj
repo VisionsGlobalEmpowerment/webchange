@@ -143,7 +143,7 @@
   (doseq [scene-version scene-versions]
     (let [current-latest (db/get-latest-scene-version {:scene_id (:scene-id scene-version)})
           scene-version (-> scene-version
-                            (assoc :created-at (dt/iso-str2date-time (:created-at scene-version))))]
+                            (assoc :created-at (jt/local-date-time)))]
       (when-not (= (:data scene-version) (:data current-latest))
         (-> scene-version
             (#(db/transform-keys-one-level ->snake_case_keyword %))

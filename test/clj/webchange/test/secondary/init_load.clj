@@ -168,7 +168,7 @@
       (assert (not (nil? scene-old)))
       (assert (not (nil? scene-version-old)))
       (assert (= scene-old scene-new))
-      (assert (= (dissoc scene-version-old :id) (dissoc  scene-version-new :id)))
+      (assert (= (dissoc scene-version-old :id :created-at) (dissoc scene-version-new :id :created-at)))
       )))
 
 (deftest can-import-activity-stats

@@ -43,8 +43,11 @@
   {:name     name
    :hide     (fn [] (aset sprite "visible" false))
    :show     (fn [] (aset sprite "visible" true))
-   :select   (fn [] (aset sprite "tint" frame-selected-color))
-   :deselect (fn [] (aset sprite "tint" frame-default-color))})
+   :select   (fn []
+               (aset sprite "visible" true)
+               (aset sprite "tint" frame-selected-color))
+   :deselect (fn []
+               (aset sprite "visible" false))})
 
 (defn- get-object-local-bounds
   [object]
@@ -136,7 +139,7 @@
   [component-container object-props object]
   (let [{:keys [x y width height]} (get-frame-position object)
         sprite (doto (Sprite. WHITE)
-                 (aset "tint" frame-default-color)
+                 (aset "visible" false)
                  (update-sprite-dimensions! object))
 
         mask (doto (Graphics.)
