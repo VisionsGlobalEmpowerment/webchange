@@ -1,12 +1,12 @@
 (ns webchange.editor-v2.activity-form.common.object-form.image-form.views
   (:require
-    [re-frame.core :as re-frame]
-    [reagent.core :as r]
-    [webchange.editor-v2.activity-form.common.object-form.components.scale.views :refer [scale-component]]
-    [webchange.editor-v2.activity-form.common.object-form.image-form.state :as state]
-    [webchange.common.image-selector.views-modal :refer [with-image-modal]]
-    [webchange.ui-framework.components.index :refer [button file label]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+   [re-frame.core :as re-frame]
+   [reagent.core :as r]
+   [webchange.editor-v2.activity-form.common.object-form.components.scale.views :refer [scale-component]]
+   [webchange.editor-v2.activity-form.common.object-form.image-form.state :as state]
+   [webchange.common.image-selector.views-modal :refer [with-image-modal]]
+   [webchange.ui-framework.components.index :refer [button file label checkbox]] 
+   [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- preview
   [{:keys [id]}]
@@ -65,6 +65,19 @@
                 :on-click #(re-frame/dispatch [::state/apply-to-all id tags])}
         "Apply to all"]])))
 
+
+(defn- visible
+  [{:keys [id]}]
+  (let [show-visible? @(re-frame/subscribe [::state/show-visible-control? id])
+        checked? @(re-frame/subscribe [::state/current-visible id])
+        handle-change (fn [{:keys [checked?]}]
+                        (re-frame/dispatch [::state/set-visible id checked?]))]
+    (when show-visible?
+      [:div.control-block
+       [label "Visible:"]
+       [checkbox {:checked?  checked?
+                  :on-change handle-change}]])))
+
 (defn form
   [{:keys [class-name id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
@@ -75,4 +88,5 @@
       [select-image-control {:id id}]
       [upload-image-control {:id id}]
       [scale {:id id}]
-      [apply-to-all {:id id}]]]))
+      [apply-to-all {:id id}]
+      [visible {:id id}]]]))

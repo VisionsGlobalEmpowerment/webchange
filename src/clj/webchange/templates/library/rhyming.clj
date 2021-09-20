@@ -353,7 +353,8 @@
                               :editable? {:edit-form {:select-image true
                                                       :upload-image true
                                                       :scale true
-                                                      :flip true}}}
+                                                      :flip true
+                                                      :visible true}}}
                              concept-image-options)
       ball-text-name  {:type           "text"
                        :text           text

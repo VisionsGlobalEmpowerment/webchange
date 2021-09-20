@@ -15,7 +15,7 @@
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
     (let [image-data (merge {:scale {:x 1 :y 1}}
-                            (select-keys objects-data [:src :scale]))
+                            (select-keys objects-data [:src :scale :visible]))
           image-tags (get-in objects-data [:editable? :image-tags])
           edit-tags (get-in objects-data [:editable? :edit-tags])
           form-params (get-in objects-data [:editable? :edit-form])
@@ -45,6 +45,13 @@
   ::show-apply-to-all-control?
   (fn [[_ id]]
     (re-frame/subscribe [::state/form-component-available? id :apply-to-all]))
+  (fn [show-control?]
+    show-control?))
+
+(re-frame/reg-sub
+  ::show-visible-control?
+  (fn [[_ id]]
+    (re-frame/subscribe [::state/form-component-available? id :visible]))
   (fn [show-control?]
     show-control?))
 ;; Upload options
@@ -140,3 +147,17 @@
       {:dispatch-n (conj render-events 
                          [::core-state/update-scene-objects {:patches-list patches-list}])})))
 
+;; Hide image
+
+(re-frame/reg-sub
+  ::current-visible
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :visible true)))
+
+(re-frame/reg-event-fx
+  ::set-visible
+  (fn [{:keys [db]} [_ id visible?]]
+    {:dispatch [::state/update-current-data id {:visible visible?}]}))
