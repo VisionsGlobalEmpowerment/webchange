@@ -9,6 +9,7 @@
   (let [db @re-frame.db/app-db
         current-scene (:current-scene db)
         objects (get-in db [:interpreter :scene :objects])
+        object-name (name object-name)
         object-key (keyword object-name)
         object (-> @objects
                    (get object-key)

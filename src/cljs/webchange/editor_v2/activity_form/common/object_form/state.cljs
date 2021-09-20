@@ -45,7 +45,7 @@
 (re-frame/reg-event-fx
   ::set-form-params
   (fn [{:keys [db]} [_ id form-params]]
-    {:db (assoc-in db (path-to-db id [form-params-path]) (or form-params {}))}))
+    {:db (assoc-in db (path-to-db id [form-params-path]) form-params)}))
 
 (re-frame/reg-sub
   ::form-component-available?
@@ -53,8 +53,7 @@
     {:pre [(some? id)]}
     (let [form-params (get-in db (path-to-db id [form-params-path]))]
       (cond
-        (nil? form-params) false
-        (empty? form-params) true
+        (nil? form-params) true
         :else (get form-params component-key false)))))
 
 ;; Selected Objects

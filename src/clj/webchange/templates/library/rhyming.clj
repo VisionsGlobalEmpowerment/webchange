@@ -47,15 +47,23 @@
                         {:url "/raw/img/rhyming/left-gate.png", :size 10 :type "image"}
                         {:url "/raw/img/rhyming/right-gate.png", :size 10 :type "image"}
                         {:url "/raw/img/rhyming/ball.png", :size 10 :type "image"}
-                        {:url "/raw/img/rhyming/img.jpg", :size 10 :type "image"}],
+
+                        {:url "/raw/clipart/rhyming/rhyming_background.png", :size 10 :type "image"}
+                        {:url "/raw/clipart/rhyming/rhyming_background.png", :size 10 :type "image"}
+                        {:url "/raw/clipart/rhyming/etc--rhyming-content_wrapper--ball.png", :size 1 :type "image"}
+                        {:url "/raw/clipart/rhyming/etc--rhyming-gate--gate_left.png", :size 1 :type "image"}
+                        {:url "/raw/clipart/rhyming/etc--rhyming-gate--gate_right.png", :size 1 :type "image"}
+                        {:url "/raw/clipart/rhyming/etc--rhyming-plate--board.png", :size 1 :type "image"}
+                        {:url "/raw/clipart/rhyming/etc--rhyming-plate--board1.png", :size 1 :type "image"}
+                        ],
         :objects
         {:layered-background {:type       "layered-background"
-                              :background {:src "/raw/img/rhyming/background.png"}
-                              :surface    {:src "/raw/img/rhyming/surface.png"}}
+                              :background {:src "/raw/clipart/rhyming/rhyming_background.png"}
+                              :surface    {:src "/raw/clipart/rhyming/rhyming_surface.png"}}
          :left-gate          {:type       "image"
-                              :src        "/raw/img/rhyming/left-gate.png"
+                              :src        "/raw/clipart/rhyming/etc--rhyming-gate--gate_left.png"
                               :x          303
-                              :y          600
+                              :y          700
                               :max-width  700
                               :max-height 850
                               :origin     {:type "center-center"}
@@ -67,10 +75,24 @@
                                            :edit-form  {:select-image true
                                                         :upload-image true
                                                         :flip         true}}}
+         :left-gate-text-group {:type "group"
+                                :x 355
+                                :y 330
+                                :editable?      {:select true
+                                                 :drag   true}
+                                :children ["left-gate-plate" "left-gate-text"]}
+         :left-gate-plate {:type       "image"
+                           :src        "/raw/clipart/rhyming/etc--rhyming-plate--board1.png"
+                           :max-width  700
+                           :max-height 850
+                           :origin     {:type "center-center"}
+                           
+                           :editable? {:image-tags ["rhyming" "plate"]
+                                       :edit-form {:select-image true
+                                                   :upload-image true
+                                                   :flip true}}}
          :left-gate-text     {:type           "text"
                               :text           "rhyme"
-                              :x              355
-                              :y              330
                               :skew-x         0
                               :skew-y         0.19
                               :align          "center"
@@ -78,25 +100,12 @@
                               :font-family    "Lexend Deca"
                               :font-size      80
                               :fill           "#000000"
-                              :editable?      {:select true
-                                               :drag   true}}
-         :right-gate-text    {:type           "text"
-                              :text           "rhyme"
-                              :x              1590
-                              :y              330
-                              :skew-x         -0.05
-                              :skew-y         -0.19
-                              :align          "center"
-                              :vertical-align "middle"
-                              :font-family    "Lexend Deca"
-                              :font-size      80
-                              :fill           "#000000"
-                              :editable?      {:select true
-                                               :drag   true}}
+                              :editable? {}}
+
          :right-gate         {:type       "image"
-                              :src        "/raw/img/rhyming/right-gate.png"
+                              :src        "/raw/clipart/rhyming/etc--rhyming-gate--gate_right.png"
                               :x          1633
-                              :y          600
+                              :y          700
                               :max-width  700
                               :max-height 850
                               :origin     {:type "center-center"}
@@ -107,8 +116,35 @@
                                            :image-tags ["rhyming" "gate"]
                                            :edit-form  {:select-image true
                                                         :upload-image true
-                                                        :flip         true}}}},
-        :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text" "right-gate-text"]],
+                                                        :flip         true}}}
+         :right-gate-text-group {:type "group"
+                                 :x              1590
+                                 :y              330
+                                 :editable?      {:select true
+                                                  :drag   true}
+                                 :children ["right-gate-plate" "right-gate-text"]}
+         :right-gate-plate {:type       "image"
+                            :src        "/raw/clipart/rhyming/etc--rhyming-plate--board.png"
+                            :max-width  700
+                            :max-height 850
+                            :origin     {:type "center-center"}
+                            :editable? {:image-tags ["rhyming" "plate"]
+                                        :edit-form {:select-image true
+                                                    :upload-image true
+                                                    :flip true}}}
+         :right-gate-text    {:type           "text"
+                              :text           "rhyme"
+                              :skew-x         -0.05
+                              :skew-y         -0.19
+                              :align          "center"
+                              :vertical-align "middle"
+                              :font-family    "Lexend Deca"
+                              :font-size      80
+                              :fill           "#000000"
+                              :editable? {}
+                              }
+         },
+        :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text-group" "right-gate-text-group"]],
         :actions       {:start-drag           {:type "sequence-data"
                                                :data [{:type "set-variable", :var-name "left-selected", :var-value false}
                                                       {:type "set-variable", :var-name "right-selected", :var-value false}
@@ -219,7 +255,7 @@
                                                :data       [{:type "action" :id "read-all-word-left"}
                                                             {:type "action" :id "read-all-word-right"}
                                                             {:type "action" :id "finish-dialog"}
-                                                            {:type "action", :id "stop-activity"}],
+                                                            {:type "finish-activity"}],
                                                :unique-tag "click"}
                         :finish-dialog        {:type               "sequence-data",
                                                :editor-type        "dialog",
@@ -313,7 +349,11 @@
                               :x       100
                               :y       85
                               :origin {:type "center-center"}
-                              :alias   "Concept image"}
+                              :alias   "Concept image"
+                              :editable? {:edit-form {:select-image true
+                                                      :upload-image true
+                                                      :scale true
+                                                      :flip true}}}
                              concept-image-options)
       ball-text-name  {:type           "text"
                        :text           text
@@ -325,7 +365,8 @@
                        :font-family    "Lexend Deca"
                        :font-size      30
                        :fill           "#000000"
-                       :alias          "Concept text"}
+                       :alias          "Concept text"
+                       :editable? {}}
       ball-group-name {:type       "group"
                        :x          500
                        :y          500
