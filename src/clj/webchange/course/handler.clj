@@ -1,6 +1,7 @@
 (ns webchange.course.handler
   (:require
    [buddy.auth :refer [throw-unauthorized]]
+   [clojure.string :as str]
    [clojure.tools.logging :as log]
    [compojure.api.sweet :refer [GET POST PUT api context defroutes swagger-routes]]
    [ring.util.response :refer [redirect resource-response response]]
@@ -240,7 +241,7 @@
   (response (core/find-all-character-skins)))
 
 (defn editor-assets [tag tags type]
-  (let [tags (->> (clojure.string/split tags #",")
+  (let [tags (->> (str/split tags #",")
                   (remove empty?)
                   (map #(Integer/parseInt %)))]
     (response (core/editor-assets tag tags type))))
@@ -276,7 +277,7 @@
 (defroutes website-api-routes
   (context "/api/courses" []
     :tags ["course"]
-    ;should go before general "/api/courses/:course-slug" to be accessible
+                                        ;should go before general "/api/courses/:course-slug" to be accessible
     (GET "/available" []
       :return CoursesOrError
       :summary "Returns all available courses"
@@ -308,7 +309,7 @@
       :path-params [course-id :- s/Int]
       :return Course
       :body [review-result ReviewResult]
-      :summary "Send review result. Publish or decline"
+      :summary "Send review result. Publish or decline. Or unpubish"
       (handle-review-course course-id review-result request))
     (GET "/list/:type/:status" request
       :path-params [type :- s/Str status :- s/Str]
