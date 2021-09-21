@@ -10,105 +10,110 @@
         :options     {}})
 
 (def t {:assets
-                       [{:url "/raw/img/i-spy/background.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy/decoration.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy/surface.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy/icons/newspaper_01.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/newspaper_02.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/fire_station_01.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/fire_station_02.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/hat_01.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/hat_02.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/car_plate_01.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/car_plate_02.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/bakery_01.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/icons/bakery_02.png" :size 1 :type "image"}
-                        {:url "/raw/img/i-spy/transparent.png" :size 1 :type "image"}]
+        [{:url "/raw/img/i-spy/background.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy/decoration.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy/surface.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy/icons/newspaper_01.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/newspaper_02.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/fire_station_01.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/fire_station_02.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/hat_01.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/hat_02.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/car_plate_01.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/car_plate_02.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/bakery_01.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/icons/bakery_02.png" :size 1 :type "image"}
+         {:url "/raw/img/i-spy/transparent.png" :size 1 :type "image"}]
         :objects       {:layered-background
-                                      {:type       "layered-background",
-                                       :background {:src "/raw/img/i-spy/background.png"},
-                                       :decoration {:src "/raw/img/i-spy/decoration.png"},
-                                       :surface    {:src "/raw/img/i-spy/surface.png"}}
+                        {:type       "layered-background",
+                         :background {:src "/raw/img/i-spy/background.png"},
+                         :decoration {:src "/raw/img/i-spy/decoration.png"},
+                         :surface    {:src "/raw/img/i-spy/surface.png"}}
                         :cap
-                                      {:type           "text",
-                                       :x              1555,
-                                       :y              520,
-                                       :width          200,
-                                       :height         130,
-                                       :align          "center",
-                                       :fill           "#ff3857",
-                                       :font-family    "Pacifico",
-                                       :font-size      32,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "Wombats",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}}}
+                        {:type           "text",
+                         :x              1555,
+                         :y              520,
+                         :width          200,
+                         :height         130,
+                         :align          "center",
+                         :fill           "#ff3857",
+                         :font-family    "Pacifico",
+                         :font-size      32,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "Wombats",
+                         :vertical-align "middle",
+                         :visible        true
+                         :editable?      {:select true}
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}}}
                         :newspaper
-                                      {:type           "text",
-                                       :x              210,
-                                       :y              917,
-                                       :width          235,
-                                       :height         32,
-                                       :align          "center",
-                                       :fill           "#000000",
-                                       :font-family    "AbrilFatface",
-                                       :font-size      24,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "The Wordbury Times",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},}
+                        {:type           "text",
+                         :x              210,
+                         :y              917,
+                         :width          235,
+                         :height         32,
+                         :align          "center",
+                         :fill           "#000000",
+                         :font-family    "AbrilFatface",
+                         :font-size      24,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "The Wordbury Times",
+                         :vertical-align "middle",
+                         :visible        true
+                         :editable?      {:select true}
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},}
                         :fire-station
-                                      {:type           "text",
-                                       :x              1102,
-                                       :y              346,
-                                       :width          219,
-                                       :height         63,
-                                       :align          "center",
-                                       :fill           "#CC001B",
-                                       :font-family    "Staatliches",
-                                       :font-size      50,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "FIRE STATION",
-                                       :vertical-align "middle",
-                                       :visible        true,
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},}
+                        {:type           "text",
+                         :x              1102,
+                         :y              346,
+                         :width          219,
+                         :height         63,
+                         :align          "center",
+                         :fill           "#CC001B",
+                         :font-family    "Staatliches",
+                         :font-size      50,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "FIRE STATION",
+                         :vertical-align "middle",
+                         :visible        true,
+                         :editable?      {:select true}
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},}
                         :bakery
-                                      {:type           "text",
-                                       :x              392,
-                                       :y              243,
-                                       :width          181,
-                                       :height         102,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Pacifico",
-                                       :font-size      58,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "Bakery",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},}
+                        {:type           "text",
+                         :x              392,
+                         :y              243,
+                         :width          181,
+                         :height         102,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Pacifico",
+                         :font-size      58,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "Bakery",
+                         :vertical-align "middle",
+                         :visible        true
+                         :editable?      {:select true}
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},}
                         :plate
-                                      {:type           "text",
-                                       :x              759,
-                                       :y              730,
-                                       :width          104,
-                                       :height         43,
-                                       :align          "center",
-                                       :fill           "#000000",
-                                       :font-family    "Staatliches",
-                                       :font-size      34,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "6TRJ244",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},}
+                        {:type           "text",
+                         :x              759,
+                         :y              730,
+                         :width          104,
+                         :height         43,
+                         :align          "center",
+                         :fill           "#000000",
+                         :font-family    "Staatliches",
+                         :font-size      34,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "6TRJ244",
+                         :vertical-align "middle",
+                         :visible        true
+                         :editable?      {:select true}
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},}
                         :bar          {:type          "rectangle",
                                        :x             672,
                                        :y             912,
@@ -228,7 +233,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-1" "bakery-1"],
-                                       :visible  false,
+                                       :visible  true,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-im-1 {:type       "image",
                                        :x          700,
@@ -240,42 +245,44 @@
                                        :src        "/raw/img/i-spy/icons/bakery_01.png"
                                        }
                         :bakery-1
-                                      {:type           "text",
-                                       :x              708,
-                                       :y              958,
-                                       :width          53,
-                                       :height         30,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Pacifico",
-                                       :font-size      17,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "Bakery",
-                                       :vertical-align "middle",
-                                       :visible        true},
+                        {:type           "text",
+                         :x              708,
+                         :y              958,
+                         :width          53,
+                         :height         30,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Pacifico",
+                         :font-size      17,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "Bakery",
+                         :vertical-align "middle",
+                         :editable?      {:select true}
+                         :visible        true},
                         :icon-br-2    {:type     "group",
                                        :x        0,
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-2" "plate-2"],
-                                       :visible  false,
+                                       :visible  true,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :plate-2
-                                      {:type           "text",
-                                       :x              819,
-                                       :y              964.31,
-                                       :width          58,
-                                       :height         24,
-                                       :align          "center",
-                                       :fill           "#000000",
-                                       :font-family    "Staatliches",
-                                       :font-size      19,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "6TRJ244",
-                                       :vertical-align "middle",
-                                       :visible        true},
+                        {:type           "text",
+                         :x              819,
+                         :y              964.31,
+                         :width          58,
+                         :height         24,
+                         :align          "center",
+                         :fill           "#000000",
+                         :font-family    "Staatliches",
+                         :font-size      19,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "6TRJ244",
+                         :vertical-align "middle",
+                         :editable?      {:select true}
+                         :visible        true},
                         :icon-br-im-2 {:type       "image",
                                        :x          812,
                                        :y          960,
@@ -289,23 +296,24 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-3" "cap-3"],
-                                       :visible  false,
+                                       :visible  true,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :cap-3
-                                      {:type           "text",
-                                       :x              947,
-                                       :y              964,
-                                       :width          38,
-                                       :height         16,
-                                       :align          "center",
-                                       :fill           "#ff3857",
-                                       :font-family    "Pacifico",
-                                       :font-size      9,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "Wombats",
-                                       :vertical-align "middle",
-                                       :visible        true},
+                        {:type           "text",
+                         :x              947,
+                         :y              964,
+                         :width          38,
+                         :height         16,
+                         :align          "center",
+                         :fill           "#ff3857",
+                         :font-family    "Pacifico",
+                         :font-size      9,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "Wombats",
+                         :vertical-align "middle",
+                         :editable?      {:select true}
+                         :visible        true},
 
                         :icon-br-im-3 {:type       "image",
                                        :x          924,
@@ -321,25 +329,26 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-4" "fire-station-4"],
-                                       :visible  false,
+                                       :visible  true,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
 
 
                         :fire-station-4
-                                      {:type           "text",
-                                       :x              1045.5,
-                                       :y              968.5,
-                                       :width          53,
-                                       :height         15,
-                                       :align          "center",
-                                       :fill           "#CC001B",
-                                       :font-family    "Staatliches",
-                                       :font-size      12,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "FIRE STATION",
-                                       :vertical-align "middle",
-                                       :visible        true}
+                        {:type           "text",
+                         :x              1045.5,
+                         :y              968.5,
+                         :width          53,
+                         :height         15,
+                         :align          "center",
+                         :fill           "#CC001B",
+                         :font-family    "Staatliches",
+                         :font-size      12,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "FIRE STATION",
+                         :vertical-align "middle",
+                         :editable?      {:select true}
+                         :visible        true}
 
                         :icon-br-im-4 {:type       "image",
                                        :x          1036,
@@ -354,23 +363,24 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-5" "newspaper-5"],
-                                       :visible  false,
+                                       :visible  true,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :newspaper-5
-                                      {:type           "text",
-                                       :x              1168,
-                                       :y              959,
-                                       :width          44,
-                                       :height         6,
-                                       :align          "center",
-                                       :fill           "#000000",
-                                       :font-family    "AbrilFatface",
-                                       :font-size      4.5,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "The Wordbury Times",
-                                       :vertical-align "middle",
-                                       :visible        true},
+                        {:type           "text",
+                         :x              1168,
+                         :y              959,
+                         :width          44,
+                         :height         6,
+                         :align          "center",
+                         :fill           "#000000",
+                         :font-family    "AbrilFatface",
+                         :font-size      4.5,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "The Wordbury Times",
+                         :vertical-align "middle",
+                         :editable?      {:select true}
+                         :visible        true},
 
                         :icon-br-im-5 {:type       "image",
                                        :x          1148,
@@ -387,17 +397,22 @@
                         ["icon-br-1" "icon-br-2" "icon-br-3" "icon-br-4" "icon-br-5"]
                         ["icon-59" "icon-open" "icon-276"]],
         :actions       {:init-items         {:type "sequence-data",
-                                             :data [{:type "set-variable", :var-name "item-1", :var-value false}
+                                             :data [{:type "set-attribute", :target "icon-br-1", :attr-name "visible", :attr-value false}
+                                                    {:type "set-attribute", :target "icon-br-2", :attr-name "visible", :attr-value false}
+                                                    {:type "set-attribute", :target "icon-br-3", :attr-name "visible", :attr-value false}
+                                                    {:type "set-attribute", :target "icon-br-4", :attr-name "visible", :attr-value false}
+                                                    {:type "set-attribute", :target "icon-br-5", :attr-name "visible", :attr-value false}
+                                                    {:type "set-variable", :var-name "item-1", :var-value false}
                                                     {:type "set-variable", :var-name "item-2", :var-value false}
                                                     {:type "set-variable", :var-name "item-3", :var-value false}
                                                     {:type "set-variable", :var-name "item-4", :var-value false}
                                                     {:type "set-variable", :var-name "item-5", :var-value false}
                                                     {:type "set-variable", :var-name "finish-not-played", :var-value true}]}
                         :test-complete
-                                            {:type      "test-var-list",
-                                             :success   "finish-activity",
-                                             :values    [true true true true true true],
-                                             :var-names ["item-1" "item-2" "item-3" "item-4" "item-5" "finish-not-played"]},
+                        {:type      "test-var-list",
+                         :success   "finish-activity",
+                         :values    [true true true true true true],
+                         :var-names ["item-1" "item-2" "item-3" "item-4" "item-5" "finish-not-played"]},
                         :finish-activity    {:type "sequence-data"
                                              :data [{:type "set-variable", :var-name "finish-not-played" :var-value false}
                                                     {:type "action" :id "finish-dialog"}
@@ -551,8 +566,8 @@
                                              :phrase-description "Introduce task"}
                         },
         :triggers
-                       {:back  {:on "back", :action "stop-activity"},
-                        :start {:on "start", :action "intro"}},
+        {:back  {:on "back", :action "stop-activity"},
+         :start {:on "start", :action "intro"}},
         :metadata      {:autostart true
                         :tracks    [{:title "Dialogs"
                                      :nodes [{:type      "dialog"
