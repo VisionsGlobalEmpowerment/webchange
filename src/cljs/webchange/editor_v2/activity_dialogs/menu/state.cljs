@@ -1,8 +1,9 @@
 (ns webchange.editor-v2.activity-dialogs.menu.state
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-dialogs.form.state :as parent-state]
-    [webchange.editor-v2.translator.translator-form.state.scene :as state-translator]))
+   [re-frame.core :as re-frame]
+   [webchange.editor-v2.activity-dialogs.form.state :as parent-state]
+   [webchange.editor-v2.translator.translator-form.state.scene :as state-translator]
+   [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]))
 
 (defn path-to-db
   [relative-path]
@@ -49,7 +50,10 @@
   ::selected-action-data
   (fn []
     [(re-frame/subscribe [::state-translator/actions-data])
+     (re-frame/subscribe [::translator-form.concepts/current-concept])
      (re-frame/subscribe [::parent-state/selected-action])])
-  (fn [[actions-data {:keys [path]}]]
+  (fn [[actions-data concept-data {:keys [path source]}]]
     (when (some? path)
-      (get-in actions-data path))))
+      (if (= source :concept)
+        (get-in (:data concept-data) path)
+        (get-in actions-data path)))))
