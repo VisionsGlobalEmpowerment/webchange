@@ -49,6 +49,6 @@
       
       [dialog {:open?    open?
                :on-close close
-               :title    "Info"}
+               :title    "Course Info"}
        [course-info {:title "Choose Your Topic"}]]
       )))

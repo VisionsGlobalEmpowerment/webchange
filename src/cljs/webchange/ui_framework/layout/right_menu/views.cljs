@@ -78,7 +78,4 @@
           [objects-tree-menu]]
          (for [{:keys [text on-click] :as props} default-actions-list]
            ^{:key text}
-           [default-actions-item props])])]
-     (when show-edit-menu?
-       [:div
-        [course-info {:title "Choose Your Topic"}]])]))
+           [default-actions-item props])])]]))
