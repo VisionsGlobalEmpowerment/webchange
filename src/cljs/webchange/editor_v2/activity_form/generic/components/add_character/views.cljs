@@ -43,9 +43,10 @@
                :actions  [[button {:on-click handle-add
                                    :size     "big"}
                            "Add"]
-                          [button {:on-click handle-close
-                                   :color    "default"
-                                   :variant  "outlined"
-                                   :size     "big"}
-                           "Cancel"]]}
+                          ;; [button {:on-click handle-close
+                          ;;          :color    "default"
+                          ;;          :variant  "outlined"
+                          ;;          :size     "big"}
+                          ;;  "Cancel"]
+                          ]}
        [add-character-form]])))

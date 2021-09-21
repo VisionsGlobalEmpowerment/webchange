@@ -81,20 +81,20 @@
                                     :display         "flex"
                                     :justify-content "space-between"}}
            title]
-          [ui/tooltip {:title "Show course table"}
-           [ui/icon-button {:on-click #(redirect-to :course-table :course-id course-id)
-                            :style    {:position "absolute"
-                                       :margin   "8px"
-                                       :top      "0"
-                                       :right    "0"}}
-            [ic/menu]]]
-          [ui/tooltip {:title "Manage scenes crossing"}
-           [ui/icon-button {:on-click #(redirect-to :scenes-crossing :course-id course-id)
-                            :style    {:position "absolute"
-                                       :margin   "8px"
-                                       :top      "0"
-                                       :right    "64px"}}
-            [ic/compare-arrows]]]
+          ;; [ui/tooltip {:title "Show course table"}
+          ;;  [ui/icon-button {:on-click #(redirect-to :course-table :course-id course-id)
+          ;;                   :style    {:position "absolute"
+          ;;                              :margin   "8px"
+          ;;                              :top      "0"
+          ;;                              :right    "0"}}
+          ;;   [ic/menu]]]
+          ;; [ui/tooltip {:title "Manage scenes crossing"}
+          ;;  [ui/icon-button {:on-click #(redirect-to :scenes-crossing :course-id course-id)
+          ;;                   :style    {:position "absolute"
+          ;;                              :margin   "8px"
+          ;;                              :top      "0"
+          ;;                              :right    "64px"}}
+          ;;   [ic/compare-arrows]]]
           [ui/grid {:container   true
                     :justify     "space-between"
                     :spacing     24
