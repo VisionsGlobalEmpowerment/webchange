@@ -36,6 +36,24 @@
               :class-name          "font-family-selector"
               :variant             "outlined"}]]))
 
+(defn- font-color-component
+  [{:keys [id]}]
+  (let [value @(re-frame/subscribe [::state/current-font-color id])
+        options @(re-frame/subscribe [::state/font-color-options])
+        handle-change (fn [font-color]
+                        (re-frame/dispatch [::state/set-current-font-color id font-color]))]
+    [:div
+     [icon {:icon       "font-color"
+            :class-name "color-icon"}]
+     [select {:value               (or value "")
+              :on-change           handle-change
+              :options-text-suffix "pt"
+              :options             options
+              :show-buttons?       true
+              :with-arrow?         false
+              :class-name          "font-family-selector"
+              :variant             "outlined"}]]))
+
 (defn- font-size-component
   [{:keys [id]}]
   (let [value @(re-frame/subscribe [::state/current-font-size id])
@@ -65,6 +83,8 @@
      [:div.font-controls
       [font-family-component {:id id}]
       [font-size-component {:id id}]]
+     [:div.font-controls.font-color-section
+      [font-color-component {:id id}]]
      [:div.text-control
       [text-component {:id id}]
       [voice-over-control {:id          id

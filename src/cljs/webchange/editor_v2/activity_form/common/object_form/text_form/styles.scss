@@ -4,6 +4,10 @@
         justify-content: space-between;
         margin-bottom: 24px;
 
+        .font-color-section {
+            width: 289px;
+        }
+
         & > * {
             align-items: center;
             display: flex;
@@ -16,6 +20,26 @@
 
         .font-size-selector {
             width: 96px;
+        }
+
+        .color-box {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            background-color: #ccc;
+            position: absolute;
+            left: 5px;
+            top: 5px;
+        }
+
+        .color-icon {
+            padding: 3px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+                padding: 0px;
+            }
         }
     }
 

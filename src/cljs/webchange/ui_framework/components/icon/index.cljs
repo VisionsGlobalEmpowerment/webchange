@@ -30,6 +30,7 @@
     [webchange.ui-framework.components.icon.icon-expand-arrow-right :as expand-arrow-right]
     [webchange.ui-framework.components.icon.icon-expand :as expand]
     [webchange.ui-framework.components.icon.icon-flip :as flip]
+    [webchange.ui-framework.components.icon.icon-font-color :as font-color]
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
     [webchange.ui-framework.components.icon.icon-game :as game]
@@ -99,6 +100,7 @@
    "expand-arrow-right" expand-arrow-right/data
    "expand"             expand/data
    "flip"               flip/data
+   "font-color"         font-color/data
    "font-family"        font-family/data
    "font-size"          font-size/data
    "game"               game/data
