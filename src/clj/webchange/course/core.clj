@@ -808,8 +808,8 @@
 (defn review-course!
   [course-id {new-status :status}]
   (let [{course-slug :slug status :status} (db/get-course-by-id {:id course-id})
-        can-review? (contains? #{"in-review"} status)
-        new-status-valid? (contains? #{"published" "declined" "changes-requested"} new-status)]
+        can-review? (contains? #{"in-review" "published"} status)
+        new-status-valid? (contains? #{"published" "declined" "changes-requested" "draft"} new-status)]
     (if (and can-review? new-status-valid?)
       (do (db/update-course-status! {:id course-id :status new-status})
           [true (-> (get-course-info course-slug)
