@@ -1,12 +1,13 @@
 (ns webchange.editor-v2.layout.components.sync-status.history.state
   (:require
-    [ajax.core :refer [json-request-format json-response-format]]
-    [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
-    [webchange.interpreter.events :as interpreter.events]
-    [webchange.state.core :as core]
-    [webchange.state.warehouse :as warehouse]
-    [webchange.subs :as subs]))
+   [ajax.core :refer [json-request-format json-response-format]]
+   [re-frame.core :as re-frame]
+   [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
+   [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+   [webchange.interpreter.events :as interpreter.events]
+   [webchange.state.core :as core]
+   [webchange.state.warehouse :as warehouse]
+   [webchange.subs :as subs]))
 
 (def modal-versions-state-path [:editor-v2 :sandbox :restore-versions-state])
 (def modal-template-state-path [:editor-v2 :sandbox :restore-template-state])
@@ -42,6 +43,7 @@
                                           :scene-data data}]
                   [::interpreter.events/set-scene name data]
                   [::interpreter.events/store-scene name data]
+                  [::translator-form.scene/init-state]
                   [::state-stage/reset-stage]]}))
 
 (re-frame/reg-event-fx

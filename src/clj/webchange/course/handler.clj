@@ -13,6 +13,7 @@
    [webchange.common.handler :refer [current-user handle]]
    [webchange.common.hmac-sha256 :as sign]
    [webchange.course.core :as core]
+   [webchange.course.translate :as translate]
    [webchange.course.skills :as skills]
    [webchange.dataset.library :as datasets-library]
    [webchange.templates.core :as templates]))
@@ -205,6 +206,14 @@
     (-> (core/get-on-review-courses type status)
         handle)))
 
+(defn handle-translate-activity
+  [course-slug scene-slug data request]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (translate/translate-activity! course-slug scene-slug data user-id)
+        handle)))
+
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
                      :url s/Str :lang (s/maybe s/Str)
                      (s/optional-key :updated-at) s/Str
@@ -213,6 +222,7 @@
                      (s/optional-key :status) s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int (s/optional-key :type) s/Str (s/optional-key :image-src) s/Str})
 (s/defschema Translate {:user-id s/Int :language s/Str})
+(s/defschema TranslateActivity {:language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration" "etc")})
 (s/defschema CharacterSkin {:name                     s/Str
@@ -378,7 +388,13 @@
       :return Activity
       :body [data SetActivityPreview]
       :summary "Sets activity preview image url"
-      (handle-set-activity-preview course-slug scene-slug data request)))
+      (handle-set-activity-preview course-slug scene-slug data request))
+    (PUT "/:course-slug/translate-activity/:scene-slug" request
+      :path-params [course-slug :- s/Str scene-slug :- s/Str]
+      :return s/Any
+      :body [data TranslateActivity]
+      :summary "Translate all the text and dialogs in activity into given language"
+      (handle-translate-activity course-slug scene-slug data request)))
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills

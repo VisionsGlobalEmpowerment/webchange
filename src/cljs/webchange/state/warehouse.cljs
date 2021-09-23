@@ -217,6 +217,14 @@
                      :method :put
                      :uri    (str "/api/courses/" course-slug "/scenes/" scene-slug "/preview")
                      :params {:preview preview}} handlers)))
+
+(re-frame/reg-event-fx
+  ::translate-activity
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug lang]} handlers]]
+    (create-request {:key    :translate-activity
+                     :method :put
+                     :uri    (str "/api/courses/" course-slug "/translate-activity/" scene-slug)
+                     :params {:language lang}} handlers)))
 ;; Lesson sets
 
 (re-frame/reg-event-fx
