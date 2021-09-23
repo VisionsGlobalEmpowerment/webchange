@@ -1,37 +1,45 @@
 {:initial-scene "map",
  :scene-list
- {:home
+ {:first-words-book-letter-o {:name "first-words-book-letter-o"},
+  :home
   {:name "Casa",
    :outs [{:x 1457, :y 630, :name "map", :object "door"} {:x 100, :y 100, :name "map", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
   :conversation-v-7-sharing {:name "conversation-v-7-sharing"},
+  :interactive-read-aloud-newest
+  {:name "Interactive Read Aloud: Sleepy Mr. Sloth",
+   :outs [{:x 100, :y 100, :name "map", :object "back"}],
+   :preview "/upload/MCCWPUFWPLOTKCBV.png",
+   :lesson-sets nil}
   :rhyme-karaoke-twinkle
-  {:name "Rhyme Karaoke: Twinkle",
+  {:name "Repeat Rhyme Karaoke: Twinkle",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :preview "/upload/POEPDUWHHHJUMJSR.png",
-   :lesson-sets nil}
+   :lesson-sets nil},
   :i-spy-1
   {:name "I Spy 1",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
-   :preview "/upload/TTREOHTMWLHEBYEQ.png",
+   :preview "/upload/UWYEBZKLKYDEZEOU.png",
    :lesson-sets nil},
   :recording-summary-new-1
   {:name "Recording Studio Summary",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
-   :preview "/upload/NFGDTEWJYCOZFZNJ.png",
+   :preview "/upload/EUKBMQJNYCQQOWWC.png",
    :lesson-sets nil},
   :cinema
   {:name "Cinema",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
+   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg",
+   :archived true},
   :cinema-new
-  {:name "Video Player",
+  {:name "Letter Cinema",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :preview "/upload/GVDDIVMNLIZXBOAZ.png",
-   :lesson-sets ["concepts-single"]}
-  :letter-z-2-sample--delete-later {:name "Letter Z 2 Sample (Delete later)", :lesson-sets ["concepts-single"]},
+   :lesson-sets ["concepts-single"]},
+  :letter-z-2-sample--delete-later
+  {:name "Letter Z 2 Sample (Delete later)", :archived true, :lesson-sets ["concepts-single"]},
   :park-poem
   {:name "Poem",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
@@ -50,9 +58,10 @@
   {:name "Book",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Library_Book.jpg"},
-  :rhyming-2 {:name "Rhyming 2", :lesson-sets nil},
-  :letter-intro-demo {:name "Letter Intro Demo", :lesson-sets ["concepts-single"]},
+   :preview "/images/dashboard/scene-preview/Library_Book.jpg",
+   :archived true},
+  :rhyming-2 {:name "Rhyming 2", :archived true, :lesson-sets nil},
+  :letter-intro-demo {:name "Letter Intro Demo", :archived true, :lesson-sets ["concepts-single"]},
   :swings
   {:name "Swings",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
@@ -62,38 +71,44 @@
   {:name "Volleyball",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
-  :letter-m-1-sample--delete-later {:name "Letter M 1 Sample (Delete later)", :lesson-sets ["concepts-single"]},
+   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg",
+   :archived true},
+  :letter-m-1-sample--delete-later
+  {:name "Letter M 1 Sample (Delete later)", :archived true, :lesson-sets ["concepts-single"]},
   :magic-hat
   {:name "Magic Hat",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Library_Magic-Hat.jpg"},
+   :preview "/images/dashboard/scene-preview/Library_Magic-Hat.jpg",
+   :archived true},
   :sandbox
   {:name "Sandbox",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg",
+   :archived true},
   :running-with-letters
-  {:name "Running with Letters",
+  {:name "Running ",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :preview "/upload/LXTYFJHLJYTJQCVV.png",
-   :lesson-sets ["concepts-group" "concepts-single"]}
+   :lesson-sets ["concepts-group" "concepts-single"]},
   :magic-hat-v-2
   {:name "Magic Hat",
    :outs [{:x 100, :y 100, :name "map", :object "library"}],
    :preview "/upload/YUVNWPYXCGVUXYLF.png",
-   :lesson-sets ["concepts-magic-hat-rounds" "concepts-all"]}
+   :lesson-sets ["concepts-magic-hat-rounds" "concepts-all"]},
   :running
   {:name "Running",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Running.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Running.jpg",
+   :archived true},
   :cycling
   {:name "Cycling",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg",
+   :archived true},
   :library
   {:name "Library",
    :outs
@@ -104,35 +119,39 @@
     {:x 1714, :y 646, :name "magic-hat", :object "magic-hat"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Library_Room.jpg"},
-  :rhyming-1 {:name "Rhyming 1", :lesson-sets nil},
+  :rhyming-1 {:name "Rhyming 1", :archived true, :lesson-sets nil},
   :cinema-video
   {:name "Cinema Video",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
-  :letter-y-2-sample--delete-later {:name "Letter Y 2 Sample (Delete later)", :lesson-sets ["concepts-single"]},
+   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg",
+   :archived true},
+  :letter-y-2-sample--delete-later
+  {:name "Letter Y 2 Sample (Delete later)", :archived true, :lesson-sets ["concepts-single"]},
   :cycling-letters
   {:name "Cycling",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg",
+   :archived true},
   :riddle-colors-3
   {:name "Riddle: Colors",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :preview "/upload/KVDHSFRIBSBRKEOQ.png",
-   :lesson-sets nil}
+   :lesson-sets nil},
   :sandbox-vocabulary-colors
-  {:name "Vocabulary: Colors",
+  {:name "Sandbox Vocabulary: Colors",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :preview "/upload/PLVFPHAXUKDEUUBJ.png",
-   :lesson-sets nil}
+   :lesson-sets nil},
+  :first-words-book-letter-i {:name "first-words-book-letter-i"},
   :hide-n-seek
   {:name "Hide and Seek",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "assessment",
    :preview "/images/dashboard/scene-preview/Park_Hide-and-seek.jpg"},
   :see-saw
-  {:name "Sea-saw",
+  {:name "See-saw",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Park_See-Saw.jpg"},
@@ -145,17 +164,17 @@
   {:name "Interactive Read Aloud: Sleepy Mr. Sloth 1",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :preview "/upload/MCCWPUFWPLOTKCBV.png",
-   :lesson-sets nil}
+   :lesson-sets nil},
   :recording-studio-1-ai
   {:name "Recording Studio 1 Ai",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
-   :preview "/upload/BTNVASMVMVKUBYGB.png",
-   :lesson-sets nil}
+   :preview "/upload/IONAOFWLNXDSEGRY.png",
+   :lesson-sets nil},
   :letter-intro-1
   {:name "Letter Introduction",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :preview "/upload/IKHYGUUGTYCSSAAU.png",
-   :lesson-sets ["concepts-single"]}
+   :lesson-sets ["concepts-single"]},
   :painting-tablet
   {:name "Painting",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
@@ -165,28 +184,31 @@
   {:name "Writing 1",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :preview "/upload/WLSCUSXADHZEUCRI.png",
-   :lesson-sets nil}
+   :lesson-sets nil},
   :pinata
   {:name "Pinata",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Park_Pinata.jpg"},
-  :letter-m-2-sample--delete-later {:name "Letter M 2 Sample (Delete Later)", :lesson-sets ["concepts-single"]},
+  :letter-m-2-sample--delete-later
+  {:name "Letter M 2 Sample (Delete Later)", :archived true, :lesson-sets ["concepts-single"]},
   :writing-practice
   {:name "Writing Practice",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :preview "/upload/DZFHRIOPFYOBPVGP.png",
    :lesson-sets ["concepts-single"]},
   :alliteration-v-2
-  {:name "Sandbox Matching: Alliteration",
+  {:name "Alliteration",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
-   :preview "/upload/QLXVXLXNSXTEPXAU.png",
-   :lesson-sets ["concepts" "concepts-incorrect"]}
+   :preview "/upload/ZKDLMXMJQSJSWWLP.png",
+   :lesson-sets ["concepts" "concepts-incorrect"]},
+  :first-words-book-letter-a {:name "first-words-book-letter-a"},
   :letter-intro
   {:name "Letter Intro",
    :outs [{:x 1457, :y 330, :name "map", :object "door"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
+   :preview "/images/dashboard/scene-preview/Casa_Room.jpg",
+   :archived true},
   :park
   {:name "Park",
    :outs
@@ -203,7 +225,8 @@
   {:name "Volleyball",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :preview "/upload/BSBLLLJUGNZRHWOV.png",
-   :lesson-sets ["volleyball-concepts" "volleyball-incorrect"]}
+   :lesson-sets ["volleyball-concepts" "volleyball-incorrect"]},
+  :first-words-book-letter-e {:name "first-words-book-letter-e"},
   :map
   {:name "Map",
    :outs
@@ -220,14 +243,17 @@
   {:name "Volleyball",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
-  :letter-z-1-sample--delete-later {:name "Letter Z 1 Sample (Delete later)", :lesson-sets ["concepts-single"]},
+   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg",
+   :archived true},
+  :letter-z-1-sample--delete-later
+  {:name "Letter Z 1 Sample (Delete later)", :archived true, :lesson-sets ["concepts-single"]},
   :writing-lesson
   {:name "Writing Lesson",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Library_Room.jpg"},
-  :letter-y-1-sample--delete-later {:name "Letter Y 1 Sample (Delete later)", :lesson-sets ["concepts-single"]}},
+  :letter-y-1-sample--delete-later
+  {:name "Letter Y 1 Sample (Delete later)", :archived true, :lesson-sets ["concepts-single"]}},
  :scenes
  ["home"
   "map"
@@ -296,9 +322,7 @@
       {:only nil, :activity "running-with-letters", :time-expected 300}
       {:activity "cinema-new", :time-expected 300}
       {:activity "magic-hat-v-2", :time-expected 300}
-      {:scored true,
-       :activity "alliteration-v-2",
-       :time-expected 300}
+      {:scored true, :activity "alliteration-v-2", :time-expected 300}
       {:activity "volleyball-v-3", :time-expected 300}],
      :lesson-sets
      {:concepts "ls-concepts-030d9495",
@@ -326,9 +350,7 @@
       {:only nil, :activity "running-with-letters", :time-expected 300}
       {:activity "cinema-new", :time-expected 300}
       {:activity "magic-hat-v-2", :time-expected 300}
-      {:scored true,
-       :activity "alliteration-v-2",
-       :time-expected 300}
+      {:scored true, :activity "alliteration-v-2", :time-expected 300}
       {:activity "volleyball-v-3", :time-expected 300}],
      :lesson-sets
      {:concepts "ls-concepts-f0e065bd",
@@ -352,22 +374,25 @@
      :type "lesson",
      :lesson 5,
      :activities
-     [{:activity "home", :time-expected 300}
-      {:only ["beginner"], :activity "see-saw", :time-expected 300}
-      {:activity "swings", :time-expected 300}
-      {:activity "sandbox", :time-expected 300}
-      {:scored true,
-       :activity "volleyball",
-       :tags-by-score {:advanced [75 101], :intermediate [0 75]},
-       :time-expected 300}
-      {:activity "book", :time-expected 300}
+     [{:activity "letter-intro", :time-expected 300}
+      {:only ["beginner"], :activity "running-with-letters", :time-expected 300}
+      {:activity "cinema-new", :time-expected 300}
+      {:activity "magic-hat-v-2", :time-expected 300}
+      {:scored true, :activity "book", :tags-by-score {:advanced [75 101], :intermediate [0 75]}, :time-expected 300}
+      {:activity "alliteration-v-2", :time-expected 300}
       {:only ["intermediate"],
        :scored true,
-       :activity "cycling",
+       :activity "writing-practice",
        :tags-by-score {:beginner [0 75], :intermediate [75 101]},
        :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
-     :lesson-sets {:concepts "ls4"}}
+      {:activity "volleyball-letters", :time-expected 300}],
+     :lesson-sets
+     {:concepts "ls-concepts-2cc769f0",
+      :concepts-all "ls-concepts-all-3d2aae11",
+      :concepts-group "ls-concepts-group-3fdd60e8",
+      :concepts-single "ls-concepts-single-43d3deaf",
+      :concepts-incorrect "ls-concepts-incorrect-69cbfc29",
+      :concepts-magic-hat-rounds "ls-concepts-magic-hat-rounds-3eab962c"}}
     {:name "Lesson 5",
      :type "lesson",
      :lesson 6,
@@ -999,7 +1024,7 @@
      :activities [{:scored true, :activity "pinata", :time-expected 300, :expected-score-percentage 90}],
      :lesson-sets {:assessment "assessment6"}}]}],
  :default-progress
- {:next {:level 0, :lesson 0, :activity 0, :activity-name "home"},
+ {:next {:level 0, :lesson 0, :activity 0, :activity-name "letter-intro-1"},
   :finished {:0 {:0 []}},
   :variables {:last-location "home"}},
  :navigation-mode "activity",
