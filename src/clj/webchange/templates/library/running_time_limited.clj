@@ -59,7 +59,7 @@
                                                 :x        676
                                                 :y        64
                                                 :children ["letter-background" "letter-target"
-                                                           ;           "box-target-background" "box-target"
+                                        ;           "box-target-background" "box-target"
                                                            "counter-background" "counter"]}
                         :letter-background     {:type          "rectangle"
                                                 :x             40
@@ -161,7 +161,7 @@
                         :emit-group            {:type "group"}
                         :vera                  {:type       "animation"
                                                 :x          0
-                                                :y          0
+                                                :y          -55
                                                 :width      727
                                                 :height     1091
                                                 :scene-name "vera"
@@ -173,8 +173,7 @@
                                                 :scale-y    0.4
                                                 :skin       "default"
                                                 :speed      1
-                                                :start      true
-                                                :editable?  true}
+                                                :start      true}
                         :vera-collision-test   {:type        "transparent"
                                                 :x           150
                                                 :y           -55

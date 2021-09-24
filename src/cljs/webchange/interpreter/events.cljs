@@ -357,9 +357,10 @@
   :animation-props
   (fn [{component :state {:keys [scaleX scaleY x y]} :props}]
     (let [position {:x x
-                    :y y}]
-      (w/set-scale component {:x scaleX
-                              :y scaleY})
+                    :y y}
+          current-scale (w/get-scale component {:abs? true})]
+      (w/set-scale component {:x (* (:x current-scale) (or scaleX 1))
+                              :y (* (:y current-scale) (or scaleY 1))})
       (w/set-position component position))))
 
 (defn get-audio-key
@@ -1005,9 +1006,9 @@
     (let [activity-name (or activity-name (:current-scene db))
           activity-action (lessons-activity/name->activity-action db activity-name)]
       {:db         (assoc db
-                     :activity-started true
-                     :activity-start-time (js/Date.)
-                     :activity (select-keys activity-action [:level :lesson :activity :activity-name]))
+                          :activity-started true
+                          :activity-start-time (js/Date.)
+                          :activity (select-keys activity-action [:level :lesson :activity :activity-name]))
        :dispatch-n (list
                      [::disable-navigation]
                      [::add-pending-event :activity-started activity-action]

@@ -19,6 +19,7 @@
                                        (swap! state update :props merge {:scale scale})
                                        (utils/set-scale (:animation @state) scale)
                                        (common-utils/emit (:container @state) "scaleChanged" scale))
+                   :get-scale        (fn [params] (utils/get-scale (:animation @state) params))
                    :set-slot         (fn [slot-name image-src slot-params]
                                        ;; ToDo: Remove double set-animation-slot call
                                        ;; Without this slot is not updated if new skin is created inside the method
@@ -30,13 +31,11 @@
                                        (swap! state update :props dissoc :skin-names)
                                        (swap! state update :props merge {:skin-name :skin-name})
                                        (utils/set-skin (:animation @state) skin-name))
-                   :set-combined-skin
-                                     (fn [skin-names]
-                                       (swap! state update :props dissoc :skin-name)
-                                       (swap! state update :props merge {:skin-names skin-names})
-                                       (utils/reset-skeleton container state))
-                   :set-skeleton
-                                     (fn [{:keys [name skin skin-names]}]
+                   :set-combined-skin (fn [skin-names]
+                                        (swap! state update :props dissoc :skin-name)
+                                        (swap! state update :props merge {:skin-names skin-names})
+                                        (utils/reset-skeleton container state))
+                   :set-skeleton     (fn [{:keys [name skin skin-names]}]
                                        (swap! state update :props merge {:name name})
                                        (if (some? skin-names)
                                          (do (swap! state update :props merge {:skin-names skin-names})
