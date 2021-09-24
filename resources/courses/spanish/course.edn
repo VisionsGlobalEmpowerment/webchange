@@ -11,7 +11,7 @@
   {:name "Interactive Read Aloud: Sleepy Mr. Sloth",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :preview "/upload/MCCWPUFWPLOTKCBV.png",
-   :lesson-sets nil}
+   :lesson-sets nil},
   :rhyme-karaoke-twinkle
   {:name "Repeat Rhyme Karaoke: Twinkle",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
@@ -283,7 +283,7 @@
  :locations
  {:home
   [{:level 0, :scene "letter-intro-1", :lesson 0}
-   {:level 0, :scene "interactive-read-aloud-import-2-2", :lesson 1}
+   {:level 0, :scene "interactive-read-aloud-newest", :lesson 1}
    {:level 0, :scene "letter-intro-1", :lesson 2}
    {:level 1, :scene "letter-intro"}],
   :cinema
@@ -337,7 +337,7 @@
      :type "lesson",
      :lesson 2,
      :activities
-     [{:activity "interactive-read-aloud-import-2-2", :time-expected 300}
+     [{:activity "interactive-read-aloud-newest", :time-expected 300}
       {:only ["beginner"], :activity "recording-summary-new-1", :time-expected 300}
       {:activity "writing-1", :time-expected 300}
       {:activity "i-spy-1", :time-expected 300}],
