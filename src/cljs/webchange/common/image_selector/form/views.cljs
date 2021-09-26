@@ -5,19 +5,38 @@
     [webchange.common.image-selector.form.state :as state]
     [webchange.ui-framework.components.index :refer [checkbox label select]]))
 
+;; (defn- tag-selector
+;;   [{:keys [id]}]
+;;   (let [options @(re-frame/subscribe [::state/tags-options id])
+;;         handle-change (fn [{:keys [value checked?]}]
+;;                         (js/console.log "----------------->>>> " id)
+;;                         (js/console.log "----------------->>>> " value)
+;;                         (js/console.log "----------------->>>> " checked?)
+;;                         (re-frame/dispatch [::state/update-current-tags id value checked?]))]
+;;     (into [:div.tag-selector]
+;;           (->> options
+;;                (reduce (fn [result {:keys [text value selected?]}]
+;;                          (concat result [[checkbox {:value     value
+;;                                                     :on-change handle-change
+;;                                                     :checked?  selected?}]
+;;                                          [label {:class-name "tag-label"} text]]))
+;;                        [])))))
+
 (defn- tag-selector
   [{:keys [id]}]
-  (let [options @(re-frame/subscribe [::state/tags-options id])
+  (let [options (into [] @(re-frame/subscribe [::state/tags-options id]))
         handle-change (fn [{:keys [value checked?]}]
                         (re-frame/dispatch [::state/update-current-tags id value checked?]))]
-    (into [:div.tag-selector]
-          (->> options
-               (reduce (fn [result {:keys [text value selected?]}]
-                         (concat result [[checkbox {:value     value
-                                                    :on-change handle-change
-                                                    :checked?  selected?}]
-                                         [label {:class-name "tag-label"} text]]))
-                       [])))))
+    [:div.tag-selector
+     (for [{:keys [text value selected?]} options]
+       ^{:key value}
+       [:div {:class-name (if selected? "chip-active" "chip")
+              :on-click   #(handle-change {:value value
+                                           :checked? (not selected?)})}
+        text
+        ;; (if selected?
+        ;;   [:span.closebtn "×"])
+        ])]))
 
 (defn- assets-list-item
   [{:keys [on-click path thumbnail-path]}]
