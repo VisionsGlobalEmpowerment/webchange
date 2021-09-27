@@ -31,8 +31,9 @@
                              :on-stop-record  handle-stop-record}]]
              (when @show-upload-form?
                [[:div.input-label.thin "or"]
-                [upload-audio {:input-props {:show-icon?   false
-                                             :show-input?  false
-                                             :button-text  "Upload file"
-                                             :button-props {:color   "default"
-                                                            :variant "outlined"}}}]]))])))
+                [upload-audio {:input-props {:show-icon?     false
+                                             :show-input?    false
+                                             :drag-and-drop? false
+                                             :button-text    "Upload file"
+                                             :button-props   {:color   "default"
+                                                              :variant "outlined"}}}]]))])))
