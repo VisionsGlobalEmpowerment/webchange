@@ -1,7 +1,7 @@
-(ns webchange.game-changer.steps.select_template.state
+(ns webchange.game-changer.steps.select-template.state
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.state.state-templates :as state-templates]))
+   [re-frame.core :as re-frame]
+   [webchange.state.state-templates :as state-templates]))
 
 (re-frame/reg-event-fx
   ::init

@@ -1,7 +1,7 @@
-(ns webchange.game-changer.steps.select_template.views-preview
+(ns webchange.game-changer.steps.select-template.views-preview
   (:require
-    [reagent.core :as r]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+   [reagent.core :as r]
+   [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def timeout 1500)
 

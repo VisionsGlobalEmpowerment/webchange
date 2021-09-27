@@ -1,10 +1,10 @@
-(ns webchange.game-changer.steps.select_template.views-list-item
+(ns webchange.game-changer.steps.select-template.views-list-item
   (:require
-    [reagent.core :as r]
-    [webchange.game-changer.steps.select_template.views-preview :refer [activity-preview]]
-    [webchange.editor-v2.layout.components.sandbox.create-link :refer [create-link]]
-    [webchange.ui-framework.components.index :refer [button]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+   [reagent.core :as r]
+   [webchange.game-changer.steps.select-template.views-preview :refer [activity-preview]]
+   [webchange.editor-v2.layout.components.sandbox.create-link :refer [create-link]]
+   [webchange.ui-framework.components.index :refer [button]]
+   [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- preview-button
   [{:keys [activity-slug course-slug]}]

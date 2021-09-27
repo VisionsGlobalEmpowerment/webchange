@@ -1,10 +1,10 @@
-(ns webchange.game-changer.steps.select_template.views-list
+(ns webchange.game-changer.steps.select-template.views-list
   (:require
-    [re-frame.core :as re-frame]
-    [reagent.core :as r]
-    [webchange.game-changer.steps.select_template.state :as state]
-    [cljs-react-material-ui.reagent :as ui]
-    [webchange.game-changer.steps.select_template.views-list-item :refer [template-list-item]]))
+   [re-frame.core :as re-frame]
+   [reagent.core :as r]
+   [webchange.game-changer.steps.select-template.state :as state]
+   [cljs-react-material-ui.reagent :as ui]
+   [webchange.game-changer.steps.select-template.views-list-item :refer [template-list-item]]))
 
 (defn templates-list
   [{:keys [data actions]}]
