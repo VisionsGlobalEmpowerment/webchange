@@ -1,0 +1,549 @@
+{:assets
+ [{:url "/raw/clipart/recording_studio/recording_studio_background.png", :type "image"}
+  {:url "/raw/clipart/recording_studio/recording_studio_decoration.png", :type "image"}
+  {:url "/raw/clipart/recording_studio/recording_studio_surface.png", :type "image"}
+  {:url "/raw/clipart/recording_studio/mic.png", :type "image"}
+  {:url "/raw/clipart/recording_studio/green-circle.png", :type "image"}
+  {:url "/raw/img/demo/Senor_Oso_Perezoso.jpg", :type "image"}
+  {:url "/upload/EBMHMQBJKTKIHIKK.mp3", :date 1625675776821, :size 131, :type "audio", :alias "Guide", :target nil}
+  {:url "/upload/WLNSAIZMGVUZYEZL.mp3",
+   :date 1632177668104,
+   :lang "spanish",
+   :size 402,
+   :type "audio",
+   :alias "EMSV_RSSummary"}],
+ :objects
+ {:approve-background
+  {:type "rectangle",
+   :x 0,
+   :y 0,
+   :width 96,
+   :height 96,
+   :transition "approve-background",
+   :border-radius 48,
+   :fill 16735232},
+  :approve-group
+  {:type "group",
+   :x 1706,
+   :y 132,
+   :width 96,
+   :height 96,
+   :children ["approve-background" "approve-playback-button"],
+   :filters [{:name "brightness", :value 0} {:name "glow", :color 16766720, :outer-strength 0}]},
+  :approve-playback-button
+  {:type "svg-path",
+   :x 20,
+   :y 25,
+   :width 128,
+   :height 128,
+   :actions {:click {:id "approve-playback-click", :on "click", :type "action", :unique-tag "intro"}},
+   :data "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343",
+   :fill "#FFFFFF"},
+  :background
+  {:type "layered-background",
+   :background {:src "/raw/clipart/recording_studio/recording_studio_background.png"},
+   :decoration {:src "/raw/clipart/recording_studio/recording_studio_decoration.png"},
+   :surface {:src "/raw/clipart/recording_studio/recording_studio_surface.png"}},
+  :concept-image
+  {:type "image",
+   :x 965,
+   :y 270,
+   :origin {:type "center-center"},
+   :max-height 300,
+   :max-width 400,
+   :min-height 300,
+   :scale-x 10,
+   :scale-y 10,
+   :src "",
+   :visible false},
+  :green
+  {:type "rectangle", :x 16, :y 16, :width 96, :height 96, :transition "green", :border-radius 48, :fill 1096747},
+  :mari
+  {:type "animation",
+   :x 1300,
+   :y 620,
+   :width 473,
+   :height 511,
+   :scene-name "mari",
+   :transition "mari",
+   :actions {:click {:id "mari-click", :on "click", :type "action"}},
+   :anim "idle",
+   :editable? true,
+   :loop true,
+   :name "mari",
+   :scale-x 0.5,
+   :scale-y 0.5,
+   :speed 0.35,
+   :start true,
+   :states {:left {:scale-x 1}, :right {:scale-x -1}}},
+  :mic
+  {:type "image",
+   :x 960,
+   :y 750,
+   :width 360,
+   :height 656,
+   :origin {:type "center-center"},
+   :src "/raw/clipart/recording_studio/mic.png",
+   :visible true},
+  :playback-background {:type "rectangle", :x 0, :y 0, :width 128, :height 128, :border-radius 24, :fill 16777215},
+  :playback-group
+  {:type "group",
+   :x 896,
+   :y 667,
+   :width 128,
+   :height 128,
+   :children ["playback-background" "green" "run-playback-button" "stop-playback-button"],
+   :filters [{:name "brightness", :value 0} {:name "glow", :color 16766720, :outer-strength 0}]},
+  :record-button
+  {:type "group",
+   :x 896,
+   :y 513,
+   :width 128,
+   :height 128,
+   :scene-name "record-button",
+   :transition "record-button",
+   :actions {:click {:id "record-button-click", :on "click", :type "action", :unique-tag "intro"}},
+   :children ["record-button-back" "record-button-icon" "record-button-icon-int"],
+   :filters [{:name "brightness", :value 0} {:name "glow", :color 16766720, :outer-strength 0}]},
+  :record-button-back {:type "rectangle", :x 0, :y 0, :width 128, :height 128, :border-radius 24, :fill 16777215},
+  :record-button-icon
+  {:type "rectangle",
+   :x 16,
+   :y 16,
+   :width 96,
+   :height 96,
+   :transition "record-button-icon",
+   :border-radius 48,
+   :fill 15539236},
+  :record-button-icon-int
+  {:type "rectangle",
+   :x 40,
+   :y 40,
+   :width 48,
+   :height 48,
+   :transition "record-button-icon-int",
+   :border-radius 32,
+   :fill 16777215},
+  :run-playback-button
+  {:type "svg-path",
+   :x 52,
+   :y 42,
+   :actions {:click {:id "run-playback-click", :on "click", :type "action"}},
+   :data
+   "M34.2834 17.57L6.05798 0.63479C3.39189 -0.964869 0 0.955583 0 4.06476V37.9352C0 41.0444 3.39189 42.9649 6.05798 41.3652L34.2834 24.43C36.8727 22.8764 36.8727 19.1236 34.2834 17.57",
+   :fill "#FFFFFF"},
+  :stop-playback-button
+  {:type "rectangle",
+   :x 45,
+   :y 45,
+   :width 40,
+   :height 40,
+   :scene-name "stop-playback-button",
+   :actions {:click {:id "stop-playback-click", :on "click", :type "action"}},
+   :border-radius 10,
+   :fill 16777215,
+   :visible false}},
+ :scene-objects [["background"] ["concept-image" "mic" "mari"] ["record-button" "playback-group" "approve-group"]],
+ :actions
+ {:approve-playback-click {:type "action", :id "script"},
+  :demo-dialog
+  {:type "sequence-data",
+   :data
+   [{:data [{:type "empty", :duration 0} {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
+     :type "sequence-data"}],
+   :phrase "Demo",
+   :phrase-description "Demo",
+   :editor-type "dialog",
+   :unique-tag "intro"},
+  :empty {:type "empty", :duration 100},
+  :finish {:type "sequence-data", :data [{:id "remove-timeout-timer", :type "action"} {:type "finish-activity"}]},
+  :finish-dialog
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 9.701,
+       :data
+       [{:end 0.58, :anim "talk", :start 0.36}
+        {:end 3.84, :anim "talk", :start 0.7}
+        {:end 6.55, :anim "talk", :start 4.45}
+        {:end 9.22, :anim "talk", :start 6.89}],
+       :type "animation-sequence",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :start 0.352,
+       :target "mari",
+       :duration 9.349,
+       :phrase-text
+       "¡Recordaron muchas cosas del libro! Escuchen lo que grabaron presionando el botón de reproducir."}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration 0}
+      {:end 13.77,
+       :data [{:end 11.65, :anim "talk", :start 10.29} {:end 13.15, :anim "talk", :start 11.85}],
+       :type "animation-sequence",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :start 10.286,
+       :target "mari",
+       :duration 3.484,
+       :phrase-text "Cuando terminen, presionen la paloma."}],
+     :type "sequence-data"}],
+   :phrase "Finish",
+   :phrase-description "Finish",
+   :editor-type "dialog"},
+  :hide-playback-group
+  {:type "parallel",
+   :data
+   [{:type "set-attribute", :target "approve-group", :attr-name "visible", :attr-value false}
+    {:type "set-attribute", :target "playback-group", :attr-name "visible", :attr-value false}]},
+  :highlight-approve-button
+  {:type "transition",
+   :from {:glow 0, :brightness 0},
+   :return-immediately true,
+   :to {:glow 10, :yoyo true, :repeat 5, :duration 0.5, :brightness 1},
+   :transition-id "approve-group"},
+  :highlight-playback-button
+  {:type "transition",
+   :from {:glow 0, :brightness 0},
+   :return-immediately true,
+   :to {:glow 10, :yoyo true, :repeat 5, :duration 0.5, :brightness 1},
+   :transition-id "playback-group"},
+  :highlight-record-button
+  {:type "transition",
+   :from {:glow 0, :brightness 0},
+   :return-immediately true,
+   :to {:glow 10, :yoyo true, :repeat 5, :duration 0.5, :brightness 1},
+   :transition-id "record-button"},
+  :intro-dialog
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:phrase-text "¡Les damos la bienvenida al estudio de grabación!",
+       :start 25.47,
+       :type "animation-sequence",
+       :duration 4.753,
+       :region-text "les da la bienvenida al estudio de grabación para",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :target "mari",
+       :end 30.223,
+       :data [{:end 27.53, :anim "talk", :start 25.49} {:end 30.05, :anim "talk", :start 28.0}]}],
+     :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration "500"}
+      {:end 35.3,
+       :data [{:end 32.14, :anim "talk", :start 30.76} {:end 34.88, :anim "talk", :start 32.69}],
+       :type "animation-sequence",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :start 30.708,
+       :target "mari",
+       :duration 4.592,
+       :phrase-text "Para grabarse, solo presionen el micrófono"}],
+     :type "sequence-data"}
+    {:data [{:type "empty", :duration 0} {:id "highlight-record-button", :type "action"}], :type "sequence-data"}
+    {:data
+     [{:data
+       [{:type "empty", :duration "500"}
+        {:end 40.452,
+         :data [{:end 38.3, :anim "talk", :start 36.54} {:end 40.42, :anim "talk", :start 38.75}],
+         :type "animation-sequence",
+         :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+         :start 36.53,
+         :target "mari",
+         :duration 3.922,
+         :phrase-text "Cuando esté azul empiecen a hablar "}],
+       :type "sequence-data"}
+      {:data [{:type "empty", :duration "1000"} {:id "show-button-stop", :type "action"}], :type "sequence-data"}],
+     :type "parallel"}
+    {:data
+     [{:type "empty", :duration "500"}
+      {:phrase-text "y cuando terminen, presionen el botón de grabar.",
+       :start 41.07,
+       :type "animation-sequence",
+       :duration 4.534,
+       :region-text "y cuando termine precio el botón grabar si",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :target "mari",
+       :end 45.604,
+       :data [{:end 42.75, :anim "talk", :start 41.18} {:end 45.6, :anim "talk", :start 43.32}]}],
+     :type "sequence-data"}
+    {:data [{:type "empty", :duration 0} {:id "show-button-record", :type "action"}], :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration "600"}
+      {:phrase-text "Si quieren escuchar su grabación, presionen el botón de reproducir.",
+       :start 47.04,
+       :type "animation-sequence",
+       :duration 5.939999999999998,
+       :region-text "si quieren escuchar su grabación presión el botón reproducir",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :target "mari",
+       :end 52.98,
+       :data [{:end 49.75, :anim "talk", :start 47.11} {:end 52.82, :anim "talk", :start 50.23}]}],
+     :type "sequence-data"}
+    {:data [{:type "empty", :duration 0} {:id "highlight-playback-button", :type "action"}], :type "sequence-data"}
+    {:data
+     [{:type "empty", :duration "500"}
+      {:phrase-text "¡Si necesitan ayuda me pueden presionar a mí! ¡Vamos a comenzar!",
+       :start 53.52,
+       :type "animation-sequence",
+       :duration 6.949,
+       :region-text "sin necesitan ayuda me pueden presionar a mí comenzar que",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :target "mari",
+       :end 60.469,
+       :data
+       [{:end 55.8, :anim "talk", :start 53.62}
+        {:end 58.2, :anim "talk", :start 56.19}
+        {:end 60.43, :anim "talk", :start 58.85}]}],
+     :type "sequence-data"}],
+   :phrase "Intro",
+   :phrase-description "Intro",
+   :4
+   {:data
+    [{:type "empty", :duration "500"}
+     {:end 37.71,
+      :data
+      [{:end 33.47, :anim "talk", :start 31.42}
+       {:end 35.58, :anim "talk", :start 33.88}
+       {:end 37.69, :anim "talk", :start 36.5}],
+      :type "animation-sequence",
+      :audio "/upload/EBMHMQBJKTKIHIKK.mp3",
+      :start 31.29,
+      :target "mari",
+      :duration 6.420000000000002,
+      :phrase-text "After you have said everything you want to, tap the recording button again to end the recording"}
+     {:data [{:type "empty", :duration 0} {:id "show-button-stop", :type "action"}], :type "sequence-data"}]},
+   :editor-type "dialog",
+   :unique-tag "intro"},
+  :mari-click
+  {:type "action",
+   :from-var [{:var-name "tap-instructions-action", :action-property "id"}],
+   :unique-tag "instructions"},
+  :move-mari
+  {:type "sequence-data",
+   :data
+   [{:to {:x 450, :y 300, :duration 2}, :type "transition", :transition-id "mari"}
+    {:id "right", :type "state", :target "mari"}]},
+  :move-mari-back
+  {:type "sequence-data",
+   :data
+   [{:to {:x 1300, :y 620, :duration 2}, :type "transition", :transition-id "mari"}
+    {:id "left", :type "state", :target "mari"}]},
+  :record-button-click
+  {:type "test-var-scalar",
+   :var-name "record-button-state",
+   :value "stop",
+   :success
+   {:data
+    [{:id "show-button-record", :type "action"}
+     {:type "set-variable", :var-name "record-button-state", :var-value "record"}
+     {:data
+      [{:type "stop-audio-recording", :var-name "recording-studio-audio"}
+       {:type "set-progress",
+        :from-var [{:var-name "recording-studio-audio", :action-property "var-value"}],
+        :var-name "recording-studio"}
+       {:id "show-playback-group", :type "action"}
+       {:id "remove-timeout-timer", :type "action"}
+       {:id "stop-recording-dialog", :type "action"}],
+      :type "sequence-data"}],
+    :type "parallel"},
+   :fail
+   {:data
+    [{:type "set-variable", :var-name "record-button-state", :var-value "stop"}
+     {:type "start-audio-recording"}
+     {:id "timeout-timer", :type "action"}
+     {:id "show-button-stop", :type "action"}],
+    :type "sequence-data"}},
+  :remove-timeout-timer {:type "remove-interval", :id "incorrect-answer-checker"},
+  :reset-controls {:type "sequence-data", :data [{:id "hide-playback-group", :type "action"}]},
+  :round-1
+  {:type "sequence-data",
+   :data
+   [{:type "set-attribute", :target "concept-image", :attr-name "src", :attr-value "/raw/img/demo/Senor_Oso_Perezoso.jpg"}
+    {:type "set-variable", :var-name "tap-instructions-action", :var-value "round-tap-dialog-1"}
+    {:type "set-variable", :var-name "timeout-instructions-action", :var-value "round-timeout-dialog-1"}
+    {:id "round-dialog-1", :type "action"}
+    {:id "timeout-timer", :type "action"}]},
+  :round-dialog-1
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 84.35,
+       :data
+       [{:end 64.54, :anim "talk", :start 62.29}
+        {:end 68.6, :anim "talk", :start 65.42}
+        {:end 70.84, :anim "talk", :start 69.3}
+        {:end 73.36, :anim "talk", :start 71.29}
+        {:end 78.56, :anim "talk", :start 74.21}
+        {:end 79.81, :anim "talk", :start 79.3}
+        {:end 83.82, :anim "talk", :start 80.37}],
+       :type "animation-sequence",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :start 62.263,
+       :target "mari",
+       :duration 22.087,
+       :phrase-text
+       "¿Qué pasó en este cuento? ¡Platiquen las partes más importantes! Usen sus dedos para contar sus ideas, levanten un dedo por cada idea que me digan, ¡y no paren hasta que hayan levantado tres dedos!"}],
+     :type "sequence-data"}],
+   :phrase "Round 1",
+   :phrase-description "Round 1",
+   :editor-type "dialog"},
+  :round-tap-dialog-1
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 84.346,
+       :data
+       [{:end 64.54, :anim "talk", :start 62.29}
+        {:end 68.6, :anim "talk", :start 65.42}
+        {:end 70.84, :anim "talk", :start 69.3}
+        {:end 73.36, :anim "talk", :start 71.29}
+        {:end 78.56, :anim "talk", :start 74.21}
+        {:end 79.81, :anim "talk", :start 79.3}
+        {:end 83.82, :anim "talk", :start 80.37}],
+       :type "animation-sequence",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :start 62.259,
+       :target "mari",
+       :duration 22.087,
+       :phrase-text
+       "¿Qué pasó en este cuento? ¡Platiquen las partes más importantes! Usen sus dedos para contar sus ideas, levanten un dedo por cada idea que me digan, ¡y no paren hasta que hayan levantado tres dedos!"}],
+     :type "sequence-data"}],
+   :phrase "Round 1 tap instructions",
+   :phrase-description "Round 1 tap instructions",
+   :editor-type "dialog"},
+  :round-timeout-dialog-1
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:type "empty", :duration 0}
+      {:end 99.58,
+       :data
+       [{:end 90.16, :anim "talk", :start 86.19}
+        {:end 95.52, :anim "talk", :start 91.33}
+        {:end 97.65, :anim "talk", :start 95.74}
+        {:end 99.44, :anim "talk", :start 97.93}],
+       :type "animation-sequence",
+       :audio "/upload/WLNSAIZMGVUZYEZL.mp3",
+       :start 86.167,
+       :duration 13.413,
+       :phrase-text
+       "¿Hay algo más que quieran conversar del cuento? Si ya dijeron tres ideas y quieren terminar, presionen nuevamente el botón de grabar."}],
+     :type "sequence-data"}],
+   :phrase "Round 1 timeout instructions",
+   :phrase-description "Round 1 timeout instructions",
+   :editor-type "dialog"},
+  :run-playback-click
+  {:type "sequence-data",
+   :data
+   [{:id "remove-timeout-timer", :type "action"}
+    {:id "run-record-playing", :type "action"}
+    {:id "stop-record-playing", :type "action"}]},
+  :run-record-playing
+  {:type "parallel",
+   :data
+   [{:type "set-attribute", :target "run-playback-button", :attr-name "visible", :attr-value false}
+    {:type "set-attribute", :target "stop-playback-button", :attr-name "visible", :attr-value true}
+    {:tags ["recorded-audio-flow"],
+     :type "audio",
+     :from-var [{:var-name "recording-studio-audio", :action-property "id"}]}]},
+  :script
+  {:type "workflow",
+   :data
+   [{:type "start-activity"}
+    {:data
+     [{:type "set-variable", :var-name "record-button-state", :var-value "record"}
+      {:type "set-variable", :var-name "tap-instructions-action", :var-value "empty"}
+      {:type "set-variable", :var-name "timeout-instructions-action", :var-value "empty"}],
+     :type "parallel"}
+    {:id "intro-dialog", :type "action"}
+    {:id "set-demo-image-src", :type "action"}
+    {:type "set-attribute", :target "concept-image", :attr-name "visible", :attr-value true}
+    {:id "demo-dialog", :type "action"}
+    {:id "reset-controls", :type "action"}
+    {:id "round-1", :type "action", :workflow-user-input true}],
+   :on-end "finish"},
+  :set-demo-image-src
+  {:type "set-attribute", :target "concept-image", :attr-name "src", :attr-value "/raw/img/demo/Senor_Oso_Perezoso.jpg"},
+  :show-button-record
+  {:type "parallel",
+   :data
+   [{:to {:fill 15539236, :duration 0.2, :border-radius 48}, :type "transition", :transition-id "record-button-icon"}
+    {:to {:duration 0.2, :border-radius 32}, :type "transition", :transition-id "record-button-icon-int"}]},
+  :show-button-stop
+  {:type "parallel",
+   :data
+   [{:to {:fill 255, :duration 0.2, :border-radius 24}, :type "transition", :transition-id "record-button-icon"}
+    {:to {:duration 0.2, :border-radius 16}, :type "transition", :transition-id "record-button-icon-int"}]},
+  :show-playback-group
+  {:type "parallel",
+   :data
+   [{:type "set-attribute", :target "approve-group", :attr-name "visible", :attr-value true}
+    {:type "set-attribute", :target "playback-group", :attr-name "visible", :attr-value true}]},
+  :stop-activity
+  {:type "sequence-data",
+   :data [{:id "remove-timeout-timer", :type "action"} {:id "recording-studio", :type "stop-activity"}]},
+  :stop-playback-click
+  {:type "sequence-data", :data [{:id "timeout-timer", :type "action"} {:id "stop-record-playing", :type "action"}]},
+  :stop-record-playing
+  {:type "parallel",
+   :data
+   [{:type "remove-flows", :flow-tag "recorded-audio-flow"}
+    {:type "set-attribute", :target "run-playback-button", :attr-name "visible", :attr-value true}
+    {:type "set-attribute", :target "stop-playback-button", :attr-name "visible", :attr-value false}]},
+  :stop-recording-dialog
+  {:type "sequence-data",
+   :data
+   [{:data [{:type "empty", :duration 0} {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
+     :type "sequence-data"}],
+   :phrase "Stop recording",
+   :phrase-description "Stop recording",
+   :editor-type "dialog"},
+  :timeout
+  {:type "action",
+   :from-var [{:var-name "timeout-instructions-action", :action-property "id"}],
+   :unique-tag "instructions"},
+  :timeout-timer {:type "set-interval", :id "incorrect-answer-checker", :action "timeout", :interval 25000}},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "script"}},
+ :metadata
+ {:next-round-id 1,
+  :template-name "Recording Studio (Rounds)",
+  :tracks
+  [{:id "main",
+    :nodes
+    [{:type "dialog", :action-id "intro-dialog"}
+     {:type "dialog", :action-id "demo-dialog"}
+     {:type "dialog", :action-id "stop-recording-dialog"}
+     {:type "dialog", :action-id "finish-dialog"}
+     {:type "track", :track-id "round-1"}],
+    :title "Main Track"}
+   {:id "round-1",
+    :nodes
+    [{:type "dialog", :action-id "round-dialog-1"}
+     {:type "dialog", :action-id "round-tap-dialog-1"}
+     {:type "dialog", :action-id "round-timeout-dialog-1"}],
+    :title "Round 1"}],
+  :history
+  {:created
+   {:image {:src "/raw/img/demo/Senor_Oso_Perezoso.jpg"}, :demo-image {:src "/raw/img/demo/Senor_Oso_Perezoso.jpg"}, :template-id 46},
+   :updated []},
+  :actions
+  {:add-round
+   {:title "Add Round",
+    :options
+    {:image
+     {:type "image", :label "Prompt Image", :description "What visual prompt do you want to show on the screen?"}},
+    :track-id "main"}},
+  :template-version nil,
+  :lip-not-sync false,
+  :autostart true,
+  :resources ["/raw/img/demo/Senor_Oso_Perezoso.jpg"],
+  :template-id 46,
+  :available-actions
+  [{:name "Highlight record", :action "highlight-record-button"}
+   {:name "Show record (record button goes red)", :action "show-button-record"}
+   {:name "Highlight play", :action "highlight-playback-button"}
+   {:name "Highligh approve", :action "highlight-approve-button"}
+   {:name "Show stop (record button goes blue)", :action "show-button-stop"}]},
+ :skills []}
