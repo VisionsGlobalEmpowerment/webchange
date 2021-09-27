@@ -13,4 +13,5 @@
       [dialog {:open?    open?
                :on-close close
                :title    "Course Info"}
-       [course-info {:title "Choose Your Topic"}]])))
+       [course-info {:title     "Choose Your Topic"
+                     :iconFlag? false}]])))
