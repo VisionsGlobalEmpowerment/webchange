@@ -34,9 +34,9 @@
                :style (:left-side styles)}
       [next-activity-block {:activity next-activity
                             :on-click handle-activity-click}]
-      [assessments-block {:data      assessments
-                          :max-count 1
-                          :on-click  handle-activity-click}]]
+      #_[assessments-block {:data      assessments
+                            :max-count 1
+                            :on-click  handle-activity-click}]]
      [ui/grid {:item  true
                :xs    4
                :style (:right-side styles)}
