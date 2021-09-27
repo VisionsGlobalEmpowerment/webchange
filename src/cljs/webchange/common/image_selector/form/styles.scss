@@ -29,29 +29,31 @@
     // }
 
     .tag-selector {
+
+        margin-bottom: 10px;
+
         .chip {
             display: inline-block;
             padding: 0 15px;
-            height: 50px;
-            font-size: 18px;
-            line-height: 50px;
+            height: 35px;
+            font-size: 16px;
+            line-height: 35px;
             border-radius: 25px;
             background-color: #f1f1f1;
             cursor: pointer;
-            font: #ffff;
-            margin: 5px 6px;
+            margin: 5px 5px;
           }
           .chip-active {
             display: inline-block;
             padding: 0 15px;
-            height: 50px;
-            font-size: 18px;
-            line-height: 50px;
+            height: 35px;
+            font-size: 16px;
+            line-height: 35px;
             border-radius: 25px;
             background-color: #0071E3;
             cursor: pointer;
             color: #ffff;
-            margin: 5px 6px;
+            margin: 5px 5px;
           }
           
           .closebtn {
@@ -74,11 +76,10 @@
         grid-template-columns: repeat(4, 1fr);
         column-gap: 16px;
         row-gap: 16px;
-
         width: 100%;
-        max-height: $max-height;
+        max-height: 300px;
+        min-height: 300px;
         overflow: auto;
-
         background-color: #f2f2f2;
         border-radius: 8px;
         padding: 16px;
