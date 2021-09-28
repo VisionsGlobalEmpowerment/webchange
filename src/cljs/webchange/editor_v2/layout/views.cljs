@@ -11,12 +11,21 @@
     [webchange.editor-v2.layout.components.sandbox.views :refer [share-button]]
     [webchange.editor-v2.layout.components.sync-status.views :refer [sync-status]]
     [webchange.editor-v2.layout.state :as state]
-    [webchange.ui-framework.components.index :refer [icon-button]]
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]
+    [webchange.ui-framework.components.index :refer [icon-button with-confirmation]]
     [webchange.ui-framework.layout.views :as ui]))
+
+(defn- handle-switch-mode
+  []
+  (re-frame/dispatch [::state/switch-content-mode]))
 
 (defn- change-activity-mode
   []
-  (let [handle-click #(re-frame/dispatch [::state/switch-content-mode])]
+  (let [has-changes? @(re-frame/subscribe [::translator-form.form/has-changes])
+        handle-click #(if has-changes?
+                        (with-confirmation {:message    "Close form without saving?"
+                                            :on-confirm handle-switch-mode})
+                        (handle-switch-mode))]
     [icon-button {:icon     "swap"
                   :on-click handle-click}
      "Change mode"]))
@@ -30,8 +39,8 @@
         current-content @(re-frame/subscribe [::state/current-content])
         content-props {:scene-data scene-data}]
     [ui/layout {:actions           (cond-> [[sync-status {:class-name "sync-status"}]]
-                                     show-review? (conj [review-status])
-                                     show-preview (conj [share-button]))
+                                           show-review? (conj [review-status])
+                                           show-preview (conj [share-button]))
                 :scene-data        scene-data
                 :edit-menu-content (case current-content
                                      :activity-dialogs [[activity-dialogs-menu]]
