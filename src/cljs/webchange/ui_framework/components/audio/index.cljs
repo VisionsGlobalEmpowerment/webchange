@@ -4,8 +4,6 @@
     [webchange.audio-utils.player :as utils]
     [webchange.ui-framework.components.icon-button.index :as icon-button]))
 
-
-
 (defn component
   []
   (let [audio (atom nil)
@@ -26,15 +24,19 @@
       {:display-name "wc-audio"
        :component-did-mount
                      (fn [this]
-                       (let [{:keys [url]} (r/props this)]
+                       (let [{:keys [url volume] :or {volume 1}} (r/props this)]
                          (when (some? url)
-                           (reset! audio (js/Audio. url)))))
+                           (reset! audio (js/Audio. url))
+                           (set! (.-volume @audio) volume))))
        :component-did-update
                      (fn [this [_ old-props]]
                        (let [new-props (r/props this)]
                          (when-not (= (:url old-props) (:url new-props))
                            (handle-stop)
-                           (reset! audio (js/Audio. (:url new-props))))))
+                           (reset! audio (js/Audio. (:url new-props))))
+                         (when (and (some? @audio)
+                                    (not= (:volume old-props) (:volume new-props)))
+                           (set! (.-volume @audio) (:volume new-props)))))
        :component-will-unmount
                      (fn []
                        (handle-stop))
