@@ -24,15 +24,16 @@
                                            {:name "60" :value 60}]}}})
 
 (def t {:assets        [{:url "/raw/img/running-with-letters/bg_01.jpg" :type "image"}
+                        {:url "/raw/img/running-with-letters/bg_02.png" :type "image"}
                         {:url "/raw/img/running-with-letters/box.png" :type "image"}]
         :objects       {:background            {:type   "carousel"
                                                 :x      0
                                                 :y      0
                                                 :width  1920
                                                 :height 1080
-                                                :first  "/raw/img/running-with-letters/bg_01.jpg"
-                                                :last   "/raw/img/running-with-letters/bg_01.jpg"
-                                                :next   "/raw/img/running-with-letters/bg_01.jpg"}
+                                                :first  "/raw/img/running-with-letters/bg_02.png"
+                                                :last   "/raw/img/running-with-letters/bg_02.png"
+                                                :next   "/raw/img/running-with-letters/bg_02.png"}
                         :frame                 {:type          "rectangle"
                                                 :x             676
                                                 :y             64
