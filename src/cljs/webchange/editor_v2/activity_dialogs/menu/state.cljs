@@ -1,9 +1,10 @@
 (ns webchange.editor-v2.activity-dialogs.menu.state
   (:require
-   [re-frame.core :as re-frame]
-   [webchange.editor-v2.activity-dialogs.form.state :as parent-state]
-   [webchange.editor-v2.translator.translator-form.state.scene :as state-translator]
-   [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]))
+    [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-dialogs.form.state :as parent-state]
+    [webchange.editor-v2.dialog.dialog-form.state.actions-utils :refer [get-available-effects]]
+    [webchange.editor-v2.translator.translator-form.state.scene :as state-translator]
+    [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]))
 
 (defn path-to-db
   [relative-path]
@@ -37,6 +38,15 @@
             (some? selected-action) (conj (get-section :delay))
             (and (some? selected-action)
                  (some #{(:type selected-action)} [:phrase :text-animation])) (conj (get-section :voice-over)))))
+
+(re-frame/reg-sub
+  ::available-effects
+  (fn []
+    [(re-frame/subscribe [::parent-state/selected-action])
+     (re-frame/subscribe [::parent-state/scene-available-actions])])
+  (fn [[{:keys [node-data]} scene-available-actions]]
+    (-> (get-available-effects node-data)
+        (concat scene-available-actions))))
 
 ;;
 

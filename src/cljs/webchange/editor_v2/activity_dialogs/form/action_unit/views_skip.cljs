@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.dialog.dialog-text-form.action-unit.views-skip
+(ns webchange.editor-v2.activity-dialogs.form.action-unit.views-skip
   (:require
     [webchange.ui-framework.components.index :refer [icon]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
