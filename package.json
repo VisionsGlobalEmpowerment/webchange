@@ -1,15 +1,13 @@
 {
   "dependencies": {
     "@cljs-oss/module-deps": "^1.1.1",
-    "@material-ui/core": "^3.9.3",
+    "@material-ui/core": "^3.9.4",
     "@material-ui/styles": "3.0.0-alpha.10",
     "@material-ui/icons": "^3.0.2",
     "create-react-class": "^15.7.0",
     "gsap": "^2.1.2",
-    "material-ui": "^0.20.2",
-    "material-ui-icons": "^1.0.0-beta.36",
-    "pixi": "^0.3.1",
-    "pixi-spine": "^3.0.13",
+    "pixi.js": "^5.3.10",
+    "pixi-spine": "^2.1.14",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "svg-arc-to-cubic-bezier": "^3.2.0",
