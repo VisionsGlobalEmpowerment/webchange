@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
-    [webchange.editor-v2.dialog.dialog-text-form.side-menu.state :as parent-state]
+    [webchange.editor-v2.activity-dialogs.menu.state :as parent-state]
     [webchange.editor-v2.activity-dialogs.form.state :as state-dialog]))
 
 (defn path-to-db
