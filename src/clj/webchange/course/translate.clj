@@ -1,12 +1,13 @@
 (ns webchange.course.translate
   (:require
-   [clojure.java.io :as io]
-   [config.core :refer [env]]
-   [webchange.course.core :as course])
+    [clojure.java.io :as io]
+    [clojure.tools.logging :as log]
+    [config.core :refer [env]]
+    [webchange.course.core :as course])
   (:import
-   (com.google.cloud.translate Translate$TranslateOption
-                               TranslateOptions)
-   (com.google.auth.oauth2 GoogleCredentials)))
+    (com.google.cloud.translate Translate$TranslateOption
+                                TranslateOptions)
+    (com.google.auth.oauth2 GoogleCredentials)))
 
 (def translate-service (atom nil))
 
@@ -63,15 +64,20 @@
                                 (into-array Translate$TranslateOption [(Translate$TranslateOption/sourceLanguage source-language)
                                                                        (Translate$TranslateOption/targetLanguage target-language)]))
         translated-items (map (fn [t item]
-                                (assoc item :text (.getTranslatedText t)))
+                                (-> item
+                                    (assoc :origin-text (:text item))
+                                    (assoc :text (.getTranslatedText t))))
                               translation
                               items)]
     (->> translated-items
-         (reduce (fn [scene {:keys [path text type]}]
+         (reduce (fn [scene {:keys [path text origin-text type]}]
                    (let [text-path (if (= type :object)
                                      :text
-                                     :phrase-text)]
-                     (assoc-in scene (concat path [text-path]) text)))
+                                     :phrase-text)
+                         origin-text-path :origin-text]
+                     (-> scene
+                         (assoc-in (concat path [text-path]) text)
+                         (assoc-in (concat path [origin-text-path]) origin-text))))
                  scene-data))))
 
 (defn translate-activity!
@@ -88,7 +94,7 @@
                                 ["Hello World" "My name is Ivan"]
                                 (into-array Translate$TranslateOption [(Translate$TranslateOption/sourceLanguage "en")
                                                                        (Translate$TranslateOption/targetLanguage "es")]))]
-    
+
     (map #(.getTranslatedText %) translation))
 
   (let [course-slug "english"

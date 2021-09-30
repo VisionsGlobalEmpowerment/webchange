@@ -1,14 +1,14 @@
 (ns webchange.editor-v2.activity-dialogs.form.views
   (:require
-   [re-frame.core :as re-frame]
-   [reagent.core :as r]
-   [webchange.editor-v2.activity-dialogs.form.state :as state]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views :refer [action-unit]]
-   [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
-   [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]))
+    [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.editor-v2.activity-dialogs.form.state :as state]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views :refer [action-unit]]
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
+    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]))
 
 (defn- dialog-form
-  [{:keys [nodes title] :as dialog-data}]
+  [{:keys [nodes title]}]
   (let [stage-key @(re-frame/subscribe [::state-stage/stage-key])]
     [:div.sheet
      [:h3 title]
@@ -32,10 +32,18 @@
 
 (defn activity-dialogs-form
   []
-  (r/with-let [_ (re-frame/dispatch [::state/init])
-               handle-close #(re-frame/dispatch [::translator-form/reset-state])]
-    (let [script-data @(re-frame/subscribe [::state/script-data])
-          ]
+  (r/with-let [handle-reset-selection (fn [event]
+                                        (when-not (-> (.-target event)
+                                                      (.closest ".action-unit")
+                                                      (some?))
+                                          (re-frame/dispatch [::state/reset-selected-action])))
+               handle-close (fn []
+                              (.removeEventListener js/document "click" handle-reset-selection)
+                              (re-frame/dispatch [::translator-form/reset-state]))
+
+               _ (do (.addEventListener js/document "click" handle-reset-selection)
+                     (re-frame/dispatch [::state/init]))]
+    (let [script-data @(re-frame/subscribe [::state/script-data])]
       [:div {:class-name "activity-script-form"}
        [:div.work-field
         [track-selector]

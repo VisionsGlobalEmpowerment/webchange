@@ -80,6 +80,7 @@
                {:keys [duration]} (get-empty-action action-data)
                {action-type :type
                 :keys       [id
+                             origin-text
                              phrase-text
                              phrase-placeholder
                              target
@@ -93,6 +94,7 @@
                    (= type :phrase)
                    (merge {:character   target
                            :text        phrase-text
+                           :origin-text origin-text
                            :placeholder phrase-placeholder})
 
                    (= type :text-animation)
