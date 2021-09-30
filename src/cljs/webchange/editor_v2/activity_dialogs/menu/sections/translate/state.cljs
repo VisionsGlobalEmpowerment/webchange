@@ -3,9 +3,18 @@
    [re-frame.core :as re-frame]
    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
    [webchange.interpreter.events :as interpreter.events]
+   [webchange.editor-v2.activity-dialogs.menu.sections.translate.iso-639-1 :as languages]
    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
    [webchange.state.core :as core]
    [webchange.state.warehouse :as warehouse]))
+
+(re-frame/reg-sub
+  ::lang-options
+  (fn []
+    (->> languages/data
+         (map (fn [{:keys [name code]}]
+                {:text  name
+                 :value code})))))
 
 (re-frame/reg-event-fx
   ::translate
