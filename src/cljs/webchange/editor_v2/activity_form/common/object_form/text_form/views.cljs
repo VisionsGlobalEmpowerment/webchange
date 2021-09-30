@@ -12,12 +12,18 @@
   [{:keys [id]}]
   (let [value @(re-frame/subscribe [::state/current-text id])
         handle-change (fn [value] (re-frame/dispatch [::state/set-current-text id value]))
-        with-footer? @(re-frame/subscribe [::state-voice-over/visible? id])]
-    [text-area {:value      value
-                :on-change  handle-change
-                :class-name (get-class-name {"text-value-control" true
-                                             "with-footer"        with-footer?})
-                :variant    "outlined"}]))
+        with-footer? @(re-frame/subscribe [::state-voice-over/visible? id])
+        origin-text @(re-frame/subscribe [::state/origin-text id])]
+    [:div
+     [text-area {:value      value
+                 :on-change  handle-change
+                 :class-name (get-class-name {"text-value-control" true
+                                              "with-footer"        with-footer?})
+                 :variant    "outlined"}]
+     (when (some? origin-text)
+       [:div.origin-text
+        [:span.label "Original text:"]
+        [:span.text origin-text]])]))
 
 (defn- font-family-component
   [{:keys [id]}]

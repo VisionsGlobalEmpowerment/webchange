@@ -8,9 +8,25 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [text-data (select-keys objects-data [:text :chunks :font-family :font-size :fill])]
-      {:dispatch [::state/init id {:data  text-data
-                                   :names objects-names}]})))
+    (let [text-data (select-keys objects-data [:text :chunks :font-family :font-size :fill])
+          origin-text (get objects-data :origin-text)]
+      {:dispatch-n [[::state/init id {:data  text-data
+                                      :names objects-names}]
+                    [::set-origin-text id origin-text]]})))
+
+;; Origin text
+
+(def origin-text-path [:origin-text])
+
+(re-frame/reg-sub
+  ::origin-text
+  (fn [db [_ id]]
+    (get-in db (state/path-to-db id origin-text-path))))
+
+(re-frame/reg-event-fx
+  ::set-origin-text
+  (fn [{:keys [db]} [_ id origin-text]]
+    {:db (assoc-in db (state/path-to-db id origin-text-path) origin-text)}))
 
 ;; Text
 

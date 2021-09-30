@@ -161,4 +161,26 @@ $units-margin: 6px;
     &.drop-parallel {
         border-left: solid 1px #333;
     }
+
+    .origin-text {
+        display: flex;
+        position: absolute;
+        left: 25px;
+        top: 100%;
+        border-radius: 3px;
+        background-color: #fefefe;
+        padding: 4px 8px;
+        color: #7e7e7e;
+        font-size: 13px;
+        box-shadow: 0px 0px 12px rgba(175, 175, 175, 0.5);
+
+        .label {
+            min-width: 85px;
+            display: inline-block;
+            text-align: right;
+            font-weight: 400;
+            font-size: 11px;
+            margin-right: 6px;
+        }
+    }
 }

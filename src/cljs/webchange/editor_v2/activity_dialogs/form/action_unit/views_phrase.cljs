@@ -34,6 +34,13 @@
                    :on-enter-press      handle-enter-press
                    :on-ctrl-enter-press handle-ctrl-enter-press}]))
 
+(defn- origin-text
+  [{:keys [origin-text selected?]}]
+  (when (and selected? (some? origin-text))
+    [:div.origin-text
+     [:span.label "Original text:"]
+     [:span origin-text]]))
+
 (defn phrase-unit
   [{:keys [source concept-name] :as props}]
   (let [concept? (= source :concept)]
@@ -42,4 +49,5 @@
                                                 "concept-unit" concept?})}
                   concept? (assoc :title (str "Concept «" concept-name "»")))
      [phrase-target-control props]
-     [phrase-text-control props]]))
+     [phrase-text-control props]
+     [origin-text props]]))

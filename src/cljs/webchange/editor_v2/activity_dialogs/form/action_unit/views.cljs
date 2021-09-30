@@ -1,17 +1,17 @@
 (ns webchange.editor-v2.activity-dialogs.form.action-unit.views
   (:require
-   [re-frame.core :as re-frame]
-   [reagent.core :as r]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-menu :refer [unit-menu]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-animation :refer [animation-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-effect :refer [effect-unit]]
-   [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-skip :refer [skip-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-phrase :refer [phrase-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-text-animation :refer [text-animation-unit]]
-   [webchange.editor-v2.activity-dialogs.form.state :as state]
-   [webchange.logger.index :as logger]
-   [webchange.ui-framework.components.utils :refer [get-class-name]]
-   [webchange.utils.drag-and-drop :as utils]))
+    [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-menu :refer [unit-menu]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-animation :refer [animation-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-effect :refer [effect-unit]]
+    [webchange.editor-v2.dialog.dialog-text-form.action-unit.views-skip :refer [skip-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-phrase :refer [phrase-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-text-animation :refer [text-animation-unit]]
+    [webchange.editor-v2.activity-dialogs.form.state :as state]
+    [webchange.logger.index :as logger]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.utils.drag-and-drop :as utils]))
 
 (defn- unknown-element
   [{:keys [type] :as props}]

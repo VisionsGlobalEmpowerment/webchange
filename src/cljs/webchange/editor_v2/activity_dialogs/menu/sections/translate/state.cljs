@@ -23,7 +23,7 @@
           scene-slug (core/current-scene-id db)]
       {:dispatch [::warehouse/translate-activity {:course-slug course-slug
                                                   :scene-slug  scene-slug
-                                                  :lang  lang}
+                                                  :lang        lang}
                   {:on-success [::translate-success nil]}]})))
 
 (re-frame/reg-event-fx
