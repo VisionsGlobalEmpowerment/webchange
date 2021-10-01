@@ -7,6 +7,8 @@
     [webchange.editor-v2.activity-form.generic.components.add-character.views :as add-character]
     [webchange.editor-v2.activity-form.generic.components.background-music.views :as background-music]
     [webchange.editor-v2.activity-form.generic.components.change-background.views-background :as background]
+    [webchange.editor-v2.activity-form.generic.components.info-action.state :as info-action-state]
+    [webchange.editor-v2.activity-form.generic.components.info-action.views :as info-action]
     [webchange.editor-v2.activity-form.generic.components.activity-preview.state :as activity-preview]
     [webchange.editor-v2.activity-form.generic.components.add-image.views :as add-image]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
@@ -27,7 +29,9 @@
    {:text     "Add image"
     :on-click add-image/open-add-image-window}
    {:text     "Add character"
-    :on-click add-character/open-add-character-window}])
+    :on-click add-character/open-add-character-window}
+   {:text     "Info"
+    :on-click info-action-state/open-info-window}])
 
 (defn actions-item
   [{:keys [text on-click]}]
@@ -63,6 +67,7 @@
       [background/change-background-window]
       [background-music/set-music-window]
       [add-image/add-image-window]
+      [info-action/info-window]
       (when-not show-edit-menu?
         [:div
          (for [{:keys [text on-click] :as props} combined-actions]

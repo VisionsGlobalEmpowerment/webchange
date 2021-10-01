@@ -22,7 +22,8 @@
   (let [styles (get-styles)]
     [layout {:breadcrumbs (root-breadcrumbs "Course")}
      [:div {:style (:content-wrapper styles)}
-      [course-info {:title "Step 2: Choose Your Topic"}]
+      [course-info {:title     "Step 2: Choose Your Topic"
+                    :iconFlag? true}]
       [ui/grid {:container true
                 :justify   "space-between"
                 :spacing   24
