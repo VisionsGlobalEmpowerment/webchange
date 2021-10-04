@@ -79,7 +79,7 @@
       (when-not (nil? ref) (ref wrapped-animation))
 
       (-> animation
-          (.update 0))
+          (.update (rand)))
 
       (apply-filters animation-container filters)
 

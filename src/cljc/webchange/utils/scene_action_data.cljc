@@ -37,6 +37,8 @@
 
 (def animation-tracks
   {:main    0
+   :idle    5
+   :eyes    4
    :mouth   3
    :hands   2
    :emotion 1

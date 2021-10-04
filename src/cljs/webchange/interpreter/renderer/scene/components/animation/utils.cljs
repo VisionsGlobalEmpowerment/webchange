@@ -3,7 +3,8 @@
     [webchange.interpreter.pixi :refer [RegionAttachment Skin Spine TextureAtlasRegion]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.logger.index :as logger]
-    [webchange.resources.manager :as resources]))
+    [webchange.resources.manager :as resources]
+    [webchange.utils.scene-action-data :refer [animation-tracks]]))
 
 (def default-region-params
   {:x               0
@@ -161,11 +162,12 @@
   ([spine-object animation-name params]
    (when-not (has-animation? spine-object animation-name)
      (-> (str "Can not add animation <" animation-name ">: Animation does not exist") js/Error. throw))
-   (let [{:keys [track-index loop? delay]} (merge {:track-index 0
-                                                   :delay       0
-                                                   :loop?       true}
-                                                  params)]
-     (when (> track-index 0)
+   (let [{:keys [track-index loop? delay force-set?]} (merge {:track-index 0
+                                                              :delay       0
+                                                              :loop?       true
+                                                              :force-set?  true}
+                                                             params)]
+     (when (and (> track-index 0) force-set?)
        (set-empty-animation spine-object {:track-index track-index}))
      (-> (.-state spine-object)
          (.addAnimation track-index animation-name loop? delay)))))
@@ -206,6 +208,75 @@
   (doto (.. spine-object -state -data)
     (set! -defaultMix 0.25)))
 
+(defn- enliven?
+  [animation-resource]
+  (-> (.-name animation-resource)
+      (= "child")))
+
+(defn- freq->rand
+  [frequency-interval]
+  (-> (- (last frequency-interval) (first frequency-interval))
+      (* (rand))
+      (+ (first frequency-interval))))
+
+(defn- apply-idle
+  [spine-object]
+  (when (has-animation? spine-object "idle")
+    (let [speed-interval [0.7 1.1]
+          track (set-animation spine-object "idle" {:track-index (:idle animation-tracks)
+                                                    :loop?       true})]
+      (set! (.-timeScale track) (freq->rand speed-interval))))
+  spine-object)
+
+(defn- make-blink
+  [track frequency]
+  (set! (.-trackTime track) 0)
+  (js/setTimeout #(make-blink track frequency) (freq->rand frequency)))
+
+(defn- apply-blink
+  [spine-object]
+  (when (has-animation? spine-object "blink")
+    (let [frequency (->> [15 20]                            ;; times per minute
+                         (map #(/ 60000 %))
+                         (sort))]
+      (js/setTimeout #(-> (set-animation spine-object "blink" {:track-index (:eyes animation-tracks)
+                                                               :loop?       false})
+                          (make-blink frequency))
+                     (freq->rand frequency))))
+  spine-object)
+
+(defn- make-boredom
+  [spine-object animations frequency]
+  (let [animation (->> (count animations)
+                       (rand-int)
+                       (nth animations))
+        params {:track-index (:idle animation-tracks)
+                :force-set?  false}]
+    (add-animation spine-object animation (assoc params :loop? false))
+    (add-animation spine-object "idle" (assoc params :loop? true))
+    (js/setTimeout #(make-boredom spine-object animations frequency) (freq->rand frequency))))
+
+(defn- apply-boredom
+  [spine-object]
+  (let [animations (->> ["track-boredom"
+                         "track-dance"
+                         "track-hi"
+                         "track-shrug"]
+                        (filter #(has-animation? spine-object %)))
+        frequency (->> [1 2]                                ;; times per minute
+                       (map #(/ 60000 %))
+                       (sort))]
+    (js/setTimeout #(make-boredom spine-object animations frequency)
+                   (freq->rand frequency)))
+  spine-object)
+
+(defn- make-animation-alive
+  [spine-object]
+  (-> spine-object
+      (apply-idle)
+      (apply-blink)
+      (apply-boredom)))
+
 (defn create-spine-animation
   [animation-resource {:keys [animation-start? speed offset position skin-name skin-names animation-name scale loop]}]
   (let [spine-data (.-spineData animation-resource)
@@ -213,13 +284,15 @@
                      :y (* (- (:y position) (:y offset)) (:y scale))}]
     (doto (Spine. spine-data)
       (set-or-combine-skin skin-names skin-name)
-      (set-animation animation-name)
       (set-position coordinates)
       (set-scale scale)
       (set-animation-speed speed)
       (set-animation-mix)
       (set-auto-update animation-start?)
-      (set-track-loop loop))))
+      (cond-> (enliven? animation-resource) (make-animation-alive)
+              (not (enliven? animation-resource)) (doto
+                                                    (set-animation animation-name)
+                                                    (set-track-loop loop))))))
 
 (defn reset-skeleton
   [container state]
