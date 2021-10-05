@@ -1,5 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.index
   (:require
+    [webchange.interpreter.renderer.scene.components.anchor.component :as anchor]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as animated-svg-path]
     [webchange.interpreter.renderer.scene.components.animation.component :as animation]
     [webchange.interpreter.renderer.scene.components.background.component :as background]
@@ -24,7 +25,9 @@
     [webchange.interpreter.renderer.scene.components.painting-toolset.component :as painting-toolset]
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.component :as text-tracing-pattern]))
 
-(def components (apply hash-map [animated-svg-path/component-type {:constructor   animated-svg-path/create
+(def components (apply hash-map [anchor/component-type {:constructor   anchor/create
+                                                        :default-props anchor/default-props}
+                                 animated-svg-path/component-type {:constructor   animated-svg-path/create
                                                                    :default-props animated-svg-path/default-props}
                                  animation/component-type {:constructor   animation/create
                                                            :default-props animation/default-props}

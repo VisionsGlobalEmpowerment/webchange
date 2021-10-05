@@ -32,7 +32,7 @@
   (if (app-exists?)
     (get-app)
     (let [{:keys [x y width height scale-x scale-y]} viewport]
-      (doto (Application. (clj->js (cond-> {                ;:antialias  true
+      (doto (Application. (clj->js (cond-> {;:antialias  true
                                             :autoDensity true
                                             :width       width
                                             :height      height
@@ -76,7 +76,8 @@
                          (-> (create-component {:type        "group"
                                                 :object-name :scene
                                                 :parent      (.-stage app)
-                                                :children    (apply-mode objects mode)})
+                                                :children    (apply-mode objects mode)
+                                                :mode        mode})
                              (init-mode-helpers! mode))
 
                          (-> (get-renderer)

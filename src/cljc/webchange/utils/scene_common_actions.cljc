@@ -171,3 +171,9 @@
         (remove-from-available-actions question-name)
         (remove-from-dialogs question-name)
         (remove-from-tracks question-name))))
+
+(defn remove-anchor
+  [scene-data {anchor-name :name}]
+  (-> scene-data
+      (remove-from-objects anchor-name)
+      (remove-from-scene-objects anchor-name)))

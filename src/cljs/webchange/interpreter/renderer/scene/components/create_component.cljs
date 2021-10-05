@@ -69,7 +69,9 @@
                               "flipbook" (->> (:pages props) (map first))
                               (:children props))
                             (map (fn [child]
-                                   (create-component (assoc child :parent group-instance))))
+                                   (create-component (-> child
+                                                         (assoc :parent group-instance)
+                                                         (assoc :mode (:mode props))))))
                             (doall)))
                      [])]
       (logger/trace "prepared-props" prepared-props)

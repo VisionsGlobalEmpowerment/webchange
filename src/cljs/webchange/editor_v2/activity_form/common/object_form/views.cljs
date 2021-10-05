@@ -1,25 +1,24 @@
 (ns webchange.editor-v2.activity-form.common.object-form.views
   (:require
-   [clojure.string :as str]
-   [re-frame.core :as re-frame]
-   [reagent.core :as r]
-   [webchange.editor-v2.activity-form.common.object-form.state :as state]
-   [webchange.editor-v2.activity-form.common.object-form.animation-form.views :as animation-form]
-   [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
-   [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
-   [webchange.logger.index :as logger]
-   [webchange.ui-framework.components.index :refer [button with-confirmation]]
-   [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [clojure.string :as str]
+    [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.editor-v2.activity-form.common.object-form.state :as state]
+    [webchange.editor-v2.activity-form.common.object-form.animation-form.views :as animation-form]
+    [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
+    [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
+    [webchange.ui-framework.components.index :refer [button with-confirmation]]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
 
-   [webchange.subs :as subs]
-   [webchange.utils.scene-data :as utils]))
+    [webchange.subs :as subs]
+    [webchange.utils.scene-data :as utils]))
 
 (def form-components
   {"animation" animation-form/form
    "text"      text-form/form
    "image"     image-form/form})
 
-(defn- available-object-type?
+(defn available-object-type?
   [object-type]
   (contains? form-components object-type))
 
@@ -27,7 +26,7 @@
   [{:keys [class-name objects-data objects-names object-type on-destroy on-save-click ref show-save-button? title]
     :or   {on-save-click     #()
            show-save-button? true}}]
-  (if (available-object-type? object-type)
+  (when (available-object-type? object-type)
     (r/with-let [id (->> (random-uuid) (str) (take 8) (str/join ""))
                  _ (when (fn? ref) (ref id))]
       (let [component (get form-components object-type)
@@ -50,12 +49,7 @@
                      :on-click  #(on-save-click id)}
              "Apply"]])])
       (finally
-        (on-destroy id)))
-    (do (logger/warn "Form not defined")
-        (logger/warn "type" object-type)
-        (logger/warn "names" objects-names)
-        (logger/warn "data" objects-data)
-        nil)))
+        (on-destroy id)))))
 
 (defn- group-form
   [{:keys [component-key objects-data on-save-click] :as props

@@ -155,6 +155,24 @@
         (assoc-in [:actions (keyword hide-action-name)] hide-action)
         (update-in [:metadata :available-actions] concat available-actions))))
 
+(defn- add-anchor
+  [scene-data]
+  (let [anchor-idx (-> scene-data
+                       (get-in [:metadata :added-anchor-idx])
+                       (or 0)
+                       inc)
+        anchor-name (str "anchor-" anchor-idx)
+        anchor-data {:type      "anchor"
+                     :x         500
+                     :y         500
+                     :editable? {:select        true
+                                 :drag          true
+                                 :show-in-tree? true}}]
+    (-> scene-data
+        (assoc-in [:objects (keyword anchor-name)] anchor-data)
+        (add-object-to-last-layer anchor-name)
+        (assoc-in [:metadata :added-anchor-idx] anchor-idx))))
+
 (defn update-activity
   [scene-data action data]
   (case (keyword action)
@@ -164,4 +182,6 @@
     :remove-image (common-actions-utils/remove-image scene-data data)
     :add-character (add-character scene-data data)
     :remove-character (common-actions-utils/remove-character scene-data data)
-    :remove-question (common-actions-utils/remove-question scene-data data)))
+    :remove-question (common-actions-utils/remove-question scene-data data)
+    :add-anchor (add-anchor scene-data)
+    :remove-anchor (common-actions-utils/remove-anchor scene-data data)))

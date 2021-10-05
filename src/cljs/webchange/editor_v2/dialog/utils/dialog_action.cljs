@@ -26,10 +26,10 @@
                                     :phrase-text "Text animation"
                                     :audio       nil}]})
 
-(def skip-effects {:start-skip-region {:text "Start skip"
+(def skip-effects {:start-skip-region {:text  "Start skip"
                                        :value "start-skip-region"}
-                   :end-skip-region {:text "End skip"
-                                     :value "end-skip-region"}})
+                   :end-skip-region   {:text  "End skip"
+                                       :value "end-skip-region"}})
 (defn get-empty-action
   [action]
   (get-in action action-utils/empty-action-path))
@@ -97,3 +97,8 @@
   [action-data]
   (-> (get-inner-action-type action-data)
       (= "action")))
+
+(defn get-movement-action-data
+  [props]
+  (-> (action-utils/create-character-movement-action props)
+      (get-dialog-node)))

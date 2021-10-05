@@ -39,6 +39,7 @@
   [actions {:keys [available-effects]}]
   {:post [(every? (fn [{:keys [type]}]
                     (some #{type} [:character-animation
+                                   :character-movement
                                    :effect
                                    :phrase
                                    :text-animation
@@ -61,6 +62,9 @@
                                (some #{inner-action-type} ["add-animation" "remove-animation"])
                                :character-animation
 
+                               (some #{inner-action-type} ["char-movement"])
+                               :character-movement
+
                                (some? inner-action-phrase-text)
                                :phrase
 
@@ -79,11 +83,13 @@
          (let [concept-name (:name concept-data)
                {:keys [duration]} (get-empty-action action-data)
                {action-type :type
-                :keys       [id
+                :keys       [action
+                             id
                              phrase-text
                              phrase-placeholder
                              target
-                             track]} (get-inner-action action-data)]
+                             track
+                             transition-id]} (get-inner-action action-data)]
            (cond-> {:type          type
                     :source        source
                     :delay         duration
@@ -105,6 +111,11 @@
                    (merge {:animation-object target
                            :animation-name   id
                            :animation-track  track})
+
+                   (= type :character-movement)
+                   (merge {:action    action
+                           :character transition-id
+                           :target    target})
 
                    (= type :effect)
                    (merge {:effect      id

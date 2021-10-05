@@ -47,6 +47,7 @@
     [webchange.ui-framework.components.icon.icon-menu-vertical :as menu-vertical]
     [webchange.ui-framework.components.icon.icon-mic :as mic]
     [webchange.ui-framework.components.icon.icon-mismatch :as mismatch]
+    [webchange.ui-framework.components.icon.icon-movement :as movement]
     [webchange.ui-framework.components.icon.icon-music :as music]
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
@@ -117,6 +118,7 @@
    "menu-vertical"      menu-vertical/data
    "mic"                mic/data
    "mismatch"           mismatch/data
+   "movement"           movement/data
    "music"              music/data
    "music-off"          music-off/data
    "play"               play/data

@@ -65,6 +65,27 @@ $units-margin: 6px;
         }
     }
 
+    .movement-unit {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        user-select: none;
+
+        font-size: 12px;
+        font-family: monospace;
+        font-style: italic;
+        color: #a6a6a6;
+
+        .effect-icon {
+            padding: 4px;
+
+            svg {
+                fill: #a6a6a6;
+            }
+        }
+    }
+
     .text-animation-unit {
         display: flex;
     }

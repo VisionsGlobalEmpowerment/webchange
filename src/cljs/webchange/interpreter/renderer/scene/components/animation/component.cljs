@@ -2,6 +2,7 @@
   (:require
     [webchange.interpreter.pixi :refer [Container Spine]]
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.animation.utils.idle :as utils-idle]
     [webchange.interpreter.renderer.scene.components.animation.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :refer [set-handler]]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
@@ -67,9 +68,13 @@
           animation-container (create-animation-container props)
           state (atom {:props     props
                        :animation animation
-                       :container animation-container})
+                       :container animation-container
+                       :state     {}})
 
           wrapped-animation (wrap type (:object-name props) animation-container state)]
+
+      (when (utils-idle/support-idle? resource)
+        (utils-idle/enable-idle-animation state))
 
       (.addChild animation-container animation)
       (.addChild parent animation-container)

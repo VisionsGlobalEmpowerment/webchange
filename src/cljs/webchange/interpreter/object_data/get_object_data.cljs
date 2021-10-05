@@ -29,6 +29,8 @@
                     (with-navigation-params scene-id name))
         type (-> object :type keyword)
         object-data (case type
+                      :anchor (-> (merge object
+                                         {:object-name (keyword name)}))
                       :background (-> (merge object
                                              {:object-name (keyword name)}
                                              (with-filter-params object))

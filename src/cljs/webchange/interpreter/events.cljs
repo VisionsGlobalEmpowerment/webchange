@@ -19,6 +19,7 @@
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.events-objects-emitter]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.components.animation.utils.movements :as movements]
     [webchange.interpreter.renderer.scene.components.counter.state]
     [webchange.interpreter.renderer.scene.components.timer.state]
     [webchange.interpreter.renderer.scene.components.flipbook.state]
@@ -81,6 +82,7 @@
 (ce/reg-simple-executor :show-question ::execute-show-question)
 (ce/reg-simple-executor :hide-question ::execute-hide-question)
 (ce/reg-simple-executor :upload-screenshot ::execute-upload-screenshot)
+(ce/reg-simple-executor :char-movement ::execute-char-movement)
 
 
 (re-frame/reg-event-fx
@@ -1929,6 +1931,17 @@
   (fn [_]
     (.back (.-history js/window))))
 
+(re-frame/reg-event-fx
+  ::execute-char-movement
+  (fn [{:keys [db]} [_ {:keys [action target transition-id] :as action-data}]]
+    (let [character (scene/get-scene-object db (keyword transition-id))
+          target (scene/get-scene-object db (keyword target))
+          handle-action-finish #(ce/dispatch-success-fn action-data)]
+      (case action
+        "go-to" (movements/walk character target handle-action-finish)
+        "pick-up" (movements/pick-up character target handle-action-finish)
+        "give" (movements/give character target handle-action-finish))
+      {})))
 
 (comment
   (let [db @re-frame.db/app-db
