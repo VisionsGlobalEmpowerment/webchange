@@ -41,7 +41,7 @@
                               (.removeEventListener js/document "click" handle-reset-selection)
                               (re-frame/dispatch [::translator-form/reset-state]))
 
-               _ (do (.addEventListener js/document "click" handle-reset-selection)
+               _ (do ;(.addEventListener js/document "click" handle-reset-selection)
                      (re-frame/dispatch [::state/init]))]
     (let [script-data @(re-frame/subscribe [::state/script-data])]
       [:div {:class-name "activity-script-form"}

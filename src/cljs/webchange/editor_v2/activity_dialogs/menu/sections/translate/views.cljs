@@ -22,7 +22,8 @@
          [button {:on-click   handle-translate
                   :variant    "outlined"
                   :class-name "translate-button"}
-          "Translate"]
+          "Translate"]]
+        [:div
          [button {:on-click handle-generate-voice
                   :variant "outlined"
                   :class-name "translate-button"}

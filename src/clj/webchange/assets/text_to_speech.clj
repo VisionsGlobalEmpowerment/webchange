@@ -33,7 +33,8 @@
 
 (defn- timepoints->transcript!
   [timepoints words audio-path]
-  (let [result (map-indexed (fn [i t] {:word (get words i)
+  (let [timepoints (vec timepoints)
+        result (map-indexed (fn [i t] {:word (get words i)
                                        :start (.getTimeSeconds t)
                                        :end (or
                                               (some-> (get timepoints (inc i)) (.getTimeSeconds))
@@ -50,7 +51,7 @@
                   out))))
 
 (def lang->code-map {"en" "en-US"
-                     "cmn" "cmn-CN"})
+                     "zh" "cmn-CN"})
 
 (defn- generate-voice!
   [{:keys [text lang]} audio-name]
@@ -86,7 +87,6 @@
                         (.build))
             response (.synthesizeSpeech c request)
             timepoints (-> response .getTimepointsList)]
-        (log/debug "ssml count" (count ssml))
         (.writeTo (-> response .getAudioContent) out)
         (timepoints->transcript! timepoints words path)
         (core/store-asset-hash! path)))
@@ -101,7 +101,6 @@
         text-length (count text)
         mark-length (count "<mark name\"i-999\"/>")
         speak-length (count "<speak></speak>")]
-    (log/debug "ssmls count - " (+ speak-length text-length (* words-count mark-length)))
     (+ speak-length text-length (* words-count mark-length))))
 
 (defn- lines->texts

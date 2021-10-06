@@ -37,7 +37,7 @@
         numbers-to-search (reduce (fn [result number] (str result "|" number)) "" numbers)
         text (-> text
                  (str/replace #"[\s]" " ")
-                 (str/replace #"[^A-Za-z 0-9]" "")
+                 (str/replace #"[_~.<>{}()!№%:,;#$%^&*+='`]" "")
                  (str/replace #" +" " ")
                  (str/lower-case)
                  (str/trim))]
