@@ -3,7 +3,8 @@
     [clojure.java.io :as io]
     [clojure.tools.logging :as log]
     [config.core :refer [env]]
-    [webchange.course.core :as course])
+    [webchange.course.core :as course]
+    [webchange.course.walk :as course-walk])
   (:import
     (com.google.cloud.translate Translate$TranslateOption
                                 TranslateOptions)
@@ -22,43 +23,11 @@
                       (.getService))]
     (reset! translate-service translate)))
 
-(defn- text-lines
-  [{:keys [objects]}]
-  (let [lines (->> objects
-                   (filter #(-> % second :type (= "text")))
-                   (map (fn [[k v]] {:type :object
-                                     :path [:objects k]
-                                     :text (:text v)})))]
-    lines))
-
-(defn- walk-dialog
-  [path {:keys [type data] :as action}]
-  (case type
-    "parallel" (->> data
-                    (map-indexed (fn [i d] (walk-dialog (concat path [:data i]) d)))
-                    flatten)
-    "sequence-data" (->> data
-                         (map-indexed (fn [i d] (walk-dialog (concat path [:data i]) d)))
-                         flatten)
-    "animation-sequence" [{:type :action
-                           :path path
-                           :text (:phrase-text action)}]
-    nil))
-
-
-(defn- dialog-lines
-  [{:keys [actions]}]
-  (let [dialogs (->> actions
-                     (filter #(-> % second :editor-type (= "dialog"))))]
-    (->> dialogs
-         (mapcat (fn [[key action]] (walk-dialog [:actions key] action)))
-         (remove nil?))))
-
 (defn- translate-scene
   [scene-data lang]
   (let [source-language "en"
         target-language lang
-        items (concat (text-lines scene-data) (dialog-lines scene-data))
+        items (concat (course-walk/text-lines scene-data) (course-walk/dialog-lines scene-data))
         translation (.translate @translate-service
                                 (mapv :text items)
                                 (into-array Translate$TranslateOption [(Translate$TranslateOption/sourceLanguage source-language)

@@ -56,6 +56,7 @@
                                                                                                   :primaryFontColor   font-color
                                                                                                   :secondaryFontColor font-color}))]}))]
     (disable-default-scroll-handler ws-div)
+    (js/console.log "waves" key)
     (loader/get-audio-blob key #(.loadBlob wavesurfer %))
     (.zoom wavesurfer zoom)
     wavesurfer))

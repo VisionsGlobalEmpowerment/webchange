@@ -1,20 +1,21 @@
 (ns webchange.assets.handler
   (:require
-   [clojure.edn :as edn]
-   [clojure.java.io :as io]
-   [compojure.core :refer [GET POST defroutes]]
-   [config.core :refer [env]]
-   [ring.middleware.multipart-params :refer [wrap-multipart-params]]
-   [ring.middleware.params :refer [wrap-params]]
-   [ring.util.response :refer [response]]
-   [webchange.assets.core :as core]
-   [webchange.common.audio-parser.converter :refer [convert-to-mp3]]
-   [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
-   [webchange.common.files :as f]
-   [webchange.common.handler :refer [handle]]
-   [webchange.common.hmac-sha256 :as sign]
-   [webchange.common.image-manipulation :as im]
-   [webchange.common.voice-recognition.voice-recognition :refer [get-subtitles try-voice-recognition-audio]]))
+    [clojure.edn :as edn]
+    [clojure.java.io :as io]
+    [compojure.core :refer [GET POST defroutes]]
+    [config.core :refer [env]]
+    [ring.middleware.multipart-params :refer [wrap-multipart-params]]
+    [ring.middleware.params :refer [wrap-params]]
+    [ring.util.response :refer [response]]
+    [webchange.assets.core :as core]
+    [webchange.common.audio-parser.converter :refer [convert-to-mp3]]
+    [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
+    [webchange.common.files :as f]
+    [webchange.common.handler :refer [handle]]
+    [webchange.common.hmac-sha256 :as sign]
+    [webchange.common.image-manipulation :as im]
+    [webchange.common.voice-recognition.voice-recognition :refer [get-subtitles try-voice-recognition-audio]]
+    [webchange.assets.text-to-speech :as text-to-speech]))
 
 (def types
   {"image" ["jpg" "jpeg" "png"]
@@ -113,15 +114,19 @@
     (core/store-asset-hash! full-path)))
 
 (defroutes asset-routes
-           (POST "/api/assets/" request
-             (wrap-multipart-params
-               (fn [request]
-                (-> request :multipart-params upload-asset response))))
-           (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params)))
+  (POST "/api/assets/" request
+        (wrap-multipart-params
+          (fn [request]
+            (-> request :multipart-params upload-asset response))))
+  (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params))
+  (POST "/api/assets/:course-slug/:scene-slug/text-to-speech" [course-slug scene-slug :as request]
+        (fn [request]
+          (-> (text-to-speech/generate-voice-for course-slug scene-slug (get request :body) (rand-str 16))
+              response))))
 
 (defroutes asset-maintainer-routes
-           (POST "/api/assets/by-path/" request
-             (-> (fn [request]
-                   (-> request :multipart-params upload-asset-by-path response))
-                 (wrap-multipart-params)
-                 (sign/wrap-api-with-signature true))))
+  (POST "/api/assets/by-path/" request
+        (-> (fn [request]
+              (-> request :multipart-params upload-asset-by-path response))
+            (wrap-multipart-params)
+            (sign/wrap-api-with-signature true))))

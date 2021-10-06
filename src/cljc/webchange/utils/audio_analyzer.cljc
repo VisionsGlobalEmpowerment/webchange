@@ -1,6 +1,7 @@
-(ns webchange.editor-v2.audio-analyzer.utils
+(ns webchange.utils.audio-analyzer
   (:require
     [clojure.edn :as edn]
+    [clojure.string :as str]
     [webchange.utils.forty-two :as forty-two]))
 
 (defn- next-row
@@ -30,14 +31,22 @@
 
 (defn prepare-text
   [text]
-  (let [numbers (sort-by #(- 0 (count %)) (remove empty? (clojure.string/split text #"[^\d]+")))
+  (let [text (or text "")
+        numbers (sort-by #(- 0 (count %)) (remove empty? (str/split text #"[^\d]+")))
         text-numbers (into {} (map (fn [number] [number (forty-two/words (edn/read-string number))]) numbers))
-        numbers-to-search (reduce (fn [result number] (str result "|" number)) numbers)
-        text (cond-> (or text "")
-               true (clojure.string/replace #"[\s]" " ")
-               true (clojure.string/replace #"[^A-Za-z 0-9]" "")
-               true (clojure.string/replace #" +" " ")
-               true (clojure.string/lower-case)
-               true (clojure.string/trim)
-               (not (empty? text-numbers)) (clojure.string/replace (re-pattern numbers-to-search) text-numbers))]
-    text))
+        numbers-to-search (reduce (fn [result number] (str result "|" number)) "" numbers)
+        text (-> text
+                 (str/replace #"[\s]" " ")
+                 (str/replace #"[^A-Za-z 0-9]" "")
+                 (str/replace #" +" " ")
+                 (str/lower-case)
+                 (str/trim))]
+    (if (seq text-numbers)
+      (str/replace text (re-pattern numbers-to-search) text-numbers)
+      text)))
+
+(comment
+  (prepare-text "")
+  (prepare-text nil)
+  (prepare-text "Hello, World!")
+  )

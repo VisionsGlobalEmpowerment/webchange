@@ -36,3 +36,22 @@
                           [::translator-form.scene/init-state]
                           [::state-stage/reset-stage]]
                    (some? on-success) (conj (conj on-success response)))}))
+
+(re-frame/reg-event-fx
+  ::generate-voice
+  (fn [{:keys [db]} [_ lang]]
+    (let [course-slug (core/current-course-id db)
+          scene-slug (core/current-scene-id db)
+          asset-data {:date (.now js/Date)
+                      :lang lang}]
+      {:dispatch [::warehouse/text-to-speech {:course-slug course-slug
+                                              :scene-slug  scene-slug
+                                              :lang        lang}
+                  {:on-success [::generate-voice-success asset-data]}]})))
+
+(re-frame/reg-event-fx
+  ::generate-voice-success
+  (fn [{:keys [_]} [_ asset-data response]]
+    (let [events (map (fn [asset] [::translator-form.scene/add-asset (merge asset-data asset)]) response)]
+      (js/console.log "voice success" response)
+      {:dispatch-n events})))

@@ -1,12 +1,12 @@
 (ns webchange.translate
   (:require
-   [clojure.java.io :as io]
-   [config.core :refer [env]]
-   [webchange.course.core :as course])
+    [clojure.java.io :as io]
+    [config.core :refer [env]]
+    [webchange.course.core :as course])
   (:import
-   (com.google.cloud.translate Translate$TranslateOption
-                               TranslateOptions)
-   (com.google.auth.oauth2 GoogleCredentials)))
+    (com.google.cloud.translate Translate$TranslateOption
+                                TranslateOptions)
+    (com.google.auth.oauth2 GoogleCredentials)))
 
 (def translate-service (atom nil))
 

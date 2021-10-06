@@ -9,7 +9,8 @@
 (defn form
   []
   (r/with-let [lang (r/atom "es")
-               handle-translate #(re-frame/dispatch [::state/translate @lang])]
+               handle-translate #(re-frame/dispatch [::state/translate @lang])
+               handle-generate-voice #(re-frame/dispatch [::state/generate-voice @lang])]
     (let [options @(re-frame/subscribe [::state/lang-options])]
       [:div.translate-form
        [section-block {:title "Translate"}
@@ -21,4 +22,8 @@
          [button {:on-click   handle-translate
                   :variant    "outlined"
                   :class-name "translate-button"}
-          "Translate"]]]])))
+          "Translate"]
+         [button {:on-click handle-generate-voice
+                  :variant "outlined"
+                  :class-name "translate-button"}
+          "Generate voice"]]]])))

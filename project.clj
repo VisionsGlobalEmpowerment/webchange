@@ -50,7 +50,8 @@
                  [org.clojure/data.csv "1.0.0"]
                  [me.raynes/fs "1.4.6"]
                  [io.djy/ezzmq "0.8.2"]
-                 [com.google.cloud/google-cloud-translate "2.1.0"]]
+                 [com.google.cloud/google-cloud-translate "2.1.0"]
+                 [com.google.cloud/google-cloud-texttospeech "2.0.5"]]
 
                                         ;:node-dependencies [[source-map-support "0.2.8"]]
 
@@ -58,7 +59,8 @@
             [lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]
             [lein-sass "0.5.0"]
-            [migratus-lein "0.7.0"]]
+            [migratus-lein "0.7.0"]
+            [lein-cljfmt "0.8.0"]]
 
   :prep-tasks ["javac" "compile"]
   :jvm-opts ["-Xmx2g" "-Djava.library.path=native/vosk/"]
@@ -95,6 +97,9 @@
   :aliases {"dev"       ["cooper"]
             "resources" ["run" "-m" "webchange.resources.generate-resources-list"]}
 
+  :cljfmt {:indents {re-frame/reg-event-fx [[:inner 2]]
+                     re-frame/reg-sub [[:inner 2]]
+                     ns [[:block 1] [:inner 1]]}}
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]

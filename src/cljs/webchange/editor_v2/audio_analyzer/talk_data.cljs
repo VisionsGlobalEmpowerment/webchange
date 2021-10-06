@@ -1,9 +1,9 @@
 (ns webchange.editor-v2.audio-analyzer.talk-data
   (:require
-   [webchange.editor-v2.audio-analyzer.config :refer [confidence-chunk-threshold]]
-   [webchange.editor-v2.audio-analyzer.utils :refer [levenshtein-distance prepare-text]]
-   [clojure.string :as str]
-   [clojure.set :as set]))
+    [webchange.editor-v2.audio-analyzer.config :refer [confidence-chunk-threshold]]
+    [webchange.utils.audio-analyzer :refer [levenshtein-distance prepare-text]]
+    [clojure.string :as str]
+    [clojure.set :as set]))
 
 (defn get-chunks
   [orig-text rec-text]

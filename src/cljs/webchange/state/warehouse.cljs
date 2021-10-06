@@ -225,6 +225,14 @@
                      :method :put
                      :uri    (str "/api/courses/" course-slug "/translate-activity/" scene-slug)
                      :params {:language lang}} handlers)))
+
+(re-frame/reg-event-fx
+  ::text-to-speech
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug lang]} handlers]]
+    (create-request {:key    :text-to-speech
+                     :method :post
+                     :uri    (str "/api/assets/" course-slug "/" scene-slug "/text-to-speech")
+                     :params {:lang lang}} handlers)))
 ;; Lesson sets
 
 (re-frame/reg-event-fx
