@@ -2,22 +2,27 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.common.image-selector.form.state :as state]
-    [webchange.ui-framework.components.index :refer [checkbox label select]]))
+    [webchange.common.image-selector.form.state :as state]))
+
+(defn- tag-chip
+  [{:keys [text value selected? handle-change]}]
+  [:div {:class-name (if selected? "chip-active" "chip")
+         :on-click   #(handle-change {:value    value
+                                      :checked? (not selected?)})}
+   text])
 
 (defn- tag-selector
   [{:keys [id]}]
-  (let [options @(re-frame/subscribe [::state/tags-options id])
+  (let [options (vec @(re-frame/subscribe [::state/tags-options id]))
         handle-change (fn [{:keys [value checked?]}]
                         (re-frame/dispatch [::state/update-current-tags id value checked?]))]
-    (into [:div.tag-selector]
-          (->> options
-               (reduce (fn [result {:keys [text value selected?]}]
-                         (concat result [[checkbox {:value     value
-                                                    :on-change handle-change
-                                                    :checked?  selected?}]
-                                         [label {:class-name "tag-label"} text]]))
-                       [])))))
+    [:div.tag-selector
+     (for [{:keys [text value selected?] :as props} options]
+       ^{:key value}
+       [tag-chip {:text          text
+                   :value         value
+                   :selected?     selected?
+                   :handle-change handle-change}])]))
 
 (defn- assets-list-item
   [{:keys [on-click path thumbnail-path]}]
