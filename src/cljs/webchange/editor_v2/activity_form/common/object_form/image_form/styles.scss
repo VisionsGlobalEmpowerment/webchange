@@ -5,7 +5,7 @@
     gap: 32px;
 
     .preview {
-        $preview-size: 180px;
+        $preview-size: 100px;
 
         background-color: white;
         background-image:
@@ -29,6 +29,8 @@
     }
 
     .controls {
+        width: 100%;
+
         .control-block {
             margin-bottom: 16px;
 
