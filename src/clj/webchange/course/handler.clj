@@ -1,21 +1,22 @@
 (ns webchange.course.handler
   (:require
-   [buddy.auth :refer [throw-unauthorized]]
-   [clojure.string :as str]
-   [clojure.tools.logging :as log]
-   [compojure.api.sweet :refer [GET POST PUT api context defroutes swagger-routes]]
-   [ring.util.response :refer [redirect resource-response response]]
-   [schema.core :as s]
-   [webchange.assets.core :as assets]
-   [webchange.auth.core :as auth]
-   [webchange.auth.roles :refer [is-admin?]]
-   [webchange.auth.website :as website]
-   [webchange.common.handler :refer [current-user handle]]
-   [webchange.common.hmac-sha256 :as sign]
-   [webchange.course.core :as core]
-   [webchange.course.skills :as skills]
-   [webchange.dataset.library :as datasets-library]
-   [webchange.templates.core :as templates]))
+    [buddy.auth :refer [throw-unauthorized]]
+    [clojure.string :as str]
+    [clojure.tools.logging :as log]
+    [compojure.api.sweet :refer [GET POST PUT api context defroutes swagger-routes]]
+    [ring.util.response :refer [redirect resource-response response]]
+    [ring.util.codec :refer [url-encode]] 
+    [schema.core :as s]
+    [webchange.assets.core :as assets]
+    [webchange.auth.core :as auth]
+    [webchange.auth.roles :refer [is-admin?]]
+    [webchange.auth.website :as website]
+    [webchange.common.handler :refer [current-user handle]]
+    [webchange.common.hmac-sha256 :as sign]
+    [webchange.course.core :as core]
+    [webchange.course.skills :as skills]
+    [webchange.dataset.library :as datasets-library]
+    [webchange.templates.core :as templates]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
@@ -394,11 +395,11 @@
 
 (defn- editor-url
   [{:keys [course-slug scene-slug]}]
-  (str "/courses/" course-slug "/editor-v2/" scene-slug))
+  (str "/courses/" (url-encode course-slug) "/editor-v2/" (url-encode scene-slug)))
 
 (defn- sandbox-url
   [{:keys [course-slug scene-slug]}]
-  (str "/s/" course-slug "/" scene-slug))
+  (str "/s/" (url-encode course-slug) "/" (url-encode scene-slug)))
 
 (defroutes course-pages-routes
   (GET "/courses/:course-slug/edit" [course-slug] (-> course-slug core/first-activity editor-url redirect))
