@@ -22,14 +22,18 @@
     (com.google.api.gax.core FixedCredentialsProvider)))
 
 (defn- words->ssml
-  [words]
-  (let [with-marks (->> words
-                        (map-indexed (fn [i t] (str "<mark name=\"i-" i "\"/>" t)))
-                        (str/join " "))]
+  [sentences]
+  (let [with-marks (fn [si sentence]
+                     (->> (str/split sentence #" ")
+                          (map-indexed (fn [i t] (str "<mark name=\"i-" si "-" i "\"/>" t)))
+                          (str/join " ")))
+        with-sentences (->> sentences
+                            (map-indexed (fn [i s] (str "<s>" (with-marks i s) "</s>")))
+                            (str/join ""))]
     (str
-      "<speak>"
-      with-marks
-      "</speak>")))
+      "<speak><p>"
+      with-sentences
+      "</p></speak>")))
 
 (defn- timepoints->transcript!
   [timepoints words audio-path]
@@ -53,11 +57,16 @@
 (def lang->code-map {"en" "en-US"
                      "zh" "cmn-CN"})
 
+(def ssmsl-gender {"female" SsmlVoiceGender/FEMALE
+                   "male" SsmlVoiceGender/MALE
+                   "neutral" SsmlVoiceGender/NEUTRAL})
+
 (defn- generate-voice!
-  [{:keys [text lang]} audio-name]
+  [{:keys [sentences lang gender]} audio-name]
   (let [path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") audio-name)
         relative-path (str "/upload/" audio-name)
-        
+
+        text (str/join " " sentences)
         words (str/split text #" ")
         json-path (env :google-application-credentials)
         credentials (-> (GoogleCredentials/fromStream (io/input-stream json-path))
@@ -68,13 +77,13 @@
         lang-code (get lang->code-map lang (str lang "-" (str/upper-case lang)))]
     (with-open [c (TextToSpeechClient/create settings)
                 out (io/output-stream path)]
-      (let [ssml (words->ssml words)
+      (let [ssml (words->ssml sentences)
             input (-> (SynthesisInput/newBuilder)
                       (.setSsml ssml)
                       (.build))
             voice (-> (VoiceSelectionParams/newBuilder)
                       (.setLanguageCode lang-code)
-                      (.setSsmlGender SsmlVoiceGender/NEUTRAL)
+                      (.setSsmlGender (get ssmsl-gender gender SsmlVoiceGender/NEUTRAL))
                       (.build))
             audio-config (-> (AudioConfig/newBuilder)
                              (.setAudioEncoding AudioEncoding/MP3)
@@ -95,36 +104,39 @@
      :size 1}))
 
 (defn- ssmls-count
-  [text]
-  (let [words-count (-> (str/split text #" ")
+  [text-lines]
+  (let [text (str/join " " text-lines)
+        words-count (-> (str/split text #" ")
                         (count))
+        sentence-length (count "<s></s>")
+        sentence-count (count text-lines)
         text-length (count text)
-        mark-length (count "<mark name\"i-999\"/>")
-        speak-length (count "<speak></speak>")]
-    (+ speak-length text-length (* words-count mark-length))))
+        mark-length (count "<mark name\"i-99-99\"/>")
+        speak-length (count "<speak><p></p></speak>")]
+    (+ speak-length text-length (* words-count mark-length) (* sentence-count sentence-length))))
 
 (defn- lines->texts
   [lines]
   (loop [texts []
-         current-text ""
+         current-text []
          [head & tail :as lines-left] lines]
     (cond
       (nil? head)
       (conj texts current-text)
 
-      (> (ssmls-count head) 5000)
+      (> (ssmls-count [head]) 5000)
       (recur texts
              current-text
              tail)
 
-      (> (ssmls-count (str current-text " " head)) 5000)
+      (> (ssmls-count (conj current-text head)) 5000)
       (recur (conj texts current-text)
-             ""
+             []
              lines-left)
 
       :else
       (recur texts
-             (str current-text " " head)
+             (conj current-text head)
              tail))))
 
 (defn generate-voice-for
@@ -133,22 +145,41 @@
         texts (->> (concat (course-walk/text-lines scene-data) (course-walk/dialog-lines scene-data))
                    (map :text)
                    (lines->texts))]
-    (map-indexed (fn [i text] (generate-voice! (assoc data :text text) (str audio-name "-" i ".mp3"))) texts)))
+    (map-indexed (fn [i text] (generate-voice! (assoc data :sentences text) (str audio-name "-" i ".mp3"))) texts)))
 
 (comment
   {:result [{:conf 1.0 :end 3.84 :start 3.12 :word "letters"}]
    :text "some text"
    :filepath "/upload/qqq.mp3"}
 
-  
-  (generate-voice! {:text "Hello, World! My name is Ivan. My name is Ivan. Hello, World! Can we use duplicates?"
+
+  (words->ssml ["Hello, World!"
+                "My name is Ivan."
+                "My name is Ivan."
+                "Hello, World!"
+                "Can we use duplicates?"])
+  (generate-voice! {:sentences ["Hello, World!"
+                                "My name is Ivan."
+                                "My name is Ivan."
+                                "Hello, World!"
+                                "Can we use duplicates?"]
                     :lang "en"}
                    "output.mp3")
 
+  (generate-voice! {:sentences ["Hello, World!"
+                                "My name is Ivan."
+                                "My name is Ivan."
+                                "Hello, World!"
+                                "Can we use duplicates?"]
+                    :lang "en"
+                    :gender "female"}
+                   "output.mp3")
+  
   (generate-voice! {:text "¡Bienvenido a Quick Kick Arena, donde es hora de rimar!"
                     :lang "es"}
                    "output.mp3")
   
   (generate-voice-for "rhyming-english-zswjvnhv" "rhyming-activity" {:lang "es"} "output")
+  (generate-voice-for "rhyming-english-zswjvnhv" "rhyming-activity" {:lang "en" :gender "female"} "output")
 
   )
