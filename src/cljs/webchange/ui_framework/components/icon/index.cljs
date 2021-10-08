@@ -13,6 +13,7 @@
     [webchange.ui-framework.components.icon.icon-back :as back]
     [webchange.ui-framework.components.icon.icon-background :as background]
     [webchange.ui-framework.components.icon.icon-book :as book]
+    [webchange.ui-framework.components.icon.icon-boy :as boy]
     [webchange.ui-framework.components.icon.icon-book-library :as book-library]
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
     [webchange.ui-framework.components.icon.icon-cancel :as cancel]
@@ -34,14 +35,17 @@
     [webchange.ui-framework.components.icon.icon-font-family :as font-family]
     [webchange.ui-framework.components.icon.icon-font-size :as font-size]
     [webchange.ui-framework.components.icon.icon-game :as game]
+    [webchange.ui-framework.components.icon.icon-girl :as girl]
     [webchange.ui-framework.components.icon.icon-game-library :as game-library]
     [webchange.ui-framework.components.icon.icon-group :as group]
+    [webchange.ui-framework.components.icon.guide :as guide]
     [webchange.ui-framework.components.icon.icon-image :as image]
     [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
     [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
     [webchange.ui-framework.components.icon.icon-link :as link]
     [webchange.ui-framework.components.icon.icon-logout :as logout]
+    [webchange.ui-framework.components.icon.icon-man :as man]
     [webchange.ui-framework.components.icon.icon-match :as match]
     [webchange.ui-framework.components.icon.icon-menu :as menu]
     [webchange.ui-framework.components.icon.icon-menu-vertical :as menu-vertical]
@@ -56,8 +60,10 @@
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-slider :as slider]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
+    [webchange.ui-framework.components.icon.icon-student :as student]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
+    [webchange.ui-framework.components.icon.icon-teacher :as teacher]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
     [webchange.ui-framework.components.icon.icon-text :as text]
     [webchange.ui-framework.components.icon.icon-user :as user]
@@ -66,6 +72,7 @@
     [webchange.ui-framework.components.icon.icon-visibility-on :as visibility-on]
     [webchange.ui-framework.components.icon.icon-volume :as volume]
     [webchange.ui-framework.components.icon.icon-warning :as warning]
+    [webchange.ui-framework.components.icon.icon-woman :as woman]
 
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -83,6 +90,7 @@
    "back"               back/data
    "background"         background/data
    "book"               book/data
+   "boy"                boy/data
    "book-library"       book-library/data
    "bring-to-top"       bring-to-top/data
    "cancel"             cancel/data
@@ -104,14 +112,17 @@
    "font-family"        font-family/data
    "font-size"          font-size/data
    "game"               game/data
+   "girl"               girl/data
    "game-library"       game-library/data
    "group"              group/data
+   "guide"              guide/data
    "image"              image/data
    "insert-after"       insert-after/data
    "insert-before"      insert-before/data
    "insert-parallel"    insert-parallel/data
    "link"               link/data
    "logout"             logout/data
+   "man"                man/data
    "match"              match/data
    "menu"               menu/data
    "menu-vertical"      menu-vertical/data
@@ -126,8 +137,10 @@
    "settings"           settings/data
    "slider"             slider/data
    "stop"               stop/data
+   "student"            student/data
    "swap"               swap/data
    "sync"               sync/data
+   "teacher"            teacher/data
    "text-animation"     text-animation/data
    "text"               text/data
    "undo"               undo/data
@@ -135,7 +148,8 @@
    "visibility-off"     visibility-off/data
    "visibility-on"      visibility-on/data
    "volume"             volume/data
-   "warning"            warning/data})
+   "warning"            warning/data
+   "woman"              woman/data})
 
 (defn component
   [{:keys [icon on-click rotate? title class-name]}]
