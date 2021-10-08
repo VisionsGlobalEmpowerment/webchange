@@ -4,7 +4,8 @@
     [webchange.dashboard.common.views :refer [content-page]]
     [webchange.dashboard.courses.subs :as courses-subs]
     [webchange.dashboard.courses.events :as courses-events]
-    [cljs-react-material-ui.reagent :as ui]))
+    [cljs-react-material-ui.reagent :as ui]
+    [webchange.ui-framework.components.index :refer [with-confirmation]]))
 
 (def styles
   {:add-button {:margin   16
@@ -26,20 +27,29 @@
 
 (defn- review-list-item
   [{:keys [id name slug image-src]}]
-  [ui/table-row {:hover true}
-   [ui/table-cell {} [:img {:src image-src :width 300}]]
-   [ui/table-cell {} name]
-   [ui/table-cell {:align "right"
-                   :style {:white-space "nowrap"}}
-    [ui/tooltip
-     {:title (translate [:actions :approve])}
-     [ui/button {:on-click #(re-frame/dispatch [::courses-events/approve id])} "Approve"]]
-    [ui/tooltip
-     {:title (translate [:actions :decline])}
-     [ui/button {:on-click #(re-frame/dispatch [::courses-events/decline id])} "Decline"]]
-    [ui/tooltip
-     {:title (translate [:actions :preview])}
-     [ui/button {:href     (str "/courses/" slug "/play")} "Preview"]]]])
+  (let [handle-approve #(re-frame/dispatch [::courses-events/approve id])
+        handle-decline #(re-frame/dispatch [::courses-events/decline id])
+        handle-confirm (fn [{:keys [message action]}]
+                         (with-confirmation {:message    message
+                                             :on-confirm action}))]
+    [ui/table-row {:hover true}
+     [ui/table-cell {} [:img {:src image-src :width 300}]]
+     [ui/table-cell {} name]
+     [ui/table-cell {:align "right"
+                     :style {:white-space "nowrap"}}
+      [ui/tooltip
+       {:title (translate [:actions :approve])}
+       [ui/button {:on-click  #(handle-confirm {:message "Are you sure to approve?"
+                                                :action  handle-approve})}
+        "Approve"]]
+      [ui/tooltip
+       {:title (translate [:actions :decline])}
+       [ui/button {:on-click  #(handle-confirm {:message "Are you sure to decline?"
+                                                :action  handle-decline})}
+        "Decline"]]
+      [ui/tooltip
+       {:title (translate [:actions :preview])}
+       [ui/button {:href     (str "/courses/" slug "/play")} "Preview"]]]]))
 
 (defn- published-list-item
   [{:keys [id name slug image-src]}]
