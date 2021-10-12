@@ -55,7 +55,8 @@
                   out))))
 
 (def lang->code-map {"en" "en-US"
-                     "zh" "cmn-CN"})
+                     "zh" "cmn-CN"
+                     "ta" "ta-IN"})
 
 (def ssmsl-gender {"female" SsmlVoiceGender/FEMALE
                    "male" SsmlVoiceGender/MALE
