@@ -2,9 +2,8 @@
   (:require
     [webchange.common.files :as f]
     [clojure.java.io :as io]
-  [webchange.migrations.onebillion.book-import :as book-import]
-
-  [clojure.string :refer [join]]))
+    [webchange.migrations.onebillion.book-import :as book-import]
+    [clojure.string :refer [join]]))
 
 (defn get-book-name [import-dir]
     (->> (.listFiles (io/file import-dir))
@@ -14,20 +13,13 @@
 (defn load-book
   ([config import-dir owner-id]
    (doseq [dir (get-book-name import-dir)]
-     (load-book config import-dir owner-id (.getName dir))
-   ))
-  ([config import-dir owner-id name]
+     (load-book config import-dir owner-id (.getName dir))))
+  ([config import-dir owner-id book-name]
    (let [owner-id (Integer. owner-id)
-         source-dir  (str import-dir name "/")
-         public-dir  (str "/raw/book-onebillion/" name "/")
+         source-dir  (str import-dir book-name "/")
+         public-dir  (str "/raw/book-onebillion/" book-name "/")
          target-dir  (f/relative->absolute-path public-dir)]
-     (-> source-dir
-         (book-import/read-book-info public-dir target-dir)
-         (book-import/import-book-info-by-sentence owner-id name)
-
-         )))
-  )
-
+     (println (book-import/import-book owner-id source-dir public-dir target-dir)))))
 
 (def commands
   {"load-onebillion-book"

@@ -271,7 +271,7 @@
 (defn- rand-str [len]
   (apply str (take len (repeatedly #(char (+ (rand 26) 65))))))
 
-(defn- slug
+(defn slug
   [text]
   (-> (->kebab-case text)
       (string/replace #"[_~.<>{}()!№%:,;#$%^&*+='`]" "")
