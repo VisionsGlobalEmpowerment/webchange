@@ -4,11 +4,12 @@
             [clojure.edn :as edn]
             [webchange.db.core :refer [*db*] :as db]
             [webchange.course.core :as core]
+            [webchange.assets.core :as assets]
             [camel-snake-kebab.core :refer [->kebab-case]]
             [webchange.migrations.kitkit.book-vertical :as vertical-template]
             [webchange.migrations.kitkit.book-vertical-page :as book-vertical-page]
             [webchange.migrations.kitkit.book-horizontal-page :as book-horizontal-page]
-  ))
+            ))
 
 (def course-name "kitkit-book")
 
@@ -173,7 +174,8 @@
   [source target]
   (with-open [in (io/input-stream source)
               out (io/output-stream target)]
-    (io/copy in out)))
+    (io/copy in out)
+    (assets/store-asset-hash! target)))
 
 (defn import-assets-book-info
   [book-info source-dir target-dir public-dir]
