@@ -7,6 +7,7 @@
     (-> (case action
           "go-to" (str character " goes to " target)
           "pick-up" (str character " picks up " target)
+          "put" (str character " puts on " target)
           "give" (str character " gives item to " target)
           action)
         clojure.string/capitalize)))

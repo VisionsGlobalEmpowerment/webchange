@@ -1937,10 +1937,7 @@
     (let [character (scene/get-scene-object db (keyword transition-id))
           target (scene/get-scene-object db (keyword target))
           handle-action-finish #(ce/dispatch-success-fn action-data)]
-      (case action
-        "go-to" (movements/walk character target handle-action-finish)
-        "pick-up" (movements/pick-up character target handle-action-finish)
-        "give" (movements/give character target handle-action-finish))
+      (movements/move action character target handle-action-finish)
       {})))
 
 (comment

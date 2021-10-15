@@ -11,16 +11,16 @@
   (get @state :has-item-in-hands? false))
 
 (defn take-image
-  [state image-src]
+  [state image]
   (swap! state assoc :has-item-in-hands? true)
-  (swap! state assoc :item-img image-src))
+  (swap! state assoc :item-img image))
 
 (defn give-image
   [state]
-  (let [image-src (get @state :item-img)]
+  (let [image (get @state :item-img)]
     (swap! state assoc :has-item-in-hands? false)
     (swap! state assoc :item-img nil)
-    image-src))
+    image))
 
 (defn pass-image
   [source-state target-state]

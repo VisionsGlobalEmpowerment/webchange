@@ -8,9 +8,9 @@
     [webchange.utils.scene-action-data :refer [animation-tracks]]))
 
 ;; px per second AnimationStateListener
-(def walk-speed 118)
-(def slot-name "Items")
-(def attachment-name "Items/8")
+(def walk-speed 236)
+(def slot-name "placeholder")
+(def attachment-name "placeholder")
 
 (defn- log
   [name value]
@@ -22,10 +22,10 @@
   (Math/sqrt (Math/pow (- (:x p1) (:x p2)) 2)
              (Math/pow (- (:y p1) (:y p2)) 2)))
 
-(defn- get-walk-duration
-  [p1 p2]
+(defn- get-duration
+  [p1 p2 speed]
   (-> (get-distance p1 p2)
-      (/ walk-speed)))
+      (/ speed)))
 
 (defn- wrapper->spine-object
   [wrapper]
@@ -113,6 +113,27 @@
                                            (Math/abs)
                                            (* direction))))))
 
+(defn- get-character-scale
+  [character]
+  (let [{character-get-scale :get-scale} character]
+    (-> (character-get-scale)
+        (get :x)
+        (Math/abs))))
+
+(defn- get-character-speed
+  [character]
+  (->> (get-character-scale character)
+       (* walk-speed)))
+
+(defn- get-pass-item-distance
+  [character char-position target-position]
+  (let [default-distance 300
+        scale (get-character-scale character)
+        direction (if (> (:x target-position)
+                         (:x char-position))
+                    - +)]
+    (-> (* default-distance scale)
+        (direction))))
 
 ;; Methods
 
@@ -128,11 +149,10 @@
          to (target-get-position)
          target-width (-> target wrapper->spine-object .getBounds .-width)
          target-position (cond-> (update to :x (if (> (:x to) (:x from)) - +) target-width)
-                                 (= distance "give-item") (update :x
-                                                                  (if (> (:x to) (:x from)) - +)
-                                                                  100))
+                                 (= distance "give-item") (update :x + (get-pass-item-distance character from to)))
 
-         duration (get-walk-duration from target-position)
+         speed (get-character-speed character)
+         duration (get-duration from target-position speed)
          mix-time 0.3
 
          {remove-animation :remove-animation
@@ -150,21 +170,43 @@
                                   (on-end))}))))
 
 (defn- pick-up-item
-  [character item callback]
-  (let [image-src (get-image-src item)
+  [character image callback]
+  (let [image-src (get-image-src image)
         animation (wrapper->spine-object character)
         state (:state character)
         {play-animation-once  :play-animation-once
          subscribe-once       :subscribe-once
          reset-idle-animation :reset-idle-animation} character
-        {target-set-visibility :set-visibility} item]
+        {target-set-visibility :set-visibility} image]
     (when (some? image-src) (give-img-in-hands animation image-src))
     (subscribe-once "take" (fn [] (target-set-visibility false)))
     (play-animation-once (:main animation-tracks) "pick-up_item"
                          (fn []
-                           (state-utils/take-image state image-src)
+                           (state-utils/take-image state image)
                            (reset-idle-animation)
                            (callback)))))
+
+(defn- put-item
+  [character target callback]
+  (let [{character-get-position :get-position
+         play-animation-once    :play-animation-once
+         reset-idle-animation   :reset-idle-animation
+         subscribe-once         :subscribe-once
+         state                  :state} character]
+    (subscribe-once "give" (fn []
+                             (let [image (state-utils/give-image state)
+                                   {target-get-position :get-position} target
+                                   {image-set-position   :set-position
+                                    image-set-visibility :set-visibility} image
+                                   position (-> (target-get-position)
+                                                (update :x (if (> (:x (target-get-position)) (:x (character-get-position)))
+                                                             + -) 40)
+                                                (update :y - 45))]
+                               (image-set-position position)
+                               (js/setTimeout #(image-set-visibility true) 10)
+                               (reset-idle-animation))))
+
+    (play-animation-once (:main animation-tracks) "put_item" callback)))
 
 (defn- give-item
   [character target on-end]
@@ -201,19 +243,33 @@
 
 ;; API
 
-(defn walk
+(defn- walk
   [character target callback]
   (run-seq [go-to character target]
            [callback]))
 
-(defn pick-up
+(defn- pick-up
   [character target callback]
   (run-seq [go-to character target]
            [pick-up-item character target]
            [callback]))
 
-(defn give
+(defn- put
+  [character target callback]
+  (run-seq [go-to character target]
+           [put-item character target]
+           [callback]))
+
+(defn- give
   [character target callback]
   (run-seq [go-to character target {:distance "give-item"}]
            [give-item character target]
            [callback]))
+
+(defn move
+  [action character target callback]
+  (case action
+    "go-to" (walk character target callback)
+    "pick-up" (pick-up character target callback)
+    "put" (put character target callback)
+    "give" (give character target callback)))

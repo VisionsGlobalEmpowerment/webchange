@@ -58,6 +58,8 @@
       :value "go-to"}
      {:text  "Pick up item"
       :value "pick-up"}
+     {:text  "Put item"
+      :value "put"}
      {:text  "Give item"
       :value "give"}]))
 
@@ -96,6 +98,7 @@
                                     (not= type "background")
                                     (not= type "layered-background"))
                        "pick-up" (= type "image")
+                       "put" (= type "anchor")
                        "give" (and (not= (clojure.core/name object-name) current-character)
                                    (= type "animation")
                                    (= name "child")))))
