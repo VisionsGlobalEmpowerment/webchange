@@ -277,7 +277,7 @@
       (string/replace #"[_~.<>{}()!№%:,;#$%^&*+='`]" "")
       (clojure.string/lower-case)))
 
-(defn- course-slug
+(defn course-slug
   [original lang]
   (let [suffix (rand-str 8)]
     (-> (str original "-" lang "-" suffix)

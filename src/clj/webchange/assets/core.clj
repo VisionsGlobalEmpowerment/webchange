@@ -83,7 +83,8 @@
 (defn- thumbnail-path
   "Get path for specified type of thumbnail"
   [source-file type]
-  (str "/upload/thumbnails/" (name type) "/" (f/get-file-name source-file)))
+  (let [parent-name (-> source-file f/get-directory f/get-file-name)]
+    (str "/upload/thumbnails/" (name type) "/" parent-name "/" (f/get-file-name-without-extension source-file) ".png")))
 
 (defn- width-from-type
   "Get width for specified type of thumbnail"

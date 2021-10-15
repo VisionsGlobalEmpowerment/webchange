@@ -5,6 +5,7 @@
             [webchange.course.core :as core]
             [webchange.db.core :as db]
             [webchange.migrations.kitkit.book-import :as kitkit]
+            [webchange.assets.core :as assets]
             [webchange.templates.core :as t]
             [webchange.common.files :as f]))
 
@@ -202,17 +203,25 @@
   (str/replace text #"/" ""))
 
 (defn- save-book!
-  [activity metadata owner-id book-name]
-  (let [data {:name book-name
-              :lang "english"
-              :skills [1]}
-        [course] (db/find-courses-by-name {:name book-name})
-        course (if course course (second (core/create-course (assoc data :name book-name) owner-id)))
-        course-slug (-> course :slug)
+  [activity metadata owner-id book-name image-src]
+  (let [[course] (db/find-courses-by-name {:name book-name})
+        lang "english"
+        course-data (-> {:name book-name
+                         :type "book"
+                         :lang lang
+                         :skills [1]}
+                        (assoc :name book-name)
+                        (assoc :image-src
+                               (assets/make-thumbnail image-src :course)))
+        course (if course
+                 course
+                 (second (core/create-course course-data owner-id)))
+        course-slug (or (-> course :slug) (core/course-slug book-name lang))
         scene-slug (core/slug book-name)]
+    (core/save-course-info! (:id course) (assoc course-data :slug course-slug))
     (if (core/get-scene-data course-slug scene-slug)
       (second (core/save-scene! course-slug scene-slug activity owner-id))
-      (second (core/create-scene! activity metadata course-slug scene-slug (:skills data) owner-id)))
+      (second (core/create-scene! activity metadata course-slug scene-slug (:skills course-data) owner-id)))
     (str "/s/" course-slug "/" scene-slug)))
 
 (defn import-book
@@ -236,8 +245,9 @@
                                        (update-last-page-dialog! page)))
                                  created-activity
                                  (:pages book-info))
-        book-name (prepare-text (:title book-info))]
-    (save-book! updated-activity metadata owner-id book-name)))
+        book-name (prepare-text (:title book-info))
+        image-src (:image book-info)]
+    (save-book! updated-activity metadata owner-id book-name image-src)))
 
 (comment
   (let [owner-id 1
