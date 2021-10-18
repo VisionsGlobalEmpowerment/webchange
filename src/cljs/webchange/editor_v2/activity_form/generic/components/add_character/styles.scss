@@ -1,15 +1,20 @@
 .add-character-form {
-    display: flex;
-    gap: 16px;
+    .characters-form {
+        $item-size: 100px;
 
-    .select-group {
-        .select-label {
-            margin-bottom: 8px;
-        }
+        display: flex;
+        gap: 24px;
 
-        .select-control {
-            width: 200px;
-            height: 180px;
+        .form-list-item {
+            .img-wrapper {
+                width: $item-size;
+                height: $item-size;
+            }
+
+            label {
+                line-height: 12px;
+                margin-top: 16px;
+            }
         }
     }
 }

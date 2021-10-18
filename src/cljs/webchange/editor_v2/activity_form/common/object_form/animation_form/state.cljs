@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
+    [webchange.editor-v2.components.character-form.data :refer [animation->character-data]]
     [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]
     [webchange.logger.index :as logger]
     [webchange.state.warehouse-animations :as warehouse-animations]))
@@ -21,44 +22,15 @@
                                       :names objects-names}]
                     [::warehouse-animations/load-available-animation]]})))
 
-;; Available skins
-
-(defn- check-skin-option
-  [value type]
-  (-> value
-      (clojure.string/split #"/")
-      first
-      (clojure.string/lower-case)
-      keyword
-      (= type)))
-
 ;; Skeleton
 
 (re-frame/reg-sub
-  ::current-skeleton
+  ::current-character-data
   (fn [[_ id]]
     {:pre [(some? id)]}
     [(re-frame/subscribe [::state/current-data id])])
   (fn [[current-data]]
-    (get current-data :name "")))
-
-(defn- filter-extra-skeletons
-  [skeletons]
-  (let [skeletons-to-avoid ["book" "boxes" "pinata" "vera-go" "vera-45" "vera-90"]]
-    (->> skeletons
-         (filter (fn [{:keys [name]}]
-                   (-> #{name} (some skeletons-to-avoid) not))))))
-
-(re-frame/reg-sub
-  ::skeletons-options
-  (fn []
-    (re-frame/subscribe [::warehouse-animations/available-animations]))
-  (fn [available-animations]
-    (->> (filter-extra-skeletons available-animations)
-         (map (fn [{:keys [name preview]}]
-                {:text      name
-                 :value     name
-                 :thumbnail preview})))))
+    (animation->character-data current-data)))
 
 (defn- get-default-skeleton-params
   [skeleton-name]
@@ -68,91 +40,20 @@
 
 (re-frame/reg-event-fx
   ::set-skeleton
-  (fn [{:keys [db]} [_ id skeleton-name]]
+  (fn [{:keys [db]} [_ id skeleton-name skin-params]]
     (let [{:keys [default-skin default-skins skin-type]} (->> (warehouse-animations/get-available-animations db)
                                                               (some (fn [{:keys [name] :as skeleton}]
                                                                       (and (= name skeleton-name) skeleton))))
           default-skin-params (merge (case skin-type
-                                       :combined {:skin-names default-skins
+                                       :combined {:skin-names (merge default-skins
+                                                                     skin-params)
                                                   :skin       nil}
-                                       :single {:skin       default-skin
+                                       :single {:skin       (or skin-params default-skin)
                                                 :skin-names nil})
                                      (get-default-skeleton-params skeleton-name))]
       {:dispatch [::state/update-current-data id (merge {:name skeleton-name} default-skin-params)]})))
 
 ;; Skin
-
-(re-frame/reg-sub
-  ::skin-options
-  (fn [[_ id]]
-    [(re-frame/subscribe [::current-skeleton id])
-     (re-frame/subscribe [::warehouse-animations/available-animations])])
-  (fn [[skeleton-name available-skeletons]]
-    (->> available-skeletons
-         (some (fn [{:keys [name skins]}]
-                 (and (= name skeleton-name)
-                      skins)))
-         (map (fn [{:keys [name preview]}]
-                {:value     name
-                 :thumbnail preview}))
-         (sort-by :thumbnail)
-         (reverse))))
-
-(re-frame/reg-sub
-  ::skin-body-options
-  (fn [[_ id]]
-    [(re-frame/subscribe [::skin-options id])])
-  (fn [[skin-options]]
-    (filter #(check-skin-option (:value %) :body) skin-options)))
-
-(re-frame/reg-sub
-  ::skin-clothes-options
-  (fn [[_ id]]
-    [(re-frame/subscribe [::skin-options id])])
-  (fn [[skin-options]]
-    (filter #(check-skin-option (:value %) :clothes) skin-options)))
-
-(re-frame/reg-sub
-  ::skin-head-options
-  (fn [[_ id]]
-    [(re-frame/subscribe [::skin-options id])])
-  (fn [[skin-options]]
-    (filter #(check-skin-option (:value %) :head) skin-options)))
-
-(re-frame/reg-sub
-  ::combined-skins?
-  (fn [[_ id]]
-    [(re-frame/subscribe [::current-skeleton id])
-     (re-frame/subscribe [::warehouse-animations/available-animations])])
-  (fn [[skeleton-name available-skeletons]]
-    (->> available-skeletons
-         (some (fn [{:keys [name skin-type]}]
-                 (and (= name skeleton-name)
-                      skin-type)))
-         (= :combined))))
-
-(re-frame/reg-sub
-  ::current-skin
-  (fn [[_ id]]
-    {:pre [(some? id)]}
-    [(re-frame/subscribe [::state/current-data id])])
-  (fn [[current-data]]
-    (get current-data :skin "")))
-
-(re-frame/reg-event-fx
-  ::set-current-skin
-  (fn [{:keys [_]} [_ id skin]]
-    (logger/trace "set current-skin" id skin)
-    {:dispatch [::state/update-current-data id {:skin skin}]}))
-
-(re-frame/reg-sub
-  ::current-skin-names
-  (fn [[_ id]]
-    {:pre [(some? id)]}
-    [(re-frame/subscribe [::state/current-data id])])
-  (fn [[current-data]]
-    (logger/trace "current data" current-data)
-    (get current-data :skin-names {:body nil})))
 
 (re-frame/reg-event-fx
   ::set-current-skin-names

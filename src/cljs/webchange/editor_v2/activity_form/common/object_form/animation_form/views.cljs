@@ -3,30 +3,27 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.object-form.animation-form.state :as state]
-    [webchange.editor-v2.activity-form.common.object-form.animation-form.views-skin :refer [skin]]
     [webchange.editor-v2.activity-form.common.object-form.components.scale.views :refer [scale-component]]
-    [webchange.ui-framework.components.index :refer [icon-button input label select-image]]))
+    [webchange.editor-v2.components.character-form.views :as animation-form]))
 
-(defn- skeleton
+(defn- character
   [{:keys [class-name id]}]
-  (let [value @(re-frame/subscribe [::state/current-skeleton id])
-        options @(re-frame/subscribe [::state/skeletons-options id])
-        handle-change (fn [skeleton]
-                        (re-frame/dispatch [::state/set-skeleton id skeleton]))]
-    [:div (cond-> {} (some? class-name) (assoc :class-name class-name))
-     [label "Select character:"]
-     [select-image {:value       (or value "")
-                    :on-change   handle-change
-                    :options     options
-                    :with-arrow? false
-                    :show-image? false
-                    :variant     "outlined"}]]))
+  (let [{:keys [character skin head clothes]} @(re-frame/subscribe [::state/current-character-data id])
+        handle-change (fn [{:keys [name skin-params change-skeleton?]}]
+                        (if change-skeleton?
+                          (re-frame/dispatch [::state/set-skeleton id name skin-params])
+                          (re-frame/dispatch [::state/set-current-skin-names id skin-params])))]
+    [animation-form/form {:character  character
+                          :skin       skin
+                          :head       head
+                          :clothes    clothes
+                          :on-change  handle-change
+                          :class-name class-name}]))
 
 (defn form
   [{:keys [id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
     [:div.animation-form
-     [skeleton {:id id}]
-     [skin {:id id}]
+     [character {:id id}]
      [scale-component {:id         id
                        :class-name "scale-group"}]]))
