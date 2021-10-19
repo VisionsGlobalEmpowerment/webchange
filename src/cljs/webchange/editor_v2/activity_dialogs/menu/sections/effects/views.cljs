@@ -4,6 +4,7 @@
    [webchange.editor-v2.activity-dialogs.menu.sections.common.section-block.views :refer [section-block]]
    [webchange.editor-v2.activity-dialogs.menu.sections.common.options-list.views :refer [options-list]]
    [webchange.editor-v2.activity-dialogs.menu.sections.effects.emotions.views :refer [available-emotions]]
+   [webchange.editor-v2.activity-dialogs.menu.sections.effects.movements.views :refer [available-movements]]
    [webchange.editor-v2.activity-dialogs.menu.sections.effects.state :as state]
    [webchange.ui-framework.components.index :refer [icon-button]]
    [webchange.editor-v2.dialog.utils.dialog-action :refer [skip-effects]]))
@@ -81,5 +82,7 @@
                     :effect-type type}])
    [section-block {:title "Emotions"}
     [available-emotions]]
+   [section-block {:title "Movements"}
+    [available-movements]]
    [section-block {:title "Skip"}
     [skip-effects-list]]])

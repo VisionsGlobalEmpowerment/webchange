@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.activity-dialogs.form.action-unit.views-menu
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.editor-v2.activity-dialogs.form.state-actions :as state-actions]
     [webchange.ui-framework.components.index :refer [icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))

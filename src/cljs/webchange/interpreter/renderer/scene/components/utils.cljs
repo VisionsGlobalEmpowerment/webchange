@@ -113,6 +113,10 @@
   (when alpha
     (set! (.-alpha object) alpha)))
 
+(defn get-z-index
+  [object]
+  (.-zIndex object))
+
 (defn set-z-index
   [object index]
   (set! (.-zIndex object) index))

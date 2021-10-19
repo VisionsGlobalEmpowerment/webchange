@@ -11,6 +11,7 @@
     [webchange.editor-v2.activity-form.generic.components.info-action.views :as info-action]
     [webchange.editor-v2.activity-form.generic.components.activity-preview.state :as activity-preview]
     [webchange.editor-v2.activity-form.generic.components.add-image.views :as add-image]
+    [webchange.editor-v2.activity-form.generic.components.anchor.views :refer [add-anchor]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.layout.right-menu.edit-menu.views :refer [edit-menu]]
     [webchange.editor-v2.components.activity-tracks.state :as state]))
@@ -31,7 +32,9 @@
    {:text     "Add character"
     :on-click add-character/open-add-character-window}
    {:text     "Info"
-    :on-click info-action-state/open-info-window}])
+    :on-click info-action-state/open-info-window}
+   {:text     "Add anchor"
+    :on-click add-anchor}])
 
 (defn actions-item
   [{:keys [text on-click]}]

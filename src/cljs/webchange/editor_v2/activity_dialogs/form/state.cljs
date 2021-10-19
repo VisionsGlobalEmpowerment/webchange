@@ -28,6 +28,15 @@
   (fn [{:keys [_]} [_]]
     {:dispatch-n [[::reset-selected-action]]}))
 
+;; Object data
+
+(re-frame/reg-sub
+  ::object-data
+  (fn []
+    [(re-frame/subscribe [::translator-form.scene/objects-data])])
+  (fn [[objects-data] [_ object-name]]
+    (get objects-data (keyword object-name))))
+
 ;; Track
 
 (re-frame/reg-sub
@@ -256,6 +265,7 @@
       "remove-target-animation" {:dispatch [::remove-target-animation data]}
       "start-skip-region" {:dispatch [::start-skip-region data]}
       "end-skip-region" {:dispatch [::end-skip-region data]}
+      "add-movement" {:dispatch [::add-movement data]}
       {})))
 
 (defn- get-action-position-data
@@ -306,5 +316,15 @@
   (fn [{:keys [_]} [_ data]]
     (let [position-data (get-action-position-data data)
           action-data (defaults/get-dialog-node {:type "end-skip-region"})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::add-movement
+  (fn [{:keys [_]} [_ {:keys [character movement target] :as data}]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-movement-action-data {:action    movement
+                                                          :character character
+                                                          :target    target})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))

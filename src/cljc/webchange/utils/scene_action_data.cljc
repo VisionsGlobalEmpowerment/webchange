@@ -36,13 +36,14 @@
 ;; Animation
 
 (def animation-tracks
-  {:main    0
-   :idle    5
+  {:main    5
+   :idle    0
    :eyes    4
    :mouth   3
    :hands   2
    :emotion 1
-   :default 0})
+   :default 5})
+
 
 (defn create-add-animation-action
   [{:keys [animation loop? target track] :or {loop? true}}]
@@ -69,6 +70,19 @@
     {:type   "remove-animation"
      :target target
      :track  track-number}))
+
+;; Movements
+
+(defn create-character-movement-action
+  [{:keys [action character target]}]
+  {:pre [(string? action)
+         (string? character)
+         (string? target)
+         (not= character target)]}
+  {:type          "char-movement"
+   :action        action
+   :transition-id character
+   :target        target})
 
 ;; Dialogs
 
