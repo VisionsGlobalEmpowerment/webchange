@@ -6,6 +6,7 @@
     [webchange.interpreter.renderer.scene.components.index :refer [components]]
     [webchange.interpreter.renderer.scene.components.props-utils :refer [get-props get-object-props]]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.logger.index :as logger]))
 
@@ -84,6 +85,8 @@
 
       (re-frame/dispatch [::state/register-object component-wrapper])
       (logger/group-end "create component" type (:object-name props))
+
+      (utils/sort-children (:container component-wrapper))
 
       {:props    prepared-props
        :wrapper  component-wrapper

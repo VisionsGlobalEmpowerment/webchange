@@ -9,14 +9,16 @@
                     :y        {}
                     :ref      {}
                     :on-click {}
-                    :filters         {}
-                    :type     {:default "group"}})
+                    :filters  {}
+                    :type     {:default "group"}
+                    :metadata {}})
 
 (defn- create-container
-  [{:keys [x y]}]
+  [{:keys [x y z-index]}]
   (doto (Container.)
     (utils/set-position {:x x
-                         :y y})))
+                         :y y})
+    (utils/set-z-index z-index)))
 
 (def component-type "group")
 
@@ -30,8 +32,9 @@
     :ref - callback function that must be called with component wrapper.
     :children - vector og object names to group"
 
-  [{:keys [parent type ref on-click filters] :as props}]
-  (let [group (create-container props)
+  [{:keys [parent type ref on-click filters metadata] :as props}]
+  (let [group (create-container (cond-> props
+                                        (:question? metadata) (assoc :z-index 100)))
         wrapped-group (wrap type (:object-name props) group)]
 
     (.addChild parent group)
