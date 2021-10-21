@@ -27,7 +27,7 @@
     [(re-frame/subscribe [::selected-objects])])
   (fn [[{:keys [data]}]]
     (and (some? data)
-         (some #{(:type data)} ["animation" "text" "image"]))))
+         (some #{(:type data)} ["animation" "text" "image" "group"]))))
 
 ;;
 
