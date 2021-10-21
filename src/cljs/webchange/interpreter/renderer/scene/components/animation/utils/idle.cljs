@@ -59,11 +59,10 @@
   [spine-object animations frequency state]
   (let [animation (->> (count animations)
                        (rand-int)
-                       (nth animations))
-        params {:track-index (:idle animation-tracks)
-                :force-set?  false}]
-    (utils/add-animation spine-object animation (assoc params :loop? false))
-    (utils/add-animation spine-object "idle" (assoc params :loop? true))
+                       (nth animations))]
+    (utils/add-animation spine-object animation {:track-index (:hands animation-tracks)
+                                                 :loop?       false
+                                                 :force-set?  false})
     (set-timeout #(make-boredom spine-object animations frequency state) (freq->rand frequency) state :make-boredom)))
 
 (defn- apply-boredom
