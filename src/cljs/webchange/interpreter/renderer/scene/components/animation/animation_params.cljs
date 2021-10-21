@@ -43,6 +43,11 @@
                                      :height 691,
                                      :scale  {:x 0.5 :y 0.5}
                                      :speed  1
+                                     :meshes true}
+                        :adult      {:width  342,
+                                     :height 691,
+                                     :scale  {:x 0.5 :y 0.5}
+                                     :speed  1
                                      :meshes true}})
 
 (defn get-animations-resource-path

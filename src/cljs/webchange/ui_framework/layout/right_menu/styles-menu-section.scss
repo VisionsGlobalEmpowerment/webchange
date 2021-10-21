@@ -15,7 +15,7 @@ $menu-section-border: solid 1px #cbcbcb;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
+        gap: 16px;
         padding: $menu-padding;
         cursor: pointer;
 
@@ -26,6 +26,24 @@ $menu-section-border: solid 1px #cbcbcb;
         & > .title-icon {
             width: 14px;
             padding: 0;
+        }
+
+        & > .title-image-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+
+            & > .title-image {
+                $image-size: 70%;
+                width: $image-size;
+                height: $image-size;
+                object-fit: contain;
+            }
         }
 
         & > .title-text {
