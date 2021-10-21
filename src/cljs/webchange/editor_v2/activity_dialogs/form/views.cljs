@@ -7,7 +7,7 @@
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]))
 
 (defn- dialog-form
-  [{:keys [nodes title] :as dialog-data}]
+  [{:keys [nodes title]}]
   [:div.sheet
    [:h3 title]
    (for [[idx {:keys [path concept-name] :as action}] (map-indexed vector nodes)]

@@ -47,7 +47,6 @@
             :class-name "color-icon"}]
      [select {:value               (or value "")
               :on-change           handle-change
-              :options-text-suffix "pt"
               :options             options
               :show-buttons?       true
               :with-arrow?         false

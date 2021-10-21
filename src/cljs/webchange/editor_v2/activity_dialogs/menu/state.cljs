@@ -39,6 +39,18 @@
             (and (some? selected-action)
                  (some #{(:type selected-action)} [:phrase :text-animation])) (conj (get-section :voice-over)))))
 
+(def current-section-path (path-to-db [:current-section]))
+
+(re-frame/reg-sub
+  ::current-section
+  (fn [db]
+    (get-in db current-section-path)))
+
+(re-frame/reg-event-fx
+  ::set-current-section
+  (fn [{:keys [db]} [_ section-id]]
+    {:db (assoc-in db current-section-path section-id)}))
+
 (re-frame/reg-sub
   ::available-effects
   (fn []

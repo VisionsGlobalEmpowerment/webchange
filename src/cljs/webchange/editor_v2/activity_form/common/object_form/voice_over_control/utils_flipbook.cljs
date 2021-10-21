@@ -5,8 +5,6 @@
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.utils.flipbook :as utils]))
 
-;; text-name->page-index
-
 (defn- get-all-children
   [{:keys [objects] :as scene-data} object-name]
   (let [{:keys [type children]} (get objects object-name)]
@@ -67,12 +65,13 @@
         object-type (:type object-data)
         object-info {:name object-name
                      :data object-data}]
-    (cond-> (merge page-data
-                   {:phrase-action-path (-> (get-phrase-node scene-data page-data object-name) (second) (:path))})
-            (= object-type "text") (-> (assoc :text object-info)
-                                       (dissoc :image))
-            (= object-type "image") (-> (assoc :image object-info)
-                                        (dissoc :text)))))
+    (let [phrase-node (get-phrase-node scene-data page-data object-name)]
+      (cond-> (merge page-data
+                     {:phrase-action-path (-> phrase-node second :path)})
+              (= object-type "text") (-> (assoc :text object-info)
+                                         (dissoc :image))
+              (= object-type "image") (-> (assoc :image object-info)
+                                          (dissoc :text))))))
 
 (defn get-page-data
   [scene-data stage-idx object-name page-idx]
