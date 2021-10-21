@@ -1,11 +1,13 @@
 (ns webchange.editor-v2.activity-form.common.object-form.voice-over-control.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-dialogs.form.state :as activity-dialogs-state]
+    [webchange.editor-v2.activity-dialogs.form.utils :refer [prepare-phrase-actions]]
+    [webchange.editor-v2.activity-dialogs.menu.state :as menu-state]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
     [webchange.editor-v2.activity-form.common.object-form.voice-over-control.utils :refer [get-actions-data]]
-    [webchange.editor-v2.dialog.state.window :as dialog.window]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.logger.index :as logger]))
+    [webchange.editor-v2.layout.state :as layout-state]
+    [webchange.subs :as subs]))
 
 (defn path-to-db
   [id relative-path]
@@ -51,24 +53,17 @@
 (re-frame/reg-event-fx
   ::open-dialog-window
   (fn [{:keys [db]} [_ id]]
-    (let [{:keys [dialog-action-name phrase-action-path ]} (get-action-data db id)
-          action-node {:path [dialog-action-name]}
-          phrase-node {:path phrase-action-path}
-          window-options {:components     {:description  {:hide? true}
-                                           :node-options {:hide? true}
-                                           :target       {:hide? true}
-                                           :phrase       {:hide? true}
-                                           :play-phrase  {:hide? true}
-                                           :diagram      {:hide? true}}
-                          :single-phrase? true}]
-
-      (logger/group-folded "Open voice-over window")
-      (logger/trace "dialog-action-name" dialog-action-name)
-      (logger/trace "phrase-action-path" phrase-action-path)
-      (logger/trace "action-node" action-node)
-      (logger/trace "phrase-node" phrase-node)
-      (logger/group-end "Open voice-over window")
-
-      {:dispatch-n [[::translator-form.actions/set-current-dialog-action action-node]
-                    [::translator-form.actions/set-current-phrase-action phrase-node]
-                    [::dialog.window/open window-options]]})))
+    (let [{:keys [dialog-action-name phrase-action-path]} (get-action-data db id)
+          action-path (->> phrase-action-path
+                           (map (fn [item]
+                                  (if (number? item) [:data item] item)))
+                           (flatten)
+                           (vec))
+          scene-data (subs/current-scene-data db)
+          action-data (-> (prepare-phrase-actions {:dialog-action-path  [dialog-action-name]
+                                                   :current-action-path action-path
+                                                   :scene-data          scene-data})
+                          first)]
+      {:dispatch-n [[::layout-state/set-activity-dialogs]
+                    [::activity-dialogs-state/set-selected-action action-data]
+                    [::menu-state/set-current-section :voice-over]]})))

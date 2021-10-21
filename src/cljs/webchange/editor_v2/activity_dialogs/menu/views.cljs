@@ -15,12 +15,14 @@
 (defn activity-dialogs-menu
   []
   (let [sections @(re-frame/subscribe [::state/available-sections])
+        current-section @(re-frame/subscribe [::state/current-section])
         handle-save #(re-frame/dispatch [::translator-form.form/save-changes])]
     [:div.dialogs-menu
      (for [{:keys [id name icon]} sections]
        ^{:key id}
        [menu-section {:title-icon icon
-                      :title-text name}
+                      :title-text name
+                      :expanded?  (= id current-section)}
         (case id
           :delay [delay/form]
           :effects [effects/form]

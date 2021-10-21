@@ -140,7 +140,9 @@
        actions))
 
 (defn prepare-phrase-actions
-  [{:keys [dialog-action-path concept-data scene-data available-effects current-action-path]}]
+  [{:keys [dialog-action-path concept-data scene-data available-effects current-action-path]
+    :or   {concept-data      nil
+           available-effects []}}]
   (-> (prepare-nodes scene-data concept-data dialog-action-path)
       (set-parallel-marks)
       (set-action-data {:concept-data concept-data
