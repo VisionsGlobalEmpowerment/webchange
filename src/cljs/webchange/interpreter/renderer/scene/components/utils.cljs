@@ -119,7 +119,8 @@
 
 (defn set-z-index
   [object index]
-  (set! (.-zIndex object) index))
+  (when (number? index)
+    (set! (.-zIndex object) index)))
 
 (defn set-sortable-children
   [object value]
