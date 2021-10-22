@@ -33,36 +33,36 @@
                   :combined-skin? true
                   :heads          ["01"]
                   :clothes        ["01"]
-                  :defaults       {:skin  "02"
-                                   :head  "01"
-                                   :cloth "01"}}
+                  :defaults       {:skin    "02"
+                                   :head    "01"
+                                   :clothes "01"}}
                  {:name           "Woman"
                   :value          "woman"
                   :background     (get-background-color {:character "woman" :skin "03"})
                   :combined-skin? true
                   :heads          ["01"]
                   :clothes        ["01"]
-                  :defaults       {:skin  "03"
-                                   :head  "01"
-                                   :cloth "01"}}
+                  :defaults       {:skin    "03"
+                                   :head    "01"
+                                   :clothes "01"}}
                  {:name           "Boy"
                   :value          "boy"
                   :background     (get-background-color {:character "boy" :skin "04"})
                   :combined-skin? true
                   :heads          ["01" "02" "03"]
                   :clothes        ["01" "02" "03"]
-                  :defaults       {:skin  "04"
-                                   :head  "02"
-                                   :cloth "02"}}
+                  :defaults       {:skin    "04"
+                                   :head    "02"
+                                   :clothes "02"}}
                  {:name           "Girl"
                   :value          "girl"
                   :background     (get-background-color {:character "girl" :skin "01"})
                   :combined-skin? true
                   :heads          ["01" "02" "03"]
                   :clothes        ["01" "02" "03"]
-                  :defaults       {:skin  "01"
-                                   :head  "01"
-                                   :cloth "01"}}
+                  :defaults       {:skin    "01"
+                                   :head    "01"
+                                   :clothes "01"}}
                  {:name       "Teacher"
                   :value      "teacher"
                   :background (get-background-color {:character "teacher"})
