@@ -86,7 +86,8 @@
       (re-frame/dispatch [::state/register-object component-wrapper])
       (logger/group-end "create component" type (:object-name props))
 
-      (utils/sort-children (:container component-wrapper))
+      (when (= (:object-name props) :scene)
+        (utils/sort-children (:container component-wrapper)))
 
       {:props    prepared-props
        :wrapper  component-wrapper
