@@ -404,7 +404,7 @@
         (update-in [:metadata :resources] conj image)
         (assoc-in [:metadata :actions] (:actions m)))))
 
-(defn update
+(defn update-template
   [old-data {:keys [action-name image]}]
   (case action-name
     "add-round" (add-round old-data (:src image))))
@@ -412,4 +412,4 @@
 (core/register-template
   m
   create
-  update)
+  update-template)

@@ -7,6 +7,14 @@ WHERE true
 --~ (when (and (contains? params :type) (some? (:type params)))" and type = :type::editor_asset_type")
 ;
 
+-- :name find-editor-assets-by-tags :? :*
+-- :doc retrieve class record
+SELECT DISTINCT ea.* from editor_assets ea
+INNER JOIN editor_assets_tags eat ON (eat.editor_asset_id=ea.id)
+WHERE eat.editor_tag_id IN (:v*:tags)
+--~ (when (:tag params) " and EXISTS (SELECT * FROM editor_assets_tags WHERE editor_asset_id = ea.id AND editor_tag_id = :tag)")
+;
+
 -- :name find-all-tags :? :*
 -- :doc retrieve all tags
 SELECT * from editor_tags;
@@ -14,6 +22,16 @@ SELECT * from editor_tags;
 -- :name find-editor-tag-by-name :? :1
 -- :doc retrieve tag by name
 SELECT * from editor_tags where name=:name;
+
+-- :name find-editor-tags-by-query :? :*
+-- :doc retrieve tags by query
+SELECT * from editor_tags where name like :query;
+
+-- :name find-editor-tags-by-assets :? :*
+-- :doc retrieve class record
+SELECT eat.editor_asset_id, et.* from editor_tags et
+INNER JOIN editor_assets_tags eat ON (eat.editor_tag_id=et.id)
+WHERE eat.editor_asset_id IN (:v*:assets);
 
 -- :name create-editor-tag! :<!
 -- :doc creates a new dataset record

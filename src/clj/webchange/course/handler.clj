@@ -216,6 +216,7 @@
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration" "etc")})
+(s/defschema EditorAssetWithTags {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration" "etc") :tags [EditorTag]})
 (s/defschema CharacterSkin {:name                     s/Str
                             :width                    s/Num
                             :height                   s/Num
@@ -247,8 +248,18 @@
                   (map #(Integer/parseInt %)))]
     (response (core/editor-assets tag tags type))))
 
+(defn editor-assets-search
+  [query tag]
+  (-> query
+      (core/editor-assets-search tag)
+      (response)))
+
 (defn find-all-tags []
   (response (core/find-all-tags)))
+
+(defn find-tag-by-name
+  [tags]
+  (response (core/find-tags-by-name tags)))
 
 (s/defschema Error403 {:errors [{:message s/Str}]})
 
@@ -259,17 +270,28 @@
     (swagger-routes {:ui   "/api-docs"
                      :data {:info {:title "TabSchools API"}
                             :tags [{:name "course", :description "Course APIs"}]}})
-    (context "/api/courses" []
+    (context
+        "/api/courses" []
       :tags ["editor-assets"]
       (GET "/editor/assets" []
         :summary "Return list of available assets"
         :query-params [{type :- s/Str nil}, {tag :- s/Int nil}, {tags :- s/Str ""}]
         :return [EditorAsset]
         (editor-assets tag tags type))
+      (GET "/editor/assets-search" []
+        :summary "Return list of available assets"
+        :query-params [{q :- s/Str ""} {tag :- s/Int nil}]
+        :return [EditorAssetWithTags]
+        (editor-assets-search q tag))             
       (GET "/editor/tags" []
         :summary "Return list of available assets"
         :return [EditorTag]
         (find-all-tags))
+      (GET "/editor/tags-by-name" []
+        :summary "Return tag by name"
+        :query-params [{tags :- [s/Str] []}]
+        :return [EditorTag]
+        (find-tag-by-name tags))
       (GET "/editor/character-skin" []
         :summary "Return skins available for objects"
         :return [CharacterSkin]
