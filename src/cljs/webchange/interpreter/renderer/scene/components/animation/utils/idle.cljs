@@ -105,5 +105,6 @@
 
 (defn start-idle-animation?
   [props resource]
-  (and (:idle-animation-enabled? props)
-       (support-idle? resource)))
+  (if (support-idle? resource)
+    (:idle-animation-enabled? props)
+    true))
