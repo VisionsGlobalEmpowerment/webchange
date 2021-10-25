@@ -12,6 +12,7 @@
     [webchange.editor-v2.activity-form.generic.components.activity-preview.state :as activity-preview]
     [webchange.editor-v2.activity-form.generic.components.add-image.views :as add-image]
     [webchange.editor-v2.activity-form.generic.components.anchor.views :refer [add-anchor]]
+    [webchange.editor-v2.activity-form.generic.components.animation-settings.views :refer [animation-settings-window open-animation-settings-window]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.layout.right-menu.edit-menu.views :refer [edit-menu]]
     [webchange.editor-v2.components.activity-tracks.state :as state]))
@@ -34,7 +35,9 @@
    {:text     "Info"
     :on-click info-action-state/open-info-window}
    {:text     "Add anchor"
-    :on-click add-anchor}])
+    :on-click add-anchor}
+   {:text     "Animation settings"
+    :on-click open-animation-settings-window}])
 
 (defn actions-item
   [{:keys [text on-click]}]
@@ -66,6 +69,7 @@
                   :show-edit-menu?   show-edit-menu?
                   :on-edit-menu-back on-edit-menu-back}]
       [activity-action/activity-action-modal]
+      [animation-settings-window]
       [add-character/add-character-window]
       [background/change-background-window]
       [background-music/set-music-window]
