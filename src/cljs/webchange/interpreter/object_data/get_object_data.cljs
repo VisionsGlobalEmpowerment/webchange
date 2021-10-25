@@ -24,7 +24,7 @@
           extra-props-names))
 
 (defn- prepare-object-data
-  [name scene-id get-data]
+  [name scene-id get-data metadata]
   (let [object (->> (get-data name)
                     (with-navigation-params scene-id name))
         type (-> object :type keyword)
@@ -90,6 +90,7 @@
                                        animation-name (or (:scene-name anim-object) (:name anim-object))]
                                    (-> anim-object
                                        (with-group-params)
+                                       (merge (get metadata :animation-settings {}))
                                        (assoc :object-name (keyword name))
                                        (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
                                        (filter-extra-props [:actions :width :height :origin :meshes])))
@@ -180,6 +181,17 @@
 
 (defn get-object-data
   ([scene-id name]
-   (prepare-object-data name scene-id (fn [name] @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]))))
+   (prepare-object-data name
+                        scene-id
+                        (fn [name] @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]))
+                        @(re-frame/subscribe [::subs/scene-metadata scene-id])))
   ([scene-id name objects-data]
-   (prepare-object-data name scene-id (fn [name] (get objects-data (keyword name))))))
+   (prepare-object-data name
+                        scene-id
+                        (fn [name] (get objects-data (keyword name)))
+                        @(re-frame/subscribe [::subs/scene-metadata scene-id])))
+  ([scene-id name objects-data metadata]
+   (prepare-object-data name
+                        scene-id
+                        (fn [name] (get objects-data (keyword name)))
+                        metadata)))

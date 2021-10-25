@@ -208,19 +208,26 @@
     (set! -defaultMix 0.25)))
 
 (defn create-spine-animation
-  [animation-resource {:keys [animation-start? speed offset position skin-name skin-names animation-name scale loop]}]
-  (let [spine-data (.-spineData animation-resource)
-        coordinates {:x (* (- (:x position) (:x offset)) (:x scale))
-                     :y (* (- (:y position) (:y offset)) (:y scale))}]
-    (doto (Spine. spine-data)
-      (set-or-combine-skin skin-names skin-name)
-      (set-position coordinates)
-      (set-scale scale)
-      (set-animation-speed speed)
-      (set-animation-mix)
-      (set-auto-update animation-start?)
-      (set-animation animation-name)
-      (set-track-loop loop))))
+  ([animation-resource props]
+   (create-spine-animation animation-resource props {}))
+  ([animation-resource
+    {:keys [animation-start? speed offset position skin-name skin-names animation-name scale loop]}
+    {:keys [set-animation?] :or {set-animation? true}}]
+   (let [spine-data (.-spineData animation-resource)
+         coordinates {:x (* (- (:x position) (:x offset)) (:x scale))
+                      :y (* (- (:y position) (:y offset)) (:y scale))}
+         spine-object (doto (Spine. spine-data)
+                        (set-or-combine-skin skin-names skin-name)
+                        (set-position coordinates)
+                        (set-scale scale)
+                        (set-animation-speed speed)
+                        (set-animation-mix)
+                        (set-auto-update animation-start?))]
+     (when set-animation?
+       (doto spine-object
+         (set-animation animation-name)
+         (set-track-loop loop)))
+     spine-object)))
 
 (defn reset-skeleton
   [container state]

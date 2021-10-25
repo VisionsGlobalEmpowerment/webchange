@@ -102,3 +102,8 @@
   [state char-state]
   (disable-idle-animation state)
   (enable-idle-animation state char-state))
+
+(defn start-idle-animation?
+  [props resource]
+  (and (:idle-animation-enabled? props)
+       (support-idle? resource)))
