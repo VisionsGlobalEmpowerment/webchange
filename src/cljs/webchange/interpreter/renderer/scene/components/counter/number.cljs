@@ -19,6 +19,7 @@
   [{:keys [text style] :as props}]
   (let [container (create-container props)
         text (create-text text style)]
+    (aset (.-anchor text) "x" 0.5)
     (.addChild container text)
     {:component container
      :set-value (fn [value] (aset text "text" value))}))

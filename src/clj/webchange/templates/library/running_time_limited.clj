@@ -109,7 +109,7 @@
                                                 :transition    "counter-background"}
                         :counter               {:type        "counter"
                                                 :transition  "counter"
-                                                :x           271
+                                                :x           284
                                                 :y           48,
                                                 :font-family "Roboto"
                                                 :font-size   48
