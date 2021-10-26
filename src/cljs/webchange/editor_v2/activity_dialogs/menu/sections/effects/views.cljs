@@ -1,13 +1,13 @@
 (ns webchange.editor-v2.activity-dialogs.menu.sections.effects.views
   (:require
-   [re-frame.core :as re-frame]
-   [webchange.editor-v2.activity-dialogs.menu.sections.common.section-block.views :refer [section-block]]
-   [webchange.editor-v2.activity-dialogs.menu.sections.common.options-list.views :refer [options-list]]
-   [webchange.editor-v2.activity-dialogs.menu.sections.effects.emotions.views :refer [available-emotions]]
-   [webchange.editor-v2.activity-dialogs.menu.sections.effects.movements.views :refer [available-movements]]
-   [webchange.editor-v2.activity-dialogs.menu.sections.effects.state :as state]
-   [webchange.ui-framework.components.index :refer [icon-button]]
-   [webchange.editor-v2.dialog.utils.dialog-action :refer [skip-effects]]))
+    [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-dialogs.menu.sections.common.section-block.views :refer [section-block]]
+    [webchange.editor-v2.activity-dialogs.menu.sections.common.options-list.views :refer [options-list]]
+    [webchange.editor-v2.activity-dialogs.menu.sections.effects.emotions.views :refer [available-emotions]]
+    [webchange.editor-v2.activity-dialogs.menu.sections.effects.movements.views :refer [available-movements]]
+    [webchange.editor-v2.activity-dialogs.menu.sections.effects.state :as state]
+    [webchange.ui-framework.components.index :refer [icon-button]]
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [music-effects skip-effects]]))
 
 (def event-type
   [{:id 1 :title "Default" :type "default"}
@@ -56,10 +56,17 @@
        (when show-actions?
          [actions])])))
 
-
 (defn- skip-effects-list
   []
   (let [options (vals skip-effects)]
+    [:div
+     [options-list {:options       options
+                    :get-drag-data (fn [{:keys [value]}]
+                                     {:action value})}]]))
+
+(defn- music-effects-list
+  []
+  (let [options (vals music-effects)]
     [:div
      [options-list {:options       options
                     :get-drag-data (fn [{:keys [value]}]
@@ -85,4 +92,6 @@
    [section-block {:title "Movements"}
     [available-movements]]
    [section-block {:title "Skip"}
-    [skip-effects-list]]])
+    [skip-effects-list]]
+   [section-block {:title "Music"}
+    [music-effects-list]]])
