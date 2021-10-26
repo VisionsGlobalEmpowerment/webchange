@@ -4,7 +4,8 @@
     [clojure.string :as string]
     [clojure.tools.logging :as log]
     [webchange.templates.utils.characters :refer [animations character-positions]]
-    [webchange.utils.scene-common-actions :as common-actions-utils]))
+    [webchange.utils.scene-common-actions :as common-actions-utils]
+    [webchange.utils.scene-data :refer [update-animation-settings]]))
 
 (defn- file-used?
   [scene-data file]
@@ -173,6 +174,10 @@
         (add-object-to-last-layer anchor-name)
         (assoc-in [:metadata :added-anchor-idx] anchor-idx))))
 
+(defn- set-animation-settings
+  [scene-data data]
+  (update-animation-settings scene-data data))
+
 (defn update-activity
   [scene-data action data]
   (case (keyword action)
@@ -184,4 +189,5 @@
     :remove-character (common-actions-utils/remove-character scene-data data)
     :remove-question (common-actions-utils/remove-question scene-data data)
     :add-anchor (add-anchor scene-data)
-    :remove-anchor (common-actions-utils/remove-anchor scene-data data)))
+    :remove-anchor (common-actions-utils/remove-anchor scene-data data)
+    :set-animation-settings (set-animation-settings scene-data data)))

@@ -34,7 +34,7 @@
   [scene-data]
   (->> (get scene-data :scene-objects)
        (flatten)
-       (map #(get-object-data nil % (:objects scene-data)))))
+       (map #(get-object-data nil % (:objects scene-data) (:metadata scene-data)))))
 
 (defn- scene-started?
   [scene-id]

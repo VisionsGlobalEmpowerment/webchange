@@ -223,6 +223,10 @@
   [scene-data]
   (get scene-data :metadata {}))
 
+(defn update-metadata
+  [scene-data metadata-patch]
+  (update scene-data :metadata merge metadata-patch))
+
 (defn get-template-name
   [scene-data]
   (-> (get-metadata scene-data)
@@ -293,6 +297,20 @@
 (defn set-updates-history
   [scene-data updates]
   (assoc-in scene-data [:metadata :history :updated] updates))
+
+(defn get-animation-settings
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :animation-settings {})))
+
+(defn update-animation-settings
+  [scene-data animation-settings-patch]
+  (update-in scene-data [:metadata :animation-settings] merge animation-settings-patch))
+
+(defn get-idle-animation-enabled
+  [scene-data]
+  (-> (get-animation-settings scene-data)
+      (get :idle-animation-enabled? true)))
 
 ; General
 

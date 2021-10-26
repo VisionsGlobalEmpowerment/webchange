@@ -169,6 +169,11 @@
     (scene-object db scene-id name)))
 
 (re-frame/reg-sub
+  ::scene-metadata
+  (fn [db [_ scene-id]]
+    (get-in db [:scenes scene-id :metadata] {})))
+
+(re-frame/reg-sub
   ::scene-object-with-var
   (fn [db [_ scene-id name]]
     (let [object (get-in db [:scenes scene-id :objects (keyword name)] {})

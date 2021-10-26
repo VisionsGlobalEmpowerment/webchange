@@ -26,12 +26,13 @@
      :from 'concepts-all'}"
     (let [scene-id (:current-scene db)
           object-data (get-in db [:scenes scene-id :objects (keyword object-to-propagate)])
+          metadata (get-in db [:scenes scene-id :metadata])
           lesson-items (lessons/lesson-dataset-items db lesson-name)
           {:keys [objects scene-objects]} (get-propagated-objects object-data lesson-items)]
       (let [propagated-object-wrapper (->> (keyword object-to-propagate)
                                            (scene/get-scene-object db))]
         (doseq [object-name (map keyword scene-objects)]
-          (create-component (merge (get-object-data scene-id object-name objects)
+          (create-component (merge (get-object-data scene-id object-name objects metadata)
                                    {:parent (:container propagated-object-wrapper)})))
         ;; Assigning propagated objects to db is needed for :execute-state work
         {:db       (-> db

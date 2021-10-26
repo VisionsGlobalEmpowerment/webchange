@@ -8,25 +8,26 @@
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.resources.manager :as resources]))
 
-(def default-props {:x                {}
-                    :y                {}
-                    :offset           {}
-                    :on-mount         {}
-                    :ref              {}
-                    :name             {}
-                    :start            {}
-                    :anim             {}
-                    :skin             {}
-                    :on-click         {}
-                    :scale            {:default {:x 1 :y 1}}
-                    :loop             {:default true}
-                    :animation-start? {:alias :start}
-                    :speed            {:default 1}
-                    :skin-name        {:alias :skin :default "default"}
-                    :skin-names       {}
-                    :animation-name   {:alias :anim}
-                    :position         {:alias :anim-offset}
-                    :filters          {}})
+(def default-props {:x                       {}
+                    :y                       {}
+                    :offset                  {}
+                    :on-mount                {}
+                    :ref                     {}
+                    :name                    {}
+                    :start                   {}
+                    :anim                    {}
+                    :skin                    {}
+                    :on-click                {}
+                    :scale                   {:default {:x 1 :y 1}}
+                    :loop                    {:default true}
+                    :animation-start?        {:alias :start}
+                    :idle-animation-enabled? {:default true}
+                    :speed                   {:default 1}
+                    :skin-name               {:alias :skin :default "default"}
+                    :skin-names              {}
+                    :animation-name          {:alias :anim}
+                    :position                {:alias :anim-offset}
+                    :filters                 {}})
 
 (defn- create-animation-container
   [{:keys [x y]}]
@@ -64,7 +65,7 @@
   (let [resource (resources/get-resource name)]
     (when (nil? resource)
       (-> (str "Resource for animation <" name "> is not defined") js/Error. throw))
-    (let [animation (utils/create-spine-animation resource props)
+    (let [animation (utils/create-spine-animation resource props {:set-animation? (utils-idle/start-idle-animation? props resource)})
           animation-container (create-animation-container props)
           state (atom {:props     props
                        :animation animation
@@ -73,7 +74,7 @@
 
           wrapped-animation (wrap type (:object-name props) animation-container state)]
 
-      (when (utils-idle/support-idle? resource)
+      (when (utils-idle/start-idle-animation? props resource)
         (utils-idle/enable-idle-animation state))
 
       (.addChild animation-container animation)
