@@ -19,14 +19,18 @@
   (fn [{:keys [db]} [_ x y]]
     (let [name (editor/selected-object db)
           current-scene (subs/current-scene db)
-          state (-> (subs/scene-object db current-scene name)
-                    (assoc :x x :y y))]
-      {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
-                                                      :target   name
-                                                      :state    state}]
-                         [::edit-scene/update-current-scene-object {:target name
-                                                                    :state  state}]
-                         [::edit-scene/save-current-scene current-scene])})))
+          init-state (subs/scene-object db current-scene name)
+          state (assoc init-state :x x :y y)
+          dx (Math/abs (- (:x state) (:x init-state)))
+          dy (Math/abs (- (:y state) (:y init-state)))
+          delta 1]
+      (when (or (> dx delta) (> dy delta))
+        {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
+                                                        :target   name
+                                                        :state    state}]
+                           [::edit-scene/update-current-scene-object {:target name
+                                                                      :state  state}]
+                           [::edit-scene/save-current-scene current-scene])}))))
 
 (defn- handle-frame-click
   [component]
