@@ -38,12 +38,13 @@
 (defn set-action-type
   [actions {:keys [available-effects]}]
   {:post [(every? (fn [{:keys [type]}]
-                    (some #{type} [:character-animation
+                    (some #{type} [:background-music
+                                   :character-animation
                                    :character-movement
                                    :effect
                                    :phrase
-                                   :text-animation
                                    :skip
+                                   :text-animation
                                    :unknown])) %)
           (every? (fn [{:keys [source]}]
                     (some #{source} [:concept :scene])) %)]}
@@ -70,6 +71,9 @@
 
                                (some #{inner-action-type} ["start-skip-region" "end-skip-region"])
                                :skip
+
+                               (some #{inner-action-type} ["mute-background-music" "unmute-background-music"])
+                               :background-music
 
                                :else :unknown)]
              (-> data
@@ -127,6 +131,9 @@
 
                    (= type :skip)
                    (merge {:effect-name (get-in skip-effects [(keyword action-type) :text])})
+
+                   (= type :background-music)
+                   (merge {:action action-type})
 
                    (= source :concept)
                    (merge {:concept-name concept-name}))))

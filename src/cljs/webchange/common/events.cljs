@@ -6,6 +6,7 @@
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    [webchange.interpreter.sound :as sound]
     [webchange.logger.index :as logger]
     [webchange.utils.scene-data :as utils]))
 
@@ -750,7 +751,7 @@
          first)))
 
 (defn- execute-start-skip-region
-  "Defines the starting point in dialogue where Skip is availeble
+  "Defines the starting point in dialogue where Skip is available
    Example:
    {:type 'start-skip-region'}"
   [{{:keys [flow-id] :as action} :action}]
@@ -762,7 +763,7 @@
 (reg-executor :start-skip-region execute-start-skip-region)
 
 (defn- execute-end-skip-region
-  "Defines the end point in dialogue where Skip is availeble
+  "Defines the end point in dialogue where Skip is available
    Example:
    {:type 'end-skip-region'}"
   [{{:keys [flow-id] :as action} :action}]
@@ -775,6 +776,26 @@
   (dispatch-success-fn action))
 
 (reg-executor :end-skip-region execute-end-skip-region)
+
+(defn- execute-mute-background-music
+  "Defines the end point in dialogue where background music is muted
+   Example:
+   {:type 'mute-background-music'}"
+  [{{:keys [_] :as action} :action}]
+  (sound/music-mute)
+  (dispatch-success-fn action))
+
+(reg-executor :mute-background-music execute-mute-background-music)
+
+(defn- execute-unmute-background-music
+  "Defines the end point in dialogue where background music is unmuted
+   Example:
+   {:type 'unmute-background-music'}"
+  [{{:keys [_] :as action} :action}]
+  (sound/music-unmute)
+  (dispatch-success-fn action))
+
+(reg-executor :unmute-background-music execute-unmute-background-music)
 
 (defn- init-workflow-indexes
   [{:keys [data] :as action}]

@@ -7,6 +7,7 @@
                                    :filter        nil
                                    :gain          nil}
                            :music {:default-value 0.08
+                                   :last-value    0.08
                                    :filter        nil
                                    :gain          nil}}))
 
@@ -23,6 +24,10 @@
     (.stop audio))
   (reset! registered-audio []))
 
+(defn- get-volume
+  [gain]
+  (.. gain -gain -value))
+
 (defn- set-volume
   [gain value]
   (set! (.. gain -gain -value) value))
@@ -32,6 +37,23 @@
   (-> @app-volume
       (get-in [:music :gain])
       (set-volume value)))
+
+(defn music-get-volume
+  []
+  (-> @app-volume
+      (get-in [:music :gain])
+      (get-volume)))
+
+(defn music-mute
+  []
+  (let [current-value (music-get-volume)]
+    (swap! app-volume assoc-in [:music :last-value] current-value)
+    (music-volume 0)))
+
+(defn music-unmute
+  []
+  (let [last-value (get-in @app-volume [:music :last-value])]
+    (music-volume last-value)))
 
 (defn effects-volume
   [value]

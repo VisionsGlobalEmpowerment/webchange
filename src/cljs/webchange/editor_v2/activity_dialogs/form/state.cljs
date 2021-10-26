@@ -265,6 +265,8 @@
       "remove-target-animation" {:dispatch [::remove-target-animation data]}
       "start-skip-region" {:dispatch [::start-skip-region data]}
       "end-skip-region" {:dispatch [::end-skip-region data]}
+      "mute-background-music" {:dispatch [::mute-background-music data]}
+      "unmute-background-music" {:dispatch [::unmute-background-music data]}
       "add-movement" {:dispatch [::add-movement data]}
       {})))
 
@@ -316,6 +318,22 @@
   (fn [{:keys [_]} [_ data]]
     (let [position-data (get-action-position-data data)
           action-data (defaults/get-dialog-node {:type "end-skip-region"})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::mute-background-music
+  (fn [{:keys [_]} [_ data]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-dialog-node {:type "mute-background-music"})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::unmute-background-music
+  (fn [{:keys [_]} [_ data]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-dialog-node {:type "unmute-background-music"})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))
 

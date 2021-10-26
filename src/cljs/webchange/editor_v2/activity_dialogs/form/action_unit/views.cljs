@@ -4,6 +4,7 @@
    [reagent.core :as r]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-menu :refer [unit-menu]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-animation :refer [animation-unit]]
+   [webchange.editor-v2.activity-dialogs.form.action-unit.views-background-music :refer [background-music-unit]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-effect :refer [effect-unit]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-movement :refer [movement-unit]]
    [webchange.editor-v2.activity-dialogs.form.action-unit.views-skip :refer [skip-unit]]
@@ -82,6 +83,7 @@
        :phrase [phrase-unit props]
        :text-animation [text-animation-unit props]
        :skip [skip-unit props]
+       :background-music [background-music-unit props]
        [unknown-element props])
      [unit-menu {:idx         idx
                  :action-data props}]]

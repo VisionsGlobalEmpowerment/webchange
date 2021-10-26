@@ -30,6 +30,11 @@
                                        :value "start-skip-region"}
                    :end-skip-region   {:text  "End skip"
                                        :value "end-skip-region"}})
+
+(def music-effects {:mute-background-music   {:text  "Mute background music"
+                                              :value "mute-background-music"}
+                    :unmute-background-music {:text  "Unmute background music"
+                                              :value "unmute-background-music"}})
 (defn get-empty-action
   [action]
   (get-in action action-utils/empty-action-path))
