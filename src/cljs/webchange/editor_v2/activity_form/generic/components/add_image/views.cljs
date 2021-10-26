@@ -5,7 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.activity-template.views-image :as views-image]
     [webchange.editor-v2.wizard.activity-template.views-string :as views-string]
-    [webchange.ui-framework.components.index :refer [icon range-input]]
+    [webchange.ui-framework.components.index :refer [icon]]
     [webchange.editor-v2.activity-form.generic.components.add-image.state :as state]))
 
 (def modal-state-path [:editor-v2 :add-image-modal :state])

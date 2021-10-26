@@ -4,7 +4,8 @@
     [webchange.ui-framework.components.tooltip.index :as tooltip]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
-(def event->value #(.. % -target -value))
+(def event->value #(->> (.. % -target -value)
+                        (.parseFloat js/Number)))
 
 (defn- has-value?
   [value]

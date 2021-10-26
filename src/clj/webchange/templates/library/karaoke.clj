@@ -54,7 +54,9 @@
                                                   :y          83
                                                   :width      649
                                                   :height     379
-                                                  :visible    false}
+                                                  :visible    false
+                                                  :editable?  {:select        true
+                                                               :show-in-tree? true}}
                         :play-video-button       {:type      "image"
                                                   :src       "/raw/clipart/karaoke/play_button.png"
                                                   :x         900

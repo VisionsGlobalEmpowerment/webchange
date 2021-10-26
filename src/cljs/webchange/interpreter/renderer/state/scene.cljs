@@ -112,7 +112,7 @@
 (re-frame/reg-event-fx
   ::set-scene-object-state
   (fn [{:keys [_]} [_ object-name state]]
-    (let [filtered-state (filter-extra-props state [:start :revert :target])
+    (let [filtered-state (filter-extra-props state [:revert :start :target :volume])
           [execute-actions not-handled-params] (loop [actions-to-execute []
                                                       [{:keys [action] :as available-action} & rest-available-actions] available-actions
                                                       current-state filtered-state]
