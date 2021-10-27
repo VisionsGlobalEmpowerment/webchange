@@ -493,6 +493,7 @@
          :dialog-intro                (-> (dialog/default "Intro")
                                           (assoc :available-activities ["highlight-prev" "highlight-next" "turn-open-page" "turn-close-page"]))
          :dialog-timeout-instructions (-> (dialog/default "Timeout instructions")
+                                          (assoc :tags ["dialog"])
                                           (assoc :available-activities ["highlight-prev" "highlight-next"]))
          :highlight-next              {:type               "transition"
                                        :transition-id      "next-button"
