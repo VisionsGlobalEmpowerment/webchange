@@ -323,32 +323,26 @@
             :id   audio}
            (select-keys action [:duration :start :volume]))))
 
-(defn text-animation-sequence->actions [db {:keys [target animation start duration data fill]}]
+(defn text-animation-sequence->actions [db {:keys [target animation start duration data fill] :or {fill 45823}}]
   (let [end (+ start duration)]
     (->> data
          (remove (fn [{chunk-end :end chunk-start :at}]
                    (or
-                    (<= chunk-end start)
-                    (>= chunk-start end))))
+                     (<= chunk-end start)
+                     (>= chunk-start end))))
          (map (fn [{:keys [at chunk duration]}]
-                (case animation
-                  ("bounce") {:type "sequence-data"
-                              :data [{:type "empty" :duration (* (- at start) 1000)}
-                                     {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y -20 :duration 0.01}}
-                                     {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}
-                                     {:type "set-variable" :var-name (chunk-animated-variable target) :var-value chunk}]}
-                  ("color") (let [transition-id (chunk-transition-name target chunk)
-                                  variable-name (chunk-animated-variable target)
-                                  scene-id (:current-scene db)
-                                  transition (get-in db [:transitions scene-id transition-id])
-                                  start-fill ((:get-fill @transition))]
-                              {:type         "sequence-data"
-                               :data         [{:type "empty" :duration (* (- at start) 1000)}
-                                              {:type "transition" :transition-id transition-id :to {:fill fill :duration 0.01}}
-                                              {:type "empty" :duration (* duration 1000)}
-                                              {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.1}}
-                                              {:type "set-variable" :var-name variable-name :var-value chunk}]
-                               :on-interrupt {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.001}}}))))
+                (let [transition-id (chunk-transition-name target chunk)
+                      variable-name (chunk-animated-variable target)
+                      scene-id (:current-scene db)
+                      transition (get-in db [:transitions scene-id transition-id])
+                      start-fill ((:get-fill @transition))]
+                  {:type         "sequence-data"
+                   :data         [{:type "empty" :duration (* (- at start) 1000)}
+                                  {:type "transition" :transition-id transition-id :to {:fill fill :duration 0.01}}
+                                  {:type "empty" :duration (* duration 1000)}
+                                  {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.1}}
+                                  {:type "set-variable" :var-name variable-name :var-value chunk}]
+                   :on-interrupt {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.001}}})))
          (into []))))
 
 (defn find-nav-path
