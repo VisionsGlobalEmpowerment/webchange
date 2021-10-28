@@ -13,7 +13,6 @@
    [icon {:icon       "volume"
           :class-name "volume-icon"}]
    [range-input {:value       @value
-                 :type        "range"
                  :class-name  "volume-input"
                  :on-change   #(reset! value %)
                  :on-mouse-up #(on-change @value)

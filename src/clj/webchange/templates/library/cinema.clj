@@ -25,7 +25,9 @@
                                      :y       111,
                                      :width   1236,
                                      :height  674,
-                                     :visible false},
+                                     :visible false,
+                                     :editable? {:select        true
+                                                 :show-in-tree? true}},
                         :play-button
                                     {:type      "button",
                                      :x         816,

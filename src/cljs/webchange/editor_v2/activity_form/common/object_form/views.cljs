@@ -7,6 +7,7 @@
     [webchange.editor-v2.activity-form.common.object-form.animation-form.views :as animation-form]
     [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
     [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
+    [webchange.editor-v2.activity-form.common.object-form.video-form.views :as video-form]
     [webchange.ui-framework.components.index :refer [button with-confirmation]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
 
@@ -16,7 +17,8 @@
 (def form-components
   {"animation" animation-form/form
    "text"      text-form/form
-   "image"     image-form/form})
+   "image"     image-form/form
+   "video"     video-form/form})
 
 (defn available-object-type?
   [object-type]

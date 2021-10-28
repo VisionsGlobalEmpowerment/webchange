@@ -54,6 +54,7 @@
     (re-frame/subscribe [::state/form-component-available? id :visible]))
   (fn [show-control?]
     show-control?))
+
 ;; Upload options
 
 (def upload-options-path :upload-options)
