@@ -157,7 +157,8 @@
                                                         {:type "finish-activity"}]},
                    :dialog-instructions         (-> (dialog/default "Instructions")
                                                     (assoc :concept-var "current-concept")
-                                                    (assoc :available-activities ["show-example"]))
+                                                    (assoc :available-activities ["show-example"])
+                                                    (assoc :unique-tag "instruction"))
                    :dialog-instructions-second-stage
                                                 (-> (dialog/default "Instructions second stage")
                                                     (assoc :concept-var "current-concept")
