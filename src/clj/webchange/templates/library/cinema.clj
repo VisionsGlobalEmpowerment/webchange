@@ -51,6 +51,7 @@
                        {:finish-activity             {:type "finish-activity"},
                         :play-video                  {:type "sequence-data",
                                                       :data [{:type "action" :id "stop-timeout"}
+                                                             {:type "remove-flows", :flow-tag "instruction"}
                                                              {:type "set-attribute" :attr-name "visible", :attr-value false :target "play-button"}
                                                              {:type "set-attribute" :attr-name "visible", :attr-value false :target "screen-overlay"}
                                                              {:type "set-attribute" :attr-name "visible", :attr-value true :target "letter-video"}
@@ -71,7 +72,8 @@
                                                                     {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
                                                                     {:type "action" :id "dialog-intro"}
                                                                     {:type "action" :id "start-timeout"}],
-                                                      :description "Initial action"},
+                                                      :description "Initial action"
+                                                      :tags ["instruction"]},
                         :stop-activity               {:type "stop-activity"}
                         :start-timeout        {:type      "start-timeout-counter",
                                                :id        "inactive-counter",
