@@ -51,7 +51,7 @@
 (defn set-visibility [wrapper & params] (execute wrapper :set-visibility params))
 (defn start-animation [wrapper & params] (execute wrapper :start-animation params))
 (defn set-filter [wrapper & params] (execute wrapper :set-filter params))
-(defn stop [wrapper & params] (execute wrapper :stop-video params))
+(defn stop [wrapper & params] (execute wrapper :stop params))
 (defn set-tool [wrapper & params] (execute wrapper :set-tool params))
 (defn set-color [wrapper & params] (execute wrapper :set-color params))
 (defn set-interactive [wrapper & params] (execute wrapper :set-interactive params))
