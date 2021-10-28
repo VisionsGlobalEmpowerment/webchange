@@ -13,6 +13,7 @@
 (def default-object-props {:draggable       {}
                            :on-drag-end     {}
                            :on-drag-start   {}
+                           :on-drag-move    {}
                            :on-collide      {}
                            :collide-test    {}
                            :transition-name {}
@@ -24,11 +25,13 @@
 (defn- init-display-object!
   [{object :object :as wrapper} props props-to-exclude]
   (let [default-props (apply dissoc default-object-props props-to-exclude)
-        {:keys [draggable on-drag-end on-drag-start visible rotation opacity] :as props} (get-object-props props default-props)]
+        {:keys [draggable on-drag-end on-drag-start on-drag-move visible rotation opacity] :as props} (get-object-props props default-props)]
     (register-object object props)
     (when (some? draggable)
       (when draggable
-        (enable-drag! object on-drag-end on-drag-start)))
+        (enable-drag! object {:on-drag-start on-drag-start
+                              :on-drag-move on-drag-move
+                              :on-drag-end on-drag-end})))
     (when (has-collision-handler? props)
       (enable-collisions! object props))
     (when (some? visible)
