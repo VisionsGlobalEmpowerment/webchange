@@ -167,6 +167,7 @@
           :y       570
           :filters [{:name "brightness" :value 0}
                     {:name "glow" :outer-strength 0 :color 0xffd700}]
+          :actions {:click {:on "click", :type "action", :id "target-clicked"}}
           :src     ""},},
         :scene-objects [["background"] ["easel" "shadow" "sandbox" "skirting" "target-letter" "target-image" "box3" "box2" "box1" "mari"]],
         :actions
@@ -195,6 +196,10 @@
                                           :from-var [{:template        "word-dialog-%",
                                                       :var-name        "round-counter",
                                                       :action-property "id"}]}]}
+         :target-clicked {:type     "action"
+                          :from-var [{:template        "target-word-dialog-%",
+                                      :var-name        "round-counter",
+                                      :action-property "id"}]}
          :correct-box-selected
          {:type "sequence-data",
           :data [{:type "action" :id "unhighlight"}

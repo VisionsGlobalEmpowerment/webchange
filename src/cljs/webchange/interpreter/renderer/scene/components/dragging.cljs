@@ -46,17 +46,18 @@
             {offset-x :x offset-y :y} (-> this .-drag-offset)]
         (reset! mouse-position-data {:x (-> this .-data .-global .-x) :y (-> this .-data .-global .-y)})
         (set! (.-x this) (+ offset-x (.-x new-position)))
-        (set! (.-y this) (+ offset-y (.-y new-position)))))))
+        (set! (.-y this) (+ offset-y (.-y new-position))))
+      (when (.-on-drag-move-handler this)
+        ((.-on-drag-move-handler this))))))
 
 (defn enable-drag!
-  ([object on-drag-end-handler]
-   (enable-drag! object on-drag-end-handler nil))
-  ([object on-drag-end-handler on-drag-start-handler]
-   (doto object
-     (set! -interactive true)
-     (set! -on-drag-end-handler on-drag-end-handler)
-     (set! -on-drag-start-handler on-drag-start-handler)
-     (.on "pointerdown" on-drag-start)
-     (.on "pointerup" on-drag-end)
-     (.on "pointerupoutside" on-drag-end)
-     (.on "pointermove" on-drag-move))))
+  [object {on-drag-end-handler :on-drag-end on-drag-start-handler :on-drag-start on-drag-move-handler :on-drag-move}]
+  (doto object
+    (set! -interactive true)
+    (set! -on-drag-end-handler on-drag-end-handler)
+    (set! -on-drag-start-handler on-drag-start-handler)
+    (set! -on-drag-move-handler on-drag-move-handler)
+    (.on "pointerdown" on-drag-start)
+    (.on "pointerup" on-drag-end)
+    (.on "pointerupoutside" on-drag-end)
+    (.on "pointermove" on-drag-move)))
