@@ -45,8 +45,13 @@
               (.translate (:x offset) (:y offset)))
 
         texture (.from Texture canvas)
-        state (atom {:ctx ctx :texture texture :paths (paths path duration)
-                     :width     (* width (:x scale)) :height (* height (:y scale)) :duration duration})]
+        state (atom {:ctx      ctx
+                     :texture  texture
+                     :paths    (paths path duration)
+                     :width    (* width (:x scale))
+                     :height   (* height (:y scale))
+                     :duration duration
+                     :enable?  true})]
     (a-svg-utils/set-stroke state (select-keys props [:stroke]))
     state))
 

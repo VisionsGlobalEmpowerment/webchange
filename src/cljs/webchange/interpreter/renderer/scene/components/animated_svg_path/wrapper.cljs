@@ -20,4 +20,6 @@
                    :set-stroke              #(a-svg-utils/set-stroke state %)
                    :activate                #(do
                                                (swap! state assoc :active true)
-                                               (tracing/draw state {:path-idx 0 :point-idx 0}))}))
+                                               (tracing/draw state {:path-idx 0 :point-idx 0}))
+                   :set-enable              #(do (print "set-enable" %)
+                                                 (swap! state assoc :enable? %))}))

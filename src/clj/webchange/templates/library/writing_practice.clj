@@ -67,6 +67,7 @@
                                  :traceable   true
                                  :repeat-text 3
                                  :text        " "
+                                 :enable?     false
                                  :actions     {:next-letter {:on "next-letter-activated" :type "action" :id "letter-finished-dialog"}
                                                :finish      {:on "finish" :type "action" :id "text-finished"}
                                                :click       {:on "click" :type "action" :id "timeout-timer"}}}
@@ -148,6 +149,10 @@
                                                          :attr-name "text"}
                                                         {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
                                                         {:type "action" :id "dialog-instructions"}
+                                                        {:type      "set-attribute",
+                                                         :target    "text-tracing-pattern",
+                                                         :attr-name "enable?",
+                                                         :attr-value true}
                                                         {:type "action" :id "timeout-timer"}]},
                    :stop-activity               {:type "sequence-data"
                                                  :data [{:type "remove-interval" :id "instructions-timeout"}

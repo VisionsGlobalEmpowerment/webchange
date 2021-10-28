@@ -91,7 +91,8 @@
    {:action :set-font-family :params [:font-family]}
    {:action :set-skeleton :params [:name] :accompany-params [:skin :skin-names]}
    {:action :set-animation-skin :params [:skin]}
-   {:action :set-combined-skin :params [:skin-names]}])
+   {:action :set-combined-skin :params [:skin-names]}
+   {:action :set-enable :params [:enable?]}])
 
 (defn- get-action-params
   [{:keys [params accompany-params] :or {params [] accompany-params []}} overall-params]
@@ -297,6 +298,11 @@
   :set-combined-skin
   (fn [[object-wrapper {:keys [skin-names]}]]
     (apply-to-wrapper w/set-combined-skin object-wrapper skin-names)))
+
+(re-frame/reg-fx
+  :set-enable
+  (fn [[object-wrapper {:keys [enable?]}]]
+    (apply-to-wrapper w/set-enable object-wrapper enable?)))
 
 (re-frame/reg-fx
   :set-skeleton
