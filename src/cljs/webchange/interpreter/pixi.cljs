@@ -44,3 +44,6 @@
 
 (def sound (.. PIXI -sound))
 (def SoundFilter (.. PIXI -sound -filters -Filter))
+
+(def line-cap (.. PIXI -LINE_CAP))
+(def line-join (.. PIXI -LINE_JOIN))
