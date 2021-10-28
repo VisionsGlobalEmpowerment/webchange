@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.painting-area.component
   (:require
-    [webchange.interpreter.pixi :refer [Container Sprite Texture RenderTexture]]
+    [webchange.interpreter.pixi :refer [Container Graphics Sprite Texture RenderTexture]]
     [webchange.interpreter.renderer.scene.components.painting-area.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.painting-area.graphics :refer [create-tool]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
@@ -27,7 +27,7 @@
   [event]
   (this-as this
     (let [pos (-> event .-data (.getLocalPosition (.-parent this)))]
-      (set! (.-lastDrawPosition this) {:x (.-x pos) :y (.-y pos)}))
+      (set! (.-lastDrawPosition this) pos))
     (set! (.-data this) (.-data event))
     (set! (.-drawing this) true)))
 
@@ -43,9 +43,13 @@
     (this-as this
       (when (.-drawing this)
         (let [pos (-> this .-data (.getLocalPosition (.-parent this)))
-              tool @atool]
-          (-> tool .-position (.copyFrom pos))
-          (.render (app/get-renderer) tool texture false nil false))))))
+              last-pos (.-lastDrawPosition this)
+              graphic (@atool pos last-pos)]
+          (.render (app/get-renderer)
+                   graphic
+                   texture false nil false)
+          (.destroy graphic)
+          (set! (.-lastDrawPosition this) pos))))))
 
 (defn- create-trigger
   [texture tool {:keys [width height]}]
