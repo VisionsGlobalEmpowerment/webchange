@@ -4,15 +4,25 @@
 
 (defn- create-brush
   [color]
-  (let [line-style (clj->js {:width 70
+  (let [line-style (clj->js {:width 2
                              :color color
                              :cap   (.-ROUND line-cap)
-                             :join  (.-ROUND line-join)})]
+                             :join  (.-ROUND line-join)})
+        radius 30
+        centripetal 1.5
+        shape (->> (range 100)
+                   (map (fn []
+                          (let [dist (* radius (Math/pow (rand) centripetal))
+                                angle (* (rand) Math/PI 2)]
+                            {:x (* dist (Math/cos angle))
+                             :y (* dist (Math/sin angle))}))))]
     (fn [current-pos last-pos]
-      (doto (Graphics.)
-        (.lineStyle line-style)
-        (.moveTo (.-x last-pos) (.-y last-pos))
-        (.lineTo (.-x current-pos) (.-y current-pos))))))
+      (let [graphic (doto (Graphics.)
+                      (.lineStyle line-style))]
+        (doseq [{:keys [x y]} shape]
+          (.moveTo graphic (+ x (.-x last-pos)) (+ y (.-y last-pos)))
+          (.lineTo graphic (+ x (.-x current-pos)) (+ y (.-y current-pos))))
+        graphic))))
 
 (defn- create-pencil
   [color]
