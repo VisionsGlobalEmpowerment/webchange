@@ -118,7 +118,8 @@
   [state props]
   (fn []
     (this-as this
-      (when (.-drawing this)
+      (when (and (:enable? @state)
+                 (.-drawing this))
         (let [{offset-x :x offset-y :y} (-> this .-drag-offset)
               pos (-> this .-data (.getLocalPosition (.-parent this)))
               pointer {:x (+ offset-x (.-x pos)) :y (+ offset-y (.-y pos))}]

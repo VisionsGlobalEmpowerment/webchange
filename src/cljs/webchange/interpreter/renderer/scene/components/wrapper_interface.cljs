@@ -64,6 +64,7 @@
 (defn animated-svg-path-stop [wrapper & params] (execute wrapper :animated-svg-path-stop params))
 (defn animated-svg-path-reset [wrapper & params] (execute wrapper :animated-svg-path-reset params))
 (defn set-traffic-light [wrapper & params] (execute wrapper :set-traffic-light params))
+(defn set-enable [wrapper & params] (execute wrapper :set-enable params))
 
 (defn get-wrapped-props [wrapper & params] (execute wrapper :get-wrapped-props params))
 (defn get-prop [wrapper & params] (execute wrapper :get-prop params))

@@ -4,6 +4,7 @@
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.svg-path.component :as s]
+    [webchange.interpreter.renderer.scene.components.text-tracing-pattern.utils :refer [set-enable!]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
     [webchange.logger.index :as logger]))
 
@@ -19,7 +20,8 @@
                     :on-next-letter-activated {}
                     :on-finish                {}
                     :on-click                 {}
-                    :debug                    {:default false}})
+                    :debug                    {:default false}
+                    :enable?                  {:default true}})
 
 (def base-height 225)
 (def midline-offset 70)
@@ -156,7 +158,8 @@
                                             :on-finish #(activate-next-letter state props)
                                             :object-name (str "text-tracing-pattern-animated-" (:x letter))
                                             :parent group))]
-          (swap! state update :letters conj animated-svg-path))))
+          (swap! state update :letters conj animated-svg-path)
+          (swap! state update :all-letters conj animated-svg-path))))
     (activate-next-letter state)))
 
 (defn- padding-scale
@@ -236,7 +239,8 @@
         midline-y (-> topline-y (+ (* midline-offset letter-scale)))
         baseline-y (-> topline-y (+ (* baseline-offset letter-scale)))
         has-text? (not (clojure.string/blank? text))]
-    (reset! state {:letters []})
+    (swap! state assoc :letters [])
+    (swap! state assoc :all-letters [])
     (reset-group! group)
 
     (logger/trace-folded "text-tracing-pattern draw!" scale topline-y midline-y baseline-y)
@@ -257,7 +261,9 @@
     (when has-text?
       (draw-pattern! group props scale topline-y)
       (when traceable
-        (draw-traceable-pattern! group props scale topline-y state)))))
+        (draw-traceable-pattern! group props scale topline-y state)))
+
+    (set-enable! state)))
 
 (def component-type "text-tracing-pattern")
 
@@ -270,9 +276,9 @@
   :traceable - for traceable overlay based on animated-svg-path
   :name - component name that will be set to sprite and container with corresponding suffixes.
   :on-change - on change event handler."
-  [{:keys [parent type object-name on-click] :as props}]
+  [{:keys [parent type object-name on-click enable?] :as props}]
   (let [group (create-container props)
-        state (atom nil)
+        state (atom {:enable? enable?})
         wrapped-group (wrap type object-name group props state draw!)]
     (logger/trace-folded "Create text-tracing-pattern" props)
 
