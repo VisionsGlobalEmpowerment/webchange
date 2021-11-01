@@ -48,8 +48,8 @@
         state (atom {:ctx      ctx
                      :texture  texture
                      :paths    (paths path duration)
-                     :width    (* width (:x scale))
-                     :height   (* height (:y scale))
+                     :width    width
+                     :height   height
                      :duration duration
                      :enable?  true})]
     (a-svg-utils/set-stroke state (select-keys props [:stroke]))
