@@ -136,7 +136,7 @@
                                                    :fill        "#ef545c"
                                                    :font-weight "bold"
                                                    :actions     {:click {:id "word-click", :on "click", :type "action", :unique-tag "click"}},}
-                                                  {:start  1 :end "last"}]}},
+                                                  {:start 1 :end "last"}]}},
         :scene-objects
                    [["background"]
                     ["canvas"]
@@ -272,6 +272,7 @@
                                                             "whole-word"
                                                             "start-timeout"
                                                             ],
+                                              :unique-tag  "instruction"
                                               :description "Initial action"},
                     :start-timeout           {:type      "start-timeout-counter",
                                               :id        "inactive-counter",
@@ -291,10 +292,11 @@
                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                               :phrase             "dialog-wrong-answer",
                                               :phrase-description "Dialog wrong answer"},
-                    :word-click              {:type "sequence-data",
-                                              :data [{:type "action" :id "stop-timeout"}
-                                                     {:type "action" :id "correct-response-dialog"}
-                                                     {:type "action" :id "finish-activity"}]}
+                    :word-click              {:type       "sequence-data",
+                                              :unique-tag "instruction"
+                                              :data       [{:type "action" :id "stop-timeout"}
+                                                           {:type "action" :id "correct-response-dialog"}
+                                                           {:type "action" :id "finish-activity"}]}
                     :correct-response-dialog {:type               "sequence-data",
                                               :editor-type        "dialog",
                                               :concept-var        "current-concept",
