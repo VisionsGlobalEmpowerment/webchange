@@ -4,5 +4,6 @@
   [str]
   "Parse string to integer if string contains only digits. Return string otherwise."
   (if (re-matches #"\d+" str)
-    (.parseInt js/Number str)
+    #?(:clj  (.parseInt Integer str)
+       :cljs (.parseInt js/Number str))
     str))

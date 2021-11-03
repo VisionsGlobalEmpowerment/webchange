@@ -14,8 +14,7 @@
 (defn- create-chunk
   [chunk line-container]
   (let [text (-> chunk
-                 (merge {:x     (:x chunk)
-                         :y     0
+                 (merge {:y     0
                          :align "left"})
                  (prepare-actions)
                  (create-simple-text))]
@@ -29,9 +28,18 @@
     (.addChild text-container line-container)
     (map #(create-chunk % line-container) chunks)))
 
+(defn- map-chunk-keywords
+  [chunks {:keys [text]}]
+  (map (fn [{:keys [end] :as chunk}]
+         (cond-> chunk
+                 (= end "last") (assoc :end (count text))))
+       chunks))
+
 (defn create-chunked-text
   [{:keys [x y] :as props}]
-  (let [text-container (new-container x y)
-        lines (lines-with-y props)]
+  (let [fixed-props (-> props
+                        (update :chunks map-chunk-keywords props))
+        text-container (new-container x y)
+        lines (lines-with-y fixed-props)]
     {:text-container text-container
-     :chunks         (mapcat #(create-line % text-container props) lines)}))
+     :chunks         (mapcat #(create-line % text-container fixed-props) lines)}))
