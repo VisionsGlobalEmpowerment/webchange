@@ -1,8 +1,7 @@
 (ns webchange.templates.library.letter-intro
   (:require
     [webchange.templates.core :as core]
-    [webchange.templates.utils.common :as common]
-    [webchange.templates.utils.dialog :as dialog]))
+    [webchange.templates.utils.common :as common]))
 
 (def m {:id          39
         :name        "Letter intro"
@@ -10,8 +9,7 @@
         :description "letter introduction"
         :lesson-sets ["concepts-single"]
         :fields      [{:name "image-src",
-                       :type "image"}]
-        })
+                       :type "image"}]})
 
 (def t {:assets
                    [{:url "/raw/img/casa/background.jpg", :size 10, :type "image"}
@@ -57,7 +55,7 @@
                                                :visible   {:visible true}
                                                :hidden    {:visible false}},
                                  :text        ""
-                                 :transition "letter-big"},
+                                 :transition  "letter-big"},
                     :letter-small
                                 {:type        "text",
                                  :x           885,
@@ -73,7 +71,7 @@
                                                :visible   {:visible true}
                                                :hidden    {:visible false}},
                                  :text        ""
-                                 :transition "letter-small"},
+                                 :transition  "letter-small"},
                     :letter-path
                                 {:type         "animated-svg-path",
                                  :x            875,
@@ -107,61 +105,42 @@
                                  :speed      0.35,
                                  :start      true},
                     :senora-vaca
-                                {:type   "animation",
-                                 :x      380,
-                                 :y      1000,
-                                 :width  351,
-                                 :height 717,
-                                 :anim   "idle",
-                                 :name   "senoravaca",
+                                {:type       "animation",
+                                 :x          380,
+                                 :y          1000,
+                                 :width      351,
+                                 :height     717,
+                                 :anim       "idle",
+                                 :name       "senoravaca",
                                  :scene-name "senora-vaca"
-                                 :skin   "vaca",
-                                 :speed  0.3,
-                                 :start  true},
-                    :word-1-first
-                                {:type           "text",
-                                 :x              720,
-                                 :y              410,
-                                 :width          120,
-                                 :height         90,
-                                 :visible        false,
-                                 :align          "right",
-                                 :fill           "#ef545c",
-                                 :font-family    "Lexend Deca",
-                                 :font-size      80,
-                                 :font-weight    "bold",
-                                 :actions        {:click {:id "word-1-first-click", :on "click", :type "action", :unique-tag "click"}},
+                                 :skin       "vaca",
+                                 :speed      0.3,
+                                 :start      true},
+                    :word
+                                {:type           "text"
+                                 :text           ""
+                                 :align          "center"
+                                 :vertical-align "bottom"
+                                 :font-size      80
+                                 :font-family    "Lexend Deca"
+                                 :fill           "#fc8e51"
+                                 :x              720
+                                 :y              450
+                                 :width          470
+                                 :height         60
                                  :states         {:glow      {:permanent-pulsation {:speed 2}}
                                                   :stop-glow {:permanent-pulsation false}
-                                                  :big       {:y 390, :font-size 90},
                                                   :hidden    {:visible false},
-                                                  :normal    {:y 410, :font-size 80},
-                                                  :visible   {:visible true}},
-                                 :vertical-align "top",
-                                 :text           ""},
-                    :word-1-rest
-                                {:type           "text",
-                                 :x              840,
-                                 :y              410,
-                                 :width          340,
-                                 :height         90,
-                                 :visible        false,
-                                 :fill           "#fc8e51",
-                                 :font-family    "Lexend Deca",
-                                 :font-size      80,
-                                 :states         {:glow      {:permanent-pulsation {:speed 2}}
-                                                  :stop-glow {:permanent-pulsation false}
-                                                  :big       {:y 390, :font-size 90},
-                                                  :hidden    {:visible false},
-                                                  :normal    {:y 410, :font-size 80},
-                                                  :visible   {:visible true}},
-                                 :vertical-align "top",
-                                 :text           ""},
-                    },
+                                                  :visible   {:visible true}}
+                                 :chunks         [{:start       0 :end 1
+                                                   :fill        "#ef545c"
+                                                   :font-weight "bold"
+                                                   :actions     {:click {:id "word-click", :on "click", :type "action", :unique-tag "click"}},}
+                                                  {:start  1 :end "last"}]}},
         :scene-objects
                    [["background"]
                     ["canvas"]
-                    ["letter-small" "letter-big" "word-1-first" "word-1-rest"]
+                    ["letter-small" "letter-big" "word"]
                     ["letter-path"]
                     ["senora-vaca" "mari"]
                     ["image"]],
@@ -185,7 +164,6 @@
                     :init-state              {:type "parallel",
                                               :data
                                                     [
-                                                     ;{:id "hidden", :type "state", :target "letter-small"}
                                                      {:type      "set-attribute",
                                                       :target    "letter-small",
                                                       :from-var  [{:var-name "current-concept", :var-property "letter", :action-property "attr-value"}],
@@ -199,15 +177,10 @@
                                                       :target    "letter-big",
                                                       :from-var  [{:var-name "current-concept", :var-property "letter-big", :action-property "attr-value"}],
                                                       :attr-name "text"}
-                                                     {:id "hidden", :type "state", :target "word-1-first"}
+                                                     {:id "hidden", :type "state", :target "word"}
                                                      {:type      "set-attribute",
-                                                      :target    "word-1-first",
-                                                      :from-var  [{:var-name "current-concept", :var-property "letter", :action-property "attr-value"}],
-                                                      :attr-name "text"}
-                                                     {:id "hidden", :type "state", :target "word-1-rest"}
-                                                     {:type      "set-attribute",
-                                                      :target    "word-1-rest",
-                                                      :from-var  [{:var-name "current-concept", :var-property "concept-rest", :action-property "attr-value"}],
+                                                      :target    "word",
+                                                      :from-var  [{:var-name "current-concept", :var-property "concept-name", :action-property "attr-value"}],
                                                       :attr-name "text"}
                                                      {:id "init-position", :type "state", :target "image"}
                                                      {:type      "set-attribute",
@@ -230,15 +203,15 @@
                                                                              {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                               :phrase               "intro",
                                               :phrase-description   "Introduce task"}
-                    :describe-writing        {:type               "sequence-data",
-                                              :editor-type        "dialog",
-                                              :concept-var        "current-concept",
+                    :describe-writing        {:type                 "sequence-data",
+                                              :editor-type          "dialog",
+                                              :concept-var          "current-concept",
                                               :available-activities ["redraw-letter"]
-                                              :data               [{:type "sequence-data"
-                                                                    :data [{:type "empty" :duration 0}
-                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                              :phrase             "describe-writing",
-                                              :phrase-description "Describe writing"}
+                                              :data                 [{:type "sequence-data"
+                                                                      :data [{:type "empty" :duration 0}
+                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                              :phrase               "describe-writing",
+                                              :phrase-description   "Describe writing"}
                     :introduce-image-dialog  {:type               "sequence-data",
                                               :editor-type        "dialog",
                                               :concept-var        "current-concept",
@@ -265,9 +238,9 @@
                                                              {:type "action", :id "describe-writing"}]
                                                       }
                                                      ]}
-                    :redraw-letter {:type "sequence-data"
-                                    :data [{:type "set-attribute" :target "letter-path" :attr-name "stroke" :attr-value "#5c54ef"}
-                                           {:type "path-animation", :state "play", :target "letter-path"}]}
+                    :redraw-letter           {:type "sequence-data"
+                                              :data [{:type "set-attribute" :target "letter-path" :attr-name "stroke" :attr-value "#5c54ef"}
+                                                     {:type "path-animation", :state "play", :target "letter-path"}]}
                     :introduce-image         {:type "sequence-data",
                                               :data [
                                                      {:id "hidden" :type "state" :target "image"}
@@ -284,15 +257,10 @@
                                                      {:to {:x 1600, :y 635, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
                                                      {:type "action", :id "introduce-image-dialog"}
                                                      ]}
-                    :whole-word-glow         {:type "sequence-data",
-                                              :data [{:type "state" :target "word-1-first" :id "glow"}
-                                                     {:type "state" :target "word-1-rest" :id "glow"}]}
-                    :whole-word-stop-glow    {:type "sequence-data",
-                                              :data [{:type "state" :target "word-1-first" :id "stop-glow"}
-                                                     {:type "state" :target "word-1-rest" :id "stop-glow"}]}
+                    :whole-word-glow         {:type "state" :target "word" :id "glow"}
+                    :whole-word-stop-glow    {:type "state" :target "word" :id "stop-glow"}
                     :whole-word              {:type "sequence-data",
-                                              :data [{:id "visible", :type "state", :target "word-1-first"}
-                                                     {:id "visible", :type "state", :target "word-1-rest"}
+                                              :data [{:id "visible" :type "state" :target "word"}
                                                      {:id "whole-word-dialog" :type "action"}]}
                     :start-scene             {:type        "sequence",
                                               :data        ["start-activity"
@@ -305,25 +273,25 @@
                                                             "start-timeout"
                                                             ],
                                               :description "Initial action"},
-                    :start-timeout        {:type      "start-timeout-counter",
-                                           :id        "inactive-counter",
-                                           :action    "continue-try",
-                                           :autostart true
-                                           :interval  10000}
-                    :stop-timeout      {:type "remove-interval"
-                                        :id        "inactive-counter"}
-                    :continue-try         {:type "sequence",
-                                           :data ["start-timeout"
-                                                  "dialog-wrong-answer"]},
-                    :dialog-wrong-answer  {:type               "sequence-data",
-                                           :editor-type        "dialog",
-                                           :concept-var        "current-concept",
-                                           :data               [{:type "sequence-data"
-                                                                 :data [{:type "empty" :duration 0}
-                                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                           :phrase             "dialog-wrong-answer",
-                                           :phrase-description "Dialog wrong answer"},
-                    :word-1-first-click      {:type "sequence-data",
+                    :start-timeout           {:type      "start-timeout-counter",
+                                              :id        "inactive-counter",
+                                              :action    "continue-try",
+                                              :autostart true
+                                              :interval  10000}
+                    :stop-timeout            {:type "remove-interval"
+                                              :id   "inactive-counter"}
+                    :continue-try            {:type "sequence",
+                                              :data ["start-timeout"
+                                                     "dialog-wrong-answer"]},
+                    :dialog-wrong-answer     {:type               "sequence-data",
+                                              :editor-type        "dialog",
+                                              :concept-var        "current-concept",
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                              :phrase             "dialog-wrong-answer",
+                                              :phrase-description "Dialog wrong answer"},
+                    :word-click              {:type "sequence-data",
                                               :data [{:type "action" :id "stop-timeout"}
                                                      {:type "action" :id "correct-response-dialog"}
                                                      {:type "action" :id "finish-activity"}]}
@@ -335,18 +303,18 @@
                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                               :phrase             "Correct Response",
                                               :phrase-description "Correct Response and finish"}
-                    :highlight-small-letter {:type               "transition"
-                                             :transition-id      "letter-small"
-                                             :return-immediately true
-                                             :from               {:opacity 1},
-                                             :to                 {:opacity 0.38 :yoyo true :duration 0.5}
-                                             :kill-after         3000}
-                    :highlight-big-letter {:type               "transition"
-                                             :transition-id      "letter-big"
-                                             :return-immediately true
-                                             :from               {:opacity 1},
-                                             :to                 {:opacity 0.38 :yoyo true :duration 0.5}
-                                             :kill-after         3000}
+                    :highlight-small-letter  {:type               "transition"
+                                              :transition-id      "letter-small"
+                                              :return-immediately true
+                                              :from               {:opacity 1},
+                                              :to                 {:opacity 0.38 :yoyo true :duration 0.5}
+                                              :kill-after         3000}
+                    :highlight-big-letter    {:type               "transition"
+                                              :transition-id      "letter-big"
+                                              :return-immediately true
+                                              :from               {:opacity 1},
+                                              :to                 {:opacity 0.38 :yoyo true :duration 0.5}
+                                              :kill-after         3000}
                     },
         ;
         :triggers  {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
