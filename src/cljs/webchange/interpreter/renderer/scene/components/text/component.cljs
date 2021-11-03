@@ -14,8 +14,8 @@
                     :font-size       {}
                     :fill            {:default "#000000"}
                     :shadow-color    {}
-                    :skew-x           {:default 0}
-                    :skew-y           {:default 0}
+                    :skew-x          {:default 0}
+                    :skew-y          {:default 0}
                     :shadow-distance {:default 5}
                     :shadow-blur     {}
                     :shadow-opacity  {}
@@ -78,7 +78,6 @@
       (apply-filters text filters)
       (.addChild parent text)
 
-      (when-not (nil? on-click) (utils/set-handler text "click" on-click))
       (when-not (nil? ref) (ref wrapped-text))
 
       wrapped-text)))

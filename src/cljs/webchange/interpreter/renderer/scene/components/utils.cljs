@@ -58,9 +58,16 @@
 
 (defn get-pivot
   [display-object]
-  (let [scale (.-pivot display-object)]
-    {:x (.-x scale)
-     :y (.-y scale)}))
+  (let [pivot (.-pivot display-object)]
+    {:x (.-x pivot)
+     :y (.-y pivot)}))
+
+(defn set-pivot
+  [display-object pivot]
+  (let [{:keys [x y]} (-> (get-pivot display-object)
+                          (merge pivot))]
+    (-> (.-pivot display-object)
+        (.set x y))))
 
 (defn set-visibility
   [display-object visible?]

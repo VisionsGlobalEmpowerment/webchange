@@ -28,11 +28,11 @@
     [webchange.resources.manager :as resources-manager]
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
     [webchange.interpreter.renderer.scene.app :as app]
-    [webchange.editor-v2.activity-form.common.interpreter-stage.state :as stage]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.warehouse :as warehouse]
     [webchange.logger.index :as logger]
-    [webchange.interpreter.subs :as interpreter-subs]))
+    [webchange.interpreter.subs :as interpreter-subs]
+    [webchange.utils.numbers :as numbers]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :start-audio-recording ::execute-start-audio-recording)
@@ -778,11 +778,17 @@
      :id     'hidden'}"
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
-          object (get-in scene [:objects (keyword target)])
+          target-path (->> (clojure.string/split target ".")
+                           (map numbers/try-parse-int)
+                           (map (fn [path-step]
+                                  (if (string? path-step)
+                                    (keyword path-step)
+                                    path-step))))
+          object (get-in scene (concat [:objects] target-path))
           states (get object :states)
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
           state (merge (get states-with-aliases (keyword id)) params)]
-      {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge state)
+      {:db         (update-in db (concat [:scenes scene-id :objects] target-path) merge state)
        :dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
                          (ce/success-event action))})))
 

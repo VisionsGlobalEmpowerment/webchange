@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.text.chunked-text
   (:require
     [webchange.interpreter.pixi :refer [Container]]
+    [webchange.interpreter.object-data.group-params :refer [prepare-actions]]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [lines-with-y chunks-with-x]]
     [webchange.interpreter.renderer.scene.components.text.simple-text :refer [create-simple-text]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
@@ -12,7 +13,12 @@
 
 (defn- create-chunk
   [chunk line-container]
-  (let [text (create-simple-text (merge chunk {:x (:x chunk) :y 0 :align "left"}))]
+  (let [text (-> chunk
+                 (merge {:x     (:x chunk)
+                         :y     0
+                         :align "left"})
+                 (prepare-actions)
+                 (create-simple-text))]
     (.addChild line-container text)
     {:chunk chunk :text-object text}))
 

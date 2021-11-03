@@ -159,8 +159,11 @@
     "right" (- width (:width line))
     0))
 
-(defn chunk-transition-name [name index]
-  (if index (str "chunk-" name "-" index)))
+(defn chunk-transition-name
+  [name index]
+  (if index
+    ; chunk name corresponds to chunk definition path in scene data: {chunked-text-name}.chunks.{index}
+    (str name ".chunks." index)))
 
 (defn chunk-animated-variable [name]
   (str "chunk-" name "-animated"))

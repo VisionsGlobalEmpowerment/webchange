@@ -24,160 +24,162 @@
           extra-props-names))
 
 (defn- prepare-object-data
-  [name scene-id get-data metadata]
-  (let [object (->> (get-data name)
-                    (with-navigation-params scene-id name))
-        type (-> object :type keyword)
-        object-data (case type
-                      :anchor (-> (merge object
-                                         {:object-name (keyword name)}))
-                      :background (-> (merge object
-                                             {:object-name (keyword name)}
-                                             (with-filter-params object))
-                                      (filter-extra-props [:brightness :filter]))
-                      :layered-background (-> (merge object
-                                                     {:object-name (keyword name)}
-                                                     (with-filter-params object))
-                                              (filter-extra-props [:brightness :filter]))
-                      :button (-> (merge object
+  ([name scene-id get-data]
+   (prepare-object-data name scene-id get-data {}))
+  ([name scene-id get-data metadata]
+   (let [object (->> (get-data name)
+                     (with-navigation-params scene-id name))
+         type (-> object :type keyword)
+         object-data (case type
+                       :anchor (-> (merge object
+                                          {:object-name (keyword name)}))
+                       :background (-> (merge object
+                                              {:object-name (keyword name)}
+                                              (with-filter-params object))
+                                       (filter-extra-props [:brightness :filter]))
+                       :layered-background (-> (merge object
+                                                      {:object-name (keyword name)}
+                                                      (with-filter-params object))
+                                               (filter-extra-props [:brightness :filter]))
+                       :button (-> (merge object
+                                          {:object-name (keyword name)}
+                                          (with-group-params object))
+                                   (filter-extra-props []))
+                       :image (-> object
+                                  (assoc :object-name (keyword name))
+                                  (with-group-params)
+                                  (with-filter-params)
+                                  (filter-extra-props [:actions :brightness :filter :highlight :eager]))
+                       :questions (-> object
+                                      (assoc :object-name (keyword name))
+                                      (with-group-params)
+                                      (with-filter-params)
+                                      (filter-extra-props []))
+                       :transparent (-> object
+                                        (with-group-params)
+                                        (assoc :object-name (keyword name))
+                                        (filter-extra-props [:actions :origin]))
+                       :group (let [group-params (with-group-params object)
+                                    children-params (->> (:children object)
+                                                         (map (fn [name] (prepare-object-data name scene-id get-data)))
+                                                         (remove nil?))]
+                                (-> (merge object
+                                           group-params
+                                           {:object-name (keyword name)
+                                            :children    children-params})
+                                    (with-filter-params)
+                                    (filter-extra-props [:width :height])))
+                       :flipbook (let [group-params (with-group-params object)
+                                       pages-params (->> (:pages object)
+                                                         (map (fn [{:keys [object action]}]
+                                                                [(prepare-object-data object scene-id get-data) action]))
+                                                         (map (fn [[object-params action]]
+                                                                [(-> object-params
+                                                                     (assoc :visible false)
+                                                                     (dissoc :x)
+                                                                     (dissoc :y))
+                                                                 action]))
+                                                         (map-indexed (fn [idx [object-params action]]
+                                                                        [(update object-params :children concat (flipbook-decorations/create-for idx))
+                                                                         action]))
+                                                         (remove nil?))]
+                                   (-> (merge object
+                                              group-params
+                                              {:object-name (keyword name)
+                                               :pages       pages-params})
+                                       (filter-extra-props [])))
+                       :animation (let [anim-object (prepare-anim-object-params object)
+                                        animation-name (or (:scene-name anim-object) (:name anim-object))]
+                                    (-> anim-object
+                                        (with-group-params)
+                                        (merge (get metadata :animation-settings {}))
+                                        (assoc :object-name (keyword name))
+                                        (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
+                                        (filter-extra-props [:actions :width :height :origin :meshes])))
+                       :text (-> object
+                                 (with-group-params)
+                                 (with-filter-params)
+                                 (merge {:object-name (keyword name)})
+                                 (filter-extra-props []))
+                       :rectangle (-> object
+                                      (with-group-params)
+                                      (with-filter-params)
+                                      (merge {:object-name (keyword name)})
+                                      (filter-extra-props []))
+                       :carousel (-> object
+                                     (merge {:object-name (keyword name)})
+                                     (filter-extra-props []))
+                       :painting-area (-> object
+                                          (with-group-params)
+                                          (assoc :object-name (keyword name))
+                                          (filter-extra-props []))
+                       :colors-palette (-> object
+                                           (with-group-params)
+                                           (assoc :object-name (keyword name))
+                                           (filter-extra-props [:var :var-name]))
+                       :video (-> (merge object
                                          {:object-name (keyword name)}
                                          (with-group-params object))
                                   (filter-extra-props []))
-                      :image (-> object
-                                 (assoc :object-name (keyword name))
-                                 (with-group-params)
-                                 (with-filter-params)
-                                 (filter-extra-props [:actions :brightness :filter :highlight :eager]))
-                      :questions (-> object
+                       :animated-svg-path (-> object
+                                              (with-group-params)
+                                              (assoc :object-name (keyword name))
+                                              (filter-extra-props []))
+                       :svg-path (-> object
+                                     (with-group-params)
                                      (assoc :object-name (keyword name))
-                                     (with-group-params)
-                                     (with-filter-params)
                                      (filter-extra-props []))
-                      :transparent (-> object
-                                       (with-group-params)
-                                       (assoc :object-name (keyword name))
-                                       (filter-extra-props [:actions :origin]))
-                      :group (let [group-params (with-group-params object)
-                                   children-params (->> (:children object)
-                                                        (map (fn [name] (prepare-object-data name scene-id get-data)))
-                                                        (remove nil?))]
-                               (-> (merge object
-                                          group-params
-                                          {:object-name (keyword name)
-                                           :children    children-params})
-                                   (with-filter-params)
-                                   (filter-extra-props [:width :height])))
-                      :flipbook (let [group-params (with-group-params object)
-                                      pages-params (->> (:pages object)
-                                                        (map (fn [{:keys [object action]}]
-                                                               [(prepare-object-data object scene-id get-data) action]))
-                                                        (map (fn [[object-params action]]
-                                                               [(-> object-params
-                                                                    (assoc :visible false)
-                                                                    (dissoc :x)
-                                                                    (dissoc :y))
-                                                                action]))
-                                                        (map-indexed (fn [idx [object-params action]]
-                                                                       [(update object-params :children concat (flipbook-decorations/create-for idx))
-                                                                        action]))
-                                                        (remove nil?))]
-                                  (-> (merge object
-                                             group-params
-                                             {:object-name (keyword name)
-                                              :pages       pages-params})
-                                      (filter-extra-props [])))
-                      :animation (let [anim-object (prepare-anim-object-params object)
-                                       animation-name (or (:scene-name anim-object) (:name anim-object))]
-                                   (-> anim-object
-                                       (with-group-params)
-                                       (merge (get metadata :animation-settings {}))
-                                       (assoc :object-name (keyword name))
-                                       (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
-                                       (filter-extra-props [:actions :width :height :origin :meshes])))
-                      :text (-> object
-                                (with-group-params)
-                                (with-filter-params)
-                                (merge {:object-name (keyword name)})
-                                (filter-extra-props []))
-                      :rectangle (-> object
-                                     (with-group-params)
-                                     (with-filter-params)
-                                     (merge {:object-name (keyword name)})
-                                     (filter-extra-props []))
-                      :carousel (-> object
-                                    (merge {:object-name (keyword name)})
-                                    (filter-extra-props []))
-                      :painting-area (-> object
-                                         (with-group-params)
-                                         (assoc :object-name (keyword name))
-                                         (filter-extra-props []))
-                      :colors-palette (-> object
-                                          (with-group-params)
-                                          (assoc :object-name (keyword name))
-                                          (filter-extra-props [:var :var-name]))
-                      :video (-> (merge object
-                                        {:object-name (keyword name)}
-                                        (with-group-params object))
-                                 (filter-extra-props []))
-                      :animated-svg-path (-> object
-                                             (with-group-params)
-                                             (assoc :object-name (keyword name))
-                                             (filter-extra-props []))
-                      :svg-path (-> object
-                                    (with-group-params)
-                                    (assoc :object-name (keyword name))
-                                    (filter-extra-props []))
-                      :matrix (let [children-params (let [{:keys [el width height dx dy max skip]} object
-                                                          skip-coordinates (partition 2 skip)]
-                                                      (->> (for [y (range (/ height dy)) x (range (/ width dx))] [x y])
-                                                           (filter (fn [coordinate] (not (some #(= coordinate %) skip-coordinates))))
-                                                           (take max)
-                                                           (map-indexed (fn [index [x y]]
-                                                                          (merge (prepare-object-data el scene-id get-data)
-                                                                                 {:x           (* x dx)
-                                                                                  :y           (* y dy)
-                                                                                  :object-name (-> el (str "-" index) (keyword))
-                                                                                  :group-name  (keyword el)})))))]
-                                (-> object
-                                    (with-group-params)
-                                    (merge {:type        "group"
-                                            :object-name (keyword name)
-                                            :children    children-params})
-                                    (filter-extra-props [:el :dx :width :dy :max :height])))
-                      :propagate (-> object
+                       :matrix (let [children-params (let [{:keys [el width height dx dy max skip]} object
+                                                           skip-coordinates (partition 2 skip)]
+                                                       (->> (for [y (range (/ height dy)) x (range (/ width dx))] [x y])
+                                                            (filter (fn [coordinate] (not (some #(= coordinate %) skip-coordinates))))
+                                                            (take max)
+                                                            (map-indexed (fn [index [x y]]
+                                                                           (merge (prepare-object-data el scene-id get-data)
+                                                                                  {:x           (* x dx)
+                                                                                   :y           (* y dy)
+                                                                                   :object-name (-> el (str "-" index) (keyword))
+                                                                                   :group-name  (keyword el)})))))]
+                                 (-> object
                                      (with-group-params)
                                      (merge {:type        "group"
-                                             :object-name (keyword name)})
-                                     (filter-extra-props [:el-height :el :width :el-width :height]))
-                      :traffic-light (-> object
-                                         (assoc :object-name (keyword name))
-                                         (with-group-params)
-                                         (with-filter-params)
-                                         (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
-                      :timer (-> object
-                                 (assoc :object-name (keyword name))
-                                 (with-group-params)
-                                 (with-filter-params)
-                                 (filter-extra-props []))
-                      :counter (-> object
-                                   (assoc :object-name (keyword name))
-                                   (with-group-params)
-                                   (with-filter-params)
-                                   (filter-extra-props []))
-                      :painting-toolset (-> object
-                                            (assoc :object-name (keyword name))
-                                            (with-group-params)
-                                            (filter-extra-props []))
-                      :text-tracing-pattern (-> object
-                                                (assoc :object-name (keyword name))
-                                                (with-group-params)
-                                                (filter-extra-props []))
-                      :question (-> object
+                                             :object-name (keyword name)
+                                             :children    children-params})
+                                     (filter-extra-props [:el :dx :width :dy :max :height])))
+                       :propagate (-> object
+                                      (with-group-params)
+                                      (merge {:type        "group"
+                                              :object-name (keyword name)})
+                                      (filter-extra-props [:el-height :el :width :el-width :height]))
+                       :traffic-light (-> object
+                                          (assoc :object-name (keyword name))
+                                          (with-group-params)
+                                          (with-filter-params)
+                                          (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
+                       :timer (-> object
+                                  (assoc :object-name (keyword name))
+                                  (with-group-params)
+                                  (with-filter-params)
+                                  (filter-extra-props []))
+                       :counter (-> object
                                     (assoc :object-name (keyword name))
+                                    (with-group-params)
+                                    (with-filter-params)
                                     (filter-extra-props []))
-                      (-> (str "Object with type " type " can not be parsed (" name ")") (js/Error.) (throw)))]
-    (-> object-data
-        (filter-extra-props [:actions :states :scene-name :transition :filter-transition]))))
+                       :painting-toolset (-> object
+                                             (assoc :object-name (keyword name))
+                                             (with-group-params)
+                                             (filter-extra-props []))
+                       :text-tracing-pattern (-> object
+                                                 (assoc :object-name (keyword name))
+                                                 (with-group-params)
+                                                 (filter-extra-props []))
+                       :question (-> object
+                                     (assoc :object-name (keyword name))
+                                     (filter-extra-props []))
+                       (-> (str "Object with type " type " can not be parsed (" name ")") (js/Error.) (throw)))]
+     (-> object-data
+         (filter-extra-props [:actions :states :scene-name :transition :filter-transition])))))
 
 (defn get-object-data
   ([scene-id name]
