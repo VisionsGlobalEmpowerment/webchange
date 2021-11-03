@@ -12,7 +12,8 @@
   (let [chunk-name (chunk-transition-name (name object-name) (:index chunk))
         wrapper (wrap type (keyword chunk-name) text-object nil)]
     (re-frame/dispatch [::ier/register-transition chunk-name (atom wrapper)])
-    (re-frame/dispatch [::scene/register-object wrapper])))
+    (when (some? chunk-name)
+      (re-frame/dispatch [::scene/register-object wrapper]))))
 
 (defn register-chunks
   [chunks object-name type]
