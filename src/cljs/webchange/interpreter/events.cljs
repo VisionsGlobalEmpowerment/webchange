@@ -778,7 +778,7 @@
      :id     'hidden'}"
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
-          target-path (->> (clojure.string/split target ".")
+          target-path (->> (clojure.string/split (clojure.core/name target) ".")
                            (map numbers/try-parse-int)
                            (map (fn [path-step]
                                   (if (string? path-step)
