@@ -37,12 +37,23 @@
       (when-not (nil? group-name)
         (swap! groups update group-name conj object-name)))))
 
+(re-frame/reg-fx
+  :remove-scene-object
+  (fn [{:keys [objects object-name]}]
+    (swap! objects dissoc object-name)))
+
 (re-frame/reg-event-fx
   ::register-object
   (fn [{:keys [db]} [_ object-wrapper]]
     {:add-scene-object {:objects        (get-in db (path-to-db [:objects]))
                         :groups         (get-in db (path-to-db [:groups]))
                         :object-wrapper object-wrapper}}))
+
+(re-frame/reg-event-fx
+  ::unregister-object
+  (fn [{:keys [db]} [_ object-name]]
+    {:remove-scene-object {:objects     (get-in db (path-to-db [:objects]))
+                           :object-name object-name}}))
 
 (defn get-scene-object
   [db name]

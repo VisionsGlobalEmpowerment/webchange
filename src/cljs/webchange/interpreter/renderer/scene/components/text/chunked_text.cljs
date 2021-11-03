@@ -6,7 +6,7 @@
     [webchange.interpreter.renderer.scene.components.text.simple-text :refer [create-simple-text]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
-(defn- new-container
+(defn new-container
   [x y]
   (doto (Container.)
     (utils/set-position {:x x :y y})))
@@ -36,10 +36,8 @@
        chunks))
 
 (defn create-chunked-text
-  [{:keys [x y] :as props}]
+  [text-container props]
   (let [fixed-props (-> props
                         (update :chunks map-chunk-keywords props))
-        text-container (new-container x y)
         lines (lines-with-y fixed-props)]
-    {:text-container text-container
-     :chunks         (mapcat #(create-line % text-container fixed-props) lines)}))
+    (mapcat #(create-line % text-container fixed-props) lines)))
