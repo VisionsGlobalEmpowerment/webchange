@@ -310,8 +310,7 @@
                                  (if (progress-initialized? progress)
                                    (re-frame/dispatch [::set-progress-data progress])
                                    (re-frame/dispatch [::init-default-progress progress]))
-                                 (re-frame/dispatch [::set-current-scene (or scene-id (get-in progress [:next :activity-name]))])
-                                 (re-frame/dispatch [::progress-loaded])))))
+                                 (re-frame/dispatch [::progress-loaded course-id scene-id])))))
 
 (re-frame/reg-fx
   :load-lessons
@@ -1721,8 +1720,10 @@
 
 (re-frame/reg-event-fx
   ::progress-loaded
-  (fn [{:keys [db]} _]
-    {:dispatch-n (list [::load-settings])}))
+  (fn [{:keys [db]} [_ course-id scene-id]]
+    (let [progress (:progress-data db)]
+      {:dispatch-n (list [::load-settings]
+                         [::set-current-scene (or scene-id (get-in progress [:next :activity-name]))])})))
 
 (re-frame/reg-event-fx
   ::add-pending-event

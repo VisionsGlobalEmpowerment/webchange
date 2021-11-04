@@ -1,20 +1,19 @@
 (ns webchange.core-test
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.test :refer-macros [deftest testing is use-fixtures]]
-            [cljs.core.async :refer [<! timeout]]
             [re-frame.core :as re-frame]
+            [re-frame.db]
             [day8.re-frame.test :as rf-test]
-            [webchange.core :as core]
             [webchange.events :as events]
             [webchange.interpreter.core :as ic]
             [webchange.interpreter.events :as ie]
             [webchange.fixtures :as fixtures]))
 
 (use-fixtures :once
-              {:before (fn []
-                         (doto ic/http-buffer
-                           (swap! assoc (ic/course-url "test-course") (fixtures/get-course "test-course"))
-                           (swap! assoc (ic/scene-url "test-course" "initial-scene") (fixtures/get-scene "test-course" "initial-scene"))))})
+  {:before (fn []
+             (doto ic/http-buffer
+               (swap! assoc (ic/course-url "test-course") (fixtures/get-course "test-course"))
+               (swap! assoc (ic/scene-url "test-course" "initial-scene") (fixtures/get-scene "test-course" "initial-scene"))
+               (swap! assoc (ic/progress-url "test-course") (fixtures/get-progress "test-course"))))})
 
 (use-fixtures :each {:before (fn []
                                (re-frame/dispatch-sync [::events/initialize-db]))})

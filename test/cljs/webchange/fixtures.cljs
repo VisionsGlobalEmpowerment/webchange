@@ -10,9 +10,8 @@
 
 (def test-courses
   {"table-course" table-course/data
-   "test-course"  {:initial-scene "initial-scene"
-                   :preload       ["initial-scene" "next-scene"]
-                   :scenes        ["initial-scene" "next-scene" "last-scene"]}})
+   "test-course"  {:scenes        ["initial-scene" "next-scene" "last-scene"]
+                   :default-progress {:next {:level 0, :lesson 0, :activity 0, :activity-name "initial-scene"}}}})
 
 (def test-scenes
   {"table-course" {"scene-1" table-scene-1/data
@@ -46,6 +45,12 @@
   [course-id]
   (let [c (chan)]
     (go (>! c {:body (get test-lesson-sets course-id)}))
+    c))
+
+(defn get-progress
+  [course-id]
+  (let [c (chan)]
+    (go (>! c {:body {}}))
     c))
 
 (defn init-scene
