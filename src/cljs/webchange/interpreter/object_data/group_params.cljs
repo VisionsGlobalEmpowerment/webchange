@@ -20,7 +20,7 @@
   [action]
   {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action (prepare-action-data action %)])})
 
-(defn- prepare-actions
+(defn prepare-actions
   [{:keys [actions] :as object}]
   (let [has-actions? (->> actions keys nil? not)
         group? (-> object :type keyword (= :group))

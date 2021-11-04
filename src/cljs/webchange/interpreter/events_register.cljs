@@ -15,3 +15,9 @@
     (logger/trace-folded "register transition" name component)
     (let [scene-id (:current-scene db)]
       (assoc-in db [:transitions scene-id name] component))))
+
+(re-frame/reg-event-db
+  ::unregister-transition
+  (fn [db [_ name]]
+    (let [scene-id (:current-scene db)]
+      (update-in db [:transitions scene-id] dissoc name))))

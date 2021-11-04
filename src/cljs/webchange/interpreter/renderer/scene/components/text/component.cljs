@@ -1,9 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.text.component
   (:require
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.text.wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.scene.components.text.chunked-text :refer [create-chunked-text]]
-    [webchange.interpreter.renderer.scene.components.text.chunked-text-utils :refer [register-chunks]]
+    [webchange.interpreter.renderer.scene.components.text.wrapper :refer [register-chunks wrap]]
+    [webchange.interpreter.renderer.scene.components.text.chunked-text :refer [create-chunked-text new-container]]
     [webchange.interpreter.renderer.scene.components.text.simple-text :refer [create-simple-text]]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]))
 
@@ -14,8 +13,8 @@
                     :font-size       {}
                     :fill            {:default "#000000"}
                     :shadow-color    {}
-                    :skew-x           {:default 0}
-                    :skew-y           {:default 0}
+                    :skew-x          {:default 0}
+                    :skew-y          {:default 0}
                     :shadow-distance {:default 5}
                     :shadow-blur     {}
                     :shadow-opacity  {}
@@ -60,25 +59,30 @@
   :on-click - on click event handler.
   :ref - callback function that must be called with component wrapper.
   "
-  [{:keys [parent type object-name chunks on-click ref filters] :as props}]
-  (if chunks
-    (let [{:keys [text-container chunks]} (create-chunked-text props)
-          wrapped-text (wrap type object-name text-container chunks)]
-      (apply-filters text-container filters)
-      (.addChild parent text-container)
+  [{:keys [x y parent type object-name chunks on-click ref filters] :as props}]
+  (let [state (atom {:chunked? false
+                     :props    props})]
+    (if chunks
+      (let [text-container (new-container x y)
+            chunks (create-chunked-text text-container props)
+            wrapped-text (wrap type object-name text-container chunks state)]
+        (apply-filters text-container filters)
+        (.addChild parent text-container)
 
-      (register-chunks chunks object-name type)
+        (swap! state assoc :chunked? true)
+        (swap! state assoc :container text-container)
+        (swap! state assoc :chunks [])
+        (register-chunks chunks object-name type state)
 
-      (when-not (nil? on-click) (utils/set-handler text-container "click" on-click))
+        (when-not (nil? on-click) (utils/set-handler text-container "click" on-click))
 
-      wrapped-text)
-    (let [text (create-simple-text props)
-          wrapped-text (wrap type object-name text nil)]
+        wrapped-text)
+      (let [text (create-simple-text props)
+            wrapped-text (wrap type object-name text nil state)]
 
-      (apply-filters text filters)
-      (.addChild parent text)
+        (apply-filters text filters)
+        (.addChild parent text)
 
-      (when-not (nil? on-click) (utils/set-handler text "click" on-click))
-      (when-not (nil? ref) (ref wrapped-text))
+        (when-not (nil? ref) (ref wrapped-text))
 
-      wrapped-text)))
+        wrapped-text))))

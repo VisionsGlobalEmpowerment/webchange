@@ -45,17 +45,21 @@
         "bottom" (+ y height))})
 
 (defn create-simple-text
-  [{:keys [align text font-family font-size font-weight fill scale skew-x skew-y width word-wrap] :as props}]
-  (let [position (calculate-position props)]
-    (doto (Text. text (clj->js (cond-> {:align      align
-                                        :fontFamily font-family
-                                        :fontWeight font-weight
-                                        :fill       fill}
-                                       (some? font-size) (assoc :fontSize font-size)
-                                       (true? word-wrap) (-> (assoc :wordWrap true)
-                                                             (assoc :wordWrapWidth width)))))
-      (set-skew skew-x skew-y)
-      (utils/set-position position)
-      (set-scale scale)
-      (set-shadow props)
-      (set-align props))))
+  [{:keys [align text font-family font-size font-weight fill scale skew-x skew-y width word-wrap on-click] :as props}]
+  (let [position (calculate-position props)
+        text-object (doto (Text. text (clj->js (cond-> {:align      align
+                                                        :fontFamily font-family
+                                                        :fontWeight font-weight
+                                                        :fill       fill}
+                                                       (some? font-size) (assoc :fontSize font-size)
+                                                       (true? word-wrap) (-> (assoc :wordWrap true)
+                                                                             (assoc :wordWrapWidth width)))))
+                      (set-skew skew-x skew-y)
+                      (utils/set-position position)
+                      (set-scale scale)
+                      (set-shadow props)
+                      (set-align props))]
+
+    (when-not (nil? on-click) (utils/set-handler text-object "click" on-click))
+
+    text-object))
