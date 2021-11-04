@@ -10,7 +10,7 @@
 
 (defn show-overlay?
   [mode]
-  (some #{mode} [::modes/game]))
+  (some #{mode} [::modes/game ::modes/game-with-nav]))
 
 (def menu-padding {:x 20 :y 20})
 
@@ -185,8 +185,9 @@
 (defn- get-score-window
   [viewport]
   (let [go-to-next-activity #(re-frame/dispatch [::ie/run-next-activity])
-        restart-activity #(re-frame/dispatch [::ie/restart-scene])
-        continue-playing #(re-frame/dispatch [::ie/next-scene])]
+                                        ;        restart-activity #(re-frame/dispatch [::ie/restart-scene])
+                                        ;       continue-playing #(re-frame/dispatch [::ie/next-scene])
+        ]
     (merge
       {:type        "group"
        :object-name score-window-name
@@ -205,10 +206,10 @@
                      (get-featured-content {:x        (+ (/ (:width score-window-size) 2) 65)
                                             :y        120
                                             :on-click go-to-next-activity})
-                     (get-menu {:x                20
-                                :y                (+ (:height score-window-size) 10)
-                                :on-restart-click restart-activity
-                                :on-next-click    continue-playing})]}
+                     #_(get-menu {:x                20
+                                  :y                (+ (:height score-window-size) 10)
+                                  :on-restart-click restart-activity
+                                  :on-next-click    continue-playing})]}
       (get-score-window-position viewport))))
 
 (defn create

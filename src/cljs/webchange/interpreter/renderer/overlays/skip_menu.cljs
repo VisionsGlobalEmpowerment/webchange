@@ -9,7 +9,7 @@
 
 (defn show-overlay?
   [mode]
-  (some #{mode} [::modes/game ::modes/sandbox]))
+  (some #{mode} [::modes/game ::modes/game-with-nav ::modes/sandbox]))
 
 (def menu-padding {:y 20})
 (def button-name :skip-menu-button)

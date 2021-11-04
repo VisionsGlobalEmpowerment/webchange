@@ -195,7 +195,7 @@
              activity-idx (filter-last-finished-activities activity-idx))))
 
 (defn complete-individual-progress!
-  [course-slug student-id {lesson-val :lesson level-val :level activity-val :activity}]
+  [course-slug student-id {lesson-val :lesson level-val :level activity-val :activity navigation :navigation}]
   (let [level (when level-val (dec level-val))
         lesson (when lesson-val (dec lesson-val))
         activity (when activity-val (dec activity-val))
@@ -213,5 +213,6 @@
                    (db/get-progress {:user_id user-id :course_id course-id})
                    :data
                    (assoc :finished finished)
-                   (assoc :next next))]
+                   (assoc :next next)
+                   (assoc :user-mode (if navigation "game-with-nav")))]
     (save-progress! user-id course-slug {:progress progress})))

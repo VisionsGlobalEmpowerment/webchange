@@ -13,7 +13,8 @@
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
     [webchange.interpreter.renderer.scene.components.group.propagate]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.logger.index :as logger]))
 
 (defn- get-layer-objects-data
   [scene-id layer-objects]
@@ -98,14 +99,16 @@
   (r/with-let []
     (let [scene-id @(re-frame/subscribe [::subs/current-scene])
           scene-data @(re-frame/subscribe [::subs/scene scene-id])
-          dataset-items @(re-frame/subscribe [::isubs/dataset-items])]
+          dataset-items @(re-frame/subscribe [::isubs/dataset-items])
+          user-mode (-> @(re-frame/subscribe [::isubs/user-mode])
+                        (modes/get-mode))]
       [:div {:style {:position "fixed"
                      :top      0
                      :left     0
                      :width    "100%"
                      :height   "100%"}}
        [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-       [stage-wrapper {:mode          mode
+       [stage-wrapper {:mode          (or user-mode mode)
                        :scene-id      scene-id
                        :scene-data    scene-data
                        :dataset-items dataset-items}]])

@@ -8,7 +8,7 @@
 
 (defn show-overlay?
   [mode]
-  (some #{mode} [::modes/game ::modes/sandbox]))
+  (some #{mode} [::modes/game ::modes/game-with-nav ::modes/sandbox]))
 
 
 (def goodbye-window-name :goodbye-window)

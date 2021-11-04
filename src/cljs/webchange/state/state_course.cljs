@@ -29,7 +29,9 @@
 (re-frame/reg-event-fx
   ::set-course-data
   (fn [{:keys [db]} [_ course-data]]
-    {:db (assoc-in db course-data-path course-data)}))
+    {:db (-> db
+             (assoc-in course-data-path course-data)
+             (assoc :course-data course-data))}))
 
 (re-frame/reg-event-fx
   ::load-course-data

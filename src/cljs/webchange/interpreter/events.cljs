@@ -280,9 +280,9 @@
                    (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
                                     (re-frame/dispatch [::sw-status/set-current-course course-id])
                                     (re-frame/dispatch [::set-course-data course])
-                                    (re-frame/dispatch [::load-progress course-id])
-                                    (re-frame/dispatch [::load-lessons course-id])
-                                    (re-frame/dispatch [::set-current-scene (or scene-id (:initial-scene course))]))))))
+                                    (re-frame/dispatch [::load-progress {:course-id course-id
+                                                                         :scene-id  scene-id}])
+                                    (re-frame/dispatch [::load-lessons course-id]))))))
 
 (re-frame/reg-fx
   :load-course-data
@@ -304,13 +304,13 @@
 
 (re-frame/reg-fx
   :load-progress
-  (fn [course-id]
+  (fn [{:keys [course-id scene-id]}]
     (i/load-progress course-id (fn [progress]
                                  (re-frame/dispatch [:complete-request :load-progress])
                                  (if (progress-initialized? progress)
                                    (re-frame/dispatch [::set-progress-data progress])
                                    (re-frame/dispatch [::init-default-progress progress]))
-                                 (re-frame/dispatch [::progress-loaded])))))
+                                 (re-frame/dispatch [::progress-loaded course-id scene-id])))))
 
 (re-frame/reg-fx
   :load-lessons
@@ -1437,9 +1437,10 @@
 
 (re-frame/reg-event-fx
   ::load-progress
-  (fn [{:keys [db]} [_ course-id]]
+  (fn [{:keys [db]} [_ {:keys [course-id scene-id]}]] 
     {:db            (assoc-in db [:loading :load-progress] true)
-     :load-progress course-id}))
+     :load-progress {:course-id course-id
+                     :scene-id  scene-id}}))
 
 (re-frame/reg-event-fx
   ::load-lessons
@@ -1719,8 +1720,10 @@
 
 (re-frame/reg-event-fx
   ::progress-loaded
-  (fn [{:keys [db]} _]
-    {:dispatch-n (list [::load-settings])}))
+  (fn [{:keys [db]} [_ course-id scene-id]]
+    (let [progress (:progress-data db)]
+      {:dispatch-n (list [::load-settings]
+                         [::set-current-scene (or scene-id (get-in progress [:next :activity-name]))])})))
 
 (re-frame/reg-event-fx
   ::add-pending-event

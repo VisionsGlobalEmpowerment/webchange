@@ -15,10 +15,16 @@
 
 (re-frame/reg-event-fx
   ::init-editor
-  (fn [_ [_ course-id scene-id]]
-    {:dispatch-n (list [::ie/start-course course-id scene-id]
+  (fn [{:keys [db]} [_ course-id scene-id]]
+    {:db          (-> db
+                      (assoc :loaded-course course-id)
+                      (assoc :current-course course-id))
+     :dispatch-n (list [::state-course/load-course-data course-id]
                        [::load-lesson-sets course-id]
-                       [::state-course/load-course-info course-id])}))
+                       [::ie/load-lessons course-id]
+                       [::state-course/load-course-info course-id]
+                       (when scene-id
+                         [::ie/set-current-scene scene-id]))}))
 
 (re-frame/reg-event-fx
   ::load-lesson-sets
