@@ -8,7 +8,7 @@
 
 (defn show-overlay?
   [mode]
-  (some #{mode} [::modes/game]))
+  (some #{mode} [::modes/game ::modes/game-with-nav]))
 
 (def menu-padding {:x 20 :y 20})
 

@@ -123,10 +123,10 @@
         {{first-name :first-name last-name :last-name} :user :as student} @(re-frame/subscribe [::students-subs/current-student])
         student-modal-state @(re-frame/subscribe [::students-subs/student-modal-state])
         student-data (r/atom (assoc student :first-name first-name
-                                            :last-name last-name
-                                            :class-id (if (= :add student-modal-state)
-                                                        class-id
-                                                        (:class-id student))))
+                                    :last-name last-name
+                                    :class-id (if (= :add student-modal-state)
+                                                class-id
+                                                (:class-id student))))
         handle-save (if (= :edit student-modal-state)
                       (fn [student-data] (re-frame/dispatch [::students-events/edit-student (:class-id student-data) (:id student-data) student-data]))
                       (fn [student-data] (re-frame/dispatch [::students-events/add-student (:class-id student-data) student-data])))
@@ -228,7 +228,11 @@
               {:label         "Activity to complete"
                :type          "text"
                :helper-text   "Leave blank to complete all activities"
-               :on-change #(swap! data assoc :activity (-> % .-target .-value js/parseInt))}]]
+               :on-change #(swap! data assoc :activity (-> % .-target .-value js/parseInt))}]
+             [ui/checkbox {:label     "Navigation"
+                           :variant   "outlined"
+                           :default-value false
+                           :on-change #(swap! data assoc :navigation (-> % .-target .-checked))}]]
             [ui/dialog-actions
              [ui/button {:on-click #(re-frame/dispatch [::students-events/close-complete-modal])} "Cancel"]
              [ui/button

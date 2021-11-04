@@ -1,6 +1,12 @@
 (ns webchange.interpreter.renderer.scene.modes.modes)
 
-(def available-modes [::game ::sandbox ::editor])
+(def available-modes [::game ::game-with-nav ::sandbox ::editor])
+
+(defn get-mode
+  [mode-name]
+  (case mode-name
+    "game-with-nav" ::game-with-nav
+    nil))
 
 (defn show-overlays?
   [mode]
@@ -8,7 +14,7 @@
 
 (defn start-on-ready?
   [mode]
-  (some #{mode} [::game ::sandbox]))
+  (some #{mode} [::game ::game-with-nav ::sandbox]))
 
 (defn fullscreen?
   [mode]

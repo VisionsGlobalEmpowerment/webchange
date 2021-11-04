@@ -62,6 +62,11 @@
     (->> (get-in db [:progress-data :next])
          (activity/next-not-finished-for db))))
 
+(re-frame/reg-sub
+  ::user-mode
+  (fn [db]
+    (get-in db [:progress-data :user-mode])))
+
 (defn lesson-sets-data
   [db lesson-sets-ids]
   (let [lesson-sets (get-in db [:lessons])]
