@@ -25,10 +25,15 @@
 
 (re-frame/reg-sub
   ::scene-list-ordered
-  (fn [db]
-    (->> (get-in db [:course-data :scene-list])        
+  (fn []
+    [(re-frame/subscribe [::scene-list])
+     (re-frame/subscribe [::scene-placeholders])])
+  (fn [[scene-list scene-placeholders]]
+    (->> scene-list
          (remove #(-> % second :archived))
-         (map #(assoc (second %) :scene-id (first %)))
+         (map #(assoc (second %)
+                      :scene-id (first %)
+                      :is-placeholder (get scene-placeholders (-> % first name) false)))
          (sort-by :scene-id))))
 
 (re-frame/reg-sub

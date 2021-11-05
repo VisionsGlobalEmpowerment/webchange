@@ -20,9 +20,10 @@
                       (assoc :loaded-course course-id)
                       (assoc :current-course course-id))
      :dispatch-n (list [::state-course/load-course-data course-id]
+                       [::state-course/load-course-info course-id]
                        [::load-lesson-sets course-id]
                        [::ie/load-lessons course-id]
-                       [::state-course/load-course-info course-id]
+                       [::ie/load-scenes-with-skills course-id]
                        (when scene-id
                          [::ie/set-current-scene scene-id]))}))
 
