@@ -19,7 +19,9 @@
 (defn dialog-action?
   [action-data]
   (or (contains? action-data :phrase)
-      (contains? action-data :phrase-text)))
+      (contains? action-data :phrase-text)
+      (-> (:editor-type action-data)
+          (= "dialog"))))
 
 (defn fix-available-effect
   [available-effect]
