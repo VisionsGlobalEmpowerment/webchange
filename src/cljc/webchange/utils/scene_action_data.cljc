@@ -2,6 +2,8 @@
   (:require
     [clojure.string :as string]))
 
+(def action-tags {:unskippable-action "unskippable-action"})
+
 (defn get-action-type
   [action-data]
   (get action-data :type))

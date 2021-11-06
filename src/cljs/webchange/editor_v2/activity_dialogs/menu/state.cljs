@@ -21,7 +21,9 @@
                :text-animation {:name "Text Animation Action"
                                 :icon "text-animation"}
                :voice-over     {:name "Voice-over"
-                                :icon "mic"}})
+                                :icon "mic"}
+               :action-tags    {:name "Action tags"
+                                :icon "link"}})
 (defn- get-section
   [id]
   (-> (get sections id)
@@ -36,6 +38,7 @@
              (get-section :text-animation)
              (get-section :effects)]
             (some? selected-action) (conj (get-section :delay))
+            (some? selected-action) (conj (get-section :action-tags))
             (and (some? selected-action)
                  (some #{(:type selected-action)} [:phrase :text-animation])) (conj (get-section :voice-over)))))
 
