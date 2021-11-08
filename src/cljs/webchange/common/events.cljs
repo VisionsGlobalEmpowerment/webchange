@@ -328,11 +328,24 @@
         (dispatch-success-fn action)))
     (dispatch-success-fn action)))
 
+(defonce user-interactions-blocked? (atom false))
+
+(defn- block-user-interaction
+  []
+  (when-not @user-interactions-blocked?
+    (reset! user-interactions-blocked? true)))
+
+(defn- unblock-user-interaction
+  []
+  (when @user-interactions-blocked?
+    (reset! user-interactions-blocked? false)))
+
 (re-frame/reg-event-fx
   ::execute-action
   [event-as-action]
-  (fn [{:keys [db]} action]
-    (execute-action db action)
+  (fn [{:keys [db]} {:keys [user-event?] :as action}]
+    (when-not (and user-event? @user-interactions-blocked?)
+      (execute-action db action))
     {}))
 
 (defn remove-tag
@@ -593,13 +606,6 @@
                     (into []))]
       {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
-(defonce first-dialog-name (atom nil))
-
-(defn- first-dialog-action?
-  [{:keys [display-name]}]
-  (or (nil? @first-dialog-name)
-      (= @first-dialog-name display-name)))
-
 (defn execute-sequence-data!
   ([db {:keys [flow-id] :as action}]
    (if (and (skip-flow? flow-id) (:workflow-user-input action))
@@ -620,32 +626,33 @@
            action-tags (get-action-tags action)
            dialog-action? (action-data-utils/dialog-action? action)
            skippable? (or
-                        (and dialog-action?
-                             (not (some #{(:unskippable-action action-data-utils/action-tags)} action-tags))
-                             (not (first-dialog-action? action)))
+                        dialog-action?
                         (->> action :previous-flow :tags (some #{"skip"})))
-           flow-data {:flow-id flow-id
-                      :actions [action-id]
-                      :type :all
-                      :next next
-                      :parent (:flow-id action)
-                      :skip (get-in action [:previous-flow :skip])
-                      :tags (cond-> action-tags
-                                    skippable? (conj "skip"))
-                      :dialog (= "dialog" (:editor-type action))
+           flow-data {:flow-id       flow-id
+                      :actions       [action-id]
+                      :type          :all
+                      :next          next
+                      :parent        (:flow-id action)
+                      :skip          (get-in action [:previous-flow :skip])
+                      :tags          (cond-> action-tags
+                                             skippable? (conj "skip"))
+                      :dialog        (= "dialog" (:editor-type action))
                       :current-scene current-scene
-                      :on-remove (when (:on-interrupt action)
-                                   [#(execute-action db (:on-interrupt action))])}
+                      :on-remove     (when (:on-interrupt action)
+                                       [#(execute-action db (:on-interrupt action))])}
            current-action (-> current
                               (update :display-name
                                       #(or % (sequenced-action->display-name action
                                                                              sequence-position)))
                               (assoc :flow-id flow-id)
                               (assoc :action-id action-id)
-                              (with-prev action))]
+                              (with-prev action))
 
-       (when dialog-action?
-         (reset! first-dialog-name (:display-name action)))
+           block-user-interaction? (some #{(:unskippable-action action-data-utils/action-tags)} action-tags)]
+
+       (if block-user-interaction?
+         (block-user-interaction)
+         (unblock-user-interaction))
 
        (register-flow! flow-data)
        (execute-action db current-action)))))
