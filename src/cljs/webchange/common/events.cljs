@@ -610,8 +610,10 @@
            flow-id (random-uuid)
            action-id (random-uuid)
            current-scene (:current-scene db)
+           action-tags (get-action-tags action)
            skippable? (or
-                        (action-data-utils/dialog-action? action)
+                        (and (action-data-utils/dialog-action? action)
+                             (not (some #{(:unskippable-action action-data-utils/action-tags)} action-tags)))
                         (->> action :previous-flow :tags (some #{"skip"})))
            flow-data {:flow-id flow-id
                       :actions [action-id]
@@ -619,7 +621,7 @@
                       :next next
                       :parent (:flow-id action)
                       :skip (get-in action [:previous-flow :skip])
-                      :tags (cond-> (get-action-tags action)
+                      :tags (cond-> action-tags
                                     skippable? (conj "skip"))
                       :dialog (= "dialog" (:editor-type action))
                       :current-scene current-scene
