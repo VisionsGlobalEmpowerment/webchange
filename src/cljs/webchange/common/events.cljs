@@ -593,6 +593,13 @@
                     (into []))]
       {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
+(defonce first-dialog-name (atom nil))
+
+(defn- first-dialog-action?
+  [{:keys [display-name]}]
+  (or (nil? @first-dialog-name)
+      (= @first-dialog-name display-name)))
+
 (defn execute-sequence-data!
   ([db {:keys [flow-id] :as action}]
    (if (and (skip-flow? flow-id) (:workflow-user-input action))
@@ -611,9 +618,11 @@
            action-id (random-uuid)
            current-scene (:current-scene db)
            action-tags (get-action-tags action)
+           dialog-action? (action-data-utils/dialog-action? action)
            skippable? (or
-                        (and (action-data-utils/dialog-action? action)
-                             (not (some #{(:unskippable-action action-data-utils/action-tags)} action-tags)))
+                        (and dialog-action?
+                             (not (some #{(:unskippable-action action-data-utils/action-tags)} action-tags))
+                             (not (first-dialog-action? action)))
                         (->> action :previous-flow :tags (some #{"skip"})))
            flow-data {:flow-id flow-id
                       :actions [action-id]
@@ -634,6 +643,10 @@
                               (assoc :flow-id flow-id)
                               (assoc :action-id action-id)
                               (with-prev action))]
+
+       (when dialog-action?
+         (reset! first-dialog-name (:display-name action)))
+
        (register-flow! flow-data)
        (execute-action db current-action)))))
 
