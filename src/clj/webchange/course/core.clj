@@ -304,7 +304,8 @@
         scenes (->> course-data
                     :scene-list
                     keys
-                    (map name))]
+                    (map name)
+                    (map codec/url-decode))]
     (db/save-course! {:course_id  new-course-id
                       :data       course-data
                       :owner_id   owner-id
@@ -588,11 +589,11 @@
         lesson-sets-lessons (->> lesson-sets (map (juxt keyword default-lesson-name)) (into {}))
         initial-scene-required? (nil? (get course-data :initial-scene))
         data (cond-> course-data
-                     :always (assoc-in [:scene-list (keyword scene-slug)] {:name scene-name})
-                     :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
-                     :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
-                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
-                     initial-scene-required? (assoc :initial-scene scene-slug))]
+               :always (assoc-in [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword)] {:name scene-name})
+               :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
+               :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
+               lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
+               initial-scene-required? (assoc :initial-scene scene-slug))]
     (db/save-course! {:course_id  course-id
                       :data       data
                       :owner_id   owner-id
@@ -626,7 +627,7 @@
   (let [created-at (jt/local-date-time)
         {course-data :data} (db/get-latest-course-version {:course_id course-id})]
     (db/save-course! {:course_id  course-id
-                      :data       (assoc-in course-data [:scene-list (keyword scene-slug) :lesson-sets] lesson-sets)
+                      :data       (assoc-in course-data [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword) :lesson-sets] lesson-sets)
                       :owner_id   owner-id
                       :created_at created-at})))
 
@@ -644,8 +645,8 @@
     (save-dataset-on-create! course-id scene-slug metadata)
     (add-activity-lesson-sets! course-id scene-slug metadata owner-id)
     [true {:id          scene-id
-           :name        (get-in course-data [:scene-list (keyword scene-slug) :name])
-           :scene-slug  scene-slug
+           :name        (get-in course-data [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword) :name])
+           :scene-slug  (codec/url-encode scene-slug)
            :course-slug course-slug}]))
 
 (defn set-activity-preview!
@@ -655,11 +656,11 @@
         {course-data :data} (db/get-latest-course-version {:course_id course-id})
         created-at (jt/local-date-time)]
     (db/save-course! {:course_id  course-id
-                      :data       (assoc-in course-data [:scene-list (keyword scene-slug) :preview] preview)
+                      :data       (assoc-in course-data [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword) :preview] preview)
                       :owner_id   owner-id
                       :created_at created-at})
     [true {:id          scene-id
-           :name        (get-in course-data [:scene-list (keyword scene-slug) :name])
+           :name        (get-in course-data [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword) :name])
            :scene-slug  scene-slug
            :course-slug course-slug}]))
 
