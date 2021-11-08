@@ -133,7 +133,7 @@
 
                                                         {:type      "set-attribute",
                                                          :target    "letter-tutorial-trace",
-                                                         :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter-path"}],
+                                                         :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter-tutorial-path"}],
                                                          :attr-name "data"}
                                                         {:type      "set-attribute",
                                                          :target    "letter-tutorial-path",
