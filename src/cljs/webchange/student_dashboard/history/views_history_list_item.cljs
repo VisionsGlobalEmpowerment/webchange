@@ -42,7 +42,7 @@
                   :src   (:png image)
                   :style (:img styles)}]]
      [ui/list-item-text {:primary                name
-                         :secondary              (str "Level " level " Lesson " lesson)
+                         :secondary              (str "Level " (inc level) " Lesson " (inc lesson))
                          :primaryTypographyProps {:style (:text-primary styles)}
                          :style                  (:text styles)}]
      [ui/list-item-secondary-action
