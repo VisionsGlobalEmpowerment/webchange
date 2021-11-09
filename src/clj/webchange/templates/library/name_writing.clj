@@ -27,28 +27,26 @@
                                                   :width      96 :height 96
                                                   :transition "next-button"
                                                   :children   ["next-background"
-                                                               "next-button-mark"
-                                                               ]}
+                                                               "next-button-mark"]}
                         :next-background      {:type          "rectangle"
-                                                  :x             0
-                                                  :y             0
-                                                  :transition    "next-background"
-                                                  :width         96
-                                                  :height        96
-                                                  :border-radius 48
-                                                  :fill          0xFF5C00}
+                                               :x             0
+                                               :y             0
+                                               :transition    "next-background"
+                                               :width         96
+                                               :height        96
+                                               :border-radius 48
+                                               :fill          0xFF5C00}
                         :next-button-mark {:type    "svg-path"
-                                                  :x       20
-                                                  :y       25
-                                                  :width   128
-                                                  :height  128
-                                                  :fill    "#FFFFFF",
-                                                  :actions {:click {:id "finish-activity", :on "click", :type "action"}},
-                                                  :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}
+                                           :x       20
+                                           :y       25
+                                           :width   128
+                                           :height  128
+                                           :fill    "#FFFFFF",
+                                           :actions {:click {:id "finish-activity", :on "click", :type "action"}},
+                                           :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}
                         :outline                 {:type           "text",
                                                   :x              960,
                                                   :y              150,
-                                                  :transition     "outline",
                                                   :align          "center",
                                                   :fill           "#ffffff",
                                                   :font-family    "Lexend Deca",
@@ -58,44 +56,43 @@
                                                   :shadow-offset  {:x 0, :y 0},
                                                   :shadow-color   "#1a1a1a",
                                                   :shadow-blur    5,
-                                                  :shadow-opacity 0.5
-                                                  :filter         "brighten"}
+                                                  :shadow-opacity 0.5}
 
                         :text-tracing-pattern
-                                                 {:type "text-tracing-pattern"
-                                                  :text " "
-                                                  :y    400}
+                        {:type "text-tracing-pattern"
+                         :text " "
+                         :y    400}
 
                         :practice-canvas
-                                                 {:type   "painting-area"
-                                                  :tool   "felt-tip"
-                                                  :color  "#4479bb"
-                                                  :change {:on "click" :type "action" :id "timeout-timer"}}
+                        {:type   "painting-area"
+                         :tool   "felt-tip"
+                         :color  "#4479bb"
+                         :change {:on "click" :type "action" :id "timeout-timer"}}
                         :painting-toolset
-                                                 {:type       "painting-toolset"
-                                                  :x          -100
-                                                  :transition "painting-toolset"
-                                                  :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}}
+                        {:type       "painting-toolset"
+                         :x          -100
+                         :transition "painting-toolset"
+                         :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}}
                         :colors-palette
-                                                 {:type       "colors-palette",
-                                                  :x          1830
-                                                  :transition "colors-palette"
-                                                  :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}}
+                        {:type       "colors-palette",
+                         :x          1830
+                         :transition "colors-palette"
+                         :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}}
                         :mari
-                                                 {:type       "animation",
-                                                  :x          1600,
-                                                  :y          225,
-                                                  :width      473,
-                                                  :height     511,
-                                                  :scene-name "mari",
-                                                  :transition "mari",
-                                                  :anim       "idle",
-                                                  :name       "mari",
-                                                  :scale-x    0.5,
-                                                  :scale-y    0.5,
-                                                  :speed      0.35,
-                                                  :start      true
-                                                  :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}},
+                        {:type       "animation",
+                         :x          1600,
+                         :y          225,
+                         :width      473,
+                         :height     511,
+                         :scene-name "mari",
+                         :transition "mari",
+                         :anim       "idle",
+                         :name       "mari",
+                         :scale-x    0.5,
+                         :scale-y    0.5,
+                         :speed      0.35,
+                         :start      true
+                         :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}},
                         }
         :scene-objects [["background"
                          "outline"
@@ -140,33 +137,9 @@
 
                         :timeout-instructions-dialog (dialog/default "timeout instructions")
                         :correct-answer-dialog       (dialog/default "correct answer")
-                        :introduction-dialog         (-> (dialog/default "introduction")
-                                                         (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next" "highlight-text"]))
+                        :introduction-dialog         (-> (dialog/default "introduction"))
 
-                        :highlight-tools             {:type               "transition"
-                                                      :transition-id      "painting-toolset"
-                                                      :return-immediately true
-                                                      :from               {:brightness 0},
-                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                      :kill-after         3000}
-                        :highlight-colors            {:type               "transition"
-                                                      :transition-id      "colors-palette"
-                                                      :return-immediately true
-                                                      :from               {:brightness 0},
-                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                      :kill-after         3000}
-                        :highlight-next              {:type               "transition"
-                                                      :transition-id      "next-button"
-                                                      :return-immediately true
-                                                      :from               {:brightness 0},
-                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                      :kill-after         3000}
-                        :highlight-text              {:type               "transition"
-                                                      :transition-id      "outline"
-                                                      :return-immediately true
-                                                      :from               {:brightness 0},
-                                                      :to                 {:brightness 0.35 :yoyo true :duration 0.5}
-                                                      :kill-after         3000}
+
                         :set-current-tool            {:type "sequence-data"
                                                       :data [{:type        "set-attribute",
                                                               :target      "practice-canvas"
@@ -247,8 +220,11 @@
 (defn f
   [args]
   (-> (common/init-metadata m t args)
+      (common/add-highlight "next-button" "Highlight next button")
+      (common/add-highlight "painting-toolset" "Highlight tools")
+      (common/add-highlight "colors-palette" "Highlight colors")
+      (common/add-highlight "outline" "Highlight text")
       (config-text (:type args))))
 
 (core/register-template
   m f)
-
