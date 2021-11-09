@@ -475,11 +475,13 @@
           {:type      "set-variable"
            :var-name  "next-action"
            :var-value (if last? finish-action (get-round-3-action-name (inc idx)))}
-          {:type     "play-video"
-           :target   "video"
-           :start    from
-           :end      to
-           :from-var [{:var-name "video-src" :action-property "src"}]}
+          {:type "sequence-data"
+           :tags ["user-interactions-blocked"]
+           :data [{:type     "play-video"
+                   :target   "video"
+                   :start    from
+                   :end      to
+                   :from-var [{:var-name "video-src" :action-property "src"}]}]}
           {:type "action" :id "start-timeout-record"}]})
 
 (defn- config-round-3
