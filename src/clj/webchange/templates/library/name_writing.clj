@@ -67,7 +67,7 @@
                         {:type   "painting-area"
                          :tool   "felt-tip"
                          :color  "#4479bb"
-                         :change {:on "click" :type "action" :id "timeout-timer"}}
+                         :actions {:change {:on "click" :type "action" :id "timeout-timer"}}}
                         :painting-toolset
                         {:type       "painting-toolset"
                          :x          -100
@@ -137,7 +137,8 @@
 
                         :timeout-instructions-dialog (dialog/default "timeout instructions")
                         :correct-answer-dialog       (dialog/default "correct answer")
-                        :introduction-dialog         (-> (dialog/default "introduction"))
+                        :introduction-dialog         (-> (dialog/default "introduction")
+                                                         (assoc :available-activities []))
 
 
                         :set-current-tool            {:type "sequence-data"
