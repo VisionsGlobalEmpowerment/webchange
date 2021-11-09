@@ -8,6 +8,7 @@
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.sound :as sound]
     [webchange.logger.index :as logger]
+    [webchange.question.common.params :as question-params]
     [webchange.utils.scene-data :as utils]
     [webchange.utils.scene-action-data :as action-data-utils]))
 
@@ -343,9 +344,13 @@
 (re-frame/reg-event-fx
   ::execute-action
   [event-as-action]
-  (fn [{:keys [db]} {:keys [user-event?] :as action}]
-    (when-not (and user-event? @user-interactions-blocked?)
-      (execute-action db action))
+  (fn [{:keys [db]} {:keys [unique-tag user-event?] :as action}]
+    (let [question-action? (= unique-tag question-params/question-action-tag)]
+      (when (or question-action?
+                (not user-event?)
+                (and user-event?
+                     (not @user-interactions-blocked?)))
+        (execute-action db action)))
     {}))
 
 (defn remove-tag

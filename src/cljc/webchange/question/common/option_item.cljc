@@ -78,7 +78,7 @@
           (some? on-option-click) (assoc :click (cond-> {:type       "action"
                                                          :on         "click"
                                                          :id         on-option-click
-                                                         :unique-tag "question-action"}
+                                                         :unique-tag common-params/question-action-tag}
                                                         (some? value) (assoc :params {:value value})))))
 
 (defn- create-image-with-text-options
