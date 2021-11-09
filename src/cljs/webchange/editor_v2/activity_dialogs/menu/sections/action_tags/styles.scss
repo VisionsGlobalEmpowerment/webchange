@@ -1,0 +1,33 @@
+.action-tags-form {
+    .tags-list {
+        display: flex;
+        margin: 6px 0;
+
+        .tag-chip {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            padding: 2px 8px;
+
+            button {
+                $icon-size: 6px;
+
+                display: block;
+                min-width: auto;
+                width: $icon-size * 2;
+                height: $icon-size * 2;
+
+                .wc-icon {
+                    top: -3px;
+                    left: 0;
+
+                    svg {
+                        width: $icon-size;
+                        height: $icon-size;
+                    }
+                }
+            }
+        }
+    }
+}

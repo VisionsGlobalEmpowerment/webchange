@@ -14,7 +14,8 @@
                       (merge (:params action)))
                  (:params action))]
     (merge action {:params       params
-                   :display-name id})))
+                   :display-name id
+                   :user-event?  true})))
 
 (defn- prepare-action
   [action]
@@ -53,20 +54,20 @@
                        (reset! moved? true)
                        (when on-drag-move
                          (on-drag-move)))
-        wrapped-on-click  (fn []
-                            (when (and on-click (not @moved?))
-                              (on-click))
-                            (reset! moved? false))]
+        wrapped-on-click (fn []
+                           (when (and on-click (not @moved?))
+                             (on-click))
+                           (reset! moved? false))]
     (if on-click
       (assoc object
-             :on-drag-move wrapped-move
-             :on-click wrapped-on-click)
+        :on-drag-move wrapped-move
+        :on-click wrapped-on-click)
       object)))
 
 (defn- with-draggable
   [{:keys [draggable] :as object}]
   (if draggable
-    (-> object 
+    (-> object
         (assoc :draggable true)
         (hack-on-click))
     object))

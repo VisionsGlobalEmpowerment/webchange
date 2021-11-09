@@ -10,6 +10,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.utils.scene-action-data :as action-data-utils]
     [webchange.utils.scene-data :as scene-utils]))
 
 (defn path-to-db
@@ -91,6 +92,32 @@
   ::reset-selected-action
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db selected-action-path nil)}))
+
+;; Dialog data
+
+(re-frame/reg-sub
+  ::user-interactions-blocked?
+  (fn []
+    [(re-frame/subscribe [::translator-form.scene/actions-data])])
+  (fn [[actions-data] [_ action-path]]
+    (->> (get-in actions-data action-path)
+         (:tags)
+         (some #{(:user-interactions-blocked action-data-utils/action-tags)})
+         (boolean))))
+
+(re-frame/reg-event-fx
+  ::set-user-interactions-block
+  (fn [{:keys [db]} [_ action-path value]]
+    (let [block-interactions-tag (:user-interactions-blocked action-data-utils/action-tags)
+          current-dialog-action-data (translator-form.actions/current-dialog-action-data db)
+          tags (-> (get-in current-dialog-action-data action-path)
+                   (get :tags []))
+          new-tags (if value
+                     (-> tags (conj block-interactions-tag) (distinct) (vec))
+                     (->> tags (remove #(= % block-interactions-tag)) (vec)))]
+      {:dispatch [::state-dialog-form/update-action-by-path {:action-path action-path
+                                                             :action-type :scene
+                                                             :data-patch  {:tags new-tags}}]})))
 
 ;; ---
 

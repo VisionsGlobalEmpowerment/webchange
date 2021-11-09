@@ -43,7 +43,7 @@
                         (some? on-click) (assoc :click (cond-> {:type "action"
                                                                 :on   "click"
                                                                 :id   on-click
-                                                                :unique-tag "question-action"}
+                                                                :unique-tag common-params/question-action-tag}
                                                                (some? on-click-params) (assoc :params on-click-params))))]
     (merge-data {:objects {(keyword object-name) {:type     "group"
                                                   :x        x

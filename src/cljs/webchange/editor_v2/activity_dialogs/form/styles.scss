@@ -7,8 +7,19 @@
         border-radius: 4px;
         margin-bottom: 10px;
 
-        h3 {
-            padding: 0 $main-padding-horizontal;
+        .sheet-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            h3 {
+                padding: 0 $main-padding-horizontal;
+                margin: 0;
+            }
+
+            .title-control {
+                padding: 0 $main-padding-horizontal;
+            }
         }
 
         @import "action_unit/styles";

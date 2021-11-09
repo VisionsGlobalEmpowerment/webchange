@@ -1,5 +1,7 @@
 (ns webchange.question.common.params)
 
+(def question-action-tag "question-action")
+
 (def template-size {:x      0
                     :y      0
                     :width  1920

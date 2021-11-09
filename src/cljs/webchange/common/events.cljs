@@ -8,7 +8,9 @@
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.sound :as sound]
     [webchange.logger.index :as logger]
-    [webchange.utils.scene-data :as utils]))
+    [webchange.question.common.params :as question-params]
+    [webchange.utils.scene-data :as utils]
+    [webchange.utils.scene-action-data :as action-data-utils]))
 
 (def executors (atom {}))
 (def flows (atom {}))
@@ -327,11 +329,28 @@
         (dispatch-success-fn action)))
     (dispatch-success-fn action)))
 
+(defonce user-interactions-blocked? (atom false))
+
+(defn- block-user-interaction
+  []
+  (when-not @user-interactions-blocked?
+    (reset! user-interactions-blocked? true)))
+
+(defn- unblock-user-interaction
+  []
+  (when @user-interactions-blocked?
+    (reset! user-interactions-blocked? false)))
+
 (re-frame/reg-event-fx
   ::execute-action
   [event-as-action]
-  (fn [{:keys [db]} action]
-    (execute-action db action)
+  (fn [{:keys [db]} {:keys [unique-tag user-event?] :as action}]
+    (let [question-action? (= unique-tag question-params/question-action-tag)]
+      (when (or question-action?
+                (not user-event?)
+                (and user-event?
+                     (not @user-interactions-blocked?)))
+        (execute-action db action)))
     {}))
 
 (defn remove-tag
@@ -476,6 +495,50 @@
        flow-ancestors
        (some :skip)))
 
+(defn- execute-finish-flows!
+  "Execute `finish-flows` action.
+   Removes flows with given tag, and continues flows stuck on removed flows.
+
+   Action params:
+   :tag - tag name.
+
+   Example:
+   {:type 'finish-flows',
+    :tag  'question-1'}"
+  [{:keys [tag] :as action}]
+  (let [flows-to-remove (->> @flows
+                             (filter (fn [[k v]] (contains? (:tags v) tag)))
+                             (map first))]
+    (doseq [flow-id flows-to-remove]
+      (force-finish-flow! flow-id)))
+  (dispatch-success-fn action))
+
+(re-frame/reg-event-fx
+  ::execute-finish-flows
+  (fn [{:keys [_]} [_ action]]
+    (execute-finish-flows! action)
+    {}))
+
+(defn- enable-skip-in-flows!
+  "Skip actions in skippable dialogs"
+  []
+  (swap! flows #(->> %
+                     (map (fn [[k v]] (if (some #{"skip"} (:tags v))
+                                        [k (assoc v :skip true)]
+                                        [k v])))
+                     (into {}))))
+
+(defn skip
+  "Immediately completes current skippable flow.
+   Should set all variables and complete transitions.
+
+   Example:
+   {:type 'skip'}"
+  []
+  (enable-skip-in-flows!)
+  (execute-finish-flows! {:tag "skip"})
+  (re-frame/dispatch [::overlays/hide-skip-menu]))
+
 (defn execute-remove-flows!
   [{:keys [flow-tag] :as action}]
   (let [flows-to-remove (->> @flows
@@ -529,30 +592,6 @@
     (flow-success! flow-id action-id)
     {}))
 
-(defn- execute-finish-flows!
-  "Execute `finish-flows` action. 
-   Removes flows with given tag, and continues flows stuck on removed flows.
-
-   Action params:
-   :tag - tag name.
-
-   Example:
-   {:type 'finish-flows',
-    :tag  'question-1'}"
-  [{:keys [tag] :as action}]
-  (let [flows-to-remove (->> @flows
-                             (filter (fn [[k v]] (contains? (:tags v) tag)))
-                             (map first))]
-    (doseq [flow-id flows-to-remove]
-      (force-finish-flow! flow-id)))
-  (dispatch-success-fn action))
-
-(re-frame/reg-event-fx
-  ::execute-finish-flows
-  (fn [{:keys [db]} [_ action]]
-    (execute-finish-flows! action)
-    {}))
-
 (re-frame/reg-event-fx
   ::execute-sequence
   [event-as-action with-vars]
@@ -589,27 +628,37 @@
            flow-id (random-uuid)
            action-id (random-uuid)
            current-scene (:current-scene db)
-           skippable? (->> action :previous-flow :tags (some #{"skip"}))
-           flow-data {:flow-id flow-id
-                      :actions [action-id]
-                      :type :all
-                      :next next
-                      :parent (:flow-id action)
-                      :skip (get-in action [:previous-flow :skip])
-                      :tags (if skippable?
-                              (conj (get-action-tags action) "skip")
-                              (get-action-tags action))
-                      :dialog (= "dialog" (:editor-type action))
+           action-tags (get-action-tags action)
+           dialog-action? (action-data-utils/dialog-action? action)
+           skippable? (or
+                        dialog-action?
+                        (->> action :previous-flow :tags (some #{"skip"})))
+           flow-data {:flow-id       flow-id
+                      :actions       [action-id]
+                      :type          :all
+                      :next          next
+                      :parent        (:flow-id action)
+                      :skip          (get-in action [:previous-flow :skip])
+                      :tags          (cond-> action-tags
+                                             skippable? (conj "skip"))
+                      :dialog        (= "dialog" (:editor-type action))
                       :current-scene current-scene
-                      :on-remove (when (:on-interrupt action)
-                                   [#(execute-action db (:on-interrupt action))])}
+                      :on-remove     (when (:on-interrupt action)
+                                       [#(execute-action db (:on-interrupt action))])}
            current-action (-> current
                               (update :display-name
                                       #(or % (sequenced-action->display-name action
                                                                              sequence-position)))
                               (assoc :flow-id flow-id)
                               (assoc :action-id action-id)
-                              (with-prev action))]
+                              (with-prev action))
+
+           block-user-interaction? (some #{(:user-interactions-blocked action-data-utils/action-tags)} action-tags)]
+
+       (if block-user-interaction?
+         (block-user-interaction)
+         (unblock-user-interaction))
+
        (register-flow! flow-data)
        (execute-action db current-action)))))
 
@@ -626,6 +675,8 @@
     {:type 'sequence-data',
      :data [{:type 'animation', :id 'volley_call', :target 'vera'}
             {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
+    (when (action-data-utils/dialog-action? action)
+      (skip))
     (execute-sequence-data! db action)
     {}))
 
@@ -714,26 +765,6 @@
      :callback [object Function]}"
     (execute-callback! db action)
     {}))
-
-(defn- enable-skip-in-flows!
-  "Skip actions in skippable dialogs"
-  []
-  (swap! flows #(->> %
-                     (map (fn [[k v]] (if (some #{"skip"} (:tags v))
-                                        [k (assoc v :skip true)]
-                                        [k v])))
-                     (into {}))))
-
-(defn skip
-  "Immediately completes current skippable flow.
-   Should set all variables and complete transitions.
-
-   Example:
-   {:type 'skip'}"
-  []
-  (enable-skip-in-flows!)
-  (execute-finish-flows! {:tag "skip"})
-  (re-frame/dispatch [::overlays/hide-skip-menu]))
 
 (re-frame/reg-event-fx
   ::execute-skip

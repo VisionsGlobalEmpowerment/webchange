@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.activity-dialogs.menu.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-dialogs.menu.sections.action-tags.views :as action-tags]
     [webchange.editor-v2.activity-dialogs.menu.sections.delay.views :as delay]
     [webchange.editor-v2.activity-dialogs.menu.sections.effects.views :as effects]
     [webchange.editor-v2.activity-dialogs.menu.sections.phrase.views :as phrase]
@@ -24,6 +25,7 @@
                       :title-text name
                       :expanded?  (= id current-section)}
         (case id
+          :action-tags [action-tags/form]
           :delay [delay/form]
           :effects [effects/form]
           :phrase [phrase/form]
