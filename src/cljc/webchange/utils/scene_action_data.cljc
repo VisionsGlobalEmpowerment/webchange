@@ -2,7 +2,7 @@
   (:require
     [clojure.string :as string]))
 
-(def action-tags {:unskippable-action "unskippable-action"})
+(def action-tags {:user-interactions-blocked "user-interactions-blocked"})
 
 (defn get-action-type
   [action-data]

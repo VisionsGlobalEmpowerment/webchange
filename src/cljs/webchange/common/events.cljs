@@ -648,7 +648,7 @@
                               (assoc :action-id action-id)
                               (with-prev action))
 
-           block-user-interaction? (some #{(:unskippable-action action-data-utils/action-tags)} action-tags)]
+           block-user-interaction? (some #{(:user-interactions-blocked action-data-utils/action-tags)} action-tags)]
 
        (if block-user-interaction?
          (block-user-interaction)

@@ -4,16 +4,25 @@
     [reagent.core :as r]
     [webchange.editor-v2.activity-dialogs.form.state :as state]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views :refer [action-unit]]
-    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]))
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
+    [webchange.ui-framework.components.index :refer [switcher]]))
 
 (defn- dialog-form
-  [{:keys [nodes title]}]
-  [:div.sheet
-   [:h3 title]
-   (for [[idx {:keys [path concept-name] :as action}] (map-indexed vector nodes)]
-     ^{:key (concat [(count nodes)] path [concept-name])}
-     [action-unit (merge action
-                         {:idx idx})])])
+  [{:keys [nodes title action-path]}]
+  (let [interactions-blocked? @(re-frame/subscribe [::state/user-interactions-blocked? action-path])
+        handle-change (fn [value]
+                        (re-frame/dispatch [::state/set-user-interactions-block action-path value]))]
+    [:div.sheet
+     [:div.sheet-title
+      [:h3 title]
+      [switcher {:checked?   interactions-blocked?
+                 :on-change  handle-change
+                 :label      "Block interactions"
+                 :class-name "title-control"}]]
+     (for [[idx {:keys [path concept-name] :as action}] (map-indexed vector nodes)]
+       ^{:key (concat [(count nodes)] path [concept-name])}
+       [action-unit (merge action
+                           {:idx idx})])]))
 
 (defn- track-selector
   []

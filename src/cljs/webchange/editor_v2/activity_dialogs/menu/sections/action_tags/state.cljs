@@ -7,7 +7,7 @@
     [webchange.utils.scene-action-data :refer [action-tags]]))
 
 (def available-tags [{:text  "Not skippable action"
-                      :value (:unskippable-action action-tags)}])
+                      :value (:user-interactions-blocked action-tags)}])
 
 (defn- selected-action-data->current-tags
   [selected-action-data]
