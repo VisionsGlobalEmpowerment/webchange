@@ -91,6 +91,7 @@
 (defn- component-will-unmount
   []
   (re-frame/dispatch [::ie/stop-playing])
+  (sound/stop-all-audio!)
   (-> (exit-fullscreen)
       (.catch #())))
 
