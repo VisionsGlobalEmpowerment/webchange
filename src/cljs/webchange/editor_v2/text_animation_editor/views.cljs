@@ -14,16 +14,26 @@
         selected-chunk @(re-frame/subscribe [::state/selected-chunk])
         selected-audio @(re-frame/subscribe [::state/selected-audio])
         parts (chunks->parts (:text text-object-data) (:chunks text-object-data))
+        active-parts  @(re-frame/subscribe [::state/active-parts])
         handle-chunks-change (fn [text-name text-data-patch]
                                (re-frame/dispatch [::state/set-current-text-data text-name text-data-patch]))]
+
+    ;(print "text-object-name" text-object-name)
+    ;(print "text-object-data" text-object-data)
+    ;(print "selected-chunk" selected-chunk)
+    ;(print "selected-audio" selected-audio)
+    (print "parts" parts)
+    (print "active-parts" active-parts)
+
     [:div.text-animation-editor
      [chunks-editor-form (merge (select-keys text-object-data [:text :chunks])
-                                 {:on-change             (fn [data] (handle-chunks-change (keyword text-object-name) data))
-                                  :show-chunks?          false
-                                  :origin-text-disabled? true})]
+                                {:on-change             (fn [data] (handle-chunks-change (keyword text-object-name) data))
+                                 :show-chunks?          false
+                                 :origin-text-disabled? true})]
      [text-chunks {:parts              parts
-                    :selected-chunk-idx selected-chunk
-                    :on-click           #(re-frame/dispatch [::state/select-chunk %])}]
+                   :active-parts       active-parts
+                   :selected-chunk-idx selected-chunk
+                   :on-click           #(re-frame/dispatch [::state/select-chunk %])}]
      [audio-wave-form (merge selected-audio
                              {:height         96
                               :on-change      #(re-frame/dispatch [::state/select-audio %])
@@ -36,6 +46,9 @@
         apply #(re-frame/dispatch [::state/apply])
         form-available? @(re-frame/subscribe [::state/form-available?])
         selected-audio @(re-frame/subscribe [::state/selected-audio])]
+
+    (print "selected-audio" selected-audio)
+
     (when open?
       [dialog
        {:title    "Edit text animation chunks"
