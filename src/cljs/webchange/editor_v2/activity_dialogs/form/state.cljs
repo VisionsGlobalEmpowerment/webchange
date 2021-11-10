@@ -261,21 +261,19 @@
                [(keyword action-name)])
              untracked-actions)))))
 
-(defn compare-dialogs-order
-  [dialog-1 dialog-2 {:keys [pages-data]}]
-  (let [action-name->page-number (fn [action-name]
-                                   (let [page-number (->> pages-data
-                                          (map-indexed vector)
-                                          (some (fn [[idx {:keys [action]}]]
-                                                  (and (= action action-name) idx))))]
-                                     (or page-number ##Inf)))
-        dialog-data->page-number (fn [dialog-data]
-                                   (-> (get dialog-data :action-path)
-                                       (first)
-                                       (clojure.core/name)
-                                       (action-name->page-number)))]
-    (< (dialog-data->page-number dialog-1)
-       (dialog-data->page-number dialog-2))))
+(defn- action-name->page-number
+  [action-name pages-data]
+  (->> pages-data
+       (map-indexed vector)
+       (some (fn [[idx {:keys [action]}]]
+               (and (= action action-name) idx)))))
+
+(defn- dialog-data->page-number
+  [dialog-data pages-data]
+  (-> (get dialog-data :action-path)
+      (first)
+      (clojure.core/name)
+      (action-name->page-number pages-data)))
 
 ; flipbook-utils
 
@@ -299,9 +297,16 @@
                                                                       :available-effects   available-actions
                                                                       :current-action-path (:path selected-action)})}))
                            dialogs-paths)]
-      (cond->> script-data
-               (flipbook-activity? scene-data) (sort (fn [dialog-1 dialog-2]
-                                                       (compare-dialogs-order dialog-1 dialog-2 {:pages-data (flipbook-utils/get-pages-data scene-data)})))))))
+      (cond
+        (flipbook-activity? scene-data) (let [pages-data (flipbook-utils/get-pages-data scene-data)]
+                                          (->> script-data
+                                               (filter (fn [dialog-data]
+                                                         (-> (dialog-data->page-number dialog-data pages-data)
+                                                             (some?))))
+                                               (sort (fn [dialog-1 dialog-2]
+                                                       (< (or (dialog-data->page-number dialog-1 pages-data) ##Inf)
+                                                          (or (dialog-data->page-number dialog-2 pages-data) ##Inf))))))
+        :else script-data))))
 
 ;; Actions
 
