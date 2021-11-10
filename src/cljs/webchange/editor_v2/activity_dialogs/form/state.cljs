@@ -10,6 +10,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.utils.flipbook :as flipbook-utils :refer [flipbook-activity?]]
     [webchange.utils.scene-action-data :as action-data-utils]
     [webchange.utils.scene-data :as scene-utils]))
 
@@ -260,6 +261,24 @@
                [(keyword action-name)])
              untracked-actions)))))
 
+(defn compare-dialogs-order
+  [dialog-1 dialog-2 {:keys [pages-data]}]
+  (let [action-name->page-number (fn [action-name]
+                                   (let [page-number (->> pages-data
+                                          (map-indexed vector)
+                                          (some (fn [[idx {:keys [action]}]]
+                                                  (and (= action action-name) idx))))]
+                                     (or page-number ##Inf)))
+        dialog-data->page-number (fn [dialog-data]
+                                   (-> (get dialog-data :action-path)
+                                       (first)
+                                       (clojure.core/name)
+                                       (action-name->page-number)))]
+    (< (dialog-data->page-number dialog-1)
+       (dialog-data->page-number dialog-2))))
+
+; flipbook-utils
+
 (re-frame/reg-sub
   ::script-data
   (fn []
@@ -268,18 +287,21 @@
      (re-frame/subscribe [::translator-form.scene/scene-data])
      (re-frame/subscribe [::selected-action])])
   (fn [[dialogs-paths current-concept scene-data selected-action]]
-    (map (fn [dialog-path]
-           (let [{:keys [available-activities phrase-description]} (get-in scene-data (concat [:actions] dialog-path))
-                 available-actions (->> (scene-utils/get-available-effects scene-data)
-                                        (concat available-activities))]
-             {:title       phrase-description
-              :action-path dialog-path
-              :nodes       (prepare-phrase-actions {:dialog-action-path  dialog-path
-                                                    :concept-data        current-concept
-                                                    :scene-data          scene-data
-                                                    :available-effects   available-actions
-                                                    :current-action-path (:path selected-action)})}))
-         dialogs-paths)))
+    (let [script-data (map (fn [dialog-path]
+                             (let [{:keys [available-activities phrase-description]} (get-in scene-data (concat [:actions] dialog-path))
+                                   available-actions (->> (scene-utils/get-available-effects scene-data)
+                                                          (concat available-activities))]
+                               {:title       phrase-description
+                                :action-path dialog-path
+                                :nodes       (prepare-phrase-actions {:dialog-action-path  dialog-path
+                                                                      :concept-data        current-concept
+                                                                      :scene-data          scene-data
+                                                                      :available-effects   available-actions
+                                                                      :current-action-path (:path selected-action)})}))
+                           dialogs-paths)]
+      (cond->> script-data
+               (flipbook-activity? scene-data) (sort (fn [dialog-1 dialog-2]
+                                                       (compare-dialogs-order dialog-1 dialog-2 {:pages-data (flipbook-utils/get-pages-data scene-data)})))))))
 
 ;; Actions
 
