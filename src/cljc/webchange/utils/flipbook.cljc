@@ -6,6 +6,11 @@
       (get-in [:metadata :flipbook-name])
       (keyword)))
 
+(defn flipbook-activity?
+  [activity-data]
+  (-> (get-book-object-name activity-data)
+      (some?)))
+
 (defn get-pages-data
   [activity-data]
   (let [flipbook-name (get-book-object-name activity-data)]
