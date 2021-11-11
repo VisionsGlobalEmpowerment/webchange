@@ -9,25 +9,17 @@
 (re-frame/reg-event-fx
   ::open
   (fn [{:keys [db]} [_]]
-    (let [{:keys [audio start duration data target] :as text-animation-action} (-> (translator-form.actions/current-phrase-action db)
-                                                                                   (get-inner-action))
+    (let [{:keys [audio start duration data target]} (-> (translator-form.actions/current-phrase-action db)
+                                                         (get-inner-action))
+          first-chunk (-> data first :chunk)
           chunks-count (-> (translator-form.scene/objects-data db)
                            (get (keyword target))
                            (get :chunks)
                            count)
           filtered-data (remove #(<= chunks-count (:chunk %)) data)]
-
-      (print "::open")
-      ;(print "current-phrase-action" current-phrase-action)
-      (print "text-animation-action" text-animation-action)
-      (print "audio" audio)
-      (print "start" start)
-      (print "duration" duration)
-      (print "bounds" {:start start :end (+ start duration)})
-
       {:dispatch-n [[::set-current-audio audio]
                     [::set-bounds {:start start :end (+ start duration)}]
-                    [::select-chunk 0]
+                    [::select-chunk first-chunk]
                     [::set-data filtered-data]
                     [::open-modal]]})))
 
@@ -212,15 +204,6 @@
      (re-frame/subscribe [::data])])
   (fn [[selected-chunk-index audio bounds data]]
     (let [{:keys [start end]} (->> data (filter #(= selected-chunk-index (:chunk %))) first)]
-
-      (print "::selected-audio")
-      (print "selected-chunk-index" selected-chunk-index)
-      (print "audio" audio)
-      (print "data" data)
-      (print "bounds" bounds)
-      (print "start" start)
-      (print "end" end)
-
       (when (some? audio)
         {:url   audio
          :start (bound bounds start)

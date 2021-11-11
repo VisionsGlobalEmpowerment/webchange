@@ -17,14 +17,6 @@
         active-parts  @(re-frame/subscribe [::state/active-parts])
         handle-chunks-change (fn [text-name text-data-patch]
                                (re-frame/dispatch [::state/set-current-text-data text-name text-data-patch]))]
-
-    ;(print "text-object-name" text-object-name)
-    ;(print "text-object-data" text-object-data)
-    ;(print "selected-chunk" selected-chunk)
-    ;(print "selected-audio" selected-audio)
-    (print "parts" parts)
-    (print "active-parts" active-parts)
-
     [:div.text-animation-editor
      [chunks-editor-form (merge (select-keys text-object-data [:text :chunks])
                                 {:on-change             (fn [data] (handle-chunks-change (keyword text-object-name) data))
@@ -45,10 +37,8 @@
         cancel #(re-frame/dispatch [::state/cancel])
         apply #(re-frame/dispatch [::state/apply])
         form-available? @(re-frame/subscribe [::state/form-available?])
-        selected-audio @(re-frame/subscribe [::state/selected-audio])]
-
-    (print "selected-audio" selected-audio)
-
+        selected-audio @(re-frame/subscribe [::state/selected-audio])
+        selected-audio-bounds @(re-frame/subscribe [::state/bounds])]
     (when open?
       [dialog
        {:title    "Edit text animation chunks"
@@ -62,8 +52,8 @@
                             :size     "big"}
                     "Cancel"]]}
        (if (or (nil? selected-audio)
-               (nil? (:start selected-audio))
-               (nil? (:end selected-audio)))
+               (nil? (:start selected-audio-bounds))
+               (nil? (:end selected-audio-bounds)))
          [message {:type    "warn"
                    :message "Select audio region in translation dialog to configure text animation"}]
          [text-animation-form])])))
