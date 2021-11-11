@@ -5,6 +5,7 @@
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-common :refer [target-control text-control]]
     [webchange.editor-v2.activity-dialogs.form.state-actions :as state-actions]
     [webchange.editor-v2.activity-dialogs.form.state :as state]
+    [webchange.ui-framework.components.index :refer [icon]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- text-animation-target-control
@@ -19,15 +20,22 @@
                        :on-change handle-target-change}])))
 
 (defn text-animation-unit
-  [{:keys [path text text-object] :as props}]
+  [{:keys [chunked-text path text text-object] :as props}]
   (let [current-target @(re-frame/subscribe [::state/current-text-animation-target path])
         handle-text-change (fn [new-value]
                              (re-frame/dispatch [::state-actions/set-object-text {:object-name (keyword text-object)
-                                                                                  :text        new-value}]))]
+                                                                                  :text        new-value}]))
+        full-defined? (->> chunked-text
+                           (map :filled?)
+                           (every? true?))]
     [:div {:class-name (get-class-name {"unit-content"        true
                                         "text-animation-unit" true})}
      [text-animation-target-control props]
      ^{:key text-object}
      [text-control {:value     text
                     :editable? (some? current-target)
-                    :on-change handle-text-change}]]))
+                    :on-change handle-text-change}]
+     (when-not full-defined?
+       [icon {:icon       "warning"
+              :title      "Not all text chunks defined"
+              :class-name "chunks-warn"}])]))

@@ -88,6 +88,18 @@ $units-margin: 6px;
 
     .text-animation-unit {
         display: flex;
+
+        .chunks-warn {
+            position: absolute;
+            padding: 0;
+            left: -32px;
+            top: 6px;
+            width: 20px;
+
+            svg {
+                fill: #d4b500;
+            }
+        }
     }
 
     .unknown-unit {
