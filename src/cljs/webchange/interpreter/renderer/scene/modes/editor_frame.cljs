@@ -139,6 +139,20 @@
     (draw-border mask width height frame-padding)
     (aset component-container "hitArea" (Rectangle. x y width height))))
 
+(defn- update-text-frame-position
+  [state text-object frame-container]
+  (let [{:keys [align x width]} (:props @state)
+        {:keys [anchor-x position-x]}
+        (case align
+          "left" {:anchor-x   0
+                  :position-x x}
+          "center" {:anchor-x   0.5
+                    :position-x (+ x (/ width 2))}
+          "right" {:anchor-x   1
+                   :position-x (+ x width)})]
+    (aset (.-anchor text-object) "x" anchor-x)
+    (utils/set-position frame-container {:x position-x})))
+
 (defn- create-frame
   [component-container object-props object]
   (let [{:keys [x y width height]} (get-frame-position object)
@@ -157,7 +171,9 @@
     (when (instance? Text object)
       (utils/set-handler object "textChanged" #(update-editor-frame object sprite mask component-container))
       (utils/set-handler object "fontSizeChanged" #(update-editor-frame object sprite mask component-container))
-      (utils/set-handler object "fontFamilyChanged" #(update-editor-frame object sprite mask component-container)))
+      (utils/set-handler object "fontFamilyChanged" #(update-editor-frame object sprite mask component-container))
+      (utils/set-handler object "textAlignChanged" #(do (update-text-frame-position % object component-container)
+                                                        (update-editor-frame object sprite mask component-container))))
 
     (utils/set-handler object "scaleChanged" #(update-editor-frame object sprite mask component-container))
     (utils/set-handler object "srcChanged" #(update-editor-frame object sprite mask component-container))

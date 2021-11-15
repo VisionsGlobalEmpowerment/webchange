@@ -5,7 +5,7 @@
     [webchange.editor-v2.activity-form.common.object-form.text-form.state :as state]
     [webchange.editor-v2.activity-form.common.object-form.voice-over-control.state :as state-voice-over]
     [webchange.editor-v2.activity-form.common.object-form.voice-over-control.views :refer [voice-over-control]]
-    [webchange.ui-framework.components.index :refer [icon select text-area]]
+    [webchange.ui-framework.components.index :refer [icon icon-button select text-area]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- text-component
@@ -45,13 +45,13 @@
     [:div
      [icon {:icon       "font-color"
             :class-name "color-icon"}]
-     [select {:value               (or value "")
-              :on-change           handle-change
-              :options             options
-              :show-buttons?       true
-              :with-arrow?         false
-              :class-name          "font-family-selector"
-              :variant             "outlined"}]]))
+     [select {:value         (or value "")
+              :on-change     handle-change
+              :options       options
+              :show-buttons? true
+              :with-arrow?   false
+              :class-name    "font-family-selector"
+              :variant       "outlined"}]]))
 
 (defn- font-size-component
   [{:keys [id]}]
@@ -74,6 +74,28 @@
               :class-name          "font-size-selector"
               :variant             "outlined"}]]))
 
+(defn- text-align-button
+  [{:keys [active? on-click value]}]
+  [icon-button {:icon     (str "align-" value)
+                :color    (if active? "primary" "default")
+                :on-click #(on-click value)}])
+
+(defn- text-align-component
+  [{:keys [id]}]
+  (let [value @(re-frame/subscribe [::state/current-text-align id])
+        handle-click (fn [align]
+                       (re-frame/dispatch [::state/set-current-text-align id align]))]
+    [:div.text-align-controls
+     [text-align-button {:value    "left"
+                         :active?  (= value "left")
+                         :on-click handle-click}]
+     [text-align-button {:value    "center"
+                         :active?  (= value "center")
+                         :on-click handle-click}]
+     [text-align-button {:value    "right"
+                         :active?  (= value "right")
+                         :on-click handle-click}]]))
+
 (defn form
   [{:keys [class-name id objects-data objects-names]}]
   (r/with-let [_ (re-frame/dispatch [::state/init id objects-data objects-names])]
@@ -81,7 +103,8 @@
                                                (some? class-name) (assoc class-name true)))}
      [:div.font-controls
       [font-family-component {:id id}]
-      [font-size-component {:id id}]]
+      [font-size-component {:id id}]
+      [text-align-component {:id id}]]
      [:div.font-controls.font-color-section
       [font-color-component {:id id}]]
      [:div.text-control

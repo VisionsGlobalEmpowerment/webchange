@@ -3,6 +3,8 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 8px;
 
         .font-color-section {
             width: 289px;
@@ -40,6 +42,16 @@
                 height: 24px;
                 padding: 0px;
             }
+        }
+    }
+
+    .text-align-controls {
+        display: flex;
+        gap: 4px;
+
+        button {
+            height: 28px;
+            min-width: 28px;
         }
     }
 
