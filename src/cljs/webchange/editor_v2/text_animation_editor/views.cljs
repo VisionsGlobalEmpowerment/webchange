@@ -14,16 +14,18 @@
         selected-chunk @(re-frame/subscribe [::state/selected-chunk])
         selected-audio @(re-frame/subscribe [::state/selected-audio])
         parts (chunks->parts (:text text-object-data) (:chunks text-object-data))
+        active-parts  @(re-frame/subscribe [::state/active-parts])
         handle-chunks-change (fn [text-name text-data-patch]
                                (re-frame/dispatch [::state/set-current-text-data text-name text-data-patch]))]
     [:div.text-animation-editor
      [chunks-editor-form (merge (select-keys text-object-data [:text :chunks])
-                                 {:on-change             (fn [data] (handle-chunks-change (keyword text-object-name) data))
-                                  :show-chunks?          false
-                                  :origin-text-disabled? true})]
+                                {:on-change             (fn [data] (handle-chunks-change (keyword text-object-name) data))
+                                 :show-chunks?          false
+                                 :origin-text-disabled? true})]
      [text-chunks {:parts              parts
-                    :selected-chunk-idx selected-chunk
-                    :on-click           #(re-frame/dispatch [::state/select-chunk %])}]
+                   :active-parts       active-parts
+                   :selected-chunk-idx selected-chunk
+                   :on-click           #(re-frame/dispatch [::state/select-chunk %])}]
      [audio-wave-form (merge selected-audio
                              {:height         96
                               :on-change      #(re-frame/dispatch [::state/select-audio %])
@@ -35,7 +37,8 @@
         cancel #(re-frame/dispatch [::state/cancel])
         apply #(re-frame/dispatch [::state/apply])
         form-available? @(re-frame/subscribe [::state/form-available?])
-        selected-audio @(re-frame/subscribe [::state/selected-audio])]
+        selected-audio @(re-frame/subscribe [::state/selected-audio])
+        selected-audio-bounds @(re-frame/subscribe [::state/bounds])]
     (when open?
       [dialog
        {:title    "Edit text animation chunks"
@@ -49,8 +52,8 @@
                             :size     "big"}
                     "Cancel"]]}
        (if (or (nil? selected-audio)
-               (nil? (:start selected-audio))
-               (nil? (:end selected-audio)))
+               (nil? (:start selected-audio-bounds))
+               (nil? (:end selected-audio-bounds)))
          [message {:type    "warn"
                    :message "Select audio region in translation dialog to configure text animation"}]
          [text-animation-form])])))

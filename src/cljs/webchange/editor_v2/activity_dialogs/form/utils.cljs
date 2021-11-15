@@ -81,6 +81,16 @@
                  (assoc :source (if concept-acton? :concept :scene)))))
          actions)))
 
+(defn- get-chunked-text-data
+  [text text-chunks action-chunks]
+  (let [action-chunks-numbers (map :chunk action-chunks)]
+    (map-indexed (fn [idx {:keys [start end]}]
+                   {:text    (subs text start end)
+                    :filled? (->> action-chunks-numbers
+                                  (some #{idx} )
+                                  (boolean))})
+                 text-chunks)))
+
 (defn- get-component-data
   [actions {:keys [available-effects concept-data scene-data]}]
   (map (fn [{:keys [type source action-data action-path node-data parallel-mark]}]
@@ -88,6 +98,7 @@
                {:keys [duration]} (get-empty-action action-data)
                {action-type :type
                 :keys       [action
+                             data
                              id
                              phrase-text
                              phrase-placeholder
@@ -106,10 +117,18 @@
                            :placeholder phrase-placeholder})
 
                    (= type :text-animation)
-                   (merge {:text-object target
-                           :text        (->> (keyword target)
-                                             (get-scene-object scene-data)
-                                             (:text))})
+                   (merge {:text-object  target
+                           :chunked-text (get-chunked-text-data
+                                           (->> (keyword target)
+                                                (get-scene-object scene-data)
+                                                (:text))
+                                           (->> (keyword target)
+                                                (get-scene-object scene-data)
+                                                (:chunks))
+                                           data)
+                           :text         (->> (keyword target)
+                                              (get-scene-object scene-data)
+                                              (:text))})
 
                    (= type :character-animation)
                    (merge {:animation-object target

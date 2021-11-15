@@ -10,21 +10,26 @@
                      :margin-left "8px"}})
 
 (defn- text-chunk
-  [{:keys [text selected? on-click]}]
+  [{:keys [text filled? selected? on-click]}]
   (let [styles (get-styles)]
     [chip {:label    text
            :variant  "outlined"
-           :color    (if selected? "secondary" "primary" )
+           :color    (cond
+                       selected? "secondary"
+                       filled? "primary"
+                       :else "default")
            :on-click on-click
            :style    (:text-chunk styles)}]))
 
 (defn text-chunks
-  [{:keys [parts selected-chunk-idx on-click]
-    :or   {selected-chunk-idx -1
+  [{:keys [active-parts parts selected-chunk-idx on-click]
+    :or   {active-parts       []
+           selected-chunk-idx -1
            on-click           #()}}]
   [:div.text-chunks
    (for [[index part] (map-indexed vector parts)]
      ^{:key index}
      [text-chunk {:text      part
                   :selected? (= index selected-chunk-idx)
+                  :filled?   (some #{index} active-parts)
                   :on-click  #(on-click index)}])])

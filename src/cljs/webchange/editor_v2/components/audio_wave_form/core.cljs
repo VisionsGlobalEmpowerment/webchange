@@ -71,7 +71,7 @@
     (when (and (= (:start region-data) 0) (= (:end region-data) 0))
       (.stop wave-surfer)
       (.clearRegions wave-surfer))
-    (when (and (> (:start region-data) 0) (> (:end region-data) 0))
+    (when (and (>= (:start region-data) 0) (> (:end region-data) 0))
       (.stop wave-surfer)
       (.clearRegions wave-surfer)
       (let [progress (/ (last-position key (:start region-data))
