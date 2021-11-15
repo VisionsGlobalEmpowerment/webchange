@@ -4,9 +4,8 @@
     [webchange.interpreter.events-register :as events]
     [webchange.interpreter.renderer.scene.components.text.chunked-text :refer [create-chunked-text]]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]
-    [webchange.interpreter.renderer.scene.components.text.simple-text :as simple-text]
     [webchange.interpreter.renderer.scene.components.text.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.utils :refer [emit set-position]]
+    [webchange.interpreter.renderer.scene.components.utils :refer [emit]]
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
     [webchange.interpreter.renderer.scene.filters.filters :as f]
     [webchange.interpreter.renderer.state.scene :as scene]
@@ -75,8 +74,7 @@
                                               (emit text-object "fontSizeChanged"))
                    :set-align               (fn [align]
                                               (swap! state assoc-in [:props :align] align)
-                                              ;; Apply align
-                                              )
+                                              (emit text-object "textAlignChanged" state))
                    :set-font-family         (fn [font-family]
                                               (if (some? font-family)
                                                 (do (utils/set-font-family text-object font-family)

@@ -47,13 +47,13 @@
 (defn create-simple-text
   [{:keys [align text font-family font-size font-weight fill scale skew-x skew-y width word-wrap on-click] :as props}]
   (let [position (calculate-position props)
-        text-object (doto (Text. text (clj->js (cond-> {:align      align
-                                                        :fontFamily font-family
-                                                        :fontWeight font-weight
-                                                        :fill       fill}
+        text-object (doto (Text. text (clj->js (cond-> {:align         align
+                                                        :fontFamily    font-family
+                                                        :fontWeight    font-weight
+                                                        :fill          fill
+                                                        :wordWrapWidth width}
                                                        (some? font-size) (assoc :fontSize font-size)
-                                                       (true? word-wrap) (-> (assoc :wordWrap true)
-                                                                             (assoc :wordWrapWidth width)))))
+                                                       (true? word-wrap) (assoc :wordWrap true))))
                       (set-skew skew-x skew-y)
                       (utils/set-position position)
                       (set-scale scale)
