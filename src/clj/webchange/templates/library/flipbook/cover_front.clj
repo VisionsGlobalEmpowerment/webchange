@@ -8,49 +8,61 @@
 (def resources [])
 
 (def template
-  {:page-cover            {:type       "group"
-                           :transition "page-cover"
-                           :children   ["page-cover-background" "page-cover-image" "page-cover-title"]}
-   :page-cover-background {:type   "rectangle"
-                           :x      0
-                           :y      0
-                           :width  "---"
-                           :height "---"
-                           :fill   "---"}
-   :page-cover-image      {:type       "image"
-                           :x          "---"
-                           :y          "---"
-                           :width      832
-                           :height     744
-                           :image-size "contain"
-                           :origin     {:type "center-center"}
-                           :src        "---"
-                           :editable?  {:select true}}
-   :page-cover-title      {:type     "group"
-                           :x        "---"
-                           :y        "---"
-                           :children ["page-cover-title-text" "page-cover-authors"]}
-   :page-cover-title-text {:type           "text"
-                           :y              0
-                           :font-size      48
-                           :font-family    "Lexend Deca"
-                           :align          "left"
-                           :vertical-align "top"
-                           :editable?      {:select true}
-                           :x              "---"
-                           :width          "---"
-                           :chunks         "---"
-                           :fill           "---"
-                           :text           "---"}
-   :page-cover-authors    {:type           "text"
-                           :x              0
-                           :y              96
-                           :vertical-align "top"
-                           :fill           "---"
-                           :align          "left"
-                           :font-size      24
-                           :font-family    "Lexend Deca"
-                           :text           "---"}})
+  {:page-cover              {:type       "group"
+                             :transition "page-cover"
+                             :children   ["page-cover-background" "page-cover-image" "page-cover-title"]}
+   :page-cover-background   {:type   "rectangle"
+                             :x      0
+                             :y      0
+                             :width  "---"
+                             :height "---"
+                             :fill   "---"}
+   :page-cover-image        {:type       "image"
+                             :x          "---"
+                             :y          "---"
+                             :width      832
+                             :height     744
+                             :image-size "contain"
+                             :origin     {:type "center-center"}
+                             :src        "---"
+                             :editable?  {:select true}}
+   :page-cover-title        {:type     "group"
+                             :x        "---"
+                             :y        "---"
+                             :children ["page-cover-title-text" "page-cover-authors" "page-cover-illustrators"]}
+   :page-cover-title-text   {:type           "text"
+                             :y              0
+                             :font-size      48
+                             :font-family    "Lexend Deca"
+                             :align          "left"
+                             :vertical-align "top"
+                             :editable?      {:select true}
+                             :x              "---"
+                             :width          "---"
+                             :chunks         "---"
+                             :fill           "---"
+                             :text           "---"}
+   :page-cover-authors      {:type           "text"
+                             :x              0
+                             :y              85
+                             :vertical-align "top"
+                             :editable?      {:select true}
+                             :fill           "---"
+                             :align          "left"
+                             :font-size      24
+                             :font-family    "Lexend Deca"
+                             :text           "---"}
+   :page-cover-illustrators {:type           "text"
+                             :x              0
+                             :y              125
+                             :vertical-align "top"
+                             :editable?      {:select true}
+                             :fill           "---"
+                             :align          "left"
+                             :font-size      24
+                             :font-family    "Lexend Deca"
+                             :text           "---"}
+   })
 
 (defn- apply-page-size
   [page-data {:keys [width height]}]
@@ -66,7 +78,7 @@
 (defn- set-layout
   [page-data {:keys [layout]}]
   (let [title-top-y 150
-        title-bottom-y 900
+        title-bottom-y 880
         image-top-y 436
         image-bottom-y 850]
     (case layout
@@ -78,19 +90,27 @@
                         (assoc-in [:page-cover-image :y] image-top-y)))))
 
 (defn- set-content
-  [page-data {:keys [image-src title authors]}]
-  (let [authors-text (join "     " authors)]
+  [page-data
+   {:keys [image-src title authors illustrators]
+    :or   {authors      ["___"]
+           illustrators ["___"]}}]
+  (let [authors-text (->> (join ", " authors)
+                          (str "By "))
+        illustrators-text (->> (join ", " illustrators)
+                               (str "Illustrated by "))]
     (-> page-data
         (assoc-in [:page-cover-image :src] image-src)
         (assoc-in [:page-cover-title-text :text] title)
         (assoc-in [:page-cover-title-text :chunks] (text-utils/text->chunks title))
-        (assoc-in [:page-cover-authors :text] authors-text))))
+        (assoc-in [:page-cover-authors :text] authors-text)
+        (assoc-in [:page-cover-illustrators :text] illustrators-text))))
 
 (defn- set-colors
   [page-data {:keys [background-color text-color]}]
   (-> page-data
       (assoc-in [:page-cover-title-text :fill] text-color)
       (assoc-in [:page-cover-authors :fill] text-color)
+      (assoc-in [:page-cover-illustrators :fill] text-color)
       (assoc-in [:page-cover-background :fill] background-color)))
 
 (defn create

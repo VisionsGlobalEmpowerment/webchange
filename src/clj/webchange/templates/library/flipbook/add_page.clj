@@ -5,11 +5,12 @@
     [webchange.templates.library.flipbook.utils :refer [get-book-object-name]]))
 
 (defn activity->front-cover-props
-  [{:keys [authors cover-layout cover-image cover-title]}]
+  [{:keys [authors cover-layout cover-image cover-title illustrators]}]
   {:layout       (keyword cover-layout)
    :image-src    (:src cover-image)
    :title        cover-title
    :authors      authors
+   :illustrators illustrators
    :with-action? true
    :removable?   false})
 
@@ -74,7 +75,7 @@
    {:keys [with-action? shift-from-end removable? position]
     :or   {shift-from-end 0
            removable?     true}
-    :as content-data}
+    :as   content-data}
    {:keys [name resources objects text-name action] :as page-data}]
   (let [book-object-name (get-book-object-name activity-data)
         new-page-position (if (some? position)
