@@ -6,7 +6,7 @@
 (def m {:id             46
         :name           "Recording Studio (Rounds)"
         :tags           ["Direct Instruction - Animated Instructor"]
-        :description    "Users move a character around a race track filled with answer images.  Before time runs out, users must steer the character to as many correct answer options as possible while avoiding incorrect answer images."
+        :description    "Recording Studio (Rounds)"
         :props          {:game-changer?    true
                          :preview          "/images/templates/previews/recording_studio.png"
                          :preview-anim     ["/images/templates/previews/recording_studio_1.png"
@@ -231,6 +231,7 @@
                                                                                      {:type "action" :id "stop-recording-dialog"}]}]}
                                                            :fail     {:type "sequence-data"
                                                                       :data [{:type "set-variable" :var-name "record-button-state" :var-value "stop"}
+                                                                             {:type "action" :id "start-recording-dialog"}
                                                                              {:type "start-audio-recording"}
                                                                              {:type "action" :id "timeout-timer"}
                                                                              {:type "action" :id "show-button-stop"}]}}
@@ -256,10 +257,12 @@
                                                                   {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value false}]}
                                :run-playback-click        {:type "sequence-data"
                                                            :data [{:type "action" :id "remove-timeout-timer"}
+                                                                  {:type "action" :id "start-playback-dialog"}
                                                                   {:type "action" :id "run-record-playing"}
                                                                   {:type "action" :id "stop-record-playing"}]}
                                :stop-playback-click       {:type "sequence-data"
                                                            :data [{:type "action" :id "timeout-timer"}
+                                                                  {:type "action" :id "stop-playback-dialog"}
                                                                   {:type "action" :id "stop-record-playing"}]}
 
                                :set-demo-image-src        {:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
@@ -300,7 +303,10 @@
                                :empty                     {:type "empty" :duration 100}
                                :intro-dialog              (-> (dialog/default "Intro")
                                                               (assoc :unique-tag "intro"))
+                               :start-recording-dialog    (dialog/default "Start recording")
                                :stop-recording-dialog     (dialog/default "Stop recording")
+                               :start-playback-dialog     (dialog/default "Start playback")
+                               :stop-playback-dialog      (dialog/default "Stop playback")
                                :finish-dialog             (dialog/default "Finish")
                                :demo-dialog               (-> (dialog/default "Demo")
                                                               (assoc :unique-tag "intro"))}
@@ -316,7 +322,13 @@
                                                             {:type      "dialog"
                                                              :action-id "demo-dialog"}
                                                             {:type      "dialog"
+                                                             :action-id "start-recording-dialog"}
+                                                            {:type      "dialog"
                                                              :action-id "stop-recording-dialog"}
+                                                            {:type      "dialog"
+                                                             :action-id "start-playback-dialog"}
+                                                            {:type      "dialog"
+                                                             :action-id "stop-playback-dialog"}
                                                             {:type      "dialog"
                                                              :action-id "finish-dialog"}]}]
                                :available-actions [{:action "highlight-record-button"
