@@ -2,6 +2,10 @@
   (:require
     [webchange.ui-framework.components.icon.icon-add :as add]
     [webchange.ui-framework.components.icon.icon-add-box :as add-box]
+    [webchange.ui-framework.components.icon.icon-align-center :as align-center]
+    [webchange.ui-framework.components.icon.icon-align-justify :as align-justify]
+    [webchange.ui-framework.components.icon.icon-align-left :as align-left]
+    [webchange.ui-framework.components.icon.icon-align-right :as align-right]
     [webchange.ui-framework.components.icon.icon-animation :as animation]
     [webchange.ui-framework.components.icon.icon-animation-add :as animation-add]
     [webchange.ui-framework.components.icon.icon-animation-remove :as animation-remove]
@@ -73,6 +77,10 @@
 (def icons
   {"add"                add/data
    "add-box"            add-box/data
+   "align-center"       align-center/data
+   "align-justify"      align-justify/data
+   "align-left"         align-left/data
+   "align-right"        align-right/data
    "animation"          animation/data
    "animation-add"      animation-add/data
    "animation-remove"   animation-remove/data

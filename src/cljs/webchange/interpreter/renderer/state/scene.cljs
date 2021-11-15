@@ -78,7 +78,8 @@
        (into {})))
 
 (def available-actions
-  [{:action :set-position :params [:x :y]}
+  [{:action :set-align :params [:align]}
+   {:action :set-position :params [:x :y]}
    {:action :set-scale :params [:scale :scale-x :scale-y]}
    {:action :set-visibility :params [:visible]}
    {:action :set-src :params [:src]}
@@ -168,6 +169,11 @@
   :set-filter
   (fn [[object-wrapper {:keys [filter] :as params}]]
     (apply-to-wrapper w/set-filter object-wrapper filter params)))
+
+(re-frame/reg-fx
+  :set-align
+  (fn [[object-wrapper {:keys [align]}]]
+    (apply-to-wrapper w/set-align object-wrapper align)))
 
 (re-frame/reg-fx
   :set-position

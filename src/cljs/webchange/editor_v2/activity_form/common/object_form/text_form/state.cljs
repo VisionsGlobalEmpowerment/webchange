@@ -8,7 +8,7 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-    (let [text-data (select-keys objects-data [:text :chunks :font-family :font-size :fill])]
+    (let [text-data (select-keys objects-data [:align :text :chunks :font-family :font-size :fill])]
       {:dispatch [::state/init id {:data  text-data
                                    :names objects-names}]})))
 
@@ -101,3 +101,18 @@
    [(re-frame/subscribe [::fonts/font-color-options])])
  (fn [[options]]
    options))
+
+;; Text Align
+
+(re-frame/reg-sub
+  ::current-text-align
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :align)))
+
+(re-frame/reg-event-fx
+  ::set-current-text-align
+  (fn [{:keys [_]} [_ id align]]
+    {:dispatch [::state/update-current-data id {:align align}]}))
