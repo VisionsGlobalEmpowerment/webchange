@@ -417,40 +417,51 @@
                                                                                                                :duration 1}}}}
                                                             },
                                        :triangle-table
-                                                           {:type       "image",
-                                                            :x          196,
-                                                            :y          631,
-                                                            :width      460,
-                                                            :height     243
-                                                            :src        "/raw/img/categorize-shapes/triangle-table.png",
-                                                            :transition "triangle-table",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
+                                       {:type       "image",
+                                        :x          196,
+                                        :y          631,
+                                        :width      460,
+                                        :height     243
+                                        :src        "/raw/img/categorize-shapes/triangle-table.png",
+                                        :transition "triangle-table",
+                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                        }
                                        :circle-table
-                                                           {:type       "image",
-                                                            :x          1222,
-                                                            :y          650,
-                                                            :width      429,
-                                                            :height     221,
-                                                            :src        "/raw/img/categorize-shapes/circle-table.png",
-                                                            :transition "circle-table",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
+                                       {:type       "image",
+                                        :x          1222,
+                                        :y          650,
+                                        :width      429,
+                                        :height     221,
+                                        :src        "/raw/img/categorize-shapes/circle-table.png",
+                                        :transition "circle-table",
+                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                        }
                                        :square-table
-                                                           {:type       "image",
-                                                            :x          691,
-                                                            :y          665,
-                                                            :width      512
-                                                            :height     251
-                                                            :src        "/raw/img/categorize-shapes/square-table.png",
-                                                            :transition "square-table",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
-
+                                       {:type       "image",
+                                        :x          691,
+                                        :y          665,
+                                        :width      512
+                                        :height     251
+                                        :src        "/raw/img/categorize-shapes/square-table.png",
+                                        :transition "square-table",
+                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                        }
+                                       :librarian        {:type   "animation",
+                                                          :x      250,
+                                                          :y      1000,
+                                                          :width  351,
+                                                          :height 717,
+                                                          :anim   "idle",
+                                                          :name   "senoravaca",
+                                                          :skin   "lion",
+                                                          :speed  0.3,
+                                                          :start  true
+                                                          :actions    {:click {:id "tap-instructions" :on "click" :type "action"}}}
                                        },
 
                        :scene-objects [["layered-background"]
                                        ["triangle-table" "square-table" "circle-table"]
+                                       ["librarian"]
                                        ["star-box" "rectangle-box" "oval-box"]
                                        ["oval-object" "triangle-object" "star-object" "circle-object" "rectangle-object" "square-object"]
                                        ["star-group-1" "star-group" "oval-group" "rectangle-group"]
@@ -720,81 +731,11 @@
                                                                      :phrase             "instruction-6",
                                                                      :phrase-description "Square on square table"
                                                                      }
-                                       :instruction-7-1             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-7-1",
-                                                                     :phrase-description "Star in star box"
-                                                                     }
-                                       :instruction-7-2             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-7-2",
-                                                                     :phrase-description "Star-group circle"
-                                                                     }
-                                       :instruction-8-1             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-8-1",
-                                                                     :phrase-description "Rectangle in rectangle box"
-                                                                     }
-                                       :instruction-8-2             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-8-2",
-                                                                     :phrase-description "Rectangle group on square table"
-                                                                     }
-                                       :instruction-9-1             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-9-1",
-                                                                     :phrase-description "Star in star box"
-                                                                     }
-                                       :instruction-9-2             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-9-2",
-                                                                     :phrase-description "Star group triangle table"
-                                                                     }
-                                       :instruction-10-1            {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-10-1",
-                                                                     :phrase-description "Oval in oval-box"
-                                                                     }
-                                       :instruction-10-2            {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-10-2",
-                                                                     :phrase-description "Oval group circle"
-                                                                     }
-                                       :stop-activity               {:type "stop-activity", :id "categorize"},
+                                       :stop-activity               {:type "stop-activity"},
+                                       :finish-activity             {:type "finish-activity"}
                                        :finish                      {:type "sequence-data",
-                                                                     :data [
-                                                                            {:type "action"
-                                                                             :id   "finish-dialog"
-                                                                             }
-                                                                            {:type "action"
-                                                                             :id   "stop-activity"
-                                                                             }
-                                                                            ]
-                                                                     }
+                                                                     :data [{:type "action" :id   "finish-dialog"}
+                                                                            {:type "action" :id   "finish-activity"}]}
                                        :finish-dialog               {:type               "sequence-data",
                                                                      :editor-type        "dialog",
                                                                      :data               [{:type "sequence-data"
@@ -869,114 +810,11 @@
                                                                             {:type "set-variable", :var-name "object-1", :var-value "square-object"}
                                                                             {:type "set-variable", :var-name "object-2", :var-value "square-table"}
                                                                             {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-square-object" "colliding-square-table"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-7-1"}
+                                                                            {:type "set-variable", :var-name "next-task", :var-value "finish"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-single"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
                                                                             {:type "action", :id "instruction-6"}]
                                                                      }
-                                       :task-7-1                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "star-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "star-box"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-object" "colliding-star-box"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-7-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "star-group"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-7-1"}]
-                                                                     }
-                                       :task-7-2                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "star-group"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "circle-table"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "star-box"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "star-object"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-group" "colliding-circle-table"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-8-1"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-7-2"}]}
-                                       :task-8-1                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "rectangle-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "rectangle-box"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-rectangle-object" "colliding-rectangle-box"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-8-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "rectangle-group"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-8-1"}]}
-                                       :task-8-2                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "rectangle-group"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "square-table"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "rectangle-box"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "rectangle-object"}
-
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-rectangle-group" "colliding-square-table"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-9-1"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-8-2"}]
-                                                                     }
-
-                                       :task-9-1                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "star-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "star-box"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-object" "colliding-star-box"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-9-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "star-group-1"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-9-1"}]
-                                                                     }
-
-                                       :task-9-2                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "star-group-1"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "triangle-table"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "star-box"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "star-object"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-group-1" "colliding-triangle-table"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-10-1"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-9-2"}]
-                                                                     }
-                                       :task-10-1                   {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "oval-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "oval-box"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-oval-object" "colliding-oval-box"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-10-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "oval-group"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-10-1"}]
-                                                                     }
-                                       :task-10-2                   {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "oval-group"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "circle-table"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "oval-box"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "oval-object"}
-
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-oval-group" "colliding-circle-table"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "finish"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-10-2"}]
-                                                                     }
-
                                        :start-activity              {:type "sequence-data",
                                                                      :data [{:type "action", :id "intro"}
                                                                             {:type "set-variable", :var-name "object-1", :var-value "oval-object"}
@@ -987,6 +825,8 @@
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
                                                                             {:type "action", :id "instruction-1"}
                                                                             ]},
+                                       :tap-instructions {:type "action"
+                                                          :from-var [{:var-name "instruction", :action-property "id"}]}
                                        }
 
 
@@ -1031,41 +871,6 @@
                                                             {:type      "dialog"
                                                              :action-id :instruction-6}
                                                             ]}
-                                                   {:title "Round 3 - Second 4 tasks"
-                                                    :nodes [{:type "prompt"
-                                                             :text "Put the star in its box;"}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-7-1}
-                                                            {:type "prompt"
-                                                             :text "then put the whole box on the circle table."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-7-2}
-                                                            {:type "prompt"
-                                                             :text "Put the rectangle in its box; "}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-8-1}
-                                                            {:type "prompt"
-                                                             :text "then put the whole box on the square table."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-8-2}
-                                                            {:type "prompt"
-                                                             :text "Put the star in its box;"}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-9-1}
-                                                            {:type "prompt"
-                                                             :text "then put the whole box on the triangle table."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-9-2}
-                                                            {:type "prompt"
-                                                             :text "Put the oval in its box;"}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-10-1}
-                                                            {:type "prompt"
-                                                             :text "then put the whole box on the circle table."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-10-2}
-                                                            ]
-                                                    }
                                                    {:title "Round 3 - items"
                                                     :nodes [{:type      "dialog"
                                                              :action-id :oval-item}
@@ -1086,8 +891,4 @@
                                                             {:type      "dialog"
                                                              :action-id :rectangle-group}
                                                             {:type      "dialog"
-                                                             :action-id :oval-group}
-                                                            ]}
-                                                   ]
-                                       },
-                       })
+                                                             :action-id :oval-group}]}]}})

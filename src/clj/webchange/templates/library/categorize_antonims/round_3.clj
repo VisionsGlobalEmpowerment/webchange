@@ -365,10 +365,21 @@
                                                                                :params {:target "right"}
                                                                                }}
                                                           },
-
+                                       :librarian        {:type   "animation",
+                                                          :x      250,
+                                                          :y      1000,
+                                                          :width  351,
+                                                          :height 717,
+                                                          :anim   "idle",
+                                                          :name   "senoravaca",
+                                                          :skin   "lion",
+                                                          :speed  0.3,
+                                                          :start  true
+                                                          :actions    {:click {:id "tap-instructions" :on "click" :type "action"}}}
                                        },
 
                        :scene-objects [["layered-background"]
+                                       ["librarian"]
                                        ["in" "quiet" "right"]
                                        ["down" "front" "day"]
                                        ["left-object" "up-object" "out-object" "night-object" "loud-object" "back-object"]
@@ -641,89 +652,11 @@
                                                                      :phrase             "instruction-6",
                                                                      :phrase-description "Up on down"
                                                                      }
-                                       :instruction-7-1             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-7-1",
-                                                                     :phrase-description "Left on right"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :instruction-7-2             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-7-2",
-                                                                     :phrase-description "Left-right on quiet"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :instruction-8-1             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-8-1",
-                                                                     :phrase-description "Back on front"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :instruction-8-2             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-8-2",
-                                                                     :phrase-description "Back-front on down"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :instruction-9-1             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-9-1",
-                                                                     :phrase-description "Night on day"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :instruction-9-2             {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-9-2",
-                                                                     :phrase-description "Day-night on right"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :instruction-10-1            {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-10-1",
-                                                                     :phrase-description "Out on in"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :instruction-10-2            {:type               "sequence-data",
-                                                                     :editor-type        "dialog",
-                                                                     :data               [{:type "sequence-data"
-                                                                                           :data [{:type "empty" :duration 0}
-                                                                                                  {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                     :phrase             "instruction-10-2",
-                                                                     :phrase-description "Out-in on right"
-                                                                     :dialog-track       "Second 4 tasks"
-                                                                     }
-                                       :stop-activity               {:type "stop-activity", :id "categorize"},
+                                       
+                                       :stop-activity               {:type "stop-activity"},
                                        :finish                      {:type "sequence-data",
-                                                                     :data [
-                                                                            {:type "action"
-                                                                             :id   "finish-dialog"
-                                                                             }
-                                                                            {:type "action"
-                                                                             :id   "stop-activity"
-                                                                             }
-                                                                            ]
-                                                                     }
+                                                                     :data [{:type "action" :id   "finish-dialog"}
+                                                                            {:type "action" :id   "finish-activity"}]}
                                        :finish-dialog               {:type               "sequence-data",
                                                                      :editor-type        "dialog",
                                                                      :data               [{:type "sequence-data"
@@ -798,108 +731,11 @@
                                                                             {:type "set-variable", :var-name "object-1", :var-value "up-object"}
                                                                             {:type "set-variable", :var-name "object-2", :var-value "down"}
                                                                             {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-up-object" "colliding-down"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-7-1"}
+                                                                            {:type "set-variable", :var-name "next-task", :var-value "finish"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-single"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
                                                                             {:type "action", :id "instruction-6"}]
                                                                      }
-                                       :task-7-1                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "left-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "right"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-left-object" "colliding-right"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-7-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "left-right-group"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-7-1"}]
-                                                                     }
-                                       :task-7-2                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "left-right-group"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "quiet"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "right"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "left-object"}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-8-1"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-7-2"}]}
-                                       :task-8-1                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "back-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "front"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-back-object" "colliding-front"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-8-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "back-front-group"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-8-1"}]}
-                                       :task-8-2                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "back-front-group"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "down"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "back-object"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "front"}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-9-1"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-8-2"}]
-                                                                     }
-
-                                       :task-9-1                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "night-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "day"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-night-object" "colliding-day"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-9-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "day-night-group"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-9-1"}]
-                                                                     }
-
-                                       :task-9-2                    {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "day-night-group"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "right"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "day"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "night-object"}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-10-1"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-9-2"}]
-                                                                     }
-                                       :task-10-1                   {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "out-object"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "in"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-out-object" "colliding-in"]}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-10-2"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                            {:type "set-variable", :var-name "group-name", :var-value "out-in-group"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-10-1"}]
-                                                                     }
-                                       :task-10-2                   {
-                                                                     :type "sequence-data",
-                                                                     :data [
-                                                                            {:type "set-variable", :var-name "object-1", :var-value "out-in-group"}
-                                                                            {:type "set-variable", :var-name "object-2", :var-value "right"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "in"}
-                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "out-object"}
-                                                                            {:type "set-variable", :var-name "next-task", :var-value "finish"}
-                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                            {:type "action", :id "instruction-10-2"}]
-                                                                     }
-
                                        :start-activity              {:type "sequence-data",
                                                                      :data [{:type "action", :id "intro"}
                                                                             {:type "set-variable", :var-name "object-1", :var-value "left-object"}
@@ -910,6 +746,9 @@
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
                                                                             {:type "action", :id "instruction-1"}
                                                                             ]},
+                                       :finish-activity                {:type "finish-activity"}
+                                       :tap-instructions {:type "action"
+                                                          :from-var [{:var-name "instruction", :action-property "id"}]}
                                        }
 
 
@@ -954,41 +793,6 @@
                                                             {:type      "dialog"
                                                              :action-id :instruction-6}
                                                             ]}
-                                                   {:title "Round 3 - Second 4 tasks"
-                                                    :nodes [{:type "prompt"
-                                                             :text "Put the left picture on the right picture;"}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-7-1}
-                                                            {:type "prompt"
-                                                             :text "then tap on the quiet picture."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-7-2}
-                                                            {:type "prompt"
-                                                             :text "Put the back picture on the front picture;"}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-8-1}
-                                                            {:type "prompt"
-                                                             :text "then tap on the down picture."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-8-2}
-                                                            {:type "prompt"
-                                                             :text "Put the night picture on the day picture;"}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-9-1}
-                                                            {:type "prompt"
-                                                             :text "then tap on the right picture."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-9-2}
-                                                            {:type "prompt"
-                                                             :text "Put the out picture on the in picture;"}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-10-1}
-                                                            {:type "prompt"
-                                                             :text "then tap on the right picture."}
-                                                            {:type      "dialog"
-                                                             :action-id :instruction-10-2}
-                                                            ]
-                                                    }
                                                    {:title "Round 3 - items"
                                                     :nodes [{:type      "dialog"
                                                              :action-id :left-item}
@@ -1001,8 +805,4 @@
                                                             {:type      "dialog"
                                                              :action-id :night-item}
                                                             {:type      "dialog"
-                                                             :action-id :out-item}
-                                                            ]}
-                                                   ]
-                                       },
-                       })
+                                                             :action-id :out-item}]}]}})

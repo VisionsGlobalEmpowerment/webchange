@@ -34,8 +34,7 @@
                                                             :x    1352,
                                                             :y    490,
                                                             :src  "/raw/img/categorize/red_box_small.png"}
-                                       :purple-table
-                                                           {:type "image",
+                                       :purple-table       {:type "image",
                                                             :x    745,
                                                             :y    773,
                                                             :src  "/raw/img/categorize/purple_table.png"}
@@ -58,15 +57,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "blue-color"
-                                                                                              :crayon-target "blue-box"
                                                                                               :target         "blue-crayon-1"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "blue-box"
-                                                                                              :target         "blue-crayon-1"
-                                                                                              :init-position  {:x 46, :y 1050, :duration 1}
-                                                                                              :check-variable "blue-box-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "blue-box"
+                                                                                            :target         "blue-crayon-1"
+                                                                                            :init-position  {:x 46, :y 1050, :duration 1}
+                                                                                            :check-variable "blue-box-selected"}}}},
                                        :blue-crayon-2      {:type      "image",
                                                             :x         592,
                                                             :y         500,
@@ -78,15 +76,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "blue-color"
-                                                                                              :crayon-target "blue-box"
                                                                                               :target         "blue-crayon-2"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "blue-box"
-                                                                                              :target         "blue-crayon-2"
-                                                                                              :init-position  {:x 592, :y 500, :duration 1}
-                                                                                              :check-variable "blue-box-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "blue-box"
+                                                                                            :target         "blue-crayon-2"
+                                                                                            :init-position  {:x 592, :y 500, :duration 1}
+                                                                                            :check-variable "blue-box-selected"}}}},
                                        :blue-crayon-3      {:type      "image",
                                                             :x         17,
                                                             :y         143,
@@ -98,15 +95,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "blue-color"
-                                                                                              :crayon-target "blue-box"
                                                                                               :target         "blue-crayon-3"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "blue-box"
-                                                                                              :target         "blue-crayon-3"
-                                                                                              :init-position  {:x 17, :y 143, :duration 1}
-                                                                                              :check-variable "blue-box-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "blue-box"
+                                                                                            :target         "blue-crayon-3"
+                                                                                            :init-position  {:x 17, :y 143, :duration 1}
+                                                                                            :check-variable "blue-box-selected"}}}},
 
                                        :orange-crayon-1    {:type      "image",
                                                             :x         746,
@@ -119,15 +115,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "orange-color"
-                                                                                              :crayon-target "orange-table"
                                                                                               :target         "orange-crayon-1"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "orange-table"
-                                                                                              :target         "orange-crayon-1"
-                                                                                              :init-position  {:x 746, :y 850, :duration 1}
-                                                                                              :check-variable "orange-table-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "orange-table"
+                                                                                            :target         "orange-crayon-1"
+                                                                                            :init-position  {:x 746, :y 850, :duration 1}
+                                                                                            :check-variable "orange-table-selected"}}}},
                                        :orange-crayon-2    {:type      "image",
                                                             :x         892,
                                                             :y         400,
@@ -139,15 +134,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "orange-color"
-                                                                                              :crayon-target "orange-table"
                                                                                               :target         "orange-crayon-2"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "orange-table"
-                                                                                              :target         "orange-crayon-2"
-                                                                                              :init-position  {:x 892, :y 400, :duration 1}
-                                                                                              :check-variable "orange-table-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "orange-table"
+                                                                                            :target         "orange-crayon-2"
+                                                                                            :init-position  {:x 892, :y 400, :duration 1}
+                                                                                            :check-variable "orange-table-selected"}}}},
                                        :orange-crayon-3    {:type      "image",
                                                             :x         317,
                                                             :y         238,
@@ -159,15 +153,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "orange-color"
-                                                                                              :crayon-target "orange-table"
                                                                                               :target         "orange-crayon-3"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "orange-table"
-                                                                                              :target         "orange-crayon-3"
-                                                                                              :init-position  {:x 317, :y 238, :duration 1}
-                                                                                              :check-variable "orange-table-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "orange-table"
+                                                                                            :target         "orange-crayon-3"
+                                                                                            :init-position  {:x 317, :y 238, :duration 1}
+                                                                                            :check-variable "orange-table-selected"}}}},
 
                                        :yellow-crayon-1    {:type      "image",
                                                             :x         764,
@@ -180,15 +173,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "yellow-color"
-                                                                                              :crayon-target "yellow-box"
                                                                                               :target         "yellow-crayon-1"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "yellow-box"
-                                                                                              :target         "yellow-crayon-1"
-                                                                                              :init-position  {:x 764, :y 691, :duration 1}
-                                                                                              :check-variable "yellow-box-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "yellow-box"
+                                                                                            :target         "yellow-crayon-1"
+                                                                                            :init-position  {:x 764, :y 691, :duration 1}
+                                                                                            :check-variable "yellow-box-selected"}}}},
                                        :yellow-crayon-2    {:type      "image",
                                                             :x         1171,
                                                             :y         126,
@@ -200,15 +192,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "yellow-color"
-                                                                                              :crayon-target "yellow-box"
                                                                                               :target         "yellow-crayon-2"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "yellow-box"
-                                                                                              :target         "yellow-crayon-2"
-                                                                                              :init-position  {:x 1171, :y 126, :duration 1}
-                                                                                              :check-variable "yellow-box-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "yellow-box"
+                                                                                            :target         "yellow-crayon-2"
+                                                                                            :init-position  {:x 1171, :y 126, :duration 1}
+                                                                                            :check-variable "yellow-box-selected"}}}},
                                        :yellow-crayon-3    {:type      "image",
                                                             :x         1618,
                                                             :y         440,
@@ -220,15 +211,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "yellow-color"
-                                                                                              :crayon-target "yellow-box"
                                                                                               :target         "yellow-crayon-3"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "yellow-box"
-                                                                                              :target         "yellow-crayon-3"
-                                                                                              :init-position  {:x 1618, :y 440, :duration 1}
-                                                                                              :check-variable "yellow-box-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "yellow-box"
+                                                                                            :target         "yellow-crayon-3"
+                                                                                            :init-position  {:x 1618, :y 440, :duration 1}
+                                                                                            :check-variable "yellow-box-selected"}}}},
                                        :purple-crayon-1    {:type      "image",
                                                             :x         664,
                                                             :y         541,
@@ -240,15 +230,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "purple-color"
-                                                                                              :crayon-target "purple-table"
                                                                                               :target         "purple-crayon-1"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "purple-table"
-                                                                                              :target         "purple-crayon-1"
-                                                                                              :init-position  {:x 664, :y 541, :duration 1}
-                                                                                              :check-variable "purple-table-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "purple-table"
+                                                                                            :target         "purple-crayon-1"
+                                                                                            :init-position  {:x 664, :y 541, :duration 1}
+                                                                                            :check-variable "purple-table-selected"}}}},
                                        :purple-crayon-2    {:type      "image",
                                                             :x         1271,
                                                             :y         236,
@@ -260,15 +249,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "purple-color"
-                                                                                              :crayon-target "purple-table"
                                                                                               :target         "purple-crayon-2"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "purple-table"
-                                                                                              :target         "purple-crayon-2"
-                                                                                              :init-position  {:x 1271, :y 236, :duration 1}
-                                                                                              :check-variable "purple-table-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "purple-table"
+                                                                                            :target         "purple-crayon-2"
+                                                                                            :init-position  {:x 1271, :y 236, :duration 1}
+                                                                                            :check-variable "purple-table-selected"}}}},
                                        :purple-crayon-3    {:type      "image",
                                                             :x         1418,
                                                             :y         310,
@@ -280,15 +268,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "purple-color"
-                                                                                              :crayon-target "purple-table"
                                                                                               :target         "purple-crayon-3"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "purple-table"
-                                                                                              :target         "purple-crayon-3"
-                                                                                              :init-position  {:x 1418, :y 310, :duration 1}
-                                                                                              :check-variable "purple-table-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "purple-table"
+                                                                                            :target         "purple-crayon-3"
+                                                                                            :init-position  {:x 1418, :y 310, :duration 1}
+                                                                                            :check-variable "purple-table-selected"}}}},
                                        :red-crayon-1       {:type      "image",
                                                             :x         924,
                                                             :y         500,
@@ -300,15 +287,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "red-color"
-                                                                                              :crayon-target "red-box"
                                                                                               :target         "red-crayon-1"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "red-box"
-                                                                                              :target         "red-crayon-1"
-                                                                                              :init-position  {:x 924, :y 500, :duration 1}
-                                                                                              :check-variable "red-box-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "red-box"
+                                                                                            :target         "red-crayon-1"
+                                                                                            :init-position  {:x 924, :y 500, :duration 1}
+                                                                                            :check-variable "red-box-selected"}}}},
                                        :red-crayon-2       {:type      "image",
                                                             :x         1618,
                                                             :y         958,
@@ -320,15 +306,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "red-color"
-                                                                                              :crayon-target "red-box"
                                                                                               :target         "red-crayon-2"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "red-box"
-                                                                                              :target         "red-crayon-2"
-                                                                                              :init-position  {:x 1618, :y 958, :duration 1}
-                                                                                              :check-variable "red-box-selected"}}}}
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "red-box"
+                                                                                            :target         "red-crayon-2"
+                                                                                            :init-position  {:x 1618, :y 958, :duration 1}
+                                                                                            :check-variable "red-box-selected"}}}}
                                        :red-crayon-3       {:type      "image",
                                                             :x         1548,
                                                             :y         164,
@@ -340,15 +325,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "red-color"
-                                                                                              :crayon-target "red-box"
                                                                                               :target         "red-crayon-3"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "red-box"
-                                                                                              :target         "red-crayon-3"
-                                                                                              :init-position  {:x 1548, :y 164, :duration 1}
-                                                                                              :check-variable "red-box-selected"}}}}
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "red-box"
+                                                                                            :target         "red-crayon-3"
+                                                                                            :init-position  {:x 1548, :y 164, :duration 1}
+                                                                                            :check-variable "red-box-selected"}}}}
                                        :green-crayon-1     {:type      "image",
                                                             :x         714,
                                                             :y         210,
@@ -360,15 +344,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "green-color"
-                                                                                              :crayon-target "green-table"
                                                                                               :target         "green-crayon-1"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "green-table"
-                                                                                              :target         "green-crayon-1"
-                                                                                              :init-position  {:x 714, :y 210, :duration 1}
-                                                                                              :check-variable "green-table-selected"}}}},
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "green-table"
+                                                                                            :target         "green-crayon-1"
+                                                                                            :init-position  {:x 714, :y 210, :duration 1}
+                                                                                            :check-variable "green-table-selected"}}}},
                                        :green-crayon-2     {:type      "image",
                                                             :x         1418,
                                                             :y         818,
@@ -380,15 +363,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "green-color"
-                                                                                              :crayon-target "green-table"
                                                                                               :target         "green-crayon-2"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "green-table"
-                                                                                              :target         "green-crayon-2"
-                                                                                              :init-position  {:x 1418, :y 818, :duration 1}
-                                                                                              :check-variable "green-table-selected"}}}}
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "green-table"
+                                                                                            :target         "green-crayon-2"
+                                                                                            :init-position  {:x 1418, :y 818, :duration 1}
+                                                                                            :check-variable "green-table-selected"}}}}
                                        :green-crayon-3     {:type      "image",
                                                             :x         1678,
                                                             :y         364,
@@ -400,15 +382,14 @@
                                                                                      :on     "drag-start",
                                                                                      :id     "start-drag"
                                                                                      :params {:say-color     "green-color"
-                                                                                              :crayon-target "green-table"
                                                                                               :target         "green-crayon-3"}}
                                                                         :drag-end {:id     "drag-crayon",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {:box            "green-table"
-                                                                                              :target         "green-crayon-3"
-                                                                                              :init-position  {:x 1678, :y 364, :duration 1}
-                                                                                              :check-variable "green-table-selected"}}}}
+                                                                                   :on     "drag-end",
+                                                                                   :type   "action",
+                                                                                   :params {:box            "green-table"
+                                                                                            :target         "green-crayon-3"
+                                                                                            :init-position  {:x 1678, :y 364, :duration 1}
+                                                                                            :check-variable "green-table-selected"}}}}
                                        :librarian        {:type   "animation",
                                                           :x      250,
                                                           :y      1000,
@@ -571,7 +552,6 @@
                                                                                                    {:start 33, :end 40}]
                                                                                       :success    "correct-answer-question",
                                                                                       :fail       "fail-answer-question"
-                                                                                      :skip       "skip-question"
                                                                                       :audio-data {:audio     ""
                                                                                                    :start     0,
                                                                                                    :duration  0,
@@ -664,8 +644,8 @@
                                        :stop-activity                  {:type "stop-activity"}}
 
                        :triggers
-                                      {:back  {:on "back", :action "stop-activity"},
-                                       :start {:on "start", :action "init-activity"}},
+                       {:back  {:on "back", :action "stop-activity"},
+                        :start {:on "start", :action "init-activity"}},
                        :metadata      {:autostart   true
                                        :last-insert "technical-question-placeholder"
                                        :tracks      [{:title "Round 2"

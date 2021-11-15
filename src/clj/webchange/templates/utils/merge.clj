@@ -143,11 +143,19 @@
                                                                            :show-technical {:visible true}})])
                                       (:objects template)))))
 
+(defn- from-first-round?
+  [object-key]
+  (-> object-key
+      (name)
+      (.endsWith "-r0")))
+
 (defn- hide-all-objects
   [template]
   (assoc template :objects (into {} (map
                                       (fn [[key object]]
-                                        [key (assoc object :visible false)])
+                                        (if (from-first-round? key)
+                                          [key object]
+                                          [key (assoc object :visible false)]))
                                       (:objects template)))))
 
 (defn- set-state-actions
