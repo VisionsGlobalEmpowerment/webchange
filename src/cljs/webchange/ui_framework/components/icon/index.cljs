@@ -41,6 +41,9 @@
     [webchange.ui-framework.components.icon.icon-game-library :as game-library]
     [webchange.ui-framework.components.icon.icon-group :as group]
     [webchange.ui-framework.components.icon.icon-image :as image]
+    [webchange.ui-framework.components.icon.icon-image-contain :as image-contain]
+    [webchange.ui-framework.components.icon.icon-image-cover :as image-cover]
+    [webchange.ui-framework.components.icon.icon-image-no-size :as image-no-size]
     [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
     [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
@@ -116,6 +119,9 @@
    "game-library"       game-library/data
    "group"              group/data
    "image"              image/data
+   "image-contain"      image-contain/data
+   "image-cover"        image-cover/data
+   "image-no-size"      image-no-size/data
    "insert-after"       insert-after/data
    "insert-before"      insert-before/data
    "insert-parallel"    insert-parallel/data
