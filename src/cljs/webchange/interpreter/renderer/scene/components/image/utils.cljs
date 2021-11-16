@@ -1,8 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.image.utils
   (:require
-   [clojure.string :as str]
-   [webchange.interpreter.renderer.scene.components.utils :as utils]
-   [webchange.logger.index :as logger]))
+    [clojure.string :as str]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.logger.index :as logger]))
 
 (defn apply-boundaries
   [container {:keys [max-width max-height min-width min-height]}]
@@ -48,10 +48,10 @@
 (defn set-image-size
   [container sprite {:keys [image-size width height scale]}]
   (cond
-    (some? scale) (utils/set-scale container scale)
     (some? image-size) (let [sprite-size (utils/get-size sprite)
-                             w-scale (/ width (:width sprite-size))
-                             h-scale (/ height (:height sprite-size))
+                             {scale-x :x scale-y :y} scale
+                             w-scale (/ (* width scale-x) (:width sprite-size))
+                             h-scale (/ (* height scale-y) (:height sprite-size))
                              scale (case image-size
                                      "cover" (Math/max w-scale h-scale)
                                      "contain" (Math/min w-scale h-scale))
@@ -59,6 +59,7 @@
                              y (->> (:height sprite-size) (* scale) (- height) (* 0.5))]
                          (utils/set-scale sprite scale)
                          (utils/set-position sprite x y))
+    (some? scale) (utils/set-scale container scale)
     :else (do (utils/set-not-nil-value sprite "width" width)
               (utils/set-not-nil-value sprite "height" height))))
 
