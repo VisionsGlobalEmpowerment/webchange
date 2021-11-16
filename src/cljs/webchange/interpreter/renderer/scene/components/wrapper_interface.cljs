@@ -30,6 +30,7 @@
 (defn set-filter-value [wrapper & params] (execute wrapper :set-filter-value params))
 (defn set-opacity [wrapper & params] (execute wrapper :set-opacity params))
 (defn set-align [wrapper & params] (execute wrapper :set-align params))
+(defn set-image-size [wrapper & params] (execute wrapper :set-image-size params))
 (defn set-position [wrapper & params] (execute wrapper :set-position params))
 (defn set-rotation [wrapper & params] (execute wrapper :set-rotation params))
 (defn set-scale [wrapper & params] (execute wrapper :set-scale params))

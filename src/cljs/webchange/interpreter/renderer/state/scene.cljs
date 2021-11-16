@@ -79,6 +79,7 @@
 
 (def available-actions
   [{:action :set-align :params [:align]}
+   {:action :set-image-size :params [:image-size]}
    {:action :set-position :params [:x :y]}
    {:action :set-scale :params [:scale :scale-x :scale-y]}
    {:action :set-visibility :params [:visible]}
@@ -174,6 +175,11 @@
   :set-align
   (fn [[object-wrapper {:keys [align]}]]
     (apply-to-wrapper w/set-align object-wrapper align)))
+
+(re-frame/reg-fx
+  :set-image-size
+  (fn [[object-wrapper {:keys [image-size]}]]
+    (apply-to-wrapper w/set-image-size object-wrapper image-size)))
 
 (re-frame/reg-fx
   :set-position

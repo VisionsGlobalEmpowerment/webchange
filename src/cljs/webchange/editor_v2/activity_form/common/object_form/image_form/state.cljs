@@ -15,7 +15,7 @@
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
     (let [image-data (merge {:scale {:x 1 :y 1}}
-                            (select-keys objects-data [:src :scale :visible]))
+                            (select-keys objects-data [:image-size :src :scale :visible]))
           image-tags (get-in objects-data [:editable? :image-tags])
           edit-tags (get-in objects-data [:editable? :edit-tags])
           form-params (get-in objects-data [:editable? :edit-form])
@@ -162,3 +162,18 @@
   ::set-visible
   (fn [{:keys [db]} [_ id visible?]]
     {:dispatch [::state/update-current-data id {:visible visible?}]}))
+
+;; Image fit
+
+(re-frame/reg-sub
+  ::current-image-fit
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :image-size)))
+
+(re-frame/reg-event-fx
+  ::set-image-fit
+  (fn [{:keys [_]} [_ id value]]
+    {:dispatch [::state/update-current-data id {:image-size value}]}))

@@ -1,12 +1,12 @@
 (ns webchange.editor-v2.activity-form.common.object-form.image-form.views
   (:require
-   [re-frame.core :as re-frame]
-   [reagent.core :as r]
-   [webchange.editor-v2.activity-form.common.object-form.components.scale.views :refer [scale-component]]
-   [webchange.editor-v2.activity-form.common.object-form.image-form.state :as state]
-   [webchange.common.image-selector.views-modal :refer [with-image-modal]]
-   [webchange.ui-framework.components.index :refer [button file label checkbox]] 
-   [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.editor-v2.activity-form.common.object-form.components.scale.views :refer [scale-component]]
+    [webchange.editor-v2.activity-form.common.object-form.image-form.state :as state]
+    [webchange.common.image-selector.views-modal :refer [with-image-modal]]
+    [webchange.ui-framework.components.index :refer [button checkbox file icon-button label]]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- preview
   [{:keys [id]}]
@@ -49,6 +49,25 @@
               :on-upload-start handle-upload-start
               :upload-options  upload-options}]])))
 
+(defn- image-size
+  [{:keys [id]}]
+  (let [value @(re-frame/subscribe [::state/current-image-fit id])
+        handle-click #(re-frame/dispatch [::state/set-image-fit id %])]
+    [:div.control-block.image-size-block
+     [label "Image fit:"]
+     [icon-button {:icon     "image-cover"
+                   :title    "Cover"
+                   :color    (if (= value "cover") "primary" "default")
+                   :on-click #(handle-click "cover")}]
+     [icon-button {:icon     "image-contain"
+                   :title    "Contain"
+                   :color    (if (= value "contain") "primary" "default")
+                   :on-click #(handle-click "contain")}]
+     [icon-button {:icon     "image-no-size"
+                   :title    "No fit"
+                   :color    (if (nil? value) "primary" "default")
+                   :on-click #(handle-click nil)}]]))
+
 (defn- scale
   [{:keys [id]}]
   [scale-component {:id         id
@@ -60,8 +79,8 @@
         tags @(re-frame/subscribe [::state/edit-tags id])]
     (when show-apply-to-all?
       [:div.control-block
-       [button {:variant "contained"
-                :color "primary"
+       [button {:variant  "contained"
+                :color    "primary"
                 :on-click #(re-frame/dispatch [::state/apply-to-all id tags])}
         "Apply to all"]])))
 
@@ -87,6 +106,7 @@
      [:div.controls
       [select-image-control {:id id}]
       [upload-image-control {:id id}]
+      [image-size {:id id}]
       [scale {:id id}]
       [apply-to-all {:id id}]
       [visible {:id id}]]]))

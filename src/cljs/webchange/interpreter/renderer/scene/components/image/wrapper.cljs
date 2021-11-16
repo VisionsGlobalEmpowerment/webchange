@@ -35,6 +35,10 @@
                                               (swap! state assoc :scale scale)
                                               (image-utils/set-image-size container sprite-object @state)
                                               (utils/emit container "scaleChanged" scale))
+                   :set-image-size          (fn [image-size]
+                                              (swap! state assoc :image-size image-size)
+                                              (image-utils/set-image-size container sprite-object @state)
+                                              (utils/emit container "scaleChanged"))
                    :set-src                 (fn [src]
                                               (when src
                                                 (resources/load-resource

@@ -39,4 +39,19 @@
             }
         }
     }
+
+    .image-size-block {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        span {
+            margin: 0;
+        }
+
+        button {
+            height: 28px;
+            min-width: 28px;
+        }
+    }
 }
