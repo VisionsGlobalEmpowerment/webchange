@@ -17,6 +17,7 @@
                                       :label       "Demo Image"
                                       :description "What demo image you want to show on the screen?"}
                          :image      {:type        "image"
+                                      :optional?   true
                                       :label       "Prompt Image"
                                       :description "What visual prompt do you want to show on the screen?"}}
         :options-groups [{:title   "Add Content"
@@ -397,23 +398,26 @@
                              {:type      "dialog"
                               :action-id round-timeout}]}
         tracks (as-> activity-data x
-                     (get-in x [:metadata :tracks])
-                     (drop 1 x)
-                     (concat [main-track] x [round-track]))]
+                 (get-in x [:metadata :tracks])
+                 (drop 1 x)
+                 (concat [main-track] x [round-track]))]
     (-> activity-data
         (update :actions merge actions)
         (update-in [:actions :script :data] concat [{:type "action" :id round-action :workflow-user-input true}])
         (assoc-in [:metadata :tracks] tracks)
+        (update-in [:metadata :resources] conj image)
         (assoc-in [:metadata :next-round-id] next-round))))
 
 (defn create
   [args]
   (let [demo-image (get-in args [:demo-image :src])
-        image (get-in args [:image :src])]
+        image (get-in args [:image :src])
+        template (if image
+                   (add-round template image)
+                   template)]
     (-> template
-        (add-round image)
         (assoc-in [:actions :set-demo-image-src :attr-value] demo-image)
-        (update-in [:metadata :resources] conj image)
+        (update-in [:metadata :resources] conj demo-image)
         (assoc-in [:metadata :actions] (:actions m)))))
 
 (defn update

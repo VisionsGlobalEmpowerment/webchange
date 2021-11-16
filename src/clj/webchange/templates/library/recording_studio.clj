@@ -541,13 +541,13 @@
                                      :nodes [{:type      "dialog"
                                               :action-id :prompt}]}]}})
 
-(defn f
+(defn- f
   [t args]
   (let [demo-image (get-in args [:demo-image :src])]
     (-> t
         (assoc-in [:actions :demonstration-set-demo-image-src :attr-value] demo-image)
         (update-in [:metadata :resources] conj demo-image))))
 
-(core/register-template
-  m
-  (partial f t))
+;; (core/register-template
+;;   m
+;;   (partial f t))
