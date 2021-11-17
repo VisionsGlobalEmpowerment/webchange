@@ -10,6 +10,7 @@
                     :height       {}
                     :ref          {}
                     :pages        {}
+                    :stages       {:default []}
                     :prev-control {}
                     :next-control {}
                     :type         {:default "flipbook"}})

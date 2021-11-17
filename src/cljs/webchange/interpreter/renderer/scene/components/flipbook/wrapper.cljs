@@ -148,6 +148,14 @@
     (when (some? left) (utils/set-visibility (keyword left) false))
     (when (some? right) (utils/set-visibility (keyword right) false))))
 
+(defn- get-spread-pages
+  [spread-idx state]
+  (let [[left right] (-> (:stages @state)
+                         (nth spread-idx)
+                         (get :pages-idx))]
+    {:left  left
+     :right right}))
+
 (defn wrap
   [type name container state]
   (create-wrapper {:name          name
@@ -177,8 +185,7 @@
                                     (logger/trace "options" options)
 
                                     (let [current-spread (:current-spread @state)
-                                          new-spread {:left  (->> (* spread-idx 2) (dec))
-                                                      :right (->> (* spread-idx 2))}]
+                                          new-spread (get-spread-pages spread-idx state)]
                                       (hide-spread @state current-spread)
                                       (show-spread @state new-spread options)
                                       (swap! state assoc :current-spread new-spread))
