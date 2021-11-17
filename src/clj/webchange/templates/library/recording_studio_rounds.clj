@@ -287,6 +287,7 @@
                                :approve-playback-click    {:type "action" :id "script"}
                                :finish                    {:type "sequence-data"
                                                            :data [{:type "action" :id "remove-timeout-timer"}
+                                                                  {:type "action" :id "finish-dialog"}
                                                                   {:type "finish-activity"}]}
                                :stop-activity             {:type "sequence-data"
                                                            :data [{:type "action" :id "remove-timeout-timer"}
@@ -324,12 +325,16 @@
                                                              :action-id "demo-dialog"}
                                                             {:type      "dialog"
                                                              :action-id "start-recording-dialog"}
+                                                            {:type "prompt"
+                                                             :text "Plays after stop recording:"}
                                                             {:type      "dialog"
                                                              :action-id "stop-recording-dialog"}
                                                             {:type      "dialog"
                                                              :action-id "start-playback-dialog"}
                                                             {:type      "dialog"
                                                              :action-id "stop-playback-dialog"}
+                                                            {:type "prompt"
+                                                             :text "Plays after check mark button click:"}
                                                             {:type      "dialog"
                                                              :action-id "finish-dialog"}]}]
                                :available-actions [{:action "highlight-record-button"
@@ -398,9 +403,9 @@
                              {:type      "dialog"
                               :action-id round-timeout}]}
         tracks (as-> activity-data x
-                 (get-in x [:metadata :tracks])
-                 (drop 1 x)
-                 (concat [main-track] x [round-track]))]
+                     (get-in x [:metadata :tracks])
+                     (drop 1 x)
+                     (concat [main-track] x [round-track]))]
     (-> activity-data
         (update :actions merge actions)
         (update-in [:actions :script :data] concat [{:type "action" :id round-action :workflow-user-input true}])

@@ -254,11 +254,14 @@
       (if (some? current-track)
         (->> (:nodes current-track)
              (filter (fn [{:keys [type]}]
-                       (= type "dialog")))
-             (map (fn [{:keys [action-id]}]
-                    [(keyword action-id)])))
+                       (some #{type} ["dialog" "prompt"])))
+             (map (fn [{:keys [action-id text type]}]
+                    (cond-> {:type type}
+                            (= type "dialog") (assoc :action-path [(keyword action-id)])
+                            (= type "prompt") (assoc :title text)))))
         (map (fn [action-name]
-               [(keyword action-name)])
+               {:type        "dialog"
+                :action-path [(keyword action-name)]})
              untracked-actions)))))
 
 (defn- action-name->page-number
@@ -285,17 +288,21 @@
      (re-frame/subscribe [::translator-form.scene/scene-data])
      (re-frame/subscribe [::selected-action])])
   (fn [[dialogs-paths current-concept scene-data selected-action]]
-    (let [script-data (map (fn [dialog-path]
-                             (let [{:keys [available-activities phrase-description]} (get-in scene-data (concat [:actions] dialog-path))
-                                   available-actions (->> (scene-utils/get-available-effects scene-data)
-                                                          (concat available-activities))]
-                               {:title       phrase-description
-                                :action-path dialog-path
-                                :nodes       (prepare-phrase-actions {:dialog-action-path  dialog-path
-                                                                      :concept-data        current-concept
-                                                                      :scene-data          scene-data
-                                                                      :available-effects   available-actions
-                                                                      :current-action-path (:path selected-action)})}))
+    (let [script-data (map (fn [{:keys [action-path title type]}]
+                             (case type
+                               "dialog" (let [{:keys [available-activities phrase-description]} (get-in scene-data (concat [:actions] action-path))
+                                              available-actions (->> (scene-utils/get-available-effects scene-data)
+                                                                     (concat available-activities))]
+                                          {:type        "dialog"
+                                           :title       phrase-description
+                                           :action-path action-path
+                                           :nodes       (prepare-phrase-actions {:dialog-action-path  action-path
+                                                                                 :concept-data        current-concept
+                                                                                 :scene-data          scene-data
+                                                                                 :available-effects   available-actions
+                                                                                 :current-action-path (:path selected-action)})})
+                               "prompt" {:type  "prompt"
+                                         :title title}))
                            dialogs-paths)]
       (cond
         (flipbook-activity? scene-data) (let [pages-data (flipbook-utils/get-pages-data scene-data)]

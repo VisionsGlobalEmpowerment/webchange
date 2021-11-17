@@ -24,6 +24,10 @@
        [action-unit (merge action
                            {:idx idx})])]))
 
+(defn- prompt-form
+  [{:keys [title]}]
+  [:div.prompt-form title])
+
 (defn- track-selector
   []
   (let [current-track @(re-frame/subscribe [::state/current-track])
@@ -46,8 +50,10 @@
        [:div.work-field
         [track-selector]
         [:div.actions-script
-         (for [{:keys [action-path] :as dialog-data} script-data]
-           ^{:key action-path}
-           [dialog-form dialog-data])]]])
+         (for [{:keys [type] :as data} script-data]
+           (case type
+             "dialog" ^{:key (:action-path data)} [dialog-form data]
+             "prompt" ^{:key (:title data)} [prompt-form data])
+           )]]])
     (finally
       (handle-close))))
