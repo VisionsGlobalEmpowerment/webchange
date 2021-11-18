@@ -109,7 +109,7 @@
         (assoc-in [:metadata :uploaded-image-idx] image-idx)
         (update-in [:metadata :available-actions] concat available-actions))))
 
-(defn- add-character
+(defn add-character
   [scene-data {:keys [name skin] :as data}]
   (let [character-idx (-> scene-data
                           (get-in [:metadata :added-character-idx])

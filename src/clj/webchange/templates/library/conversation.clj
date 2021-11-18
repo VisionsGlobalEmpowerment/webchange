@@ -1,9 +1,9 @@
 (ns webchange.templates.library.conversation
   (:require
+    [webchange.templates.common-actions :refer [add-character]]
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.question :as question]
     [webchange.templates.utils.dialog :as dialog]
-    [webchange.templates.utils.characters :as characters]
     [webchange.templates.core :as core]
     [webchange.question.create :as question-object]
     [webchange.question.get-question-data :refer [form->question-data]]))
@@ -46,8 +46,11 @@
 
 (defn create-template
   [args]
-  (-> (common/init-metadata m t args)
-      (characters/add-characters (:characters args))))
+  (reduce (fn [scene-data {:keys [name skeleton]}]
+            (add-character scene-data {:name       skeleton
+                                       :scene-name name}))
+          (common/init-metadata m t args)
+          (:characters args)))
 
 (defn- get-next-action-index
   [activity-data]
