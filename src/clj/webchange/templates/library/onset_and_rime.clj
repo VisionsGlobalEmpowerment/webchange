@@ -322,6 +322,10 @@
                                                       :unique-tag "finish-step"
                                                       :data       [
                                                                    {:type "action" :id "animate-finish-step"}
+                                                                   {:type     "action"
+                                                                    :from-var [{:template        "correct-answer-dialog-%"
+                                                                                :var-name        "unique-suffix"
+                                                                                :action-property "id"}]}
                                                                    {:type "action" :id "next-step"}
                                                                    ]}
 
@@ -449,27 +453,36 @@
   [scene args]
   [
    {
-    (common/make-name-unique scene "cloud-left-dialog")   {:type               "sequence-data",
-                                                           :editor-type        "dialog",
-                                                           :data               [{:type "sequence-data"
-                                                                                 :data [{:type "empty" :duration 0}
-                                                                                        {:type "animation-sequence", :phrase-text (:left-text args), :audio nil}]}],
-                                                           :phrase             "cloud-left-dialog",
-                                                           :phrase-description "Cloud left dialog"}
-    (common/make-name-unique scene "cloud-right-dialog")  {:type               "sequence-data",
-                                                           :editor-type        "dialog",
-                                                           :data               [{:type "sequence-data"
-                                                                                 :data [{:type "empty" :duration 0}
-                                                                                        {:type "animation-sequence", :phrase-text (:right-text args), :audio nil}]}],
-                                                           :phrase             "cloud-right-dialog",
-                                                           :phrase-description "Cloud right dialog"}
-    (common/make-name-unique scene "cloud-center-dialog") {:type               "sequence-data",
-                                                           :editor-type        "dialog",
-                                                           :data               [{:type "sequence-data"
-                                                                                 :data [{:type "empty" :duration 0}
-                                                                                        {:type "animation-sequence", :phrase-text (:whole-text args), :audio nil}]}],
-                                                           :phrase             "cloud-center-dialog",
-                                                           :phrase-description "Cloud center dialog"}
+    (common/make-name-unique scene "cloud-left-dialog")     {:type               "sequence-data",
+                                                             :editor-type        "dialog",
+                                                             :data               [{:type "sequence-data"
+                                                                                   :data [{:type "empty" :duration 0}
+                                                                                          {:type "animation-sequence", :phrase-text (:left-text args), :audio nil}]}],
+                                                             :phrase             "cloud-left-dialog",
+                                                             :phrase-description "Cloud left dialog"}
+    (common/make-name-unique scene "cloud-right-dialog")    {:type               "sequence-data",
+                                                             :editor-type        "dialog",
+                                                             :data               [{:type "sequence-data"
+                                                                                   :data [{:type "empty" :duration 0}
+                                                                                          {:type "animation-sequence", :phrase-text (:right-text args), :audio nil}]}],
+                                                             :phrase             "cloud-right-dialog",
+                                                             :phrase-description "Cloud right dialog"}
+    (common/make-name-unique scene "cloud-center-dialog")   {:type               "sequence-data",
+                                                             :editor-type        "dialog",
+                                                             :data               [{:type "sequence-data"
+                                                                                   :data [{:type "empty" :duration 0}
+                                                                                          {:type "animation-sequence", :phrase-text (:whole-text args), :audio nil}]}],
+                                                             :phrase             "cloud-center-dialog",
+                                                             :phrase-description "Cloud center dialog"}
+    (common/make-name-unique scene "correct-answer-dialog") {:type               "sequence-data",
+                                                             :editor-type        "dialog",
+                                                             :data               [{:type "sequence-data"
+                                                                                   :data [{:type "empty" :duration 0}
+                                                                                          {:type        "animation-sequence",
+                                                                                           :phrase-text "New action",
+                                                                                           :audio       nil}]}],
+                                                             :phrase             "correct-answer",
+                                                             :phrase-description "Correct answer"}
     }
 
    {(common/make-name-unique scene "cloud-left-img")        {:type   "image"
