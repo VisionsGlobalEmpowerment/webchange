@@ -1138,18 +1138,20 @@
     (when (:activity-started db)
       (let [show-goodbye (and (not (lesson-activity-finished? db action)) (not (has-next-activity? db)))
             events (cond-> (list)
-                           (lesson-activity-finished? db action) (conj [::finish-next-activity])
-                           show-goodbye (conj [::goodbye-activity])
-                           (not show-goodbye) (conj [::overlays/show-activity-finished])
-                           :always (conj (activity-finished-event db action))
-                           :always (conj [::reset-navigation]))
+                     (lesson-activity-finished? db action) (conj [::finish-next-activity])
+                     show-goodbye (conj [::goodbye-activity])
+                     (not show-goodbye) (conj [::overlays/show-activity-finished])
+                     :always (conj (activity-finished-event db action))
+                     :always (conj [::reset-navigation]))
             lesson-activity-tags (get-lesson-activity-tags db action)
             finished (get-in db [:progress-data :next])
             db (cond-> db
-                       :always lessons-activity/clear-loaded-activity
-                       :always (assoc :activity-started false)
-                       :always (assoc-in [:progress-data :current-tags] lesson-activity-tags)
-                       (lesson-activity-finished? db action) (lessons-activity/finish finished))]
+                 :always lessons-activity/clear-loaded-activity
+                 :always (assoc :activity-started false)
+                 :always (assoc-in [:progress-data :current-tags] lesson-activity-tags)
+                 (lesson-activity-finished? db action) (lessons-activity/finish finished))]
+        (ce/skip)
+        (ce/remove-timers!)
         {:db         db
          :dispatch-n events}))))
 
