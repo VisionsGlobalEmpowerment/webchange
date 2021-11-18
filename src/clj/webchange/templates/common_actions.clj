@@ -4,6 +4,8 @@
     [clojure.string :as string]
     [clojure.tools.logging :as log]
     [webchange.templates.utils.characters :refer [animations character-positions]]
+    [webchange.question.create :as question-object]
+    [webchange.question.get-question-data :refer [form->question-data]]
     [webchange.utils.scene-common-actions :as common-actions-utils]
     [webchange.utils.scene-data :refer [update-animation-settings]]))
 
@@ -174,6 +176,28 @@
         (add-object-to-last-layer anchor-name)
         (assoc-in [:metadata :added-anchor-idx] anchor-idx))))
 
+(defn get-next-action-index
+  [activity-data]
+  (get-in activity-data [:metadata :next-action-index] 0))
+
+(defn increase-next-action-index
+  [activity-data]
+  (update-in activity-data [:metadata :next-action-index] inc))
+
+(defn add-question
+  [activity-data {:keys [question-page-object]}]
+  (let [index (get-next-action-index activity-data)
+        action-name (str "question-" index)
+        object-name (str "question-" index)
+        question-data (question-object/create
+                        (form->question-data question-page-object)
+                        {:suffix           index
+                         :action-name      action-name
+                         :object-name      object-name})]
+    (-> activity-data
+        (increase-next-action-index)
+        (question-object/add-to-scene question-data))))
+
 (defn- set-animation-settings
   [scene-data data]
   (update-animation-settings scene-data data))
@@ -187,6 +211,7 @@
     :remove-image (common-actions-utils/remove-image scene-data data)
     :add-character (add-character scene-data data)
     :remove-character (common-actions-utils/remove-character scene-data data)
+    :add-question (add-question scene-data data)
     :remove-question (common-actions-utils/remove-question scene-data data)
     :add-anchor (add-anchor scene-data)
     :remove-anchor (common-actions-utils/remove-anchor scene-data data)
