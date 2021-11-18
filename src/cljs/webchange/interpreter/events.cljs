@@ -1655,7 +1655,9 @@
           last (if (nil? last) -1 last)
           animation-actions (i/text-animation-sequence->actions db (-> action
                                                                        (assoc :start 0)
-                                                                       (assoc :data [{:at 0 :chunk (inc last)}])))]
+                                                                       (assoc :duration 0.5)
+                                                                       (assoc :data [{:at 0 :end 0.5 :duration 0.5 :chunk (inc last)}])))]
+      (vars.core/set-variable! variable-name (inc last))
       {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})))
 
 (re-frame/reg-event-fx
@@ -1673,17 +1675,9 @@
      :animation 'color',
      :fill '#ff0000'
      }"
-    (let [variable-name (tc/chunk-animated-variable target)
-          last (vars.core/get-variable variable-name)
-          animation-actions (-> (i/text-animation-sequence->actions db (-> action
-                                                                           (assoc :start 0)
-                                                                           (assoc :data (vec (map (fn [i] {:at 0 :chunk i})
-                                                                                                  (range last -1 -1)))
-                                                                                  )))
-                                (update-in [0 :data] conj {:type "set-variable" :var-name variable-name :var-value nil}))]
-      (if (not last)
-        {:dispatch-n (list (ce/success-event action))}
-        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
+    (let [variable-name (tc/chunk-animated-variable target)]
+      (vars.core/set-variable! variable-name nil)
+      {:dispatch (ce/success-event action)})))
 
 (re-frame/reg-event-fx
   ::reset-navigation
