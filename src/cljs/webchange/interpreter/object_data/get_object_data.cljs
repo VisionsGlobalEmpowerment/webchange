@@ -86,7 +86,8 @@
                                    (-> (merge object
                                               group-params
                                               {:object-name (keyword name)
-                                               :pages       pages-params})
+                                               :pages       pages-params
+                                               :stages      (get metadata :stages [])})
                                        (filter-extra-props [])))
                        :animation (let [anim-object (prepare-anim-object-params object)
                                         animation-name (or (:scene-name anim-object) (:name anim-object))]

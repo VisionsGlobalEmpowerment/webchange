@@ -72,9 +72,10 @@
 
 (defn- add-page-to-book
   [activity-data
-   {:keys [with-action? shift-from-end removable? position]
-    :or   {shift-from-end 0
-           removable?     true}
+   {:keys [with-action? shift-from-end removable? position back-cover-filler?]
+    :or   {shift-from-end     0
+           removable?         true
+           back-cover-filler? false}
     :as   content-data}
    {:keys [name resources objects text-name action] :as page-data}]
   (let [book-object-name (get-book-object-name activity-data)
@@ -87,7 +88,13 @@
     (cond-> (-> activity-data
                 (update :assets concat resources)
                 (update :objects merge objects)
-                (update-in [:objects book-object-name :pages] insert-at-position {:object name :text text-name :removable? removable?} new-page-position)
+                (update-in [:objects book-object-name :pages]
+                           insert-at-position
+                           (cond-> {:object     name
+                                    :text       text-name
+                                    :removable? removable?}
+                                   back-cover-filler? (assoc :back-cover-filler? true))
+                           new-page-position)
                 (update-stages {:book-name book-object-name})
                 (update-current-side))
             (and with-action?

@@ -6,6 +6,7 @@
     [webchange.templates.library.flipbook.credits :as credits]
     [webchange.templates.library.flipbook.custom-page :as custom-page]
     [webchange.templates.library.flipbook.custom-spread :as custom-spread]
+    [webchange.templates.library.flipbook.back-filler :as back-filler]
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
@@ -126,6 +127,8 @@
       (add-page front-cover/create page-params (page/activity->front-cover-props props))
       (add-page generic-front/create page-params (page/activity->generic-front-props props))
       (add-page credits/create page-params (page/activity->credits-props props))
+      (add-page back-filler/create page-params {:removable?         false
+                                                :back-cover-filler? true})
       (add-page back-cover/create page-params (page/activity->back-cover-props props))
       (assoc-in [:metadata :actions] (:actions metadata))
       (assoc-in [:metadata :saved-props :wizard] props)))
@@ -139,7 +142,7 @@
               (add-page activity-data constructor page-params {:image-src      (:src image)
                                                                :text           text
                                                                :with-action?   true
-                                                               :shift-from-end 1}))
+                                                               :shift-from-end 2}))
             activity-data
             constructors)))
 
