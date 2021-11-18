@@ -330,9 +330,12 @@
                    (or
                      (<= chunk-end start)
                      (>= chunk-start end))))
+         (filter (fn [{:keys [chunk]}]
+                   (let [transition-id (chunk-transition-name target chunk)
+                         scene-id (:current-scene db)]
+                     (get-in db [:transitions scene-id transition-id]))))
          (map (fn [{:keys [at chunk duration]}]
                 (let [transition-id (chunk-transition-name target chunk)
-                      variable-name (chunk-animated-variable target)
                       scene-id (:current-scene db)
                       transition (get-in db [:transitions scene-id transition-id])
                       start-fill ((:get-fill @transition))]
@@ -340,8 +343,7 @@
                    :data         [{:type "empty" :duration (* (- at start) 1000)}
                                   {:type "transition" :transition-id transition-id :to {:fill fill :duration 0.01}}
                                   {:type "empty" :duration (* duration 1000)}
-                                  {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.1}}
-                                  {:type "set-variable" :var-name variable-name :var-value chunk}]
+                                  {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.1}}]
                    :on-interrupt {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.001}}})))
          (into []))))
 

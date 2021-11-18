@@ -465,14 +465,18 @@
       (concat [flow] (flow-ancestors parent))
       [flow])))
 
-(defn- execute-remove-flow-tag!
-  [{:keys [flow-id tag] :as action}]
+(defn- remove-flow-tag!
+  [flow-id tag]
   (let [flow-ancestors (->> (flow-ancestors flow-id)
                             (map #(remove-tag % tag))
                             (map (juxt :flow-id identity))
                             (into {}))]
-    (swap! flows merge flow-ancestors)
-    (dispatch-success-fn action)))
+    (swap! flows merge flow-ancestors)))
+
+(defn- execute-remove-flow-tag!
+  [{:keys [flow-id tag] :as action}]
+  (remove-flow-tag! flow-id tag)
+  (dispatch-success-fn action))
 
 (defn- flow-success!
   [flow-id action-id]
@@ -611,11 +615,19 @@
                     (into []))]
       {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
+(defn- deactivate-parent-dialog!
+  "Disable skip in parent dialog so that dialogs in nested sequences would not skip whole dialog"
+  [{:keys [flow-id]}]
+  (remove-flow-tag! flow-id "skip"))
+
 (defn execute-sequence-data!
   ([db {:keys [flow-id] :as action}]
    (if (and (skip-flow? flow-id) (:workflow-user-input action))
      (dispatch-success-fn action)
-     (execute-sequence-data! db action 0)))
+     (do
+       (when (:workflow-user-input action)
+         (deactivate-parent-dialog! action))
+       (execute-sequence-data! db action 0))))
   ([db action sequence-position]
    (if (empty? (remove nil? (:data action)))
      (when-not (:workflow-user-input action)
@@ -640,8 +652,8 @@
                       :parent        (:flow-id action)
                       :skip          (get-in action [:previous-flow :skip])
                       :tags          (cond-> action-tags
-                                             skippable? (conj "skip"))
-                      :dialog        (= "dialog" (:editor-type action))
+                                       skippable? (conj "skip"))
+                      :dialog        dialog-action?
                       :current-scene current-scene
                       :on-remove     (when (:on-interrupt action)
                                        [#(execute-action db (:on-interrupt action))])}
@@ -653,7 +665,8 @@
                               (assoc :action-id action-id)
                               (with-prev action))
 
-           block-user-interaction? (some #{(:user-interactions-blocked action-data-utils/action-tags)} action-tags)]
+           block-user-interaction? (and (some #{(:user-interactions-blocked action-data-utils/action-tags)} action-tags)
+                                        (not (:workflow-user-input action)))]
 
        (if block-user-interaction?
          (block-user-interaction)

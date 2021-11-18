@@ -725,7 +725,7 @@
 
 (defn- preserve-actions
   [scene-data created-activity]
-  (let [action-names (dialog-names scene-data)
+  (let [action-names (dialog-names created-activity)
         preserve-actions (-> scene-data
                              :actions
                              (select-keys action-names))]
@@ -748,7 +748,7 @@
 
 (defn- get-object-keys-to-update
   [{:keys [editable?]}]
-  (cond-> [:editable? :origin :max-width :max-height :width :height :image-size]
+  (cond-> [:editable? :origin :max-width :max-height :width :height :image-size :metadata]
     (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y])
     (not editable?) (concat [:visible])))
 
