@@ -5,6 +5,7 @@
     [webchange.ui-framework.layout.right-menu.object-tree-menu.views :refer [objects-tree-menu]]
     [webchange.editor-v2.activity-form.generic.components.activity-action.views :as activity-action]
     [webchange.editor-v2.activity-form.generic.components.add-character.views :as add-character]
+    [webchange.editor-v2.activity-form.generic.components.add-question.views :as add-question]
     [webchange.editor-v2.activity-form.generic.components.background-music.views :as background-music]
     [webchange.editor-v2.activity-form.generic.components.change-background.views-background :as background]
     [webchange.editor-v2.activity-form.generic.components.info-action.state :as info-action-state]
@@ -32,6 +33,8 @@
     :on-click add-image/open-add-image-window}
    {:text     "Add character"
     :on-click add-character/open-add-character-window}
+   {:text     "Add question"
+    :on-click add-question/open-add-question-window}
    {:text     "Info"
     :on-click info-action-state/open-info-window}
    {:text     "Add anchor"
@@ -71,6 +74,7 @@
       [activity-action/activity-action-modal]
       [animation-settings-window]
       [add-character/add-character-window]
+      [add-question/add-question-window]
       [background/change-background-window]
       [background-music/set-music-window]
       [add-image/add-image-window]
