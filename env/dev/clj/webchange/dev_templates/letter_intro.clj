@@ -106,3 +106,60 @@
                   :assets        []
                   :skills        []
                   :triggers      {:start {:on "start", :action "start-scene"}}}))))
+
+
+(comment
+  (let [letter-small-path "M 90 111 h 65 m 0 0 l -66 80 m 0 0 h 72"
+        letter-small-shape "M 90 111 h 65 m 0 0 l -66 80 m 0 0 h 72"
+        letter-big-path "M 75 35 h 103 m 0 0 l -112 157 m 0 0 h 116"
+        letter-big-shape "M 75 35 h 103 m 0 0 l -112 157 m 0 0 h 116"
+
+        letter-path-template {:type         "animated-svg-path"
+                              :width        325
+                              :height       325
+                              :scale-x      1
+                              :scale-y      1
+                              :animation    "stop"
+                              :duration     5000
+                              :stroke       "#323232"
+                              :stroke-width 15
+                              :line-cap     "round"}
+        letter-shape-template {:type         "svg-path"
+                               :width        325
+                               :height       325
+                               :stroke       "#898989"
+                               :stroke-width 4
+                               :scale-x      1
+                               :scale-y      1
+                               :dash         [7 7]
+                               :line-cap     "round"
+                               :rotation     0}
+        x0 700 dx 200
+        y0 300 dy 200]
+    {:objects       {:letter-big-path    (merge letter-path-template
+                                                {:x    x0
+                                                 :y    y0
+                                                 :path letter-big-path})
+                     :letter-small-path  (merge letter-path-template
+                                                {:x    (+ x0 dx)
+                                                 :y    y0
+                                                 :path letter-small-path})
+                     :letter-big-shape   (merge letter-shape-template
+                                                {:x    x0
+                                                 :y    (+ y0 dy)
+                                                 :data letter-big-shape})
+                     :letter-small-shape (merge letter-shape-template
+                                                {:x    (+ x0 dx)
+                                                 :y    (+ y0 dy)
+                                                 :data letter-small-shape})}
+     :actions       {:start-scene {:type "parallel"
+                                   :data [{:target "letter-big-path"
+                                           :type   "path-animation"
+                                           :state  "play"}
+                                          {:target "letter-small-path"
+                                           :type   "path-animation"
+                                           :state  "play"}]}}
+     :scene-objects [["letter-big-path" "letter-small-path" "letter-big-shape" "letter-small-shape"]]
+     :assets        []
+     :skills        []
+     :triggers      {:start {:on "start" :action "start-scene"}}}))
