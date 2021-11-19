@@ -1826,25 +1826,24 @@
                                 (assoc-in [id :last] (if autostart 0 nil))
                                 (assoc-in [id :counter] 0)))
     (ce/remove-timer id)
-    (let [interval-id (.setInterval js/window (fn []
-                                                (let
-                                                  [last (get-in @timeout-counter [id :last])
-                                                   counter (get-in @timeout-counter [id :counter])
-                                                   scene-action (-> (ce/get-action action db)
-                                                                    (assoc :params (:params main-action))
-                                                                    (assoc-in [:params :counter] counter))
-                                                   ]
-                                                  (if (and (< interval (- (.now js/Date) last)) (not (nil? last)))
-                                                    (do
-                                                      (ce/remove-timer id)
-                                                      (vars.core/set-variable! (str id "-value") counter)
-                                                      (re-frame/dispatch [::ce/execute-action scene-action]))))
-                                                ) interval)]
+    (let [interval-id (.setInterval
+                       js/window
+                       (fn []
+                         (let [last (get-in @timeout-counter [id :last])
+                               counter (get-in @timeout-counter [id :counter])
+                               scene-action (-> (ce/get-action action db)
+                                                (assoc :params (:params main-action))
+                                                (assoc-in [:params :counter] counter))]
+                           (if (and (< interval (- (.now js/Date) last)) (not (nil? last)))
+                             (do
+                               (ce/remove-timer id)
+                               (vars.core/set-variable! (str id "-value") counter)
+                               (re-frame/dispatch [::ce/execute-action scene-action])))))
+                       interval)]
       {:dispatch-n (list [::ce/execute-register-timer {:name id
                                                        :id   interval-id
                                                        :type "interval"}]
-                         (ce/success-event main-action))})
-    ))
+                         (ce/success-event main-action))})))
 
 (re-frame/reg-event-fx
   ::execute-set-interval
@@ -1862,13 +1861,14 @@
      :interval 17000
      :action   'show-click-reminder'}"
     (ce/remove-timer id)
-    (let [scene-action (-> (ce/get-action action db)
-                           (assoc :params (:params main-action)))
-          interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action scene-action])) interval)]
-      {:dispatch-n (list [::ce/execute-register-timer {:name id
-                                                       :id   interval-id
-                                                       :type "interval"}]
-                         (ce/success-event main-action))})))
+    (when (:activity-started db)
+      (let [scene-action (-> (ce/get-action action db)
+                             (assoc :params (:params main-action)))
+            interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action scene-action])) interval)]
+        {:dispatch-n (list [::ce/execute-register-timer {:name id
+                                                         :id   interval-id
+                                                         :type "interval"}]
+                           (ce/success-event main-action))}))))
 
 (re-frame/reg-event-fx
   ::execute-remove-interval
