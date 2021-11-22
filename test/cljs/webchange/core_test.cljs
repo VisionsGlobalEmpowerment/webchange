@@ -27,7 +27,8 @@
 
 (deftest scene-can-be-loaded
   (rf-test/run-test-async
-    (testing "load scene"
-      (re-frame/dispatch [::ie/start-course "test-course"])
-      (rf-test/wait-for [::ie/set-scene]
-                        (is (= fixtures/initial-scene (get-in @re-frame.db/app-db [:scenes "initial-scene"])))))))
+   (testing "load scene"
+     (re-frame/dispatch [::ie/start-course "test-course"])
+     (rf-test/wait-for [::ie/set-scene]
+                       (is (= fixtures/initial-scene (get-in @re-frame.db/app-db [:scenes "initial-scene"])))))))
+

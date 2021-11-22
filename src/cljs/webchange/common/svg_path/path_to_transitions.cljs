@@ -1,7 +1,7 @@
 (ns webchange.common.svg-path.path-to-transitions
   (:require
     [clojure.string :as s]
-    [svg-arc-to-cubic-bezier :as arcToBezier]
+    ["svg-arc-to-cubic-bezier" :as arcToBezier]
     [webchange.common.svg-path.path-splitter :refer [split-path apply-path-to-point]]
     [webchange.common.svg-path.path-element :refer [length]]
     [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]
@@ -111,13 +111,13 @@
                              :xAxisRotation x-axis-rotation
                              :largeArcFlag  large-arc-flag
                              :sweepFlag     sweep-flag})
-            curves (->> params ((.-default arcToBezier)) (js->clj))]
+            curves (->> params (arcToBezier) (js->clj))]
         (map
-          (fn [{x1 "x1" y1 "y1" x2 "x2" y2 "y2" x3 "x" y3 "y"}]
-            {:bezier [(->precision {:x x1 :y y1})
-                      (->precision {:x x2 :y y2})
-                      (->precision {:x x3 :y y3})]})
-          curves))
+         (fn [{x1 "x1" y1 "y1" x2 "x2" y2 "y2" x3 "x" y3 "y"}]
+           {:bezier [(->precision {:x x1 :y y1})
+                     (->precision {:x x2 :y y2})
+                     (->precision {:x x3 :y y3})]})
+         curves))
       (throw (js/Error. (str "Unknown path type: " path-type))))))
 
 (defn- get-transitions
@@ -126,11 +126,11 @@
   ([paths options precision]
    (->> paths
         (reduce
-          (fn [[last-point prev-path result] path]
-            (let [transitions (get-transition last-point prev-path path precision)
-                  new-point (apply-path-to-point last-point path)]
-              [new-point path (concat result (map #(merge % options) transitions))]))
-          [{:x 0 :y 0} nil []])
+         (fn [[last-point prev-path result] path]
+           (let [transitions (get-transition last-point prev-path path precision)
+                 new-point (apply-path-to-point last-point path)]
+             [new-point path (concat result (map #(merge % options) transitions))]))
+         [{:x 0 :y 0} nil []])
         (last))))
 
 (defn- transition->path
