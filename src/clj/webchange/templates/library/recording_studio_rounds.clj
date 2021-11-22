@@ -14,6 +14,7 @@
                          :preview-activity {:course-slug   "recording-studio-test-english-gvfoggox"
                                             :activity-slug "recording-apple"}}
         :options        {:demo-image {:type        "image"
+                                      :optional?   true
                                       :label       "Demo Image"
                                       :description "What demo image you want to show on the screen?"}
                          :image      {:type        "image"
@@ -274,12 +275,6 @@
                                                                             {:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
                                                                             {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
                                                                     {:type "action" :id "intro-dialog"}
-                                                                    {:type "action" :id "set-demo-image-src"}
-                                                                    {:type       "set-attribute"
-                                                                     :target     "concept-image"
-                                                                     :attr-name  "visible"
-                                                                     :attr-value true}
-                                                                    {:type "action" :id "demo-dialog"}
                                                                     {:type "action" :id "reset-controls"}]
                                                            :on-end "finish"}
                                :reset-controls            {:type "sequence-data"
@@ -309,9 +304,7 @@
                                :stop-recording-dialog     (dialog/default "Stop recording")
                                :start-playback-dialog     (dialog/default "Start playback")
                                :stop-playback-dialog      (dialog/default "Stop playback")
-                               :finish-dialog             (dialog/default "Finish")
-                               :demo-dialog               (-> (dialog/default "Demo")
-                                                              (assoc :unique-tag "intro"))}
+                               :finish-dialog             (dialog/default "Finish")}
 
                :triggers      {:stop  {:on "back" :action "stop-activity"}
                                :start {:on "start" :action "script"}}
@@ -321,8 +314,6 @@
                                                     :title "Main Track"
                                                     :nodes [{:type      "dialog"
                                                              :action-id "intro-dialog"}
-                                                            {:type      "dialog"
-                                                             :action-id "demo-dialog"}
                                                             {:type      "dialog"
                                                              :action-id "start-recording-dialog"}
                                                             {:type "prompt"
@@ -413,24 +404,37 @@
         (update-in [:metadata :resources] conj image)
         (assoc-in [:metadata :next-round-id] next-round))))
 
+(defn- add-demo
+  [activity-data image]
+  (-> activity-data
+      (assoc-in [:actions :set-demo-image-src :attr-value] image)
+      (assoc-in [:actions :demo-dialog] (dialog/default "Demo"))
+      (update-in [:actions :script :data] concat [{:type "action" :id "set-demo-image-src"}
+                                                  {:type       "set-attribute"
+                                                   :target     "concept-image"
+                                                   :attr-name  "visible"
+                                                   :attr-value true}
+                                                  {:type "action" :id "demo-dialog"}
+                                                  {:type "action" :id "reset-controls"}])
+      (update-in [:metadata :tracks 0] concat [{:type      "dialog"
+                                                :action-id "demo-dialog"}]) 
+      (update-in [:metadata :resources] conj image)))
+
 (defn create
   [args]
   (let [demo-image (get-in args [:demo-image :src])
-        image (get-in args [:image :src])
-        template (if image
-                   (add-round template image)
-                   template)]
-    (-> template
-        (assoc-in [:actions :set-demo-image-src :attr-value] demo-image)
-        (update-in [:metadata :resources] conj demo-image)
-        (assoc-in [:metadata :actions] (:actions m)))))
+        image (get-in args [:image :src])]
+    (cond-> template
+            demo-image (add-demo demo-image)
+            image (add-round image)
+            :always (assoc-in [:metadata :actions] (:actions m)))))
 
-(defn update
+(defn update-template
   [old-data {:keys [action-name image]}]
   (case action-name
     "add-round" (add-round old-data (:src image))))
 
 (core/register-template
-  m
-  create
-  update)
+ m
+ create
+ update-template)
