@@ -59,8 +59,7 @@
                                                 :type       "image",
                                                 :x          1635,
                                                 :y          107,
-                                                :width      160,
-                                                :height     160,
+                                                :scale      {:x 0.65, :y 0.65}
                                                 :src        "/raw/img/categorize-antonims/left.png",
                                                 :draggable  true,
                                                 :actions    {:drag-start {:type   "action",
@@ -82,8 +81,7 @@
                                                             :type       "image",
                                                             :x          415,
                                                             :y          354,
-                                                            :width      160,
-                                                            :height     160,
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-antonims/back.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -106,8 +104,7 @@
                                                             :type       "image",
                                                             :x          801,
                                                             :y          481,
-                                                            :width      160,
-                                                            :height     160,
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-antonims/up.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -130,8 +127,7 @@
                                                             :type       "image",
                                                             :x          790,
                                                             :y          160,
-                                                            :width      160,
-                                                            :height     160,
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-antonims/loud.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -154,8 +150,7 @@
                                                             :type       "image",
                                                             :x          1274,
                                                             :y          481,
-                                                            :width      160,
-                                                            :height     160,
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-antonims/night.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -177,8 +172,7 @@
                                                             :type       "image",
                                                             :x          1095,
                                                             :y          223,
-                                                            :width      160,
-                                                            :height     160,
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-antonims/out.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {

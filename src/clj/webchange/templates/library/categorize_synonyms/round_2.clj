@@ -58,8 +58,7 @@
                                                 :type       "image",
                                                 :x          768,
                                                 :y          481,
-                                                :width      160,
-                                                :height     160
+                                                :scale      {:x 0.65, :y 0.65}
                                                 :src        "/raw/img/categorize-synonyms/cold.png",
                                                 :draggable  true,
                                                 :actions    {:drag-start {:type   "action",
@@ -81,8 +80,7 @@
                                                             :type       "image",
                                                             :x          1094,
                                                             :y          223,
-                                                            :width      160,
-                                                            :height     160
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-synonyms/child.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -105,8 +103,7 @@
                                                             :type       "image",
                                                             :x          415,
                                                             :y          355,
-                                                            :width      160,
-                                                            :height     160
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-synonyms/big.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -129,8 +126,7 @@
                                                             :type       "image",
                                                             :x          1388,
                                                             :y          561,
-                                                            :width      160,
-                                                            :height     160
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-synonyms/trash.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -153,8 +149,7 @@
                                                             :type       "image",
                                                             :x          1636,
                                                             :y          107,
-                                                            :width      160,
-                                                            :height     160
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-synonyms/scared.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -177,8 +172,7 @@
                                                             :type       "image",
                                                             :x          1674,
                                                             :y          434,
-                                                            :width      160,
-                                                            :height     160
+                                                            :scale      {:x 0.65, :y 0.65}
                                                             :src        "/raw/img/categorize-synonyms/happy.png",
                                                             :draggable  true,
                                                             :actions    {:drag-start {

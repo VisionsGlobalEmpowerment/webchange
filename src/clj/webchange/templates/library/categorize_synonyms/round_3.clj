@@ -56,8 +56,7 @@
                                                                           :hidden    {:visible false}}}
                                        :chilly-object       {
                                                              :type       "image",
-                                                             :width      159,
-                                                             :height     160,
+                                                             :scale      {:x 0.65, :y 0.65}
                                                              :x          768,
                                                              :y          481,
                                                              :src        "/raw/img/categorize-synonyms/chilly.png",
@@ -93,8 +92,7 @@
                                                                                                                 :duration 1}}}},},
                                        :large-object        {
                                                              :type       "image",
-                                                             :width      160,
-                                                             :height     159,
+                                                             :scale      {:x 0.65, :y 0.65}
                                                              :x          415,
                                                              :y          355,
                                                              :src        "/raw/img/categorize-synonyms/large.png",
@@ -131,8 +129,7 @@
                                                              },
                                        :glad-object         {
                                                              :type       "image",
-                                                             :width      160,
-                                                             :height     161,
+                                                             :scale      {:x 0.65, :y 0.65}
                                                              :x          1674,
                                                              :y          434,
                                                              :src        "/raw/img/categorize-synonyms/glad.png",
@@ -169,8 +166,7 @@
                                                              },
                                        :afraid-object       {
                                                              :type       "image",
-                                                             :width      160,
-                                                             :height     160,
+                                                             :scale      {:x 0.65, :y 0.65}
                                                              :x          1636,
                                                              :y          107,
                                                              :src        "/raw/img/categorize-synonyms/afraid.png",
@@ -207,8 +203,7 @@
                                                              },
                                        :garbage-object      {
                                                              :type       "image",
-                                                             :width      160,
-                                                             :height     160,
+                                                             :scale      {:x 0.65, :y 0.65}
                                                              :x          1388,
                                                              :y          561,
                                                              :src        "/raw/img/categorize-synonyms/garbage.png",
@@ -245,8 +240,7 @@
                                                              },
                                        :kid-object          {
                                                              :type       "image",
-                                                             :width      161,
-                                                             :height     160,
+                                                             :scale      {:x 0.65, :y 0.65}
                                                              :x          1094,
                                                              :y          223,
                                                              :src        "/raw/img/categorize-synonyms/kid.png",

@@ -55,8 +55,7 @@
                                                                        :hidden    {:visible false}}}
                                        :left-object      {
                                                           :type       "image",
-                                                          :width      160,
-                                                          :height     160,
+                                                          :scale      {:x 0.65, :y 0.65}
                                                           :x          1635,
                                                           :y          107,
                                                           :src        "/raw/img/categorize-antonims/left.png",
@@ -92,8 +91,7 @@
                                                                                                              :duration 1}}}},},
                                        :up-object        {
                                                           :type       "image",
-                                                          :width      160,
-                                                          :height     160,
+                                                          :scale      {:x 0.65, :y 0.65}
                                                           :x          801,
                                                           :y          481,
                                                           :src        "/raw/img/categorize-antonims/up.png",
@@ -130,8 +128,7 @@
                                                           },
                                        :out-object       {
                                                           :type       "image",
-                                                          :width      160,
-                                                          :height     160,
+                                                          :scale      {:x 0.65, :y 0.65}
                                                           :x          1095,
                                                           :y          223,
                                                           :src        "/raw/img/categorize-antonims/out.png",
@@ -168,8 +165,7 @@
                                                           },
                                        :night-object     {
                                                           :type       "image",
-                                                          :width      160,
-                                                          :height     160,
+                                                          :scale      {:x 0.65, :y 0.65}
                                                           :x          1274,
                                                           :y          481,
                                                           :src        "/raw/img/categorize-antonims/night.png",
@@ -206,8 +202,7 @@
                                                           },
                                        :loud-object      {
                                                           :type       "image",
-                                                          :width      160,
-                                                          :height     160,
+                                                          :scale      {:x 0.65, :y 0.65}
                                                           :x          790,
                                                           :y          160,
                                                           :src        "/raw/img/categorize-antonims/loud.png",
@@ -244,8 +239,7 @@
                                                           },
                                        :back-object      {
                                                           :type       "image",
-                                                          :width      160,
-                                                          :height     160,
+                                                          :scale      {:x 0.65, :y 0.65}
                                                           :x          415,
                                                           :y          354,
                                                           :src        "/raw/img/categorize-antonims/back.png",
