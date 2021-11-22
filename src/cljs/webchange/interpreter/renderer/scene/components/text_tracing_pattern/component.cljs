@@ -24,12 +24,13 @@
                     :debug                    {:default false}
                     :enable?                  {:default true}})
 
-(def base-height 225)
+(def base-height 275)
 (def midline-offset 70)
 (def baseline-offset 150)
 
 (def base-width 225)
 (def line-height 10)
+(def letter-offset-y -34)
 
 (def safe-padding 60)
 
@@ -241,7 +242,6 @@
                                  :y topline-y}))))
 
         letters (->> text
-                     (str/lower-case)
                      (map alphabet-traceable-path)
                      (map #(path->animated-letter letter-scale padding-scale %))
                      (map merge positions))]
@@ -341,6 +341,7 @@
         topline-y (-> (- height letter-height) (/ 2))
         midline-y (-> topline-y (+ (* midline-offset letter-scale)))
         baseline-y (-> topline-y (+ (* baseline-offset letter-scale)))
+        text-offset-y (* letter-offset-y letter-scale)
         has-text? (not (clojure.string/blank? text))]
     (swap! state assoc :letters [])
     (swap! state assoc :all-letters [])
@@ -362,9 +363,9 @@
                                  :stroke      "#323232"}))
 
     (when has-text?
-      (draw-pattern! group props scale topline-y)
+      (draw-pattern! group props scale text-offset-y)
       (when traceable
-        (draw-traceable-pattern! group props scale topline-y state)))
+        (draw-traceable-pattern! group props scale text-offset-y state)))
 
     (set-enable! state)))
 
