@@ -186,8 +186,8 @@
 (defn- levels->finished
   [levels level-idx lesson-idx activity-idx]
   (let [->lesson (fn [idx lesson] [idx (->> (:activities lesson) (map-indexed (fn [idx _] idx)) (into #{}))])
-        ->level (fn [idx level] [idx (->> (:lessons level) (map-indexed ->lesson) (into {}))])
-        prepared (->> levels (map-indexed ->level) (into {}))]
+        ->level (fn [idx level] [idx (->> (:lessons level) (map-indexed ->lesson) (into (sorted-map)))])
+        prepared (->> levels (map-indexed ->level) (into (sorted-map)))]
     (cond->> prepared
              level-idx (keep (fn [[idx item]] (when (>= level-idx idx) [idx item])))
              :always (into {})
@@ -204,15 +204,13 @@
         levels (-> (course/get-course-data course-slug) :levels)
         finished (-> levels
                      (levels->finished level lesson activity))
-        current-tags (->
-                       (db/get-progress {:user_id user-id :course_id course-id})
-                       :data
-                       :current-tags)
+        current-tags (-> (db/get-progress {:user_id user-id :course_id course-id})
+                         :data
+                         :current-tags)
         next (activity/next-not-finished-for current-tags levels finished {:level level :lesson lesson :activity activity})
-        progress (->
-                   (db/get-progress {:user_id user-id :course_id course-id})
-                   :data
-                   (assoc :finished finished)
-                   (assoc :next next)
-                   (assoc :user-mode (if navigation "game-with-nav")))]
+        progress (-> (db/get-progress {:user_id user-id :course_id course-id})
+                     :data
+                     (assoc :finished finished)
+                     (assoc :next next)
+                     (assoc :user-mode (if navigation "game-with-nav")))]
     (save-progress! user-id course-slug {:progress progress})))
