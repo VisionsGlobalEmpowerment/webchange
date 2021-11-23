@@ -416,8 +416,8 @@
                                                    :attr-value true}
                                                   {:type "action" :id "demo-dialog"}
                                                   {:type "action" :id "reset-controls"}])
-      (update-in [:metadata :tracks 0] concat [{:type      "dialog"
-                                                :action-id "demo-dialog"}]) 
+      (update-in [:metadata :tracks 0 :nodes] concat [{:type      "dialog"
+                                                       :action-id "demo-dialog"}]) 
       (update-in [:metadata :resources] conj image)))
 
 (defn create
