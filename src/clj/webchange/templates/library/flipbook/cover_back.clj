@@ -7,95 +7,34 @@
 (def resources ["/raw/img/flipbook/logo_2.png"])
 
 (def template
-  {:page-cover-back                   {:type       "group"
-                                       :transition "page-cover-back"
-                                       :children   ["page-cover-back-background"
-                                                    "page-cover-back-image"
-                                                    "page-cover-back-license"
-                                                    "page-cover-back-attributions"]
-                                       :generated? true}
-   :page-cover-back-background        {:type   "rectangle"
-                                       :x      0
-                                       :y      0
-                                       :width  "---"
-                                       :height "---"
-                                       :fill   "---"}
-   :page-cover-back-image             {:type       "image"
-                                       :x          "---"
-                                       :y          350
-                                       :src        "/raw/img/flipbook/logo_2.png"
-                                       :origin     {:type "center-center"}
-                                       :editable?  {:select true}}
-   :page-cover-back-license           {:type           "text"
-                                       :word-wrap      true
-                                       :vertical-align "top"
-                                       :font-size      24
-                                       :x              "---"
-                                       :y              700
-                                       :width          "---"
-                                       :fill           "---"
-                                       :text           "---"}
-   :page-cover-back-attributions      {:type     "group"
-                                       :x        "---"
-                                       :y        "---"
-                                       :children []}})
-
-(def attr-template
-  {:page-attr       {:type     "group"
-                     :children ["page-attr-label" "page-attr-value"]
-                     :x        0
-                     :y        "---"}
-   :page-attr-label {:type           "text"
-                     :vertical-align "top"
-                     :font-size      24
-                     :x              0
-                     :y              0
-                     :fill           "---"
-                     :text           "---"}
-   :page-attr-value {:type           "text"
-                     :vertical-align "top"
-                     :font-size      24
-                     :x              "---"
-                     :y              0
-                     :fill           "---"
-                     :text           "---"}})
-
-
-(defn- get-attribute-group
-  [{:keys [y label value label-width]} {:keys [text-color]}]
-  (-> attr-template
-      (assoc-in [:page-attr :y] y)
-      (assoc-in [:page-attr-label :fill] text-color)
-      (assoc-in [:page-attr-label :text] label)
-      (assoc-in [:page-attr-value :x] label-width)
-      (assoc-in [:page-attr-value :fill] text-color)
-      (assoc-in [:page-attr-value :text] value)))
-
-(defn- generate-attributions
-  "[{:label
-     :value}]"
-  [attributions {:keys [attribution-label-width vertical-step] :as page-params}]
-  (->> attributions
-       (map-indexed vector)
-       (reduce (fn [result [idx attribute]]
-                 (let [attr-name (generate-name)
-                       attr-data (-> (merge attribute
-                                            {:y           (* idx vertical-step)
-                                             :label-width attribution-label-width})
-                                     (get-attribute-group page-params)
-                                     (rename-object "page-attr" attr-name))]
-                   (-> result
-                       (update :names conj attr-name)
-                       (update :objects merge attr-data))))
-               {:names   []
-                :objects {}})))
-
-(defn- set-attributions
-  [page-data page-params attributions]
-  (let [{:keys [names objects]} (generate-attributions attributions page-params)]
-    (-> page-data
-        (assoc-in [:page-cover-back-attributions :children] names)
-        (merge objects))))
+  {:page-cover-back            {:type       "group"
+                                :transition "page-cover-back"
+                                :children   ["page-cover-back-background"
+                                             "page-cover-back-image"
+                                             "page-cover-back-license"]
+                                :generated? true}
+   :page-cover-back-background {:type   "rectangle"
+                                :x      0
+                                :y      0
+                                :width  "---"
+                                :height "---"
+                                :fill   "---"}
+   :page-cover-back-image      {:type      "image"
+                                :x         "---"
+                                :y         350
+                                :src       "/raw/img/flipbook/logo_2.png"
+                                :origin    {:type "center-center"}
+                                :editable? {:select true}}
+   :page-cover-back-license    {:type           "text"
+                                :word-wrap      true
+                                :vertical-align "top"
+                                :font-size      24
+                                :x              "---"
+                                :y              700
+                                :width          "---"
+                                :fill           "---"
+                                :text           "---"
+                                :editable?      {:select true}}})
 
 (defn- apply-page-size
   [page-data {:keys [width height padding]}]
@@ -104,8 +43,6 @@
         (assoc-in [:page-cover-back-background :width] width)
         (assoc-in [:page-cover-back-background :height] height)
         (assoc-in [:page-cover-back-image :x] page-center)
-        (assoc-in [:page-cover-back-attributions :x] 232)
-        (assoc-in [:page-cover-back-attributions :y] 512)
         (assoc-in [:page-cover-back-license :x] (* 2 padding))
         (assoc-in [:page-cover-back-license :width] (- width (* 4 padding))))))
 
@@ -130,20 +67,9 @@ Illustrated by __illustrators__."
 
 (defn create
   [page-params content-params]
-  (let [attributions []
-        attributions-height (* 40 (count attributions))
-        attributions-width 100
-        attribution-label-width 130
-        vertical-step 40]
-    {:name      page-name
-     :resources resources
-     :objects   (-> template
-                    (set-attributions (merge page-params
-                                             {:attribution-label-width attribution-label-width
-                                              :vertical-step           vertical-step})
-                                      attributions)
-                    (apply-page-size (merge page-params
-                                            {:attributions-height attributions-height
-                                             :attributions-width  attributions-width}))
-                    (set-content content-params)
-                    (set-colors page-params))}))
+  {:name      page-name
+   :resources resources
+   :objects   (-> template
+                  (apply-page-size page-params)
+                  (set-content content-params)
+                  (set-colors page-params))})
