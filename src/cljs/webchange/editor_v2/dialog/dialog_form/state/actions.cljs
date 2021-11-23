@@ -212,7 +212,7 @@
   ::delete-phrase-action
   (fn [{:keys [db]} [_ node]]
     (let [{:keys [concept-action? base-path parent-action base-action target-position item-position]} (actions/get-dialog-node-data node)]
-      (if (and (actions/node-parallel? parent-action) (not= 0 item-position))
+      (if (actions/node-parallel? parent-action)
         (let [parent-action (assoc parent-action :data (vec (:data parent-action)))
               parallel-data (-> parent-action
                                 (au/delete-child-action item-position))
