@@ -30,7 +30,7 @@
         :objects
                   {:background  {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
                    :letter-tutorial-image
-                                {:type "image", :x 1065, :y 75, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
+                                {:type "image", :x 1065, :y 125, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
                    :letter-tutorial-path
                                 {:type         "animated-svg-path",
                                  :x            600,
