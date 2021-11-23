@@ -1,19 +1,19 @@
 (ns webchange.editor-v2.activity-dialogs.form.action-unit.views
   (:require
-   [re-frame.core :as re-frame]
-   [reagent.core :as r]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-menu :refer [unit-menu]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-animation :refer [animation-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-background-music :refer [background-music-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-effect :refer [effect-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-movement :refer [movement-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-skip :refer [skip-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-phrase :refer [phrase-unit]]
-   [webchange.editor-v2.activity-dialogs.form.action-unit.views-text-animation :refer [text-animation-unit]]
-   [webchange.editor-v2.activity-dialogs.form.state :as state]
-   [webchange.logger.index :as logger]
-   [webchange.ui-framework.components.utils :refer [get-class-name]]
-   [webchange.utils.drag-and-drop :as utils]))
+    [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-menu :refer [unit-menu]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-animation :refer [animation-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-background-music :refer [background-music-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-effect :refer [effect-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-movement :refer [movement-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-skip :refer [skip-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-phrase :refer [phrase-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-text-animation :refer [text-animation-unit]]
+    [webchange.editor-v2.activity-dialogs.form.state :as state]
+    [webchange.logger.index :as logger]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.utils.drag-and-drop :as utils]))
 
 (defn- unknown-element
   [{:keys [type] :as props}]
@@ -21,19 +21,45 @@
   (logger/trace-folded "Props" props)
   [:div.unknown-unit "Not editable action"])
 
-(defn drag-event->drop-target
-  [event parallel-available?]
+(defn- inside-parallel-action?
+  [parallel-mark]
+  (not= parallel-mark :none))
+
+(defn- drag-event->drop-target
+  [event parallel-mark]
   (if-let [target (.. event -target)]
     (let [offset-y (.-offsetY event)
+          offset-x (.-offsetX event)
           target-height (.. target -clientHeight)]
-      (if parallel-available?
+      (if-not (inside-parallel-action? parallel-mark)
         (cond
           (< offset-y (/ target-height 3)) :before
           (> offset-y (* (/ target-height 3) 2)) :after
           :else :parallel)
-        (if (< offset-y (/ target-height 2))
-          :before
-          :after)))))
+        (let [order (if (< offset-y (/ target-height 2))
+                      :before :after)
+              nesting (if (and (< offset-x 100)
+                               (or (and (= order :before)
+                                        (= parallel-mark :start))
+                                   (and (= order :after)
+                                        (= parallel-mark :end))))
+                        :outside :inside)]
+          (case nesting
+            :inside (case order
+                      :after :after-inside
+                      :before :before-inside)
+            :outside order))))))
+
+(defn- get-drop-position
+  [path drop-target parallel-mark]
+  {:target-path       (if (and (inside-parallel-action? parallel-mark)
+                               (some #{drop-target} [:after :before]))
+                        (drop-last 2 path)
+                        path)
+   :relative-position (case drop-target
+                        :after-inside :after
+                        :before-inside :before
+                        drop-target)})
 
 (defn action-unit
   [{:keys [idx parallel-mark path type selected?] :as props}]
@@ -48,22 +74,22 @@
                handle-drag-enter #(prevent-defaults %)
                handle-drag-leave #(do (prevent-defaults %) (reset! drop-target nil))
                handle-drag-over (fn [event]
-                                  (let [parallel-action-available? (= parallel-mark :none)]
-                                    (prevent-defaults event)
-                                    (reset! drop-target (drag-event->drop-target event parallel-action-available?))))
+                                  (prevent-defaults event)
+                                  (reset! drop-target (drag-event->drop-target event parallel-mark)))
                handle-drop #(do (prevent-defaults %)
-                                (re-frame/dispatch [::state/handle-drag-n-drop (merge (utils/get-transfer-data %)
-                                                                                      {:target-type       type
-                                                                                       :target-path       path
-                                                                                       :relative-position @drop-target})])
-                                (reset! drop-target nil))
+                                (let [{:keys [target-path relative-position]} (get-drop-position path @drop-target parallel-mark)]
+                                  (re-frame/dispatch [::state/handle-drag-n-drop (merge (utils/get-transfer-data %)
+                                                                                        {:target-type       type
+                                                                                         :target-path       target-path
+                                                                                         :relative-position relative-position})])
+                                  (reset! drop-target nil)))
 
                init-dnd (fn []
                           (.addEventListener @container-ref "dragenter" handle-drag-enter)
                           (.addEventListener @container-ref "dragleave" handle-drag-leave)
-                          (.addEventListener @container-ref "dragover" handle-drag-over)
+                          (.addEventListener @container-ref "dragover" handle-drag-over true)
                           (.addEventListener @container-ref "drop" handle-drop))]
-    [:div {:ref        #(when (some? %)
+    [:div {:ref        #(when (and (nil? @container-ref) (some? %))
                           (reset! container-ref %)
                           (init-dnd))
            :on-click   handle-click
@@ -73,8 +99,10 @@
                                         "parallel-middle" (= parallel-mark :middle)
                                         "parallel-end"    (= parallel-mark :end)
                                         "selected"        selected?
-                                        "drop-before"     (= @drop-target :before)
-                                        "drop-after"      (= @drop-target :after)
+                                        "drop-target"     (some? @drop-target)
+                                        "drop-before"     (some #{@drop-target} [:before :before-inside])
+                                        "drop-after"      (some #{@drop-target} [:after :after-inside])
+                                        "drop-inside"     (some #{@drop-target} [:after-inside :before-inside])
                                         "drop-parallel"   (= @drop-target :parallel)})}
      (case type
        :character-animation [animation-unit props]
