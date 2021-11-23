@@ -146,8 +146,8 @@
                                :metadata  {:added-character? true}
                                :links     [{:type "action" :id show-action-name}
                                            {:type "action" :id hide-action-name}]}
-                              (get animations name {:scale {:x 1 :y 1}
-                                                    :speed 1})
+                              (get animations (keyword name) {:scale {:x 1 :y 1}
+                                                              :speed 1})
                               (nth character-positions character-idx {:x 500 :y 500})
                               data)]
     (-> scene-data

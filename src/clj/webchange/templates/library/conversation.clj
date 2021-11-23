@@ -1,10 +1,9 @@
 (ns webchange.templates.library.conversation
   (:require
-    [webchange.templates.common-actions :refer [add-character get-next-action-index increase-next-action-index]]
+    [webchange.templates.common-actions :refer [add-character add-question]]
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]
-    [webchange.templates.core :as core]
-    [webchange.question.get-question-data :refer [form->question-data]]))
+    [webchange.templates.core :as core]))
 
 (def m {:id          26
         :name        "Conversation"
@@ -45,31 +44,11 @@
           (common/init-metadata m t args)
           (:characters args)))
 
-(defn- place-dialog
-  [activity-data actions action-name]
-  (-> activity-data
-      (update :actions merge actions)
-      (update-in [:actions :script :data] conj {:type "action" :id action-name})
-      (update-in [:metadata :tracks 0 :nodes] conj {:type "dialog" :action-id action-name})))
-
-(defn- add-assets
-  [activity-data assets]
-  (-> activity-data
-      (update :assets concat assets)))
-
-(defn- add-dialog
-  [activity-data args]
-  (let [index (get-next-action-index activity-data)
-        action-name (str "dialog-" index)
-        default-dialog (dialog/default (str "dialog-" index))]
-    (cond-> activity-data
-            :always (increase-next-action-index)
-            :always (place-dialog {(keyword action-name) default-dialog} action-name))))
-
 (defn- update-template
   [activity-data {action-name :action-name :as args}]
   (case (keyword action-name)
-    :add-dialog (add-dialog activity-data args)))
+    :add-dialog activity-data ;noop
+    :add-question-object (add-question activity-data args)))
 
 (core/register-template
   m create-template update-template)
