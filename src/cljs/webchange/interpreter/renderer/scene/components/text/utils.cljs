@@ -23,6 +23,10 @@
     (aset (.-style text-object) property value)
     (-> (str "Object is not a PIXI.Text") js/Error. throw)))
 
+(defn set-align
+  [text-object align]
+  (set-style-property text-object "align" align))
+
 (defn get-fill
   [text-object]
   (get-style-property text-object "fill"))
