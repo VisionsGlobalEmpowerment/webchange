@@ -34,7 +34,8 @@
                                 :width          "---"
                                 :fill           "---"
                                 :text           "---"
-                                :editable?      {:select true}}})
+                                :editable?      {:select true}
+                                :placeholder    "Add attributions"}})
 
 (defn- apply-page-size
   [page-data {:keys [width height padding]}]

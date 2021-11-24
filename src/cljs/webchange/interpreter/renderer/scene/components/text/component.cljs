@@ -28,7 +28,8 @@
                     :height          {:default 0}
                     :on-click        {}
                     :ref             {}
-                    :filters         {}})
+                    :filters         {}
+                    :placeholder     {:default "Placeholder"}})
 
 (def component-type "text")
 

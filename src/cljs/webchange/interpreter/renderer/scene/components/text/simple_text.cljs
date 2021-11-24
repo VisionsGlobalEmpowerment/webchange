@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.text.simple-text
   (:require
     [webchange.interpreter.pixi :refer [Text]]
+    [webchange.interpreter.renderer.scene.components.text.utils :as text-utils]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
 (defn- set-shadow
@@ -59,6 +60,8 @@
                       (set-scale scale)
                       (set-shadow props)
                       (set-align props))]
+
+    (text-utils/check-text-placeholder text-object props)
 
     (when-not (nil? on-click) (utils/set-handler text-object "click" on-click))
 
