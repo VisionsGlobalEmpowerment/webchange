@@ -211,15 +211,35 @@
 
 ;; Text animation target
 
+(defn- get-book-text-name
+  [object-name scene-data]
+  (let [pages-data (flipbook-utils/get-pages-data scene-data)
+        stages-data (flipbook-utils/get-stages-data scene-data)
+
+        page-idx (->> pages-data
+                      (map-indexed vector)
+                      (some (fn [[idx {:keys [text]}]]
+                              (and (= text object-name)
+                                   idx))))
+        {:keys [idx pages-idx]} (some (fn [{:keys [idx pages-idx] :as stage-data}]
+                                        (and (some #{page-idx} pages-idx) stage-data))
+                                      stages-data)
+        page-name (if (= page-idx (first pages-idx)) "left" "right")]
+    (str "Stage " (inc idx) ", " page-name " page")))
+
 (re-frame/reg-sub
   ::available-text-animation-targets
   (fn [_]
-    [(re-frame/subscribe [::translator-form.scene/text-objects])])
-  (fn [[targets]]
-    (->> targets
-         (map (fn [[object-name {:keys [text]}]]
-                {:text  (str text " (" (clojure.core/name object-name) ")")
-                 :value (clojure.core/name object-name)})))))
+    [(re-frame/subscribe [::translator-form.scene/text-objects])
+     (re-frame/subscribe [::translator-form.scene/scene-data])])
+  (fn [[targets scene-data]]
+    (cond->> (->> targets
+                  (map (fn [[object-name {:keys [text]}]]
+                         {:text  (str text " (" (clojure.core/name object-name) ")")
+                          :value (clojure.core/name object-name)})))
+             (flipbook-activity? scene-data) (map (fn [{:keys [value]}]
+                                                    {:text  (get-book-text-name value scene-data)
+                                                     :value value})))))
 
 (def current-text-animation-target-path :current-target)
 
