@@ -4,6 +4,7 @@
   [metadata template args]
   (cond-> template
           (:actions metadata) (assoc-in [:metadata :actions] (:actions metadata))
+          true (assoc-in [:metadata :next-action-index] 0)
           true (assoc-in [:metadata :unique-suffix] 0)))
 
 (defn get-unique-suffix

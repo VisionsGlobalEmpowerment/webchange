@@ -12,12 +12,7 @@
 (def m {:id          29
         :name        "Categorize synonyms - 3 rounds"
         :tags        ["Independent Practice"]
-        :description "Categorize"
-        :actions     {:add-question {:title   "Add question",
-                                     :options {:question-page {:label         "Question"
-                                                               :type          "questions-no-image"
-                                                               :answers-label "Answers"
-                                                               :max-answers   5}}}}})
+        :description "Categorize"})
 
 (defn prepare-templates
   []
@@ -35,13 +30,5 @@
   [args]
   (common/init-metadata m (prepare-templates) args))
 
-(defn fu
-  [old-data args]
-  (let [params (common/get-replace-params old-data)
-        [_ actions assets] (question/create (:question-page args) params)
-        old-data (update-in old-data [:assets] concat assets)]
-    (common/merge-new-action old-data actions params)))
-
-(core/register-template
-  m f fu)
+(core/register-template m f)
 

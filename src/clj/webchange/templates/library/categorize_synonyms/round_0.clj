@@ -60,7 +60,6 @@
                        {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "init-activity"}},
                        :metadata      {:autostart   true
-                                       :last-insert "technical-question-placeholder"
                                        :tracks      [{:title "Welcome"
                                                       :nodes [{:type      "dialog"
                                                                :action-id :voiceover}]}]}})
