@@ -200,15 +200,14 @@
                                 {:x (+ (* letter-width pos) (/ (- width (* letter-width length)) 2))
                                  :y topline-y}))))
         letters (->> text
-                     (str/lower-case)
                      (map alphabet-path)
                      (map #(path->letter letter-scale %))
                      (map merge positions))]
     (doall
       (for [letter letters]
         (s/create (assoc letter
-                    :object-name (str "text-tracing-pattern-" (:x letter))
-                    :parent group))))))
+                         :object-name (str "text-tracing-pattern-" (:x letter))
+                         :parent group))))))
 
 (defn- activate-next-letter
   ([state]
