@@ -227,7 +227,7 @@
                                                                                 :var-name   "sorted-objects",
                                                                                 :value      6,
                                                                                 :inequality ">=",
-                                                                                :success    "scene-question"}]}
+                                                                                :success    "finish-round"}]}
                                        :dragged                        {:type "sequence-data"
                                                                         :data [{:type        "copy-variable",
                                                                                 :var-name "current-selection-state"
@@ -279,13 +279,11 @@
                                                                                {:type     "test-var-scalar",
                                                                                 :success  "next-check-collide",
                                                                                 :value    true,
-                                                                                :var-name "next-check-collide"}
-                                                                               ]}
+                                                                                :var-name "next-check-collide"}]}
 
                                        :init-activity                  {:type "sequence-data"
                                                                         :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-objects"}
-                                                                               {:type "action" :id "intro"}]
-                                                                        }
+                                                                               {:type "action" :id "intro"}]}
                                        
                                        :cold-item                      (-> (dialog/default "cold")
                                                                            (assoc :unique-tag "item"))
@@ -299,8 +297,8 @@
                                                                            (assoc :unique-tag "item"))
                                        :happy-item                     (-> (dialog/default "happy")
                                                                            (assoc :unique-tag "item"))
-                                       :tap-instructions              (-> (dialog/default "Tap instructions")
-                                                                          (assoc :unique-tag "instructions"))
+                                       :tap-instructions               (-> (dialog/default "Tap instructions")
+                                                                           (assoc :unique-tag "instructions"))
                                        :say-item                       {:type "sequence-data"
                                                                         :data [{:type "action" :from-params [{:action-property "id"
                                                                                                               :param-property  "say-item"}]}
@@ -348,121 +346,11 @@
                                                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                                         :phrase             "wrong-answer",
                                                                         :phrase-description "wrong answer"}
-                                       :scene-question                 {
-                                                                        :type        "show-question"
-                                                                        :description "What is the same about these two groups?"
-                                                                        :data        {
-                                                                                      :type       "type-1"
-                                                                                      :text       "What is the same about these two groups?\n"
-                                                                                      :chunks     [{:start 0, :end 4},
-                                                                                                   {:start 5, :end 7},
-                                                                                                   {:start 8, :end 11},
-                                                                                                   {:start 12, :end 16},
-                                                                                                   {:start 17, :end 22},
-                                                                                                   {:start 23, :end 28},
-                                                                                                   {:start 29, :end 32},
-                                                                                                   {:start 33, :end 40}
-                                                                                                   ]
-                                                                                      :success    "correct-answer-question",
-                                                                                      :fail       "fail-answer-question"
-                                                                                      :audio-data {
-                                                                                                   :audio     ""
-                                                                                                   :start     0,
-                                                                                                   :duration  0,
-                                                                                                   :animation "color",
-                                                                                                   :fill      0x00B2FF
-                                                                                                   :data      []}
 
-                                                                                      :image      "/raw/img/categorize-synonyms/question.png"
-                                                                                      :background "/raw/img/bg.png"
-                                                                                      :answers    {:data
-                                                                                                   [
-                                                                                                    {:text       "A.  They are both faces that are smiling."
-                                                                                                     :correct    true
-                                                                                                     :chunks     [{:start 0, :end 2},
-                                                                                                                  {:start 3, :end 7},
-                                                                                                                  {:start 8, :end 11},
-                                                                                                                  {:start 12, :end 16},
-                                                                                                                  {:start 17, :end 22}]
-                                                                                                     :audio-data {
-                                                                                                                  :audio     ""
-                                                                                                                  :start     0,
-                                                                                                                  :duration  0,
-                                                                                                                  :animation "color",
-                                                                                                                  :fill      0x00B2FF
-                                                                                                                  :data      []}
-                                                                                                     }
-                                                                                                    {:text       "B. They are both opposites."
-                                                                                                     :chunks     [{:start 0, :end 2},
-                                                                                                                  {:start 3, :end 7},
-                                                                                                                  {:start 8, :end 11},
-                                                                                                                  {:start 12, :end 16},
-                                                                                                                  {:start 17, :end 24},
-                                                                                                                  {:start 25, :end 28},
-                                                                                                                  {:start 29, :end 32},
-                                                                                                                  {:start 33, :end 36},
-                                                                                                                  {:start 37, :end 39},
-                                                                                                                  {:start 40, :end 45}
-                                                                                                                  ],
-                                                                                                     :audio-data {
-                                                                                                                  :audio     ""
-                                                                                                                  :start     0,
-                                                                                                                  :duration  0,
-                                                                                                                  :animation "color",
-                                                                                                                  :fill      0x00B2FF
-                                                                                                                  :data      []}
-                                                                                                     :correct    false}
-                                                                                                    {:text       "C. They are both green."
-                                                                                                     :chunks     [{:start 0, :end 2},
-                                                                                                                  {:start 3, :end 7},
-                                                                                                                  {:start 8, :end 11},
-                                                                                                                  {:start 12, :end 16},
-                                                                                                                  {:start 17, :end 19},
-                                                                                                                  {:start 20, :end 25},
-                                                                                                                  {:start 26, :end 32},
-                                                                                                                  {:start 33, :end 38}]
-                                                                                                     :audio-data {
-                                                                                                                  :audio     ""
-                                                                                                                  :start     0,
-                                                                                                                  :duration  0,
-                                                                                                                  :animation "color",
-                                                                                                                  :fill      0x00B2FF
-                                                                                                                  :data      []}
-                                                                                                     :correct    false}
-                                                                                                    {:text       "D. They are both stars."
-                                                                                                     :chunks     [{:start 0, :end 2},
-                                                                                                                  {:start 3, :end 7},
-                                                                                                                  {:start 8, :end 11},
-                                                                                                                  {:start 12, :end 16},
-                                                                                                                  {:start 17, :end 22}
-                                                                                                                  {:start 23, :end 40}],
-                                                                                                     :audio-data {
-                                                                                                                  :audio     ""
-                                                                                                                  :start     0,
-                                                                                                                  :duration  0,
-                                                                                                                  :animation "color",
-                                                                                                                  :fill      0x00B2FF
-                                                                                                                  :data      []}
-                                                                                                     :correct    false}
-                                                                                                    ]
-                                                                                                   }
-                                                                                      }
-                                                                        }
-                                       :fail-answer-question           {:type "sequence-data",
-                                                                        :data [{:type "action" :id "fail-answer-dialog"}],}
-                                       :correct-answer-question        {:type "sequence-data",
-                                                                        :data [{:type "empty" :duration 500}
-                                                                               {:type "hide-question"}
-                                                                               {:type "action" :id "correct-answer-dialog"}
-                                                                               {:type "action" :id "technical-question-placeholder"}]}
-                                       :skip-question                  {:type "sequence-data",
-                                                                        :data [{:type "hide-question"}
-                                                                               {:type "action" :id "technical-question-placeholder"}]}
-                                       :technical-question-placeholder {:type "action" :id "finish-scene"}
-                                       :correct-answer-dialog          (-> (dialog/default "Correct question answer")
-                                                                           (assoc :tags ["instructions"]))
-                                       :fail-answer-dialog             (-> (dialog/default "Incorrect question answer")
-                                                                           (assoc :tags ["instructions"]))
+                                       :finish-round                   {:type "sequence-data",
+                                                                        :data [{:type "action" :id "finish-round-dialog"}
+                                                                               {:type "action" :id "finish-scene"}]}
+                                       :finish-round-dialog            (dialog/default "Finish round")
                                        :finish-scene                   {:type "sequence-data",
                                                                         :data [{:type "remove-interval"
                                                                                 :id   "check-collide-2"}
@@ -474,7 +362,6 @@
                        {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "init-activity"}},
                        :metadata      {:autostart   true
-                                       :last-insert "technical-question-placeholder"
                                        :tracks      [{:title "Round 2"
                                                       :nodes [{:type      "dialog"
                                                                :action-id :intro}
@@ -488,11 +375,10 @@
                                                                :action-id :wrong-answer}
                                                               {:type      "dialog"
                                                                :action-id :tap-instructions}
-                                                              {:type "question" :action-id :scene-question}
+                                                              {:type "prompt"
+                                                               :text "Dialog after all elements correctly found"}
                                                               {:type      "dialog"
-                                                               :action-id :correct-answer-dialog}
-                                                              {:type      "dialog"
-                                                               :action-id :fail-answer-dialog}]}
+                                                               :action-id :finish-round-dialog}]}
                                                      {:title "Round 2 - items"
                                                       :nodes [{:type      "dialog"
                                                                :action-id :cold-item}
