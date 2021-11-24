@@ -74,6 +74,7 @@
                                               (emit text-object "fontSizeChanged"))
                    :set-align               (fn [align]
                                               (swap! state assoc-in [:props :align] align)
+                                              (utils/set-align text-object align)
                                               (emit text-object "textAlignChanged" state))
                    :set-font-family         (fn [font-family]
                                               (if (some? font-family)
