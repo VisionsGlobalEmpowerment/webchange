@@ -6,13 +6,19 @@
 
 (defn target-control
   [{:keys [value options on-change]}]
-  [menu {:class-name "targets-menu"
-         :el         (r/as-element [:span.target-value
-                                    (if-not (empty? value) value "select target")])
-         :items      (->> options
-                          (map (fn [{:keys [text value]}]
-                                 {:text     text
-                                  :on-click #(on-change value)})))}])
+  (let [value-str (if-not (empty? value)
+                    (or (some (fn [option]
+                                (and (= value (:value option))
+                                     (:text option)))
+                              options)
+                        value)
+                    "select target")]
+    [menu {:class-name "targets-menu"
+           :el         (r/as-element [:span.target-value value-str])
+           :items      (->> options
+                            (map (fn [{:keys [text value]}]
+                                   {:text     text
+                                    :on-click #(on-change value)})))}]))
 
 (defn- empty-text-value?
   [value]
