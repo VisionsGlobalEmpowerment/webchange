@@ -1,10 +1,15 @@
 (ns webchange.interpreter.renderer.scene.components.text.utils
   (:require
-    [webchange.interpreter.pixi :refer [Text]]))
+    [webchange.interpreter.pixi :refer [Text]]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn- text?
   [display-object]
   (instance? Text display-object))
+
+(defn set-text
+  [text-object value]
+  (aset text-object "text" value))
 
 (defn- get-style-property
   [text-object property]
@@ -33,3 +38,25 @@
 (defn set-font-family
   [text-object font-family]
   (set-style-property text-object "fontFamily" font-family))
+
+(defn set-text-props
+  [text-object props]
+  (let [prop-setters {:fill        set-fill
+                      :font-family set-font-family
+                      :font-size   set-font-size}]
+    (doseq [[key value] props]
+      (-> (get prop-setters key)
+          (apply [text-object value])))))
+
+(defn check-text-placeholder
+  [text-object {:keys [mode placeholder text] :as props}]
+  (let [placeholder-style {:fill "#bebebe"}
+        show-placeholder? (and (= mode ::modes/editor)
+                               (empty? text))]
+    (if show-placeholder?
+      (do (set-text text-object placeholder)
+          (set-text-props text-object placeholder-style))
+      (do (set-text text-object text)
+          (->> (keys placeholder-style)
+               (select-keys props)
+               (set-text-props text-object))))))

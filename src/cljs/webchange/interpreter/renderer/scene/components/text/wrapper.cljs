@@ -49,9 +49,11 @@
                    :object                  text-object
                    :chunks                  chunks
                    :set-text                (fn [value]
+                                              (swap! state assoc-in [:props :text] value)
+
                                               (if (:chunked? @state)
                                                 (reset-text-chunks state value)
-                                                (aset text-object "text" value))
+                                                (utils/check-text-placeholder text-object (:props @state)))
 
                                               (emit text-object "textChanged"))
                    :set-highlight           (fn [highlight]
@@ -66,7 +68,8 @@
                                                 (if (and permanent-pulsation (not pulsation-filter-set))
                                                   (f/set-filter text-object "pulsation" (assoc permanent-pulsation :no-interval true)))))
                    :set-fill                (fn [value]
-                                              (utils/set-fill text-object value))
+                                              (swap! state assoc-in [:props :fill] value)
+                                              (utils/check-text-placeholder text-object (:props @state)))
                    :get-fill                (fn []
                                               (utils/get-fill text-object))
                    :set-font-size           (fn [font-size]
