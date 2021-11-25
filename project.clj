@@ -52,7 +52,7 @@
                  [io.djy/ezzmq "0.8.2"]
                  [com.taoensso/tempura "1.2.1"]]
 
-  ;:node-dependencies [[source-map-support "0.2.8"]]
+                                        ;:node-dependencies [[source-map-support "0.2.8"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-cooper "1.2.2"]
@@ -69,7 +69,9 @@
   :source-paths ["src/clj" "src/cljc" "src/cljs"]
   :test-paths ["test/clj" "test/cljc"]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
+  :clean-targets ^{:protect false} ["resources/public/js/compiled"
+                                    "target"
+                                    ".shadow-cljs"
                                     "test/js"]
 
   :figwheel {:css-dirs       ["resources/public/css"]
@@ -97,19 +99,20 @@
 
   :profiles
   {:dev
-            {:dependencies [[binaryage/devtools "0.9.10"]
-                            [day8.re-frame/tracing "0.5.1"]
-                            [ring/ring-mock "0.3.2"]
-                            [mockery "0.1.4"]
-                            [figwheel-sidecar "0.5.20"]]
-             :plugins      [[lein-doo "0.1.8"]]
-             :main         webchange.server-dev
-             :repl-options {:init-ns webchange.server
-                            :init    (dev)}
-             :source-paths ["env/dev/clj" "env/dev/cljs"]}
+   {:dependencies [[binaryage/devtools "0.9.10"]
+                   [day8.re-frame/tracing "0.5.1"]
+                   [ring/ring-mock "0.3.2"]
+                   [mockery "0.1.4"]
+                   [figwheel-sidecar "0.5.20"]]
+    :plugins      [[lein-doo "0.1.8"]]
+    :main         webchange.server-dev
+    :repl-options {:init-ns webchange.server
+                   :init    (dev)}
+    :source-paths ["env/dev/clj" "env/dev/cljs"]}
    :prod    {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths       ["env/prod/clj"]
              :dependencies       [[day8.re-frame/tracing-stubs "0.5.1"]]
+             :auto-clean false
              :omit-source        false
              :main               webchange.server
              :aot                [webchange.server]
@@ -118,7 +121,8 @@
              :uberjar-exclusions [#"public/raw/.*" #"public/upload/.*"]
              :prep-tasks         ["compile" ["sass" "once"]
                                   "compile" ["cljsbuild" "once" "sw"]
-                                  "compile" ["cljsbuild" "once" "min"]]}}
+                                        ;"compile" ["cljsbuild" "once" "min"]
+                                  ]}}
 
   :cljsbuild
   {:builds

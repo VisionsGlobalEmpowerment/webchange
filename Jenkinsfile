@@ -15,11 +15,14 @@ node {
     }
 
     stage('Test cljs') {
+        sh 'npm install'
+	sh 'shadow-cljs compile ci'
         sh 'lein doo chrome-headless test once'
     }
 
     stage('Build') {
         sh 'lein clean'
+	sh 'shadow-cljs release app'
         sh 'lein uberjar'
     }
 
