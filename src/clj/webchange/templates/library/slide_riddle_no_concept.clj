@@ -194,7 +194,7 @@
                                        {:type "action" :id "script"}]},
          :spot-selected        {:type "sequence-data",
                                 :data
-                                      [{:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value false}
+                                      [{:type "action" :id "unhighlight"}
                                        {:type "action" :id "timeout-timer"}
                                        {:type        "copy-variable"
                                         :var-name    "dragged-item"
@@ -212,13 +212,10 @@
                                        {:type        "copy-variable"
                                         :var-name    "clicked-item"
                                         :from-params [{:action-property "from" :param-property "target"}]}
-                                       {:type     "test-var-scalar",
-                                        :value    false,
-                                        :var-name "spot-selected"
-                                        :success  "",
+                                       {:type "action"
                                         :from-var [{:var-name        "clicked-item",
                                                     :var-property    "click-dialog",
-                                                    :action-property "success"}]}]}
+                                                    :action-property "id"}]}]}
 
          :reset-boxes
                                {:type "sequence-data",
