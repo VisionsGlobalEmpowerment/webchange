@@ -2,6 +2,7 @@
   (:require
     [clojure.string :as s]
     [re-frame.core :as re-frame]
+    [webchange.interpreter.interactions :as interactions]
     [webchange.interpreter.variables.core :refer [variables]]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.overlays :as overlays]
@@ -329,18 +330,6 @@
         (dispatch-success-fn action)))
     (dispatch-success-fn action)))
 
-(defonce user-interactions-blocked? (atom false))
-
-(defn- block-user-interaction
-  []
-  (when-not @user-interactions-blocked?
-    (reset! user-interactions-blocked? true)))
-
-(defn- unblock-user-interaction
-  []
-  (when @user-interactions-blocked?
-    (reset! user-interactions-blocked? false)))
-
 (re-frame/reg-event-fx
   ::execute-action
   [event-as-action]
@@ -349,7 +338,7 @@
       (when (or question-action?
                 (not user-event?)
                 (and user-event?
-                     (not @user-interactions-blocked?)))
+                     (not @interactions/user-interactions-blocked?)))
         (execute-action db action)))
     {}))
 
@@ -629,51 +618,52 @@
          (deactivate-parent-dialog! action))
        (execute-sequence-data! db action 0))))
   ([db action sequence-position]
-   (if (empty? (remove nil? (:data action)))
-     (when-not (:workflow-user-input action)
-       (dispatch-success-fn action))
-     (let [action (->with-vars db action)
-           [current & rest] (:data action)
-           next #(execute-sequence-data! db
-                                         (-> action (assoc :data rest :previous-flow %))
-                                         (inc sequence-position))
-           flow-id (random-uuid)
-           action-id (random-uuid)
-           current-scene (:current-scene db)
-           action-tags (get-action-tags action)
-           dialog-action? (action-data-utils/dialog-action? action)
-           skippable? (or
-                        dialog-action?
-                        (->> action :previous-flow :tags (some #{"skip"})))
-           flow-data {:flow-id       flow-id
-                      :actions       [action-id]
-                      :type          :all
-                      :next          next
-                      :parent        (:flow-id action)
-                      :skip          (get-in action [:previous-flow :skip])
-                      :tags          (cond-> action-tags
-                                       skippable? (conj "skip"))
-                      :dialog        dialog-action?
-                      :current-scene current-scene
-                      :on-remove     (when (:on-interrupt action)
-                                       [#(execute-action db (:on-interrupt action))])}
-           current-action (-> current
-                              (update :display-name
-                                      #(or % (sequenced-action->display-name action
-                                                                             sequence-position)))
-                              (assoc :flow-id flow-id)
-                              (assoc :action-id action-id)
-                              (with-prev action))
+   (let [action (->with-vars db action)
+         action-tags (get-action-tags action)
+         dialog-action? (action-data-utils/dialog-action? action)
+         ended? (empty? (remove nil? (:data action)))
+         block-user-interaction? (and (some #{(:user-interactions-blocked action-data-utils/action-tags)} action-tags)
+                                      (not (:workflow-user-input action))
+                                      (not (and dialog-action? ended?)))]
 
-           block-user-interaction? (and (some #{(:user-interactions-blocked action-data-utils/action-tags)} action-tags)
-                                        (not (:workflow-user-input action)))]
-
-       (if block-user-interaction?
-         (block-user-interaction)
-         (unblock-user-interaction))
-
-       (register-flow! flow-data)
-       (execute-action db current-action)))))
+     (if block-user-interaction?
+       (interactions/block-user-interaction)
+       (interactions/unblock-user-interaction))
+     
+     (if ended?
+       (when-not (:workflow-user-input action)
+         (dispatch-success-fn action))
+       (let [[current & rest] (:data action)
+             next #(execute-sequence-data! db
+                                           (-> action (assoc :data rest :previous-flow %))
+                                           (inc sequence-position))
+             flow-id (random-uuid)
+             action-id (random-uuid)
+             current-scene (:current-scene db)
+             skippable? (or
+                         dialog-action?
+                         (->> action :previous-flow :tags (some #{"skip"})))
+             flow-data {:flow-id       flow-id
+                        :actions       [action-id]
+                        :type          :all
+                        :next          next
+                        :parent        (:flow-id action)
+                        :skip          (get-in action [:previous-flow :skip])
+                        :tags          (cond-> action-tags
+                                               skippable? (conj "skip"))
+                        :dialog        dialog-action?
+                        :current-scene current-scene
+                        :on-remove     (when (:on-interrupt action)
+                                         [#(execute-action db (:on-interrupt action))])}
+             current-action (-> current
+                                (update :display-name
+                                        #(or % (sequenced-action->display-name action
+                                                                               sequence-position)))
+                                (assoc :flow-id flow-id)
+                                (assoc :action-id action-id)
+                                (with-prev action))]
+         (register-flow! flow-data)
+         (execute-action db current-action))))))
 
 (re-frame/reg-event-fx
   ::execute-sequence-data

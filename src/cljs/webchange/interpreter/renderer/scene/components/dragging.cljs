@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.dragging
   (:require
-    [reagent.core :as r]))
+    [reagent.core :as r]
+    [webchange.interpreter.interactions :as interactions]))
 
 (def empty-position {:x 0 :y 0})
 (def mouse-position-data (r/atom {:x 0 :y 0}))
@@ -13,20 +14,21 @@
 
 (defn- on-drag-start
   [event]
-  (this-as this
-    (let [pointer-position (-> event .-data (.getLocalPosition (.-parent this)))
-          pointer-x (.-x pointer-position)
-          pointer-y (.-y pointer-position)
-          object-x (-> this .-position .-x)
-          object-y (-> this .-position .-y)
-          drag-offset {:x (- object-x pointer-x) :y (- object-y pointer-y)}]
-      (reset! mouse-position-data {:x (-> event .-data .-global .-x) :y (-> event .-data .-global .-y)})
-      (set! (.-drag-offset this) drag-offset))
-    (set! (.-data this) (.-data event))
-    (set! (.-alpha this) 0.9)
-    (set! (.-dragging this) true)
-    (when (and (.-dragging this) (.-on-drag-start-handler this))
-      ((.-on-drag-start-handler this)))))
+  (when-not @interactions/user-interactions-blocked?
+    (this-as this
+      (let [pointer-position (-> event .-data (.getLocalPosition (.-parent this)))
+            pointer-x (.-x pointer-position)
+            pointer-y (.-y pointer-position)
+            object-x (-> this .-position .-x)
+            object-y (-> this .-position .-y)
+            drag-offset {:x (- object-x pointer-x) :y (- object-y pointer-y)}]
+        (reset! mouse-position-data {:x (-> event .-data .-global .-x) :y (-> event .-data .-global .-y)})
+        (set! (.-drag-offset this) drag-offset))
+      (set! (.-data this) (.-data event))
+      (set! (.-alpha this) 0.9)
+      (set! (.-dragging this) true)
+      (when (and (.-dragging this) (.-on-drag-start-handler this))
+        ((.-on-drag-start-handler this))))))
 
 (defn- on-drag-end
   []
