@@ -43,11 +43,12 @@
               (set! -lineCap line-cap)
               (.scale (:x scale) (:y scale))
               (.translate (:x offset) (:y offset)))
+        svg-path (a-svg-utils/get-svg-path path)
 
         texture (.from Texture canvas)
         state (atom {:ctx      ctx
                      :texture  texture
-                     :paths    (paths path duration)
+                     :paths    (paths svg-path duration)
                      :width    width
                      :height   height
                      :duration duration
@@ -67,7 +68,7 @@
     :height - image height.
     :scale - image scale. Default: {:x 1 :y 1}.
     :name - component name that will be set to sprite and container with corresponding suffixes.
-    :path - svg data
+    :path - svg data or letter
     :dash - An Array of numbers that specify distances to alternately draw a line and a gap (in coordinate space units).
             If the number of elements in the array is odd, the elements of the array get copied and concatenated.
             For example, [5, 15, 25] will become [5, 15, 25, 5, 15, 25]. If the array is empty, the line dash list is
