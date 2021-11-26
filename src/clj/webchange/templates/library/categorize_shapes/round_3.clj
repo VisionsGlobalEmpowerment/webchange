@@ -168,28 +168,20 @@
                                        :star-box           {:type       "image",
                                                             :x          1181,
                                                             :y          835,
-                                                            :width      221,
-                                                            :height     200,
+                                                            :transition "star-box"
                                                             :src        "/raw/img/categorize-shapes/star-box.png",
-                                                            :transition "star-box",
-                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :init-position {:x 1181, :y 835, :visible true}
-                                                                         },
+                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}},
                                                             },
                                        :rectangle-box      {:type       "image",
-                                                            :x          922,
+                                                            :x          822,
                                                             :y          835,
-                                                            :width      222,
-                                                            :height     200,
-                                                            :transition "rectangle-box",
+                                                            :transition "rectangle-box"
                                                             :src        "/raw/img/categorize-shapes/rectangle-box.png",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
                                                             }
                                        :oval-box           {:type       "image",
-                                                            :x          663,
+                                                            :x          463,
                                                             :y          835,
-                                                            :width      222,
-                                                            :height     200
                                                             :transition "oval-box",
                                                             :src        "/raw/img/categorize-shapes/oval-box.png",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
