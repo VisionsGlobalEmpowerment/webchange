@@ -6,6 +6,7 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.animation :as a]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as t]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.utils :as a-svg-utils]
+    [webchange.interpreter.renderer.scene.components.letters-path :refer [get-svg-path]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.logger.index :as logger]))
 
@@ -43,7 +44,7 @@
               (set! -lineCap line-cap)
               (.scale (:x scale) (:y scale))
               (.translate (:x offset) (:y offset)))
-        svg-path (a-svg-utils/get-svg-path path)
+        svg-path (get-svg-path path {:trace? true})
 
         texture (.from Texture canvas)
         state (atom {:ctx      ctx

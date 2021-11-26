@@ -109,3 +109,12 @@
    "z" "M 90 111 h 65 m 0 0 l -66 80 m 0 0 h 72"
    "Z" "M 75 35 h 103 m 0 0 l -112 157 m 0 0 h 116"
    "ñ" "M82,74.83v75M82,92a32.36,32.36,0,0,1,60.9,15.23v42.65M86,48.06s4.12-11.83,13.63-7.88c3.71,1.54,7.49,2.94,11.29,4.27c10.27,3.6,22.52,2.17,28-8.67"})
+
+(defn get-svg-path
+  ([path]
+   (get-svg-path path {}))
+  ([path {:keys [trace?] :or {trace? false}}]
+   (let [source (if trace? alphabet-traceable-path alphabet-path)]
+     (if (contains? source path)
+       (get source path)
+       path))))

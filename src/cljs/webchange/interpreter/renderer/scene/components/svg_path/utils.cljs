@@ -1,11 +1,14 @@
-(ns webchange.interpreter.renderer.scene.components.svg-path.utils)
+(ns webchange.interpreter.renderer.scene.components.svg-path.utils
+  (:require
+    [webchange.interpreter.renderer.scene.components.letters-path :refer [get-svg-path]]))
 
 (defn set-svg-path
   [texture ctx {:keys [data dash fill width height]
                 :or   {fill false}}]
   (.clearRect ctx 0 0 width height)
 
-  (let [path (js/Path2D. data)]
+  (let [path (-> (get-svg-path data)
+                 (js/Path2D.))]
     (when dash
       (.setLineDash ctx (clj->js dash)))
     (if fill

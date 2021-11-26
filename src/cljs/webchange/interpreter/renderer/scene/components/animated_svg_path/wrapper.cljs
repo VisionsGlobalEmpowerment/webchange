@@ -4,7 +4,8 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.animation :refer [start stop reset]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.path :refer [paths]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.utils :as a-svg-utils]
-    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]))
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
+    [webchange.interpreter.renderer.scene.components.letters-path :refer [get-svg-path]]))
 
 (defn wrap
   [type name group-name container state]
@@ -16,7 +17,7 @@
                    :animated-svg-path-start #(start state %)
                    :animated-svg-path-stop  #(stop state)
                    :animated-svg-path-reset #(reset state)
-                   :set-path                #(swap! state assoc :paths (paths (a-svg-utils/get-svg-path %)
+                   :set-path                #(swap! state assoc :paths (paths (get-svg-path % {:trace? true})
                                                                               (:duration @state)))
                    :set-stroke              #(a-svg-utils/set-stroke state %)
                    :activate                #(do

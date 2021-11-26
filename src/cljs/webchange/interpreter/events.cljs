@@ -463,7 +463,7 @@
                                 {:x 655, :y 342},
                                 {:x 314, :y 942}],
                      :duration 1.4}}"
-    (if (:path to)
+    (if (or (:path to) (:letter-path to))
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
 
