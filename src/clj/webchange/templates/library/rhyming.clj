@@ -198,7 +198,11 @@
                                                :var-names ["saved-left-selected" "saved-right-selected"]
                                                :success   "wrong-option"}
                         :end-dragging         {:type "sequence-data"
-                                               :data [{:type      "copy-variables",
+                                               :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
+                                                      {:type        "state"
+                                                       :id          "not-highlighted"
+                                                       :from-params [{:action-property "target" :param-property "gate"}]}
+                                                      {:type      "copy-variables",
                                                        :var-names ["saved-left-selected" "saved-right-selected"]
                                                        :from-list ["left-selected" "right-selected"]}
                                                       {:type        "test-var-scalar",
@@ -207,11 +211,7 @@
                                                        :value       true,
                                                        :from-params [{:param-property  "side",
                                                                       :template        "saved-%-selected",
-                                                                      :action-property "var-name"}]}
-                                                      {:type "set-variable", :var-name "next-check-collide", :var-value false}
-                                                      {:type        "state"
-                                                       :id          "not-highlighted"
-                                                       :from-params [{:action-property "target" :param-property "gate"}]}]}
+                                                                      :action-property "var-name"}]}]}
                         :correct-option       {:type "sequence-data",
                                                :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                       {:type "counter" :counter-action "increase" :counter-id "sorted-counter"}
