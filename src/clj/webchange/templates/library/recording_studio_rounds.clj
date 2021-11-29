@@ -317,11 +317,15 @@
                                                             {:type      "dialog"
                                                              :action-id "start-recording-dialog"}
                                                             {:type "prompt"
-                                                             :text "Plays after stop recording:"}
+                                                             :text "Automatically plays when the user taps the record button to end their recording:"}
                                                             {:type      "dialog"
                                                              :action-id "stop-recording-dialog"}
+                                                            {:type "prompt"
+                                                             :text "Plays when the user taps the playback button:"}
                                                             {:type      "dialog"
                                                              :action-id "start-playback-dialog"}
+                                                            {:type "prompt"
+                                                             :text "Plays when the user stops the playback:"}
                                                             {:type      "dialog"
                                                              :action-id "stop-playback-dialog"}
                                                             {:type "prompt"
@@ -416,8 +420,10 @@
                                                    :attr-value true}
                                                   {:type "action" :id "demo-dialog"}
                                                   {:type "action" :id "reset-controls"}])
-      (update-in [:metadata :tracks 0 :nodes] concat [{:type      "dialog"
-                                                       :action-id "demo-dialog"}]) 
+      (update-in [:metadata :tracks 0 :nodes] concat [{:type "prompt"
+                                                       :text "Plays after the instructions and before round 1:"}
+                                                      {:type      "dialog"
+                                                       :action-id "demo-dialog"}])
       (update-in [:metadata :resources] conj image)))
 
 (defn create
@@ -435,6 +441,6 @@
     "add-round" (add-round old-data (:src image))))
 
 (core/register-template
- m
- create
- update-template)
+  m
+  create
+  update-template)
