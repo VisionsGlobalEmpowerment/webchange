@@ -2,6 +2,7 @@
 {:source-paths
  ["src/cljs"
   "src/cljc"
+  "src/sw"
   "src/libs"
   "test/cljs"
   "test/cljc"]
@@ -35,10 +36,17 @@
    :asset-path           "/js/compiled"
    :modules {:app {:entries [webchange.core]}}
    :devtools {:after-load webchange.core/mount-root
-              :ignore-warnings true}
+              :ignore-warnings true
+              :hud #{:errors :progress}}
    :compiler-options {:optimizations :simple}
    :release {:build-options
              {:ns-aliases {day8.re-frame.tracing day8.re-frame.tracing-stubs}}}}
+  :service-worker
+  {:target :browser
+   :output-dir           "resources/public/js/compiled"
+   :asset-path           "/js/compiled"
+   :modules {:service-worker {:entries [webchange.service-worker]
+                              :web-worker true}}}
   :test
   {:target :browser-test
    :test-dir "target/test"
