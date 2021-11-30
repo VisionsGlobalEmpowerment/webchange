@@ -18,8 +18,8 @@
   []
   (let [
         pt0 (utils-merge/prepare-template template-round-0 "r0" [:target] [] [])
-        pt (utils-merge/prepare-template template-round-1 "r1" [:say-item :target] [] [])
-        pt1 (utils-merge/prepare-template template-round-2 "r2" [:say-item :target :box] [] [])
+        pt (utils-merge/prepare-template template-round-1 "r1" [:say-item :target :correct-drop] [] [])
+        pt1 (utils-merge/prepare-template template-round-2 "r2" [:say-item :target :box :correct-drop] [] [])
         pt2 (utils-merge/prepare-template template-round-3 "r3" [:say-item :target :self :placement-target :colliders :object]
                               ["object-1" "object-2" "check-collide" "group-name" "ungroup-object-1" "ungroup-object-2"]
                               ["next-task" "correct-answer"])

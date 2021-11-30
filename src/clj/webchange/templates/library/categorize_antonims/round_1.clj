@@ -16,178 +16,184 @@
                                        {:url "/raw/img/categorize-antonims/loud.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-antonims/quiet.png", :size 10, :type "image"}],
                        :objects       {:background {:type "background", :src "/raw/img/categorize-antonims/background.png"},
-                                       :right-box {:type       "image",
-                                                   :y          763,
-                                                   :x          99,
-                                                   :src        "/raw/img/categorize-antonims/right.png",},
-                                       :front-box  {:type       "image",
-                                                    :y          763,
-                                                    :x          686,
-                                                    :src        "/raw/img/categorize-antonims/front.png",
+                                       :right-box  {:type "image",
+                                                    :y    763,
+                                                    :x    99,
+                                                    :src  "/raw/img/categorize-antonims/right.png",},
+                                       :front-box  {:type "image",
+                                                    :y    763,
+                                                    :x    686,
+                                                    :src  "/raw/img/categorize-antonims/front.png",
                                                     }
-                                       :down-box   {:type       "image",
-                                                    :y          763,
-                                                    :x          1568,
-                                                    :src        "/raw/img/categorize-antonims/down.png",
+                                       :down-box   {:type "image",
+                                                    :y    763,
+                                                    :x    1568,
+                                                    :src  "/raw/img/categorize-antonims/down.png",
                                                     }
-                                       :quiet-box  {:type       "image",
-                                                    :y          763,
-                                                    :x          393,
-                                                    :src        "/raw/img/categorize-antonims/quiet.png",
+                                       :quiet-box  {:type "image",
+                                                    :y    763,
+                                                    :x    393,
+                                                    :src  "/raw/img/categorize-antonims/quiet.png",
                                                     }
-                                       :day-box    {:type       "image",
-                                                    :y          763,
-                                                    :x          980,
-                                                    :src        "/raw/img/categorize-antonims/day.png",
+                                       :day-box    {:type "image",
+                                                    :y    763,
+                                                    :x    980,
+                                                    :src  "/raw/img/categorize-antonims/day.png",
                                                     }
-                                       :in-box     {:type       "image",
-                                                    :y          763,
-                                                    :x          1274,
-                                                    :src        "/raw/img/categorize-antonims/in.png",
+                                       :in-box     {:type "image",
+                                                    :y    763,
+                                                    :x    1274,
+                                                    :src  "/raw/img/categorize-antonims/in.png",
                                                     }
                                        :left-1     {
-                                                    :type       "image",
-                                                    :y          256,
-                                                    :x          448,
-                                                    :src        "/raw/img/categorize-antonims/left.png",
-                                                    :draggable  true,
-                                                    :actions    {:drag-start {:type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"
-                                                                              :params {:say-item "left-item"
-                                                                                       :placement-target "right-box"
-                                                                                       :target         "left-1"}
-                                                                              }
-                                                                 :drag-end
-                                                                 {:id     "dragged",
-                                                                  :on     "drag-end",
-                                                                  :type   "action",
-                                                                  :params {:box            "right-box"
-                                                                           :target         "left-1"
-                                                                           :init-position  {:y 256, :x 448, :duration 1}
-                                                                           :check-variable "right-box-selected"
-                                                                           }}}},
+                                                    :type      "image",
+                                                    :y         256,
+                                                    :x         448,
+                                                    :src       "/raw/img/categorize-antonims/left.png",
+                                                    :draggable true,
+                                                    :actions   {:drag-start {:type   "action",
+                                                                             :on     "drag-start",
+                                                                             :id     "start-drag"
+                                                                             :params {:say-item         "left-item"
+                                                                                      :placement-target "right-box"
+                                                                                      :target           "left-1"}
+                                                                             }
+                                                                :drag-end
+                                                                            {:id     "dragged",
+                                                                             :on     "drag-end",
+                                                                             :type   "action",
+                                                                             :params {:box            "right-box"
+                                                                                      :target         "left-1"
+                                                                                      :init-position  {:y 256, :x 448, :duration 1}
+                                                                                      :check-variable "right-box-selected"
+                                                                                      :correct-drop   "left-correct"
+                                                                                      }}}},
                                        :back-1     {
-                                                    :type       "image",
-                                                    :y          393,
-                                                    :x          701,
-                                                    :src        "/raw/img/categorize-antonims/back.png",
-                                                    :draggable  true,
-                                                    :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"
-                                                                              :params {:say-item "back-item"
-                                                                                       :placement-target "front-box"
-                                                                                       :target         "back-1"}
-                                                                              }
-                                                                 :drag-end
-                                                                 {:id     "dragged",
-                                                                  :on     "drag-end",
-                                                                  :type   "action",
-                                                                  :params {:box            "front-box"
-                                                                           :target         "back-1"
-                                                                           :init-position  {:y 393,
-                                                                                            :x 701, :duration 1}
-                                                                           :check-variable "front-box-selected"
-                                                                           }}},
-                                                    :states     {:hide {:visible false}}},
+                                                    :type      "image",
+                                                    :y         393,
+                                                    :x         701,
+                                                    :src       "/raw/img/categorize-antonims/back.png",
+                                                    :draggable true,
+                                                    :actions   {:drag-start {
+                                                                             :type   "action",
+                                                                             :on     "drag-start",
+                                                                             :id     "start-drag"
+                                                                             :params {:say-item         "back-item"
+                                                                                      :placement-target "front-box"
+                                                                                      :target           "back-1"}
+                                                                             }
+                                                                :drag-end
+                                                                            {:id     "dragged",
+                                                                             :on     "drag-end",
+                                                                             :type   "action",
+                                                                             :params {:box            "front-box"
+                                                                                      :target         "back-1"
+                                                                                      :init-position  {:y 393,
+                                                                                                       :x 701, :duration 1}
+                                                                                      :check-variable "front-box-selected"
+                                                                                      :correct-drop   "back-correct"
+                                                                                      }}},
+                                                    :states    {:hide {:visible false}}},
                                        :up-1       {
-                                                    :type       "image",
-                                                    :x          1035,
-                                                    :y          383,
-                                                    :src        "/raw/img/categorize-antonims/up.png",
-                                                    :draggable  true,
-                                                    :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"
-                                                                              :params {:say-item "up-item"
-                                                                                       :placement-target "down-box"
-                                                                                       :target         "up-1"}
-                                                                              }
-                                                                 :drag-end
-                                                                 {:id     "dragged",
-                                                                  :on     "drag-end",
-                                                                  :type   "action",
-                                                                  :params {:box            "down-box"
-                                                                           :target         "up-1"
-                                                                           :init-position  {:x 1035,
-                                                                                            :y 383, :duration 1}
-                                                                           :check-variable "down-box-selected"
-                                                                           }}},}
+                                                    :type      "image",
+                                                    :x         1035,
+                                                    :y         383,
+                                                    :src       "/raw/img/categorize-antonims/up.png",
+                                                    :draggable true,
+                                                    :actions   {:drag-start {
+                                                                             :type   "action",
+                                                                             :on     "drag-start",
+                                                                             :id     "start-drag"
+                                                                             :params {:say-item         "up-item"
+                                                                                      :placement-target "down-box"
+                                                                                      :target           "up-1"}
+                                                                             }
+                                                                :drag-end
+                                                                            {:id     "dragged",
+                                                                             :on     "drag-end",
+                                                                             :type   "action",
+                                                                             :params {:box            "down-box"
+                                                                                      :target         "up-1"
+                                                                                      :init-position  {:x 1035,
+                                                                                                       :y 383, :duration 1}
+                                                                                      :check-variable "down-box-selected"
+                                                                                      :correct-drop   "up-correct"
+                                                                                      }}}}
                                        :loud-1     {
-                                                    :type       "image",
-                                                    :y          89,
-                                                    :x          701,
-                                                    :src        "/raw/img/categorize-antonims/loud.png",
-                                                    :draggable  true,
-                                                    :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"
-                                                                              :params {:say-item "loud-item"
-                                                                                       :target         "loud-1"
-                                                                                       :placement-target "quiet-box"}
-                                                                              }
-                                                                 :drag-end
-                                                                 {:id     "dragged",
-                                                                  :on     "drag-end",
-                                                                  :type   "action",
-                                                                  :params {:box            "quiet-box"
-                                                                           :target         "loud-1"
-                                                                           :init-position  {:y 89,
-                                                                                            :x 701, :duration 1}
-                                                                           :check-variable "quiet-box-selected"
-                                                                           }}},}
+                                                    :type      "image",
+                                                    :y         89,
+                                                    :x         701,
+                                                    :src       "/raw/img/categorize-antonims/loud.png",
+                                                    :draggable true,
+                                                    :actions   {:drag-start {
+                                                                             :type   "action",
+                                                                             :on     "drag-start",
+                                                                             :id     "start-drag"
+                                                                             :params {:say-item         "loud-item"
+                                                                                      :target           "loud-1"
+                                                                                      :placement-target "quiet-box"}
+                                                                             }
+                                                                :drag-end
+                                                                            {:id     "dragged",
+                                                                             :on     "drag-end",
+                                                                             :type   "action",
+                                                                             :params {:box            "quiet-box"
+                                                                                      :target         "loud-1"
+                                                                                      :init-position  {:y 89,
+                                                                                                       :x 701, :duration 1}
+                                                                                      :check-variable "quiet-box-selected"
+                                                                                      :correct-drop   "loud-correct"
+                                                                                      }}},}
                                        :night-1    {
-                                                    :type       "image",
-                                                    :x          1121,
-                                                    :y          105,
-                                                    :src        "/raw/img/categorize-antonims/night.png",
-                                                    :draggable  true,
-                                                    :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"
-                                                                              :params {:say-item "night-item"
-                                                                                       :target         "night-1"
-                                                                                       :placement-target "day-box"}
-                                                                              }
-                                                                 :drag-end
-                                                                 {:id     "dragged",
-                                                                  :on     "drag-end",
-                                                                  :type   "action",
-                                                                  :params {:box            "day-box"
-                                                                           :target         "night-1"
-                                                                           :init-position  {:x 1121,
-                                                                                            :y 105, :duration 1}
-                                                                           :check-variable "day-box-selected"
-                                                                           }}}}
+                                                    :type      "image",
+                                                    :x         1121,
+                                                    :y         105,
+                                                    :src       "/raw/img/categorize-antonims/night.png",
+                                                    :draggable true,
+                                                    :actions   {:drag-start {
+                                                                             :type   "action",
+                                                                             :on     "drag-start",
+                                                                             :id     "start-drag"
+                                                                             :params {:say-item         "night-item"
+                                                                                      :target           "night-1"
+                                                                                      :placement-target "day-box"}
+                                                                             }
+                                                                :drag-end
+                                                                            {:id     "dragged",
+                                                                             :on     "drag-end",
+                                                                             :type   "action",
+                                                                             :params {:box            "day-box"
+                                                                                      :target         "night-1"
+                                                                                      :init-position  {:x 1121,
+                                                                                                       :y 105, :duration 1}
+                                                                                      :check-variable "day-box-selected"
+                                                                                      :correct-drop   "night-correct"
+                                                                                      }}}}
                                        :out-1      {
-                                                    :type       "image",
-                                                    :x          863,
-                                                    :y          243,
-                                                    :src        "/raw/img/categorize-antonims/out.png",
-                                                    :draggable  true,
-                                                    :actions    {:drag-start {
-                                                                              :type "action",
-                                                                              :on   "drag-start",
-                                                                              :id   "start-drag"
-                                                                              :params {:say-item "out-item"
-                                                                                       :target         "out-1"
-                                                                                       :placement-target "in-box"}
-                                                                              }
-                                                                 :drag-end
-                                                                 {:id     "dragged",
-                                                                  :on     "drag-end",
-                                                                  :type   "action",
-                                                                  :params {:box            "in-box"
-                                                                           :target         "out-1"
-                                                                           :init-position  {:x 863,
-                                                                                            :y 243, :duration 1}
-                                                                           :check-variable "in-box-selected"
-                                                                           }}}}
+                                                    :type      "image",
+                                                    :x         863,
+                                                    :y         243,
+                                                    :src       "/raw/img/categorize-antonims/out.png",
+                                                    :draggable true,
+                                                    :actions   {:drag-start {
+                                                                             :type   "action",
+                                                                             :on     "drag-start",
+                                                                             :id     "start-drag"
+                                                                             :params {:say-item         "out-item"
+                                                                                      :target           "out-1"
+                                                                                      :placement-target "in-box"}
+                                                                             }
+                                                                :drag-end
+                                                                            {:id     "dragged",
+                                                                             :on     "drag-end",
+                                                                             :type   "action",
+                                                                             :params {:box            "in-box"
+                                                                                      :target         "out-1"
+                                                                                      :init-position  {:x 863,
+                                                                                                       :y 243, :duration 1}
+                                                                                      :check-variable "in-box-selected"
+                                                                                      :correct-drop   "out-correct"
+                                                                                      }}}}
 
                                        },
                        :scene-objects [["background"]
@@ -209,6 +215,9 @@
                                                              :data [{:id "unhighlight-all" :type "action"}
                                                                     {:type "counter" :counter-action "increase" :counter-id "sorted-objects"}
                                                                     {:id "object-in-right-box", :type "action"}
+                                                                    {:type        "action"
+                                                                     :from-params [{:param-property  "correct-drop",
+                                                                                    :action-property "id"}]}
                                                                     {:id "correct-answer", :type "action"}
                                                                     {:type       "test-var-inequality"
                                                                      :var-name   "sorted-objects",
@@ -220,15 +229,15 @@
                                        :dragged             {:type "sequence-data"
                                                              :data [
                                                                     {:type        "copy-variable",
-                                                                     :var-name "current-selection-state"
+                                                                     :var-name    "current-selection-state"
                                                                      :from-params [{:param-property "check-variable", :action-property "from"}]}
                                                                     {:type "set-variable", :var-name "say", :var-value false}
                                                                     {:type "set-variable", :var-name "next-check-collide", :var-value false}
 
-                                                                    {:type        "test-var-scalar",
-                                                                     :success     "correct-option",
-                                                                     :fail       "object-revert",
-                                                                     :value       true,
+                                                                    {:type     "test-var-scalar",
+                                                                     :success  "correct-option",
+                                                                     :fail     "object-revert",
+                                                                     :value    true,
                                                                      :var-name "current-selection-state"}
                                                                     ]
                                                              }
@@ -252,10 +261,10 @@
                                                                     {:type "set-attribute" :attr-name "highlight" :attr-value false :target "orange-box"}
                                                                     {:type "set-attribute" :attr-name "highlight" :attr-value false :target "green-box"}]}
 
-                                       :next-check-collide            {:type "sequence-data"
-                                                                       :data [{:type     "set-timeout"
-                                                                               :action   "check-collide"
-                                                                               :interval 10}]}
+                                       :next-check-collide  {:type "sequence-data"
+                                                             :data [{:type     "set-timeout"
+                                                                     :action   "check-collide"
+                                                                     :interval 10}]}
                                        :check-collide       {:type "sequence-data"
                                                              :data [
                                                                     {:type          "test-transitions-and-pointer-collide",
@@ -274,26 +283,38 @@
                                                                      :var-name "next-check-collide"}
                                                                     ]}
 
-                                       :left-item        (-> (dialog/default "Left")
-                                                             (assoc :unique-tag "item"))
-                                       :back-item          (-> (dialog/default "Back")
-                                                               (assoc :unique-tag "item"))
-                                       :up-item           (-> (dialog/default "Up")
-                                                              (assoc :unique-tag "item"))
-                                       :loud-item        (-> (dialog/default "Loud")
-                                                             (assoc :unique-tag "item"))
-                                       :night-item        (-> (dialog/default "Night")
-                                                              (assoc :unique-tag "item"))
-                                       :out-item         (-> (dialog/default "Out")
-                                                             (assoc :unique-tag "item"))
+                                       :left-item           (-> (dialog/default "Left")
+                                                                (assoc :unique-tag "item"))
+                                       :left-correct        (-> (dialog/default "Right")
+                                                                (assoc :unique-tag "item"))
+                                       :back-item           (-> (dialog/default "Back")
+                                                                (assoc :unique-tag "item"))
+                                       :back-correct        (-> (dialog/default "Front")
+                                                                (assoc :unique-tag "item"))
+                                       :up-item             (-> (dialog/default "Up")
+                                                                (assoc :unique-tag "item"))
+                                       :up-correct          (-> (dialog/default "Down")
+                                                                (assoc :unique-tag "item"))
+                                       :loud-item           (-> (dialog/default "Loud")
+                                                                (assoc :unique-tag "item"))
+                                       :loud-correct        (-> (dialog/default "Quiet")
+                                                                (assoc :unique-tag "item"))
+                                       :night-item          (-> (dialog/default "Night")
+                                                                (assoc :unique-tag "item"))
+                                       :night-correct       (-> (dialog/default "Day")
+                                                                (assoc :unique-tag "item"))
+                                       :out-item            (-> (dialog/default "Out")
+                                                                (assoc :unique-tag "item"))
+                                       :out-correct         (-> (dialog/default "In")
+                                                                (assoc :unique-tag "item"))
 
-                                       :say-item           {:type "sequence-data"
-                                                            :data [{:type "action" :from-params [{:action-property "id"
-                                                                                                  :param-property  "say-item"}]}
-                                                                   {:type     "test-var-scalar",
-                                                                    :success  "next-say",
-                                                                    :value    true,
-                                                                    :var-name "say"}]}
+                                       :say-item            {:type "sequence-data"
+                                                             :data [{:type "action" :from-params [{:action-property "id"
+                                                                                                   :param-property  "say-item"}]}
+                                                                    {:type     "test-var-scalar",
+                                                                     :success  "next-say",
+                                                                     :value    true,
+                                                                     :var-name "say"}]}
                                        :next-say            {:type "sequence-data"
                                                              :data [{:type     "set-timeout"
                                                                      :action   "say-item"
@@ -353,8 +374,8 @@
                                        },
 
                        :triggers
-                       {:back  {:on "back", :action "stop-activity"},
-                        :start {:on "start", :action "init-activity"}},
+                                      {:back  {:on "back", :action "stop-activity"},
+                                       :start {:on "start", :action "init-activity"}},
                        :metadata      {:autostart true
                                        :tracks    [{:title "Round 1"
                                                     :nodes [{:type      "dialog"
@@ -376,12 +397,24 @@
                                                     :nodes [{:type      "dialog"
                                                              :action-id :left-item}
                                                             {:type      "dialog"
+                                                             :action-id :left-correct}
+                                                            {:type      "dialog"
                                                              :action-id :back-item}
+                                                            {:type      "dialog"
+                                                             :action-id :back-correct}
                                                             {:type      "dialog"
                                                              :action-id :up-item}
                                                             {:type      "dialog"
+                                                             :action-id :up-correct}
+                                                            {:type      "dialog"
                                                              :action-id :loud-item}
+                                                            {:type      "dialog"
+                                                             :action-id :loud-correct}
                                                             {:type      "dialog"
                                                              :action-id :night-item}
                                                             {:type      "dialog"
-                                                             :action-id :out-item}]}]}})
+                                                             :action-id :night-correct}
+                                                            {:type      "dialog"
+                                                             :action-id :out-item}
+                                                            {:type      "dialog"
+                                                             :action-id :out-correct}]}]}})
