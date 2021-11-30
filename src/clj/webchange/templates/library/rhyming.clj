@@ -80,7 +80,11 @@
                                 :y 330
                                 :editable?      {:select true
                                                  :drag   true}
-                                :children ["left-gate-plate" "left-gate-text"]}
+                                :children ["left-gate-plate" "left-gate-text"]
+                                :actions {:click
+                                          {:type   "action",
+                                           :on     "click",
+                                           :id     "left-text-dialog"}}}
          :left-gate-plate {:type       "image"
                            :src        "/raw/clipart/rhyming/etc--rhyming-plate--board1.png"
                            :max-width  700
@@ -122,7 +126,11 @@
                                  :y              330
                                  :editable?      {:select true
                                                   :drag   true}
-                                 :children ["right-gate-plate" "right-gate-text"]}
+                                 :children ["right-gate-plate" "right-gate-text"]
+                                 :actions {:click
+                                           {:type   "action",
+                                            :on     "click",
+                                            :id     "right-text-dialog"}}}
          :right-gate-plate {:type       "image"
                             :src        "/raw/clipart/rhyming/etc--rhyming-plate--board.png"
                             :max-width  700
@@ -201,7 +209,10 @@
                                                :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
                                                       {:type        "state"
                                                        :id          "not-highlighted"
-                                                       :from-params [{:action-property "target" :param-property "gate"}]}
+                                                       :target      "left-gate"}
+                                                      {:type        "state"
+                                                       :id          "not-highlighted"
+                                                       :target      "right-gate"}
                                                       {:type      "copy-variables",
                                                        :var-names ["saved-left-selected" "saved-right-selected"]
                                                        :from-list ["left-selected" "right-selected"]}
@@ -263,7 +274,9 @@
                                                                      :data [{:type "empty" :duration 0}
                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                :phrase             "finish-dialog",
-                                               :phrase-description "finish dialog"}}
+                                               :phrase-description "finish dialog"}
+                        :left-text-dialog (dialog/default "Left text")
+                        :right-text-dialog (dialog/default "Right text")}
         :triggers      {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "init-activity"}},
         :metadata      {:tracks [{:id    "main"
@@ -275,7 +288,11 @@
                                           {:type     "track"
                                            :track-id "right-track"}
                                           {:type      "dialog"
-                                           :action-id "finish-dialog"}]}
+                                           :action-id "finish-dialog"}
+                                          {:type "dialog"
+                                           :action-id "left-text-dialog"}
+                                          {:type "dialog"
+                                           :action-id "right-text-dialog"}]}
                                  {:id    "left-track"
                                   :title "Track left"
                                   :nodes []}
