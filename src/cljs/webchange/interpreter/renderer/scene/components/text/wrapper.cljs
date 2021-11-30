@@ -16,7 +16,7 @@
 (defn- register-chunk
   [{:keys [chunk text-object]} type object-name state]
   (let [chunk-name (chunk-transition-name (name object-name) (:index chunk))
-        wrapper (wrap type (keyword chunk-name) text-object nil nil)]
+        wrapper (wrap type (keyword chunk-name) text-object nil (atom {:is-chunk true}))]
     (when (some? chunk-name)
       (swap! state update :chunks conj chunk-name)
       (re-frame/dispatch [::events/register-transition chunk-name (atom wrapper)])
@@ -69,7 +69,9 @@
                                                   (f/set-filter text-object "pulsation" (assoc permanent-pulsation :no-interval true)))))
                    :set-fill                (fn [value]
                                               (swap! state assoc-in [:props :fill] value)
-                                              (utils/check-text-placeholder text-object (:props @state)))
+                                              (if (:is-chunk @state)
+                                                (utils/set-fill text-object value)
+                                                (utils/check-text-placeholder text-object (:props @state))))
                    :get-fill                (fn []
                                               (utils/get-fill text-object))
                    :set-font-size           (fn [font-size]
