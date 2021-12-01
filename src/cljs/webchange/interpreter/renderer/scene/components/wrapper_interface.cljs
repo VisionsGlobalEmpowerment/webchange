@@ -15,6 +15,8 @@
         (logger/error e)))
     (logger/error (str "[Wrapper Interface] Failed to execute <" method-name "> method: wrapper is nil"))))
 
+(defn execute-method [wrapper method & params] (execute wrapper method params))
+
 (defn add-animation [wrapper & params] (execute wrapper :add-animation params))
 (defn add-filter [wrapper & params] (execute wrapper :add-filter params))
 (defn get-data [wrapper & params] (execute wrapper :get-data params))
