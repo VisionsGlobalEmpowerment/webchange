@@ -141,7 +141,7 @@
                                                                 "cloud-center-text-img--1"]
                                                    :states     {:hide {:visible false} :show {:visible true}}}}
         :scene-objects [["background"] ["senoravaca"] ["cloud-center--1" "moving-clouds--1"]],
-        :actions       {:sync-highlightion           {:type "sequence-data"
+        :actions       {:sync-highlights             {:type "parallel"
                                                       :data [{:type     "state"
                                                               :from-var [{:var-name "next-cloud-img" :action-property "target"}
                                                                          {:template "highlighted-%" :var-name "step-counter" :action-property "id"}]}
@@ -168,7 +168,8 @@
                                                              {:type     "set-variable" :var-name "prev-cloud-img"
                                                               :from-var [{:template "cloud-left-img-%" :var-name "unique-suffix" :action-property "var-value"}]}
                                                              {:type     "set-variable" :var-name "next-cloud-img"
-                                                              :from-var [{:template "cloud-right-img-%" :var-name "unique-suffix" :action-property "var-value"}]}]}
+                                                              :from-var [{:template "cloud-right-img-%" :var-name "unique-suffix" :action-property "var-value"}]}
+                                                             {:type "action" :id "sync-highlights"}]}
                         :update-right                {:type "sequence-data"
                                                       :data [{:type     "calc" :var-name "cloud-right-x" :operation "plus" :value-1 -140
                                                               :from-var [{:var-name "cloud-right-x" :action-property "value-2"}]}
@@ -179,7 +180,8 @@
                                                              {:type     "set-variable" :var-name "prev-cloud-img"
                                                               :from-var [{:template "cloud-right-img-%" :var-name "unique-suffix" :action-property "var-value"}]}
                                                              {:type     "set-variable" :var-name "next-cloud-img"
-                                                              :from-var [{:template "cloud-left-img-%" :var-name "unique-suffix" :action-property "var-value"}]}]}
+                                                              :from-var [{:template "cloud-left-img-%" :var-name "unique-suffix" :action-property "var-value"}]}
+                                                             {:type "action" :id "sync-highlights"}]}
                         :animate-clouds              {:type "sequence-data"
                                                       :data [{:type     "transition"
                                                               :to       {:duration 0.5}
@@ -189,8 +191,7 @@
                                                               :transition-id "cloud-right"
                                                               :to            {:duration 0.5}
                                                               :from-var      [{:var-name "cloud-right-x" :action-property "to.x"}
-                                                                              {:template "cloud-right-%" :var-name "unique-suffix" :action-property "transition-id"}]}
-                                                             {:type "action" :id "sync-highlightion"}]}
+                                                                              {:template "cloud-right-%" :var-name "unique-suffix" :action-property "transition-id"}]}]}
                         :shake-step-left             {:type "sequence-data"
                                                       :data [{:type        "transition",
                                                               :from-var    [{:var-name        "cloud-left-x"
@@ -216,7 +217,6 @@
                                                       :success     "cloud-left-clicked-correct",
                                                       :fail        "shake-left",
                                                       :var-name    "next-cloud"
-                                                      :unique-tag  "cloud-clicked"
                                                       :from-params [{:param-property "target", :action-property "value"}]}
                         :cloud-left-clicked-correct  {:type "sequence-data"
                                                       :data [{:type "action" :id "update-left"}
@@ -244,7 +244,6 @@
                                                       :success     "cloud-right-clicked-correct",
                                                       :fail        "shake-right",
                                                       :var-name    "next-cloud"
-                                                      :unique-tag  "cloud-clicked"
                                                       :from-params [{:param-property "target", :action-property "value"}]}
                         :cloud-right-clicked-correct {:type "parallel"
                                                       :data [{:type     "action"
@@ -298,7 +297,7 @@
                         :init-next                   {:type "sequence-data"
                                                       :data [{:type "counter" :counter-action "increase" :counter-id "unique-suffix"}
                                                              {:type "action" :id "init-scene-cloud-vars"}
-                                                             {:type "action" :id "sync-highlightion"}
+                                                             {:type "action" :id "sync-highlights"}
                                                              {:type "set-variable" :var-name "left-click-unlocked" :var-value true}
                                                              {:type     "state" :id "show"
                                                               :from-var [{:template "moving-clouds-%" :var-name "unique-suffix" :action-property "target"}]}]}
@@ -308,7 +307,7 @@
                                                               :data [{:type "set-variable" :var-name "unique-suffix" :var-value -1}
                                                                      {:type "action" :id "init-scene-cloud-vars"}
                                                                      {:type "set-variable" :var-name "step-counter" :var-value 0}
-                                                                     {:type "action" :id "sync-highlightion"}
+                                                                     {:type "action" :id "sync-highlights"}
                                                                      {:type "empty" :duration 500}
                                                                      {:type "set-variable" :var-name "step-counter" :var-value 0}
                                                                      {:type "action" :id "update-left"}
@@ -341,7 +340,7 @@
                                                              {:type "action" :id "init-scene-cloud-vars"}
                                                              {:type "counter" :counter-action "reset" :counter-value 0 :counter-id "goal-counter"}
                                                              {:type "counter" :counter-action "reset" :counter-value 0 :counter-id "step-counter"}
-                                                             {:type "action" :id "sync-highlightion"}
+                                                             {:type "action" :id "sync-highlights"}
                                                              {:type     "state" :id "show"
                                                               :from-var [{:template "moving-clouds-%" :var-name "unique-suffix" :action-property "target"}]}]}
                         :intro-dialog                {:type               "sequence-data",
