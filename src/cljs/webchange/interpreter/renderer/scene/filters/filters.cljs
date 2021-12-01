@@ -174,6 +174,15 @@
   (apply-alpha-pulsation-filter container {:remove true})
   (aset container "filters" nil))
 
+(defn- remove-filter-by-name
+  [container filter-name]
+  (->> (.-filters container)
+       (js->clj)
+       (filter (fn [filter]
+               (not= (.-name filter) filter-name)))
+       (clj->js)
+       (aset container "filters")))
+
 (defn has-filter-by-name
   [container filter-name]
   (case filter-name
@@ -219,7 +228,7 @@
         handler (get @glow-pulsation-fns handler-key)]
     (remove-ticker handler)
     (swap! glow-pulsation-fns dissoc handler-key)
-    (set-filter-value container "glow" 0)))
+    (remove-filter-by-name container "glow")))
 
 (defn apply-filters
   [container filters]
