@@ -539,7 +539,8 @@
                                              (dialog/default "Start Round 1")
                         :round2-started-dialog
                                              (dialog/default "Start Round 2")
-                        :fx-dialog           (dialog/default "Sound FX")
+                        :fx-dialog           (-> (dialog/default "Sound FX")
+                                                 (assoc :tags ["fx"]))
                         :finish-activity-dialog
                                              (dialog/default "Finish activity")
                         :fact1-round1-dialog (dialog/default "Round 1 Fact 1")

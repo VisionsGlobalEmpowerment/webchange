@@ -678,7 +678,9 @@
     {:type 'sequence-data',
      :data [{:type 'animation', :id 'volley_call', :target 'vera'}
             {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
-    (when (action-data-utils/dialog-action? action)
+    (when (and
+           (action-data-utils/dialog-action? action)
+           (not (some #{(:fx action-data-utils/action-tags)} (get-action-tags action))))
       (skip))
     (execute-sequence-data! db action)
     {}))

@@ -2,7 +2,8 @@
   (:require
     [clojure.string :as string]))
 
-(def action-tags {:user-interactions-blocked "user-interactions-blocked"})
+(def action-tags {:user-interactions-blocked "user-interactions-blocked"
+                  :fx "fx"})
 
 (defn get-action-type
   [action-data]
