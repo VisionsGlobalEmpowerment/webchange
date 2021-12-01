@@ -13,9 +13,13 @@
   {:content-wrapper {:height         "100%"
                      :display        "flex"
                      :flex-direction "column"}
-   :main-content    {:height "100%"
-                     :margin "0"
-                     :width  "100%"}})
+   :main-content    {:margin          "0"
+                     :width           "100%"
+                     :overflow        "auto"
+                     :display         "flex"
+                     :align-items     "stretch"
+                     :justify-content "space-between"
+                     :flex            "1 1"}})
 
 (defn course-dashboard
   []

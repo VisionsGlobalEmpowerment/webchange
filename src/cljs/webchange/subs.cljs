@@ -34,7 +34,7 @@
          (map #(assoc (second %)
                       :scene-id (first %)
                       :is-placeholder (get scene-placeholders (-> % first name js/decodeURIComponent) false)))
-         (sort-by :scene-id))))
+         (sort-by :name))))
 
 (re-frame/reg-sub
   ::navigation-mode

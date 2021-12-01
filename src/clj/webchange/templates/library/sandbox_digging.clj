@@ -44,6 +44,14 @@
                                            :min-height 50
                                            :min-width  50}}}})
 
+(def piles-counter {:state-1 3
+                    :state-2 7
+                    :state-3 11
+                    :state-4 15
+                    :state-5 20
+                    :state-6 25
+                    :state-7 31})
+
 (def t {:assets        [{:url "/raw/img/park/sandbox-castle/background.png", :size 10, :type "image"}
                         {:url "/raw/img/park/sandbox-castle/surface.png", :size 10, :type "image"}
                         {:url "/raw/img/park/sandbox-castle/decoration.png", :size 10, :type "image"}
@@ -80,10 +88,12 @@
                                         :speed      0.35
                                         :start      true
                                         :states     {:left {:scale-x 1} :right {:scale-x -1}}}
-                        :sand1-trigger {:type    "transparent"
-                                        :width   200
-                                        :height  200
-                                        :actions {:dig {:id "dig1" :on "pointerover" :type "action"}}}
+                        :sand1-trigger {:type      "transparent"
+                                        :x         -100
+                                        :y         -100
+                                        :width     200
+                                        :height    200
+                                        :actions   {:dig {:id "dig1" :on "pointerover" :type "action"}}}
                         :box1-group    {:type     "group"
                                         :x        492
                                         :y        720
@@ -137,10 +147,12 @@
                                                       {:name "glow" :outer-strength 0 :color 0xffd700}]
                                         :states      {:init-position {:x 304, :y 826}}},
 
-                        :sand2-trigger {:type    "transparent"
-                                        :width   200
-                                        :height  200
-                                        :actions {:dig {:id "dig2" :on "pointerover" :type "action"}}}
+                        :sand2-trigger {:type      "transparent"
+                                        :x         -100
+                                        :y         -100
+                                        :width     200
+                                        :height    200
+                                        :actions   {:dig {:id "dig2" :on "pointerover" :type "action"}}}
 
                         :sand2         {:type     "group"
                                         :filters  [{:name "brightness" :value 0}
@@ -184,10 +196,12 @@
                                                       {:name "glow" :outer-strength 0 :color 0xffd700}]
                                         :states      {:init-position {:x 401, :y 696}}}
 
-                        :sand3-trigger {:type    "transparent"
-                                        :width   200
-                                        :height  200
-                                        :actions {:dig {:id "dig3" :on "pointerover" :type "action"}}}
+                        :sand3-trigger {:type      "transparent"
+                                        :x         -100
+                                        :y         -100
+                                        :width     200
+                                        :height    200
+                                        :actions   {:dig {:id "dig3" :on "pointerover" :type "action"}}}
 
                         :sand3         {:type     "group"
                                         :filters  [{:name "brightness" :value 0}
@@ -258,37 +272,37 @@
                                                                    {:template "sand1-state%" :var-name "sand1-next-state", :action-property "success"}]}]}
                         :sand1-state2        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 3}
-                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value 30}
+                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value (:state-2 piles-counter)}
                                                      {:type "set-attribute", :target "sand1-6", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state3        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 4}
-                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value 60}
+                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value (:state-3 piles-counter)}
                                                      {:type "set-attribute", :target "sand1-5", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state4        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 5}
-                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value 90}
+                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value (:state-4 piles-counter)}
                                                      {:type "set-attribute", :target "sand1-4", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state5        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 6}
-                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value 120}
+                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value (:state-5 piles-counter)}
                                                      {:type "set-attribute", :target "sand1-3", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state6        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 7}
-                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value 150}
+                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value (:state-6 piles-counter)}
                                                      {:type "set-attribute", :target "sand1-2", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word1-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand1-state7        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand1-next-state", :var-value 8}
-                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value 150}
+                                                     {:type "set-variable", :var-name "sand1-next-state-value", :var-value (:state-7 piles-counter)}
                                                      {:type "set-attribute", :target "sand1-1", :attr-name "visible" :attr-value false}
                                                      {:type     "action"
                                                       :from-var [{:template "fact1-round%-dialog" :var-name "round-counter", :action-property "id"}]}
@@ -309,37 +323,37 @@
                                                                    {:template "sand2-state%" :var-name "sand2-next-state", :action-property "success"}]}]}
                         :sand2-state2        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 3}
-                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value 30}
+                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value (:state-2 piles-counter)}
                                                      {:type "set-attribute", :target "sand2-6", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state3        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 4}
-                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value 60}
+                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value (:state-3 piles-counter)}
                                                      {:type "set-attribute", :target "sand2-5", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state4        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 5}
-                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value 90}
+                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value (:state-4 piles-counter)}
                                                      {:type "set-attribute", :target "sand2-4", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state5        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 6}
-                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value 120}
+                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value (:state-5 piles-counter)}
                                                      {:type "set-attribute", :target "sand2-3", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state6        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 7}
-                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value 150}
+                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value (:state-6 piles-counter)}
                                                      {:type "set-attribute", :target "sand2-2", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word2-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand2-state7        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand2-next-state", :var-value 8}
-                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value 150}
+                                                     {:type "set-variable", :var-name "sand2-next-state-value", :var-value (:state-7 piles-counter)}
                                                      {:type "set-attribute", :target "sand2-1", :attr-name "visible" :attr-value false}
                                                      {:type     "action"
                                                       :from-var [{:template "fact2-round%-dialog" :var-name "round-counter", :action-property "id"}]}
@@ -361,37 +375,37 @@
                                                                    {:template "sand3-state%" :var-name "sand3-next-state", :action-property "success"}]}]}
                         :sand3-state2        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 3}
-                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value 30}
+                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value (:state-2 piles-counter)}
                                                      {:type "set-attribute", :target "sand3-6", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state3        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 4}
-                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value 60}
+                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value (:state-3 piles-counter)}
                                                      {:type "set-attribute", :target "sand3-5", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state4        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 5}
-                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value 90}
+                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value (:state-4 piles-counter)}
                                                      {:type "set-attribute", :target "sand3-4", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state5        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 6}
-                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value 120}
+                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value (:state-5 piles-counter)}
                                                      {:type "set-attribute", :target "sand3-3", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state6        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 7}
-                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value 150}
+                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value (:state-6 piles-counter)}
                                                      {:type "set-attribute", :target "sand3-2", :attr-name "visible" :attr-value false}
                                                      {:type     "action" :unique-tag "word" :return-immediately true
                                                       :from-var [{:template "word3-round%-dialog" :var-name "round-counter", :action-property "id"}]}]}
                         :sand3-state7        {:type "sequence-data"
                                               :data [{:type "set-variable", :var-name "sand3-next-state", :var-value 8}
-                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value 150}
+                                                     {:type "set-variable", :var-name "sand3-next-state-value", :var-value (:state-7 piles-counter)}
                                                      {:type "set-attribute", :target "sand3-1", :attr-name "visible" :attr-value false}
                                                      {:type     "action"
                                                       :from-var [{:template "fact3-round%-dialog" :var-name "round-counter", :action-property "id"}]}
@@ -428,17 +442,17 @@
                                                              {:type "set-variable", :var-name "sand1", :var-value 0}
                                                              {:type "set-variable", :var-name "sand1-finished", :var-value false}
                                                              {:type "set-variable", :var-name "sand1-next-state", :var-value 2}
-                                                             {:type "set-variable", :var-name "sand1-next-state-value", :var-value 10}
+                                                             {:type "set-variable", :var-name "sand1-next-state-value", :var-value (:state-1 piles-counter)}
 
                                                              {:type "set-variable", :var-name "sand2", :var-value 0}
                                                              {:type "set-variable", :var-name "sand2-finished", :var-value false}
                                                              {:type "set-variable", :var-name "sand2-next-state", :var-value 2}
-                                                             {:type "set-variable", :var-name "sand2-next-state-value", :var-value 10}
+                                                             {:type "set-variable", :var-name "sand2-next-state-value", :var-value (:state-1 piles-counter)}
 
                                                              {:type "set-variable", :var-name "sand3", :var-value 0}
                                                              {:type "set-variable", :var-name "sand3-finished", :var-value false}
                                                              {:type "set-variable", :var-name "sand3-next-state", :var-value 2}
-                                                             {:type "set-variable", :var-name "sand3-next-state-value", :var-value 10}
+                                                             {:type "set-variable", :var-name "sand3-next-state-value", :var-value (:state-1 piles-counter)}
 
                                                              {:type "set-attribute", :target "sand1-1", :attr-name "visible" :attr-value true}
                                                              {:type "set-attribute", :target "sand1-2", :attr-name "visible" :attr-value true}

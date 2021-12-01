@@ -20,7 +20,7 @@
 (defn list-card
   []
   (let [this (r/current-component)
-        {:keys [title title-action on-add-click full-height style]} (r/props this)
+        {:keys [title title-action on-add-click full-height style shrink?] :or {shrink? true}} (r/props this)
         custom-style (or style {})
         styles (get-styles)]
     [ui/card {:style (if full-height
@@ -40,8 +40,10 @@
        title
        (when-not (nil? title-action)
          title-action)]
-      (into [:div {:style {:flex-grow 1
-                     :position  "relative"}}]
+      (into [:div {:style (cond-> {:position "relative"}
+                                  shrink? (merge {:flex       "1 1 auto"
+                                                  :overflow-y "auto"
+                                                  :height     100}))}]
             (r/children this))]
      (when-not (nil? on-add-click)
        [ui/card-actions {:style {:position   "relative"
