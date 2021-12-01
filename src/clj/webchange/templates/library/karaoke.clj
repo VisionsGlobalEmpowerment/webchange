@@ -180,7 +180,7 @@
                         :play-video-seq                       {:type "sequence"
                                                                :data ["show-video"
                                                                       "play-video"
-                                                                      ;"hide-video"
+                                        ;"hide-video"
                                                                       ]}
 
                         :play-video                           {:type     "play-video"
@@ -314,7 +314,7 @@
                                                                :data [{:type          "transition"
                                                                        :transition-id "record-button-icon"
                                                                        :to            {:border-radius 24 :duration 0.2
-                                                                                       :fill          0x10BC2B}}
+                                                                                       :fill          0x0000FF}}
                                                                       {:type          "transition"
                                                                        :transition-id "record-button-icon-int"
                                                                        :to            {:border-radius 16 :duration 0.2}}]}
@@ -482,6 +482,7 @@
                    :start    from
                    :end      to
                    :from-var [{:var-name "video-src" :action-property "src"}]}]}
+          {:type "action" :id "highlight-record-button"}
           {:type "action" :id "start-timeout-record"}]})
 
 (defn- config-round-3
