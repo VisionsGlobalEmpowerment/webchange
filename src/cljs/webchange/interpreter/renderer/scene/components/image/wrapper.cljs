@@ -17,12 +17,15 @@
                                                   (f/set-filter container "" {}))
                                                 (when (and highlight (not highlight-filter-set))
                                                   (f/set-filter container "glow" {}))))
+                   :set-glow-pulsation      (fn [params]
+                                              (if params
+                                                (f/set-filter container "glow-pulsation" params)
+                                                (f/remove-filter container "glow-pulsation")))
                    :set-permanent-pulsation (fn [permanent-pulsation]
                                               (let [pulsation-filter-set (f/has-filter-by-name container "pulsation")]
                                                 (if (and (not permanent-pulsation) pulsation-filter-set) (f/set-filter container "" {}))
                                                 (if (and permanent-pulsation (not pulsation-filter-set))
-                                                  (f/set-filter container "pulsation" (assoc permanent-pulsation :no-interval true))))
-                                              )
+                                                  (f/set-filter container "pulsation" (assoc permanent-pulsation :no-interval true)))))
                    :set-on-click-handler    #(utils/set-handler sprite-object "click" %)
                    :set-draggable           (fn [draggable]
                                               (doto container

@@ -4,6 +4,7 @@
     [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager apply-transformation]]
     [webchange.interpreter.renderer.scene.filters.filters-alpha-pulsation :as fap]
     [webchange.interpreter.renderer.scene.filters.utils :as utils]
+    [webchange.interpreter.renderer.scene.filters.utils-pulsation :refer [pulsation reset-pulsation]]
     [webchange.interpreter.renderer.scene.components.utils :as components-utils]
     [webchange.logger.index :as logger]))
 
@@ -58,11 +59,11 @@
 
 (defn apply-glow-filter
   [container {:keys [quality distance inner-strength outer-strength color]
-              :or {quality 0.1
-                   distance 10
-                   inner-strength 0
-                   outer-strength 4
-                   color 0xffffff}}]
+              :or   {quality        0.1
+                     distance       10
+                     inner-strength 0
+                     outer-strength 4
+                     color          0xffffff}}]
   (let [glow-params (clj->js {:quality       quality
                               :distance      distance
                               :innerStrength inner-strength
@@ -143,8 +144,8 @@
        (do
          (when (get @pulsation-default-scale container)
            (components-utils/set-scale container (get @pulsation-default-scale container)))
-        (remove-ticker (get @pulsation-fns container))
-        (swap! pulsation-fns assoc container nil))
+         (remove-ticker (get @pulsation-fns container))
+         (swap! pulsation-fns assoc container nil))
        (do
          (swap! pulsation-default-scale assoc container (components-utils/get-scale container))
          (move-pivot-to-center container)
@@ -179,6 +180,47 @@
     "pulsation" (not (nil? (get @pulsation-fns container)))
     (not (nil? (get-filter-by-name container filter-name)))))
 
+
+(defn get-filter-value
+  [container filter-name]
+  (->> (get-filter-by-name container filter-name)
+       (.-value)))
+
+(defn set-filter-value
+  [container filter-name value]
+  (if-let [filter (get-filter-by-name container filter-name)]
+    (case filter-name
+      "brightness" (set-brightness filter value)
+      "hue" (set-hue filter value)
+      "glow" (set-glow-outer-strength filter value)
+      (logger/warn "[Filters]" (str "Filter with type <" filter-name "> can not be updated")))
+    (logger/warn "[Filters]" (str "Filter with type <" filter-name "> was not found"))))
+
+(defonce glow-pulsation-fns (atom {}))
+
+(defn- apply-glow-pulsation-filter
+  [container params]
+  (let [handler-key (.-name container)
+        handler (fn [_]
+                  (->> (pulsation handler-key params)
+                       (set-filter-value container "glow")))]
+
+    (when-not (has-filter-by-name container "glow")
+      (apply-glow-filter container {:outer-strength 0}))
+
+    (reset-pulsation handler-key)
+    (create-ticker handler)
+
+    (swap! glow-pulsation-fns assoc handler-key handler)))
+
+(defn- remove-glow-pulsation-filter
+  [container]
+  (let [handler-key (.-name container)
+        handler (get @glow-pulsation-fns handler-key)]
+    (remove-ticker handler)
+    (swap! glow-pulsation-fns dissoc handler-key)
+    (set-filter-value container "glow" 0)))
+
 (defn apply-filters
   [container filters]
   (logger/trace-folded "apply Filter" container filters)
@@ -191,6 +233,7 @@
       "outline" (apply-outline-filter container filter-params)
       "pulsation" (apply-pulsation-filter container)
       "alpha-pulsation" (apply-alpha-pulsation-filter container)
+      "glow-pulsation" (apply-glow-pulsation-filter container filter-params)
       "shadow" (apply-shadow-filter container filter-params)
       (logger/warn "[Filters]" (str "Filter with type <" name "> can not be drawn because it is not defined")))))
 
@@ -205,22 +248,13 @@
     "outline" (apply-outline-filter container params)
     "pulsation" (apply-pulsation-filter container params)
     "alpha-pulsation" (apply-alpha-pulsation-filter container params)
+    "glow-pulsation" (apply-glow-pulsation-filter container params)
     "shadow" (apply-shadow-filter container params)
     "" (remove-all-filters container)
     (logger/warn "[Filters]" (str "Filter with type <" name "> can not be set because it is not defined"))))
 
-(defn get-filter-value
-  [container filter-name]
-  (->> (get-filter-by-name container filter-name)
-       (.-value)))
-
-(defn set-filter-value
-  [container filter-name value]
-  (logger/trace-folded "set filter value" container filter-name value)
-  (if-let [filter (get-filter-by-name container filter-name)]
-    (case filter-name
-      "brightness" (set-brightness filter value)
-      "hue" (set-hue filter value)
-      "glow" (set-glow-outer-strength filter value)
-      (logger/warn "[Filters]" (str "Filter with type <" filter-name "> can not be updated")))
-    (logger/warn "[Filters]" (str "Filter with type <" filter-name "> was not found"))))
+(defn remove-filter
+  [container name]
+  (case name
+    "glow-pulsation" (remove-glow-pulsation-filter container)
+    nil))

@@ -96,6 +96,7 @@
    {:action :set-fill :params [:fill]}
    {:action :set-border-color :params [:border-color]}
    {:action :set-highlight :params [:highlight]}
+   ;{:action :set-glow-pulsation :params [:glow-pulsation]}
    {:action :set-permanent-pulsation :params [:permanent-pulsation]}
    {:action :set-alpha-pulsation :params [:alpha-pulsation]}
    {:action :set-draggable :params [:draggable]}
@@ -137,10 +138,15 @@
                                                               (conj actions-to-execute [action action-params])
                                                               actions-to-execute)
                                                             rest-available-actions
-                                                            rest-params))))]
-      (when-not (empty? not-handled-params)
-        (logger/warn (str "[Set object state] Not-processed-params for <" object-name "> object:") (clj->js not-handled-params)))
-      {:dispatch [::change-scene-object object-name execute-actions]})))
+                                                            rest-params))))
+          generic-handlers (map (fn [[param-name param-value]]
+                                  (let [executor-name (->> param-name clojure.core/name (str "set-") keyword)]
+                                    [executor-name param-value]))
+                                not-handled-params)]
+      {:dispatch [::change-scene-object
+                  object-name
+                  (cond-> execute-actions
+                          (-> generic-handlers empty? not) (conj [:generic-handler generic-handlers]))]})))
 
 (defn get-object-name
   [db object-name]
@@ -331,3 +337,9 @@
   :set-skeleton
   (fn [[object-wrapper params]]
     (apply-to-wrapper w/set-skeleton object-wrapper params)))
+
+(re-frame/reg-fx
+  :generic-handler
+  (fn [[object-wrapper props _]]
+    (doseq [[method params] props]
+      (apply-to-wrapper w/execute-method object-wrapper method params))))

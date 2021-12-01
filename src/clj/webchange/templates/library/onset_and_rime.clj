@@ -39,6 +39,17 @@
                                                                   :min-height 50
                                                                   :min-width  50}}}}}})
 
+(def cloud-states {:highlighted-0   {:glow-pulsation {:min-value 0
+                                                      :max-value 2
+                                                      :duration  200}}
+                   :highlighted-1   {:glow-pulsation {:min-value 0
+                                                      :max-value 2
+                                                      :duration  150}}
+                   :highlighted-2   {:glow-pulsation {:min-value 0
+                                                      :max-value 2
+                                                      :duration  100}}
+                   :not-highlighted {:glow-pulsation false}})
+
 (def t {:assets        [{:url "/raw/img/onset-and-rime/background.png", :size 10 :type "image"}
                         {:url "/raw/img/onset-and-rime/cloud.png", :size 1, :type "image"}],
         :objects       {:background               {:type "background", :src "/raw/img/onset-and-rime/background.png"},
@@ -57,10 +68,7 @@
                                                    :src    "/raw/img/onset-and-rime/cloud.png"
                                                    :x      0
                                                    :y      0
-                                                   :states {:highlighted-0   {:permanent-pulsation {:speed 2}}
-                                                            :highlighted-1   {:permanent-pulsation {:speed 3}}
-                                                            :highlighted-2   {:permanent-pulsation {:speed 4}}
-                                                            :not-highlighted {:permanent-pulsation false}},}
+                                                   :states cloud-states}
                         :cloud-left-text--1       {:type           "text"
                                                    :text           ""
                                                    :x              320
@@ -79,10 +87,7 @@
                         :cloud-right-img--1       {:type       "image"
                                                    :src        "/raw/img/onset-and-rime/cloud.png"
                                                    :transition "cloud-right-img"
-                                                   :states     {:highlighted-0   {:permanent-pulsation {:speed 2}}
-                                                                :highlighted-1   {:permanent-pulsation {:speed 3}}
-                                                                :highlighted-2   {:permanent-pulsation {:speed 4}}
-                                                                :not-highlighted {:permanent-pulsation false}}
+                                                   :states     cloud-states
                                                    :x          0
                                                    :y          0}
                         :cloud-right-text--1      {:type           "text"
@@ -395,10 +400,7 @@
    {(common/make-name-unique scene "cloud-left-img")        {:type   "image"
                                                              :src    "/raw/img/onset-and-rime/cloud.png"
                                                              :x      0
-                                                             :states {:highlighted-0   {:permanent-pulsation {:speed 2}}
-                                                                      :highlighted-1   {:permanent-pulsation {:speed 3}}
-                                                                      :highlighted-2   {:permanent-pulsation {:speed 4}}
-                                                                      :not-highlighted {:permanent-pulsation false}},
+                                                             :states cloud-states,
                                                              :y      0}
     (common/make-name-unique scene "cloud-left-text")       {:type           "text"
                                                              :text           (:left-text args)
@@ -414,21 +416,16 @@
                                                              :y          176
                                                              :transition (common/make-name-unique scene "cloud-left")
                                                              :children   [(common/make-name-unique scene "cloud-left-img")
-                                                                          (common/make-name-unique scene "cloud-left-text")
-                                                                          ]
+                                                                          (common/make-name-unique scene "cloud-left-text")]
                                                              :actions    {:click {:type   "action"
                                                                                   :id     "cloud-left-click-check"
                                                                                   :on     "click"
                                                                                   :params {:target     (common/make-name-unique scene "cloud-left")
-                                                                                           :target-img (common/make-name-unique scene "cloud-left-img")
-                                                                                           }}}},
+                                                                                           :target-img (common/make-name-unique scene "cloud-left-img")}}}},
     (common/make-name-unique scene "cloud-right-img")       {:type       "image"
                                                              :src        "/raw/img/onset-and-rime/cloud.png"
                                                              :transition (common/make-name-unique scene "cloud-right-img")
-                                                             :states     {:highlighted-0   {:permanent-pulsation {:speed 2}}
-                                                                          :highlighted-1   {:permanent-pulsation {:speed 3}}
-                                                                          :highlighted-2   {:permanent-pulsation {:speed 4}}
-                                                                          :not-highlighted {:permanent-pulsation false}}
+                                                             :states     cloud-states
                                                              :x          0
                                                              :y          0}
     (common/make-name-unique scene "cloud-right-text")      {:type           "text"
