@@ -96,7 +96,6 @@
    {:action :set-fill :params [:fill]}
    {:action :set-border-color :params [:border-color]}
    {:action :set-highlight :params [:highlight]}
-   ;{:action :set-glow-pulsation :params [:glow-pulsation]}
    {:action :set-permanent-pulsation :params [:permanent-pulsation]}
    {:action :set-alpha-pulsation :params [:alpha-pulsation]}
    {:action :set-draggable :params [:draggable]}
