@@ -11,33 +11,34 @@
 (defn- level-item
   [level]
   (r/with-let [in (r/atom true)]
-              (let [course @(re-frame/subscribe [::subs/current-course])
-                    list-styles (list/get-styles)]
-                [list-card {:title        (:name level)
-                            :title-action (r/as-element [ui/icon-button {:size     "small"
-                                                                         :style    {:padding "5px"}
-                                                                         :on-click #(swap! in not)}
-                                                         (if @in
-                                                           [ic/expand-less]
-                                                           [ic/expand-more])])
-                            :on-add-click #(redirect-to :course-editor-v2-add-lesson :course-id course :level-id (:level level))
-                            :style        {:margin-bottom "24px"}}
-                 (when @in
-                   [ui/list
-                    (for [[idx lesson] (map-indexed vector (:lessons level))]
-                      ^{:key idx}
-                      [ui/list-item
-                       [ui/list-item-text {:primary (:name lesson)}]
-                       [ui/list-item-secondary-action
-                        [ui/icon-button {:on-click   #(redirect-to :course-editor-v2-lesson :course-id course :level-id (:level level) :lesson-id (:lesson lesson))
-                                         :aria-label "Edit"}
-                         [ic/edit {:style (:action-icon list-styles)}]]]])])])))
+    (let [course @(re-frame/subscribe [::subs/current-course])
+          list-styles (list/get-styles)]
+      [list-card {:title        (:name level)
+                  :title-action (r/as-element [ui/icon-button {:size     "small"
+                                                               :style    {:padding "5px"}
+                                                               :on-click #(swap! in not)}
+                                               (if @in
+                                                 [ic/expand-less]
+                                                 [ic/expand-more])])
+                  :on-add-click #(redirect-to :course-editor-v2-add-lesson :course-id course :level-id (:level level))
+                  :shrink?      false
+                  :style        {:margin-bottom "24px"}}
+       (when @in
+         [ui/list
+          (for [[idx lesson] (map-indexed vector (:lessons level))]
+            ^{:key idx}
+            [ui/list-item
+             [ui/list-item-text {:primary (:name lesson)}]
+             [ui/list-item-secondary-action
+              [ui/icon-button {:on-click   #(redirect-to :course-editor-v2-lesson :course-id course :level-id (:level level) :lesson-id (:lesson lesson))
+                               :aria-label "Edit"}
+               [ic/edit {:style (:action-icon list-styles)}]]]])])])))
 
 (defn lessons-list
   [{:keys [title]}]
   (let [levels @(re-frame/subscribe [::subs/course-levels])]
-    [list-card {:title title
-                :full-height  true}
+    [list-card {:title       title
+                :full-height true}
      (for [[idx level] (map-indexed vector levels)]
-        ^{:key idx}
-        [level-item level])]))
+       ^{:key idx}
+       [level-item level])]))
