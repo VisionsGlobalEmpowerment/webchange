@@ -44,8 +44,11 @@
                                                       :duration  200}}
                    :highlighted-1   {:glow-pulsation {:min-value 0
                                                       :max-value 2
-                                                      :duration  150}}
+                                                      :duration  160}}
                    :highlighted-2   {:glow-pulsation {:min-value 0
+                                                      :max-value 2
+                                                      :duration  130}}
+                   :highlighted-3   {:glow-pulsation {:min-value 0
                                                       :max-value 2
                                                       :duration  100}}
                    :not-highlighted {:glow-pulsation false}})
@@ -146,7 +149,11 @@
                                                               :from-var [{:var-name "next-cloud-img" :action-property "target"}
                                                                          {:template "highlighted-%" :var-name "step-counter" :action-property "id"}]}
                                                              {:type     "state" :id "not-highlighted"
-                                                              :from-var [{:var-name "prev-cloud-img" :action-property "target"}]}]}
+                                                              :from-var [{:var-name "prev-cloud-img" :action-property "target"}]}
+                                                             {:type     "state" :id "disable"
+                                                              :from-var [{:var-name "prev-cloud" :action-property "target"}]}
+                                                             {:type     "state" :id "enable"
+                                                              :from-var [{:var-name "next-cloud" :action-property "target"}]}]}
                         :init-scene-cloud-vars       {:type "sequence-data"
                                                       :data [{:type "set-variable" :var-name "cloud-left-x" :var-value 25}
                                                              {:type "set-variable" :var-name "cloud-right-x" :var-value 1214}
@@ -416,6 +423,8 @@
                                                              :transition (common/make-name-unique scene "cloud-left")
                                                              :children   [(common/make-name-unique scene "cloud-left-img")
                                                                           (common/make-name-unique scene "cloud-left-text")]
+                                                             :states     {:disable {:interactive false}
+                                                                          :enable  {:interactive true}}
                                                              :actions    {:click {:type   "action"
                                                                                   :id     "cloud-left-click-check"
                                                                                   :on     "click"
@@ -442,6 +451,8 @@
                                                              :transition (common/make-name-unique scene "cloud-right")
                                                              :children   [(common/make-name-unique scene "cloud-right-img")
                                                                           (common/make-name-unique scene "cloud-right-text")]
+                                                             :states     {:disable {:interactive false}
+                                                                          :enable  {:interactive true}}
                                                              :actions    {:click {:type   "action"
                                                                                   :id     "cloud-right-clicked"
                                                                                   :on     "click"
