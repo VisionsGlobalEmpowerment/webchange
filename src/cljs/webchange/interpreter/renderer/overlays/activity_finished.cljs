@@ -132,6 +132,7 @@
                     :y             0
                     :width         image-width
                     :height        image-height
+                    :image-size    "cover"
                     :border-radius [(- border-radius 5) (- border-radius 5) 0 0]}
                    {:type           "text"
                     :object-name    :next-activity-card-name
@@ -171,11 +172,11 @@
      :x           x
      :y           (- y (/ menu-height 2))
      :children    [#_{:type        "image"
-                    :src         "/raw/img/ui/reload_button_01.png"
-                    :object-name :overall-progress-menu-reset
-                    :x           0
-                    :y           0
-                    :on-click    on-restart-click}
+                      :src         "/raw/img/ui/reload_button_01.png"
+                      :object-name :overall-progress-menu-reset
+                      :x           0
+                      :y           0
+                      :on-click    on-restart-click}
                    {:type        "button"
                     :object-name :overall-progress-menu-next
                     :x           60
@@ -185,8 +186,8 @@
 (defn- get-score-window
   [viewport]
   (let [go-to-next-activity #(re-frame/dispatch [::ie/run-next-activity])
-                                        ;        restart-activity #(re-frame/dispatch [::ie/restart-scene])
-                                        ;       continue-playing #(re-frame/dispatch [::ie/next-scene])
+        ;restart-activity #(re-frame/dispatch [::ie/restart-scene])
+        ;continue-playing #(re-frame/dispatch [::ie/next-scene])
         ]
     (merge
       {:type        "group"
@@ -200,16 +201,16 @@
                      (get-title)
                      (get-character {:x (/ (:width score-window-size) 4)
                                      :y (:height score-window-size)})
-                     (get-overall-progress {:x     65
+                     #_(get-overall-progress {:x     65
                                             :y     120
                                             :width (- (/ (:width score-window-size) 2) 130)})
                      (get-featured-content {:x        (+ (/ (:width score-window-size) 2) 65)
                                             :y        120
                                             :on-click go-to-next-activity})
-                     #_(get-menu {:x                20
-                                  :y                (+ (:height score-window-size) 10)
-                                  :on-restart-click restart-activity
-                                  :on-next-click    continue-playing})]}
+                     (get-menu {:x             20
+                                :y             (+ (:height score-window-size) 10)
+                                ;:on-restart-click restart-activity
+                                :on-next-click go-to-next-activity})]}
       (get-score-window-position viewport))))
 
 (defn create
@@ -220,7 +221,7 @@
      :visible     false
      :children    [(get-background)
                    #_(get-top-menu {:viewport       viewport
-                                  :on-close-click close-screen})
+                                    :on-close-click close-screen})
                    (get-score-window viewport)]}))
 
 (defn update-viewport
