@@ -12,6 +12,8 @@
   (let [interactions-blocked? @(re-frame/subscribe [::state/user-interactions-blocked? action-path])
         handle-change (fn [value]
                         (re-frame/dispatch [::state/set-user-interactions-block action-path value]))]
+    (when (empty? nodes)
+      (re-frame/dispatch [::state/add-default-phrase action-path]))
     [:div.sheet
      [:div.sheet-title
       [:h3 title]
