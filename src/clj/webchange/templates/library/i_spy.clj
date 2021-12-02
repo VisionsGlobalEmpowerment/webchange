@@ -201,39 +201,36 @@
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/newspaper_02.png"}
-                        :icon-59      {:type       "image",
+                        :icon-59      {:type       "transparent",
                                        :x          210,
                                        :y          405,
                                        :width      55,
                                        :height     55,
                                        :transition "icon-59",
-                                       :filter     "brighten",
-                                       :src        "/raw/img/i-spy/transparent.png"
+                                       :editable?  {:drag true, :select true},
                                        :actions    {:click {:id "icon-59-click", :on "click", :type "action" :unique-tag "speech"}}}
-                        :icon-open    {:type       "image",
+                        :icon-open    {:type       "transparent",
                                        :x          200,
                                        :y          605,
                                        :width      95,
                                        :height     80,
                                        :transition "icon-open",
-                                       :filter     "brighten",
-                                       :src        "/raw/img/i-spy/transparent.png"
+                                       :editable?  {:drag true, :select true},
                                        :actions    {:click {:id "icon-open-click", :on "click", :type "action" :unique-tag "speech"}}}
-                        :icon-276     {:type       "image",
+                        :icon-276     {:type       "transparent",
                                        :x          1485,
                                        :y          490,
                                        :width      43,
                                        :height     25,
                                        :transition "icon-276",
-                                       :filter     "brighten",
-                                       :src        "/raw/img/i-spy/transparent.png"
+                                       :editable?  {:drag true, :select true},
                                        :actions    {:click {:id "icon-276-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-br-1    {:type     "group",
                                        :x        0,
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-1" "bakery-1"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-im-1 {:type       "image",
                                        :x          700,
@@ -265,7 +262,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-2" "plate-2"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :plate-2
                         {:type           "text",
@@ -296,7 +293,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-3" "cap-3"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :cap-3
                         {:type           "text",
@@ -329,7 +326,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-4" "fire-station-4"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
 
 
@@ -363,7 +360,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-5" "newspaper-5"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :newspaper-5
                         {:type           "text",
