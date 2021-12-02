@@ -89,6 +89,17 @@
                              :options options}}
         :options     options})
 
+(def image-common-params {:type       "image"
+                          :width      400
+                          :height     400
+                          :image-size "contain"})
+(def image-left-params (merge image-common-params
+                              {:x 420
+                               :y 270}))
+(def image-right-params (merge image-common-params
+                               {:x 1050
+                                :y 270}))
+
 (def t {:assets        [{:url "/raw/img/library/book/background.jpg", :size 10, :type "image"}
                         {:url "/raw/img/library/book/background2.jpg", :size 10, :type "image"}
                         {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}],
@@ -178,10 +189,7 @@
                                   :font-size      90,
                                   :text           "",
                                   :vertical-align "middle"}
-         :spread-2-left-image    {:type  "image",
-                                  :x     420,
-                                  :y     270,
-                                  :scale {:x 4 :y 4}}
+         :spread-2-left-image    image-left-params
          :spread-2-left-text     {:type           "text"
                                   :word-wrap      true
                                   :vertical-align "top"
@@ -196,10 +204,7 @@
                                   :text           "text"
                                   :editable?      {:select true}
                                   :chunks         []}
-         :spread-2-right-image   {:type  "image",
-                                  :x     1050,
-                                  :y     270,
-                                  :scale {:x 4 :y 4}}
+         :spread-2-right-image   image-right-params
          :spread-2-right-text    {:type           "text"
                                   :word-wrap      true
                                   :vertical-align "top"
@@ -214,10 +219,7 @@
                                   :text           "text"
                                   :editable?      {:select true}
                                   :chunks         []}
-         :spread-3-left-image    {:type  "image",
-                                  :x     420,
-                                  :y     270,
-                                  :scale {:x 4 :y 4}}
+         :spread-3-left-image    image-left-params
          :spread-3-left-text     {:type           "text"
                                   :word-wrap      true
                                   :vertical-align "top"
@@ -232,10 +234,7 @@
                                   :text           "text"
                                   :editable?      {:select true}
                                   :chunks         []}
-         :spread-3-right-image   {:type  "image",
-                                  :x     1050,
-                                  :y     270,
-                                  :scale {:x 4 :y 4}}
+         :spread-3-right-image   image-right-params
          :spread-3-right-text    {:type           "text"
                                   :word-wrap      true
                                   :vertical-align "top"
@@ -250,10 +249,7 @@
                                   :text           "text"
                                   :editable?      {:select true}
                                   :chunks         []}
-         :spread-4-left-image    {:type  "image",
-                                  :x     420,
-                                  :y     270,
-                                  :scale {:x 4 :y 4}}
+         :spread-4-left-image    image-left-params
          :spread-4-left-text     {:type           "text"
                                   :word-wrap      true
                                   :vertical-align "top"
@@ -268,10 +264,7 @@
                                   :text           "text"
                                   :editable?      {:select true}
                                   :chunks         []}
-         :spread-4-right-image   {:type  "image",
-                                  :x     1050,
-                                  :y     270,
-                                  :scale {:x 4 :y 4}}
+         :spread-4-right-image   image-right-params
          :spread-4-right-text    {:type           "text"
                                   :word-wrap      true
                                   :vertical-align "top"
