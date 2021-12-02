@@ -119,6 +119,10 @@
       {:dispatch [::state-dialog-form/update-action-by-path {:action-path action-path
                                                              :action-type :scene
                                                              :data-patch  {:tags new-tags}}]})))
+(re-frame/reg-event-fx
+  ::add-default-phrase
+  (fn [{:keys [db]} [_ action-path]]
+    {:dispatch [::state-dialog-form/update-scene-action action-path {:data [defaults/default-action]}]}))
 
 ;; ---
 
