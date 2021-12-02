@@ -233,7 +233,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-1" "bakery-1"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-im-1 {:type       "image",
                                        :x          700,
@@ -265,7 +265,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-2" "plate-2"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :plate-2
                         {:type           "text",
@@ -296,7 +296,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-3" "cap-3"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :cap-3
                         {:type           "text",
@@ -329,7 +329,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-4" "fire-station-4"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
 
 
@@ -363,7 +363,7 @@
                                        :y        0,
                                        :actions  {},
                                        :children ["icon-br-im-5" "newspaper-5"],
-                                       :visible  true,
+                                       :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :newspaper-5
                         {:type           "text",
