@@ -400,6 +400,8 @@
                                                           :skin   "lion",
                                                           :speed  0.3,
                                                           :start  true
+                                                          :editable? {:select true
+                                                                      :show-in-tree? true}
                                                           :actions    {:click {:id "tap-instructions" :on "click" :type "action"}}}}
                        :scene-objects [["layered-background"]
                                        ["orange-table" "green-table" "purple-table"]

@@ -38,6 +38,8 @@
                                                           :name   "senoravaca",
                                                           :skin   "lion",
                                                           :speed  0.3,
+                                                          :editable? {:select true
+                                                                      :show-in-tree? true}
                                                           :start  true}}
                        :scene-objects [["layered-background"]
                                        ["yellow-table" "blue-table" "red-table"]
