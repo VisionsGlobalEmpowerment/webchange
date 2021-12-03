@@ -93,7 +93,7 @@
 (re-frame/reg-sub
   ::stage-size
   (fn [db]
-    (:stage-size db)))
+    (get db :stage-size)))
 
 (re-frame/reg-sub
   ::lessons-data

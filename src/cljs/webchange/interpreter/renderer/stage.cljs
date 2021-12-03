@@ -86,7 +86,8 @@
         loading (r/atom {:done     false
                          :progress 0})
         current-scene-id (r/atom nil)
-        handle-resize (get-handler handle-screen-resize container)]
+        handle-resize (get-handler handle-screen-resize container)
+        prev-viewport (atom nil)]
     (r/create-class
       {:display-name "web-gl-stage"
        :component-did-mount
@@ -112,6 +113,10 @@
                                                                                                                 :scene-data           scene-data
                                                                                                                 :show-waiting-screen? show-waiting-screen?
                                                                                                                 :viewport             viewport})]
+                         (when (and (some? @prev-viewport)
+                                    (not= @prev-viewport viewport))
+                           (handle-resize))
+                         (reset! prev-viewport viewport)
                          [:div {:ref   #(when % (reset! container (.-parentNode %)))
                                 :style {:width  "100%"
                                         :height "100%"}}
