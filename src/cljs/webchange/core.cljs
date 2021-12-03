@@ -35,7 +35,7 @@
 
 (defn ^:export init
   [service-worker-enabled]
-  (sw/setup (and service-worker-enabled config/use-cache) "/service-worker.js")
+  ;(sw/setup (and service-worker-enabled config/use-cache) "/service-worker.js")
   (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (re-frame/dispatch [::events/init-current-school])
