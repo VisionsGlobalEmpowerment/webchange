@@ -13,9 +13,56 @@
                                  :options {:word {:label "Word"
                                                   :type  "string"}}}}})
 
-(def t {:assets [{:url "/raw/img/syllables/bg.png", :size 10, :type "audio"}
-                 {:url "/raw/img/syllables/fog.png", :size 10, :type "audio"}
-                 {:url "/raw/img/syllables/splash_cymbal.png", :size 10, :type "audio"}],
+(def default-sounds {:splash-cymbal {:url      "/upload/HFNAWQVQQLNTRCJE.mp3"
+                                     :data     {:start 0.001 :duration 0.114 :end 0.115}
+                                     :metadata {:size 9}}
+                     :bass-drum     {:url      "/upload/LGZUACFGDIBQEBEU.mp3"
+                                     :data     {:start 0 :duration 0.81 :end 0.81}
+                                     :metadata {:size 19}}
+                     :hi-hat        {:url      "/upload/DJXYYAZBMGVSWEHY.mp3"
+                                     :data     {:start 0.001 :duration 0.867 :end 0.868}
+                                     :metadata {:size 17}}
+                     :tom-tom-left  {:url      "/upload/HBBXZWOTDJQLKJWR.mp3"
+                                     :data     {:start 0 :duration 0.555 :end 0.555}
+                                     :metadata {:size 11}}
+                     :tom-tom-right {:url      "/upload/PDDXIKMFDOWWDCMS.mp3"
+                                     :data     {:start 0, :duration 1.86 :end 1.86}
+                                     :metadata {:size 19}}
+                     :ride-cymbal   {:url      "/upload/OEOCFHETKJEMFLSW.mp3"
+                                     :data     {:start 0 :duration 2.328 :end 2.328}
+                                     :metadata {:size 55}}
+                     :china-cymbal  {:url      "/upload/IDIVGFZREABODOUH.mp3"
+                                     :data     {:start 0 :duration 1.745 :end 1.745}
+                                     :metadata {:size 131}}
+                     :share-drum    {:url      "/upload/JDZNDWDZTRVAXJOX.mp3"
+                                     :data     {:start 0 :duration 0.173 :end 0.173}
+                                     :metadata {:size 8}}})
+
+(defn- get-default-sound-data
+  [sound-name]
+  (let [{:keys [url data]} (get default-sounds sound-name)]
+    (when (some? url) (merge data {:audio url}))))
+
+(def t {:assets        (concat [{:url "/raw/img/syllables/bg.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/fog.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/splash_cymbal.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/group.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/bass_drum.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/hi_hat.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/share_drum.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/tom_tom_left.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/tom_tom_right.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/ride_cymbal.png", :size 10, :type "image"}
+                                {:url "/raw/img/syllables/china_cymbal.png", :size 10, :type "image"}]
+                               (->> default-sounds
+                                    (map (fn [[sound-name {:keys [url metadata]}]]
+                                           (merge {:type  "audio"
+                                                   :url   url
+                                                   :alias (-> (clojure.core/name sound-name)
+                                                              (clojure.string/replace "-" " "))}
+                                                  metadata)))
+                                    (filter (fn [{:keys [url]}]
+                                              (some? url)))))
         :objects       {:layered-background {:type       "layered-background"
                                              :background {:src "/raw/img/syllables/bg.png"}
                                              :decoration {:src "/raw/img/syllables/fog.png"}}
@@ -29,8 +76,8 @@
                                              :x          1744
                                              :y          513
                                              :type       "animation"
-                                             :editable? {:drag true, :select true, :show-in-tree? true},
-                                             :metadata  {:added-character? true}
+                                             :editable?  {:drag true, :select true, :show-in-tree? true},
+                                             :metadata   {:added-character? true}
                                              :anim       "idle"
                                              :start      true
                                              :scene-name "vera"}
@@ -133,49 +180,49 @@
         :scene-objects [["layered-background"]
                         ["group" "bass-drum" "tom-tom-left" "tom-tom-right" "splash-cymbal" "hi-hat" "share-drum" "ride-cymbal" "china-cymbal"]
                         ["text-rectangle" "vera"]],
-        :actions       {:splash-cymbal-dialog  (dialog/default "splash-cymbal-dialog")
+        :actions       {:splash-cymbal-dialog  (dialog/default "splash-cymbal-dialog" {:inner-action-data (get-default-sound-data :splash-cymbal)})
                         :splash-cymbal-tap     {:type "parallel",
                                                 :data [{:type "action" :id "splash-cymbal-dialog"}
                                                        {:type "action" :id "blink-splash-cymbal"}
                                                        {:type "action" :id "cymbal-click"}]}
 
-                        :bass-drum-dialog      (dialog/default "bass-drum-dialog")
+                        :bass-drum-dialog      (dialog/default "bass-drum-dialog" {:inner-action-data (get-default-sound-data :bass-drum)})
                         :bass-drum-tap         {:type "parallel",
                                                 :data [{:type "action" :id "bass-drum-dialog"}
                                                        {:type "action" :id "blink-bass-drum"}
                                                        {:type "action" :id "cymbal-click"}]}
 
-                        :hi-hat-dialog         (dialog/default "hi-hat-dialog")
+                        :hi-hat-dialog         (dialog/default "hi-hat-dialog" {:inner-action-data (get-default-sound-data :hi-hat)})
                         :hi-hat-tap            {:type "parallel",
                                                 :data [{:type "action" :id "hi-hat-dialog"}
                                                        {:type "action" :id "blink-hi-hat"}
                                                        {:type "action" :id "cymbal-click"}]}
 
-                        :share-drum-dialog     (dialog/default "snare-drum-dialog")
+                        :share-drum-dialog     (dialog/default "share-drum-dialog" {:inner-action-data (get-default-sound-data :share-drum)})
                         :share-drum-tap        {:type "parallel",
                                                 :data [{:type "action" :id "share-drum-dialog"}
                                                        {:type "action" :id "blink-share-drum"}
                                                        {:type "action" :id "cymbal-click"}]}
 
-                        :tom-tom-left-dialog   (dialog/default "tom-tom-left-dialog")
+                        :tom-tom-left-dialog   (dialog/default "tom-tom-left-dialog" {:inner-action-data (get-default-sound-data :tom-tom-left)})
                         :tom-tom-left-tap      {:type "parallel",
                                                 :data [{:type "action" :id "tom-tom-left-dialog"}
                                                        {:type "action" :id "blink-tom-tom-left"}
                                                        {:type "action" :id "cymbal-click"}]}
 
-                        :tom-tom-right-dialog  (dialog/default "tom-tom-right-dialog")
+                        :tom-tom-right-dialog  (dialog/default "tom-tom-right-dialog" {:inner-action-data (get-default-sound-data :tom-tom-right)})
                         :tom-tom-right-tap     {:type "parallel",
                                                 :data [{:type "action" :id "tom-tom-right-dialog"}
                                                        {:type "action" :id "blink-tom-tom-right"}
                                                        {:type "action" :id "cymbal-click"}]}
 
-                        :ride-cymbal-dialog    (dialog/default "ride-cymbal-dialog")
+                        :ride-cymbal-dialog    (dialog/default "ride-cymbal-dialog" {:inner-action-data (get-default-sound-data :ride-cymbal)})
                         :ride-cymbal-tap       {:type "parallel",
                                                 :data [{:type "action" :id "ride-cymbal-dialog"}
                                                        {:type "action" :id "blink-ride-cymbal"}
                                                        {:type "action" :id "cymbal-click"}]}
 
-                        :china-cymbal-dialog   (dialog/default "china-cymbal-dialog")
+                        :china-cymbal-dialog   (dialog/default "china-cymbal-dialog" {:inner-action-data (get-default-sound-data :china-cymbal)})
                         :china-cymbal-tap      {:type "parallel",
                                                 :data [{:type "action" :id "china-cymbal-dialog"}
                                                        {:type "action" :id "blink-china-cymbal"}
@@ -188,25 +235,25 @@
                         :next-syllable         {:type      "animate-next-text",
                                                 :animation "color",
                                                 :from-var  [{:var-name "word-name", :action-property "target"}]}
-                        
+
                         :next-counter          {:type "next-timeout-counter"
                                                 :id   "syllables-counter"}
                         :timeout-timer         {:type     "start-timeout-counter",
                                                 :id       "syllables-counter",
                                                 :action   "check-result",
                                                 :interval 2000}
-                        :check-result          {:type        "sequence-data",
-                                                :data        [{:type "action" :id "hide-text"}
-                                                              {:type    "test-value",
-                                                               :success "success-task-action",
-                                                               :fail    "wrong-task-action",
-                                                               :from-var
-                                                               [{:var-name "syllable-count", :action-property "value1"}
-                                                                {:var-name "syllables-counter-value", :action-property "value2"}]}]}
+                        :check-result          {:type "sequence-data",
+                                                :data [{:type "action" :id "hide-text"}
+                                                       {:type    "test-value",
+                                                        :success "success-task-action",
+                                                        :fail    "wrong-task-action",
+                                                        :from-var
+                                                                 [{:var-name "syllable-count", :action-property "value1"}
+                                                                  {:var-name "syllables-counter-value", :action-property "value2"}]}]}
 
                         :wrong-task-action     {:type "sequence-data",
                                                 :data [{:type "action" :id "wrong-answer-dialog"}
-                                                       {:type "action"
+                                                       {:type     "action"
                                                         :from-var [{:var-name "task-name", :action-property "id"}]}]}
 
                         :success-task-action   {:type "sequence-data",
@@ -294,34 +341,34 @@
    :vertical-align "middle",
    :visible        false,
    :editable?      {:show-in-tree? true
-                    :select true}})
+                    :select        true}})
 
 (defn task-start-action
   [scene-data args]
   (let [task-start-name (common/make-name-unique scene-data "task-setup")
         dialog-name (common/make-name-unique scene-data "word-dialog")]
-    {:type "sequence-data",
+    {:type                "sequence-data",
      :workflow-user-input true
-     :tags [task-start-name]
-     :data [{:type "action" :id "hide-text"}
-            {:type "reset-animate-text", :animation "color",
-             :fill "#000000", :target (common/make-name-unique scene-data "text")}
-            {:type "set-attribute" :attr-name "visible" :attr-value true :target (common/make-name-unique scene-data "text")}
-            {:type "set-variable" :var-name "word-name" :var-value (common/make-name-unique scene-data "text")}
-            {:type "set-variable" :var-name "syllable-count" :var-value (count (clojure.string/split (:word args) #" "))}
-            {:type "set-variable" :var-name "task-name" :var-value task-start-name}
-            {:type "action" :id dialog-name}
-            {:type "action" :id "timeout-timer"}]}))
+     :tags                [task-start-name]
+     :data                [{:type "action" :id "hide-text"}
+                           {:type "reset-animate-text", :animation "color",
+                            :fill "#000000", :target (common/make-name-unique scene-data "text")}
+                           {:type "set-attribute" :attr-name "visible" :attr-value true :target (common/make-name-unique scene-data "text")}
+                           {:type "set-variable" :var-name "word-name" :var-value (common/make-name-unique scene-data "text")}
+                           {:type "set-variable" :var-name "syllable-count" :var-value (count (clojure.string/split (:word args) #" "))}
+                           {:type "set-variable" :var-name "task-name" :var-value task-start-name}
+                           {:type "action" :id dialog-name}
+                           {:type "action" :id "timeout-timer"}]}))
 
 (defn- show-text-action
   [word-name]
   {:type "sequence-data"
-   :data [{:type "set-attribute"
-           :attr-name "visible"
+   :data [{:type       "set-attribute"
+           :attr-name  "visible"
            :attr-value true
-           :target word-name}
-          {:type "set-variable"
-           :var-name "word-name"
+           :target     word-name}
+          {:type      "set-variable"
+           :var-name  "word-name"
            :var-value word-name}]})
 
 (defn f
@@ -355,15 +402,15 @@
     (-> old-data
         (assoc-in [:objects (keyword word-name)] word)
         (assoc-in [:actions (keyword dialog-name)] dialog)
-        (assoc-in [:actions (keyword show-text-name)] show-text)        
+        (assoc-in [:actions (keyword show-text-name)] show-text)
         (common/add-track-action {:track-name "Words"
                                   :type       "dialog"
                                   :action-id  (keyword dialog-name)})
         (assoc-in [:actions (keyword task-start-name)] task-start)
-        (update-in [:actinons :hide-text :data] concat [{:type "set-attribute"
-                                                         :attr-name "visible"
+        (update-in [:actions :hide-text :data] concat [{:type       "set-attribute"
+                                                         :attr-name  "visible"
                                                          :attr-value false
-                                                         :target word-name}])
+                                                         :target     word-name}])
         (common/add-available-action show-text-name (str "Show text " (:word args)))
         (common/add-available-action task-start-name (str "Ask text " (:word args)))
         (common/add-scene-object [word-name])
