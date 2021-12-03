@@ -407,7 +407,7 @@
                                   :type       "dialog"
                                   :action-id  (keyword dialog-name)})
         (assoc-in [:actions (keyword task-start-name)] task-start)
-        (update-in [:actinons :hide-text :data] concat [{:type       "set-attribute"
+        (update-in [:actions :hide-text :data] concat [{:type       "set-attribute"
                                                          :attr-name  "visible"
                                                          :attr-value false
                                                          :target     word-name}])
