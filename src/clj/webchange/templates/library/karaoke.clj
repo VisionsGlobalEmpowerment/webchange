@@ -28,7 +28,8 @@
                         {:url "/raw/clipart/recording_studio/recording_studio_surface.png" :type "image"}
                         {:url "/raw/clipart/karaoke/mic.png" :type "image"}
                         {:url "/raw/clipart/karaoke/play_button.png" :type "image"}
-                        {:url "/raw/clipart/karaoke/record_button.png" :type "image"}]
+                        {:url "/raw/clipart/karaoke/record_button.png" :type "image"}
+                        {:url "/raw/clipart/karaoke/checkmark.png" :type "image"}]
         :objects       {:background              {:type       "layered-background"
                                                   :background {:src "/raw/clipart/recording_studio/recording_studio_background.png"}
                                                   :decoration {:src "/raw/clipart/recording_studio/recording_studio_decoration.png"}
@@ -97,21 +98,15 @@
                                                   :border-radius 32
                                                   :fill          0xFFFFFF}
 
-                        :approve-group           {:type     "group"
-                                                  :x        1706
-                                                  :y        132
-                                                  :width    96 :height 96
-                                                  :visible  false
-                                                  :children ["approve-background"
-                                                             "approve-playback-button"]}
-                        :approve-background      {:type          "rectangle"
-                                                  :x             0
-                                                  :y             0
-                                                  :transition    "approve-background"
-                                                  :width         96
-                                                  :height        96
-                                                  :border-radius 48
-                                                  :fill          0xFF5C00}
+                        :approve-group           {:type      "image"
+                                                  :src       "/raw/clipart/karaoke/play_button.png"
+                                                  :x         900
+                                                  :y         210
+                                                  :width     128
+                                                  :height    128
+                                                  :visible   false
+                                                  :actions   {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}}
+                        
                         :playback-group          {:type     "group"
                                                   :x        896 :y 667
                                                   :width    128 :height 128
@@ -145,18 +140,10 @@
                                                   :visible       false
                                                   :border-radius 10
                                                   :actions       {:click {:id "stop-playback-click" :on "click" :type "action"}}
-                                                  :fill          0xFFFFFF}
-                        :approve-playback-button {:type    "svg-path"
-                                                  :x       20
-                                                  :y       25
-                                                  :width   128
-                                                  :height  128
-                                                  :fill    "#FFFFFF",
-                                                  :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
-                                                  :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}
+                                                  :fill          0xFFFFFF}}
         :scene-objects [["background"]
-                        ["mic" "record-button" "playback-group" "approve-group"]
-                        ["video" "play-video-button"]
+                        ["mic" "record-button" "playback-group"]
+                        ["video" "approve-group" "play-video-button"]
                         ["mari"]]
         :actions       {:start-scene                          {:type "sequence"
                                                                :data ["start-activity"
@@ -190,7 +177,8 @@
                         :on-play-video-button-clicked         {:type     "case"
                                                                :from-var [{:var-name "current-round" :action-property "value"}]
                                                                :options  {:round1 {:type "action" :id "on-play-video-button-clicked-round-1"}
-                                                                          :round2 {:type "action" :id "on-play-video-button-clicked-round-2"}}}
+                                                                          :round2 {:type "action" :id "on-play-video-button-clicked-round-2"}
+                                                                          :round3 {:type "action" :id "on-play-video-button-clicked-round-3"}}}
 
                         ;; Round 1
 
@@ -249,13 +237,13 @@
                         ;; Round 3 Intro
                         :show-mic                             {:type "set-attribute" :target "mic" :attr-name "visible" :attr-value true}
                         :run-round-3-intro                    {:type "sequence"
-                                                               :data ["show-mic"
+                                                               :data ["set-current-round-3"
+                                                                      "show-mic"
                                                                       "dialog-round-3-intro"
-                                                                      "get-record-buttons"
-                                                                      "controls-intro"
-                                                                      "dialog-finish-intro"
-                                                                      "run-round-3-play"]}
+                                                                      "show-play-video-button"]}
 
+                        :set-current-round-3                  {:type "set-variable" :var-name "current-round" :var-value "round3"}
+                        
                         :dialog-round-3-intro                 {:type               "sequence-data"
                                                                :editor-type        "dialog"
                                                                :concept-var        "current-concept"
@@ -265,50 +253,6 @@
                                                                :phrase             "round-3-intro"
                                                                :phrase-description "Round 3 Intro"}
 
-                        :get-record-buttons                   {:type "sequence-data"
-                                                               :data [{:type "set-attribute" :target "record-button" :attr-name "visible" :attr-value true}
-                                                                      {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value true}]}
-
-                        :controls-intro                       {:type "sequence"
-                                                               :data ["dialog-how-to-record"
-                                                                      "highlight-record-button"
-                                                                      "dialog-when-to-sing-1"
-                                                                      "activate-record-button"
-                                                                      "dialog-when-to-sing-2"
-                                                                      "dialog-how-to-stop"
-                                                                      "deactivate-record-button"]}
-                        :dialog-how-to-record                 {:type               "sequence-data"
-                                                               :editor-type        "dialog"
-                                                               :concept-var        "current-concept"
-                                                               :data               [{:type "sequence-data"
-                                                                                     :data [{:type "empty" :duration 0}
-                                                                                            {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                               :phrase             "how-to-record"
-                                                               :phrase-description "How to start record"}
-                        :dialog-when-to-sing-1                {:type               "sequence-data"
-                                                               :editor-type        "dialog"
-                                                               :concept-var        "current-concept"
-                                                               :data               [{:type "sequence-data"
-                                                                                     :data [{:type "empty" :duration 0}
-                                                                                            {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                               :phrase             "when-to-sing-1"
-                                                               :phrase-description "How to know when singing. Part 1"}
-                        :dialog-when-to-sing-2                {:type               "sequence-data"
-                                                               :editor-type        "dialog"
-                                                               :concept-var        "current-concept"
-                                                               :data               [{:type "sequence-data"
-                                                                                     :data [{:type "empty" :duration 0}
-                                                                                            {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                               :phrase             "when-to-sing-2"
-                                                               :phrase-description "How to know when singing. Part 2"}
-                        :dialog-how-to-stop                   {:type               "sequence-data"
-                                                               :editor-type        "dialog"
-                                                               :concept-var        "current-concept"
-                                                               :data               [{:type "sequence-data"
-                                                                                     :data [{:type "empty" :duration 0}
-                                                                                            {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                               :phrase             "how-to-stop"
-                                                               :phrase-description "How to stop record"}
 
                         :activate-record-button               {:type "parallel"
                                                                :data [{:type          "transition"
@@ -326,15 +270,6 @@
                                                                       {:type          "transition"
                                                                        :transition-id "record-button-icon-int"
                                                                        :to            {:border-radius 32 :duration 0.2}}]}
-
-                        :dialog-finish-intro                  {:type               "sequence-data"
-                                                               :editor-type        "dialog"
-                                                               :concept-var        "current-concept"
-                                                               :data               [{:type "sequence-data"
-                                                                                     :data [{:type "empty" :duration 0}
-                                                                                            {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                               :phrase             "finish-intro"
-                                                               :phrase-description "If can't remember words"}
 
                         ;; Round 3 Play
 
@@ -381,10 +316,13 @@
                                                                        :from-var [{:var-name        "next-action"
                                                                                    :action-property "id"}]}]}
 
+                        :on-play-video-button-clicked-round-3 {:type "action" :id "run-round-3-play"}
+                        
                         :run-round-3-play                     {:type "sequence-data"
                                                                :data [{:type "action" :id "show-video"}
                                                                       {:type "action" :id "hide-play-video-button"}
-                                                                      {:type "action" :id "hide-playback"}]}
+                                                                      {:type "action" :id "hide-playback"}
+                                                                      {:type "set-attribute" :target "record-button" :attr-name "visible" :attr-value true}]}
 
                         ;; Finish
 
@@ -435,16 +373,6 @@
                                              :nodes [{:type      "dialog"
                                                       :action-id :dialog-round-3-intro}
                                                      {:type      "dialog"
-                                                      :action-id :dialog-how-to-record}
-                                                     {:type      "dialog"
-                                                      :action-id :dialog-when-to-sing-1}
-                                                     {:type      "dialog"
-                                                      :action-id :dialog-when-to-sing-2}
-                                                     {:type      "dialog"
-                                                      :action-id :dialog-how-to-stop}
-                                                     {:type      "dialog"
-                                                      :action-id :dialog-finish-intro}
-                                                     {:type      "dialog"
                                                       :action-id :stop-recording-dialog}
                                                      {:type      "dialog"
                                                       :action-id :timeout-record-dialog}
@@ -483,7 +411,9 @@
                    :end      to
                    :from-var [{:var-name "video-src" :action-property "src"}]}]}
           {:type "action" :id "highlight-record-button"}
-          {:type "action" :id "start-timeout-record"}]})
+          {:type "action" :id "start-timeout-record"}
+          (when last?
+            {:type "set-attribute" :target "approve-group" :attr-name "src" :attr-value "/raw/clipart/karaoke/checkmark.png"})]})
 
 (defn- config-round-3
   [template {:keys [video-ranges]}]
