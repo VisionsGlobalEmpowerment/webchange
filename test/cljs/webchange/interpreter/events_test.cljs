@@ -17,11 +17,11 @@
 
 (use-fixtures :each {:before (fn [] (re-frame/dispatch-sync [::events/initialize-db]))})
 
-(deftest state-can-be-executed
+#_(deftest state-can-be-executed
   (run-test-async
     (fixtures/init-scene)
     (wait-for [::ie/set-scene]
-      (testing "object state changed"
-        (re-frame/dispatch [::ie/execute-state {:target :object-with-state :id :test-state}])
-          (wait-for [::ie/execute-state]
-            (is (= 100 (get-in @re-frame.db/app-db [:scenes "initial-scene" :objects :object-with-state :x]))))))))
+              (testing "object state changed"
+                (re-frame/dispatch [::ie/execute-state {:target :object-with-state :id :test-state}])
+                (wait-for [::ie/execute-state]
+                          (is (= 100 (get-in @re-frame.db/app-db [:scenes "initial-scene" :objects :object-with-state :x]))))))))
