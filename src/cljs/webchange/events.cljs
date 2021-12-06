@@ -27,15 +27,6 @@
   (fn [db [_ scene-id value]]
     (assoc-in db [:scene-loading-complete scene-id] value)))
 
-(re-frame/reg-event-db
-  ::set-object-state
-  (fn [db [_ [target state-id]]]
-    (let [scene-id (:current-scene db)
-          scene (get-in db [:scenes scene-id])
-          object (get-in scene [:objects (keyword target)])
-          state (get-in object [:states (keyword state-id)])]
-      (update-in db [:scenes scene-id :objects (keyword target)] merge state))))
-
 (re-frame/reg-event-fx
   ::login
   (fn [{:keys [db]} [_ credentials]] ;; credentials = {:email ... :password ...}

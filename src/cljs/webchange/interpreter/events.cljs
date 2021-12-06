@@ -42,7 +42,6 @@
 (ce/reg-simple-executor :state ::execute-state)
 (ce/reg-simple-executor :mass-state ::execute-mass-state)
 (ce/reg-simple-executor :set-attribute ::execute-set-attribute)
-(ce/reg-simple-executor :add-alias ::execute-add-alias)
 (ce/reg-simple-executor :empty ::execute-empty)
 (ce/reg-simple-executor :animation ::execute-animation)
 (ce/reg-simple-executor :add-animation ::execute-add-animation)
@@ -729,25 +728,6 @@
       {})))
 
 (re-frame/reg-event-fx
-  ::execute-add-alias
-  (fn [{:keys [db]} [_ {:keys [target alias state] :as action}]]
-    "Execute `add-alias` action - add state alias to component.
-
-    Action params:
-    :target - component name.
-    :alias - state alias name.
-    :state - state object.
-
-    Example:
-    {:type   'add-alias',
-     :target 'bubble-1',
-     :alias  'hidden'
-     :state  {:visible false}}"
-    (let [scene-id (:current-scene db)]
-      {:db       (assoc-in db [:scenes scene-id :objects (keyword target) :states-aliases (keyword alias)] state)
-       :dispatch (ce/success-event action)})))
-
-(re-frame/reg-event-fx
   ::execute-mass-state
   (fn [{:keys [db]} [_ {:keys [targets] :as action}]]
     "Execute `state` action - apply component state.
@@ -788,13 +768,12 @@
           states (get object :states)
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
           state (merge (get states-with-aliases (keyword id)) params)]
-      {:db         (update-in db (concat [:scenes scene-id :objects] target-path) merge state)
-       :dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
+      {:dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
                          (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-set-attribute
-  (fn [{:keys [db]} [_ {:keys [target attr-name attr-value] :as action}]]
+  (fn [{:keys [_]} [_ {:keys [target attr-name attr-value] :as action}]]
     "Execute `set-attribute` action - set component attribute value.
 
     Action params:
@@ -807,10 +786,8 @@
      :target     'letter-path'
      :attr-name  'x'
      :attr-value 0}"
-    (let [scene-id (:current-scene db)
-          patch (into {} [[(keyword attr-name) attr-value]])]
-      {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge patch)
-       :dispatch-n (list [::scene/set-scene-object-state (keyword target) patch]
+    (let [patch {(keyword attr-name) attr-value}]
+      {:dispatch-n (list [::scene/set-scene-object-state (keyword target) patch]
                          (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -1014,9 +991,9 @@
     (let [activity-name (or activity-name (:current-scene db))
           activity-action (lessons-activity/name->activity-action db activity-name)]
       {:db         (assoc db
-                          :activity-started true
-                          :activity-start-time (js/Date.)
-                          :activity (select-keys activity-action [:level :lesson :activity :activity-name]))
+                     :activity-started true
+                     :activity-start-time (js/Date.)
+                     :activity (select-keys activity-action [:level :lesson :activity :activity-name]))
        :dispatch-n (list
                      [::disable-navigation]
                      [::add-pending-event :activity-started activity-action]
@@ -1138,18 +1115,18 @@
     (when (:activity-started db)
       (let [show-goodbye (and (not (lesson-activity-finished? db action)) (not (has-next-activity? db)))
             events (cond-> (list)
-                     (lesson-activity-finished? db action) (conj [::finish-next-activity])
-                     show-goodbye (conj [::goodbye-activity])
-                     (not show-goodbye) (conj [::overlays/show-activity-finished])
-                     :always (conj (activity-finished-event db action))
-                     :always (conj [::reset-navigation]))
+                           (lesson-activity-finished? db action) (conj [::finish-next-activity])
+                           show-goodbye (conj [::goodbye-activity])
+                           (not show-goodbye) (conj [::overlays/show-activity-finished])
+                           :always (conj (activity-finished-event db action))
+                           :always (conj [::reset-navigation]))
             lesson-activity-tags (get-lesson-activity-tags db action)
             finished (get-in db [:progress-data :next])
             db (cond-> db
-                 :always lessons-activity/clear-loaded-activity
-                 :always (assoc :activity-started false)
-                 :always (assoc-in [:progress-data :current-tags] lesson-activity-tags)
-                 (lesson-activity-finished? db action) (lessons-activity/finish finished))]
+                       :always lessons-activity/clear-loaded-activity
+                       :always (assoc :activity-started false)
+                       :always (assoc-in [:progress-data :current-tags] lesson-activity-tags)
+                       (lesson-activity-finished? db action) (lessons-activity/finish finished))]
         (ce/skip)
         (ce/remove-timers!)
         {:db         db
@@ -1274,7 +1251,7 @@
   ::clear-current-scene
   (fn [{:keys [db]} _]
     (let [current-scene (:current-scene db)]
-      {:db (assoc db :activity-started false)
+      {:db         (assoc db :activity-started false)
        :dispatch-n (list [::vars.events/clear-vars {:keep-running true}]
                          [::execute-stop-audio]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
@@ -1335,8 +1312,8 @@
   (fn [{:keys [db]} [_ scene-id scene]]
     (let [current-scene (:current-scene db)
           merged-scene (merge-with-templates db scene)]
-      {:db       (cond-> (assoc-in db [:scenes scene-id] merged-scene)
-                         (= current-scene scene-id) (assoc :current-scene-data merged-scene))
+      {:db         (cond-> (assoc-in db [:scenes scene-id] merged-scene)
+                           (= current-scene scene-id) (assoc :current-scene-data merged-scene))
        :dispatch-n [[::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size] "cover"))]]})))
 
 (re-frame/reg-event-fx
@@ -1439,7 +1416,7 @@
 
 (re-frame/reg-event-fx
   ::load-progress
-  (fn [{:keys [db]} [_ {:keys [course-id scene-id]}]] 
+  (fn [{:keys [db]} [_ {:keys [course-id scene-id]}]]
     {:db            (assoc-in db [:loading :load-progress] true)
      :load-progress {:course-id course-id
                      :scene-id  scene-id}}))
@@ -1827,19 +1804,19 @@
                                 (assoc-in [id :counter] 0)))
     (ce/remove-timer id)
     (let [interval-id (.setInterval
-                       js/window
-                       (fn []
-                         (let [last (get-in @timeout-counter [id :last])
-                               counter (get-in @timeout-counter [id :counter])
-                               scene-action (-> (ce/get-action action db)
-                                                (assoc :params (:params main-action))
-                                                (assoc-in [:params :counter] counter))]
-                           (if (and (< interval (- (.now js/Date) last)) (not (nil? last)))
-                             (do
-                               (ce/remove-timer id)
-                               (vars.core/set-variable! (str id "-value") counter)
-                               (re-frame/dispatch [::ce/execute-action scene-action])))))
-                       interval)]
+                        js/window
+                        (fn []
+                          (let [last (get-in @timeout-counter [id :last])
+                                counter (get-in @timeout-counter [id :counter])
+                                scene-action (-> (ce/get-action action db)
+                                                 (assoc :params (:params main-action))
+                                                 (assoc-in [:params :counter] counter))]
+                            (if (and (< interval (- (.now js/Date) last)) (not (nil? last)))
+                              (do
+                                (ce/remove-timer id)
+                                (vars.core/set-variable! (str id "-value") counter)
+                                (re-frame/dispatch [::ce/execute-action scene-action])))))
+                        interval)]
       {:dispatch-n (list [::ce/execute-register-timer {:name id
                                                        :id   interval-id
                                                        :type "interval"}]
