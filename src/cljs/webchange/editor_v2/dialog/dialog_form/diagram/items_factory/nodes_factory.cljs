@@ -101,6 +101,7 @@
                                                                                         "sequence-data" {:action-path inparallel-action-path
                                                                                                          :x           x
                                                                                                          :y           y}
+                                                                                        "parallel"      {:action-path inparallel-action-path}
                                                                                         "action" (let [{nodes :nodes offset-x :offset-x offset-y :offset-y}
                                                                                                        (get-nodes-from-concept concept
                                                                                                                                (get-in inparallel-action [:from-var 0 :var-property])
