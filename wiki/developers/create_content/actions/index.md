@@ -45,7 +45,6 @@ In some cases we need to add to action some information from environment of curr
 - `:path-animation` - run svg path animation;
 - `:state` - apply component state;
 - `:set-attribute` - set component attribute value;
-- `:add-alias` - add state alias to component;
 - `:empty` - delay in ms;
 - `:animation` - immediately run animation of `animation` component;
 - `:add-animation` - add animation to animations que.
