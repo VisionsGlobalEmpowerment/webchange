@@ -85,6 +85,7 @@
                          "mari"]],
         :actions       {:finish-activity         {:type "sequence-data"
                                                   :data [{:type "action" :id "remove-timeout-timer"}
+                                                         {:type "action" :id "correct-answer-dialog"}
                                                          {:type "finish-activity"}]}
 
                         :start                   {:type "sequence-data"
