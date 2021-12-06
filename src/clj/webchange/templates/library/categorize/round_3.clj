@@ -16,10 +16,10 @@
                                                             :surface    {:src "/raw/img/categorize/02.png"},
                                                             :decoration {:src "/raw/img/categorize/03.png"}}
                                        :yellow-box
-                                                           {:type "image",
-                                                            :x    943,
-                                                            :y    628,
-                                                            :src  "/raw/img/categorize/yellow_box_small.png"}
+                                       {:type "image",
+                                        :x    943,
+                                        :y    628,
+                                        :src  "/raw/img/categorize/yellow_box_small.png"}
                                        :blue-box           {:type "image",
                                                             :x    1352,
                                                             :y    490,
@@ -279,12 +279,17 @@
                                                                          {:type "set-variable", :var-name "say", :var-value false}
                                                                          {:type "set-variable", :var-name "next-check-collide", :var-value false}
 
-                                                                         {:type      "test-var-list",
-                                                                          :values    [true true],
-                                                                          :fail      "wrong-answer",
-                                                                          :var-names ["check-collide-1" "check-collide-2"]
-                                                                          :success   "correct-answer-single"
-                                                                          :from-var  [{:var-name "check-collide", :action-property "var-names"}]}]},
+                                                                         {:type "test-value"
+                                                                          :value1 true
+                                                                          :from-var  [{:var-name "highlighted", :action-property "value2"}]
+                                                                          :success "stop-drag-highlighted"
+                                                                          :fail    "object-revert"}]},
+                                       :stop-drag-highlighted {:type      "test-var-list",
+                                                               :values    [true true],
+                                                               :fail      "wrong-answer",
+                                                               :var-names ["check-collide-1" "check-collide-2"]
+                                                               :success   "correct-answer-single"
+                                                               :from-var  [{:var-name "check-collide", :action-property "var-names"}]}
 
                                        :yellow-color             (-> (dialog/default "Color yellow")
                                                                      (assoc :unique-tag "color"))
@@ -346,7 +351,8 @@
                                                                   :value    true,
                                                                   :var-name "next-check-collide"}
                                        :highlight                {:type "sequence-data"
-                                                                  :data [{:type        "set-variable",
+                                                                  :data [{:type "set-variable" :var-value true :var-name "highlighted"}
+                                                                         {:type        "set-variable",
                                                                           :var-value   true
                                                                           :from-params [{:action-property "var-name",
                                                                                          :template        "colliding-raw-%",
@@ -360,9 +366,11 @@
                                                                                          :template        "colliding-raw-%",
                                                                                          :param-property  "transition"}]}
                                                                          {:type        "set-attribute" :attr-name "highlight" :attr-value false
-                                                                          :from-params [{:action-property "target" :param-property "transition"}]}]}
+                                                                          :from-params [{:action-property "target" :param-property "transition"}]}
+                                                                         {:type "set-variable" :var-value false :var-name "highlighted"}]}
                                        :unhighlight-all     {:type "parallel"
-                                                             :data [{:type "set-attribute" :attr-name "highlight" :attr-value false :target "yellow-box"}
+                                                             :data [{:type "set-variable" :var-value false :var-name "highlighted"}
+                                                                    {:type "set-attribute" :attr-name "highlight" :attr-value false :target "yellow-box"}
                                                                     {:type "set-attribute" :attr-name "highlight" :attr-value false :target "blue-box"}
                                                                     {:type "set-attribute" :attr-name "highlight" :attr-value false :target "red-box"}
                                                                     {:type "set-attribute" :attr-name "highlight" :attr-value false :target "purple-table"}
