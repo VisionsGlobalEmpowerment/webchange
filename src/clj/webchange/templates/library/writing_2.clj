@@ -100,8 +100,8 @@
                         :remove-timeout-timer    {:type "remove-interval"
                                                   :id   "incorrect-answer-checker"}
 
-                        :incorrect-answer-dialog (dialog/default "incorrect answer")
-                        :correct-answer-dialog   (dialog/default "correct answer")
+                        :incorrect-answer-dialog (dialog/default "Timeout instrucitons")
+                        :correct-answer-dialog   (dialog/default "Finish activity")
                         :introduction-dialog     (-> (dialog/default "introduction")
                                                      (assoc :available-activities []))
                         :set-current-tool        {:type "sequence-data"
@@ -127,9 +127,38 @@
                         :dialog-color-15569322   (dialog/default "color pink")
                         :dialog-color-16631089   (dialog/default "color yellow")
                         :dialog-color-65793      (dialog/default "color black")
+                        :dialog-tap-instructions    (dialog/default "Tap instructions")
                         }
         :triggers      {:start {:on "start" :action "start"}}
-        :metadata      {}})
+        :metadata      {:tracks            [{:title "1 Instructions"
+                                             :nodes [{:type      "dialog"
+                                                      :action-id :introduction-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :incorrect-answer-dialog}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-tap-instructions}
+                                                     {:type      "dialog"
+                                                      :action-id :correct-answer-dialog}]}
+                                            {:title "2 Colors"
+                                             :nodes [{:type      "dialog"
+                                                      :action-id :dialog-color-4487611}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-color-9616714}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-color-15569322}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-color-16631089}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-color-65793}]}
+                                            {:title "3 Tools"
+                                             :nodes [{:type      "dialog"
+                                                      :action-id :dialog-tool-brush}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-tool-felt-tip}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-tool-pencil}
+                                                     {:type      "dialog"
+                                                      :action-id :dialog-tool-eraser}]}]}})
 
 (defn- config-text
   [template text]
