@@ -104,6 +104,7 @@
                                                          :x        1706
                                                          :y        132
                                                          :width    96 :height 96
+                                                         :visible  false
                                                          :filters  [{:name "brightness" :value 0}
                                                                     {:name "glow" :outer-strength 0 :color 0xffd700}]
                                                          :children ["approve-background"
@@ -121,6 +122,7 @@
                                                          :width    128 :height 128
                                                          :filters  [{:name "brightness" :value 0}
                                                                     {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                                         :visible  false
                                                          :children ["playback-background"
                                                                     "green"
                                                                     "run-playback-button"
