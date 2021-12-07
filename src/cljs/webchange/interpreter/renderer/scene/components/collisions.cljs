@@ -7,7 +7,8 @@
 
 (defn has-collision-handler?
   [props]
-  (contains? props :on-collide))
+  (or (contains? props :on-collide-enter)
+      (contains? props :on-collide-leave)))
 
 (defn register-object
   [object {:keys [transition-name] :as props}]
@@ -51,25 +52,38 @@
     :else (= name target-name)))
 
 (defn- interested-target?
-  [object-name target-name interested-names]
-  (and (not (= object-name target-name))
-       (some (fn [name] (test-name name target-name)) interested-names)))
+  [target-name {:keys [object-name on-collide-enter on-collide-leave]}]
+  (let [interested-names (concat (get on-collide-enter :test [])
+                                 (get on-collide-leave :test []))]
+    (and (not (= object-name target-name))
+         (some (fn [name] (test-name name target-name)) interested-names))))
+
+(defn- call-event-handler
+  [event-handler-data params]
+  (let [handler (get event-handler-data :handler)]
+    (when (fn? handler)
+      (handler params))))
 
 (defn- test-objects
-  [object object-name bumped-into collide-test on-collide]
+  [{:keys [object bumped-into on-collide-enter on-collide-leave] :as props}]
   (doseq [[target-name target-object target-props] (get-objects-to-test)]
-    (if (and (.-parent object) (.-parent target-object)
-             (collided? object target-object)
-             (interested-target? object-name target-name collide-test))
-      (do (when-not (get @bumped-into target-name)
-            (logger/trace)
-            (on-collide (merge target-props
-                               {:target target-name})))
-          (swap! bumped-into assoc target-name true))
-      (swap! bumped-into assoc target-name false))))
+    (when (and (.-parent object) (.-parent target-object)
+               (interested-target? target-name props))
+      (let [prev-value (get @bumped-into target-name)
+            new-value (collided? object target-object)
+            handler-props (merge target-props {:target target-name})]
+        (swap! bumped-into assoc target-name new-value)
+        (when (and (not= prev-value new-value)
+                   (false? new-value))
+          (call-event-handler on-collide-leave handler-props))
+        (when (and (not= prev-value new-value)
+                   (true? new-value))
+          (call-event-handler on-collide-enter handler-props))))))
 
 (defn enable-collisions!
-  [object {:keys [object-name collide-test on-collide]}]
+  [object props]
   (logger/trace "enable-collisions! for" object)
   (let [bumped-into (atom {})]
-    (app/add-ticker (fn [] (test-objects object object-name bumped-into collide-test on-collide)))))
+    (app/add-ticker (fn [] (test-objects (merge props
+                                                {:object      object
+                                                 :bumped-into bumped-into}))))))

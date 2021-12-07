@@ -17,8 +17,8 @@
                            :on-drag-start-options {}
                            :on-drag-move          {}
                            :on-drag-move-options  {}
-                           :on-collide            {}
-                           :collide-test          {}
+                           :on-collide-enter      {}
+                           :on-collide-leave      {}
                            :transition-name       {}
                            :visible               {:default true}
                            :rotation              {:default 0}

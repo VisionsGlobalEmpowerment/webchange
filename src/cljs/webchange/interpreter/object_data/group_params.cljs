@@ -80,10 +80,18 @@
 (defn- with-collision
   [{:keys [actions collidable?] :as object}]
   (if collidable?
-    (let [{:keys [test pick-event-param]} (some (fn [[_ {:keys [on test] :as event}]] (and (= on "collide") event)) actions)]
-      (-> object
-          (assoc :collide-test test)
-          (assoc :pick-params (if (sequential? pick-event-param) pick-event-param [pick-event-param]))))
+    (reduce (fn [object event-name]
+              (let [{:keys [test pick-event-param]} (some (fn [[_ {:keys [on] :as event}]]
+                                                            (and (= on event-name) event))
+                                                          actions)
+                    event-key (-> (str "on-" event-name) (keyword))]
+                (assoc object event-key {:handler     (get object event-key)
+                                         :test        test
+                                         :pick-params (if (sequential? pick-event-param)
+                                                        pick-event-param
+                                                        [pick-event-param])})))
+            object
+            ["collide-enter" "collide-leave"])
     object))
 
 (defn- with-scale
