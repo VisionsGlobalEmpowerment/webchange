@@ -52,13 +52,30 @@
       (when (.-on-drag-move-handler this)
         ((.-on-drag-move-handler this))))))
 
+(defn- throttle-by-callback
+  [handler]
+  (let [in-progress? (atom false)]
+    (fn [this]
+      (when-not @in-progress?
+        (reset! in-progress? true)
+        (handler this #(reset! in-progress? false))))))
+
+(defn- throttle
+  [handler options]
+  (case (:throttle options)
+    "action-done" (throttle-by-callback handler)
+    handler))
+
 (defn enable-drag!
-  [object {on-drag-end-handler :on-drag-end on-drag-start-handler :on-drag-start on-drag-move-handler :on-drag-move}]
+  [object {on-drag-end-handler   :on-drag-end
+           on-drag-start-handler :on-drag-start
+           on-drag-move-handler  :on-drag-move
+           on-drag-move-options  :on-drag-move-options}]
   (doto object
     (set! -interactive true)
     (set! -on-drag-end-handler on-drag-end-handler)
     (set! -on-drag-start-handler on-drag-start-handler)
-    (set! -on-drag-move-handler on-drag-move-handler)
+    (set! -on-drag-move-handler (throttle on-drag-move-handler on-drag-move-options))
     (.on "pointerdown" on-drag-start)
     (.on "pointerup" on-drag-end)
     (.on "pointerupoutside" on-drag-end)

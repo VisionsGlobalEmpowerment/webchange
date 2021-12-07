@@ -5,7 +5,7 @@
     [webchange.interpreter.object-data.with-transition :refer [with-transition]]))
 
 (defn- prepare-action-data
-  [{:keys [id] :as action} event]
+  [{:keys [id] :as action} event callback]
   (let [event-params-name (:pick-event-param action)
         params (if event-params-name
                  (->> (if (sequential? event-params-name) event-params-name [event-params-name])
@@ -15,11 +15,16 @@
                  (:params action))]
     (merge action {:params       params
                    :display-name id
-                   :user-event?  true})))
+                   :user-event?  true
+                   :callback     callback})))
 
 (defn- prepare-action
   [action]
-  {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action (prepare-action-data action %)])})
+  (let [event-name (:on action)
+        handler-name (->> (str "on-" event-name) (keyword))
+        handler-options-name (->> (str "on-" event-name "-options") (keyword))]
+    (cond-> {handler-name #(re-frame/dispatch [::ce/execute-action (prepare-action-data action %1 %2)])}
+            (contains? action :options) (assoc handler-options-name (:options action)))))
 
 (defn prepare-actions
   [{:keys [actions] :as object}]
