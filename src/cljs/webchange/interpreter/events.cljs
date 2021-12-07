@@ -235,8 +235,8 @@
 
 (re-frame/reg-fx
   :start-audio-recording
-  (fn []
-    (audio-recorder/start)))
+  (fn [{:keys [on-success]}]
+    (audio-recorder/start on-success)))
 
 (re-frame/reg-fx
   :stop-audio-recording
@@ -244,7 +244,8 @@
     (audio-recorder/stop (fn [audio-blob]
                            (re-frame/dispatch [::warehouse/upload-audio-blob
                                                {:blob audio-blob}
-                                               {:on-success [::stop-audio-recording-success var-name on-ended]}])))))
+                                               {:on-success [::stop-audio-recording-success var-name on-ended]
+                                                :on-failure [::stop-audio-recording-failure on-ended]}])))))
 
 (re-frame/reg-event-fx
   ::stop-audio-recording-success
@@ -252,6 +253,11 @@
     (vars.core/set-variable! var-name url)
     {:load-resources {:urls     [url]
                       :on-ended on-ended}}))
+
+(re-frame/reg-event-fx
+  ::stop-audio-recording-failure
+  (fn [{:keys [_]} [_ on-ended]]
+    (on-ended)))
 
 (re-frame/reg-fx
   :load-resources
@@ -655,8 +661,7 @@
   ::execute-start-audio-recording
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [_]} action]
-    {:start-audio-recording nil
-     :dispatch              (ce/success-event action)}))
+    {:start-audio-recording {:on-success #(ce/dispatch-success-fn action)}}))
 
 (re-frame/reg-event-fx
   ::execute-stop-audio-recording
