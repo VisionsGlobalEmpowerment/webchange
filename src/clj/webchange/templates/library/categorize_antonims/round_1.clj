@@ -27,12 +27,12 @@
                                                                            {:duration 1})
                                                      :target        target}}
                         :collide-enter-all {:on               "collide-enter"
-                                            :test             ["#^.*-box-r1"]
+                                            :test             ["#^.*-box"]
                                             :type             "action"
                                             :id               "handle-collide-enter"
                                             :pick-event-param ["target"]}
                         :collide-leave-all {:on               "collide-leave"
-                                            :test             ["#^.*-box-r1"]
+                                            :test             ["#^.*-box"]
                                             :type             "action"
                                             :id               "handle-collide-leave"
                                             :pick-event-param ["target"]}}}))
@@ -92,42 +92,42 @@
                                                                         :target      "left-1"
                                                                         :say-item    "left-item"
                                                                         :say-correct "left-correct"
-                                                                        :box         "right-box-r1"})
+                                                                        :box         "right-box"})
 
                                        :back-1     (get-draggable-item {:position    {:x 701 :y 393}
                                                                         :src         "/raw/img/categorize-antonims/back.png"
                                                                         :target      "back-1"
                                                                         :say-item    "back-item"
                                                                         :say-correct "back-correct"
-                                                                        :box         "front-box-r1"})
+                                                                        :box         "front-box"})
 
                                        :up-1       (get-draggable-item {:position    {:x 1035 :y 383}
                                                                         :src         "/raw/img/categorize-antonims/up.png"
                                                                         :target      "up-1"
                                                                         :say-item    "up-item"
                                                                         :say-correct "up-correct"
-                                                                        :box         "down-box-r1"})
+                                                                        :box         "down-box"})
 
                                        :loud-1     (get-draggable-item {:position    {:x 701 :y 89}
                                                                         :src         "/raw/img/categorize-antonims/loud.png"
                                                                         :target      "loud-1"
                                                                         :say-item    "loud-item"
                                                                         :say-correct "loud-correct"
-                                                                        :box         "quiet-box-r1"})
+                                                                        :box         "quiet-box"})
 
                                        :night-1    (get-draggable-item {:position    {:x 1121 :y 105}
                                                                         :src         "/raw/img/categorize-antonims/night.png"
                                                                         :target      "night-1"
                                                                         :say-item    "night-item"
                                                                         :say-correct "night-correct"
-                                                                        :box         "day-box-r1"})
+                                                                        :box         "day-box"})
 
                                        :out-1      (get-draggable-item {:position    {:x 863 :y 243}
                                                                         :src         "/raw/img/categorize-antonims/out.png"
                                                                         :target      "out-1"
                                                                         :say-item    "out-item"
                                                                         :say-correct "out-correct"
-                                                                        :box         "in-box-r1"})}
+                                                                        :box         "in-box"})}
 
                        :scene-objects [["background"]
                                        ["right-box" "front-box" "down-box"]
