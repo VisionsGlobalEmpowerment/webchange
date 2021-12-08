@@ -75,7 +75,11 @@
   - not finished yet
   - satisfies provided tags"
   [tags levels finished activity]
-  (loop [next (next-for levels activity)]
-    (if (or (finished? finished next) (excluded-by-tags? tags levels next))
-      (recur (next-for levels next))
-      next)))
+  (loop [next (next-for levels activity)
+         cur activity]
+    (cond
+      (nil? next) cur
+      (or (finished? finished next)
+          (excluded-by-tags? tags levels next)) (recur (next-for levels next)
+                                                       next)
+      :else next)))
