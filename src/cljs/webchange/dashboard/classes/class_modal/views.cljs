@@ -9,7 +9,8 @@
 
 (def courses
   [{:course-id 4 :name "english"}
-   {:course-id 2 :name "spanish"}])
+   {:course-id 2 :name "spanish"}
+   {:course-id 1 :name "demo"}])
 
 (defn- get-styles
   []
