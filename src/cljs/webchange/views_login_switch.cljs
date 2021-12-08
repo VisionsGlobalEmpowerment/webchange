@@ -11,7 +11,7 @@
 (def courses
   [{:key :spanish :value "spanish" :text "Español"}
    {:key :english :value "english" :text "English"}
-   {:key :english :value "demo" :text "Demo"}])
+   {:key :demo :value "demo" :text "Demo"}])
 
 (defn- get-styles
   []
