@@ -105,6 +105,6 @@
 (re-frame/reg-event-fx
   ::show-goodbye-screen
   (fn [{:keys [db]}]
-      (set-scene-interactive db false)
-      {:dispatch-n (list [::hide-navigation-menu]
-                         [::scene/change-scene-object :goodbye-overlay [[:set-visibility {:visible true}]]])}))
+    (set-scene-interactive db false)
+    {:dispatch-n (list 
+                  [::scene/change-scene-object :goodbye-overlay [[:set-visibility {:visible true}]]])}))
