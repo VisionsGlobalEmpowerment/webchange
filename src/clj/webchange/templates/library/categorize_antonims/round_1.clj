@@ -1,41 +1,7 @@
 (ns webchange.templates.library.categorize-antonims.round-1
   (:require
+    [webchange.templates.library.categorize-antonims.common :refer [get-draggable-item]]
     [webchange.templates.utils.dialog :as dialog]))
-
-(defn- get-draggable-item
-  [{:keys [position src target say-item say-correct box]}]
-  (merge position
-         {:type        "image"
-          :src         src,
-          :draggable   true
-          :collidable? true
-          :actions     {:drag-start        {:on     "drag-start"
-                                            :type   "action"
-                                            :id     "handle-drag-start"
-                                            :params {:target target}}
-                        :drag-move         {:on      "drag-move"
-                                            :type    "action"
-                                            :id      "handle-drag-move"
-                                            :params  {:say-item say-item}
-                                            :options {:throttle "action-done"}}
-                        :drag-end          {:on     "drag-end"
-                                            :type   "action"
-                                            :id     "handle-drag-end"
-                                            :params {:box           box
-                                                     :correct-drop  say-correct
-                                                     :init-position (merge position
-                                                                           {:duration 1})
-                                                     :target        target}}
-                        :collide-enter-all {:on               "collide-enter"
-                                            :test             ["#^.*-box"]
-                                            :type             "action"
-                                            :id               "handle-collide-enter"
-                                            :pick-event-param ["target"]}
-                        :collide-leave-all {:on               "collide-leave"
-                                            :test             ["#^.*-box"]
-                                            :type             "action"
-                                            :id               "handle-collide-leave"
-                                            :pick-event-param ["target"]}}}))
 
 (def template-round-1 {:assets        [{:url "/raw/img/categorize-antonims/background.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-antonims/day.png", :size 10, :type "image"}
