@@ -62,8 +62,7 @@
     (let [next-activity (subs/next-activity db)
           lesson-progress (subs/lesson-progress db)]
       (set-scene-interactive db false)
-      {:dispatch-n (list [::hide-navigation-menu]
-                         [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]]
+      {:dispatch-n (list [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]]
                          [::scene/change-scene-object :overall-progress-bar [[:set-value lesson-progress]]]
                          [::scene/change-scene-object :next-activity-card-image [[:set-src {:src (:image next-activity)}]]]
                          [::scene/change-scene-object :next-activity-card-name [[:set-text {:text (:name next-activity)}]]])})))

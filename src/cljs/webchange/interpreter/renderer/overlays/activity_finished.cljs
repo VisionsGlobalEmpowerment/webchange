@@ -57,7 +57,7 @@
     {:x               (/ (:width score-window-size) 2)
      :y               (/ font-size -1.5)
      :type            "text"
-     :text            "Clear!"
+     :text            "Great Job!"
      :object-name     :overall-progress-title
      :align           "center"
      :vertical-align  "top"
