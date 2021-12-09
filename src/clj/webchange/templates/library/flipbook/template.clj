@@ -129,6 +129,7 @@
       (add-page credits/create page-params (page/activity->credits-props props))
       (add-page back-filler/create page-params {:removable?         false
                                                 :back-cover-filler? true})
+      (update-in [:metadata :next-page-id] dec)
       (add-page back-cover/create page-params (page/activity->back-cover-props props))
       (assoc-in [:metadata :actions] (:actions metadata))
       (assoc-in [:metadata :saved-props :wizard] props)))
