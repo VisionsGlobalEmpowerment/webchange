@@ -91,11 +91,11 @@
                            {:width (progress->width value)})}]]]))
 
 (defn loader-screen
-  [{:keys [on-start-click loading]}]
+  [{:keys [on-start-click done progress]}]
   (let [styles (get-styles)]
     [:div {:style (:background styles)}
      [centered
       [logo]
-      (if (:done loading)
+      (if done
         [start-button {:on-click on-start-click}]
-        [progress-bar {:value (:progress loading)}])]]))
+        [progress-bar {:value progress}])]]))

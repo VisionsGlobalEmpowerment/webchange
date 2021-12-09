@@ -58,13 +58,17 @@
            :resources (get-activity-resources scene-id scene-data)
            :started?  (scene-started? scene-id)}))
 
+(defn- fullscreen
+  []
+  (-> (request-fullscreen)
+      (.then lock-screen-orientation)
+      (.catch #())))
+
 (defn- start-scene
   []
   (sound/init)
   (re-frame/dispatch [::ie/start-playing])
-  (-> (request-fullscreen)
-      (.then lock-screen-orientation)
-      (.catch #())))
+  (fullscreen))
 
 (defn- start-triggers
   []
@@ -88,29 +92,33 @@
           :on-start-click   start-scene
           :reset-resources? reset-resources?}])
 
-(defn- component-will-unmount
-  []
-  (re-frame/dispatch [::ie/stop-playing])
-  (sound/stop-all-audio!)
-  (-> (exit-fullscreen)
-      (.catch #())))
-
 (defn course
-  [{:keys [mode]}]
-  (r/with-let []
-    (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-          scene-data @(re-frame/subscribe [::subs/scene scene-id])
-          dataset-items @(re-frame/subscribe [::isubs/dataset-items])
-          user-mode (-> @(re-frame/subscribe [::isubs/user-mode])
-                        (modes/get-mode))]
-      [:div {:style {:position "fixed"
-                     :top      0
-                     :left     0
-                     :width    "100%"
-                     :height   "100%"}}
-       [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-       [stage-wrapper {:mode          (or user-mode mode)
-                       :scene-id      scene-id
-                       :scene-data    scene-data
-                       :dataset-items dataset-items}]])
-    (finally (component-will-unmount))))
+  []
+  (r/create-class
+    {:display-name "course"
+     :component-did-mount
+                   (fn []
+                     (fullscreen))
+     :component-will-unmount
+                   (fn []
+                     (re-frame/dispatch [::ie/stop-playing])
+                     (sound/stop-all-audio!)
+                     (-> (exit-fullscreen)
+                         (.catch #())))
+     :reagent-render
+                   (fn [{:keys [mode]}]
+                     (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+                           scene-data @(re-frame/subscribe [::subs/scene scene-id])
+                           dataset-items @(re-frame/subscribe [::isubs/dataset-items])
+                           user-mode (-> @(re-frame/subscribe [::isubs/user-mode])
+                                         (modes/get-mode))]
+                       [:div {:style {:position "fixed"
+                                      :top      0
+                                      :left     0
+                                      :width    "100%"
+                                      :height   "100%"}}
+                        [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
+                        [stage-wrapper {:mode          (or user-mode mode)
+                                        :scene-id      scene-id
+                                        :scene-data    scene-data
+                                        :dataset-items dataset-items}]]))}))
