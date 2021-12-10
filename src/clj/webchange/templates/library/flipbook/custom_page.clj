@@ -72,6 +72,8 @@
             0
             (- height image-height))
         page-image (assoc page-image-template
+                     :editable? {:drag true
+                                 :select true}
                      :y y
                      :width width
                      :height image-height

@@ -20,3 +20,7 @@
 (defn set-visibility
   [object-name visible?]
   (re-frame/dispatch [::scene-state/change-scene-object object-name [[:set-visibility {:visible visible?}]]]))
+
+(defn set-mask
+  [object-name page-size]
+  (re-frame/dispatch [::flipbook-state/set-mask object-name page-size]))
