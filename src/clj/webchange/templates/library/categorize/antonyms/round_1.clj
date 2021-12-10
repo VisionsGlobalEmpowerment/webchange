@@ -1,6 +1,6 @@
 (ns webchange.templates.library.categorize.antonyms.round-1
   (:require
-    [webchange.templates.library.categorize-antonims.common :refer [get-draggable-item]]
+    [webchange.templates.library.categorize.templates.common :refer [get-draggable-item]]
     [webchange.templates.utils.dialog :as dialog]))
 
 (def template-round-1 {:assets        [{:url "/raw/img/categorize-antonims/background.png", :size 10, :type "image"}
