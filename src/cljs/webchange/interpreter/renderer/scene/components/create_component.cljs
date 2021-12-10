@@ -10,28 +10,31 @@
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.logger.index :as logger]))
 
-(def default-object-props {:draggable       {}
-                           :on-drag-end     {}
-                           :on-drag-start   {}
-                           :on-drag-move    {}
-                           :on-collide      {}
-                           :collide-test    {}
-                           :transition-name {}
-                           :visible         {:default true}
-                           :rotation        {:default 0}
-                           :opacity         {}
-                           :custom-data     {}})
+(def default-object-props {:draggable             {}
+                           :on-drag-end           {}
+                           :on-drag-end-options   {}
+                           :on-drag-start         {}
+                           :on-drag-start-options {}
+                           :on-drag-move          {}
+                           :on-drag-move-options  {}
+                           :on-collide-enter      {}
+                           :on-collide-leave      {}
+                           :transition-name       {}
+                           :visible               {:default true}
+                           :rotation              {:default 0}
+                           :opacity               {}
+                           :custom-data           {}})
 
 (defn- init-display-object!
   [{object :object :as wrapper} props props-to-exclude]
   (let [default-props (apply dissoc default-object-props props-to-exclude)
-        {:keys [draggable on-drag-end on-drag-start on-drag-move visible rotation opacity] :as props} (get-object-props props default-props)]
+        {:keys [draggable visible rotation opacity] :as props} (get-object-props props default-props)]
     (register-object object props)
     (when (some? draggable)
       (when draggable
-        (enable-drag! object {:on-drag-start on-drag-start
-                              :on-drag-move on-drag-move
-                              :on-drag-end on-drag-end})))
+        (enable-drag! object (select-keys props [:on-drag-start :on-drag-start-options
+                                                 :on-drag-move :on-drag-move-options
+                                                 :on-drag-end :on-drag-end-options]))))
     (when (has-collision-handler? props)
       (enable-collisions! object props))
     (when (some? visible)

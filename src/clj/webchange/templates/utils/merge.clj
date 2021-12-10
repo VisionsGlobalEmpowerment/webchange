@@ -1,4 +1,5 @@
 (ns webchange.templates.utils.merge)
+
 (defn- replace-data
   [action action-key-fn object-key-fn]
   (cond-> action
@@ -17,7 +18,9 @@
   [action action-key-fn object-key-fn params-object-names var-object-names var-action-names]
   (cond->
     (case (:type action)
-      "action" (if (contains? action :id) (assoc action :id (action-key-fn (:id action))) action)
+      "action" (cond-> action
+                       (contains? action :id) (assoc :id (action-key-fn (:id action)))
+                       (contains? action :test) (assoc :test (replace-name (:test action) object-key-fn)))
       "parallel" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
       "sequence-data" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
       "sequence" (assoc action :data (map (fn [value] (action-key-fn value)) (:data action)))

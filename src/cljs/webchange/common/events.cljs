@@ -311,7 +311,7 @@
   (flatten [(:display-name action) sequence-position]))
 
 (defn execute-action
-  [db {:keys [unique-tag] :as action}]
+  [db {:keys [callback unique-tag] :as action}]
   (if (flow-not-registered? unique-tag)
     (let [action (as-> action a
                        (assoc a :current-scene (:current-scene db))
@@ -324,6 +324,8 @@
       (if (some? handler)
         (logger/trace-folded ["execute action" display-name (str "(" type ")")] "action data:" action)
         (logger/error "Executor for action" display-name "is not defined" action))
+      (when (some? callback)
+        (swap! on-action-finished-handlers update action-id conj callback))
       (when tags (register-flow-tags! flow-id tags))
       (handler {:db db :action action})
       (when return-immediately

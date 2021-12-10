@@ -182,7 +182,7 @@
                                                 :height      10
                                                 :transition  "vera-collision-test"
                                                 :collidable? true
-                                                :actions     {:collide {:on "collide" :test ["#^target-letter-.*"] :type "action" :id "check-box" :pick-event-param ["custom-data" "transition-name"]}}}}
+                                                :actions     {:collide {:on "collide-enter" :test ["#^target-letter-.*"] :type "action" :id "check-box" :pick-event-param ["custom-data" "transition-name"]}}}}
         :scene-objects [["background"]
                         ["frame"]
                         ["emit-group"]

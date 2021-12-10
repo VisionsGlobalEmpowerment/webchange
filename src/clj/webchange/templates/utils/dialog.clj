@@ -3,14 +3,17 @@
 (defn default
   ([phrase]
    (default phrase {}))
-  ([phrase {:keys [inner-action-data] :or {inner-action-data {}}}]
+  ([phrase
+    {:keys [inner-action-data phrase-description]
+     :or   {inner-action-data {}}}]
    {:type               "sequence-data",
     :editor-type        "dialog",
     :data               [{:type "sequence-data"
                           :data [{:type "empty" :duration 0}
-                                 (merge {:type "animation-sequence" :phrase-text "New action" :audio nil} inner-action-data)]}],
+                                 (merge {:type "animation-sequence" :phrase-text "New action" :audio nil}
+                                        inner-action-data)]}],
     :phrase             phrase,
-    :phrase-description phrase}))
+    :phrase-description (or phrase-description phrase)}))
 
 (defn create-and-place-before
   [dialog {:keys [old-action-name new-action-name unique-suffix]}]
