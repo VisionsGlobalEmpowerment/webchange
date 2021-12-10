@@ -79,7 +79,9 @@
         (assoc-in [:page-cover-title :x] 64)
         (assoc-in [:page-cover-image :x] page-center)
         (assoc-in [:page-cover-title-text :x] 0)
-        (assoc-in [:page-cover-title-text :width] (* width 0.8)))))
+        (assoc-in [:page-cover-title-text :width] (* width 0.8))
+        (assoc-in [:page-cover-authors :width] (* width 0.8))
+        (assoc-in [:page-cover-illustrators :width] (* width 0.8)))))
 
 (defn- set-layout
   [page-data {:keys [layout]}]
