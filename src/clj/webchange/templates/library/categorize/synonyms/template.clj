@@ -16,7 +16,7 @@
 (defn prepare-templates
   []
   (let [pt0 (utils-merge/prepare-template template-round-0 "r0" [:target] [] [])
-        pt1 (utils-merge/prepare-template round-1/template "r1" round-1/params-object-names round-1/var-object-names round-1/var-action-names)
+        pt1 (utils-merge/prepare-template round-1/template "r1" round-1/params-object-names round-1/var-object-names round-1/var-action-names round-1/all-vars-in-actions)
         pt2 (utils-merge/prepare-template template-round-2 "r2" [:say-item :target :correct-drop :box] [] [])
         pt3 (utils-merge/prepare-template template-round-3 "r3" [:say-item :target :correct-drop :box]
                                           ["instruction" "check-collide"]

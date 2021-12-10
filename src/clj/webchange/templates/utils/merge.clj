@@ -15,20 +15,40 @@
   (if (vector? data) (vec (map (fn [item] (func item)) data)) (func data)))
 
 (defn- process-action
-  [action action-key-fn object-key-fn params-object-names var-object-names var-action-names]
+  [{:keys [action-name action action-key-fn object-key-fn params-object-names var-object-names var-action-names all-vars-in-actions]
+    :or   {all-vars-in-actions []}}]
   (cond->
     (case (:type action)
       "action" (cond-> action
                        (contains? action :id) (assoc :id (action-key-fn (:id action)))
                        (contains? action :test) (assoc :test (replace-name (:test action) object-key-fn)))
-      "parallel" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
-      "sequence-data" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
+      "parallel" (assoc action :data (map (fn [value] (process-action
+                                                        {:action-name         action-name
+                                                         :action              value
+                                                         :action-key-fn       action-key-fn
+                                                         :object-key-fn       object-key-fn
+                                                         :params-object-names params-object-names
+                                                         :var-object-names    var-object-names
+                                                         :var-action-names    var-action-names
+                                                         :all-vars-in-actions all-vars-in-actions}))
+                                          (:data action)))
+      "sequence-data" (assoc action :data (map (fn [value] (process-action
+                                                             {:action-name         action-name
+                                                              :action              value
+                                                              :action-key-fn       action-key-fn
+                                                              :object-key-fn       object-key-fn
+                                                              :params-object-names params-object-names
+                                                              :var-object-names    var-object-names
+                                                              :var-action-names    var-action-names
+                                                              :all-vars-in-actions all-vars-in-actions}))
+                                               (:data action)))
       "sequence" (assoc action :data (map (fn [value] (action-key-fn value)) (:data action)))
       "set-interval" (assoc action :action (action-key-fn (:action action)))
       "set-timeout" (assoc action :action (action-key-fn (:action action)))
       "set-variable" (cond-> action
                              (some #(= (:var-name action) %) var-object-names) (assoc :var-value (replace-name (:var-value action) object-key-fn))
-                             (some #(= (:var-name action) %) var-action-names) (assoc :var-value (replace-name (:var-value action) action-key-fn)))
+                             (some #(= (:var-name action) %) var-action-names) (assoc :var-value (replace-name (:var-value action) action-key-fn))
+                             (some #{(clojure.core/name action-name)} all-vars-in-actions) (assoc :var-name (replace-name (:var-name action) action-key-fn)))
       "show-question" (assoc action :data (replace-data (:data action) action-key-fn object-key-fn))
       (replace-data action action-key-fn object-key-fn))
     (contains? action :params) (assoc :params (into {} (map (fn [[key data]]
@@ -60,16 +80,25 @@
             ) {:objects {} :object-map {} :transition-map {}} objects))
 
 (defn- prepare-actions
-  [actions action-key-fn object-key-fn params-object-names var-object-names var-action-names]
-  (reduce (fn [result [key action]]
-            (let [
-                  action-key (action-key-fn key)
-                  prepared-action (process-action action action-key-fn object-key-fn params-object-names
-                                                  var-object-names var-action-names)]
-              (cond-> result
-                      true (update :actions #(assoc % (keyword action-key) prepared-action))
-                      true (update :action-map #(assoc % key (keyword action-key)))))
-            ) {:actions {} :action-map {}} actions))
+  ([actions action-key-fn object-key-fn params-object-names var-object-names var-action-names]
+   (prepare-actions actions action-key-fn object-key-fn params-object-names var-object-names var-action-names []))
+  ([actions action-key-fn object-key-fn params-object-names var-object-names var-action-names all-vars-in-actions]
+   (reduce (fn [result [key action]]
+             (let [
+                   action-key (action-key-fn key)
+                   prepared-action (process-action
+                                     {:action-name         key
+                                      :action              action
+                                      :action-key-fn       action-key-fn
+                                      :object-key-fn       object-key-fn
+                                      :params-object-names params-object-names
+                                      :var-object-names    var-object-names
+                                      :var-action-names    var-action-names
+                                      :all-vars-in-actions all-vars-in-actions})]
+               (cond-> result
+                       true (update :actions #(assoc % (keyword action-key) prepared-action))
+                       true (update :action-map #(assoc % key (keyword action-key)))))
+             ) {:actions {} :action-map {}} actions)))
 
 (defn- process-object-actions
   [objects action-key-fn object-key-fn
@@ -82,9 +111,13 @@
                                              (map (fn [[key action]]
                                                     [key
                                                      (process-action
-                                                       action action-key-fn object-key-fn
-                                                       params-object-names
-                                                       var-object-names var-action-names)])
+                                                       {:action-name         key
+                                                        :action              action
+                                                        :action-key-fn       action-key-fn
+                                                        :object-key-fn       object-key-fn
+                                                        :params-object-names params-object-names
+                                                        :var-object-names    var-object-names
+                                                        :var-action-names    var-action-names})])
                                                   (:actions object))))]
                     [key object])
                   ) objects)))
@@ -116,27 +149,28 @@
          ) tracks))
 
 (defn prepare-template
-  [template round params-object-names var-object-names var-action-names]
-  (let [action-key-fn #(str (name %) "-" round)
-        object-key-fn #(str (name %) "-" round)
-        prepared-objects (prepare-objects (:objects template) object-key-fn)
-        prepared-actions (prepare-actions (:actions template) action-key-fn
-                                          object-key-fn params-object-names var-object-names var-action-names)
-        result-objects (process-object-actions (:objects prepared-objects) action-key-fn object-key-fn
-                                               params-object-names
-                                               var-object-names var-action-names)
-        prepared-scene-objects (prepare-scene-objects prepared-objects (:scene-objects template))
-        prepared-triggers (prepare-triggers prepared-actions (:triggers template))
-        template (cond-> template
-                         true (assoc-in [:metadata :tracks] (prepare-tracks (get-in template [:metadata :tracks]) action-key-fn))
-                         (get-in template [:metadata :last-insert]) (update-in [:metadata :last-insert] action-key-fn))]
-    {:assets        (:assets template)
-     :objects       result-objects
-     :actions       (:actions prepared-actions)
-     :scene-objects prepared-scene-objects
-     :triggers      prepared-triggers
-     :metadata      (:metadata template)
-     }))
+  ([template round params-object-names var-object-names var-action-names]
+   (prepare-template template round params-object-names var-object-names var-action-names []))
+  ([template round params-object-names var-object-names var-action-names all-vars-in-actions]
+   (let [action-key-fn #(str (name %) "-" round)
+         object-key-fn #(str (name %) "-" round)
+         prepared-objects (prepare-objects (:objects template) object-key-fn)
+         prepared-actions (prepare-actions (:actions template) action-key-fn
+                                           object-key-fn params-object-names var-object-names var-action-names all-vars-in-actions)
+         result-objects (process-object-actions (:objects prepared-objects) action-key-fn object-key-fn
+                                                params-object-names
+                                                var-object-names var-action-names)
+         prepared-scene-objects (prepare-scene-objects prepared-objects (:scene-objects template))
+         prepared-triggers (prepare-triggers prepared-actions (:triggers template))
+         template (cond-> template
+                          true (assoc-in [:metadata :tracks] (prepare-tracks (get-in template [:metadata :tracks]) action-key-fn))
+                          (get-in template [:metadata :last-insert]) (update-in [:metadata :last-insert] action-key-fn))]
+     {:assets        (:assets template)
+      :objects       result-objects
+      :actions       (:actions prepared-actions)
+      :scene-objects prepared-scene-objects
+      :triggers      prepared-triggers
+      :metadata      (:metadata template)})))
 
 (defn- add-technical-states
   [template]

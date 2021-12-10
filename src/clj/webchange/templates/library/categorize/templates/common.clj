@@ -17,7 +17,9 @@
                                                  :type   "action"
                                                  :id     "handle-drag-end"
                                                  :params (cond-> {:box           box
-                                                                  :init-position (merge position {:duration 1})
+                                                                  :init-position (-> position
+                                                                                     (select-keys [:x :y])
+                                                                                     (merge {:duration 1}))
                                                                   :target        target}
                                                                  (some? say-correct) (assoc :correct-drop say-correct))}
                                  :collide-enter {:on               "collide-enter"

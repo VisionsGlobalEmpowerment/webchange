@@ -10,7 +10,7 @@
   (def scene-slug "test-activity")
 
   (def test-course-slug "english")
-  (def scene-slug "categorize-colors")
+  (def scene-slug "categorize-colors-2")
 
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 
