@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize-antonims.round-1
+(ns webchange.templates.library.categorize.antonyms.round-1
   (:require
     [webchange.templates.library.categorize-antonims.common :refer [get-draggable-item]]
     [webchange.templates.utils.dialog :as dialog]))

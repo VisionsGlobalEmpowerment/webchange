@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize-synonyms.round-1
+(ns webchange.templates.library.categorize.synonyms.round-1
   (:require
     [webchange.templates.utils.dialog :as dialog]))
 

@@ -1,11 +1,11 @@
-(ns webchange.templates.library.categorize-antonims.template
+(ns webchange.templates.library.categorize.antonyms.template
   (:require
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.merge :as utils-merge]
-    [webchange.templates.library.categorize-antonims.round-0 :refer [template-round-0]]
-    [webchange.templates.library.categorize-antonims.round-1 :refer [template-round-1]]
-    [webchange.templates.library.categorize-antonims.round-2 :refer [template-round-2]]
-    [webchange.templates.library.categorize-antonims.round-3 :refer [template-round-3]]
+    [webchange.templates.library.categorize.antonyms.round-0 :refer [template-round-0]]
+    [webchange.templates.library.categorize.antonyms.round-1 :refer [template-round-1]]
+    [webchange.templates.library.categorize.antonyms.round-2 :refer [template-round-2]]
+    [webchange.templates.library.categorize.antonyms.round-3 :refer [template-round-3]]
     [webchange.templates.core :as core]))
 
 (def m {:id          28

@@ -1,6 +1,5 @@
-(ns webchange.templates.library.categorize-shapes.round-1
+(ns webchange.templates.library.categorize.shapes.round-1
   (:require
-    [clojure.tools.logging :as log]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.utils.random-position :refer [get-items-positions]]))
 
