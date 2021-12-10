@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize-shapes.round-3
+(ns webchange.templates.library.categorize.shapes.round-3
   (:require
     [webchange.templates.utils.dialog :as dialog]))
 

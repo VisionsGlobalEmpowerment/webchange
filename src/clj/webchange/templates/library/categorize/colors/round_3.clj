@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize.round-3
+(ns webchange.templates.library.categorize.colors.round-3
   (:require
     [webchange.templates.utils.dialog :as dialog]))
 

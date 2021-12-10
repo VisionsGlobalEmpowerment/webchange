@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize-antonims.common)
+(ns webchange.templates.library.categorize.antonyms.common)
 
 (defn get-draggable-item
   ([params]

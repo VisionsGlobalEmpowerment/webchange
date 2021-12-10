@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize-antonims.round-2
+(ns webchange.templates.library.categorize.antonyms.round-2
   (:require
     [webchange.templates.library.categorize-antonims.common :as common]
     [webchange.templates.utils.dialog :as dialog]))

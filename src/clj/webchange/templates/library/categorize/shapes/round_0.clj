@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize.round-0)
+(ns webchange.templates.library.categorize.shapes.round-0)
 
 (def template-round-0 {:assets        [{:url "/raw/img/categorize/01.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize/02.png", :size 10, :type "image"}
