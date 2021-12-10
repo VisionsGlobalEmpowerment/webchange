@@ -1,9 +1,10 @@
-(ns webchange.templates.library.categorize.antonyms.common)
+(ns webchange.templates.library.categorize.templates.common)
 
 (defn get-draggable-item
   ([params]
    (get-draggable-item params {}))
-  ([{:keys [position src target say-item say-correct box]}
+  ([{:keys [position src target say-item say-correct box test]
+     :or   {test ["#^.*-box"]}}
     {:keys [drag-start? drag-move?]
      :or   {drag-start? true
             drag-move?  true}}]
@@ -20,12 +21,12 @@
                                                                   :target        target}
                                                                  (some? say-correct) (assoc :correct-drop say-correct))}
                                  :collide-enter {:on               "collide-enter"
-                                                 :test             ["#^.*-box"]
+                                                 :test             test
                                                  :type             "action"
                                                  :id               "handle-collide-enter"
                                                  :pick-event-param ["target"]}
                                  :collide-leave {:on               "collide-leave"
-                                                 :test             ["#^.*-box"]
+                                                 :test             test
                                                  :type             "action"
                                                  :id               "handle-collide-leave"
                                                  :pick-event-param ["target"]}}
@@ -38,6 +39,3 @@
                                                               :id      "handle-drag-move"
                                                               :params  {:say-item say-item}
                                                               :options {:throttle "action-done"}}))})))
-
-
-

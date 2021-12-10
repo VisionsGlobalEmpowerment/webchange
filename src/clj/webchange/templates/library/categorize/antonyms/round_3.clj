@@ -1,6 +1,6 @@
 (ns webchange.templates.library.categorize.antonyms.round-3
   (:require
-    [webchange.templates.library.categorize-antonims.common :as common]
+    [webchange.templates.library.categorize.templates.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
 (defn- get-draggable-item
