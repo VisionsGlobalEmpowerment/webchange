@@ -55,6 +55,13 @@
   (fn [show-control?]
     show-control?))
 
+(re-frame/reg-sub
+  ::show-image-fit-control?
+  (fn [[_ id]]
+    (re-frame/subscribe [::state/form-component-available? id :image-fit]))
+  (fn [show-control?]
+    show-control?))
+
 ;; Upload options
 
 (def upload-options-path :upload-options)

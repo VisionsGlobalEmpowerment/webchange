@@ -25,7 +25,13 @@
                              :image-size "contain"
                              :origin     {:type "center-center"}
                              :src        "---"
-                             :editable?  {:select true}}
+                             :editable?  {:select true
+                                          :drag   true
+                                          :edit-form {:select-image true
+                                                      :upload-image true
+                                                      :scale true
+                                                      :flip true
+                                                      :visible true}}}
    :page-cover-title        {:type     "group"
                              :x        "---"
                              :y        "---"

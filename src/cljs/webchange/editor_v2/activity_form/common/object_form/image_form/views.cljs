@@ -51,22 +51,24 @@
 
 (defn- image-size
   [{:keys [id]}]
-  (let [value @(re-frame/subscribe [::state/current-image-fit id])
+  (let [show-image-fit? @(re-frame/subscribe [::state/show-image-fit-control? id])
+        value @(re-frame/subscribe [::state/current-image-fit id])
         handle-click #(re-frame/dispatch [::state/set-image-fit id %])]
-    [:div.control-block.image-size-block
-     [label "Image fit:"]
-     [icon-button {:icon     "image-cover"
-                   :title    "Cover"
-                   :color    (if (= value "cover") "primary" "default")
-                   :on-click #(handle-click "cover")}]
-     [icon-button {:icon     "image-contain"
-                   :title    "Contain"
-                   :color    (if (= value "contain") "primary" "default")
-                   :on-click #(handle-click "contain")}]
-     [icon-button {:icon     "image-no-size"
-                   :title    "No fit"
-                   :color    (if (nil? value) "primary" "default")
-                   :on-click #(handle-click nil)}]]))
+    (when show-image-fit?
+      [:div.control-block.image-size-block
+       [label "Image fit:"]
+       [icon-button {:icon     "image-cover"
+                     :title    "Cover"
+                     :color    (if (= value "cover") "primary" "default")
+                     :on-click #(handle-click "cover")}]
+       [icon-button {:icon     "image-contain"
+                     :title    "Contain"
+                     :color    (if (= value "contain") "primary" "default")
+                     :on-click #(handle-click "contain")}]
+       [icon-button {:icon     "image-no-size"
+                     :title    "No fit"
+                     :color    (if (nil? value) "primary" "default")
+                     :on-click #(handle-click nil)}]])))
 
 (defn- scale
   [{:keys [id]}]

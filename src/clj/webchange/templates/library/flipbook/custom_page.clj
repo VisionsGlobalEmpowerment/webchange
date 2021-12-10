@@ -24,7 +24,13 @@
    :width      "---"
    :height     "---"
    :src        "---"
-   :editable?  {:select true}})
+   :editable?  {:select true
+                :drag true
+                :edit-form {:select-image true
+                            :upload-image true
+                            :scale true
+                            :flip true
+                            :visible true}}})
 
 (def page-text-background-template
   {:type   "rectangle"
@@ -72,8 +78,6 @@
             0
             (- height image-height))
         page-image (assoc page-image-template
-                     :editable? {:drag true
-                                 :select true}
                      :y y
                      :width width
                      :height image-height
