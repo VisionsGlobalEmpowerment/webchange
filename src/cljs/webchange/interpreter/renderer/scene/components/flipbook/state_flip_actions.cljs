@@ -81,6 +81,14 @@
         "forward" {:flip-forward params}
         "backward" {:flip-backward params}))))
 
+(re-frame/reg-event-fx
+  ::set-mask
+  (fn [{:keys [db]} [_ object-name page-size]]
+    (let [mask (create-mask page-size)
+          page (get-container db object-name)]
+      (apply-mask page mask))
+    {}))
+
 (defn- set-position
   [object position]
   (when (some? object)
@@ -121,6 +129,9 @@
           next-left-mask-params (assoc page-size :width 0)
           next-left-mask (create-mask next-left-mask-params)
 
+          next-right-mask-params page-size
+          next-right-mask (create-mask next-right-mask-params)
+          
           next-left-initial-position (+ (:x right-page-position) (:width page-size))
           next-left-destination-position (:x left-page-position)]
       (set-z-indexes {:current current-spread
@@ -145,10 +156,11 @@
       (set-visibility (:left next-spread) true)
 
       ;; next right page
+      (apply-mask (:right next-spread) next-right-mask)
       (set-position (:right next-spread) right-page-position)
       (set-visibility (:right next-spread) true)
 
-      ; Animate
+                                        ; Animate
       (interpolate {:from        {:flipped-page-width         (:width current-right-mask-params)
                                   :flipped-page-back-position next-left-initial-position
                                   :flipped-page-back-width    0}

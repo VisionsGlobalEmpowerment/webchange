@@ -135,9 +135,11 @@
     (logger/trace "left page" left)
     (logger/trace "right page" right)
     (when (some? left)
+      (utils/set-mask (keyword left) (get-page-size state))
       (utils/set-position (keyword left) (get-left-page-position state))
       (utils/set-visibility (keyword left) true))
     (when (some? right)
+      (utils/set-mask (keyword right) (get-page-size state))
       (utils/set-position (keyword right) (get-right-page-position state))
       (utils/set-visibility (keyword right) true))))
 
