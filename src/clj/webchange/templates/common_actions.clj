@@ -181,8 +181,8 @@
   (get-in activity-data [:metadata :next-action-index] 0))
 
 (defn increase-next-action-index
-  [activity-data]
-  (update-in activity-data [:metadata :next-action-index] inc))
+  [activity-data index]
+  (assoc-in activity-data [:metadata :next-action-index] (inc index)))
 
 (defn add-question
   [activity-data {:keys [question-page-object]}]
@@ -190,12 +190,12 @@
         action-name (str "question-" index)
         object-name (str "question-" index)
         question-data (question-object/create
-                        (form->question-data question-page-object)
-                        {:suffix           index
-                         :action-name      action-name
-                         :object-name      object-name})]
+                       (form->question-data question-page-object)
+                       {:suffix           index
+                        :action-name      action-name
+                        :object-name      object-name})]
     (-> activity-data
-        (increase-next-action-index)
+        (increase-next-action-index index)
         (question-object/add-to-scene question-data))))
 
 (defn- set-animation-settings

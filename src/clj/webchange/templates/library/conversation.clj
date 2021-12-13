@@ -63,7 +63,7 @@
         action-name (str "dialog-" index)
         default-dialog (dialog/default (str "dialog-" index))]
     (cond-> activity-data
-            :always (increase-next-action-index)
+            :always (increase-next-action-index index) 
             :always (place-dialog {(keyword action-name) default-dialog} action-name))))
 
 (defn- update-template
