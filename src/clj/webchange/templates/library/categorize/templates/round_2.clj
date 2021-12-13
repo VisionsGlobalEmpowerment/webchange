@@ -1,4 +1,4 @@
-(ns webchange.templates.library.categorize.templates.round-1
+(ns webchange.templates.library.categorize.templates.round-2
   (:require
     [webchange.templates.library.categorize.templates.common :refer [add-background get-draggable-item]]
     [webchange.templates.utils.dialog :as dialog]
@@ -11,10 +11,25 @@
 
 (defn- init-tracks-metadata
   [template {:keys [tracks]}]
-  (assoc-in template [:metadata :tracks] [{:title (get-in tracks [:generic :title] "Round 1")
+  (assoc-in template [:metadata :tracks] [{:title (get-in tracks [:generic :title] "Round 2")
                                            :nodes []}
-                                          {:title (get-in tracks [:items :title] "Round 1 - items")
+                                          {:title (get-in tracks [:items :title] "Round 2 - items")
                                            :nodes []}]))
+
+(defn- add-librarian
+  [template {:keys [generic-dialogs]}]
+  (let [object-name "librarian"
+        object-data {:type      "animation"
+                     :x         250 :y 1000
+                     :width     351 :height 717
+                     :name      "senoravaca" :skin "lion"
+                     :anim      "idle" :speed 0.3 :start true
+                     :editable? {:select true :show-in-tree? true}
+                     :actions   {:click {:on "click" :type "action"
+                                         :id (-> generic-dialogs :tap-instructions :name)}}}]
+    (-> template
+        (update :objects assoc (keyword object-name) object-data)
+        (update :scene-objects conj [object-name]))))
 
 (defn- get-box-name
   [name]
@@ -115,7 +130,7 @@
         items))
 
 (defn get-template
-  "Create Round 1.
+  "Create Round 2.
    Properties description:
    - boxes - list of boxes descriptions:
        - name - unique box name, used to define item's target
@@ -132,7 +147,11 @@
            - name - dialog name used in :actions field of scene-data
            - phrase - dialog phrase text
    - background - background data:
-       - src - background image src
+       - src - background image src (for single background)
+       or
+       - background - {:src} - background layer data (for layered background)
+       - decoration - the same as for 'background' field
+       - surface - the same as for 'background' field
    - generic-dialogs - other dialogs:
        - intro - round introduction
            - name - dialog name used in :actions field of scene-data
@@ -245,6 +264,7 @@
        :metadata      {:autostart true}}
       (init-tracks-metadata props)
       (add-background props)
+      (add-librarian props)
       (add-boxes props)
       (add-items props)
       (add-items-dialogs props)

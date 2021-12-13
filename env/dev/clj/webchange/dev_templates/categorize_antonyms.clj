@@ -7,7 +7,7 @@
   (def test-course-slug (-> (t/create-test-course) :slug))
   (def scene-slug "categorize-antonyms")
 
-  (def test-course-slug "test-course-english-hhzmfwzy")
+  (def test-course-slug "english")
   (def scene-slug "categorize-antonyms")
 
   (core/update-activity-template! test-course-slug scene-slug t/user-id)

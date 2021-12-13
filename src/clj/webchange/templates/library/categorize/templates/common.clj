@@ -1,5 +1,38 @@
 (ns webchange.templates.library.categorize.templates.common)
 
+(defn- add-single-background
+  [template {:keys [background]}]
+  (let [{:keys [src]} background
+        asset {:url src :size 10 :type "image"}
+        object-name "background"
+        object-data {:type "background" :src src}]
+    (-> template
+        (update :assets conj asset)
+        (update :objects assoc (keyword object-name) object-data)
+        (update :scene-objects conj [object-name]))))
+
+(defn- add-layered-background
+  [template {:keys [background]}]
+  (let [{:keys [background decoration surface]} background
+        assets (->> [background decoration surface]
+                    (map :src)
+                    (map (fn [src] {:url src :size 10 :type "image"})))
+        object-name "background"
+        object-data {:type       "layered-background"
+                     :background background
+                     :decoration decoration
+                     :surface    surface}]
+    (-> template
+        (update :assets concat assets)
+        (update :objects assoc (keyword object-name) object-data)
+        (update :scene-objects conj [object-name]))))
+
+(defn add-background
+  [template {:keys [background] :as params}]
+  (if (contains? background :src)
+    (add-single-background template params)
+    (add-layered-background template params)))
+
 (defn get-draggable-item
   ([params]
    (get-draggable-item params {}))
