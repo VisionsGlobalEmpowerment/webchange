@@ -126,6 +126,30 @@
         items))
 
 (defn get-template
+  "Create Round 1.
+   Properties description:
+   - boxes - list of boxes descriptions:
+       - name - unique box name, used to define item's target
+       - position - where box has to be placed, {:x :y}
+       - src - box image src
+   - items - items of boxes descriptions:
+       - target - target box name
+       - position - where item has to be placed, {:x :y}
+       - src - item image src
+       - pick-dialog - dialog, played when the item is being dragged:
+           - name - dialog name used in :actions field of scene-data
+           - phrase - dialog phrase description
+       - correct-dialog - dialog, played when the item is placed in right box (target). Optional
+           - name - dialog name used in :actions field of scene-data
+           - phrase - dialog phrase text
+   - background - background data:
+       - src - background image src
+   - generic-dialogs - other dialogs:
+       - intro - round introduction
+           - name - dialog name used in :actions field of scene-data
+           - prompt - text for prompt item in dialogs form. Optional
+           - phrase - dialog phrase text. Optional
+           - phrase-description - dialog phrase description text. Optional"
   [{:keys [generic-dialogs items boxes] :as props}]
   (-> {:assets        []
        :objects       {}
