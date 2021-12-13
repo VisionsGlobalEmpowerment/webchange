@@ -87,7 +87,7 @@
         current-scene-id (r/atom nil)
         handle-resize (get-handler handle-screen-resize container)
         prev-viewport (atom nil)
-        scene-ready? (atom false)]
+        scene-ready? (r/atom false)]
     (r/create-class
       {:display-name "web-gl-stage"
        :component-did-mount
@@ -124,14 +124,12 @@
                                 :style      {:width  "100%"
                                              :height "100%"}}
                           (when show-scene?
-                            (when (and (:started? scene-data)
-                                       @scene-ready?)
-                              (on-ready))
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)
                                     :metadata (:metadata scene-data)
                                     :viewport viewport
-                                    :on-ready #(reset! scene-ready? true)}])
+                                    :on-ready #(do (reset! scene-ready? true)
+                                                   (on-ready))}])
                           (when show-loader-screen?
                             [overlay-wrapper {:viewport viewport}
                              [loader-screen {:on-start-click on-start-click
