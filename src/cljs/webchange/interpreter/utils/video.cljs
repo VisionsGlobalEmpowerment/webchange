@@ -1,5 +1,18 @@
 (ns webchange.interpreter.utils.video)
 
+(defonce registered-video (atom []))
+
+(defn- register-video!
+  [video]
+  (swap! registered-video conj video)
+  video)
+
+(defn stop-all-video!
+  []
+  (doseq [video @registered-video]
+    (.pause video))
+  (reset! registered-video []))
+
 (defn set-current-time
   [video frame]
   (set! (.-currentTime video) frame))
@@ -10,7 +23,9 @@
 
 (defn play
   [video]
-  (.play video))
+  (-> video
+      register-video!
+      .play))
 
 (defn stop
   [video]

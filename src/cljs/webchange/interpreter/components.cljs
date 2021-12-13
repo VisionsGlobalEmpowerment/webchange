@@ -6,6 +6,7 @@
     [webchange.subs :as subs]
     [webchange.interpreter.renderer.scene.full-screen :refer [request-fullscreen exit-fullscreen lock-screen-orientation]]
     [webchange.interpreter.sound :as sound]
+    [webchange.interpreter.utils.video :as video]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.resources.scene-parser :as scene-parser]
@@ -92,6 +93,7 @@
   []
   (re-frame/dispatch [::ie/stop-playing])
   (sound/stop-all-audio!)
+  (video/stop-all-video!)
   (-> (exit-fullscreen)
       (.catch #())))
 
