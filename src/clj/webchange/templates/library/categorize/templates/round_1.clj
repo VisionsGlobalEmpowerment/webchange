@@ -2,6 +2,7 @@
   (:require
     [webchange.templates.library.categorize.templates.common :refer [add-background get-draggable-item]]
     [webchange.templates.utils.dialog :as dialog]
+    [webchange.utils.deep-merge :refer [deep-merge]]
     [webchange.utils.list :refer [distinct-by-key]]))
 
 (def params-object-names [:say-item :target :correct-drop :box])
@@ -114,6 +115,20 @@
           (contains? item :correct-dialog))
         items))
 
+(def default-generic-dialogs
+  {:intro          {:name               "intro"
+                    :prompt             "Start dialog"
+                    :phrase             "intro"
+                    :phrase-description "Introduce task"}
+   :correct-answer {:name               "correct-answer"
+                    :phrase             "correct-answer"
+                    :phrase-description "correct answer"
+                    :prompt             "Correct answer"}
+   :wrong-answer   {:name   "wrong-answer"
+                    :prompt "Wrong answer"}
+   :finish-dialog  {:name   "finish-dialog"
+                    :prompt "Finish dialog"}})
+
 (defn get-template
   "Create Round 1.
    Properties description:
@@ -141,111 +156,118 @@
            - phrase-description - dialog phrase description text. Optional
        - correct-answer - common dialog for all correct cases. The same fields as in the 'intro'
        - wrong-answer - common dialog for all incorrect cases. The same fields as in the 'intro'
-       - finish-dialog - dialog in the end of the round. The same fields as in the 'intro'"
-  [{:keys [generic-dialogs items boxes] :as props}]
-  (-> {:assets        []
-       :objects       {}
-       :scene-objects []
-       :actions       {:handle-drag-start    {:type        "stop-transition"
-                                              :from-params [{:action-property "id" :param-property "target"}]}
+       - continue-sorting - dialog after 'correct-answer' played when collected items number is less then needed. Optional
+       - finish-dialog - dialog in the end of the round. The same fields as in the 'intro'
+   - tracks - dialogs tracks options. Optional:
+       - items - sortable items track options. Optional:
+           - title - title of track. Optional
+       - generic - generic dialogs track options. Optional:
+           - title - title of track. Optional"
+  [params]
+  (let [{:keys [generic-dialogs items boxes] :as props} (deep-merge {:generic-dialogs default-generic-dialogs} params)]
+    (-> {:assets        []
+         :objects       {}
+         :scene-objects []
+         :actions       {:handle-drag-start    {:type        "stop-transition"
+                                                :from-params [{:action-property "id" :param-property "target"}]}
 
-                       :handle-drag-move     {:type        "action"
-                                              :from-params [{:action-property "id"
-                                                             :param-property  "say-item"}]}
+                         :handle-drag-move     {:type        "action"
+                                                :from-params [{:action-property "id"
+                                                               :param-property  "say-item"}]}
 
-                       :handle-drag-end      {:type "sequence-data"
-                                              :data [{:type        "test-var-scalar"
-                                                      :from-params [{:action-property "var-name"
-                                                                     :param-property  "box"}]
-                                                      :value       true
-                                                      :success     "correct-option"
-                                                      :fail        "wrong-option"}
-                                                     {:type "action"
-                                                      :id   "clear-target-vars"}]}
+                         :handle-drag-end      {:type "sequence-data"
+                                                :data [{:type        "test-var-scalar"
+                                                        :from-params [{:action-property "var-name"
+                                                                       :param-property  "box"}]
+                                                        :value       true
+                                                        :success     "correct-option"
+                                                        :fail        "wrong-option"}
+                                                       {:type "action"
+                                                        :id   "clear-target-vars"}]}
 
-                       :handle-collide-enter {:type "sequence-data"
-                                              :data [{:type        "set-attribute"
-                                                      :attr-name   "highlight"
-                                                      :attr-value  true
-                                                      :from-params [{:action-property "target" :param-property "target"}]}
-                                                     {:type        "set-variable"
-                                                      :from-params [{:action-property "var-name"
-                                                                     :param-property  "target"}]
-                                                      :var-value   true}]}
+                         :handle-collide-enter {:type "sequence-data"
+                                                :data [{:type        "set-attribute"
+                                                        :attr-name   "highlight"
+                                                        :attr-value  true
+                                                        :from-params [{:action-property "target" :param-property "target"}]}
+                                                       {:type        "set-variable"
+                                                        :from-params [{:action-property "var-name"
+                                                                       :param-property  "target"}]
+                                                        :var-value   true}]}
 
-                       :handle-collide-leave {:type "sequence-data"
-                                              :data [{:type        "set-attribute"
-                                                      :attr-name   "highlight"
-                                                      :attr-value  false
-                                                      :from-params [{:action-property "target" :param-property "target"}]}
-                                                     {:type        "set-variable"
-                                                      :from-params [{:action-property "var-name"
-                                                                     :param-property  "target"}]
-                                                      :var-value   false}]}
+                         :handle-collide-leave {:type "sequence-data"
+                                                :data [{:type        "set-attribute"
+                                                        :attr-name   "highlight"
+                                                        :attr-value  false
+                                                        :from-params [{:action-property "target" :param-property "target"}]}
+                                                       {:type        "set-variable"
+                                                        :from-params [{:action-property "var-name"
+                                                                       :param-property  "target"}]
+                                                        :var-value   false}]}
 
-                       :clear-target-vars    {:type "parallel"
-                                              :data (->> boxes
-                                                         (map (fn [{:keys [name]}]
-                                                                (get-box-name name)))
-                                                         (map (fn [box-object-name]
-                                                                {:type      "set-variable"
-                                                                 :var-name  box-object-name
-                                                                 :var-value false})))}
+                         :clear-target-vars    {:type "parallel"
+                                                :data (->> boxes
+                                                           (map (fn [{:keys [name]}]
+                                                                  (get-box-name name)))
+                                                           (map (fn [box-object-name]
+                                                                  {:type      "set-variable"
+                                                                   :var-name  box-object-name
+                                                                   :var-value false})))}
 
-                       :correct-option       {:type "sequence-data"
-                                              :data (->> [{:type "action" :id "unhighlight-all"}
-                                                          {:type "counter" :counter-action "increase" :counter-id "sorted-objects"}
-                                                          {:type "action" :id "object-in-right-box"}
-                                                          (when (items-have-correct-dialog? props)
-                                                            {:type        "action"
-                                                             :from-params [{:param-property  "correct-drop"
-                                                                            :action-property "id"}]})
-                                                          {:type "action" :id (-> generic-dialogs :correct-answer :name)}
-                                                          (cond-> {:type       "test-var-inequality"
-                                                                   :var-name   "sorted-objects"
-                                                                   :value      (count items)
-                                                                   :inequality ">="
-                                                                   :success    "finish-scene"}
-                                                                  (contains? generic-dialogs :continue-sorting) (assoc :fail (-> generic-dialogs :continue-sorting :name)))]
-                                                         (remove nil?))}
+                         :correct-option       {:type "sequence-data"
+                                                :data (->> [{:type "action" :id "unhighlight-all"}
+                                                            {:type "counter" :counter-action "increase" :counter-id "sorted-objects"}
+                                                            {:type "action" :id "object-in-right-box"}
+                                                            (when (items-have-correct-dialog? props)
+                                                              {:type        "action"
+                                                               :from-params [{:param-property  "correct-drop"
+                                                                              :action-property "id"}]})
+                                                            {:type "action" :id (-> generic-dialogs :correct-answer :name)}
+                                                            (cond-> {:type       "test-var-inequality"
+                                                                     :var-name   "sorted-objects"
+                                                                     :value      (count items)
+                                                                     :inequality ">="
+                                                                     :success    "finish-scene"}
+                                                                    (contains? generic-dialogs :continue-sorting) (assoc :fail (-> generic-dialogs :continue-sorting :name)))]
+                                                           (remove nil?))}
 
-                       :object-in-right-box  {:type        "set-attribute"
-                                              :attr-name   "visible"
-                                              :attr-value  false
-                                              :from-params [{:action-property "target"
-                                                             :param-property  "target"}]}
+                         :object-in-right-box  {:type        "set-attribute"
+                                                :attr-name   "visible"
+                                                :attr-value  false
+                                                :from-params [{:action-property "target"
+                                                               :param-property  "target"}]}
 
-                       :wrong-option         {:type "parallel"
-                                              :data [{:type "action" :id (-> generic-dialogs :wrong-answer :name)}
-                                                     {:type "action" :id "unhighlight-all"}
-                                                     {:type "action" :id "object-revert"}]}
+                         :wrong-option         {:type "parallel"
+                                                :data [{:type "action" :id (-> generic-dialogs :wrong-answer :name)}
+                                                       {:type "action" :id "unhighlight-all"}
+                                                       {:type "action" :id "object-revert"}]}
 
-                       :object-revert        {:type        "transition"
-                                              :from-params [{:action-property "transition-id"
-                                                             :param-property  "target"}
-                                                            {:action-property "to"
-                                                             :param-property  "init-position"}]}
+                         :object-revert        {:type        "transition"
+                                                :from-params [{:action-property "transition-id"
+                                                               :param-property  "target"}
+                                                              {:action-property "to"
+                                                               :param-property  "init-position"}]}
 
-                       :unhighlight-all      {:type "parallel"
-                                              :data []}     ; Data filled by add-boxes
+                         :unhighlight-all      {:type "parallel"
+                                                :data []}   ; Data filled by add-boxes
 
-                       :init-activity        {:type "sequence-data"
-                                              :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-objects"}
-                                                     {:type "action" :id (-> generic-dialogs :intro :name)}]}
+                         :init-activity        {:type "sequence-data"
+                                                :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-objects"}
+                                                       {:type "action" :id (-> generic-dialogs :intro :name)}]}
 
-                       :finish-scene         {:type "sequence-data"
-                                              :data [{:type "action" :id (-> generic-dialogs :finish-dialog :name)}
-                                                     {:type "action" :id "finish-activity"}]}
+                         :finish-scene         {:type "sequence-data"
+                                                :data [{:type "action" :id (-> generic-dialogs :finish-dialog :name)}
+                                                       {:type "action" :id "finish-activity"}]}
 
-                       :stop-activity        {:type "stop-activity"}
-                       :finish-activity      {:type "finish-activity"}}
+                         :stop-activity        {:type "stop-activity"}
+                         :finish-activity      {:type "finish-activity"}}
 
-       :triggers      {:back  {:on "back" :action "stop-activity"}
-                       :start {:on "start" :action "init-activity"}}
-       :metadata      {:autostart true}}
-      (init-tracks-metadata props)
-      (add-background props)
-      (add-boxes props)
-      (add-items props)
-      (add-items-dialogs props)
-      (add-generic-dialogs props)))
+         :triggers      {:back  {:on "back" :action "stop-activity"}
+                         :start {:on "start" :action "init-activity"}}
+         :metadata      {:autostart true}}
+        (init-tracks-metadata props)
+        (add-background props)
+        (add-boxes props)
+        (add-items props)
+        (add-items-dialogs props)
+        (add-generic-dialogs props))))

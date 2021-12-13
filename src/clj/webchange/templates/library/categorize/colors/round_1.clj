@@ -87,18 +87,6 @@
                                                                    :phrase "Color green"}})))]
                                        (flatten))
                  :background      {:src "/raw/img/categorize/background.png"}
-                 :generic-dialogs {:intro            {:name               "intro"
-                                                      :prompt             "Start dialog"
-                                                      :phrase             "intro"
-                                                      :phrase-description "Introduce task"}
-                                   :correct-answer   {:name               "correct-answer"
-                                                      :phrase             "correct-answer"
-                                                      :phrase-description "correct answer"
-                                                      :prompt             "Correct answer"}
-                                   :wrong-answer     {:name   "wrong-answer"
-                                                      :prompt "Wrong answer"}
-                                   :finish-dialog    {:name   "finish-dialog"
-                                                      :prompt "Finish dialog"}
-                                   :continue-sorting {:name   "continue-sorting"
+                 :generic-dialogs {:continue-sorting {:name   "continue-sorting"
                                                       :prompt "Continue sorting"}}
                  :tracks          {:items {:title "Round 1 - Colors"}}}))

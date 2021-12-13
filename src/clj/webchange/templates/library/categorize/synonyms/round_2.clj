@@ -27,36 +27,18 @@
                       :phrase (str word " correct")}}))
 
 (def template (round-2-template/get-template
-                {:boxes           [(word->box {:word "chilly" :x 980})
-                                   (word->box {:word "kid" :x 1274})
-                                   (word->box {:word "big" :x 393})
-                                   (word->box {:word "trash" :x 1568})
-                                   (word->box {:word "afraid" :x 686})
-                                   (word->box {:word "glad" :x 99})]
-                 :items           [(word->item {:word "cold" :target "chilly" :x 701 :y 89})
-                                   (word->item {:word "child" :target "kid" :x 863 :y 243})
-                                   (word->item {:word "large" :target "big" :x 448 :y 256})
-                                   (word->item {:word "garbage" :target "trash" :x 1035 :y 383 :item "trash"})
-                                   (word->item {:word "scared" :target "afraid" :x 1121 :y 105})
-                                   (word->item {:word "happy" :target "glad" :x 701 :y 393})]
-                 :background      {:background {:src "/raw/img/categorize-shapes/background-class.png"},
-                                   :decoration {:src "/raw/img/categorize-shapes/decoration.png"},
-                                   :surface    {:src "/raw/img/categorize-shapes/surface.png"}}
-                 :generic-dialogs {:intro            {:name               "intro"
-                                                      :prompt             "Start dialog"
-                                                      :phrase             "intro"
-                                                      :phrase-description "Introduce task"}
-                                   :tap-instructions {:name   "tap-instructions"
-                                                      :phrase "Tap instructions"}
-                                   :correct-answer   {:name               "correct-answer"
-                                                      :phrase             "correct-answer"
-                                                      :phrase-description "correct answer"
-                                                      :prompt             "Correct answer"}
-                                   :wrong-answer     {:name               "wrong-answer"
-                                                      :phrase             "wrong-answer"
-                                                      :phrase-description "wrong answer"
-                                                      :prompt             "Wrong answer"}
-                                   :finish-dialog    {:name               "finish-dialog"
-                                                      :phrase             "finish-answer"
-                                                      :phrase-description "finish answer"
-                                                      :prompt             "Finish dialog"}}}))
+                {:boxes      [(word->box {:word "chilly" :x 980})
+                              (word->box {:word "kid" :x 1274})
+                              (word->box {:word "big" :x 393})
+                              (word->box {:word "trash" :x 1568})
+                              (word->box {:word "afraid" :x 686})
+                              (word->box {:word "glad" :x 99})]
+                 :items      [(word->item {:word "cold" :target "chilly" :x 701 :y 89})
+                              (word->item {:word "child" :target "kid" :x 863 :y 243})
+                              (word->item {:word "large" :target "big" :x 448 :y 256})
+                              (word->item {:word "garbage" :target "trash" :x 1035 :y 383 :item "trash"})
+                              (word->item {:word "scared" :target "afraid" :x 1121 :y 105})
+                              (word->item {:word "happy" :target "glad" :x 701 :y 393})]
+                 :background {:background {:src "/raw/img/categorize-shapes/background-class.png"},
+                              :decoration {:src "/raw/img/categorize-shapes/decoration.png"},
+                              :surface    {:src "/raw/img/categorize-shapes/surface.png"}}}))

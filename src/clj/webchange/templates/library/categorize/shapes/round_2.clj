@@ -44,21 +44,4 @@
                  :background      {:background {:src "/raw/img/categorize-shapes/background-class.png"}
                                    :decoration {:src "/raw/img/categorize-shapes/decoration.png"}
                                    :surface    {:src "/raw/img/categorize-shapes/surface.png"}}
-                 :generic-dialogs {:intro            {:name               "intro"
-                                                      :prompt             "Start dialog"
-                                                      :phrase             "intro"
-                                                      :phrase-description "Introduce task"}
-                                   :tap-instructions {:name   "tap-instructions"
-                                                      :phrase "Tap instructions"}
-                                   :correct-answer   {:name               "correct-answer"
-                                                      :phrase             "correct-answer"
-                                                      :phrase-description "correct answer"
-                                                      :prompt             "Correct answer"}
-                                   :wrong-answer     {:name               "wrong-answer"
-                                                      :phrase             "wrong-answer"
-                                                      :phrase-description "wrong answer"
-                                                      :prompt             "Wrong answer"}
-                                   :finish-dialog    {:name               "finish-round-dialog"
-                                                      :phrase             "finish-answer"
-                                                      :phrase-description "finish answer"
-                                                      :prompt             "Finish dialog"}}}))
+                 :generic-dialogs {:finish-dialog {:name "finish-round-dialog"}}}))
