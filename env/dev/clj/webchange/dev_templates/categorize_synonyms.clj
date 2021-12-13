@@ -17,7 +17,6 @@
   (def scene-slug "categorize-synonyms")
 
   (copy-activity "english" "categorize-synonyms")
-
   (def test-course-slug "test-course-english-mvkcezni")
   (def scene-slug "categorize-synonyms")
 
