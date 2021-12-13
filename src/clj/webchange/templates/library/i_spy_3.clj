@@ -10,134 +10,134 @@
         :options     {}})
 
 (def t {:assets
-                       [{:url "/raw/img/i-spy-3/background.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/decoration.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/surface.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-1.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-2.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-3.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-4.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-5.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-6.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-7.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-8.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-9.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/img-10.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy-3/icons/22.png", :size 10, :type "image"}
-                        ],
+        [{:url "/raw/img/i-spy-3/background.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/decoration.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/surface.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-1.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-2.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-3.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-4.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-5.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-6.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-7.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-8.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-9.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/img-10.png", :size 10, :type "image"}
+         {:url "/raw/img/i-spy-3/icons/22.png", :size 10, :type "image"}
+         ],
         :objects       {:layered-background
-                                      {:type       "layered-background",
-                                       :background {:src "/raw/img/i-spy-3/background.png"},
-                                       :decoration {:src "/raw/img/i-spy-3/decoration.png"},
-                                       :surface    {:src "/raw/img/i-spy-3/surface.png"}
-                                       }
+                        {:type       "layered-background",
+                         :background {:src "/raw/img/i-spy-3/background.png"},
+                         :decoration {:src "/raw/img/i-spy-3/decoration.png"},
+                         :surface    {:src "/raw/img/i-spy-3/surface.png"}
+                         }
                         :schedule
-                                      {:type           "text",
-                                       :x              1121,
-                                       :y              623,
-                                       :width          108,
-                                       :height         73,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Staatliches",
-                                       :font-size      32,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "    OPEN \n8AM-8PM",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
-                                       },
+                        {:type           "text",
+                         :x              1121,
+                         :y              623,
+                         :width          108,
+                         :height         73,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Staatliches",
+                         :font-size      32,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "    OPEN \n8AM-8PM",
+                         :vertical-align "middle",
+                         :visible        true
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
+                         },
 
                         :menu
-                                      {:type           "text",
-                                       :x              65,
-                                       :y              858,
-                                       :width          169,
-                                       :height         62,
-                                       :align          "center",
-                                       :fill           "#B90000",
-                                       :font-family    "AbrilFatface",
-                                       :font-size      56,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "MENU",
-                                       :vertical-align "middle",
-                                       :visible        true,
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
-                                       },
+                        {:type           "text",
+                         :x              65,
+                         :y              858,
+                         :width          169,
+                         :height         62,
+                         :align          "center",
+                         :fill           "#B90000",
+                         :font-family    "AbrilFatface",
+                         :font-size      56,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "MENU",
+                         :vertical-align "middle",
+                         :visible        true,
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
+                         },
                         :park-name
-                                      {:type           "text",
-                                       :x              619,
-                                       :y              249,
-                                       :width          459,
-                                       :height         82,
-                                       :align          "center",
-                                       :fill           "#333333",
-                                       :font-family    "AbrilFatface",
-                                       :font-size      60,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "Wordbury Park",
-                                       :vertical-align "middle",
-                                       :visible        true,
-                                       },
+                        {:type           "text",
+                         :x              619,
+                         :y              249,
+                         :width          459,
+                         :height         82,
+                         :align          "center",
+                         :fill           "#333333",
+                         :font-family    "AbrilFatface",
+                         :font-size      60,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "Wordbury Park",
+                         :vertical-align "middle",
+                         :visible        true,
+                         },
                         :monument
-                                      {:type    "image",
-                                       :x       620,
-                                       :y       455,
-                                       :width   100,
-                                       :height  100,
-                                       :scale-x 2,
-                                       :scale-y 3,
-                                       :filter  "brighten",
-                                       :src     "/raw/img/i-spy-3/icons/22.png",
-                                       :actions {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
-                                       },
+                        {:type    "image",
+                         :x       620,
+                         :y       455,
+                         :width   100,
+                         :height  100,
+                         :scale-x 2,
+                         :scale-y 3,
+                         :filter  "brighten",
+                         :src     "/raw/img/i-spy-3/icons/22.png",
+                         :actions {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
+                         },
                         :trash-bin-1
-                                      {:type           "text",
-                                       :x              1579,
-                                       :y              718,
-                                       :width          76,
-                                       :height         24,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Staatliches",
-                                       :font-size      24,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "TRASH",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
-                                       },
+                        {:type           "text",
+                         :x              1579,
+                         :y              718,
+                         :width          76,
+                         :height         24,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Staatliches",
+                         :font-size      24,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "TRASH",
+                         :vertical-align "middle",
+                         :visible        true
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
+                         },
                         :trash-bin-2
-                                      {:type           "text",
-                                       :x              1692,
-                                       :y              718,
-                                       :width          76,
-                                       :height         24,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Staatliches",
-                                       :font-size      24,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "RECYCLE",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
-                                       },
+                        {:type           "text",
+                         :x              1692,
+                         :y              718,
+                         :width          76,
+                         :height         24,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Staatliches",
+                         :font-size      24,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "RECYCLE",
+                         :vertical-align "middle",
+                         :visible        true
+                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
+                         },
                         :house-sign
-                                      {:type    "image",
-                                       :x       1330,
-                                       :y       235,
-                                       :width   100,
-                                       :height  100,
-                                       :filter  "brighten",
-                                       :src     "/raw/img/i-spy-3/icons/22.png",
-                                       :actions {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
-                                       },
+                        {:type    "image",
+                         :x       1330,
+                         :y       235,
+                         :width   100,
+                         :height  100,
+                         :filter  "brighten",
+                         :src     "/raw/img/i-spy-3/icons/22.png",
+                         :actions {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
+                         },
                         :bar          {:type          "rectangle",
                                        :x             672,
                                        :y             912,
@@ -191,24 +191,18 @@
                                        :fill          0xE4E4E4,
                                        :states        {:gray {:fill 0xE4E4E4}, :highlighted {:fill 0x76C700}}
                                        }
-                        :icon-max          {:type       "image",
-                                             :x          1545,
-                                             :y          1008,
-                                             :width      60,
-                                             :height     60,
-                                             :transition "icon-max",
-                                             :filter     "brighten",
-                                             :src        "/raw/img/i-spy/transparent.png"
-                                             :actions    {:click {:id "icon-max-click", :on "click", :type "action" :unique-tag "speech"}}}
-                        :icon-park          {:type       "image",
-                                            :x          575,
-                                            :y          230,
-                                            :width      530,
-                                            :height     120,
-                                            :transition "icon-park",
-                                            :filter     "brighten",
-                                            :src        "/raw/img/i-spy/transparent.png"
-                                            :actions    {:click {:id "icon-park-click", :on "click", :type "action" :unique-tag "speech"}}}
+                        :icon-max     {:type       "transparent",
+                                       :x          1545,
+                                       :y          1008,
+                                       :width      60,
+                                       :height     60,
+                                       :actions    {:click {:id "icon-max-click", :on "click", :type "action" :unique-tag "speech"}}}
+                        :icon-park    {:type       "transparent",
+                                       :x          575,
+                                       :y          230,
+                                       :width      530,
+                                       :height     120,
+                                       :actions    {:click {:id "icon-park-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-1       {:type       "image",
                                        :x          700,
                                        :y          940,
@@ -266,20 +260,20 @@
                                        :src        "/raw/img/i-spy-3/icons/img-1.png"
                                        }
                         :schedule-1
-                                      {:type           "text",
-                                       :x              717,
-                                       :y              958,
-                                       :width          37,
-                                       :height         23,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Staatliches",
-                                       :font-size      12,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "    OPEN \n8AM-8PM",
-                                       :vertical-align "middle",
-                                       :visible        true},
+                        {:type           "text",
+                         :x              717,
+                         :y              958,
+                         :width          37,
+                         :height         23,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Staatliches",
+                         :font-size      12,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "    OPEN \n8AM-8PM",
+                         :vertical-align "middle",
+                         :visible        true},
                         :icon-br-2    {:type     "group",
                                        :x        0,
                                        :y        0,
@@ -288,21 +282,21 @@
                                        :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :menu-2
-                                      {:type           "text",
-                                       :x              822,
-                                       :y              946,
-                                       :width          49,
-                                       :height         17,
-                                       :align          "center",
-                                       :fill           "#B90000",
-                                       :font-family    "Staatliches",
-                                       :font-size      19,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "MENU",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       },
+                        {:type           "text",
+                         :x              822,
+                         :y              946,
+                         :width          49,
+                         :height         17,
+                         :align          "center",
+                         :fill           "#B90000",
+                         :font-family    "Staatliches",
+                         :font-size      19,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "MENU",
+                         :vertical-align "middle",
+                         :visible        true
+                         },
                         :icon-br-im-2 {:type       "image",
                                        :x          810,
                                        :y          941,
@@ -339,35 +333,35 @@
 
 
                         :trash-bin-4
-                                      {:type           "text",
-                                       :x              1048,
-                                       :y              985,
-                                       :width          19,
-                                       :height         9,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Staatliches",
-                                       :font-size      7,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "TRASH",
-                                       :vertical-align "middle",
-                                       :visible        true}
+                        {:type           "text",
+                         :x              1048,
+                         :y              985,
+                         :width          19,
+                         :height         9,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Staatliches",
+                         :font-size      7,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "TRASH",
+                         :vertical-align "middle",
+                         :visible        true}
                         :trash-bin-5
-                                      {:type           "text",
-                                       :x              1075,
-                                       :y              985,
-                                       :width          23,
-                                       :height         9,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Staatliches",
-                                       :font-size      7,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "TRASH",
-                                       :vertical-align "middle",
-                                       :visible        true}
+                        {:type           "text",
+                         :x              1075,
+                         :y              985,
+                         :width          23,
+                         :height         9,
+                         :align          "center",
+                         :fill           "#FFFFFF",
+                         :font-family    "Staatliches",
+                         :font-size      7,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "TRASH",
+                         :vertical-align "middle",
+                         :visible        true}
 
                         :icon-br-im-4 {:type       "image",
                                        :x          1036,
@@ -412,10 +406,10 @@
                                                     ]
                                              }
                         :test-complete
-                                            {:type      "test-var-list",
-                                             :success   "finish-activity",
-                                             :values    [true true true true true true],
-                                             :var-names ["item-1" "item-2" "item-3" "item-4" "item-5" "finish-not-played"]},
+                        {:type      "test-var-list",
+                         :success   "finish-activity",
+                         :values    [true true true true true true],
+                         :var-names ["item-1" "item-2" "item-3" "item-4" "item-5" "finish-not-played"]},
                         :finish-activity    {:type "sequence-data"
                                              :data [
                                                     {:type "set-variable", :var-name "finish-not-played" :var-value false}
@@ -431,19 +425,19 @@
                                              :phrase-description "Activity completion script"}
 
                         :icon-max-click      {:type               "sequence-data",
-                                             :editor-type        "dialog",
-                                             :data               [{:type "sequence-data"
-                                                                   :data [{:type "empty" :duration 0}
-                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "icon-max-click",
-                                             :phrase-description "Max click"}
+                                              :editor-type        "dialog",
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                              :phrase             "icon-max-click",
+                                              :phrase-description "Max click"}
                         :icon-park-click      {:type               "sequence-data",
-                                             :editor-type        "dialog",
-                                             :data               [{:type "sequence-data"
-                                                                   :data [{:type "empty" :duration 0}
-                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "icon-park-click",
-                                             :phrase-description "Park name click"}
+                                               :editor-type        "dialog",
+                                               :data               [{:type "sequence-data"
+                                                                     :data [{:type "empty" :duration 0}
+                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                               :phrase             "icon-park-click",
+                                               :phrase-description "Park name click"}
 
                         :item-1-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
@@ -453,12 +447,12 @@
                                              :phrase             "schedule-dialog",
                                              :phrase-description "Park hours"}
                         :item-1-next-dialog      {:type               "sequence-data",
-                                             :editor-type        "dialog",
-                                             :data               [{:type "sequence-data"
-                                                                   :data [{:type "empty" :duration 0}
-                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "schedule-next-dialog",
-                                             :phrase-description "Park hours next click"}
+                                                  :editor-type        "dialog",
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                  :phrase             "schedule-next-dialog",
+                                                  :phrase-description "Park hours next click"}
                         :item-2-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
@@ -467,12 +461,12 @@
                                              :phrase             "menu-dialog",
                                              :phrase-description "menu description"}
                         :item-2-next-dialog      {:type               "sequence-data",
-                                             :editor-type        "dialog",
-                                             :data               [{:type "sequence-data"
-                                                                   :data [{:type "empty" :duration 0}
-                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "menu-next-dialog",
-                                             :phrase-description "Menu description next click"}
+                                                  :editor-type        "dialog",
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                  :phrase             "menu-next-dialog",
+                                                  :phrase-description "Menu description next click"}
                         :item-3-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
@@ -495,12 +489,12 @@
                                              :phrase             "trash-bin-dialog",
                                              :phrase-description "Trash bin description"}
                         :item-4-next-dialog      {:type               "sequence-data",
-                                             :editor-type        "dialog",
-                                             :data               [{:type "sequence-data"
-                                                                   :data [{:type "empty" :duration 0}
-                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "trash-bin-next-dialog",
-                                             :phrase-description "Trash bin description next click"}
+                                                  :editor-type        "dialog",
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                  :phrase             "trash-bin-next-dialog",
+                                                  :phrase-description "Trash bin description next click"}
                         :item-5-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
@@ -509,12 +503,12 @@
                                              :phrase             "house-plate-dialog",
                                              :phrase-description "Building address number"}
                         :item-5-next-dialog      {:type               "sequence-data",
-                                             :editor-type        "dialog",
-                                             :data               [{:type "sequence-data"
-                                                                   :data [{:type "empty" :duration 0}
-                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "house-plate-next-dialog",
-                                             :phrase-description "Building address number next click"}
+                                                  :editor-type        "dialog",
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                  :phrase             "house-plate-next-dialog",
+                                                  :phrase-description "Building address number next click"}
 
                         :check-and-set-item {:type       "sequence-data",
                                              :data       [
@@ -571,8 +565,8 @@
                                              :phrase-description "Introduce task"}
                         },
         :triggers
-                       {:back  {:on "back", :action "stop-activity"},
-                        :start {:on "start", :action "intro"}},
+        {:back  {:on "back", :action "stop-activity"},
+         :start {:on "start", :action "intro"}},
         :metadata      {:autostart true
                         :tracks    [{:title "Dialogs"
                                      :nodes [{:type      "dialog"
@@ -605,7 +599,7 @@
                                               :action-id :icon-max-click}
                                              {:type      "dialog"
                                               :action-id :icon-park-click}
-                                            ]}
+                                             ]}
                                     ]
                         }})
 
