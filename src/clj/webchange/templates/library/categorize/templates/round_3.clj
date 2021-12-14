@@ -63,12 +63,7 @@
                    (-> template
                        (update :assets conj asset)
                        (update :objects assoc (keyword object-name) object-data)
-                       (update :scene-objects conj [object-name])
-                       ;(update-in [:actions :unhighlight-all :data] conj {:target     object-name
-                       ;                                                   :type       "set-attribute"
-                       ;                                                   :attr-name  "highlight"
-                       ;                                                   :attr-value false})
-                       )))
+                       (update :scene-objects conj [object-name]))))
                template)))
 
 (defn- get-item-name
@@ -300,8 +295,8 @@
          :metadata      {:autostart true}}
         (init-tracks-metadata props)
         (add-background props)
-        (add-boxes props)
         (add-librarian props)
+        (add-boxes props)
         (add-items props)
         (add-items-dialogs props)
         (add-tasks props)
