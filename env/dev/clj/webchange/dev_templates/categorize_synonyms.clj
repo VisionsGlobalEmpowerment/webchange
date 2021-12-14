@@ -17,7 +17,7 @@
   (def scene-slug "categorize-synonyms")
 
   (copy-activity "english" "categorize-synonyms")
-  (def test-course-slug "test-course-english-vfcggqjn")
+  (def test-course-slug "test-course-english-bkmcftyf")
   (def scene-slug "categorize-synonyms")
 
   (core/update-activity-template! test-course-slug scene-slug t/user-id)

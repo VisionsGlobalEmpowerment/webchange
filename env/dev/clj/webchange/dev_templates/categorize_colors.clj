@@ -20,7 +20,7 @@
 
   (copy-activity "english" "categorize-colors-2")
 
-  (def test-course-slug "test-course-english-mbcakkhf")
+  (def test-course-slug "test-course-english-moyhvzcn")
   (def scene-slug "categorize-colors-2")
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 
