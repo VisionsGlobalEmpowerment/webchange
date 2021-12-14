@@ -91,14 +91,14 @@
 
 ;; Dialogs
 
-(defn get-nth-in [data path]
+(defn- get-nth-in [data path]
   (reduce
-    (fn [current-data path-step]
-      (if (associative? current-data)
-        (get current-data path-step)
-        (nth current-data path-step nil)))
-    data
-    path))
+   (fn [current-data path-step]
+     (if (associative? current-data)
+       (get current-data path-step)
+       (nth current-data path-step nil)))
+   data
+   path))
 
 (def empty-action-position 0)
 (def inner-action-position 1)
@@ -108,4 +108,5 @@
 
 (defn get-inner-action
   [action]
-  (get-nth-in action inner-action-path))
+  (if (map? action)
+    (get-nth-in action inner-action-path)))
