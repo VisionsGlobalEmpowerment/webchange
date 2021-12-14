@@ -5,7 +5,6 @@
     [webchange.templates.library.categorize.colors.round-0 :refer [template-round-0]]
     [webchange.templates.library.categorize.colors.round-1 :as round-1]
     [webchange.templates.library.categorize.colors.round-2 :as round-2]
-    [webchange.templates.library.categorize.colors.round-2 :refer [template-round-2]]
     [webchange.templates.library.categorize.colors.round-3 :refer [template-round-3]]
     [webchange.templates.core :as core]))
 

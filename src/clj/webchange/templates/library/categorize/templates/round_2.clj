@@ -293,8 +293,8 @@
          :metadata      {:autostart true}}
         (init-tracks-metadata props)
         (add-background props)
-        (add-boxes props)
         (add-librarian props)
+        (add-boxes props)
         (add-items props)
         (add-items-dialogs props)
         (add-generic-dialogs props))))
