@@ -214,7 +214,47 @@
                     :prompt             "Finish dialog"}})
 
 (defn get-template
-  ""
+  "Create Round 3.
+   Properties description:
+   - boxes - list of boxes descriptions:
+       - name - unique box name, used to define task box
+       - position - where box has to be placed, {:x :y}
+       - src - box image src
+   - items - list of items descriptions:
+       - name - unique item name, used to define task item
+       - target - target box name
+       - position - where item has to be placed, {:x :y}. Also can contain additional props e.g. rotation, scale.. 
+       - src - item image src
+       - pick-dialog - dialog, played when the item is being dragged:
+           - name - dialog name used in :actions field of scene-data
+           - phrase - dialog phrase description
+       - correct-dialog - dialog, played when the item is placed in right box (target). Optional
+           - name - dialog name used in :actions field of scene-data
+           - phrase - dialog phrase text
+   - tasks 
+       - item - what item has to be placed
+       - box - where item has to be placed
+       - instruction - instruction phrase description. Optional
+   - background - background data:
+       - src - background image src (for single background)
+       or
+       - background - {:src} - background layer data (for layered background)
+       - decoration - the same as for 'background' field
+       - surface - the same as for 'background' field
+   - generic-dialogs - other dialogs:
+       - intro - round introduction
+           - name - dialog name used in :actions field of scene-data
+           - prompt - text for prompt item in dialogs form. Optional
+           - phrase - dialog phrase text. Optional
+           - phrase-description - dialog phrase description text. Optional
+       - correct-answer - common dialog for all correct cases. The same fields as in the 'intro'
+       - wrong-answer - common dialog for all incorrect cases. The same fields as in the 'intro'
+       - finish-dialog - dialog in the end of the round. The same fields as in the 'intro'
+   - tracks - dialogs tracks options. Optional:
+       - items - sortable items track options. Optional:
+           - title - title of track. Optional
+       - generic - generic dialogs track options. Optional:
+           - title - title of track. Optional"
   [params]
   (let [{:keys [generic-dialogs] :as props} (deep-merge {:generic-dialogs default-generic-dialogs} params)]
     (-> {:assets        []

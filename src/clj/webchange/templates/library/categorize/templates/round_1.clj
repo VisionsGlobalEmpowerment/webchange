@@ -136,7 +136,7 @@
        - name - unique box name, used to define item's target
        - position - where box has to be placed, {:x :y}
        - src - box image src
-   - items - items of boxes descriptions:
+   - items - list of items descriptions:
        - target - target box name
        - position - where item has to be placed, {:x :y}
        - src - item image src
