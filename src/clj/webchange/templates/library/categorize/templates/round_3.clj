@@ -139,16 +139,17 @@
   (->> tasks
        (map-indexed vector)
        (map (fn [[idx value]] [(inc idx) value]))
-       (reduce (fn [template [idx {:keys [item box]}]]
-                 (let [instruction-description (-> (str item " on " box) (clojure.string/capitalize))
-                       instruction-prompt (str "Put the " item " picture on the " box "picture.")
+       (reduce (fn [template [idx {:keys [item box instruction]}]]
+                 (let [instruction-description (if (some? instruction)
+                                                 instruction
+                                                 (str "Put the " item " picture on the " box "picture."))
 
                        instruction-name (get-instruction-name idx)
                        instruction-data (dialog/default instruction-name
                                                         {:phrase-description instruction-description})
 
                        track-prompt-data {:type "prompt"
-                                          :text instruction-prompt}
+                                          :text instruction-description}
                        track-dialog-data {:type      "dialog"
                                           :action-id (keyword instruction-name)}]
                    (-> template
@@ -299,9 +300,9 @@
          :metadata      {:autostart true}}
         (init-tracks-metadata props)
         (add-background props)
-        (add-librarian props)
         (add-boxes props)
         (add-items props)
+        (add-librarian props)
         (add-items-dialogs props)
         (add-tasks props)
         (add-instructions props)
