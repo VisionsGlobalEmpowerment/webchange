@@ -31,12 +31,12 @@
                               (word->box {:word "in" :x 1274})
                               (word->box {:word "quiet" :x 393})
                               (word->box {:word "right" :x 99})]
-                 :items      [(word->item {:word "left" :target "right" :x 1635 :y 107})
-                              (word->item {:word "up" :target "down" :x 801 :y 481})
-                              (word->item {:word "out" :target "in" :x 1095 :y 223})
-                              (word->item {:word "night" :target "day" :x 1274 :y 481})
-                              (word->item {:word "loud" :target "quiet" :x 790 :y 160})
-                              (word->item {:word "back" :target "front" :x 415 :y 354})]
+                 :items      [(word->item {:word "left" :x 1635 :y 107})
+                              (word->item {:word "up" :x 801 :y 481})
+                              (word->item {:word "out" :x 1095 :y 223})
+                              (word->item {:word "night" :x 1274 :y 481})
+                              (word->item {:word "loud" :x 790 :y 160})
+                              (word->item {:word "back" :x 415 :y 354})]
                  :tasks      [{:item "left" :box "right"}
                               {:item "loud" :box "quiet"}
                               {:item "out" :box "in"}

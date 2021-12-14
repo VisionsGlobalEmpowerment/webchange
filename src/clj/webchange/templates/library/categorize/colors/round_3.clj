@@ -10,7 +10,6 @@
 (defn- word->item
   [{:keys [word x y]}]
   {:name        word
-   :target      word
    :position    {:x        x
                  :y        y
                  :rotation -90

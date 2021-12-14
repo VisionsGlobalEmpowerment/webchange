@@ -49,11 +49,11 @@
                    :actions     (cond-> {:drag-end      {:on     "drag-end"
                                                          :type   "action"
                                                          :id     "handle-drag-end"
-                                                         :params (cond-> {:box           box
-                                                                          :init-position (-> position
+                                                         :params (cond-> {:init-position (-> position
                                                                                              (select-keys [:x :y])
-                                                                                             (merge {:duration 1}))
-                                                                          :target        target}
+                                                                                             (merge {:duration 1}))}
+                                                                         (some? box) (assoc :box box)
+                                                                         (some? target) (assoc :target target)
                                                                          (some? say-correct) (assoc :correct-drop say-correct))}
                                          :collide-enter {:on               "collide-enter"
                                                          :test             test
@@ -68,7 +68,8 @@
                                         drag-start? (assoc :drag-start {:on     "drag-start"
                                                                         :type   "action"
                                                                         :id     "handle-drag-start"
-                                                                        :params {:target target}})
+                                                                        :params (cond-> {}
+                                                                                        (some? target) (assoc :target target))})
                                         drag-move? (assoc :drag-move {:on      "drag-move"
                                                                       :type    "action"
                                                                       :id      "handle-drag-move"

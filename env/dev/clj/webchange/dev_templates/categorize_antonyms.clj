@@ -23,7 +23,7 @@
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
 
   (copy-activity "english" "categorize-antonyms")
-  (def test-course-slug "test-course-english-hhwsebwe")
+  (def test-course-slug "test-course-english-muwtkazw")
   (def scene-slug "categorize-antonyms")
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 

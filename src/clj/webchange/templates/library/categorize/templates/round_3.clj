@@ -103,7 +103,6 @@
 (defn- add-items-dialogs
   [template {:keys [items]}]
   (->> items
-       (distinct-by-key :target)
        (reduce (fn [template {:keys [pick-dialog correct-dialog]}]
                  (let [pick-dialog-name (-> pick-dialog :name keyword)
                        pick-dialog-data (-> (:phrase pick-dialog)
@@ -222,7 +221,6 @@
        - src - box image src
    - items - list of items descriptions:
        - name - unique item name, used to define task item
-       - target - target box name
        - position - where item has to be placed, {:x :y}. Also can contain additional props e.g. rotation, scale.. 
        - src - item image src
        - pick-dialog - dialog, played when the item is being dragged:
