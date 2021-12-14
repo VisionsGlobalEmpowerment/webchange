@@ -21,7 +21,7 @@
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 
   (copy-activity "english" "categorize-shapes")
-  (def test-course-slug "test-course-english-novvnqph")
+  (def test-course-slug "test-course-english-ghdldiqt")
   (def scene-slug "categorize-shapes")
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 

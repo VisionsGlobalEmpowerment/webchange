@@ -1,6 +1,5 @@
 (ns webchange.templates.library.categorize.colors.round-3
   (:require
-    [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.library.categorize.templates.round-3 :as round-3-template]))
 
 (def params-object-names round-3-template/params-object-names)
