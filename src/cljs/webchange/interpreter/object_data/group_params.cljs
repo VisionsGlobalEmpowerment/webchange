@@ -63,12 +63,13 @@
   [{:keys [actions collidable?] :as object}]
   (if collidable?
     (reduce (fn [object event-name]
-              (let [{:keys [test pick-event-param]} (some (fn [[_ {:keys [on] :as event}]]
-                                                            (and (= on event-name) event))
-                                                          actions)
+              (let [{:keys [test pick-event-param collision-type]} (some (fn [[_ {:keys [on] :as event}]]
+                                                                           (and (= on event-name) event))
+                                                                         actions)
                     event-key (-> (str "on-" event-name) (keyword))]
                 (assoc object event-key {:handler     (get object event-key)
                                          :test        test
+                                         :type        collision-type
                                          :pick-params (if (sequential? pick-event-param)
                                                         pick-event-param
                                                         [pick-event-param])})))

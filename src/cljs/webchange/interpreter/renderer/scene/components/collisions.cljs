@@ -35,8 +35,9 @@
 (defn- collided?
   ([object1 object2]
    (collided? object1 object2 {}))
-  ([object1 object2 {:keys [type] :or {type "mouse"}}]
-   (let [{mouse-x :x mouse-y :y} (get-mouse-position)
+  ([object1 object2 {:keys [type]}]
+   (let [type (or type "mouse")
+         {mouse-x :x mouse-y :y} (get-mouse-position)
          {x1 :x y1 :y width1 :width height1 :height} (get-bounds object1)
          {x2 :x y2 :y width2 :width height2 :height} (get-bounds object2)]
      (case type
@@ -83,7 +84,7 @@
     (when (and (.-parent object) (.-parent target-object)
                (interested-target? target-name props))
       (let [prev-value (get @bumped-into target-name)
-            new-value (collided? object target-object)
+            new-value (collided? object target-object on-collide-enter)
             handler-props (merge target-props {:target target-name})]
         (swap! bumped-into assoc target-name new-value)
         (when (and (true? prev-value)
