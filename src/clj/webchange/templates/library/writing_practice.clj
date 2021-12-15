@@ -34,9 +34,9 @@
                    :letter-tutorial-path
                                 {:type         "animated-svg-path",
                                  :x            600,
-                                 :y            25,
+                                 :y            -37,
                                  :width        225,
-                                 :height       225,
+                                 :height       300,
                                  :duration     5000,
                                  :fill         "transparent",
                                  :line-cap     "round",
@@ -49,9 +49,9 @@
                    :letter-tutorial-trace
                                 {:type         "svg-path",
                                  :x            600,
-                                 :y            25,
+                                 :y            -37,
                                  :width        225,
-                                 :height       225,
+                                 :height       300,
                                  :scene-name   "letter-tutorial-trace",
                                  :dash         [7 7],
                                  :data         "",
@@ -133,11 +133,11 @@
 
                                                         {:type      "set-attribute",
                                                          :target    "letter-tutorial-trace",
-                                                         :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter-tutorial-path"}],
+                                                         :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
                                                          :attr-name "data"}
                                                         {:type      "set-attribute",
                                                          :target    "letter-tutorial-path",
-                                                         :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter-path"}],
+                                                         :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
                                                          :attr-name "path"}
                                                         {:type      "set-attribute",
                                                          :target    "letter-tutorial-image",
@@ -172,9 +172,9 @@
                                                  :data [{:to {:x 1080, :y 360, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
                                                         {:id "visible", :type "state", :target "letter-tutorial-path"}
                                                         {:data [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
-                                                                {:to            {:path "", :scale {:x 1.8, :y 1.8}, :origin {:x 780, :y 60}, :duration 5},
+                                                                {:to            {:letter-path "", :scale {:x 1.8, :y 1.8}, :origin {:x 780, :y 0}, :duration 5},
                                                                  :type          "transition",
-                                                                 :from-var      [{:var-name "current-concept", :action-property "to.path" :var-property "letter-path"}],
+                                                                 :from-var      [{:var-name "current-concept", :action-property "to.letter-path" :var-property "letter"}],
                                                                  :transition-id "mari"}],
                                                          :type "parallel"}
                                                         {:to {:x 1490, :y 180, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}]}

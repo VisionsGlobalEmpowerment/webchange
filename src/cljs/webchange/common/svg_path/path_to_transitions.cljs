@@ -4,6 +4,7 @@
     [clojure.string :as s]
     [webchange.common.svg-path.path-splitter :refer [split-path apply-path-to-point]]
     [webchange.common.svg-path.path-element :refer [length]]
+    [webchange.interpreter.renderer.scene.components.letters-path :refer [get-svg-path]]
     [svg-arc-to-cubic-bezier :as arcToBezier]))
 
 (defn- apply-origin
@@ -56,7 +57,7 @@
     ("M" "L")
     (let [[x1 y1] coordinates]
       [{:x x1
-        :y y1}] )
+        :y y1}])
     ("H")
     (let [[x1] coordinates]
       [{:x x1
@@ -91,15 +92,15 @@
         [{:x x2 :y y2}]))
     ("A")
     (let [[rx ry x-axis-rotation large-arc-flag sweep-flag current-x current-y] coordinates
-          params (clj->js {:px x
-                           :py y
-                           :cx current-x
-                           :cy current-y
-                           :rx rx
-                           :ry ry
+          params (clj->js {:px            x
+                           :py            y
+                           :cx            current-x
+                           :cy            current-y
+                           :rx            rx
+                           :ry            ry
                            :xAxisRotation x-axis-rotation
-                           :largeArcFlag large-arc-flag
-                           :sweepFlag sweep-flag})
+                           :largeArcFlag  large-arc-flag
+                           :sweepFlag     sweep-flag})
           curves (->> params ((.-default arcToBezier)) (js->clj))]
       (map
         (fn [{x1 "x1" y1 "y1" x2 "x2" y2 "y2" x3 "x" y3 "y"}]
@@ -135,7 +136,7 @@
                        (fn [[{:keys [x y] :as last-point} result] transition]
                          (let [transition-path (transition->path transition)
                                new-point (apply-path-to-point last-point transition-path)
-                               path (concat ["M" x y ] transition-path)
+                               path (concat ["M" x y] transition-path)
                                length (length (s/join " " path))]
                            [new-point (conj result length)]))
                        [origin []])
@@ -144,8 +145,9 @@
     (map #(* total-duration (/ % total-length)) lengths)))
 
 (defn path->transitions
-  [{:keys [path origin duration scale]}]
-  (let [absolute-paths (->> (split-path path)
+  [{:keys [path letter-path origin duration scale]}]
+  (let [absolute-paths (->> (if (some? letter-path) (get-svg-path letter-path {:trace? true}) path)
+                            (split-path)
                             (map (partial apply-scale scale))
                             (map (partial apply-origin origin)))
         transitions (->> absolute-paths (get-transitions {}))

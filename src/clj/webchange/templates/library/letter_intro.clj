@@ -74,17 +74,17 @@
                                  :transition  "letter-small"},
                     :letter-path
                                 {:type         "animated-svg-path",
-                                 :x            875,
-                                 :y            248,
+                                 :x            870,
+                                 :y            230,
                                  :width        325
-                                 :height       225,
+                                 :height       300,
                                  :scene-name   "letter-path",
                                  :animation    "stop",
                                  :duration     5000,
                                  :line-cap     "round",
                                  :path         "",
-                                 :scale-x      0.75,
-                                 :scale-y      0.75,
+                                 :scale-x      0.65,
+                                 :scale-y      0.65,
                                  :stroke       "#ef545c",
                                  :stroke-width 15
                                  :visible      false
@@ -170,7 +170,7 @@
                                                       :attr-name "text"}
                                                      {:type      "set-attribute",
                                                       :target    "letter-path",
-                                                      :from-var  [{:var-name "current-concept", :var-property "letter-path", :action-property "attr-value"}],
+                                                      :from-var  [{:var-name "current-concept", :var-property "letter", :action-property "attr-value"}],
                                                       :attr-name "path"}
                                                      {:id "big", :type "state", :target "letter-big"}
                                                      {:type      "set-attribute",
