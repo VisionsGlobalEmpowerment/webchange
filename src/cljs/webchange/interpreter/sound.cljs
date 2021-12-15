@@ -87,6 +87,7 @@
   (let [params (cond-> {:loop     loop
                         :complete on-ended
                         :start    start}
+                       (< start 0) (assoc :start 0)
                        (some? duration) (assoc :end (+ start duration)))
         music-audio? (:loop params)]
     (.setTimeout js/window

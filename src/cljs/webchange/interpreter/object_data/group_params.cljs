@@ -52,29 +52,11 @@
                           (assoc :offset {:x (/ width 2) :y height}))
       object)))
 
-(defn- hack-on-click
-  [{:keys [on-drag-move on-click] :as object}]
-  (let [moved? (atom false)
-        wrapped-move (fn []
-                       (reset! moved? true)
-                       (when on-drag-move
-                         (on-drag-move)))
-        wrapped-on-click (fn []
-                           (when (and on-click (not @moved?))
-                             (on-click))
-                           (reset! moved? false))]
-    (if on-click
-      (assoc object
-        :on-drag-move wrapped-move
-        :on-click wrapped-on-click)
-      object)))
-
 (defn- with-draggable
   [{:keys [draggable] :as object}]
   (if draggable
     (-> object
-        (assoc :draggable true)
-        (hack-on-click))
+        (assoc :draggable true))
     object))
 
 (defn- with-collision

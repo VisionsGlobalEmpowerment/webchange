@@ -1,6 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.collisions
   (:require
     [webchange.interpreter.renderer.scene.app :as app]
+    [webchange.interpreter.renderer.scene.components.dragging :refer [get-mouse-position]]
+    [webchange.interpreter.renderer.scene.components.dragging-utils :as u]
     [webchange.logger.index :as logger]))
 
 (def objects (atom {}))
@@ -31,19 +33,30 @@
      :height (.-height bounds)}))
 
 (defn- collided?
-  [object1 object2]
-  (let [{x1 :x y1 :y width1 :width height1 :height} (get-bounds object1)
-        {x2 :x y2 :y width2 :width height2 :height} (get-bounds object2)]
-    (and (< x1 (+ x2 width2))
-         (> (+ x1 width1) x2)
-         (< y1 (+ y2 height2))
-         (> (+ y1 height1) y2))))
+  ([object1 object2]
+   (collided? object1 object2 {}))
+  ([object1 object2 {:keys [type] :or {type "mouse"}}]
+   (let [{mouse-x :x mouse-y :y} (get-mouse-position)
+         {x1 :x y1 :y width1 :width height1 :height} (get-bounds object1)
+         {x2 :x y2 :y width2 :width height2 :height} (get-bounds object2)]
+     (case type
+       "mouse" (and (u/get-prop object1 "dragging")
+                    (> mouse-x x2)
+                    (< mouse-x (+ x2 width2))
+                    (> mouse-y y2)
+                    (< mouse-y (+ y2 height2)))
+       "bounds" (and (< x1 (+ x2 width2))
+                     (> (+ x1 width1) x2)
+                     (< y1 (+ y2 height2))
+                     (> (+ y1 height1) y2))))))
 
 (defn- get-objects-to-test
   []
-  (map (fn [[name {:keys [object params]}]]
-         [name object params])
-       @objects))
+  (->> @objects
+       (map (fn [[name {:keys [object params]}]]
+              [name object params]))
+       (filter (fn [[_ object _]]
+                 (.-visible object)))))
 
 (defn- test-name
   [name target-name]
@@ -73,17 +86,34 @@
             new-value (collided? object target-object)
             handler-props (merge target-props {:target target-name})]
         (swap! bumped-into assoc target-name new-value)
-        (when (and (not= prev-value new-value)
+        (when (and (true? prev-value)
                    (false? new-value))
           (call-event-handler on-collide-leave handler-props))
         (when (and (not= prev-value new-value)
                    (true? new-value))
           (call-event-handler on-collide-enter handler-props))))))
 
+(defonce ticker-created? (atom false))
+(defonce callbacks (atom []))
+
+(defn- init-ticker
+  []
+  (when-not @ticker-created?
+    (app/add-ticker (fn []
+                      (doseq [{:keys [object props bumped-into]} @callbacks]
+                        (test-objects (merge props
+                                             {:object      object
+                                              :bumped-into bumped-into})))))
+    (reset! ticker-created? true)))
+
+(defn- add-callback
+  [object props bumped-into]
+  (swap! callbacks conj {:object      object
+                         :props       props
+                         :bumped-into bumped-into}))
+
 (defn enable-collisions!
   [object props]
   (logger/trace "enable-collisions! for" object)
-  (let [bumped-into (atom {})]
-    (app/add-ticker (fn [] (test-objects (merge props
-                                                {:object      object
-                                                 :bumped-into bumped-into}))))))
+  (init-ticker)
+  (add-callback object props (atom {})))

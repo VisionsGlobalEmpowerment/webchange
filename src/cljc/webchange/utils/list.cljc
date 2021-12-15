@@ -78,3 +78,17 @@
   [list item]
   {:pre [(sequential? list)]}
   (some #{item} list))
+
+(defn distinct-by-key
+  [key list]
+  (->> list
+       (reduce (fn [{:keys [result used-values]} item]
+                 (let [value (get item key)]
+                   (if (contains? used-values value)
+                     {:result      result
+                      :used-values used-values}
+                     {:result      (conj result item)
+                      :used-values (assoc used-values value true)})))
+               {:result      []
+                :used-values {}})
+       (:result)))
