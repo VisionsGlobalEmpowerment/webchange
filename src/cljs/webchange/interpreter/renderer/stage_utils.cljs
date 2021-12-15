@@ -19,7 +19,8 @@
         width-ratio (/ (:width viewport) (:width target-size))]
     (case stage-size
       :contain (if (< original-ratio window-ratio) height-ratio width-ratio)
-      (if (> original-ratio window-ratio) height-ratio width-ratio))))
+      :cover (if (> original-ratio window-ratio) height-ratio width-ratio)
+      (if (< original-ratio window-ratio) height-ratio width-ratio))))
 
 (defn get-stage-params
   [viewport]

@@ -110,7 +110,7 @@
                      :left     0
                      :width    "100%"
                      :height   "100%"}}
-       [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
+       [:style "html, body {margin: 0; max-width: 100%; overflow: hidden; background-color: black;}"]
        [stage-wrapper {:mode          (or user-mode mode)
                        :scene-id      scene-id
                        :scene-data    scene-data
