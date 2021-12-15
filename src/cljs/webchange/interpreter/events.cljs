@@ -1294,7 +1294,7 @@
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
        :dispatch-n (list [::load-scene scene-id]
-                         [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size] "cover"))])})))
+                         [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size] "contain"))])})))
 
 (re-frame/reg-event-fx
   ::set-stage-size
@@ -1319,7 +1319,7 @@
           merged-scene (merge-with-templates db scene)]
       {:db         (cond-> (assoc-in db [:scenes scene-id] merged-scene)
                            (= current-scene scene-id) (assoc :current-scene-data merged-scene))
-       :dispatch-n [[::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size] "cover"))]]})))
+       :dispatch-n [[::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size] "contain"))]]})))
 
 (re-frame/reg-event-fx
   ::set-scenes-data
