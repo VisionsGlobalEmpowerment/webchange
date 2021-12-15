@@ -26,6 +26,7 @@
       (set! (.-drag-offset this) drag-offset))
     (set! (.-data this) (.-data event))
     (set! (.-alpha this) 0.9)
+    (u/set-prop this "dragging" true)
     (u/call-handler this "drag-start-handler")))
 
 (defn- on-drag-end
@@ -33,7 +34,8 @@
   (u/call-handler this "drag-end-handler")
   (reset! mouse-position-data empty-position)
   (set! (.-data this) nil)
-  (set! (.-alpha this) 1))
+  (set! (.-alpha this) 1)
+  (u/set-prop this "dragging" false))
 
 (defn- on-drag-move
   [this _]
