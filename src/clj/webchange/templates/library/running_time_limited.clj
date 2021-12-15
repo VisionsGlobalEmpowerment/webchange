@@ -399,6 +399,7 @@
                                                                                                       :x           2100
                                                                                                       :y           685
                                                                                                       :custom-data ""
+                                                                                                      :collidable? true
                                                                                                       :children    ["target-letter-box"
                                                                                                                     "target-letter-text"]}
                                                                                  :target-letter-box  {:type "image"
