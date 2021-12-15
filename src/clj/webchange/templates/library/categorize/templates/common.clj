@@ -46,7 +46,9 @@
                    :src         src,
                    :draggable   true
                    :collidable? true
-                   :actions     (cond-> {:drag-end      {:on     "drag-end"
+                   :actions     (cond-> {:click         {:on "click" :type "action"
+                                                         :id say-item}
+                                         :drag-end      {:on     "drag-end"
                                                          :type   "action"
                                                          :id     "handle-drag-end"
                                                          :params (cond-> {:init-position (-> position
