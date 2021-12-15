@@ -15,11 +15,25 @@
   (assoc-in template [:metadata :tracks] [{:title (get-in tracks [:generic :title] "Round 1")
                                            :nodes []}
                                           {:title (get-in tracks [:items :title] "Round 1 - items")
+                                           :nodes []}
+                                          {:title (get-in tracks [:items :title] "Round 1 - boxes")
                                            :nodes []}]))
+
+(defn- add-track-dialog
+  [template track-type track-item-data]
+  (let [track-number (get {:generic 0
+                           :item    1
+                           :box     2}
+                          track-type 0)]
+    (update-in template [:metadata :tracks track-number :nodes] conj track-item-data)))
 
 (defn- get-box-name
   [name]
   (str "box-" name))
+
+(defn- get-box-dialog-name
+  [box-name]
+  (str "box-" box-name "-dialog"))
 
 (defn- add-boxes
   [template {:keys [boxes]}]
@@ -30,7 +44,9 @@
                        object-data (merge position
                                           {:type       "image"
                                            :src        src
-                                           :transition object-name})]
+                                           :transition object-name
+                                           :actions    {:click {:on "click" :type "action"
+                                                                :id (get-box-dialog-name name)}}})]
                    (-> template
                        (update :assets conj asset)
                        (update :objects assoc (keyword object-name) object-data)
@@ -39,6 +55,21 @@
                                                                           :type       "set-attribute"
                                                                           :attr-name  "highlight"
                                                                           :attr-value false}))))
+               template)))
+
+(defn- add-boxes-dialogs
+  [template {:keys [boxes]}]
+  (->> boxes
+       (reduce (fn [template {:keys [name]}]
+                 (let [box-dialog-name (get-box-dialog-name name)
+                       box-dialog-data (-> name
+                                           (dialog/default {:phrase-description (str "Box " name " clicked")})
+                                           (assoc :unique-tag "box"))
+                       box-dialog-track-item {:type      "dialog"
+                                              :action-id box-dialog-name}]
+                   (-> template
+                       (update :actions assoc (keyword box-dialog-name) box-dialog-data)
+                       (add-track-dialog :box box-dialog-track-item))))
                template)))
 
 (defn- add-items
@@ -89,9 +120,9 @@
                                                        :action-id correct-dialog-name}]
                    (cond-> template
                            (some? pick-dialog) (-> (update :actions assoc pick-dialog-name pick-dialog-data)
-                                                   (update-in [:metadata :tracks 1 :nodes] conj pick-dialog-track-item-data))
+                                                   (add-track-dialog :item pick-dialog-track-item-data))
                            (some? correct-dialog) (-> (update :actions assoc correct-dialog-name correct-dialog-data)
-                                                      (update-in [:metadata :tracks 1 :nodes] conj correct-dialog-track-item-data)))))
+                                                      (add-track-dialog :item correct-dialog-track-item-data)))))
                template)))
 
 (defn- add-generic-dialogs
@@ -104,8 +135,8 @@
                   track-item-data {:type "dialog" :action-id dialog-name}]
               (-> template
                   (update :actions assoc dialog-name dialog-data)
-                  (update-in [:metadata :tracks 0 :nodes] conj track-item-prompt)
-                  (update-in [:metadata :tracks 0 :nodes] conj track-item-data))))
+                  (add-track-dialog :generic track-item-prompt)
+                  (add-track-dialog :generic track-item-data))))
           template
           generic-dialogs))
 
@@ -268,6 +299,7 @@
         (init-tracks-metadata props)
         (add-background props)
         (add-boxes props)
+        (add-boxes-dialogs props)
         (add-items props)
         (add-items-dialogs props)
         (add-generic-dialogs props))))
