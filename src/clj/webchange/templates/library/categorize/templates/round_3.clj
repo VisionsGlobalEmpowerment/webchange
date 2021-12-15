@@ -252,91 +252,99 @@
        - items - sortable items track options. Optional:
            - title - title of track. Optional
        - generic - generic dialogs track options. Optional:
-           - title - title of track. Optional"
+           - title - title of track. Optional
+   - librarian-position - where librarian should be placed:
+                              'before' - behind boxes/tables and items. Default
+                              'between' - between boxes/tables and items
+                              'after' - in front of boxes/tables and items."
   [params]
-  (let [{:keys [generic-dialogs] :as props} (deep-merge {:generic-dialogs default-generic-dialogs} params)]
-    (-> {:assets        []
-         :objects       {}
-         :scene-objects []
-         :actions       {:handle-drag-start    {:type        "set-variable"
-                                                :from-params [{:action-property "var-name"
-                                                               :param-property  "target"}]
-                                                :var-value   true}
+  (let [{:keys [generic-dialogs librarian-position] :as props} (deep-merge {:generic-dialogs    default-generic-dialogs
+                                                                            :librarian-position "before"}
+                                                                           params)]
+    (cond-> {:assets        []
+             :objects       {}
+             :scene-objects []
+             :actions       {:handle-drag-start    {:type        "set-variable"
+                                                    :from-params [{:action-property "var-name"
+                                                                   :param-property  "target"}]
+                                                    :var-value   true}
 
-                         :handle-drag-move     {:type        "action"
-                                                :from-params [{:action-property "id"
-                                                               :param-property  "say-item"}]}
+                             :handle-drag-move     {:type        "action"
+                                                    :from-params [{:action-property "id"
+                                                                   :param-property  "say-item"}]}
 
-                         :handle-drag-end      {:type "sequence-data"
-                                                :data [{:type     "test-var-list"
-                                                        :from-var [{:action-property "var-names"
-                                                                    :var-name        "check-collide"}]
-                                                        :values   [true true]
-                                                        :success  "correct-answer"
-                                                        :fail     "wrong-answer"}
-                                                       {:type        "set-variable"
-                                                        :from-params [{:action-property "var-name"
-                                                                       :param-property  "target"}]
-                                                        :var-value   false}]}
+                             :handle-drag-end      {:type "sequence-data"
+                                                    :data [{:type     "test-var-list"
+                                                            :from-var [{:action-property "var-names"
+                                                                        :var-name        "check-collide"}]
+                                                            :values   [true true]
+                                                            :success  "correct-answer"
+                                                            :fail     "wrong-answer"}
+                                                           {:type        "set-variable"
+                                                            :from-params [{:action-property "var-name"
+                                                                           :param-property  "target"}]
+                                                            :var-value   false}]}
 
-                         :handle-collide-enter {:type "sequence-data"
-                                                :data [{:type        "state"
-                                                        :id          "highlighted"
-                                                        :from-params [{:action-property "target" :param-property "target"}]}
-                                                       {:type        "set-variable"
-                                                        :from-params [{:action-property "var-name"
-                                                                       :param-property  "target"}]
-                                                        :var-value   true}]}
+                             :handle-collide-enter {:type "sequence-data"
+                                                    :data [{:type        "state"
+                                                            :id          "highlighted"
+                                                            :from-params [{:action-property "target" :param-property "target"}]}
+                                                           {:type        "set-variable"
+                                                            :from-params [{:action-property "var-name"
+                                                                           :param-property  "target"}]
+                                                            :var-value   true}]}
 
-                         :handle-collide-leave {:type "sequence-data"
-                                                :data [{:type        "state"
-                                                        :id          "not-highlighted"
-                                                        :from-params [{:action-property "target" :param-property "target"}]}
-                                                       {:type        "set-variable"
-                                                        :from-params [{:action-property "var-name"
-                                                                       :param-property  "target"}]
-                                                        :var-value   false}]}
+                             :handle-collide-leave {:type "sequence-data"
+                                                    :data [{:type        "state"
+                                                            :id          "not-highlighted"
+                                                            :from-params [{:action-property "target" :param-property "target"}]}
+                                                           {:type        "set-variable"
+                                                            :from-params [{:action-property "var-name"
+                                                                           :param-property  "target"}]
+                                                            :var-value   false}]}
 
-                         :correct-answer       {:type "sequence-data"
-                                                :data [{:type        "state"
-                                                        :id          "init-position"
-                                                        :from-params [{:action-property "target" :param-property "target"}]}
-                                                       {:type "action"
-                                                        :id   (-> generic-dialogs :correct-answer :name)}
-                                                       {:type     "action"
-                                                        :from-var [{:var-name "next-task" :action-property "id"}]}]}
+                             :correct-answer       {:type "sequence-data"
+                                                    :data [{:type        "state"
+                                                            :id          "init-position"
+                                                            :from-params [{:action-property "target" :param-property "target"}]}
+                                                           {:type "action"
+                                                            :id   (-> generic-dialogs :correct-answer :name)}
+                                                           {:type     "action"
+                                                            :from-var [{:var-name "next-task" :action-property "id"}]}]}
 
-                         :wrong-answer         {:type "sequence-data"
-                                                :data [{:type "action"
-                                                        :id   (-> generic-dialogs :wrong-answer :name)}
-                                                       {:type "action" :id "object-revert"}]}
+                             :wrong-answer         {:type "sequence-data"
+                                                    :data [{:type "action"
+                                                            :id   (-> generic-dialogs :wrong-answer :name)}
+                                                           {:type "action" :id "object-revert"}]}
 
-                         :object-revert        {:type        "state"
-                                                :id          "init-position"
-                                                :from-params [{:action-property "target" :param-property "target"}]}
+                             :object-revert        {:type        "state"
+                                                    :id          "init-position"
+                                                    :from-params [{:action-property "target" :param-property "target"}]}
 
-                         :stop-activity        {:type "stop-activity"}
-                         :finish               {:type "sequence-data"
-                                                :data [{:type "action" :id (-> generic-dialogs :finish-dialog :name)}
-                                                       {:type "action" :id "finish-activity"}]}
+                             :stop-activity        {:type "stop-activity"}
+                             :finish               {:type "sequence-data"
+                                                    :data [{:type "action" :id (-> generic-dialogs :finish-dialog :name)}
+                                                           {:type "action" :id "finish-activity"}]}
 
-                         :start-activity       {:type "sequence-data"
-                                                :data [{:type "action" :id (-> generic-dialogs :intro :name)}
-                                                       {:type "action" :id (get-task-name 1)}]}
+                             :start-activity       {:type "sequence-data"
+                                                    :data [{:type "action" :id (-> generic-dialogs :intro :name)}
+                                                           {:type "action" :id (get-task-name 1)}]}
 
-                         :finish-activity      {:type "finish-activity"}
+                             :finish-activity      {:type "finish-activity"}
 
-                         :tap-instructions     {:type     "action"
-                                                :from-var [{:var-name "instruction" :action-property "id"}]}}
+                             :tap-instructions     {:type     "action"
+                                                    :from-var [{:var-name "instruction" :action-property "id"}]}}
 
-         :triggers      {:start {:on "start" :action "start-activity"}}
-         :metadata      {:autostart true}}
-        (init-tracks-metadata props)
-        (add-background props)
-        (add-librarian props)
-        (add-boxes props)
-        (add-items props)
-        (add-items-dialogs props)
-        (add-tasks props)
-        (add-instructions props)
-        (add-generic-dialogs props))))
+             :triggers      {:start {:on "start" :action "start-activity"}}
+             :metadata      {:autostart true}}
+            :always (init-tracks-metadata props)
+            :always (add-background props)
+            (= librarian-position "before") (add-librarian props)
+            :always (add-boxes props)
+            (= librarian-position "between") (add-librarian props)
+            :always (add-items props)
+            :always (add-items-dialogs props)
+            (= librarian-position "after") (add-librarian props)
+            :always (add-tasks props)
+            :always (add-instructions props)
+            :always (add-generic-dialogs props))))

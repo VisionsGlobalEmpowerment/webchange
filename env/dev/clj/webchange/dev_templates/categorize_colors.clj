@@ -20,7 +20,7 @@
 
   (copy-activity "english" "categorize-colors-2")
 
-  (def test-course-slug "test-course-english-moyhvzcn")
+  (def test-course-slug "test-course-english-khfkargr")
   (def scene-slug "categorize-colors-2")
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 
@@ -34,5 +34,4 @@
         activity (templates/activity-from-template data)
         metadata (templates/metadata-from-template data)
         [_ {scene-slug :scene-slug}] (core/create-scene! activity metadata test-course-slug scene-slug [] t/user-id)]
-    (str "/courses/" test-course-slug "/editor-v2/" scene-slug))
-  )
+    (str "/courses/" test-course-slug "/editor-v2/" scene-slug)))
