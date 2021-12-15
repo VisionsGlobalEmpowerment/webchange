@@ -37,12 +37,12 @@
                               {:name     "red"
                                :position {:x 500 :y 506}
                                :src      "/raw/img/categorize/red_box_small.png"}]
-                 :items      [(word->item {:word "red" :x 776 :y 501})
-                              (word->item {:word "purple" :x 60 :y 1054})
-                              (word->item {:word "yellow" :x 154 :y 139})
-                              (word->item {:word "green" :x 19 :y 263})
-                              (word->item {:word "blue" :x 1611 :y 440})
-                              (word->item {:word "orange" :x 1495 :y 914})]
+                 :items      [(word->item {:word "red" :x 776 :y 524})
+                              (word->item {:word "purple" :x 60 :y 1077})
+                              (word->item {:word "yellow" :x 154 :y 162})
+                              (word->item {:word "green" :x 19 :y 286})
+                              (word->item {:word "blue" :x 1611 :y 463})
+                              (word->item {:word "orange" :x 1495 :y 937})]
                  :tasks      [{:item "red" :box "red" :instruction "Put the red crayon in its crayon box."}
                               {:item "purple" :box "purple" :instruction "Put the purple crayon on its table."}
                               {:item "yellow" :box "yellow" :instruction "Put the yellow crayon in its crayon box."}

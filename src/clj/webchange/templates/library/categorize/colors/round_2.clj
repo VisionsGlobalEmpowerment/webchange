@@ -37,24 +37,24 @@
                                    {:name     "red"
                                     :position {:x 1352 :y 490}
                                     :src      "/raw/img/categorize/red_box_small.png"}]
-                 :items           [(word->item {:word "blue" :x 46 :y 1050})
-                                   (word->item {:word "blue" :x 592 :y 500})
-                                   (word->item {:word "blue" :x 17 :y 143})
-                                   (word->item {:word "orange" :x 746 :y 850})
-                                   (word->item {:word "orange" :x 892 :y 400})
-                                   (word->item {:word "orange" :x 317 :y 238})
-                                   (word->item {:word "yellow" :x 764 :y 691})
-                                   (word->item {:word "yellow" :x 1171 :y 126})
-                                   (word->item {:word "yellow" :x 1618 :y 440})
-                                   (word->item {:word "purple" :x 664 :y 541})
-                                   (word->item {:word "purple" :x 1271 :y 236})
-                                   (word->item {:word "purple" :x 1418 :y 310})
-                                   (word->item {:word "red" :x 924 :y 500})
-                                   (word->item {:word "red" :x 1618 :y 958})
-                                   (word->item {:word "red" :x 1548 :y 164})
-                                   (word->item {:word "green" :x 714 :y 210})
-                                   (word->item {:word "green" :x 1418 :y 818})
-                                   (word->item {:word "green" :x 1678 :y 364})]
+                 :items           [(word->item {:word "blue" :x 46 :y 1073})
+                                   (word->item {:word "blue" :x 592 :y 523})
+                                   (word->item {:word "blue" :x 17 :y 166})
+                                   (word->item {:word "orange" :x 746 :y 873})
+                                   (word->item {:word "orange" :x 892 :y 423})
+                                   (word->item {:word "orange" :x 317 :y 261})
+                                   (word->item {:word "yellow" :x 764 :y 714})
+                                   (word->item {:word "yellow" :x 1171 :y 149})
+                                   (word->item {:word "yellow" :x 1618 :y 463})
+                                   (word->item {:word "purple" :x 664 :y 564})
+                                   (word->item {:word "purple" :x 1271 :y 259})
+                                   (word->item {:word "purple" :x 1418 :y 333})
+                                   (word->item {:word "red" :x 924 :y 523})
+                                   (word->item {:word "red" :x 1618 :y 981})
+                                   (word->item {:word "red" :x 1548 :y 187})
+                                   (word->item {:word "green" :x 714 :y 233})
+                                   (word->item {:word "green" :x 1418 :y 841})
+                                   (word->item {:word "green" :x 1678 :y 387})]
                  :background      {:background {:src "/raw/img/categorize/01.png"},
                                    :decoration {:src "/raw/img/categorize/03.png"},
                                    :surface    {:src "/raw/img/categorize/02.png"}}
