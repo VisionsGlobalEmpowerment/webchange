@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.collisions
   (:require
     [webchange.interpreter.renderer.scene.app :as app]
+    [webchange.interpreter.renderer.scene.components.dragging :refer [get-mouse-position]]
     [webchange.logger.index :as logger]))
 
 (def objects (atom {}))
@@ -31,13 +32,21 @@
      :height (.-height bounds)}))
 
 (defn- collided?
-  [object1 object2]
-  (let [{x1 :x y1 :y width1 :width height1 :height} (get-bounds object1)
-        {x2 :x y2 :y width2 :width height2 :height} (get-bounds object2)]
-    (and (< x1 (+ x2 width2))
-         (> (+ x1 width1) x2)
-         (< y1 (+ y2 height2))
-         (> (+ y1 height1) y2))))
+  ([object1 object2]
+   (collided? object1 object2 {}))
+  ([object1 object2 {:keys [type] :or {type "mouse"}}]
+   (let [{mouse-x :x mouse-y :y} (get-mouse-position)
+         {x1 :x y1 :y width1 :width height1 :height} (get-bounds object1)
+         {x2 :x y2 :y width2 :width height2 :height} (get-bounds object2)]
+     (case type
+       "mouse" (and (> mouse-x x2)
+                    (< mouse-x (+ x2 width2))
+                    (> mouse-y y2)
+                    (< mouse-y (+ y2 height2)))
+       "bounds" (and (< x1 (+ x2 width2))
+                     (> (+ x1 width1) x2)
+                     (< y1 (+ y2 height2))
+                     (> (+ y1 height1) y2))))))
 
 (defn- get-objects-to-test
   []
