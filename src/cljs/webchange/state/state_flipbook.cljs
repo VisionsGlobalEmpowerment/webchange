@@ -32,6 +32,18 @@
   get-current-stage-idx)
 
 (re-frame/reg-sub
+  ::current-page-number
+  (fn []
+    [(re-frame/subscribe [::state/scene-data])
+     (re-frame/subscribe [::current-stage-idx])])
+  (fn [[scene-data current-stage-idx] [_]]
+    (when (and (some? scene-data)
+               (some? current-stage-idx))
+      (-> (flipbook-utils/get-stage-data scene-data current-stage-idx)
+        (get :pages-idx)
+        (first)))))
+
+(re-frame/reg-sub
   ::stage-pages
   (fn []
     [(re-frame/subscribe [::state/scene-data])
@@ -293,7 +305,7 @@
     (let [show-generated-pages? (get-show-generated-pages db)
           stage (-> (get-in db [:current-scene-data :metadata])
                     (get-in [:stages idx]))]
-      {:db       (set-current-stage-idx db idx)
+      {:db         (set-current-stage-idx db idx)
        :dispatch-n [[::show-flipbook-stage (:idx stage) {:hide-generated-pages? (not show-generated-pages?)}]
                     [::state-activity-form/reset-selection]]})))
 

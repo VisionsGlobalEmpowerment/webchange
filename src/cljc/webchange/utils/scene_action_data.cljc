@@ -3,7 +3,7 @@
     [clojure.string :as string]))
 
 (def action-tags {:user-interactions-blocked "user-interactions-blocked"
-                  :fx "fx"})
+                  :fx                        "fx"})
 
 (defn get-action-type
   [action-data]
@@ -93,12 +93,12 @@
 
 (defn- get-nth-in [data path]
   (reduce
-   (fn [current-data path-step]
-     (if (associative? current-data)
-       (get current-data path-step)
-       (nth current-data path-step nil)))
-   data
-   path))
+    (fn [current-data path-step]
+      (if (associative? current-data)
+        (get current-data path-step)
+        (nth current-data path-step nil)))
+    data
+    path))
 
 (def empty-action-position 0)
 (def inner-action-position 1)
@@ -110,3 +110,21 @@
   [action]
   (if (map? action)
     (get-nth-in action inner-action-path)))
+
+(defn update-inner-action
+  [action data-patch]
+  (update-in action inner-action-path merge data-patch))
+
+(def text-animation-action {:type "sequence-data"
+                            :data [{:type     "empty"
+                                    :duration 0}
+                                   {:type        "text-animation"
+                                    :animation   "color"
+                                    :fill        0x00B2FF
+                                    :phrase-text "Text animation"
+                                    :audio       nil}]})
+
+(defn create-text-animation-action
+  [{:keys [inner-action] :or {inner-action {}}}]
+  (-> text-animation-action
+      (update-inner-action inner-action)))

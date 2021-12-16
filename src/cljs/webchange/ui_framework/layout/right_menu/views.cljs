@@ -81,12 +81,12 @@
       [info-action/info-window]
       (when-not show-edit-menu?
         [:div
-         (for [{:keys [text on-click] :as props} combined-actions]
+         (for [{:keys [text] :as props} combined-actions]
            ^{:key text}
            [actions-item props])
          [:div.scene-section
           [:h3 "Scene Layers"]
           [objects-tree-menu]]
-         (for [{:keys [text on-click] :as props} default-actions-list]
+         (for [{:keys [text] :as props} default-actions-list]
            ^{:key text}
            [default-actions-item props])])]]))

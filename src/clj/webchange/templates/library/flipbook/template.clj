@@ -3,6 +3,7 @@
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
     [webchange.templates.library.flipbook.add-page :refer [add-page] :as page]
+    [webchange.templates.library.flipbook.add-text :refer [add-text]]
     [webchange.templates.library.flipbook.credits :as credits]
     [webchange.templates.library.flipbook.custom-page :as custom-page]
     [webchange.templates.library.flipbook.custom-spread :as custom-spread]
@@ -108,11 +109,17 @@
                :description "Some description of flipbook mechanics and covered skills"
                :lesson-sets []
                :options     book-options
-               :actions     {:add-page      {:title   "Add page",
-                                             :options page-options}
-                             :remake-covers {:title         "Remake covers",
-                                             :options       book-options
-                                             :default-props :wizard}}})
+               :actions     {:add-page       {:title   "Add page",
+                                              :options page-options}
+                             :add-empty-page {:title   "Add empty page",
+                                              :options []}
+                             :add-text       {:title   "Add text",
+                                              :options []}
+                             :add-image      {:title   "Add image",
+                                              :options []}
+                             :remake-covers  {:title         "Remake covers",
+                                              :options       book-options
+                                              :default-props :wizard}}})
 
 (def page-params {:width            960
                   :height           1080
@@ -147,10 +154,25 @@
             activity-data
             constructors)))
 
+(defn add-empty-page-handler
+  [activity-data props]
+  (log/debug ">> add-empty-page")
+  (log/debug "props" props)
+  activity-data)
+
+(defn add-image-handler
+  [activity-data props]
+  (log/debug ">> add-image")
+  (log/debug "props" props)
+  activity-data)
+
 (defn update-activity
   [activity-data {action-name :action-name :as props}]
   (case action-name
     "add-page" (add-page-handler activity-data props)
+    "add-empty-page" (add-empty-page-handler activity-data props)
+    "add-text" (add-text activity-data (:page-number props))
+    "add-image" (add-image-handler activity-data props)
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)
     "remake-covers" (-> (remake-covers activity-data props page-params)

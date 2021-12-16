@@ -7,6 +7,7 @@
     [webchange.state.state-activity :as state-activity]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
     [webchange.editor-v2.wizard.validator :as validator]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.index :refer [dialog button]]
     [webchange.utils.scene-data :as utils]
     [webchange.logger.index :as logger]))
@@ -30,7 +31,7 @@
                {:keys [valid?] :as validator} (validator/init data)
                close #(re-frame/dispatch [::scene-action.events/close])
                save #(do
-                       (if (valid?) (re-frame/dispatch [::scene-action.events/save @data])))]
+                       (if (valid?) (re-frame/dispatch [::scene-action.events/save {:data @data}])))]
     [dialog
      {:title    (:title current-action-data)
       :on-close close
@@ -57,7 +58,12 @@
 
 (defn get-activity-actions-list
   [scene-data]
-  (->> (utils/get-metadata-untracked-actions scene-data)
-       (map (fn [[name {:keys [title]}]]
-              {:text    title
-               :on-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])}))))
+  (let [page-number @(re-frame/subscribe [::state-flipbook/current-page-number])]
+    (->> (utils/get-metadata-untracked-actions scene-data)
+         (map (fn [[name {:keys [title options]}]]
+                {:text     title
+                 :on-click (if-not (empty? options)
+                             #(re-frame/dispatch [::scene-action.events/show-actions-form name])
+                             #(re-frame/dispatch [::scene-action.events/save {:action name
+                                                                              ;; ToDo: check is it flipbook?
+                                                                              :data   {:page-number page-number}}]))})))))

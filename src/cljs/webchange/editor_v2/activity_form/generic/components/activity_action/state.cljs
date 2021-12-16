@@ -37,8 +37,8 @@
 
 (re-frame/reg-event-fx
   ::save
-  (fn [{:keys [db]} [_ data]]
-    (let [current-action (state-activity/get-current-action db)]
+  (fn [{:keys [db]} [_ {:keys [action data]}]]
+    (let [current-action (or action (state-activity/get-current-action db))]
       {:dispatch [::state-activity/call-activity-action
                   {:action current-action
                    :data   data}
