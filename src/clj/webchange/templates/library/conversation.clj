@@ -1,6 +1,7 @@
 (ns webchange.templates.library.conversation
   (:require
-    [webchange.templates.common-actions :refer [add-character get-next-action-index increase-next-action-index]]
+    [clojure.string :as str]
+    [webchange.templates.common-actions :refer [add-character add-question get-next-action-index increase-next-action-index]]
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.core :as core]
@@ -12,12 +13,8 @@
         :description "Conversation"
         :options     {:characters {:label "Characters"
                                    :type  "characters"
-                                   :max   5}}
-        :actions     {:add-dialog   {:title   "Add dialogue",
-                                     :options {:dialog {:label       "Dialog name"
-                                                        :description "Dialog name"
-                                                        :placeholder "(ex. Conversation about ball)"
-                                                        :type        "string"}}}}})
+                                   :max   5}}})
+
 (def t {:assets        [{:url "/raw/img/casa/background.jpg", :size 10 :type "image"}],
         :objects       {:background {:type "background", :src "/raw/img/casa/background.jpg"}},
         :scene-objects [["background"]],
@@ -40,8 +37,12 @@
 (defn create-template
   [args]
   (reduce (fn [scene-data {:keys [name skeleton]}]
-            (add-character scene-data {:name       skeleton
-                                       :scene-name name}))
+            (let [prepared-name (-> name
+                                    (str/replace " " "-")
+                                    (str/replace "_" "-")
+                                    (str/lower-case))]
+              (add-character scene-data {:name       skeleton
+                                         :scene-name prepared-name})))
           (common/init-metadata m t args)
           (:characters args)))
 
@@ -51,11 +52,6 @@
       (update :actions merge actions)
       (update-in [:actions :script :data] conj {:type "action" :id action-name})
       (update-in [:metadata :tracks 0 :nodes] conj {:type "dialog" :action-id action-name})))
-
-(defn- add-assets
-  [activity-data assets]
-  (-> activity-data
-      (update :assets concat assets)))
 
 (defn- add-dialog
   [activity-data args]
@@ -69,7 +65,8 @@
 (defn- update-template
   [activity-data {action-name :action-name :as args}]
   (case (keyword action-name)
-    :add-dialog (add-dialog activity-data args)))
+    :add-dialog (add-dialog activity-data args)
+    :add-question-object (add-question activity-data args)))
 
 (core/register-template
   m create-template update-template)

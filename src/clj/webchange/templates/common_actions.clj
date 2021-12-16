@@ -112,17 +112,18 @@
         (update-in [:metadata :available-actions] concat available-actions))))
 
 (defn add-character
-  [scene-data {:keys [name skin] :as data}]
+  [scene-data {:keys [name skin scene-name] :as data}]
   (let [character-idx (-> scene-data
                           (get-in [:metadata :added-character-idx])
                           (or 0)
                           inc)
-        character-name (cond-> name
-                               (some? skin) (str "-" skin)
-                               :always (str "-" character-idx)
-                               :always (-> (string/replace " " "-")
-                                           (string/replace "_" "-")
-                                           (string/lower-case)))
+        character-name (or scene-name
+                           (cond-> name
+                                   (some? skin) (str "-" skin)
+                                   :always (str "-" character-idx)
+                                   :always (-> (string/replace " " "-")
+                                               (string/replace "_" "-")
+                                               (string/lower-case))))
 
         show-action-name (str "show-character-" character-name)
         hide-action-name (str "hide-character-" character-name)
