@@ -30,8 +30,9 @@
 
 (defn set-handler
   [object handler-name handler]
-  (set-prop object handler-name (clj->js {:fn      handler
-                                          :context object})))
+  (when handler
+    (set-prop object handler-name (clj->js {:fn      handler
+                                            :context object}))))
 
 (defn hide-click-handler
   [object]
