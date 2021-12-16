@@ -54,9 +54,9 @@
                                               [::editor/reset-scene-objects scene-id objects]
                                               [::editor/reset-scene-metadata scene-id metadata]
                                               [::editor/save-current-scene scene-id]
+                                              [::translator-form.scene/reset-changes]
                                               (when (not-empty edited-concepts-ids)
-                                                [::editor/edit-dataset (:id current-dataset) current-dataset-patch-data ]))))
-       :reset-before-leave true})))
+                                                [::editor/edit-dataset (:id current-dataset) current-dataset-patch-data ]))))})))
 
 (re-frame/reg-event-fx
   ::set-components-settings
