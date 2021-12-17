@@ -13,7 +13,6 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.templates.library.flipbook.stages :refer [update-stages]]
     [webchange.question.create :as question-object]
     [webchange.question.get-question-data :refer [form->question-data]]))
 

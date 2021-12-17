@@ -1,5 +1,6 @@
 (ns webchange.templates.library.flipbook.add-page
   (:require
+    [webchange.templates.library.flipbook.add-empty-page :refer [update-current-side]]
     [webchange.templates.library.flipbook.stages :refer [update-stages]]
     [webchange.utils.list :refer [insert-at-position]]
     [webchange.templates.library.flipbook.utils :refer [get-book-object-name]]))
@@ -65,10 +66,6 @@
         (assoc-in [:objects book-object-name :pages page-position :action] name)
         (assoc-in [:actions (keyword name)] data)
         (on-text-animation-action page-position name data))))
-
-(defn- update-current-side
-  [activity-data]
-  (update-in activity-data [:metadata :flipbook-pages :current-side] #(if (= % "right") "left" "right")))
 
 (defn- add-page-to-book
   [activity-data
