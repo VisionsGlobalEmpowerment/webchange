@@ -7,6 +7,7 @@
 
 (def actions-modal-state-path [:editor-v2 :translator :actions-modal-state])
 (def actions-modal-handlers-path [:editor-v2 :translator :actions-modal-handlers])
+(def predefined-data-path [:editor-v2 :translator :predefined-data])
 
 (re-frame/reg-sub
   ::modal-state
@@ -24,24 +25,27 @@
 (re-frame/reg-event-fx
   ::close
   (fn [{:keys [db]} [_]]
-    {:db       (assoc-in db actions-modal-state-path false)
+    {:db         (assoc-in db actions-modal-state-path false)
      :dispatch-n [[::translator-form/reset-state]
                   [::state-stage/reset-stage]]}))
 
 (re-frame/reg-event-fx
   ::show-actions-form
-  (fn [{:keys [db]} [_ action-name handlers]]
-    {:db         (assoc-in db actions-modal-handlers-path handlers)
+  (fn [{:keys [db]} [_ action-name handlers predefined-data]]
+    {:db         (-> db
+                     (assoc-in actions-modal-handlers-path handlers)
+                     (assoc-in predefined-data-path predefined-data))
      :dispatch-n (list [::state-activity/set-current-action action-name]
                        [::open])}))
 
 (re-frame/reg-event-fx
   ::save
   (fn [{:keys [db]} [_ {:keys [action data]}]]
-    (let [current-action (or action (state-activity/get-current-action db))]
+    (let [current-action (or action (state-activity/get-current-action db))
+          predefined-data (get-in db predefined-data-path {})]
       {:dispatch [::state-activity/call-activity-action
                   {:action current-action
-                   :data   data}
+                   :data   (merge data predefined-data)}
                   {:on-success [::save-success]}]})))
 
 (re-frame/reg-event-fx

@@ -4,6 +4,7 @@
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
     [webchange.templates.library.flipbook.add-page :refer [add-page] :as page]
     [webchange.templates.library.flipbook.add-text :refer [add-text]]
+    [webchange.templates.library.flipbook.add-image :refer [add-image]]
     [webchange.templates.library.flipbook.credits :as credits]
     [webchange.templates.library.flipbook.custom-page :as custom-page]
     [webchange.templates.library.flipbook.custom-spread :as custom-spread]
@@ -116,7 +117,9 @@
                              :add-text       {:title   "Add text",
                                               :options []}
                              :add-image      {:title   "Add image",
-                                              :options []}
+                                              :options [{:key        :image
+                                                         :type       "image"
+                                                         :label      "Select Image"}]}
                              :remake-covers  {:title         "Remake covers",
                                               :options       book-options
                                               :default-props :wizard}}})
@@ -160,19 +163,13 @@
   (log/debug "props" props)
   activity-data)
 
-(defn add-image-handler
-  [activity-data props]
-  (log/debug ">> add-image")
-  (log/debug "props" props)
-  activity-data)
-
 (defn update-activity
   [activity-data {action-name :action-name :as props}]
   (case action-name
     "add-page" (add-page-handler activity-data props)
     "add-empty-page" (add-empty-page-handler activity-data props)
     "add-text" (add-text activity-data (:page-number props))
-    "add-image" (add-image-handler activity-data props)
+    "add-image" (add-image activity-data (:page-number props) (:image props))
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)
     "remake-covers" (-> (remake-covers activity-data props page-params)

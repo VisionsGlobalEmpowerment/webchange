@@ -62,8 +62,7 @@
     (->> (utils/get-metadata-untracked-actions scene-data)
          (map (fn [[name {:keys [title options]}]]
                 {:text     title
-                 :on-click (if-not (empty? options)
-                             #(re-frame/dispatch [::scene-action.events/show-actions-form name])
+                 :on-click (if-not (empty? options);; ToDo: check is it flipbook for page-number?
+                             #(re-frame/dispatch [::scene-action.events/show-actions-form name nil {:page-number page-number}])
                              #(re-frame/dispatch [::scene-action.events/save {:action name
-                                                                              ;; ToDo: check is it flipbook?
                                                                               :data   {:page-number page-number}}]))})))))

@@ -15,12 +15,12 @@
 (defn get-text-data
   [text]
   (let [content {:text   text
-                 :chunks (text->chunks text)}
-        position {:x 300
-                  :y 300}
-        size {:width     400
-              :height    400
-              :word-wrap true}
+                 :chunks (text->chunks text)
+                 :word-wrap true}
+        dimensions {:x         300
+                    :y         300
+                    :width     400
+                    :height    400}
         align {:align          "left"
                :vertical-align "top"}
         font {:fill        0
@@ -29,7 +29,7 @@
     (merge {:type      "text"
             :editable? {:select true
                         :drag   true}}
-           content position size align font)))
+           content dimensions align font)))
 
 (defn add-text
   [activity-data page-idx]
