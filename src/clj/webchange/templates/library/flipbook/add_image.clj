@@ -30,6 +30,15 @@
                                     :upload-image true}}}
            content dimensions)))
 
+(defn- sort-children
+  [children activity-data]
+  (->> children
+       (map (fn [object-name]
+              {:name object-name
+               :type (get-in activity-data [:objects (keyword object-name) :type])}))
+       (sort-by :type)
+       (map :name)))
+
 (defn add-image
   [activity-data page-idx {:keys [image page-params]}]
   (let [{:keys [object]} (f/get-page-data activity-data page-idx)
@@ -39,4 +48,5 @@
     (-> activity-data
         (update :assets conj image-asset)
         (update :objects assoc (keyword image-name) image-data)
-        (update-in [:objects (keyword object) :children] conj image-name))))
+        (update-in [:objects (keyword object) :children] conj image-name)
+        (update-in [:objects (keyword object) :children] sort-children activity-data))))

@@ -3,14 +3,17 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.subs :as subs]
+    [webchange.editor-v2.activity-form.generic.components.activity-action.add-image.state :as add-image]
+    [webchange.editor-v2.activity-form.generic.components.activity-action.add-text.state :as add-text]
     [webchange.editor-v2.activity-form.generic.components.activity-action.state :as scene-action.events]
     [webchange.state.state-activity :as state-activity]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
     [webchange.editor-v2.wizard.validator :as validator]
-    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.index :refer [dialog button]]
-    [webchange.utils.scene-data :as utils]
-    [webchange.logger.index :as logger]))
+    [webchange.utils.scene-data :as utils]))
+
+(def custom-actions {:add-image ::add-image/call-action
+                     :add-text  ::add-text/call-action})
 
 (defn- get-action-default-data
   [scene-data action-data]
@@ -58,11 +61,10 @@
 
 (defn get-activity-actions-list
   [scene-data]
-  (let [page-number @(re-frame/subscribe [::state-flipbook/current-page-number])]
-    (->> (utils/get-metadata-untracked-actions scene-data)
-         (map (fn [[name {:keys [title options]}]]
-                {:text     title
-                 :on-click (if-not (empty? options);; ToDo: check is it flipbook for page-number?
-                             #(re-frame/dispatch [::scene-action.events/show-actions-form name nil {:page-number page-number}])
-                             #(re-frame/dispatch [::scene-action.events/save {:action name
-                                                                              :data   {:page-number page-number}}]))})))))
+  (->> (utils/get-metadata-untracked-actions scene-data)
+       (map (fn [[action-name {:keys [title options]}]]
+              {:text     title
+               :on-click (cond
+                           (contains? custom-actions action-name) #(re-frame/dispatch [(get custom-actions action-name) action-name])
+                           (empty? options) #(re-frame/dispatch [::scene-action.events/save {:action action-name}])
+                           :default #(re-frame/dispatch [::scene-action.events/show-actions-form action-name]))}))))
