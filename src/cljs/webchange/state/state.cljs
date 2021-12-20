@@ -6,7 +6,9 @@
 
 (defn path-to-db
   [relative-path]
-  (concat [:state] relative-path))
+  (->> relative-path
+       (concat [:state])
+       (vec)))
 
 ;; Scene data
 
@@ -112,6 +114,26 @@
                                         :scene-id     scene-id
                                         :patches-list [{:object-name       object-name
                                                         :object-data-patch object-data-patch}]} handlers]}))
+
+(def current-object-path (path-to-db [:current-object]))
+
+(defn get-current-object
+  [db]
+  (get-in db current-object-path))
+
+(re-frame/reg-sub
+  ::current-object
+  get-current-object)
+
+(re-frame/reg-event-fx
+  ::set-current-object
+  (fn [{:keys [db]} [_ object-name]]
+    {:db (assoc-in db current-object-path object-name)}))
+
+(re-frame/reg-event-fx
+  ::reset-current-object
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::set-current-object nil]}))
 
 ; Metadata
 

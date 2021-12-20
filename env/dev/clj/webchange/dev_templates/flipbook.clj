@@ -13,22 +13,8 @@
                                   {:url "/raw/img/flipbook/corner_right.png", :size 1, :type "image"}
                                   {:url "/raw/img/flipbook/logo_2.png", :size 1, :type "image"}
                                   "/raw/img/flipbook/logo_2.png"
-                                  nil],
+                                  "/raw/img/flipbook/logo_2.png"],
                   :actions       {:start-scene        {:data [{:type "flipbook-init", :target "book"}], :type "sequence-data"},
-                                  :page-5-action      {:data               [{:data [{:type "empty", :duration 0}
-                                                                                    {:data        [],
-                                                                                     :fill        45823,
-                                                                                     :type        "text-animation",
-                                                                                     :audio       nil,
-                                                                                     :target      "page-text-5",
-                                                                                     :animation   "color",
-                                                                                     :phrase-text "eee"}],
-                                                                             :type "sequence-data"}],
-                                                       :type               "sequence-data",
-                                                       :phrase             "page-5-action",
-                                                       :concept-var        "current-word",
-                                                       :editor-type        "dialog",
-                                                       :phrase-description "Read page"},
                                   :next-page-click    {:data [{:type "flipbook-flip-forward", :target "book"}], :type "sequence-data"},
                                   :prev-page-click    {:data [{:type "flipbook-flip-backward", :target "book"}], :type "sequence-data"},
                                   :page-cover-action  {:data               [{:data [{:type "empty", :duration 0}
@@ -38,7 +24,7 @@
                                                                                      :audio       nil,
                                                                                      :target      "page-cover-title-text",
                                                                                      :animation   "color",
-                                                                                     :phrase-text "t"}],
+                                                                                     :phrase-text "Book title"}],
                                                                              :type "sequence-data"}],
                                                        :type               "sequence-data",
                                                        :phrase             "page-cover-action",
@@ -61,7 +47,7 @@
                                                                                      :audio       nil,
                                                                                      :target      "credits-page-authors-0",
                                                                                      :animation   "color",
-                                                                                     :phrase-text "q"}],
+                                                                                     :phrase-text "A"}],
                                                                              :type "sequence-data"}
                                                                             {:data [{:type "empty", :duration 0}
                                                                                     {:data        [],
@@ -79,7 +65,7 @@
                                                                                      :audio       nil,
                                                                                      :target      "credits-page-illustrators-0",
                                                                                      :animation   "color",
-                                                                                     :phrase-text "w"}],
+                                                                                     :phrase-text "I"}],
                                                                              :type "sequence-data"}],
                                                        :type               "sequence-data",
                                                        :phrase             "credentials-action",
@@ -94,14 +80,13 @@
                                                                        :type        "text",
                                                                        :x           480,
                                                                        :font-family "Lexend Deca",
-                                                                       :text        "t"},
+                                                                       :text        "Book title"},
                                   :page-cover-background              {:x 0, :y 0, :fill 16777215, :type "rectangle", :width 960, :height 1080},
                                   :generic-front-page-background-back {:x 0, :y 0, :fill 16777215, :type "rectangle", :width 960, :height 1080},
                                   :generic-front-page                 {:type       "group",
                                                                        :children   ["generic-front-page-background-back" "generic-front-page-logo"],
                                                                        :generated? true,
                                                                        :transition "generic-front-page"},
-                                  :page-background-5                  {:x 0, :y 0, :fill 16777215, :type "rectangle", :width 960, :height 1080},
                                   :credits-page-illustrators-label    {:y           0,
                                                                        :font-size   24,
                                                                        :fill        "black",
@@ -113,10 +98,9 @@
                                                                        :font-family "Lexend Deca",
                                                                        :text        "Illustrated By"},
                                   :page-cover-title                   {:x        64,
-                                                                       :y        880,
+                                                                       :y        150,
                                                                        :type     "group",
                                                                        :children ["page-cover-title-text" "page-cover-authors" "page-cover-illustrators"]},
-                                  :page-5                             {:type "group", :children ["page-background-5" "page-text-background-5" "page-text-5"]},
                                   :next-page                          {:x                1787,
                                                                        :y                979,
                                                                        :src              "/raw/img/flipbook/corner_right.png",
@@ -129,7 +113,7 @@
                                                                        :generated? true,
                                                                        :transition "page-cover-back"},
                                   :page-cover-back-background-border  {:fill 14342874},
-                                  :page-cover-image                   {:y          436,
+                                  :page-cover-image                   {:y          850,
                                                                        :width      832,
                                                                        :editable?  {:drag      true,
                                                                                     :select    true,
@@ -139,7 +123,7 @@
                                                                                                 :select-image true,
                                                                                                 :upload-image true}},
                                                                        :type       "image",
-                                                                       :src        "/upload/HGBBJKONXAUWYZTG.png",
+                                                                       :src        "/upload/ERXOAWOEKZXPMBCE.png",
                                                                        :image-size "contain",
                                                                        :origin     {:type "center-center"},
                                                                        :x          480,
@@ -155,26 +139,11 @@
                                                                                        :removable? false}
                                                                                       {:text nil, :object "generic-front-page", :removable? false}
                                                                                       {:text nil, :action "credentials-action", :object "credits-page", :removable? false}
-                                                                                      {:text "page-text-5", :action "page-5-action", :object "page-5", :removable? true}
                                                                                       {:text nil, :object "page-back-filler", :removable? false, :back-cover-filler? true}
                                                                                       {:text nil, :object "page-cover-back", :removable? false}],
                                                                        :x            0,
                                                                        :prev-control "prev-page",
                                                                        :height       1080},
-                                  :page-text-5                        {:y              64,
-                                                                       :align          "left",
-                                                                       :vertical-align "top",
-                                                                       :font-size      38,
-                                                                       :fill           0,
-                                                                       :word-wrap      true,
-                                                                       :width          832,
-                                                                       :editable?      {:select true},
-                                                                       :type           "text",
-                                                                       :chunks         [{:end 3, :start 0}],
-                                                                       :x              64,
-                                                                       :font-family    "Lexend Deca",
-                                                                       :height         952,
-                                                                       :text           "eee"},
                                   :page-cover-back                    {:type       "group",
                                                                        :children   ["page-cover-back-background" "page-cover-back-image" "page-cover-back-license"],
                                                                        :generated? true,
@@ -208,7 +177,7 @@
                                                                        :editable?      {:select true},
                                                                        :type           "text",
                                                                        :x              128,
-                                                                       :text           "Written by q.\n\nIllustrated by w."},
+                                                                       :text           "Written by A.\n\nIllustrated by I."},
                                   :left-page-number                   {:x              64,
                                                                        :y              0,
                                                                        :fill           3289650,
@@ -226,7 +195,7 @@
                                                                        :chunks      [{:end 1, :start 0}],
                                                                        :x           200,
                                                                        :font-family "Lexend Deca",
-                                                                       :text        "w"},
+                                                                       :text        "I"},
                                   :credits-page-illustrators          {:x        232,
                                                                        :y        656,
                                                                        :type     "group",
@@ -256,8 +225,7 @@
                                                                        :type           "text",
                                                                        :x              0,
                                                                        :font-family    "Lexend Deca",
-                                                                       :text           "Illustrated by w"},
-                                  :page-text-background-5             {:x 0, :y 0, :fill 16777215, :type "rectangle", :width 960, :height 1080},
+                                                                       :text           "Illustrated by I"},
                                   :credits-page-authors-0             {:y           0,
                                                                        :font-size   24,
                                                                        :fill        "black",
@@ -267,7 +235,7 @@
                                                                        :chunks      [{:end 1, :start 0}],
                                                                        :x           200,
                                                                        :font-family "Lexend Deca",
-                                                                       :text        "q"},
+                                                                       :text        "A"},
                                   :credits-page-background            {:x 0, :y 0, :fill 16777215, :type "rectangle", :width 960, :height 1080},
                                   :prev-page                          {:x                32,
                                                                        :y                979,
@@ -302,10 +270,10 @@
                                                                        :width          768.0,
                                                                        :editable?      {:select true},
                                                                        :type           "text",
-                                                                       :chunks         [{:end 1, :start 0}],
+                                                                       :chunks         [{:end 4, :start 0} {:end 10, :start 5}],
                                                                        :x              0,
                                                                        :font-family    "Lexend Deca",
-                                                                       :text           "t"},
+                                                                       :text           "Book title"},
                                   :page-back-filler-background        {:x 0, :y 0, :fill 16777215, :type "rectangle", :width 960, :height 1080},
                                   :page-cover-authors                 {:y              85,
                                                                        :align          "left",
@@ -317,49 +285,36 @@
                                                                        :type           "text",
                                                                        :x              0,
                                                                        :font-family    "Lexend Deca",
-                                                                       :text           "By q"}},
+                                                                       :text           "By A"}},
                   :metadata      {:template-name    "flipbook",
-                                  :stages           [{:idx 0, :name "t", :pages-idx [nil 0]}
+                                  :stages           [{:idx 0, :name "Book title", :pages-idx [nil 0]}
                                                      {:idx 1, :name "Stage 1", :pages-idx [1 2]}
-                                                     {:idx 2, :name "eee", :pages-idx [3 4]}
-                                                     {:idx 3, :name "Stage 3", :pages-idx [5 nil]}],
+                                                     {:idx 2, :name "Stage 2", :pages-idx [4 nil]}],
                                   :stage-size       "contain",
                                   :saved-props      {:wizard {:activity-name "Book",
-                                                              :cover-title   "t",
+                                                              :cover-title   "Book title",
                                                               :name          "Book",
-                                                              :cover-layout  "title-bottom",
+                                                              :cover-layout  "title-top",
                                                               :lang          "English",
                                                               :skills        [],
-                                                              :illustrators  ["w"],
-                                                              :course-name   "t",
-                                                              :cover-image   {:src "/upload/HGBBJKONXAUWYZTG.png"},
-                                                              :authors       ["q"],
+                                                              :illustrators  ["I"],
+                                                              :course-name   "Book title",
+                                                              :cover-image   {:src "/upload/ERXOAWOEKZXPMBCE.png"},
+                                                              :authors       ["A"],
                                                               :template-id   24}},
                                   :history          {:created {:activity-name "Book",
-                                                               :cover-title   "t",
+                                                               :cover-title   "Book title",
                                                                :name          "Book",
-                                                               :cover-layout  "title-bottom",
+                                                               :cover-layout  "title-top",
                                                                :lang          "English",
                                                                :skills        [],
-                                                               :illustrators  ["w"],
-                                                               :course-name   "t",
-                                                               :cover-image   {:src "/upload/HGBBJKONXAUWYZTG.png"},
-                                                               :authors       ["q"],
+                                                               :illustrators  ["I"],
+                                                               :course-name   "Book title",
+                                                               :cover-image   {:src "/upload/ERXOAWOEKZXPMBCE.png"},
+                                                               :authors       ["A"],
                                                                :template-id   24},
-                                                     :updated [{:data   {:text          "eee",
-                                                                         :type          "page",
-                                                                         :image         nil,
-                                                                         :page-layout   "text-only",
-                                                                         :spread-layout "text-right-top"},
-                                                                :action "add-page"}
-                                                               {:data nil, :action "add-empty-page"}
-                                                               {:data nil, :action "add-empty-page"}
-                                                               {:data nil, :action "add-empty-page"}
-                                                               {:data nil, :action "add-text"}
-                                                               {:data nil, :action "add-image"}
-                                                               {:data {:page-number 3}, :action "add-image"}
-                                                               {:data {:page-number 3}, :action "add-text"}]},
-                                  :flipbook-pages   {:total 0, :current-side "right"},
+                                                     :updated []},
+                                  :flipbook-pages   {:total 0, :current-side "left"},
                                   :actions          {:add-page       {:title   "Add page",
                                                                       :options [{:key     "type",
                                                                                  :type    "lookup",
@@ -412,7 +367,7 @@
                                                                                  :label      "Image",
                                                                                  :conditions [{:key "page-layout", :state "not-in", :value ["text-only"]}]}]},
                                                      :add-text       {:title "Add text", :options []},
-                                                     :add-image      {:title "Add image", :options []},
+                                                     :add-image      {:title "Add image", :options [{:key "image", :type "image", :label "Select Image"}]},
                                                      :remake-covers  {:title         "Remake covers",
                                                                       :options       [{:key         "cover-layout",
                                                                                        :type        "lookup-image",
@@ -442,7 +397,7 @@
                                                                       :default-props "wizard"},
                                                      :add-empty-page {:title "Add empty page", :options []}},
                                   :template-version nil,
-                                  :next-page-id     5,
+                                  :next-page-id     4,
                                   :flipbook-name    "book",
                                   :autostart        true,
                                   :template-id      24},
@@ -450,10 +405,14 @@
                   :scene-objects [["background"] ["book"] ["prev-page" "next-page" "page-numbers"]]})
 
 (comment
-  (def test-course-slug "t-english-wqvikqzi")
+  (def test-course-slug "book-title-english-pgbrcrig")
   (def scene-slug "book")
 
   (core/get-scene-latest-version test-course-slug scene-slug)
+  (-> (core/get-scene-latest-version test-course-slug scene-slug)
+      (get-in [:objects :book]))
+  (-> (core/get-scene-latest-version test-course-slug scene-slug)
+      (get-in [:metadata :stages]))
 
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 

@@ -31,17 +31,25 @@
   ::current-stage-idx
   get-current-stage-idx)
 
+(defn get-current-page-number
+  [db]
+  (let [scene-data (state/scene-data db)
+        current-object (state/get-current-object db)]
+    (flipbook-utils/page-object-name->page-number scene-data current-object)))
+
 (re-frame/reg-sub
-  ::current-page-number
+  ::current-page-side
   (fn []
     [(re-frame/subscribe [::state/scene-data])
-     (re-frame/subscribe [::current-stage-idx])])
-  (fn [[scene-data current-stage-idx] [_]]
-    (when (and (some? scene-data)
-               (some? current-stage-idx))
-      (-> (flipbook-utils/get-stage-data scene-data current-stage-idx)
-        (get :pages-idx)
-        (first)))))
+     (re-frame/subscribe [::state/current-object])])
+  (fn [[scene-data current-object] [_]]
+    (when (some? current-object)
+      (let [page-number (flipbook-utils/page-object-name->page-number scene-data current-object)
+            stage-number (flipbook-utils/page-number->stage-number scene-data page-number)
+            {:keys [pages-idx]} (flipbook-utils/get-stage-data scene-data stage-number)]
+        (cond
+          (= page-number (first pages-idx)) "left"
+          (= page-number (last pages-idx)) "right")))))
 
 (re-frame/reg-sub
   ::stage-pages
@@ -289,7 +297,8 @@
   (fn [{:keys [db]} [_ idx]]
     (let [metadata (get-in db [:current-scene-data :metadata])]
       (if (contains? metadata :flipbook-name)
-        {:dispatch [::select-flipbook-stage idx]}
+        {:dispatch-n [[::select-flipbook-stage idx]
+                      [::state/reset-current-object]]}
         (let [objects (get-in db [:current-scene-data :scene-objects])
               stage (get-in db [:current-scene-data :metadata :stages idx])
               visible? (fn [name] (some #{name} (:objects stage)))]
@@ -297,7 +306,8 @@
            :dispatch-n (->> objects
                             flatten
                             (map (fn [object-name]
-                                   [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]])))})))))
+                                   [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]]))
+                            (concat [::state/reset-current-object]))})))))
 
 (re-frame/reg-event-fx
   ::select-flipbook-stage
