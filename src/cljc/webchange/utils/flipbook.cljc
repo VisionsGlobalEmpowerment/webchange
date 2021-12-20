@@ -16,11 +16,6 @@
   (let [flipbook-name (get-book-object-name activity-data)]
     (get-in activity-data [:objects flipbook-name :pages])))
 
-(defn add-to-pages-data
-  [activity-data page-record]
-  (let [flipbook-name (get-book-object-name activity-data)]
-    (update-in activity-data [:objects flipbook-name :pages] conj page-record)))
-
 (defn get-stages-data
   [activity-data]
   (get-in activity-data [:metadata :stages] []))

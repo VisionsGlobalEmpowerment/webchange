@@ -410,7 +410,7 @@
 
   (core/get-scene-latest-version test-course-slug scene-slug)
   (-> (core/get-scene-latest-version test-course-slug scene-slug)
-      (get-in [:objects :book]))
+      (get-in [:objects :book :pages]))
   (-> (core/get-scene-latest-version test-course-slug scene-slug)
       (get-in [:metadata :stages]))
 

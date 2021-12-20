@@ -36,7 +36,8 @@
        (map (fn [object-name]
               {:name object-name
                :type (get-in activity-data [:objects (keyword object-name) :type])}))
-       (sort-by :type)
+       (sort-by (fn [{:keys [type]}]
+                  (.indexOf ["image" "text"] type)))
        (map :name)))
 
 (defn add-image

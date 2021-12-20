@@ -1,7 +1,8 @@
 (ns webchange.templates.library.flipbook.add-empty-page
   (:require
     [webchange.templates.library.flipbook.stages :refer [update-stages]]
-    [webchange.utils.flipbook :as f]))
+    [webchange.utils.flipbook :as f]
+    [webchange.utils.list :refer [insert-at-position]]))
 
 (defn update-current-side
   [activity-data]
@@ -15,6 +16,18 @@
    :width  width
    :height height
    :fill   background-color})
+
+(defn- add-to-flipbook-pages
+  [activity-data page-record]
+  (let [flipbook-name (-> activity-data f/get-book-object-name keyword)
+        pages-data (f/get-pages-data activity-data)
+        page-position (cond-> (-> pages-data count dec)
+                              (some :back-cover-filler? pages-data) (dec))]
+    (update-in activity-data
+               [:objects flipbook-name :pages]
+               insert-at-position
+               page-record
+               page-position)))
 
 (defn add-empty-page
   [activity-data {:keys [page-params]}]
@@ -40,7 +53,7 @@
                      :object     page-object-name
                      :removable? true}]
     (-> activity-data
-        (f/add-to-pages-data page-record)
+        (add-to-flipbook-pages page-record)
         (update :objects merge {(keyword page-object-name)     page-object-data
                                 (keyword page-background-name) page-background-data})
         (update :actions assoc (keyword page-action-name) page-action-data)
