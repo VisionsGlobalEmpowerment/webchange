@@ -7,6 +7,7 @@
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.logger.index :as logger]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.subs :as subs]))
 
 (def frame-width 5)
@@ -30,7 +31,8 @@
                                                         :state    state}]
                            [::edit-scene/update-current-scene-object {:target name
                                                                       :state  state}]
-                           [::edit-scene/save-current-scene current-scene])}))))
+                           [::edit-scene/save-current-scene current-scene]
+                           [::state-flipbook/generate-stages-screenshots {:only-current-stage? true}])}))))
 
 (defn- handle-frame-click
   [component]
