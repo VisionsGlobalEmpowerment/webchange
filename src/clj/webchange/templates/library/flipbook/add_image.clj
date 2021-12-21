@@ -32,22 +32,26 @@
 
 (defn- sort-children
   [children activity-data]
-  (->> children
-       (map (fn [object-name]
-              {:name object-name
-               :type (get-in activity-data [:objects (keyword object-name) :type])}))
-       (sort-by (fn [{:keys [type]}]
-                  (.indexOf ["image" "text"] type)))
-       (map :name)))
+  (loop [[object-name & rest-objects] (vec children)
+         images []
+         texts []
+         etc []]
+    (if (nil? object-name)
+      (concat etc images texts)
+      (let [object-type (get-in activity-data [:objects (keyword object-name) :type])]
+        (case object-type
+          "image" (recur rest-objects (conj images object-name) texts etc)
+          "text" (recur rest-objects images (conj texts object-name) etc)
+          (recur rest-objects images texts (conj etc object-name)))))))
 
 (defn add-image
   [activity-data page-idx {:keys [image page-params]}]
   (let [{:keys [object]} (f/get-page-data activity-data page-idx)
         image-name (get-image-name activity-data object)
         image-data (get-image-data image page-params)
-        image-asset {:url (:src image) :size 1 :type "image"}]
-    (-> activity-data
-        (update :assets conj image-asset)
-        (update :objects assoc (keyword image-name) image-data)
-        (update-in [:objects (keyword object) :children] conj image-name)
-        (update-in [:objects (keyword object) :children] sort-children activity-data))))
+        image-asset {:url (:src image) :size 1 :type "image"}
+        updated-activity-data (-> activity-data
+                                  (update :assets conj image-asset)
+                                  (update :objects assoc (keyword image-name) image-data)
+                                  (update-in [:objects (keyword object) :children] conj image-name))]
+    (update-in updated-activity-data [:objects (keyword object) :children] sort-children updated-activity-data)))
