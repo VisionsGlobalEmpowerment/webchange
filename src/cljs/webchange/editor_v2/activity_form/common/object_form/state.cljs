@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.utils.deep-merge :refer [deep-merge]]
     [webchange.utils.map :refer [ignore-keys]]))
 
@@ -227,7 +228,7 @@
                            (->> [[::set-initial-data id data]
                                  [::set-loading-status id :done]]
                                 (concat result)))
-                         []
+                         [[::state-flipbook/generate-stages-screenshots {:only-current-stage? true}]]
                          forms-data)}))
 
 ;; Reset
