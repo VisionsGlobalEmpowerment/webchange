@@ -36,11 +36,26 @@
   [component]
   (re-frame/dispatch [::editor/select-object (:object-name component)]))
 
+(defn- apply-origin-to-coordinates
+  [{:keys [x y]} origin width height]
+  (let [[h v] (clojure.string/split origin #"-")]
+    {:x (case h
+          "left" x
+          "center" (-> (/ width 2) (+ x))
+          "right" (+ x width)
+          x)
+     :y (case v
+          "top" y
+          "center" (-> (/ height 2) (+ y))
+          "bottom" (+ y height)
+          y)}))
+
 (defn- handle-drag
-  [container]
-  (let [{:keys [x y] :as position} (utils/get-position container)]
-    (logger/trace-folded "change position on drag end" position)
-    (re-frame/dispatch [::change-position x y])))
+  [container {:keys [type origin width height]}]
+  (let [round #(-> % Math/round int)
+        {:keys [x y]} (cond-> (utils/get-position container)
+                              (= type "image") (apply-origin-to-coordinates (:type origin) width height))]
+    (re-frame/dispatch [::change-position (round x) (round y)])))
 
 (defn- wrap
   [name sprite]
@@ -204,7 +219,7 @@
     (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
     (when (draggable? props)
       (enable-drag! container {:on-drag-start #(handle-frame-click props)
-                               :on-drag-end #(handle-drag container)}))
+                               :on-drag-end   #(handle-drag container props)}))
 
     container))
 

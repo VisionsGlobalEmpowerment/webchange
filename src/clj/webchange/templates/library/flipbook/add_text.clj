@@ -14,13 +14,11 @@
 
 (defn get-text-data
   [text]
-  (let [content {:text   text
-                 :chunks (text->chunks text)
+  (let [content {:text      text
+                 :chunks    (text->chunks text)
                  :word-wrap true}
-        dimensions {:x         300
-                    :y         300
-                    :width     400
-                    :height    400}
+        dimensions {:x 300
+                    :y 300}
         align {:align          "left"
                :vertical-align "top"}
         font {:fill        0
