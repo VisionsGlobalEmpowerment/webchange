@@ -162,11 +162,9 @@
   [activity-data {action-name :action-name :as props}]
   (case action-name
     "add-page" (add-page-handler activity-data props)
-    "add-empty-page" (add-empty-page activity-data (merge props
-                                                          {:page-params page-params}))
-    "add-text" (add-text activity-data (:page-number props))
-    "add-image" (add-image activity-data (:page-number props) (merge props
-                                                                     {:page-params page-params}))
+    "add-empty-page" (add-empty-page activity-data (merge props {:page-params page-params}))
+    "add-text" (add-text activity-data (:page-number props) (merge props {:page-params page-params}))
+    "add-image" (add-image activity-data (:page-number props) (merge props {:page-params page-params}))
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)
     "remake-covers" (-> (remake-covers activity-data props page-params)

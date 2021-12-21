@@ -13,12 +13,13 @@
     (str page-object-name "-text-" (count children))))
 
 (defn get-text-data
-  [text]
+  [text {:keys [width padding]}]
   (let [content {:text      text
                  :chunks    (text->chunks text)
                  :word-wrap true}
-        dimensions {:x 300
-                    :y 300}
+        dimensions {:x     padding
+                    :y     padding
+                    :width (->> (* 2 padding) (- width))}
         align {:align          "left"
                :vertical-align "top"}
         font {:fill        0
@@ -30,11 +31,11 @@
            content dimensions align font)))
 
 (defn add-text
-  [activity-data page-idx]
+  [activity-data page-idx {:keys [page-params]}]
   (let [{:keys [action object]} (f/get-page-data activity-data page-idx)
         text "Text"
         text-name (get-text-name activity-data object)
-        text-data (get-text-data text)
+        text-data (get-text-data text page-params)
         text-action (create-text-animation-action {:inner-action {:target      text-name
                                                                   :phrase-text text}})]
     (-> activity-data
