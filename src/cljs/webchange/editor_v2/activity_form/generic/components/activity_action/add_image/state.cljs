@@ -3,8 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.generic.components.activity-action.state :as parent-state]
     [webchange.state.state-activity :as state-activity]
-    [webchange.state.state-flipbook :as state-flipbook]
-    [webchange.logger.index :as logger]))
+    [webchange.state.state-flipbook :as state-flipbook]))
 
 (re-frame/reg-event-fx
   ::call-action
@@ -12,7 +11,7 @@
     (let [current-page-number (state-flipbook/get-current-page-number db)]
       (if (number? current-page-number)
         {:dispatch [::parent-state/show-actions-form action-name {:on-save ::save}]}
-        (do (logger/error (str "Current page in not a number: " current-page-number))
+        (do (js/alert "Select page before add image")
             {})))))
 
 (re-frame/reg-event-fx
