@@ -63,8 +63,10 @@
   [scene-data]
   (->> (utils/get-metadata-untracked-actions scene-data)
        (map (fn [[action-name {:keys [title options]}]]
-              {:text     title
+              {:name     action-name
+               :text     title
                :on-click (cond
                            (contains? custom-actions action-name) #(re-frame/dispatch [(get custom-actions action-name) action-name])
                            (empty? options) #(re-frame/dispatch [::scene-action.events/save {:action action-name}])
-                           :default #(re-frame/dispatch [::scene-action.events/show-actions-form action-name]))}))))
+                           :default #(re-frame/dispatch [::scene-action.events/show-actions-form action-name]))}))
+       (sort-by :name)))
