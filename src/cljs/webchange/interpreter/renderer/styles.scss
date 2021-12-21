@@ -1,12 +1,14 @@
 .stage-container {
+    $border-width: 2px;
+
     @mixin scene-border-style {
         content: '';
         display: block;
         position: absolute;
-        top: 0;
+        top: -$border-width;
 
-        width: 50%;
-        height: 100%;
+        width: calc(50% + #{$border-width});
+        height: calc(100% + #{2 * $border-width});
         border-style: solid;
         border-color: #0071E3;
     }
@@ -15,8 +17,8 @@
         &::before {
             @include scene-border-style;
 
-            left: 0;
-            border-width: 1px 0 1px 1px;
+            left: -$border-width;
+            border-width: $border-width 0 $border-width $border-width;
             border-radius: 8px 0 0 8px;
         }
     }
@@ -26,7 +28,7 @@
             @include scene-border-style;
 
             left: 50%;
-            border-width: 1px 1px 1px 0;
+            border-width: $border-width $border-width $border-width 0;
             border-radius: 0 8px 8px 0;
         }
     }
