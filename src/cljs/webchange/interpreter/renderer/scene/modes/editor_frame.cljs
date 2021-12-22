@@ -38,7 +38,7 @@
   [component]
   (re-frame/dispatch [::editor/select-object (:object-name component)]))
 
-(defn- apply-origin-to-coordinates
+(defn- apply-img-origin
   [{:keys [x y]} origin width height]
   (let [[h v] (clojure.string/split origin #"-")]
     {:x (case h
@@ -52,11 +52,22 @@
           "bottom" (+ y height)
           y)}))
 
+(defn- apply-text-align
+  [{:keys [x y]} align width container]
+  (let [local-bounds (.getLocalBounds container)]
+    {:x (case align
+          "left" x
+          "center" (- x (/ width 2))
+          "right" (- x (- width (.-width local-bounds) (.-x local-bounds)))
+          x)
+     :y y}))
+
 (defn- handle-drag
-  [container {:keys [type origin width height]}]
+  [container {:keys [type align origin width height]}]
   (let [round #(-> % Math/round int)
         {:keys [x y]} (cond-> (utils/get-position container)
-                              (= type "image") (apply-origin-to-coordinates (:type origin) width height))]
+                              (= type "image") (apply-img-origin (:type origin) width height)
+                              (= type "text") (apply-text-align align width container))]
     (re-frame/dispatch [::change-position (round x) (round y)])))
 
 (defn- wrap
