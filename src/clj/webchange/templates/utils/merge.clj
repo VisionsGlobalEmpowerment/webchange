@@ -4,7 +4,8 @@
   [action action-key-fn object-key-fn]
   (cond-> action
           (contains? action :target) (assoc :target (object-key-fn (:target action)))
-          (contains? action :success) (assoc :success (action-key-fn (:success action)))
+          (and (contains? action :success)
+               (string? (:success action))) (assoc :success (action-key-fn (:success action)))
           (contains? action :fail) (assoc :fail (action-key-fn (:fail action)))
           (contains? action :skip) (assoc :skip (action-key-fn (:skip action)))
           (contains? action :transition) (assoc :transition (object-key-fn (:transition action)))
