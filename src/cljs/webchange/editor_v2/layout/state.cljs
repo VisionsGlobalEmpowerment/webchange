@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.layout.state
   (:require
-    [re-frame.core :as re-frame]))
+    [re-frame.core :as re-frame]
+    [webchange.editor-v2.activity-form.common.state :as state-activity-form]))
 
 (defn path-to-db
   [relative-path]
@@ -26,7 +27,8 @@
 (re-frame/reg-event-fx
   ::set-activity-dialogs
   (fn [{:keys [_]} [_]]
-    {:dispatch [::set-current-content :activity-dialogs]}))
+    {:dispatch-n [[::state-activity-form/reset-selection]
+                  [::set-current-content :activity-dialogs]]}))
 
 (re-frame/reg-event-fx
   ::set-activity-stage

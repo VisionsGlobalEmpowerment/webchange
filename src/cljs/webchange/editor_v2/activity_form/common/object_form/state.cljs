@@ -19,8 +19,10 @@
 
 (re-frame/reg-sub
   ::selected-objects
-  (fn [db]
-    (state-parent/get-selected-objects db)))
+  (fn [_]
+    [(re-frame/subscribe [::state-parent/selected-objects])])
+  (fn [[selected-objects]]
+    selected-objects))
 
 (re-frame/reg-sub
   ::show-edit-menu?
