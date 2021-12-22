@@ -15,8 +15,7 @@
     [webchange.templates.library.flipbook.generic-front :as generic-front]
     [webchange.templates.library.flipbook.remake-covers :refer [remake-covers]]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
-    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
-    [clojure.tools.logging :as log]))
+    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]))
 
 (def book-options [{:key         :cover-layout
                     :label       "Cover layout"
@@ -91,11 +90,16 @@
                                  {:src   "/images/templates/page_layout/spread_text_left_top.png"
                                   :value :text-left-top}
                                  {:src   "/images/templates/page_layout/spread_text_left_bottom.png"
-                                  :value :text-left-bottom}]}
+                                  :value :text-left-bottom}
+                                 {:src   "/images/templates/page_layout/spread_image_only.png"
+                                  :value :image-only}]}
                    {:key        :text
                     :type       "string"
                     :label      "Text"
                     :conditions [{:key   :page-layout
+                                  :state :not-in
+                                  :value [:image-only]}
+                                 {:key   :spread-layout
                                   :state :not-in
                                   :value [:image-only]}]}
                    {:key        :image

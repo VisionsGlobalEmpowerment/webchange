@@ -171,4 +171,5 @@
     :text-right-top [left-without-text right-text-top]
     :text-right-bottom [left-without-text right-text-bottom]
     :text-left-top [left-text-top right-without-text]
-    :text-left-bottom [left-text-bottom right-without-text]))
+    :text-left-bottom [left-text-bottom right-without-text]
+    :image-only [left-without-text right-without-text]))
