@@ -120,9 +120,15 @@
 
 (re-frame/reg-event-fx
   ::set-changes
-  (fn [{:keys [db]} [_ asset-data]]
+  (fn [{:keys [db]} [_]]
     {:db               (assoc-in db (path-to-db [:scene :changed]) true)
      :set-before-leave confirm/unsaved-changes-message}))
+
+(re-frame/reg-event-fx
+  ::reset-changes
+  (fn [{:keys [db]} [_]]
+    {:db                 (assoc-in db (path-to-db [:scene :changed]) false)
+     :reset-before-leave true}))
 
 (re-frame/reg-event-fx
   ::add-asset
