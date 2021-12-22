@@ -4,10 +4,6 @@
     [webchange.utils.flipbook :as f]
     [webchange.utils.list :refer [insert-at-position]]))
 
-(defn update-current-side
-  [activity-data]
-  (update-in activity-data [:metadata :flipbook-pages :current-side] #(if (= % "right") "left" "right")))
-
 (defn- get-background-data
   [{:keys [width height background-color]}]
   {:type   "rectangle"
@@ -58,5 +54,4 @@
                                 (keyword page-background-name) page-background-data})
         (update :actions assoc (keyword page-action-name) page-action-data)
         (update-stages {:book-name flipbook-name})
-        (update-current-side)
         (update-in [:metadata :next-page-id] inc))))
