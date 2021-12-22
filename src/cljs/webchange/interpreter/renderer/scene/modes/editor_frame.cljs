@@ -15,29 +15,6 @@
 (def frame-default-color 0x59acff)
 (def frame-selected-color 0xFFA500)
 
-(re-frame/reg-event-fx
-  ::change-position
-  (fn [{:keys [db]} [_ x y]]
-    (let [name (editor/selected-object db)
-          current-scene (subs/current-scene db)
-          init-state (subs/scene-object db current-scene name)
-          state (assoc init-state :x x :y y)
-          dx (Math/abs (- (:x state) (:x init-state)))
-          dy (Math/abs (- (:y state) (:y init-state)))
-          delta 1]
-      (when (or (> dx delta) (> dy delta))
-        {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
-                                                        :target   name
-                                                        :state    state}]
-                           [::edit-scene/update-current-scene-object {:target name
-                                                                      :state  state}]
-                           [::edit-scene/save-current-scene current-scene]
-                           [::state-flipbook/generate-stages-screenshots {:only-current-stage? true}])}))))
-
-(defn- handle-frame-click
-  [component]
-  (re-frame/dispatch [::editor/select-object (:object-name component)]))
-
 (defn- apply-img-origin
   [{:keys [x y]} origin width height]
   (let [[h v] (clojure.string/split origin #"-")]
@@ -62,13 +39,47 @@
           x)
      :y y}))
 
+(defn round-position
+  [{:keys [x y]}]
+  (let [round #(-> % Math/round int)]
+    {:x (round x)
+     :y (round y)}))
+
+(defn- fix-position
+  [position props container]
+  (let [{:keys [type align origin width height]} props]
+    (cond-> position
+            (= type "image") (apply-img-origin (:type origin) width height)
+            (= type "text") (apply-text-align align width container)
+            :always (round-position))))
+
+(re-frame/reg-event-fx
+  ::change-position
+  (fn [{:keys [db]} [_ position container]]
+    (let [name (editor/selected-object db)
+          current-scene (subs/current-scene db)
+          init-state (subs/scene-object db current-scene name)
+          state (->> (fix-position position init-state container)
+                     (merge init-state))
+          dx (Math/abs (- (:x state) (:x init-state)))
+          dy (Math/abs (- (:y state) (:y init-state)))
+          delta 1]
+      (when (or (> dx delta) (> dy delta))
+        {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
+                                                        :target   name
+                                                        :state    state}]
+                           [::edit-scene/update-current-scene-object {:target name
+                                                                      :state  state}]
+                           [::edit-scene/save-current-scene current-scene]
+                           [::state-flipbook/generate-stages-screenshots {:only-current-stage? true}])}))))
+
+(defn- handle-frame-click
+  [component]
+  (re-frame/dispatch [::editor/select-object (:object-name component)]))
+
 (defn- handle-drag
-  [container {:keys [type align origin width height]}]
-  (let [round #(-> % Math/round int)
-        {:keys [x y]} (cond-> (utils/get-position container)
-                              (= type "image") (apply-img-origin (:type origin) width height)
-                              (= type "text") (apply-text-align align width container))]
-    (re-frame/dispatch [::change-position (round x) (round y)])))
+  [container]
+  (re-frame/dispatch [::change-position (utils/get-position container) container]))
 
 (defn- wrap
   [name sprite]
@@ -232,7 +243,7 @@
     (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
     (when (draggable? props)
       (enable-drag! container {:on-drag-start #(handle-frame-click props)
-                               :on-drag-end   #(handle-drag container props)}))
+                               :on-drag-end   #(handle-drag container)}))
 
     container))
 
