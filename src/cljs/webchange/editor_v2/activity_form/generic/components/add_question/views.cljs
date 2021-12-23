@@ -25,7 +25,7 @@
       (when open?
         [dialog {:open?    open?
                  :on-close handle-close
-                 :title    "Add Question *new*"
+                 :title    "Add Question"
                  :actions  [[button {:on-click handle-add
                                      :size     "big"}
                              "Add"]

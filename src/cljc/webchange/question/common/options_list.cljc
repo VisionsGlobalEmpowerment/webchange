@@ -6,10 +6,10 @@
     [webchange.question.utils :refer [merge-data]]))
 
 (defn create
-  [{:keys [object-name x y width height options frame on-check-click on-option-click on-option-voice-over-click question-id]}
-   {:keys [answers-number question-type] :as form-data}]
-  (let [{label-type :label} (:options form-data)
-        show-check-button? (= answers-number "many")
+  [options
+   {:keys [answers-number question-type] :as form-data}
+   {:keys [object-name x y width height frame on-check-click on-option-click on-option-voice-over-click question-id]}]
+  (let [show-check-button? (= answers-number "many")
 
         check-button-name (str object-name "-check-button")
         {check-button-size :size} params/check-button
@@ -29,25 +29,25 @@
                                   height)
         list-offset-x (-> (- list-placeholder-width list-width) (/ 2))
         list-offset-y (-> (- list-placeholder-height list-height) (/ 2))]
-
-    (->> (map-indexed vector options)
-         (reduce (fn [result [idx {:keys [img text value]}]]
+    (->> options
+         (map-indexed (fn [idx option] [(inc idx) option]))
+         (reduce (fn [result [idx option]]
                    (let [option-name (str object-name "-option-" idx)]
                      (-> result
                          (update-in [:objects (keyword object-name) :children] conj option-name)
-                         (merge-data (option-item/create {:object-name                option-name
-                                                          :x                          (-> (get-in positions [idx :x])
+                         (merge-data (option-item/create option
+                                                         form-data
+                                                         {:idx                        idx
+                                                          :object-name                option-name
+                                                          :x                          (-> (get-in positions [(dec idx) :x])
                                                                                           (+ list-offset-x))
-                                                          :y                          (-> (get-in positions [idx :y])
+                                                          :y                          (-> (get-in positions [(dec idx) :y])
                                                                                           (+ list-offset-y))
                                                           :width                      option-width
                                                           :height                     option-height
-                                                          :img                        img
-                                                          :text                       text
-                                                          :label-type                 label-type
                                                           :on-option-click            on-option-click
                                                           :on-option-voice-over-click on-option-voice-over-click
-                                                          :value                      value
+                                                          :value                      (str "option-" idx)
                                                           :question-id                question-id
                                                           :question-type              question-type})))))
                  (cond-> {:objects {(keyword object-name) {:type     "group"

@@ -19,8 +19,8 @@
 
 (re-frame/reg-sub
   ::selected-objects
-  (fn [_]
-    [(re-frame/subscribe [::state-parent/selected-objects])])
+  (fn [[_ scene-data]]
+    [(re-frame/subscribe [::state-parent/selected-objects scene-data])])
   (fn [[selected-objects]]
     selected-objects))
 
@@ -41,6 +41,22 @@
                   [::set-initial-data id data]
                   [::set-current-data id data]
                   [::set-form-params id form-params]]}))
+
+(re-frame/reg-event-fx
+  ::init-common-params
+  (fn [{:keys [_]} [_ id {:keys [hot-update?]}]]
+    {:dispatch-n [[::set-hot-update id (if (boolean? hot-update?) hot-update? true)]]}))
+
+(def hot-update-path :hot-update)
+
+(defn- get-hot-update
+  [db id]
+  (get-in db (path-to-db id [hot-update-path])))
+
+(re-frame/reg-event-fx
+  ::set-hot-update
+  (fn [{:keys [db]} [_ id value]]
+    {:db (assoc-in db (path-to-db id [hot-update-path]) value)}))
 
 ;; Form params
 
@@ -124,13 +140,12 @@
 (re-frame/reg-event-fx
   ::update-current-data
   (fn [{:keys [db]} [_ id data]]
-
-    (logger/group-folded "Update current data" id)
-    (logger/trace "data" data)
-    (logger/group-end "Update current data" id)
-
-    {:db       (update-in db (path-to-db id [current-data-path]) merge data)
-     :dispatch [::update-stage-objects id data]}))
+    (let [hot-update? (get-hot-update db id)]
+      (logger/group-folded "Update current data" id)
+      (logger/trace "data" data)
+      (logger/group-end "Update current data" id)
+      (cond-> {:db (update-in db (path-to-db id [current-data-path]) merge data)}
+              hot-update? (assoc :dispatch [::update-stage-objects id data])))))
 
 ;; Update stage
 
@@ -198,7 +213,7 @@
 
 (re-frame/reg-event-fx
   ::save
-  (fn [{:keys [db]} [_ id {:keys [reset?] :or {reset? false}}]]
+  (fn [{:keys [db]} [_ id {:keys [reset? on-save] :or {reset? false}}]]
     (let [saving-forms-ids (if (sequential? id) id [id])
           patches-list (reduce (fn [patches-list form-id]
                                  (let [objects-names (get-selected-objects-names db form-id)
@@ -214,6 +229,7 @@
                             {:id   form-id
                              :data (get-current-data db form-id)})
                           saving-forms-ids)]
+      (when (fn? on-save) (on-save patches-list))           ;; ToDo: Effect?
       {:dispatch-n (cond-> [[::state/update-scene-objects {:patches-list patches-list}
                              {:on-success [::save-success forms-data]}]]
                            :always (concat (map (fn [form-id]

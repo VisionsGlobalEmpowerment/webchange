@@ -245,7 +245,6 @@
 (defn- create-editor-container
   [props]
   (let [container (Container.)]
-
     (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
     (when (draggable? props)
       (enable-drag! container {:on-drag-start #(handle-frame-click props)

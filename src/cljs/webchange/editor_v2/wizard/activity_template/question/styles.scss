@@ -50,30 +50,24 @@
         font-weight: 400;
     }
 
-    .preview-wrapper {
-        $origin-width: 1920px;
-        $origin-height: 1080px;
-        $scale: 0.35;
+    .preview {
+        display: flex;
+        justify-content: space-between;
 
-        position: relative;
-        left: 50%;
-        margin-left: -1 * ($origin-width * $scale * 0.5);
+        .preview-stage-wrapper {
+            $origin-width: 1920px;
+            $origin-height: 1080px;
+            $scale: 0.35;
 
-        width: $origin-width * $scale;
-        height: $origin-height * $scale;
+            position: relative;
+            width: $origin-width * $scale;
+            height: $origin-height * $scale;
 
-        canvas {
-            border: solid 1px #e5e5e5;
-            border-radius: 4px;
-            box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
-        }
-
-        .preview-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            canvas {
+                border: solid 1px #e5e5e5;
+                border-radius: 4px;
+                box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.75);
+            }
         }
     }
 }

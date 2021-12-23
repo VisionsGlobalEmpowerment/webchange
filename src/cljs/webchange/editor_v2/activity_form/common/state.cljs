@@ -20,8 +20,10 @@
 
 (re-frame/reg-sub
   ::selected-objects
-  (fn []
-    [(re-frame/subscribe [::state/scene-data])
+  (fn [[_ scene-data]]
+    [(if (some? scene-data)
+       (atom scene-data)                                    ;; ToDo: replace with subscription
+       (re-frame/subscribe [::state/scene-data]))
      (re-frame/subscribe [::selected-objects-paths])])
   (fn [[scene-data selected-objects-paths]]
     (prepare-selected-objects {:objects-names selected-objects-paths

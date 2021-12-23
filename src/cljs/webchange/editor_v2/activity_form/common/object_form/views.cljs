@@ -25,11 +25,12 @@
   (contains? form-components object-type))
 
 (defn- object-form-view
-  [{:keys [class-name objects-data objects-names object-type on-destroy on-save-click ref show-save-button? title]
+  [{:keys [class-name objects-data objects-names object-type on-destroy on-save-click ref show-save-button? title hot-update?]
     :or   {on-save-click     #()
            show-save-button? true}}]
   (when (available-object-type? object-type)
     (r/with-let [id (->> (random-uuid) (str) (take 8) (str/join ""))
+                 _ (re-frame/dispatch [::state/init-common-params id {:hot-update? hot-update?}])
                  _ (when (fn? ref) (ref id))]
       (let [component (get form-components object-type)
             component-props {:id            id
@@ -89,17 +90,17 @@
         "Apply"]])))
 
 (defn object-form
-  []
-  (r/with-let [handle-save #(re-frame/dispatch [::state/save %])
+  [{:keys [scene-data on-save hot-update?]}]
+  (r/with-let [handle-save #(re-frame/dispatch [::state/save % {:on-save on-save}])
                handle-reset #(re-frame/dispatch [::state/reset %])
-               handle-save-and-reset #(re-frame/dispatch [::state/save % {:reset? true}])
+               handle-save-and-reset #(re-frame/dispatch [::state/save % {:reset? true :on-save on-save}])
                handle-destroy (fn [id]
                                 (if @(re-frame/subscribe [::state/has-changes? id])
                                   (with-confirmation {:message    "Save changes?"
                                                       :on-confirm #(handle-save-and-reset id)
                                                       :on-discard #(handle-reset id)})
                                   (handle-reset id)))]
-    (let [{:keys [data names]} @(re-frame/subscribe [::state/selected-objects])
+    (let [{:keys [data names]} @(re-frame/subscribe [::state/selected-objects scene-data])
           type (get data :type)
           component-key (->> (map clojure.core/name names)
                              (clojure.string/join "--"))
@@ -107,7 +108,8 @@
                            :objects-data  data
                            :objects-names names
                            :on-save-click handle-save
-                           :on-destroy    handle-destroy}]
+                           :on-destroy    handle-destroy
+                           :hot-update?   hot-update?}]
       (when (some? data)
         (if (= type "group")
           ^{:key component-key}

@@ -1,48 +1,55 @@
-(ns webchange.question.get-question-data)
+(ns webchange.question.get-question-data
+  (:require
+    [webchange.utils.deep-merge :refer [deep-merge]]))
 
-(def default-task-text "Question placeholder")
+(def current-question-version 2)
 
-(def default-options [{:img   "/images/questions/option1.png"
-                       :text  "Option 1"
-                       :value "option-1"}
-                      {:img   "/images/questions/option2.png"
-                       :text  "Option 2"
-                       :value "option-2"}
-                      {:img   "/images/questions/option3.png"
-                       :text  "Option 3"
-                       :value "option-3"}
-                      {:img   "/images/questions/option4.png"
-                       :text  "Option 4"
-                       :value "option-4"}])
+(defn param-name->object-name
+  [param-name question-id]
+  (str question-id "--" param-name))
 
-(def available-mark-options [{:value "thumbs-up"
-                              :text  "Thumbs Up"
-                              :img   "/images/questions/thumbs_up.png"}
-                             {:value "ok"
-                              :text  "Ok"
-                              :img   "/images/questions/ok.png"}
-                             {:value "thumbs-down"
-                              :text  "Thumbs Down"
-                              :img   "/images/questions/thumbs_down.png"}])
+(defn object-name->param-name
+  [object-name]
+  (-> (clojure.core/name object-name)
+      (clojure.string/split #"--")
+      (last)
+      (keyword)))
+
+(def available-values
+  {:mark-options ["thumbs-up" "ok" "thumbs-down"]})
+
+(def default-question-data
+  {:alias             "New question"
+   :question-type     "multiple-choice-image"
+   :layout            "vertical"
+   :answers-number    "one"
+   :correct-answers   ["option-1"]
+
+   :task-type         "text-image"
+   :task-text         {:text "Question placeholder" :font-size 48}
+   :task-image        {:src "/images/questions/question.png" :image-size "contain"}
+
+   :options-number    2
+   :options-label     "audio-text"
+
+   :option-1-text     {:text "Option 1" :font-size 48}
+   :option-1-image    {:src "/images/questions/option1.png" :image-size "contain"}
+   :option-2-text     {:text "Option 2" :font-size 48}
+   :option-2-image    {:src "/images/questions/option2.png" :image-size "contain"}
+   :option-3-text     {:text "Option 3" :font-size 48}
+   :option-3-image    {:src "/images/questions/option3.png" :image-size "contain"}
+   :option-4-text     {:text "Option 4" :font-size 48}
+   :option-4-image    {:src "/images/questions/option4.png" :image-size "contain"}
+
+   :mark-options      [(-> available-values :mark-options first)
+                       (-> available-values :mark-options last)]
+   :thumbs-up-text    {:text "Thumbs Up" :font-size 48}
+   :thumbs-up-image   {:src "/images/questions/thumbs_up.png" :image-size "contain"}
+   :ok-text           {:text "Ok" :font-size 48}
+   :ok-image          {:src "/images/questions/ok.png" :image-size "contain"}
+   :thumbs-down-text  {:text "Thumbs Down" :font-size 48}
+   :thumbs-down-image {:src "/images/questions/thumbs_down.png" :image-size "contain"}})
 
 (defn form->question-data
-  [{:keys [alias answers-number correct-answers layout mark-options option-label options-number task-type question-type]
-    :or   {alias          "New question"
-           layout         "horizontal"
-           options-number 2
-           question-type  "multiple-choice-text"}}]
-  (let [marks-question? (= question-type "thumbs-up-n-down")]
-    {:alias           alias
-     :question-type   question-type
-     :layout          layout
-     :task            {:type task-type
-                       :text default-task-text
-                       :img  "/images/questions/question.png"}
-     :options         {:label option-label
-                       :data  (if marks-question?
-                                (filter (fn [{:keys [value]}]
-                                          (some #{value} mark-options))
-                                        available-mark-options)
-                                (take options-number default-options))}
-     :answers-number  answers-number
-     :correct-answers correct-answers}))
+  [form-data]
+  (deep-merge {:version current-question-version} default-question-data form-data))

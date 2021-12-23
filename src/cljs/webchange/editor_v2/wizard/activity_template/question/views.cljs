@@ -3,17 +3,13 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.activity-template.question.views-preview :refer [question-preview]]
     [webchange.editor-v2.wizard.validator :refer [connect-data]]
-    [webchange.question.get-question-data :refer [available-mark-options default-options]]
-    [webchange.ui-framework.components.index :refer [checkbox label select input]]))
+    [webchange.ui-framework.components.index :refer [checkbox label select input]]
 
-(def default-values
-  {:question-type  "multiple-choice-image"
-   :task-type      "text-image"
-   :layout         "vertical"
-   :option-label   "audio-text"
-   :options-number 2
-   :answers-number "one"
-   :mark-options   ["thumbs-up" "thumbs-down"]})
+    [webchange.editor-v2.activity-form.common.object-form.views :refer [object-form]]
+    [webchange.logger.index :as logger]
+    [webchange.question.get-question-data :refer [available-values form->question-data object-name->param-name default-question-data]]
+    [webchange.utils.scene-data :as scene-utils]
+    [webchange.question.create :as question]))
 
 (defn- answers-number-control
   [{:keys [value on-change]}]
@@ -34,15 +30,14 @@
   [{:keys [value answers-number mark-options options-number question-type on-change]}]
   (let [handle-change #(on-change (if (= answers-number "one") [%] %))
         options (if (= question-type "thumbs-up-n-down")
-                  (->> available-mark-options
-                       (filter (fn [{:keys [value]}]
-                                 (some #{value} mark-options))))
-                  (->> default-options
-                       (take options-number)
-                       (map-indexed vector)
-                       (map (fn [[number {:keys [value]}]]
-                              {:text  (str "Option " (inc number))
-                               :value value}))))
+                  (->> mark-options
+                       (map (fn [value]
+                              {:text  value
+                               :value value})))
+                  (->> (range 1 (inc options-number))
+                       (map (fn [number]
+                              {:text  (str "Option " number)
+                               :value (str "option-" number)}))))
         show? (not= answers-number "any")]
     (when show?
       [:div.option-group
@@ -79,7 +74,7 @@
 
 (defn- mark-options-control
   [{:keys [value question-type on-change]}]
-  (let [options-list (map :value available-mark-options)
+  (let [options-list (:mark-options available-values)
         list->map (fn [values-list]
                     (->> options-list
                          (map (fn [option-value] [option-value (->> values-list (some #{option-value}) (boolean))]))
@@ -98,12 +93,13 @@
       [:div.option-group
        [label {:class-name "label"} "Options"]
        (into [:div.mark-options]
-             (reduce (fn [result option]
-                       (concat result (get-mark-option (merge option
-                                                              {:on-change    handle-change
-                                                               :parent-value value}))))
+             (reduce (fn [result mark]
+                       (concat result (get-mark-option {:text         mark
+                                                        :value        mark
+                                                        :on-change    handle-change
+                                                        :parent-value value})))
                      []
-                     available-mark-options))])))
+                     (:mark-options available-values)))])))
 
 (defn- option-label-control
   [{:keys [value question-type on-change]}]
@@ -153,13 +149,13 @@
 
 (defn- question-params-form
   [{:keys [data]}]
-  (r/with-let [answers-number (connect-data data [:answers-number] (:answers-number default-values))
+  (r/with-let [answers-number (connect-data data [:answers-number] (:answers-number default-question-data))
                correct-answer (connect-data data [:correct-answers] [])
-               layout (connect-data data [:layout] (:layout default-values))
-               mark-options (connect-data data [:mark-options] (:mark-options default-values))
-               option-label (connect-data data [:option-label] (get default-values :option-label))
-               options-number (connect-data data [:options-number] (:options-number default-values))
-               task-type (connect-data data [:task-type] (get default-values :task-type))
+               layout (connect-data data [:layout] (:layout default-question-data))
+               mark-options (connect-data data [:mark-options] (:mark-options default-question-data))
+               option-label (connect-data data [:options-label] (:options-label default-question-data))
+               options-number (connect-data data [:options-number] (:options-number default-question-data))
+               task-type (connect-data data [:task-type] (:task-type default-question-data))
 
                handle-answers-number-changed #(do (reset! answers-number %)
                                                   (reset! correct-answer []))
@@ -203,7 +199,7 @@
 (defn- question-type-control
   [{:keys [data]}]
   (r/with-let [param-key :question-type
-               value (connect-data data [param-key] (get default-values param-key))
+               value (connect-data data [param-key] (get default-question-data param-key))
                handle-change #(reset! value %)
                options [{:text  "Multiple choice image"
                          :value "multiple-choice-image"}
@@ -237,12 +233,30 @@
 (defn question-option
   [{:keys [key option data validator]}]
   (r/with-let [option-data (connect-data data [key] {})]
-    [:div.question-option
-     [question-alias-control {:data option-data}]
-     [question-type-control {:data option-data}]
-     [:hr]
-     [question-params-form {:data option-data}]
-     [label {:class-name "explanation-label"}
-      "After you hit save, use the script editor boxes to fill in your actual question and answers."]
-     [:hr]
-     [question-preview @option-data]]))
+    (let [scene-data (->> (question/create (logger/->>with-trace "Question data"
+                                                                 (form->question-data @option-data))
+                                           {:action-name "question-action" :object-name "question"}
+                                           {:visible? true})
+                          (question/add-to-scene scene-utils/empty-data)
+                          (logger/->>with-trace-folded "Scene data"))]
+      (js/console.groupCollapsed "form data") (js/console.log @option-data) (js/console.groupEnd "form data")
+      (js/console.groupCollapsed "question data") (js/console.log (form->question-data @option-data)) (js/console.groupEnd "question data")
+      (js/console.groupCollapsed "question") (js/console.log (question/create (logger/->>with-trace "Question data"
+                                                                                                    (form->question-data @option-data))
+                                                                              {:action-name "question-action" :object-name "question"}
+                                                                              {:visible? true})) (js/console.groupEnd "question")
+      [:div.question-option
+       [question-alias-control {:data option-data}]
+       [question-type-control {:data option-data}]
+       [:hr]
+       [question-params-form {:data option-data}]
+       [label {:class-name "explanation-label"}
+        "After you hit save, use the script editor boxes to fill in your actual question and answers."]
+       [:hr]
+       [:div.preview
+        [question-preview {:scene-data scene-data}]
+        [object-form {:scene-data  scene-data
+                      :hot-update? false
+                      :on-save     (fn [params]
+                                     (doseq [{:keys [object-name object-data-patch]} params]
+                                       (swap! option-data update (object-name->param-name object-name) merge object-data-patch)))}]]])))
