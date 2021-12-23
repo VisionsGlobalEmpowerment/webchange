@@ -60,4 +60,6 @@
                          :idx       stage-index
                          :pages-idx [left-page-index right-page-index]}))
                     (range stages-number))]
-    (assoc-in activity-data [:metadata :stages] stages)))
+    (-> activity-data
+        (assoc-in [:metadata :stages] stages)
+        (assoc-in [:metadata :flipbook-pages :current-side] (if omit-filler? "right" "left")))))

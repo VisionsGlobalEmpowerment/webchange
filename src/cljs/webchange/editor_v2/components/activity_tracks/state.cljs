@@ -79,8 +79,10 @@
   (fn [scene-data]
     (->> (utils/get-track-actions scene-data "main")
          (map (fn [[name {:keys [title]}]]
-                {:text     title
-                 :on-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])})))))
+                {:name     name
+                 :text     title
+                 :on-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])}))
+         (sort-by :name))))
 
 ;; Second track
 

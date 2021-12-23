@@ -5,8 +5,14 @@
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.state.state-activity :as state-activity]))
 
-(def actions-modal-state-path [:editor-v2 :translator :actions-modal-state])
-(def actions-modal-handlers-path [:editor-v2 :translator :actions-modal-handlers])
+(defn path-to-db
+  [relative-path]
+  (->> relative-path
+       (concat [:editor-v2 :translator])
+       (vec)))
+
+(def actions-modal-state-path (path-to-db [:actions-modal-state]))
+(def actions-modal-handlers-path (path-to-db [:actions-modal-handlers]))
 
 (re-frame/reg-sub
   ::modal-state
@@ -24,25 +30,29 @@
 (re-frame/reg-event-fx
   ::close
   (fn [{:keys [db]} [_]]
-    {:db       (assoc-in db actions-modal-state-path false)
+    {:db         (assoc-in db actions-modal-state-path false)
      :dispatch-n [[::translator-form/reset-state]
                   [::state-stage/reset-stage]]}))
 
 (re-frame/reg-event-fx
   ::show-actions-form
   (fn [{:keys [db]} [_ action-name handlers]]
-    {:db         (assoc-in db actions-modal-handlers-path handlers)
+    {:db         (-> db
+                     (assoc-in actions-modal-handlers-path handlers))
      :dispatch-n (list [::state-activity/set-current-action action-name]
                        [::open])}))
 
 (re-frame/reg-event-fx
   ::save
-  (fn [{:keys [db]} [_ data]]
-    (let [current-action (state-activity/get-current-action db)]
-      {:dispatch [::state-activity/call-activity-action
-                  {:action current-action
-                   :data   data}
-                  {:on-success [::save-success]}]})))
+  (fn [{:keys [db]} [_ {:keys [action data]}]]
+    (let [{:keys [on-save]} (get-in db actions-modal-handlers-path)
+          current-action (or action (state-activity/get-current-action db))
+          params {:action current-action
+                  :data   data}]
+      (if (some? on-save)
+        {:dispatch [on-save params]}
+        {:dispatch [::state-activity/call-activity-action params
+                    {:on-success [::save-success]}]}))))
 
 (re-frame/reg-event-fx
   ::save-success

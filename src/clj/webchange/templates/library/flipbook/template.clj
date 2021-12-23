@@ -2,7 +2,10 @@
   (:require
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
+    [webchange.templates.library.flipbook.add-empty-page :refer [add-empty-page]]
     [webchange.templates.library.flipbook.add-page :refer [add-page] :as page]
+    [webchange.templates.library.flipbook.add-text :refer [add-text]]
+    [webchange.templates.library.flipbook.add-image :refer [add-image]]
     [webchange.templates.library.flipbook.credits :as credits]
     [webchange.templates.library.flipbook.custom-page :as custom-page]
     [webchange.templates.library.flipbook.custom-spread :as custom-spread]
@@ -12,8 +15,7 @@
     [webchange.templates.library.flipbook.generic-front :as generic-front]
     [webchange.templates.library.flipbook.remake-covers :refer [remake-covers]]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
-    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
-    [clojure.tools.logging :as log]))
+    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]))
 
 (def book-options [{:key         :cover-layout
                     :label       "Cover layout"
@@ -88,11 +90,16 @@
                                  {:src   "/images/templates/page_layout/spread_text_left_top.png"
                                   :value :text-left-top}
                                  {:src   "/images/templates/page_layout/spread_text_left_bottom.png"
-                                  :value :text-left-bottom}]}
+                                  :value :text-left-bottom}
+                                 {:src   "/images/templates/page_layout/spread_image_only.png"
+                                  :value :image-only}]}
                    {:key        :text
                     :type       "string"
                     :label      "Text"
                     :conditions [{:key   :page-layout
+                                  :state :not-in
+                                  :value [:image-only]}
+                                 {:key   :spread-layout
                                   :state :not-in
                                   :value [:image-only]}]}
                    {:key        :image
@@ -108,11 +115,19 @@
                :description "Some description of flipbook mechanics and covered skills"
                :lesson-sets []
                :options     book-options
-               :actions     {:add-page      {:title   "Add page",
-                                             :options page-options}
-                             :remake-covers {:title         "Remake covers",
-                                             :options       book-options
-                                             :default-props :wizard}}})
+               :actions     {:add-page       {:title   "Add page",
+                                              :options page-options}
+                             :add-empty-page {:title   "Add empty page",
+                                              :options []}
+                             :add-text       {:title   "Add text",
+                                              :options []}
+                             :add-image      {:title   "Add image",
+                                              :options [{:key   :image
+                                                         :type  "image"
+                                                         :label "Select Image"}]}
+                             :remake-covers  {:title         "Remake covers",
+                                              :options       book-options
+                                              :default-props :wizard}}})
 
 (def page-params {:width            960
                   :height           1080
@@ -151,6 +166,9 @@
   [activity-data {action-name :action-name :as props}]
   (case action-name
     "add-page" (add-page-handler activity-data props)
+    "add-empty-page" (add-empty-page activity-data (merge props {:page-params page-params}))
+    "add-text" (add-text activity-data (:page-number props) (merge props {:page-params page-params}))
+    "add-image" (add-image activity-data (:page-number props) (merge props {:page-params page-params}))
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)
     "remake-covers" (-> (remake-covers activity-data props page-params)

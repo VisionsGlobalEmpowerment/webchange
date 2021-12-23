@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
+    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.utils.deep-merge :refer [deep-merge]]
     [webchange.utils.map :refer [ignore-keys]]))
 
@@ -18,8 +19,10 @@
 
 (re-frame/reg-sub
   ::selected-objects
-  (fn [db]
-    (state-parent/get-selected-objects db)))
+  (fn [_]
+    [(re-frame/subscribe [::state-parent/selected-objects])])
+  (fn [[selected-objects]]
+    selected-objects))
 
 (re-frame/reg-sub
   ::show-edit-menu?
@@ -227,7 +230,7 @@
                            (->> [[::set-initial-data id data]
                                  [::set-loading-status id :done]]
                                 (concat result)))
-                         []
+                         [[::state-flipbook/generate-stages-screenshots {:only-current-stage? true}]]
                          forms-data)}))
 
 ;; Reset

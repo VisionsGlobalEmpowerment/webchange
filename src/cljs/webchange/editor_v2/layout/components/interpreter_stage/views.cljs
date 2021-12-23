@@ -12,11 +12,8 @@
 (def stage-height 1080)
 
 (defn- scene-ready-handler
-  [{:keys [scene-data]}]
-  (let [metadata (get scene-data :metadata {})
-        flipbook? (contains? metadata :flipbook-name)]
-    (when flipbook?
-      (re-frame/dispatch [::state-flipbook/generate-stages-screenshots]))))
+  [{:keys [_]}]
+  (re-frame/dispatch [::state-flipbook/generate-stages-screenshots]))
 
 (defn get-stage-size
   [{:keys [width height]}]

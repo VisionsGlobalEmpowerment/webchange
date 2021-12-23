@@ -1,0 +1,35 @@
+.stage-container {
+    $border-width: 2px;
+
+    @mixin scene-border-style {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -$border-width;
+
+        width: calc(50% + #{$border-width});
+        height: calc(100% + #{2 * $border-width});
+        border-style: solid;
+        border-color: #0071E3;
+    }
+
+    &.current-page-left {
+        &::before {
+            @include scene-border-style;
+
+            left: -$border-width;
+            border-width: $border-width 0 $border-width $border-width;
+            border-radius: 8px 0 0 8px;
+        }
+    }
+
+    &.current-page-right {
+        &::before {
+            @include scene-border-style;
+
+            left: 50%;
+            border-width: $border-width $border-width $border-width 0;
+            border-radius: 0 8px 8px 0;
+        }
+    }
+}

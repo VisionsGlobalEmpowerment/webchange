@@ -22,8 +22,9 @@
 
 (defn get-stage-data
   [activity-data stage-idx]
-  (-> (get-stages-data activity-data)
-      (nth stage-idx)))
+  (when (number? stage-idx)
+    (let [stages-data (get-stages-data activity-data)]
+      (nth stages-data stage-idx))))
 
 (defn stage-idx->page-idx
   [activity-data stage-idx page-side]
@@ -45,3 +46,19 @@
                            (get-in activity-data))]
       (-> page-data
           (assoc :generated? (:generated? page-object))))))
+
+(defn page-object-name->page-number
+  [activity-data page-object-name]
+  (->> (get-pages-data activity-data)
+       (map-indexed vector)
+       (some (fn [[idx {:keys [object]}]]
+               (and (= object page-object-name) idx)))))
+
+(defn page-number->stage-number
+  [activity-data page-number]
+  (when (number? page-number)
+    (->> (get-stages-data activity-data)
+         (map :pages-idx)
+         (map-indexed vector)
+         (some (fn [[stage-idx pages-numbers]]
+                 (and (some #{page-number} pages-numbers) stage-idx))))))

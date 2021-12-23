@@ -73,7 +73,10 @@
           children (if (container-component? type)
                      (let [group-instance (:container component-wrapper)]
                        (->> (case type
-                              "flipbook" (->> (:pages props) (map first))
+                              "flipbook" (->> (:pages props)
+                                              (map first)
+                                              (map (fn [child]
+                                                     (assoc child :flipbook-page? true))))
                               (:children props))
                             (map (fn [child]
                                    (create-component (-> child

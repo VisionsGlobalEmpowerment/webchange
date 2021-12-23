@@ -17,7 +17,7 @@
                     :on-click   handle-click}])))
 
 (defn stage-block
-  []
+  [{:keys [_]}]
   (let [prev-stage-available? @(re-frame/subscribe [::state-flipbook/prev-stage-available?])
         next-stage-available? @(re-frame/subscribe [::state-flipbook/next-stage-available?])
         show-prev-stage (fn [] (re-frame/dispatch [::state-flipbook/select-prev-stage]))

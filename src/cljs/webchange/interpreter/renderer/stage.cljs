@@ -11,7 +11,9 @@
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.interpreter.variables.core :as vars.core]))
+    [webchange.interpreter.variables.core :as vars.core]
+    [webchange.state.state-flipbook :as state-flipbook]
+    [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- init-scene
   [{:keys [scene-id resources]} current-scene-id loading reset-resources?]
@@ -108,6 +110,7 @@
                        (let [viewport (-> (element->viewport @container)
                                           (get-stage-params))
                              show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])
+                             current-page @(re-frame/subscribe [::state-flipbook/current-page-side])
                              {:keys [show-loader-screen? show-scene? show-waiting-screen?]} (get-screens-state {:loading-state        @loading
                                                                                                                 :props                props
                                                                                                                 :scene-data           scene-data
@@ -117,9 +120,11 @@
                                     (not= @prev-viewport viewport))
                            (handle-resize))
                          (reset! prev-viewport viewport)
-                         [:div {:ref   #(when % (reset! container (.-parentNode %)))
-                                :style {:width  "100%"
-                                        :height "100%"}}
+                         [:div {:ref        #(when % (reset! container (.-parentNode %)))
+                                :class-name (get-class-name {"stage-container"                  true
+                                                             (str "current-page-" current-page) (some? current-page)})
+                                :style      {:width  "100%"
+                                             :height "100%"}}
                           (when show-scene?
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)

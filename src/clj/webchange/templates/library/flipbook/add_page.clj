@@ -66,10 +66,6 @@
         (assoc-in [:actions (keyword name)] data)
         (on-text-animation-action page-position name data))))
 
-(defn- update-current-side
-  [activity-data]
-  (update-in activity-data [:metadata :flipbook-pages :current-side] #(if (= % "right") "left" "right")))
-
 (defn- add-page-to-book
   [activity-data
    {:keys [with-action? shift-from-end removable? position back-cover-filler?]
@@ -95,8 +91,7 @@
                                     :removable? removable?}
                                    back-cover-filler? (assoc :back-cover-filler? true))
                            new-page-position)
-                (update-stages {:book-name book-object-name})
-                (update-current-side))
+                (update-stages {:book-name book-object-name}))
             (and with-action?
                  (or (some? action)
                      (some? text-name))) (add-text-animation-action new-page-position content-data page-data))))

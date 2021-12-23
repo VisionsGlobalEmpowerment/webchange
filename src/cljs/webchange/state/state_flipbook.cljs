@@ -31,6 +31,26 @@
   ::current-stage-idx
   get-current-stage-idx)
 
+(defn get-current-page-number
+  [db]
+  (let [scene-data (state/scene-data db)
+        current-object (state/get-current-object db)]
+    (flipbook-utils/page-object-name->page-number scene-data current-object)))
+
+(re-frame/reg-sub
+  ::current-page-side
+  (fn []
+    [(re-frame/subscribe [::state/scene-data])
+     (re-frame/subscribe [::state/current-object])])
+  (fn [[scene-data current-object] [_]]
+    (when (some? current-object)
+      (let [page-number (flipbook-utils/page-object-name->page-number scene-data current-object)
+            stage-number (flipbook-utils/page-number->stage-number scene-data page-number)
+            {:keys [pages-idx]} (flipbook-utils/get-stage-data scene-data stage-number)]
+        (cond
+          (= page-number (first pages-idx)) "left"
+          (= page-number (last pages-idx)) "right")))))
+
 (re-frame/reg-sub
   ::stage-pages
   (fn []
@@ -139,6 +159,11 @@
   (fn [{:keys [db]} [_ screenshots]]
     {:db (assoc-in db (path-to-db [:stages-screenshots]) screenshots)}))
 
+(re-frame/reg-event-fx
+  ::update-stages-screenshots
+  (fn [{:keys [db]} [_ screenshots]]
+    {:db (update-in db (path-to-db [:stages-screenshots]) merge screenshots)}))
+
 (def show-generated-pages-path (path-to-db [:show-generated-pages?]))
 
 (defn get-show-generated-pages
@@ -162,46 +187,53 @@
 
 (re-frame/reg-event-fx
   ::generate-stages-screenshots
-  (fn [{:keys [db]} [_ {:keys [hide-generated-pages?] :or {hide-generated-pages? true}}]]
-    (let [show-generated-pages? (get-show-generated-pages db)
-          current-stage (get-current-stage-idx db)
-          metadata (state/scene-metadata db)
-          stages-idx (->> (state/scene-metadata db)
-                          (:stages)
-                          (map :idx))
-          ;"Interactive Read Aloud workaround to show book and it's background for screenshots"
-          book-name (get metadata :flipbook-name)
-          scene-id (:current-scene db)
-          book-background (str book-name "-background")
-          component-wrapper @(get-in db [:transitions scene-id book-name])
-          book-background-wrapper (get-in db [:transitions scene-id book-background])
-          visibility ((:get-visibility component-wrapper))]
-      (if (not visibility) (do
-                             ((:set-visibility component-wrapper) true)
-                             (if book-background-wrapper ((:set-visibility @book-background-wrapper) true))))
-      {:dispatch-n              [[::set-generate-screenshots-running-state true]
-                                 [::overlays/show-waiting-screen]]
-       :take-stages-screenshots {:stages-idx            stages-idx
-                                 :hide-generated-pages? (not show-generated-pages?)
-                                 :callback              (fn [screenshots]
-                                                          (let [screenshots-blobs (->> screenshots
-                                                                                       (map (fn [[idx blob]]
-                                                                                              [idx (.createObjectURL js/URL blob)]))
-                                                                                       (into {}))
-                                                                blobs (->> screenshots
-                                                                           (map (fn [[idx blob]] [idx blob]))
-                                                                           (into {}))]
-                                                            (re-frame/dispatch [::set-stages-screenshots screenshots-blobs])
-                                                            (re-frame/dispatch [::set-stages-blob-screenshots blobs])
-                                                            )
-                                                          (re-frame/dispatch [::select-stage (or current-stage 0)])
-                                                          (re-frame/dispatch [::overlays/hide-waiting-screen])
-                                                          (re-frame/dispatch [::set-generate-screenshots-running-state false])
-                                                          (if (not visibility)
-                                                            (do
-                                                              ((:set-visibility component-wrapper) false)
-                                                              (if book-background-wrapper ((:set-visibility @book-background-wrapper) false))))
-                                                          )}})))
+  (fn [{:keys [db]} [_ {:keys [only-current-stage? hide-generated-pages?]
+                        :or   {only-current-stage?   false
+                               hide-generated-pages? true}}]]
+    (when (-> (state/scene-data db)
+              (flipbook-utils/flipbook-activity?))
+      (let [show-generated-pages? (get-show-generated-pages db)
+            current-stage (get-current-stage-idx db)
+            metadata (state/scene-metadata db)
+            stages-idx (if only-current-stage?
+                         [current-stage]
+                         (->> (state/scene-metadata db)
+                              (:stages)
+                              (map :idx)))
+            ;"Interactive Read Aloud workaround to show book and it's background for screenshots"
+            book-name (get metadata :flipbook-name)
+            scene-id (:current-scene db)
+            book-background (str book-name "-background")
+            component-wrapper @(get-in db [:transitions scene-id book-name])
+            book-background-wrapper (get-in db [:transitions scene-id book-background])
+            visibility ((:get-visibility component-wrapper))]
+        (if (not visibility) (do
+                               ((:set-visibility component-wrapper) true)
+                               (if book-background-wrapper ((:set-visibility @book-background-wrapper) true))))
+        {:dispatch-n              (cond-> [[::set-generate-screenshots-running-state true]]
+                                          (not only-current-stage?) (conj [::overlays/show-waiting-screen]))
+         :take-stages-screenshots {:stages-idx            stages-idx
+                                   :hide-generated-pages? (not show-generated-pages?)
+                                   :callback              (fn [screenshots]
+                                                            (let [screenshots-blobs (->> screenshots
+                                                                                         (map (fn [[idx blob]]
+                                                                                                [idx (.createObjectURL js/URL blob)]))
+                                                                                         (into {}))
+                                                                  blobs (->> screenshots
+                                                                             (map (fn [[idx blob]] [idx blob]))
+                                                                             (into {}))]
+                                                              (if only-current-stage?
+                                                                (re-frame/dispatch [::update-stages-screenshots screenshots-blobs])
+                                                                (re-frame/dispatch [::set-stages-screenshots screenshots-blobs]))
+                                                              (re-frame/dispatch [::set-stages-blob-screenshots blobs]))
+                                                            (when-not only-current-stage?
+                                                              (re-frame/dispatch [::select-stage (or current-stage 0)]))
+                                                            (re-frame/dispatch [::overlays/hide-waiting-screen])
+                                                            (re-frame/dispatch [::set-generate-screenshots-running-state false])
+                                                            (if (not visibility)
+                                                              (do
+                                                                ((:set-visibility component-wrapper) false)
+                                                                (if book-background-wrapper ((:set-visibility @book-background-wrapper) false)))))}}))))
 
 (re-frame/reg-event-fx
   ::upload-stage-screenshot
@@ -220,8 +252,8 @@
      (callback @data)
      (let [last-index? (-> (count seq) (dec) (= idx))
            f (nth seq idx)]
-       (f (fn [result]
-            (swap! data assoc idx result)
+       (f (fn [result stage-idx]
+            (swap! data assoc stage-idx result)
             (if last-index?
               (callback @data)
               (run-seq seq callback (inc idx) data))))))))
@@ -230,12 +262,14 @@
   [stage-idx hide-generated-pages?]
   (fn [callback]
     (re-frame/dispatch [::show-flipbook-stage stage-idx {:hide-generated-pages? hide-generated-pages?}])
-    (js/setTimeout (fn [] (app/take-screenshot callback {:extract-canvas? false})) 100)))
+    (js/setTimeout (fn [] (app/take-screenshot #(callback % stage-idx) {:extract-canvas? false})) 100)))
 
 (re-frame/reg-fx
   :take-stages-screenshots
   (fn [{:keys [stages-idx callback hide-generated-pages?]}]
-    (run-seq (map #(take-stage-screenshot % hide-generated-pages?) stages-idx) callback)))
+    (-> #(take-stage-screenshot % hide-generated-pages?)
+        (map stages-idx)
+        (run-seq callback))))
 
 (re-frame/reg-sub
   ::scene-stages
@@ -277,7 +311,8 @@
   (fn [{:keys [db]} [_ idx]]
     (let [metadata (get-in db [:current-scene-data :metadata])]
       (if (contains? metadata :flipbook-name)
-        {:dispatch [::select-flipbook-stage idx]}
+        {:dispatch-n [[::select-flipbook-stage idx]
+                      [::state/reset-current-object]]}
         (let [objects (get-in db [:current-scene-data :scene-objects])
               stage (get-in db [:current-scene-data :metadata :stages idx])
               visible? (fn [name] (some #{name} (:objects stage)))]
@@ -285,7 +320,8 @@
            :dispatch-n (->> objects
                             flatten
                             (map (fn [object-name]
-                                   [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]])))})))))
+                                   [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]]))
+                            (concat [::state/reset-current-object]))})))))
 
 (re-frame/reg-event-fx
   ::select-flipbook-stage
@@ -293,7 +329,7 @@
     (let [show-generated-pages? (get-show-generated-pages db)
           stage (-> (get-in db [:current-scene-data :metadata])
                     (get-in [:stages idx]))]
-      {:db       (set-current-stage-idx db idx)
+      {:db         (set-current-stage-idx db idx)
        :dispatch-n [[::show-flipbook-stage (:idx stage) {:hide-generated-pages? (not show-generated-pages?)}]
                     [::state-activity-form/reset-selection]]})))
 
