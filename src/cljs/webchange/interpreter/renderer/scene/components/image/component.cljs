@@ -25,6 +25,8 @@
                     :mask-height   {}
                     :mask-width    {}
                     :mask-align    {}
+                    :mask-x        {}
+                    :mask-y        {}
                     :max-width     {}
                     :max-height    {}
                     :min-width     {}
@@ -48,7 +50,7 @@
 
 
 (defn- create-sprite-mask
-  [{:keys [border-radius width height image-size mask-width mask-height]}]
+  [{:keys [border-radius width height image-size mask-width mask-height mask-x mask-y]}]
   (cond
     (some? border-radius) (let [[lt rt rb lb] (cond
                                                 (number? border-radius) [border-radius border-radius border-radius border-radius]
@@ -69,7 +71,7 @@
     (and (some? mask-width)
          (some? mask-height)) (doto (Graphics.)
                                 (.beginFill 0x000000)
-                                (.drawRect 0 0 mask-width mask-height)
+                                (.drawRect (or mask-x 0) (or mask-y 0) mask-width mask-height)
                                 (.endFill 0x000000))
 
     (and (some? image-size)
