@@ -239,24 +239,32 @@
                                                                    :param-property  "say-item"}]}
 
                              :handle-drag-end      {:type "sequence-data"
-                                                    :data [{:type        "test-var-scalar"
+                                                    :data [{:type "test-expression"
+                                                            :expression (concat ["or"] (->> boxes (map :name) (map get-box-name) (map #(str "@" % "-r2"))))
+                                                            :success {:type "set-variable"
+                                                                      :var-name "collided"
+                                                                      :var-value true}}
+                                                           {:type        "test-var-scalar"
                                                             :from-params [{:action-property "var-name"
                                                                            :param-property  "box"}]
                                                             :value       true
                                                             :success     "correct-option"
                                                             :fail        "wrong-option"}
+                                                           {:type "set-variable"
+                                                            :var-name "collided"
+                                                            :var-value false}
                                                            {:type "action"
                                                             :id   "clear-target-vars"}]}
 
                              :handle-collide-enter {:type "sequence-data"
-                                                    :data [{:type        "set-attribute"
-                                                            :attr-name   "highlight"
-                                                            :attr-value  true
-                                                            :from-params [{:action-property "target" :param-property "target"}]}
-                                                           {:type        "set-variable"
+                                                    :data [{:type        "set-variable"
                                                             :from-params [{:action-property "var-name"
                                                                            :param-property  "target"}]
-                                                            :var-value   true}]}
+                                                            :var-value   true}
+                                                           {:type        "set-attribute"
+                                                            :attr-name   "highlight"
+                                                            :attr-value  true
+                                                            :from-params [{:action-property "target" :param-property "target"}]}]}
 
                              :handle-collide-leave {:type "sequence-data"
                                                     :data [{:type        "set-attribute"
@@ -301,7 +309,9 @@
                                                                    :param-property  "target"}]}
 
                              :wrong-option         {:type "parallel"
-                                                    :data [{:type "action" :id (-> generic-dialogs :wrong-answer :name)}
+                                                    :data [{:type "test-expression"
+                                                            :expression "@collided"
+                                                            :success (-> generic-dialogs :wrong-answer :name)}
                                                            {:type "action" :id "unhighlight-all"}
                                                            {:type "action" :id "object-revert"}]}
 

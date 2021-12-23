@@ -19,6 +19,7 @@
 (e/reg-simple-executor :test-var-list ::execute-test-var-list)
 (e/reg-simple-executor :test-value ::execute-test-value)
 (e/reg-simple-executor :test-random ::execute-test-random)
+(e/reg-simple-executor :test-expression ::execute-test-expression)
 (e/reg-simple-executor :case ::execute-case)
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :calc ::execute-calc)
@@ -431,6 +432,44 @@
         (if fail
           {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
           {:dispatch-n (list (e/success-event action))})))))
+
+(declare eval-expression)
+
+(defn- do-eval-expression
+  [db action [ex & args]]
+  (case ex
+    "eq" (apply = (map #(eval-expression db action %) args))
+    "and" (every? identity (map #(eval-expression db action %) args))
+    "or" (some identity (map #(eval-expression db action %) args))))
+
+(defn- expression->value
+  [db action expression]
+  (let [variable? #(-> % first (= "@"))
+        param? #(-> % first (= "#"))
+        ->name #(subs % 1)]
+    (cond
+      (variable? expression) (core/get-variable (->name expression))
+      (param? expression) (get-in action [:params (keyword (->name expression))])
+      :else expression)))
+
+(defn- eval-expression
+  [db action expression]
+  (cond
+    (string? expression) (expression->value db action expression)
+    (int? expression) expression
+    (vector? expression) (do-eval-expression db action expression)))
+
+(re-frame/reg-event-fx
+  ::execute-test-expression
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [expression success fail] :as action}]
+    (if (eval-expression db action expression)
+      (if success
+        {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
+        {:dispatch-n (list (e/success-event action))})
+      (if fail
+        {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
+        {:dispatch-n (list (e/success-event action))}))))
 
 (re-frame/reg-event-fx
   ::execute-case

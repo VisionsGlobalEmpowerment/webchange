@@ -13,7 +13,11 @@
    :position    {:x        x
                  :y        y
                  :rotation -90
-                 :scale    0.35}
+                 :scale    0.35
+                 :mask-x   -100
+                 :mask-y   -150
+                 :mask-width 395
+                 :mask-height 936}
    :src         (str "/raw/img/categorize/" word "_crayons.png")
    :pick-dialog {:name   (str word "-color")
                  :phrase (str "Color " word)}})

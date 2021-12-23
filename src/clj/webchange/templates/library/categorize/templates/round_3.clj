@@ -274,25 +274,33 @@
                                                                    :param-property  "say-item"}]}
 
                              :handle-drag-end      {:type "sequence-data"
-                                                    :data [{:type     "test-var-list"
+                                                    :data [{:type "test-expression"
+                                                            :expression (concat ["or"] (->> props :boxes (map :name) (map get-box-name) (map #(str "@" % "-r3"))))
+                                                            :success {:type "set-variable"
+                                                                      :var-name "collided"
+                                                                      :var-value true}}
+                                                           {:type     "test-var-list"
                                                             :from-var [{:action-property "var-names"
                                                                         :var-name        "check-collide"}]
                                                             :values   [true true]
                                                             :success  "correct-answer"
                                                             :fail     "wrong-answer"}
+                                                           {:type "set-variable"
+                                                            :var-name "collided"
+                                                            :var-value false}
                                                            {:type        "set-variable"
                                                             :from-params [{:action-property "var-name"
                                                                            :param-property  "target"}]
                                                             :var-value   false}]}
 
                              :handle-collide-enter {:type "sequence-data"
-                                                    :data [{:type        "state"
-                                                            :id          "highlighted"
-                                                            :from-params [{:action-property "target" :param-property "target"}]}
-                                                           {:type        "set-variable"
+                                                    :data [{:type        "set-variable"
                                                             :from-params [{:action-property "var-name"
                                                                            :param-property  "target"}]
-                                                            :var-value   true}]}
+                                                            :var-value   true}
+                                                           {:type        "state"
+                                                            :id          "highlighted"
+                                                            :from-params [{:action-property "target" :param-property "target"}]}]}
 
                              :handle-collide-leave {:type "sequence-data"
                                                     :data [{:type        "state"
@@ -313,8 +321,9 @@
                                                             :from-var [{:var-name "next-task" :action-property "id"}]}]}
 
                              :wrong-answer         {:type "sequence-data"
-                                                    :data [{:type "action"
-                                                            :id   (-> generic-dialogs :wrong-answer :name)}
+                                                    :data [{:type "test-expression"
+                                                            :expression "@collided"
+                                                            :success (-> generic-dialogs :wrong-answer :name)}
                                                            {:type "action" :id "object-revert"}]}
 
                              :object-revert        {:type        "state"
@@ -348,3 +357,8 @@
             :always (add-tasks props)
             :always (add-instructions props)
             :always (add-generic-dialogs props))))
+
+(comment
+  (let [props {:boxes [{:name "box1"} {:name "box2"}]}]
+    (concat ["or"]
+            (->> props :boxes (map :name) (map get-box-name) (map #(str "@" %))))))
