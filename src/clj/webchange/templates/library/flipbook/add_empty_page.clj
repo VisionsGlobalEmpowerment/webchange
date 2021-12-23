@@ -28,7 +28,9 @@
 (defn add-empty-page
   [activity-data {:keys [page-params]}]
   (let [flipbook-name (f/get-book-object-name activity-data)
-        next-page-id (get-in activity-data [:metadata :next-page-id] 0)
+        next-page-id (-> activity-data
+                          (get-in [:metadata :next-page-id] 0)
+                          inc)
 
         page-action-name (str "page-" next-page-id "-action")
         page-action-data {:type               "sequence-data"
@@ -54,4 +56,4 @@
                                 (keyword page-background-name) page-background-data})
         (update :actions assoc (keyword page-action-name) page-action-data)
         (update-stages {:book-name flipbook-name})
-        (update-in [:metadata :next-page-id] inc))))
+        (assoc-in [:metadata :next-page-id] next-page-id))))

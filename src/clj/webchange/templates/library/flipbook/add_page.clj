@@ -100,9 +100,11 @@
   ([activity-data page-constructor page-params]
    (add-page activity-data page-constructor page-params {}))
   ([activity-data page-constructor page-params content-data]
-   (let [next-page-id (get-in activity-data [:metadata :next-page-id] 0)
+   (let [next-page-id (-> activity-data
+                          (get-in [:metadata :next-page-id] 0)
+                          inc)
          content-data (assoc content-data :next-page-id next-page-id)
          page-data (page-constructor page-params content-data)]
      (-> activity-data
          (add-page-to-book content-data page-data)
-         (assoc-in [:metadata :next-page-id] (inc next-page-id))))))
+         (assoc-in [:metadata :next-page-id] next-page-id)))))
