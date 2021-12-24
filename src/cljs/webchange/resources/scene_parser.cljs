@@ -170,7 +170,12 @@
 
 (defn- parse-additional-resources
   []
-  ["/raw/img/bg.png"
+  ["/raw/img/ui/activity_finished/bg.png"
+   "/raw/img/ui/activity_finished/form.png"
+   "/raw/img/ui/activity_finished/home.png"
+   "/raw/img/ui/activity_finished/next.png"
+   "/raw/img/ui/activity_finished/vera.png"
+   "/raw/img/bg.png"
    "/raw/img/cross.png"
    "/raw/img/ui/logo.png"
    "/raw/img/questions/sound-icon.png"

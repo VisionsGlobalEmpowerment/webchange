@@ -18,6 +18,7 @@
                     :shadow-distance {:default 5}
                     :shadow-blur     {}
                     :shadow-opacity  {}
+                    :shadow-angle    {}
                     :scale           {}
                     :align           {:default "left"}
                     :vertical-align  {:default "bottom"}
@@ -26,6 +27,7 @@
                     :width           {:default 0}
                     :word-wrap       {:default false}
                     :height          {:default 0}
+                    :line-height     {}
                     :on-click        {}
                     :ref             {}
                     :filters         {}

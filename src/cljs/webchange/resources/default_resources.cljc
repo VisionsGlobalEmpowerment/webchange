@@ -15,6 +15,11 @@
                           ;; Activity finished
                           {:url "/raw/img/ui/ts_287x385.png", :size 1, :type "image"}
                           {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/activity_finished/bg.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/activity_finished/form.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/activity_finished/home.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/activity_finished/next.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/activity_finished/vera.png", :size 1, :type "image"}
 
                           ;; Goodbye
                           {:url "/raw/img/ui/ts_321x350.png", :size 1, :type "image"}])

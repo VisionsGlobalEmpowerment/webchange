@@ -5,13 +5,14 @@
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
 (defn- set-shadow
-  [text {:keys [shadow-color shadow-distance shadow-blur shadow-opacity]}]
+  [text {:keys [shadow-color shadow-distance shadow-blur shadow-opacity shadow-angle]}]
   (when-not (nil? shadow-color)
     (aset (.-style text) "dropShadow" true)
     (aset (.-style text) "dropShadowColor" shadow-color)
     (aset (.-style text) "dropShadowDistance" shadow-distance)
     (aset (.-style text) "dropShadowBlur" shadow-blur)
-    (aset (.-style text) "dropShadowAlpha" shadow-opacity)))
+    (aset (.-style text) "dropShadowAlpha" shadow-opacity)
+    (aset (.-style text) "dropShadowAngle" shadow-angle)))
 
 (defn- set-align
   [text {:keys [align vertical-align]}]
@@ -46,13 +47,14 @@
         "bottom" (+ y height))})
 
 (defn create-simple-text
-  [{:keys [align text font-family font-size font-weight fill scale skew-x skew-y width word-wrap on-click] :as props}]
+  [{:keys [align text font-family font-size font-weight fill scale skew-x skew-y width word-wrap on-click line-height] :as props}]
   (let [position (calculate-position props)
         text-object (doto (Text. text (clj->js (cond-> {:align         align
                                                         :fontFamily    font-family
                                                         :fontWeight    font-weight
                                                         :fill          fill
                                                         :wordWrapWidth width}
+                                                       (some? line-height) (assoc :lineHeight line-height)
                                                        (some? font-size) (assoc :fontSize font-size)
                                                        (true? word-wrap) (assoc :wordWrap true))))
                       (set-skew skew-x skew-y)

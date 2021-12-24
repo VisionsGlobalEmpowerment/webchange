@@ -15,17 +15,17 @@
                      :object-name :overlays
                      :children    (cond-> []
                                           (skip-menu/show-overlay? mode) (conj (skip-menu/create {:viewport viewport}))
-                                          (activity-finished/show-overlay? mode) (conj (activity-finished/create {:viewport viewport}))
                                           (goodbye/show-overlay? mode) (conj (goodbye/create {:viewport viewport}))
                                           (navigation/show-overlay? mode) (conj (navigation/create {:viewport viewport}))
                                           (navigation-back/show-overlay? mode) (conj (navigation-back/create {:viewport viewport}))
+                                          (activity-finished/show-overlay? mode) (conj (activity-finished/create {:viewport viewport}))
                                           (settings/show-overlay? mode) (conj (settings/create {:viewport viewport})))}))
 
 (defn update-viewport
   [viewport]
   (skip-menu/update-viewport {:viewport viewport})
-  (activity-finished/update-viewport {:viewport viewport})
   (goodbye/update-viewport {:viewport viewport})
   (navigation/update-viewport {:viewport viewport})
   (navigation-back/update-viewport {:viewport viewport})
+  (activity-finished/update-viewport {:viewport viewport})
   (settings/update-viewport {:viewport viewport}))
