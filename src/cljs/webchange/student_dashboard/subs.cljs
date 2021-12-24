@@ -18,6 +18,15 @@
       (->> activities
            (map #(merge % (scene-name->scene (:activity-name %) scenes)))))))
 
+(defn- activity-letter
+  [db {:keys [level lesson] :as activity}]
+  (if-let [lesson-set-name (get-in db [:course-data :levels level :lessons lesson :lesson-sets :concepts-single])]
+    (let [item-id (-> (get-in db [:lessons lesson-set-name :item-ids])
+                      first)
+          letter (get-in db [:dataset-items item-id :data :letter])]
+      (assoc activity :letter letter))
+    activity))
+
 (re-frame/reg-sub
   ::finished-activities
   (fn [db]
@@ -26,7 +35,8 @@
       (->> activities
            (filter #(lessons-activity/finished? db %))
            (map #(merge % (scene-name->scene (:activity-name %) scenes)))
-           (map #(assoc % :completed true))))))
+           (map #(assoc % :completed true))
+           (map #(activity-letter db %))))))
 
 (defn next-activity
   [db]

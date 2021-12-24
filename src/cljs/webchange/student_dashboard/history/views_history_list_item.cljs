@@ -31,7 +31,7 @@
    :text-primary {:font-weight "bold"}})
 
 (defn history-list-item
-  [{:keys [name level lesson date image style on-click] :as activity}]
+  [{:keys [name level lesson letter date image style on-click] :as activity}]
   (let [styles (get-styles)]
     [ui/list-item {:button   true
                    :on-click #(on-click activity)
@@ -42,7 +42,7 @@
                   :src   (:png image)
                   :style (:img styles)}]]
      [ui/list-item-text {:primary                name
-                         :secondary              (str "Level " (inc level) " Lesson " (inc lesson))
+                         :secondary              (str "Level " (inc level) " Lesson " (inc lesson) " " (when letter letter))
                          :primaryTypographyProps {:style (:text-primary styles)}
                          :style                  (:text styles)}]
      [ui/list-item-secondary-action
