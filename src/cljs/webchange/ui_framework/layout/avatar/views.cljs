@@ -10,7 +10,7 @@
   (let [user @(re-frame/subscribe [::as/user])
         initials (or (-> user :first-name first)
                      (-> user :last-name first))]
-    [:div.avatar {:on-click #(location :profile)}
+    [:div.layout-avatar {:on-click #(location :profile)}
      (if (string? initials)
        (string/upper-case initials)
        "T")]))

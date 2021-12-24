@@ -14,6 +14,7 @@
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.game-changer.views :as game-changer]
     [webchange.student-dashboard.views :refer [student-dashboard-page student-dashboard-finished-page]]
+    [webchange.student-dashboard-v2.views :refer [student-dashboard]]
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.views-login-switch :refer [login-switch]]
     [webchange.editor-v2.wizard.views :as wizard]
@@ -93,8 +94,8 @@
 
     ;; student dashboard
     :student-login [student-access-form]
-    :student-dashboard [student-dashboard-page]
-    :student-course-dashboard [student-dashboard-page]
+    :student-dashboard [student-dashboard]
+    :student-course-dashboard [student-dashboard]
     :finished-activities [student-dashboard-finished-page]
 
     ;;wizard

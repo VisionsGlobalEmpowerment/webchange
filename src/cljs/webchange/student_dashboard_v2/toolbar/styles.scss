@@ -1,0 +1,22 @@
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .toolbar-item {
+        width: 192px;
+        height: 148px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        &.contained {
+            background-color: #C2D39E;
+            border-radius: 50px;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+    }
+}
