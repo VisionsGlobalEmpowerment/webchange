@@ -208,19 +208,9 @@
 
                          :handle-drag-end      {:type "sequence-data"
                                                 :data [{:type "test-expression"
-                                                        :expression (concat ["or"] (->> props :boxes (map :name) (map get-box-name) (map #(str "@" % "-r1"))))
-                                                        :success {:type "set-variable"
-                                                                  :var-name "collided"
-                                                                  :var-value true}}
-                                                       {:type        "test-var-scalar"
-                                                        :from-params [{:action-property "var-name"
-                                                                       :param-property  "box"}]
-                                                        :value       true
+                                                        :expression ["eq" "#collided-object-name" "#box"]
                                                         :success     "correct-option"
                                                         :fail        "wrong-option"}
-                                                       {:type "set-variable"
-                                                        :var-name "collided"
-                                                        :var-value false}
                                                        {:type "action"
                                                         :id   "clear-target-vars"}]}
 
@@ -278,8 +268,8 @@
 
                          :wrong-option         {:type "parallel"
                                                 :data [{:type "test-expression"
-                                                        :expression "@collided"
-                                                        :success (-> generic-dialogs :wrong-answer :name)}
+                                                        :expression "#collided-object-name"
+                                                        :success     (-> generic-dialogs :wrong-answer :name)}
                                                        {:type "action" :id "unhighlight-all"}
                                                        {:type "action" :id "object-revert"}]}
 

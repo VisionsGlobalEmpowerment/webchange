@@ -51,6 +51,7 @@
                                          :drag-end      {:on     "drag-end"
                                                          :type   "action"
                                                          :id     "handle-drag-end"
+                                                         :pick-event-param [:collided-object-name]
                                                          :params (cond-> {:init-position (-> position
                                                                                              (select-keys [:x :y])
                                                                                              (merge {:duration 1}))}

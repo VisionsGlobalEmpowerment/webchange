@@ -118,3 +118,25 @@
   (logger/trace "enable-collisions! for" object)
   (init-ticker)
   (add-callback object props (atom {})))
+
+(defn- collided-with-mouse?
+  [object]
+  (let [{mouse-x :x mouse-y :y} (get-mouse-position)
+        {x :x y :y width :width height :height} (get-bounds object)]
+    (and (> mouse-x x)
+         (< mouse-x (+ x width))
+         (> mouse-y y)
+         (< mouse-y (+ y height)))))
+
+(defn get-top-object-at-mouse
+  []
+  (->> (get-objects-to-test)
+       (filter (fn [[_ object _]]
+                 (collided-with-mouse? object)))
+       (reduce (fn [one another]
+                 (if one
+                   (if (> (-> one second .-z) (-> another second .-z))
+                     one
+                     another)
+                   another)))
+       first))

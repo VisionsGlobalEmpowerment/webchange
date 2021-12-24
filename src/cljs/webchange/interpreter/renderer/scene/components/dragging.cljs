@@ -1,11 +1,10 @@
 (ns webchange.interpreter.renderer.scene.components.dragging
   (:require
-    [reagent.core :as r]
     [webchange.interpreter.interactions :as interactions]
     [webchange.interpreter.renderer.scene.components.dragging-utils :as u]))
 
 (def empty-position {:x 0 :y 0})
-(def mouse-position-data (r/atom {:x 0 :y 0}))
+(def mouse-position-data (atom {:x 0 :y 0}))
 
 (defn get-mouse-position []
   @mouse-position-data)

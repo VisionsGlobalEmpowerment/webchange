@@ -172,6 +172,8 @@
                        task-name (get-task-name idx)
                        task-data {:type "sequence-data",
                                   :data [{:type "set-variable" :var-name "check-collide" :var-value [item-name box-name]}
+                                         {:type "set-variable" :var-name "current-item" :var-value (str item-name "-r3")}
+                                         {:type "set-variable" :var-name "current-box" :var-value (str box-name "-r3")}
                                          {:type "set-variable" :var-name "next-task" :var-value next-task}
                                          {:type "set-variable" :var-name "instruction" :var-value instruction-name}
                                          {:type "action" :id instruction-name}]}]
@@ -275,23 +277,11 @@
 
                              :handle-drag-end      {:type "sequence-data"
                                                     :data [{:type "test-expression"
-                                                            :expression (concat ["or"] (->> props :boxes (map :name) (map get-box-name) (map #(str "@" % "-r3"))))
-                                                            :success {:type "set-variable"
-                                                                      :var-name "collided"
-                                                                      :var-value true}}
-                                                           {:type     "test-var-list"
-                                                            :from-var [{:action-property "var-names"
-                                                                        :var-name        "check-collide"}]
-                                                            :values   [true true]
-                                                            :success  "correct-answer"
-                                                            :fail     "wrong-answer"}
-                                                           {:type "set-variable"
-                                                            :var-name "collided"
-                                                            :var-value false}
-                                                           {:type        "set-variable"
-                                                            :from-params [{:action-property "var-name"
-                                                                           :param-property  "target"}]
-                                                            :var-value   false}]}
+                                                            :expression ["and"
+                                                                         ["eq" "#collided-object-name" "@current-box"]
+                                                                         ["eq" "#target" "@current-item"]]
+                                                            :success     "correct-answer"
+                                                            :fail        "wrong-answer"}]}
 
                              :handle-collide-enter {:type "sequence-data"
                                                     :data [{:type        "set-variable"
@@ -322,8 +312,8 @@
 
                              :wrong-answer         {:type "sequence-data"
                                                     :data [{:type "test-expression"
-                                                            :expression "@collided"
-                                                            :success (-> generic-dialogs :wrong-answer :name)}
+                                                            :expression "#collided-object-name"
+                                                            :success     (-> generic-dialogs :wrong-answer :name)}
                                                            {:type "action" :id "object-revert"}]}
 
                              :object-revert        {:type        "state"

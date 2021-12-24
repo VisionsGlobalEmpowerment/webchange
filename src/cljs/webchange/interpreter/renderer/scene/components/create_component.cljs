@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.scene.components.collisions :refer [has-collision-handler? enable-collisions! register-object]]
+    [webchange.interpreter.renderer.scene.components.collisions :refer [has-collision-handler? enable-collisions! register-object get-top-object-at-mouse]]
     [webchange.interpreter.renderer.scene.components.index :refer [components]]
     [webchange.interpreter.renderer.scene.components.props-utils :refer [get-props get-object-props]]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
@@ -31,10 +31,11 @@
         {:keys [draggable visible rotation opacity] :as props} (get-object-props props default-props)]
     (register-object object props)
     (when (some? draggable)
-      (when draggable
-        (enable-drag! object (select-keys props [:on-drag-start :on-drag-start-options
-                                                 :on-drag-move :on-drag-move-options
-                                                 :on-drag-end :on-drag-end-options]))))
+      (let [on-drag-end #((:on-drag-end props) {:collided-object-name (get-top-object-at-mouse)})]
+        (enable-drag! object (-> props
+                                 (select-keys [:on-drag-start :on-drag-start-options
+                                               :on-drag-move :on-drag-move-options])
+                                 (assoc :on-drag-end on-drag-end)))))
     (when (has-collision-handler? props)
       (enable-collisions! object props))
     (when (some? visible)
