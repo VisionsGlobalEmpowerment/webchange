@@ -35,7 +35,7 @@
     :on-click add-character/open-add-character-window}
    {:text     "Add question"
     :on-click add-question/open-add-question-window}
-   {:text     "Info"
+   {:text     "Course Info"
     :on-click info-action-state/open-info-window}
    {:text     "Add anchor"
     :on-click add-anchor}
