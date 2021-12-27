@@ -1,0 +1,101 @@
+.student-dashboard {
+    $play-button-size: 370px;
+
+    @import "toolbar/styles.scss";
+    @import "timeline/styles.scss";
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    background: url("/images/student_dashboard/background.png");
+    background-position: center;
+    background-size: cover;
+
+    .header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+
+        width: 100%;
+        height: 210px;
+        padding: 24px;
+
+        background-color: rgba(255, 255, 255, 0.6);
+
+        .user {
+            justify-self: start;
+
+            display: flex;
+            align-items: flex-end;
+
+            .avatar {
+                $avatar-width: 120px;
+                $z-index: 10;
+
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                width: $avatar-width;
+
+                position: relative;
+                border-radius: $avatar-width / 2;
+                overflow: hidden;
+
+                .background {
+                    position: absolute;
+                    bottom: 0;
+
+                    width: $avatar-width;
+                    height: $avatar-width;
+
+                    background-color: #ffffff;
+                    border-radius: $avatar-width / 2;
+
+                    z-index: $z-index;
+                }
+
+                img {
+                    position: relative;
+
+                    width: 90%;
+                    object-fit: contain;
+
+                    z-index: $z-index + 1;
+                }
+            }
+
+            .name {
+                padding: 12px 24px;
+                line-height: 36px;
+
+                font-family: 'Roboto';
+                font-size: 36px;
+            }
+        }
+
+        .logo {
+            justify-self: center;
+
+            display: flex;
+            align-items: center;
+
+            img {
+                width: 384px;
+                height: 100px;
+                object-fit: contain;
+            }
+        }
+
+        .toolbar {
+            justify-self: end;
+        }
+    }
+
+    .content {
+        position: relative;
+        flex-grow: 1;
+    }
+}
