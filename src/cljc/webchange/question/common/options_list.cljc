@@ -47,7 +47,6 @@
                                                           :height                     option-height
                                                           :on-option-click            on-option-click
                                                           :on-option-voice-over-click on-option-voice-over-click
-                                                          :value                      (str "option-" idx)
                                                           :question-id                question-id
                                                           :question-type              question-type})))))
                  (cond-> {:objects {(keyword object-name) {:type     "group"

@@ -75,7 +75,8 @@
                                          (some? actions) (assoc :actions actions))}})
 
 (defn- get-option-actions
-  [{:keys [on-option-click value]}]
+  [{:keys [value]}
+   {:keys [on-option-click]}]
   (cond-> {}
           (some? on-option-click) (assoc :click (cond-> {:type       "action"
                                                          :on         "click"
@@ -84,11 +85,9 @@
                                                         (some? value) (assoc :params {:value value})))))
 
 (defn- create-image-with-text-options
-  [{:keys [image-name text-name] :as option}
-   {:keys [options-label] :as form-data}
-   {:keys [object-name x y width height value question-id
-           on-option-voice-over-click]
-    :as   props}]
+  [{:keys [image-name text-name value] :as option}
+   {:keys [options-label]}
+   {:keys [object-name x y width height question-id on-option-voice-over-click] :as props}]
   (let [show-text? (= options-label "audio-text")
         show-voice-over? (not= options-label "none")
 
@@ -110,7 +109,7 @@
         button-x (if show-text? 0 (- (/ width 2)
                                      (/ voice-over/default-size 2)))
 
-        actions (get-option-actions props)]
+        actions (get-option-actions option props)]
     (cond-> {:objects {(keyword object-name) {:type        "group"
                                               :object-name object-name
                                               :x           x
@@ -134,11 +133,11 @@
                                                :height      image-height
                                                :actions     actions}))
             show-text? (merge-data (create-text option
-                                                {:x           text-x
-                                                 :y           text-y
-                                                 :width       text-width
-                                                 :height      text-height
-                                                 :actions     actions}))
+                                                {:x       text-x
+                                                 :y       text-y
+                                                 :width   text-width
+                                                 :height  text-height
+                                                 :actions actions}))
             show-voice-over? (merge-data (voice-over/create {:object-name     button-name
                                                              :x               button-x
                                                              :y               (+ image-height p/options-gap)
@@ -148,11 +147,8 @@
                                                              :on-click-params {:value value}})))))
 
 (defn- create-text-option
-  [{:keys [text-name] :as option}
-   {:keys [object-name x y width height
-           question-id value
-           on-option-voice-over-click]
-    :as   props}]
+  [{:keys [text-name value] :as option}
+   {:keys [object-name x y width height question-id on-option-voice-over-click] :as props}]
   (let [{voice-over-size :size voice-over-margin :margin} common-params/voice-over
         border-radius (get-in common-params/option [:border-radius :text])
         text-padding (get-in common-params/option [:padding :text])
@@ -165,7 +161,7 @@
         content-width (- width content-x)
         content-height height
 
-        actions (get-option-actions props)]
+        actions (get-option-actions option props)]
     (merge-data {:objects {(keyword object-name) {:type     "group"
                                                   :x        x
                                                   :y        y
@@ -180,11 +176,11 @@
                                    :value         value
                                    :actions       actions})
                 (create-text option
-                             {:x           (+ content-x text-padding)
-                              :y           (+ content-y text-padding)
-                              :width       (- content-width (* 2 text-padding))
-                              :height      (- content-height (* 2 text-padding))
-                              :actions     actions})
+                             {:x       (+ content-x text-padding)
+                              :y       (+ content-y text-padding)
+                              :width   (- content-width (* 2 text-padding))
+                              :height  (- content-height (* 2 text-padding))
+                              :actions actions})
                 (voice-over/create {:object-name     voice-over-name
                                     :question-id     question-id
                                     :value           value
@@ -192,12 +188,12 @@
                                     :on-click-params {:value value}}))))
 
 (defn- create-thumbs-option
-  [{:keys [image-name] :as option}
-   {:keys [object-name x y width height question-id value] :as props}]
+  [{:keys [image-name value] :as option}
+   {:keys [object-name x y width height question-id] :as props}]
   (let [substrate-name (str object-name "-substrate")
         border-radius (/ width 2)
         image-group-name (str image-name "-group")
-        actions (get-option-actions props)]
+        actions (get-option-actions option props)]
     (merge-data {:objects {(keyword object-name) {:type     "group"
                                                   :x        x
                                                   :y        y

@@ -85,8 +85,9 @@
                      (map inc)
                      (map (fn [option-idx]
                             (let [option-name (str "option-" option-idx)
+                                  value-prop-name (str option-name "-value")
                                   text-prop-name (str option-name "-text")]
-                              {:value      option-name
+                              {:value      (->> value-prop-name keyword (get form-data))
                                :text-name  (param-name->object-name text-prop-name question-id)
                                :text-props (->> text-prop-name keyword (get form-data))}))))
         frame (get-options-frame {:width          (- width (* 2 params/block-padding))

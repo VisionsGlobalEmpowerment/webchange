@@ -11,7 +11,7 @@
     [webchange.question.utils :refer [merge-data]]))
 
 (defn- get-options-frame
-  [{:keys [width options-number]}]
+  [{:keys [options-number]}]
   (let [{:keys [gap]} params/options
         option-width (:mark-size params/option)
         option-height (:mark-size params/option)]
@@ -30,9 +30,10 @@
    {:keys [question-id width height] :as props}]
   (let [options (->> mark-options
                      (map (fn [mark-option]
-                            (let [text-prop-name (str mark-option "-text")
+                            (let [value-prop-name (str mark-option "-value")
+                                  text-prop-name (str mark-option "-text")
                                   image-prop-name (str mark-option "-image")]
-                              {:value       mark-option
+                              {:value       (->> value-prop-name keyword (get form-data))
                                :text-name   (param-name->object-name text-prop-name question-id)
                                :text-props  (->> text-prop-name keyword (get form-data))
                                :image-name  (param-name->object-name image-prop-name question-id)
@@ -45,7 +46,7 @@
 
 (defn create
   [{:keys [alias layout options task-type] :as form-data}
-   {:keys [object-name task-text-name question-id visible? task-image-param-name] :as props}]
+   {:keys [object-name question-id visible? task-image-param-name] :as props}]
   (let [{options-label :label} options
 
         show-task-image? (= task-type "text-image")

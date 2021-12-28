@@ -39,9 +39,10 @@
                      (map inc)
                      (map (fn [option-idx]
                             (let [option-name (str "option-" option-idx)
+                                  value-prop-name (str option-name "-value")
                                   text-prop-name (str option-name "-text")
                                   image-prop-name (str option-name "-image")]
-                              {:value       option-name
+                              {:value       (->> value-prop-name keyword (get form-data))
                                :text-name   (param-name->object-name text-prop-name question-id)
                                :text-props  (->> text-prop-name keyword (get form-data))
                                :image-name  (param-name->object-name image-prop-name question-id)
