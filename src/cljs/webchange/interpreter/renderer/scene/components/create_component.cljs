@@ -30,7 +30,7 @@
   (let [default-props (apply dissoc default-object-props props-to-exclude)
         {:keys [draggable visible rotation opacity] :as props} (get-object-props props default-props)]
     (register-object object props)
-    (when (some? draggable)
+    (when (and (some? draggable) draggable)
       (let [on-drag-end #((:on-drag-end props) {:collided-object-name (get-top-object-at-mouse)})]
         (enable-drag! object (-> props
                                  (select-keys [:on-drag-start :on-drag-start-options
