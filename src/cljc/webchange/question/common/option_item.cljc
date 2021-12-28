@@ -94,6 +94,7 @@
         border-radius (get-in common-params/option [:border-radius :image])
         substrate-name (str object-name "-substrate")
         button-name (str object-name "-button")
+        image-group-name (str image-name "-group")
 
         label-height 80
         image-ratio 1.25
@@ -128,7 +129,7 @@
                                                    :value         value
                                                    :actions       actions}))
             :always (merge-data (create-image option
-                                              {:object-name image-name
+                                              {:object-name image-group-name
                                                :width       image-width
                                                :height      image-height
                                                :actions     actions}))
