@@ -24,6 +24,7 @@
     [webchange.interpreter.renderer.scene.components.timer.state]
     [webchange.interpreter.renderer.scene.components.flipbook.state]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    [webchange.interpreter.renderer.scene.components.collisions :as collisions]
     [webchange.audio-utils.recorder :as audio-recorder]
     [webchange.resources.manager :as resources-manager]
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
@@ -1286,6 +1287,7 @@
           stored-scene (get-in db [:store-scenes scene-id])
           merged-scene (merge-with-templates db stored-scene)]
       (reset-scene-flows! current-scene)
+      (collisions/reset-objects!)
       {:db         (-> db
                        (assoc :current-scene scene-id)
                        (assoc-in [:scenes scene-id] merged-scene)

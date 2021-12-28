@@ -24,6 +24,10 @@
 
     (logger/group-end "register collidable" (keyword transition-name))))
 
+(defn reset-objects!
+  []
+  (reset! objects {}))
+
 (defn- get-bounds
   [object]
   (let [bounds (.getBounds object)]
