@@ -26,6 +26,6 @@
                               (assoc :img (str "/images/student_dashboard/" img))
                               (assoc :on-click #(re-frame/dispatch [::state/open-page id]))))))]
     [:div.toolbar
-     #_(for [{:keys [id] :as item} items]
+     (for [{:keys [id] :as item} items]
        ^{:key id}
        [toolbar-item item])]))

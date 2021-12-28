@@ -60,3 +60,9 @@
       {:db         (lessons-activity/add-loaded-activity db activity)
        :dispatch-n (list [::ie/set-current-scene (:activity-name activity)]
                          [::events/redirect (str "/courses/" course)])})))
+
+(re-frame/reg-sub
+  ::loading?
+  (fn [db]
+    (or (get-in db [:loading :load-course])
+        (get-in db [:loading :load-progress]))))
