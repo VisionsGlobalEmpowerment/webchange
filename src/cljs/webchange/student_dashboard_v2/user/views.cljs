@@ -6,8 +6,7 @@
 (defn- avatar
   []
   [:div.avatar
-   [:img {:src "/images/student_dashboard/avatar.png"}]
-   [:div.background]])
+   [:img {:src "/images/student_dashboard/avatar.png"}]])
 
 (defn user
   []

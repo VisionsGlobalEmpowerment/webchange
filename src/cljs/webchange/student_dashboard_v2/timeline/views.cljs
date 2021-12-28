@@ -28,21 +28,23 @@
        :component-did-update (fn [] (scroll-to-end))
        :reagent-render
                              (fn []
-                               (let [finished-activities @(re-frame/subscribe [::state/finished-activities])
+                               (let [loading? @(re-frame/subscribe [::state/loading?])
+                                     finished-activities @(re-frame/subscribe [::state/finished-activities])
                                      handle-next-click (fn [] (re-frame/dispatch [::state/open-next-activity]))
                                      handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
                                  [:div.timeline-wrapper {:ref #(when (some? %)
                                                                  (reset! container %))}
-                                  (into [:div.timeline
-                                         (-> (reduce (fn [result {:keys [id] :as item}]
-                                                       (concat result [^{:key (str id "-connector")}
-                                                                       [:div.connector.timeline-item]
-                                                                       ^{:key id}
-                                                                       [timeline-item (merge item
-                                                                                             {:on-click handle-activity-click})]]))
-                                                     []
-                                                     finished-activities)
-                                             (concat [^{:key "play-button-connector"}
-                                                      [:div.play-button-connector.timeline-item]
-                                                      ^{:key "play-button"}
-                                                      [play-button {:on-click handle-next-click}]]))])]))})))
+                                  (when-not loading?
+                                    (into [:div.timeline
+                                           (-> (reduce (fn [result {:keys [id] :as item}]
+                                                         (concat result [^{:key (str id "-connector")}
+                                                                         [:div.connector.timeline-item]
+                                                                         ^{:key id}
+                                                                         [timeline-item (merge item
+                                                                                               {:on-click handle-activity-click})]]))
+                                                       []
+                                                       finished-activities)
+                                               (concat [^{:key "play-button-connector"}
+                                                        [:div.play-button-connector.timeline-item]
+                                                        ^{:key "play-button"}
+                                                        [play-button {:on-click handle-next-click}]]))]))]))})))

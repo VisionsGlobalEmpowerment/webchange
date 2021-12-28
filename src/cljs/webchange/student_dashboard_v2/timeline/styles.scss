@@ -11,9 +11,13 @@
 
     .timeline {
         display: flex;
-        height: 380px;
         align-items: flex-start;
-        margin-right: calc(50% - #{$play-button-size / 2});
+
+        position: relative;
+        top: 16vh;
+
+        height: 32vh;
+        padding-right: calc(50% - #{$play-button-size / 2});
 
         .timeline-item {
             flex-shrink: 0;
@@ -42,6 +46,7 @@
             background-image: url("/images/student_dashboard/timeline-connector.svg");
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
 
         .play-button-connector {
@@ -57,11 +62,11 @@
         .activity {
             position: relative;
 
-            width: 252px;
-            height: 186px;
+            width: 23vh;
+            height: 17vh;
 
-            border: solid 18px #fff;
-            border-radius: 24px;
+            border: solid 1.6vh #fff;
+            border-radius: 2.2vh;
 
             &:hover {
                 box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
@@ -79,22 +84,27 @@
 
             .letter {
                 display: flex;
-                align-items: center;
-                justify-content: center;
+                align-items: flex-start;
+                justify-content: flex-end;
 
                 position: absolute;
                 top: -1px;
                 right: -1px;
 
-                width: 64px;
-                height: 64px;
+                width: 5vh;
+                height: 5vh;
 
                 background: #fff;
                 border-radius: 0 0 0 24px;
 
-                color: #C92373;
-                font-size: 36px;
+                color: #f00;
+                font-size: 4vh;
                 font-weight: bold;
+                text-transform: capitalize;
+
+                span {
+                    line-height: 4vh;
+                }
             }
         }
 
