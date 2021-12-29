@@ -138,9 +138,8 @@
          option-voice-over-name (str action-name "-option-voice-over")
          option-click-name (str action-name "-option-click-handler")
 
-         options-have-voice-over? (not (= question-type "thumbs-up-n-down"))
-         has-correct-answer? (not (and (= question-type "thumbs-up-n-down")
-                                       (= answers-number "any")))
+         options-have-voice-over? (not= question-type "thumbs-up-n-down")
+         has-correct-answer? (not= answers-number "any")
          create-question (get question-types question-type)
          question-params {:task-type-param-name  "task-type"
                           :task-image-param-name "task-image"}]

@@ -22,7 +22,7 @@
 
   (copy-activity "english" "categorize-colors-2")
 
-  (def test-course-slug "test-course-english-yidmnork")
+  (def test-course-slug "test-course-english-lvllpweb")
   (def scene-slug "categorize-colors-2")
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
 
@@ -115,22 +115,8 @@
                     :lang  nil,
                     :size  18,
                     :type  "audio",
-                    :alias "BK Round 2"}
-                   {:url "/raw/img/categorize/yellow_box.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/blue_box.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/red_box.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/purple_box.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/orange_box.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/green_box.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/orange_crayons.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/purple_crayons.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/green_crayons.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/purple_table.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/green_table.png", :size 10, :type "image"}
-                   {:url "/raw/img/categorize/orange_table.png", :size 10, :type "image"}
-                   {:url "/images/questions/thumbs_up.png", :size 1, :type "image"}
-                   {:url "/raw/clipart/elements/etc--elements-concepts--apple.png", :size 1, :type "image"}
-                   {:url "/images/questions/thumbs_down.png", :size 1, :type "image"}],
+                    :alias "BK Round 2"}],
+   :skills        [],
    :actions       {:green-color-r1                                    {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         8.85,
                                                                                                      :data        [{:end 8.75, :anim "talk", :start 7.99}],
@@ -142,41 +128,30 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color green",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color green"},
-                   :box-yellow-dialog-r2                              {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "yellow",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box yellow clicked"},
+                   :say-color-r1                                      {:data [{:type "action", :from-params [{:param-property "say-color", :action-property "id"}]}
+                                                                              {:type "test-var-scalar", :value true, :success "next-say-r1", :var-name "say"}],
+                                                                       :type "sequence-data"},
+                   :unhighlight-r3                                    {:data [{:type        "set-variable",
+                                                                               :var-value   false,
+                                                                               :from-params [{:template        "colliding-raw-%",
+                                                                                              :param-property  "transition",
+                                                                                              :action-property "var-name"}]}
+                                                                              {:type        "set-attribute",
+                                                                               :attr-name   "highlight",
+                                                                               :attr-value  false,
+                                                                               :from-params [{:param-property "transition", :action-property "target"}]}
+                                                                              {:type "set-variable", :var-name "highlighted", :var-value false}],
+                                                                       :type "sequence-data"},
                    :question-0-options-option-3-voice-over-activate   {:data [{:id     "active",
                                                                                :type   "state",
                                                                                :target "question-0-options-option-3-voice-over-background"}
                                                                               {:id     "active",
                                                                                :type   "state",
                                                                                :target "question-0-options-option-3-voice-over-icon"}],
-                                                                       :tags ["activate-voice-over-option-3-question-0-question-id"],
-                                                                       :type "sequence-data"},
-                   :question-1-options-option-3-substrate-inactivate  {:id     "default",
-                                                                       :tags   ["inactivate-options-question-1-question-id"
-                                                                                "inactivate-option-thumbs-down-question-1-question-id"],
-                                                                       :type   "state",
-                                                                       :target "question-1-options-option-3-substrate"},
-                   :question-1-task-voice-over-click                  {:data [{:tag  "activate-voice-over-task-question-1-question-id",
-                                                                               :type "parallel-by-tag"}
-                                                                              {:id "question-1-task-dialog", :type "action"}
-                                                                              {:tag  "inactivate-voice-over-task-question-1-question-id",
-                                                                               :type "parallel-by-tag"}],
-                                                                       :type "sequence-data"},
-                   :correct-answer-r3                                 {:data [{:id          "init-position",
-                                                                               :type        "state",
-                                                                               :from-params [{:param-property "target", :action-property "target"}]}
-                                                                              {:id "correct-answer-dialog-r3", :type "action"}
-                                                                              {:type "action", :from-var [{:var-name "next-task", :action-property "id"}]}],
+                                                                       :tags ["activate-voice-over-option-4-question-0-question-id"],
                                                                        :type "sequence-data"},
                    :question-0-task-dialog                            {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:animation   "color",
@@ -233,7 +208,6 @@
                                                                        :type               "sequence-data",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Question text"},
-                   :handle-drag-move-r1                               {:type "action", :from-params [{:param-property "say-item", :action-property "id"}]},
                    :start-background-music                            {:id "/upload/LGFWFEKYFMZRKXYS.mp3", :loop true, :type "audio", :volume "0.1"},
                    :wrong-answer-r2                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         0.483,
@@ -248,23 +222,15 @@
                                                                        :phrase             "wrong-answer",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "wrong answer"},
-                   :question-1-options-option-2-substrate-inactivate  {:id     "default",
-                                                                       :tags   ["inactivate-options-question-1-question-id"
-                                                                                "inactivate-option-ok-question-1-question-id"],
+                   :question-0-options-option-0-substrate-inactivate  {:id     "default",
+                                                                       :tags   ["inactivate-options-question-0-question-id"
+                                                                                "inactivate-option-option-1-question-0-question-id"],
                                                                        :type   "state",
-                                                                       :target "question-1-options-option-2-substrate"},
-                   :wrong-option-r2                                   {:data [{:type "test-expression", :success "wrong-answer-r2", :expression "@collided"}
-                                                                              {:id "unhighlight-all-r2", :type "action"}
-                                                                              {:id "object-revert-r2", :type "action"}],
+                                                                       :target "question-0-options-option-0-substrate"},
+                   :wrong-option-r2                                   {:data [{:id "unhighlight-all-r2", :type "action"}
+                                                                              {:id "crayon-revert-r2", :type "action"}
+                                                                              {:id "wrong-answer-r2", :type "action"}],
                                                                        :type "parallel"},
-                   :handle-collide-leave-r2                           {:data [{:type        "set-attribute",
-                                                                               :attr-name   "highlight",
-                                                                               :attr-value  false,
-                                                                               :from-params [{:param-property "target", :action-property "target"}]}
-                                                                              {:type        "set-variable",
-                                                                               :var-value   false,
-                                                                               :from-params [{:param-property "target", :action-property "var-name"}]}],
-                                                                       :type "sequence-data"},
                    :yellow-color-r3                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         7.38,
                                                                                                      :data        [{:end 7.33, :anim "talk", :start 6.5}],
@@ -276,9 +242,27 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color yellow",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color yellow"},
+                   :blink-objects-r3                                  {:data [{:type       "set-attribute",
+                                                                               :from-var   [{:var-name "object-1", :action-property "target"}],
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value true}
+                                                                              {:type       "set-attribute",
+                                                                               :from-var   [{:var-name "object-2", :action-property "target"}],
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value true}
+                                                                              {:type "empty", :duration 2000}
+                                                                              {:type       "set-attribute",
+                                                                               :from-var   [{:var-name "object-1", :action-property "target"}],
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}
+                                                                              {:type       "set-attribute",
+                                                                               :from-var   [{:var-name "object-2", :action-property "target"}],
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}],
+                                                                       :type "sequence-data"},
                    :yellow-color-r2                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         7.38,
                                                                                                      :data        [{:end 7.33, :anim "talk", :start 6.5}],
@@ -290,26 +274,9 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color yellow",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color yellow"},
-                   :handle-drag-end-r1                                {:data [{:type       "test-expression",
-                                                                               :success    {:type "set-variable", :var-name "collided", :var-value true},
-                                                                               :expression ["or"
-                                                                                            "@box-yellow-r1"
-                                                                                            "@box-blue-r1"
-                                                                                            "@box-red-r1"
-                                                                                            "@box-purple-r1"
-                                                                                            "@box-orange-r1"
-                                                                                            "@box-green-r1"]}
-                                                                              {:fail        "wrong-option-r1",
-                                                                               :type        "test-var-scalar",
-                                                                               :value       true,
-                                                                               :success     "correct-option-r1",
-                                                                               :from-params [{:param-property "box", :action-property "var-name"}]}
-                                                                              {:type "set-variable", :var-name "collided", :var-value false}
-                                                                              {:id "clear-target-vars-r1", :type "action"}],
-                                                                       :type "sequence-data"},
                    :red-color-r2                                      {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         4.41,
                                                                                                      :data        [{:end 4.37, :anim "talk", :start 3.77}],
@@ -321,7 +288,7 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color red",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color red"},
                    :red-color-r1                                      {:data               [{:data [{:type "empty", :duration 0}
@@ -335,7 +302,7 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color red",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color red"},
                    :init-technical-1                                  {:data [{:id "hide-technical", :type "state", :target "layered-background-r0"}
@@ -343,31 +310,31 @@
                                                                               {:id "hide-technical", :type "state", :target "blue-table-r0"}
                                                                               {:id "hide-technical", :type "state", :target "red-table-r0"}
                                                                               {:id "hide-technical", :type "state", :target "librarian-r0"}
-                                                                              {:id "show-technical", :type "state", :target "box-green-r1"}
-                                                                              {:id "show-technical", :type "state", :target "box-red-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-8-r1"}
-                                                                              {:id "show-technical", :type "state", :target "box-blue-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-9-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-6-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-10-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-13-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-12-r1"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-crayon-1-r1"}
+                                                                              {:id "show-technical", :type "state", :target "orange-crayon-3-r1"}
+                                                                              {:id "show-technical", :type "state", :target "orange-crayon-1-r1"}
+                                                                              {:id "show-technical", :type "state", :target "red-box-r1"}
+                                                                              {:id "show-technical", :type "state", :target "purple-crayon-1-r1"}
+                                                                              {:id "show-technical", :type "state", :target "green-box-r1"}
+                                                                              {:id "show-technical", :type "state", :target "red-crayon-3-r1"}
                                                                               {:id "show-technical", :type "state", :target "background-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-17-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-3-r1"}
-                                                                              {:id "show-technical", :type "state", :target "box-purple-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-5-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-1-r1"}
-                                                                              {:id "show-technical", :type "state", :target "box-orange-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-2-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-15-r1"}
-                                                                              {:id "show-technical", :type "state", :target "box-yellow-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-4-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-7-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-14-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-16-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-0-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-11-r1"}],
+                                                                              {:id "show-technical", :type "state", :target "red-crayon-2-r1"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-box-r1"}
+                                                                              {:id "show-technical", :type "state", :target "blue-crayon-2-r1"}
+                                                                              {:id "show-technical", :type "state", :target "green-crayon-3-r1"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-crayon-3-r1"}
+                                                                              {:id "show-technical", :type "state", :target "orange-box-r1"}
+                                                                              {:id "show-technical", :type "state", :target "blue-crayon-3-r1"}
+                                                                              {:id "show-technical", :type "state", :target "purple-crayon-3-r1"}
+                                                                              {:id "show-technical", :type "state", :target "red-crayon-1-r1"}
+                                                                              {:id "show-technical", :type "state", :target "blue-crayon-1-r1"}
+                                                                              {:id "show-technical", :type "state", :target "green-crayon-2-r1"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-crayon-2-r1"}
+                                                                              {:id "show-technical", :type "state", :target "orange-crayon-2-r1"}
+                                                                              {:id "show-technical", :type "state", :target "purple-crayon-2-r1"}
+                                                                              {:id "show-technical", :type "state", :target "green-crayon-1-r1"}
+                                                                              {:id "show-technical", :type "state", :target "blue-box-r1"}
+                                                                              {:id "show-technical", :type "state", :target "purple-box-r1"}],
                                                                        :type "parallel"},
                    :purple-color-r2                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         11.58,
@@ -380,9 +347,22 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color purple",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color purple"},
+                   :correct-answer-4-r3                               {:data               [{:data [{:type "empty", :duration 0}
+                                                                                                    {:end         0.625,
+                                                                                                     :data        [],
+                                                                                                     :type        "animation-sequence",
+                                                                                                     :audio       "/upload/SIXWHSICTJUWRKRH.mp3",
+                                                                                                     :start       0,
+                                                                                                     :duration    0.625,
+                                                                                                     :phrase-text "correct"}],
+                                                                                             :type "sequence-data"}],
+                                                                       :type               "sequence-data",
+                                                                       :phrase             "Correct answer for task 4",
+                                                                       :editor-type        "dialog",
+                                                                       :phrase-description "Correct answer for task 4"},
                    :instruction-6-r3                                  {:data               [{:data [{:type "empty", :duration "1000"}
                                                                                                     {:end         122.16,
                                                                                                      :data        [{:end 122.09, :anim "talk", :start 119.83}],
@@ -398,23 +378,20 @@
                                                                        :phrase             "instruction-6",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Put the orange crayon on its table."},
-                   :handle-collide-enter-r3                           {:data [{:type        "set-variable",
-                                                                               :var-value   true,
-                                                                               :from-params [{:param-property "target", :action-property "var-name"}]}
-                                                                              {:id          "highlighted",
-                                                                               :type        "state",
-                                                                               :from-params [{:param-property "target", :action-property "target"}]}],
-                                                                       :type "sequence-data"},
+                   :correct-answer-5-r3                               {:data               [{:data [{:type "empty", :duration 0}
+                                                                                                    {:end         0.626,
+                                                                                                     :data        [],
+                                                                                                     :type        "animation-sequence",
+                                                                                                     :audio       "/upload/SIXWHSICTJUWRKRH.mp3",
+                                                                                                     :start       0,
+                                                                                                     :duration    0.626,
+                                                                                                     :phrase-text "correct"}],
+                                                                                             :type "sequence-data"}],
+                                                                       :type               "sequence-data",
+                                                                       :phrase             "Correct answer for task 5",
+                                                                       :editor-type        "dialog",
+                                                                       :phrase-description "Correct answer for task 5"},
                    :next-round-r0                                     {:id "finish-scene-r0", :type "action"},
-                   :question-1-check-answers-correct-answer           {:data [{:id   "question-1-check-answers-correct-answer-dialog",
-                                                                               :type "action"}
-                                                                              {:id "question-1-hide", :type "action"}
-                                                                              {:tag "question-1-question-id", :type "finish-flows"}],
-                                                                       :type "sequence-data"},
-                   :question-1-check-answers-wrong-answer             {:data [{:type "empty", :duration 500}
-                                                                              {:id   "question-1-check-answers-wrong-answer-dialog",
-                                                                               :type "action"}],
-                                                                       :type "sequence-data"},
                    :question-0-option-voice-over-voice-over-option-3  {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         70.95,
                                                                                                      :data        [{:end   70.89,
@@ -431,22 +408,30 @@
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Option \"Option 3\" voice-over"},
                    :stop-activity-r2                                  {:type "stop-activity"},
-                   :task-5-r3                                         {:data [{:type      "set-variable",
+                   :task-5-r3                                         {:data [{:type "set-variable", :var-name "object-1", :var-value "blue-crayon-r3"}
+                                                                              {:type "set-variable", :var-name "object-2", :var-value "blue-box-r3"}
+                                                                              {:type      "set-variable",
                                                                                :var-name  "check-collide",
-                                                                               :var-value ["item-blue-r3" "box-blue-r3"]}
+                                                                               :var-value ["colliding-object-blue-crayon-r3" "colliding-blue-box-r3"]}
                                                                               {:type "set-variable", :var-name "next-task", :var-value "task-6-r3"}
+                                                                              {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-5-r3"}
                                                                               {:type "set-variable", :var-name "instruction", :var-value "instruction-5-r3"}
+                                                                              {:type "counter", :counter-id "wrong-answers-counter", :counter-action "reset"}
                                                                               {:id "instruction-5-r3", :type "action"}],
                                                                        :type "sequence-data"},
                    :question-0-options-option-2-substrate-inactivate  {:id     "default",
                                                                        :tags   ["inactivate-options-question-0-question-id"
-                                                                                "inactivate-option-option-2-question-0-question-id"],
+                                                                                "inactivate-option-option-3-question-0-question-id"],
                                                                        :type   "state",
                                                                        :target "question-0-options-option-2-substrate"},
-                   :object-in-right-box-r2                            {:type        "set-attribute",
-                                                                       :attr-name   "visible",
-                                                                       :attr-value  false,
-                                                                       :from-params [{:param-property "target", :action-property "target"}]},
+                   :question-0-options-option-0-voice-over-activate   {:data [{:id     "active",
+                                                                               :type   "state",
+                                                                               :target "question-0-options-option-0-voice-over-background"}
+                                                                              {:id     "active",
+                                                                               :type   "state",
+                                                                               :target "question-0-options-option-0-voice-over-icon"}],
+                                                                       :tags ["activate-voice-over-option-1-question-0-question-id"],
+                                                                       :type "sequence-data"},
                    :question-0-task-voice-over-click                  {:data [{:tag  "activate-voice-over-task-question-0-question-id",
                                                                                :type "parallel-by-tag"}
                                                                               {:id "question-0-task-dialog", :type "action"}
@@ -455,39 +440,14 @@
                                                                        :type "sequence-data"},
                    :question-0-options-option-1-substrate-inactivate  {:id     "default",
                                                                        :tags   ["inactivate-options-question-0-question-id"
-                                                                                "inactivate-option-option-1-question-0-question-id"],
+                                                                                "inactivate-option-option-2-question-0-question-id"],
                                                                        :type   "state",
                                                                        :target "question-0-options-option-1-substrate"},
-                   :handle-drag-end-r2                                {:data [{:type       "test-expression",
-                                                                               :success    {:type "set-variable", :var-name "collided", :var-value true},
-                                                                               :expression ["or"
-                                                                                            "@box-orange-r2"
-                                                                                            "@box-green-r2"
-                                                                                            "@box-purple-r2"
-                                                                                            "@box-yellow-r2"
-                                                                                            "@box-blue-r2"
-                                                                                            "@box-red-r2"]}
-                                                                              {:fail        "wrong-option-r2",
-                                                                               :type        "test-var-scalar",
-                                                                               :value       true,
-                                                                               :success     "correct-option-r2",
-                                                                               :from-params [{:param-property "box", :action-property "var-name"}]}
-                                                                              {:type "set-variable", :var-name "collided", :var-value false}
-                                                                              {:id "clear-target-vars-r2", :type "action"}],
-                                                                       :type "sequence-data"},
                    :question-0-options-option-3-substrate-inactivate  {:id     "default",
                                                                        :tags   ["inactivate-options-question-0-question-id"
-                                                                                "inactivate-option-option-3-question-0-question-id"],
+                                                                                "inactivate-option-option-4-question-0-question-id"],
                                                                        :type   "state",
                                                                        :target "question-0-options-option-3-substrate"},
-                   :question-0-options-option-4-voice-over-activate   {:data [{:id     "active",
-                                                                               :type   "state",
-                                                                               :target "question-0-options-option-4-voice-over-background"}
-                                                                              {:id     "active",
-                                                                               :type   "state",
-                                                                               :target "question-0-options-option-4-voice-over-icon"}],
-                                                                       :tags ["activate-voice-over-option-4-question-0-question-id"],
-                                                                       :type "sequence-data"},
                    :purple-color-r1                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         11.58,
                                                                                                      :data        [{:end 11.52, :anim "talk", :start 10.88}],
@@ -499,7 +459,7 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color purple",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color purple"},
                    :correct-answer-r1                                 {:data               [{:data [{:type "empty", :duration 0}
@@ -517,37 +477,32 @@
                                                                        :phrase-description "correct answer"},
                    :object-revert-r3                                  {:id          "init-position",
                                                                        :type        "state",
-                                                                       :from-params [{:param-property "target", :action-property "target"}]},
-                   :handle-collide-leave-r1                           {:data [{:type        "set-attribute",
-                                                                               :attr-name   "highlight",
-                                                                               :attr-value  false,
-                                                                               :from-params [{:param-property "target", :action-property "target"}]}
-                                                                              {:type        "set-variable",
-                                                                               :var-value   false,
-                                                                               :from-params [{:param-property "target", :action-property "var-name"}]}],
-                                                                       :type "sequence-data"},
+                                                                       :from-params [{:param-property "self", :action-property "target"}]},
                    :init-activity-r0                                  {:data [{:type "start-activity"}
                                                                               {:id "voiceover-r0", :type "action"}
                                                                               {:id "next-round-r0", :type "action"}],
                                                                        :type "sequence-data"},
-                   :task-3-r3                                         {:data [{:type      "set-variable",
+                   :task-3-r3                                         {:data [{:type "set-variable", :var-name "object-1", :var-value "yellow-crayon-r3"}
+                                                                              {:type "set-variable", :var-name "object-2", :var-value "yellow-box-r3"}
+                                                                              {:type      "set-variable",
                                                                                :var-name  "check-collide",
-                                                                               :var-value ["item-yellow-r3" "box-yellow-r3"]}
+                                                                               :var-value ["colliding-object-yellow-crayon-r3" "colliding-yellow-box-r3"]}
                                                                               {:type "set-variable", :var-name "next-task", :var-value "task-4-r3"}
+                                                                              {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-3-r3"}
                                                                               {:type "set-variable", :var-name "instruction", :var-value "instruction-3-r3"}
+                                                                              {:type "counter", :counter-id "wrong-answers-counter", :counter-action "reset"}
                                                                               {:id "instruction-3-r3", :type "action"}],
                                                                        :type "sequence-data"},
                    :correct-option-r2                                 {:data [{:id "unhighlight-all-r2", :type "action"}
-                                                                              {:type "counter", :counter-id "sorted-objects", :counter-action "increase"}
-                                                                              {:id "object-in-right-box-r2", :type "action"}
+                                                                              {:type "counter", :counter-id "sorted-crayons", :counter-action "increase"}
+                                                                              {:id "crayon-in-right-box-r2", :type "action"}
                                                                               {:id "correct-answer-r2", :type "action"}
                                                                               {:type       "test-var-inequality",
                                                                                :value      18,
-                                                                               :success    "finish-scene-r2",
-                                                                               :var-name   "sorted-objects",
+                                                                               :success    "finish-round-r2",
+                                                                               :var-name   "sorted-crayons",
                                                                                :inequality ">="}],
                                                                        :type "sequence-data"},
-                   :question-1-hide                                   {:type "set-attribute", :target "question-1", :attr-name "visible", :attr-value false},
                    :yellow-color-r1                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         7.38,
                                                                                                      :data        [{:end 7.33, :anim "talk", :start 6.5}],
@@ -559,12 +514,10 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color yellow",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color yellow"},
-                   :voiceover-r0                                      {:data               [{:data [{:type "empty", :duration 0} {:id "question-1", :type "action"}],
-                                                                                             :type "sequence-data"}
-                                                                                            {:data [{:type "empty", :duration 0}
+                   :voiceover-r0                                      {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:phrase-text "Can you please help me clean",
                                                                                                      :start       6.66,
                                                                                                      :type        "animation-sequence",
@@ -618,33 +571,20 @@
                                                                        :type               "sequence-data",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Option \"Option 1\" voice-over"},
-                   :task-4-r3                                         {:data [{:type      "set-variable",
+                   :task-4-r3                                         {:data [{:type "set-variable", :var-name "object-1", :var-value "green-crayon-r3"}
+                                                                              {:type "set-variable", :var-name "object-2", :var-value "green-table-r3"}
+                                                                              {:type      "set-variable",
                                                                                :var-name  "check-collide",
-                                                                               :var-value ["item-green-r3" "box-green-r3"]}
+                                                                               :var-value ["colliding-object-green-crayon-r3" "colliding-green-table-r3"]}
                                                                               {:type "set-variable", :var-name "next-task", :var-value "task-5-r3"}
+                                                                              {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-4-r3"}
                                                                               {:type "set-variable", :var-name "instruction", :var-value "instruction-4-r3"}
+                                                                              {:type "counter", :counter-id "wrong-answers-counter", :counter-action "reset"}
                                                                               {:id "instruction-4-r3", :type "action"}],
-                                                                       :type "sequence-data"},
-                   :question-1-task-text-group-button-activate        {:data [{:id     "active",
-                                                                               :type   "state",
-                                                                               :target "question-1-task-text-group-button-background"}
-                                                                              {:id     "active",
-                                                                               :type   "state",
-                                                                               :target "question-1-task-text-group-button-icon"}],
-                                                                       :tags ["activate-voice-over-task-question-1-question-id"],
-                                                                       :type "sequence-data"},
-                   :question-1-task-text-group-button-inactivate      {:data [{:id     "default",
-                                                                               :type   "state",
-                                                                               :target "question-1-task-text-group-button-background"}
-                                                                              {:id     "default",
-                                                                               :type   "state",
-                                                                               :target "question-1-task-text-group-button-icon"}],
-                                                                       :tags ["inactivate-voice-overs-question-1-question-id"
-                                                                              "inactivate-voice-over-task-question-1-question-id"],
                                                                        :type "sequence-data"},
                    :stop-activity-r1                                  {:type "stop-activity"},
                    :init-activity-r1                                  {:data [{:type           "counter",
-                                                                               :counter-id     "sorted-objects",
+                                                                               :counter-id     "sorted-crayons",
                                                                                :counter-value  0,
                                                                                :counter-action "reset"}
                                                                               {:id "intro-r1", :type "action"}],
@@ -662,19 +602,19 @@
                                                                        :phrase             "correct-answer-dialog",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Correct answer dialog"},
-                   :question-1-task-dialog                            {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:data        [],
-                                                                                                     :fill        45823,
-                                                                                                     :type        "text-animation",
-                                                                                                     :audio       nil,
-                                                                                                     :target      "question-1-question-id--task-text",
-                                                                                                     :animation   "color",
-                                                                                                     :phrase-text "Question placeholder"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :tags               ["question-action"],
-                                                                       :type               "sequence-data",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Question text"},
+                   :start-drag-r3                                     {:data [{:type     "set-variable-list",
+                                                                               :values   [false false],
+                                                                               :from-var [{:var-name "check-collide", :action-property "var-names"}]}
+                                                                              {:type        "set-variable",
+                                                                               :var-value   true,
+                                                                               :from-params [{:template        "colliding-object-%",
+                                                                                              :param-property  "self",
+                                                                                              :action-property "var-name"}]}
+                                                                              {:type "set-variable", :var-name "say", :var-value true}
+                                                                              {:type "set-variable", :var-name "next-check-collide", :var-value true}
+                                                                              {:id "check-say-r3", :type "action"}
+                                                                              {:id "next-check-collide-r3", :type "action"}],
+                                                                       :type "sequence-data"},
                    :stop-activity-r0                                  {:type "stop-activity"},
                    :blue-color-r2                                     {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         5.82,
@@ -687,9 +627,21 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color blue",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color blue"},
+                   :highlight-r3                                      {:data [{:type "set-variable", :var-name "highlighted", :var-value true}
+                                                                              {:type        "set-variable",
+                                                                               :var-value   true,
+                                                                               :from-params [{:template        "colliding-raw-%",
+                                                                                              :param-property  "transition",
+                                                                                              :action-property "var-name"}]}
+                                                                              {:type        "set-attribute",
+                                                                               :attr-name   "highlight",
+                                                                               :attr-value  true,
+                                                                               :from-params [{:param-property "transition", :action-property "target"}]}],
+                                                                       :type "sequence-data"},
+                   :empty-r3                                          {:type "empty", :duration 100},
                    :finish-activity-r3                                {:type "finish-activity"},
                    :green-color-r3                                    {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         8.85,
@@ -702,7 +654,7 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color green",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color green"},
                    :question-0-options-option-2-voice-over-inactivate {:data [{:id     "default",
@@ -712,18 +664,10 @@
                                                                                :type   "state",
                                                                                :target "question-0-options-option-2-voice-over-icon"}],
                                                                        :tags ["inactivate-voice-overs-question-0-question-id"
-                                                                              "inactivate-voice-over-option-2-question-0-question-id"],
+                                                                              "inactivate-voice-over-option-3-question-0-question-id"],
                                                                        :type "sequence-data"},
-                   :box-red-dialog-r1                                 {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "red",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box red clicked"},
                    :question-0-options-option-1-substrate-activate    {:id     "active",
-                                                                       :tags   ["activate-option-option-1-question-0-question-id"],
+                                                                       :tags   ["activate-option-option-2-question-0-question-id"],
                                                                        :type   "state",
                                                                        :target "question-0-options-option-1-substrate"},
                    :instruction-1-r3                                  {:data               [{:data [{:type "empty", :duration "1000"}
@@ -741,9 +685,14 @@
                                                                        :phrase             "instruction-1",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Put the red crayon in its crayon box."},
-                   :object-revert-r1                                  {:type        "transition",
-                                                                       :from-params [{:param-property "target", :action-property "transition-id"}
-                                                                                     {:param-property "init-position", :action-property "to"}]},
+                   :highlight-r1                                      {:data [{:type        "set-variable",
+                                                                               :var-value   true,
+                                                                               :from-params [{:param-property "check-variable", :action-property "var-name"}]}
+                                                                              {:type        "set-attribute",
+                                                                               :attr-name   "highlight",
+                                                                               :attr-value  true,
+                                                                               :from-params [{:param-property "transition", :action-property "target"}]}],
+                                                                       :type "sequence-data"},
                    :question-0-hide                                   {:type "set-attribute", :target "question-0", :attr-name "visible", :attr-value false},
                    :red-color-r3                                      {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         4.41,
@@ -756,35 +705,58 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color red",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color red"},
+                   :say-color-r3                                      {:data [{:type "action", :from-params [{:param-property "say-color", :action-property "id"}]}
+                                                                              {:id "check-say-r3", :type "action"}],
+                                                                       :type "sequence-data"},
                    :finish-scene-r0                                   {:data ["finish-activity-r0"], :type "sequence"},
                    :finish-activity-r1                                {:data [{:id "init-technical-2", :type "action"}
                                                                               {:id "init-activity-r2", :type "action"}],
                                                                        :type "sequence-data"},
-                   :object-in-right-box-r1                            {:type        "set-attribute",
-                                                                       :attr-name   "visible",
-                                                                       :attr-value  false,
-                                                                       :from-params [{:param-property "target", :action-property "target"}]},
-                   :question-1-options-option-2-substrate-activate    {:id     "active",
-                                                                       :tags   ["activate-option-ok-question-1-question-id"],
+                   :check-collide-r1                                  {:data [{:fail          "unhighlight-r1",
+                                                                               :type          "test-transitions-and-pointer-collide",
+                                                                               :success       "highlight-r1",
+                                                                               :transitions   ["yellow-box-r1"
+                                                                                               "blue-box-r1"
+                                                                                               "red-box-r1"
+                                                                                               "purple-box-r1"
+                                                                                               "orange-box-r1"
+                                                                                               "green-box-r1"],
+                                                                               :action-params [{:check-variable "yellow-box-selected"}
+                                                                                               {:check-variable "blue-box-selected"}
+                                                                                               {:check-variable "red-box-selected"}
+                                                                                               {:check-variable "purple-box-selected"}
+                                                                                               {:check-variable "orange-box-selected"}
+                                                                                               {:check-variable "green-box-selected"}]}
+                                                                              {:type     "test-var-scalar",
+                                                                               :value    true,
+                                                                               :success  "next-check-collide-r1",
+                                                                               :var-name "next-check-collide"}],
+                                                                       :type "sequence-data"},
+                   :finish-round-r2                                   {:data [{:id "finish-round-dialog-r2", :type "action"}
+                                                                              {:id "finish-scene-r2", :type "action"}],
+                                                                       :type "sequence-data"},
+                   :question-0-options-option-0-voice-over-inactivate {:data [{:id     "default",
+                                                                               :type   "state",
+                                                                               :target "question-0-options-option-0-voice-over-background"}
+                                                                              {:id     "default",
+                                                                               :type   "state",
+                                                                               :target "question-0-options-option-0-voice-over-icon"}],
+                                                                       :tags ["inactivate-voice-overs-question-0-question-id"
+                                                                              "inactivate-voice-over-option-1-question-0-question-id"],
+                                                                       :type "sequence-data"},
+                   :question-0-options-option-0-substrate-activate    {:id     "active",
+                                                                       :tags   ["activate-option-option-1-question-0-question-id"],
                                                                        :type   "state",
-                                                                       :target "question-1-options-option-2-substrate"},
-                   :box-blue-dialog-r2                                {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "blue",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box blue clicked"},
+                                                                       :target "question-0-options-option-0-substrate"},
                    :question-0-options-option-3-substrate-activate    {:id     "active",
-                                                                       :tags   ["activate-option-option-3-question-0-question-id"],
+                                                                       :tags   ["activate-option-option-4-question-0-question-id"],
                                                                        :type   "state",
                                                                        :target "question-0-options-option-3-substrate"},
                    :question-0-options-option-2-substrate-activate    {:id     "active",
-                                                                       :tags   ["activate-option-option-2-question-0-question-id"],
+                                                                       :tags   ["activate-option-option-3-question-0-question-id"],
                                                                        :type   "state",
                                                                        :target "question-0-options-option-2-substrate"},
                    :finish-dialog-r3                                  {:data               [{:data [{:type "empty", :duration 0}
@@ -827,7 +799,7 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color blue",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color blue"},
                    :init-technical-0                                  {:data [{:id "show-technical", :type "state", :target "layered-background-r0"}
@@ -836,18 +808,6 @@
                                                                               {:id "show-technical", :type "state", :target "red-table-r0"}
                                                                               {:id "show-technical", :type "state", :target "librarian-r0"}],
                                                                        :type "parallel"},
-                   :question-1-options-option-3-substrate-activate    {:id     "active",
-                                                                       :tags   ["activate-option-thumbs-down-question-1-question-id"],
-                                                                       :type   "state",
-                                                                       :target "question-1-options-option-3-substrate"},
-                   :handle-collide-enter-r1                           {:data [{:type        "set-variable",
-                                                                               :var-value   true,
-                                                                               :from-params [{:param-property "target", :action-property "var-name"}]}
-                                                                              {:type        "set-attribute",
-                                                                               :attr-name   "highlight",
-                                                                               :attr-value  true,
-                                                                               :from-params [{:param-property "target", :action-property "target"}]}],
-                                                                       :type "sequence-data"},
                    :purple-color-r3                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         11.58,
                                                                                                      :data        [{:end 11.52, :anim "talk", :start 10.88}],
@@ -859,18 +819,12 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color purple",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color purple"},
-                   :handle-collide-enter-r2                           {:data [{:type        "set-variable",
-                                                                               :var-value   true,
-                                                                               :from-params [{:param-property "target", :action-property "var-name"}]}
-                                                                              {:type        "set-attribute",
-                                                                               :attr-name   "highlight",
-                                                                               :attr-value  true,
-                                                                               :from-params [{:param-property "target", :action-property "target"}]}],
+                   :next-check-collide-r2                             {:data [{:type "set-timeout", :action "check-collide-r2", :interval 10}],
                                                                        :type "sequence-data"},
-                   :finish-scene-r2                                   {:data [{:id "finish-round-dialog-r2", :type "action"}
+                   :finish-scene-r2                                   {:data [{:id "check-collide-2", :type "remove-interval"}
                                                                               {:id "finish-activity-r2", :type "action"}],
                                                                        :type "sequence-data"},
                    :question-0-option-voice-over-voice-over-option-2  {:data               [{:data [{:type "empty", :duration 0}
@@ -888,14 +842,16 @@
                                                                        :type               "sequence-data",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Option \"Option 2\" voice-over"},
-                   :box-purple-dialog-r1                              {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "purple",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box purple clicked"},
+                   :correct-answer-single-r3                          {:data [{:id "unhighlight-all-r3", :type "action"}
+                                                                              {:id          "init-position",
+                                                                               :type        "state",
+                                                                               :from-params [{:param-property "self", :action-property "target"}]}
+                                                                              {:type     "action",
+                                                                               :from-var [{:var-name "correct-answer", :action-property "id"}]}
+                                                                              {:type     "action",
+                                                                               :from-var [{:var-name "next-task", :action-property "id"}]}
+                                                                              {:id "object-revert-r3", :type "action"}],
+                                                                       :type "sequence-data"},
                    :orange-color-r3                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         10.11,
                                                                                                      :data        [{:end 10.1, :anim "talk", :start 9.31}],
@@ -907,9 +863,11 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color orange",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color orange"},
+                   :next-check-collide-r3                             {:data [{:type "set-timeout", :action "check-collide-r3", :interval 10}],
+                                                                       :type "sequence-data"},
                    :stop-activity-r3                                  {:type "stop-activity"},
                    :tap-instructions-r2                               {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:phrase-text "Drag the crayons to the box or table that matches their color.",
@@ -929,27 +887,27 @@
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Tap instructions"},
                    :unhighlight-all-r2                                {:data [{:type       "set-attribute",
-                                                                               :target     "box-orange-r2",
+                                                                               :target     "yellow-box-r2",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-green-r2",
+                                                                               :target     "blue-box-r2",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-purple-r2",
+                                                                               :target     "red-box-r2",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-yellow-r2",
+                                                                               :target     "purple-table-r2",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-blue-r2",
+                                                                               :target     "orange-table-r2",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-red-r2",
+                                                                               :target     "green-table-r2",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}],
                                                                        :type "parallel"},
@@ -962,6 +920,7 @@
                                                                        :type               "sequence-data",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Correct answer"},
+                   :next-say-r2                                       {:data [{:type "set-timeout", :action "say-color-r2", :interval 100}], :type "sequence-data"},
                    :intro-r2                                          {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:phrase-text "Drag the crayons to the box or table that matches their color.",
                                                                                                      :start       1.2,
@@ -980,33 +939,49 @@
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Introduce task"},
                    :correct-option-r1                                 {:data [{:id "unhighlight-all-r1", :type "action"}
-                                                                              {:type "counter", :counter-id "sorted-objects", :counter-action "increase"}
-                                                                              {:id "object-in-right-box-r1", :type "action"}
+                                                                              {:type "counter", :counter-id "sorted-crayons", :counter-action "increase"}
+                                                                              {:id "crayon-in-right-box-r1", :type "action"}
                                                                               {:id "correct-answer-r1", :type "action"}
                                                                               {:fail       "continue-sorting-r1",
                                                                                :type       "test-var-inequality",
                                                                                :value      18,
                                                                                :success    "finish-scene-r1",
-                                                                               :var-name   "sorted-objects",
+                                                                               :var-name   "sorted-crayons",
                                                                                :inequality ">="}],
                                                                        :type "sequence-data"},
-                   :task-6-r3                                         {:data [{:type      "set-variable",
+                   :task-6-r3                                         {:data [{:type "set-variable", :var-name "object-1", :var-value "orange-crayon-r3"}
+                                                                              {:type "set-variable", :var-name "object-2", :var-value "orange-table-r3"}
+                                                                              {:type      "set-variable",
                                                                                :var-name  "check-collide",
-                                                                               :var-value ["item-orange-r3" "box-orange-r3"]}
+                                                                               :var-value ["colliding-object-orange-crayon-r3" "colliding-orange-table-r3"]}
                                                                               {:type "set-variable", :var-name "next-task", :var-value "finish-r3"}
+                                                                              {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-6-r3"}
                                                                               {:type "set-variable", :var-name "instruction", :var-value "instruction-6-r3"}
+                                                                              {:type "counter", :counter-id "wrong-answers-counter", :counter-action "reset"}
                                                                               {:id "instruction-6-r3", :type "action"}],
                                                                        :type "sequence-data"},
-                   :box-orange-dialog-r2                              {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "orange",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box orange clicked"},
                    :finish-activity-r2                                {:data [{:id "init-technical-3", :type "action"}
                                                                               {:id "start-activity-r3", :type "action"}],
+                                                                       :type "sequence-data"},
+                   :check-collide-r2                                  {:data [{:fail          "unhighlight-r2",
+                                                                               :type          "test-transitions-and-pointer-collide",
+                                                                               :success       "highlight-r2",
+                                                                               :transitions   ["purple-table-r2"
+                                                                                               "orange-table-r2"
+                                                                                               "green-table-r2"
+                                                                                               "yellow-box-r2"
+                                                                                               "blue-box-r2"
+                                                                                               "red-box-r2"],
+                                                                               :action-params [{:check-variable "purple-table-selected"}
+                                                                                               {:check-variable "orange-table-selected"}
+                                                                                               {:check-variable "green-table-selected"}
+                                                                                               {:check-variable "yellow-box-selected"}
+                                                                                               {:check-variable "blue-box-selected"}
+                                                                                               {:check-variable "red-box-selected"}]}
+                                                                              {:type     "test-var-scalar",
+                                                                               :value    true,
+                                                                               :success  "next-check-collide-r2",
+                                                                               :var-name "next-check-collide"}],
                                                                        :type "sequence-data"},
                    :question-0-options-option-1-voice-over-activate   {:data [{:id     "active",
                                                                                :type   "state",
@@ -1014,20 +989,8 @@
                                                                               {:id     "active",
                                                                                :type   "state",
                                                                                :target "question-0-options-option-1-voice-over-icon"}],
-                                                                       :tags ["activate-voice-over-option-1-question-0-question-id"],
+                                                                       :tags ["activate-voice-over-option-2-question-0-question-id"],
                                                                        :type "sequence-data"},
-                   :question-1-check-answers-wrong-answer-dialog      {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type        "animation-sequence",
-                                                                                                     :audio       nil,
-                                                                                                     :phrase-text ""}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Wrong answer"},
-                   :question-0-options-option-4-substrate-activate    {:id     "active",
-                                                                       :tags   ["activate-option-option-4-question-0-question-id"],
-                                                                       :type   "state",
-                                                                       :target "question-0-options-option-4-substrate"},
                    :instruction-4-r3                                  {:data               [{:data [{:type "empty", :duration "1000"}
                                                                                                     {:end         113.34,
                                                                                                      :data        [{:end 113.28, :anim "talk", :start 111.04}],
@@ -1043,13 +1006,25 @@
                                                                        :phrase             "instruction-4",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Put the green crayon on its table."},
-                   :question-0-options-option-4-substrate-inactivate  {:id     "default",
-                                                                       :tags   ["inactivate-options-question-0-question-id"
-                                                                                "inactivate-option-option-4-question-0-question-id"],
-                                                                       :type   "state",
-                                                                       :target "question-0-options-option-4-substrate"},
-                   :start-activity-r3                                 {:data [{:id "intro-r3", :type "action"} {:id "task-1-r3", :type "action"}],
+                   :start-activity-r3                                 {:data [{:type "set-variable", :var-name "instruction", :var-value "empty-r3"}
+                                                                              {:id "intro-r3", :type "action"}
+                                                                              {:type "set-variable", :var-name "object-1", :var-value "red-crayon-r3"}
+                                                                              {:type "set-variable", :var-name "object-2", :var-value "red-box-r3"}
+                                                                              {:type      "set-variable",
+                                                                               :var-name  "check-collide",
+                                                                               :var-value ["colliding-object-red-crayon-r3" "colliding-red-box-r3"]}
+                                                                              {:type "set-variable", :var-name "next-task", :var-value "task-2-r3"}
+                                                                              {:type      "set-variable",
+                                                                               :var-name  "correct-answer",
+                                                                               :var-value "correct-answer-1-r3"}
+                                                                              {:type "set-variable", :var-name "instruction", :var-value "instruction-1-r3"}
+                                                                              {:type "counter", :counter-id "wrong-answers-counter", :counter-action "reset"}
+                                                                              {:id "instruction-1-r3", :type "action"}],
                                                                        :type "sequence-data"},
+                   :crayon-in-right-box-r1                            {:type        "set-attribute",
+                                                                       :attr-name   "visible",
+                                                                       :attr-value  false,
+                                                                       :from-params [{:param-property "target", :action-property "target"}]},
                    :question-0-options-option-1-voice-over-inactivate {:data [{:id     "default",
                                                                                :type   "state",
                                                                                :target "question-0-options-option-1-voice-over-background"}
@@ -1057,26 +1032,7 @@
                                                                                :type   "state",
                                                                                :target "question-0-options-option-1-voice-over-icon"}],
                                                                        :tags ["inactivate-voice-overs-question-0-question-id"
-                                                                              "inactivate-voice-over-option-1-question-0-question-id"],
-                                                                       :type "sequence-data"},
-                   :handle-drag-end-r3                                {:data [{:type       "test-expression",
-                                                                               :success    {:type "set-variable", :var-name "collided", :var-value true},
-                                                                               :expression ["or"
-                                                                                            "@box-purple-r3"
-                                                                                            "@box-green-r3"
-                                                                                            "@box-orange-r3"
-                                                                                            "@box-yellow-r3"
-                                                                                            "@box-blue-r3"
-                                                                                            "@box-red-r3"]}
-                                                                              {:fail     "wrong-answer-r3",
-                                                                               :type     "test-var-list",
-                                                                               :values   [true true],
-                                                                               :success  "correct-answer-r3",
-                                                                               :from-var [{:var-name "check-collide", :action-property "var-names"}]}
-                                                                              {:type "set-variable", :var-name "collided", :var-value false}
-                                                                              {:type        "set-variable",
-                                                                               :var-value   false,
-                                                                               :from-params [{:param-property "target", :action-property "var-name"}]}],
+                                                                              "inactivate-voice-over-option-2-question-0-question-id"],
                                                                        :type "sequence-data"},
                    :continue-sorting-r1                               {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:type               "animation-sequence",
@@ -1088,8 +1044,22 @@
                                                                        :phrase             "continue-sorting",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Continue sorting"},
-                   :handle-drag-start-r1                              {:type        "stop-transition",
-                                                                       :from-params [{:param-property "target", :action-property "id"}]},
+                   :stop-drag-hide-r3                                 {:data [{:type        "copy-variables",
+                                                                               :from-params [{:template        "colliding-%",
+                                                                                              :param-property  "colliders",
+                                                                                              :action-property "var-names"}
+                                                                                             {:template        "colliding-raw-%",
+                                                                                              :param-property  "colliders",
+                                                                                              :action-property "from-list"}]}
+                                                                              {:type "set-variable", :var-name "say", :var-value false}
+                                                                              {:type "set-variable", :var-name "next-check-collide", :var-value false}
+                                                                              {:fail     "object-revert-r3",
+                                                                               :type     "test-value",
+                                                                               :value1   true,
+                                                                               :success  "stop-drag-highlighted-r3",
+                                                                               :from-var [{:var-name "highlighted", :action-property "value2"}]}],
+                                                                       :type "sequence-data"},
+                   :check-say-r3                                      {:type "test-var-scalar", :value true, :success "next-say-r3", :var-name "say"},
                    :question-0-option-click-handler                   {:data [{:id          "question-0-question-id",
                                                                                :type        "question-pick",
                                                                                :from-params [{:param-property "value", :action-property "value"}]}
@@ -1126,6 +1096,31 @@
                                                                        :phrase             "continue-sorting",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Listen carefully, because it might be a different place than where you put it before!"},
+                   :next-say-r1                                       {:data [{:type "set-timeout", :action "say-color-r1", :interval 100}], :type "sequence-data"},
+                   :start-drag-r2                                     {:data [{:type        "stop-transition",
+                                                                               :from-params [{:param-property "target", :action-property "id"}]}
+                                                                              {:type "set-variable", :var-name "purple-table-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "orange-table-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "green-table-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "yellow-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "blue-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "red-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "say", :var-value true}
+                                                                              {:type "set-variable", :var-name "next-check-collide", :var-value true}
+                                                                              {:id "next-say-r2", :type "action"}
+                                                                              {:id "next-check-collide-r2", :type "action"}],
+                                                                       :type "sequence-data"},
+                   :drag-crayon-r1                                    {:data [{:type        "copy-variable",
+                                                                               :var-name    "current-selection-state",
+                                                                               :from-params [{:param-property "check-variable", :action-property "from"}]}
+                                                                              {:type "set-variable", :var-name "say", :var-value false}
+                                                                              {:type "set-variable", :var-name "next-check-collide", :var-value false}
+                                                                              {:fail     "wrong-option-r1",
+                                                                               :type     "test-var-scalar",
+                                                                               :value    true,
+                                                                               :success  "correct-option-r1",
+                                                                               :var-name "current-selection-state"}],
+                                                                       :type "sequence-data"},
                    :question-0-options-option-3-voice-over-inactivate {:data [{:id     "default",
                                                                                :type   "state",
                                                                                :target "question-0-options-option-3-voice-over-background"}
@@ -1133,16 +1128,16 @@
                                                                                :type   "state",
                                                                                :target "question-0-options-option-3-voice-over-icon"}],
                                                                        :tags ["inactivate-voice-overs-question-0-question-id"
-                                                                              "inactivate-voice-over-option-3-question-0-question-id"],
+                                                                              "inactivate-voice-over-option-4-question-0-question-id"],
                                                                        :type "sequence-data"},
-                   :box-green-dialog-r1                               {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "green",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box green clicked"},
+                   :highlight-r2                                      {:data [{:type        "set-variable",
+                                                                               :var-value   true,
+                                                                               :from-params [{:param-property "check-variable", :action-property "var-name"}]}
+                                                                              {:type        "set-attribute",
+                                                                               :attr-name   "highlight",
+                                                                               :attr-value  true,
+                                                                               :from-params [{:param-property "transition", :action-property "target"}]}],
+                                                                       :type "sequence-data"},
                    :question-0-check-answers-wrong-answer             {:data [{:type "empty", :duration 500}
                                                                               {:id   "question-0-check-answers-wrong-answer-dialog",
                                                                                :type "action"}],
@@ -1153,14 +1148,7 @@
                                                                               {:id     "active",
                                                                                :type   "state",
                                                                                :target "question-0-options-option-2-voice-over-icon"}],
-                                                                       :tags ["activate-voice-over-option-2-question-0-question-id"],
-                                                                       :type "sequence-data"},
-                   :handle-collide-leave-r3                           {:data [{:id          "not-highlighted",
-                                                                               :type        "state",
-                                                                               :from-params [{:param-property "target", :action-property "target"}]}
-                                                                              {:type        "set-variable",
-                                                                               :var-value   false,
-                                                                               :from-params [{:param-property "target", :action-property "var-name"}]}],
+                                                                       :tags ["activate-voice-over-option-3-question-0-question-id"],
                                                                        :type "sequence-data"},
                    :intro-r1                                          {:data               [{:data [{:type "empty", :duration 1000}
                                                                                                     {:phrase-text "Drag the crayons to the box that matches their color.",
@@ -1178,18 +1166,32 @@
                                                                        :phrase             "intro",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Introduce task"},
-                   :question-0-options-option-4-voice-over-inactivate {:data [{:id     "default",
-                                                                               :type   "state",
-                                                                               :target "question-0-options-option-4-voice-over-background"}
-                                                                              {:id     "default",
-                                                                               :type   "state",
-                                                                               :target "question-0-options-option-4-voice-over-icon"}],
-                                                                       :tags ["inactivate-voice-overs-question-0-question-id"
-                                                                              "inactivate-voice-over-option-4-question-0-question-id"],
-                                                                       :type "sequence-data"},
-                   :handle-drag-start-r3                              {:type        "set-variable",
-                                                                       :var-value   true,
-                                                                       :from-params [{:param-property "target", :action-property "var-name"}]},
+                   :unhighlight-all-r3                                {:data [{:type "set-variable", :var-name "highlighted", :var-value false}
+                                                                              {:type       "set-attribute",
+                                                                               :target     "yellow-box-r3",
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}
+                                                                              {:type       "set-attribute",
+                                                                               :target     "blue-box-r3",
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}
+                                                                              {:type       "set-attribute",
+                                                                               :target     "red-box-r3",
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}
+                                                                              {:type       "set-attribute",
+                                                                               :target     "purple-table-r3",
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}
+                                                                              {:type       "set-attribute",
+                                                                               :target     "orange-table-r3",
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}
+                                                                              {:type       "set-attribute",
+                                                                               :target     "green-table-r3",
+                                                                               :attr-name  "highlight",
+                                                                               :attr-value false}],
+                                                                       :type "parallel"},
                    :instruction-2-r3                                  {:data               [{:data [{:type "empty", :duration "1000"}
                                                                                                     {:end         105.06,
                                                                                                      :data        [{:end 105.0, :anim "talk", :start 102.85}],
@@ -1209,10 +1211,21 @@
                                                                               {:id "init-activity-r1", :type "action"}],
                                                                        :type "sequence-data"},
                    :init-activity-r2                                  {:data [{:type           "counter",
-                                                                               :counter-id     "sorted-objects",
+                                                                               :counter-id     "sorted-crayons",
                                                                                :counter-value  0,
                                                                                :counter-action "reset"}
                                                                               {:id "intro-r2", :type "action"}],
+                                                                       :type "sequence-data"},
+                   :drag-crayon-r2                                    {:data [{:type        "copy-variable",
+                                                                               :var-name    "current-selection-state",
+                                                                               :from-params [{:param-property "check-variable", :action-property "from"}]}
+                                                                              {:type "set-variable", :var-name "say", :var-value false}
+                                                                              {:type "set-variable", :var-name "next-check-collide", :var-value false}
+                                                                              {:fail     "wrong-option-r2",
+                                                                               :type     "test-var-scalar",
+                                                                               :value    true,
+                                                                               :success  "correct-option-r2",
+                                                                               :var-name "current-selection-state"}],
                                                                        :type "sequence-data"},
                    :orange-color-r2                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         10.11,
@@ -1225,13 +1238,9 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color orange",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color orange"},
-                   :question-1-options-option-1-substrate-activate    {:id     "active",
-                                                                       :tags   ["activate-option-thumbs-up-question-1-question-id"],
-                                                                       :type   "state",
-                                                                       :target "question-1-options-option-1-substrate"},
                    :question-0-task-text-group-button-activate        {:data [{:id     "active",
                                                                                :type   "state",
                                                                                :target "question-0-task-text-group-button-background"}
@@ -1270,50 +1279,46 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color orange",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color orange"},
-                   :clear-target-vars-r2                              {:data [{:type "set-variable", :var-name "box-orange-r2", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-green-r2", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-purple-r2", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-yellow-r2", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-blue-r2", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-red-r2", :var-value false}],
-                                                                       :type "parallel"},
-                   :question-1-show                                   {:type "set-attribute", :target "question-1", :attr-name "visible", :attr-value true},
+                   :correct-answer-2-r3                               {:data               [{:data [{:type "empty", :duration 0}
+                                                                                                    {:end         0.626,
+                                                                                                     :data        [],
+                                                                                                     :type        "animation-sequence",
+                                                                                                     :audio       "/upload/SIXWHSICTJUWRKRH.mp3",
+                                                                                                     :start       0,
+                                                                                                     :duration    0.626,
+                                                                                                     :phrase-text "correct"}],
+                                                                                             :type "sequence-data"}],
+                                                                       :type               "sequence-data",
+                                                                       :phrase             "Correct answer for task 2",
+                                                                       :editor-type        "dialog",
+                                                                       :phrase-description "Correct answer for task 2"},
+                   :correct-answer-6-r3                               {:data               [{:data [{:type "empty", :duration 0}
+                                                                                                    {:end         0.627,
+                                                                                                     :data        [],
+                                                                                                     :type        "animation-sequence",
+                                                                                                     :audio       "/upload/SIXWHSICTJUWRKRH.mp3",
+                                                                                                     :start       0,
+                                                                                                     :duration    0.627,
+                                                                                                     :phrase-text "correct"}],
+                                                                                             :type "sequence-data"}],
+                                                                       :type               "sequence-data",
+                                                                       :phrase             "Correct answer for task 6",
+                                                                       :editor-type        "dialog",
+                                                                       :phrase-description "Correct answer for task 6"},
                    :question-0-check-answers-correct-answer           {:data [{:id   "question-0-check-answers-correct-answer-dialog",
                                                                                :type "action"}
                                                                               {:id "question-0-hide", :type "action"}
                                                                               {:tag "question-0-question-id", :type "finish-flows"}],
                                                                        :type "sequence-data"},
-                   :box-blue-dialog-r1                                {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "blue",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box blue clicked"},
                    :intermediate-action-0                             {:data [{:id "init-technical-0", :type "action"}
                                                                               {:id "init-activity-r0", :type "action"}],
                                                                        :type "sequence-data"},
-                   :box-green-dialog-r2                               {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "green",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box green clicked"},
-                   :box-purple-dialog-r2                              {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "purple",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box purple clicked"},
-                   :finish-scene-r1                                   {:data [{:id "finish-dialog-r1", :type "action"} {:id "finish-activity-r1", :type "action"}],
+                   :finish-scene-r1                                   {:data [{:id "finish-dialog-r1", :type "action"}
+                                                                              {:type "set-variable", :var-name "next-check-collide", :var-value false}
+                                                                              {:id "finish-activity-r1", :type "action"}],
                                                                        :type "sequence-data"},
                    :question-0-show                                   {:type "set-attribute", :target "question-0", :attr-name "visible", :attr-value true},
                    :intermediate-action-2                             {:data [{:id "init-technical-2", :type "action"}
@@ -1322,7 +1327,6 @@
                    :finish-activity-r0                                {:data [{:id "init-technical-1", :type "action"}
                                                                               {:id "init-activity-r1", :type "action"}],
                                                                        :type "sequence-data"},
-                   :handle-drag-move-r3                               {:type "action", :from-params [{:param-property "say-item", :action-property "id"}]},
                    :finish-round-dialog-r2                            {:data               [{:data [{:type "empty", :duration 0} {:id "question-0", :type "action"}],
                                                                                              :type "sequence-data"}
                                                                                             {:data [{:type "empty", :duration 0}
@@ -1357,84 +1361,74 @@
                                                                        :phrase             "wrong-answer-dialog",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Wrong answer dialog"},
-                   :init-technical-2                                  {:data [{:id "hide-technical", :type "state", :target "box-green-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "box-red-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-8-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "box-blue-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-9-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-6-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-10-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-13-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-12-r1"}
+                   :init-technical-2                                  {:data [{:id "hide-technical", :type "state", :target "yellow-crayon-1-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "orange-crayon-3-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "orange-crayon-1-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "red-box-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-crayon-1-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "green-box-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "red-crayon-3-r1"}
                                                                               {:id "hide-technical", :type "state", :target "background-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-17-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-3-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "box-purple-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-5-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-1-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "box-orange-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-2-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-15-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "box-yellow-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-4-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-7-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-14-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-16-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-0-r1"}
-                                                                              {:id "hide-technical", :type "state", :target "item-11-r1"}
-                                                                              {:id "show-technical", :type "state", :target "item-11-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-3-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-13-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "red-crayon-2-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "yellow-box-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-crayon-2-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "green-crayon-3-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "yellow-crayon-3-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "orange-box-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-crayon-3-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-crayon-3-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "red-crayon-1-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-crayon-1-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "green-crayon-2-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "yellow-crayon-2-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "orange-crayon-2-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-crayon-2-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "green-crayon-1-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-box-r1"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-box-r1"}
+                                                                              {:id "show-technical", :type "state", :target "orange-crayon-1-r2"}
                                                                               {:id "show-technical", :type "state", :target "librarian-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-10-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-7-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-6-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-5-r2"}
-                                                                              {:id "show-technical", :type "state", :target "box-red-r2"}
-                                                                              {:id "show-technical", :type "state", :target "background-r2"}
-                                                                              {:id "show-technical", :type "state", :target "box-purple-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-12-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-2-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-9-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-0-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-4-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-17-r2"}
-                                                                              {:id "show-technical", :type "state", :target "box-yellow-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-1-r2"}
-                                                                              {:id "show-technical", :type "state", :target "box-orange-r2"}
-                                                                              {:id "show-technical", :type "state", :target "box-blue-r2"}
-                                                                              {:id "show-technical", :type "state", :target "box-green-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-16-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-15-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-8-r2"}
-                                                                              {:id "show-technical", :type "state", :target "item-14-r2"}],
+                                                                              {:id "show-technical", :type "state", :target "red-crayon-2-r2"}
+                                                                              {:id "show-technical", :type "state", :target "orange-crayon-3-r2"}
+                                                                              {:id "show-technical", :type "state", :target "purple-crayon-2-r2"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-crayon-2-r2"}
+                                                                              {:id "show-technical", :type "state", :target "red-crayon-1-r2"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-crayon-1-r2"}
+                                                                              {:id "show-technical", :type "state", :target "blue-box-r2"}
+                                                                              {:id "show-technical", :type "state", :target "red-box-r2"}
+                                                                              {:id "show-technical", :type "state", :target "blue-crayon-3-r2"}
+                                                                              {:id "show-technical", :type "state", :target "blue-crayon-1-r2"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-box-r2"}
+                                                                              {:id "show-technical", :type "state", :target "green-crayon-2-r2"}
+                                                                              {:id "show-technical", :type "state", :target "green-table-r2"}
+                                                                              {:id "show-technical", :type "state", :target "orange-table-r2"}
+                                                                              {:id "show-technical", :type "state", :target "green-crayon-1-r2"}
+                                                                              {:id "show-technical", :type "state", :target "blue-crayon-2-r2"}
+                                                                              {:id "show-technical", :type "state", :target "purple-table-r2"}
+                                                                              {:id "show-technical", :type "state", :target "green-crayon-3-r2"}
+                                                                              {:id "show-technical", :type "state", :target "purple-crayon-1-r2"}
+                                                                              {:id "show-technical", :type "state", :target "purple-crayon-3-r2"}
+                                                                              {:id "show-technical", :type "state", :target "layered-background-r2"}
+                                                                              {:id "show-technical", :type "state", :target "red-crayon-3-r2"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-crayon-3-r2"}
+                                                                              {:id "show-technical", :type "state", :target "orange-crayon-2-r2"}],
                                                                        :type "parallel"},
-                   :question-1-options-option-1-substrate-inactivate  {:id     "default",
-                                                                       :tags   ["inactivate-options-question-1-question-id"
-                                                                                "inactivate-option-thumbs-up-question-1-question-id"],
-                                                                       :type   "state",
-                                                                       :target "question-1-options-option-1-substrate"},
-                   :box-red-dialog-r2                                 {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "red",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box red clicked"},
-                   :tap-instructions-r3                               {:type "action", :from-var [{:var-name "instruction", :action-property "id"}]},
-                   :wrong-answer-r3                                   {:data [{:type       "test-expression",
-                                                                               :success    "wrong-answer-dialog-r3",
-                                                                               :expression "@collided"}
-                                                                              {:id "object-revert-r3", :type "action"}],
+                   :next-check-collide-r1                             {:data [{:type "set-timeout", :action "check-collide-r1", :interval 10}],
                                                                        :type "sequence-data"},
-                   :question-1                                        {:data                [{:id "question-1-show", :type "action"} {:id "question-1-task-dialog", :type "action"}],
-                                                                       :tags                ["question-1-question-id"],
-                                                                       :type                "sequence-data",
-                                                                       :description         "-- Description --",
-                                                                       :workflow-user-input true},
-                   :handle-drag-start-r2                              {:type        "stop-transition",
-                                                                       :from-params [{:param-property "target", :action-property "id"}]},
+                   :tap-instructions-r3                               {:type "action", :from-var [{:var-name "instruction", :action-property "id"}]},
+                   :wrong-answer-r3                                   {:data [{:id "unhighlight-all-r3", :type "action"}
+                                                                              {:id "object-revert-r3", :type "action"}
+                                                                              {:type "counter", :counter-id "wrong-answers-counter", :counter-action "increase"}
+                                                                              {:type       "test-var-inequality",
+                                                                               :value      2,
+                                                                               :success    "blink-objects-r3",
+                                                                               :var-name   "wrong-answers-counter",
+                                                                               :inequality ">="}
+                                                                              {:data [{:id "wrong-answer-dialog-r3", :type "action"}
+                                                                                      {:type     "action",
+                                                                                       :from-var [{:var-name "instruction", :action-property "id"}]}],
+                                                                               :type "sequence-data"}],
+                                                                       :type "parallel"},
                    :wrong-answer-r1                                   {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         0.412,
                                                                                                      :data        [],
@@ -1486,9 +1480,17 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color blue",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color blue"},
+                   :unhighlight-r2                                    {:data [{:type        "set-variable",
+                                                                               :var-value   false,
+                                                                               :from-params [{:param-property "check-variable", :action-property "var-name"}]}
+                                                                              {:type        "set-attribute",
+                                                                               :attr-name   "highlight",
+                                                                               :attr-value  false,
+                                                                               :from-params [{:param-property "transition", :action-property "target"}]}],
+                                                                       :type "sequence-data"},
                    :finish-dialog-r1                                  {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
                                                                                              :type "sequence-data"}],
@@ -1496,19 +1498,31 @@
                                                                        :phrase             "finish-dialog",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "finish dialog"},
-                   :question-1-check-answers                          {:data [{:id      "question-1-question-id",
-                                                                               :fail    "question-1-check-answers-wrong-answer",
-                                                                               :type    "question-check",
-                                                                               :answer  ["ok"],
-                                                                               :success "question-1-check-answers-correct-answer"}
-                                                                              {:id "question-1-question-id", :type "question-reset"}
-                                                                              {:tag "inactivate-options-question-1-question-id", :type "parallel-by-tag"}],
-                                                                       :type "sequence-data"},
-                   :wrong-option-r1                                   {:data [{:type "test-expression", :success "wrong-answer-r1", :expression "@collided"}
-                                                                              {:id "unhighlight-all-r1", :type "action"}
-                                                                              {:id "object-revert-r1", :type "action"}],
+                   :next-say-r3                                       {:data [{:type "set-timeout", :action "say-color-r3", :interval 100}], :type "sequence-data"},
+                   :crayon-revert-r1                                  {:type        "transition",
+                                                                       :from-params [{:param-property "target", :action-property "transition-id"}
+                                                                                     {:param-property "init-position", :action-property "to"}]},
+                   :crayon-in-right-box-r2                            {:type        "set-attribute",
+                                                                       :attr-name   "visible",
+                                                                       :attr-value  false,
+                                                                       :from-params [{:param-property "target", :action-property "target"}]},
+                   :wrong-option-r1                                   {:data [{:id "unhighlight-all-r1", :type "action"}
+                                                                              {:id "crayon-revert-r1", :type "action"}
+                                                                              {:id "wrong-answer-r1", :type "action"}],
                                                                        :type "parallel"},
-                   :handle-drag-move-r2                               {:type "action", :from-params [{:param-property "say-item", :action-property "id"}]},
+                   :correct-answer-3-r3                               {:data               [{:data [{:type "empty", :duration 0}
+                                                                                                    {:end         0.627,
+                                                                                                     :data        [],
+                                                                                                     :type        "animation-sequence",
+                                                                                                     :audio       "/upload/SIXWHSICTJUWRKRH.mp3",
+                                                                                                     :start       0,
+                                                                                                     :duration    0.627,
+                                                                                                     :phrase-text "correct"}],
+                                                                                             :type "sequence-data"}],
+                                                                       :type               "sequence-data",
+                                                                       :phrase             "Correct answer for task 3",
+                                                                       :editor-type        "dialog",
+                                                                       :phrase-description "Correct answer for task 3"},
                    :question-0-check-answers                          {:data [{:id      "question-0-question-id",
                                                                                :fail    "question-0-check-answers-wrong-answer",
                                                                                :type    "question-check",
@@ -1522,29 +1536,6 @@
                                                                        :type                "sequence-data",
                                                                        :description         "-- Description --",
                                                                        :workflow-user-input true},
-                   :clear-target-vars-r1                              {:data [{:type "set-variable", :var-name "box-yellow-r1", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-blue-r1", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-red-r1", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-purple-r1", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-orange-r1", :var-value false}
-                                                                              {:type "set-variable", :var-name "box-green-r1", :var-value false}],
-                                                                       :type "parallel"},
-                   :question-1-check-answers-correct-answer-dialog    {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type        "animation-sequence",
-                                                                                                     :audio       nil,
-                                                                                                     :phrase-text ""}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Correct answer"},
-                   :box-orange-dialog-r1                              {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
-                                                                                             :type "sequence-data"}],
-                                                                       :type               "sequence-data",
-                                                                       :phrase             "orange",
-                                                                       :unique-tag         "box",
-                                                                       :editor-type        "dialog",
-                                                                       :phrase-description "Box orange clicked"},
                    :green-color-r2                                    {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         8.85,
                                                                                                      :data        [{:end 8.75, :anim "talk", :start 7.99}],
@@ -1556,15 +1547,22 @@
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
                                                                        :phrase             "Color green",
-                                                                       :unique-tag         "item",
+                                                                       :unique-tag         "color",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Color green"},
-                   :task-2-r3                                         {:data [{:type      "set-variable",
+                   :task-2-r3                                         {:data [{:type "set-variable", :var-name "object-1", :var-value "purple-crayon-r3"}
+                                                                              {:type "set-variable", :var-name "object-2", :var-value "purple-table-r3"}
+                                                                              {:type      "set-variable",
                                                                                :var-name  "check-collide",
-                                                                               :var-value ["item-purple-r3" "box-purple-r3"]}
+                                                                               :var-value ["colliding-object-purple-crayon-r3" "colliding-purple-table-r3"]}
                                                                               {:type "set-variable", :var-name "next-task", :var-value "task-3-r3"}
+                                                                              {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-2-r3"}
                                                                               {:type "set-variable", :var-name "instruction", :var-value "instruction-2-r3"}
+                                                                              {:type "counter", :counter-id "wrong-answers-counter", :counter-action "reset"}
                                                                               {:id "instruction-2-r3", :type "action"}],
+                                                                       :type "sequence-data"},
+                   :say-color-r2                                      {:data [{:type "action", :from-params [{:param-property "say-color", :action-property "id"}]}
+                                                                              {:type "test-var-scalar", :value true, :success "next-say-r2", :var-name "say"}],
                                                                        :type "sequence-data"},
                    :instruction-3-r3                                  {:data               [{:data [{:type "empty", :duration "1000"}
                                                                                                     {:end         109.41,
@@ -1581,25 +1579,43 @@
                                                                        :phrase             "instruction-3",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Put the yellow crayon in its crayon box."},
-                   :question-1-option-click-handler                   {:data [{:id          "question-1-question-id",
-                                                                               :type        "question-pick",
-                                                                               :from-params [{:param-property "value", :action-property "value"}]}
-                                                                              {:id          "question-1-question-id",
-                                                                               :fail        {:type        "parallel-by-tag",
-                                                                                             :from-params [{:template        "inactivate-option-%-question-1-question-id",
-                                                                                                            :param-property  "value",
-                                                                                                            :action-property "tag"}]},
-                                                                               :type        "question-test",
-                                                                               :success     {:type        "parallel-by-tag",
-                                                                                             :from-params [{:template        "activate-option-%-question-1-question-id",
-                                                                                                            :param-property  "value",
-                                                                                                            :action-property "tag"}]},
-                                                                               :from-params [{:param-property "value", :action-property "value"}]}
-                                                                              {:type    "test-value",
-                                                                               :value1  "one",
-                                                                               :value2  "one",
-                                                                               :success "question-1-check-answers"}],
+                   :start-drag-r1                                     {:data [{:type        "stop-transition",
+                                                                               :from-params [{:param-property "target", :action-property "id"}]}
+                                                                              {:type "set-variable", :var-name "yellow-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "blue-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "red-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "purple-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "orange-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "green-box-selected", :var-value false}
+                                                                              {:type "set-variable", :var-name "say", :var-value true}
+                                                                              {:type "set-variable", :var-name "next-check-collide", :var-value true}
+                                                                              {:id "next-say-r1", :type "action"}
+                                                                              {:id "next-check-collide-r1", :type "action"}],
                                                                        :type "sequence-data"},
+                   :check-next-check-collide-r3                       {:type     "test-var-scalar",
+                                                                       :value    true,
+                                                                       :success  "next-check-collide-r3",
+                                                                       :var-name "next-check-collide"},
+                   :unhighlight-r1                                    {:data [{:type        "set-variable",
+                                                                               :var-value   false,
+                                                                               :from-params [{:param-property "check-variable", :action-property "var-name"}]}
+                                                                              {:type        "set-attribute",
+                                                                               :attr-name   "highlight",
+                                                                               :attr-value  false,
+                                                                               :from-params [{:param-property "transition", :action-property "target"}]}],
+                                                                       :type "sequence-data"},
+                   :check-collide-r3                                  {:data [{:fail        "unhighlight-r3",
+                                                                               :type        "test-transitions-and-pointer-collide",
+                                                                               :success     "highlight-r3",
+                                                                               :from-params [{:param-property "colliders", :action-property "transitions"}]}
+                                                                              {:id "check-next-check-collide-r3", :type "action"}],
+                                                                       :type "sequence-data"},
+                   :stop-drag-highlighted-r3                          {:fail      "wrong-answer-r3",
+                                                                       :type      "test-var-list",
+                                                                       :values    [true true],
+                                                                       :success   "correct-answer-single-r3",
+                                                                       :from-var  [{:var-name "check-collide", :action-property "var-names"}],
+                                                                       :var-names ["check-collide-1" "check-collide-2"]},
                    :correct-answer-r2                                 {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         0.111,
                                                                                                      :data        [],
@@ -1615,50 +1631,47 @@
                                                                        :phrase-description "correct answer"},
                    :finish-r3                                         {:data [{:id "finish-dialog-r3", :type "action"} {:id "finish-activity-r3", :type "action"}],
                                                                        :type "sequence-data"},
-                   :init-technical-3                                  {:data [{:id "hide-technical", :type "state", :target "item-11-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-3-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-13-r2"}
+                   :init-technical-3                                  {:data [{:id "hide-technical", :type "state", :target "orange-crayon-1-r2"}
                                                                               {:id "hide-technical", :type "state", :target "librarian-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-10-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-7-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-6-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-5-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "box-red-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "background-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "box-purple-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-12-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-2-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-9-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-0-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-4-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-17-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "box-yellow-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-1-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "box-orange-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "box-blue-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "box-green-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-16-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-15-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-8-r2"}
-                                                                              {:id "hide-technical", :type "state", :target "item-14-r2"}
-                                                                              {:id "show-technical", :type "state", :target "box-yellow-r3"}
-                                                                              {:id "show-technical", :type "state", :target "box-green-r3"}
-                                                                              {:id "show-technical", :type "state", :target "item-green-r3"}
-                                                                              {:id "show-technical", :type "state", :target "item-orange-r3"}
-                                                                              {:id "show-technical", :type "state", :target "box-red-r3"}
-                                                                              {:id "show-technical", :type "state", :target "box-orange-r3"}
-                                                                              {:id "show-technical", :type "state", :target "item-blue-r3"}
-                                                                              {:id "show-technical", :type "state", :target "background-r3"}
-                                                                              {:id "show-technical", :type "state", :target "box-blue-r3"}
+                                                                              {:id "hide-technical", :type "state", :target "red-crayon-2-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "orange-crayon-3-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-crayon-2-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "yellow-crayon-2-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "red-crayon-1-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "yellow-crayon-1-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-box-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "red-box-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-crayon-3-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-crayon-1-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "yellow-box-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "green-crayon-2-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "green-table-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "orange-table-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "green-crayon-1-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "blue-crayon-2-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-table-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "green-crayon-3-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-crayon-1-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "purple-crayon-3-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "layered-background-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "red-crayon-3-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "yellow-crayon-3-r2"}
+                                                                              {:id "hide-technical", :type "state", :target "orange-crayon-2-r2"}
+                                                                              {:id "show-technical", :type "state", :target "red-box-r3"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-crayon-r3"}
+                                                                              {:id "show-technical", :type "state", :target "green-table-r3"}
+                                                                              {:id "show-technical", :type "state", :target "purple-table-r3"}
+                                                                              {:id "show-technical", :type "state", :target "blue-box-r3"}
+                                                                              {:id "show-technical", :type "state", :target "orange-crayon-r3"}
+                                                                              {:id "show-technical", :type "state", :target "yellow-box-r3"}
+                                                                              {:id "show-technical", :type "state", :target "red-crayon-r3"}
+                                                                              {:id "show-technical", :type "state", :target "green-crayon-r3"}
+                                                                              {:id "show-technical", :type "state", :target "layered-background-r3"}
                                                                               {:id "show-technical", :type "state", :target "librarian-r3"}
-                                                                              {:id "show-technical", :type "state", :target "box-purple-r3"}
-                                                                              {:id "show-technical", :type "state", :target "item-yellow-r3"}
-                                                                              {:id "show-technical", :type "state", :target "item-purple-r3"}
-                                                                              {:id "show-technical", :type "state", :target "item-red-r3"}],
+                                                                              {:id "show-technical", :type "state", :target "blue-crayon-r3"}
+                                                                              {:id "show-technical", :type "state", :target "purple-crayon-r3"}
+                                                                              {:id "show-technical", :type "state", :target "orange-table-r3"}],
                                                                        :type "parallel"},
-                   :object-revert-r2                                  {:type        "transition",
-                                                                       :from-params [{:param-property "target", :action-property "transition-id"}
-                                                                                     {:param-property "init-position", :action-property "to"}]},
                    :question-0-option-voice-over-voice-over-option-4  {:data               [{:data [{:type "empty", :duration 0}
                                                                                                     {:end         73.71,
                                                                                                      :data        [{:end   73.67,
@@ -1674,194 +1687,131 @@
                                                                        :type               "sequence-data",
                                                                        :editor-type        "dialog",
                                                                        :phrase-description "Option \"Option 4\" voice-over"},
+                   :crayon-revert-r2                                  {:type        "transition",
+                                                                       :from-params [{:param-property "target", :action-property "transition-id"}
+                                                                                     {:param-property "init-position", :action-property "to"}]},
                    :unhighlight-all-r1                                {:data [{:type       "set-attribute",
-                                                                               :target     "box-yellow-r1",
+                                                                               :target     "yellow-box-r1",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-blue-r1",
+                                                                               :target     "blue-box-r1",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-red-r1",
+                                                                               :target     "red-box-r1",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-purple-r1",
+                                                                               :target     "purple-box-r1",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-orange-r1",
+                                                                               :target     "orange-box-r1",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}
                                                                               {:type       "set-attribute",
-                                                                               :target     "box-green-r1",
+                                                                               :target     "green-box-r1",
                                                                                :attr-name  "highlight",
                                                                                :attr-value false}],
                                                                        :type "parallel"},
                    :intermediate-action-3                             {:data [{:id "init-technical-3", :type "action"}
                                                                               {:id "start-activity-r3", :type "action"}],
                                                                        :type "sequence-data"},
-                   :box-yellow-dialog-r1                              {:data               [{:data [{:type "empty", :duration 0}
-                                                                                                    {:type "animation-sequence", :audio nil, :phrase-text "New action"}],
+                   :correct-answer-1-r3                               {:data               [{:data [{:type "empty", :duration 0}
+                                                                                                    {:end         0.627,
+                                                                                                     :data        [],
+                                                                                                     :type        "animation-sequence",
+                                                                                                     :audio       "/upload/SIXWHSICTJUWRKRH.mp3",
+                                                                                                     :start       0,
+                                                                                                     :duration    0.627,
+                                                                                                     :phrase-text "correct"}],
                                                                                              :type "sequence-data"}],
                                                                        :type               "sequence-data",
-                                                                       :phrase             "yellow",
-                                                                       :unique-tag         "box",
+                                                                       :phrase             "Correct answer for task 1",
                                                                        :editor-type        "dialog",
-                                                                       :phrase-description "Box yellow clicked"},
-                   :task-1-r3                                         {:data [{:type "set-variable", :var-name "check-collide", :var-value ["item-red-r3" "box-red-r3"]}
-                                                                              {:type "set-variable", :var-name "next-task", :var-value "task-2-r3"}
-                                                                              {:type "set-variable", :var-name "instruction", :var-value "instruction-1-r3"}
-                                                                              {:id "instruction-1-r3", :type "action"}],
-                                                                       :type "sequence-data"}},
-   :objects       {:item-11-r2                                        {:y           333,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/purple_crayons.png",
-                                                                       :actions     {:click         {:id "purple-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-purple-r2",
-                                                                                                              :target        "item-11-r2",
-                                                                                                              :init-position {:x 1418, :y 333, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "purple-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-11-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1418,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :box-green-r1                                      {:y          810,
-                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :transition "box-green-r1",
-                                                                       :scale      0.65,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/green_box.png",
-                                                                       :actions    {:click {:id "box-green-dialog-r1", :on "click", :type "action"}},
-                                                                       :x          1575,
-                                                                       :visible    false},
-                   :blue-table-r0                                     {:x      330,
+                                                                       :phrase-description "Correct answer for task 1"}},
+   :objects       {:blue-table-r0                                     {:x      330,
                                                                        :y      667,
                                                                        :src    "/raw/img/categorize/blue_table.png",
                                                                        :type   "image",
                                                                        :scale  0.8,
                                                                        :states {:hide-technical {:visible false}, :show-technical {:visible true}}},
-                   :item-3-r2                                         {:y           873,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/orange_crayons.png",
-                                                                       :actions     {:click         {:id "orange-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-orange-r2",
-                                                                                                              :target        "item-3-r2",
-                                                                                                              :init-position {:x 746, :y 873, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "orange-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-3-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           746,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :box-yellow-r3                                     {:y          628,
-                                                                       :states     {:highlighted     {:highlight true},
-                                                                                    :hide-technical  {:visible false},
-                                                                                    :show-technical  {:visible true},
-                                                                                    :not-highlighted {:highlight false}},
-                                                                       :transition "box-yellow-r3",
-                                                                       :width      253,
+                   :orange-crayon-1-r2                                {:y         850,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/orange_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "orange-table-r2",
+                                                                                                         :target         "orange-crayon-1-r2",
+                                                                                                         :init-position  {:x 746, :y 850, :duration 1},
+                                                                                                         :check-variable "orange-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "orange-crayon-1-r2",
+                                                                                                         :say-color "orange-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         746,
+                                                                       :visible   false},
+                   :yellow-crayon-1-r1                                {:y          521,
+                                                                       :rotation   -129,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "yellow-crayon-1-r1",
                                                                        :type       "image",
-                                                                       :src        "/raw/img/categorize/yellow_box_small.png",
-                                                                       :x          943,
-                                                                       :visible    false,
-                                                                       :height     253},
-                   :item-13-r2                                        {:y           981,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/red_crayons.png",
-                                                                       :actions     {:click         {:id "red-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-red-r2",
-                                                                                                              :target        "item-13-r2",
-                                                                                                              :init-position {:x 1618, :y 981, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "red-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-13-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1618,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
+                                                                       :src        "/raw/img/categorize/yellow_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "yellow-crayon-1-r1",
+                                                                                                          :init-position  {:x 145, :y 521, :duration 1},
+                                                                                                          :check-variable "yellow-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "yellow-crayon-1-r1",
+                                                                                                          :say-color    "yellow-color-r1",
+                                                                                                          :crayon-color "yellow"}}},
+                                                                       :draggable  true,
+                                                                       :x          145,
+                                                                       :visible    false},
+                   :red-box-r3                                        {:x       500,
+                                                                       :y       506,
+                                                                       :src     "/raw/img/categorize/red_box_small.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :question-0-options-option-0-voice-over-icon       {:y          24,
+                                                                       :states     {:active {:fill "#FFFFFF"}, :default {:fill "#000000"}},
+                                                                       :fill       "#000000",
+                                                                       :width      41,
+                                                                       :type       "svg-path",
+                                                                       :x          19.5,
+                                                                       :scene-name "letter-tutorial-trace",
+                                                                       :height     32,
+                                                                       :data       "M20.86 0.199576C20.5352 0.0590597 20.1789 0.00723956 19.8276 0.0494034C19.4762 0.0915673 19.1423 0.226205 18.86 0.439575L9.3 7.99958H2C1.46957 7.99958 0.960859 8.21029 0.585786 8.58536C0.210714 8.96043 0 9.46914 0 9.99957V21.9996C0 22.53 0.210714 23.0387 0.585786 23.4138C0.960859 23.7889 1.46957 23.9996 2 23.9996H9.3L18.76 31.5596C19.1119 31.8419 19.5489 31.997 20 31.9996C20.2987 32.0045 20.5941 31.9358 20.86 31.7996C21.2003 31.6375 21.4879 31.3825 21.6897 31.064C21.8914 30.7455 21.9989 30.3765 22 29.9996V1.99958C21.9989 1.6226 21.8914 1.25361 21.6897 0.935133C21.4879 0.616658 21.2003 0.361673 20.86 0.199576ZM18 25.8396L11.24 20.4396C10.8881 20.1573 10.4511 20.0022 10 19.9996H4V11.9996H10C10.4511 11.997 10.8881 11.8419 11.24 11.5596L18 6.15957V25.8396ZM35.32 4.67958C34.9434 4.30297 34.4326 4.09139 33.9 4.09139C33.3674 4.09139 32.8566 4.30297 32.48 4.67958C32.1034 5.05618 31.8918 5.56697 31.8918 6.09958C31.8918 6.63218 32.1034 7.14297 32.48 7.51958C33.6577 8.69545 34.5779 10.1034 35.1823 11.6541C35.7866 13.2047 36.0617 14.8641 35.9902 16.5268C35.9188 18.1895 35.5022 19.8192 34.7671 21.3122C34.0319 22.8053 32.9943 24.1291 31.72 25.1996C31.4105 25.4642 31.1892 25.8169 31.0856 26.2107C30.982 26.6045 31.001 27.0205 31.1402 27.4032C31.2793 27.7858 31.5319 28.1169 31.8643 28.3521C32.1966 28.5874 32.5929 28.7156 33 28.7196C33.4673 28.7205 33.9202 28.5577 34.28 28.2596C35.9819 26.8342 37.3685 25.0702 38.3517 23.0798C39.3349 21.0895 39.8932 18.9163 39.991 16.6985C40.0888 14.4807 39.7241 12.2668 38.9199 10.1977C38.1157 8.12848 36.8898 6.24928 35.32 4.67958ZM29.66 10.3396C29.4735 10.1531 29.2521 10.0052 29.0085 9.90425C28.7649 9.80333 28.5037 9.75139 28.24 9.75139C27.9763 9.75139 27.7152 9.80333 27.4715 9.90425C27.2279 10.0052 27.0065 10.1531 26.82 10.3396C26.6335 10.5261 26.4856 10.7474 26.3847 10.9911C26.2838 11.2347 26.2318 11.4959 26.2318 11.7596C26.2318 12.0233 26.2838 12.2844 26.3847 12.5281C26.4856 12.7717 26.6335 12.9931 26.82 13.1796C27.5712 13.9263 27.9955 14.9404 28 15.9996C28.0005 16.5823 27.8736 17.158 27.6284 17.6866C27.3831 18.2152 27.0253 18.6837 26.58 19.0596C26.3775 19.2275 26.2101 19.4337 26.0874 19.6664C25.9647 19.8991 25.8891 20.1537 25.8649 20.4156C25.8408 20.6776 25.8685 20.9417 25.9466 21.1929C26.0247 21.4441 26.1516 21.6775 26.32 21.8796C26.4893 22.0806 26.6966 22.2464 26.93 22.3672C27.1634 22.4881 27.4184 22.5618 27.6803 22.5841C27.9422 22.6064 28.2059 22.5769 28.4564 22.4972C28.7069 22.4174 28.9392 22.2891 29.14 22.1196C30.0342 21.3698 30.7536 20.4335 31.2477 19.3763C31.7417 18.319 31.9985 17.1665 32 15.9996C31.9887 13.8798 31.1489 11.8485 29.66 10.3396Z"},
+                   :question-0-options-option-0-text                  {:y              50,
+                                                                       :vertical-align "middle",
+                                                                       :font-size      48,
+                                                                       :word-wrap      true,
+                                                                       :width          720,
+                                                                       :editable?      {:select true},
+                                                                       :type           "text",
+                                                                       :actions        {:click {:id         "question-0-option-click-handler",
+                                                                                                :on         "click",
+                                                                                                :type       "action",
+                                                                                                :params     {:value "option-1"},
+                                                                                                :unique-tag "question-action"}},
+                                                                       :chunks         [{:end 4, :start 0}
+                                                                                        {:end 8, :start 5}
+                                                                                        {:end 13, :start 9}
+                                                                                        {:end 18, :start 14}],
+                                                                       :x              130,
+                                                                       :text           "They are both red."},
                    :question-0-options-option-2-voice-over-icon       {:y          24,
                                                                        :states     {:active {:fill "#FFFFFF"}, :default {:fill "#000000"}},
                                                                        :fill       "#000000",
@@ -1871,21 +1821,6 @@
                                                                        :scene-name "letter-tutorial-trace",
                                                                        :height     32,
                                                                        :data       "M20.86 0.199576C20.5352 0.0590597 20.1789 0.00723956 19.8276 0.0494034C19.4762 0.0915673 19.1423 0.226205 18.86 0.439575L9.3 7.99958H2C1.46957 7.99958 0.960859 8.21029 0.585786 8.58536C0.210714 8.96043 0 9.46914 0 9.99957V21.9996C0 22.53 0.210714 23.0387 0.585786 23.4138C0.960859 23.7889 1.46957 23.9996 2 23.9996H9.3L18.76 31.5596C19.1119 31.8419 19.5489 31.997 20 31.9996C20.2987 32.0045 20.5941 31.9358 20.86 31.7996C21.2003 31.6375 21.4879 31.3825 21.6897 31.064C21.8914 30.7455 21.9989 30.3765 22 29.9996V1.99958C21.9989 1.6226 21.8914 1.25361 21.6897 0.935133C21.4879 0.616658 21.2003 0.361673 20.86 0.199576ZM18 25.8396L11.24 20.4396C10.8881 20.1573 10.4511 20.0022 10 19.9996H4V11.9996H10C10.4511 11.997 10.8881 11.8419 11.24 11.5596L18 6.15957V25.8396ZM35.32 4.67958C34.9434 4.30297 34.4326 4.09139 33.9 4.09139C33.3674 4.09139 32.8566 4.30297 32.48 4.67958C32.1034 5.05618 31.8918 5.56697 31.8918 6.09958C31.8918 6.63218 32.1034 7.14297 32.48 7.51958C33.6577 8.69545 34.5779 10.1034 35.1823 11.6541C35.7866 13.2047 36.0617 14.8641 35.9902 16.5268C35.9188 18.1895 35.5022 19.8192 34.7671 21.3122C34.0319 22.8053 32.9943 24.1291 31.72 25.1996C31.4105 25.4642 31.1892 25.8169 31.0856 26.2107C30.982 26.6045 31.001 27.0205 31.1402 27.4032C31.2793 27.7858 31.5319 28.1169 31.8643 28.3521C32.1966 28.5874 32.5929 28.7156 33 28.7196C33.4673 28.7205 33.9202 28.5577 34.28 28.2596C35.9819 26.8342 37.3685 25.0702 38.3517 23.0798C39.3349 21.0895 39.8932 18.9163 39.991 16.6985C40.0888 14.4807 39.7241 12.2668 38.9199 10.1977C38.1157 8.12848 36.8898 6.24928 35.32 4.67958ZM29.66 10.3396C29.4735 10.1531 29.2521 10.0052 29.0085 9.90425C28.7649 9.80333 28.5037 9.75139 28.24 9.75139C27.9763 9.75139 27.7152 9.80333 27.4715 9.90425C27.2279 10.0052 27.0065 10.1531 26.82 10.3396C26.6335 10.5261 26.4856 10.7474 26.3847 10.9911C26.2838 11.2347 26.2318 11.4959 26.2318 11.7596C26.2318 12.0233 26.2838 12.2844 26.3847 12.5281C26.4856 12.7717 26.6335 12.9931 26.82 13.1796C27.5712 13.9263 27.9955 14.9404 28 15.9996C28.0005 16.5823 27.8736 17.158 27.6284 17.6866C27.3831 18.2152 27.0253 18.6837 26.58 19.0596C26.3775 19.2275 26.2101 19.4337 26.0874 19.6664C25.9647 19.8991 25.8891 20.1537 25.8649 20.4156C25.8408 20.6776 25.8685 20.9417 25.9466 21.1929C26.0247 21.4441 26.1516 21.6775 26.32 21.8796C26.4893 22.0806 26.6966 22.2464 26.93 22.3672C27.1634 22.4881 27.4184 22.5618 27.6803 22.5841C27.9422 22.6064 28.2059 22.5769 28.4564 22.4972C28.7069 22.4174 28.9392 22.2891 29.14 22.1196C30.0342 21.3698 30.7536 20.4335 31.2477 19.3763C31.7417 18.319 31.9985 17.1665 32 15.9996C31.9887 13.8798 31.1489 11.8485 29.66 10.3396Z"},
-                   :question-1-options-option-2-substrate             {:y             0,
-                                                                       :states        {:active {:border-color 45823}, :default {:border-color 0}},
-                                                                       :fill          16777215,
-                                                                       :width         250,
-                                                                       :type          "rectangle",
-                                                                       :actions       {:click {:id         "question-1-option-click-handler",
-                                                                                               :on         "click",
-                                                                                               :type       "action",
-                                                                                               :params     {:value "ok"},
-                                                                                               :unique-tag "question-action"}},
-                                                                       :border-width  2,
-                                                                       :border-color  0,
-                                                                       :x             0,
-                                                                       :border-radius 125,
-                                                                       :height        250},
                    :librarian-r2                                      {:y         1000,
                                                                        :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
                                                                        :speed     0.3,
@@ -1901,229 +1836,312 @@
                                                                        :visible   false,
                                                                        :skin      "lion",
                                                                        :height    717},
-                   :item-10-r2                                        {:y           259,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/purple_crayons.png",
-                                                                       :actions     {:click         {:id "purple-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-purple-r2",
-                                                                                                              :target        "item-10-r2",
-                                                                                                              :init-position {:x 1271, :y 259, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "purple-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-10-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1271,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :box-red-r1                                        {:y          810,
+                   :red-crayon-2-r2                                   {:y         958,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/red_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "red-box-r2",
+                                                                                                         :target         "red-crayon-2-r2",
+                                                                                                         :init-position  {:x 1618, :y 958, :duration 1},
+                                                                                                         :check-variable "red-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "red-crayon-2-r2", :say-color "red-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1618,
+                                                                       :visible   false},
+                   :question-0-options-option-0-voice-over-background {:x             0,
+                                                                       :y             0,
+                                                                       :fill          16777215,
+                                                                       :type          "rectangle",
+                                                                       :width         80,
+                                                                       :height        80,
+                                                                       :states        {:active  {:fill 45823},
+                                                                                       :default {:fill 16777215}},
+                                                                       :border-radius 40},
+                   :yellow-crayon-r3                                  {:y         139,
+                                                                       :rotation  -90,
+                                                                       :states    {:init-position  {:x 154, :y 139, :visible true},
+                                                                                   :hide-technical {:visible false},
+                                                                                   :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/yellow_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "stop-drag-hide-r3",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:self          "yellow-crayon-r3",
+                                                                                                         :target        "yellow-box-r3",
+                                                                                                         :colliders     ["yellow-box-r3"
+                                                                                                                         "blue-box-r3"
+                                                                                                                         "red-box-r3"
+                                                                                                                         "purple-table-r3"
+                                                                                                                         "orange-table-r3"
+                                                                                                                         "green-table-r3"],
+                                                                                                         :init-position {:x 154, :y 139, :duration 1}}},
+                                                                                   :drag-start {:id     "start-drag-r3",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:self      "yellow-crayon-r3",
+                                                                                                         :target    "yellow-box-r3",
+                                                                                                         :colliders ["yellow-box-r3"
+                                                                                                                     "blue-box-r3"
+                                                                                                                     "red-box-r3"
+                                                                                                                     "purple-table-r3"
+                                                                                                                     "orange-table-r3"
+                                                                                                                     "green-table-r3"],
+                                                                                                         :say-color "yellow-color-r3"}}},
+                                                                       :draggable true,
+                                                                       :x         154,
+                                                                       :visible   false},
+                   :green-table-r3                                    {:x       330,
+                                                                       :y       667,
+                                                                       :src     "/raw/img/categorize/green_table.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :orange-crayon-3-r1                                {:y          144,
+                                                                       :rotation   135,
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :transition "box-red-r1",
-                                                                       :scale      0.65,
+                                                                       :transition "orange-crayon-3-r1",
                                                                        :type       "image",
-                                                                       :src        "/raw/img/categorize/red_box.png",
-                                                                       :actions    {:click {:id "box-red-dialog-r1", :on "click", :type "action"}},
-                                                                       :x          675,
+                                                                       :src        "/raw/img/categorize/orange_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "orange-crayon-3-r1",
+                                                                                                          :init-position  {:x 1753, :y 144, :duration 1},
+                                                                                                          :check-variable "orange-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "orange-crayon-3-r1",
+                                                                                                          :say-color    "orange-color-r1",
+                                                                                                          :crayon-color "orange"}}},
+                                                                       :draggable  true,
+                                                                       :x          1753,
                                                                        :visible    false},
-                   :item-7-r2                                         {:y           149,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/yellow_crayons.png",
-                                                                       :actions     {:click         {:id "yellow-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-yellow-r2",
-                                                                                                              :target        "item-7-r2",
-                                                                                                              :init-position {:x 1171, :y 149, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "yellow-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-7-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1171,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-8-r1                                         {:y           106,
-                                                                       :rotation    -52,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/red_crayons.png",
-                                                                       :actions     {:click         {:id "red-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-red-r1",
-                                                                                                              :target        "item-8-r1",
-                                                                                                              :init-position {:x 1097, :y 106, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "red-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-8-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1097,
-                                                                       :visible     false},
-                   :box-blue-r1                                       {:y          810,
+                   :purple-table-r3                                   {:x       1120,
+                                                                       :y       652,
+                                                                       :src     "/raw/img/categorize/purple_table.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :orange-crayon-1-r1                                {:y          178,
+                                                                       :rotation   37,
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :transition "box-blue-r1",
-                                                                       :scale      0.65,
+                                                                       :transition "orange-crayon-1-r1",
                                                                        :type       "image",
-                                                                       :src        "/raw/img/categorize/blue_box.png",
-                                                                       :actions    {:click {:id "box-blue-dialog-r1", :on "click", :type "action"}},
-                                                                       :x          375,
+                                                                       :src        "/raw/img/categorize/orange_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "orange-crayon-1-r1",
+                                                                                                          :init-position  {:x 134, :y 178, :duration 1},
+                                                                                                          :check-variable "orange-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "orange-crayon-1-r1",
+                                                                                                          :say-color    "orange-color-r1",
+                                                                                                          :crayon-color "orange"}}},
+                                                                       :draggable  true,
+                                                                       :x          134,
                                                                        :visible    false},
-                   :item-6-r2                                         {:y           714,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/yellow_crayons.png",
-                                                                       :actions     {:click         {:id "yellow-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-yellow-r2",
-                                                                                                              :target        "item-6-r2",
-                                                                                                              :init-position {:x 764, :y 714, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "yellow-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-6-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           764,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-5-r2                                         {:y           261,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/orange_crayons.png",
-                                                                       :actions     {:click         {:id "orange-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-orange-r2",
-                                                                                                              :target        "item-5-r2",
-                                                                                                              :init-position {:x 317, :y 261, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "orange-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-5-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           317,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :question-1-task-text-group-button-icon            {:y          24,
-                                                                       :states     {:active {:fill "#FFFFFF"}, :default {:fill "#000000"}},
-                                                                       :fill       "#000000",
-                                                                       :width      41,
-                                                                       :type       "svg-path",
-                                                                       :x          19.5,
-                                                                       :scene-name "letter-tutorial-trace",
-                                                                       :height     32,
-                                                                       :data       "M20.86 0.199576C20.5352 0.0590597 20.1789 0.00723956 19.8276 0.0494034C19.4762 0.0915673 19.1423 0.226205 18.86 0.439575L9.3 7.99958H2C1.46957 7.99958 0.960859 8.21029 0.585786 8.58536C0.210714 8.96043 0 9.46914 0 9.99957V21.9996C0 22.53 0.210714 23.0387 0.585786 23.4138C0.960859 23.7889 1.46957 23.9996 2 23.9996H9.3L18.76 31.5596C19.1119 31.8419 19.5489 31.997 20 31.9996C20.2987 32.0045 20.5941 31.9358 20.86 31.7996C21.2003 31.6375 21.4879 31.3825 21.6897 31.064C21.8914 30.7455 21.9989 30.3765 22 29.9996V1.99958C21.9989 1.6226 21.8914 1.25361 21.6897 0.935133C21.4879 0.616658 21.2003 0.361673 20.86 0.199576ZM18 25.8396L11.24 20.4396C10.8881 20.1573 10.4511 20.0022 10 19.9996H4V11.9996H10C10.4511 11.997 10.8881 11.8419 11.24 11.5596L18 6.15957V25.8396ZM35.32 4.67958C34.9434 4.30297 34.4326 4.09139 33.9 4.09139C33.3674 4.09139 32.8566 4.30297 32.48 4.67958C32.1034 5.05618 31.8918 5.56697 31.8918 6.09958C31.8918 6.63218 32.1034 7.14297 32.48 7.51958C33.6577 8.69545 34.5779 10.1034 35.1823 11.6541C35.7866 13.2047 36.0617 14.8641 35.9902 16.5268C35.9188 18.1895 35.5022 19.8192 34.7671 21.3122C34.0319 22.8053 32.9943 24.1291 31.72 25.1996C31.4105 25.4642 31.1892 25.8169 31.0856 26.2107C30.982 26.6045 31.001 27.0205 31.1402 27.4032C31.2793 27.7858 31.5319 28.1169 31.8643 28.3521C32.1966 28.5874 32.5929 28.7156 33 28.7196C33.4673 28.7205 33.9202 28.5577 34.28 28.2596C35.9819 26.8342 37.3685 25.0702 38.3517 23.0798C39.3349 21.0895 39.8932 18.9163 39.991 16.6985C40.0888 14.4807 39.7241 12.2668 38.9199 10.1977C38.1157 8.12848 36.8898 6.24928 35.32 4.67958ZM29.66 10.3396C29.4735 10.1531 29.2521 10.0052 29.0085 9.90425C28.7649 9.80333 28.5037 9.75139 28.24 9.75139C27.9763 9.75139 27.7152 9.80333 27.4715 9.90425C27.2279 10.0052 27.0065 10.1531 26.82 10.3396C26.6335 10.5261 26.4856 10.7474 26.3847 10.9911C26.2838 11.2347 26.2318 11.4959 26.2318 11.7596C26.2318 12.0233 26.2838 12.2844 26.3847 12.5281C26.4856 12.7717 26.6335 12.9931 26.82 13.1796C27.5712 13.9263 27.9955 14.9404 28 15.9996C28.0005 16.5823 27.8736 17.158 27.6284 17.6866C27.3831 18.2152 27.0253 18.6837 26.58 19.0596C26.3775 19.2275 26.2101 19.4337 26.0874 19.6664C25.9647 19.8991 25.8891 20.1537 25.8649 20.4156C25.8408 20.6776 25.8685 20.9417 25.9466 21.1929C26.0247 21.4441 26.1516 21.6775 26.32 21.8796C26.4893 22.0806 26.6966 22.2464 26.93 22.3672C27.1634 22.4881 27.4184 22.5618 27.6803 22.5841C27.9422 22.6064 28.2059 22.5769 28.4564 22.4972C28.7069 22.4174 28.9392 22.2891 29.14 22.1196C30.0342 21.3698 30.7536 20.4335 31.2477 19.3763C31.7417 18.319 31.9985 17.1665 32 15.9996C31.9887 13.8798 31.1489 11.8485 29.66 10.3396Z"},
-                   :question-0-question-id--option-2-text             {:y              50,
+                   :red-box-r1                                        {:x       675,
+                                                                       :y       810,
+                                                                       :src     "/raw/img/categorize/red_box.png",
+                                                                       :type    "image",
+                                                                       :scale   0.65,
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :purple-crayon-1-r1                                {:y          521,
+                                                                       :rotation   -39,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "purple-crayon-1-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/purple_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "purple-crayon-1-r1",
+                                                                                                          :init-position  {:x 145, :y 521, :duration 1},
+                                                                                                          :check-variable "purple-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "purple-crayon-1-r1",
+                                                                                                          :say-color    "purple-color-r1",
+                                                                                                          :crayon-color "purple"}}},
+                                                                       :draggable  true,
+                                                                       :x          145,
+                                                                       :visible    false},
+                   :orange-crayon-3-r2                                {:y         238,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/orange_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "orange-table-r2",
+                                                                                                         :target         "orange-crayon-3-r2",
+                                                                                                         :init-position  {:x 317, :y 238, :duration 1},
+                                                                                                         :check-variable "orange-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "orange-crayon-3-r2",
+                                                                                                         :say-color "orange-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         317,
+                                                                       :visible   false},
+                   :blue-box-r3                                       {:x       1352,
+                                                                       :y       490,
+                                                                       :src     "/raw/img/categorize/blue_box_small.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :purple-crayon-2-r2                                {:y         236,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/purple_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "purple-table-r2",
+                                                                                                         :target         "purple-crayon-2-r2",
+                                                                                                         :init-position  {:x 1271, :y 236, :duration 1},
+                                                                                                         :check-variable "purple-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "purple-crayon-2-r2",
+                                                                                                         :say-color "purple-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1271,
+                                                                       :visible   false},
+                   :green-box-r1                                      {:x       1575,
+                                                                       :y       810,
+                                                                       :src     "/raw/img/categorize/green_box.png",
+                                                                       :type    "image",
+                                                                       :scale   0.65,
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :red-crayon-3-r1                                   {:y          106,
+                                                                       :rotation   -52,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "red-crayon-3-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/red_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "red-crayon-3-r1",
+                                                                                                          :init-position  {:x 1097, :y 106, :duration 1},
+                                                                                                          :check-variable "red-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "red-crayon-3-r1",
+                                                                                                          :say-color    "red-color-r1",
+                                                                                                          :crayon-color "red"}}},
+                                                                       :draggable  true,
+                                                                       :x          1097,
+                                                                       :visible    false},
+                   :question-0-options-option-0-voice-over            {:x        0,
+                                                                       :y        0,
+                                                                       :type     "group",
+                                                                       :actions  {:click {:id         "question-0-option-voice-over",
+                                                                                          :on         "click",
+                                                                                          :type       "action",
+                                                                                          :params     {:value "option-1"},
+                                                                                          :unique-tag "question-action"}},
+                                                                       :children ["question-0-options-option-0-voice-over-background"
+                                                                                  "question-0-options-option-0-voice-over-icon"]},
+                   :question-0-background                             {:x           0,
+                                                                       :y           412.5286478227654,
+                                                                       :fill        16753409,
+                                                                       :type        "rectangle",
+                                                                       :width       1920,
+                                                                       :height      667.4713521772346,
+                                                                       :object-name "question-0-background"},
+                   :yellow-crayon-2-r2                                {:y         126,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/yellow_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "yellow-box-r2",
+                                                                                                         :target         "yellow-crayon-2-r2",
+                                                                                                         :init-position  {:x 1171, :y 126, :duration 1},
+                                                                                                         :check-variable "yellow-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "yellow-crayon-2-r2",
+                                                                                                         :say-color "yellow-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1171,
+                                                                       :visible   false},
+                   :orange-crayon-r3                                  {:y         914,
+                                                                       :rotation  -90,
+                                                                       :states    {:init-position  {:x 1495, :y 914},
+                                                                                   :hide-technical {:visible false},
+                                                                                   :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/orange_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "stop-drag-hide-r3",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:self          "orange-crayon-r3",
+                                                                                                         :target        "orange-table-r3",
+                                                                                                         :colliders     ["yellow-box-r3"
+                                                                                                                         "blue-box-r3"
+                                                                                                                         "red-box-r3"
+                                                                                                                         "purple-table-r3"
+                                                                                                                         "orange-table-r3"
+                                                                                                                         "green-table-r3"],
+                                                                                                         :init-position {:x 1495, :y 914, :duration 1}}},
+                                                                                   :drag-start {:id     "start-drag-r3",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:self      "orange-crayon-r3",
+                                                                                                         :target    "orange-table-r3",
+                                                                                                         :colliders ["yellow-box-r3"
+                                                                                                                     "blue-box-r3"
+                                                                                                                     "red-box-r3"
+                                                                                                                     "purple-table-r3"
+                                                                                                                     "orange-table-r3"
+                                                                                                                     "green-table-r3"],
+                                                                                                         :say-color "orange-color-r3"}}},
+                                                                       :draggable true,
+                                                                       :x         1495,
+                                                                       :visible   false},
+                   :background-r1                                     {:src     "/raw/img/categorize/background.png",
+                                                                       :type    "background",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :yellow-box-r3                                     {:x       943,
+                                                                       :y       628,
+                                                                       :src     "/raw/img/categorize/yellow_box_small.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :question-0-options-option-1-text                  {:y              50,
                                                                        :vertical-align "middle",
                                                                        :font-size      48,
                                                                        :word-wrap      true,
@@ -2135,78 +2153,98 @@
                                                                                                 :type       "action",
                                                                                                 :params     {:value "option-2"},
                                                                                                 :unique-tag "question-action"}},
+                                                                       :chunks         [{:end 4, :start 0}
+                                                                                        {:end 8, :start 5}
+                                                                                        {:end 13, :start 9}
+                                                                                        {:end 21, :start 14}
+                                                                                        {:end 25, :start 22}
+                                                                                        {:end 29, :start 26}
+                                                                                        {:end 33, :start 30}
+                                                                                        {:end 36, :start 34}
+                                                                                        {:end 43, :start 37}],
                                                                        :x              130,
-                                                                       :text           "Option 2"},
-                   :box-green-r3                                      {:y          667,
-                                                                       :states     {:highlighted     {:highlight true},
-                                                                                    :hide-technical  {:visible false},
-                                                                                    :show-technical  {:visible true},
-                                                                                    :not-highlighted {:highlight false}},
-                                                                       :transition "box-green-r3",
-                                                                       :width      253,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/green_table.png",
-                                                                       :x          330,
-                                                                       :visible    false,
-                                                                       :height     253},
-                   :box-red-r2                                        {:x          1352,
-                                                                       :y          490,
-                                                                       :src        "/raw/img/categorize/red_box_small.png",
-                                                                       :type       "image",
+                                                                       :text           "They are both crayons you can use to color."},
+                   :red-crayon-1-r2                                   {:y         500,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/red_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "red-box-r2",
+                                                                                                         :target         "red-crayon-1-r2",
+                                                                                                         :init-position  {:x 924, :y 500, :duration 1},
+                                                                                                         :check-variable "red-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "red-crayon-1-r2", :say-color "red-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         924,
+                                                                       :visible   false},
+                   :yellow-crayon-1-r2                                {:y         691,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/yellow_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "yellow-box-r2",
+                                                                                                         :target         "yellow-crayon-1-r2",
+                                                                                                         :init-position  {:x 764, :y 691, :duration 1},
+                                                                                                         :check-variable "yellow-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "yellow-crayon-1-r2",
+                                                                                                         :say-color "yellow-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         764,
+                                                                       :visible   false},
+                   :yellow-table-r0                                   {:x      745,
+                                                                       :y      773,
+                                                                       :src    "/raw/img/categorize/yellow_table.png",
+                                                                       :type   "image",
+                                                                       :scale  0.8,
+                                                                       :states {:hide-technical {:visible false}, :show-technical {:visible true}}},
+                   :blue-box-r2                                       {:x       943,
+                                                                       :y       628,
+                                                                       :src     "/raw/img/categorize/blue_box_small.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :red-crayon-2-r1                                   {:y          387,
+                                                                       :rotation   -69,
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :actions    {:click {:id "box-red-dialog-r2", :on "click", :type "action"}},
-                                                                       :visible    false,
-                                                                       :transition "box-red-r2"},
-                   :background-r2                                     {:type       "layered-background",
-                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :surface    {:src "/raw/img/categorize/02.png"},
-                                                                       :visible    false,
-                                                                       :background {:src "/raw/img/categorize/01.png"},
-                                                                       :decoration {:src "/raw/img/categorize/03.png"}},
-                   :item-9-r1                                         {:y           178,
-                                                                       :rotation    37,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/orange_crayons.png",
-                                                                       :actions     {:click         {:id "orange-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-orange-r1",
-                                                                                                              :target        "item-9-r1",
-                                                                                                              :init-position {:x 134, :y 178, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "orange-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-9-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           134,
-                                                                       :visible     false},
-                   :question-1-task-text-group-button-background      {:x             0,
-                                                                       :y             0,
-                                                                       :fill          16777215,
-                                                                       :type          "rectangle",
-                                                                       :width         80,
-                                                                       :height        80,
-                                                                       :states        {:active {:fill 45823}, :default {:fill 16777215}},
-                                                                       :border-radius 40},
-                   :question-0-question-id--option-4-text             {:y              50,
+                                                                       :transition "red-crayon-2-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/red_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "red-crayon-2-r1",
+                                                                                                          :init-position  {:x 736, :y 387, :duration 1},
+                                                                                                          :check-variable "red-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "red-crayon-2-r1",
+                                                                                                          :say-color    "red-color-r1",
+                                                                                                          :crayon-color "red"}}},
+                                                                       :draggable  true,
+                                                                       :x          736,
+                                                                       :visible    false},
+                   :red-table-r0                                      {:x      1160,
+                                                                       :y      652,
+                                                                       :src    "/raw/img/categorize/red_table.png",
+                                                                       :type   "image",
+                                                                       :scale  0.8,
+                                                                       :states {:hide-technical {:visible false}, :show-technical {:visible true}}},
+                   :question-0-options-option-3-text                  {:y              50,
                                                                        :vertical-align "middle",
                                                                        :font-size      48,
                                                                        :word-wrap      true,
@@ -2218,728 +2256,150 @@
                                                                                                 :type       "action",
                                                                                                 :params     {:value "option-4"},
                                                                                                 :unique-tag "question-action"}},
+                                                                       :chunks         [{:end 4, :start 0}
+                                                                                        {:end 8, :start 5}
+                                                                                        {:end 13, :start 9}
+                                                                                        {:end 20, :start 14}],
                                                                        :x              130,
-                                                                       :text           "Option 4"},
-                   :item-6-r1                                         {:y           64,
-                                                                       :rotation    31,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/red_crayons.png",
-                                                                       :actions     {:click         {:id "red-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-red-r1",
-                                                                                                              :target        "item-6-r1",
-                                                                                                              :init-position {:x 760, :y 64, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "red-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-6-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           760,
-                                                                       :visible     false},
-                   :item-10-r1                                        {:y           456,
-                                                                       :rotation    215,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/orange_crayons.png",
-                                                                       :actions     {:click         {:id "orange-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-orange-r1",
-                                                                                                              :target        "item-10-r1",
-                                                                                                              :init-position {:x 1406, :y 456, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "orange-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-10-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1406,
-                                                                       :visible     false},
-                   :question-1-background                             {:x           0,
-                                                                       :y           412.5286478227654,
-                                                                       :fill        16753409,
-                                                                       :type        "rectangle",
-                                                                       :width       1920,
-                                                                       :height      667.4713521772346,
-                                                                       :object-name "question-1-background"},
-                   :box-purple-r2                                     {:x          745,
-                                                                       :y          773,
-                                                                       :src        "/raw/img/categorize/purple_table.png",
-                                                                       :type       "image",
-                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :actions    {:click {:id "box-purple-dialog-r2", :on "click", :type "action"}},
-                                                                       :visible    false,
-                                                                       :transition "box-purple-r2"},
-                   :item-green-r3                                     {:y           286,
-                                                                       :rotation    -90,
-                                                                       :states      {:highlighted     {:highlight true},
-                                                                                     :init-position   {:x           19,
-                                                                                                       :y           286,
-                                                                                                       :scale       0.35,
-                                                                                                       :mask-x      -100,
-                                                                                                       :mask-y      -150,
-                                                                                                       :rotation    -90,
-                                                                                                       :mask-width  395,
-                                                                                                       :mask-height 936},
-                                                                                     :hide-technical  {:visible false},
-                                                                                     :show-technical  {:visible true},
-                                                                                     :not-highlighted {:highlight false}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/green_crayons.png",
-                                                                       :actions     {:click         {:id "green-color-r3", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r3",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box--r3",
-                                                                                                              :target        "item-green-r3",
-                                                                                                              :init-position {:x 19, :y 286, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r3",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "green-color-r3"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r3",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-green-r3"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r3",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r3",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           19,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :question-1-question-id--thumbs-up-image-group     {:x           0,
-                                                                       :y           0,
-                                                                       :type        "group",
-                                                                       :children    ["question-1-question-id--thumbs-up-image"],
-                                                                       :object-name "question-1-question-id--thumbs-up-image-group"},
-                   :question-0-options-option-4-voice-over-icon       {:y          24,
-                                                                       :states     {:active {:fill "#FFFFFF"}, :default {:fill "#000000"}},
-                                                                       :fill       "#000000",
-                                                                       :width      41,
-                                                                       :type       "svg-path",
-                                                                       :x          19.5,
-                                                                       :scene-name "letter-tutorial-trace",
-                                                                       :height     32,
-                                                                       :data       "M20.86 0.199576C20.5352 0.0590597 20.1789 0.00723956 19.8276 0.0494034C19.4762 0.0915673 19.1423 0.226205 18.86 0.439575L9.3 7.99958H2C1.46957 7.99958 0.960859 8.21029 0.585786 8.58536C0.210714 8.96043 0 9.46914 0 9.99957V21.9996C0 22.53 0.210714 23.0387 0.585786 23.4138C0.960859 23.7889 1.46957 23.9996 2 23.9996H9.3L18.76 31.5596C19.1119 31.8419 19.5489 31.997 20 31.9996C20.2987 32.0045 20.5941 31.9358 20.86 31.7996C21.2003 31.6375 21.4879 31.3825 21.6897 31.064C21.8914 30.7455 21.9989 30.3765 22 29.9996V1.99958C21.9989 1.6226 21.8914 1.25361 21.6897 0.935133C21.4879 0.616658 21.2003 0.361673 20.86 0.199576ZM18 25.8396L11.24 20.4396C10.8881 20.1573 10.4511 20.0022 10 19.9996H4V11.9996H10C10.4511 11.997 10.8881 11.8419 11.24 11.5596L18 6.15957V25.8396ZM35.32 4.67958C34.9434 4.30297 34.4326 4.09139 33.9 4.09139C33.3674 4.09139 32.8566 4.30297 32.48 4.67958C32.1034 5.05618 31.8918 5.56697 31.8918 6.09958C31.8918 6.63218 32.1034 7.14297 32.48 7.51958C33.6577 8.69545 34.5779 10.1034 35.1823 11.6541C35.7866 13.2047 36.0617 14.8641 35.9902 16.5268C35.9188 18.1895 35.5022 19.8192 34.7671 21.3122C34.0319 22.8053 32.9943 24.1291 31.72 25.1996C31.4105 25.4642 31.1892 25.8169 31.0856 26.2107C30.982 26.6045 31.001 27.0205 31.1402 27.4032C31.2793 27.7858 31.5319 28.1169 31.8643 28.3521C32.1966 28.5874 32.5929 28.7156 33 28.7196C33.4673 28.7205 33.9202 28.5577 34.28 28.2596C35.9819 26.8342 37.3685 25.0702 38.3517 23.0798C39.3349 21.0895 39.8932 18.9163 39.991 16.6985C40.0888 14.4807 39.7241 12.2668 38.9199 10.1977C38.1157 8.12848 36.8898 6.24928 35.32 4.67958ZM29.66 10.3396C29.4735 10.1531 29.2521 10.0052 29.0085 9.90425C28.7649 9.80333 28.5037 9.75139 28.24 9.75139C27.9763 9.75139 27.7152 9.80333 27.4715 9.90425C27.2279 10.0052 27.0065 10.1531 26.82 10.3396C26.6335 10.5261 26.4856 10.7474 26.3847 10.9911C26.2838 11.2347 26.2318 11.4959 26.2318 11.7596C26.2318 12.0233 26.2838 12.2844 26.3847 12.5281C26.4856 12.7717 26.6335 12.9931 26.82 13.1796C27.5712 13.9263 27.9955 14.9404 28 15.9996C28.0005 16.5823 27.8736 17.158 27.6284 17.6866C27.3831 18.2152 27.0253 18.6837 26.58 19.0596C26.3775 19.2275 26.2101 19.4337 26.0874 19.6664C25.9647 19.8991 25.8891 20.1537 25.8649 20.4156C25.8408 20.6776 25.8685 20.9417 25.9466 21.1929C26.0247 21.4441 26.1516 21.6775 26.32 21.8796C26.4893 22.0806 26.6966 22.2464 26.93 22.3672C27.1634 22.4881 27.4184 22.5618 27.6803 22.5841C27.9422 22.6064 28.2059 22.5769 28.4564 22.4972C28.7069 22.4174 28.9392 22.2891 29.14 22.1196C30.0342 21.3698 30.7536 20.4335 31.2477 19.3763C31.7417 18.319 31.9985 17.1665 32 15.9996C31.9887 13.8798 31.1489 11.8485 29.66 10.3396Z"},
-                   :item-13-r1                                        {:y           279,
-                                                                       :rotation    165,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/purple_crayons.png",
-                                                                       :actions     {:click         {:id "purple-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-purple-r1",
-                                                                                                              :target        "item-13-r1",
-                                                                                                              :init-position {:x 1071, :y 279, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "purple-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-13-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1071,
-                                                                       :visible     false},
-                   :question-0-background                             {:x           0,
-                                                                       :y           412.5286478227654,
-                                                                       :fill        16753409,
-                                                                       :type        "rectangle",
-                                                                       :width       1920,
-                                                                       :height      667.4713521772346,
-                                                                       :object-name "question-0-background"},
-                   :question-1-substrate                              {:x           0,
-                                                                       :y           0,
-                                                                       :fill        16777215,
-                                                                       :type        "rectangle",
-                                                                       :width       1920,
-                                                                       :height      1080,
-                                                                       :object-name "question-1-substrate"},
-                   :item-12-r1                                        {:y           521,
-                                                                       :rotation    -39,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/purple_crayons.png",
-                                                                       :actions     {:click         {:id "purple-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-purple-r1",
-                                                                                                              :target        "item-12-r1",
-                                                                                                              :init-position {:x 145, :y 521, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "purple-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-12-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           145,
-                                                                       :visible     false},
-                   :question-1-options-option-3-substrate             {:y             0,
-                                                                       :states        {:active {:border-color 45823}, :default {:border-color 0}},
-                                                                       :fill          16777215,
-                                                                       :width         250,
-                                                                       :type          "rectangle",
-                                                                       :actions       {:click {:id         "question-1-option-click-handler",
-                                                                                               :on         "click",
-                                                                                               :type       "action",
-                                                                                               :params     {:value "thumbs-down"},
-                                                                                               :unique-tag "question-action"}},
-                                                                       :border-width  2,
-                                                                       :border-color  0,
-                                                                       :x             0,
-                                                                       :border-radius 125,
-                                                                       :height        250},
-                   :background-r1                                     {:src     "/raw/img/categorize/background.png",
-                                                                       :type    "background",
+                                                                       :text           "They are both books."},
+                   :red-box-r2                                        {:x       1352,
+                                                                       :y       490,
+                                                                       :src     "/raw/img/categorize/red_box_small.png",
+                                                                       :type    "image",
                                                                        :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
                                                                        :visible false},
-                   :item-17-r1                                        {:y           106,
-                                                                       :rotation    30,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/green_crayons.png",
-                                                                       :actions     {:click         {:id "green-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-green-r1",
-                                                                                                              :target        "item-17-r1",
-                                                                                                              :init-position {:x 1097, :y 106, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "green-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-17-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1097,
-                                                                       :visible     false},
-                   :item-orange-r3                                    {:y           937,
-                                                                       :rotation    -90,
-                                                                       :states      {:highlighted     {:highlight true},
-                                                                                     :init-position   {:x           1495,
-                                                                                                       :y           937,
-                                                                                                       :scale       0.35,
-                                                                                                       :mask-x      -100,
-                                                                                                       :mask-y      -150,
-                                                                                                       :rotation    -90,
-                                                                                                       :mask-width  395,
-                                                                                                       :mask-height 936},
-                                                                                     :hide-technical  {:visible false},
-                                                                                     :show-technical  {:visible true},
-                                                                                     :not-highlighted {:highlight false}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/orange_crayons.png",
-                                                                       :actions     {:click         {:id "orange-color-r3", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r3",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box--r3",
-                                                                                                              :target        "item-orange-r3",
-                                                                                                              :init-position {:x 1495, :y 937, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r3",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "orange-color-r3"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r3",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-orange-r3"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r3",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r3",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1495,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :question-1-question-id--thumbs-up-image           {:y             125,
-                                                                       :width         230,
-                                                                       :editable?     {:select true},
-                                                                       :type          "image",
-                                                                       :src           "/images/questions/thumbs_up.png",
-                                                                       :image-size    "contain",
-                                                                       :origin        {:type "center-center"},
-                                                                       :x             125,
-                                                                       :border-radius 115,
-                                                                       :height        230},
-                   :box-red-r3                                        {:y          506,
-                                                                       :states     {:highlighted     {:highlight true},
-                                                                                    :hide-technical  {:visible false},
-                                                                                    :show-technical  {:visible true},
-                                                                                    :not-highlighted {:highlight false}},
-                                                                       :transition "box-red-r3",
-                                                                       :width      253,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/red_box_small.png",
-                                                                       :x          500,
-                                                                       :visible    false,
-                                                                       :height     253},
-                   :box-orange-r3                                     {:y          773,
-                                                                       :states     {:highlighted     {:highlight true},
-                                                                                    :hide-technical  {:visible false},
-                                                                                    :show-technical  {:visible true},
-                                                                                    :not-highlighted {:highlight false}},
-                                                                       :transition "box-orange-r3",
-                                                                       :width      253,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/orange_table.png",
-                                                                       :x          745,
-                                                                       :visible    false,
-                                                                       :height     253},
-                   :question-0-options-option-4-voice-over-background {:x             0,
-                                                                       :y             0,
-                                                                       :fill          16777215,
-                                                                       :type          "rectangle",
-                                                                       :width         80,
-                                                                       :height        80,
-                                                                       :states        {:active  {:fill 45823},
-                                                                                       :default {:fill 16777215}},
-                                                                       :border-radius 40},
-                   :yellow-table-r0                                   {:x      745,
-                                                                       :y      773,
-                                                                       :src    "/raw/img/categorize/yellow_table.png",
-                                                                       :type   "image",
-                                                                       :scale  0.8,
-                                                                       :states {:hide-technical {:visible false}, :show-technical {:visible true}}},
-                   :item-12-r2                                        {:y           523,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/red_crayons.png",
-                                                                       :actions     {:click         {:id "red-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-red-r2",
-                                                                                                              :target        "item-12-r2",
-                                                                                                              :init-position {:x 924, :y 523, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "red-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-12-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           924,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-2-r2                                         {:y           166,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/blue_crayons.png",
-                                                                       :actions     {:click         {:id "blue-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-blue-r2",
-                                                                                                              :target        "item-2-r2",
-                                                                                                              :init-position {:x 17, :y 166, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "blue-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-2-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           17,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :red-table-r0                                      {:x      1160,
-                                                                       :y      652,
-                                                                       :src    "/raw/img/categorize/red_table.png",
-                                                                       :type   "image",
-                                                                       :scale  0.8,
-                                                                       :states {:hide-technical {:visible false}, :show-technical {:visible true}}},
-                   :item-blue-r3                                      {:y           463,
-                                                                       :rotation    -90,
-                                                                       :states      {:highlighted     {:highlight true},
-                                                                                     :init-position   {:x           1611,
-                                                                                                       :y           463,
-                                                                                                       :scale       0.35,
-                                                                                                       :mask-x      -100,
-                                                                                                       :mask-y      -150,
-                                                                                                       :rotation    -90,
-                                                                                                       :mask-width  395,
-                                                                                                       :mask-height 936},
-                                                                                     :hide-technical  {:visible false},
-                                                                                     :show-technical  {:visible true},
-                                                                                     :not-highlighted {:highlight false}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/blue_crayons.png",
-                                                                       :actions     {:click         {:id "blue-color-r3", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r3",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box--r3",
-                                                                                                              :target        "item-blue-r3",
-                                                                                                              :init-position {:x 1611, :y 463, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r3",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "blue-color-r3"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r3",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-blue-r3"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r3",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r3",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1611,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-9-r2                                         {:y           564,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/purple_crayons.png",
-                                                                       :actions     {:click         {:id "purple-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-purple-r2",
-                                                                                                              :target        "item-9-r2",
-                                                                                                              :init-position {:x 664, :y 564, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "purple-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-9-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           664,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-3-r1                                         {:y           521,
-                                                                       :rotation    -129,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/yellow_crayons.png",
-                                                                       :actions     {:click         {:id "yellow-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-yellow-r1",
-                                                                                                              :target        "item-3-r1",
-                                                                                                              :init-position {:x 145, :y 521, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "yellow-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-3-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           145,
-                                                                       :visible     false},
-                   :question-0-question-id--option-1-text             {:y              50,
-                                                                       :vertical-align "middle",
-                                                                       :font-size      48,
-                                                                       :word-wrap      true,
-                                                                       :width          720,
-                                                                       :editable?      {:select true},
-                                                                       :type           "text",
-                                                                       :actions        {:click {:id         "question-0-option-click-handler",
-                                                                                                :on         "click",
-                                                                                                :type       "action",
-                                                                                                :params     {:value "option-1"},
-                                                                                                :unique-tag "question-action"}},
-                                                                       :x              130,
-                                                                       :text           "Option 1"},
-                   :question-1-options-option-3                       {:x        1145,
-                                                                       :y        208.7356760886173,
-                                                                       :type     "group",
-                                                                       :children ["question-1-options-option-3-substrate"
-                                                                                  "question-1-question-id--thumbs-down-image-group"]},
-                   :item-0-r2                                         {:y           1073,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/blue_crayons.png",
-                                                                       :actions     {:click         {:id "blue-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-blue-r2",
-                                                                                                              :target        "item-0-r2",
-                                                                                                              :init-position {:x 46, :y 1073, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "blue-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-0-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           46,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-4-r2                                         {:y           423,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/orange_crayons.png",
-                                                                       :actions     {:click         {:id "orange-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-orange-r2",
-                                                                                                              :target        "item-4-r2",
-                                                                                                              :init-position {:x 892, :y 423, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "orange-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-4-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           892,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :question-0-options-option-2                       {:x        990,
-                                                                       :y        203.7356760886173,
+                   :blue-crayon-3-r2                                  {:y         143,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/blue_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "blue-box-r2",
+                                                                                                         :target         "blue-crayon-3-r2",
+                                                                                                         :init-position  {:x 17, :y 143, :duration 1},
+                                                                                                         :check-variable "blue-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "blue-crayon-3-r2", :say-color "blue-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         17,
+                                                                       :visible   false},
+                   :question-0-options-option-2                       {:x        60,
+                                                                       :y        363.7356760886173,
                                                                        :type     "group",
                                                                        :children ["question-0-options-option-2-substrate"
                                                                                   "question-0-options-option-2-voice-over"
-                                                                                  "question-0-question-id--option-2-text"]},
-                   :background-r3                                     {:type       "layered-background",
+                                                                                  "question-0-options-option-2-text"]},
+                   :red-crayon-r3                                     {:y         501,
+                                                                       :rotation  -90,
+                                                                       :states    {:init-position  {:x 776, :y 501},
+                                                                                   :hide-technical {:visible false},
+                                                                                   :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/red_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "stop-drag-hide-r3",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:self          "red-crayon-r3",
+                                                                                                         :target        "red-box-r3",
+                                                                                                         :colliders     ["yellow-box-r3"
+                                                                                                                         "blue-box-r3"
+                                                                                                                         "red-box-r3"
+                                                                                                                         "purple-table-r3"
+                                                                                                                         "orange-table-r3"
+                                                                                                                         "green-table-r3"],
+                                                                                                         :init-position {:x 776, :y 501, :duration 1}}},
+                                                                                   :drag-start {:id     "start-drag-r3",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:self      "red-crayon-r3",
+                                                                                                         :target    "red-box-r3",
+                                                                                                         :colliders ["yellow-box-r3"
+                                                                                                                     "blue-box-r3"
+                                                                                                                     "red-box-r3"
+                                                                                                                     "purple-table-r3"
+                                                                                                                     "orange-table-r3"
+                                                                                                                     "green-table-r3"],
+                                                                                                         :say-color "red-color-r3"}}},
+                                                                       :draggable true,
+                                                                       :x         776,
+                                                                       :visible   false},
+                   :yellow-box-r1                                     {:x       75,
+                                                                       :y       810,
+                                                                       :src     "/raw/img/categorize/yellow_box.png",
+                                                                       :type    "image",
+                                                                       :scale   0.65,
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :question-0-task-text                              {:y              0,
+                                                                       :vertical-align "top",
+                                                                       :font-size      48,
+                                                                       :word-wrap      true,
+                                                                       :width          956.6157372039727,
+                                                                       :editable?      {:select true},
+                                                                       :type           "text",
+                                                                       :chunks         [{:end 4, :start 0}
+                                                                                        {:end 7, :start 5}
+                                                                                        {:end 11, :start 8}
+                                                                                        {:end 16, :start 12}
+                                                                                        {:end 22, :start 17}
+                                                                                        {:end 28, :start 23}
+                                                                                        {:end 32, :start 29}
+                                                                                        {:end 41, :start 33}],
+                                                                       :x              110,
+                                                                       :text           "What is the same about these two crayons?"},
+                   :blue-crayon-1-r2                                  {:y         1050,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/blue_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "blue-box-r2",
+                                                                                                         :target         "blue-crayon-1-r2",
+                                                                                                         :init-position  {:x 46, :y 1050, :duration 1},
+                                                                                                         :check-variable "blue-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "blue-crayon-1-r2", :say-color "blue-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         46,
+                                                                       :visible   false},
+                   :blue-crayon-2-r1                                  {:y          456,
+                                                                       :rotation   125,
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :surface    {:src "/raw/img/categorize/02.png"},
-                                                                       :visible    false,
-                                                                       :background {:src "/raw/img/categorize/background-3.png"},
-                                                                       :decoration {:src "/raw/img/categorize/03.png"}},
-                   :box-purple-r1                                     {:y          810,
-                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :transition "box-purple-r1",
-                                                                       :scale      0.65,
+                                                                       :transition "blue-crayon-2-r1",
                                                                        :type       "image",
-                                                                       :src        "/raw/img/categorize/purple_box.png",
-                                                                       :actions    {:click {:id "box-purple-dialog-r1", :on "click", :type "action"}},
-                                                                       :x          975,
+                                                                       :src        "/raw/img/categorize/blue_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "blue-crayon-2-r1",
+                                                                                                          :init-position  {:x 1406, :y 456, :duration 1},
+                                                                                                          :check-variable "blue-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "blue-crayon-2-r1",
+                                                                                                          :say-color    "blue-color-r1",
+                                                                                                          :crayon-color "blue"}}},
+                                                                       :draggable  true,
+                                                                       :x          1406,
                                                                        :visible    false},
+                   :yellow-box-r2                                     {:x       500,
+                                                                       :y       506,
+                                                                       :src     "/raw/img/categorize/yellow_box_small.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
                    :question-0-task-text-group-button-background      {:x             0,
                                                                        :y             0,
                                                                        :fill          16777215,
@@ -2948,6 +2408,61 @@
                                                                        :height        80,
                                                                        :states        {:active {:fill 45823}, :default {:fill 16777215}},
                                                                        :border-radius 40},
+                   :green-crayon-r3                                   {:y         263,
+                                                                       :rotation  -90,
+                                                                       :states    {:init-position  {:x 19, :y 263},
+                                                                                   :hide-technical {:visible false},
+                                                                                   :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/green_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "stop-drag-hide-r3",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:self          "green-crayon-r3",
+                                                                                                         :target        "green-table-r3",
+                                                                                                         :colliders     ["yellow-box-r3"
+                                                                                                                         "blue-box-r3"
+                                                                                                                         "red-box-r3"
+                                                                                                                         "purple-table-r3"
+                                                                                                                         "orange-table-r3"
+                                                                                                                         "green-table-r3"],
+                                                                                                         :init-position {:x 19, :y 263, :duration 1}}},
+                                                                                   :drag-start {:id     "start-drag-r3",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:self      "green-crayon-r3",
+                                                                                                         :target    "green-table-r3",
+                                                                                                         :colliders ["yellow-box-r3"
+                                                                                                                     "blue-box-r3"
+                                                                                                                     "red-box-r3"
+                                                                                                                     "purple-table-r3"
+                                                                                                                     "orange-table-r3"
+                                                                                                                     "green-table-r3"],
+                                                                                                         :say-color "green-color-r3"}}},
+                                                                       :draggable true,
+                                                                       :x         19,
+                                                                       :visible   false},
+                   :green-crayon-2-r2                                 {:y         818,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/green_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "green-table-r2",
+                                                                                                         :target         "green-crayon-2-r2",
+                                                                                                         :init-position  {:x 1418, :y 818, :duration 1},
+                                                                                                         :check-variable "green-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "green-crayon-2-r2", :say-color "green-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1418,
+                                                                       :visible   false},
                    :question-0-options-option-2-substrate             {:y             0,
                                                                        :states        {:active {:border-color 45823}, :default {:border-color 0}},
                                                                        :fill          16777215,
@@ -2956,180 +2471,124 @@
                                                                        :actions       {:click {:id         "question-0-option-click-handler",
                                                                                                :on         "click",
                                                                                                :type       "action",
-                                                                                               :params     {:value "option-2"},
+                                                                                               :params     {:value "option-3"},
                                                                                                :unique-tag "question-action"}},
                                                                        :border-width  2,
                                                                        :border-color  0,
                                                                        :x             110,
                                                                        :border-radius 20,
                                                                        :height        100},
-                   :question-1-options                                {:x        0,
-                                                                       :y        412.5286478227654,
-                                                                       :type     "group",
-                                                                       :children ["question-1-options-option-1"
-                                                                                  "question-1-options-option-2"
-                                                                                  "question-1-options-option-3"]},
-                   :question-1-question-id--ok-image-group            {:x           0,
-                                                                       :y           0,
-                                                                       :type        "group",
-                                                                       :children    ["question-1-question-id--ok-image"],
-                                                                       :object-name "question-1-question-id--ok-image-group"},
-                   :box-blue-r3                                       {:y          490,
-                                                                       :states     {:highlighted     {:highlight true},
-                                                                                    :hide-technical  {:visible false},
-                                                                                    :show-technical  {:visible true},
-                                                                                    :not-highlighted {:highlight false}},
-                                                                       :transition "box-blue-r3",
-                                                                       :width      253,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/blue_box_small.png",
-                                                                       :x          1352,
-                                                                       :visible    false,
-                                                                       :height     253},
-                   :item-17-r2                                        {:y           387,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/green_crayons.png",
-                                                                       :actions     {:click         {:id "green-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-green-r2",
-                                                                                                              :target        "item-17-r2",
-                                                                                                              :init-position {:x 1678, :y 387, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "green-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-17-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1678,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :question-0-question-id--task-text                 {:y              0,
-                                                                       :vertical-align "top",
-                                                                       :font-size      48,
-                                                                       :word-wrap      true,
-                                                                       :width          956.6157372039727,
-                                                                       :editable?      {:select true},
-                                                                       :type           "text",
-                                                                       :x              110,
-                                                                       :text           "Question placeholder"},
                    :question-0-options                                {:x        0,
                                                                        :y        412.5286478227654,
                                                                        :type     "group",
-                                                                       :children ["question-0-options-option-1"
+                                                                       :children ["question-0-options-option-0"
+                                                                                  "question-0-options-option-1"
                                                                                   "question-0-options-option-2"
-                                                                                  "question-0-options-option-3"
-                                                                                  "question-0-options-option-4"]},
-                   :question-0-question-id--option-3-text             {:y              50,
-                                                                       :vertical-align "middle",
-                                                                       :font-size      48,
-                                                                       :word-wrap      true,
-                                                                       :width          720,
-                                                                       :editable?      {:select true},
-                                                                       :type           "text",
-                                                                       :actions        {:click {:id         "question-0-option-click-handler",
-                                                                                                :on         "click",
-                                                                                                :type       "action",
-                                                                                                :params     {:value "option-3"},
-                                                                                                :unique-tag "question-action"}},
-                                                                       :x              130,
-                                                                       :text           "Option 3"},
-                   :question-0-options-option-1                       {:x        60,
+                                                                                  "question-0-options-option-3"]},
+                   :green-table-r2                                    {:x       330,
+                                                                       :y       667,
+                                                                       :src     "/raw/img/categorize/green_table.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :question-0-options-option-1                       {:x        990,
                                                                        :y        203.7356760886173,
                                                                        :type     "group",
                                                                        :children ["question-0-options-option-1-substrate"
                                                                                   "question-0-options-option-1-voice-over"
-                                                                                  "question-0-question-id--option-1-text"]},
-                   :question-0-options-option-4                       {:x        990,
-                                                                       :y        363.7356760886173,
-                                                                       :type     "group",
-                                                                       :children ["question-0-options-option-4-substrate"
-                                                                                  "question-0-options-option-4-voice-over"
-                                                                                  "question-0-question-id--option-4-text"]},
-                   :question-1-question-id--thumbs-down-image-group   {:x           0,
-                                                                       :y           0,
-                                                                       :type        "group",
-                                                                       :children    ["question-1-question-id--thumbs-down-image"],
-                                                                       :object-name "question-1-question-id--thumbs-down-image-group"},
+                                                                                  "question-0-options-option-1-text"]},
+                   :green-crayon-3-r1                                 {:y          106,
+                                                                       :rotation   30,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "green-crayon-3-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/green_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "green-crayon-3-r1",
+                                                                                                          :init-position  {:x 1097, :y 106, :duration 1},
+                                                                                                          :check-variable "green-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "green-crayon-3-r1",
+                                                                                                          :say-color    "green-color-r1",
+                                                                                                          :crayon-color "green"}}},
+                                                                       :draggable  true,
+                                                                       :x          1097,
+                                                                       :visible    false},
+                   :yellow-crayon-3-r1                                {:y          558,
+                                                                       :rotation   -120,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "yellow-crayon-3-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/yellow_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "yellow-crayon-3-r1",
+                                                                                                          :init-position  {:x 1033, :y 558, :duration 1},
+                                                                                                          :check-variable "yellow-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "yellow-crayon-3-r1",
+                                                                                                          :say-color    "yellow-color-r1",
+                                                                                                          :crayon-color "yellow"}}},
+                                                                       :draggable  true,
+                                                                       :x          1033,
+                                                                       :visible    false},
+                   :orange-box-r1                                     {:x       1275,
+                                                                       :y       810,
+                                                                       :src     "/raw/img/categorize/orange_box.png",
+                                                                       :type    "image",
+                                                                       :scale   0.65,
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :question-0-task-image                             {:y          206.2643239113827,
+                                                                       :max-height 292.5286478227654,
+                                                                       :scale      {:x 1, :y 1},
+                                                                       :editable?  {:select true},
+                                                                       :type       "image",
+                                                                       :src        "/upload/XYYMRKSNYSJMCNNS.png",
+                                                                       :max-width  613.3842627960273,
+                                                                       :origin     {:type "center-center"},
+                                                                       :x          366.69213139801366},
+                   :blue-crayon-3-r1                                  {:y          144,
+                                                                       :rotation   45,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "blue-crayon-3-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/blue_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "blue-crayon-3-r1",
+                                                                                                          :init-position  {:x 1753, :y 144, :duration 1},
+                                                                                                          :check-variable "blue-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "blue-crayon-3-r1",
+                                                                                                          :say-color    "blue-color-r1",
+                                                                                                          :crayon-color "blue"}}},
+                                                                       :draggable  true,
+                                                                       :x          1753,
+                                                                       :visible    false},
+                   :orange-table-r2                                   {:x       1120,
+                                                                       :y       652,
+                                                                       :src     "/raw/img/categorize/orange_table.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :layered-background-r3                             {:type       "layered-background",
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :surface    {:src "/raw/img/categorize/02.png"},
+                                                                       :visible    false,
+                                                                       :background {:src "/raw/img/categorize/background-3.png"},
+                                                                       :decoration {:src "/raw/img/categorize/03.png"}},
                    :question-0-options-option-1-voice-over            {:x        0,
-                                                                       :y        0,
-                                                                       :type     "group",
-                                                                       :actions  {:click {:id         "question-0-option-voice-over",
-                                                                                          :on         "click",
-                                                                                          :type       "action",
-                                                                                          :params     {:value "option-1"},
-                                                                                          :unique-tag "question-action"}},
-                                                                       :children ["question-0-options-option-1-voice-over-background"
-                                                                                  "question-0-options-option-1-voice-over-icon"]},
-                   :question-1-question-id--ok-image                  {:y             125,
-                                                                       :scale         {:x 1, :y 1},
-                                                                       :width         230,
-                                                                       :editable?     {:select true},
-                                                                       :type          "image",
-                                                                       :src           "/raw/clipart/elements/etc--elements-concepts--apple.png",
-                                                                       :image-size    "contain",
-                                                                       :origin        {:type "center-center"},
-                                                                       :x             125,
-                                                                       :border-radius 115,
-                                                                       :height        230},
-                   :item-5-r1                                         {:y           558,
-                                                                       :rotation    -120,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/yellow_crayons.png",
-                                                                       :actions     {:click         {:id "yellow-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-yellow-r1",
-                                                                                                              :target        "item-5-r1",
-                                                                                                              :init-position {:x 1033, :y 558, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "yellow-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-5-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1033,
-                                                                       :visible     false},
-                   :question-0-options-option-2-voice-over            {:x        0,
                                                                        :y        0,
                                                                        :type     "group",
                                                                        :actions  {:click {:id         "question-0-option-voice-over",
@@ -3137,87 +2596,39 @@
                                                                                           :type       "action",
                                                                                           :params     {:value "option-2"},
                                                                                           :unique-tag "question-action"}},
+                                                                       :children ["question-0-options-option-1-voice-over-background"
+                                                                                  "question-0-options-option-1-voice-over-icon"]},
+                   :purple-crayon-3-r1                                {:y          558,
+                                                                       :rotation   -30,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "purple-crayon-3-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/purple_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "purple-crayon-3-r1",
+                                                                                                          :init-position  {:x 1033, :y 558, :duration 1},
+                                                                                                          :check-variable "purple-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "purple-crayon-3-r1",
+                                                                                                          :say-color    "purple-color-r1",
+                                                                                                          :crayon-color "purple"}}},
+                                                                       :draggable  true,
+                                                                       :x          1033,
+                                                                       :visible    false},
+                   :question-0-options-option-2-voice-over            {:x        0,
+                                                                       :y        0,
+                                                                       :type     "group",
+                                                                       :actions  {:click {:id         "question-0-option-voice-over",
+                                                                                          :on         "click",
+                                                                                          :type       "action",
+                                                                                          :params     {:value "option-3"},
+                                                                                          :unique-tag "question-action"}},
                                                                        :children ["question-0-options-option-2-voice-over-background"
                                                                                   "question-0-options-option-2-voice-over-icon"]},
-                   :item-1-r1                                         {:y           456,
-                                                                       :rotation    125,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/blue_crayons.png",
-                                                                       :actions     {:click         {:id "blue-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-blue-r1",
-                                                                                                              :target        "item-1-r1",
-                                                                                                              :init-position {:x 1406, :y 456, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "blue-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-1-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1406,
-                                                                       :visible     false},
-                   :box-orange-r1                                     {:y          810,
-                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :transition "box-orange-r1",
-                                                                       :scale      0.65,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/orange_box.png",
-                                                                       :actions    {:click {:id "box-orange-dialog-r1", :on "click", :type "action"}},
-                                                                       :x          1275,
-                                                                       :visible    false},
-                   :item-2-r1                                         {:y           144,
-                                                                       :rotation    45,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/blue_crayons.png",
-                                                                       :actions     {:click         {:id "blue-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-blue-r1",
-                                                                                                              :target        "item-2-r1",
-                                                                                                              :init-position {:x 1753, :y 144, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "blue-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-2-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1753,
-                                                                       :visible     false},
                    :question-0-substrate                              {:x           0,
                                                                        :y           0,
                                                                        :fill        16777215,
@@ -3240,75 +2651,170 @@
                                                                        :visible   false,
                                                                        :skin      "lion",
                                                                        :height    717},
-                   :question-0-options-option-3                       {:x        60,
+                   :question-0-options-option-3                       {:x        990,
                                                                        :y        363.7356760886173,
                                                                        :type     "group",
                                                                        :children ["question-0-options-option-3-substrate"
                                                                                   "question-0-options-option-3-voice-over"
-                                                                                  "question-0-question-id--option-3-text"]},
-                   :item-15-r1                                        {:y           64,
-                                                                       :rotation    121,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/green_crayons.png",
-                                                                       :actions     {:click         {:id "green-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-green-r1",
-                                                                                                              :target        "item-15-r1",
-                                                                                                              :init-position {:x 760, :y 64, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "green-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-15-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           760,
-                                                                       :visible     false},
-                   :question-1-options-option-1-substrate             {:y             0,
+                                                                                  "question-0-options-option-3-text"]},
+                   :green-crayon-1-r2                                 {:y         210,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/green_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "green-table-r2",
+                                                                                                         :target         "green-crayon-1-r2",
+                                                                                                         :init-position  {:x 714, :y 210, :duration 1},
+                                                                                                         :check-variable "green-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "green-crayon-1-r2", :say-color "green-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         714,
+                                                                       :visible   false},
+                   :question-0-options-option-0-substrate             {:y             0,
                                                                        :states        {:active {:border-color 45823}, :default {:border-color 0}},
                                                                        :fill          16777215,
-                                                                       :width         250,
+                                                                       :width         760,
                                                                        :type          "rectangle",
-                                                                       :actions       {:click {:id         "question-1-option-click-handler",
+                                                                       :actions       {:click {:id         "question-0-option-click-handler",
                                                                                                :on         "click",
                                                                                                :type       "action",
-                                                                                               :params     {:value "thumbs-up"},
+                                                                                               :params     {:value "option-1"},
                                                                                                :unique-tag "question-action"}},
                                                                        :border-width  2,
                                                                        :border-color  0,
-                                                                       :x             0,
-                                                                       :border-radius 125,
-                                                                       :height        250},
-                   :question-1-task-text-group                        {:x        793.3842627960273,
-                                                                       :y        60,
-                                                                       :type     "group",
-                                                                       :children ["question-1-task-text-group-button"
-                                                                                  "question-1-question-id--task-text"]},
-                   :box-yellow-r2                                     {:x          500,
-                                                                       :y          506,
-                                                                       :src        "/raw/img/categorize/yellow_box_small.png",
-                                                                       :type       "image",
+                                                                       :x             110,
+                                                                       :border-radius 20,
+                                                                       :height        100},
+                   :blue-crayon-2-r2                                  {:y         500,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/blue_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "blue-box-r2",
+                                                                                                         :target         "blue-crayon-2-r2",
+                                                                                                         :init-position  {:x 592, :y 500, :duration 1},
+                                                                                                         :check-variable "blue-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "blue-crayon-2-r2", :say-color "blue-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         592,
+                                                                       :visible   false},
+                   :red-crayon-1-r1                                   {:y          64,
+                                                                       :rotation   31,
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :actions    {:click {:id "box-yellow-dialog-r2", :on "click", :type "action"}},
-                                                                       :visible    false,
-                                                                       :transition "box-yellow-r2"},
+                                                                       :transition "red-crayon-1-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/red_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "red-crayon-1-r1",
+                                                                                                          :init-position  {:x 760, :y 64, :duration 1},
+                                                                                                          :check-variable "red-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "red-crayon-1-r1",
+                                                                                                          :say-color    "red-color-r1",
+                                                                                                          :crayon-color "red"}}},
+                                                                       :draggable  true,
+                                                                       :x          760,
+                                                                       :visible    false},
+                   :purple-table-r2                                   {:x       745,
+                                                                       :y       773,
+                                                                       :src     "/raw/img/categorize/purple_table.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :green-crayon-3-r2                                 {:y         364,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/green_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "green-table-r2",
+                                                                                                         :target         "green-crayon-3-r2",
+                                                                                                         :init-position  {:x 1678, :y 364, :duration 1},
+                                                                                                         :check-variable "green-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "green-crayon-3-r2", :say-color "green-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1678,
+                                                                       :visible   false},
+                   :blue-crayon-r3                                    {:y         440,
+                                                                       :rotation  -90,
+                                                                       :states    {:init-position  {:x 1611, :y 440},
+                                                                                   :hide-technical {:visible false},
+                                                                                   :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/blue_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "stop-drag-hide-r3",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:self          "blue-crayon-r3",
+                                                                                                         :target        "blue-box-r3",
+                                                                                                         :colliders     ["yellow-box-r3"
+                                                                                                                         "blue-box-r3"
+                                                                                                                         "red-box-r3"
+                                                                                                                         "purple-table-r3"
+                                                                                                                         "orange-table-r3"
+                                                                                                                         "green-table-r3"],
+                                                                                                         :init-position {:x 1611, :y 440, :duration 1}}},
+                                                                                   :drag-start {:id     "start-drag-r3",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:self      "blue-crayon-r3",
+                                                                                                         :target    "blue-box-r3",
+                                                                                                         :colliders ["yellow-box-r3"
+                                                                                                                     "blue-box-r3"
+                                                                                                                     "red-box-r3"
+                                                                                                                     "purple-table-r3"
+                                                                                                                     "orange-table-r3"
+                                                                                                                     "green-table-r3"],
+                                                                                                         :say-color "blue-color-r3"}}},
+                                                                       :draggable true,
+                                                                       :x         1611,
+                                                                       :visible   false},
+                   :blue-crayon-1-r1                                  {:y          228,
+                                                                       :rotation   -53,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "blue-crayon-1-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/blue_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "blue-crayon-1-r1",
+                                                                                                          :init-position  {:x 184, :y 228, :duration 1},
+                                                                                                          :check-variable "blue-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "blue-crayon-1-r1",
+                                                                                                          :say-color    "blue-color-r1",
+                                                                                                          :crayon-color "blue"}}},
+                                                                       :draggable  true,
+                                                                       :x          184,
+                                                                       :visible    false},
                    :question-0-options-option-3-substrate             {:y             0,
                                                                        :states        {:active {:border-color 45823}, :default {:border-color 0}},
                                                                        :fill          16777215,
@@ -3317,74 +2823,13 @@
                                                                        :actions       {:click {:id         "question-0-option-click-handler",
                                                                                                :on         "click",
                                                                                                :type       "action",
-                                                                                               :params     {:value "option-3"},
+                                                                                               :params     {:value "option-4"},
                                                                                                :unique-tag "question-action"}},
                                                                        :border-width  2,
                                                                        :border-color  0,
                                                                        :x             110,
                                                                        :border-radius 20,
                                                                        :height        100},
-                   :box-purple-r3                                     {:y          652,
-                                                                       :states     {:highlighted     {:highlight true},
-                                                                                    :hide-technical  {:visible false},
-                                                                                    :show-technical  {:visible true},
-                                                                                    :not-highlighted {:highlight false}},
-                                                                       :transition "box-purple-r3",
-                                                                       :width      253,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/purple_table.png",
-                                                                       :x          1120,
-                                                                       :visible    false,
-                                                                       :height     253},
-                   :box-yellow-r1                                     {:y          810,
-                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :transition "box-yellow-r1",
-                                                                       :scale      0.65,
-                                                                       :type       "image",
-                                                                       :src        "/raw/img/categorize/yellow_box.png",
-                                                                       :actions    {:click {:id "box-yellow-dialog-r1", :on "click", :type "action"}},
-                                                                       :x          75,
-                                                                       :visible    false},
-                   :item-1-r2                                         {:y           523,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/blue_crayons.png",
-                                                                       :actions     {:click         {:id "blue-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-blue-r2",
-                                                                                                              :target        "item-1-r2",
-                                                                                                              :init-position {:x 592, :y 523, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "blue-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-1-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           592,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
                    :question-0-options-option-2-voice-over-background {:x             0,
                                                                        :y             0,
                                                                        :fill          16777215,
@@ -3407,59 +2852,27 @@
                                                                        :x         380,
                                                                        :skin      "lion",
                                                                        :height    717},
-                   :question-0-question-id--task-image                {:y          206.2643239113827,
-                                                                       :width      613.3842627960273,
-                                                                       :editable?  {:select true},
+                   :green-crayon-2-r1                                 {:y          387,
+                                                                       :rotation   25,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "green-crayon-2-r1",
                                                                        :type       "image",
-                                                                       :src        "/images/questions/question.png",
-                                                                       :image-size "contain",
-                                                                       :origin     {:type "center-center"},
-                                                                       :x          366.69213139801366,
-                                                                       :height     292.5286478227654},
-                   :question-1-task-text-group-button                 {:x        0,
-                                                                       :y        0,
-                                                                       :type     "group",
-                                                                       :actions  {:click {:id         "question-1-task-voice-over-click",
-                                                                                          :on         "click",
-                                                                                          :type       "action",
-                                                                                          :unique-tag "question-action"}},
-                                                                       :children ["question-1-task-text-group-button-background"
-                                                                                  "question-1-task-text-group-button-icon"]},
-                   :item-4-r1                                         {:y           279,
-                                                                       :rotation    75,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/yellow_crayons.png",
-                                                                       :actions     {:click         {:id "yellow-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-yellow-r1",
-                                                                                                              :target        "item-4-r1",
-                                                                                                              :init-position {:x 1071, :y 279, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "yellow-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-4-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1071,
-                                                                       :visible     false},
+                                                                       :src        "/raw/img/categorize/green_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "green-crayon-2-r1",
+                                                                                                          :init-position  {:x 736, :y 387, :duration 1},
+                                                                                                          :check-variable "green-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "green-crayon-2-r1",
+                                                                                                          :say-color    "green-color-r1",
+                                                                                                          :crayon-color "green"}}},
+                                                                       :draggable  true,
+                                                                       :x          736,
+                                                                       :visible    false},
                    :question-0-task-text-group-button-icon            {:y          24,
                                                                        :states     {:active {:fill "#FFFFFF"}, :default {:fill "#000000"}},
                                                                        :fill       "#000000",
@@ -3469,21 +2882,69 @@
                                                                        :scene-name "letter-tutorial-trace",
                                                                        :height     32,
                                                                        :data       "M20.86 0.199576C20.5352 0.0590597 20.1789 0.00723956 19.8276 0.0494034C19.4762 0.0915673 19.1423 0.226205 18.86 0.439575L9.3 7.99958H2C1.46957 7.99958 0.960859 8.21029 0.585786 8.58536C0.210714 8.96043 0 9.46914 0 9.99957V21.9996C0 22.53 0.210714 23.0387 0.585786 23.4138C0.960859 23.7889 1.46957 23.9996 2 23.9996H9.3L18.76 31.5596C19.1119 31.8419 19.5489 31.997 20 31.9996C20.2987 32.0045 20.5941 31.9358 20.86 31.7996C21.2003 31.6375 21.4879 31.3825 21.6897 31.064C21.8914 30.7455 21.9989 30.3765 22 29.9996V1.99958C21.9989 1.6226 21.8914 1.25361 21.6897 0.935133C21.4879 0.616658 21.2003 0.361673 20.86 0.199576ZM18 25.8396L11.24 20.4396C10.8881 20.1573 10.4511 20.0022 10 19.9996H4V11.9996H10C10.4511 11.997 10.8881 11.8419 11.24 11.5596L18 6.15957V25.8396ZM35.32 4.67958C34.9434 4.30297 34.4326 4.09139 33.9 4.09139C33.3674 4.09139 32.8566 4.30297 32.48 4.67958C32.1034 5.05618 31.8918 5.56697 31.8918 6.09958C31.8918 6.63218 32.1034 7.14297 32.48 7.51958C33.6577 8.69545 34.5779 10.1034 35.1823 11.6541C35.7866 13.2047 36.0617 14.8641 35.9902 16.5268C35.9188 18.1895 35.5022 19.8192 34.7671 21.3122C34.0319 22.8053 32.9943 24.1291 31.72 25.1996C31.4105 25.4642 31.1892 25.8169 31.0856 26.2107C30.982 26.6045 31.001 27.0205 31.1402 27.4032C31.2793 27.7858 31.5319 28.1169 31.8643 28.3521C32.1966 28.5874 32.5929 28.7156 33 28.7196C33.4673 28.7205 33.9202 28.5577 34.28 28.2596C35.9819 26.8342 37.3685 25.0702 38.3517 23.0798C39.3349 21.0895 39.8932 18.9163 39.991 16.6985C40.0888 14.4807 39.7241 12.2668 38.9199 10.1977C38.1157 8.12848 36.8898 6.24928 35.32 4.67958ZM29.66 10.3396C29.4735 10.1531 29.2521 10.0052 29.0085 9.90425C28.7649 9.80333 28.5037 9.75139 28.24 9.75139C27.9763 9.75139 27.7152 9.80333 27.4715 9.90425C27.2279 10.0052 27.0065 10.1531 26.82 10.3396C26.6335 10.5261 26.4856 10.7474 26.3847 10.9911C26.2838 11.2347 26.2318 11.4959 26.2318 11.7596C26.2318 12.0233 26.2838 12.2844 26.3847 12.5281C26.4856 12.7717 26.6335 12.9931 26.82 13.1796C27.5712 13.9263 27.9955 14.9404 28 15.9996C28.0005 16.5823 27.8736 17.158 27.6284 17.6866C27.3831 18.2152 27.0253 18.6837 26.58 19.0596C26.3775 19.2275 26.2101 19.4337 26.0874 19.6664C25.9647 19.8991 25.8891 20.1537 25.8649 20.4156C25.8408 20.6776 25.8685 20.9417 25.9466 21.1929C26.0247 21.4441 26.1516 21.6775 26.32 21.8796C26.4893 22.0806 26.6966 22.2464 26.93 22.3672C27.1634 22.4881 27.4184 22.5618 27.6803 22.5841C27.9422 22.6064 28.2059 22.5769 28.4564 22.4972C28.7069 22.4174 28.9392 22.2891 29.14 22.1196C30.0342 21.3698 30.7536 20.4335 31.2477 19.3763C31.7417 18.319 31.9985 17.1665 32 15.9996C31.9887 13.8798 31.1489 11.8485 29.66 10.3396Z"},
-                   :question-0-options-option-4-substrate             {:y             0,
-                                                                       :states        {:active {:border-color 45823}, :default {:border-color 0}},
-                                                                       :fill          16777215,
-                                                                       :width         760,
-                                                                       :type          "rectangle",
-                                                                       :actions       {:click {:id         "question-0-option-click-handler",
-                                                                                               :on         "click",
-                                                                                               :type       "action",
-                                                                                               :params     {:value "option-4"},
-                                                                                               :unique-tag "question-action"}},
-                                                                       :border-width  2,
-                                                                       :border-color  0,
-                                                                       :x             110,
-                                                                       :border-radius 20,
-                                                                       :height        100},
+                   :yellow-crayon-2-r1                                {:y          279,
+                                                                       :rotation   75,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "yellow-crayon-2-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/yellow_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "yellow-crayon-2-r1",
+                                                                                                          :init-position  {:x 1071, :y 279, :duration 1},
+                                                                                                          :check-variable "yellow-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "yellow-crayon-2-r1",
+                                                                                                          :say-color    "yellow-color-r1",
+                                                                                                          :crayon-color "yellow"}}},
+                                                                       :draggable  true,
+                                                                       :x          1071,
+                                                                       :visible    false},
+                   :purple-crayon-1-r2                                {:y         541,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/purple_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "purple-table-r2",
+                                                                                                         :target         "purple-crayon-1-r2",
+                                                                                                         :init-position  {:x 664, :y 541, :duration 1},
+                                                                                                         :check-variable "purple-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "purple-crayon-1-r2",
+                                                                                                         :say-color "purple-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         664,
+                                                                       :visible   false},
+                   :purple-crayon-3-r2                                {:y         310,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/purple_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "purple-table-r2",
+                                                                                                         :target         "purple-crayon-3-r2",
+                                                                                                         :init-position  {:x 1418, :y 310, :duration 1},
+                                                                                                         :check-variable "purple-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "purple-crayon-3-r2",
+                                                                                                         :say-color "purple-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1418,
+                                                                       :visible   false},
                    :question-0-options-option-1-voice-over-icon       {:y          24,
                                                                        :states     {:active {:fill "#FFFFFF"}, :default {:fill "#000000"}},
                                                                        :fill       "#000000",
@@ -3493,231 +2954,27 @@
                                                                        :scene-name "letter-tutorial-trace",
                                                                        :height     32,
                                                                        :data       "M20.86 0.199576C20.5352 0.0590597 20.1789 0.00723956 19.8276 0.0494034C19.4762 0.0915673 19.1423 0.226205 18.86 0.439575L9.3 7.99958H2C1.46957 7.99958 0.960859 8.21029 0.585786 8.58536C0.210714 8.96043 0 9.46914 0 9.99957V21.9996C0 22.53 0.210714 23.0387 0.585786 23.4138C0.960859 23.7889 1.46957 23.9996 2 23.9996H9.3L18.76 31.5596C19.1119 31.8419 19.5489 31.997 20 31.9996C20.2987 32.0045 20.5941 31.9358 20.86 31.7996C21.2003 31.6375 21.4879 31.3825 21.6897 31.064C21.8914 30.7455 21.9989 30.3765 22 29.9996V1.99958C21.9989 1.6226 21.8914 1.25361 21.6897 0.935133C21.4879 0.616658 21.2003 0.361673 20.86 0.199576ZM18 25.8396L11.24 20.4396C10.8881 20.1573 10.4511 20.0022 10 19.9996H4V11.9996H10C10.4511 11.997 10.8881 11.8419 11.24 11.5596L18 6.15957V25.8396ZM35.32 4.67958C34.9434 4.30297 34.4326 4.09139 33.9 4.09139C33.3674 4.09139 32.8566 4.30297 32.48 4.67958C32.1034 5.05618 31.8918 5.56697 31.8918 6.09958C31.8918 6.63218 32.1034 7.14297 32.48 7.51958C33.6577 8.69545 34.5779 10.1034 35.1823 11.6541C35.7866 13.2047 36.0617 14.8641 35.9902 16.5268C35.9188 18.1895 35.5022 19.8192 34.7671 21.3122C34.0319 22.8053 32.9943 24.1291 31.72 25.1996C31.4105 25.4642 31.1892 25.8169 31.0856 26.2107C30.982 26.6045 31.001 27.0205 31.1402 27.4032C31.2793 27.7858 31.5319 28.1169 31.8643 28.3521C32.1966 28.5874 32.5929 28.7156 33 28.7196C33.4673 28.7205 33.9202 28.5577 34.28 28.2596C35.9819 26.8342 37.3685 25.0702 38.3517 23.0798C39.3349 21.0895 39.8932 18.9163 39.991 16.6985C40.0888 14.4807 39.7241 12.2668 38.9199 10.1977C38.1157 8.12848 36.8898 6.24928 35.32 4.67958ZM29.66 10.3396C29.4735 10.1531 29.2521 10.0052 29.0085 9.90425C28.7649 9.80333 28.5037 9.75139 28.24 9.75139C27.9763 9.75139 27.7152 9.80333 27.4715 9.90425C27.2279 10.0052 27.0065 10.1531 26.82 10.3396C26.6335 10.5261 26.4856 10.7474 26.3847 10.9911C26.2838 11.2347 26.2318 11.4959 26.2318 11.7596C26.2318 12.0233 26.2838 12.2844 26.3847 12.5281C26.4856 12.7717 26.6335 12.9931 26.82 13.1796C27.5712 13.9263 27.9955 14.9404 28 15.9996C28.0005 16.5823 27.8736 17.158 27.6284 17.6866C27.3831 18.2152 27.0253 18.6837 26.58 19.0596C26.3775 19.2275 26.2101 19.4337 26.0874 19.6664C25.9647 19.8991 25.8891 20.1537 25.8649 20.4156C25.8408 20.6776 25.8685 20.9417 25.9466 21.1929C26.0247 21.4441 26.1516 21.6775 26.32 21.8796C26.4893 22.0806 26.6966 22.2464 26.93 22.3672C27.1634 22.4881 27.4184 22.5618 27.6803 22.5841C27.9422 22.6064 28.2059 22.5769 28.4564 22.4972C28.7069 22.4174 28.9392 22.2891 29.14 22.1196C30.0342 21.3698 30.7536 20.4335 31.2477 19.3763C31.7417 18.319 31.9985 17.1665 32 15.9996C31.9887 13.8798 31.1489 11.8485 29.66 10.3396Z"},
-                   :item-7-r1                                         {:y           387,
-                                                                       :rotation    -69,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/red_crayons.png",
-                                                                       :actions     {:click         {:id "red-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-red-r1",
-                                                                                                              :target        "item-7-r1",
-                                                                                                              :init-position {:x 736, :y 387, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "red-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-7-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           736,
-                                                                       :visible     false},
-                   :item-14-r1                                        {:y           558,
-                                                                       :rotation    -30,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/purple_crayons.png",
-                                                                       :actions     {:click         {:id "purple-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-purple-r1",
-                                                                                                              :target        "item-14-r1",
-                                                                                                              :init-position {:x 1033, :y 558, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "purple-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-14-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1033,
-                                                                       :visible     false},
-                   :item-16-r1                                        {:y           387,
-                                                                       :rotation    25,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/green_crayons.png",
-                                                                       :actions     {:click         {:id "green-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-green-r1",
-                                                                                                              :target        "item-16-r1",
-                                                                                                              :init-position {:x 736, :y 387, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "green-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-16-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           736,
-                                                                       :visible     false},
-                   :question-1-options-option-2                       {:x        835,
-                                                                       :y        208.7356760886173,
-                                                                       :type     "group",
-                                                                       :children ["question-1-options-option-2-substrate"
-                                                                                  "question-1-question-id--ok-image-group"]},
-                   :box-orange-r2                                     {:x          1120,
-                                                                       :y          652,
-                                                                       :src        "/raw/img/categorize/orange_table.png",
-                                                                       :type       "image",
+                   :orange-crayon-2-r1                                {:y          456,
+                                                                       :rotation   215,
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :actions    {:click {:id "box-orange-dialog-r2", :on "click", :type "action"}},
-                                                                       :visible    false,
-                                                                       :transition "box-orange-r2"},
-                   :question-1-question-id--task-text                 {:y              0,
-                                                                       :vertical-align "top",
-                                                                       :font-size      48,
-                                                                       :word-wrap      true,
-                                                                       :width          956.6157372039727,
-                                                                       :editable?      {:select true},
-                                                                       :type           "text",
-                                                                       :x              110,
-                                                                       :text           "Question placeholder"},
-                   :question-1                                        {:x         0,
-                                                                       :y         0,
-                                                                       :type      "group",
-                                                                       :alias     "Q1",
-                                                                       :visible   false,
-                                                                       :children  ["question-1-substrate"
-                                                                                   "question-1-background"
-                                                                                   "question-1-task-text-group"
-                                                                                   "question-1-options"
-                                                                                   "question-1-question-id--task-image"],
-                                                                       :metadata  {:assets    ["/images/questions/thumbs_up.png"
-                                                                                               "/raw/clipart/elements/etc--elements-concepts--apple.png"
-                                                                                               "/images/questions/thumbs_down.png"
-                                                                                               "/images/questions/question.png"],
-                                                                                   :params    {:ok-image          {:src        "/raw/clipart/elements/etc--elements-concepts--apple.png",
-                                                                                                                   :scale      {:x 1, :y 1},
-                                                                                                                   :image-size "contain"},
-                                                                                               :task-text         {:text "Question placeholder", :font-size 48},
-                                                                                               :options-label     "audio-text",
-                                                                                               :option-4-text     {:text "Option 4", :font-size 48},
-                                                                                               :option-4-image    {:src        "/images/questions/option4.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :option-3-image    {:src        "/images/questions/option3.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :ok-text           {:text "Ok", :font-size 48},
-                                                                                               :option-2-text     {:text "Option 2", :font-size 48},
-                                                                                               :thumbs-up-image   {:src        "/images/questions/thumbs_up.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :answers-number    "one",
-                                                                                               :layout            "vertical",
-                                                                                               :option-1-text     {:text "Option 1", :font-size 48},
-                                                                                               :option-1-image    {:src        "/images/questions/option1.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :option-2-image    {:src        "/images/questions/option2.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :thumbs-up-text    {:text "Thumbs Up", :font-size 48},
-                                                                                               :task-type         "text-image",
-                                                                                               :question-type     "thumbs-up-n-down",
-                                                                                               :alias             "Q1",
-                                                                                               :option-1-value    "option-1",
-                                                                                               :option-3-text     {:text "Option 3", :font-size 48},
-                                                                                               :thumbs-down-image {:src        "/images/questions/thumbs_down.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :thumbs-down-value "thumbs-down",
-                                                                                               :task-image        {:src "/images/questions/question.png", :image-size "contain"},
-                                                                                               :options-number    2,
-                                                                                               :mark-options      ["thumbs-up" "ok" "thumbs-down"],
-                                                                                               :option-2-value    "option-2",
-                                                                                               :option-4-value    "option-4",
-                                                                                               :correct-answers   ["ok"],
-                                                                                               :version           2,
-                                                                                               :thumbs-down-text  {:text "Thumbs Down", :font-size 48},
-                                                                                               :ok-value          "ok",
-                                                                                               :thumbs-up-value   "thumbs-up",
-                                                                                               :option-3-value    "option-3"},
-                                                                                   :actions   ["question-1-options-option-3-substrate-inactivate"
-                                                                                               "question-1-task-voice-over-click"
-                                                                                               "question-1-options-option-2-substrate-inactivate"
-                                                                                               "question-1-check-answers-correct-answer"
-                                                                                               "question-1-check-answers-wrong-answer"
-                                                                                               "question-1-hide"
-                                                                                               "question-1-task-text-group-button-activate"
-                                                                                               "question-1-task-text-group-button-inactivate"
-                                                                                               "question-1-task-dialog"
-                                                                                               "question-1-options-option-2-substrate-activate"
-                                                                                               "question-1-options-option-3-substrate-activate"
-                                                                                               "question-1-check-answers-wrong-answer-dialog"
-                                                                                               "question-1-options-option-1-substrate-activate"
-                                                                                               "question-1-show"
-                                                                                               "question-1-options-option-1-substrate-inactivate"
-                                                                                               "question-1"
-                                                                                               "question-1-check-answers"
-                                                                                               "question-1-check-answers-correct-answer-dialog"
-                                                                                               "question-1-option-click-handler"],
-                                                                                   :objects   ["question-1-options-option-2-substrate"
-                                                                                               "question-1-task-text-group-button-icon"
-                                                                                               "question-1-task-text-group-button-background"
-                                                                                               "question-1-background"
-                                                                                               "question-1-question-id--thumbs-up-image-group"
-                                                                                               "question-1-substrate"
-                                                                                               "question-1-options-option-3-substrate"
-                                                                                               "question-1-question-id--thumbs-up-image"
-                                                                                               "question-1-options-option-3"
-                                                                                               "question-1-options"
-                                                                                               "question-1-question-id--ok-image-group"
-                                                                                               "question-1-question-id--thumbs-down-image-group"
-                                                                                               "question-1-question-id--ok-image"
-                                                                                               "question-1-options-option-1-substrate"
-                                                                                               "question-1-task-text-group"
-                                                                                               "question-1-task-text-group-button"
-                                                                                               "question-1-options-option-2"
-                                                                                               "question-1-question-id--task-text"
-                                                                                               "question-1"
-                                                                                               "question-1-options-option-1"
-                                                                                               "question-1-question-id--task-image"
-                                                                                               "question-1-question-id--thumbs-down-image"],
-                                                                                   :question? true},
-                                                                       :editable? {:show-in-tree? true}},
+                                                                       :transition "orange-crayon-2-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/orange_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "orange-crayon-2-r1",
+                                                                                                          :init-position  {:x 1406, :y 456, :duration 1},
+                                                                                                          :check-variable "orange-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "orange-crayon-2-r1",
+                                                                                                          :say-color    "orange-color-r1",
+                                                                                                          :crayon-color "orange"}}},
+                                                                       :draggable  true,
+                                                                       :x          1406,
+                                                                       :visible    false},
                    :question-0-options-option-1-substrate             {:y             0,
                                                                        :states        {:active {:border-color 45823}, :default {:border-color 0}},
                                                                        :fill          16777215,
@@ -3726,18 +2983,13 @@
                                                                        :actions       {:click {:id         "question-0-option-click-handler",
                                                                                                :on         "click",
                                                                                                :type       "action",
-                                                                                               :params     {:value "option-1"},
+                                                                                               :params     {:value "option-2"},
                                                                                                :unique-tag "question-action"}},
                                                                        :border-width  2,
                                                                        :border-color  0,
                                                                        :x             110,
                                                                        :border-radius 20,
                                                                        :height        100},
-                   :question-1-options-option-1                       {:x        525,
-                                                                       :y        208.7356760886173,
-                                                                       :type     "group",
-                                                                       :children ["question-1-options-option-1-substrate"
-                                                                                  "question-1-question-id--thumbs-up-image-group"]},
                    :question-0-options-option-3-voice-over-background {:x             0,
                                                                        :y             0,
                                                                        :fill          16777215,
@@ -3747,72 +2999,134 @@
                                                                        :states        {:active  {:fill 45823},
                                                                                        :default {:fill 16777215}},
                                                                        :border-radius 40},
-                   :box-blue-r2                                       {:x          943,
-                                                                       :y          628,
-                                                                       :src        "/raw/img/categorize/blue_box_small.png",
-                                                                       :type       "image",
+                   :purple-crayon-2-r1                                {:y          279,
+                                                                       :rotation   165,
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :actions    {:click {:id "box-blue-dialog-r2", :on "click", :type "action"}},
-                                                                       :visible    false,
-                                                                       :transition "box-blue-r2"},
-                   :item-0-r1                                         {:y           228,
-                                                                       :rotation    -53,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/blue_crayons.png",
-                                                                       :actions     {:click         {:id "blue-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-blue-r1",
-                                                                                                              :target        "item-0-r1",
-                                                                                                              :init-position {:x 184, :y 228, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "blue-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-0-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           184,
-                                                                       :visible     false},
-                   :question-0-options-option-4-voice-over            {:x        0,
-                                                                       :y        0,
-                                                                       :type     "group",
-                                                                       :actions  {:click {:id         "question-0-option-voice-over",
-                                                                                          :on         "click",
-                                                                                          :type       "action",
-                                                                                          :params     {:value "option-4"},
-                                                                                          :unique-tag "question-action"}},
-                                                                       :children ["question-0-options-option-4-voice-over-background"
-                                                                                  "question-0-options-option-4-voice-over-icon"]},
-                   :box-green-r2                                      {:x          330,
-                                                                       :y          667,
-                                                                       :src        "/raw/img/categorize/green_table.png",
+                                                                       :transition "purple-crayon-2-r1",
                                                                        :type       "image",
+                                                                       :src        "/raw/img/categorize/purple_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "purple-crayon-2-r1",
+                                                                                                          :init-position  {:x 1071, :y 279, :duration 1},
+                                                                                                          :check-variable "purple-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "purple-crayon-2-r1",
+                                                                                                          :say-color    "purple-color-r1",
+                                                                                                          :crayon-color "purple"}}},
+                                                                       :draggable  true,
+                                                                       :x          1071,
+                                                                       :visible    false},
+                   :purple-crayon-r3                                  {:y         1054,
+                                                                       :rotation  -90,
+                                                                       :states    {:init-position  {:x 60, :y 1054},
+                                                                                   :hide-technical {:visible false},
+                                                                                   :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/purple_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "stop-drag-hide-r3",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:self          "purple-crayon-r3",
+                                                                                                         :target        "purple-table-r3",
+                                                                                                         :colliders     ["yellow-box-r3"
+                                                                                                                         "blue-box-r3"
+                                                                                                                         "red-box-r3"
+                                                                                                                         "purple-table-r3"
+                                                                                                                         "orange-table-r3"
+                                                                                                                         "green-table-r3"],
+                                                                                                         :init-position {:x 60, :y 1054, :duration 1}}},
+                                                                                   :drag-start {:id     "start-drag-r3",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:self      "purple-crayon-r3",
+                                                                                                         :target    "purple-table-r3",
+                                                                                                         :colliders ["yellow-box-r3"
+                                                                                                                     "blue-box-r3"
+                                                                                                                     "red-box-r3"
+                                                                                                                     "purple-table-r3"
+                                                                                                                     "orange-table-r3"
+                                                                                                                     "green-table-r3"],
+                                                                                                         :say-color "purple-color-r3"}}},
+                                                                       :draggable true,
+                                                                       :x         60,
+                                                                       :visible   false},
+                   :layered-background-r2                             {:type       "layered-background",
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :actions    {:click {:id "box-green-dialog-r2", :on "click", :type "action"}},
+                                                                       :surface    {:src "/raw/img/categorize/02.png"},
                                                                        :visible    false,
-                                                                       :transition "box-green-r2"},
+                                                                       :background {:src "/raw/img/categorize/01.png"},
+                                                                       :decoration {:src "/raw/img/categorize/03.png"}},
+                   :question-0-options-option-2-text                  {:y              50,
+                                                                       :vertical-align "middle",
+                                                                       :font-size      48,
+                                                                       :word-wrap      true,
+                                                                       :width          720,
+                                                                       :editable?      {:select true},
+                                                                       :type           "text",
+                                                                       :actions        {:click {:id         "question-0-option-click-handler",
+                                                                                                :on         "click",
+                                                                                                :type       "action",
+                                                                                                :params     {:value "option-3"},
+                                                                                                :unique-tag "question-action"}},
+                                                                       :chunks         [{:end 4, :start 0}
+                                                                                        {:end 8, :start 5}
+                                                                                        {:end 13, :start 9}
+                                                                                        {:end 16, :start 14}
+                                                                                        {:end 22, :start 17}
+                                                                                        {:end 29, :start 23}
+                                                                                        {:end 36, :start 30}],
+                                                                       :x              130,
+                                                                       :text           "They are both in their crayon boxes."},
+                   :red-crayon-3-r2                                   {:y         164,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/red_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "red-box-r2",
+                                                                                                         :target         "red-crayon-3-r2",
+                                                                                                         :init-position  {:x 1548, :y 164, :duration 1},
+                                                                                                         :check-variable "red-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target "red-crayon-3-r2", :say-color "red-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1548,
+                                                                       :visible   false},
+                   :green-crayon-1-r1                                 {:y          64,
+                                                                       :rotation   121,
+                                                                       :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :transition "green-crayon-1-r1",
+                                                                       :type       "image",
+                                                                       :src        "/raw/img/categorize/green_crayons.png",
+                                                                       :actions    {:drag-end   {:id     "drag-crayon-r1",
+                                                                                                 :on     "drag-end",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target         "green-crayon-1-r1",
+                                                                                                          :init-position  {:x 760, :y 64, :duration 1},
+                                                                                                          :check-variable "green-box-selected"}},
+                                                                                    :drag-start {:id     "start-drag-r1",
+                                                                                                 :on     "drag-start",
+                                                                                                 :type   "action",
+                                                                                                 :params {:target       "green-crayon-1-r1",
+                                                                                                          :say-color    "green-color-r1",
+                                                                                                          :crayon-color "green"}}},
+                                                                       :draggable  true,
+                                                                       :x          760,
+                                                                       :visible    false},
                    :question-0-task-text-group                        {:x        793.3842627960273,
                                                                        :y        60,
                                                                        :type     "group",
-                                                                       :children ["question-0-task-text-group-button"
-                                                                                  "question-0-question-id--task-text"]},
+                                                                       :children ["question-0-task-text-group-button" "question-0-task-text"]},
                    :question-0                                        {:x         0,
                                                                        :y         0,
                                                                        :type      "group",
@@ -3824,71 +3138,31 @@
                                                                                    "question-0-options"
                                                                                    "question-0-task-image"],
                                                                        :metadata  {:assets    ["/images/questions/question.png"],
-                                                                                   :params    {:ok-image          {:src "/images/questions/ok.png", :image-size "contain"},
-                                                                                               :task-text         {:text "Question placeholder", :font-size 48},
-                                                                                               :options-label     "audio-text",
-                                                                                               :option-4-text     {:text "Option 4", :font-size 48},
-                                                                                               :option-4-image    {:src        "/images/questions/option4.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :option-3-image    {:src        "/images/questions/option3.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :ok-text           {:text "Ok", :font-size 48},
-                                                                                               :option-2-text     {:text "Option 2", :font-size 48},
-                                                                                               :thumbs-up-image   {:src        "/images/questions/thumbs_up.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :answers-number    "one",
-                                                                                               :layout            "vertical",
-                                                                                               :option-1-text     {:text "Option 1", :font-size 48},
-                                                                                               :option-1-image    {:src        "/images/questions/option1.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :option-2-image    {:src        "/images/questions/option2.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :thumbs-up-text    {:text "Thumbs Up", :font-size 48},
-                                                                                               :task-type         "text-image",
-                                                                                               :question-type     "multiple-choice-text",
-                                                                                               :alias             "What is the same about these two crayons?",
-                                                                                               :option-1-value    "option-1",
-                                                                                               :option-3-text     {:text "Option 3", :font-size 48},
-                                                                                               :thumbs-down-image {:src        "/images/questions/thumbs_down.png",
-                                                                                                                   :image-size "contain"},
-                                                                                               :thumbs-down-value "thumbs-down",
-                                                                                               :task-image        {:src "/images/questions/question.png", :image-size "contain"},
-                                                                                               :options-number    4,
-                                                                                               :mark-options      ["thumbs-up" "thumbs-down"],
-                                                                                               :option-2-value    "option-2",
-                                                                                               :option-label      "audio-text",
-                                                                                               :option-4-value    "option-4",
-                                                                                               :correct-answers   ["option-2"],
-                                                                                               :version           2,
-                                                                                               :thumbs-down-text  {:text "Thumbs Down", :font-size 48},
-                                                                                               :ok-value          "ok",
-                                                                                               :thumbs-up-value   "thumbs-up",
-                                                                                               :option-3-value    "option-3"},
                                                                                    :actions   ["question-0-options-option-3-voice-over-activate"
                                                                                                "question-0-task-dialog"
+                                                                                               "question-0-options-option-0-substrate-inactivate"
                                                                                                "question-0-option-voice-over-voice-over-option-3"
                                                                                                "question-0-options-option-2-substrate-inactivate"
+                                                                                               "question-0-options-option-0-voice-over-activate"
                                                                                                "question-0-task-voice-over-click"
                                                                                                "question-0-options-option-1-substrate-inactivate"
                                                                                                "question-0-options-option-3-substrate-inactivate"
-                                                                                               "question-0-options-option-4-voice-over-activate"
                                                                                                "question-0-option-voice-over-voice-over-option-1"
                                                                                                "question-0-options-option-2-voice-over-inactivate"
                                                                                                "question-0-options-option-1-substrate-activate"
                                                                                                "question-0-hide"
+                                                                                               "question-0-options-option-0-voice-over-inactivate"
+                                                                                               "question-0-options-option-0-substrate-activate"
                                                                                                "question-0-options-option-3-substrate-activate"
                                                                                                "question-0-options-option-2-substrate-activate"
                                                                                                "question-0-option-voice-over-voice-over-option-2"
                                                                                                "question-0-check-answers-correct-answer-dialog"
                                                                                                "question-0-options-option-1-voice-over-activate"
-                                                                                               "question-0-options-option-4-substrate-activate"
-                                                                                               "question-0-options-option-4-substrate-inactivate"
                                                                                                "question-0-options-option-1-voice-over-inactivate"
                                                                                                "question-0-option-click-handler"
                                                                                                "question-0-options-option-3-voice-over-inactivate"
                                                                                                "question-0-check-answers-wrong-answer"
                                                                                                "question-0-options-option-2-voice-over-activate"
-                                                                                               "question-0-options-option-4-voice-over-inactivate"
                                                                                                "question-0-task-text-group-button-activate"
                                                                                                "question-0-option-voice-over"
                                                                                                "question-0-check-answers-correct-answer"
@@ -3898,272 +3172,54 @@
                                                                                                "question-0-check-answers"
                                                                                                "question-0"
                                                                                                "question-0-option-voice-over-voice-over-option-4"],
-                                                                                   :objects   ["question-0-options-option-2-voice-over-icon"
-                                                                                               "question-0-question-id--option-2-text"
-                                                                                               "question-0-question-id--option-4-text"
-                                                                                               "question-0-options-option-4-voice-over-icon"
+                                                                                   :objects   ["question-0-options-option-0-voice-over-icon"
+                                                                                               "question-0-options-option-0-text"
+                                                                                               "question-0-options-option-2-voice-over-icon"
+                                                                                               "question-0-options-option-0-voice-over-background"
+                                                                                               "question-0-options-option-0-voice-over"
                                                                                                "question-0-background"
-                                                                                               "question-0-options-option-4-voice-over-background"
-                                                                                               "question-0-question-id--option-1-text"
+                                                                                               "question-0-options-option-1-text"
+                                                                                               "question-0-options-option-3-text"
                                                                                                "question-0-options-option-2"
+                                                                                               "question-0-task-text"
                                                                                                "question-0-task-text-group-button-background"
                                                                                                "question-0-options-option-2-substrate"
-                                                                                               "question-0-question-id--task-text"
                                                                                                "question-0-options"
-                                                                                               "question-0-question-id--option-3-text"
                                                                                                "question-0-options-option-1"
-                                                                                               "question-0-options-option-4"
+                                                                                               "question-0-task-image"
                                                                                                "question-0-options-option-1-voice-over"
                                                                                                "question-0-options-option-2-voice-over"
                                                                                                "question-0-substrate"
                                                                                                "question-0-options-option-3"
+                                                                                               "question-0-options-option-0-substrate"
                                                                                                "question-0-options-option-3-substrate"
                                                                                                "question-0-options-option-2-voice-over-background"
-                                                                                               "question-0-question-id--task-image"
                                                                                                "question-0-task-text-group-button-icon"
-                                                                                               "question-0-options-option-4-substrate"
                                                                                                "question-0-options-option-1-voice-over-icon"
                                                                                                "question-0-options-option-1-substrate"
                                                                                                "question-0-options-option-3-voice-over-background"
-                                                                                               "question-0-options-option-4-voice-over"
+                                                                                               "question-0-options-option-2-text"
                                                                                                "question-0-task-text-group"
                                                                                                "question-0"
                                                                                                "question-0-options-option-3-voice-over-icon"
+                                                                                               "question-0-options-option-0"
                                                                                                "question-0-task-text-group-button"
                                                                                                "question-0-options-option-1-voice-over-background"
                                                                                                "question-0-options-option-3-voice-over"],
                                                                                    :question? true},
                                                                        :editable? {:show-in-tree? true}},
-                   :item-11-r1                                        {:y           144,
-                                                                       :rotation    135,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :type        "image",
-                                                                       :src         "/raw/img/categorize/orange_crayons.png",
-                                                                       :actions     {:click         {:id "orange-color-r1", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r1",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-orange-r1",
-                                                                                                              :target        "item-11-r1",
-                                                                                                              :init-position {:x 1753, :y 144, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r1",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "orange-color-r1"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r1",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-11-r1"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r1",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r1",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r1"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1753,
-                                                                       :visible     false},
                    :layered-background-r0                             {:type       "layered-background",
                                                                        :states     {:hide-technical {:visible false}, :show-technical {:visible true}},
                                                                        :surface    {:src "/raw/img/categorize/02.png"},
                                                                        :background {:src "/raw/img/categorize/01.png"},
                                                                        :decoration {:src "/raw/img/categorize/03.png"}},
-                   :item-yellow-r3                                    {:y           162,
-                                                                       :rotation    -90,
-                                                                       :states      {:highlighted     {:highlight true},
-                                                                                     :init-position   {:x           154,
-                                                                                                       :y           162,
-                                                                                                       :scale       0.35,
-                                                                                                       :mask-x      -100,
-                                                                                                       :mask-y      -150,
-                                                                                                       :rotation    -90,
-                                                                                                       :mask-width  395,
-                                                                                                       :mask-height 936},
-                                                                                     :hide-technical  {:visible false},
-                                                                                     :show-technical  {:visible true},
-                                                                                     :not-highlighted {:highlight false}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/yellow_crayons.png",
-                                                                       :actions     {:click         {:id "yellow-color-r3", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r3",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box--r3",
-                                                                                                              :target        "item-yellow-r3",
-                                                                                                              :init-position {:x 154, :y 162, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r3",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "yellow-color-r3"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r3",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-yellow-r3"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r3",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r3",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           154,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :question-1-question-id--task-image                {:y          206.2643239113827,
-                                                                       :width      613.3842627960273,
-                                                                       :editable?  {:select true},
-                                                                       :type       "image",
-                                                                       :src        "/images/questions/question.png",
-                                                                       :image-size "contain",
-                                                                       :origin     {:type "center-center"},
-                                                                       :x          366.69213139801366,
-                                                                       :height     292.5286478227654},
-                   :item-16-r2                                        {:y           841,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/green_crayons.png",
-                                                                       :actions     {:click         {:id "green-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-green-r2",
-                                                                                                              :target        "item-16-r2",
-                                                                                                              :init-position {:x 1418, :y 841, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "green-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-16-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1418,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :question-1-question-id--thumbs-down-image         {:y             125,
-                                                                       :width         230,
-                                                                       :editable?     {:select true},
-                                                                       :type          "image",
-                                                                       :src           "/images/questions/thumbs_down.png",
-                                                                       :image-size    "contain",
-                                                                       :origin        {:type "center-center"},
-                                                                       :x             125,
-                                                                       :border-radius 115,
-                                                                       :height        230},
-                   :item-15-r2                                        {:y           233,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/green_crayons.png",
-                                                                       :actions     {:click         {:id "green-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-green-r2",
-                                                                                                              :target        "item-15-r2",
-                                                                                                              :init-position {:x 714, :y 233, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "green-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-15-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           714,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-8-r2                                         {:y           463,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/yellow_crayons.png",
-                                                                       :actions     {:click         {:id "yellow-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-yellow-r2",
-                                                                                                              :target        "item-8-r2",
-                                                                                                              :init-position {:x 1618, :y 463, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "yellow-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-8-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1618,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
+                   :blue-box-r1                                       {:x       375,
+                                                                       :y       810,
+                                                                       :src     "/raw/img/categorize/blue_box.png",
+                                                                       :type    "image",
+                                                                       :scale   0.65,
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
                    :question-0-options-option-3-voice-over-icon       {:y          24,
                                                                        :states     {:active {:fill "#FFFFFF"}, :default {:fill "#000000"}},
                                                                        :fill       "#000000",
@@ -4173,97 +3229,46 @@
                                                                        :scene-name "letter-tutorial-trace",
                                                                        :height     32,
                                                                        :data       "M20.86 0.199576C20.5352 0.0590597 20.1789 0.00723956 19.8276 0.0494034C19.4762 0.0915673 19.1423 0.226205 18.86 0.439575L9.3 7.99958H2C1.46957 7.99958 0.960859 8.21029 0.585786 8.58536C0.210714 8.96043 0 9.46914 0 9.99957V21.9996C0 22.53 0.210714 23.0387 0.585786 23.4138C0.960859 23.7889 1.46957 23.9996 2 23.9996H9.3L18.76 31.5596C19.1119 31.8419 19.5489 31.997 20 31.9996C20.2987 32.0045 20.5941 31.9358 20.86 31.7996C21.2003 31.6375 21.4879 31.3825 21.6897 31.064C21.8914 30.7455 21.9989 30.3765 22 29.9996V1.99958C21.9989 1.6226 21.8914 1.25361 21.6897 0.935133C21.4879 0.616658 21.2003 0.361673 20.86 0.199576ZM18 25.8396L11.24 20.4396C10.8881 20.1573 10.4511 20.0022 10 19.9996H4V11.9996H10C10.4511 11.997 10.8881 11.8419 11.24 11.5596L18 6.15957V25.8396ZM35.32 4.67958C34.9434 4.30297 34.4326 4.09139 33.9 4.09139C33.3674 4.09139 32.8566 4.30297 32.48 4.67958C32.1034 5.05618 31.8918 5.56697 31.8918 6.09958C31.8918 6.63218 32.1034 7.14297 32.48 7.51958C33.6577 8.69545 34.5779 10.1034 35.1823 11.6541C35.7866 13.2047 36.0617 14.8641 35.9902 16.5268C35.9188 18.1895 35.5022 19.8192 34.7671 21.3122C34.0319 22.8053 32.9943 24.1291 31.72 25.1996C31.4105 25.4642 31.1892 25.8169 31.0856 26.2107C30.982 26.6045 31.001 27.0205 31.1402 27.4032C31.2793 27.7858 31.5319 28.1169 31.8643 28.3521C32.1966 28.5874 32.5929 28.7156 33 28.7196C33.4673 28.7205 33.9202 28.5577 34.28 28.2596C35.9819 26.8342 37.3685 25.0702 38.3517 23.0798C39.3349 21.0895 39.8932 18.9163 39.991 16.6985C40.0888 14.4807 39.7241 12.2668 38.9199 10.1977C38.1157 8.12848 36.8898 6.24928 35.32 4.67958ZM29.66 10.3396C29.4735 10.1531 29.2521 10.0052 29.0085 9.90425C28.7649 9.80333 28.5037 9.75139 28.24 9.75139C27.9763 9.75139 27.7152 9.80333 27.4715 9.90425C27.2279 10.0052 27.0065 10.1531 26.82 10.3396C26.6335 10.5261 26.4856 10.7474 26.3847 10.9911C26.2838 11.2347 26.2318 11.4959 26.2318 11.7596C26.2318 12.0233 26.2838 12.2844 26.3847 12.5281C26.4856 12.7717 26.6335 12.9931 26.82 13.1796C27.5712 13.9263 27.9955 14.9404 28 15.9996C28.0005 16.5823 27.8736 17.158 27.6284 17.6866C27.3831 18.2152 27.0253 18.6837 26.58 19.0596C26.3775 19.2275 26.2101 19.4337 26.0874 19.6664C25.9647 19.8991 25.8891 20.1537 25.8649 20.4156C25.8408 20.6776 25.8685 20.9417 25.9466 21.1929C26.0247 21.4441 26.1516 21.6775 26.32 21.8796C26.4893 22.0806 26.6966 22.2464 26.93 22.3672C27.1634 22.4881 27.4184 22.5618 27.6803 22.5841C27.9422 22.6064 28.2059 22.5769 28.4564 22.4972C28.7069 22.4174 28.9392 22.2891 29.14 22.1196C30.0342 21.3698 30.7536 20.4335 31.2477 19.3763C31.7417 18.319 31.9985 17.1665 32 15.9996C31.9887 13.8798 31.1489 11.8485 29.66 10.3396Z"},
-                   :item-14-r2                                        {:y           187,
-                                                                       :rotation    -90,
-                                                                       :states      {:hide-technical {:visible false}, :show-technical {:visible true}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/red_crayons.png",
-                                                                       :actions     {:click         {:id "red-color-r2", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r2",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box-red-r2",
-                                                                                                              :target        "item-14-r2",
-                                                                                                              :init-position {:x 1548, :y 187, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r2",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "red-color-r2"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r2",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-14-r2"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r2",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r2",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r2"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           1548,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
-                   :item-purple-r3                                    {:y           1077,
-                                                                       :rotation    -90,
-                                                                       :states      {:highlighted     {:highlight true},
-                                                                                     :init-position   {:x           60,
-                                                                                                       :y           1077,
-                                                                                                       :scale       0.35,
-                                                                                                       :mask-x      -100,
-                                                                                                       :mask-y      -150,
-                                                                                                       :rotation    -90,
-                                                                                                       :mask-width  395,
-                                                                                                       :mask-height 936},
-                                                                                     :hide-technical  {:visible false},
-                                                                                     :show-technical  {:visible true},
-                                                                                     :not-highlighted {:highlight false}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/purple_crayons.png",
-                                                                       :actions     {:click         {:id "purple-color-r3", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r3",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box--r3",
-                                                                                                              :target        "item-purple-r3",
-                                                                                                              :init-position {:x 60, :y 1077, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r3",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "purple-color-r3"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r3",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-purple-r3"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r3",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r3",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           60,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
+                   :orange-table-r3                                   {:x       745,
+                                                                       :y       773,
+                                                                       :src     "/raw/img/categorize/orange_table.png",
+                                                                       :type    "image",
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :purple-box-r1                                     {:x       975,
+                                                                       :y       810,
+                                                                       :src     "/raw/img/categorize/purple_box.png",
+                                                                       :type    "image",
+                                                                       :scale   0.65,
+                                                                       :states  {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :visible false},
+                   :yellow-crayon-3-r2                                {:y         440,
+                                                                       :rotation  -90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/yellow_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "yellow-box-r2",
+                                                                                                         :target         "yellow-crayon-3-r2",
+                                                                                                         :init-position  {:x 1618, :y 440, :duration 1},
+                                                                                                         :check-variable "yellow-box-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "yellow-crayon-3-r2",
+                                                                                                         :say-color "yellow-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         1618,
+                                                                       :visible   false},
+                   :question-0-options-option-0                       {:x        60,
+                                                                       :y        203.7356760886173,
+                                                                       :type     "group",
+                                                                       :children ["question-0-options-option-0-substrate"
+                                                                                  "question-0-options-option-0-voice-over"
+                                                                                  "question-0-options-option-0-text"]},
                    :question-0-task-text-group-button                 {:x        0,
                                                                        :y        0,
                                                                        :type     "group",
@@ -4282,64 +3287,34 @@
                                                                        :states        {:active  {:fill 45823},
                                                                                        :default {:fill 16777215}},
                                                                        :border-radius 40},
-                   :item-red-r3                                       {:y           524,
-                                                                       :rotation    -90,
-                                                                       :states      {:highlighted     {:highlight true},
-                                                                                     :init-position   {:x           776,
-                                                                                                       :y           524,
-                                                                                                       :scale       0.35,
-                                                                                                       :mask-x      -100,
-                                                                                                       :mask-y      -150,
-                                                                                                       :rotation    -90,
-                                                                                                       :mask-width  395,
-                                                                                                       :mask-height 936},
-                                                                                     :hide-technical  {:visible false},
-                                                                                     :show-technical  {:visible true},
-                                                                                     :not-highlighted {:highlight false}},
-                                                                       :scale       0.35,
-                                                                       :type        "image",
-                                                                       :mask-height 936,
-                                                                       :src         "/raw/img/categorize/red_crayons.png",
-                                                                       :actions     {:click         {:id "red-color-r3", :on "click", :type "action"},
-                                                                                     :drag-end      {:id     "handle-drag-end-r3",
-                                                                                                     :on     "drag-end",
-                                                                                                     :type   "action",
-                                                                                                     :params {:box           "box--r3",
-                                                                                                              :target        "item-red-r3",
-                                                                                                              :init-position {:x 776, :y 524, :duration 1}}},
-                                                                                     :drag-move     {:id      "handle-drag-move-r3",
-                                                                                                     :on      "drag-move",
-                                                                                                     :type    "action",
-                                                                                                     :params  {:say-item "red-color-r3"},
-                                                                                                     :options {:throttle "action-done"}},
-                                                                                     :drag-start    {:id     "handle-drag-start-r3",
-                                                                                                     :on     "drag-start",
-                                                                                                     :type   "action",
-                                                                                                     :params {:target "item-red-r3"}},
-                                                                                     :collide-enter {:id               "handle-collide-enter-r3",
-                                                                                                     :on               "collide-enter",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]},
-                                                                                     :collide-leave {:id               "handle-collide-leave-r3",
-                                                                                                     :on               "collide-leave",
-                                                                                                     :test             ["#^box-.*-r3"],
-                                                                                                     :type             "action",
-                                                                                                     :pick-event-param ["target"]}},
-                                                                       :draggable   true,
-                                                                       :collidable? true,
-                                                                       :x           776,
-                                                                       :mask-width  395,
-                                                                       :visible     false,
-                                                                       :mask-y      -150,
-                                                                       :mask-x      -100},
+                   :orange-crayon-2-r2                                {:y         400,
+                                                                       :rotation  90,
+                                                                       :states    {:hide-technical {:visible false}, :show-technical {:visible true}},
+                                                                       :scale     0.35,
+                                                                       :type      "image",
+                                                                       :src       "/raw/img/categorize/orange_crayons.png",
+                                                                       :actions   {:drag-end   {:id     "drag-crayon-r2",
+                                                                                                :on     "drag-end",
+                                                                                                :type   "action",
+                                                                                                :params {:box            "orange-table-r2",
+                                                                                                         :target         "orange-crayon-2-r2",
+                                                                                                         :init-position  {:x 892, :y 400, :duration 1},
+                                                                                                         :check-variable "orange-table-selected"}},
+                                                                                   :drag-start {:id     "start-drag-r2",
+                                                                                                :on     "drag-start",
+                                                                                                :type   "action",
+                                                                                                :params {:target    "orange-crayon-2-r2",
+                                                                                                         :say-color "orange-color-r2"}}},
+                                                                       :draggable true,
+                                                                       :x         892,
+                                                                       :visible   false},
                    :question-0-options-option-3-voice-over            {:x        0,
                                                                        :y        0,
                                                                        :type     "group",
                                                                        :actions  {:click {:id         "question-0-option-voice-over",
                                                                                           :on         "click",
                                                                                           :type       "action",
-                                                                                          :params     {:value "option-3"},
+                                                                                          :params     {:value "option-4"},
                                                                                           :unique-tag "question-action"}},
                                                                        :children ["question-0-options-option-3-voice-over-background"
                                                                                   "question-0-options-option-3-voice-over-icon"]}},
@@ -4347,79 +3322,74 @@
                    :stages            [{:name    "Round 1",
                                         :objects ["layered-background-r0" "yellow-table-r0" "blue-table-r0" "red-table-r0" "librarian-r0"]}
                                        {:name    "Round 2",
-                                        :objects ["box-green-r1"
-                                                  "box-red-r1"
-                                                  "item-8-r1"
-                                                  "box-blue-r1"
-                                                  "item-9-r1"
-                                                  "item-6-r1"
-                                                  "item-10-r1"
-                                                  "item-13-r1"
-                                                  "item-12-r1"
+                                        :objects ["yellow-crayon-1-r1"
+                                                  "orange-crayon-3-r1"
+                                                  "orange-crayon-1-r1"
+                                                  "red-box-r1"
+                                                  "purple-crayon-1-r1"
+                                                  "green-box-r1"
+                                                  "red-crayon-3-r1"
                                                   "background-r1"
-                                                  "item-17-r1"
-                                                  "item-3-r1"
-                                                  "box-purple-r1"
-                                                  "item-5-r1"
-                                                  "item-1-r1"
-                                                  "box-orange-r1"
-                                                  "item-2-r1"
-                                                  "item-15-r1"
-                                                  "box-yellow-r1"
-                                                  "item-4-r1"
-                                                  "item-7-r1"
-                                                  "item-14-r1"
-                                                  "item-16-r1"
-                                                  "item-0-r1"
-                                                  "item-11-r1"]}
+                                                  "red-crayon-2-r1"
+                                                  "yellow-box-r1"
+                                                  "blue-crayon-2-r1"
+                                                  "green-crayon-3-r1"
+                                                  "yellow-crayon-3-r1"
+                                                  "orange-box-r1"
+                                                  "blue-crayon-3-r1"
+                                                  "purple-crayon-3-r1"
+                                                  "red-crayon-1-r1"
+                                                  "blue-crayon-1-r1"
+                                                  "green-crayon-2-r1"
+                                                  "yellow-crayon-2-r1"
+                                                  "orange-crayon-2-r1"
+                                                  "purple-crayon-2-r1"
+                                                  "green-crayon-1-r1"
+                                                  "blue-box-r1"
+                                                  "purple-box-r1"]}
                                        {:name    "Round 3",
-                                        :objects ["item-11-r2"
-                                                  "item-3-r2"
-                                                  "item-13-r2"
+                                        :objects ["orange-crayon-1-r2"
                                                   "librarian-r2"
-                                                  "item-10-r2"
-                                                  "item-7-r2"
-                                                  "item-6-r2"
-                                                  "item-5-r2"
-                                                  "box-red-r2"
-                                                  "background-r2"
-                                                  "box-purple-r2"
-                                                  "item-12-r2"
-                                                  "item-2-r2"
-                                                  "item-9-r2"
-                                                  "item-0-r2"
-                                                  "item-4-r2"
-                                                  "item-17-r2"
-                                                  "box-yellow-r2"
-                                                  "item-1-r2"
-                                                  "box-orange-r2"
-                                                  "box-blue-r2"
-                                                  "box-green-r2"
-                                                  "item-16-r2"
-                                                  "item-15-r2"
-                                                  "item-8-r2"
-                                                  "item-14-r2"]}
+                                                  "red-crayon-2-r2"
+                                                  "orange-crayon-3-r2"
+                                                  "purple-crayon-2-r2"
+                                                  "yellow-crayon-2-r2"
+                                                  "red-crayon-1-r2"
+                                                  "yellow-crayon-1-r2"
+                                                  "blue-box-r2"
+                                                  "red-box-r2"
+                                                  "blue-crayon-3-r2"
+                                                  "blue-crayon-1-r2"
+                                                  "yellow-box-r2"
+                                                  "green-crayon-2-r2"
+                                                  "green-table-r2"
+                                                  "orange-table-r2"
+                                                  "green-crayon-1-r2"
+                                                  "blue-crayon-2-r2"
+                                                  "purple-table-r2"
+                                                  "green-crayon-3-r2"
+                                                  "purple-crayon-1-r2"
+                                                  "purple-crayon-3-r2"
+                                                  "layered-background-r2"
+                                                  "red-crayon-3-r2"
+                                                  "yellow-crayon-3-r2"
+                                                  "orange-crayon-2-r2"]}
                                        {:name    "Round 4",
-                                        :objects ["box-yellow-r3"
-                                                  "box-green-r3"
-                                                  "item-green-r3"
-                                                  "item-orange-r3"
-                                                  "box-red-r3"
-                                                  "box-orange-r3"
-                                                  "item-blue-r3"
-                                                  "background-r3"
-                                                  "box-blue-r3"
+                                        :objects ["red-box-r3"
+                                                  "yellow-crayon-r3"
+                                                  "green-table-r3"
+                                                  "purple-table-r3"
+                                                  "blue-box-r3"
+                                                  "orange-crayon-r3"
+                                                  "yellow-box-r3"
+                                                  "red-crayon-r3"
+                                                  "green-crayon-r3"
+                                                  "layered-background-r3"
                                                   "librarian-r3"
-                                                  "box-purple-r3"
-                                                  "item-yellow-r3"
-                                                  "item-purple-r3"
-                                                  "item-red-r3"]}],
-                   :tracks            [{:nodes       [{:type "dialog", :action-id "question-1-task-dialog"}
-                                                      {:type "dialog", :action-id "question-1-check-answers-correct-answer-dialog"}
-                                                      {:type "dialog", :action-id "question-1-check-answers-wrong-answer-dialog"}],
-                                        :title       "Q1",
-                                        :question-id "question-1"}
-                                       {:nodes       [{:type "dialog", :action-id "question-0-task-dialog"}
+                                                  "blue-crayon-r3"
+                                                  "purple-crayon-r3"
+                                                  "orange-table-r3"]}],
+                   :tracks            [{:nodes       [{:type "dialog", :action-id "question-0-task-dialog"}
                                                       {:type "dialog", :action-id "question-0-check-answers-correct-answer-dialog"}
                                                       {:type "dialog", :action-id "question-0-check-answers-wrong-answer-dialog"}
                                                       {:type "dialog", :action-id "question-0-option-voice-over-voice-over-option-1"}
@@ -4429,65 +3399,44 @@
                                         :title       "What is the same about these two crayons?",
                                         :question-id "question-0"}
                                        {:nodes [{:type "dialog", :action-id "voiceover-r0"}], :title "Welcome"}
-                                       {:nodes [{:text "Start dialog", :type "prompt"}
-                                                {:type "dialog", :action-id "intro-r1"}
+                                       {:nodes [{:type "dialog", :action-id "intro-r1"}
                                                 {:text "Correct answer", :type "prompt"}
                                                 {:type "dialog", :action-id "correct-answer-r1"}
                                                 {:text "Wrong answer", :type "prompt"}
                                                 {:type "dialog", :action-id "wrong-answer-r1"}
-                                                {:text "Finish dialog", :type "prompt"}
-                                                {:type "dialog", :action-id "finish-dialog-r1"}
                                                 {:text "Continue sorting", :type "prompt"}
-                                                {:type "dialog", :action-id "continue-sorting-r1"}],
+                                                {:type "dialog", :action-id "continue-sorting-r1"}
+                                                {:text "Finish dialog", :type "prompt"}
+                                                {:type "dialog", :action-id "finish-dialog-r1"}],
                                         :title "Round 1"}
-                                       {:nodes [{:type "dialog", :action-id "blue-color-r1"}
-                                                {:type "dialog", :action-id "yellow-color-r1"}
+                                       {:nodes [{:type "dialog", :action-id "yellow-color-r1"}
+                                                {:type "dialog", :action-id "blue-color-r1"}
                                                 {:type "dialog", :action-id "red-color-r1"}
-                                                {:type "dialog", :action-id "orange-color-r1"}
                                                 {:type "dialog", :action-id "purple-color-r1"}
+                                                {:type "dialog", :action-id "orange-color-r1"}
                                                 {:type "dialog", :action-id "green-color-r1"}],
-                                        :title "Round 1 - Colors"}
-                                       {:nodes [{:type "dialog", :action-id "box-yellow-dialog-r1"}
-                                                {:type "dialog", :action-id "box-blue-dialog-r1"}
-                                                {:type "dialog", :action-id "box-red-dialog-r1"}
-                                                {:type "dialog", :action-id "box-purple-dialog-r1"}
-                                                {:type "dialog", :action-id "box-orange-dialog-r1"}
-                                                {:type "dialog", :action-id "box-green-dialog-r1"}],
-                                        :title "Round 1 - Colors"}
-                                       {:nodes [{:text "Start dialog", :type "prompt"}
-                                                {:type "dialog", :action-id "intro-r2"}
-                                                {:text nil, :type "prompt"}
-                                                {:type "dialog", :action-id "tap-instructions-r2"}
+                                        :title "Round 1 - colors"}
+                                       {:nodes [{:type "dialog", :action-id "intro-r2"}
                                                 {:text "Correct answer", :type "prompt"}
                                                 {:type "dialog", :action-id "correct-answer-r2"}
                                                 {:text "Wrong answer", :type "prompt"}
                                                 {:type "dialog", :action-id "wrong-answer-r2"}
-                                                {:text "Finish dialog", :type "prompt"}
+                                                {:type "dialog", :action-id "tap-instructions-r2"}
+                                                {:text "Dialog after all elements correctly found", :type "prompt"}
                                                 {:type "dialog", :action-id "finish-round-dialog-r2"}],
                                         :title "Round 2"}
-                                       {:nodes [{:type "dialog", :action-id "blue-color-r2"}
-                                                {:type "dialog", :action-id "orange-color-r2"}
-                                                {:type "dialog", :action-id "yellow-color-r2"}
-                                                {:type "dialog", :action-id "purple-color-r2"}
+                                       {:nodes [{:type "dialog", :action-id "yellow-color-r2"}
+                                                {:type "dialog", :action-id "blue-color-r2"}
                                                 {:type "dialog", :action-id "red-color-r2"}
+                                                {:type "dialog", :action-id "purple-color-r2"}
+                                                {:type "dialog", :action-id "orange-color-r2"}
                                                 {:type "dialog", :action-id "green-color-r2"}],
-                                        :title "Round 2 - items"}
-                                       {:nodes [{:type "dialog", :action-id "box-orange-dialog-r2"}
-                                                {:type "dialog", :action-id "box-green-dialog-r2"}
-                                                {:type "dialog", :action-id "box-purple-dialog-r2"}
-                                                {:type "dialog", :action-id "box-yellow-dialog-r2"}
-                                                {:type "dialog", :action-id "box-blue-dialog-r2"}
-                                                {:type "dialog", :action-id "box-red-dialog-r2"}],
-                                        :title "Round 2 - boxes"}
-                                       {:nodes [{:text "Start dialog", :type "prompt"}
-                                                {:type "dialog", :action-id "intro-r3"}
-                                                {:text "Correct answer", :type "prompt"}
-                                                {:type "dialog", :action-id "correct-answer-dialog-r3"}
-                                                {:text "Wrong answer", :type "prompt"}
-                                                {:type "dialog", :action-id "wrong-answer-dialog-r3"}
-                                                {:text "Finish dialog", :type "prompt"}
-                                                {:type "dialog", :action-id "finish-dialog-r3"}],
-                                        :title "Round 3"}
+                                        :title "Round 2 - colors"}
+                                       {:nodes [{:type "dialog", :action-id "intro-r3"} {:type "dialog", :action-id "finish-dialog-r3"}],
+                                        :title "Round 3 - Intro and finish"}
+                                       {:nodes [{:type "dialog", :action-id "wrong-answer-dialog-r3"}
+                                                {:type "dialog", :action-id "correct-answer-dialog-r3"}],
+                                        :title "Round 3 - Action result"}
                                        {:nodes [{:text "Put the red crayon in its crayon box.", :type "prompt"}
                                                 {:type "dialog", :action-id "instruction-1-r3"}
                                                 {:text "Put the purple crayon on its table.", :type "prompt"}
@@ -4496,18 +3445,31 @@
                                                 {:type "dialog", :action-id "instruction-3-r3"}
                                                 {:text "Put the green crayon on its table.", :type "prompt"}
                                                 {:type "dialog", :action-id "instruction-4-r3"}
-                                                {:text "Put the blue crayon in its crayon box.", :type "prompt"}
+                                                {:text "Put the blue crayon on its table.", :type "prompt"}
                                                 {:type "dialog", :action-id "instruction-5-r3"}
                                                 {:text "Put the orange crayon on its table.", :type "prompt"}
                                                 {:type "dialog", :action-id "instruction-6-r3"}],
                                         :title "Round 3 - tasks"}
-                                       {:nodes [{:type "dialog", :action-id "red-color-r3"}
-                                                {:type "dialog", :action-id "purple-color-r3"}
-                                                {:type "dialog", :action-id "yellow-color-r3"}
-                                                {:type "dialog", :action-id "green-color-r3"}
+                                       {:nodes [{:text "Put the red crayon in its crayon box.", :type "prompt"}
+                                                {:type "dialog", :action-id "correct-answer-1-r3"}
+                                                {:text "Put the purple crayon on its table.", :type "prompt"}
+                                                {:type "dialog", :action-id "correct-answer-2-r3"}
+                                                {:text "Put the yellow crayon in its crayon box.", :type "prompt"}
+                                                {:type "dialog", :action-id "correct-answer-3-r3"}
+                                                {:text "Put the green crayon on its table.", :type "prompt"}
+                                                {:type "dialog", :action-id "correct-answer-4-r3"}
+                                                {:text "Put the blue crayon on its table.", :type "prompt"}
+                                                {:type "dialog", :action-id "correct-answer-5-r3"}
+                                                {:text "Put the orange crayon on its table.", :type "prompt"}
+                                                {:type "dialog", :action-id "correct-answer-6-r3"}],
+                                        :title "Round 3 - Correct responses"}
+                                       {:nodes [{:type "dialog", :action-id "yellow-color-r3"}
                                                 {:type "dialog", :action-id "blue-color-r3"}
-                                                {:type "dialog", :action-id "orange-color-r3"}],
-                                        :title "Round 3 - items"}],
+                                                {:type "dialog", :action-id "red-color-r3"}
+                                                {:type "dialog", :action-id "purple-color-r3"}
+                                                {:type "dialog", :action-id "orange-color-r3"}
+                                                {:type "dialog", :action-id "green-color-r3"}],
+                                        :title "Round 3 - colors"}],
                    :history           {:created {:template-id 22},
                                        :updated [{:data           {:background-music {:src "/upload/LGFWFEKYFMZRKXYS.mp3", :volume "0.1"}},
                                                   :action         "background-music",
@@ -4522,98 +3484,47 @@
                                                                                           :option-label    "audio-text",
                                                                                           :correct-answers ["option-2"]}},
                                                   :action         "add-question",
-                                                  :common-action? true}
-                                                 {:data           {:question-page-object {:ok-image        {:src        "/raw/clipart/elements/etc--elements-concepts--apple.png",
-                                                                                                            :scale      {:x 1, :y 1},
-                                                                                                            :image-size "contain"},
-                                                                                          :options-label   "audio-text",
-                                                                                          :answers-number  "one",
-                                                                                          :layout          "vertical",
-                                                                                          :task-type       "text-image",
-                                                                                          :question-type   "thumbs-up-n-down",
-                                                                                          :alias           "Q1",
-                                                                                          :options-number  2,
-                                                                                          :mark-options    ["thumbs-up" "ok" "thumbs-down"],
-                                                                                          :correct-answers ["ok"]}},
-                                                  :action         "add-question",
                                                   :common-action? true}]},
                    :template-version  nil,
-                   :next-action-index 2,
+                   :next-action-index 1,
+                   :lip-not-sync      false,
                    :unique-suffix     0,
                    :template-id       22,
                    :available-actions [{:name   "Ask What is the same about these two crayons?",
                                         :type   "question",
-                                        :action "question-0"}
-                                       {:name "Ask Q1", :type "question", :action "question-1"}]},
+                                        :action "question-0"}]},
    :triggers      {:music {:on "start", :action "start-background-music"},
                    :start {:on "start", :action "intermediate-action-0"}},
    :scene-objects [["layered-background-r0"]
                    ["yellow-table-r0" "blue-table-r0" "red-table-r0"]
                    ["librarian-r0"]
                    ["background-r1"]
-                   ["box-yellow-r1"]
-                   ["box-blue-r1"]
-                   ["box-red-r1"]
-                   ["box-purple-r1"]
-                   ["box-orange-r1"]
-                   ["box-green-r1"]
-                   ["item-0-r1"]
-                   ["item-1-r1"]
-                   ["item-2-r1"]
-                   ["item-3-r1"]
-                   ["item-4-r1"]
-                   ["item-5-r1"]
-                   ["item-6-r1"]
-                   ["item-7-r1"]
-                   ["item-8-r1"]
-                   ["item-9-r1"]
-                   ["item-10-r1"]
-                   ["item-11-r1"]
-                   ["item-12-r1"]
-                   ["item-13-r1"]
-                   ["item-14-r1"]
-                   ["item-15-r1"]
-                   ["item-16-r1"]
-                   ["item-17-r1"]
-                   ["background-r2"]
-                   ["box-orange-r2"]
-                   ["box-green-r2"]
-                   ["box-purple-r2"]
-                   ["box-yellow-r2"]
-                   ["box-blue-r2"]
-                   ["box-red-r2"]
+                   ["yellow-box-r1" "blue-box-r1" "red-box-r1"]
+                   ["purple-box-r1" "orange-box-r1" "green-box-r1"]
+                   ["blue-crayon-1-r1" "yellow-crayon-1-r1" "red-crayon-1-r1"]
+                   ["orange-crayon-1-r1" "purple-crayon-1-r1" "green-crayon-1-r1"]
+                   ["red-crayon-2-r1" "blue-crayon-2-r1" "yellow-crayon-2-r1"]
+                   ["green-crayon-2-r1" "orange-crayon-2-r1" "purple-crayon-2-r1"]
+                   ["yellow-crayon-3-r1" "red-crayon-3-r1" "blue-crayon-3-r1"]
+                   ["green-crayon-3-r1" "orange-crayon-3-r1" "purple-crayon-3-r1"]
+                   ["layered-background-r2"]
+                   ["orange-table-r2" "green-table-r2" "purple-table-r2"]
                    ["librarian-r2"]
-                   ["item-0-r2"]
-                   ["item-1-r2"]
-                   ["item-2-r2"]
-                   ["item-3-r2"]
-                   ["item-4-r2"]
-                   ["item-5-r2"]
-                   ["item-6-r2"]
-                   ["item-7-r2"]
-                   ["item-8-r2"]
-                   ["item-9-r2"]
-                   ["item-10-r2"]
-                   ["item-11-r2"]
-                   ["item-12-r2"]
-                   ["item-13-r2"]
-                   ["item-14-r2"]
-                   ["item-15-r2"]
-                   ["item-16-r2"]
-                   ["item-17-r2"]
-                   ["background-r3"]
-                   ["box-purple-r3"]
-                   ["box-green-r3"]
-                   ["box-orange-r3"]
-                   ["box-yellow-r3"]
-                   ["box-blue-r3"]
-                   ["box-red-r3"]
+                   ["yellow-box-r2" "blue-box-r2" "red-box-r2"]
+                   ["blue-crayon-1-r2" "blue-crayon-2-r2" "blue-crayon-3-r2"]
+                   ["yellow-crayon-1-r2" "yellow-crayon-2-r2" "yellow-crayon-3-r2"]
+                   ["purple-crayon-1-r2" "purple-crayon-2-r2" "purple-crayon-3-r2"]
+                   ["red-crayon-1-r2" "red-crayon-2-r2" "red-crayon-3-r2"]
+                   ["green-crayon-1-r2" "green-crayon-2-r2" "green-crayon-3-r2"]
+                   ["orange-crayon-1-r2" "orange-crayon-2-r2" "orange-crayon-3-r2"]
+                   ["layered-background-r3"]
+                   ["purple-table-r3" "green-table-r3" "orange-table-r3"]
                    ["librarian-r3"]
-                   ["item-red-r3"]
-                   ["item-purple-r3"]
-                   ["item-yellow-r3"]
-                   ["item-green-r3"]
-                   ["item-blue-r3"]
-                   ["item-orange-r3"]
-                   ["question-0"]
-                   ["question-1"]]})
+                   ["yellow-box-r3" "blue-box-r3" "red-box-r3"]
+                   ["red-crayon-r3"
+                    "purple-crayon-r3"
+                    "yellow-crayon-r3"
+                    "green-crayon-r3"
+                    "blue-crayon-r3"
+                    "orange-crayon-r3"]
+                   ["question-0"]]})
