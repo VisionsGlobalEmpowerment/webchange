@@ -7,7 +7,7 @@
 
 (defn- logo
   []
-  [:div.logo
+  [:div.header-logo
    [:img {:src "/images/student_dashboard/tabschool_logo.svg"}]])
 
 (defn student-dashboard

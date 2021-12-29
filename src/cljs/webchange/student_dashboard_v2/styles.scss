@@ -17,6 +17,21 @@
     background-position: center;
     background-size: cover;
 
+    .header-logo {
+        position: relative;
+        align-self: stretch;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+
+            object-fit: contain;
+        }
+    }
+
     .content {
         position: relative;
         flex-grow: 1;
