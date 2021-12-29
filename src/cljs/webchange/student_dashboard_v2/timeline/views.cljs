@@ -36,10 +36,10 @@
           :height              "100%"
           :fill                "none"
           :preserveAspectRatio "none"
-          :viewBox             "0 0 187 167"}
-    [:path {:d                "M 14 5 Q 85 12 93 84 T 173 161"
+          :viewBox             "0 0 103 167"}
+    [:path {:d                "M 4 5 Q 43 12 48 84 T 97 161"
             :stroke           "#fff"
-            :stroke-width     5
+            :stroke-width     3
             :stroke-linecap   "round"
             :stroke-dasharray "3,10"}]]])
 
