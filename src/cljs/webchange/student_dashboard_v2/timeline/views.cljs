@@ -16,6 +16,33 @@
    (when (some? letter)
      [:div.letter [:span letter]])])
 
+(defn- button-connector
+  []
+  [:div.play-button-connector.timeline-item
+   [:svg {:width               "100%"
+          :height              "100%"
+          :fill                "none"
+          :preserveAspectRatio "none"
+          :viewBox             "0 0 198 93"}
+    [:path {:d              "M 5 4 q 44 0 96 42 t 96 42"
+            :stroke         "#fff"
+            :stroke-width   3
+            :stroke-linecap "round"}]]])
+
+(defn- item-connector
+  []
+  [:div.connector.timeline-item
+   [:svg {:width               "100%"
+          :height              "100%"
+          :fill                "none"
+          :preserveAspectRatio "none"
+          :viewBox             "0 0 187 167"}
+    [:path {:d                "M 14 5 Q 85 12 93 84 T 173 161"
+            :stroke           "#fff"
+            :stroke-width     5
+            :stroke-linecap   "round"
+            :stroke-dasharray "3,10"}]]])
+
 (defn timeline
   []
   (let [container (atom nil)
@@ -38,13 +65,13 @@
                                     (into [:div.timeline
                                            (-> (reduce (fn [result {:keys [id] :as item}]
                                                          (concat result [^{:key (str id "-connector")}
-                                                                         [:div.connector.timeline-item]
+                                                                         [item-connector]
                                                                          ^{:key id}
                                                                          [timeline-item (merge item
                                                                                                {:on-click handle-activity-click})]]))
                                                        []
                                                        finished-activities)
                                                (concat [^{:key "play-button-connector"}
-                                                        [:div.play-button-connector.timeline-item]
+                                                        [button-connector]
                                                         ^{:key "play-button"}
                                                         [play-button {:on-click handle-next-click}]]))]))]))})))

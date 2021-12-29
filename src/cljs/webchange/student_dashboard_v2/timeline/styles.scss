@@ -9,6 +9,13 @@
     height: 100%;
     overflow: auto;
 
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
     .timeline {
         display: flex;
         align-items: flex-start;
@@ -17,6 +24,7 @@
         top: 16vh;
 
         height: 32vh;
+        padding-left: 10vw;
         padding-right: calc(50% - #{$play-button-size / 2});
 
         .timeline-item {
@@ -32,31 +40,32 @@
 
             &:nth-child(2n + 1) {
                 align-self: center;
+
+                &.play-button-connector {
+                    align-self: start;
+                    margin-top: 8.5vh;
+                    height: 10vh;
+                }
             }
 
             &:nth-child(4n + 1) {
                 transform: scaleY(-1);
+
+                &.play-button-connector {
+                    align-self: end;
+                    margin-bottom: 8.5vh;
+                    height: 7.5vh;
+                }
             }
         }
 
         .connector {
             width: 100px;
-            height: 160px;
-
-            background-image: url("/images/student_dashboard/timeline-connector.svg");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            height: 15vh;
         }
 
         .play-button-connector {
             width: 200px;
-            height: 100%;
-
-            background-image: url("/images/student_dashboard/timeline-play-connector.svg");
-            background-size: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
         }
 
         .activity {
