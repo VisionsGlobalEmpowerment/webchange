@@ -4,8 +4,7 @@
     [webchange.templates.common-actions :refer [add-character add-question get-next-action-index increase-next-action-index]]
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]
-    [webchange.templates.core :as core]
-    [webchange.question.get-question-data :refer [form->question-data]]))
+    [webchange.templates.core :as core]))
 
 (def m {:id          26
         :name        "Conversation"

@@ -58,6 +58,24 @@
    :thumbs-down-text  {:text "Thumbs Down" :font-size 48}
    :thumbs-down-image {:src "/images/questions/thumbs_down.png" :image-size "contain"}})
 
+(defn- update-data
+  [data version]
+  (let [data-updaters {2 (fn [data]
+                           (-> data
+                               (assoc :options-label (:option-label data))
+                               (dissoc :option-label)))}
+        update-data-version (fn [current-data dist-version]
+                              (let [updater (get data-updaters dist-version)]
+                                (updater current-data)))]
+    (loop [current-version version
+           current-data data]
+      (if (not= current-version current-question-version)
+        (recur (inc current-version)
+               (update-data-version current-data (inc current-version)))
+        current-data))))
+
 (defn form->question-data
-  [form-data]
-  (deep-merge {:version current-question-version} default-question-data form-data))
+  [form-data data-version]
+  (let [version (if (some? data-version) data-version 1)]
+    (->> (update-data form-data version)
+         (deep-merge {:version current-question-version} default-question-data))))

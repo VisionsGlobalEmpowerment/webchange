@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
-    [webchange.state.state-activity :as state-activity]))
+    [webchange.state.state-activity :as state-activity]
+    [webchange.question.get-question-data :refer [current-question-version]]))
 
 (defn path-to-db
   [relative-path]
@@ -29,7 +30,6 @@
   (fn [db]
     (get-in db modal-state-path false)))
 
-
 ;; Save
 
 (re-frame/reg-event-fx
@@ -37,5 +37,6 @@
   (fn [{:keys [_]} [_ {:keys [data]}]]
     {:dispatch [::state-activity/call-activity-common-action
                 {:action :add-question
-                 :data   {:question-page-object data}}
+                 :data   {:question-page-object data
+                          :data-version         current-question-version}}
                 {:on-success [::close]}]}))

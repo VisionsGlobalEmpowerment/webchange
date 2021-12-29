@@ -7,7 +7,7 @@
 
     [webchange.editor-v2.activity-form.common.object-form.views :refer [object-form]]
     [webchange.logger.index :as logger]
-    [webchange.question.get-question-data :refer [available-values form->question-data object-name->param-name default-question-data]]
+    [webchange.question.get-question-data :refer [available-values current-question-version form->question-data object-name->param-name default-question-data]]
     [webchange.utils.scene-data :as scene-utils]
     [webchange.question.create :as question]))
 
@@ -234,17 +234,11 @@
   [{:keys [key option data validator]}]
   (r/with-let [option-data (connect-data data [key] {})]
     (let [scene-data (->> (question/create (logger/->>with-trace "Question data"
-                                                                 (form->question-data @option-data))
+                                                                 (form->question-data @option-data current-question-version))
                                            {:action-name "question-action" :object-name "question"}
                                            {:visible? true})
                           (question/add-to-scene scene-utils/empty-data)
                           (logger/->>with-trace-folded "Scene data"))]
-      (js/console.groupCollapsed "form data") (js/console.log @option-data) (js/console.groupEnd "form data")
-      (js/console.groupCollapsed "question data") (js/console.log (form->question-data @option-data)) (js/console.groupEnd "question data")
-      (js/console.groupCollapsed "question") (js/console.log (question/create (logger/->>with-trace "Question data"
-                                                                                                    (form->question-data @option-data))
-                                                                              {:action-name "question-action" :object-name "question"}
-                                                                              {:visible? true})) (js/console.groupEnd "question")
       [:div.question-option
        [question-alias-control {:data option-data}]
        [question-type-control {:data option-data}]

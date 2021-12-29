@@ -186,12 +186,12 @@
   (assoc-in activity-data [:metadata :next-action-index] (inc index)))
 
 (defn add-question
-  [activity-data {:keys [question-page-object]}]
+  [activity-data {:keys [data-version question-page-object]}]
   (let [index (get-next-action-index activity-data)
         action-name (str "question-" index)
         object-name (str "question-" index)
         question-data (question-object/create
-                       (form->question-data question-page-object)
+                       (form->question-data question-page-object data-version)
                        {:suffix           index
                         :action-name      action-name
                         :object-name      object-name})]
