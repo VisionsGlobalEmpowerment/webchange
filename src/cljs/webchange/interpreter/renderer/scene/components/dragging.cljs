@@ -39,10 +39,13 @@
 (defn- on-drag-move
   [this _]
   (let [new-position (-> this .-data (.getLocalPosition (.-parent this)))
-        {offset-x :x offset-y :y} (-> this .-drag-offset)]
+        {offset-x :x offset-y :y} (-> this .-drag-offset)
+        {:keys [restrict-x restrict-y]} (-> this .-on-drag-move-options)]
     (reset! mouse-position-data {:x (-> this .-data .-global .-x) :y (-> this .-data .-global .-y)})
-    (set! (.-x this) (+ offset-x (.-x new-position)))
-    (set! (.-y this) (+ offset-y (.-y new-position))))
+    (when-not restrict-x
+      (set! (.-x this) (+ offset-x (.-x new-position))))
+    (when-not restrict-y
+      (set! (.-y this) (+ offset-y (.-y new-position)))))
   (u/call-handler this "drag-move-handler"))
 
 ;; ---
@@ -102,6 +105,8 @@
     (u/set-handler "drag-move-handler" (u/throttle-handler on-drag-move-handler on-drag-move-options))
     (u/set-handler "drag-end-handler" on-drag-end-handler)
 
+    (set! -on-drag-move-options on-drag-move-options)
+    
     (.on "pointerdown" handle-pointer-down)
     (.on "pointerup" handle-pointer-up)
     (.on "pointerupoutside" handle-pointer-up)

@@ -53,7 +53,10 @@
    :width          "---"
    :height         "---"
    :fill           "---"
-   :text           "---"})
+   :text           "---"
+   :editable?      {:select true
+                    :drag   true
+                    :restrict-x true}})
 
 (defn- generate-page-id
   [suffix]
@@ -132,7 +135,6 @@
                     :height (- text-height (* padding 2))
                     :fill text-color
                     :text text
-                    :editable? {:select true}
                     :chunks (text-utils/text->chunks text))
         page-id (generate-page-id next-page-id)
         object-id (generate-text-id next-page-id)]
