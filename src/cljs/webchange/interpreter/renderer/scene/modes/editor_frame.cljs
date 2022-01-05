@@ -236,6 +236,12 @@
   (or (= editable? true)
       (= (:drag editable?) true)))
 
+(defn- drag-options
+  [{{:keys [restrict-x restrict-y]} :editable?}]
+  (when (or restrict-x restrict-y)
+    {:restrict-x restrict-x
+     :restrict-y restrict-y}))
+
 (defn- create-editor-container
   [props]
   (let [container (Container.)]
@@ -243,7 +249,8 @@
     (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
     (when (draggable? props)
       (enable-drag! container {:on-drag-start #(handle-frame-click props)
-                               :on-drag-end   #(handle-drag container)}))
+                               :on-drag-end   #(handle-drag container)
+                               :on-drag-move-options (drag-options props)}))
 
     container))
 

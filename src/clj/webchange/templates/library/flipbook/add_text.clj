@@ -27,7 +27,8 @@
               :font-size   38}]
     (merge {:type      "text"
             :editable? {:select true
-                        :drag   true}}
+                        :drag   true
+                        :restrict-x true}}
            content dimensions align font)))
 
 (defn add-text
