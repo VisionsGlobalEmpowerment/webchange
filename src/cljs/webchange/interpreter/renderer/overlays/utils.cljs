@@ -2,7 +2,9 @@
 
 (def common-elements
   {:close-button {:src  "/raw/img/ui/close_button_01.png"
-                  :size {:width 97 :height 97}}})
+                  :size {:width 97 :height 97}}
+   :home-button {:src  "/raw/img/ui/activity_finished/home.png"
+                 :size {:width 96 :height 96}}})
 
 (defn get-coordinates
   [{:keys [viewport vertical horizontal padding object] :as params

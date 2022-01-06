@@ -10,29 +10,27 @@
   [mode]
   (some #{mode} [::modes/game]))
 
-(def menu-padding {:x 20 :y 20})
+(def home-button-name :home)
 
-(def close-button-name :close)
-
-(defn- get-close-button-position
+(defn- get-home-button-position
   [viewport]
   (utils/get-coordinates {:viewport   viewport
                           :vertical   "top"
-                          :horizontal "right"
-                          :object     (get-in utils/common-elements [:close-button :size])
-                          :padding    menu-padding}))
+                          :horizontal "left"
+                          :object     (get-in utils/common-elements [:home-button :size])
+                          :padding    {:x 20 :y 20}}))
 
 (defn create
   [{:keys [viewport]}]
   (let [close-button (merge {:type        "image"
-                             :src         (get-in utils/common-elements [:close-button :src])
-                             :object-name close-button-name
+                             :src         (get-in utils/common-elements [:home-button :src])
+                             :object-name home-button-name
                              :on-click    #(re-frame/dispatch [::ie/open-student-dashboard])}
-                            (get-close-button-position viewport))]
+                            (get-home-button-position viewport))]
     {:type        "group"
      :object-name :navigation-menu
      :children    [close-button]}))
 
 (defn update-viewport
   [{:keys [viewport]}]
-  (re-frame/dispatch [::scene/change-scene-object close-button-name [[:set-position (get-close-button-position viewport)]]]))
+  (re-frame/dispatch [::scene/change-scene-object home-button-name [[:set-position (get-home-button-position viewport)]]]))
