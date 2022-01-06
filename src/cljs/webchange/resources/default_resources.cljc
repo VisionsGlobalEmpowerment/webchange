@@ -20,7 +20,7 @@
                           {:url "/raw/img/ui/activity_finished/home.png", :size 1, :type "image"}
                           {:url "/raw/img/ui/activity_finished/next.png", :size 1, :type "image"}
                           {:url "/raw/img/ui/activity_finished/vera.png", :size 1, :type "image"}
-
+                          {:url "/raw/anim/ui-shooting-star/skeleton.json", :size 1, :type "animation"}
                           ;; Goodbye
                           {:url "/raw/img/ui/ts_321x350.png", :size 1, :type "image"}])
 

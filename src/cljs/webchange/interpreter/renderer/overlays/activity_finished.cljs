@@ -63,6 +63,18 @@
    :object-name :activity-finished-overlay
    :visible     false
    :children    [(get-background)
+                 {:type "animation",
+                  :x 960
+                  :y 590
+                  :scale {:x 1, :y 1},
+                  :anim "opt-1",
+                  :meshes true,
+                  :name "ui-shooting-star",
+                  :skin "default",
+                  :speed 1,
+                  :start false,
+                  :visible true
+                  :object-name :form-shooting-star}
                  {:type        "image"
                   :src         "/raw/img/ui/activity_finished/form.png"
                   :object-name :form-bg

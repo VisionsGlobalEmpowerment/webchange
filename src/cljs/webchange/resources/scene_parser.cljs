@@ -175,6 +175,7 @@
    "/raw/img/ui/activity_finished/home.png"
    "/raw/img/ui/activity_finished/next.png"
    "/raw/img/ui/activity_finished/vera.png"
+   ["ui-shooting-star" "/raw/anim/ui-shooting-star/skeleton.json"]
    "/raw/img/bg.png"
    "/raw/img/cross.png"
    "/raw/img/ui/logo.png"
