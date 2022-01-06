@@ -64,6 +64,11 @@
                          (some? on-success) (conj (conj on-success scene-data)))}))
 
 (re-frame/reg-event-fx
+  ::update-last-saved
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db last-saved-path (js/Date.))}))
+
+(re-frame/reg-event-fx
   ::update-scene
   (fn [{:keys [db]} [_ {:keys [course-id scene-id scene-data-patch]} {:keys [on-success]}]]
     (let [course-id (or course-id (core/current-course-id db))
@@ -79,9 +84,9 @@
 (re-frame/reg-event-fx
   ::update-scene-success
   (fn [{:keys [db]} [_ on-success {:keys [name data] :as response}]]
-    {:db (assoc-in db last-saved-path (js/Date.))
-     :dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
-                                                  :scene-data data}]]
+    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
+                                                  :scene-data data}]
+                          [::update-last-saved]]
                          (some? on-success) (conj (conj on-success response)))}))
 
 ; Objects

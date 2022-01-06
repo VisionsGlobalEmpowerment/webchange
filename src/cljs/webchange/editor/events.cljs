@@ -8,7 +8,8 @@
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.state.state :as state-core]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -146,6 +147,7 @@
     {:dispatch-n (list [::ie/set-scene scene-id data]
                        [::ie/store-scene scene-id data]
                        [::translator-form.scene/init-state]
+                       [::state-core/update-last-saved]
                        [:complete-request :save-scene])}))
 
 (defn update-scene
