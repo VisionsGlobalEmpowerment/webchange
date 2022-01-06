@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.components.sync-status.history.state :as state]
-    [webchange.state.core :as state-core]
+    [webchange.state.state :as state-core]
     [webchange.ui-framework.components.index :refer [button dialog]]))
 
 (defn- update-template-button
@@ -18,7 +18,7 @@
        "Update is available")]))
 
 (defn- get-date-time
-  [date-str]
+  [date]
   (let [zone "en-US"
         options {:year   "numeric"
                  :month  "numeric"
@@ -27,15 +27,14 @@
                  :minute "numeric"
                  :second "numeric"
                  :hour12 false}
-        date-obj (js/Date. date-str)
         date-format (js/Intl.DateTimeFormat. zone (clj->js options))]
-    (.format date-format date-obj)))
+    (.format date-format date)))
 
 (defn- history-list-item
   [{:keys [created-at description first-item? id on-click]}]
   [:div.history-list-item
    [:div.date
-    (get-date-time created-at)]
+    (get-date-time (js/Date. created-at))]
    [:div.description
     description]
    (if first-item?
@@ -75,14 +74,8 @@
 
 (defn history-button
   []
-  (let [course-slug @(re-frame/subscribe [::state-core/current-course-id])
-        scene-slug @(re-frame/subscribe [::state-core/current-scene-id])
-        last-update @(re-frame/subscribe [::state/last-update])
+  (let [last-update @(re-frame/subscribe [::state-core/last-saved])
         handle-click #(re-frame/dispatch [::state/open])]
-
-    (when-not (some? last-update)
-      (re-frame/dispatch [::state/load-versions course-slug scene-slug]))
-
     [:div
      (into [:div.history-button {:on-click handle-click}]
            (if (some? last-update)

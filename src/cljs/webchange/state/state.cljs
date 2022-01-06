@@ -11,6 +11,12 @@
        (vec)))
 
 ;; Scene data
+(def last-saved-path (path-to-db [:last-saved]))
+
+(re-frame/reg-sub
+  ::last-saved
+  (fn [db]
+    (get-in db last-saved-path)))
 
 (re-frame/reg-sub
   ::current-scene-id
@@ -72,8 +78,9 @@
 
 (re-frame/reg-event-fx
   ::update-scene-success
-  (fn [{:keys [_]} [_ on-success {:keys [name data] :as response}]]
-    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
+  (fn [{:keys [db]} [_ on-success {:keys [name data] :as response}]]
+    {:db (assoc-in db last-saved-path (js/Date.))
+     :dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
                                                   :scene-data data}]]
                          (some? on-success) (conj (conj on-success response)))}))
 

@@ -11,7 +11,6 @@
 (def modal-versions-state-path [:editor-v2 :sandbox :restore-versions-state])
 (def modal-template-state-path [:editor-v2 :sandbox :restore-template-state])
 
-
 (re-frame/reg-sub
   ::versions
   (fn [db]
@@ -19,13 +18,6 @@
          (get-in db )
          (sort-by :created-at)
          (reverse))))
-
-(re-frame/reg-sub
-  ::last-update
-  (fn []
-    [(re-frame/subscribe [::versions])])
-  (fn [[versions]]
-    (-> versions first :created-at)))
 
 (re-frame/reg-sub
   ::update-available
