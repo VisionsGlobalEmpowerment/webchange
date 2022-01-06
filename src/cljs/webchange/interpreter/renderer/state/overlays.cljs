@@ -62,7 +62,10 @@
     (let [next-activity (subs/next-activity db)
           lesson-progress (subs/lesson-progress db)]
       (set-scene-interactive db false)
+      (js/setTimeout #(re-frame/dispatch [::scene/change-scene-object :form-shooting-star [[:set-visibility {:visible false}]]])
+                     3500)
       {:dispatch-n (list [::hide-navigation-menu]
+                         [::scene/change-scene-object :form-shooting-star [[:generic-handler [[:start-animation]]]]]
                          [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]])})))
 
 (re-frame/reg-event-fx
