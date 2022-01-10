@@ -95,9 +95,11 @@
                handle-save-and-reset #(re-frame/dispatch [::state/save % {:reset? true}])
                handle-destroy (fn [id]
                                 (if @(re-frame/subscribe [::state/has-changes? id])
-                                  (with-confirmation {:message    "Save changes?"
-                                                      :on-confirm #(handle-save-and-reset id)
-                                                      :on-discard #(handle-reset id)})
+                                  (with-confirmation {:message      "Save changes?"
+                                                      :confirm-text "Save"
+                                                      :discard-text "Don't save"
+                                                      :on-confirm   #(handle-save-and-reset id)
+                                                      :on-discard   #(handle-reset id)})
                                   (handle-reset id)))]
     (let [{:keys [data names]} @(re-frame/subscribe [::state/selected-objects])
           type (get data :type)
