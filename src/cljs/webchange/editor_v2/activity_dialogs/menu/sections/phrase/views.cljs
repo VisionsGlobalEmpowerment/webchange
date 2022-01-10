@@ -36,4 +36,5 @@
      (when show-concepts?
        [section-block {:title "Concepts"}
         [concepts-control]])
-     [actions]]))
+     [section-block {:title "Add"}
+      [actions]]]))

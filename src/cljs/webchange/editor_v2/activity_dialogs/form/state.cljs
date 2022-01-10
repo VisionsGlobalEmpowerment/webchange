@@ -347,6 +347,7 @@
     (case action
       "add-effect-action" {:dispatch [::add-effect-action data]}
       "add-phrase-action" {:dispatch [::add-phrase-action data]}
+      "add-text-animation-action" {:dispatch [::add-text-animation-action data]}
       "set-target-animation" {:dispatch [::set-target-animation data]}
       "remove-target-animation" {:dispatch [::remove-target-animation data]}
       "start-skip-region" {:dispatch [::start-skip-region data]}
@@ -377,6 +378,15 @@
   (fn [{:keys [_]} [_ {:keys [destination] :as data}]]
     (let [position-data (get-action-position-data data)
           action-data defaults/default-action]
+      (case destination
+        "scene" {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                                     position-data)]}))))
+
+(re-frame/reg-event-fx
+  ::add-text-animation-action
+  (fn [{:keys [_]} [_ {:keys [destination] :as data}]]
+    (let [position-data (get-action-position-data data)
+          action-data defaults/text-animation-action]
       (case destination
         "scene" {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                                      position-data)]}))))
