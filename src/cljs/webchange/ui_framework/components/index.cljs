@@ -46,3 +46,4 @@
 (def timeline timeline/component)
 (def tooltip tooltip/component)
 (def with-confirmation confirm/with-confirmation)
+(def with-custom-window confirm/with-custom-window)

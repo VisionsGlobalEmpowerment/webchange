@@ -12,7 +12,7 @@
     [webchange.editor-v2.layout.components.sync-status.views :refer [sync-status]]
     [webchange.editor-v2.layout.state :as state]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]
-    [webchange.ui-framework.components.index :refer [icon-button with-confirmation]]
+    [webchange.ui-framework.components.index :refer [icon-button with-custom-window]]
     [webchange.ui-framework.layout.views :as ui]))
 
 (defn- handle-switch-mode
@@ -22,9 +22,18 @@
 (defn- change-activity-mode
   []
   (let [has-changes? @(re-frame/subscribe [::translator-form.form/has-changes])
+        handle-save (fn []
+                      (re-frame/dispatch [::translator-form.form/save-changes])
+                      (handle-switch-mode))
         handle-click #(if has-changes?
-                        (with-confirmation {:message    "Close form without saving?"
-                                            :on-confirm handle-switch-mode})
+                        (with-custom-window {:title   "Confirm"
+                                             :message ["There are some unsaved changes." "Do you want to save them?"]
+                                             :actions [{:text    "Save"
+                                                        :handler handle-save
+                                                        :props   {:color "primary"}}
+                                                       {:text    "Don't save"
+                                                        :handler handle-switch-mode
+                                                        :props   {:variant "outlined"}}]})
                         (handle-switch-mode))]
     [icon-button {:icon     "swap"
                   :on-click handle-click}
