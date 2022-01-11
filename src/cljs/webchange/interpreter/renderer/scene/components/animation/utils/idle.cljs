@@ -6,8 +6,8 @@
 
 (defn support-idle?
   [animation-resource]
-  (-> (.-name animation-resource)
-      (= "child")))
+  (let [animation-name (.-name animation-resource)]
+    (some #{animation-name} ["child" "teacher" "guide"])))
 
 (defn- freq->rand
   [frequency-interval]

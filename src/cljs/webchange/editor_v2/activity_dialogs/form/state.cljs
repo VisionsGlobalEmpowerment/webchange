@@ -191,7 +191,9 @@
     (->> targets
          (map (fn [target]
                 {:text  target
-                 :value target})))))
+                 :value target}))
+         (concat [{:text "Guide"
+                   :value "guide"}]))))
 
 (def current-target-path :current-target)
 

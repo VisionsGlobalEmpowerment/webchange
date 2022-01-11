@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.group.component
   (:require
     [re-frame.core :as re-frame]
-    [webchange.interpreter.pixi :refer [Container]]
+    [webchange.interpreter.pixi :refer [Container Graphics]]
     [webchange.interpreter.renderer.scene.components.group.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
@@ -15,6 +15,7 @@
                     :filters        {}
                     :type           {:default "group"}
                     :metadata       {}
+                    :mask           {}
                     :flipbook-page? {}})
 
 (defn- create-container
@@ -23,6 +24,17 @@
     (utils/set-position {:x x
                          :y y})
     (utils/set-z-index z-index)))
+
+(defn- create-mask
+  [{:keys [x y width height]
+    :or   {x      0
+           y      0
+           width  0
+           height 0}}]
+  (doto (Graphics.)
+    (.beginFill 0x000000)
+    (.drawRect x y width height)
+    (.endFill 0x000000)))
 
 (def component-type "group")
 
@@ -34,11 +46,17 @@
     :on-click - on click event handler.
     :ref - callback function that must be called with component wrapper.
     :children - vector og object names to group"
-  [{:keys [parent type ref on-click filters metadata flipbook-page? mode] :as props}]
+  [{:keys [parent type ref on-click filters metadata flipbook-page? mode mask] :as props}]
   (let [group (create-container (cond-> props
                                         (:question? metadata) (assoc :z-index 100)))
         wrapped-group (wrap type (:object-name props) group {:question? (:question? metadata)})]
 
+    (when mask
+      (js/console.log "applying mask" mask)
+      (let [mask-obj (create-mask mask)]
+        (.addChild group mask-obj)
+        (aset group "mask" mask-obj)))
+    
     (.addChild parent group)
     (apply-filters group filters)
 

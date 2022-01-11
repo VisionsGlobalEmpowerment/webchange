@@ -181,7 +181,10 @@
    "/raw/img/ui/logo.png"
    "/raw/img/questions/sound-icon.png"
    "/raw/img/questions/sound-icon-white.png"
-   "/raw/img/questions/skip.png"])
+   "/raw/img/questions/skip.png"
+   "/raw/img/ui/guide/bg-01.png"
+   ["teacher" "/raw/anim/teacher/skeleton.json"]
+   ["guide" "/raw/anim/guide/skeleton.json"]])
 
 (defn get-activity-resources
   [scene-id scene-data]

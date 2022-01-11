@@ -7,7 +7,7 @@
     [webchange.editor-v2.activity-dialogs.menu.sections.effects.movements.views :refer [available-movements]]
     [webchange.editor-v2.activity-dialogs.menu.sections.effects.state :as state]
     [webchange.ui-framework.components.index :refer [icon-button]]
-    [webchange.editor-v2.dialog.utils.dialog-action :refer [music-effects skip-effects]]))
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [music-effects skip-effects guide-effects]]))
 
 (def event-type
   [{:id 1 :title "Default" :type "default"}
@@ -56,6 +56,14 @@
        (when show-actions?
          [actions])])))
 
+(defn- guide-effects-list
+  []
+  (let [options (vals guide-effects)]
+    [:div
+     [options-list {:options       options
+                    :get-drag-data (fn [{:keys [value]}]
+                                     {:action value})}]]))
+
 (defn- skip-effects-list
   []
   (let [options (vals skip-effects)]
@@ -91,6 +99,8 @@
     [available-emotions]]
    [section-block {:title "Movements"}
     [available-movements]]
+   [section-block {:title "Guide"}
+    [guide-effects-list]]
    [section-block {:title "Skip"}
     [skip-effects-list]]
    [section-block {:title "Music"}
