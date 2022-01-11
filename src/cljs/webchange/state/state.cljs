@@ -103,6 +103,11 @@
   (fn [[scene-data]]
     (get scene-data :objects {})))
 
+(defn get-object-data
+  [db object-name]
+  (-> (get-objects-data db)
+      (get object-name)))
+
 (re-frame/reg-event-fx
   ::update-scene-objects
   (fn [{:keys [db]} [_ {:keys [course-id scene-id patches-list]} handlers]]

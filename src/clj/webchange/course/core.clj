@@ -589,11 +589,11 @@
         lesson-sets-lessons (->> lesson-sets (map (juxt keyword default-lesson-name)) (into {}))
         initial-scene-required? (nil? (get course-data :initial-scene))
         data (cond-> course-data
-               :always (assoc-in [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword)] {:name scene-name})
-               :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
-               :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
-               lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
-               initial-scene-required? (assoc :initial-scene scene-slug))]
+                     :always (assoc-in [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword)] {:name scene-name})
+                     :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
+                     :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
+                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
+                     initial-scene-required? (assoc :initial-scene scene-slug))]
     (db/save-course! {:course_id  course-id
                       :data       data
                       :owner_id   owner-id
@@ -749,8 +749,8 @@
 (defn- get-object-keys-to-update
   [{:keys [editable?]}]
   (cond-> [:editable? :origin :max-width :max-height :width :height :image-size :metadata :actions]
-    (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y])
-    (not editable?) (concat [:visible])))
+          (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y])
+          (not editable?) (concat [:visible])))
 
 (defn- update-object
   [created-activity]
@@ -774,6 +774,17 @@
          (map (update-object created-activity))
          (into {}))))
 
+(defn- update-preserved-objects
+  [activity preserved-objects]
+  (reduce (fn [activity [object-name object-data]]
+            (let [object-data (if (contains? object-data :children)
+                                (->> (get-in activity [:objects object-name :children])
+                                     (assoc object-data :children))
+                                object-data)]
+              (update activity :objects merge {object-name object-data})))
+          activity
+          preserved-objects))
+
 (defn update-activity-template!
   [course-slug scene-slug user-id]
   (let [scene-data (get-scene-latest-version course-slug scene-slug)
@@ -785,7 +796,7 @@
         preserved-objects (preserve-objects scene-data created-activity)
         activity (-> created-activity
                      (update :actions merge preserved-actions)
-                     (update :objects merge preserved-objects)
+                     (update-preserved-objects preserved-objects)
                      (update :assets #(->> (concat original-assets %)
                                            (flatten)
                                            (distinct))))]
@@ -828,4 +839,4 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-slug :name} (-> (db/get-scenes-by-course-id {:course_id course-id}) first)]
     {:course-slug course-slug
-     :scene-slug scene-slug}))
+     :scene-slug  scene-slug}))

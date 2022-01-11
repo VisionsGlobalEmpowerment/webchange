@@ -6,7 +6,7 @@
 
 (defn param-name->object-name
   [param-name question-id]
-  (str question-id "-" param-name))
+  (str question-id "--" param-name))
 
 (defn object-name->param-name
   [object-name]

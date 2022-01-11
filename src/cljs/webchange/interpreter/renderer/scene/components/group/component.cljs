@@ -37,7 +37,7 @@
   [{:keys [parent type ref on-click filters metadata flipbook-page? mode] :as props}]
   (let [group (create-container (cond-> props
                                         (:question? metadata) (assoc :z-index 100)))
-        wrapped-group (wrap type (:object-name props) group)]
+        wrapped-group (wrap type (:object-name props) group {:question? (:question? metadata)})]
 
     (.addChild parent group)
     (apply-filters group filters)
