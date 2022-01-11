@@ -126,7 +126,7 @@
    (let [show-question-name (str action-name "-show")
          hide-question-name (str action-name "-hide")
 
-         question-id (str action-name "-question-id")
+         question-id action-name
          check-answers (str action-name "-check-answers")
          finish-dialog (str action-name "-finish-dialog")
 

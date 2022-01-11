@@ -107,6 +107,7 @@
         background-name (str object-name "-background")
         options-name (str object-name "-options")
         task-text-group-name (str object-name "-task-text-group")
+        task-image-object-name (param-name->object-name task-image-param-name question-id)
 
         layout-coordinates (get-layout-coordinates {:layout      layout
                                                     :with-image? show-task-image?})]
@@ -118,7 +119,7 @@
                                                                   background-name
                                                                   task-text-group-name
                                                                   options-name]
-                                                                 show-task-image? (conj (param-name->object-name task-image-param-name question-id)))
+                                                                 show-task-image? (conj task-image-object-name))
                                               :visible   visible?
                                               :editable? {:show-in-tree? true}}}}
             :always (merge-data (substrate/create {:object-name substrate-name}))
@@ -141,4 +142,4 @@
                                                             (merge props
                                                                    (:image layout-coordinates)
                                                                    {:param-name  task-image-param-name
-                                                                    :question-id question-id}))))))
+                                                                    :object-name task-image-object-name}))))))
