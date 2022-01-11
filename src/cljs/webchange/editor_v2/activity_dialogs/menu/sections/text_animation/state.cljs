@@ -22,6 +22,12 @@
       {:dispatch-n [[::translator-form.actions/set-current-phrase-action node-data]
                     [::chunks/open]]})))
 
+(re-frame/reg-sub
+  ::available-actions
+  (fn []
+    [{:text  "Add to scene"
+      :value "scene"}]))
+
 ;; Actions
 
 (re-frame/reg-event-fx

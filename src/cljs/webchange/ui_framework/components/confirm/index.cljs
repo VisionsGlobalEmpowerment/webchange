@@ -36,6 +36,33 @@
                   [:p message])])]
             (r/children this)))))
 
+(defn with-custom-window
+  [{:keys [title message actions]
+    :or   {title   "Title"
+           actions []}}]
+  (let [container (.createElement js/document "div")
+        unmount-window (fn []
+                         (r/unmount-component-at-node container)
+                         (.remove container))]
+    (.appendChild js/document.body container)
+    (r/render
+      [dialog
+       {:title    title
+        :on-close unmount-window
+        :size     "message"
+        :actions  (->> actions
+                       (map (fn [{:keys [text handler props]
+                                  :or   {handler #()}}]
+                              [button (merge {:on-click #(do (unmount-window)
+                                                             (handler))}
+                                             props)
+                               text])))}
+       (when (some? message)
+         (if (sequential? message)
+           (map-indexed (fn [idx text] ^{:key idx} [:p text]) message)
+           [:p message]))]
+      container)))
+
 (defn with-confirmation
   [{:keys [confirm-text discard-text message on-confirm on-discard title]
     :or   {confirm-text "Confirm"
@@ -44,27 +71,10 @@
            on-confirm   #()
            on-discard   #()
            title        "Confirm"}}]
-  (let [container (.createElement js/document "div")
-        unmount-window (fn []
-                         (r/unmount-component-at-node container)
-                         (.remove container))
-        handle-confirm (fn []
-                         (unmount-window)
-                         (on-confirm))
-        handle-discard (fn []
-                         (unmount-window)
-                         (on-discard))]
-    (.appendChild js/document.body container)
-    (r/render
-      [dialog
-       {:title    title
-        :on-close handle-discard
-        :size     "message"
-        :actions  [[button {:on-click handle-confirm}
-                    confirm-text]
-                   [button {:variant  "outlined"
-                            :on-click handle-discard}
-                    discard-text]]}
-       (when-not (nil? message)
-         message)]
-      container)))
+  (with-custom-window {:title   title
+                       :message message
+                       :actions [{:text    confirm-text
+                                  :handler on-confirm}
+                                 {:text    discard-text
+                                  :handler on-discard
+                                  :props   {:variant "outlined"}}]}))

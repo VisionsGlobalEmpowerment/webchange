@@ -45,8 +45,9 @@
   ::remove-action
   (fn [{:keys [_]} [_ {:keys [node-data source]}]]
     {:pre [(pre_node-data node-data)]}
-    {:dispatch [::state-actions-common/remove-action {:concept-action? (= source :concept)
-                                                      :node-data       node-data}]}))
+    {:dispatch-n [[::translator-form.scene/set-changes]
+                  [::state-actions-common/remove-action {:concept-action? (= source :concept)
+                                                         :node-data       node-data}]]}))
 
 (re-frame/reg-event-fx
   ::add-scene-action
