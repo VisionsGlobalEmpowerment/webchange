@@ -4,6 +4,7 @@
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.interpreter.events :as interpreter.events]
     [webchange.state.core :as core]
+    [webchange.state.state :as state]
     [webchange.state.warehouse :as warehouse]))
 
 (def current-action-name-path [:editor-v2 :translator :current-action-name])
@@ -56,7 +57,8 @@
                                                   :scene-data data}]
                           [::interpreter.events/set-scene name data]
                           [::interpreter.events/store-scene name data]
-                          [::state-stage/reset-stage]]
+                          [::state-stage/reset-stage]
+                          [::state/update-last-saved]]
                          (some? on-success) (conj on-success))}))
 
 (re-frame/reg-event-fx
