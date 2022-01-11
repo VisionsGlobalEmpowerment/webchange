@@ -41,7 +41,9 @@
    :width          "---"
    :height         "---"
    :fill           "---"
-   :editable? {:select true}
+   :editable?      {:select true
+                    :drag   true
+                    :restrict-x true}
    :text           "---"})
 
 (defn- generate-page-id
