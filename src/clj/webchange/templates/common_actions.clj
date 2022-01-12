@@ -229,6 +229,18 @@
         (update :objects ignore-keys current-question-objects-names)
         (update :objects merge (:objects new-question-data)))))
 
+(defn- merge-tracks
+  [activity-data new-question-data {:keys [object-name]}]
+  (let [new-question-track (get new-question-data :track)
+        current-tracks (get-in activity-data [:metadata :tracks])
+        updated-tracks (map (fn [{:keys [question-id] :as track}]
+                              (if (= question-id object-name)
+                                (merge track new-question-track)
+                                track))
+                            current-tracks)]
+    (-> activity-data
+        (assoc-in [:metadata :tracks] updated-tracks))))
+
 (defn edit-question
   [activity-data {:keys [data-version question-page-object question-index]}]
   (let [question-params (get-question-params question-index)
@@ -238,7 +250,8 @@
                             question-params)]
     (-> activity-data
         (merge-objects current-question-data new-question-data)
-        (merge-actions current-question-data new-question-data))))
+        (merge-actions current-question-data new-question-data)
+        (merge-tracks new-question-data question-params))))
 
 (defn- set-animation-settings
   [scene-data data]
