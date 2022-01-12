@@ -835,6 +835,42 @@
 
 (reg-executor :unmute-background-music execute-unmute-background-music)
 
+(defn- execute-show-guide
+  "Shows guide character
+   Example:
+   {:type 'show-guide'}"
+  [{{:keys [flow-id] :as action} :action}]
+  (re-frame/dispatch [::scene/change-scene-object :guide-overlay [[:set-visibility {:visible true}]]])
+  (dispatch-success-fn action))
+
+(reg-executor :show-guide execute-show-guide)
+
+(defn- execute-hide-guide
+  "Hide guide character
+   Example:
+   {:type 'hide-guide'}"
+  [{{:keys [flow-id] :as action} :action}]
+  (re-frame/dispatch [::scene/change-scene-object :guide-overlay [[:set-visibility {:visible false}]]])
+  (dispatch-success-fn action))
+
+(reg-executor :hide-guide execute-hide-guide)
+
+(defn- execute-highlight-guide
+  "Highlight guide character
+   Example:
+   {:type 'highlight-guide'}"
+  [{:keys [db action]}]
+  (let [highlight-action (-> {:type               "transition"
+                              :transition-id      :guide-overlay
+                              :return-immediately true
+                              :from               {:brightness 0 :glow 0}
+                              :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
+                             (assoc :flow-id (:flow-id action))
+                             (assoc :action-id (:action-id action)))]
+    (execute-action db highlight-action)))
+
+(reg-executor :highlight-guide execute-highlight-guide)
+
 (defn- init-workflow-indexes
   [{:keys [data] :as action}]
   (let [with-indexes (->> data
