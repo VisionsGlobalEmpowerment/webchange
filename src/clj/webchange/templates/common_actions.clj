@@ -202,7 +202,32 @@
         (increase-next-action-index index)
         (question-object/add-to-scene question-data))))
 
-;ignore-keys
+(defn- restore-dialogs
+  [activity-data new-question-data preserved-actions]
+  (let [dialog-actions-names (->> (:actions new-question-data)
+                                  (filter (fn [[_ action-data]]
+                                            (= (:editor-type action-data) "dialog")))
+                                  (map first))]
+    (->> (select-keys preserved-actions dialog-actions-names)
+         (update activity-data :actions merge))))
+
+(defn- merge-actions
+  [activity-data current-question-data new-question-data]
+  (let [current-question-actions-names (->> (get-in current-question-data [:metadata :actions])
+                                            (map keyword))
+        preserved-actions (-> (:actions activity-data)
+                              (select-keys current-question-actions-names))]
+    (-> activity-data
+        (update :actions ignore-keys current-question-actions-names)
+        (update :actions merge (:actions new-question-data))
+        (restore-dialogs new-question-data preserved-actions))))
+
+(defn- merge-objects
+  [activity-data current-question-data new-question-data]
+  (let [current-question-objects-names (->> (get-in current-question-data [:metadata :objects]) (map keyword))]
+    (-> activity-data
+        (update :objects ignore-keys current-question-objects-names)
+        (update :objects merge (:objects new-question-data)))))
 
 (defn edit-question
   [activity-data {:keys [data-version question-page-object question-index]}]
@@ -210,30 +235,10 @@
         current-question-data (get-in activity-data [:objects (keyword (:object-name question-params))])
         new-question-data (question-object/create
                             (form->question-data question-page-object data-version)
-                            question-params)
-
-        current-question-actions-names (map keyword (get-in current-question-data [:metadata :actions]))
-        current-question-objects-names (map keyword (get-in current-question-data [:metadata :objects]))
-
-        current-question-actions-data (select-keys (:actions activity-data) (keys (:actions new-question-data)))
-
-
-        ]
-    (log/debug "\n -> index" question-index)
-    ;(log/debug "\n\n\n -> current-question-data \n" current-question-data)
-    ;(log/debug "\n\n\n -> new-question-data \n" new-question-data)
-
-    ;(log/debug "\n\n\n -> current-question actions \n" (map keyword (get-in current-question-data [:metadata :actions])))
-    ;(log/debug "\n\n\n -> current-question objects \n" (map keyword (get-in current-question-data [:metadata :objects])))
-    ;
-    ;(log/debug "\n\n\n -> new-question actions \n" (keys (:actions new-question-data)))
-    ;(log/debug "\n\n\n -> new-question objects \n" (keys (:objects new-question-data)))
-
+                            question-params)]
     (-> activity-data
-        (update :actions ignore-keys current-question-actions-names)
-        (update :actions merge (:actions new-question-data))
-        (update :objects ignore-keys current-question-objects-names)
-        (update :objects merge (:objects new-question-data)))))
+        (merge-objects current-question-data new-question-data)
+        (merge-actions current-question-data new-question-data))))
 
 (defn- set-animation-settings
   [scene-data data]
