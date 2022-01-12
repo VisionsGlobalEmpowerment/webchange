@@ -46,7 +46,7 @@
                                :text-name        (param-name->object-name (str "options-" "option-" (dec option-idx) "-text") question-id)
                                :text-props       (->> text-prop-name keyword (get form-data))
                                :text-param-name  text-prop-name
-                               :image-name       (param-name->object-name (str "options-" "option-" (dec option-idx) "-image") question-id)
+                               :image-name       (param-name->object-name (str "options-" "option-" (dec option-idx) "-image-image") question-id)
                                :image-props      (->> image-prop-name keyword (get form-data))
                                :image-param-name image-prop-name}))))
         frame (get-options-frame {:width          (- width (* 2 params/block-padding))
