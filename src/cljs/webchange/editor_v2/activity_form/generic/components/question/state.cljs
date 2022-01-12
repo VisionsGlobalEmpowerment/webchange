@@ -2,8 +2,13 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
+    [webchange.state.state :as state]
     [webchange.state.state-activity :as state-activity]
-    [webchange.question.get-question-data :refer [current-question-version default-question-data]]))
+    [webchange.question.get-question-data :refer [current-question-version default-question-data form->question-data]]
+
+    [webchange.question.create :as question]
+    [webchange.utils.scene-data :as scene-utils]
+    ))
 
 (defn path-to-db
   [relative-path]
@@ -81,19 +86,32 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db form-data-path {})}))
 
+(defn- get-scene-data
+  [form-data]
+  (->> (question/create (form->question-data form-data current-question-version)
+                        {:action-name "question-action" :object-name "question"}
+                        {:visible? true})
+       (question/add-to-scene scene-utils/empty-data)))
+
+(re-frame/reg-sub
+  ::scene-data
+  (fn []
+    [(re-frame/subscribe [::form-data])])
+  (fn [[form-data]]
+    (get-scene-data form-data)))
+
 (re-frame/reg-event-fx
   ::update-form-data
   (fn [{:keys [db]} [_ data]]
     (let [form-data (get-form-data db)]
       {:db (->> data
                 (reduce (fn [form-data {:keys [object-name object-data-patch]}]
-                          (let [param-name ""]
-                            (print "object-name" object-name)
-                            (print "object-data-patch" object-data-patch)
-                            (print "param-name" param-name)
-                            ;(update form-data param-name merge object-data-patch)
-                            form-data
-                            ))
+                          (let [scene-data (get-scene-data form-data)
+                                object-data (get-in scene-data [:objects object-name])
+                                param-name (-> object-data
+                                               (get-in [:metadata :question-form-param])
+                                               (keyword))]
+                            (update form-data param-name merge object-data-patch)))
                         form-data)
                 (assoc-in db form-data-path))})))
 
