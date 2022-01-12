@@ -1,5 +1,6 @@
 (ns webchange.templates.library.interactive-read-aloud
   (:require
+    [webchange.templates.common-actions :refer [add-question] :rename {add-question add-question-object}]
     [webchange.templates.core :as core]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.utils.characters :as characters]
@@ -13,8 +14,7 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.question.create :as question-object]
-    [webchange.question.get-question-data :refer [form->question-data]]))
+    [webchange.question.create :as question-object]))
 
 (def metadata {:id          32
                :name        "Interactive Read Aloud"
@@ -212,20 +212,6 @@
         (increase-next-action-index)
         (place-question question-actions action-name)
         (add-assets question-assets))))
-
-(defn- add-question-object
-  [activity-data {:keys [question-page-object]}]
-  (let [index (get-next-action-index activity-data)
-        action-name (str "question-" index)
-        object-name (str "question-" index)
-        question-data (question-object/create
-                        (form->question-data question-page-object)
-                        {:suffix           index
-                         :action-name      action-name
-                         :object-name      object-name})]
-    (-> activity-data
-        (increase-next-action-index)
-        (question-object/add-to-scene question-data))))
 
 (defn- add-page-action
   [activity-data {:keys [type page-layout spread-layout image text]}]

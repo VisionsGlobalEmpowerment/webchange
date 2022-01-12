@@ -7,10 +7,11 @@
     [webchange.question.common.task-image :as task-image]
     [webchange.question.common.task-text :as task-text]
     [webchange.question.common.params :as params]
+    [webchange.question.get-question-data :refer [param-name->object-name]]
     [webchange.question.utils :refer [merge-data]]))
 
 (defn- get-options-frame
-  [{:keys [width options-number]}]
+  [{:keys [options-number]}]
   (let [{:keys [gap]} params/options
         option-width (:mark-size params/option)
         option-height (:mark-size params/option)]
@@ -25,31 +26,41 @@
      :option-height option-height}))
 
 (defn- create-options
-  [{:keys [width height options] :as props}
-   {:keys [layout] :as form-data}]
-  (let [options-number (count options)
+  [{:keys [layout mark-options] :as form-data}
+   {:keys [question-id width height] :as props}]
+  (let [options (->> mark-options
+                     (map (fn [mark-option]
+                            (let [value-prop-name (str mark-option "-value")
+                                  text-prop-name (str mark-option "-text")
+                                  image-prop-name (str mark-option "-image")]
+                              {:value            (->> value-prop-name keyword (get form-data))
+                               :text-name        (param-name->object-name (str "options-" "option-" mark-option "-text") question-id)
+                               :text-props       (->> text-prop-name keyword (get form-data))
+                               :text-param-name  text-prop-name
+                               :image-name       (param-name->object-name (str "options-" "option-" mark-option "-image") question-id)
+                               :image-props      (->> image-prop-name keyword (get form-data))
+                               :image-param-name image-prop-name}))))
         frame (get-options-frame {:width          (- width (* 2 params/block-padding))
                                   :height         (- height (* 2 params/block-padding))
-                                  :options-number options-number
+                                  :options-number (count options)
                                   :layout         layout})]
-    (options-list/create (merge props {:frame frame}) form-data)))
+    (options-list/create options form-data (merge props {:frame frame}))))
 
 (defn create
-  [{:keys [object-name task-text-name question-id visible?] :as props}
-   {:keys [alias layout options task] :as form-data}]
-  (let [{task-text :text task-type :type} task
-        {options :data options-label :label} options
+  [{:keys [alias layout options task-type] :as form-data}
+   {:keys [object-name question-id visible? task-image-param-name] :as props}]
+  (let [{options-label :label} options
 
         show-task-image? (= task-type "text-image")
 
         substrate-name (str object-name "-substrate")
         background-name (str object-name "-background")
         options-name (str object-name "-options")
-        task-image-name (str object-name "-task-image")
         task-text-group-name (str object-name "-task-text-group")
+        task-image-object-name (param-name->object-name task-image-param-name question-id)
 
         layout-coordinates (get-layout-coordinates {:layout      layout
-                                                    :with-image? (= task-type "text-image")})]
+                                                    :with-image? show-task-image?})]
     (cond-> {:objects {(keyword object-name) {:type      "group"
                                               :alias     alias
                                               :x         (:x params/template-size)
@@ -58,25 +69,26 @@
                                                                   background-name
                                                                   task-text-group-name
                                                                   options-name]
-                                                                 show-task-image? (conj task-image-name))
+                                                                 show-task-image? (conj task-image-object-name))
                                               :visible   visible?
                                               :editable? {:show-in-tree? true}}}}
             :always (merge-data (substrate/create {:object-name substrate-name}))
             :always (merge-data (background/create (merge {:object-name background-name}
                                                           (:background layout-coordinates))))
-            :always (merge-data (task-text/create (merge props
+            :always (merge-data (task-text/create form-data
+                                                  (merge props
                                                          (:text layout-coordinates)
-                                                         {:object-name      task-text-group-name
-                                                          :text-object-name task-text-name
-                                                          :text             task-text
-                                                          :question-id      question-id})))
-            :always (merge-data (create-options (merge props
+                                                         {:object-name task-text-group-name
+                                                          :param-name  "task-text"
+                                                          :question-id question-id})))
+            :always (merge-data (create-options form-data
+                                                (merge props
                                                        (:options layout-coordinates)
                                                        {:object-name options-name
                                                         :label-type  options-label
-                                                        :options     options})
-                                                form-data))
-            show-task-image? (merge-data (task-image/create (merge props
+                                                        :question-id question-id})))
+            show-task-image? (merge-data (task-image/create form-data
+                                                            (merge props
                                                                    (:image layout-coordinates)
-                                                                   {:object-name task-image-name})
-                                                            form-data)))))
+                                                                   {:param-name  task-image-param-name
+                                                                    :object-name task-image-object-name}))))))

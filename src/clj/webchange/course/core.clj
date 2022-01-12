@@ -589,11 +589,11 @@
         lesson-sets-lessons (->> lesson-sets (map (juxt keyword default-lesson-name)) (into {}))
         initial-scene-required? (nil? (get course-data :initial-scene))
         data (cond-> course-data
-               :always (assoc-in [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword)] {:name scene-name})
-               :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
-               :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
-               lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
-               initial-scene-required? (assoc :initial-scene scene-slug))]
+                     :always (assoc-in [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword)] {:name scene-name})
+                     :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
+                     :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
+                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
+                     initial-scene-required? (assoc :initial-scene scene-slug))]
     (db/save-course! {:course_id  course-id
                       :data       data
                       :owner_id   owner-id
@@ -749,8 +749,8 @@
 (defn- get-object-keys-to-update
   [{:keys [editable?]}]
   (cond-> [:editable? :origin :max-width :max-height :width :height :image-size :metadata :actions]
-    (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y])
-    (not editable?) (concat [:visible])))
+          (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y])
+          (not editable?) (concat [:visible])))
 
 (defn- update-object
   [created-activity]
@@ -828,4 +828,4 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-slug :name} (-> (db/get-scenes-by-course-id {:course_id course-id}) first)]
     {:course-slug course-slug
-     :scene-slug scene-slug}))
+     :scene-slug  scene-slug}))
