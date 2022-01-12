@@ -91,7 +91,7 @@
 
 ;; Dialogs
 
-(defn- get-nth-in [data path]
+(defn get-nth-in [data path]
   (reduce
     (fn [current-data path-step]
       (if (associative? current-data)

@@ -7,6 +7,7 @@
     [webchange.question.create :as question-object]
     [webchange.question.get-question-data :refer [form->question-data]]
     [webchange.utils.map :refer [ignore-keys]]
+    [webchange.utils.scene-action-data :refer [get-inner-action get-nth-in update-inner-action]]
     [webchange.utils.scene-common-actions :as common-actions-utils]
     [webchange.utils.scene-data :refer [update-animation-settings]]))
 
@@ -208,8 +209,17 @@
                                   (filter (fn [[_ action-data]]
                                             (= (:editor-type action-data) "dialog")))
                                   (map first))]
-    (->> (select-keys preserved-actions dialog-actions-names)
-         (update activity-data :actions merge))))
+    (reduce (fn [activity-data dialog-action-name]
+              (let [preserved-inner-action (-> preserved-actions
+                                               (get-nth-in [dialog-action-name :data 0])
+                                               (get-inner-action))
+
+                    current-action (get-in new-question-data [:actions dialog-action-name])
+                    updated-action (->> (ignore-keys preserved-inner-action [:type])
+                                        (update-in current-action [:data 0] update-inner-action))]
+                (assoc-in activity-data [:actions dialog-action-name] updated-action)))
+            activity-data
+            dialog-actions-names)))
 
 (defn- merge-actions
   [activity-data current-question-data new-question-data]
