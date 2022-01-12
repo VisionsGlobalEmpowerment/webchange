@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
-    [webchange.state.state :as state]
     [webchange.state.state-activity :as state-activity]
     [webchange.question.get-question-data :refer [current-question-version default-question-data form->question-data]]
 
@@ -23,15 +22,21 @@
   [db]
   (get-in db modal-state-path))
 
+(defn- get-question-index
+  [db]
+  (-> (get-state db)
+      (get :question-index)))
+
 (re-frame/reg-sub
   ::state
   get-state)
 
 (re-frame/reg-event-fx
   ::open
-  (fn [{:keys [db]} [_ {:keys [action title save-button-text]}]]
+  (fn [{:keys [db]} [_ {:keys [action title save-button-text question-index]}]]
     {:db (assoc-in db modal-state-path {:open?            true
                                         :action           action
+                                        :question-index   question-index
                                         :title            title
                                         :save-button-text save-button-text})}))
 
@@ -46,10 +51,12 @@
 (re-frame/reg-event-fx
   ::open-edit-question-window
   (fn [{:keys [_]} [_ question-data]]
-    {:dispatch-n [[::open {:action           "edit"
-                           :title            "Edit Question"
-                           :save-button-text "Save"}]
-                  [::set-form-data (get-in question-data [:metadata :params])]]}))
+    (let [{:keys [index params]} (get question-data :metadata)]
+      {:dispatch-n [[::open {:action           "edit"
+                             :question-index   index
+                             :title            "Edit Question"
+                             :save-button-text "Save"}]
+                    [::set-form-data params]]})))
 
 (re-frame/reg-event-fx
   ::close
@@ -134,9 +141,23 @@
   (fn [{:keys [db]} [_]]
     (let [{:keys [action]} (get-state db)
           form-data (get-form-data db)]
-      {:dispatch [::state-activity/call-activity-common-action
-                  (case action
-                    "add" {:action :add-question
+      (case action
+        "add" {:dispatch [::state-activity/call-activity-common-action
+                          {:action :add-question
                            :data   {:question-page-object form-data
-                                    :data-version         current-question-version}})
-                  {:on-success [::close]}]})))
+                                    :data-version         current-question-version}}
+                          {:on-success [::close]}]}
+        "edit" (let [question-index (get-question-index db)]
+                 (if (number? question-index)
+                   {:dispatch [::state-activity/call-activity-common-action
+                               {:action :edit-question
+                                :data   {:question-page-object form-data
+                                         :question-index       question-index
+                                         :data-version         current-question-version}}
+                               {:on-success [::close]}]}
+                   {:show-message "Question does't have index. Try to update template."}))))))
+
+(re-frame.core/reg-fx
+  :show-message
+  (fn [message]
+    (js/alert message)))

@@ -121,7 +121,7 @@
   ([question-params activity-params]
    (create question-params activity-params {}))
   ([{:keys [alias answers-number correct-answers task-text question-type] :as form-data}
-    {:keys [action-name object-name]}
+    {:keys [action-name object-name index]}
     {:keys [visible?] :or {visible? false}}]
    (let [show-question-name (str action-name "-show")
          hide-question-name (str action-name "-hide")
@@ -142,107 +142,109 @@
          has-correct-answer? (not= answers-number "any")
          create-question (get question-types question-type)
          question-params {:task-type-param-name  "task-type"
-                          :task-image-param-name "task-image"}]
-     (merge {:alias       alias
-             :action-name action-name
-             :object-name object-name
-             :params      form-data}
-            (cond-> {:actions {(keyword action-name)           {:type                "sequence-data"
-                                                                :description         "-- Description --"
-                                                                :workflow-user-input true
-                                                                :tags                [question-id]
-                                                                :data                [{:type "action" :id show-question-name}
-                                                                                      {:type "action" :id task-dialog-name}]}
+                          :task-image-param-name "task-image"}
 
-                               (keyword show-question-name)    {:type       "set-attribute"
-                                                                :target     object-name
-                                                                :attr-name  "visible"
-                                                                :attr-value true}
-                               (keyword hide-question-name)    {:type       "set-attribute"
-                                                                :target     object-name
-                                                                :attr-name  "visible"
-                                                                :attr-value false}
+         question-data (merge {:alias       alias
+                               :action-name action-name
+                               :object-name object-name
+                               :params      form-data
+                               :index       index}
+                              (cond-> {:actions {(keyword action-name)           {:type                "sequence-data"
+                                                                                  :description         "-- Description --"
+                                                                                  :workflow-user-input true
+                                                                                  :tags                [question-id]
+                                                                                  :data                [{:type "action" :id show-question-name}
+                                                                                                        {:type "action" :id task-dialog-name}]}
 
-                               (keyword task-voice-over-click) {:type "sequence-data"
-                                                                :data [{:type "parallel-by-tag"
-                                                                        :tag  activate-tag-task}
-                                                                       {:type "action"
-                                                                        :id   task-dialog-name}
-                                                                       {:type "parallel-by-tag"
-                                                                        :tag  inactivate-tag-task}]}
+                                                 (keyword show-question-name)    {:type       "set-attribute"
+                                                                                  :target     object-name
+                                                                                  :attr-name  "visible"
+                                                                                  :attr-value true}
+                                                 (keyword hide-question-name)    {:type       "set-attribute"
+                                                                                  :target     object-name
+                                                                                  :attr-name  "visible"
+                                                                                  :attr-value false}
 
-                               (keyword task-dialog-name)      {:type               "sequence-data",
-                                                                :tags               ["question-action"]
-                                                                :data               [{:type "sequence-data"
-                                                                                      :data [{:type "empty" :duration 0}
-                                                                                             {:type        "text-animation"
-                                                                                              :phrase-text (:text task-text)
-                                                                                              :target      (param-name->object-name "task-text" question-id)
-                                                                                              :audio       nil
-                                                                                              :animation   "color"
-                                                                                              :fill        45823
-                                                                                              :data        []}]}]
-                                                                :phrase-description "Question text"
-                                                                :editor-type        "dialog"}
+                                                 (keyword task-voice-over-click) {:type "sequence-data"
+                                                                                  :data [{:type "parallel-by-tag"
+                                                                                          :tag  activate-tag-task}
+                                                                                         {:type "action"
+                                                                                          :id   task-dialog-name}
+                                                                                         {:type "parallel-by-tag"
+                                                                                          :tag  inactivate-tag-task}]}
 
-                               (keyword option-click-name)     {:type "sequence-data"
-                                                                :data (cond-> [{:type        "question-pick"
-                                                                                :id          question-id
-                                                                                :from-params [{:action-property "value" :param-property "value"}]}
-                                                                               {:type        "question-test"
-                                                                                :id          question-id
-                                                                                :from-params [{:action-property "value"
-                                                                                               :param-property  "value"}]
-                                                                                :success     {:type        "parallel-by-tag"
-                                                                                              :from-params [{:template        (str "activate-option-%-" question-id)
-                                                                                                             :action-property "tag"
-                                                                                                             :param-property  "value"}]}
-                                                                                :fail        {:type        "parallel-by-tag"
-                                                                                              :from-params [{:template        (str "inactivate-option-%-" question-id)
-                                                                                                             :action-property "tag"
-                                                                                                             :param-property  "value"}]}}]
-                                                                              has-correct-answer? (conj {:type    "test-value"
-                                                                                                         :value1  answers-number
-                                                                                                         :value2  "one"
-                                                                                                         :success check-answers})
-                                                                              (not has-correct-answer?) (conj {:type "action" :id finish-dialog}))}}
-                     :track   {:title alias
-                               :nodes [{:type      "dialog"
-                                        :action-id (keyword task-dialog-name)}]}
-                     :objects {}
-                     :assets  []}
-                    has-correct-answer? (merge-data (add-check-correct-answer {:action-name        check-answers
-                                                                               :correct-answers    correct-answers
-                                                                               :hide-question-name hide-question-name
-                                                                               :question-id        question-id}))
-                    (not has-correct-answer?) (merge-data (add-finish-dialog {:action-name        finish-dialog
-                                                                              :hide-question-name hide-question-name
-                                                                              :question-id        question-id}))
-                    options-have-voice-over? (merge-data (create-voice-over-handlers form-data
-                                                                                     {:action-name option-voice-over-name
-                                                                                      :question-id question-id}))
-                    :always (merge-data (create-question form-data
-                                                         (cond-> (merge {:question-id              question-id
-                                                                         :object-name              object-name
-                                                                         :on-option-click          option-click-name
-                                                                         :on-task-voice-over-click task-voice-over-click
-                                                                         :visible?                 visible?}
-                                                                        question-params)
-                                                                 options-have-voice-over? (assoc :on-option-voice-over-click option-voice-over-name)
-                                                                 has-correct-answer? (assoc :on-check-click check-answers)))))))))
+                                                 (keyword task-dialog-name)      {:type               "sequence-data",
+                                                                                  :tags               ["question-action"]
+                                                                                  :data               [{:type "sequence-data"
+                                                                                                        :data [{:type "empty" :duration 0}
+                                                                                                               {:type        "text-animation"
+                                                                                                                :phrase-text (:text task-text)
+                                                                                                                :target      (param-name->object-name "task-text" question-id)
+                                                                                                                :audio       nil
+                                                                                                                :animation   "color"
+                                                                                                                :fill        45823
+                                                                                                                :data        []}]}]
+                                                                                  :phrase-description "Question text"
+                                                                                  :editor-type        "dialog"}
+
+                                                 (keyword option-click-name)     {:type "sequence-data"
+                                                                                  :data (cond-> [{:type        "question-pick"
+                                                                                                  :id          question-id
+                                                                                                  :from-params [{:action-property "value" :param-property "value"}]}
+                                                                                                 {:type        "question-test"
+                                                                                                  :id          question-id
+                                                                                                  :from-params [{:action-property "value"
+                                                                                                                 :param-property  "value"}]
+                                                                                                  :success     {:type        "parallel-by-tag"
+                                                                                                                :from-params [{:template        (str "activate-option-%-" question-id)
+                                                                                                                               :action-property "tag"
+                                                                                                                               :param-property  "value"}]}
+                                                                                                  :fail        {:type        "parallel-by-tag"
+                                                                                                                :from-params [{:template        (str "inactivate-option-%-" question-id)
+                                                                                                                               :action-property "tag"
+                                                                                                                               :param-property  "value"}]}}]
+                                                                                                has-correct-answer? (conj {:type    "test-value"
+                                                                                                                           :value1  answers-number
+                                                                                                                           :value2  "one"
+                                                                                                                           :success check-answers})
+                                                                                                (not has-correct-answer?) (conj {:type "action" :id finish-dialog}))}}
+                                       :track   {:title alias
+                                                 :nodes [{:type      "dialog"
+                                                          :action-id (keyword task-dialog-name)}]}
+                                       :objects {}
+                                       :assets  []}
+                                      has-correct-answer? (merge-data (add-check-correct-answer {:action-name        check-answers
+                                                                                                 :correct-answers    correct-answers
+                                                                                                 :hide-question-name hide-question-name
+                                                                                                 :question-id        question-id}))
+                                      (not has-correct-answer?) (merge-data (add-finish-dialog {:action-name        finish-dialog
+                                                                                                :hide-question-name hide-question-name
+                                                                                                :question-id        question-id}))
+                                      options-have-voice-over? (merge-data (create-voice-over-handlers form-data
+                                                                                                       {:action-name option-voice-over-name
+                                                                                                        :question-id question-id}))
+                                      :always (merge-data (create-question form-data
+                                                                           (cond-> (merge {:question-id              question-id
+                                                                                           :object-name              object-name
+                                                                                           :on-option-click          option-click-name
+                                                                                           :on-task-voice-over-click task-voice-over-click
+                                                                                           :visible?                 visible?}
+                                                                                          question-params)
+                                                                                   options-have-voice-over? (assoc :on-option-voice-over-click option-voice-over-name)
+                                                                                   has-correct-answer? (assoc :on-check-click check-answers))))))]
+     (assoc-in question-data [:objects (keyword object-name) :metadata] {:question? true
+                                                                         :assets    (map :url (:assets question-data))
+                                                                         :actions   (->> (keys (:actions question-data)) (map clojure.core/name))
+                                                                         :objects   (->> (keys (:objects question-data)) (map clojure.core/name))
+                                                                         :params    form-data
+                                                                         :index     index}))))
 
 (defn add-to-scene
-  [activity-data {:keys [alias action-name actions object-name objects assets track params]}]
-  (let [conj-vec (fn [list element] (conj (if (vector? list) list (vec list)) element))
-        metadata {:question? true
-                  :assets    (map :url assets)
-                  :actions   (->> (keys actions) (map clojure.core/name))
-                  :objects   (->> (keys objects) (map clojure.core/name))
-                  :params    params}]
+  [activity-data {:keys [alias action-name actions object-name objects assets track]}]
+  (let [conj-vec (fn [list element] (conj (if (vector? list) list (vec list)) element))]
     (-> activity-data
         (update :actions merge actions)
         (update :objects merge objects)
-        (update-in [:objects (keyword object-name) :metadata] merge metadata)
         (update :assets concat assets)
         (update-in [:scene-objects] conj-vec [object-name])
         (update-in [:metadata :tracks] conj (merge track

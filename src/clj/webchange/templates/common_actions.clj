@@ -6,6 +6,7 @@
     [webchange.templates.utils.characters :refer [animations character-positions]]
     [webchange.question.create :as question-object]
     [webchange.question.get-question-data :refer [form->question-data]]
+    [webchange.utils.map :refer [ignore-keys]]
     [webchange.utils.scene-common-actions :as common-actions-utils]
     [webchange.utils.scene-data :refer [update-animation-settings]]))
 
@@ -185,19 +186,54 @@
   [activity-data index]
   (assoc-in activity-data [:metadata :next-action-index] (inc index)))
 
+(defn- get-question-params
+  [index]
+  {:index       index
+   :action-name (str "question-" index)
+   :object-name (str "question-" index)})
+
 (defn add-question
   [activity-data {:keys [data-version question-page-object]}]
   (let [index (get-next-action-index activity-data)
-        action-name (str "question-" index)
-        object-name (str "question-" index)
         question-data (question-object/create
-                       (form->question-data question-page-object data-version)
-                       {:suffix           index
-                        :action-name      action-name
-                        :object-name      object-name})]
+                        (form->question-data question-page-object data-version)
+                        (get-question-params index))]
     (-> activity-data
         (increase-next-action-index index)
         (question-object/add-to-scene question-data))))
+
+;ignore-keys
+
+(defn edit-question
+  [activity-data {:keys [data-version question-page-object question-index]}]
+  (let [question-params (get-question-params question-index)
+        current-question-data (get-in activity-data [:objects (keyword (:object-name question-params))])
+        new-question-data (question-object/create
+                            (form->question-data question-page-object data-version)
+                            question-params)
+
+        current-question-actions-names (map keyword (get-in current-question-data [:metadata :actions]))
+        current-question-objects-names (map keyword (get-in current-question-data [:metadata :objects]))
+
+        current-question-actions-data (select-keys (:actions activity-data) (keys (:actions new-question-data)))
+
+
+        ]
+    (log/debug "\n -> index" question-index)
+    ;(log/debug "\n\n\n -> current-question-data \n" current-question-data)
+    ;(log/debug "\n\n\n -> new-question-data \n" new-question-data)
+
+    ;(log/debug "\n\n\n -> current-question actions \n" (map keyword (get-in current-question-data [:metadata :actions])))
+    ;(log/debug "\n\n\n -> current-question objects \n" (map keyword (get-in current-question-data [:metadata :objects])))
+    ;
+    ;(log/debug "\n\n\n -> new-question actions \n" (keys (:actions new-question-data)))
+    ;(log/debug "\n\n\n -> new-question objects \n" (keys (:objects new-question-data)))
+
+    (-> activity-data
+        (update :actions ignore-keys current-question-actions-names)
+        (update :actions merge (:actions new-question-data))
+        (update :objects ignore-keys current-question-objects-names)
+        (update :objects merge (:objects new-question-data)))))
 
 (defn- set-animation-settings
   [scene-data data]
@@ -213,6 +249,7 @@
     :add-character (add-character scene-data data)
     :remove-character (common-actions-utils/remove-character scene-data data)
     :add-question (add-question scene-data data)
+    :edit-question (edit-question scene-data data)
     :remove-question (common-actions-utils/remove-question scene-data data)
     :add-anchor (add-anchor scene-data)
     :remove-anchor (common-actions-utils/remove-anchor scene-data data)
