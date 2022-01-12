@@ -134,6 +134,28 @@
   (fn [{:keys [db]} [_ field value]]
     {:db (update-in db form-data-path merge {field value})}))
 
+;; Options
+
+(re-frame/reg-sub
+  ::task-type-options
+  (fn []
+    [(re-frame/subscribe [::field-value :question-type])])
+  (fn [[question-type]]
+    (let [omit-value (fn [list omit-value]
+                       (filter (fn [{:keys [value]}]
+                                 (not= value omit-value))
+                               list))]
+      (cond-> [{:text  "Text"
+                :value "text"}
+               {:text  "Image"
+                :value "image"}
+               {:text  "Text with image"
+                :value "text-image"}
+               {:text  "Voice-over only"
+                :value "voice-over"}]
+              (some #{question-type} ["multiple-choice-image"]) (omit-value "image")
+              (some #{question-type} ["multiple-choice-image"]) (omit-value "text-image")))))
+
 ;; Save
 
 (re-frame/reg-event-fx
