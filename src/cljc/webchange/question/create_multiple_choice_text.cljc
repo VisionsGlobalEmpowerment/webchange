@@ -87,9 +87,10 @@
                             (let [option-name (str "option-" option-idx)
                                   value-prop-name (str option-name "-value")
                                   text-prop-name (str option-name "-text")]
-                              {:value      (->> value-prop-name keyword (get form-data))
-                               :text-name  (param-name->object-name text-prop-name question-id)
-                               :text-props (->> text-prop-name keyword (get form-data))}))))
+                              {:value           (->> value-prop-name keyword (get form-data))
+                               :text-name       (param-name->object-name (str "options-" "option-" (dec option-idx) "-text") question-id)
+                               :text-props      (->> text-prop-name keyword (get form-data))
+                               :text-param-name text-prop-name}))))
         frame (get-options-frame {:width          (- width (* 2 params/block-padding))
                                   :height         (- height (* 2 params/block-padding))
                                   :options-number options-number

@@ -2,12 +2,11 @@
   (:require
     [webchange.question.common.params :as common-params]
     [webchange.question.common.voice-over-button :as voice-over]
-    [webchange.question.get-question-data :refer [param-name->object-name]]
     [webchange.question.params :as p]
     [webchange.question.utils :refer [merge-data]]))
 
 (defn- create-image
-  [{:keys [image-name image-props]}
+  [{:keys [image-name image-props image-param-name]}
    {:keys [object-name x y width height border-radius]
     :or   {x             0
            y             0
@@ -24,7 +23,8 @@
                                            :height        (- height (* p/option-padding 2))
                                            :border-radius border-radius
                                            :origin        {:type "center-center"}
-                                           :editable?     {:select true}}
+                                           :editable?     {:select true}
+                                           :metadata      {:question-form-param image-param-name}}
                                           image-props)}
    :assets  [{:url  (:src image-props)
               :size 1
@@ -60,7 +60,7 @@
                                                           (str "inactivate-option-" value "-" question-id)]}}}))
 
 (defn- create-text
-  [{:keys [text-name text-props]}
+  [{:keys [text-name text-props text-param-name]}
    {:keys [x y width height text actions]}]
   {:objects {(keyword text-name) (cond-> (merge {:type           "text"
                                                  :text           text
@@ -70,7 +70,8 @@
                                                  :word-wrap      true
                                                  :font-size      p/option-font-size
                                                  :vertical-align "middle"
-                                                 :editable?      {:select true}}
+                                                 :editable?      {:select true}
+                                                 :metadata       {:question-form-param text-param-name}}
                                                 text-props)
                                          (some? actions) (assoc :actions actions))}})
 

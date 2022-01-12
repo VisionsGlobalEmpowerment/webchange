@@ -33,11 +33,13 @@
                             (let [value-prop-name (str mark-option "-value")
                                   text-prop-name (str mark-option "-text")
                                   image-prop-name (str mark-option "-image")]
-                              {:value       (->> value-prop-name keyword (get form-data))
-                               :text-name   (param-name->object-name text-prop-name question-id)
-                               :text-props  (->> text-prop-name keyword (get form-data))
-                               :image-name  (param-name->object-name image-prop-name question-id)
-                               :image-props (->> image-prop-name keyword (get form-data))}))))
+                              {:value            (->> value-prop-name keyword (get form-data))
+                               :text-name        (param-name->object-name (str "options-" "option-" mark-option "-text") question-id)
+                               :text-props       (->> text-prop-name keyword (get form-data))
+                               :text-param-name  text-prop-name
+                               :image-name       (param-name->object-name (str "options-" "option-" mark-option "-image") question-id)
+                               :image-props      (->> image-prop-name keyword (get form-data))
+                               :image-param-name image-prop-name}))))
         frame (get-options-frame {:width          (- width (* 2 params/block-padding))
                                   :height         (- height (* 2 params/block-padding))
                                   :options-number (count options)

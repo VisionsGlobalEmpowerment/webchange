@@ -774,17 +774,6 @@
          (map (update-object created-activity))
          (into {}))))
 
-(defn- update-preserved-objects
-  [activity preserved-objects]
-  (reduce (fn [activity [object-name object-data]]
-            (let [object-data (if (contains? object-data :children)
-                                (->> (get-in activity [:objects object-name :children])
-                                     (assoc object-data :children))
-                                object-data)]
-              (update activity :objects merge {object-name object-data})))
-          activity
-          preserved-objects))
-
 (defn update-activity-template!
   [course-slug scene-slug user-id]
   (let [scene-data (get-scene-latest-version course-slug scene-slug)
@@ -796,7 +785,7 @@
         preserved-objects (preserve-objects scene-data created-activity)
         activity (-> created-activity
                      (update :actions merge preserved-actions)
-                     (update-preserved-objects preserved-objects)
+                     (update :objects merge preserved-objects)
                      (update :assets #(->> (concat original-assets %)
                                            (flatten)
                                            (distinct))))]

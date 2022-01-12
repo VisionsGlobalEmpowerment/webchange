@@ -25,7 +25,8 @@
                                                                                  (* 2 common-params/block-padding))
                                                               :word-wrap      true
                                                               :vertical-align "top"
-                                                              :editable?      {:select true}}
+                                                              :editable?      {:select true}
+                                                              :metadata       {:question-form-param param-name}}
                                                              params)}}
                 (voice-over/create {:object-name button-name
                                     :x           0

@@ -7,7 +7,7 @@
 
     [webchange.editor-v2.activity-form.common.object-form.views :refer [object-form]]
     [webchange.logger.index :as logger]
-    [webchange.question.get-question-data :refer [available-values current-question-version form->question-data object-name->param-name default-question-data]]
+    [webchange.question.get-question-data :refer [available-values current-question-version form->question-data default-question-data]]
     [webchange.utils.scene-data :as scene-utils]
     [webchange.question.create :as question]))
 
@@ -253,4 +253,5 @@
                       :hot-update? false
                       :on-save     (fn [params]
                                      (doseq [{:keys [object-name object-data-patch]} params]
-                                       (swap! option-data update (object-name->param-name object-name) merge object-data-patch)))}]]])))
+                                       ;(swap! option-data update (object-name->param-name object-name) merge object-data-patch)
+                                       ))}]]])))

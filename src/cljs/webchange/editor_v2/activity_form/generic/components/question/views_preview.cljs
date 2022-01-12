@@ -8,7 +8,7 @@
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.logger.index :as logger]
     [webchange.question.create :as question]
-    [webchange.question.get-question-data :refer [current-question-version form->question-data object-name->param-name]]
+    [webchange.question.get-question-data :refer [current-question-version form->question-data]]
     [webchange.utils.scene-data :as scene-utils]))
 
 (defn- question-preview

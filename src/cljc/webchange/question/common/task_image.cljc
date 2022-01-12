@@ -1,7 +1,6 @@
 (ns webchange.question.common.task-image
   (:require
-    [webchange.question.common.params :as common-params]
-    [webchange.question.get-question-data :refer [param-name->object-name]]))
+    [webchange.question.common.params :as common-params]))
 
 (defn create
   [form-data
@@ -19,7 +18,8 @@
                                              :width     image-width
                                              :height    image-height
                                              :origin    {:type "center-center"}
-                                             :editable? {:select true}}
+                                             :editable? {:select true}
+                                             :metadata  {:question-form-param param-name}}
                                             params)}
      :assets  [{:url  (:src params)
                 :size 1

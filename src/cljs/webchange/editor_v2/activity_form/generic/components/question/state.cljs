@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.state.state-activity :as state-activity]
-    [webchange.question.get-question-data :refer [current-question-version default-question-data object-name->param-name]]))
+    [webchange.question.get-question-data :refer [current-question-version default-question-data]]))
 
 (defn path-to-db
   [relative-path]
@@ -87,8 +87,13 @@
     (let [form-data (get-form-data db)]
       {:db (->> data
                 (reduce (fn [form-data {:keys [object-name object-data-patch]}]
-                          (let [param-name (object-name->param-name object-name)]
-                            (update form-data param-name merge object-data-patch)))
+                          (let [param-name ""]
+                            (print "object-name" object-name)
+                            (print "object-data-patch" object-data-patch)
+                            (print "param-name" param-name)
+                            ;(update form-data param-name merge object-data-patch)
+                            form-data
+                            ))
                         form-data)
                 (assoc-in db form-data-path))})))
 

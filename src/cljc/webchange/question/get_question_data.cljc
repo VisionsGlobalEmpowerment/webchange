@@ -6,14 +6,7 @@
 
 (defn param-name->object-name
   [param-name question-id]
-  (str question-id "--" param-name))
-
-(defn object-name->param-name
-  [object-name]
-  (-> (clojure.core/name object-name)
-      (clojure.string/split #"--")
-      (last)
-      (keyword)))
+  (str question-id "-" param-name))
 
 (def available-values
   {:mark-options ["thumbs-up" "ok" "thumbs-down"]})
