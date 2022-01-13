@@ -94,9 +94,10 @@
 (defn get-nth-in [data path]
   (reduce
     (fn [current-data path-step]
-      (if (associative? current-data)
-        (get current-data path-step)
-        (nth current-data path-step nil)))
+      (when (some? current-data)
+        (if (associative? current-data)
+          (get current-data path-step)
+          (nth current-data path-step nil))))
     data
     path))
 
