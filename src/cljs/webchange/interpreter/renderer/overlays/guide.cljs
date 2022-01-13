@@ -11,11 +11,82 @@
   [mode]
   true)
 
+(defn- show-guide?
+  [metadata]
+  (-> metadata
+      :guide-settings
+      :show-guide))
+
+(defn- guide-character
+  [metadata]
+  (let [character (-> metadata :guide-settings :character (or "vaca"))]
+    (case character
+      "vaca"
+      {:type "animation",
+       :x 1785
+       :y 1175
+       :scale {:x -0.37, :y 0.37},
+       :anim "idle",
+       :meshes true,
+       :name "teacher",
+       :skin "default",
+       :speed 1,
+       :idle-animation-enabled? false
+       :start true
+       :visible true
+       :object-name :guide}
+
+      "vera"
+      {:type "animation",
+       :x 1785
+       :y 1175
+       :scale {:x -0.37, :y 0.37},
+       :anim "idle",
+       :meshes true,
+       :name "student",
+       :skin "default",
+       :speed 1,
+       :idle-animation-enabled? false
+       :start true
+       :visible true
+       :object-name :guide}
+
+      "mari"
+      {:type "animation",
+       :x 1785
+       :y 1075
+       :scale {:x 0.37, :y 0.37},
+       :anim "idle",
+       :meshes true,
+       :name "guide",
+       :skin "default",
+       :speed 1,
+       :idle-animation-enabled? false
+       :start true
+       :visible true
+       :object-name :guide}
+
+      "lion"
+      {:type "animation",
+       :x 1785
+       :y 1175
+       :scale {:x -0.57, :y 0.57},
+       :anim "idle",
+       :meshes true,
+       :name "lion",
+       :skin "lion",
+       :speed 1,
+       :idle-animation-enabled? false
+       :start true
+       :visible true
+       :object-name :guide})))
+
 (defn create
-  [{:keys [viewport]}]
+  [{:keys [viewport metadata]}]
+  (js/console.log "metadata" metadata)
   {:type        "group"
    :object-name :guide-overlay
-   :visible     true
+   :visible     (show-guide? metadata)
    :mask {:x 1500
           :y 600
           :width 420
@@ -27,20 +98,7 @@
                   :x 1579
                   :y 766
                   :object-name :guide-background}
-                 {:type "animation",
-                  :x 1785
-                  :y 1175
-                  :scale {:x -0.37, :y 0.37},
-                  :anim "idle",
-                  :meshes true,
-                  :name "teacher",
-                  :skin "default",
-                  :speed 1,
-                  :idle-animation-enabled? false
-                  :start true
-                  :visible true
-                  :object-name :guide}]})
+                 (guide-character metadata)]})
 
 (defn update-viewport
-  [{:keys [viewport]}]
-  )
+  [{:keys [viewport]}])

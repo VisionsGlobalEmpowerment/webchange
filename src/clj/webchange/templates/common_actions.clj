@@ -8,7 +8,7 @@
     [webchange.question.get-question-data :refer [form->question-data]]
     [webchange.utils.map :refer [ignore-keys]]
     [webchange.utils.scene-common-actions :as common-actions-utils]
-    [webchange.utils.scene-data :refer [update-animation-settings]]))
+    [webchange.utils.scene-data :refer [update-animation-settings update-guide-settings]]))
 
 (defn- file-used?
   [scene-data file]
@@ -258,4 +258,5 @@
     :remove-question (common-actions-utils/remove-question scene-data data)
     :add-anchor (add-anchor scene-data)
     :remove-anchor (common-actions-utils/remove-anchor scene-data data)
-    :set-animation-settings (set-animation-settings scene-data data)))
+    :set-animation-settings (set-animation-settings scene-data data)
+    :set-guide-settings (update-guide-settings scene-data data)))

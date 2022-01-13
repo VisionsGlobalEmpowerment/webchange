@@ -128,6 +128,7 @@
                           (when show-scene?
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)
+                                    :metadata (:metadata scene-data)
                                     :viewport viewport
                                     :on-ready on-ready
                                     :started? (:started? scene-data)}])

@@ -10,13 +10,13 @@
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]))
 
 (defn create-overlays
-  [{:keys [parent viewport mode]}]
+  [{:keys [parent viewport mode metadata]}]
   (create-component {:type        "group"
                      :parent      parent
                      :object-name :overlays
                      :children    (cond-> []
                                           (skip-menu/show-overlay? mode) (conj (skip-menu/create {:viewport viewport}))
-                                          (guide/show-overlay? mode) (conj (guide/create {:viewport viewport}))
+                                          (guide/show-overlay? mode) (conj (guide/create {:viewport viewport :metadata metadata}))
                                           (goodbye/show-overlay? mode) (conj (goodbye/create {:viewport viewport}))
                                           (navigation/show-overlay? mode) (conj (navigation/create {:viewport viewport}))
                                           (navigation-back/show-overlay? mode) (conj (navigation-back/create {:viewport viewport}))
