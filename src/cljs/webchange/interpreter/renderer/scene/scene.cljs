@@ -69,7 +69,7 @@
                        (re-frame/dispatch [::state/init])
                        (re-frame/dispatch [::state/set-rendering-state true])
 
-                       (let [{:keys [mode on-ready viewport objects]} (r/props this)
+                       (let [{:keys [mode on-ready viewport objects metadata]} (r/props this)
                              app (init-app viewport mode)]
                          (logger/trace-folded "scene mounted" viewport mode)
                          (.appendChild @container (.-view app))
@@ -84,7 +84,8 @@
                              (register-handler "resize" handle-renderer-resize))
                          (create-overlays {:parent   (get-stage)
                                            :viewport viewport
-                                           :mode     mode})
+                                           :mode     mode
+                                           :metadata metadata})
 
                          (create-component (question/create {:parent   (get-stage)
                                                              :viewport viewport}))

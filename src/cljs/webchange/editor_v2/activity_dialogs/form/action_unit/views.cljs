@@ -6,6 +6,7 @@
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-animation :refer [animation-unit]]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-background-music :refer [background-music-unit]]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-effect :refer [effect-unit]]
+    [webchange.editor-v2.activity-dialogs.form.action-unit.views-guide :refer [guide-unit]]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-movement :refer [movement-unit]]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-skip :refer [skip-unit]]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-phrase :refer [phrase-unit]]
@@ -112,6 +113,7 @@
        :text-animation [text-animation-unit props]
        :skip [skip-unit props]
        :background-music [background-music-unit props]
+       :guide [guide-unit props]
        [unknown-element props])
      [unit-menu {:idx         idx
                  :action-data props}]]

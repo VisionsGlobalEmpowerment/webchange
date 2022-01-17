@@ -4,6 +4,7 @@
     [clojure.string :as string]
     [clojure.tools.logging :as log]
     [webchange.templates.utils.characters :refer [animations character-positions]]
+    [webchange.templates.utils.dialog :as dialog]
     [webchange.question.create :as question-object]
     [webchange.question.get-question-data :refer [form->question-data]]
     [webchange.utils.map :refer [ignore-keys]]
@@ -267,6 +268,34 @@
   [scene-data data]
   (update-animation-settings scene-data data))
 
+(defn- with-guide-actions
+  [scene-data]
+  (let [tap-dialog (get-in scene-data [:actions :dialog-tap-instructions])
+        timeout-dialog (get-in scene-data [:actions :dialog-timeout-instructions])
+        tap-action (get-in scene-data [:actions :tap-instructions])
+        timeout-action (get-in scene-data [:actions :timeout-instructions])
+        init-guide (get-in scene-data [:actions :init-guide])
+        trigger-guide (get-in scene-data [:triggers :guide])]
+    (cond-> scene-data
+            (not tap-dialog) (assoc-in [:actions :dialog-tap-instructions] (dialog/default "Tap instructions"))
+            (not timeout-dialog) (assoc-in [:actions :dialog-timeout-instructions] (dialog/default "Timeout instructions"))
+            (not tap-action) (assoc-in [:actions :tap-instructions] {:type "action"
+                                                                     :from-var   [{:var-name        "tap-instructions-action"
+                                                                                   :action-property "id"}]})
+            (not timeout-action) (assoc-in [:actions :timeout-instructions] {:type "action"
+                                                                             :from-var   [{:var-name        "timeout-instructions-action"
+                                                                                           :action-property "id"}]})
+            (not init-guide) (assoc-in [:actions :init-guide] {:type "parallel"
+                                                               :data [{:type "set-variable" :var-name "tap-instructions-action" :var-value "dialog-tap-instructions"}
+                                                                      {:type "set-variable" :var-name "timeout-instructions-action" :var-value "dialog-timeout-instructions"}]})
+            (not trigger-guide) (assoc-in [:triggers :guide] {:on "start" :action "init-guide"}))))
+
+(defn update-guide-settings
+  [scene-data guide-settings-patch]
+  (-> scene-data 
+      (update-in [:metadata :guide-settings] merge guide-settings-patch)
+      (with-guide-actions)))
+
 (defn update-activity
   [scene-data action data]
   (case (keyword action)
@@ -281,4 +310,5 @@
     :remove-question (common-actions-utils/remove-question scene-data data)
     :add-anchor (add-anchor scene-data)
     :remove-anchor (common-actions-utils/remove-anchor scene-data data)
-    :set-animation-settings (set-animation-settings scene-data data)))
+    :set-animation-settings (set-animation-settings scene-data data)
+    :set-guide-settings (update-guide-settings scene-data data)))

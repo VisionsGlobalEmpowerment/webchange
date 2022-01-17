@@ -312,7 +312,20 @@
   (-> (get-animation-settings scene-data)
       (get :idle-animation-enabled? true)))
 
-; General
+(defn get-guide-settings
+  [scene-data]
+  (-> (get-metadata scene-data)
+      (get :guide-settings {})))
+
+(defn get-guide-enabled
+  [scene-data]
+  (-> (get-guide-settings scene-data)
+      (get :show-guide false)))
+                                        ; General
+(defn get-guide-character
+  [scene-data]
+  (-> (get-guide-settings scene-data)
+      (get :character)))
 
 (defn- get-background-music-action
   [scene-data]

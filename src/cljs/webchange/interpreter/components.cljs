@@ -57,6 +57,7 @@
     :else {:scene-id  scene-id
            :objects   (get-scene-objects-data scene-id (:scene-objects scene-data))
            :resources (get-activity-resources scene-id scene-data)
+           :metadata  (:metadata scene-data)
            :started?  (scene-started? scene-id)}))
 
 (defn- start-scene

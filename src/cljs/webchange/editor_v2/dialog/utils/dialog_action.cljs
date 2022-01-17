@@ -26,6 +26,13 @@
                                     :phrase-text "Text animation"
                                     :audio       nil}]})
 
+(def guide-effects {:hide-guide {:text  "Hide guide"
+                                 :value "hide-guide"}
+                    :show-guide {:text  "Show guide"
+                                 :value "show-guide"}
+                    :highlight-guide {:text "Highlight guide"
+                                      :value "highlight-guide"}})
+
 (def skip-effects {:start-skip-region {:text  "Start skip"
                                        :value "start-skip-region"}
                    :end-skip-region   {:text  "End skip"

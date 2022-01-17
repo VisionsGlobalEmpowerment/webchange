@@ -8,6 +8,7 @@
     [webchange.editor-v2.activity-form.generic.components.question.views :as add-question]
     [webchange.editor-v2.activity-form.generic.components.background-music.views :as background-music]
     [webchange.editor-v2.activity-form.generic.components.change-background.views-background :as background]
+    [webchange.editor-v2.activity-form.generic.components.guide-settings.views :refer [guide-settings-window open-guide-settings-window]]
     [webchange.editor-v2.activity-form.generic.components.info-action.state :as info-action-state]
     [webchange.editor-v2.activity-form.generic.components.info-action.views :as info-action]
     [webchange.editor-v2.activity-form.generic.components.activity-preview.state :as activity-preview]
@@ -40,7 +41,9 @@
    {:text     "Add anchor"
     :on-click add-anchor}
    {:text     "Animation settings"
-    :on-click open-animation-settings-window}])
+    :on-click open-animation-settings-window}
+   {:text     "Guide settings"
+    :on-click open-guide-settings-window}])
 
 (defn actions-item
   [{:keys [text on-click]}]
@@ -64,7 +67,7 @@
         main-track-actions @(re-frame/subscribe [::state/main-track-actions])
         combined-actions (concat main-track-actions activity-actions)]
     [:div {:class-name (get-class-name (cond-> {"right-side-bar" true}
-                                         (some? class-name) (assoc class-name true)))}
+                                               (some? class-name) (assoc class-name true)))}
      (into [:div.header-section]
            actions)
      [:div.content-section
@@ -73,6 +76,7 @@
                   :on-edit-menu-back on-edit-menu-back}]
       [activity-action/activity-action-modal]
       [animation-settings-window]
+      [guide-settings-window]
       [add-character/add-character-window]
       [add-question/question-window]
       [background/change-background-window]

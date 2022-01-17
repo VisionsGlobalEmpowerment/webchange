@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.activity-dialogs.form.utils
   (:require
     [clojure.set :refer [difference]]
-    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects]]
+    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects guide-effects]]
     [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes get-node-data]]
     [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]))
 
@@ -44,6 +44,7 @@
                                    :effect
                                    :phrase
                                    :skip
+                                   :guide
                                    :text-animation
                                    :unknown])) %)
           (every? (fn [{:keys [source]}]
@@ -75,6 +76,9 @@
                                (some #{inner-action-type} ["mute-background-music" "unmute-background-music"])
                                :background-music
 
+                               (some #{inner-action-type} ["show-guide" "hide-guide" "highlight-guide"])
+                               :guide
+                               
                                :else :unknown)]
              (-> data
                  (assoc :type action-type)
@@ -119,13 +123,13 @@
                    (= type :text-animation)
                    (merge {:text-object  target
                            :chunked-text (get-chunked-text-data
-                                           (->> (keyword target)
-                                                (get-scene-object scene-data)
-                                                (:text))
-                                           (->> (keyword target)
-                                                (get-scene-object scene-data)
-                                                (:chunks))
-                                           data)
+                                          (->> (keyword target)
+                                               (get-scene-object scene-data)
+                                               (:text))
+                                          (->> (keyword target)
+                                               (get-scene-object scene-data)
+                                               (:chunks))
+                                          data)
                            :text         (->> (keyword target)
                                               (get-scene-object scene-data)
                                               (:text))})
@@ -153,6 +157,9 @@
 
                    (= type :background-music)
                    (merge {:action action-type})
+
+                   (= type :guide)
+                   (merge {:effect-name (get-in guide-effects [(keyword action-type) :text])})
 
                    (= source :concept)
                    (merge {:concept-name concept-name}))))

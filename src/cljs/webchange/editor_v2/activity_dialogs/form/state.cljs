@@ -191,7 +191,9 @@
     (->> targets
          (map (fn [target]
                 {:text  target
-                 :value target})))))
+                 :value target}))
+         (concat [{:text "Guide"
+                   :value "guide"}]))))
 
 (def current-target-path :current-target)
 
@@ -355,6 +357,9 @@
       "mute-background-music" {:dispatch [::mute-background-music data]}
       "unmute-background-music" {:dispatch [::unmute-background-music data]}
       "add-movement" {:dispatch [::add-movement data]}
+      "show-guide" {:dispatch [::show-guide data]}
+      "hide-guide" {:dispatch [::hide-guide data]}
+      "highlight-guide" {:dispatch [::highlight-guide data]}
       {})))
 
 (defn- get-action-position-data
@@ -449,5 +454,29 @@
           action-data (defaults/get-movement-action-data {:action    movement
                                                           :character character
                                                           :target    target})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::show-guide
+  (fn [{:keys [_]} [_ data]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-dialog-node {:type "show-guide"})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::hide-guide
+  (fn [{:keys [_]} [_ data]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-dialog-node {:type "hide-guide"})]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                           position-data)]})))
+
+(re-frame/reg-event-fx
+  ::highlight-guide
+  (fn [{:keys [_]} [_ data]]
+    (let [position-data (get-action-position-data data)
+          action-data (defaults/get-dialog-node {:type "highlight-guide"})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))
