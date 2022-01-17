@@ -317,10 +317,6 @@
   (-> (get-metadata scene-data)
       (get :guide-settings {})))
 
-(defn update-guide-settings
-  [scene-data guide-settings-patch]
-  (update-in scene-data [:metadata :guide-settings] merge guide-settings-patch))
-
 (defn get-guide-enabled
   [scene-data]
   (-> (get-guide-settings scene-data)

@@ -1,9 +1,7 @@
 (ns webchange.interpreter.renderer.overlays.guide
   (:require
     [re-frame.core :as re-frame]
-    [webchange.interpreter.events :as ie]
-    [webchange.interpreter.renderer.overlays.utils :as utils]
-    [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.common.events :as ce]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 
@@ -81,6 +79,14 @@
        :visible true
        :object-name :guide})))
 
+(defn- with-action
+  [guide]
+  (-> guide
+      (assoc :on-click #(re-frame/dispatch [::ce/execute-action {:type "action"
+                                                                 :id "tap-instructions"
+                                                                 :display-name "tap-instructions"
+                                                                 :user-event?  true}]))))
+
 (defn create
   [{:keys [viewport metadata]}]
   (js/console.log "metadata" metadata)
@@ -98,7 +104,8 @@
                   :x 1579
                   :y 766
                   :object-name :guide-background}
-                 (guide-character metadata)]})
+                 (-> (guide-character metadata)
+                     (with-action))]})
 
 (defn update-viewport
   [{:keys [viewport]}])
