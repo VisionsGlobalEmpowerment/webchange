@@ -43,10 +43,7 @@
   (let [field-key :task-type
         value @(re-frame/subscribe [::state/field-value field-key])
         handle-change #(re-frame/dispatch [::state/set-field-value field-key %])
-        options [{:text  "Text with image"
-                  :value "text-image"}
-                 {:text  "Text only"
-                  :value "text"}]]
+        options @(re-frame/subscribe [::state/task-type-options])]
     [:div.option-group
      [label {:class-name "label"} "Task"]
      [select {:value     value
@@ -67,26 +64,6 @@
     (when (= task-type "text-image")
       [:div.option-group
        [label {:class-name "label"} "Layout"]
-       [select {:value     value
-                :on-change handle-change
-                :options   options
-                :variant   "outlined"}]])))
-
-(defn- option-label-control
-  []
-  (let [field-key :options-label
-        value @(re-frame/subscribe [::state/field-value field-key])
-        handle-change #(re-frame/dispatch [::state/set-field-value field-key %])
-        options [{:text  "Audio only"
-                  :value "audio"}
-                 {:text  "Audio + text"
-                  :value "audio-text"}
-                 {:text  "Empty"
-                  :value "none"}]
-        question-type @(re-frame/subscribe [::state/field-value :question-type])]
-    (when (= question-type "multiple-choice-image")
-      [:div.option-group
-       [label {:class-name "label"} "Option label"]
        [select {:value     value
                 :on-change handle-change
                 :options   options
@@ -208,11 +185,11 @@
    [:div.options-groups
     [:div
      [task-type-control]
-     [layout-control]
-     [option-label-control]]
-    [:div
-     [mark-options-control]
      [options-number-control]
+     [mark-options-control]
+     ;[layout-control]
+     ]
+    [:div
      [answers-number-control]
      [correct-answer-control]]]
    [label {:class-name "explanation-label"}

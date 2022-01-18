@@ -39,3 +39,37 @@
    :inactivate-all      (str "inactivate-voice-overs-" question-id)
    :activate-template   (str "activate-voice-over-%-" question-id)
    :inactivate-template (str "inactivate-voice-over-%-" question-id)})
+
+(defn task-has-image?
+  [{:keys [task-type]}]
+  (some #{task-type} ["image" "text-image"]))
+
+(defn task-has-text?
+  [{:keys [task-type]}]
+  (some #{task-type} ["text" "text-image"]))
+
+(defn has-correct-answer?
+  [{:keys [answers-number]}]
+  (some #{answers-number} ["one" "many"]))
+
+(defn one-correct-answer?
+  [{:keys [answers-number]}]
+  (or (= answers-number "one")
+      (= answers-number "any")))
+
+(defn many-correct-answers?
+  [{:keys [answers-number]}]
+  (= answers-number "many"))
+
+(defn options-have-voice-over?
+  [{:keys [question-type]}]
+  (not= question-type "thumbs-up-n-down"))
+
+(defn show-check-button?
+  [form-data]
+  (or (one-correct-answer? form-data)
+      (many-correct-answers? form-data)))
+
+(defn round
+  [x]
+  (-> x Math/ceil int))

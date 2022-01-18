@@ -582,13 +582,20 @@
 
 (re-frame/reg-event-fx
   ::execute-question-pick
-  (fn [{:keys [_]} [_ {:keys [id value] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [id value on-check on-uncheck] :as action}]]
     (let [current-set (set (core/get-variable id))
-          new-set (if (contains? current-set value)
-                    (remove #{value} current-set)
-                    (conj current-set value))]
+          set-action (if (contains? current-set value) :uncheck :check)
+          new-set (case set-action
+                    :check (conj current-set value)
+                    :uncheck (remove #{value} current-set))]
       (core/set-variable! id new-set)
-      {:dispatch (e/success-event action)})))
+      (case set-action
+        :check (if on-check
+                 {:dispatch-n (list [::e/execute-action (e/cond-action db (assoc action :params {:value value}) :on-check)])}
+                 {:dispatch-n (list (e/success-event action))})
+        :uncheck (if on-uncheck
+                   {:dispatch-n (list [::e/execute-action (e/cond-action db (assoc action :params {:value value}) :on-uncheck)])}
+                   {:dispatch-n (list (e/success-event action))})))))
 
 (re-frame/reg-event-fx
   ::execute-question-reset

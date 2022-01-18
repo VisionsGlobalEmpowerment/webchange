@@ -6,7 +6,8 @@
                     "Lexend Deca"
                     "Pacifico"
                     "Roboto"
-                    "Staatliches"])
+                    "Staatliches"
+                    "Tabschool"])
 
 (def font-colors [{:hex "#000000" :name "Black"}
                   {:hex "#FFFFFF" :name "White"}

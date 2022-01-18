@@ -8,7 +8,7 @@
                     :height 1080})
 
 (def background-color 0xFFA301)
-(def substrate-color 0xFFFFFF)
+(def substrate-color 0x000000)
 (def active-color 0x00B2FF)
 
 (def block-padding 60)
@@ -33,8 +33,8 @@
              :border-width     2
              :border-radius    {:text  20
                                 :image 20}
-             :border-color     {:default 0x000000
-                                :active  active-color}
+             :border-color     {:default 0xffffff
+                                :active  0xffffff}
              :padding          {:text 20}
              :text             {:height    100
                                 :min-width 0
@@ -48,3 +48,16 @@
 
 (def option-font-size font-size)
 (def option-padding 10)
+
+;; ---
+
+(def template-width 1920)
+(def template-height 1080)
+
+(def font-family "Lexend Deca")
+(def font-size--task 64)
+(def font-size--option 48)
+
+(def content-width 1264)
+
+

@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.text.simple-text
   (:require
-    [webchange.interpreter.pixi :refer [Text]]
+    [webchange.interpreter.pixi :refer [Text TextMetrics TextStyle]]
     [webchange.interpreter.renderer.scene.components.text.utils :as text-utils]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
@@ -35,16 +35,26 @@
   (when (some? scale)
     (utils/set-scale object scale)))
 
+(defn- get-font-props
+  [{:keys [font-family font-size font-weight]}]
+  (cond-> {:fontFamily font-family
+           :fontWeight font-weight
+           :fontSize   font-size}))
+
 (defn- calculate-position
-  [{:keys [x y width height align vertical-align]}]
-  {:x (case align
-        "left" x
-        "center" (+ x (/ width 2))
-        "right" (+ x width))
-   :y (case vertical-align
-        "top" y
-        "middle" (+ y (/ height 2))
-        "bottom" (+ y height))})
+  [{:keys [x y width height align vertical-align text] :as props}]
+  (let [style (TextStyle. (clj->js (get-font-props props)))
+        metrics (.measureText TextMetrics text style)]
+    {:x (case align
+          "left" x
+          "center" (+ x (/ width 2))
+          "right" (+ x width))
+     :y (if (some? height)
+          (case vertical-align
+            "middle" (+ y (/ height 2) (- (/ (.-height metrics) 2)))
+            "bottom" (+ y height (- (.-height metrics)))
+            y)
+          y)}))
 
 (defn create-simple-text
   [{:keys [align text font-family font-size font-weight fill scale skew-x skew-y width word-wrap on-click line-height] :as props}]

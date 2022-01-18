@@ -16,4 +16,5 @@
                                     :y           y
                                     :width       width
                                     :height      height
-                                    :fill        color}}})
+                                    :fill        color
+                                    :opacity     0.75}}})

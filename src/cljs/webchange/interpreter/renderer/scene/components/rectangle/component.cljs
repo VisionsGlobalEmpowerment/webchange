@@ -10,7 +10,7 @@
                     :y               {}
                     :width           {}
                     :height          {}
-                    :on-click      {}
+                    :on-click        {}
                     :fill            {}
                     :border-radius   {}
                     :border-width    {}

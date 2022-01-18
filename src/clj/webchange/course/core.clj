@@ -747,10 +747,12 @@
 
 
 (defn- get-object-keys-to-update
-  [{:keys [editable?]}]
+  [{:keys [editable? type]}]
   (cond-> [:editable? :origin :max-width :max-height :width :height :image-size :metadata :actions]
           (and (map? editable?) (not (contains? editable? :drag))) (concat [:x :y])
-          (not editable?) (concat [:visible])))
+          (not editable?) (concat [:visible])
+          (= type "group") (concat [:children])
+          (= type "text") (concat [:fill :font-family :font-size])))
 
 (defn- update-object
   [created-activity]

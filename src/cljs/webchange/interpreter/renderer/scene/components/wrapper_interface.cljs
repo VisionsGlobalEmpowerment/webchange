@@ -9,7 +9,7 @@
       (let [method (get wrapper method-name)]
         (if-not (nil? method)
           (apply method params)
-          (logger/warn (str "Method " method-name " is not implemented for " (:type wrapper)))))
+          (logger/warn (str "Method " method-name " is not implemented for " (:type wrapper) ". (params: " params ")"))))
       (catch js/Error e
         (logger/error (str "[Wrapper Interface] Failed to execute <" method-name ">"))
         (logger/error e)))
