@@ -871,6 +871,18 @@
 
 (reg-executor :highlight-guide execute-highlight-guide)
 
+(defn- execute-restore-guide
+  "Restore guide character default state
+   Example:
+   {:type 'restore-guide'}"
+  [{:keys [db action]}]
+  (let [visible (-> (get-scene-data db)
+                    (get-in [:metadata :guide-settings :show-guide] false))]
+    (re-frame/dispatch [::scene/change-scene-object :guide-overlay [[:set-visibility {:visible visible}]]]))
+  (dispatch-success-fn action))
+
+(reg-executor :restore-guide execute-restore-guide)
+
 (defn- init-workflow-indexes
   [{:keys [data] :as action}]
   (let [with-indexes (->> data

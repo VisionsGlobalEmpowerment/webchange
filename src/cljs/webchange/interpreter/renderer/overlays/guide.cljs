@@ -89,7 +89,6 @@
 
 (defn create
   [{:keys [viewport metadata]}]
-  (js/console.log "metadata" metadata)
   {:type        "group"
    :object-name :guide-overlay
    :visible     (show-guide? metadata)

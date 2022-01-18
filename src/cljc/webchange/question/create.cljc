@@ -258,14 +258,23 @@
                                                                                :data                [{:type "action" :id show-question-name}
                                                                                                      {:type "action" :id task-dialog-name}]}
 
-                                                 (keyword show-question-name) {:type       "set-attribute"
-                                                                               :target     object-name
-                                                                               :attr-name  "visible"
-                                                                               :attr-value true}
-                                                 (keyword hide-question-name) {:type       "set-attribute"
-                                                                               :target     object-name
-                                                                               :attr-name  "visible"
-                                                                               :attr-value false}
+                                                 (keyword show-question-name) {:type "sequence-data"
+                                                                               :data [{:type       "set-attribute"
+                                                                                       :target     object-name
+                                                                                       :attr-name  "visible"
+                                                                                       :attr-value true}
+                                                                                      {:type "show-guide"}
+                                                                                      {:type "set-variable" :var-name "tap-instructions-prev"
+                                                                                       :from-var [{:var-name "tap-instructions-action", :action-property "var-value"}]}
+                                                                                      {:type "set-variable" :var-name "tap-instructions-action" :var-value task-dialog-name}]}
+                                                 (keyword hide-question-name) {:type "sequence-data"
+                                                                               :data [{:type       "set-attribute"
+                                                                                       :target     object-name
+                                                                                       :attr-name  "visible"
+                                                                                       :attr-value false}
+                                                                                      {:type "set-variable" :var-name "tap-instructions-action"
+                                                                                       :from-var [{:var-name "tap-instractuins-prev", :action-property "var-value"}]}
+                                                                                      {:type "hide-guide"}]}
                                                  (keyword task-dialog-name)   {:type               "sequence-data",
                                                                                :tags               ["question-action"]
                                                                                :data               [{:type "sequence-data"
