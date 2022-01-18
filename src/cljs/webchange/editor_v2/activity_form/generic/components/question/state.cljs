@@ -95,10 +95,15 @@
 
 (defn- get-scene-data
   [form-data]
-  (->> (question/create (form->question-data form-data current-question-version)
-                        {:action-name "question-action" :object-name "question"}
-                        {:visible? true})
-       (question/add-to-scene scene-utils/empty-data)))
+  (let [background-src "/images/questions/background.png"
+        empty-scene (-> scene-utils/empty-data
+                        (update :assets conj {:url background-src :size 1 :type "image"})
+                        (update :objects assoc :background {:type "background" :src background-src})
+                        (update :scene-objects conj ["background"]))]
+    (->> (question/create (form->question-data form-data current-question-version)
+                          {:action-name "question-action" :object-name "question"}
+                          {:visible? true})
+         (question/add-to-scene empty-scene))))
 
 (re-frame/reg-sub
   ::scene-data
