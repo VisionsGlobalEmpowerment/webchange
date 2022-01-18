@@ -11,13 +11,11 @@
 
 (defn- show-guide?
   [metadata]
-  (-> metadata
-      :guide-settings
-      :show-guide))
+  (get-in metadata [:guide-settings :show-guide] false))
 
 (defn- guide-character
   [metadata]
-  (let [character (-> metadata :guide-settings :character (or "vaca"))]
+  (let [character (get-in metadata [:guide-settings :character] "vaca")]
     (case character
       "vaca"
       {:type "animation",
@@ -89,7 +87,6 @@
 
 (defn create
   [{:keys [viewport metadata]}]
-  (js/console.log "metadata" metadata)
   {:type        "group"
    :object-name :guide-overlay
    :visible     (show-guide? metadata)
