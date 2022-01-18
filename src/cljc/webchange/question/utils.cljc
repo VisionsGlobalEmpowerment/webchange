@@ -40,6 +40,27 @@
    :activate-template   (str "activate-voice-over-%-" question-id)
    :inactivate-template (str "inactivate-voice-over-%-" question-id)})
 
+(defn get-option-tag
+  [action params]
+  (let [getters {:set-selected       (fn [{:keys [option-value question-id]}]
+                                       {:pre [(string? option-value) (string? question-id)]}
+                                       (str "activate-option-" option-value "-" question-id))
+                 :set-unselected     (fn [{:keys [option-value question-id]}]
+                                       {:pre [(string? option-value) (string? question-id)]}
+                                       (str "inactivate-option-" option-value "-" question-id))
+                 :set-unselected-all (fn [{:keys [question-id]}]
+                                       {:pre [(string? question-id)]}
+                                       (str "inactivate-options-" question-id))
+                 :set-correct        (fn [{:keys [option-value question-id]}]
+                                       {:pre [(string? option-value) (string? question-id)]}
+                                       (str "set-correct-option-" option-value "-" question-id))
+                 :set-incorrect      (fn [{:keys [option-value question-id]}]
+                                       {:pre [(string? option-value) (string? question-id)]}
+                                       (str "set-incorrect-option-" option-value "-" question-id))}]
+    (if (contains? getters action)
+      ((get getters action) params)
+      (error (str "Tag '" action "' is not defined")))))
+
 (defn task-has-image?
   [{:keys [task-type]}]
   (some #{task-type} ["image" "text-image"]))

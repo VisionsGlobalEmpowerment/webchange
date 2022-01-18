@@ -4,6 +4,30 @@
     [webchange.question.utils :refer [merge-data]]
     [webchange.question.utils :as utils]))
 
+(defn- create-substrate
+  [{:keys [object-name x y width height actions border-radius]
+    :or   {x             0
+           y             0
+           border-radius 24}}]
+  (let [states {:default   {:border-color 0xFFFFFF
+                            :fill         0xC4C4C4}
+                :selected  {:border-color 0xFFFFFF
+                            :fill         0xFFFFFF}
+                :correct   {:border-color 0x56B624
+                            :fill         0xFFFFFF}
+                :incorrect {:border-color 0xFF0000
+                            :fill         0xFFFFFF}}]
+    {:objects {(keyword object-name) (merge {:type          "rectangle"
+                                             :x             x
+                                             :y             y
+                                             :width         width
+                                             :height        height
+                                             :border-radius border-radius
+                                             :border-width  2
+                                             :states        states
+                                             :actions       actions}
+                                            (:default states))}}))
+
 (defn- create-image
   [{:keys [image-name image-props image-param-name]}
    {:keys [object-name x y width height border-radius]
@@ -29,41 +53,11 @@
               :size 1
               :type "image"}]})
 
-(defn- create-substrate
-  [{:keys [object-name x y width height question-id value actions border-radius]
-    :or   {border-radius 24}}]
-  {:pre [(string? object-name) (string? question-id) (string? value)]}
-  (let [action-activate-name (str object-name "-activate")
-        action-inactivate-name (str object-name "-inactivate")
-        states {:default {:border-color 0xFFFFFF
-                          :fill         0xC4C4C4}
-                :active  {:border-color 0xFFFFFF
-                          :fill         0xFFFFFF}
-                :correct {:border-color 0x56B624
-                          :fill         0xFFFFFF}}]
-    {:objects {(keyword object-name) (cond-> {:type          "rectangle"
-                                              :x             x
-                                              :y             y
-                                              :width         width
-                                              :height        height
-                                              :border-radius border-radius
-                                              :border-width  2
-                                              :states        states}
-                                             :always (merge (:default states))
-                                             (some? actions) (assoc :actions actions))}
-     :actions {(keyword action-activate-name)   {:type   "state"
-                                                 :target object-name
-                                                 :id     "active"
-                                                 :tags   [(str "activate-option-" value "-" question-id)]}
-               (keyword action-inactivate-name) {:type   "state"
-                                                 :target object-name
-                                                 :id     "default"
-                                                 :tags   [(str "inactivate-options-" question-id)
-                                                          (str "inactivate-option-" value "-" question-id)]}}}))
-
 (defn- create-text
   [{:keys [text-name text-props text-param-name]}
-   {:keys [x y width height text actions]}]
+   {:keys [x y width height text actions]
+    :or   {x 0
+           y 0}}]
   {:objects {(keyword text-name) (cond-> (merge {:type           "text"
                                                  :text           text
                                                  :x              x
@@ -79,98 +73,65 @@
                                                 text-props)
                                          (some? actions) (assoc :actions actions))}})
 
-(defn- get-option-actions
-  [{:keys [value]} data-names]
-  {:click (cond-> {:type       "action"
-                   :on         "click"
-                   :id         (get-in data-names [:options :actions :click-handler])
-                   :params     {:value value}
-                   :unique-tag common-params/question-action-tag})})
-
-(defn- create-image-with-text-options
-  [{:keys [image-name value] :as option}
-   {:keys [object-name x y width height question-id] :as props}
+(defn create
+  [{:keys [image-name text-name value] :as option}
+   {:keys [object-name x y width height question-id question-type] :as props}
    data-names]
-  (let [substrate-name (str object-name "-substrate")
-        image-group-name (str image-name "-group")
-        actions (get-option-actions option data-names)]
-    (cond-> {:objects {(keyword object-name) {:type        "group"
-                                              :object-name object-name
-                                              :x           x
-                                              :y           y
-                                              :children    (cond-> [substrate-name]
-                                                                   :always (conj image-name))}}}
-            :always (merge-data (create-substrate {:object-name substrate-name
-                                                   :x           0
-                                                   :y           0
+  (let [image-option? (or (= question-type "multiple-choice-image")
+                          (= question-type "thumbs-up-n-down"))
+        text-option? (= question-type "multiple-choice-text")
+        mark-option? (= question-type "thumbs-up-n-down")
+
+        substrate-name (str object-name "-substrate")
+        image-name (str object-name "-" image-name "-group")
+
+        dimensions-with-padding (let [padding-vertical 10
+                                      padding-horizontal 10]
+                                  (-> props
+                                      (select-keys [:width :height])
+                                      (assoc :x padding-horizontal)
+                                      (assoc :y padding-vertical)
+                                      (update :width - (* padding-horizontal 2))
+                                      (update :height - (* padding-vertical 2))))
+
+        get-action-name (fn [action-name]
+                          (-> object-name (str "-" action-name) (keyword)))
+
+        item-actions {:click (cond-> {:type       "action"
+                                      :on         "click"
+                                      :id         (get-in data-names [:options :actions :click-handler])
+                                      :params     {:value value}
+                                      :unique-tag common-params/question-action-tag})}]
+    (cond-> (merge-data {:objects {(keyword object-name) {:type     "group"
+                                                          :x        x
+                                                          :y        y
+                                                          :children (cond-> [substrate-name]
+                                                                            image-option? (conj image-name)
+                                                                            text-option? (conj text-name))}}
+                         :actions {(get-action-name "set-selected")   {:type "sequence-data"
+                                                                       :tags [(utils/get-option-tag :set-selected {:option-value value :question-id question-id})]
+                                                                       :data [{:type "state" :id "selected" :target substrate-name}]}
+                                   (get-action-name "set-unselected") {:type "sequence-data"
+                                                                       :tags [(utils/get-option-tag :set-unselected {:option-value value :question-id question-id})
+                                                                              (utils/get-option-tag :set-unselected-all {:question-id question-id})]
+                                                                       :data [{:type "state" :id "default" :target substrate-name}]}
+                                   (get-action-name "set-correct")    {:type "sequence-data"
+                                                                       :tags [(utils/get-option-tag :set-correct {:option-value value :question-id question-id})]
+                                                                       :data [{:type "state" :id "correct" :target substrate-name}]}
+                                   (get-action-name "set-incorrect")  {:type "sequence-data"
+                                                                       :tags [(utils/get-option-tag :set-incorrect {:option-value value :question-id question-id})]
+                                                                       :data [{:type "state" :id "incorrect" :target substrate-name}]}}}
+                        (create-substrate (cond-> {:object-name substrate-name
                                                    :width       width
                                                    :height      height
-                                                   :question-id question-id
-                                                   :value       value
-                                                   :actions     actions}))
-            :always (merge-data (create-image option
-                                              {:object-name image-group-name
-                                               :width       width
-                                               :height      height
-                                               :actions     actions})))))
+                                                   :actions     item-actions}
+                                                  mark-option? (assoc :border-radius (-> width (/ 2) utils/round)))))
+            image-option? (merge-data (create-image option
+                                                    (merge {:object-name image-name
+                                                            :actions     item-actions}
+                                                           dimensions-with-padding)))
 
-(defn- create-text-option
-  [{:keys [text-name value] :as option}
-   {:keys [object-name x y width height question-id] :as props}
-   data-names]
-  (let [text-padding (get-in common-params/option [:padding :text])
-        substrate-name (str object-name "-substrate")
-        actions (get-option-actions option data-names)]
-    (merge-data {:objects {(keyword object-name) {:type     "group"
-                                                  :x        x
-                                                  :y        y
-                                                  :children [substrate-name text-name]}}}
-                (create-substrate {:object-name substrate-name
-                                   :x           0
-                                   :y           0
-                                   :width       width
-                                   :height      height
-                                   :question-id question-id
-                                   :value       value
-                                   :actions     actions})
-                (create-text option
-                             {:x       text-padding
-                              :y       text-padding
-                              :width   width
-                              :height  height
-                              :actions actions}))))
-
-(defn- create-thumbs-option
-  [{:keys [image-name value] :as option}
-   {:keys [object-name x y width height question-id] :as props}
-   data-names]
-  (let [substrate-name (str object-name "-substrate")
-        border-radius (/ width 2)
-        image-group-name (str image-name "-group")
-        actions (get-option-actions option data-names)]
-    (merge-data {:objects {(keyword object-name) {:type     "group"
-                                                  :x        x
-                                                  :y        y
-                                                  :children [substrate-name image-group-name]}}}
-                (create-substrate {:object-name   substrate-name
-                                   :x             0
-                                   :y             0
-                                   :width         width
-                                   :height        height
-                                   :question-id   question-id
-                                   :value         value
-                                   :actions       actions
-                                   :border-radius (-> width (/ 2) utils/round)})
-                (create-image option
-                              {:object-name   image-group-name
-                               :width         width
-                               :height        height
-                               :border-radius (- border-radius 10)
-                               :actions       actions}))))
-
-(defn create
-  [option {:keys [question-type] :as props} data-names]
-  (case question-type
-    "multiple-choice-image" (create-image-with-text-options option props data-names)
-    "multiple-choice-text" (create-text-option option props data-names)
-    "thumbs-up-n-down" (create-thumbs-option option props data-names)))
+            text-option? (merge-data (create-text option
+                                                  (merge {:object-name text-name
+                                                          :actions     item-actions}
+                                                         dimensions-with-padding))))))
