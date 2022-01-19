@@ -59,7 +59,8 @@
 
 (defn- add-check-correct-answer
   [{:keys [action-name correct-answers hide-question-name question-id]} form-data data-names]
-  (let [on-correct (str action-name "-correct-answer")
+  (let [submit (str action-name "-submit")
+        on-correct (str action-name "-correct-answer")
         on-correct-dialog (str action-name "-correct-answer-dialog")
         on-correct-sound (str action-name "-correct-answer-sound")
         on-wrong (str action-name "-wrong-answer")
@@ -68,7 +69,11 @@
         try-again-dialog (str action-name "-tray-again-dialog")
         highlight-correct (str action-name "-highlight-correct")
         highlight-incorrect (str action-name "-highlight-incorrect")]
-    {:actions {(keyword action-name)         {:type "sequence-data"
+    {:actions {(keyword action-name)         {:type     "test-var-scalar"
+                                              :var-name "check-button-enabled"
+                                              :value    true
+                                              :success  submit}
+               (keyword submit)              {:type "sequence-data"
                                               :data (cond-> [{:type "action"
                                                               :id   (get-in data-names [:check-button :actions :set-submitted])}]
 
@@ -218,17 +223,23 @@
                                                       :from-params [{:action-property "value" :param-property "value"}]
                                                       :on-check    highlight-option}]}
                (keyword pick-several-option) {:type "sequence-data"
-                                              :data [{:type        "question-pick"
-                                                      :id          question-id
-                                                      :from-params [{:action-property "value" :param-property "value"}]
-                                                      :on-check    highlight-option
-                                                      :on-uncheck  unhighlight-option}]}
-               (keyword update-check-button) {:type    "question-count-answers"
-                                              :id      question-id
-                                              :answer  correct-answers
-                                              :empty   {:type "action" :id (get-in data-names [:check-button :actions :set-default])}
-                                              :partial {:type "action" :id (get-in data-names [:check-button :actions :set-touched])}
-                                              :full    {:type "action" :id (get-in data-names [:check-button :actions :set-ready])}}
+                                              :data [{:type           "question-pick"
+                                                      :id             question-id
+                                                      :restrict-count (count correct-answers)
+                                                      :from-params    [{:action-property "value" :param-property "value"}]
+                                                      :on-check       highlight-option
+                                                      :on-uncheck     unhighlight-option}]}
+               (keyword update-check-button) {:type "sequence-data"
+                                              :data [{:type "set-variable" :var-name "check-button-enabled" :var-value false}
+                                                     {:type     "question-count-answers"
+                                                      :id       question-id
+                                                      :answer   correct-answers
+                                                      :empty    (get-in data-names [:check-button :actions :set-default])
+                                                      :partial  (get-in data-names [:check-button :actions :set-touched])
+                                                      :full     {:type "sequence-data"
+                                                                 :data [{:type "set-variable" :var-name "check-button-enabled" :var-value true}
+                                                                        {:type "action" :id (get-in data-names [:check-button :actions :set-ready])}]}
+                                                      :overfull (get-in data-names [:check-button :actions :set-touched])}]}
 
                (keyword highlight-option)    {:type        "parallel-by-tag"
                                               :from-params [{:template        (str "activate-option-%-" question-id)

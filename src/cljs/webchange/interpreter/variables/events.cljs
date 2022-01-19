@@ -584,20 +584,24 @@
 
 (re-frame/reg-event-fx
   ::execute-question-pick
-  (fn [{:keys [db]} [_ {:keys [id value on-check on-uncheck] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [id value restrict-count] :as action}]]
     (let [current-set (set (core/get-variable id))
-          set-action (if (contains? current-set value) :uncheck :check)
+          set-action (if (contains? current-set value)
+                       :uncheck
+                       (if (and (number? restrict-count)
+                                (-> (count current-set) (>= restrict-count)))
+                         :none
+                         :check))
           new-set (case set-action
                     :check (conj current-set value)
-                    :uncheck (remove #{value} current-set))]
+                    :uncheck (remove #{value} current-set)
+                    current-set)
+          action-with-params (assoc action :params {:value value})]
       (core/set-variable! id new-set)
       (case set-action
-        :check (if on-check
-                 {:dispatch-n (list [::e/execute-action (e/cond-action db (assoc action :params {:value value}) :on-check)])}
-                 {:dispatch-n (list (e/success-event action))})
-        :uncheck (if on-uncheck
-                   {:dispatch-n (list [::e/execute-action (e/cond-action db (assoc action :params {:value value}) :on-uncheck)])}
-                   {:dispatch-n (list (e/success-event action))})))))
+        :check (e/cond-handler db action-with-params :on-check)
+        :uncheck (e/cond-handler db action-with-params :on-uncheck)
+        {:dispatch (e/success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-question-reset
@@ -608,29 +612,21 @@
 (re-frame/reg-event-fx
   ::execute-question-check
   [e/event-as-action e/with-vars]
-  (fn [{:keys [db]} {:keys [id answer success fail] :as action}]
+  (fn [{:keys [db]} {:keys [id answer] :as action}]
     (let [value1 (set (core/get-variable id))
           value2 (set answer)]
       (if (= value1 value2)
-        (if success
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
-          {:dispatch-n (list (e/success-event action))})
-        (if fail
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
-          {:dispatch-n (list (e/success-event action))})))))
+        (e/cond-handler db action :success)
+        (e/cond-handler db action :fail)))))
 
 (re-frame/reg-event-fx
   ::execute-question-test
   [e/event-as-action e/with-vars]
-  (fn [{:keys [db]} {:keys [id value success fail] :as action}]
+  (fn [{:keys [db]} {:keys [id value] :as action}]
     (let [current-set (set (core/get-variable id))]
       (if (contains? current-set value)
-        (if success
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
-          {:dispatch-n (list (e/success-event action))})
-        (if fail
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
-          {:dispatch-n (list (e/success-event action))})))))
+        (e/cond-handler db action :success)
+        (e/cond-handler db action :fail)))))
 
 (re-frame/reg-event-fx
   ::execute-question-highlight
@@ -655,15 +651,10 @@
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [id answer] :as action}]
     (let [current-count (-> id core/get-variable set count)
-          answer-count (-> answer set count)
-
-          call-handler (fn [action handler]
-                         (if (contains? action handler)
-                           {:dispatch [::e/execute-action (e/cond-action db action handler)]}
-                           {:dispatch (e/success-event action)}))]
+          answer-count (-> answer set count)]
       (cond
-        (= current-count 0) (call-handler action :empty)
-        (= current-count answer-count) (call-handler action :full)
-        (< current-count answer-count) (call-handler action :partial)
-        (> current-count answer-count) (call-handler action :overfull)
+        (= current-count 0) (e/cond-handler db action :empty)
+        (= current-count answer-count) (e/cond-handler db action :full)
+        (< current-count answer-count) (e/cond-handler db action :partial)
+        (> current-count answer-count) (e/cond-handler db action :overfull)
         :default {:dispatch (e/success-event action)}))))
