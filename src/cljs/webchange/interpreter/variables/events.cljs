@@ -605,8 +605,13 @@
 
 (re-frame/reg-event-fx
   ::execute-question-reset
-  (fn [{:keys [_]} [_ {:keys [id] :as action}]]
-    (core/set-variable! id #{})
+  (fn [{:keys [_]} [_ {:keys [id incorrect-only? answer] :as action}]]
+    (if incorrect-only?
+      (let [current-value (set (core/get-variable id))
+            answer-value (set answer)
+            correct-values (clojure.set/intersection current-value answer-value)]
+        (core/set-variable! id correct-values))
+      (core/set-variable! id #{}))
     {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx

@@ -42,12 +42,12 @@
 
 (defn get-option-tag
   [action params]
-  (let [getters {:set-selected       (fn [{:keys [option-value question-id]}]
-                                       {:pre [(string? option-value) (string? question-id)]}
-                                       (str "activate-option-" option-value "-" question-id))
-                 :set-unselected     (fn [{:keys [option-value question-id]}]
-                                       {:pre [(string? option-value) (string? question-id)]}
-                                       (str "inactivate-option-" option-value "-" question-id))
+  (let [getters {:set-selected       (fn [{:keys [option-value question-id template?]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "activate-option-" (if template? "%" option-value) "-" question-id))
+                 :set-unselected     (fn [{:keys [option-value question-id template?]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "inactivate-option-" (if template? "%" option-value) "-" question-id))
                  :set-unselected-all (fn [{:keys [question-id]}]
                                        {:pre [(string? question-id)]}
                                        (str "inactivate-options-" question-id))

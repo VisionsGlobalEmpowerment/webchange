@@ -68,7 +68,8 @@
         on-wrong-sound (str action-name "-wrong-answer-sound")
         try-again-dialog (str action-name "-tray-again-dialog")
         highlight-correct (str action-name "-highlight-correct")
-        highlight-incorrect (str action-name "-highlight-incorrect")]
+        highlight-incorrect (str action-name "-highlight-incorrect")
+        highlight-default (str action-name "-highlight-default")]
     {:actions {(keyword action-name)         {:type     "test-var-scalar"
                                               :var-name "check-button-enabled"
                                               :value    true
@@ -93,10 +94,15 @@
                                                             (conj {:type "action"
                                                                    :id   on-correct})
 
-                                                            :always (concat [{:type "question-reset"
-                                                                              :id   question-id}
-                                                                             {:type "parallel-by-tag"
-                                                                              :tag  (str "inactivate-options-" question-id)}]))}
+                                                            :always (concat [{:type    "question-highlight"
+                                                                              :id      question-id
+                                                                              :answer  correct-answers
+                                                                              :success highlight-correct
+                                                                              :fail    highlight-default}
+                                                                             {:type            "question-reset"
+                                                                              :id              question-id
+                                                                              :incorrect-only? true
+                                                                              :answer          correct-answers}]))}
 
                (keyword on-correct)          {:type "sequence-data"
                                               :data [{:type "action" :id on-correct-sound}
@@ -138,6 +144,10 @@
                                                              :param-property  "value"}]}
                (keyword highlight-incorrect) {:type        "parallel-by-tag"
                                               :from-params [{:template        (utils/get-option-tag :set-incorrect {:question-id question-id :template? true})
+                                                             :action-property "tag"
+                                                             :param-property  "value"}]}
+               (keyword highlight-default)   {:type        "parallel-by-tag"
+                                              :from-params [{:template        (utils/get-option-tag :set-unselected {:question-id question-id :template? true})
                                                              :action-property "tag"
                                                              :param-property  "value"}]}
 
