@@ -14,18 +14,6 @@
     (aset (.-style text) "dropShadowAlpha" shadow-opacity)
     (aset (.-style text) "dropShadowAngle" shadow-angle)))
 
-(defn- set-align
-  [text {:keys [align vertical-align]}]
-  (case align
-    "left" (aset (.-anchor text) "x" 0)
-    "center" (aset (.-anchor text) "x" 0.5)
-    "right" (aset (.-anchor text) "x" 1))
-
-  (case vertical-align
-    "top" (aset (.-anchor text) "y" 0)
-    "middle" (aset (.-anchor text) "y" 0.5)
-    "bottom" (aset (.-anchor text) "y" 1)))
-
 (defn- set-skew
   [display-object skew-x skew-y]
   (.setTransform display-object 0 0 1 1 0 skew-x skew-y 0 0))
@@ -41,19 +29,38 @@
            :fontWeight font-weight
            :fontSize   font-size}))
 
+(defn- set-align
+  [text {:keys [align vertical-align]}]
+  (case align
+    "left" (aset (.-anchor text) "x" 0)
+    "center" (aset (.-anchor text) "x" 0.5)
+    "right" (aset (.-anchor text) "x" 1)
+    nil)
+  (case vertical-align
+    "top" (aset (.-anchor text) "y" 0)
+    "middle" (aset (.-anchor text) "y" 0.5)
+    "bottom" (aset (.-anchor text) "y" 1)
+    nil))
+
 (defn- calculate-position
   [{:keys [x y width height align vertical-align text] :as props}]
   (let [style (TextStyle. (clj->js (get-font-props props)))
-        metrics (.measureText TextMetrics text style)]
-    {:x (case align
-          "left" x
-          "center" (+ x (/ width 2))
-          "right" (+ x width))
-     :y (if (some? height)
+        metrics (.measureText TextMetrics text style)
+        top-empty-line (- (.-lineHeight metrics)
+                          (.. metrics -fontProperties -ascent))]
+    {:x (if (number? width)
+          (case align
+            "left" x
+            "center" (+ x (/ width 2))
+            "right" (+ x width))
+          x)
+     :y (if (number? height)
           (case vertical-align
-            "middle" (+ y (/ height 2) (- (/ (.-height metrics) 2)))
-            "bottom" (+ y height (- (.-height metrics)))
-            y)
+            "top" (- y top-empty-line)
+            "middle" (-> y
+                         (+ (/ height 2))
+                         (- (/ top-empty-line 2)))
+            "bottom" (+ y height))
           y)}))
 
 (defn create-simple-text
