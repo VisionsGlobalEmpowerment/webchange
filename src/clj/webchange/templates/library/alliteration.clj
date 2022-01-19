@@ -150,17 +150,21 @@
                        :src  "/raw/img/park/sandbox/Shadow.png"}
          :target-letter
          {:type           "text",
-          :x              1330,
-          :y              590,
+          :x              1131,
+          :y              502,
+          :width          275,
+          :height         233
+          :align          "center"
+          :vertical-align "middle"
           :transition     "letter",
           :actions        {:click {:id "letter-intro", :on "click", :type "action"}},
-          :align          "center",
           :fill           "#ff8c41",
           :font-family    "Lexend Deca",
           :font-size      200,
           :text           "",
           :states         {:highlighted {:highlight true}, :not-highlighted {:highlight false}}
-          :vertical-align "middle"}
+          }
+
          :target-image
          {:type    "image",
           :x       1150,
