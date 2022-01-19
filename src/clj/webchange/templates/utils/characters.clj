@@ -66,7 +66,7 @@
   (if-let [c (get animations (-> character :skeleton keyword))]
     (merge c
            {:type       "animation"
-            :editable?  true
+            :editable?  {:select true :drag true :show-in-tree? true}
             :anim       "idle"
             :start      true
             :scene-name (-> character :name)}

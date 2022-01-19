@@ -82,7 +82,7 @@
                                         :anim       "idle"
                                         :loop       true
                                         :name       "mari"
-                                        :editable?  true
+                                        :editable?  {:select true :drag true :show-in-tree? true}
                                         :scale-x    0.5
                                         :scale-y    0.5
                                         :speed      0.35

@@ -74,6 +74,7 @@
                          :scale-y    0.5,
                          :speed      0.35,
                          :start      true
+                         :editable?  {:select true :drag true :show-in-tree? true}
                          :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}},},
         :scene-objects [["background"
                          "outline"

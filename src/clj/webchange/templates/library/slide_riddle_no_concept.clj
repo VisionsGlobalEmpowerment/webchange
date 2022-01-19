@@ -41,106 +41,107 @@
         :objects
         {:background {:type "background", :src "/raw/img/park/slide/background2.jpg"},
          :box1
-                     {:type       "animation",
-                      :x          810,
-                      :y          216,
-                      :width      671,
-                      :height     633,
-                      :scale      {:x 0.25, :y 0.25},
-                      :scene-name "box1",
-                      :anim       "idle2",
-                      :loop       true,
-                      :name       "boxes",
-                      :skin       "qwestion",
-                      :speed      0.3,
-                      :start      true,
-                      :draggable  true,
-                      :actions    {:click      {:on     "click",
-                                                :type   "action",
-                                                :id     "box-clicked",
-                                                :params {:target "box1"}},
-                                   :drag-end   {:on     "drag-end",
-                                                :type   "action",
-                                                :id     "stop-drag",
-                                                :params {:box           "box1"
-                                                         :init-position {:x 810, :y 216 :duration 1}}},
-                                   :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
-                      :states     {:init-position {:x 810, :y 216}}},
+         {:type       "animation",
+          :x          810,
+          :y          216,
+          :width      671,
+          :height     633,
+          :scale      {:x 0.25, :y 0.25},
+          :scene-name "box1",
+          :anim       "idle2",
+          :loop       true,
+          :name       "boxes",
+          :skin       "qwestion",
+          :speed      0.3,
+          :start      true,
+          :draggable  true,
+          :actions    {:click      {:on     "click",
+                                    :type   "action",
+                                    :id     "box-clicked",
+                                    :params {:target "box1"}},
+                       :drag-end   {:on     "drag-end",
+                                    :type   "action",
+                                    :id     "stop-drag",
+                                    :params {:box           "box1"
+                                             :init-position {:x 810, :y 216 :duration 1}}},
+                       :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+          :states     {:init-position {:x 810, :y 216}}},
          :box2
-                     {:type       "animation",
-                      :x          500,
-                      :y          287,
-                      :width      671,
-                      :height     633,
-                      :scale      {:x 0.25, :y 0.25},
-                      :scene-name "box2",
-                      :transition "box2",
-                      :anim       "idle2",
-                      :loop       true,
-                      :name       "boxes",
-                      :skin       "qwestion",
-                      :speed      0.3,
-                      :start      true,
-                      :draggable  true,
-                      :actions    {:click      {:on     "click",
-                                                :type   "action",
-                                                :id     "box-clicked",
-                                                :params {:target "box2"}},
-                                   :drag-end   {:on     "drag-end",
-                                                :type   "action",
-                                                :id     "stop-drag",
-                                                :params {:box           "box2"
-                                                         :init-position {:x 500, :y 287 :duration 1}}},
-                                   :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
-                      :states     {:init-position {:x 500, :y 287}}},
+         {:type       "animation",
+          :x          500,
+          :y          287,
+          :width      671,
+          :height     633,
+          :scale      {:x 0.25, :y 0.25},
+          :scene-name "box2",
+          :transition "box2",
+          :anim       "idle2",
+          :loop       true,
+          :name       "boxes",
+          :skin       "qwestion",
+          :speed      0.3,
+          :start      true,
+          :draggable  true,
+          :actions    {:click      {:on     "click",
+                                    :type   "action",
+                                    :id     "box-clicked",
+                                    :params {:target "box2"}},
+                       :drag-end   {:on     "drag-end",
+                                    :type   "action",
+                                    :id     "stop-drag",
+                                    :params {:box           "box2"
+                                             :init-position {:x 500, :y 287 :duration 1}}},
+                       :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+          :states     {:init-position {:x 500, :y 287}}},
          :box3
-                     {:type       "animation",
-                      :x          655,
-                      :y          212,
-                      :width      671,
-                      :height     633,
-                      :scale      {:x 0.25, :y 0.25},
-                      :scene-name "box3",
-                      :transition "box3",
-                      :anim       "idle2",
-                      :loop       true,
-                      :name       "boxes",
-                      :skin       "qwestion",
-                      :speed      0.3,
-                      :start      true,
-                      :draggable  true,
-                      :actions    {:click      {:on     "click",
-                                                :type   "action",
-                                                :id     "box-clicked",
-                                                :params {:target "box3"}},
-                                   :drag-end   {:on     "drag-end",
-                                                :type   "action",
-                                                :id     "stop-drag",
-                                                :params {:box           "box3"
-                                                         :init-position {:x 655, :y 212 :duration 1}}},
-                                   :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
-                      :states     {:init-position {:x 655, :y 212}}},
+         {:type       "animation",
+          :x          655,
+          :y          212,
+          :width      671,
+          :height     633,
+          :scale      {:x 0.25, :y 0.25},
+          :scene-name "box3",
+          :transition "box3",
+          :anim       "idle2",
+          :loop       true,
+          :name       "boxes",
+          :skin       "qwestion",
+          :speed      0.3,
+          :start      true,
+          :draggable  true,
+          :actions    {:click      {:on     "click",
+                                    :type   "action",
+                                    :id     "box-clicked",
+                                    :params {:target "box3"}},
+                       :drag-end   {:on     "drag-end",
+                                    :type   "action",
+                                    :id     "stop-drag",
+                                    :params {:box           "box3"
+                                             :init-position {:x 655, :y 212 :duration 1}}},
+                       :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+          :states     {:init-position {:x 655, :y 212}}},
          :spot
-                     {:type    "image",
-                      :x       826,
-                      :y       524,
-                      :filters [{:name "brightness" :value 0}
-                                {:name "glow" :outer-strength 0 :color 0xffd700}]
-                      :src     "/raw/img/park/slide/line_01.png",},
+         {:type    "image",
+          :x       826,
+          :y       524,
+          :filters [{:name "brightness" :value 0}
+                    {:name "glow" :outer-strength 0 :color 0xffd700}]
+          :src     "/raw/img/park/slide/line_01.png",},
          :mari
-                     {:type       "animation",
-                      :x          1600,
-                      :y          580,
-                      :width      473,
-                      :height     511,
-                      :transition "mari",
-                      :anim       "idle",
-                      :name       "mari",
-                      :scale-x    0.5,
-                      :scale-y    0.5,
-                      :speed      0.35,
-                      :start      true
-                      :actions    {:click {:id "guide-click" :on "click" :type "action"}}},
+         {:type       "animation",
+          :x          1600,
+          :y          580,
+          :width      473,
+          :height     511,
+          :transition "mari",
+          :anim       "idle",
+          :name       "mari",
+          :scale-x    0.5,
+          :scale-y    0.5,
+          :speed      0.35,
+          :start      true
+          :editable?  {:select true :drag true :show-in-tree? true}
+          :actions    {:click {:id "guide-click" :on "click" :type "action"}}},
          :slide      {:type "image", :x 200, :y 190, :width 997, :height 758, :src "/raw/img/park/slide/slide.png"},
          :slide-side {:type "image", :x 591, :y 450, :width 234, :height 497, :src "/raw/img/park/slide/side.png"}},
         :scene-objects
@@ -161,22 +162,22 @@
                                        {:type "set-attribute", :target "spot", :attr-value false :attr-name "highlight"}]}
          :highlight            {:type "sequence-data",
                                 :data
-                                      [{:type "set-variable", :var-name "spot-selected", :var-value true}
-                                       {:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value true}]}
+                                [{:type "set-variable", :var-name "spot-selected", :var-value true}
+                                 {:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value true}]}
          :unhighlight          {:type "sequence-data",
                                 :data
-                                      [{:type "set-variable", :var-name "spot-selected", :var-value false}
-                                       {:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value false}]},
+                                [{:type "set-variable", :var-name "spot-selected", :var-value false}
+                                 {:type "set-attribute" :target "spot" :attr-name "highlight" :attr-value false}]},
          :check-collide        {:type "sequence-data",
                                 :data
-                                      [{:fail        "unhighlight",
-                                        :type        "test-transitions-and-pointer-collide",
-                                        :success     "highlight",
-                                        :transitions ["spot"]}]},
+                                [{:fail        "unhighlight",
+                                  :type        "test-transitions-and-pointer-collide",
+                                  :success     "highlight",
+                                  :transitions ["spot"]}]},
          :revert-position
-                               {:type        "transition"
-                                :from-params [{:param-property "box", :action-property "transition-id"}
-                                              {:param-property "init-position", :action-property "to"}]}
+         {:type        "transition"
+          :from-params [{:param-property "box", :action-property "transition-id"}
+                        {:param-property "init-position", :action-property "to"}]}
          :pick-wrong           {:type "sequence-data",
                                 :data [{:type     "action"
                                         :from-var [{:var-name        "dragged-item"
@@ -185,27 +186,27 @@
                                        {:type "action" :id "revert-position"}]},
          :pick-correct         {:type "sequence-data",
                                 :data
-                                      [{:type     "action"
-                                        :from-var [{:var-name        "dragged-item"
-                                                    :var-property    "dragged-dialog"
-                                                    :action-property "id"}]}
-                                       {:id "slide-current-target", :type "action"}
-                                       {:type "empty", :duration 1000}
-                                       {:type "action" :id "script"}]},
+                                [{:type     "action"
+                                  :from-var [{:var-name        "dragged-item"
+                                              :var-property    "dragged-dialog"
+                                              :action-property "id"}]}
+                                 {:id "slide-current-target", :type "action"}
+                                 {:type "empty", :duration 1000}
+                                 {:type "action" :id "script"}]},
          :spot-selected        {:type "sequence-data",
                                 :data
-                                      [{:type "action" :id "unhighlight"}
-                                       {:type "action" :id "timeout-timer"}
-                                       {:type        "copy-variable"
-                                        :var-name    "dragged-item"
-                                        :from-params [{:action-property "from" :param-property "box"}]}
-                                       {:fail     "pick-wrong",
-                                        :value1   true
-                                        :type     "test-value",
-                                        :success  "pick-correct",
-                                        :from-var [{:var-name        "dragged-item"
-                                                    :var-property    "correct"
-                                                    :action-property "value2"}]}]}
+                                [{:type "action" :id "unhighlight"}
+                                 {:type "action" :id "timeout-timer"}
+                                 {:type        "copy-variable"
+                                  :var-name    "dragged-item"
+                                  :from-params [{:action-property "from" :param-property "box"}]}
+                                 {:fail     "pick-wrong",
+                                  :value1   true
+                                  :type     "test-value",
+                                  :success  "pick-correct",
+                                  :from-var [{:var-name        "dragged-item"
+                                              :var-property    "correct"
+                                              :action-property "value2"}]}]}
 
          :box-clicked          {:type "sequence-data",
                                 :data [{:type "action" :id "timeout-timer"}
@@ -218,48 +219,48 @@
                                                     :action-property "id"}]}]}
 
          :reset-boxes
-                               {:type "sequence-data",
-                                :data
-                                      [{:type "set-attribute" :target "box1" :attr-name "visible" :attr-value false}
-                                       {:type "set-attribute" :target "box2" :attr-name "visible" :attr-value false}
-                                       {:type "set-attribute" :target "box3" :attr-name "visible" :attr-value false}
-                                       {:type "empty", :duration 100}
-                                       {:id "init-position", :type "state", :target "box1"}
-                                       {:id "init-position", :type "state", :target "box2"}
-                                       {:id "init-position", :type "state", :target "box3"}
-                                       {:skin "qwestion", :type "set-skin", :target "box1"}
-                                       {:skin "qwestion", :type "set-skin", :target "box2"}
-                                       {:skin "qwestion", :type "set-skin", :target "box3"}
-                                       {:type "set-attribute" :target "box1" :attr-name "visible" :attr-value true}
-                                       {:type "set-attribute" :target "box2" :attr-name "visible" :attr-value true}
-                                       {:type "set-attribute" :target "box3" :attr-name "visible" :attr-value true}]},
+         {:type "sequence-data",
+          :data
+          [{:type "set-attribute" :target "box1" :attr-name "visible" :attr-value false}
+           {:type "set-attribute" :target "box2" :attr-name "visible" :attr-value false}
+           {:type "set-attribute" :target "box3" :attr-name "visible" :attr-value false}
+           {:type "empty", :duration 100}
+           {:id "init-position", :type "state", :target "box1"}
+           {:id "init-position", :type "state", :target "box2"}
+           {:id "init-position", :type "state", :target "box3"}
+           {:skin "qwestion", :type "set-skin", :target "box1"}
+           {:skin "qwestion", :type "set-skin", :target "box2"}
+           {:skin "qwestion", :type "set-skin", :target "box3"}
+           {:type "set-attribute" :target "box1" :attr-name "visible" :attr-value true}
+           {:type "set-attribute" :target "box2" :attr-name "visible" :attr-value true}
+           {:type "set-attribute" :target "box3" :attr-name "visible" :attr-value true}]},
          :slide-current-target
-                               {:type "sequence-data",
-                                :data [{:to          {:ease [0.1 0.1], :bezier [{:x 770, :y 90} {:x 865, :y 460}], :duration 1.0},
-                                        :type        "transition",
-                                        :from-params [{:param-property "box", :action-property "transition-id"}]
-                                        }
-                                       {:to          {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
-                                        :type        "transition",
-                                        :from-params [{:param-property "box", :action-property "transition-id"}]}
-                                       {:type "empty", :duration 1000}]},
+         {:type "sequence-data",
+          :data [{:to          {:ease [0.1 0.1], :bezier [{:x 770, :y 90} {:x 865, :y 460}], :duration 1.0},
+                  :type        "transition",
+                  :from-params [{:param-property "box", :action-property "transition-id"}]
+                  }
+                 {:to          {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
+                  :type        "transition",
+                  :from-params [{:param-property "box", :action-property "transition-id"}]}
+                 {:type "empty", :duration 1000}]},
          :assign-boxes         {:type "sequence-data",
                                 :data
-                                      [{:type       "set-slot",
-                                        :target     "box1",
-                                        :from-var   [{:var-name "box1", :var-property "image-src", :action-property "image"}],
-                                        :slot-name  "box1",
-                                        :attachment {:x 40, :scale-x 4, :scale-y 4}}
-                                       {:type       "set-slot",
-                                        :target     "box2",
-                                        :from-var   [{:var-name "box2", :var-property "image-src", :action-property "image"}],
-                                        :slot-name  "box1",
-                                        :attachment {:x 40, :scale-x 4, :scale-y 4}}
-                                       {:type       "set-slot",
-                                        :target     "box3",
-                                        :from-var   [{:var-name "box3", :var-property "image-src", :action-property "image"}],
-                                        :slot-name  "box1",
-                                        :attachment {:x 40, :scale-x 4, :scale-y 4}}]}
+                                [{:type       "set-slot",
+                                  :target     "box1",
+                                  :from-var   [{:var-name "box1", :var-property "image-src", :action-property "image"}],
+                                  :slot-name  "box1",
+                                  :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                 {:type       "set-slot",
+                                  :target     "box2",
+                                  :from-var   [{:var-name "box2", :var-property "image-src", :action-property "image"}],
+                                  :slot-name  "box1",
+                                  :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                 {:type       "set-slot",
+                                  :target     "box3",
+                                  :from-var   [{:var-name "box3", :var-property "image-src", :action-property "image"}],
+                                  :slot-name  "box1",
+                                  :attachment {:x 40, :scale-x 4, :scale-y 4}}]}
          :remove-timeout-timer {:type "remove-interval"
                                 :id   "timeout-timer"}
          :timeout-timer        {:type     "set-interval"
@@ -289,15 +290,15 @@
                                 :from               {:brightness 0 :glow 0}
                                 :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
          :finish-activity
-                               {:type "sequence-data"
-                                :data [{:id "timeout-timer", :type "remove-interval"}
-                                       {:type "action" :id "finish-dialog"}
-                                       {:type "finish-activity"}]},
+         {:type "sequence-data"
+          :data [{:id "timeout-timer", :type "remove-interval"}
+                 {:type "action" :id "finish-dialog"}
+                 {:type "finish-activity"}]},
          :start-activity       {:type "start-activity"},
          :stop-activity        {:type "stop-activity"}
          :intro-dialog         (dialog/default "Intro")
          :finish-dialog
-                               (dialog/default "Finish dialog")}
+         (dialog/default "Finish dialog")}
         :triggers
         {:stop  {:on "back", :action "stop-activity"},
          :start {:on "start", :action "script"}},

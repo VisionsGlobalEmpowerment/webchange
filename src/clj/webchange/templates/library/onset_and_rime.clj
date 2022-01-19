@@ -64,7 +64,7 @@
                                                    :speed      0.3
                                                    :skin       "vaca"
                                                    :scale-x    0.75 :scale-y 0.75
-                                                   :editable?  true
+                                                   :editable?  {:select true :drag true :show-in-tree? true}
                                                    :start      true
                                                    :scene-name "senoravaca"}
                         :cloud-left-img--1        {:type   "image"

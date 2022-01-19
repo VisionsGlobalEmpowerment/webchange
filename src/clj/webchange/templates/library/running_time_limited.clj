@@ -153,7 +153,8 @@
                                                 :scale-x     0.5
                                                 :scale-y     0.5
                                                 :speed       0.5
-                                                :start       true}
+                                                :start       true
+                                                :editable?   {:select true :drag true :show-in-tree? true}}
                         :vera-group            {:type       "group"
                                                 :x          500
                                                 :y          865
