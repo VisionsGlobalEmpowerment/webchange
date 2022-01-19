@@ -63,13 +63,13 @@
   :shadow-color - color of shadow. E.g. 0x75016e
   :shadow-distance - width of shadow."
   [{:keys [parent type object-name ref border-radius on-click filters] :as props}]
-  (let [state (atom (select-keys props [:border-radius]))
+  (let [state (atom (select-keys props [:border-radius :border-width]))
         mask (-> (create-mask props)
                  (set-border-radius border-radius state))
         sprite (create-sprite props)
         container (create-container props)
 
-        wrapped-component (wrap type object-name state container sprite mask props)]
+        wrapped-component (wrap type object-name state container sprite mask)]
 
     (aset sprite "mask" mask)
     (.addChild container sprite)

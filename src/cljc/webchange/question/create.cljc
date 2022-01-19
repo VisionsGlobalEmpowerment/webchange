@@ -65,80 +65,101 @@
         on-wrong (str action-name "-wrong-answer")
         on-wrong-dialog (str action-name "-wrong-answer-dialog")
         on-wrong-sound (str action-name "-wrong-answer-sound")
-        try-again-dialog (str action-name "-tray-again-dialog")]
-    {:actions {(keyword action-name)       {:type "sequence-data"
-                                            :data (cond-> [{:type "action"
-                                                            :id   (get-in data-names [:check-button :actions :set-active])}]
-                                                          (-> form-data utils/has-correct-answer?) (conj {:type    "question-check"
-                                                                                                          :id      question-id
-                                                                                                          :answer  correct-answers
-                                                                                                          :success on-correct
-                                                                                                          :fail    on-wrong})
-                                                          (-> form-data utils/has-correct-answer? not) (conj {:type "action"
-                                                                                                              :id   on-correct})
-                                                          :always (concat [{:type "question-reset"
-                                                                            :id   question-id}
-                                                                           {:type "parallel-by-tag"
-                                                                            :tag  (str "inactivate-options-" question-id)}]))}
+        try-again-dialog (str action-name "-tray-again-dialog")
+        highlight-correct (str action-name "-highlight-correct")
+        highlight-incorrect (str action-name "-highlight-incorrect")]
+    {:actions {(keyword action-name)         {:type "sequence-data"
+                                              :data (cond-> [{:type "action"
+                                                              :id   (get-in data-names [:check-button :actions :set-active])}]
 
-               (keyword on-correct)        {:type "sequence-data"
-                                            :data [{:type "action" :id on-correct-sound}
-                                                   {:type "action" :id on-correct-dialog}
-                                                   {:type "action" :id hide-question-name}
-                                                   {:type "finish-flows" :tag question-id}]}
+                                                            (-> form-data utils/has-correct-answer?)
+                                                            (concat [{:type    "question-highlight"
+                                                                      :id      question-id
+                                                                      :answer  correct-answers
+                                                                      :success highlight-correct
+                                                                      :fail    highlight-incorrect}
+                                                                     {:type    "question-check"
+                                                                      :id      question-id
+                                                                      :answer  correct-answers
+                                                                      :success on-correct
+                                                                      :fail    on-wrong}])
 
-               (keyword on-correct-dialog) {:type               "sequence-data"
-                                            :data               [{:type "sequence-data"
-                                                                  :data [{:type "empty" :duration 0}
-                                                                         {:type        "animation-sequence"
-                                                                          :phrase-text ""
-                                                                          :audio       nil}]}]
-                                            :phrase-description "Correct answer"
-                                            :editor-type        "dialog"}
+                                                            (-> form-data utils/has-correct-answer? not)
+                                                            (conj {:type "action"
+                                                                   :id   on-correct})
 
-               (keyword on-correct-sound)  {:type               "sequence-data"
-                                            :data               [{:type "sequence-data"
-                                                                  :data [{:type "empty" :duration 0}
-                                                                         {:type        "animation-sequence"
-                                                                          :phrase-text ""
-                                                                          :audio       nil}]}]
-                                            :phrase-description "Correct answer sound effect"
-                                            :editor-type        "dialog"}
+                                                            :always (concat [{:type "question-reset"
+                                                                              :id   question-id}
+                                                                             {:type "parallel-by-tag"
+                                                                              :tag  (str "inactivate-options-" question-id)}]))}
 
-               (keyword on-wrong)          {:type "sequence-data",
-                                            :data (cond-> [{:type "action" :id on-wrong-sound}
-                                                           {:type "action" :id (get-in data-names [:check-button :actions :reset])}
-                                                           {:type        "parallel-by-tag"
-                                                            :from-params [{:template        (str "inactivate-option-%-" question-id)
-                                                                           :action-property "tag"
-                                                                           :param-property  "value"}]}
-                                                           {:type "action" :id on-wrong-dialog}
-                                                           {:type "action" :id try-again-dialog}])}
+               (keyword on-correct)          {:type "sequence-data"
+                                              :data [{:type "action" :id on-correct-sound}
+                                                     {:type "action" :id on-correct-dialog}
+                                                     {:type "action" :id hide-question-name}
+                                                     {:type "finish-flows" :tag question-id}]}
 
-               (keyword on-wrong-dialog)   {:type               "sequence-data"
-                                            :data               [{:type "sequence-data"
-                                                                  :data [{:type "empty" :duration 0}
-                                                                         {:type        "animation-sequence"
-                                                                          :phrase-text ""
-                                                                          :audio       nil}]}]
-                                            :phrase-description "Wrong answer"
-                                            :editor-type        "dialog"}
-               (keyword on-wrong-sound)    {:type               "sequence-data"
-                                            :data               [{:type "sequence-data"
-                                                                  :data [{:type "empty" :duration 0}
-                                                                         {:type        "animation-sequence"
-                                                                          :phrase-text ""
-                                                                          :audio       nil}]}]
-                                            :phrase-description "Wrong answer sound effect"
-                                            :editor-type        "dialog"}
-               (keyword try-again-dialog)  {:type               "sequence-data"
-                                            :data               [{:type "sequence-data"
-                                                                  :data [{:type "empty" :duration 0}
-                                                                         {:type        "animation-sequence"
-                                                                          :phrase-text ""
-                                                                          :audio       nil}]}]
-                                            :phrase-description "Try again"
-                                            :editor-type        "dialog"}}
+               (keyword on-correct-dialog)   {:type               "sequence-data"
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type        "animation-sequence"
+                                                                            :phrase-text ""
+                                                                            :audio       nil}]}]
+                                              :phrase-description "Correct answer"
+                                              :editor-type        "dialog"}
+
+               (keyword on-correct-sound)    {:type               "sequence-data"
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type        "animation-sequence"
+                                                                            :phrase-text ""
+                                                                            :audio       nil}]}]
+                                              :phrase-description "Correct answer sound effect"
+                                              :editor-type        "dialog"}
+
+               (keyword on-wrong)            {:type "sequence-data",
+                                              :data [{:type "action" :id on-wrong-sound}
+                                                     {:type "action" :id (get-in data-names [:check-button :actions :reset])}
+                                                     {:type        "parallel-by-tag"
+                                                      :from-params [{:template        (str "inactivate-option-%-" question-id)
+                                                                     :action-property "tag"
+                                                                     :param-property  "value"}]}
+                                                     {:type "action" :id on-wrong-dialog}
+                                                     {:type "action" :id try-again-dialog}]}
+
+               (keyword highlight-correct)   {:type        "parallel-by-tag"
+                                              :from-params [{:template        (utils/get-option-tag :set-correct {:question-id question-id :template? true})
+                                                             :action-property "tag"
+                                                             :param-property  "value"}]}
+               (keyword highlight-incorrect) {:type        "parallel-by-tag"
+                                              :from-params [{:template        (utils/get-option-tag :set-incorrect {:question-id question-id :template? true})
+                                                             :action-property "tag"
+                                                             :param-property  "value"}]}
+
+               (keyword on-wrong-dialog)     {:type               "sequence-data"
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type        "animation-sequence"
+                                                                            :phrase-text ""
+                                                                            :audio       nil}]}]
+                                              :phrase-description "Wrong answer"
+                                              :editor-type        "dialog"}
+               (keyword on-wrong-sound)      {:type               "sequence-data"
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type        "animation-sequence"
+                                                                            :phrase-text ""
+                                                                            :audio       nil}]}]
+                                              :phrase-description "Wrong answer sound effect"
+                                              :editor-type        "dialog"}
+               (keyword try-again-dialog)    {:type               "sequence-data"
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type        "animation-sequence"
+                                                                            :phrase-text ""
+                                                                            :audio       nil}]}]
+                                              :phrase-description "Try again"
+                                              :editor-type        "dialog"}}
      :track   {:nodes [{:type      "dialog"
                         :action-id (keyword on-correct-sound)}
                        {:type      "dialog"

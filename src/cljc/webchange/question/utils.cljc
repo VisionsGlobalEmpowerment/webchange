@@ -51,12 +51,12 @@
                  :set-unselected-all (fn [{:keys [question-id]}]
                                        {:pre [(string? question-id)]}
                                        (str "inactivate-options-" question-id))
-                 :set-correct        (fn [{:keys [option-value question-id]}]
-                                       {:pre [(string? option-value) (string? question-id)]}
-                                       (str "set-correct-option-" option-value "-" question-id))
-                 :set-incorrect      (fn [{:keys [option-value question-id]}]
-                                       {:pre [(string? option-value) (string? question-id)]}
-                                       (str "set-incorrect-option-" option-value "-" question-id))}]
+                 :set-correct        (fn [{:keys [option-value template? question-id]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "set-correct-option-" (if template? "%" option-value) "-" question-id))
+                 :set-incorrect      (fn [{:keys [option-value template? question-id]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "set-incorrect-option-" (if template? "%" option-value) "-" question-id))}]
     (if (contains? getters action)
       ((get getters action) params)
       (error (str "Tag '" action "' is not defined")))))

@@ -1,7 +1,7 @@
 (ns webchange.question.common.option-item
   (:require
     [webchange.question.common.params :as common-params]
-    [webchange.question.utils :refer [merge-data]]
+    [webchange.question.utils :refer [merge-data round]]
     [webchange.question.utils :as utils]))
 
 (defn- create-substrate
@@ -10,12 +10,16 @@
            y             0
            border-radius 24}}]
   (let [states {:default   {:border-color 0xFFFFFF
+                            :border-width 2
                             :fill         0xC4C4C4}
                 :selected  {:border-color 0xFFFFFF
+                            :border-width 2
                             :fill         0xFFFFFF}
                 :correct   {:border-color 0x56B624
+                            :border-width 6
                             :fill         0xFFFFFF}
-                :incorrect {:border-color 0xFF0000
+                :incorrect {:border-color 0xFFFFFF
+                            :border-width 2
                             :fill         0xFFFFFF}}]
     {:objects {(keyword object-name) (merge {:type          "rectangle"
                                              :x             x
@@ -23,7 +27,6 @@
                                              :width         width
                                              :height        height
                                              :border-radius border-radius
-                                             :border-width  2
                                              :states        states
                                              :actions       actions}
                                             (:default states))}}))
@@ -73,6 +76,22 @@
                                                 text-props)
                                          (some? actions) (assoc :actions actions))}})
 
+(defn- create-wrong-mark
+  [{:keys [object-name x y width height]}]
+  (let [stroke-width 6]
+    {:objects {(keyword object-name) {:type         "svg-path"
+                                      :data         (str "M " stroke-width " " stroke-width " "
+                                                         "L " (- width stroke-width) " " (- height stroke-width) " "
+                                                         "M " stroke-width " " (- height stroke-width) " "
+                                                         "L " (- width stroke-width) " " stroke-width)
+                                      :x            x
+                                      :y            y
+                                      :stroke       "#FF0000"
+                                      :stroke-width (* stroke-width 2)
+                                      :visible      false
+                                      :states       {:visible   {:visible true}
+                                                     :invisible {:visible false}}}}}))
+
 (defn create
   [{:keys [image-name text-name value] :as option}
    {:keys [object-name x y width height question-id question-type] :as props}
@@ -84,6 +103,7 @@
 
         substrate-name (str object-name "-substrate")
         image-name (str object-name "-" image-name "-group")
+        wrong-mark-name (str object-name "-wrong-mark")
 
         dimensions-with-padding (let [padding-vertical 10
                                       padding-horizontal 10]
@@ -107,25 +127,37 @@
                                                           :y        y
                                                           :children (cond-> [substrate-name]
                                                                             image-option? (conj image-name)
-                                                                            text-option? (conj text-name))}}
+                                                                            text-option? (conj text-name)
+                                                                            :always (conj wrong-mark-name))}}
                          :actions {(get-action-name "set-selected")   {:type "sequence-data"
                                                                        :tags [(utils/get-option-tag :set-selected {:option-value value :question-id question-id})]
                                                                        :data [{:type "state" :id "selected" :target substrate-name}]}
                                    (get-action-name "set-unselected") {:type "sequence-data"
                                                                        :tags [(utils/get-option-tag :set-unselected {:option-value value :question-id question-id})
                                                                               (utils/get-option-tag :set-unselected-all {:question-id question-id})]
-                                                                       :data [{:type "state" :id "default" :target substrate-name}]}
+                                                                       :data [{:type "state" :id "default" :target substrate-name}
+                                                                              {:type "state" :id "invisible" :target wrong-mark-name}]}
                                    (get-action-name "set-correct")    {:type "sequence-data"
                                                                        :tags [(utils/get-option-tag :set-correct {:option-value value :question-id question-id})]
-                                                                       :data [{:type "state" :id "correct" :target substrate-name}]}
+                                                                       :data [{:type "state" :id "correct" :target substrate-name}
+                                                                              {:type "state" :id "invisible" :target wrong-mark-name}]}
                                    (get-action-name "set-incorrect")  {:type "sequence-data"
                                                                        :tags [(utils/get-option-tag :set-incorrect {:option-value value :question-id question-id})]
-                                                                       :data [{:type "state" :id "incorrect" :target substrate-name}]}}}
+                                                                       :data [{:type "state" :id "incorrect" :target substrate-name}
+                                                                              {:type "state" :id "visible" :target wrong-mark-name}]}}}
                         (create-substrate (cond-> {:object-name substrate-name
                                                    :width       width
                                                    :height      height
                                                    :actions     item-actions}
-                                                  mark-option? (assoc :border-radius (-> width (/ 2) utils/round)))))
+                                                  mark-option? (assoc :border-radius (-> width (/ 2) utils/round))))
+                        (create-wrong-mark (let [size 50]
+                                             {:object-name wrong-mark-name
+                                              :x           (-> (/ width 2)
+                                                               (- (/ size 2))
+                                                               (round))
+                                              :y           20
+                                              :width       size
+                                              :height      size})))
             image-option? (merge-data (create-image option
                                                     (merge {:object-name image-name
                                                             :actions     item-actions}

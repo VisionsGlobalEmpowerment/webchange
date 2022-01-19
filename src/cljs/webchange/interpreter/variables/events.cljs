@@ -35,6 +35,7 @@
 (e/reg-simple-executor :question-pick ::execute-question-pick)
 (e/reg-simple-executor :question-reset ::execute-question-reset)
 (e/reg-simple-executor :question-test ::execute-question-test)
+(e/reg-simple-executor :question-highlight ::execute-question-highlight)
 
 
 (re-frame/reg-event-fx
@@ -629,3 +630,21 @@
         (if fail
           {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
           {:dispatch-n (list (e/success-event action))})))))
+
+(re-frame/reg-event-fx
+  ::execute-question-highlight
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [id answer success fail] :as action}]
+    (let [current-value (set (core/get-variable id))
+          answer-value (set answer)
+          correct-values (clojure.set/intersection current-value answer-value)
+          incorrect-values (clojure.set/difference current-value answer-value)]
+      {:dispatch-n (concat (map (fn [correct-value]
+                                  [::e/execute-action (-> (e/get-action success db)
+                                                          (assoc :params {:value correct-value}))])
+                                correct-values)
+                           (map (fn [incorrect-value]
+                                  [::e/execute-action (-> (e/get-action fail db)
+                                                          (assoc :params {:value incorrect-value}))])
+                                incorrect-values)
+                           [(e/success-event action)])})))
