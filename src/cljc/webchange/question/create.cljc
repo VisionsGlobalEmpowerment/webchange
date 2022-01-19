@@ -70,7 +70,7 @@
         highlight-incorrect (str action-name "-highlight-incorrect")]
     {:actions {(keyword action-name)         {:type "sequence-data"
                                               :data (cond-> [{:type "action"
-                                                              :id   (get-in data-names [:check-button :actions :set-active])}]
+                                                              :id   (get-in data-names [:check-button :actions :set-submitted])}]
 
                                                             (-> form-data utils/has-correct-answer?)
                                                             (concat [{:type    "question-highlight"
@@ -119,7 +119,7 @@
 
                (keyword on-wrong)            {:type "sequence-data",
                                               :data [{:type "action" :id on-wrong-sound}
-                                                     {:type "action" :id (get-in data-names [:check-button :actions :reset])}
+                                                     {:type "action" :id (get-in data-names [:check-button :actions :set-default])}
                                                      {:type        "parallel-by-tag"
                                                       :from-params [{:template        (str "inactivate-option-%-" question-id)
                                                                      :action-property "tag"
@@ -193,19 +193,20 @@
                         :action-id (keyword dialog-name)}]}}))
 
 (defn- create-option-click-handler
-  [question-id form-data data-names]
+  [question-id {:keys [correct-answers] :as form-data} data-names]
   (let [{:keys [click-handler voice-over]} (get-in data-names [:options :actions])
 
         pick-one-option (str click-handler "--pick-one-option")
         pick-several-option (str click-handler "--pick-several-option")
+        update-check-button (str click-handler "--update-check-button")
 
         highlight-option (str click-handler "--highlight-option")
         unhighlight-option (str click-handler "--unhighlight-option")]
     {:actions {(keyword click-handler)       {:type "sequence-data"
                                               :data (cond-> []
-                                                            (utils/show-check-button? form-data) (conj {:type "action" :id (get-in data-names [:check-button :actions :set-visible])})
                                                             (utils/one-correct-answer? form-data) (conj {:type "action" :id pick-one-option})
                                                             (utils/many-correct-answers? form-data) (conj {:type "action" :id pick-several-option})
+                                                            (utils/show-check-button? form-data) (conj {:type "action" :id update-check-button})
                                                             (utils/options-have-voice-over? form-data) (conj {:type "action" :id voice-over}))}
                (keyword pick-one-option)     {:type "sequence-data"
                                               :data [{:type "parallel-by-tag"
@@ -222,6 +223,12 @@
                                                       :from-params [{:action-property "value" :param-property "value"}]
                                                       :on-check    highlight-option
                                                       :on-uncheck  unhighlight-option}]}
+               (keyword update-check-button) {:type    "question-count-answers"
+                                              :id      question-id
+                                              :answer  correct-answers
+                                              :empty   {:type "action" :id (get-in data-names [:check-button :actions :set-default])}
+                                              :partial {:type "action" :id (get-in data-names [:check-button :actions :set-touched])}
+                                              :full    {:type "action" :id (get-in data-names [:check-button :actions :set-ready])}}
 
                (keyword highlight-option)    {:type        "parallel-by-tag"
                                               :from-params [{:template        (str "activate-option-%-" question-id)
@@ -248,10 +255,11 @@
          option-voice-over-name (str action-name "-option-voice-over")
 
          data-names {:check-button {:objects {:main (str object-name "-check-button")}
-                                    :actions {:on-click    check-answers
-                                              :set-active  (str object-name "-check-button-set-active")
-                                              :set-visible (str object-name "-check-button-set-visible")
-                                              :reset       (str object-name "-check-button-reset")}}
+                                    :actions {:on-click      check-answers
+                                              :set-default   (str object-name "-check-button-set-default")
+                                              :set-touched   (str object-name "-check-button-set-touched")
+                                              :set-ready     (str object-name "-check-button-set-ready")
+                                              :set-submitted (str object-name "-check-button-set-submitted")}}
                      :options      {:actions {:click-handler (str action-name "-option-click-handler")
                                               :voice-over    option-voice-over-name}}
                      :dialogs      {:finish finish-dialog}}
@@ -285,7 +293,7 @@
                                                                                        :attr-name  "visible"
                                                                                        :attr-value true}
                                                                                       {:type "show-guide"}
-                                                                                      {:type "set-variable" :var-name "tap-instructions-prev"
+                                                                                      {:type     "set-variable" :var-name "tap-instructions-prev"
                                                                                        :from-var [{:var-name "tap-instructions-action", :action-property "var-value"}]}
                                                                                       {:type "set-variable" :var-name "tap-instructions-action" :var-value task-dialog-name}]}
                                                  (keyword hide-question-name) {:type "sequence-data"
@@ -293,7 +301,7 @@
                                                                                        :target     object-name
                                                                                        :attr-name  "visible"
                                                                                        :attr-value false}
-                                                                                      {:type "set-variable" :var-name "tap-instructions-action"
+                                                                                      {:type     "set-variable" :var-name "tap-instructions-action"
                                                                                        :from-var [{:var-name "tap-instractuins-prev", :action-property "var-value"}]}
                                                                                       {:type "hide-guide"}]}
                                                  (keyword task-dialog-name)   {:type               "sequence-data",

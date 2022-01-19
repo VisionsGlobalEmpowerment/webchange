@@ -36,6 +36,7 @@
 (e/reg-simple-executor :question-reset ::execute-question-reset)
 (e/reg-simple-executor :question-test ::execute-question-test)
 (e/reg-simple-executor :question-highlight ::execute-question-highlight)
+(e/reg-simple-executor :question-count-answers ::execute-question-count-answers)
 
 
 (re-frame/reg-event-fx
@@ -648,3 +649,21 @@
                                                           (assoc :params {:value incorrect-value}))])
                                 incorrect-values)
                            [(e/success-event action)])})))
+
+(re-frame/reg-event-fx
+  ::execute-question-count-answers
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [id answer] :as action}]
+    (let [current-count (-> id core/get-variable set count)
+          answer-count (-> answer set count)
+
+          call-handler (fn [action handler]
+                         (if (contains? action handler)
+                           {:dispatch [::e/execute-action (e/cond-action db action handler)]}
+                           {:dispatch (e/success-event action)}))]
+      (cond
+        (= current-count 0) (call-handler action :empty)
+        (= current-count answer-count) (call-handler action :full)
+        (< current-count answer-count) (call-handler action :partial)
+        (> current-count answer-count) (call-handler action :overfull)
+        :default {:dispatch (e/success-event action)}))))
