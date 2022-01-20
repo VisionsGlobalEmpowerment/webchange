@@ -14,7 +14,8 @@
   [{:keys [options-number] :as form-data}
    layout
    {:keys [text-objects-names] :as props}
-   data-names]
+   data-names
+   creation-options]
   (let [options (->> (range options-number)
                      (map inc)
                      (map (fn [option-idx]
@@ -25,7 +26,7 @@
                                :text-name       (get text-objects-names option-idx)
                                :text-props      (->> text-prop-name keyword (get form-data))
                                :text-param-name text-prop-name}))))]
-    (options-list/create options form-data props layout data-names)))
+    (options-list/create options form-data props layout data-names creation-options)))
 
 (defn create
   [{:keys [alias options] :as form-data}
@@ -63,7 +64,8 @@
                                                         :text-objects-names text-objects-names
                                                         :label-type         options-label
                                                         :options            options})
-                                                data-names))
+                                                data-names
+                                                creation-options))
             :always (merge-data (check-button/create data-names layout creation-options))
             has-text? (merge-data (task-text/create form-data
                                                     layout

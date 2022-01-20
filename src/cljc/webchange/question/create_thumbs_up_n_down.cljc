@@ -14,7 +14,8 @@
   [{:keys [mark-options] :as form-data}
    layout
    {:keys [question-id] :as props}
-   data-names]
+   data-names
+   creation-options]
   (let [options (->> mark-options
                      (map (fn [mark-option]
                             (let [value-prop-name (str mark-option "-value")
@@ -27,7 +28,7 @@
                                :image-name       (param-name->object-name (str "options-" "option-" mark-option "-image") question-id)
                                :image-props      (->> image-prop-name keyword (get form-data))
                                :image-param-name image-prop-name}))))]
-    (options-list/create options form-data props layout data-names)))
+    (options-list/create options form-data props layout data-names creation-options)))
 
 (defn create
   [{:keys [alias options] :as form-data}
@@ -64,7 +65,8 @@
                                                        {:object-name options-name
                                                         :label-type  options-label
                                                         :question-id question-id})
-                                                data-names))
+                                                data-names
+                                                creation-options))
             :always (merge-data (check-button/create data-names layout creation-options))
             has-text? (merge-data (task-text/create form-data
                                                     layout

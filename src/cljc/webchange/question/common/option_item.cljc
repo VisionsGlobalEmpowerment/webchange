@@ -5,7 +5,7 @@
     [webchange.question.utils :as utils]))
 
 (defn- create-substrate
-  [{:keys [object-name x y width height actions border-radius]
+  [{:keys [object-name x y width height actions border-radius use-state]
     :or   {x             0
            y             0
            border-radius 24}}]
@@ -29,7 +29,9 @@
                                              :border-radius border-radius
                                              :states        states
                                              :actions       actions}
-                                            (:default states))}}))
+                                            (if (some? use-state)
+                                              (get states use-state)
+                                              (:default states)))}}))
 
 (defn- create-image
   [{:keys [image-name image-props image-param-name]}
@@ -108,8 +110,10 @@
 
 (defn create
   [{:keys [image-name text-name value] :as option}
-   {:keys [object-name x y width height question-id question-type] :as props}
-   data-names]
+   {:keys [object-name x y width height question-id question-type correct-option?] :as props}
+   data-names
+   {:keys [highlight-correct-options?]
+    :or   {highlight-correct-options? false}}]
   (let [image-option? (or (= question-type "multiple-choice-image")
                           (= question-type "thumbs-up-n-down"))
         text-option? (= question-type "multiple-choice-text")
@@ -154,7 +158,9 @@
                                                    :width       width
                                                    :height      height
                                                    :actions     item-actions}
-                                                  mark-option? (assoc :border-radius (-> width (/ 2) utils/round))))
+                                                  mark-option? (assoc :border-radius (-> width (/ 2) utils/round))
+                                                  (and correct-option?
+                                                       highlight-correct-options?) (assoc :use-state :correct)))
                         (create-wrong-mark (let [size 50]
                                              (cond-> {:object-name wrong-mark-name
                                                       :width       size
