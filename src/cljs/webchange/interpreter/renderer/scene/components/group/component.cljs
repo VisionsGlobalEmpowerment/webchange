@@ -16,6 +16,7 @@
                     :type           {:default "group"}
                     :metadata       {}
                     :mask           {}
+                    :pivot          {}
                     :flipbook-page? {}})
 
 (defn- create-container
@@ -36,6 +37,22 @@
     (.drawRect x y width height)
     (.endFill 0x000000)))
 
+(defn- apply-group-pivot
+  [group pivot]
+  (let [width (.-width group)
+        height (.-height group)
+
+        current-pivot (utils/get-pivot group)
+        new-pivot {:x (* width (:x pivot))
+                   :y (* height (:y pivot))}
+
+        new-position (-> (utils/get-position group)
+                         (update :x + (- (:x new-pivot) (:x current-pivot)))
+                         (update :y + (- (:y new-pivot) (:y current-pivot))))]
+
+    (utils/set-pivot group new-pivot)
+    (utils/set-position group new-position)))
+
 (def component-type "group")
 
 (defn create
@@ -46,17 +63,19 @@
     :on-click - on click event handler.
     :ref - callback function that must be called with component wrapper.
     :children - vector og object names to group"
-  [{:keys [parent type ref on-click filters metadata flipbook-page? mode mask] :as props}]
+  [{:keys [parent type ref on-click filters metadata flipbook-page? mode mask pivot] :as props}]
   (let [group (create-container (cond-> props
                                         (:question? metadata) (assoc :z-index 100)))
         wrapped-group (wrap type (:object-name props) group {:question? (:question? metadata)})]
 
+    (when (some? pivot)
+      (utils/set-handler group "childAdded" #(apply-group-pivot group pivot)))
+
     (when mask
-      (js/console.log "applying mask" mask)
       (let [mask-obj (create-mask mask)]
         (.addChild group mask-obj)
         (aset group "mask" mask-obj)))
-    
+
     (.addChild parent group)
     (apply-filters group filters)
 

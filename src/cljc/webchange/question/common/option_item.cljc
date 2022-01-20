@@ -131,13 +131,15 @@
                                       :id         (get-in data-names [:options :actions :click-handler])
                                       :params     {:value value}
                                       :unique-tag common-params/question-action-tag})}]
-    (cond-> (merge-data {:objects {(keyword object-name) {:type     "group"
-                                                          :x        x
-                                                          :y        y
-                                                          :children (cond-> [substrate-name]
-                                                                            image-option? (conj image-name)
-                                                                            text-option? (conj text-name)
-                                                                            :always (conj wrong-mark-name))}}
+    (cond-> (merge-data {:objects {(keyword object-name) {:type       "group"
+                                                          :x          x
+                                                          :y          y
+                                                          :pivot      {:x 0.5 :y 0.5}
+                                                          :transition object-name
+                                                          :children   (cond-> [substrate-name]
+                                                                              image-option? (conj image-name)
+                                                                              text-option? (conj text-name)
+                                                                              :always (conj wrong-mark-name))}}
                          :actions {(get-action-name "set-selected")   {:type "sequence-data"
                                                                        :tags [(utils/get-option-tag :set-selected {:option-value value :question-id question-id})]
                                                                        :data [{:type "state" :id "selected" :target substrate-name}]}
@@ -153,7 +155,22 @@
                                    (get-action-name "set-incorrect")  {:type "sequence-data"
                                                                        :tags [(utils/get-option-tag :set-incorrect {:option-value value :question-id question-id})]
                                                                        :data [{:type "state" :id "incorrect" :target substrate-name}
-                                                                              {:type "state" :id "visible" :target wrong-mark-name}]}}}
+                                                                              {:type "state" :id "visible" :target wrong-mark-name}
+                                                                              {:type "action" :id (get-action-name "shake")}]}
+                                   (get-action-name "shake")          (let [duration 0.15
+                                                                            angle 10
+                                                                            repeat 1]
+                                                                        {:type "sequence-data"
+                                                                         :data (->> [{:to {:rotation angle
+                                                                                           :duration duration}}
+                                                                                     {:to {:rotation (- angle)
+                                                                                           :duration (* duration 2)
+                                                                                           :yoyo     true
+                                                                                           :repeat   repeat}}
+                                                                                     {:to {:rotation 0
+                                                                                           :duration duration}}]
+                                                                                    (map #(merge % {:type          "transition"
+                                                                                                    :transition-id object-name})))})}}
                         (create-substrate (cond-> {:object-name substrate-name
                                                    :width       width
                                                    :height      height
