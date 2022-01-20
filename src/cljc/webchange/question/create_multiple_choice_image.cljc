@@ -8,7 +8,7 @@
     [webchange.question.common.task-text :as task-text]
     [webchange.question.common.params :as params]
     [webchange.question.get-question-data :refer [param-name->object-name]]
-    [webchange.question.utils :refer [merge-data task-has-image? task-has-text?]]))
+    [webchange.question.utils :refer [log merge-data task-has-image? task-has-text?]]))
 
 (defn- create-options
   [{:keys [options-number] :as form-data}
@@ -31,7 +31,8 @@
   [{:keys [alias options] :as form-data}
    data-names
    {:keys [object-name question-id task-image-param-name] :as props}
-   {:keys [visible?] :as creation-options}]
+   {:keys [visible?] :as creation-options
+    :or   {visible? false}}]
   (let [{options-label :label} options
 
         substrate-name (str object-name "-substrate")
