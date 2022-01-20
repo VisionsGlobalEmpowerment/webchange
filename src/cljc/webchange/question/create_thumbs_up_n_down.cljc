@@ -32,7 +32,8 @@
 (defn create
   [{:keys [alias options] :as form-data}
    data-names
-   {:keys [object-name question-id visible? task-image-param-name] :as props}]
+   {:keys [object-name question-id task-image-param-name] :as props}
+   {:keys [visible?] :as creation-options}]
   (let [{options-label :label} options
         substrate-name (str object-name "-substrate")
         options-name (str object-name "-options")
@@ -64,7 +65,7 @@
                                                         :label-type  options-label
                                                         :question-id question-id})
                                                 data-names))
-            :always (merge-data (check-button/create data-names layout))
+            :always (merge-data (check-button/create data-names layout creation-options))
             has-text? (merge-data (task-text/create form-data
                                                     layout
                                                     (merge props

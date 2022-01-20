@@ -6,27 +6,26 @@
 (defn- get-layout-params
   []
   (let [{template-width :width template-height :height} params/template-size
-        content-margin-horizontal 328
-        content-margin-vertical 56
+        content-margin-horizontal 256
+        content-margin-vertical 64
         content-width (->> (* content-margin-horizontal 2) (- template-width))
-        content-height (->> (* content-margin-vertical 2) (- template-height))
+        content-height (->> (* content-margin-vertical 2) (- template-height))]
+    {:image-width               256
+     :image-height              256
+     :image-width-big           512
+     :image-height-big          512
+     :text-height               80
+     :check-button-size         128
 
-        elements-gap 64
-
-        image-width 400
-        image-height 400
-        text-height 200
-        check-button-size 128]
-    {:image-width               image-width
-     :image-height              image-height
-     :text-height               text-height
-     :check-button-size         check-button-size
+     :elements-gap              56
+     :elements-gap-big          128
+     :footer-margin             128
+     :mark-options-list-height  200
 
      :content-width             content-width
      :content-height            content-height
      :content-margin-horizontal content-margin-horizontal
-     :content-margin-vertical   content-margin-vertical
-     :elements-gap              elements-gap}))
+     :content-margin-vertical   content-margin-vertical}))
 
 (defn- get-options-layout--image
   [{container-width :width container-height :height} {:keys [options-number]}]
@@ -150,11 +149,14 @@
   ([form-data layout-params]
    (get-question-layout form-data layout-params {}))
   ([form-data
-    {:keys [content-margin-horizontal content-margin-vertical image-height text-height check-button-size elements-gap]}
-    {:keys [header-height]}]
-   (let [has-header? (or (utils/task-has-image? form-data)
-                         (utils/task-has-text? form-data))
-         has-footer? true
+    {:keys [content-margin-horizontal content-margin-vertical image-height text-height check-button-size elements-gap footer-margin]}
+    {:keys [header-height with-header? with-footer?]
+     :or   {with-header? true
+            with-footer? true}}]
+   (let [has-header? (and with-header?
+                          (or (utils/task-has-image? form-data)
+                              (utils/task-has-text? form-data)))
+         has-footer? with-footer?
 
          content-x content-margin-horizontal
          content-y content-margin-vertical
@@ -185,7 +187,7 @@
                                     :y      (- (+ content-y content-height) check-button-size)
                                     :width  content-width
                                     :height check-button-size}
-                            shift (+ (:height footer) elements-gap)]
+                            shift (+ (:height footer) footer-margin)]
                         (-> layout
                             (assoc :footer footer)
                             (update-in [:body :height] - shift))))]
@@ -215,18 +217,20 @@
         (add-check-button layout layout-params))))
 
 (defn- get-task-layout--image
-  [{:keys [options-number question-type] :as form-data} {:keys [elements-gap image-width text-height] :as layout-params}]
+  [{:keys [options-number question-type] :as form-data} {:keys [elements-gap-big image-width image-width-big text-height] :as layout-params}]
   (if (and (= question-type "multiple-choice-text")
-           (= options-number 3))
+           (some #{options-number} [2 3]))
     (let [layout (get-question-layout form-data layout-params {:header-height text-height})]
       (-> {:image             (-> (:body layout)
-                                  (update :x + (- (:width (:body layout)) image-width))
-                                  (assoc :width image-width))
+                                  (update :x + (- (:width (:body layout)) image-width-big))
+                                  (assoc :width image-width-big))
            :options-container (-> (:body layout)
-                                  (update :width - image-width elements-gap))}
+                                  (update :width - image-width-big elements-gap-big))}
           (add-check-button layout layout-params)))
     (let [layout (get-question-layout form-data layout-params)]
-      (-> {:image             (:header layout)
+      (-> {:image             (-> (:header layout)
+                                  (update :x + (/ (- (get-in layout [:header :width]) image-width) 2))
+                                  (assoc :width image-width))
            :options-container (:body layout)}
           (add-check-button layout layout-params)))))
 
@@ -252,6 +256,75 @@
                                         elements-gap)
                              :height (get-in layout [:header :height])}
          :options-container (:body layout)}
+        (add-check-button layout layout-params))))
+
+(defn- centralize
+  [w1 w2]
+  (-> (- w1 w2) (/ 2) (utils/round)))
+
+(defn- shift-to-center
+  [x w1 w2]
+  (-> (centralize w1 w2)
+      (+ x)))
+
+(defn- get-task-layout--thumbs-up-n-down--text
+  [form-data {:keys [elements-gap mark-options-list-height text-height] :as layout-params}]
+  (let [{:keys [body] :as layout} (get-question-layout form-data layout-params {:with-header? false})
+        total-height (+ text-height elements-gap mark-options-list-height)
+        padding-top (/ (- (:height body) total-height) 2)]
+    (-> {:text              {:x      (:x body)
+                             :y      (+ (:y body) padding-top)
+                             :width  (:width body)
+                             :height text-height}
+         :options-container {:x      (:x body)
+                             :y      (+ (:y body) padding-top text-height elements-gap)
+                             :width  (:width body)
+                             :height mark-options-list-height}}
+        (add-check-button layout layout-params))))
+
+(defn- get-task-layout--thumbs-up-n-down--image
+  [form-data {:keys [elements-gap-big image-height-big image-width-big mark-options-list-height] :as layout-params}]
+  (let [{:keys [body] :as layout} (get-question-layout form-data layout-params {:with-header? false})
+        right-side-left (+ image-width-big elements-gap-big)]
+    (-> {:image             (-> body
+                                (update :y shift-to-center (:height body) image-height-big)
+                                (assoc :width image-width-big)
+                                (assoc :height image-height-big))
+         :options-container (-> body
+                                (update :x + right-side-left)
+                                (update :y shift-to-center (:height body) mark-options-list-height)
+                                (update :width - right-side-left)
+                                (assoc :height mark-options-list-height))}
+        (add-check-button layout layout-params))))
+
+(defn- get-task-layout--thumbs-up-n-down--text-image
+  [form-data {:keys [elements-gap-big image-height-big image-width-big mark-options-list-height text-height] :as layout-params}]
+  (let [{:keys [body] :as layout} (get-question-layout form-data layout-params {:with-header? false})
+        right-side-height (+ text-height elements-gap-big mark-options-list-height)
+        right-side-left (+ image-width-big elements-gap-big)
+        right-side-top (centralize (:height body) right-side-height)]
+    (-> {:text              (-> body
+                                (update :x + right-side-left)
+                                (update :y + right-side-top)
+                                (update :width - right-side-left)
+                                (assoc :height text-height))
+         :image             (-> body
+                                (update :y shift-to-center (:height body) image-height-big)
+                                (assoc :width image-width-big)
+                                (assoc :height image-height-big))
+         :options-container (-> body
+                                (update :x + right-side-left)
+                                (update :y + right-side-top text-height elements-gap-big)
+                                (update :width - right-side-left)
+                                (assoc :height mark-options-list-height))}
+        (add-check-button layout layout-params))))
+
+(defn- get-task-layout--thumbs-up-n-down--voice-over
+  [form-data {:keys [mark-options-list-height] :as layout-params}]
+  (let [{:keys [body] :as layout} (get-question-layout form-data layout-params {:with-header? false})]
+    (-> {:options-container (-> body
+                                (update :y shift-to-center (:height body) mark-options-list-height)
+                                (assoc :height mark-options-list-height))}
         (add-check-button layout layout-params))))
 
 (defn get-layout-coordinates
@@ -308,16 +381,16 @@
                                                      {:options-items (get-options-layout--text options-container form-data)}))
                                nil)
       "thumbs-up-n-down" (case task-type
-                           "text" (let [{:keys [options-container] :as layout} (get-task-layout--text form-data layout-params)]
+                           "text" (let [{:keys [options-container] :as layout} (get-task-layout--thumbs-up-n-down--text form-data layout-params)]
                                     (merge layout
                                            {:options-items (get-options-layout--mark options-container form-data)}))
-                           "image" (let [{:keys [options-container] :as layout} (get-task-layout--image form-data layout-params)]
+                           "image" (let [{:keys [options-container] :as layout} (get-task-layout--thumbs-up-n-down--image form-data layout-params)]
                                      (merge layout
                                             {:options-items (get-options-layout--mark options-container form-data)}))
-                           "text-image" (let [{:keys [options-container] :as layout} (get-task-layout--text-image form-data layout-params)]
+                           "text-image" (let [{:keys [options-container] :as layout} (get-task-layout--thumbs-up-n-down--text-image form-data layout-params)]
                                           (merge layout
                                                  {:options-items (get-options-layout--mark options-container form-data)}))
-                           "voice-over" (let [{:keys [options-container] :as layout} (get-task-layout--voice-over form-data layout-params)]
+                           "voice-over" (let [{:keys [options-container] :as layout} (get-task-layout--thumbs-up-n-down--voice-over form-data layout-params)]
                                           (merge layout
                                                  {:options-items (get-options-layout--mark options-container form-data)}))
                            nil)

@@ -265,7 +265,7 @@
    (create question-params activity-params {}))
   ([{:keys [alias correct-answers options-number task-text question-type] :as form-data}
     {:keys [action-name object-name index]}
-    {:keys [visible?] :or {visible? false}}]
+    creation-options]
    (let [show-question-name (str action-name "-show")
          hide-question-name (str action-name "-hide")
 
@@ -359,9 +359,9 @@
                                                                            data-names
                                                                            (merge {:question-id        question-id
                                                                                    :object-name        object-name
-                                                                                   :text-objects-names text-objects-names
-                                                                                   :visible?           visible?}
-                                                                                  question-params)))))]
+                                                                                   :text-objects-names text-objects-names}
+                                                                                  question-params)
+                                                                           creation-options))))]
      (assoc-in question-data [:objects (keyword object-name) :metadata] {:question? true
                                                                          :assets    (map :url (:assets question-data))
                                                                          :actions   (->> (keys (:actions question-data)) (map clojure.core/name))

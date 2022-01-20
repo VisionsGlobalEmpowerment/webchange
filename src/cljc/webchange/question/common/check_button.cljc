@@ -45,41 +45,45 @@
                                                                  :visible true}}}}}))
 
 (defn create
-  [data-names layout]
-  (let [{:keys [x y width height]} (get layout :check-button)
-        {:keys [objects actions]} (get data-names :check-button)
+  ([data-names layout]
+   (create data-names layout {}))
+  ([data-names layout
+    {:keys [show-check-button?]
+     :or   {show-check-button? false}}]
+   (let [{:keys [x y width height]} (get layout :check-button)
+         {:keys [objects actions]} (get data-names :check-button)
 
-        background-name (-> objects :main (str "-background"))
-        icon-name (-> objects :main (str "-icon"))]
-    (merge-data {:objects {(-> objects :main keyword) {:type     "group"
-                                                       :x        x
-                                                       :y        y
-                                                       :children [background-name icon-name]
-                                                       :actions  (cond-> {:click {:type       "action"
-                                                                                  :on         "click"
-                                                                                  :id         (:on-click actions)
-                                                                                  :unique-tag common-params/question-action-tag}})
-                                                       :visible  false
-                                                       :states   {:visible   {:visible true}
-                                                                  :invisible {:visible false}}}}
-                 :actions {(-> actions :set-default keyword)   {:type "parallel"
-                                                                :data [{:type "state" :id "invisible" :target (-> objects :main)}]}
-                           (-> actions :set-touched keyword)   {:type "parallel"
-                                                                :data [{:type "state" :id "visible" :target (-> objects :main)}
-                                                                       {:type "state" :id "inactive" :target background-name}
-                                                                       {:type "state" :id "invisible" :target icon-name}]}
-                           (-> actions :set-ready keyword)     {:type "parallel"
-                                                                :data [{:type "state" :id "visible" :target (-> objects :main)}
-                                                                       {:type "state" :id "inactive" :target background-name}
-                                                                       {:type "state" :id "inactive" :target icon-name}]}
+         background-name (-> objects :main (str "-background"))
+         icon-name (-> objects :main (str "-icon"))]
+     (merge-data {:objects {(-> objects :main keyword) {:type     "group"
+                                                        :x        x
+                                                        :y        y
+                                                        :children [background-name icon-name]
+                                                        :actions  (cond-> {:click {:type       "action"
+                                                                                   :on         "click"
+                                                                                   :id         (:on-click actions)
+                                                                                   :unique-tag common-params/question-action-tag}})
+                                                        :visible  show-check-button?
+                                                        :states   {:visible   {:visible true}
+                                                                   :invisible {:visible false}}}}
+                  :actions {(-> actions :set-default keyword)   {:type "parallel"
+                                                                 :data [{:type "state" :id "invisible" :target (-> objects :main)}]}
+                            (-> actions :set-touched keyword)   {:type "parallel"
+                                                                 :data [{:type "state" :id "visible" :target (-> objects :main)}
+                                                                        {:type "state" :id "inactive" :target background-name}
+                                                                        {:type "state" :id "invisible" :target icon-name}]}
+                            (-> actions :set-ready keyword)     {:type "parallel"
+                                                                 :data [{:type "state" :id "visible" :target (-> objects :main)}
+                                                                        {:type "state" :id "inactive" :target background-name}
+                                                                        {:type "state" :id "inactive" :target icon-name}]}
 
-                           (-> actions :set-submitted keyword) {:type "parallel"
-                                                                :data [{:type "state" :id "visible" :target (-> objects :main)}
-                                                                       {:type "state" :id "active" :target background-name}
-                                                                       {:type "state" :id "active" :target icon-name}]}}}
-                (create-background {:object-name background-name
-                                    :width       width
-                                    :height      height})
-                (create-icon {:object-name icon-name
-                              :width       width
-                              :height      height}))))
+                            (-> actions :set-submitted keyword) {:type "parallel"
+                                                                 :data [{:type "state" :id "visible" :target (-> objects :main)}
+                                                                        {:type "state" :id "active" :target background-name}
+                                                                        {:type "state" :id "active" :target icon-name}]}}}
+                 (create-background {:object-name background-name
+                                     :width       width
+                                     :height      height})
+                 (create-icon {:object-name icon-name
+                               :width       width
+                               :height      height})))))

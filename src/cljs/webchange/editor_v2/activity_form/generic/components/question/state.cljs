@@ -102,7 +102,8 @@
                         (update :scene-objects conj ["background"]))]
     (->> (question/create (form->question-data form-data current-question-version)
                           {:action-name "question-action" :object-name "question"}
-                          {:visible? true})
+                          {:visible?           true
+                           :show-check-button? true})
          (question/add-to-scene empty-scene))))
 
 (re-frame/reg-sub

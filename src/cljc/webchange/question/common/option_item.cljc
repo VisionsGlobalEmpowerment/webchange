@@ -92,6 +92,20 @@
                                       :states       {:visible   {:visible true}
                                                      :invisible {:visible false}}}}}))
 
+(defn- apply-padding
+  [dimensions {:keys [h v]}]
+  (-> dimensions
+      (update :x + h)
+      (update :y + v)
+      (update :width - (* h 2))
+      (update :height - (* v 2))))
+
+(defn- get-content-dimensions
+  [props padding]
+  (-> (merge {:x 0 :y 0}
+             (select-keys props [:width :height]))
+      (apply-padding padding)))
+
 (defn create
   [{:keys [image-name text-name value] :as option}
    {:keys [object-name x y width height question-id question-type] :as props}
@@ -104,15 +118,6 @@
         substrate-name (str object-name "-substrate")
         image-name (str object-name "-" image-name "-group")
         wrong-mark-name (str object-name "-wrong-mark")
-
-        dimensions-with-padding (let [padding-vertical 10
-                                      padding-horizontal 10]
-                                  (-> props
-                                      (select-keys [:width :height])
-                                      (assoc :x padding-horizontal)
-                                      (assoc :y padding-vertical)
-                                      (update :width - (* padding-horizontal 2))
-                                      (update :height - (* padding-vertical 2))))
 
         get-action-name (fn [action-name]
                           (-> object-name (str "-" action-name) (keyword)))
@@ -161,9 +166,9 @@
             image-option? (merge-data (create-image option
                                                     (merge {:object-name image-name
                                                             :actions     item-actions}
-                                                           dimensions-with-padding)))
+                                                           (get-content-dimensions props {:h 10 :v 10}))))
 
             text-option? (merge-data (create-text option
                                                   (merge {:object-name text-name
                                                           :actions     item-actions}
-                                                         dimensions-with-padding))))))
+                                                         (get-content-dimensions props {:h 40 :v 16})))))))
