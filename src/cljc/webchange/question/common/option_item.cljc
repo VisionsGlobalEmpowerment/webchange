@@ -156,13 +156,15 @@
                                                    :actions     item-actions}
                                                   mark-option? (assoc :border-radius (-> width (/ 2) utils/round))))
                         (create-wrong-mark (let [size 50]
-                                             {:object-name wrong-mark-name
-                                              :x           (-> (/ width 2)
-                                                               (- (/ size 2))
-                                                               (round))
-                                              :y           20
-                                              :width       size
-                                              :height      size})))
+                                             (cond-> {:object-name wrong-mark-name
+                                                      :width       size
+                                                      :height      size}
+                                                     image-option? (merge {:x (-> (/ width 2)
+                                                                                  (- (/ size 2))
+                                                                                  (round))
+                                                                           :y 20})
+                                                     text-option? (merge {:x (- width size 20)
+                                                                          :y 20})))))
             image-option? (merge-data (create-image option
                                                     (merge {:object-name image-name
                                                             :actions     item-actions}
