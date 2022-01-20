@@ -214,51 +214,62 @@
         pick-one-option (str click-handler "--pick-one-option")
         pick-several-option (str click-handler "--pick-several-option")
         update-check-button (str click-handler "--update-check-button")
+        set-check-button-ready (str click-handler "--set-check-button-ready")
 
         highlight-option (str click-handler "--highlight-option")
         unhighlight-option (str click-handler "--unhighlight-option")]
-    {:actions {(keyword click-handler)       {:type "sequence-data"
-                                              :data (cond-> []
-                                                            (utils/one-correct-answer? form-data) (conj {:type "action" :id pick-one-option})
-                                                            (utils/many-correct-answers? form-data) (conj {:type "action" :id pick-several-option})
-                                                            (utils/show-check-button? form-data) (conj {:type "action" :id update-check-button})
-                                                            (utils/options-have-voice-over? form-data) (conj {:type "action" :id voice-over}))}
-               (keyword pick-one-option)     {:type "sequence-data"
-                                              :data [{:type "parallel-by-tag"
-                                                      :tag  (str "inactivate-options-" question-id)}
-                                                     {:type "question-reset"
-                                                      :id   question-id}
-                                                     {:type        "question-pick"
-                                                      :id          question-id
-                                                      :from-params [{:action-property "value" :param-property "value"}]
-                                                      :on-check    highlight-option}]}
-               (keyword pick-several-option) {:type "sequence-data"
-                                              :data [{:type           "question-pick"
-                                                      :id             question-id
-                                                      :restrict-count (count correct-answers)
-                                                      :from-params    [{:action-property "value" :param-property "value"}]
-                                                      :on-check       highlight-option
-                                                      :on-uncheck     unhighlight-option}]}
-               (keyword update-check-button) {:type "sequence-data"
-                                              :data [{:type "set-variable" :var-name "check-button-enabled" :var-value false}
-                                                     {:type     "question-count-answers"
-                                                      :id       question-id
-                                                      :answer   correct-answers
-                                                      :empty    (get-in data-names [:check-button :actions :set-default])
-                                                      :partial  (get-in data-names [:check-button :actions :set-touched])
-                                                      :full     {:type "sequence-data"
-                                                                 :data [{:type "set-variable" :var-name "check-button-enabled" :var-value true}
-                                                                        {:type "action" :id (get-in data-names [:check-button :actions :set-ready])}]}
-                                                      :overfull (get-in data-names [:check-button :actions :set-touched])}]}
+    {:actions {(keyword click-handler)          {:type "sequence-data"
+                                                 :data (cond-> []
+                                                               (utils/one-correct-answer? form-data) (conj {:type "action" :id pick-one-option})
+                                                               (utils/many-correct-answers? form-data) (conj {:type "action" :id pick-several-option})
+                                                               (utils/show-check-button? form-data) (conj {:type "action" :id update-check-button})
+                                                               (utils/options-have-voice-over? form-data) (conj {:type "action" :id voice-over}))}
+               (keyword pick-one-option)        {:type "sequence-data"
+                                                 :data [{:type "parallel-by-tag"
+                                                         :tag  (str "inactivate-options-" question-id)}
+                                                        {:type "question-reset"
+                                                         :id   question-id}
+                                                        {:type        "question-pick"
+                                                         :id          question-id
+                                                         :from-params [{:action-property "value" :param-property "value"}]
+                                                         :on-check    highlight-option}]}
+               (keyword pick-several-option)    {:type "sequence-data"
+                                                 :data [{:type           "question-pick"
+                                                         :id             question-id
+                                                         :restrict-count (count correct-answers)
+                                                         :from-params    [{:action-property "value" :param-property "value"}]
+                                                         :on-check       highlight-option
+                                                         :on-uncheck     unhighlight-option}]}
+               (keyword update-check-button)    {:type "sequence-data"
+                                                 :data [{:type "set-variable" :var-name "check-button-enabled" :var-value false}
+                                                        (if (utils/has-correct-answer? form-data)
+                                                          {:type     "question-count-answers"
+                                                           :id       question-id
+                                                           :answer   correct-answers
+                                                           :empty    (get-in data-names [:check-button :actions :set-default])
+                                                           :partial  (get-in data-names [:check-button :actions :set-touched])
+                                                           :full     set-check-button-ready
+                                                           :overfull (get-in data-names [:check-button :actions :set-touched])}
+                                                          {:type     "question-count-answers"
+                                                           :id       question-id
+                                                           :answer   correct-answers
+                                                           :empty    (get-in data-names [:check-button :actions :set-default])
+                                                           :partial  set-check-button-ready
+                                                           :full     set-check-button-ready
+                                                           :overfull set-check-button-ready})]}
 
-               (keyword highlight-option)    {:type        "parallel-by-tag"
-                                              :from-params [{:template        (str "activate-option-%-" question-id)
-                                                             :action-property "tag"
-                                                             :param-property  "value"}]}
-               (keyword unhighlight-option)  {:type        "parallel-by-tag"
-                                              :from-params [{:template        (str "inactivate-option-%-" question-id)
-                                                             :action-property "tag"
-                                                             :param-property  "value"}]}}}))
+               (keyword set-check-button-ready) {:type "sequence-data"
+                                                 :data [{:type "set-variable" :var-name "check-button-enabled" :var-value true}
+                                                        {:type "action" :id (get-in data-names [:check-button :actions :set-ready])}]}
+
+               (keyword highlight-option)       {:type        "parallel-by-tag"
+                                                 :from-params [{:template        (str "activate-option-%-" question-id)
+                                                                :action-property "tag"
+                                                                :param-property  "value"}]}
+               (keyword unhighlight-option)     {:type        "parallel-by-tag"
+                                                 :from-params [{:template        (str "inactivate-option-%-" question-id)
+                                                                :action-property "tag"
+                                                                :param-property  "value"}]}}}))
 
 (defn create
   ([question-params activity-params]
