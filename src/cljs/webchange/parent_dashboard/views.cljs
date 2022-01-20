@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.parent-dashboard.layout.views :refer [layout]]
     [webchange.parent-dashboard.state :as state]
     [webchange.ui-framework.components.index :refer [dialog input label button]]))
 
@@ -24,16 +25,16 @@
     [:div
      [:div
       [label "Name"]
-      [input {:value (:name @data)
-              :on-changle #(swap! data assoc :name %)}]]
+      [input {:value     (:name @data)
+              :on-change #(swap! data assoc :name %)}]]
      [:div
       [label "Age"]
-      [input {:value (:age @data)
-              :on-changle #(swap! data assoc :age %)}]]
+      [input {:value     (:age @data)
+              :on-change #(swap! data assoc :age %)}]]
      [:div
       [label "Device"]
-      [input {:value (:device @data)
-              :on-changle #(swap! data assoc :device %)}]]
+      [input {:value     (:device @data)
+              :on-change #(swap! data assoc :device %)}]]
      [button {:on-click #(re-frame/dispatch [::state/add-student @data])
               :variant  "outlined"
               :size     "big"}
@@ -49,9 +50,10 @@
 
 (defn dashboard-page
   []
-  [:div
-   [students]
-   [add-student-button]])
+  [:div.parent-page
+   [layout
+    [students]
+    [add-student-button]]])
 
 (defn add-student-page
   []

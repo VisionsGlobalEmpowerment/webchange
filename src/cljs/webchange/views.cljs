@@ -13,6 +13,7 @@
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.game-changer.views :as game-changer]
+    [webchange.parent-dashboard.views :as parent-dashboard]
     [webchange.student-dashboard.views :refer [student-dashboard-page student-dashboard-finished-page]]
     [webchange.student-dashboard-v2.views :refer [student-dashboard]]
     [webchange.error-pages.page-404 :refer [page-404]]
@@ -97,6 +98,9 @@
     :student-dashboard [student-dashboard]
     :student-course-dashboard [student-dashboard]
     :finished-activities [student-dashboard-finished-page]
+
+    ;; parent dashboard
+    :parent-dashboard [parent-dashboard/dashboard-page]
 
     ;;wizard
     :book-creator [wizard/book-creator-panel]
