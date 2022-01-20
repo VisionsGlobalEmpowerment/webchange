@@ -355,3 +355,38 @@
                      :method :get
                      :uri    (str "/api/templates/" template-id "/metadata")}
                     handlers)))
+
+;; Students
+(re-frame/reg-event-fx
+  ::load-parent-students
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-parent-students
+                     :method :get
+                     :uri    (str "/api/parent/students")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::add-parent-student
+  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+    (create-request {:key    :add-parent-studnet
+                     :method :post
+                     :uri    (str "/api/parent/students")
+                     :params {:data data}}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::delete-parent-student
+  (fn [{:keys [_]} [_ {:keys [id]} handlers]]
+    (create-request {:key    :delete-parent-student
+                     :method :delete
+                     :uri    (str "/api/parent/students/" id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::login-as-parent-student
+  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+    (create-request {:key    :login-as-parent-student
+                     :method :post
+                     :uri    (str "/api/parent/students/login")
+                     :params {:data data}}
+                    handlers)))
