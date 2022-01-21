@@ -26,19 +26,28 @@
 
     mask))
 
+(defn- update-border
+  [sprite props]
+  (f/set-filter sprite "" {})
+  (f/set-filter sprite "outline" {:color   (:border-color props)
+                                  :width   (:border-width props)
+                                  :quality 1}))
+
 (defn wrap
-  [type name state object sprite mask props]
+  [type name state object sprite mask]
   (create-wrapper {:name                 name
                    :type                 type
                    :object               object
                    :set-fill             (fn [color]
                                            (aset sprite "tint" color))
-                   :get-fill                (fn []
-                                              (aget sprite "tint"))
+                   :get-fill             (fn []
+                                           (aget sprite "tint"))
                    :set-border-color     #(do
-                                            (f/set-filter sprite "" {})
-                                            (f/set-filter sprite "outline" {:color   % :width (:border-width props)
-                                                                            :quality 1}))
+                                            (swap! state assoc :border-color %)
+                                            (update-border sprite @state))
+                   :set-border-width     (fn [border-width]
+                                           (swap! state assoc :border-width border-width)
+                                           (update-border sprite @state))
                    :set-on-click-handler #(utils/set-handler object "click" %)
                    :get-wrapped-props    (fn []
                                            [:border-radius])

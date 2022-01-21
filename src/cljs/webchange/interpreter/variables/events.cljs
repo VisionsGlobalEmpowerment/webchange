@@ -35,6 +35,8 @@
 (e/reg-simple-executor :question-pick ::execute-question-pick)
 (e/reg-simple-executor :question-reset ::execute-question-reset)
 (e/reg-simple-executor :question-test ::execute-question-test)
+(e/reg-simple-executor :question-highlight ::execute-question-highlight)
+(e/reg-simple-executor :question-count-answers ::execute-question-count-answers)
 
 
 (re-frame/reg-event-fx
@@ -582,50 +584,82 @@
 
 (re-frame/reg-event-fx
   ::execute-question-pick
-  (fn [{:keys [db]} [_ {:keys [id value on-check on-uncheck] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [id value restrict-count] :as action}]]
     (let [current-set (set (core/get-variable id))
-          set-action (if (contains? current-set value) :uncheck :check)
+          set-action (if (contains? current-set value)
+                       :uncheck
+                       (if (and (number? restrict-count)
+                                (-> (count current-set) (>= restrict-count)))
+                         :none
+                         :check))
           new-set (case set-action
                     :check (conj current-set value)
-                    :uncheck (remove #{value} current-set))]
+                    :uncheck (remove #{value} current-set)
+                    current-set)
+          action-with-params (assoc action :params {:value value})]
       (core/set-variable! id new-set)
       (case set-action
-        :check (if on-check
-                 {:dispatch-n (list [::e/execute-action (e/cond-action db (assoc action :params {:value value}) :on-check)])}
-                 {:dispatch-n (list (e/success-event action))})
-        :uncheck (if on-uncheck
-                   {:dispatch-n (list [::e/execute-action (e/cond-action db (assoc action :params {:value value}) :on-uncheck)])}
-                   {:dispatch-n (list (e/success-event action))})))))
+        :check (e/cond-handler db action-with-params :on-check)
+        :uncheck (e/cond-handler db action-with-params :on-uncheck)
+        {:dispatch (e/success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-question-reset
-  (fn [{:keys [_]} [_ {:keys [id] :as action}]]
-    (core/set-variable! id #{})
+  (fn [{:keys [_]} [_ {:keys [id incorrect-only? answer] :as action}]]
+    (if incorrect-only?
+      (let [current-value (set (core/get-variable id))
+            answer-value (set answer)
+            correct-values (clojure.set/intersection current-value answer-value)]
+        (core/set-variable! id correct-values))
+      (core/set-variable! id #{}))
     {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
   ::execute-question-check
   [e/event-as-action e/with-vars]
-  (fn [{:keys [db]} {:keys [id answer success fail] :as action}]
+  (fn [{:keys [db]} {:keys [id answer] :as action}]
     (let [value1 (set (core/get-variable id))
           value2 (set answer)]
       (if (= value1 value2)
-        (if success
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
-          {:dispatch-n (list (e/success-event action))})
-        (if fail
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
-          {:dispatch-n (list (e/success-event action))})))))
+        (e/cond-handler db action :success)
+        (e/cond-handler db action :fail)))))
 
 (re-frame/reg-event-fx
   ::execute-question-test
   [e/event-as-action e/with-vars]
-  (fn [{:keys [db]} {:keys [id value success fail] :as action}]
+  (fn [{:keys [db]} {:keys [id value] :as action}]
     (let [current-set (set (core/get-variable id))]
       (if (contains? current-set value)
-        (if success
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :success)])}
-          {:dispatch-n (list (e/success-event action))})
-        (if fail
-          {:dispatch-n (list [::e/execute-action (e/cond-action db action :fail)])}
-          {:dispatch-n (list (e/success-event action))})))))
+        (e/cond-handler db action :success)
+        (e/cond-handler db action :fail)))))
+
+(re-frame/reg-event-fx
+  ::execute-question-highlight
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [id answer success fail] :as action}]
+    (let [current-value (set (core/get-variable id))
+          answer-value (set answer)
+          correct-values (clojure.set/intersection current-value answer-value)
+          incorrect-values (clojure.set/difference current-value answer-value)]
+      {:dispatch-n (concat (map (fn [correct-value]
+                                  [::e/execute-action (-> (e/get-action success db)
+                                                          (assoc :params {:value correct-value}))])
+                                correct-values)
+                           (map (fn [incorrect-value]
+                                  [::e/execute-action (-> (e/get-action fail db)
+                                                          (assoc :params {:value incorrect-value}))])
+                                incorrect-values)
+                           [(e/success-event action)])})))
+
+(re-frame/reg-event-fx
+  ::execute-question-count-answers
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [id answer] :as action}]
+    (let [current-count (-> id core/get-variable set count)
+          answer-count (-> answer set count)]
+      (cond
+        (= current-count 0) (e/cond-handler db action :empty)
+        (= current-count answer-count) (e/cond-handler db action :full)
+        (< current-count answer-count) (e/cond-handler db action :partial)
+        (> current-count answer-count) (e/cond-handler db action :overfull)
+        :default {:dispatch (e/success-event action)}))))

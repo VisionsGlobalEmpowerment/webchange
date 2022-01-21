@@ -4,7 +4,8 @@
     [webchange.editor-v2.activity-form.generic.components.question.state :as state]
     [webchange.editor-v2.activity-form.generic.components.question.views-preview :refer [preview]]
     [webchange.question.get-question-data :refer [available-values]]
-    [webchange.ui-framework.components.index :refer [checkbox label select input]]))
+    [webchange.ui-framework.components.index :refer [checkbox label select input]]
+    [webchange.utils.list :refer [without-item]]))
 
 (defn- question-alias-control
   []
@@ -132,7 +133,8 @@
   []
   (let [field-key :answers-number
         value @(re-frame/subscribe [::state/field-value field-key])
-        handle-change #(re-frame/dispatch [::state/set-field-value field-key %])
+        handle-change #(do (re-frame/dispatch [::state/set-field-value field-key %])
+                           (re-frame/dispatch [::state/set-field-value :correct-answers []]))
         options [{:text  "One"
                   :value "one"}
                  {:text  "Many"
@@ -154,7 +156,7 @@
         question-type @(re-frame/subscribe [::state/field-value :question-type])
 
         field-key :correct-answers
-        value @(re-frame/subscribe [::state/field-value field-key])
+        correct-answers @(re-frame/subscribe [::state/field-value field-key])
         handle-change #(re-frame/dispatch [::state/set-field-value field-key (if (= answers-number "one") [%] %)])
 
         options (if (= question-type "thumbs-up-n-down")
@@ -166,15 +168,28 @@
                        (map (fn [number]
                               {:text  (str "Option " number)
                                :value (str "option-" number)}))))]
+
+    (print "correct-answers" correct-answers)
+
     (when (not= answers-number "any")
       [:div.option-group
-       [label {:class-name "label"} (str "Correct answer" (if (= answers-number "one") "s" ""))]
-       [select (cond-> {:value     (if (= answers-number "one") (first value) value)
-                        :on-change handle-change
-                        :options   options
-                        :variant   "outlined"
-                        :multiple? (not= answers-number "one")}
-                       (= answers-number "one") (assoc :placeholder "Select correct answers"))]])))
+       [label {:class-name "label"} (str "Correct answer" (if (= answers-number "one") "" "s"))]
+       (if (= answers-number "one")
+         [select (cond-> {:value     (first correct-answers)
+                          :on-change handle-change
+                          :options   options
+                          :variant   "outlined"}
+                         (= answers-number "one") (assoc :placeholder "Select correct answers"))]
+         [:div
+          (for [{:keys [text value]} options]
+            ^{:key value}
+            [checkbox {:checked?  (or (some #{value} correct-answers) false)
+                       :label     text
+                       :value     value
+                       :on-change (fn [{:keys [checked? value]}]
+                                    (if checked?
+                                      (handle-change (conj correct-answers value))
+                                      (handle-change (without-item correct-answers value))))}])])])))
 
 (defn question-form
   []

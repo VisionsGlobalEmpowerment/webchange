@@ -294,6 +294,12 @@
                           (assoc :display-name [display-name handler-type])))]
     (cond-action-data action action-data)))
 
+(defn cond-handler
+  [db action handler]
+  (if (contains? action handler)
+    {:dispatch [::execute-action (cond-action db action handler)]}
+    {:dispatch (success-event action)}))
+
 (declare discard-flow!)
 (declare register-flow-tags!)
 
@@ -631,7 +637,7 @@
      (if block-user-interaction?
        (interactions/block-user-interaction)
        (interactions/unblock-user-interaction))
-     
+
      (if ended?
        (when-not (:workflow-user-input action)
          (dispatch-success-fn action))
@@ -643,8 +649,8 @@
              action-id (random-uuid)
              current-scene (:current-scene db)
              skippable? (or
-                         dialog-action?
-                         (->> action :previous-flow :tags (some #{"skip"})))
+                          dialog-action?
+                          (->> action :previous-flow :tags (some #{"skip"})))
              flow-data {:flow-id       flow-id
                         :actions       [action-id]
                         :type          :all
@@ -681,8 +687,8 @@
      :data [{:type 'animation', :id 'volley_call', :target 'vera'}
             {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
     (when (and
-           (action-data-utils/dialog-action? action)
-           (not (some #{(:fx action-data-utils/action-tags)} (get-action-tags action))))
+            (action-data-utils/dialog-action? action)
+            (not (some #{(:fx action-data-utils/action-tags)} (get-action-tags action))))
       (skip))
     (execute-sequence-data! db action)
     {}))

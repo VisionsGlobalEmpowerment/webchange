@@ -8,13 +8,14 @@
     [webchange.question.common.task-text :as task-text]
     [webchange.question.common.params :as params]
     [webchange.question.get-question-data :refer [param-name->object-name]]
-    [webchange.question.utils :refer [merge-data task-has-image? task-has-text?]]))
+    [webchange.question.utils :refer [log merge-data task-has-image? task-has-text?]]))
 
 (defn- create-options
   [{:keys [options-number] :as form-data}
    layout
    {:keys [question-id] :as props}
-   data-names]
+   data-names
+   creation-options]
   (let [options (->> (range options-number)
                      (map inc)
                      (map (fn [option-idx]
@@ -25,12 +26,14 @@
                                :image-name       (param-name->object-name (str "options-" "option-" (dec option-idx) "-image-image") question-id)
                                :image-props      (->> image-prop-name keyword (get form-data))
                                :image-param-name image-prop-name}))))]
-    (options-list/create options form-data props layout data-names)))
+    (options-list/create options form-data props layout data-names creation-options)))
 
 (defn create
   [{:keys [alias options] :as form-data}
    data-names
-   {:keys [object-name question-id visible? task-image-param-name] :as props}]
+   {:keys [object-name question-id task-image-param-name] :as props}
+   {:keys [visible?] :as creation-options
+    :or   {visible? false}}]
   (let [{options-label :label} options
 
         substrate-name (str object-name "-substrate")
@@ -63,8 +66,9 @@
                                                        {:object-name options-name
                                                         :label-type  options-label
                                                         :question-id question-id})
-                                                data-names))
-            :always (merge-data (check-button/create data-names layout))
+                                                data-names
+                                                creation-options))
+            :always (merge-data (check-button/create data-names layout creation-options))
             has-text? (merge-data (task-text/create form-data
                                                     layout
                                                     (merge props

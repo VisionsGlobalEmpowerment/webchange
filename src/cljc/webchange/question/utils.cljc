@@ -8,6 +8,16 @@
   #?(:clj  (new Exception message)
      :cljs (new js/Error message)))
 
+(defn apply-log
+  [message]
+  #?(:clj  (clojure.tools.logging/debug message)
+     :cljs (js/console.log message)))
+
+(defn log
+  [& messages]
+  (doseq [message messages]
+    (apply-log message)))
+
 (defn- check-keys!
   [obj1 obj2]
   (let [keys1 (-> obj1 keys set)
@@ -39,6 +49,27 @@
    :inactivate-all      (str "inactivate-voice-overs-" question-id)
    :activate-template   (str "activate-voice-over-%-" question-id)
    :inactivate-template (str "inactivate-voice-over-%-" question-id)})
+
+(defn get-option-tag
+  [action params]
+  (let [getters {:set-selected       (fn [{:keys [option-value question-id template?]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "activate-option-" (if template? "%" option-value) "-" question-id))
+                 :set-unselected     (fn [{:keys [option-value question-id template?]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "inactivate-option-" (if template? "%" option-value) "-" question-id))
+                 :set-unselected-all (fn [{:keys [question-id]}]
+                                       {:pre [(string? question-id)]}
+                                       (str "inactivate-options-" question-id))
+                 :set-correct        (fn [{:keys [option-value template? question-id]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "set-correct-option-" (if template? "%" option-value) "-" question-id))
+                 :set-incorrect      (fn [{:keys [option-value template? question-id]}]
+                                       {:pre [(or template? (string? option-value)) (string? question-id)]}
+                                       (str "set-incorrect-option-" (if template? "%" option-value) "-" question-id))}]
+    (if (contains? getters action)
+      ((get getters action) params)
+      (error (str "Tag '" action "' is not defined")))))
 
 (defn task-has-image?
   [{:keys [task-type]}]

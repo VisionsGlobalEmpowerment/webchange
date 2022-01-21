@@ -14,12 +14,12 @@
 
 (def default-question-data
   {:alias             "New question"
-   :question-type     "thumbs-up-n-down"               ; "multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"
+   :question-type     "multiple-choice-image"               ; "multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"
    :layout            "vertical"
    :answers-number    "many"                                ; "one" "many" "any"
    :correct-answers   ["option-1"]
 
-   :task-type         "voice-over"                                ; "text" "image" "text-image" "voice-over"
+   :task-type         "text"                                ; "text" "image" "text-image" "voice-over"
    :task-text         {:text "Question placeholder" :font-size params/font-size--task}
    :task-image        {:src "/images/questions/question.png" :image-size "contain"}
 
@@ -39,7 +39,6 @@
    :option-4-image    {:src "/images/questions/option4.png" :image-size "contain"}
 
    :mark-options      [(-> available-values :mark-options first)
-                       "ok"
                        (-> available-values :mark-options last)]
 
    :thumbs-up-value   "thumbs-up"
