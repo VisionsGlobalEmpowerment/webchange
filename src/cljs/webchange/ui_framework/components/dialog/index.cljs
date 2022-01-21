@@ -5,7 +5,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [actions content-class-name full-screen? size title title-actions on-enter on-exit on-close open?]
+  [{:keys [actions class-name content-class-name full-screen? size title title-actions on-enter on-exit on-close open?]
     :or   {full-screen? false
            title        ""
            on-enter     #()
@@ -15,7 +15,8 @@
         this (r/current-component)]
     (when show-window?
       (on-enter)
-      [:div.wc-dialog-wrapper
+      [:div {:class-name (get-class-name {"wc-dialog-wrapper" true
+                                          class-name          (some? class-name)})}
        [:div {:class-name (get-class-name (cond-> {"dialog"      true
                                                    "full-screen" full-screen?}
                                                   (some? size) (assoc (str "size-" size) true)))}

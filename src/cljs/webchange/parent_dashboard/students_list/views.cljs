@@ -2,13 +2,14 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.parent-dashboard.layout.views :refer [layout]]
-    [webchange.parent-dashboard.students-list.state :as state]))
+    [webchange.parent-dashboard.students-list.state :as state]
+    [webchange.parent-dashboard.ui.index :refer [dialog]]))
 
 (defn- student-card
   [{:keys [name level lesson id img]
     :or   {img "/images/parent_dashboard/user_placeholder.png"}}]
   (let [handle-play-click #(re-frame/dispatch [::state/open-student-dashboard id])
-        handle-delete-click #(re-frame/dispatch [::state/delete-student id])]
+        handle-delete-click #(re-frame/dispatch [::state/open-confirm-delete-student id])]
     [:div.student-card
      [:div.top-side
       [:img {:src img}]
@@ -23,13 +24,29 @@
                 :on-click   handle-play-click}
        "Play"]]]))
 
+(defn- confirm-delete-window
+  []
+  (let [open? @(re-frame/subscribe [::state/window-open?])
+        handle-confirm #(re-frame/dispatch [::state/confirm-delete-student])
+        handle-close #(re-frame/dispatch [::state/close-window])]
+    [dialog {:open?    open?
+             :on-close handle-close
+             :title "Are you sure you want to delete this student?"
+             :actions  [[:button {:on-click handle-confirm}
+                         "Yes"]
+                        [:button {:on-click handle-close}
+                         "No"]]}
+     [:p "This will delete student progress."]
+     [:p "Student will be permanently deleted."]]))
+
 (defn- students-list
   []
   (let [students @(re-frame/subscribe [::state/students-list])]
     [:div.students-list
      (for [{:keys [id] :as student} students]
        ^{:key id}
-       [student-card student])]))
+       [student-card student])
+     [confirm-delete-window]]))
 
 (defn students-list-page
   []
