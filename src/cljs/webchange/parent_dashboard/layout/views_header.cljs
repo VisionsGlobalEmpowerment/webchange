@@ -1,4 +1,7 @@
-(ns webchange.parent-dashboard.layout.views-header)
+(ns webchange.parent-dashboard.layout.views-header
+  (:require
+    [re-frame.core :as re-frame]
+    [webchange.parent-dashboard.layout.state :as state]))
 
 (defn- logo
   []
@@ -12,10 +15,13 @@
 
 (defn- toolbar
   []
-  [:div.toolbar
-   [toolbar-button {:text "Home"}]
-   [toolbar-button {:text "Help"}]
-   [toolbar-button {:text "Log Out"}]])
+  (let [open-home #(re-frame/dispatch [::state/open-home-page])
+        open-help #(re-frame/dispatch [::state/open-help-page])
+        log-out #(re-frame/dispatch [::state/log-out])]
+    [:div.toolbar
+     [toolbar-button {:text "Home" :on-click open-home}]
+     [toolbar-button {:text "Help" :on-click open-help}]
+     [toolbar-button {:text "Log Out" :on-click log-out}]]))
 
 (defn header
   []

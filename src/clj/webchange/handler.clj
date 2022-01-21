@@ -138,6 +138,7 @@
            ;; parent routes
            (GET "/parents" [] (public-route))
            (GET "/parents/add-student" [] (public-route))
+           (GET "/parents/help" [] (public-route))
 
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))

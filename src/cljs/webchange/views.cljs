@@ -102,6 +102,7 @@
     ;; parent dashboard
     :parent-dashboard [parent-dashboard/dashboard]
     :parent-add-student [parent-dashboard/add-student]
+    :parent-help [parent-dashboard/help]
 
     ;;wizard
     :book-creator [wizard/book-creator-panel]
