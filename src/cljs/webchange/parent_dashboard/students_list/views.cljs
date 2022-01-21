@@ -1,6 +1,7 @@
 (ns webchange.parent-dashboard.students-list.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.parent-dashboard.layout.views :refer [layout]]
     [webchange.parent-dashboard.students-list.state :as state]))
 
 (defn- student-card
@@ -27,7 +28,6 @@
 (defn- students-list
   []
   (let [students @(re-frame/subscribe [::state/students-list])]
-    (print "students" students)
     [:div.students-list
      (for [{:keys [id] :as student} students]
        ^{:key id}
@@ -35,9 +35,6 @@
 
 (defn students-list-page
   []
-  [:div.students-list-page
-   [:div.header
-    [:h1 "Current students"]
-    [:button.add-student-button "Add a student"]]
-   [:div.content
-    [students-list]]])
+  [layout {:title   "Current students"
+           :actions [[:button "Add a student"]]}
+   [students-list]])

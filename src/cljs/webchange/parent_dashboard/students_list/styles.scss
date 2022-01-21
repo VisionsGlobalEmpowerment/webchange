@@ -1,142 +1,98 @@
-.students-list-page {
+.students-list {
     color: #353535;
 
-    .header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 48px;
+
+    .student-card {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 48px;
+        flex-direction: column;
 
-        h1 {
-            margin: 0;
+        width: 325px;
+        height: 325px;
+        border-radius: 24px;
+        overflow: hidden;
+        background-color: #fff;
 
-            font-weight: 900;
-            font-size: 48px;
-            line-height: 56px;
-            text-transform: capitalize;
-        }
+        box-shadow: 0px 12px 28px rgba(119, 119, 119, 0.25);
 
-        .add-student-button {
-            background-color: transparent;
-            border: solid 2px #323232;
-            border-radius: 25px;
+        .top-side {
+            position: relative;
+            width: 100%;
+            min-height: 142px;
+            background-color: #361653;
 
-            padding: 16px 34px;
-
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 18px;
-            line-height: 21px;
-            text-transform: uppercase;
-
-            &:before {
-                content: "+";
-                position: relative;
-                left: -6px;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
 
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.2);
+            .delete-button {
+                $size: 16px;
+                $margin: 16px;
+
+                position: absolute;
+                top: $margin;
+                right: $margin;
+
+                width: $size;
+                height: $size;
+
+                background-color: transparent;
+                background-image: url("/images/parent_dashboard/delete_button.png");
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: center;
+                border: none;
+
+                cursor: pointer;
             }
         }
-    }
 
-    .content {
-        .students-list {
+        .bottom-side {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            gap: 48px;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
 
-            .student-card {
-                display: flex;
-                flex-direction: column;
+            padding: 16px;
+            padding-top: 24px;
 
-                width: 325px;
-                height: 325px;
+            .name, .progress {
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .name {
+                font-size: 36px;
+                line-height: 24px;
+            }
+
+            .progress {
+                font-size: 14px;
+                line-height: 24px;
+            }
+
+            .play-button {
+                width: 184px;
+                height: 60px;
+                background-color: #0071E3;
+                border: none;
                 border-radius: 24px;
-                overflow: hidden;
-                background-color: #fff;
 
-                box-shadow: 0px 12px 28px rgba(119, 119, 119, 0.25);
+                color: #fff;
+                font-weight: 500;
+                font-size: 40px;
+                line-height: 47px;
+                text-transform: uppercase;
 
-                .top-side {
-                    position: relative;
-                    width: 100%;
-                    min-height: 142px;
-                    background-color: #361653;
+                cursor: pointer;
 
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-
-                    .delete-button {
-                        $size: 16px;
-                        $margin: 16px;
-
-                        position: absolute;
-                        top: $margin;
-                        right: $margin;
-
-                        width: $size;
-                        height: $size;
-
-                        background-color: transparent;
-                        background-image: url("/images/parent_dashboard/delete_button.png");
-                        background-repeat: no-repeat;
-                        background-size: contain;
-                        background-position: center;
-                        border: none;
-
-                        cursor: pointer;
-                    }
-                }
-
-                .bottom-side {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 16px;
-
-                    padding: 16px;
-                    padding-top: 24px;
-
-                    .name, .progress {
-                        font-weight: bold;
-                        text-transform: uppercase;
-                    }
-
-                    .name {
-                        font-size: 36px;
-                        line-height: 24px;
-                    }
-
-                    .progress {
-                        font-size: 14px;
-                        line-height: 24px;
-                    }
-
-                    .play-button {
-                        width: 184px;
-                        height: 60px;
-                        background-color: #0071E3;
-                        border: none;
-                        border-radius: 24px;
-
-                        color: #fff;
-                        font-weight: 500;
-                        font-size: 40px;
-                        line-height: 47px;
-                        text-transform: uppercase;
-
-                        cursor: pointer;
-
-                        &:hover {
-                            background-color: #FBB707;
-                        }
-                    }
+                &:hover {
+                    background-color: #FBB707;
                 }
             }
         }

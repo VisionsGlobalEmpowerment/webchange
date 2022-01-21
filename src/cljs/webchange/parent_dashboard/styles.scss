@@ -4,5 +4,7 @@
     height: 100%;
 
     @import "layout/styles";
+    @import "add_student/styles";
     @import "students_list/styles";
+    @import "ui/styles";
 }

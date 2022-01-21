@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [webchange.parent-dashboard.layout.views :refer [layout]]
     [webchange.parent-dashboard.state :as state]
+    [webchange.parent-dashboard.add-student.views :refer [add-student-page]]
     [webchange.parent-dashboard.students-list.views :refer [students-list-page]]
     [webchange.ui-framework.components.index :refer [dialog input label button]]))
 
@@ -52,12 +53,9 @@
 (defn dashboard-page
   []
   [:div.parent-page
-   [layout
-    [students-list-page]]])
-
-(defn add-student-page
-  []
-  [add-student-form])
+   [add-student-page]
+   ;[students-list-page]
+   ])
 
 (defn help-page
   [])

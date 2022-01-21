@@ -4,6 +4,12 @@
     [webchange.events :as events]
     [webchange.state.warehouse :as warehouse]))
 
+(defn path-to-db
+  [relative-path]
+  (->> relative-path
+       (concat [:parent-dashboard])
+       (vec)))
+
 (re-frame/reg-sub
   ::students
   (fn [db]

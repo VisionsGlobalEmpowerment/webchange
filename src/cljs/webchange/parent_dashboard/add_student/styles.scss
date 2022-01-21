@@ -1,0 +1,44 @@
+.add-student-form {
+    color: #323232;
+
+    display: grid;
+    grid-template-columns: 480px auto;
+    column-gap: 56px;
+    row-gap: 28px;
+
+    & > .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    & > .message {
+        & > p {
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 28px;
+        }
+    }
+
+    & > .actions {
+        & > button {
+            background-color: #210B57;
+            border: none;
+            border-radius: 24px;
+            padding: 22px 23px;
+
+            color: #fff;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 21px;
+            text-transform: uppercase;
+
+            cursor: pointer;
+
+            &:hover {
+                background-color: #4b318c;
+            }
+        }
+    }
+}
