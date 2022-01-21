@@ -7,10 +7,8 @@
 (defn- student-card
   [{:keys [name level lesson id img]
     :or   {img "/images/parent_dashboard/user_placeholder.png"}}]
-  (let [handle-play-click (fn []
-                            (print "Play" id))
-        handle-delete-click (fn []
-                              (print "Delete" id))]
+  (let [handle-play-click #(re-frame/dispatch [::state/open-student-dashboard id])
+        handle-delete-click #(re-frame/dispatch [::state/delete-student id])]
     [:div.student-card
      [:div.top-side
       [:img {:src img}]
@@ -35,6 +33,9 @@
 
 (defn students-list-page
   []
-  [layout {:title   "Current students"
-           :actions [[:button "Add a student"]]}
-   [students-list]])
+  (re-frame/dispatch [::state/load-students])
+  (fn []
+    (let [handle-add-click #(re-frame/dispatch [::state/open-add-form])]
+      [layout {:title   "Current students"
+               :actions [[:button {:on-click handle-add-click} "Add a student"]]}
+       [students-list]])))

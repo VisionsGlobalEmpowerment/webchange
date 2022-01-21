@@ -100,7 +100,8 @@
     :finished-activities [student-dashboard-finished-page]
 
     ;; parent dashboard
-    :parent-dashboard [parent-dashboard/dashboard-page]
+    :parent-dashboard [parent-dashboard/dashboard]
+    :parent-add-student [parent-dashboard/add-student]
 
     ;;wizard
     :book-creator [wizard/book-creator-panel]
