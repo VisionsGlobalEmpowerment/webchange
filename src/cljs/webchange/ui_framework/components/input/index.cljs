@@ -19,6 +19,7 @@
   [{:keys [class-name
            default-value
            disabled?
+           error
            id
            value
            on-blur
@@ -56,19 +57,23 @@
                                "Enter" (when (fn? on-enter-press) (on-enter-press (.. event -target -value)))
                                "default"))
           handle-blur #(on-blur (.. % -target -value))]
-      [:input (cond-> {:class-name  (get-class-name (-> {"wc-input" true}
-                                                        (assoc class-name (some? class-name))))
-                       :disabled    disabled?
-                       :placeholder placeholder
-                       :on-change   handle-change
-                       :on-click    handle-click}
-                      (or (= type "int")
-                          (= type "float")) (-> (assoc :type "number")
-                                                (assoc :step step))
-                      (some? id) (assoc :id id)
-                      (some? value) (assoc :value value)
-                      (some? default-value) (assoc :default-value default-value)
-                      (fn? on-enter-press) (assoc :on-key-press handle-key-press)
-                      (fn? on-blur) (assoc :on-blur handle-blur))])
+      [:div {:class-name (get-class-name (-> {"wc-input-wrapper" true}
+                                             (assoc class-name (some? class-name))))}
+       [:input (cond-> {:class-name  (get-class-name {"wc-input"       true
+                                                      "wc-input-error" (some? error)})
+                        :disabled    disabled?
+                        :placeholder placeholder
+                        :on-change   handle-change
+                        :on-click    handle-click}
+                       (or (= type "int")
+                           (= type "float")) (-> (assoc :type "number")
+                                                 (assoc :step step))
+                       (some? id) (assoc :id id)
+                       (some? value) (assoc :value value)
+                       (some? default-value) (assoc :default-value default-value)
+                       (fn? on-enter-press) (assoc :on-key-press handle-key-press)
+                       (fn? on-blur) (assoc :on-blur handle-blur))]
+       (when (some? error)
+         [:label.wc-error error])])
     (finally
       (unsubscribe-document handle-document-key-down))))

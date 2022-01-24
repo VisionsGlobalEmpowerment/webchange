@@ -3,7 +3,9 @@
     [re-frame.core :as re-frame]
     [webchange.events :as events]
     [webchange.parent-dashboard.state :as parent-state]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.validation.specs.parent-student :as parent-student-specs]
+    [webchange.validation.validate :refer [validate]]))
 
 (defn path-to-db
   [relative-path]
@@ -11,13 +13,19 @@
        (concat [:add-student-form])
        (parent-state/path-to-db)))
 
+(re-frame/reg-event-fx
+  ::init
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::reset-form]
+                  [::reset-validation-errors]]}))
+
 ;; Form data
 
 (def form-data-path (path-to-db [:form-data]))
 
 (defn- get-form-data
   [db]
-  (get-in db form-data-path))
+  (get-in db form-data-path {}))
 
 (re-frame/reg-sub
   ::form-data
@@ -27,6 +35,11 @@
   ::set-form-field
   (fn [{:keys [db]} [_ field value]]
     {:db (update-in db form-data-path assoc field value)}))
+
+(re-frame/reg-event-fx
+  ::reset-form
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db form-data-path {})}))
 
 ;; Name
 
@@ -94,22 +107,81 @@
      {:text  "PC"
       :value "web"}]))
 
+;; Validation
+
+(def validation-data-path (path-to-db [:validation-data]))
+
+(re-frame/reg-event-fx
+  ::set-validation-errors
+  (fn [{:keys [db]} [_ errors]]
+    {:db (assoc-in db validation-data-path errors)}))
+
+(re-frame/reg-event-fx
+  ::reset-validation-errors
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::set-validation-errors nil]}))
+
+(re-frame/reg-sub
+  ::validation-errors
+  (fn [db]
+    (get-in db validation-data-path)))
+
+(re-frame/reg-sub
+  ::validation-error
+  (fn []
+    (re-frame/subscribe [::validation-errors]))
+  (fn [errors [_ field]]
+    (get errors field)))
+
 ;; Save
 
 (defn- data-valid?
-  [{:keys [name]}]
-  (and (-> name string?)
-       (-> name empty? not)))
+  [validation-data]
+  (empty? validation-data))
 
 (re-frame/reg-event-fx
   ::save
   (fn [{:keys [db]} [_]]
-    (let [data (get-form-data db)]
-      (if (data-valid? data)
-        {:dispatch [::warehouse/add-parent-student
-                {:data data}
-                {:on-success [::open-dashboard]}]}
-        {}))))
+    (let [form-data (get-form-data db)
+          validation-errors (validate ::parent-student-specs/parent-student form-data)]
+      (if (nil? validation-errors)
+        {:dispatch-n [[::reset-validation-errors]
+                      [::set-submit-status {:loading? true}]
+                      [::warehouse/add-parent-student
+                       {:data form-data}
+                       {:on-success [::save-success]
+                        :on-failure [::save-failure]}]]}
+        {:dispatch [::set-validation-errors validation-errors]}))))
+
+(re-frame/reg-event-fx
+  ::save-success
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::set-submit-status {:loading? false}]
+                  [::open-dashboard]]}))
+
+(re-frame/reg-event-fx
+  ::save-failure
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::set-submit-status {:loading? false}]}))
+
+(def submit-status-path (path-to-db [:submit-status]))
+
+(re-frame/reg-sub
+  ::submit-status
+  (fn [db]
+    (get-in db submit-status-path {:loading? false})))
+
+(re-frame/reg-event-fx
+  ::set-submit-status
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db submit-status-path data)}))
+
+(re-frame/reg-sub
+  ::loading?
+  (fn []
+    (re-frame/subscribe [::submit-status]))
+  (fn [status]
+    (get status :loading? false)))
 
 (re-frame/reg-event-fx
   ::open-dashboard
