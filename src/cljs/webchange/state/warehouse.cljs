@@ -371,7 +371,7 @@
     (create-request {:key    :add-parent-studnet
                      :method :post
                      :uri    (str "/api/parent/students")
-                     :params {:data data}}
+                     :params data}
                     handlers)))
 
 (re-frame/reg-event-fx
@@ -388,5 +388,5 @@
     (create-request {:key    :login-as-parent-student
                      :method :post
                      :uri    (str "/api/parent/students/login")
-                     :params {:data data}}
+                     :params data}
                     handlers)))

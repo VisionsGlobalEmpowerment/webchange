@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.events :as events]
     [webchange.parent-dashboard.state :as parent-state]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.interpreter.events :as ie]))
 
 (defn path-to-db
   [relative-path]
@@ -57,13 +58,7 @@
   (fn []
     (re-frame/subscribe [::students-list-data]))
   (fn [data]
-    ;; ToDO: Remove stub
-    (get data :data (->> {:name   "Ivan"
-                          :level  1
-                          :lesson 1}
-                         (repeat 6)
-                         (map-indexed (fn [idx data]
-                                        (assoc data :id idx)))))))
+    (get data :data)))
 
 ;; Confirm delete
 
@@ -166,3 +161,19 @@
   (fn [{:keys [_]} [_ student-id]]
     (print ::open-student-dashboard student-id)
     {}))
+
+(re-frame/reg-event-fx
+  ::play-as-student
+  (fn [{:keys [db]} [_ student-id]]
+    {:dispatch-n [[::set-submit-status {:loading? true}]
+                  [::warehouse/login-as-parent-student {:data {:id student-id}}
+                   {:on-success [::play-as-student-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::play-as-student-success
+  (fn [{:keys [db]} [_ user]]
+    {:db (-> db
+             (assoc-in [:current-course] (:course-slug user))
+             (update-in [:user] merge user))
+     :dispatch-n (list [::ie/open-student-course-dashboard (:course-slug user)]
+                       [::set-submit-status {:loading? false}])}))

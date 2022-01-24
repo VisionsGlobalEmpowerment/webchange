@@ -27,6 +27,7 @@
 
 (defn clear-db []
   (db/clear-table :collaborators)
+  (db/clear-table :children)
   (db/clear-table :activity_stats)
   (db/clear-table :course_stats)
   (db/clear-table :course_events)
@@ -901,3 +902,33 @@
                       :owner_id user-id
                       :created_at (jt/local-date-time)})
     (assoc placeholder :owner-id user-id)))
+
+(defn create-parent-student!
+  [data user-id]
+  (let [url (str "/api/parent/students")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn delete-parent-student!
+  [id user-id]
+  (let [url (str "/api/parent/students/" id)
+        request (-> (mock/request :delete url)
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn get-parent-students
+  [user-id]
+  (let [url (str "/api/parent/students")
+        request (-> (mock/request :get url)
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn login-as-parent-student!
+  [data user-id]
+  (let [url (str "/api/parent/students/login")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))

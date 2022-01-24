@@ -8,7 +8,7 @@
 (defn- student-card
   [{:keys [name level lesson id img]
     :or   {img "/images/parent_dashboard/user_placeholder.png"}}]
-  (let [handle-play-click #(re-frame/dispatch [::state/open-student-dashboard id])
+  (let [handle-play-click #(re-frame/dispatch [::state/play-as-student id])
         handle-delete-click #(re-frame/dispatch [::state/open-confirm-delete-student id])]
     [:div.student-card
      [:div.top-side
