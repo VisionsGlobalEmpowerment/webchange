@@ -3,7 +3,7 @@
 - Update your packages index:
 
 ```
-$ sudo apt-get update
+$ sudo apt update
 ```
 
 - Install git:
@@ -16,7 +16,7 @@ $ sudo apt install git
 
 ```
 $ curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-$ sudo apt-get install git-lfs
+$ sudo apt install git-lfs
 $ git lfs install
 ```
 
@@ -31,7 +31,6 @@ $ git lfs install
 - Install npm:
 
 ```
-$ curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 $ sudo apt install nodejs
 ```
 
@@ -39,7 +38,7 @@ $ sudo apt install nodejs
 - Install ffmpeg for audio files convert:
 
 ```
-$ sudo apt-get install ffmpeg
+$ sudo apt install ffmpeg
 ```
 
 - Install Rhubarb Lip Sync for audio phonetic recognition
@@ -90,13 +89,13 @@ postgres@user$ createuser --interactive -P // create user 'webchange'
               
 $ psql webchange < dump.sql
 
-$ psql  --command='CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+$ psql -d webchange  --command='CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 ```
 
 - Install Java:
 
 ```
-$ sudo apt-get install oracle-java8-installer
+$ sudo apt install openjdk-8-jdk
 ```
 
 See [Troubleshooting - Java 8 install error](wiki/troubleshooting.md) in case of problems with Java 8 installation.
@@ -112,7 +111,7 @@ $ sudo ./linux-install-1.10.0.442.sh
 - Install Leiningen
 
 ```
-$ sudo apt-get install leiningen
+$ sudo apt install leiningen
 ```
 
 ---
