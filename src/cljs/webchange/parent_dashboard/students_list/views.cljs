@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.parent-dashboard.layout.views :refer [layout]]
     [webchange.parent-dashboard.students-list.state :as state]
-    [webchange.parent-dashboard.ui.index :refer [dialog]]))
+    [webchange.parent-dashboard.ui.index :refer [circular-progress dialog]]))
 
 (defn- student-card
   [{:keys [name level lesson id img]
@@ -31,7 +31,7 @@
         handle-close #(re-frame/dispatch [::state/close-window])]
     [dialog {:open?    open?
              :on-close handle-close
-             :title "Are you sure you want to delete this student?"
+             :title    "Are you sure you want to delete this student?"
              :actions  [[:button {:on-click handle-confirm}
                          "Yes"]
                         [:button {:on-click handle-close}
@@ -41,18 +41,21 @@
 
 (defn- students-list
   []
-  (let [students @(re-frame/subscribe [::state/students-list])]
-    [:div.students-list
-     (for [{:keys [id] :as student} students]
-       ^{:key id}
-       [student-card student])
-     [confirm-delete-window]]))
+  (re-frame/dispatch [::state/load-students])
+  (fn []
+    (let [loading? @(re-frame/subscribe [::state/students-loading?])
+          students @(re-frame/subscribe [::state/students-list])]
+      [:div.students-list
+       (if-not loading?
+         (for [{:keys [id] :as student} students]
+           ^{:key id}
+           [student-card student])
+         [circular-progress])
+       [confirm-delete-window]])))
 
 (defn students-list-page
   []
-  (re-frame/dispatch [::state/load-students])
-  (fn []
-    (let [handle-add-click #(re-frame/dispatch [::state/open-add-form])]
-      [layout {:title   "Current students"
-               :actions [[:button {:on-click handle-add-click} "Add a student"]]}
-       [students-list]])))
+  (let [handle-add-click #(re-frame/dispatch [::state/open-add-form])]
+    [layout {:title   "Current students"
+             :actions [[:button {:on-click handle-add-click} "Add a student"]]}
+     [students-list]]))

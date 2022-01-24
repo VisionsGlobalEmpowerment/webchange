@@ -97,4 +97,17 @@
             }
         }
     }
+
+    .pd-circular-progress {
+        $size: 48px;
+        $width: 8px;
+
+        width: $size;
+        height: $size;
+
+        &:indeterminate::before,
+        &:indeterminate::-webkit-progress-value {
+            border-width: $width;
+        }
+    }
 }

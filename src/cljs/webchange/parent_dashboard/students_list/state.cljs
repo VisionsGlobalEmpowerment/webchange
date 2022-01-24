@@ -18,23 +18,52 @@
 (re-frame/reg-event-fx
   ::load-students
   (fn [{:keys [_]} [_]]
-    {:dispatch [::warehouse/load-parent-students
-                {:on-success [::set-students-list]}]}))
+    {:dispatch-n [[::students-loading-start]
+                  [::warehouse/load-parent-students
+                   {:on-success [::students-loading-finish]
+                    :on-failure [::students-loading-fail]}]]}))
 
 (re-frame/reg-event-fx
-  ::set-students-list
+  ::students-loading-start
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db students-list-path {:loading? true
+                                          :data     []})}))
+
+(re-frame/reg-event-fx
+  ::students-loading-finish
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc-in db students-list-path data)}))
+    {:db (assoc-in db students-list-path {:loading? false
+                                          :data     data})}))
+
+(re-frame/reg-event-fx
+  ::students-loading-fail
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db students-list-path {:loading? false})}))
+
+(re-frame/reg-sub
+  ::students-list-data
+  (fn [db]
+    (get-in db students-list-path)))
+
+(re-frame/reg-sub
+  ::students-loading?
+  (fn []
+    (re-frame/subscribe [::students-list-data]))
+  (fn [data]
+    (get data :loading? false)))
 
 (re-frame/reg-sub
   ::students-list
-  (fn [db]
-    (get-in db students-list-path (->> {:name   "Ivan"
-                                        :level  1
-                                        :lesson 1}
-                                       (repeat 6)
-                                       (map-indexed (fn [idx data]
-                                                      (assoc data :id idx)))))))
+  (fn []
+    (re-frame/subscribe [::students-list-data]))
+  (fn [data]
+    ;; ToDO: Remove stub
+    (get data :data (->> {:name   "Ivan"
+                          :level  1
+                          :lesson 1}
+                         (repeat 6)
+                         (map-indexed (fn [idx data]
+                                        (assoc data :id idx)))))))
 
 ;; Confirm delete
 
