@@ -13,6 +13,7 @@
             [webchange.school.handler :refer [school-routes]]
             [webchange.secondary.handler :refer [local-sync-routes global-sync-routes]]
             [webchange.progress.handler :refer [progress-routes]]
+            [webchange.parent.handler :refer [parent-api-routes]]
             [webchange.dataset.handler :refer [dataset-routes dataset-api-routes]]
             [webchange.assets.handler :refer [asset-routes asset-maintainer-routes]]
             [webchange.resources.handler :refer [resources-routes]]
@@ -135,6 +136,11 @@
            (GET "/courses/:id/dashboard" request (student-route request))
            (GET "/courses/:id/dashboard/finished" request (student-route request))
 
+           ;; parent routes
+           (GET "/parents" [] (public-route))
+           (GET "/parents/add-student" [] (public-route))
+           (GET "/parents/help" [] (public-route))
+
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))
            (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))
@@ -195,6 +201,7 @@
   asset-maintainer-routes
   dataset-routes
   progress-routes
+  parent-api-routes
   resources-routes
   service-worker-route
   asset-routes

@@ -61,6 +61,18 @@
             overflow: auto;
             padding: 32px;
             padding-top: 48px;
+
+            &.content-align-left {
+                text-align: left;
+            }
+
+            &.content-align-center {
+                text-align: center;
+            }
+
+            &.content-align-right {
+                text-align: right;
+            }
         }
 
         .dialog-actions {
