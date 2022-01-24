@@ -135,6 +135,11 @@
            (GET "/courses/:id/dashboard" request (student-route request))
            (GET "/courses/:id/dashboard/finished" request (student-route request))
 
+           ;; parent routes
+           (GET "/parents" [] (public-route))
+           (GET "/parents/add-student" [] (public-route))
+           (GET "/parents/help" [] (public-route))
+
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))
            (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))

@@ -1,0 +1,11 @@
+.parent-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    @import "layout/styles";
+    @import "add_student/styles";
+    @import "help/styles";
+    @import "students_list/styles";
+    @import "ui/styles";
+}

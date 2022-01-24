@@ -1,61 +1,20 @@
 (ns webchange.parent-dashboard.views
   (:require
-    [re-frame.core :as re-frame]
-    [reagent.core :as r]
-    [webchange.parent-dashboard.state :as state]
-    [webchange.ui-framework.components.index :refer [dialog input label button]]))
+    [webchange.parent-dashboard.add-student.views :as add-student]
+    [webchange.parent-dashboard.help.views :as help]
+    [webchange.parent-dashboard.students-list.views :as students-list]))
 
-(defn- student-card
-  [{:keys [name user-id]}]
-  [:div
-   [:p {:on-click #(re-frame/dispatch [::state/login-as user-id])} name]])
-
-(defn- students
+(defn dashboard
   []
-  (re-frame/dispatch [::state/load-students])
-  (fn []
-    (let [items @(re-frame/subscribe [::state/students])]
-      (for [item items]
-        [student-card item]))))
+  [:div.parent-page
+   [students-list/students-list-page]])
 
-(defn- add-student-form
+(defn add-student
   []
-  (r/with-let [data (r/atom {})]
-    [:div
-     [:div
-      [label "Name"]
-      [input {:value (:name @data)
-              :on-changle #(swap! data assoc :name %)}]]
-     [:div
-      [label "Age"]
-      [input {:value (:age @data)
-              :on-changle #(swap! data assoc :age %)}]]
-     [:div
-      [label "Device"]
-      [input {:value (:device @data)
-              :on-changle #(swap! data assoc :device %)}]]
-     [button {:on-click #(re-frame/dispatch [::state/add-student @data])
-              :variant  "outlined"
-              :size     "big"}
-      "Submit Student"]
-     ]))
+  [:div.parent-page
+   [add-student/add-student-page]])
 
-(defn- add-student-button
+(defn help
   []
-  [button {:on-click #(re-frame/dispatch [::state/open-add-student-page])
-           :variant  "outlined"
-           :size     "big"}
-   "Add student"])
-
-(defn dashboard-page
-  []
-  [:div
-   [students]
-   [add-student-button]])
-
-(defn add-student-page
-  []
-  [add-student-form])
-
-(defn help-page
-  [])
+  [:div.parent-page
+   [help/help-page]])

@@ -37,6 +37,9 @@
                                        ["/classes/" :class-id]                          :dashboard-class-profile
                                        ["/classes/" :class-id "/students"]              :dashboard-students
                                        ["/classes/" :class-id "/students/" :student-id] :dashboard-student-profile}
+                  "parents"           {[""]             :parent-dashboard
+                                       ["/add-student"] :parent-add-student
+                                       ["/help"]        :parent-help}
                   "test-ui"           :test-ui}])
 
 
