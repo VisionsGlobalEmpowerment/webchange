@@ -2,6 +2,7 @@
 
 .wc-select {
     display: flex;
+    position: relative;
 
     select {
         background-color: #fff;
@@ -82,5 +83,9 @@
                 background: $color-primary-dark;
             }
         }
+    }
+
+    &.wc-select-error {
+        border-color: $error-color !important;
     }
 }

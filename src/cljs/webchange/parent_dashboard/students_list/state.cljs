@@ -112,11 +112,47 @@
                   [::set-current-student student-id]]}))
 
 (re-frame/reg-event-fx
-  ::confirm-delete-student
+  ::delete-student
   (fn [{:keys [db]} [_]]
     (let [student-id (get-current-student db)]
-      {:dispatch-n [[::close-window]
-                    [::delete-student student-id]]})))
+      {:dispatch-n [[::set-submit-status {:loading? true}]
+                    [::warehouse/delete-parent-student {:id student-id}
+                     {:on-success [::delete-student-success]
+                      :on-failure [::delete-student-failure]}]
+                    ]})))
+
+(re-frame/reg-event-fx
+  ::delete-student-success
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::close-window]
+                  [::set-submit-status {:loading? false}]
+                  [::load-students]]}))
+
+(re-frame/reg-event-fx
+  ::delete-student-failure
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::set-submit-status {:loading? false}]]}))
+
+;; Submit status
+
+(def submit-status-path (path-to-db [:submit-status]))
+
+(re-frame/reg-sub
+  ::submit-status
+  (fn [db]
+    (get-in db submit-status-path {:loading? false})))
+
+(re-frame/reg-event-fx
+  ::set-submit-status
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db submit-status-path data)}))
+
+(re-frame/reg-sub
+  ::loading?
+  (fn []
+    (re-frame/subscribe [::submit-status]))
+  (fn [status]
+    (get status :loading? false)))
 
 ;; Buttons
 
@@ -128,11 +164,5 @@
 (re-frame/reg-event-fx
   ::open-student-dashboard
   (fn [{:keys [_]} [_ student-id]]
-    (print "::open-student-dashboard" student-id)
+    (print ::open-student-dashboard student-id)
     {}))
-
-(re-frame/reg-event-fx
-  ::delete-student
-  (fn [{:keys [_]} [_ student-id]]
-    {:dispatch [::warehouse/delete-parent-student {:id student-id}
-                {:on-success [::load-students]}]}))

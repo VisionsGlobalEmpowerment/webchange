@@ -36,8 +36,21 @@
 
             cursor: pointer;
 
-            &:hover {
+            &:disabled {
+                cursor: default;
+            }
+
+            &:not([disabled]):hover {
                 background-color: #4b318c;
+            }
+
+            &.submit-button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 204px;
+                height: 65px;
             }
         }
     }
