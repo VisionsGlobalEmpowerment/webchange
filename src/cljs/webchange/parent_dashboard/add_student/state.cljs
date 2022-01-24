@@ -57,6 +57,13 @@
   (fn [{:keys [_]} [_ value]]
     {:dispatch [::set-form-field name-key value]}))
 
+(re-frame/reg-sub
+  ::name-validation-error
+  (fn []
+    (re-frame/subscribe [::validation-error name-key]))
+  (fn [error]
+    error))
+
 ;; Age
 
 (def age-key :age)
@@ -71,7 +78,7 @@
 (re-frame/reg-event-fx
   ::set-age
   (fn [{:keys [_]} [_ value]]
-    {:dispatch [::set-form-field age-key value]}))
+    {:dispatch [::set-form-field age-key (.parseInt js/Number value)]}))
 
 (re-frame/reg-sub
   ::age-options
@@ -80,6 +87,13 @@
          (map (fn [age]
                 {:text  age
                  :value age})))))
+
+(re-frame/reg-sub
+  ::age-validation-error
+  (fn []
+    (re-frame/subscribe [::validation-error age-key]))
+  (fn [error]
+    error))
 
 ;; Device
 
@@ -106,6 +120,13 @@
       :value "ios-tablet"}
      {:text  "PC"
       :value "web"}]))
+
+(re-frame/reg-sub
+  ::device-validation-error
+  (fn []
+    (re-frame/subscribe [::validation-error device-key]))
+  (fn [error]
+    error))
 
 ;; Validation
 

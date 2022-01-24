@@ -20,6 +20,7 @@
 
 (defn component
   [{:keys [class-name
+           error
            max-values-number
            multiple?
            on-arrow-down-click
@@ -60,8 +61,9 @@
                               (on-change))))
         options (fix-options options props)]
     [:div {:style      (if (some? width) {:width width} {})
-           :class-name (get-class-name (cond-> (-> {"wc-select"  true
-                                                    "with-arrow" (and with-arrow? (not multiple?))}
+           :class-name (get-class-name (cond-> (-> {"wc-select"       true
+                                                    "wc-select-error" (some? error)
+                                                    "with-arrow"      (and with-arrow? (not multiple?))}
                                                    (assoc class-name (some? class-name)))
                                                (some? variant) (assoc (str "variant-" variant) true)))}
      [:select (cond-> {:value     (or value "")
@@ -77,4 +79,6 @@
         [:button {:on-click on-arrow-up-click}
          [icon-up/data]]
         [:button {:on-click on-arrow-down-click}
-         [icon-down/data]]])]))
+         [icon-down/data]]])
+     (when (some? error)
+       [:label.wc-error error])]))

@@ -9,7 +9,7 @@
   []
   (let [value @(re-frame/subscribe [::state/current-name])
         handle-change #(re-frame/dispatch [::state/set-name %])
-        error @(re-frame/subscribe [::state/validation-error :name])]
+        error @(re-frame/subscribe [::state/name-validation-error])]
     [input {:placeholder "Name*"
             :value       value
             :error       error
@@ -19,9 +19,11 @@
   []
   (let [value @(re-frame/subscribe [::state/current-age])
         options @(re-frame/subscribe [::state/age-options])
-        handle-change #(re-frame/dispatch [::state/set-age %])]
+        handle-change #(re-frame/dispatch [::state/set-age %])
+        error @(re-frame/subscribe [::state/age-validation-error])]
     [select {:placeholder "Age"
              :value       value
+             :error       error
              :options     options
              :on-change   handle-change}]))
 
@@ -29,9 +31,11 @@
   []
   (let [value @(re-frame/subscribe [::state/current-device])
         options @(re-frame/subscribe [::state/device-options])
-        handle-change #(re-frame/dispatch [::state/set-device %])]
+        handle-change #(re-frame/dispatch [::state/set-device %])
+        error @(re-frame/subscribe [::state/device-validation-error])]
     [select {:placeholder "Device"
              :value       value
+             :error       error
              :options     options
              :on-change   handle-change}]))
 
