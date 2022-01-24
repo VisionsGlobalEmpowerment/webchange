@@ -27,15 +27,21 @@
 (defn- confirm-delete-window
   []
   (let [open? @(re-frame/subscribe [::state/window-open?])
-        handle-confirm #(re-frame/dispatch [::state/confirm-delete-student])
+        loading? @(re-frame/subscribe [::state/loading?])
+        handle-confirm #(re-frame/dispatch [::state/delete-student])
         handle-close #(re-frame/dispatch [::state/close-window])]
-    [dialog {:open?    open?
-             :on-close handle-close
-             :title    "Are you sure you want to delete this student?"
-             :actions  [[:button {:on-click handle-confirm}
-                         "Yes"]
-                        [:button {:on-click handle-close}
-                         "No"]]}
+    [dialog {:open?         open?
+             :on-close      handle-close
+             :close-button? false
+             :content-align "center"
+             :width         600
+             :actions       (if-not loading?
+                              [[:button {:on-click handle-confirm}
+                                "Yes"]
+                               [:button {:on-click handle-close}
+                                "No"]]
+                              [[circular-progress]])}
+     [:p "Are you sure you want to delete this student?"]
      [:p "This will delete student progress."]
      [:p "Student will be permanently deleted."]]))
 
