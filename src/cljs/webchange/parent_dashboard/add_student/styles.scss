@@ -4,7 +4,7 @@
     display: grid;
     grid-template-columns: 480px auto;
     column-gap: 56px;
-    row-gap: 28px;
+    row-gap: 48px;
 
     & > .controls {
         display: flex;
@@ -22,36 +22,13 @@
     }
 
     & > .actions {
-        & > button {
-            background-color: #210B57;
-            border: none;
-            border-radius: 24px;
-            padding: 22px 23px;
+        & > .submit-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            color: #fff;
-            font-weight: 500;
-            font-size: 18px;
-            line-height: 21px;
-            text-transform: uppercase;
-
-            cursor: pointer;
-
-            &:disabled {
-                cursor: default;
-            }
-
-            &:not([disabled]):hover {
-                background-color: #4b318c;
-            }
-
-            &.submit-button {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                width: 204px;
-                height: 65px;
-            }
+            width: 240px;
+            height: 52px;
         }
     }
 }

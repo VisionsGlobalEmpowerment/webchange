@@ -21,7 +21,7 @@
         options @(re-frame/subscribe [::state/age-options])
         handle-change #(re-frame/dispatch [::state/set-age %])
         error @(re-frame/subscribe [::state/age-validation-error])]
-    [select {:placeholder "Age"
+    [select {:placeholder "Age*"
              :value       value
              :error       error
              :options     options
@@ -58,9 +58,11 @@
          "Also, we recommend playing TabSchool games on Android Tablets.
           Could you select what device the student will use?"]]
        [:div.actions
-        [:button {:class-name "submit-button"
-                  :disabled   loading?
-                  :on-click   handle-save}
+        [button {:class-name "submit-button"
+                 :disabled   loading?
+                 :on-click   handle-save
+                 :variant    "contained"
+                 :color      "default"}
          (if loading?
            [circular-progress]
            "Submit student")]]])))
@@ -70,7 +72,6 @@
   (let [handle-back-click #(re-frame/dispatch [::state/open-dashboard])]
     [layout {:title   "Add a student"
              :actions [[button {:on-click handle-back-click
-                                :color    "default"
                                 :variant  "text"}
                         "< Back"]]}
      [add-student-form]]))

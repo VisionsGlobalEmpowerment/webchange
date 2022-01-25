@@ -22,6 +22,28 @@
     }
 }
 
-@mixin button-filled {
-    @include button-base;
+@mixin control-border {
+    border: 1px solid #C4C4C4;
+    border-radius: 8px;
+}
+
+@mixin control-font {
+    color: #323232;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+
+    &::placeholder,
+    &::-webkit-input-placeholder {
+        color: #717171;
+    }
+
+    option:not(:first-of-type) {
+      color: black;
+    }
+    /* the modification */
+    option:first-of-type {
+      display: none;
+    }
 }

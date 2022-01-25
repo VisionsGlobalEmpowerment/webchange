@@ -19,23 +19,23 @@
         }
     }
 
-    padding: 21px 45px;
+    padding: 15px 45px;
 
     border: none;
     border-radius: 28px;
 
     font-weight: 500;
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 18px;
+    line-height: 21px;
 
     cursor: pointer;
 
-    &.variant-contained {
-        text-transform: uppercase;
+    &:disabled {
+        cursor: default;
     }
 
-    &.variant-text {
-        font-weight: normal;
+    &.variant-contained {
+        text-transform: uppercase;
     }
 
     &.variant-play-button {
@@ -57,6 +57,15 @@
         @include hover-brightness;
     }
 
+    &.color-default {
+        color: #fff;
+
+        &.variant-contained {
+            @include hover-brightness;
+            background: #210B57;
+        }
+    }
+
     &.color-primary {
         color: #fff;
 
@@ -64,12 +73,11 @@
             @include hover-brightness;
             background: linear-gradient(270deg, #38ACFF -5.36%, #3770E2 107.14%);
         }
-    }
 
-    &.color-default {
         &.variant-text {
-            @include hover-background;
             background: transparent;
+            color: #323232;
+            @include hover-background;
         }
     }
 }
