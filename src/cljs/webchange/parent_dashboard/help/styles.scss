@@ -1,9 +1,31 @@
 .help-form {
-    & > * {
-        margin-bottom: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
 
-        &:last-child {
-            margin-bottom: 0;
+    & > * {
+        font-family: 'Roboto';
+        margin: 0;
+    }
+
+    h3 {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 32px;
+        text-transform: uppercase;
+    }
+
+    .qa {
+        dt, dd {
+            margin: 0;
+
+            font-weight: normal;
+            font-size: 24px;
+            line-height: 32px;
+        }
+
+        dt {
+            font-weight: 500;
         }
     }
 
