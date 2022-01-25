@@ -1,3 +1,5 @@
+@import "../ui/mixins";
+
 .parent-page-layout {
     $page-padding: 96px;
 
@@ -15,13 +17,13 @@
         justify-content: space-between;
 
         flex: 0 0;
-        min-height: 150px;
+        min-height: 88px;
         padding: 0 $page-padding;
 
-        background-color: #353535;
+        background-color: #fff;
 
         & > .logo {
-            width: 270px;
+            max-width: 224px;
 
             img {
                 width: 100%;
@@ -34,21 +36,7 @@
             gap: 8px;
 
             & > button {
-                border-radius: 8px;
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
-
-                color: #fff;
-                font-weight: 500;
-                font-size: 25px;
-                line-height: 29px;
-
-                padding: 10px 20px;
-
-                &:hover {
-                    background-color: rgba(255, 255, 255, 0.2);
-                }
+                @include button-base;
             }
         }
     }
