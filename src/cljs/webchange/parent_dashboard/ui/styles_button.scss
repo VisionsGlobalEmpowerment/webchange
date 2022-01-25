@@ -1,0 +1,92 @@
+.pd-button {
+    @mixin hover-brightness {
+        &:hover {
+            filter: brightness(0.95);
+        }
+
+        &:active {
+            filter: brightness(0.9);
+        }
+    }
+
+    @mixin hover-background {
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &:active {
+            background-color: rgba(0, 0, 0, 0.1)
+        }
+    }
+
+    padding: 15px 45px;
+
+    border: none;
+    border-radius: 28px;
+
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+
+    cursor: pointer;
+
+    &:disabled {
+        cursor: default;
+    }
+
+    &.variant-contained {
+        text-transform: uppercase;
+    }
+
+    &.variant-outlined {
+        border: solid 1px;
+    }
+
+    &.variant-play-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: #FFA300;
+        border-radius: 37px;
+
+        font-family: Luckiest Guy;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 36px;
+        line-height: 40px;
+
+        padding: 18px 36px 6px;
+
+        @include hover-brightness;
+    }
+
+    &.color-default {
+        color: #fff;
+
+        &.variant-contained {
+            @include hover-brightness;
+            background: #210B57;
+        }
+
+        &.variant-outlined {
+            color: #323232;
+            border-color: #323232;
+        }
+    }
+
+    &.color-primary {
+        color: #fff;
+
+        &.variant-contained {
+            @include hover-brightness;
+            background: linear-gradient(270deg, #38ACFF -5.36%, #3770E2 107.14%);
+        }
+
+        &.variant-text {
+            background: transparent;
+            color: #323232;
+            @include hover-background;
+        }
+    }
+}

@@ -1,11 +1,13 @@
+@import "mixins";
+
 .pd-select {
     background: #fff;
-    border: 1px solid #bdbdbd;
-    border-radius: 2px;
-
     font-size: 16px;
+
+    @include control-border;
 
     select {
         padding: 19px 18px;
+        @include control-font;
     }
 }

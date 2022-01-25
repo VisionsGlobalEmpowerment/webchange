@@ -1,5 +1,7 @@
+@import "../ui/mixins";
+
 .parent-page-layout {
-    $page-padding: 64px;
+    $page-padding: 96px;
 
     position: relative;
 
@@ -15,13 +17,13 @@
         justify-content: space-between;
 
         flex: 0 0;
-        min-height: 150px;
+        min-height: 88px;
         padding: 0 $page-padding;
 
-        background-color: #353535;
+        background-color: #fff;
 
         & > .logo {
-            width: 270px;
+            max-width: 224px;
 
             img {
                 width: 100%;
@@ -34,51 +36,64 @@
             gap: 8px;
 
             & > button {
-                border-radius: 8px;
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
-
-                color: #fff;
-                font-weight: 500;
-                font-size: 25px;
-                line-height: 29px;
-
-                padding: 10px 20px;
-
-                &:hover {
-                    background-color: rgba(255, 255, 255, 0.2);
-                }
+                @include button-base;
             }
         }
     }
 
     & > .greeting {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         gap: 32px;
 
         flex: 0 0;
-        min-height: 277px;
+        min-height: 420px;
         padding: 0 $page-padding;
-        background-color: #E6B25E;
+        background-color: #4790c5;
+        background-image: url("/images/parent_dashboard/greeting.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
 
         & > .message {
-            max-width: 800px;
-            color: #353535;
+            max-width: 750px;
+            color: #fff;
 
             & > h1 {
                 font-weight: 900;
-                font-size: 30px;
-                line-height: 35px;
+                font-size: 36px;
+                line-height: 42px;
                 margin-bottom: 38px;
             }
 
             & > p {
-                font-weight: 400;
+                font-weight: 500;
                 font-size: 24px;
-                line-height: 28px;
+                line-height: 32px;
+                margin-bottom: 38px;
+            }
+
+            & > .button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 224px;
+                height: 56px;
+
+                border-radius: 28px;
+
+                background: #C92373;
+                color: #fff;
+                font-weight: 500;
+                font-size: 18px;
+                line-height: 21px;
+                text-transform: uppercase;
+
+                &:hover {
+                    background: #d63e87;
+                }
             }
         }
 
@@ -89,7 +104,7 @@
 
     & > .body {
         flex: 1 1;
-        background-color: #F2F2F2;
+        background-color: #fff;
         padding: $page-padding;
 
         & > .sub-header {
@@ -105,26 +120,6 @@
                 font-size: 48px;
                 line-height: 56px;
                 text-transform: capitalize;
-            }
-
-            & > .actions {
-                & > button {
-                    background-color: transparent;
-                    border: solid 2px #323232;
-                    border-radius: 25px;
-
-                    padding: 16px 34px;
-
-                    cursor: pointer;
-                    font-weight: 500;
-                    font-size: 18px;
-                    line-height: 21px;
-                    text-transform: uppercase;
-
-                    &:hover {
-                        background-color: rgba(0, 0, 0, 0.2);
-                    }
-                }
             }
         }
     }

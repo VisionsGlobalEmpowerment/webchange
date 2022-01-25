@@ -3,25 +3,28 @@
     [re-frame.core :as re-frame]
     [webchange.parent-dashboard.layout.views :refer [layout]]
     [webchange.parent-dashboard.students-list.state :as state]
-    [webchange.parent-dashboard.ui.index :refer [circular-progress dialog]]))
+    [webchange.parent-dashboard.ui.index :refer [button circular-progress dialog icon-button]]))
 
 (defn- student-card
   [{:keys [name level lesson id img]
-    :or   {img "/images/parent_dashboard/user_placeholder.png"}}]
+    :or   {img "/images/parent_dashboard/user_logo.svg"}}]
   (let [handle-play-click #(re-frame/dispatch [::state/play-as-student id])
         handle-delete-click #(re-frame/dispatch [::state/open-confirm-delete-student id])]
     [:div.student-card
      [:div.top-side
       [:img {:src img}]
-      [:button {:class-name "delete-button"
-                :title      "Delete student"
-                :on-click   handle-delete-click}]]
+      [icon-button {:class-name "delete-button"
+                    :icon       "remove"
+                    :title      "Delete student"
+                    :on-click   handle-delete-click}]]
      [:div.bottom-side
       [:div.name name]
       [:div.progress
-       (str "Progress: Level " level " - Lesson " lesson)]
-      [:button {:class-name "play-button"
-                :on-click   handle-play-click}
+       [:b "Progress: "]
+       (str "Level " level " - Lesson " lesson)]
+      [button {:class-name "play-button"
+               :variant    "play-button"
+               :on-click   handle-play-click}
        "Play"]]]))
 
 (defn- confirm-delete-window
@@ -36,9 +39,13 @@
              :content-align "center"
              :width         600
              :actions       (if-not loading?
-                              [[:button {:on-click handle-confirm}
+                              [[button {:on-click handle-confirm
+                                        :variant  "outlined"
+                                        :color    "default"}
                                 "Yes"]
-                               [:button {:on-click handle-close}
+                               [button {:on-click handle-close
+                                        :variant  "outlined"
+                                        :color    "default"}
                                 "No"]]
                               [[circular-progress]])}
      [:p "Are you sure you want to delete this student?"]
@@ -63,5 +70,8 @@
   []
   (let [handle-add-click #(re-frame/dispatch [::state/open-add-form])]
     [layout {:title   "Current students"
-             :actions [[:button {:on-click handle-add-click} "Add a student"]]}
+             :actions [[button {:on-click handle-add-click
+                                :color    "primary"
+                                :variant  "contained"}
+                        "+ Add a student"]]}
      [students-list]]))
