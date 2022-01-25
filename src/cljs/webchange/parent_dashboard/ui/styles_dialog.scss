@@ -3,7 +3,7 @@
 
     .dialog {
         width: 500px;
-        border-radius: 2px;
+        border-radius: 8px;
 
         .dialog-content {
             padding: 12px 0;
@@ -12,7 +12,7 @@
                 font-weight: 400;
                 font-size: 22px;
                 line-height: 28px;
-                margin-bottom: 10px;
+                margin-bottom: 6px;
             }
         }
 
@@ -21,22 +21,6 @@
             align-items: flex-end;
             justify-content: center;
             gap: 64px;
-
-            button {
-                font-weight: 900;
-                font-size: 24px;
-                line-height: 28px;
-                background-color: transparent;
-                border: none;
-                border-radius: 2px;
-                cursor: pointer;
-                padding: 8px 16px;
-
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.2);
-                }
-            }
         }
     }
-
 }

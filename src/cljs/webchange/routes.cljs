@@ -9,6 +9,7 @@
 
 (def routes ["/" {""                  :home
                   "login"             :login
+                  "user/logout"       :logout
                   "student-login"     :student-login
                   "register"          :register-user
                   "wizard"            :wizard               ;deprecated

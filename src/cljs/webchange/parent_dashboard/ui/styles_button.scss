@@ -38,6 +38,10 @@
         text-transform: uppercase;
     }
 
+    &.variant-outlined {
+        border: solid 1px;
+    }
+
     &.variant-play-button {
         display: flex;
         align-items: center;
@@ -63,6 +67,11 @@
         &.variant-contained {
             @include hover-brightness;
             background: #210B57;
+        }
+
+        &.variant-outlined {
+            color: #323232;
+            border-color: #323232;
         }
     }
 

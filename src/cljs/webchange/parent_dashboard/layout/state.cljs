@@ -16,5 +16,4 @@
 (re-frame/reg-event-fx
   ::log-out
   (fn [{:keys [_]} [_]]
-    (print ::log-out)
-    {}))
+    {:dispatch [::events/redirect :logout]}))

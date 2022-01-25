@@ -39,9 +39,13 @@
              :content-align "center"
              :width         600
              :actions       (if-not loading?
-                              [[:button {:on-click handle-confirm}
+                              [[button {:on-click handle-confirm
+                                        :variant  "outlined"
+                                        :color    "default"}
                                 "Yes"]
-                               [:button {:on-click handle-close}
+                               [button {:on-click handle-close
+                                        :variant  "outlined"
+                                        :color    "default"}
                                 "No"]]
                               [[circular-progress]])}
      [:p "Are you sure you want to delete this student?"]
