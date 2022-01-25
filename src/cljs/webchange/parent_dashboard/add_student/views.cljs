@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.parent-dashboard.add-student.state :as state]
     [webchange.parent-dashboard.layout.views :refer [layout]]
-    [webchange.parent-dashboard.ui.index :refer [circular-progress input select]]))
+    [webchange.parent-dashboard.ui.index :refer [button circular-progress input select]]))
 
 (defn- name-control
   []
@@ -69,5 +69,8 @@
   []
   (let [handle-back-click #(re-frame/dispatch [::state/open-dashboard])]
     [layout {:title   "Add a student"
-             :actions [[:button {:on-click handle-back-click} "Back"]]}
+             :actions [[button {:on-click handle-back-click
+                                :color    "default"
+                                :variant  "text"}
+                        "< Back"]]}
      [add-student-form]]))

@@ -1,0 +1,75 @@
+.pd-button {
+    @mixin hover-brightness {
+        &:hover {
+            filter: brightness(0.95);
+        }
+
+        &:active {
+            filter: brightness(0.9);
+        }
+    }
+
+    @mixin hover-background {
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &:active {
+            background-color: rgba(0, 0, 0, 0.1)
+        }
+    }
+
+    padding: 21px 45px;
+
+    border: none;
+    border-radius: 28px;
+
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+
+    cursor: pointer;
+
+    &.variant-contained {
+        text-transform: uppercase;
+    }
+
+    &.variant-text {
+        font-weight: normal;
+    }
+
+    &.variant-play-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: #FFA300;
+        border-radius: 37px;
+
+        font-family: Luckiest Guy;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 36px;
+        line-height: 40px;
+
+        padding: 18px 36px 6px;
+
+        @include hover-brightness;
+    }
+
+    &.color-primary {
+        color: #fff;
+
+        &.variant-contained {
+            @include hover-brightness;
+            background: linear-gradient(270deg, #38ACFF -5.36%, #3770E2 107.14%);
+        }
+    }
+
+    &.color-default {
+        &.variant-text {
+            @include hover-background;
+            background: transparent;
+        }
+    }
+}
