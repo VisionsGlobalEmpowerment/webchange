@@ -25,6 +25,7 @@
 
     ```
     $ lein migratus migrate
+    $ lein with-profile test migratus migrate
     ```
     
     2.2. Load datasets:
