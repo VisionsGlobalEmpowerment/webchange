@@ -8,4 +8,17 @@
     @import "help/styles";
     @import "students_list/styles";
     @import "ui/styles";
+
+    .parent-page-loader {
+        $size: 100px;
+
+        width: $size;
+        height: $size;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -($size / 2);
+        margin-top: -($size / 2);
+    }
 }
