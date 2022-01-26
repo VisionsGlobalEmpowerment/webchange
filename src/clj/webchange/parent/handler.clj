@@ -11,6 +11,7 @@
 
 (s/defschema Student {:id s/Int :name s/Str :first-name s/Str :last-name (s/maybe s/Str) :course-slug s/Str
                       :level s/Int :lesson s/Int})
+(s/defschema Parent {:id s/Int :name s/Str :first-name s/Str :last-name (s/maybe s/Str)})
 (s/defschema CreateStudent {:name s/Str :age s/Int (s/optional-key :device) s/Str})
 
 (s/defschema LoginAs {:id s/Int})
@@ -36,13 +37,20 @@
         core/delete-student
         handle)))
 
-(defn- handle-login-as
+(defn- handle-login-as-child
   [{student-id :id} request]
   (let [parent-id (current-user request)]
     (when-not (core/parent-of? student-id parent-id)
       (throw-unauthorized {:role :parent}))
     (let [result (core/child-login! student-id)]
       (auth-handler/handle-login result request))))
+
+(defn- handle-login-as-parent
+  [request]
+  (if-let [user-id (current-user request)]
+    (-> (core/parent-login! user-id)
+        (auth-handler/handle-login request))
+    (throw-unauthorized {:role :parent})))
 
 (defroutes parent-api-routes
   (context "/api/parent" []
@@ -64,4 +72,12 @@
                  :return Student
                  :body [login-data LoginAs]
                  :summary "Logs in as provided child student"
-                 (handle-login-as login-data request))))
+                 (handle-login-as-child login-data request))))
+
+(defroutes child-api-routes
+  (context "/api/child" []
+           :tags ["child"]
+           (PUT "/parent/login" request
+                 :return Parent
+                 :summary "Logs in as provided child parent"
+                 (handle-login-as-parent request))))

@@ -1,14 +1,29 @@
 (ns webchange.student-dashboard-v2.toolbar.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.student-dashboard-v2.toolbar.state :as state]))
 
-(defn toolbar-item
+(defn- toolbar-item
   [{:keys [img on-click title]}]
   [:div {:class-name "toolbar-item"
          :title      title
          :on-click   on-click}
    [:img {:src img}]])
+
+(defn- toolbar-button
+  [{:keys [on-click]}]
+  [:div.toolbar-button-background
+   (into [:button {:class-name "toolbar-button"
+                   :on-click   on-click}]
+         (-> (r/current-component)
+             (r/children)))])
+
+(defn- exit-button
+  []
+  (let [handle-click #(re-frame/dispatch [::state/login-as-parent])]
+    [toolbar-button {:on-click handle-click}
+     "Exit"]))
 
 (defn toolbar
   []
@@ -26,6 +41,7 @@
                               (assoc :img (str "/images/student_dashboard/" img))
                               (assoc :on-click #(re-frame/dispatch [::state/open-page id]))))))]
     [:div.toolbar
-     (for [{:keys [id] :as item} items]
-       ^{:key id}
-       [toolbar-item item])]))
+     #_(for [{:keys [id] :as item} items]
+         ^{:key id}
+         [toolbar-item item])
+     [exit-button]]))

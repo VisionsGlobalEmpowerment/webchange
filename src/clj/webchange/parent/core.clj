@@ -2,16 +2,17 @@
   (:require
     [webchange.db.core :refer [*db*] :as db]
     [webchange.auth.core :as auth]
-    [java-time :as jt]))
+    [java-time :as jt]
+    [clojure.tools.logging :as log]))
 
-(def course {:id 4
+(def course {:id   4
              :slug "english"})
 
 (defn- with-progress
   [{id :id :as child}]
   (let [course-id 4
         course-slug "english"
-        {{:keys [level lesson]} :next} (db/get-progress {:user_id id
+        {{:keys [level lesson]} :next} (db/get-progress {:user_id   id
                                                          :course_id (:course-id course)})]
     (assoc child
       :level level
@@ -19,13 +20,20 @@
 
 (defn- ->student
   [child]
-  {:id (:id child)
-   :name (:first-name child)
-   :first-name (:first-name child)
-   :last-name (:last-name child)
+  {:id          (:id child)
+   :name        (:first-name child)
+   :first-name  (:first-name child)
+   :last-name   (:last-name child)
    :course-slug (:slug course)
-   :level (or (:level child) 1)
-   :lesson (or (:lesson child) 1)})
+   :level       (or (:level child) 1)
+   :lesson      (or (:lesson child) 1)})
+
+(defn- ->parent
+  [user]
+  {:id         (:id user)
+   :name       (:first-name user)
+   :first-name (:first-name user)
+   :last-name  (:last-name user)})
 
 (defn find-students-by-parent
   [parent-id]
@@ -40,7 +48,7 @@
   (let [[{user-id :id}] (auth/create-user! {:first-name name})]
     (db/create-child! {:parent_id parent-id :child_id user-id :data {:age age :device device}})
     (auth/activate-user! user-id)
-    [true (->student {:id user-id
+    [true (->student {:id         user-id
                       :first-name name})]))
 
 (defn parent-of?
@@ -65,6 +73,14 @@
                    ->student)]
       [true user])
     [false {:errors {:form "Child not found"}}]))
+
+(defn parent-login!
+  [user-id]
+  (let [parent-id (if-let [child (db/get-child-by-id {:child_id user-id})]
+                    (:parent-id child)
+                    user-id)]
+    [true (->> (db/get-user {:id parent-id})
+               ->parent)]))
 
 (comment
   (-> (db/get-progress {:user_id 1 :course_id 4})))

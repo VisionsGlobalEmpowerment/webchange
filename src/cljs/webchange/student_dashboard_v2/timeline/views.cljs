@@ -69,9 +69,10 @@
                                                                          ^{:key id}
                                                                          [timeline-item (merge item
                                                                                                {:on-click handle-activity-click})]]))
-                                                       []
+                                                       [^{:key "filler"} [:div.filler]]
                                                        finished-activities)
-                                               (concat [^{:key "play-button-connector"}
-                                                        [button-connector]
+                                               (concat [(when-not (empty? finished-activities)
+                                                          ^{:key "play-button-connector"}
+                                                          [button-connector])
                                                         ^{:key "play-button"}
                                                         [play-button {:on-click handle-next-click}]]))]))]))})))
