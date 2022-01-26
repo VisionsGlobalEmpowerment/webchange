@@ -2,7 +2,8 @@
   (:require
     [webchange.db.core :refer [*db*] :as db]
     [webchange.auth.core :as auth]
-    [java-time :as jt]))
+    [java-time :as jt]
+    [clojure.tools.logging :as log]))
 
 (def course {:id   4
              :slug "english"})
@@ -29,10 +30,10 @@
 
 (defn- ->parent
   [user]
-  {:id          (:id user)
-   :name        (:first-name user)
-   :first-name  (:first-name user)
-   :last-name   (:last-name user)})
+  {:id         (:id user)
+   :name       (:first-name user)
+   :first-name (:first-name user)
+   :last-name  (:last-name user)})
 
 (defn find-students-by-parent
   [parent-id]
@@ -73,17 +74,13 @@
       [true user])
     [false {:errors {:form "Child not found"}}]))
 
-(defn get-child
-  [child-id]
-  (db/get-child-by-id {:child_id child-id}))
-
 (defn parent-login!
-  [parent-id]
-  (if-let [parent (db/get-parent-by-id {:parent_id parent-id})]
-    (let [user (-> (db/get-user {:id (:parent-id parent)})
-                   ->parent)]
-      [true user])
-    [false {:errors {:form "Parent not found"}}]))
+  [user-id]
+  (let [parent-id (if-let [child (db/get-child-by-id {:child_id user-id})]
+                    (:parent-id child)
+                    user-id)]
+    [true (->> (db/get-user {:id parent-id})
+               ->parent)]))
 
 (comment
   (-> (db/get-progress {:user_id 1 :course_id 4})))

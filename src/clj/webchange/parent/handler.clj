@@ -47,11 +47,10 @@
 
 (defn- handle-login-as-parent
   [request]
-  (let [child-id (current-user request)
-        {:keys [parent-id]} (core/get-child child-id)
-        result (core/parent-login! parent-id)]
-    (log/debug ">>" result)
-    (auth-handler/handle-login result request)))
+  (if-let [user-id (current-user request)]
+    (-> (core/parent-login! user-id)
+        (auth-handler/handle-login request))
+    (throw-unauthorized {:role :parent})))
 
 (defroutes parent-api-routes
   (context "/api/parent" []
@@ -78,7 +77,7 @@
 (defroutes child-api-routes
   (context "/api/child" []
            :tags ["child"]
-           (POST "/parent/login" request
+           (PUT "/parent/login" request
                  :return Parent
                  :summary "Logs in as provided child parent"
                  (handle-login-as-parent request))))

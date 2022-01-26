@@ -395,6 +395,6 @@
   ::login-as-student-parent
   (fn [{:keys [_]} [_ _ handlers]]
     (create-request {:key    :login-as-student-parent
-                     :method :post
+                     :method :put
                      :uri    (str "/api/child/parent/login")}
                     handlers)))
