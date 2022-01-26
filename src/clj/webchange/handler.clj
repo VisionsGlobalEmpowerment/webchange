@@ -13,7 +13,7 @@
             [webchange.school.handler :refer [school-routes]]
             [webchange.secondary.handler :refer [local-sync-routes global-sync-routes]]
             [webchange.progress.handler :refer [progress-routes]]
-            [webchange.parent.handler :refer [parent-api-routes]]
+            [webchange.parent.handler :refer [child-api-routes parent-api-routes]]
             [webchange.dataset.handler :refer [dataset-routes dataset-api-routes]]
             [webchange.assets.handler :refer [asset-routes asset-maintainer-routes]]
             [webchange.resources.handler :refer [resources-routes]]
@@ -201,6 +201,7 @@
   asset-maintainer-routes
   dataset-routes
   progress-routes
+  child-api-routes
   parent-api-routes
   resources-routes
   service-worker-route

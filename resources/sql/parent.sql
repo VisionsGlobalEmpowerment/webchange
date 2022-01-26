@@ -19,6 +19,12 @@ SELECT * from children
 WHERE child_id = :child_id
 LIMIT 1;
 
+-- :name get-parent-by-id :? :1
+-- :doc retrieve a scene record given the course id and the name
+SELECT * from children
+WHERE parent_id = :parent_id
+LIMIT 1;
+
 -- :name delete-child! :! :n
 -- :doc deletes course stat
 DELETE from children

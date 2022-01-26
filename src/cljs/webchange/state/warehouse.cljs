@@ -390,3 +390,11 @@
                      :uri    (str "/api/parent/students/login")
                      :params data}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::login-as-student-parent
+  (fn [{:keys [_]} [_ _ handlers]]
+    (create-request {:key    :login-as-student-parent
+                     :method :post
+                     :uri    (str "/api/child/parent/login")}
+                    handlers)))

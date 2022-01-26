@@ -27,6 +27,10 @@
         padding-left: 10vw;
         padding-right: calc(50% - #{$play-button-size / 2});
 
+        .filler {
+            width: 50vw;
+        }
+
         .timeline-item {
             flex-shrink: 0;
 

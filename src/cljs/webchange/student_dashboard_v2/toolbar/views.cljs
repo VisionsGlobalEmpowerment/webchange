@@ -26,6 +26,9 @@
                               (assoc :img (str "/images/student_dashboard/" img))
                               (assoc :on-click #(re-frame/dispatch [::state/open-page id]))))))]
     [:div.toolbar
+     #_[:button {:on-click #(re-frame/dispatch [::state/login-as-parent])
+               :style    {:z-index 1}}
+      "Back to parent"]
      (for [{:keys [id] :as item} items]
        ^{:key id}
        [toolbar-item item])]))
