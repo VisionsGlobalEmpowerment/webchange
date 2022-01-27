@@ -18,7 +18,7 @@
 (defn help-page
   []
   (let [handle-back-click #(re-frame/dispatch [::state/open-dashboard])]
-    [layout {:title   "Help"
+    [layout {:title   "Frequently Asked Questions (FAQs)"
              :actions [[button {:on-click handle-back-click
                                 :variant  "text"}
                         "< Back"]]}
