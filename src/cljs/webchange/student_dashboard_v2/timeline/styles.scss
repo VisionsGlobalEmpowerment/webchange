@@ -34,15 +34,16 @@
         .timeline-item {
             flex-shrink: 0;
 
-            &:first-child {
+            &:first-child,
+            &:nth-child(2) {
                 display: none;
             }
 
-            &:nth-child(4n) {
+            &:nth-child(4n - 1) {
                 align-self: flex-end;
             }
 
-            &:nth-child(2n + 1) {
+            &:nth-child(2n) {
                 align-self: center;
 
                 &.play-button-connector {
@@ -52,7 +53,7 @@
                 }
             }
 
-            &:nth-child(4n + 1) {
+            &:nth-child(4n) {
                 transform: scaleY(-1);
 
                 &.play-button-connector {
