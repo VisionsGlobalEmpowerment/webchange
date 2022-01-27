@@ -2,7 +2,7 @@
   (:require
     [webchange.interpreter.core :refer [kill-transitions!]]
     [webchange.interpreter.renderer.scene.filters.filters :as filters]
-    [webchange.interpreter.pixi :refer [clear-texture-cache destroy-texture-cache sound]]))
+    [webchange.interpreter.pixi :refer [clear-texture-cache destroy-texture-cache sound Graphics]]))
 
 (def pixi-app (atom nil))
 (def ticker-handlers (atom {}))
@@ -58,9 +58,11 @@
   (reset! pixi-app app))
 
 (defn get-renderer
-  []
-  (when (some? @pixi-app)
-    (.-renderer @pixi-app)))
+  ([]
+   (when (some? @pixi-app)
+     (get-renderer @pixi-app)))
+  ([app]
+   (.-renderer app)))
 
 (defn get-stage
   ([]
@@ -68,19 +70,36 @@
   ([app]
    (.-stage app)))
 
+(defn- create-mask
+  [x y width height]
+  (doto (Graphics.)
+    (.beginFill 0x000000)
+    (.drawRect x y width height)
+    (.endFill 0x000000)))
+
 (defn resize-app!
-  [viewport]
-  (when (app-exists?)
-    (let [{:keys [x y width height scale-x scale-y]} viewport
-          stage (-> (get-app) (get-stage))
-          renderer (get-renderer)
-          position (.-position stage)
-          scale (.-scale stage)]
-      (aset position "x" x)
-      (aset position "y" y)
-      (aset scale "x" scale-x)
-      (aset scale "y" scale-y)
-      (.resize renderer width height))))
+  ([viewport]
+   (when (app-exists?)
+     (-> (get-app)
+         (resize-app! viewport))))
+  ([app viewport]
+   (let [stage (get-stage app)
+         renderer (get-renderer app)
+
+         position (.-position stage)
+         scale (.-scale stage)
+
+         {:keys [x y width height scale-x scale-y]} viewport]
+     (aset position "x" x)
+     (aset position "y" y)
+     (aset scale "x" scale-x)
+     (aset scale "y" scale-y)
+     (.resize renderer width height)
+     (->> (create-mask x
+                       y
+                       (- width (* 2 x))
+                       (- height (* 2 y)))
+          (aset stage "mask")))))
 
 (defn take-screenshot
   ([callback]
