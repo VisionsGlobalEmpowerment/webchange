@@ -7,7 +7,7 @@
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.question.overlay :as question]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays update-viewport]]
-    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app get-renderer get-stage]]
+    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app resize-app! get-renderer get-stage]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! apply-mode]]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
@@ -31,15 +31,14 @@
   [viewport mode]
   (if (app-exists?)
     (get-app)
-    (let [{:keys [x y width height scale-x scale-y]} viewport]
+    (let [{:keys [width height]} viewport]
       (doto (Application. (clj->js (cond-> {;:antialias  true
                                             :autoDensity true
                                             :width       width
                                             :height      height
                                             :transparent true}
                                            (= mode ::modes/editor) (assoc :preserveDrawingBuffer true))))
-        (-> get-stage (set-scale scale-x scale-y))
-        (-> get-stage (set-position x y))
+        (resize-app! viewport)
         (register-app)))))
 
 (defn- handle-renderer-resize

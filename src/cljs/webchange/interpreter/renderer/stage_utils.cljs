@@ -29,8 +29,8 @@
            target-size {:width  1920
                         :height 1080}
            scale (compute-scale viewport target-size stage-size)]
-       {:x             (-> (compute-shift viewport target-size scale :width) (Math/round))
-        :y             (-> (compute-shift viewport target-size scale :height) (Math/round))
+       {:x             (-> (compute-shift viewport target-size scale :width) (Math/ceil))
+        :y             (-> (compute-shift viewport target-size scale :height) (Math/ceil))
         :width         (:width viewport)
         :height        (:height viewport)
         :target-width  (:width target-size)
