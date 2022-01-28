@@ -1,6 +1,7 @@
 (ns webchange.templates.library.running
   (:require
-    [webchange.templates.core :as core]))
+    [webchange.templates.core :as core]
+    [webchange.templates.utils.dialog :as dialog]))
 
 (def m {:id          16
         :name        "Running"
@@ -208,6 +209,8 @@
                                                   :phrase             "wrong",
                                                   :phrase-description "Wrong dialog",
                                                   :dialog-track       "3 Options"}
+                        :dialog-tap-instructions  (-> (dialog/default "Tap instructions")
+                                                      (assoc :concept-var "current-concept"))
                         :clear-instruction {:type "remove-flows", :flow-tag "instruction"},
                         :go-to-box1-line
                         {:type "sequence-data",

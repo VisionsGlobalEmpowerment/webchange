@@ -23,6 +23,8 @@
                                            {:name "45" :value 45}
                                            {:name "60" :value 60}]}}})
 
+(def concept-var "current-concept")
+
 (def t {:assets        [{:url "/raw/img/running-with-letters/bg_01.jpg" :type "image"}
                         {:url "/raw/img/running-with-letters/bg_02.png" :type "image"}
                         {:url "/raw/img/running-with-letters/box.png" :type "image"}]
@@ -197,7 +199,7 @@
         :actions       {:dialog-1-welcome        {:type                 "sequence-data"
                                                   :editor-type          "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var          "current-concept"
+                                                  :concept-var          concept-var
                                                   :data                 [{:type "sequence-data"
                                                                           :data [{:type "empty" :duration 0}
                                                                                  {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
@@ -208,7 +210,7 @@
                         :dialog-2-intro-concept  {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        "current-concept"
+                                                  :concept-var        concept-var
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
@@ -219,7 +221,7 @@
                         :dialog-3-intro-timer    {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        "current-concept"
+                                                  :concept-var        concept-var
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
@@ -230,7 +232,7 @@
                         :dialog-4-ready-go       {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        "current-concept"
+                                                  :concept-var        concept-var
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
@@ -257,7 +259,7 @@
                                                   }
                         :dialog-5-starting-noise {:type               "sequence-data"
                                                   :editor-type        "dialog"
-                                                  :concept-var        "current-concept"
+                                                  :concept-var        concept-var
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
@@ -268,7 +270,7 @@
                         :dialog-6-correct        {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        "current-concept"
+                                                  :concept-var        concept-var
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
@@ -278,7 +280,7 @@
                         :dialog-7-wrong          {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        "current-concept"
+                                                  :concept-var        concept-var
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
@@ -324,19 +326,19 @@
                                                   :data [{:from        "concepts-single"
                                                           :type        "lesson-var-provider"
                                                           :limit       1
-                                                          :variables   ["current-concept"]
+                                                          :variables   [concept-var]
                                                           :provider-id "current-concept-provider"}
                                                          #_{:type      "set-attribute",
                                                             :target    "box-target"
-                                                            :from-var  [{:var-name "current-concept" :var-property "image-src", :action-property "attr-value"}],
+                                                            :from-var  [{:var-name concept-var :var-property "image-src", :action-property "attr-value"}],
                                                             :attr-name "src"}
                                                          {:type      "set-attribute"
                                                           :target    "letter-target"
-                                                          :from-var  [{:var-name "current-concept" :var-property "letter" :action-property "attr-value"}]
+                                                          :from-var  [{:var-name concept-var :var-property "letter" :action-property "attr-value"}]
                                                           :attr-name "text"}]}
 
                         :check-box               {:type        "test-value"
-                                                  :from-var    [{:action-property "value1" :var-name "current-concept" :var-property "letter"}]
+                                                  :from-var    [{:action-property "value1" :var-name concept-var :var-property "letter"}]
                                                   :from-params [{:action-property "value2" :param-property "custom-data"}]
                                                   :success     "pick-correct"
                                                   :fail        "pick-wrong"}
@@ -384,12 +386,12 @@
                                                           :type      "vars-var-provider"
                                                           :unique    true
                                                           :from-var  [{:var-key         "concept-name"
-                                                                       :var-name        "current-concept"
+                                                                       :var-name        concept-var
                                                                        :var-property    "concept-name"
                                                                        :action-property "exclude-property-values"}]
                                                           :shuffled  true
                                                           :variables ["pair-concept-1" "pair-concept-2"]}
-                                                         {:from      ["current-concept" "pair-concept-1" "pair-concept-2"]
+                                                         {:from      [concept-var "pair-concept-1" "pair-concept-2"]
                                                           :type      "vars-var-provider"
                                                           :shuffled  true
                                                           :variables ["box1" "box2" "box3"]}]}
@@ -486,6 +488,9 @@
                                                   :from-params [{:param-property "transition", :action-property "transition-id"}]
                                                   :to          {:x -700 :duration 5}}
 
+                        :dialog-tap-instructions (-> (dialog/default "Tap instructions")
+                                                     (assoc :concept-var concept-var))
+
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
                                                          "init-current-concept"
@@ -506,7 +511,7 @@
                                                   :data [{:type "action" :id "finish-activity-dialog"}
                                                          {:type "finish-activity"}]}
                         :finish-activity-dialog  (-> (dialog/default "Finish activity dialog")
-                                                     (assoc :concept-var "current-concept")
+                                                     (assoc :concept-var concept-var)
                                                      (assoc :available-activities ["highlight-target-letter", "highlight-timer", "highlight-counter"]))
                         :wait-for-box-animations {:type "empty" :duration 100}}
         :triggers      {:stop {:on "back" :action "stop-scene"} :start {:on "start" :action "start-scene"}}
