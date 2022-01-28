@@ -23,6 +23,11 @@
   (let [website-host (env :website-host)]
     (str "https://" website-host "/user/login")))
 
+(defn website-logout-page
+  []
+  (let [website-host (env :website-host)]
+    (str "https://" website-host "/user/logout")))
+
 (defn coerce-user-types
   [{id :id :as user}]
   (assoc user :id (if (int? id) id (Integer/parseInt id))))

@@ -12,8 +12,3 @@
   ::open-help-page
   (fn [{:keys [_]} [_]]
     {:dispatch [::events/redirect :parent-help]}))
-
-(re-frame/reg-event-fx
-  ::log-out
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::events/redirect :logout]}))
