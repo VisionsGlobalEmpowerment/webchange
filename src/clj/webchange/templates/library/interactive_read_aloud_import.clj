@@ -6,7 +6,8 @@
     [webchange.templates.core :as core]
     [webchange.templates.utils.characters :as characters]
     [webchange.course.core :as course]
-    [webchange.question.create :as question-object]))
+    [webchange.question.create :as question-object]
+    [ring.util.codec :as codec]))
 
 (def metadata {:id          45
                :name        "Interactive Read Aloud (Import)"
@@ -173,7 +174,8 @@
 (defn- import-book
   [activity-data book-course-slug]
   (let [scene-slug "book"
-        {:keys [assets objects]} (course/get-scene-latest-version book-course-slug scene-slug)]
+        course-slug (codec/url-decode book-course-slug)
+        {:keys [assets objects]} (course/get-scene-latest-version course-slug scene-slug)]
     (-> activity-data
         (update :assets concat assets)
         (update :objects merge objects)
