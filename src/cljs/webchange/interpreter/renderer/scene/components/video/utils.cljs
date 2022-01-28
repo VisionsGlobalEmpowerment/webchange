@@ -31,6 +31,14 @@
 
   (-> (->video sprite) (utils/play)))
 
+(defn play-from-start-video
+  [sprite volume]
+
+  (when (number? volume)
+    (set-volume sprite volume))
+
+  (-> (->video sprite) (utils/play)))
+
 (defn set-src
   [sprite resource {:keys [play start end on-end volume]
                     :or   {on-end #()}}]
@@ -41,5 +49,5 @@
       (if (and (some? start) (some? end))
         (utils/play-range video start end on-end)
         (do (set-handler video "end" on-end)
-            (play-video sprite volume)))
+            (play-from-start-video sprite volume)))
       (stop-video sprite))))
