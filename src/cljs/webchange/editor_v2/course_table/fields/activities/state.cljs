@@ -148,3 +148,23 @@
   (fn [{:keys [db]} [_ activity-id]]
     (let [course-id (data-state/course-id db)]
       {:dispatch [::events/redirect :wizard-configured :course-slug (name course-id) :scene-slug (name activity-id)]})))
+
+(re-frame/reg-event-fx
+  ::create-new-activity
+  (fn [{:keys [db]} [_ activity-name]]
+    (let [course-id (data-state/course-id db)
+          activity {:name activity-name}]
+      {:dispatch [::warehouse/create-activity-placeholder
+                  {:course-id course-id
+                   :data      activity}
+                  {:on-success [::create-new-success]}]})))
+
+(re-frame/reg-event-fx
+  ::create-new-success
+  (fn [{:keys [db]} [_ {:keys [name scene-slug]}]]
+    (let [activity-data {:name name}
+          course-id (data-state/course-id db)
+          course-data (-> (subs/course-data db)
+                          (add-scene scene-slug activity-data))]
+      {:db (mark-scene-as-placeholder db scene-slug)
+       :dispatch [::common/update-course course-id course-data]})))
