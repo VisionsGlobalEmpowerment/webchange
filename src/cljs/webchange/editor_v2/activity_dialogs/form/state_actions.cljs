@@ -50,24 +50,10 @@
                                                          :node-data       node-data}]]}))
 
 (re-frame/reg-event-fx
-  ::add-scene-action
-  (fn [{:keys [_]} [_ {:keys [node-data relative-position]}]]
-    {:pre [(pre_node-data node-data)]}
-    {:dispatch [::state-actions/add-new-empty-phrase-action {:node-data         node-data
-                                                             :relative-position relative-position}]}))
-
-(re-frame/reg-event-fx
   ::add-scene-parallel-action
   (fn [{:keys [_]} [_ {:keys [node-data]}]]
     {:pre [(pre_node-data node-data)]}
     {:dispatch [::state-actions/add-new-empty-phrase-parallel-action {:node-data node-data}]}))
-
-(re-frame/reg-event-fx
-  ::add-concept-action
-  (fn [{:keys [_]} [_ {:keys [node-data relative-position]}]]
-    {:pre [(pre_node-data node-data)]}
-    {:dispatch [::state-actions/add-new-empty-phrase-concept-action {:node-data         node-data
-                                                                     :relative-position relative-position}]}))
 
 (re-frame/reg-event-fx
   ::add-effect-action

@@ -13,14 +13,14 @@
   [{:keys [action-data relative-position] :or {relative-position :after}}]
   {:pre [(pre-action-data action-data)
          (pre-relative-position relative-position)]}
-  (re-frame/dispatch [::state-actions/add-scene-action (merge action-data
+  #_(re-frame/dispatch [::state-actions/add-scene-action (merge action-data
                                                               {:relative-position relative-position})]))
 
 (defn add-concept-action
   [{:keys [action-data relative-position] :or {relative-position :after}}]
   {:pre [(pre-action-data action-data)
          (pre-relative-position relative-position)]}
-  (re-frame/dispatch [::state-actions/add-concept-action (merge action-data
+  #_(re-frame/dispatch [::state-actions/add-concept-action (merge action-data
                                                                 {:relative-position relative-position})]))
 
 (defn remove-action

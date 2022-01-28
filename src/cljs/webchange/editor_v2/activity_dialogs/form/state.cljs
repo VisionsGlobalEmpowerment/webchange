@@ -12,7 +12,8 @@
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.utils.flipbook :as flipbook-utils :refer [flipbook-activity?]]
     [webchange.utils.scene-action-data :as action-data-utils]
-    [webchange.utils.scene-data :as scene-utils]))
+    [webchange.utils.scene-data :as scene-utils]
+    [webchange.logger.index :as logger]))
 
 (defn path-to-db
   [relative-path]
@@ -192,7 +193,7 @@
          (map (fn [target]
                 {:text  target
                  :value target}))
-         (concat [{:text "Guide"
+         (concat [{:text  "Guide"
                    :value "guide"}]))))
 
 (def current-target-path :current-target)
@@ -385,7 +386,11 @@
           action-data defaults/default-action]
       (case destination
         "scene" {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
-                                                                     position-data)]}))))
+                                                                     position-data)]}
+        "concept" {:dispatch [::state-dialog-form/insert-concept-action (merge {:action-data action-data}
+                                                                               position-data)]}
+        (do (logger/warn (str "Destination '" destination "' is not defined for ::add-phrase-action"))
+            {})))))
 
 (re-frame/reg-event-fx
   ::add-text-animation-action
@@ -394,7 +399,9 @@
           action-data defaults/text-animation-action]
       (case destination
         "scene" {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
-                                                                     position-data)]}))))
+                                                                     position-data)]}
+        (do (logger/warn (str "Destination '" destination "' is not defined for ::add-text-animation-action"))
+            {})))))
 
 (re-frame/reg-event-fx
   ::set-target-animation
