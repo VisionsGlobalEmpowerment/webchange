@@ -138,16 +138,6 @@
     {:dispatch [::append-child-action defaults/text-animation-action]}))
 
 (re-frame/reg-event-fx
-  ::add-new-empty-phrase-action
-  (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
-    (let [current-target (-> (:data node-data) (defaults/get-inner-action) (get :target))
-          new-action-data (cond-> defaults/default-action
-                                  (some? current-target) (defaults/update-inner-action {:target current-target}))]
-      (if (= relative-position :parallel)
-        {:dispatch [::add-new-phrase-parallel-action new-action-data node-data]}
-        {:dispatch [::add-new-scene-action new-action-data relative-position node-data]}))))
-
-(re-frame/reg-event-fx
   ::add-new-empty-text-animation-action
   (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
     (let [new-action-data defaults/text-animation-action]
@@ -180,33 +170,31 @@
                    [::add-new-scene-action effect-action-data relative-position node-data])})))
 
 (re-frame/reg-event-fx
-  ::add-new-phrase-concept-action
-  (fn [{:keys [_]} [_ relative-position node action-data]]
-    (let [{:keys [base-path base-action target-position]} (actions/get-dialog-node-data node)
-          concept-var (:concept-var base-action)
-          field-name (actions/unique-var-name)
-          empty-action {:type "action", :from-var [{:var-name concept-var, :var-property field-name}]}
-          concept-schema {:name     field-name
+  ::add-action-to-concept
+  (fn [{:keys [_]} [_ {:keys [field-name action-data]}]]
+    (let [concept-schema {:name     field-name
                           :type     "action"
-                          :template defaults/default-concept-action}
+                          :template defaults/default-action}
           action (cond-> defaults/default-concept-action
-                         (some? action-data) (defaults/update-inner-concept-action action-data))
-
-          data-patch (-> base-action
-                         (au/insert-child-action empty-action target-position relative-position)
-                         (select-keys [:data]))]
-      {:dispatch-n (list
-                     [::dialog-form.concepts/add-concepts-schema-fields concept-schema]
-                     [::translator-form.concepts/update-current-concept [(keyword field-name)] action]
-                     [::update-scene-action base-path data-patch])})))
+                         (some? action-data) (defaults/update-inner-concept-action action-data))]
+      {:dispatch-n [[::dialog-form.concepts/add-concepts-schema-fields concept-schema]
+                    [::translator-form.concepts/update-current-concept [(keyword field-name)] action]]})))
 
 (re-frame/reg-event-fx
-  ::add-new-empty-phrase-concept-action
-  (fn [{:keys [_]} [_ {:keys [node-data relative-position] :or {relative-position :after}}]]
-    (let [current-target (-> (:data node-data) (defaults/get-inner-action) (get :target))
-          new-action-data (cond-> {}
-                                  (some? current-target) (assoc :target current-target))]
-      {:dispatch [::add-new-phrase-concept-action relative-position node-data new-action-data]})))
+  ::insert-concept-action
+  (fn [{:keys [db]} [_ {:keys [action-data parent-path] :as props}]]
+    (let [{parent-action-data :data} (get-parent-data db parent-path)
+
+          concept-var (:concept-var parent-action-data)
+          concept-field-name (actions/unique-var-name)
+
+          dialog-action {:type     "action"
+                         :from-var [{:var-name     concept-var
+                                     :var-property concept-field-name}]}]
+      {:dispatch-n [[::add-action-to-concept {:field-name  concept-field-name
+                                              :action-data action-data}]
+                    [::insert-action (merge props
+                                            {:action-data dialog-action})]]})))
 
 (re-frame/reg-event-fx
   ::delete-phrase-action

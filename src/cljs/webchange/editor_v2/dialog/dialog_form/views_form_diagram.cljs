@@ -13,26 +13,10 @@
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.utils.scene-action-data :refer [dialog-action? get-inner-action]]))
 
-(defn- add-action
-  [action path]
-  (let [scene-data @(re-frame/subscribe [::translator-form.scene/scene-data])
-        node-list-count (count (get-in scene-data (concat path [:data])))
-        node {:path (concat path [(if (= node-list-count 0) 0 (dec node-list-count))])}
-        relative-position (if (= node-list-count 0) :before :after)]
-    (re-frame/dispatch [::dialog-form.actions/add-new-scene-action action relative-position node])))
-
-(defn- add-concept-action
-  [path]
-  (let [scene-data @(re-frame/subscribe [::translator-form.scene/scene-data])
-        node-list-count (count (get-in scene-data (concat path [:data])))
-        node {:path (concat path [(if (= node-list-count 0) 0 (dec node-list-count))])}
-        relative-position (if (= node-list-count 0) :before :after)]
-    (re-frame/dispatch [::dialog-form.actions/add-new-phrase-concept-action relative-position node])))
-
 (def actions {:insert-after         {:text    "Insert activity"
-                                     :handler (partial add-action actions-defaults/default-action)}
+                                     :handler #()}
               :insert-concept-after {:text    "Insert concept"
-                                     :handler (partial add-concept-action)}})
+                                     :handler #()}})
 
 (defn menu
   [path]

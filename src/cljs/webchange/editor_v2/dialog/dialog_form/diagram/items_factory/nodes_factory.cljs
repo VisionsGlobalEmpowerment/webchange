@@ -52,76 +52,71 @@
 (defn get-nodes-from-concept
   ([concept var-name node-path] (get-nodes-from-concept concept var-name node-path 0 0))
   ([concept var-name node-path startx starty]
-   (let [
-         path [(keyword var-name)]
+   (let [path [(keyword var-name)]
          concept-action (get-in concept (concat [:data] path))
-         nodes (flatten (map-indexed (fn [idx]
-                                       (let [action-path (concat path [:data idx])
-                                             action (get-in concept (concat [:data] action-path))]
-                                         (case (:type action)
-                                           "sequence-data" {:action-path action-path
-                                                            :concept     true
-                                                            :node-path   node-path
-                                                            :x           (+ idx startx)
-                                                            :y           starty}
-                                           "parallel" (map-indexed (fn [idy]
-                                                                     {:action-path (concat action-path [:data idy])
-                                                                      :concept     true
-                                                                      :node-path   node-path
-                                                                      :x           (+ idx startx)
-                                                                      :y           (+ idy starty)}
-                                                                     )
-                                                                   (:data action))
-                                           {})))
-                                     (get-in concept-action [:data])
-                                     ))
-         ]
-     {:nodes    nodes :offset-x (count (get-in concept-action [:data]))
+         nodes (->> (get-in concept-action [:data])
+                    (map-indexed (fn [idx]
+                                   (let [action-path (concat path [:data idx])
+                                         action (get-in concept (concat [:data] action-path))]
+                                     (case (:type action)
+                                       "sequence-data" {:action-path action-path
+                                                        :concept     true
+                                                        :node-path   node-path
+                                                        :x           (+ idx startx)
+                                                        :y           starty}
+                                       "parallel" (map-indexed (fn [idy]
+                                                                 {:action-path (concat action-path [:data idy])
+                                                                  :concept     true
+                                                                  :node-path   node-path
+                                                                  :x           (+ idx startx)
+                                                                  :y           (+ idy starty)})
+                                                               (:data action))
+                                       {}))))
+                    (flatten))]
+     {:nodes    nodes
+      :offset-x (count (get-in concept-action [:data]))
       :offset-y (if (= (:type (get-in concept-action [:data 0])) "parallel") (count (get-in concept-action [:data 0 :data])) 1)})))
 
 (defn prepare-nodes
   [scene-data concept path]
   (let [offsets-x (atom [])
-        offsets-y (atom [])
-        nodes (flatten (doall (map-indexed (fn [idx]
-                                             (let [action-path (concat path [:data idx])
-                                                   x (+ idx (reduce + 0 @offsets-x))
-                                                   action (get-in scene-data (concat [:actions] action-path))]
-                                               (case (:type action)
-                                                 "sequence-data" {:action-path action-path
-                                                                  :x           x
-                                                                  :y           0}
-                                                 "parallel" (do
-                                                              (reset! offsets-y [])
-                                                              (doall (map-indexed (fn [idy]
-                                                                                    (let [inparallel-action-path (concat action-path [:data idy])
-                                                                                          inparallel-action (get-in scene-data (concat [:actions] inparallel-action-path))
-                                                                                          y (+ idy (reduce + 0 @offsets-y))]
-                                                                                      (case (:type inparallel-action)
-                                                                                        "sequence-data" {:action-path inparallel-action-path
-                                                                                                         :x           x
-                                                                                                         :y           y}
-                                                                                        "parallel"      {:action-path inparallel-action-path}
-                                                                                        "action" (let [{nodes :nodes offset-x :offset-x offset-y :offset-y}
-                                                                                                       (get-nodes-from-concept concept
-                                                                                                                               (get-in inparallel-action [:from-var 0 :var-property])
-                                                                                                                               inparallel-action-path x y)]
-                                                                                                   (swap! offsets-x conj (- offset-x 1))
-                                                                                                   (swap! offsets-y conj (- offset-y 1))
-                                                                                                   nodes)
-                                                                                        )
-                                                                                      ))
-                                                                                  (:data action))))
-
-                                                 "action" (let [{nodes :nodes offset-x :offset-x} (get-nodes-from-concept concept
-                                                                                                                          (get-in action [:from-var 0 :var-property])
-                                                                                                                          action-path x 0)]
-                                                            (swap! offsets-x conj (- offset-x 1))
-                                                            nodes)
-                                                 {})))
-                                           (get-in scene-data (concat [:actions] path [:data]))
-                                           )))]
-    nodes))
+        offsets-y (atom [])]
+    (->> (get-in scene-data (concat [:actions] path [:data]))
+         (map-indexed (fn [idx]
+                        (let [action-path (concat path [:data idx])
+                              x (+ idx (reduce + 0 @offsets-x))
+                              action (get-in scene-data (concat [:actions] action-path))]
+                          (case (:type action)
+                            "sequence-data" {:action-path action-path
+                                             :x           x
+                                             :y           0}
+                            "parallel" (do
+                                         (reset! offsets-y [])
+                                         (doall (map-indexed (fn [idy]
+                                                               (let [inparallel-action-path (concat action-path [:data idy])
+                                                                     inparallel-action (get-in scene-data (concat [:actions] inparallel-action-path))
+                                                                     y (+ idy (reduce + 0 @offsets-y))]
+                                                                 (case (:type inparallel-action)
+                                                                   "sequence-data" {:action-path inparallel-action-path
+                                                                                    :x           x
+                                                                                    :y           y}
+                                                                   "parallel" {:action-path inparallel-action-path}
+                                                                   "action" (let [{nodes :nodes offset-x :offset-x offset-y :offset-y}
+                                                                                  (get-nodes-from-concept concept
+                                                                                                          (get-in inparallel-action [:from-var 0 :var-property])
+                                                                                                          inparallel-action-path x y)]
+                                                                              (swap! offsets-x conj (- offset-x 1))
+                                                                              (swap! offsets-y conj (- offset-y 1))
+                                                                              nodes))))
+                                                             (:data action))))
+                            "action" (let [{nodes :nodes offset-x :offset-x} (get-nodes-from-concept concept
+                                                                                                     (get-in action [:from-var 0 :var-property])
+                                                                                                     action-path x 0)]
+                                       (swap! offsets-x conj (- offset-x 1))
+                                       nodes)
+                            {}))))
+         (doall)
+         (flatten))))
 
 (defn get-diagram-items
   [scene-data path]

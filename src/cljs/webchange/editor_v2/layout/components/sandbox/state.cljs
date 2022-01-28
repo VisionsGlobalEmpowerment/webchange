@@ -138,4 +138,5 @@
          (filter (fn [{:keys [dataset-id]}] (= dataset-id current-dataset-id)))
          (map (fn [{:keys [id name]}]
                 {:text  name
-                 :value id})))))
+                 :value id}))
+         (sort-by :text))))
