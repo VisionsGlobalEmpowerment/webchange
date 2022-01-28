@@ -37,6 +37,10 @@
             &:first-child,
             &:nth-child(2) {
                 display: none;
+
+                &.play-button {
+                    display: block;
+                }
             }
 
             &:nth-child(4n - 1) {
