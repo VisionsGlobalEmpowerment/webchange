@@ -48,8 +48,7 @@
         gap: 32px;
 
         flex: 0 0;
-        min-height: 420px;
-        padding: 0 $page-padding;
+        padding: 48px $page-padding;
         background-color: #4790c5;
         background-image: url("/images/parent_dashboard/greeting.png");
         background-position: center;
@@ -110,6 +109,8 @@
         & > .sub-header {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
             align-items: center;
             margin-bottom: 48px;
 
