@@ -47,4 +47,4 @@
            (GET "/user/profile" [] (redirect (website/website-profile-page)))
            (GET "/user/courses" [] (redirect (website/website-courses-page)))
            (GET "/user/login" [] (redirect (website/website-login-page)))
-           )
+           (GET "/user/logout" [] (redirect (website/website-logout-page))))

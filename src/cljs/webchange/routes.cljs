@@ -9,7 +9,6 @@
 
 (def routes ["/" {""                  :home
                   "login"             :login
-                  "user/logout"       :logout
                   "student-login"     :student-login
                   "register"          :register-user
                   "wizard"            :wizard               ;deprecated
@@ -86,6 +85,7 @@
   (let [locations {:profile "/user/profile"
                    :courses "/user/courses"
                    :login   "/user/login"
+                   :logout  "/user/logout"
                    :books   "/user/books"}
         href (get locations name)]
     (set! js/document.location href)))
