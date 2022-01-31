@@ -9,8 +9,7 @@
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
     [webchange.ui.theme :refer [get-in-theme]]
-    [webchange.editor-v2.course-dashboard.state :as state]
-    [webchange.editor-v2.course-table.fields.activities.state :as other-state]))
+    [webchange.editor-v2.course-dashboard.state :as state]))
 
 (defn- get-styles
   []
@@ -110,7 +109,8 @@
        [scene-pick-name-window {:show @show-name-picker
                                 :on-ok #(do
                                           (reset! show-name-picker false)
-                                          (re-frame/dispatch [::other-state/create-new-activity @new-activity-name]))
+                                          (if (empty? @new-activity-name)
+                                            (print "error")
+                                            (re-frame/dispatch [::state/create-new-activity @new-activity-name course])))
                                 :on-cancel #(reset! show-name-picker false)
                                 :name new-activity-name}]])))
-
