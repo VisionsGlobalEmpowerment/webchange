@@ -1,5 +1,6 @@
 (ns webchange.templates.library.interactive-read-aloud-import
   (:require
+    [clojure.tools.logging :as log]
     [webchange.templates.common-actions :refer [add-question] :rename {add-question add-question-object}]
     [webchange.templates.utils.question :as question]
     [webchange.templates.utils.dialog :as dialog]
@@ -171,6 +172,14 @@
       (assoc-in [:objects :book :width] (* width 2))
       (assoc-in [:objects :book :height] height)))
 
+(defn- remove-editable
+  [objects-data]
+  (->> objects-data
+       (map (fn [[object-name object-data]]
+              [object-name
+               (dissoc object-data :editable?)]))
+       (into {})))
+
 (defn- import-book
   [activity-data book-course-slug]
   (let [scene-slug "book"
@@ -178,7 +187,7 @@
         {:keys [assets objects]} (course/get-scene-latest-version course-slug scene-slug)]
     (-> activity-data
         (update :assets concat assets)
-        (update :objects merge objects)
+        (update :objects merge (remove-editable objects))
         (assoc-in [:objects :book :visible] false))))
 
 (defn- create-template
