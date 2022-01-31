@@ -4,10 +4,8 @@
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.state.state-activity :as state-activity]
     [webchange.question.get-question-data :refer [current-question-version default-question-data form->question-data]]
-
     [webchange.question.create :as question]
-    [webchange.utils.scene-data :as scene-utils]
-    ))
+    [webchange.utils.scene-data :as scene-utils]))
 
 (defn path-to-db
   [relative-path]
@@ -43,7 +41,8 @@
 (re-frame/reg-event-fx
   ::open-add-question-window
   (fn [{:keys [_]} [_]]
-    {:dispatch-n [[::open {:action           "add"
+    {:dispatch-n [[::state-stage/hide-stage]
+                  [::open {:action           "add"
                            :title            "Add Question"
                            :save-button-text "Add"}]
                   [::set-form-data default-question-data]]}))
@@ -129,6 +128,11 @@
                         form-data)
                 (assoc-in db form-data-path))})))
 
+(defn- get-field-value
+  [db field-name]
+  (-> (get-form-data db)
+      (get field-name)))
+
 (re-frame/reg-sub
   ::field-value
   (fn []
@@ -141,27 +145,127 @@
   (fn [{:keys [db]} [_ field value]]
     {:db (update-in db form-data-path merge {field value})}))
 
-;; Options
+;; Task
+
+(def task-field-name :task-type)
+
+(defn- get-current-task
+  [db]
+  (get-field-value db task-field-name))
+
+(re-frame/reg-sub
+  ::current-task-type
+  (fn []
+    (re-frame/subscribe [::field-value task-field-name]))
+  (fn [current-value]
+    current-value))
+
+(re-frame/reg-event-fx
+  ::set-task-type
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::set-field-value task-field-name value]}))
+
+(defn- get-task-type-options
+  ([question-type]
+   (get-task-type-options question-type ""))
+  ([question-type current-question-type-name]
+   (let [task-types [{:value          "text"
+                      :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]
+                      :text           "Text"}
+                     {:value          "image"
+                      :question-types ["multiple-choice-text" "thumbs-up-n-down"]
+                      :text           "Image"}
+                     {:value          "text-image"
+                      :question-types ["multiple-choice-text" "thumbs-up-n-down"]
+                      :text           "Text with image"}
+                     {:value          "voice-over"
+                      :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]
+                      :text           "Voice-over only"}]]
+     (->> task-types
+          (map (fn [{:keys [text value question-types]}]
+                 (let [disabled? (->> question-types (some #{question-type}) (not))]
+                   (cond-> {:text  text
+                            :value value}
+                           disabled? (merge {:disabled? true
+                                             :title     (str "Not available for question type '" current-question-type-name "'.")})))))))))
+
+(defn- get-default-task-type-for-question
+  [question-type current-task]
+  (let [question-options (get-task-type-options question-type)
+        current-task-disabled? (some (fn [{:keys [value disabled?]}]
+                                       (and (= value current-task) disabled?))
+                                     question-options)]
+    (if current-task-disabled?
+      (some (fn [{:keys [disabled? value]}]
+              (and (not disabled?)
+                   value))
+            question-options)
+      current-task)))
 
 (re-frame/reg-sub
   ::task-type-options
   (fn []
-    [(re-frame/subscribe [::field-value :question-type])])
-  (fn [[question-type]]
-    (let [omit-value (fn [list omit-value]
-                       (filter (fn [{:keys [value]}]
-                                 (not= value omit-value))
-                               list))]
-      (cond-> [{:text  "Text"
-                :value "text"}
-               {:text  "Image"
-                :value "image"}
-               {:text  "Text with image"
-                :value "text-image"}
-               {:text  "Voice-over only"
-                :value "voice-over"}]
-              (some #{question-type} ["multiple-choice-image"]) (omit-value "image")
-              (some #{question-type} ["multiple-choice-image"]) (omit-value "text-image")))))
+    [(re-frame/subscribe [::field-value :question-type])
+     (re-frame/subscribe [::current-question-type-name])])
+  (fn [[question-type current-question-type-name]]
+    (let [task-types [{:value          "text"
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Text"}
+                      {:value          "image"
+                       :question-types ["multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Image"}
+                      {:value          "text-image"
+                       :question-types ["multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Text with image"}
+                      {:value          "voice-over"
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Voice-over only"}]]
+      (->> task-types
+           (map (fn [{:keys [text value question-types]}]
+                  (let [disabled? (->> question-types (some #{question-type}) (not))]
+                    (cond-> {:text  text
+                             :value value}
+                            disabled? (merge {:disabled? true
+                                              :title     (str "Not available for question type '" current-question-type-name "'.")})))))))))
+
+;; Question type
+
+(def question-field-name :question-type)
+
+(re-frame/reg-sub
+  ::current-question-type
+  (fn []
+    (re-frame/subscribe [::field-value question-field-name]))
+  (fn [current-value]
+    current-value))
+
+(re-frame/reg-sub
+  ::current-question-type-name
+  (fn []
+    [(re-frame/subscribe [::current-question-type])
+     (re-frame/subscribe [::question-type-options])])
+  (fn [[question-type question-type-options]]
+    (some (fn [{:keys [text value]}]
+            (and (= value question-type)
+                 text))
+          question-type-options)))
+
+(re-frame/reg-event-fx
+  ::set-question-type
+  (fn [{:keys [db]} [_ value]]
+    (let [current-task (get-current-task db)]
+      {:dispatch-n [[::set-field-value question-field-name value]
+                    [::set-task-type (get-default-task-type-for-question value current-task)]]})))
+
+(re-frame/reg-sub
+  ::question-type-options
+  (fn []
+    [{:text  "Multiple choice image"
+      :value "multiple-choice-image"}
+     {:text  "Multiple choice text"
+      :value "multiple-choice-text"}
+     {:text  "Thumbs up & thumbs down"
+      :value "thumbs-up-n-down"}]))
 
 ;; Save
 

@@ -23,15 +23,9 @@
 
 (defn- question-type-control
   []
-  (let [field-key :question-type
-        value @(re-frame/subscribe [::state/field-value field-key])
-        handle-change #(re-frame/dispatch [::state/set-field-value field-key %])
-        options [{:text  "Multiple choice image"
-                  :value "multiple-choice-image"}
-                 {:text  "Multiple choice text"
-                  :value "multiple-choice-text"}
-                 {:text  "Thumbs up & thumbs down"
-                  :value "thumbs-up-n-down"}]]
+  (let [value @(re-frame/subscribe [::state/current-question-type])
+        handle-change #(re-frame/dispatch [::state/set-question-type %])
+        options @(re-frame/subscribe [::state/question-type-options])]
     [:div.option-group
      [label "Question type"]
      [select {:value     value
@@ -41,9 +35,8 @@
 
 (defn- task-type-control
   []
-  (let [field-key :task-type
-        value @(re-frame/subscribe [::state/field-value field-key])
-        handle-change #(re-frame/dispatch [::state/set-field-value field-key %])
+  (let [value @(re-frame/subscribe [::state/current-task-type])
+        handle-change #(re-frame/dispatch [::state/set-task-type %])
         options @(re-frame/subscribe [::state/task-type-options])]
     [:div.option-group
      [label {:class-name "label"} "Task"]

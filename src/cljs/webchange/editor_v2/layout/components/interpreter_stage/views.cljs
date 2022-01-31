@@ -28,13 +28,15 @@
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
         scene-data @(re-frame/subscribe [::subs/scene scene-id])
         dataset-items @(re-frame/subscribe [::isubs/dataset-items])
-        stage-key @(re-frame/subscribe [::state-stage/stage-key])]
-    ^{:key stage-key}
-    [i/stage-wrapper {:mode          ::modes/editor
-                      :scene-id      scene-id
-                      :scene-data    scene-data
-                      :dataset-items dataset-items
-                      :on-ready      #(scene-ready-handler {:scene-data scene-data})}]))
+        stage-key @(re-frame/subscribe [::state-stage/stage-key])
+        show-stage? @(re-frame/subscribe [::state-stage/show-stage?])]
+    (when show-stage?
+      ^{:key stage-key}
+      [i/stage-wrapper {:mode          ::modes/editor
+                        :scene-id      scene-id
+                        :scene-data    scene-data
+                        :dataset-items dataset-items
+                        :on-ready      #(scene-ready-handler {:scene-data scene-data})}])))
 
 (defn interpreter-stage
   []
