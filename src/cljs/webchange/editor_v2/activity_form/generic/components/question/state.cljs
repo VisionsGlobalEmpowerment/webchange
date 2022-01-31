@@ -4,10 +4,8 @@
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.state.state-activity :as state-activity]
     [webchange.question.get-question-data :refer [current-question-version default-question-data form->question-data]]
-
     [webchange.question.create :as question]
-    [webchange.utils.scene-data :as scene-utils]
-    ))
+    [webchange.utils.scene-data :as scene-utils]))
 
 (defn path-to-db
   [relative-path]
@@ -43,7 +41,8 @@
 (re-frame/reg-event-fx
   ::open-add-question-window
   (fn [{:keys [_]} [_]]
-    {:dispatch-n [[::open {:action           "add"
+    {:dispatch-n [[::state-stage/hide-stage]
+                  [::open {:action           "add"
                            :title            "Add Question"
                            :save-button-text "Add"}]
                   [::set-form-data default-question-data]]}))
