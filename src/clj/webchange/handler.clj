@@ -93,6 +93,12 @@
     (throw-unauthorized {:role :parent})
     (resource-response "student.html" {:root "public"})))
 
+(defn parent-route
+  [request]
+  (if-not (authenticated? request)
+    (throw-unauthorized {:role :parent})
+    (resource-response "student.html" {:root "public"})))
+
 (defn teacher? [request]
   (and (authenticated? request)
        (-> request :session :identity :teacher-id)))
@@ -137,9 +143,9 @@
            (GET "/courses/:id/dashboard/finished" request (student-route request))
 
            ;; parent routes
-           (GET "/parents" [] (public-route))
-           (GET "/parents/add-student" [] (public-route))
-           (GET "/parents/help" [] (public-route))
+           (GET "/parents" request (parent-route request))
+           (GET "/parents/add-student" request (parent-route request))
+           (GET "/parents/help" request (parent-route request))
 
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))
