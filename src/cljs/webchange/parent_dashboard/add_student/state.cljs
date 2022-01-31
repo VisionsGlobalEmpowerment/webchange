@@ -114,12 +114,22 @@
 (re-frame/reg-sub
   ::device-options
   (fn [_]
-    [{:text  "Android Tablet"
+    [{:text "Android Tablet"
       :value "android-tablet"}
-     {:text  "iOS Tablet"
-      :value "ios-tablet"}
-     {:text  "PC"
-      :value "web"}]))
+     {:text "iPad"
+      :value "ipad"}
+     {:text "Android Mobile Phone"
+      :value "android-mobile-phone"}
+     {:text "iPhone"
+      :value "iphone"}
+     {:text "Desktop Computer: PC"
+      :value "desktop-computer-pc"}
+     {:text "Desktop Computer: Mac"
+      :value "desktop-computer-mac"}
+     {:text "Laptop Computer: PC"
+      :value "laptop-computer-pc"}
+     {:text "Laptop Computer: Mac"
+      :value "laptop-computer-mac"}]))
 
 (re-frame/reg-sub
   ::device-validation-error
