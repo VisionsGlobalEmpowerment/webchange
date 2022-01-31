@@ -41,7 +41,7 @@
   (case role
     :student (str "/student-login" "?redirect=" prev)
     :teacher (str "/login" "?redirect=" prev)
-    (str (website/website-login-page) "?redirect=" prev)))
+    (str (website/website-logout-page) "?redirect=" prev)))
 
 (defn unauthorized-handler
   [request metadata]
