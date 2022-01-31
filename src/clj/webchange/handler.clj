@@ -90,7 +90,7 @@
 (defn student-route
   [request]
   (if-not (authenticated? request)
-    (throw-unauthorized {:role :student})
+    (throw-unauthorized {:role :parent})
     (resource-response "student.html" {:root "public"})))
 
 (defn teacher? [request]
