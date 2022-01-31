@@ -49,6 +49,7 @@
        .text
        .value
        .disabled?
+       .title
    :variant - 'outlined' or none."
   (let [handle-change (fn [event]
                         (let [selected-options (->> (get-selected-options event)
@@ -69,10 +70,11 @@
      [:select (cond-> {:value     (or value "")
                        :on-change handle-change}
                       multiple? (assoc :multiple true))
-      (for [{:keys [text value disabled?]} options]
+      (for [{:keys [text value disabled? title]} options]
         ^{:key value}
-        [:option {:value    value
-                  :disabled disabled?}
+        [:option (cond-> {:value    value
+                          :disabled disabled?}
+                         (some? title) (assoc :title title))
          text])]
      (when show-buttons?
        [:div.controls

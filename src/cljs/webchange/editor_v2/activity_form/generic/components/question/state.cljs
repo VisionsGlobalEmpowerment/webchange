@@ -143,24 +143,51 @@
 ;; Options
 
 (re-frame/reg-sub
+  ::question-type-options
+  (fn []
+    [{:text  "Multiple choice image"
+      :value "multiple-choice-image"}
+     {:text  "Multiple choice text"
+      :value "multiple-choice-text"}
+     {:text  "Thumbs up & thumbs down"
+      :value "thumbs-up-n-down"}]))
+
+(re-frame/reg-sub
+  ::current-question-type-name
+  (fn []
+    [(re-frame/subscribe [::field-value :question-type])
+     (re-frame/subscribe [::question-type-options])])
+  (fn [[question-type question-type-options]]
+    (some (fn [{:keys [text value]}]
+            (and (= value question-type)
+                 text))
+          question-type-options)))
+
+(re-frame/reg-sub
   ::task-type-options
   (fn []
-    [(re-frame/subscribe [::field-value :question-type])])
-  (fn [[question-type]]
-    (let [omit-value (fn [list omit-value]
-                       (filter (fn [{:keys [value]}]
-                                 (not= value omit-value))
-                               list))]
-      (cond-> [{:text  "Text"
-                :value "text"}
-               {:text  "Image"
-                :value "image"}
-               {:text  "Text with image"
-                :value "text-image"}
-               {:text  "Voice-over only"
-                :value "voice-over"}]
-              (some #{question-type} ["multiple-choice-image"]) (omit-value "image")
-              (some #{question-type} ["multiple-choice-image"]) (omit-value "text-image")))))
+    [(re-frame/subscribe [::field-value :question-type])
+     (re-frame/subscribe [::current-question-type-name])])
+  (fn [[question-type current-question-type-name]]
+    (let [task-types [{:value          "text"
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Text"}
+                      {:value          "image"
+                       :question-types ["multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Image"}
+                      {:value          "text-image"
+                       :question-types ["multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Text with image"}
+                      {:value          "voice-over"
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]
+                       :text           "Voice-over only"}]]
+      (->> task-types
+           (map (fn [{:keys [text value question-types]}]
+                  (let [disabled? (->> question-types (some #{question-type}) (not))]
+                    (cond-> {:text  text
+                             :value value}
+                            disabled? (merge {:disabled? true
+                                              :title     (str "Not available for question type '" current-question-type-name "'.")})))))))))
 
 ;; Save
 

@@ -26,12 +26,7 @@
   (let [field-key :question-type
         value @(re-frame/subscribe [::state/field-value field-key])
         handle-change #(re-frame/dispatch [::state/set-field-value field-key %])
-        options [{:text  "Multiple choice image"
-                  :value "multiple-choice-image"}
-                 {:text  "Multiple choice text"
-                  :value "multiple-choice-text"}
-                 {:text  "Thumbs up & thumbs down"
-                  :value "thumbs-up-n-down"}]]
+        options @(re-frame/subscribe [::state/question-type-options])]
     [:div.option-group
      [label "Question type"]
      [select {:value     value
