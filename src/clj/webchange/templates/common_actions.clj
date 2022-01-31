@@ -204,41 +204,34 @@
         (increase-next-action-index index)
         (question-object/add-to-scene question-data))))
 
-(defn- restore-dialogs
-  [activity-data new-question-data preserved-actions]
-  (let [dialog-actions-names (->> (:actions new-question-data)
-                                  (filter (fn [[_ action-data]]
-                                            (= (:editor-type action-data) "dialog")))
-                                  (map first))]
-    (reduce (fn [activity-data dialog-action-name]
-              (let [preserved-inner-action (-> preserved-actions
-                                               (get-nth-in [dialog-action-name :data 0])
-                                               (get-inner-action))
-
-                    current-action (get-in new-question-data [:actions dialog-action-name])
-                    updated-action (->> (ignore-keys preserved-inner-action [:type])
-                                        (update-in current-action [:data 0] update-inner-action))]
-                (assoc-in activity-data [:actions dialog-action-name] updated-action)))
-            activity-data
-            dialog-actions-names)))
-
 (defn- merge-actions
   [activity-data current-question-data new-question-data]
   (let [current-question-actions-names (->> (get-in current-question-data [:metadata :actions])
                                             (map keyword))
-        preserved-actions (-> (:actions activity-data)
-                              (select-keys current-question-actions-names))]
+
+        track-actions-names (->> (get-in new-question-data [:track :nodes])
+                                 (map :action-id))
+        track-actions-data (-> (get activity-data :actions)
+                               (select-keys track-actions-names))]
     (-> activity-data
         (update :actions ignore-keys current-question-actions-names)
         (update :actions merge (:actions new-question-data))
-        (restore-dialogs new-question-data preserved-actions))))
+        (update :actions merge track-actions-data))))
 
 (defn- merge-objects
   [activity-data current-question-data new-question-data]
-  (let [current-question-objects-names (->> (get-in current-question-data [:metadata :objects]) (map keyword))]
+  (let [current-question-objects-names (->> (get-in current-question-data [:metadata :objects]) (map keyword))
+
+        question-index (get-in current-question-data [:metadata :index])
+        question-params (get-question-params question-index)
+        question-object-name (-> question-params :object-name keyword)
+        question-object-data (get-in activity-data [:objects question-object-name])
+        visible? (:visible question-object-data)]
+
     (-> activity-data
         (update :objects ignore-keys current-question-objects-names)
-        (update :objects merge (:objects new-question-data)))))
+        (update :objects merge (:objects new-question-data))
+        (assoc-in [:objects question-object-name :visible] visible?))))
 
 (defn- merge-tracks
   [activity-data new-question-data {:keys [object-name]}]
@@ -279,12 +272,12 @@
     (cond-> scene-data
             (not tap-dialog) (assoc-in [:actions :dialog-tap-instructions] (dialog/default "Tap instructions"))
             (not timeout-dialog) (assoc-in [:actions :dialog-timeout-instructions] (dialog/default "Timeout instructions"))
-            (not tap-action) (assoc-in [:actions :tap-instructions] {:type "action"
-                                                                     :from-var   [{:var-name        "tap-instructions-action"
-                                                                                   :action-property "id"}]})
-            (not timeout-action) (assoc-in [:actions :timeout-instructions] {:type "action"
-                                                                             :from-var   [{:var-name        "timeout-instructions-action"
-                                                                                           :action-property "id"}]})
+            (not tap-action) (assoc-in [:actions :tap-instructions] {:type     "action"
+                                                                     :from-var [{:var-name        "tap-instructions-action"
+                                                                                 :action-property "id"}]})
+            (not timeout-action) (assoc-in [:actions :timeout-instructions] {:type     "action"
+                                                                             :from-var [{:var-name        "timeout-instructions-action"
+                                                                                         :action-property "id"}]})
             (not init-guide) (assoc-in [:actions :init-guide] {:type "parallel"
                                                                :data [{:type "set-variable" :var-name "tap-instructions-action" :var-value "dialog-tap-instructions"}
                                                                       {:type "set-variable" :var-name "timeout-instructions-action" :var-value "dialog-timeout-instructions"}]})
@@ -292,7 +285,7 @@
 
 (defn update-guide-settings
   [scene-data guide-settings-patch]
-  (-> scene-data 
+  (-> scene-data
       (update-in [:metadata :guide-settings] merge guide-settings-patch)
       (with-guide-actions)))
 
