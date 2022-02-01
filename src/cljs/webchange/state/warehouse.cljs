@@ -398,3 +398,12 @@
                      :method :put
                      :uri    (str "/api/child/parent/login")}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::retry-audio-recognition
+  (fn [{:keys [_]} [_ data handlers]]
+    (create-request {:key    :retry-audio-recognition
+                     :method :put
+                     :uri    (str "/api/assets/retry-voice-recognition")
+                     :params data}
+                    handlers)))

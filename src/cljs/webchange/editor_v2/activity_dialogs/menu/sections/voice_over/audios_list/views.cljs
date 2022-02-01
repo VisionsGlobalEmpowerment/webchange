@@ -11,6 +11,7 @@
   (let [handle-click #(re-frame/dispatch [::state/set-current-audio url])
         handle-edit-click #(do (.stopPropagation %) (on-edit-click))
         handle-remove-click #(do (.stopPropagation %) (re-frame/dispatch [::state/remove-audio url]))
+        handle-retry-click #(do (.stopPropagation %) (re-frame/dispatch [::state/retry-audio-recognition url]))
         handle-bring-to-top-click #(do (.stopPropagation %) (re-frame/dispatch [::state/bring-to-top url]))]
     [:div {:on-click   handle-click
            :class-name (get-class-name {"available-audios-list-item" true
@@ -25,6 +26,10 @@
                :class-name "selected-icon"}])]
      [:div.name name]
      [:div.actions
+      [icon-button {:icon       "restart"
+                    :title      "Retry voice"
+                    :class-name "action-button"
+                    :on-click   handle-retry-click}]
       [icon-button {:icon       "edit"
                     :title      "Change audio name"
                     :class-name "action-button"

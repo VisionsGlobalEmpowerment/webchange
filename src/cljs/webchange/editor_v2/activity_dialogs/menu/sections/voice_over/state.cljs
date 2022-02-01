@@ -8,6 +8,7 @@
     [webchange.editor-v2.activity-dialogs.menu.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
+    [webchange.state.warehouse :as warehouse]
     [webchange.state.warehouse-recognition :as recognition]
     [webchange.utils.scene-action-data :refer [text-animation-action?
                                                animation-sequence-action?]]))
@@ -143,6 +144,19 @@
     {:dispatch [::state-scene/update-asset-date url (.now js/Date)]}))
 
 (re-frame/reg-event-fx
- ::open-voice-over-audio-window
- (fn [{:keys [db]} [_]]
-     {:dispatch [::chunks/open]}))
+  ::open-voice-over-audio-window
+  (fn [{:keys [db]} [_]]
+    {:dispatch [::chunks/open]}))
+
+(re-frame/reg-event-fx
+  ::retry-audio-recognition
+  (fn [{:keys [db]} [_ url]]
+    (let [lang (get-in db (path-to-db [:current-lang]))]
+      {:dispatch [::warehouse/retry-audio-recognition
+                  {:url url :lang lang}
+                  {:on-success [::retry-audio-recognition-success]}]})))
+
+(re-frame/reg-event-fx
+  ::retry-audio-recognition-success
+  (fn [{:keys [db]} [_]]
+    {}))

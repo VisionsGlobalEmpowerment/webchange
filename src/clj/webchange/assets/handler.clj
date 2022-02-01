@@ -1,17 +1,20 @@
 (ns webchange.assets.handler
   (:require
+   [buddy.auth :refer [throw-unauthorized]]
+   [clojure.tools.logging :as log]
    [clojure.edn :as edn]
    [clojure.java.io :as io]
-   [compojure.core :refer [GET POST defroutes]]
+   [compojure.core :refer [GET POST PUT defroutes]]
    [config.core :refer [env]]
    [ring.middleware.multipart-params :refer [wrap-multipart-params]]
    [ring.middleware.params :refer [wrap-params]]
    [ring.util.response :refer [response]]
    [webchange.assets.core :as core]
+   [webchange.auth.roles :refer [is-admin?]]
    [webchange.common.audio-parser.converter :refer [convert-to-mp3]]
    [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
    [webchange.common.files :as f]
-   [webchange.common.handler :refer [handle]]
+   [webchange.common.handler :refer [current-user handle]]
    [webchange.common.hmac-sha256 :as sign]
    [webchange.common.image-manipulation :as im]
    [webchange.common.voice-recognition.voice-recognition :refer [get-subtitles try-voice-recognition-audio]]))
@@ -112,12 +115,24 @@
       (io/copy xin xout))
     (core/store-asset-hash! full-path)))
 
+(defn- handle-retry-voice-recognition
+  [request]
+  (let [user-id (current-user request)]
+    (when-not (is-admin? user-id)
+      (throw-unauthorized {:role :eduction}))
+    (let [body (-> request :body)
+          path (-> body :url)
+          lang (-> body :lang)]
+      (try-voice-recognition-audio path lang))
+    (handle [true {:message "ok"}])))
+
 (defroutes asset-routes
            (POST "/api/assets/" request
              (wrap-multipart-params
                (fn [request]
-                (-> request :multipart-params upload-asset response))))
-           (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params)))
+                 (-> request :multipart-params upload-asset response))))
+  (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params))
+  (PUT "/api/assets/retry-voice-recognition" request (handle-retry-voice-recognition request)))
 
 (defroutes asset-maintainer-routes
            (POST "/api/assets/by-path/" request
