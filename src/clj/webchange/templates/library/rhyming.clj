@@ -90,7 +90,6 @@
                            :max-width  700
                            :max-height 850
                            :origin     {:type "center-center"}
-                           
                            :editable? {:image-tags ["rhyming" "plate"]
                                        :edit-form {:select-image true
                                                    :upload-image true
@@ -420,6 +419,8 @@
       (assoc-in [:metadata :balls :left] 0)
       (assoc-in [:metadata :balls :right] 0)
       (assoc-in [:objects :left-gate-text :text] (:left args))
+      (common/add-blink "left-gate-plate" "Highligh left gate")
+      (common/add-blink "right-gate-plate" "Highligh right gate")
       (assoc-in [:objects :right-gate-text :text] (:right args))))
 
 (defn add-ball-action
