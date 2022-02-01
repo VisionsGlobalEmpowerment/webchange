@@ -348,6 +348,7 @@
   ::handle-drag-n-drop
   (fn [{:keys [_]} [_ {:keys [action] :as data}]]
     (case action
+      "move-action-unit" {:dispatch [::move-action-unit data]}
       "add-effect-action" {:dispatch [::add-effect-action data]}
       "add-phrase-action" {:dispatch [::add-phrase-action data]}
       "add-text-animation-action" {:dispatch [::add-text-animation-action data]}
@@ -370,6 +371,13 @@
     {:position          target-position
      :parent-path       target-parent-action-path
      :relative-position relative-position}))
+
+(re-frame/reg-event-fx
+  ::move-action-unit
+  (fn [{:keys [_]} [_ {:keys [action-data] :as data}]]
+    (let [position-data (get-action-position-data data)]
+      {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
+                                                      position-data)]})))
 
 (re-frame/reg-event-fx
   ::add-effect-action
