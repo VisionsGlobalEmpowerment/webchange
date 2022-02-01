@@ -72,10 +72,13 @@
 
 ;; Progress
 
+(defn- get-progress-data
+  [db]
+  (get-in db [:progress-data]))
+
 (re-frame/reg-sub
   ::progress-data
-  (fn [db]
-    (get-in db [:progress-data])))
+  get-progress-data)
 
 (defn- idx-keyword
   [idx data]
@@ -101,13 +104,16 @@
             (every? (fn [[idx lesson]]
                       (lesson-finished? idx lesson (get finished-levels level-idx)))))))
 
-(defn- course-finished?
-  [course-data progress-data]
-  (let [{:keys [finished]} progress-data]
-    (->> (:levels course-data)
-         (map-indexed idx-keyword)
-         (every? (fn [[idx level]]
-                   (level-finished? idx level finished))))))
+(defn course-finished?
+  ([db]
+   (course-finished? (get-course-data db)
+                     (get-progress-data db)))
+  ([course-data progress-data]
+   (let [{:keys [finished]} progress-data]
+     (->> (:levels course-data)
+          (map-indexed idx-keyword)
+          (every? (fn [[idx level]]
+                    (level-finished? idx level finished)))))))
 
 (re-frame/reg-sub
   ::course-finished?
