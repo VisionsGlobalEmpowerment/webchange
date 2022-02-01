@@ -46,7 +46,7 @@
                          :text           "    OPEN \n8AM-8PM",
                          :vertical-align "middle",
                          :visible        true
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
+                         :actions        {}
                          },
 
                         :menu
@@ -64,7 +64,7 @@
                          :text           "MENU",
                          :vertical-align "middle",
                          :visible        true,
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
+                         :actions        {}
                          },
                         :park-name
                         {:type           "text",
@@ -108,8 +108,8 @@
                          :scale-y        1,
                          :text           "TRASH",
                          :vertical-align "middle",
-                         :visible        true
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
+                         :visible        true,
+                         :actions        {}
                          },
                         :trash-bin-2
                         {:type           "text",
@@ -126,7 +126,7 @@
                          :text           "RECYCLE",
                          :vertical-align "middle",
                          :visible        true
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
+                         :actions        {}
                          },
                         :house-sign
                         {:type    "image",
@@ -146,6 +146,42 @@
                                        :border-radius 24,
                                        :fill          0xFFFFFF
                                        },
+                        :menu-rectangle  {:type          "transparent",
+                                          :x             30,
+                                          :y             830,                                          
+                                          :width         250,
+                                          :height        250,
+                                          :border-radius 0,
+                                          :fill          0xFF0000
+                                          :actions    {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}}
+                                          },
+                        :schedule-rectangle  {:type          "transparent",
+                                              :x             1066,
+                                              :y             582,
+                                              :width         226,
+                                              :height        136,
+                                              :border-radius 0,
+                                              :fill          0xFF0000
+                                              :actions    {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}}
+                                              },
+                        :trash-rectangle  {:type          "transparent",
+                                           :x             1554,
+                                           :y             588,
+                                           :width         119,
+                                           :height        200,
+                                           :border-radius 0,
+                                           :fill          0xFF0000
+                                           :actions    {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}}
+                                           },
+                        :recycle-rectangle  {:type          "transparent",
+                                             :x              1675,
+                                             :y              588,
+                                             :width          119,
+                                             :height         200,
+                                             :border-radius 0,
+                                             :fill          0xFF0000
+                                             :actions    {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}}
+                                             },
                         :rectangle-1  {:type          "rectangle",
                                        :x             688,
                                        :y             928,
@@ -330,8 +366,6 @@
                                        :children ["icon-br-im-4" "trash-bin-4" "trash-bin-5"],
                                        :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
-
-
                         :trash-bin-4
                         {:type           "text",
                          :x              1048,
@@ -389,7 +423,7 @@
                                        :src        "/raw/img/i-spy-3/icons/img-7.png"}
                         },
         :scene-objects [["layered-background"] ["schedule" "menu" "park-name" "house-sign" "trash-bin-1" "trash-bin-2" "monument"]
-                        ["bar" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
+                        ["bar" "menu-rectangle" "schedule-rectangle" "trash-rectangle" "recycle-rectangle" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
                         ["icon-1" "icon-2" "icon-3" "icon-4" "icon-5"]
                         ["icon-br-1" "icon-br-2" "icon-br-3" "icon-br-4" "icon-br-5"]
                         ["icon-max" "icon-park"]
