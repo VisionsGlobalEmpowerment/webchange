@@ -31,8 +31,8 @@
          :colors-palette
          {:type       "colors-palette",
           :transition "colors-palette"
-          :y          100
-          :width      150
+          :x          400
+          :height     150
           :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}}
          :mari
          {:type       "animation",
