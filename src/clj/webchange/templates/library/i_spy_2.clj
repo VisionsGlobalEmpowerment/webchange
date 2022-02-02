@@ -43,6 +43,7 @@
                          :scale-y        1,
                          :text           "BUS STOP",
                          :vertical-align "middle",
+                         :editable?      {:select true}
                          :visible        true
                          :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
                          },
@@ -61,6 +62,7 @@
                          :text           "BE \nKIND",
                          :vertical-align "middle",
                          :visible        true
+                         :editable?      {:select true}
                          :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
                          },
                         :sale-plate
@@ -78,6 +80,7 @@
                          :text           "SALE",
                          :vertical-align "middle",
                          :visible        true,
+                         :editable?      {:select true}
                          :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
                          },
                         :stop-sign
@@ -95,6 +98,7 @@
                          :text           "STOP",
                          :vertical-align "middle",
                          :visible        true
+                         :editable?      {:select true}
                          :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
                          },
                         :street-sign
@@ -111,6 +115,7 @@
                          :scale-y        1,
                          :text           "LETTER LANE",
                          :vertical-align "middle",
+                         :editable?      {:select true}
                          :visible        true
                          :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
                          },
@@ -234,6 +239,7 @@
                                              :scale-x        1,
                                              :scale-y        1,
                                              :text           "BUS STOP",
+                                             :editable?      {:select true}
                                              :vertical-align "middle",
                                              :visible        true},
                         :icon-br-2          {:type     "group",
@@ -273,6 +279,7 @@
                                              :scale-x        1,
                                              :scale-y        1,
                                              :text           "BE \nKIND",
+                                             :editable?      {:select true}
                                              :vertical-align "middle",
                                              :visible        true
 
@@ -306,6 +313,7 @@
                          :scale-y        1,
                          :text           "SALE",
                          :vertical-align "middle",
+                         :editable?      {:select true}
                          :visible        true},
 
                         :icon-br-im-3       {:type       "image",
@@ -339,6 +347,7 @@
                          :scale-x        1,
                          :scale-y        1,
                          :text           "STOP",
+                         :editable?      {:select true}
                          :vertical-align "middle",
                          :visible        true}
 
@@ -371,6 +380,7 @@
                          :scale-y        1,
                          :text           "LETTER LANE",
                          :vertical-align "middle",
+                         :editable?      {:select true}
                          :visible        true},
 
                         :icon-br-im-5       {:type       "image",
