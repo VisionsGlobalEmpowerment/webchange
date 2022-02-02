@@ -7,3 +7,12 @@
     #?(:clj  (.parseInt Integer str)
        :cljs (.parseInt js/Number str))
     str))
+
+(defn to-precision
+  [number precision]
+  (if (number? precision)
+    (let [k (Math/pow 10 precision)]
+      (-> (* number k)
+          (Math/floor)
+          (/ k)))
+    number))
