@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [webchange.student-dashboard-v2.timeline.state :as state]
     [webchange.student-dashboard-v2.timeline.play-button.views :refer [play-button]]
+    [webchange.student-dashboard-v2.timeline.views-great-work :refer [great-work-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- timeline-item
@@ -56,6 +57,7 @@
        :reagent-render
                              (fn []
                                (let [loading? @(re-frame/subscribe [::state/loading?])
+                                     course-finished? @(re-frame/subscribe [::state/course-finished?])
                                      finished-activities @(re-frame/subscribe [::state/finished-activities])
                                      handle-next-click (fn [] (re-frame/dispatch [::state/open-next-activity]))
                                      handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
@@ -63,16 +65,20 @@
                                                                  (reset! container %))}
                                   (when-not loading?
                                     (into [:div.timeline
-                                           (-> (reduce (fn [result {:keys [id] :as item}]
-                                                         (concat result [^{:key (str id "-connector")}
-                                                                         [item-connector]
-                                                                         ^{:key id}
-                                                                         [timeline-item (merge item
-                                                                                               {:on-click handle-activity-click})]]))
-                                                       [^{:key "filler"} [:div.filler]]
-                                                       finished-activities)
-                                               (concat [(when-not (empty? finished-activities)
-                                                          ^{:key "play-button-connector"}
-                                                          [button-connector])
-                                                        ^{:key "play-button"}
-                                                        [play-button {:on-click handle-next-click}]]))]))]))})))
+                                           ^{:key "filler"}
+                                           [:div.filler]]
+                                          (-> (reduce (fn [result {:keys [id] :as item}]
+                                                        (concat result [^{:key (str id "-connector")}
+                                                                        [item-connector]
+                                                                        ^{:key id}
+                                                                        [timeline-item (merge item
+                                                                                              {:on-click handle-activity-click})]]))
+                                                      []
+                                                      finished-activities)
+                                              (concat [(when-not (empty? finished-activities)
+                                                         ^{:key "play-button-connector"}
+                                                         [button-connector])
+                                                       ^{:key "play-button"}
+                                                       (if course-finished?
+                                                         [great-work-button]
+                                                         [play-button {:on-click handle-next-click}])]))))]))})))

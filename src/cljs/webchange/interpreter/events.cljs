@@ -281,13 +281,14 @@
 
 (re-frame/reg-fx
   :load-course
-  (fn [{:keys [course-id scene-id]}]
+  (fn [{:keys [course-id scene-id options]}]
     (i/load-course {:course-id course-id}
                    (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
                                     (re-frame/dispatch [::sw-status/set-current-course course-id])
                                     (re-frame/dispatch [::set-course-data course])
                                     (re-frame/dispatch [::load-progress {:course-id course-id
-                                                                         :scene-id  scene-id}])
+                                                                         :scene-id  scene-id
+                                                                         :options   options}])
                                     (re-frame/dispatch [::load-lessons course-id]))))))
 
 (re-frame/reg-fx
@@ -310,13 +311,15 @@
 
 (re-frame/reg-fx
   :load-progress
-  (fn [{:keys [course-id scene-id]}]
-    (i/load-progress course-id (fn [progress]
-                                 (re-frame/dispatch [:complete-request :load-progress])
-                                 (if (progress-initialized? progress)
-                                   (re-frame/dispatch [::set-progress-data progress])
-                                   (re-frame/dispatch [::init-default-progress progress]))
-                                 (re-frame/dispatch [::progress-loaded course-id scene-id])))))
+  (fn [{:keys [course-id scene-id options]}]
+    (let [{:keys [sandbox?] :or {sandbox? false}} options]
+      (i/load-progress course-id (fn [progress]
+                                   (re-frame/dispatch [:complete-request :load-progress])
+                                   (let [set-progress-callback [::progress-loaded course-id scene-id]]
+                                     (cond
+                                       sandbox? (re-frame/dispatch [::set-progress-data nil set-progress-callback])
+                                       (progress-initialized? progress) (re-frame/dispatch [::set-progress-data progress set-progress-callback])
+                                       :default (re-frame/dispatch [::init-default-progress progress set-progress-callback]))))))))
 
 (re-frame/reg-fx
   :load-lessons
@@ -1199,14 +1202,15 @@
 
 (re-frame/reg-event-fx
   ::load-course
-  (fn-traced [{:keys [db]} [_ course-id scene-id]]
+  (fn-traced [{:keys [db]} [_ course-id scene-id options]]
     (if (not= course-id (:loaded-course db))
       {:db          (-> db
                         (assoc :loaded-course course-id)
                         (assoc :current-course course-id)
                         (assoc-in [:loading :load-course] true))
        :load-course {:course-id course-id
-                     :scene-id  scene-id}})))
+                     :scene-id  scene-id
+                     :options   options}})))
 
 (re-frame/reg-event-fx
   ::load-scenes-with-skills
@@ -1339,14 +1343,15 @@
 
 (re-frame/reg-event-fx
   ::set-progress-data
-  (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :progress-data data)}))
+  (fn [{:keys [db]} [_ data on-done]]
+    (cond-> {:db (assoc db :progress-data data)}
+            (some? on-done) (assoc :dispatch on-done))))
 
 (re-frame/reg-event-fx
   ::init-default-progress
-  (fn [{:keys [db]} [_ progress]]
+  (fn [{:keys [db]} [_ progress on-done]]
     (let [default-progress (get-in db [:course-data :default-progress])]
-      {:db (update-in db [:progress-data] merge progress default-progress)})))
+      {:dispatch [::set-progress-data (merge progress default-progress) on-done]})))
 
 (def default-triggers
   {:start [[::reset-navigation]]})
@@ -1423,10 +1428,11 @@
 
 (re-frame/reg-event-fx
   ::load-progress
-  (fn [{:keys [db]} [_ {:keys [course-id scene-id]}]]
+  (fn [{:keys [db]} [_ {:keys [course-id scene-id options]}]]
     {:db            (assoc-in db [:loading :load-progress] true)
      :load-progress {:course-id course-id
-                     :scene-id  scene-id}}))
+                     :scene-id  scene-id
+                     :options   options}}))
 
 (re-frame/reg-event-fx
   ::load-lessons
@@ -1908,7 +1914,7 @@
       (logger/trace "sandbox started with" lessons)
       {:db         (cond-> db
                            (seq lessons) (assoc-in [:sandbox :loaded-lessons] lessons))
-       :dispatch-n (list [::load-course course-id scene-id])})))
+       :dispatch-n (list [::load-course course-id scene-id {:sandbox? true}])})))
 
 (re-frame/reg-event-fx
   ::history-back

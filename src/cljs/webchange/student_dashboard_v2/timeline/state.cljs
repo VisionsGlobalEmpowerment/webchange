@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.events :as events]
     [webchange.interpreter.events :as ie]
-    [webchange.interpreter.lessons.activity :as lessons-activity]))
+    [webchange.interpreter.lessons.activity :as lessons-activity]
+    [webchange.state.state-course :as state-course]))
 
 (defn- scene-name->scene [scene-name scenes]
   (let [{:keys [name preview type]} (get scenes (keyword scene-name))]
@@ -29,11 +30,11 @@
       (->> activities
            (filter #(lessons-activity/finished? db %))
            (map #(activity-letter db %))
-           (map (fn [{:keys [activity-name level lesson letter] :as activity}]
+           (map (fn [{:keys [activity activity-name level lesson letter] :as activity-data}]
                   (let [{:keys [name preview]} (get scenes (keyword activity-name))]
-                    {:id       (str level "-" lesson "-" activity-name)
+                    {:id       (str level "-" lesson "-" activity)
                      :title    name
-                     :activity activity
+                     :activity activity-data
                      :letter   letter
                      :preview  preview})))))))
 
@@ -66,3 +67,10 @@
   (fn [db]
     (or (get-in db [:loading :load-course])
         (get-in db [:loading :load-progress]))))
+
+(re-frame/reg-sub
+  ::course-finished?
+  (fn []
+    (re-frame/subscribe [::state-course/course-finished?]))
+  (fn [course-finished?]
+    course-finished?))

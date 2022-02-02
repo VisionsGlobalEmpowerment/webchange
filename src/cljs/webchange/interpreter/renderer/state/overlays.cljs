@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    [webchange.state.state-course :as state-course]
     [webchange.logger.index :as logger]))
 
 (re-frame/reg-event-fx
@@ -59,14 +60,14 @@
 (re-frame/reg-event-fx
   ::show-activity-finished
   (fn [{:keys [db]}]
-    (let [next-activity (subs/next-activity db)
-          lesson-progress (subs/lesson-progress db)]
+    (let [course-finished? (state-course/course-finished? db)]
       (set-scene-interactive db false)
       (js/setTimeout #(re-frame/dispatch [::scene/change-scene-object :form-shooting-star [[:set-visibility {:visible false}]]])
                      3500)
       {:dispatch-n (list [::hide-navigation-menu]
                          [::scene/change-scene-object :form-shooting-star [[:generic-handler [[:start-animation]]]]]
-                         [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]])})))
+                         [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]]
+                         [::scene/change-scene-object :form-next [[:set-visibility {:visible (not course-finished?)}]]])})))
 
 (re-frame/reg-event-fx
   ::hide-activity-finished
