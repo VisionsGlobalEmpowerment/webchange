@@ -16,28 +16,32 @@
 (def frame-selected-color 0xFFA500)
 
 (defn- apply-img-origin
-  [{:keys [x y]} origin width height]
-  (let [[h v] (clojure.string/split origin #"-")]
-    {:x (case h
-          "left" x
-          "center" (-> (/ width 2) (+ x))
-          "right" (+ x width)
-          x)
-     :y (case v
-          "top" y
-          "center" (-> (/ height 2) (+ y))
-          "bottom" (+ y height)
-          y)}))
+  [position props]
+  (let [{:keys [origin width height scale]} props
+        {scale-x :x scale-y :y} scale
+        [h v] (clojure.string/split (:type origin) #"-")]
+    (-> position
+        (update :x + (-> (case h
+                           "center" (/ width 2)
+                           "right" width
+                           0)
+                         (* scale-x)))
+        (update :y + (-> (case v
+                           "center" (/ height 2)
+                           "bottom" height
+                           0)
+                         (* scale-y))))))
 
 (defn- apply-text-align
-  [{:keys [x y]} align width container]
+  [position {:keys [align width]} container]
   (let [local-bounds (.getLocalBounds container)]
-    {:x (case align
-          "left" x
-          "center" (- x (/ width 2))
-          "right" (- x (- width (.-width local-bounds) (.-x local-bounds)))
-          x)
-     :y y}))
+    (-> position
+        (update :x - (case align
+                       "center" (/ width 2)
+                       "right" (- width
+                                  (.-width local-bounds)
+                                  (.-x local-bounds))
+                       0)))))
 
 (defn round-position
   [{:keys [x y]}]
@@ -47,10 +51,10 @@
 
 (defn- fix-position
   [position props container]
-  (let [{:keys [type align origin width height]} props]
+  (let [{:keys [type]} props]
     (cond-> position
-            (= type "image") (apply-img-origin (:type origin) width height)
-            (= type "text") (apply-text-align align width container)
+            (= type "image") (apply-img-origin props)
+            (= type "text") (apply-text-align props container)
             :always (round-position))))
 
 (re-frame/reg-event-fx
@@ -247,8 +251,8 @@
   (let [container (Container.)]
     (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
     (when (draggable? props)
-      (enable-drag! container {:on-drag-start #(handle-frame-click props)
-                               :on-drag-end   #(handle-drag container)
+      (enable-drag! container {:on-drag-start        #(handle-frame-click props)
+                               :on-drag-end          #(handle-drag container)
                                :on-drag-move-options (drag-options props)}))
 
     container))
