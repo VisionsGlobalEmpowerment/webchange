@@ -315,11 +315,11 @@
     (let [{:keys [sandbox?] :or {sandbox? false}} options]
       (i/load-progress course-id (fn [progress]
                                    (re-frame/dispatch [:complete-request :load-progress])
-                                   (cond
-                                     sandbox? (re-frame/dispatch [::set-progress-data nil])
-                                     (progress-initialized? progress) (re-frame/dispatch [::set-progress-data progress])
-                                     :default (re-frame/dispatch [::init-default-progress progress]))
-                                   (re-frame/dispatch [::progress-loaded course-id scene-id]))))))
+                                   (let [set-progress-callback [::progress-loaded course-id scene-id]]
+                                     (cond
+                                       sandbox? (re-frame/dispatch [::set-progress-data nil set-progress-callback])
+                                       (progress-initialized? progress) (re-frame/dispatch [::set-progress-data progress set-progress-callback])
+                                       :default (re-frame/dispatch [::init-default-progress progress set-progress-callback]))))))))
 
 (re-frame/reg-fx
   :load-lessons
@@ -1343,14 +1343,15 @@
 
 (re-frame/reg-event-fx
   ::set-progress-data
-  (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :progress-data data)}))
+  (fn [{:keys [db]} [_ data on-done]]
+    (cond-> {:db (assoc db :progress-data data)}
+            (some? on-done) (assoc :dispatch on-done))))
 
 (re-frame/reg-event-fx
   ::init-default-progress
-  (fn [{:keys [db]} [_ progress]]
+  (fn [{:keys [db]} [_ progress on-done]]
     (let [default-progress (get-in db [:course-data :default-progress])]
-      {:dispatch [::set-progress-data (merge progress default-progress)]})))
+      {:dispatch [::set-progress-data (merge progress default-progress) on-done]})))
 
 (def default-triggers
   {:start [[::reset-navigation]]})
