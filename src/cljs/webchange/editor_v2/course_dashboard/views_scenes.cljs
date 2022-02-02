@@ -64,16 +64,31 @@
       [ui/button {:on-click on-close}
        "Cancel"]]]))
 
+(defn- scene-pick-name-window [{:keys [show on-ok on-cancel name]}]
+  [ui/dialog
+   {:open show}
+   [ui/dialog-title "Choose name"]
+   [ui/text-field {:placeholder "New Activity"
+                   :on-click    #(.stopPropagation %)
+                   :on-change   #(reset! name (->> % .-target .-value))}]
+   [ui/dialog-actions
+    [ui/button {:on-click on-ok} "Ok"]
+    [ui/button {:on-click on-cancel} "Cancel"]]])
+
 (defn scenes-list
   [{:keys [title]}]
   (r/with-let [current-scene-info (r/atom nil)
                handle-open-info #(reset! current-scene-info %)
-               handle-close-info #(reset! current-scene-info nil)]
+               handle-close-info #(reset! current-scene-info nil)
+
+               show-name-picker (r/atom false)
+               new-activity-name (r/atom nil)]
     (let [course @(re-frame/subscribe [::subs/current-course])
           scene-list @(re-frame/subscribe [::subs/scene-list-ordered])
           list-styles (card/get-styles)]
       [list-card {:title       title
-                  :full-height true}
+                  :full-height true
+                  :on-add-click #(reset! show-name-picker true)}
        [ui/list {:style (:list-full-height list-styles)}
         (for [scene scene-list]
           ^{:key (:scene-id scene)}
@@ -90,5 +105,12 @@
                                :on-click   #(redirect-to :course-editor-v2-scene :id course :scene-id (-> scene :scene-id name))}
                [ic/edit {:style (:action-icon list-styles)}]])]])]
        [scene-info-window {:scene-id    @current-scene-info
-                           :on-close handle-close-info}]])))
-
+                           :on-close handle-close-info}]
+       [scene-pick-name-window {:show @show-name-picker
+                                :on-ok #(do
+                                          (reset! show-name-picker false)
+                                          (if (empty? @new-activity-name)
+                                            (print "error")
+                                            (re-frame/dispatch [::state/create-new-activity @new-activity-name course])))
+                                :on-cancel #(reset! show-name-picker false)
+                                :name new-activity-name}]])))
