@@ -12,9 +12,9 @@
   (case event
     "end" (aset video "onended" handler)))
 
-(defn set-volume
-  [sprite volume]
-  (-> (->video sprite)
+(defn- set-volume
+  [video volume]
+  (-> video
       (.-volume)
       (set! volume)))
 
@@ -24,30 +24,22 @@
 
 (defn play-video
   [sprite volume]
-  (stop-video sprite)
-
-  (when (number? volume)
-    (set-volume sprite volume))
-
-  (-> (->video sprite) (utils/play)))
-
-(defn play-from-start-video
-  [sprite volume]
-
-  (when (number? volume)
-    (set-volume sprite volume))
-
-  (-> (->video sprite) (utils/play)))
+  (let [video (->video sprite)]
+    (when (number? volume)
+      (set-volume video volume))
+    (utils/play video)))
 
 (defn set-src
   [sprite resource {:keys [play start end on-end volume]
                     :or   {on-end #()}}]
-  (let [video (.-data resource)
-        texture (.from Texture video)]
-    (aset sprite "texture" texture)
+  (let [src (.-url resource)
+        texture (.from Texture src)
+        _ (aset sprite "texture" texture)
+        video (->video sprite)]
+    (when (number? volume)
+      (set-volume video volume))
     (if play
       (if (and (some? start) (some? end))
         (utils/play-range video start end on-end)
-        (do (set-handler video "end" on-end)
-            (play-from-start-video sprite volume)))
-      (stop-video sprite))))
+        (set-handler video "end" on-end))
+      (utils/stop video))))
