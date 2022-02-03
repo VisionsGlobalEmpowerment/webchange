@@ -75,7 +75,9 @@
                          :actions    {:change {:on "change" :type "action" :id "set-current-tool" :pick-event-param "tool"}}}
                         :colors-palette
                         {:type       "colors-palette",
-                         :x          1830
+                         :x          400
+                         :height     150
+                         :y          900
                          :transition "colors-palette"
                          :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}}
                         :mari
