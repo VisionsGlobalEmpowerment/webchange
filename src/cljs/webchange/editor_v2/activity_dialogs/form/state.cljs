@@ -242,8 +242,9 @@
   (fn [[targets scene-data]]
     (cond->> (->> targets
                   (map (fn [[object-name {:keys [text]}]]
-                         {:text  (str text " (" (clojure.core/name object-name) ")")
-                          :value (clojure.core/name object-name)})))
+                         {:text        text
+                          :text-prefix (clojure.core/name object-name)
+                          :value       (clojure.core/name object-name)})))
              (flipbook-activity? scene-data) (map (fn [{:keys [value]}]
                                                     {:text  (get-book-text-name value scene-data)
                                                      :value value})))))
@@ -377,7 +378,7 @@
   (fn [{:keys [_]} [_ {:keys [action-data] :as data}]]
     (let [position-data (get-action-position-data data)]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
-                                                      position-data)]})))
+                                                           position-data)]})))
 
 (re-frame/reg-event-fx
   ::add-effect-action

@@ -15,9 +15,10 @@
           available-targets @(re-frame/subscribe [::state/available-text-animation-targets])
           handle-target-change (fn [target]
                                  (re-frame/dispatch [::state/set-text-animation-action-target path source target]))]
-      [target-control {:value     current-target
-                       :options   available-targets
-                       :on-change handle-target-change}])))
+      [target-control {:value            current-target
+                       :show-value-only? true
+                       :options          available-targets
+                       :on-change        handle-target-change}])))
 
 (defn text-animation-unit
   [{:keys [chunked-text path text text-object] :as props}]
