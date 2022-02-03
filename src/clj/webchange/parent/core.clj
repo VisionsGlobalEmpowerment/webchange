@@ -8,15 +8,18 @@
 (def course {:id   4
              :slug "english"})
 
+(defn- ->display-value
+  [number]
+  (-> number (or 0) (inc)))
+
 (defn- with-progress
   [{id :id :as child}]
-  (let [course-id 4
-        course-slug "english"
-        {{:keys [level lesson]} :next} (db/get-progress {:user_id   id
-                                                         :course_id (:course-id course)})]
+  (let [progress (db/get-progress {:user_id   id
+                                   :course_id (:id course)})
+        {:keys [level lesson]} (get-in progress [:data :next])]
     (assoc child
-      :level level
-      :lesson lesson)))
+      :level (->display-value level)
+      :lesson (->display-value lesson))))
 
 (defn- ->student
   [child]
@@ -25,8 +28,8 @@
    :first-name  (:first-name child)
    :last-name   (:last-name child)
    :course-slug (:slug course)
-   :level       (or (:level child) 1)
-   :lesson      (or (:lesson child) 1)})
+   :level       (:level child)
+   :lesson      (:lesson child)})
 
 (defn- ->parent
   [user]
