@@ -34,7 +34,7 @@
 
 (defn- header
   [{:keys [columns]}]
-  [ui/table-head
+  [ui/table-head {:class-name "course-table-header"}
    [ui/table-row
     (for [{:keys [id title]} columns]
       ^{:key id}
