@@ -12,6 +12,16 @@
   [number]
   (-> number (or 0) (inc)))
 
+(defn- progress-finished?
+  [progress]
+  (let [{:keys [next finished]} (get progress :data)
+        {:keys [activity level lesson]} next]
+    (-> (and (= level 0)
+             (= lesson 0)
+             (= activity 1)
+             (some #{activity} (get-in finished [:0 :0] [])))
+        (boolean))))
+
 (defn- with-progress
   [{id :id :as child}]
   (let [progress (db/get-progress {:user_id   id
@@ -19,7 +29,8 @@
         {:keys [level lesson]} (get-in progress [:data :next])]
     (assoc child
       :level (->display-value level)
-      :lesson (->display-value lesson))))
+      :lesson (->display-value lesson)
+      :finished (progress-finished? progress))))
 
 (defn- ->student
   [child]
@@ -29,7 +40,8 @@
    :last-name   (:last-name child)
    :course-slug (:slug course)
    :level       (:level child)
-   :lesson      (:lesson child)})
+   :lesson      (:lesson child)
+   :finished    (:finished child)})
 
 (defn- ->parent
   [user]

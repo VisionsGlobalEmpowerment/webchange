@@ -6,7 +6,7 @@
     [webchange.parent-dashboard.ui.index :refer [button circular-progress dialog icon-button]]))
 
 (defn- student-card
-  [{:keys [name level lesson id img]
+  [{:keys [name level lesson id img finished]
     :or   {img "/images/parent_dashboard/user_logo.svg"}}]
   (let [handle-play-click #(re-frame/dispatch [::state/play-as-student id])
         handle-delete-click #(re-frame/dispatch [::state/open-confirm-delete-student id])]
@@ -21,7 +21,9 @@
       [:div.name name]
       [:div.progress
        [:b "Progress: "]
-       (str "Level " level " - Lesson " lesson)]
+       (if finished
+         "Finished"
+         (str "Level " level " - Lesson " lesson))]
       [button {:class-name "play-button"
                :variant    "play-button"
                :on-click   handle-play-click}
