@@ -33,10 +33,19 @@ $units-margin: 6px;
 
     .unit-content {
         flex: 1 1;
+
+        & > * {
+            &:first-child {
+                flex: 1 1;
+            }
+
+            &:last-child {
+                flex: 2 1;
+            }
+        }
     }
 
     .phrase-unit {
-        display: flex;
         border-radius: 4px;
 
         &.concept-unit {
@@ -87,8 +96,6 @@ $units-margin: 6px;
     }
 
     .text-animation-unit {
-        display: flex;
-
         .chunks-warn {
             position: absolute;
             padding: 0;
@@ -115,6 +122,7 @@ $units-margin: 6px;
             font-weight: bold;
             margin-right: 8px;
             cursor: pointer;
+            white-space: nowrap;
 
             &:hover {
                 text-decoration: underline;
@@ -127,7 +135,6 @@ $units-margin: 6px;
     }
 
     .text {
-        flex: 1 1;
         cursor: text;
         outline: none;
 

@@ -10,14 +10,17 @@
 (def fixed-height 191)
 
 (defn- menu-item
-  [{:keys [close-menu icon text on-click has-icon?]}]
+  [{:keys [close-menu icon text text-prefix on-click has-icon?]}]
   [:div.wc-menu-list-item {:on-click #(when (some? on-click)
                                         (on-click)
                                         (close-menu))}
    (when has-icon?
      [icon-component/component {:icon       (if (some? icon) icon "none")
                                 :class-name "wc-menu-list-item-icon"}])
-   [:span text]])
+   [:span
+    (when (some? text-prefix)
+      [:b text-prefix ": "])
+    text]])
 
 (defn- confirmed-menu-item
   [{:keys [close-menu confirm on-click]
