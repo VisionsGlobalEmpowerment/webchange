@@ -46,6 +46,7 @@
                          :text           "    OPEN \n8AM-8PM",
                          :vertical-align "middle",
                          :visible        true
+                         :editable?      {:select true}
                          :actions        {}
                          },
 
@@ -64,6 +65,7 @@
                          :text           "MENU",
                          :vertical-align "middle",
                          :visible        true,
+                         :editable?      {:select true}
                          :actions        {}
                          },
                         :park-name
@@ -81,6 +83,7 @@
                          :text           "Wordbury Park",
                          :vertical-align "middle",
                          :visible        true,
+                         :editable?      {:select true}
                          },
                         :monument
                         {:type    "image",
@@ -109,6 +112,7 @@
                          :text           "TRASH",
                          :vertical-align "middle",
                          :visible        true,
+                         :editable?      {:select true}
                          :actions        {}
                          },
                         :trash-bin-2
@@ -126,6 +130,7 @@
                          :text           "RECYCLE",
                          :vertical-align "middle",
                          :visible        true
+                         :editable?      {:select true}
                          :actions        {}
                          },
                         :house-sign
@@ -309,6 +314,7 @@
                          :scale-y        1,
                          :text           "    OPEN \n8AM-8PM",
                          :vertical-align "middle",
+                         :editable?      {:select true}
                          :visible        true},
                         :icon-br-2    {:type     "group",
                                        :x        0,
@@ -332,6 +338,7 @@
                          :text           "MENU",
                          :vertical-align "middle",
                          :visible        true
+                         :editable?      {:select true}
                          },
                         :icon-br-im-2 {:type       "image",
                                        :x          810,
@@ -380,6 +387,7 @@
                          :scale-y        1,
                          :text           "TRASH",
                          :vertical-align "middle",
+                         :editable?      {:select true}
                          :visible        true}
                         :trash-bin-5
                         {:type           "text",
@@ -395,6 +403,7 @@
                          :scale-y        1,
                          :text           "TRASH",
                          :vertical-align "middle",
+                         :editable?      {:select true}
                          :visible        true}
 
                         :icon-br-im-4 {:type       "image",
