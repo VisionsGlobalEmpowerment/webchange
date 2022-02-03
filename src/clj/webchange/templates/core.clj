@@ -1,6 +1,8 @@
 (ns webchange.templates.core
-  (:require [webchange.templates.common-actions :as common-actions]
-            [clojure.tools.logging :as log]))
+  (:require
+    [clojure.tools.logging :as log]
+    [webchange.templates.common-actions :as common-actions]
+    [webchange.templates.common-actions-guide :as guide]))
 
 (def templates (atom {}))
 
@@ -37,7 +39,8 @@
         (assoc-in [:metadata :template-version] (:version metadata))
         (assoc-in [:metadata :template-name] (:name metadata))
         (assoc-in [:metadata :history] {:created data
-                                        :updated []}))))
+                                        :updated []})
+        (guide/with-guide-actions))))
 
 (defn- apply-heuristics
   [updated-data]
