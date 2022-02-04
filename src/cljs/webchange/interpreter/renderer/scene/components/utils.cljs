@@ -144,3 +144,12 @@
 (defn set-text
   [text-object value]
   (aset text-object "text" value))
+
+(defn throttle
+  [callback timeout]
+  (let [waiting? (atom false)]
+    (fn [& args]
+      (when-not @waiting?
+        (apply callback args)
+        (reset! waiting? true)
+        (js/setTimeout #(reset! waiting? false) timeout)))))

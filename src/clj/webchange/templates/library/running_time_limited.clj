@@ -62,7 +62,7 @@
                                                 :x        676
                                                 :y        64
                                                 :children ["letter-background" "letter-target"
-                                        ;           "box-target-background" "box-target"
+                                                           ;           "box-target-background" "box-target"
                                                            "counter-background" "counter"]}
                         :letter-background     {:type          "rectangle"
                                                 :x             40
@@ -77,7 +77,7 @@
                                                 :x              56
                                                 :y              35
                                                 :width          72
-                                                :height         72
+                                                :height         88
                                                 :transition     "letter-target"
                                                 :align          "center"
                                                 :fill           0xFFFFFF
@@ -185,11 +185,11 @@
                                                 :height      10
                                                 :transition  "vera-collision-test"
                                                 :collidable? true
-                                                :actions     {:collide {:on "collide-enter"
-                                                                        :collision-type "bounds"
-                                                                        :test ["#^target-letter-.*"]
-                                                                        :type "action"
-                                                                        :id "check-box"
+                                                :actions     {:collide {:on               "collide-enter"
+                                                                        :collision-type   "bounds"
+                                                                        :test             ["#^target-letter-.*"]
+                                                                        :type             "action"
+                                                                        :id               "check-box"
                                                                         :pick-event-param ["custom-data" "transition-name"]}}}}
         :scene-objects [["background"]
                         ["frame"]
@@ -207,38 +207,38 @@
                                                   :phrase-description   "Welcome dialog"
                                                   :dialog-track         "1 Welcome"
                                                   :skippable            true}
-                        :dialog-2-intro-concept  {:type               "sequence-data"
-                                                  :editor-type        "dialog"
+                        :dialog-2-intro-concept  {:type                 "sequence-data"
+                                                  :editor-type          "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        concept-var
-                                                  :data               [{:type "sequence-data"
-                                                                        :data [{:type "empty" :duration 0}
-                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                  :phrase             "concept"
-                                                  :phrase-description "Introduce concept"
-                                                  :dialog-track       "2 Introduce"
-                                                  :tags               ["instruction"]}
-                        :dialog-3-intro-timer    {:type               "sequence-data"
-                                                  :editor-type        "dialog"
+                                                  :concept-var          concept-var
+                                                  :data                 [{:type "sequence-data"
+                                                                          :data [{:type "empty" :duration 0}
+                                                                                 {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase               "concept"
+                                                  :phrase-description   "Introduce concept"
+                                                  :dialog-track         "2 Introduce"
+                                                  :tags                 ["instruction"]}
+                        :dialog-3-intro-timer    {:type                 "sequence-data"
+                                                  :editor-type          "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        concept-var
-                                                  :data               [{:type "sequence-data"
-                                                                        :data [{:type "empty" :duration 0}
-                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                  :phrase             "timer"
-                                                  :phrase-description "Introduce timer"
-                                                  :dialog-track       "2 Introduce"
-                                                  :tags               ["instruction"]}
-                        :dialog-4-ready-go       {:type               "sequence-data"
-                                                  :editor-type        "dialog"
+                                                  :concept-var          concept-var
+                                                  :data                 [{:type "sequence-data"
+                                                                          :data [{:type "empty" :duration 0}
+                                                                                 {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase               "timer"
+                                                  :phrase-description   "Introduce timer"
+                                                  :dialog-track         "2 Introduce"
+                                                  :tags                 ["instruction"]}
+                        :dialog-4-ready-go       {:type                 "sequence-data"
+                                                  :editor-type          "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        concept-var
-                                                  :data               [{:type "sequence-data"
-                                                                        :data [{:type "empty" :duration 0}
-                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                  :phrase             "ready-go"
-                                                  :phrase-description "Ready-Go"
-                                                  :dialog-track       "3 Start"}
+                                                  :concept-var          concept-var
+                                                  :data                 [{:type "sequence-data"
+                                                                          :data [{:type "empty" :duration 0}
+                                                                                 {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase               "ready-go"
+                                                  :phrase-description   "Ready-Go"
+                                                  :dialog-track         "3 Start"}
                         :highlight-target-letter {:type               "transition"
                                                   :transition-id      "letter-target-background"
                                                   :return-immediately true
@@ -267,26 +267,26 @@
                                                   :phrase-description "Starting noise"
                                                   :dialog-track       "3 Start"}
 
-                        :dialog-6-correct        {:type               "sequence-data"
-                                                  :editor-type        "dialog"
+                        :dialog-6-correct        {:type                 "sequence-data"
+                                                  :editor-type          "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        concept-var
-                                                  :data               [{:type "sequence-data"
-                                                                        :data [{:type "empty" :duration 0}
-                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                  :phrase             "correct"
-                                                  :phrase-description "Correct dialog"
-                                                  :dialog-track       "4 Options"}
-                        :dialog-7-wrong          {:type               "sequence-data"
-                                                  :editor-type        "dialog"
+                                                  :concept-var          concept-var
+                                                  :data                 [{:type "sequence-data"
+                                                                          :data [{:type "empty" :duration 0}
+                                                                                 {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase               "correct"
+                                                  :phrase-description   "Correct dialog"
+                                                  :dialog-track         "4 Options"}
+                        :dialog-7-wrong          {:type                 "sequence-data"
+                                                  :editor-type          "dialog"
                                                   :available-activities ["highlight-target-letter", "highlight-timer" "highlight-counter"]
-                                                  :concept-var        concept-var
-                                                  :data               [{:type "sequence-data"
-                                                                        :data [{:type "empty" :duration 0}
-                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                  :phrase             "wrong"
-                                                  :phrase-description "Wrong dialog"
-                                                  :dialog-track       "4 Options"}
+                                                  :concept-var          concept-var
+                                                  :data                 [{:type "sequence-data"
+                                                                          :data [{:type "empty" :duration 0}
+                                                                                 {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase               "wrong"
+                                                  :phrase-description   "Wrong dialog"
+                                                  :dialog-track         "4 Options"}
 
                         :go-line-check           {:type        "test-value"
                                                   :fail        "go-line"
@@ -337,11 +337,14 @@
                                                           :from-var  [{:var-name concept-var :var-property "letter" :action-property "attr-value"}]
                                                           :attr-name "text"}]}
 
-                        :check-box               {:type        "test-value"
-                                                  :from-var    [{:action-property "value1" :var-name concept-var :var-property "letter"}]
-                                                  :from-params [{:action-property "value2" :param-property "custom-data"}]
-                                                  :success     "pick-correct"
-                                                  :fail        "pick-wrong"}
+                        :check-box               {:type     "test-var-scalar"
+                                                  :var-name "game-finished"
+                                                  :value    false
+                                                  :success  {:type        "test-value"
+                                                             :from-var    [{:action-property "value1" :var-name concept-var :var-property "letter"}]
+                                                             :from-params [{:action-property "value2" :param-property "custom-data"}]
+                                                             :success     "pick-correct"
+                                                             :fail        "pick-wrong"}}
 
                         :pick-correct            {:type "sequence-data"
                                                   :data [{:id "dialog-6-correct" :type "action" :return-immediately true}

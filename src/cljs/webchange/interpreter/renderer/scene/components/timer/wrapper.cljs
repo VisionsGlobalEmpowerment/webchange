@@ -23,8 +23,13 @@
 
 (defn wrap
   [type name container state methods]
-  (create-wrapper {:name   name
-                   :type   type
-                   :object container
-                   :start  (fn []
-                             (start-timer state methods))}))
+  (let [destroy-timer (atom nil)]
+    (create-wrapper {:name       name
+                     :type       type
+                     :object     container
+                     :start      (fn []
+                                   (->> (start-timer state methods)
+                                        (reset! destroy-timer)))
+                     :on-destroy (fn []
+                                   (when (fn? @destroy-timer)
+                                     (@destroy-timer)))})))

@@ -23,7 +23,7 @@
       .-ticker
       (.remove f)))
 
-(defn- remove-all-tickers
+(defn remove-all-tickers
   []
   (doall (for [[ticker] @ticker-handlers]
            (remove-ticker ticker)))

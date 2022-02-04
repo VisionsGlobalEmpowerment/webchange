@@ -5,17 +5,17 @@
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.logger.index :as logger]))
 
-(def default-props {:x        {}
-                    :y        {}
-                    :width    {}
-                    :height   {}
-                    :name     {}
-                    :on-click {}
+(def default-props {:x              {}
+                    :y              {}
+                    :width          {}
+                    :height         {}
+                    :name           {}
+                    :on-click       {}
                     :on-pointerdown {}
                     :on-pointerover {}
-                    :ref      {}
-                    :offset   {:default {:x 0 :y 0}}
-                    :scale    {:default {:x 1 :y 1}}})
+                    :ref            {}
+                    :offset         {:default {:x 0 :y 0}}
+                    :scale          {:default {:x 1 :y 1}}})
 
 (defn- create-container
   [{:keys [x y scale offset]}]
@@ -53,9 +53,13 @@
 
     (when on-click (utils/set-handler container "click" on-click))
     (when on-pointerdown (utils/set-handler container "pointerdown" on-pointerdown))
-    (when on-pointerover (utils/set-handler container "pointermove"
-                                            #(when (and (.-target %) (= (name object-name) (.. % -target -name)))
-                                                                       (on-pointerover))))
+    (when on-pointerover (utils/set-handler container
+                                            "pointermove"
+                                            (utils/throttle #(when (and (.-target %)
+                                                                        (= (name object-name)
+                                                                           (.. % -target -name)))
+                                                               (on-pointerover))
+                                                            100)))
     (when ref (ref wrapped-container))
 
     (.addChild container sprite)

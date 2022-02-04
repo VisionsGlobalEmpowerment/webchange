@@ -76,6 +76,12 @@
             :get-wrapped-props (fn [] [])}
            wrapper-object)))
 
+(defn- with-destroy
+  [{:keys [object on-destroy] :as wrapper}]
+  (when (fn? on-destroy)
+    (utils/set-handler object "removed" on-destroy))
+  wrapper)
+
 (defn create-wrapper
   [wrapper-object]
   (-> wrapper-object
@@ -83,4 +89,5 @@
       (check-name-prop)
       (check-type-prop)
       (check-object-prop)
-      (add-default-methods)))
+      (add-default-methods)
+      (with-destroy)))

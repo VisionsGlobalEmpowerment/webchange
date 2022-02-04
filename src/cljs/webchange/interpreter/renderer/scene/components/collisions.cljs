@@ -99,17 +99,25 @@
           (call-event-handler on-collide-enter handler-props))))))
 
 (defonce ticker-created? (atom false))
+(defonce ticker-callback (atom nil))
 (defonce callbacks (atom []))
 
 (defn- init-ticker
   []
   (when-not @ticker-created?
-    (app/add-ticker (fn []
-                      (doseq [{:keys [object props bumped-into]} @callbacks]
-                        (test-objects (merge props
-                                             {:object      object
-                                              :bumped-into bumped-into})))))
+    (reset! ticker-callback (fn []
+                              (doseq [{:keys [object props bumped-into]} @callbacks]
+                                (test-objects (merge props
+                                                     {:object      object
+                                                      :bumped-into bumped-into})))))
+    (app/add-ticker @ticker-callback)
     (reset! ticker-created? true)))
+
+(defn reset-ticker
+  []
+  (app/remove-ticker @ticker-callback)
+  (reset! ticker-callback nil)
+  (reset! ticker-created? false))
 
 (defn- add-callback
   [object props bumped-into]
