@@ -20,4 +20,6 @@
                                    (tick)
                                    (when (last-tick?) (finish)))
                                  interval))
-      (finish))))
+      (finish))
+    (fn []
+      (js/clearInterval @id))))

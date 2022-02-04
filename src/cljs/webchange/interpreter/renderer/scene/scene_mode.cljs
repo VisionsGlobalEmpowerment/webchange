@@ -81,4 +81,5 @@
   [scene-object mode]
   (logger/group-folded "init mode helpers" (clojure.core/name mode))
   (init-mode-object-helpers! scene-object mode)
-  (logger/group-end "init mode helpers" (clojure.core/name mode)))
+  (logger/group-end "init mode helpers" (clojure.core/name mode))
+  scene-object)

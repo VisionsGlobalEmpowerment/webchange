@@ -7,11 +7,13 @@
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.question.overlay :as question]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays update-viewport]]
-    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app resize-app! get-renderer get-stage]]
+    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app resize-app! get-renderer get-stage remove-all-tickers]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! apply-mode]]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.interpreter.renderer.scene.components.utils :refer [set-handler]]
+    ))
 
 (defn- set-position
   [stage x y]
@@ -59,7 +61,8 @@
 
 (defn scene
   [{:keys []}]
-  (let [container (atom nil)]
+  (let [container (atom nil)
+        scene-container (atom nil)]
     (r/create-class
       {:display-name "web-gl-scene"
 
@@ -72,12 +75,13 @@
                              app (init-app viewport mode)]
                          (logger/trace-folded "scene mounted" viewport mode)
                          (.appendChild @container (.-view app))
-                         (-> (create-component {:type        "group"
-                                                :object-name :scene
-                                                :parent      (.-stage app)
-                                                :children    (apply-mode objects mode)
-                                                :mode        mode})
-                             (init-mode-helpers! mode))
+                         (reset! scene-container (-> (create-component {:type        "group"
+                                                                        :object-name :scene
+                                                                        :parent      (.-stage app)
+                                                                        :children    (apply-mode objects mode)
+                                                                        :mode        mode})
+                                                     (init-mode-helpers! mode)
+                                                     (get-in [:wrapper :object])))
 
                          (-> (get-renderer)
                              (register-handler "resize" handle-renderer-resize))
@@ -94,6 +98,8 @@
 
        :component-will-unmount
                      (fn []
+                       (remove-all-tickers)
+                       (.destroy @scene-container (clj->js {:children true}))
                        (-> (get-renderer)
                            (unregister-handler "resize" handle-renderer-resize)))
 
