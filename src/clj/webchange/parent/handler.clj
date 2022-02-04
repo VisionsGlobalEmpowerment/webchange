@@ -10,7 +10,7 @@
     [buddy.auth :refer [throw-unauthorized]]))
 
 (s/defschema Student {:id s/Int :name s/Str :first-name s/Str :last-name (s/maybe s/Str) :course-slug s/Str
-                      :level s/Int :lesson s/Int :finished s/Bool})
+                      :level (s/maybe s/Int) :lesson (s/maybe s/Int) :finished (s/maybe s/Bool)})
 (s/defschema Parent {:id s/Int :name s/Str :first-name s/Str :last-name (s/maybe s/Str)})
 (s/defschema CreateStudent {:name s/Str :age s/Int (s/optional-key :device) s/Str})
 
