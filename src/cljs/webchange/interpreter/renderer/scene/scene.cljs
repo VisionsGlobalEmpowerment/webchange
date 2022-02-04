@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.interpreter.pixi :refer [Application clear-texture-cache]]
+    [webchange.interpreter.renderer.scene.components.collisions :as collisions]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.question.overlay :as question]
@@ -11,9 +12,7 @@
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! apply-mode]]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
-    [webchange.logger.index :as logger]
-    [webchange.interpreter.renderer.scene.components.utils :refer [set-handler]]
-    ))
+    [webchange.logger.index :as logger]))
 
 (defn- set-position
   [stage x y]
@@ -99,6 +98,7 @@
        :component-will-unmount
                      (fn []
                        (remove-all-tickers)
+                       (collisions/reset-ticker)
                        (.destroy @scene-container (clj->js {:children true}))
                        (-> (get-renderer)
                            (unregister-handler "resize" handle-renderer-resize)))

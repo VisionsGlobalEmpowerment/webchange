@@ -84,6 +84,7 @@
 (ce/reg-simple-executor :upload-screenshot ::execute-upload-screenshot)
 (ce/reg-simple-executor :char-movement ::execute-char-movement)
 (ce/reg-simple-executor :log ::execute-log)
+(ce/reg-simple-executor :log-var ::execute-log-var)
 
 
 (re-frame/reg-event-fx
@@ -1940,6 +1941,12 @@
   ::execute-log
   (fn [{:keys [_]} [_ {:keys [message] :as action}]]
     (logger/trace ">>> Log: " message)
+    {:dispatch (ce/success-event action)}))
+
+(re-frame/reg-event-fx
+  ::execute-log-var
+  (fn [{:keys [_]} [_ {:keys [var-name] :as action}]]
+    (logger/trace ">>> Log variable: " var-name ": " (vars.core/get-variable var-name))
     {:dispatch (ce/success-event action)}))
 
 (comment
