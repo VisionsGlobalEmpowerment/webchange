@@ -1203,14 +1203,17 @@
 (re-frame/reg-event-fx
   ::load-course
   (fn-traced [{:keys [db]} [_ course-id scene-id options]]
-    (if (not= course-id (:loaded-course db))
-      {:db          (-> db
-                        (assoc :loaded-course course-id)
-                        (assoc :current-course course-id)
-                        (assoc-in [:loading :load-course] true))
-       :load-course {:course-id course-id
-                     :scene-id  scene-id
-                     :options   options}})))
+    (let [user-id (get-in db [:user :id])]
+      (when-not (and (= course-id (:loaded-course db))
+                     (= user-id (:loaded-course-user-id db)))
+        {:db          (-> db
+                          (assoc :loaded-course course-id)
+                          (assoc :loaded-course-user-id user-id)
+                          (assoc :current-course course-id)
+                          (assoc-in [:loading :load-course] true))
+         :load-course {:course-id course-id
+                       :scene-id  scene-id
+                       :options   options}}))))
 
 (re-frame/reg-event-fx
   ::load-scenes-with-skills
