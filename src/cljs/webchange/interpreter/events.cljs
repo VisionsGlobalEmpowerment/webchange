@@ -83,6 +83,7 @@
 (ce/reg-simple-executor :hide-question ::execute-hide-question)
 (ce/reg-simple-executor :upload-screenshot ::execute-upload-screenshot)
 (ce/reg-simple-executor :char-movement ::execute-char-movement)
+(ce/reg-simple-executor :log ::execute-log)
 
 
 (re-frame/reg-event-fx
@@ -1934,6 +1935,12 @@
           handle-action-finish #(ce/dispatch-success-fn action-data)]
       (movements/move action character target handle-action-finish)
       {})))
+
+(re-frame/reg-event-fx
+  ::execute-log
+  (fn [{:keys [_]} [_ {:keys [message] :as action}]]
+    (logger/trace ">>> Log: " message)
+    {:dispatch (ce/success-event action)}))
 
 (comment
   (let [db @re-frame.db/app-db

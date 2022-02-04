@@ -337,11 +337,14 @@
                                                           :from-var  [{:var-name concept-var :var-property "letter" :action-property "attr-value"}]
                                                           :attr-name "text"}]}
 
-                        :check-box               {:type        "test-value"
-                                                  :from-var    [{:action-property "value1" :var-name concept-var :var-property "letter"}]
-                                                  :from-params [{:action-property "value2" :param-property "custom-data"}]
-                                                  :success     "pick-correct"
-                                                  :fail        "pick-wrong"}
+                        :check-box               {:type     "test-var-scalar"
+                                                  :var-name "game-finished"
+                                                  :value    false
+                                                  :success  {:type        "test-value"
+                                                             :from-var    [{:action-property "value1" :var-name concept-var :var-property "letter"}]
+                                                             :from-params [{:action-property "value2" :param-property "custom-data"}]
+                                                             :success     "pick-correct"
+                                                             :fail        "pick-wrong"}}
 
                         :pick-correct            {:type "sequence-data"
                                                   :data [{:id "dialog-6-correct" :type "action" :return-immediately true}
