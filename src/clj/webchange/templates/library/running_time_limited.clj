@@ -77,7 +77,7 @@
                                                 :x              56
                                                 :y              35
                                                 :width          72
-                                                :height         72
+                                                :height         88
                                                 :transition     "letter-target"
                                                 :align          "center"
                                                 :fill           0xFFFFFF
