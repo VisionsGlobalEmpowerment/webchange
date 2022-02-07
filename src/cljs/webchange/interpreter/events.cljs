@@ -1287,7 +1287,8 @@
   (vars.core/clear-vars! false)
   (sound/stop-all-audio!)
   (ce/execute-remove-flows! {:flow-tag (str "scene-" scene-id)})
-  (ce/remove-timers!))
+  (ce/remove-timers!)
+  (sound/music-unmute))
 
 (re-frame/reg-event-fx
   ::set-current-scene

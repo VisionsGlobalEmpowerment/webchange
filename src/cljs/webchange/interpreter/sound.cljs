@@ -30,7 +30,8 @@
 
 (defn- set-volume
   [gain value]
-  (set! (.. gain -gain -value) value))
+  (when gain
+    (set! (.. gain -gain -value) value)))
 
 (defn music-volume
   [value]
