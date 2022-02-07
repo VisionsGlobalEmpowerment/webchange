@@ -67,8 +67,10 @@
 
 (defn get-selected-action-data
   [db]
-  (let [actions-data (state-translator/actions-data db)
-        {:keys [path]} (parent-state/get-selected-action db)]
+  (let [{:keys [path source]} (parent-state/get-selected-action db)
+        actions-data (if (= source :scene)
+                       (state-translator/actions-data db)
+                       (translator-form.concepts/current-concept-data db))]
     (get-in actions-data path)))
 
 (re-frame/reg-sub
