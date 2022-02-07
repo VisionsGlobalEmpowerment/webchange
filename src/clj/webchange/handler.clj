@@ -40,7 +40,7 @@
 (defn- login-resource
   [{role :role} prev cookies]
   (case role
-    :student (if (-> cookies (get "parent-login") :value)
+    :student (if (-> cookies (get "parent-login") :value (= "true"))
                (str (website/website-logout-page))
                (str "/student-login"))
     :teacher (str "/login" "?redirect=" prev)

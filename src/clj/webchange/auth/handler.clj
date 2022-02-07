@@ -34,17 +34,23 @@
         handle)))
 
 (defroutes auth-routes
-           (POST "/api/users/login" request
-             (-> request :body :user core/teacher-login! (handle-login request)))
-           (POST "/api/users/login-token" request
-             (handle-token-login request))
-           (POST "/api/students/login" request
-             (-> request :body core/student-login! (handle-login request)))
-           (GET "/api/users/current" request (handle-current-user request))
-           (POST "/api/users/register-user" request
-             (-> request :body :user core/register-user! handle))
+  (POST "/api/users/login" request
+        (-> request :body :user core/teacher-login! (handle-login request)))
+  (POST "/api/users/login-token" request
+        (handle-token-login request))
+  (POST "/api/students/login" request
+        (-> request
+            :body
+            core/student-login!
+            (handle-login request)
+            (assoc-in [:cookies :parent-login] {:value false
+                                                :path "/"
+                                                :http-only true})))
+  (GET "/api/users/current" request (handle-current-user request))
+  (POST "/api/users/register-user" request
+        (-> request :body :user core/register-user! handle))
 
-           (GET "/user/profile" [] (redirect (website/website-profile-page)))
-           (GET "/user/courses" [] (redirect (website/website-courses-page)))
-           (GET "/user/login" [] (redirect (website/website-login-page)))
-           (GET "/user/logout" [] (redirect (website/website-logout-page))))
+  (GET "/user/profile" [] (redirect (website/website-profile-page)))
+  (GET "/user/courses" [] (redirect (website/website-courses-page)))
+  (GET "/user/login" [] (redirect (website/website-login-page)))
+  (GET "/user/logout" [] (redirect (website/website-logout-page))))
