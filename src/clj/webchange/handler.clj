@@ -6,6 +6,7 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
+            [ring.middleware.cookies :refer [wrap-cookies]]
             [webchange.auth.handler :refer [auth-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
             [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes]]
@@ -37,9 +38,11 @@
 (defn api-request? [request] (= "application/json" (:accept request)))
 
 (defn- login-resource
-  [{role :role} prev]
+  [{role :role} prev cookies]
   (case role
-    :student (str "/student-login" "?redirect=" prev)
+    :student (if (-> cookies (get "parent-login") :value)
+               (str (website/website-logout-page))
+               (str "/student-login"))
     :teacher (str "/login" "?redirect=" prev)
     (str (website/website-logout-page) "?redirect=" prev)))
 
@@ -53,7 +56,7 @@
        :body   {:errors [{:message "Unauthenticated"}]}})
     (if (authenticated? request)
       (-> (resource-response "error403.html" {:root "public"}) (status 403))
-      (redirect (login-resource metadata (:uri request))))))
+      (redirect (login-resource metadata (:uri request) (:cookies request))))))
 
 (def auth-backend
   (session-backend {:unauthorized-handler unauthorized-handler}))
@@ -90,7 +93,7 @@
 (defn student-route
   [request]
   (if-not (authenticated? request)
-    (throw-unauthorized {:role :parent})
+    (throw-unauthorized {:role :student})
     (resource-response "student.html" {:root "public"})))
 
 (defn parent-route
@@ -222,6 +225,7 @@
       (wrap-authorization auth-backend)
       (wrap-authentication auth-backend)
       (wrap-session {:store dev-store})
+      wrap-cookies
       wrap-body-as-string
       (muuntaja.middleware/wrap-params)
       (muuntaja.middleware/wrap-format)
@@ -239,6 +243,7 @@
       (wrap-authorization auth-backend)
       (wrap-authentication auth-backend)
       (wrap-session {:store dev-store})
+      wrap-cookies
       wrap-body-as-string
       wrap-connection-close
       (muuntaja.middleware/wrap-params)

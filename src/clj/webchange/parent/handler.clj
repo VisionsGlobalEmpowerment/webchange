@@ -43,7 +43,10 @@
     (when-not (core/parent-of? student-id parent-id)
       (throw-unauthorized {:role :parent}))
     (let [result (core/child-login! student-id)]
-      (auth-handler/handle-login result request))))
+      (-> (auth-handler/handle-login result request)
+          (assoc-in [:cookies :parent-login] {:value true
+                                              :path "/"
+                                              :http-only true})))))
 
 (defn- handle-login-as-parent
   [request]

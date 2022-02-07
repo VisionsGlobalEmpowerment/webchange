@@ -21,7 +21,7 @@
 
 (defn- exit-button
   []
-  (let [handle-click #(re-frame/dispatch [::state/login-as-parent])]
+  (let [handle-click #(re-frame/dispatch [::state/exit])]
     [toolbar-button {:on-click handle-click}
      "Exit"]))
 

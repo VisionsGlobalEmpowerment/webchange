@@ -7,7 +7,6 @@
 (re-frame/reg-event-fx
   ::open-page
   (fn [{:keys [_]} [_ page-id]]
-    (print "::open-page" page-id)
     {:dispatch [::events/redirect :student-dashboard]}))
 
 (re-frame/reg-event-fx
@@ -21,3 +20,11 @@
   (fn [{:keys [db]} [_ user]]
     {:db       (update-in db [:user] merge user)
      :dispatch [::events/redirect :parent-dashboard]}))
+
+(re-frame/reg-event-fx
+  ::exit
+  (fn [{:keys [db]} [_]]
+    (let [current-school (-> db :user :school-id)]
+      (if current-school
+        {:dispatch [::events/redirect :student-login]}
+        {:dispatch [::login-as-parent]}))))
