@@ -27,7 +27,7 @@
   ::load-audio-script-data
   (fn [{:keys [db]} [_ {:keys [audio-url]} {:keys [on-success on-failure] :as handlers}]]
     (if-let [script-data (get-audio-script db audio-url)]
-      (warehouse/dispatch-if-defined (conj on-success script-data))
+      (warehouse/dispatch-if-defined on-success script-data)
       {:dispatch [::warehouse/load-audio-script-polled
                   {:file audio-url}
                   {:on-success [::load-audio-script-data-success {:audio-url audio-url} handlers]

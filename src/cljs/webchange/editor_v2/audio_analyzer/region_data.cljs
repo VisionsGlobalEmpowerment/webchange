@@ -175,7 +175,6 @@
     {}
     (let [region (get-start-end-for-text text script)
           matched? (contains? region :end)]
-      (logger/trace "region-data" region text)
       (cond-> {:matched? matched?}
               matched? (assoc :region-data region)))))
 

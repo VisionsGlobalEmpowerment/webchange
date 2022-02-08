@@ -95,13 +95,15 @@
 
 (re-frame/reg-event-fx
   ::auto-select
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ ws]]
     (let [{:keys [url]} (get-wave-form-data db)
           current-text (get-current-text db)
           audio-script (recognition/get-audio-script db url)
           region-data (utils/get-region-data current-text audio-script)]
       (when (some? region-data)
-        {:dispatch [::change-region region-data]}))))
+        {:dispatch       [::change-region region-data]
+         :scroll-to-time {:ws   ws
+                          :time (:start region-data)}}))))
 
 (re-frame/reg-event-fx
   ::change-region
