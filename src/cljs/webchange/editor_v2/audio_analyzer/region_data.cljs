@@ -44,7 +44,7 @@
                            end-subs (or (clojure.string/index-of data-text " " supposed-end)
                                         supposed-end)
                            subs-to-compare (->> (clojure.string/split
-                                                 (subs data-text i end-subs) #"\s")
+                                                  (subs data-text i end-subs) #"\s")
                                                 (butlast)
                                                 (clojure.string/join " "))
                            text-to-search-length (count subs-to-compare)
@@ -110,7 +110,7 @@
                               candidates-end (filter (fn [candidate] (and (>= max-supposed-end (:end candidate))
                                                                           (>= (:start candidate) (:start candidate-start)))) candidates-end)
                               best-candidate (select-best-candidate candidates-end)]
-                            ;Check that end fragment found and looks good, if not fallback to default logic
+                          ;Check that end fragment found and looks good, if not fallback to default logic
                           (if (and (contains? best-candidate :start)
                                    (contains? best-candidate :end)
                                    (>= (:end best-candidate) (:end candidate-start)))
@@ -121,8 +121,8 @@
                                         (> (:end-text item) (:start candidate-start))
                                         (< (:start-text item) (:end candidate-end)))
                                  (cond-> result
-                                   (>= (:end item) (:end result)) (assoc :end (:end item))
-                                   (<= (:start item) (:start result)) (assoc :start (:start item)))
+                                         (>= (:end item) (:end result)) (assoc :end (:end item))
+                                         (<= (:start item) (:start result)) (assoc :start (:start item)))
                                  result))
                              {:start 1000000} (:items result-items))]
     final-result))
@@ -175,9 +175,15 @@
     {}
     (let [region (get-start-end-for-text text script)
           matched? (contains? region :end)]
-      (logger/trace "region-data" region text)
       (cond-> {:matched? matched?}
               matched? (assoc :region-data region)))))
+
+(defn get-region-data
+  [text audio-script]
+  (let [{:keys [matched? region-data]} (get-region-data-if-possible {:text   text
+                                                                     :script audio-script})]
+    (when matched?
+      region-data)))
 
 (defn get-region-options
   [{:keys [text script]}]
@@ -185,4 +191,4 @@
     (let [regions (get-start-end-options-for-text text script)]
       (logger/trace "region-options" regions text)
       {:matched? (not-empty regions)
-       :regions regions})))
+       :regions  regions})))

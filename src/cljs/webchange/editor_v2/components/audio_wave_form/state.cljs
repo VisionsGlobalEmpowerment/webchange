@@ -14,7 +14,7 @@
   ::init-audio-script
   (fn [{:keys [db]} [_ file]]
     {:db       (assoc-in db (path-to-db [file :loading]) true)
-     :dispatch [::recognition/get-audio-script-data
+     :dispatch [::recognition/load-audio-script-data
                 {:audio-url file}
                 {:on-success [::set-audio-script file]
                  :on-failure [::reset-script-loading file]}]}))
