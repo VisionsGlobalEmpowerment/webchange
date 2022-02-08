@@ -201,7 +201,16 @@
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/newspaper_02.png"}
-                        :icon-59      {:type       "transparent",
+                        :icon-59      {:type           "text",
+                                       :align          "center",
+                                       :fill           "#FFB59C"
+                                       :font-family    "Pacifico",
+                                       :font-size      40,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "59",
+                                       :vertical-align "middle",
+                                       :visible        true
                                        :x          210,
                                        :y          405,
                                        :width      55,
@@ -209,15 +218,34 @@
                                        :transition "icon-59",
                                        :editable?  {:drag true, :select true},
                                        :actions    {:click {:id "icon-59-click", :on "click", :type "action" :unique-tag "speech"}}}
-                        :icon-open    {:type       "transparent",
+                        :icon-open    {:type           "text",
+                                       :align          "center",
+                                       :fill           "#FFC2CE"
+                                       :font-family    "Pacifico",
+                                       :font-size      32,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "Open",
+                                       :vertical-align "middle",
+                                       :visible        true
                                        :x          200,
                                        :y          605,
+                                       :skew-y     -0.1,
                                        :width      95,
                                        :height     80,
                                        :transition "icon-open",
                                        :editable?  {:drag true, :select true},
                                        :actions    {:click {:id "icon-open-click", :on "click", :type "action" :unique-tag "speech"}}}
-                        :icon-276     {:type       "transparent",
+                        :icon-276     {:type           "text",
+                                       :align          "center",
+                                       :fill           "#E7C6CB"
+                                       :font-family    "Pacifico",
+                                       :font-size      32,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "276",
+                                       :vertical-align "middle",
+                                       :visible        true
                                        :x          1485,
                                        :y          490,
                                        :width      43,

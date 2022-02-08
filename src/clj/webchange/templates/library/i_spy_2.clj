@@ -249,23 +249,54 @@
                                              :children ["icon-br-im-2" "t-shirt-2"],
                                              :visible  false,
                                              :states   {:show {:visible true}, :hide {:visible false}}},
-                        :icon-post          {:type       "transparent",
+                        :icon-post          {:type           "text",
+                                             :align          "center",
+                                             :fill           "#FFEA80",
+                                             :font-family    "Staatliches",
+                                             :font-size      80,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "POST",
+                                             :vertical-align "middle",
+                                             :visible        true
                                              :x          75,
                                              :y          900,
                                              :width      210,
                                              :height     140,
+                                             :editable?      {:select true}
                                              :actions    {:click {:id "icon-post-click", :on "click", :type "action" :unique-tag "speech"}}}
-                        :icon-street-closed {:type       "transparent",
+                        :icon-street-closed {:type           "text",
+                                             :align          "center",
+                                             :fill           "#EB9189",
+                                             :font-family    "Staatliches",
+                                             :font-size      36,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "STREET\nCLOSED",
+                                             :vertical-align "middle",
+                                             :visible        true
                                              :x          1800,
                                              :y          660,
+                                             :skew-y         0.05
                                              :width      120,
                                              :height     90,
+                                             :editable?      {:select true}
                                              :actions    {:click {:id "icon-street-closed-click", :on "click", :type "action" :unique-tag "speech"}}}
-                        :icon-2942          {:type       "transparent",
+                        :icon-2942          {:type           "text",
+                                             :align          "center",
+                                             :fill           "#15254B",
+                                             :font-family    "Staatliches",
+                                             :font-size      24,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "2942",
+                                             :vertical-align "middle",
+                                             :visible        true
                                              :x          610,
                                              :y          508,
                                              :width      50,
                                              :height     20,
+                                             :editable?      {:select true}
                                              :actions    {:click {:id "icon-2942-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :t-shirt-2          {:type           "text",
                                              :x              823,
@@ -510,7 +541,7 @@
                                                    :data               [{:type "sequence-data"
                                                                          :data [{:type "empty" :duration 0}
                                                                                 {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                   :phrase             "icon-2942",
+                                                   :phrase             "icon-2942-click",
                                                    :phrase-description "Bus stop 2942 click"}
                         :icon-street-closed-click {:type               "sequence-data",
                                                    :editor-type        "dialog",
