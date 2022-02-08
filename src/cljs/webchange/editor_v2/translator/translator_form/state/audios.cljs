@@ -31,11 +31,21 @@
          (filter #(-> % nil? not))
          (distinct))))
 
+(def current-lang-path (path-to-db [:current-lang]))
+
+(defn get-current-lang
+  [db]
+  (get-in db current-lang-path))
 
 (re-frame/reg-sub
   ::current-lang
-  (fn [db _]
-    (get-in db (path-to-db [:current-lang]))))
+  get-current-lang)
+
+(re-frame/reg-event-fx
+  ::set-current-lang
+  (fn [{:keys [db]} [_ current-lang]]
+    {:db (assoc-in db current-lang-path current-lang)}))
+
 
 ;; Events
 
@@ -50,7 +60,7 @@
 (re-frame/reg-event-fx
   ::upload-audio
   (fn [{:keys [db]} [_ js-file-value audio-props form-params]]
-    (let [lang (get-in db (path-to-db [:current-lang]))
+    (let [lang (get-current-land db)
           asset-data {:date (.now js/Date)
                       :lang lang}]
       {:db       (assoc-in db [:loading :upload-audio] true)
@@ -82,8 +92,3 @@
       (if (some? current-target)
         {:dispatch [::translator-form.scene/update-asset asset-url {:target current-target}]}
         {}))))
-
-(re-frame/reg-event-fx
-  ::set-current-lang
-  (fn [{:keys [db]} [_ current-lang]]
-    {:db (assoc-in db (path-to-db [:current-lang]) current-lang)}))

@@ -6,7 +6,9 @@
     [webchange.editor-v2.activity-dialogs.form.state :as state-dialog]
     [webchange.editor-v2.activity-dialogs.menu.state :as parent-state]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-inner-action]]
-    [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]))
+    [webchange.editor-v2.translator.translator-form.state.audios :refer [get-current-lang]]
+    [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
+    [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
   [relative-path]
@@ -62,3 +64,11 @@
   ::bring-to-top
   (fn [{:keys [_]} [_ url]]
     {:dispatch [::state-scene/update-asset-date url (.now js/Date)]}))
+
+(re-frame/reg-event-fx
+  ::retry-audio-recognition
+  (fn [{:keys [db]} [_ url]]
+    (let [lang (get-current-lang db)]
+      (print "lang" lang)
+      {:dispatch [::warehouse/retry-audio-recognition
+                  {:url url :lang lang}]})))
