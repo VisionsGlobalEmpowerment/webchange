@@ -67,7 +67,7 @@
 (defn- current-audio
   [{:keys [src volume on-volume-change]}]
   (into [:div.current-value]
-        (cond-> [[label "Current music:"]]
+        (cond-> [[label (str "Current music:" src)]]
                 (nil? src) (concat [[:div.undefined-src "Music is not selected"]])
                 (some? src) (concat [[audio {:url    src
                                              :volume volume}]
@@ -103,23 +103,23 @@
         volume (get-in scene-data [:actions (keyword action-name) :volume] default-volume)
         src (get-in scene-data [:actions (keyword action-name) :id])
         open? @(re-frame/subscribe [::modal-state])
-        handle-close #(re-frame/dispatch [::close])]
-    (r/with-let [form-data (r/atom {:background-music
-                                    {:volume volume
-                                     :src    src}})]
-      (let [handle-save #(re-frame/dispatch [::state/save :background-music @form-data [::close]])]
-        [dialog {:open?    open?
-                 :on-close handle-close
-                 :title    "Background music !!"
-                 :actions  [[button {:on-click handle-save
-                                     :size     "big"}
-                             "Save"]
-                            [button {:on-click handle-close
-                                     :variant  "outlined"
-                                     :color    "default"
-                                     :size     "big"}
-                             "Cancel"]]}
-         [background-music-form form-data]]))))
+        handle-close #(re-frame/dispatch [::close])
+        form-data (r/atom {:background-music
+                           {:volume volume
+                            :src    src}})
+        handle-save #(re-frame/dispatch [::state/save :background-music @form-data [::close]])]
+    [dialog {:open?    open?
+             :on-close handle-close
+             :title    "Background Music"
+             :actions  [[button {:on-click handle-save
+                                 :size     "big"}
+                         "Save"]
+                        [button {:on-click handle-close
+                                 :variant  "outlined"
+                                 :color    "default"
+                                 :size     "big"}
+                         "Cancel"]]}
+     [background-music-form form-data]]))
 
 (defn remove-background-music
   []
