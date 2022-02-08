@@ -65,11 +65,14 @@
 (re-frame/reg-event-fx
   ::parse-audio-script-region
   (fn [{:keys [_]} [_
-                    {:keys [script-text update-text-animation? update-talk-animation?]}
+                    {:keys [script-text update-text-animation? update-talk-animation?] :as params}
                     {:keys [on-success on-failure]}
                     script-data]]
     (let [{:keys [matched? regions]} (get-region-options {:text script-text
                                                           :script script-data})]
+      (print "::parse-audio-script-region")
+      (print "params" params)
+      (print "matched?" matched?)
       (if matched?
         (let [region-data (first regions)
               match-data {:region region-data

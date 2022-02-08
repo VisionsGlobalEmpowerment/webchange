@@ -14,5 +14,4 @@
    [section-block {:title "Add audio"}
     [add-audio]]
    [section-block {:title "Select available audio"}
-    [audios-list]]
-   [current-audio-modal]])
+    [audios-list]]])

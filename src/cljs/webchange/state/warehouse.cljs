@@ -18,6 +18,12 @@
           (js/FormData.)
           form-params))
 
+(defn dispatch-if-defined
+  [handler & args]
+  (if (some? handler)
+    {:dispatch (-> handler (concat args) (vec))}
+    {}))
+
 (defn- create-request
   [{:keys [method uri body params request-type] :as props} {:keys [on-success on-failure suppress-api-error?] :or {suppress-api-error? false}}]
   {:dispatch-n (cond-> []

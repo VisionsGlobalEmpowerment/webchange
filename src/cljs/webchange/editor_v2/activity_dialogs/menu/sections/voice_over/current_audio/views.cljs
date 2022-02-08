@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.audio-wave-form.utils :as ws-utils]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
+    [webchange.editor-v2.activity-dialogs.menu.sections.voice-over.select-region-fom.views :refer [select-region-button]]
     [webchange.editor-v2.activity-dialogs.menu.sections.voice-over.state :as state]
     [webchange.ui-framework.components.index :refer [icon-button]]))
 
@@ -16,20 +17,11 @@
     " audio or "
     [:span.clickable "select from available"]]])
 
-(defn- settings
-  []
-  (let [handle-click #(re-frame/dispatch [::state/open-voice-over-audio-window])]
-    [:div.settings
-     [icon-button {:icon     "expand"
-                   :size     "small"
-                   :on-click handle-click}
-      "Expand"]]))
-
 (defn current-audio
   [props]
   (r/with-let [ws (atom nil)
                handle-ref #(reset! ws %)]
-    (let [{:keys [audio] :as audio-data} @(re-frame/subscribe [::state/current-audio])
+    (let [{:keys [audio] :as audio-data} @(re-frame/subscribe [::state/current-inner-action])
           handle-change-region #(re-frame/dispatch [::state/set-current-audio-region %])
           handle-recognition-retry #(re-frame/dispatch [::state/recognition-retry %])
           handle-scroll-start (fn []
@@ -42,7 +34,7 @@
       (into [:div.current-audio]
             (if (some? audio)
               [[:div.actions
-                [settings]
+                [select-region-button]
                 [icon-button {:icon     "restart"
                               :title    "Recognition retry"
                               :size     "small"
