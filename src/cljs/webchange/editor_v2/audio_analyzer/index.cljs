@@ -46,6 +46,10 @@
 
 ;; Methods
 
+(defn gat-available-regions
+  [text audio-script]
+  (rg/get-start-end-options-for-text text audio-script))
+
 (defn get-region-data
   ([text audio-script]
    (get-region-data text audio-script nil))

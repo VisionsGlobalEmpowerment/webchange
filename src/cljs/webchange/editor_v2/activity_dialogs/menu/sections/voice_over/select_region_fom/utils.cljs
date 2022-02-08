@@ -8,6 +8,10 @@
   ([text audio-script restriction]
    (audio-analyzer/get-region-data text audio-script restriction)))
 
+(defn get-available-regions
+  [text audio-script]
+  (audio-analyzer/gat-available-regions text audio-script))
+
 (defn get-animation-sequence-data
   [{:keys [form-data text audio-script]}]
   (cond

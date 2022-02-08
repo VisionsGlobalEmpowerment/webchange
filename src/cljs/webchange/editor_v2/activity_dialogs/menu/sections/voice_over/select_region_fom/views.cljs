@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-dialogs.menu.sections.voice-over.select-region-fom.state :as state]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
-    [webchange.ui-framework.components.index :refer [button dialog icon-button label]]))
+    [webchange.ui-framework.components.index :refer [button dialog icon-button label select]]))
 
 (defn- toolbar
   [{:keys [ws show-expand? show-auto-select? show-scroll?]
@@ -40,12 +40,23 @@
                       :on-click handle-expand}
          "Expand"]])]))
 
+(defn- region-options
+  []
+  (let [value @(re-frame/subscribe [::state/selected-option])
+        options @(re-frame/subscribe [::state/region-options])
+        handle-change #(re-frame/dispatch [::state/set-selected-option %])]
+    [select {:type      "int"
+             :value     value
+             :options   options
+             :on-change handle-change}]))
+
 (defn select-region-form
   []
   (let [ws (atom nil)
         handle-ref #(reset! ws %)]
     (re-frame/dispatch [::state/init])
-    (fn [{:keys [toolbar-props]}]
+    (fn [{:keys [show-options? toolbar-props]
+          :or   {show-options? true}}]
       (let [wave-form-data @(re-frame/subscribe [::state/wave-form-data])
             handle-change-region #(re-frame/dispatch [::state/change-region %])]
         [:div.select-region-form
@@ -54,7 +65,9 @@
          [audio-wave-form (merge wave-form-data
                                  {:on-change      handle-change-region
                                   :show-controls? true
-                                  :ref            handle-ref})]]))))
+                                  :ref            handle-ref})]
+         (when show-options?
+           [region-options])]))))
 
 (defn select-region
   []
@@ -69,4 +82,5 @@
                             :size     "big"}
                     "Close"]]}
        [select-region-form {:toolbar-props {:show-expand? false}}]]
-      [select-region-form {:toolbar-props {:show-scroll? false}}])))
+      [select-region-form {:toolbar-props {:show-scroll? false}
+                           :show-options? false}])))

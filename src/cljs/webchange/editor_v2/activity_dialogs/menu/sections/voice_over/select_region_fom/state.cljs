@@ -8,6 +8,7 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
     [webchange.state.warehouse-recognition :as recognition]
+    [webchange.utils.numbers :refer [to-precision]]
     [webchange.utils.scene-action-data :refer [text-animation-action?
                                                animation-sequence-action?]]))
 
@@ -85,13 +86,71 @@
   (fn [{:keys [ws time]}]
     (ws-utils/center-to-time ws time)))
 
+;; Options
+
+(def region-options-path (path-to-db [:region-options]))
+
+(defn- get-region-options
+  [db]
+  (get-in db region-options-path []))
+
+(re-frame/reg-event-fx
+  ::init-region-options
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [url]} (get-wave-form-data db)
+          current-text (get-current-text db)
+          audio-script (recognition/get-audio-script db url)]
+      {:db (->> (utils/get-available-regions current-text audio-script)
+                (assoc-in db region-options-path))})))
+
+(re-frame/reg-event-fx
+  ::reset-region-options
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db region-options-path [])}))
+
+(re-frame/reg-sub
+  ::region-options
+  (fn [db]
+    (let [sec->time (fn [sec]
+                      (str (-> sec (quot 60) (int))
+                           ":"
+                           (-> sec (rem 60) (to-precision 2))))]
+      (->> (get-region-options db)
+           (map-indexed (fn [idx {:keys [start end region-text]}]
+                          {:text  (str "[" (sec->time start) " - " (sec->time end) "] " region-text)
+                           :value idx}))))))
+
+(def selected-region-option-path (path-to-db [:selected-region-option]))
+
+(re-frame/reg-sub
+  ::selected-option
+  (fn [db]
+    (get-in db selected-region-option-path)))
+
+(re-frame/reg-event-fx
+  ::set-selected-option
+  (fn [{:keys [db]} [_ option-idx]]
+    (let [region-options (get-region-options db)
+          selected-region (nth region-options option-idx)]
+      {:db       (assoc-in db selected-region-option-path option-idx)
+       :dispatch [::change-region selected-region]})))
+
+(re-frame/reg-event-fx
+  ::reset-selected-option
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db selected-region-option-path nil)}))
+
 ;; Init
 
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [db]} [_]]
     (let [{:keys [url]} (get-wave-form-data db)]
-      {:dispatch [::recognition/load-audio-script-data {:audio-url url}]})))
+      {:dispatch-n [[::reset-region-options]
+                    [::reset-selected-option]
+                    [::recognition/load-audio-script-data
+                     {:audio-url url}
+                     {:on-success [::init-region-options]}]]})))
 
 (re-frame/reg-event-fx
   ::auto-select
