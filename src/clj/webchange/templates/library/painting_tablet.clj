@@ -26,10 +26,8 @@
                                      :states  {:active {:x -180}, :inactive {:x -280}}},
                         :colors-palette
                                     {:type       "colors-palette",
-                                     :x          1680,
-                                     :y          0,
-                                     :width      180,
-                                     :height     1080,
+                                     :x          400
+                                     :height     150
                                      :scene-name "colors-palette",
                                      :actions    {:change {:id "set-current-color", :on "change", :type "action", :pick-event-param "color"}},
                                      :colors     ["#4479bb" "#92bd4a" "#ed91aa" "#fdc531" "#010101"]},
