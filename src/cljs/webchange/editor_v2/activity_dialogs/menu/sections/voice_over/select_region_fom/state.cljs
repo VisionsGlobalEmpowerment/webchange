@@ -7,7 +7,7 @@
     [webchange.editor-v2.components.audio-wave-form.utils :as ws-utils]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
-    [webchange.state.warehouse-recognition-new :as recognition]
+    [webchange.state.warehouse-recognition :as recognition]
     [webchange.utils.scene-action-data :refer [text-animation-action?
                                                animation-sequence-action?]]))
 

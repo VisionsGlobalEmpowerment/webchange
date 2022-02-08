@@ -28,7 +28,7 @@
                     :on-click handle-auto-select-retry}
        "Auto select"]]]))
 
-(defn select-region-fom
+(defn select-region-form
   []
   (let [ws (atom nil)
         handle-ref #(reset! ws %)]
@@ -55,7 +55,7 @@
                           :variant  "outlined"
                           :size     "big"}
                   "Close"]]}
-     [select-region-fom]]))
+     [select-region-form]]))
 
 (defn select-region-button
   []

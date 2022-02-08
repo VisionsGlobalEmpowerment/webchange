@@ -1,107 +1,41 @@
 (ns webchange.state.warehouse-recognition
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer.region-data :refer [get-region-data-if-possible
-                                                            get-region-options]]
-    [webchange.editor-v2.audio-analyzer.talk-data :refer [get-chunks-data-if-possible
-                                                          get-talk-data-if-possible]]
     [webchange.state.warehouse :as warehouse]))
 
-(defn- dispatch-if-defined
-  [handler & args]
-  (if (some? handler)
-    {:dispatch (-> handler (concat args) (vec))}
-    {}))
+(defn path-to-db
+  [relative-path]
+  (->> relative-path
+       (concat [:recognition])
+       (warehouse/path-to-db)))
 
-;; Stored scripts
+;; Audio scripts
 
-(defonce stored-results (atom {}))
+(def audio-scripts-path (path-to-db [:audio-scripts]))
 
-(re-frame/reg-cofx
-  :audio-scripts
-  (fn [co-effects]
-    (assoc co-effects :audio-scripts @stored-results)))
-
-(re-frame/reg-fx
-  :store-audio-script
-  (fn [{:keys [audio-url audio-script]}]
-    (swap! stored-results assoc audio-url audio-script)))
-
-;; Script data
+(defn get-audio-script
+  [db audio-url]
+  (->> (conj audio-scripts-path audio-url)
+       (get-in db)))
 
 (re-frame/reg-event-fx
-  ::get-audio-script-data
-  [(re-frame/inject-cofx :audio-scripts)]
-  (fn [{:keys [audio-scripts]} [_ {:keys [audio-url]} {:keys [on-success on-failure] :as handlers}]]
-    (if-let [loaded-audio-script (get audio-scripts audio-url)]
-      (dispatch-if-defined on-success loaded-audio-script)
+  ::store-audio-script
+  (fn [{:keys [db]} [_ audio-url script-data]]
+    {:db (update-in db audio-scripts-path assoc audio-url script-data)}))
+
+(re-frame/reg-event-fx
+  ::load-audio-script-data
+  (fn [{:keys [db]} [_ {:keys [audio-url]} {:keys [on-success on-failure] :as handlers}]]
+    (if-let [script-data (get-audio-script db audio-url)]
+      (warehouse/dispatch-if-defined (conj on-success script-data))
       {:dispatch [::warehouse/load-audio-script-polled
                   {:file audio-url}
-                  {:on-success [::audio-script-data-loaded {:audio-url audio-url} handlers]
+                  {:on-success [::load-audio-script-data-success {:audio-url audio-url} handlers]
                    :on-failure on-failure}]})))
 
 (re-frame/reg-event-fx
-  ::audio-script-data-loaded
+  ::load-audio-script-data-success
   (fn [{:keys [_]} [_ {:keys [audio-url]} {:keys [on-success]} script-data]]
-    {:dispatch           (conj on-success script-data)
-     :store-audio-script {:audio-url    audio-url
-                          :audio-script (->> script-data (remove #(= "[unk]" (:word %))))}}))
-
-;; Script region
-
-(re-frame/reg-event-fx
-  ::get-audio-script-region
-  (fn [{:keys [_]} [_
-                    {:keys [audio-url script-text update-text-animation?]}
-                    {:keys [on-failure] :as handlers}]]
-    {:dispatch [::get-audio-script-data
-                {:audio-url audio-url}
-                {:on-success [::parse-audio-script-region
-                              {:script-text            script-text
-                               :update-text-animation? update-text-animation?}
-                              handlers]
-                 :on-failure on-failure}]}))
-
-(re-frame/reg-event-fx
-  ::parse-audio-script-region
-  (fn [{:keys [_]} [_
-                    {:keys [script-text update-text-animation? update-talk-animation?] :as params}
-                    {:keys [on-success on-failure]}
-                    script-data]]
-    (let [{:keys [matched? regions]} (get-region-options {:text script-text
-                                                          :script script-data})]
-      (print "::parse-audio-script-region")
-      (print "params" params)
-      (print "matched?" matched?)
-      (if matched?
-        (let [region-data (first regions)
-              match-data {:region region-data
-                          :script script-data
-                          :text   script-text}]
-          (dispatch-if-defined
-            on-success
-            (cond-> region-data
-              update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
-              update-talk-animation? (assoc :data (get-talk-data-if-possible match-data)))
-            regions))
-        (dispatch-if-defined on-failure)))))
-
-
-(re-frame/reg-event-fx
-  ::parse-audio-script-option
-  [(re-frame/inject-cofx :audio-scripts)]
-  (fn [{:keys [audio-scripts]}
-       [_
-        {:keys [audio-url script-text region-data update-text-animation? update-talk-animation?]}
-        {:keys [on-success on-failure]}]]
-    (let [script-data (get audio-scripts audio-url)
-          match-data {:region region-data
-                      :script script-data
-                      :text   script-text}]
-      (if script-data
-        (dispatch-if-defined
-         on-success
-         (cond-> region-data
-           update-text-animation? (assoc :data (get-chunks-data-if-possible match-data))
-           update-talk-animation? (assoc :data (get-talk-data-if-possible match-data))))
-        (dispatch-if-defined on-failure)))))
+    (let [fixed-data (->> script-data (remove #(= "[unk]" (:word %))))]
+      {:dispatch-n (cond-> [[::store-audio-script audio-url fixed-data]]
+                           (some? on-success) (conj (conj on-success fixed-data)))})))
