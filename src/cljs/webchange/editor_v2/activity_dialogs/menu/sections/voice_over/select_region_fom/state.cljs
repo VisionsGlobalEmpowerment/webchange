@@ -167,18 +167,19 @@
 (re-frame/reg-event-fx
   ::change-region
   (fn [{:keys [db]} [_ region-data]]
-    (let [{:keys [url] :as form-data} (get-wave-form-data db)
+    (let [{:keys [url]} (get-wave-form-data db)
           current-text (get-current-text db)
           audio-script (recognition/get-audio-script db url)
           inner-action (parent-state/get-current-inner-action db)
           data-patch (cond-> region-data
                              (text-animation-action? inner-action)
-                             (assoc :data (utils/get-text-animation-data {:text         current-text
-                                                                          :audio-script audio-script}))
+                             (assoc :data (utils/get-text-animation-data {:text           current-text
+                                                                          :audio-script   audio-script
+                                                                          :selection-data region-data}))
                              (animation-sequence-action? inner-action)
-                             (assoc :data (utils/get-animation-sequence-data {:text         current-text
-                                                                              :audio-script audio-script
-                                                                              :form-data    form-data})))]
+                             (assoc :data (utils/get-animation-sequence-data {:text           current-text
+                                                                              :audio-script   audio-script
+                                                                              :selection-data region-data})))]
       {:dispatch [::update-action data-patch]})))
 
 (re-frame/reg-event-fx

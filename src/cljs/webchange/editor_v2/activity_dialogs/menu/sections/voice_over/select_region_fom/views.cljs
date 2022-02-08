@@ -45,10 +45,13 @@
   (let [value @(re-frame/subscribe [::state/selected-option])
         options @(re-frame/subscribe [::state/region-options])
         handle-change #(re-frame/dispatch [::state/set-selected-option %])]
-    [select {:type      "int"
-             :value     value
-             :options   options
-             :on-change handle-change}]))
+    [:div.region-options
+     [label {:class-name "label"} "Selection options:"]
+     [select {:type       "int"
+              :class-name "select"
+              :value      value
+              :options    options
+              :on-change  handle-change}]]))
 
 (defn select-region-form
   []

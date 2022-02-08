@@ -13,17 +13,17 @@
   (audio-analyzer/gat-available-regions text audio-script))
 
 (defn get-animation-sequence-data
-  [{:keys [form-data text audio-script]}]
+  [{:keys [text audio-script selection-data]}]
   (cond
-    (some? audio-script) (-> (get-region-data text audio-script (select-keys form-data [:start :end]))
+    (some? audio-script) (-> (get-region-data text audio-script (select-keys selection-data [:start :end]))
                              (audio-analyzer/region-data->animation-sequence-data audio-script))
-    :else [{:start (:start form-data)
-            :end   (:end form-data)
+    :else [{:start (:start selection-data)
+            :end   (:end selection-data)
             :anim  "talk"}]))
 
 (defn get-text-animation-data
-  [{:keys [text audio-script]}]
+  [{:keys [text audio-script selection-data]}]
   (cond
-    (some? audio-script) (-> (get-region-data text audio-script)
+    (some? audio-script) (-> (get-region-data text audio-script (select-keys selection-data [:start :end]))
                              (audio-analyzer/region->text-animation text audio-script))
     :else []))

@@ -31,6 +31,8 @@
          (filter #(-> % nil? not))
          (distinct))))
 
+;; Current language
+
 (def current-lang-path (path-to-db [:current-lang]))
 
 (defn get-current-lang
@@ -46,7 +48,6 @@
   (fn [{:keys [db]} [_ current-lang]]
     {:db (assoc-in db current-lang-path current-lang)}))
 
-
 ;; Events
 
 (re-frame/reg-event-fx
@@ -60,7 +61,7 @@
 (re-frame/reg-event-fx
   ::upload-audio
   (fn [{:keys [db]} [_ js-file-value audio-props form-params]]
-    (let [lang (get-current-land db)
+    (let [lang (get-current-lang db)
           asset-data {:date (.now js/Date)
                       :lang lang}]
       {:db       (assoc-in db [:loading :upload-audio] true)
