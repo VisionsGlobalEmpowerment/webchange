@@ -748,8 +748,10 @@
 
 (defn- get-object-keys-to-update
   [{:keys [editable? type]}]
-  (cond-> [:editable? :origin :max-width :max-height :width :height :image-size :metadata :actions]
-          (-> (get editable? :drag) true? not) (concat [:x :y])
+  (cond-> [:editable? :origin :max-width :max-height :width :height :image-size :metadata :actions :filters]
+          (and
+           (-> (get editable? :drag) true? not)
+           (not (true? editable?))) (concat [:x :y])
           (not editable?) (concat [:visible])
           (= type "group") (concat [:children])
           (= type "text") (concat [:fill :font-family :font-size])))
