@@ -105,11 +105,13 @@
 (defn- remove-character-from-dialogs
   [scene-data character-name]
   (->> (find-and-change-action-recursively
-         (:actions scene-data)
-         (fn [{:keys [target]}]
-           (= target character-name))
-         (fn [action-data]
-           (assoc action-data :target nil)))
+        (:actions scene-data)
+        (fn [action-data]
+          (and
+           (map? action-data)
+           (= (:target action-data) character-name)))
+        (fn [action-data]
+          (assoc action-data :target nil)))
        (assoc scene-data :actions)))
 
 (defn remove-character
