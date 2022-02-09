@@ -1,7 +1,7 @@
 (ns webchange.dashboard.classes.class-profile.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.dashboard.classes.events :as classes-events]
+    [webchange.dashboard.classes.class-form.state :as class-form]
     [webchange.dashboard.classes.state :as parent-state]
     [webchange.dashboard.events :as dashboard-events]
     [webchange.logger.index :as logger]
@@ -114,7 +114,7 @@
   ::open-edit-class-form
   (fn [{:keys [db]} [_]]
     (let [class-id (get-class-id db)]
-      {:dispatch [::classes-events/show-edit-class-form class-id]})))
+      {:dispatch [::class-form/open-edit-class-window class-id {:on-success [::init {:class-id class-id}]}]})))
 
 (re-frame/reg-event-fx
   ::open-remove-class-form

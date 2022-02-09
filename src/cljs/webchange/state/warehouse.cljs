@@ -156,6 +156,14 @@
                      :uri    (str "/api/courses")
                      :params course-data} handlers)))
 
+(re-frame/reg-event-fx
+  ::load-available-courses
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-available-courses
+                     :method :get
+                     :uri    (str "/api/courses/available")}
+                    handlers)))
+
 ;;
 
 (re-frame/reg-event-fx
@@ -431,4 +439,13 @@
     (create-request {:key    :load-class-profile
                      :method :get
                      :uri    (str "/api/class-profile/" class-id "/course/" course-slug)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::save-class
+  (fn [{:keys [_]} [_ {:keys [class-id data]} handlers]]
+    (create-request {:key    :save-class
+                     :method :put
+                     :uri    (str "/api/classes/" class-id)
+                     :params data}
                     handlers)))

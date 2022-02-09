@@ -42,25 +42,6 @@
                        [::load-classes])}))
 
 (re-frame/reg-event-fx
-  ::edit-class
-  (fn [{:keys [db]} [_ id data]]
-    {:db (assoc-in db [:loading :edit-class] true)
-     :http-xhrio {:method          :put
-                  :uri             (str "/api/classes/" id)
-                  :params          data
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::edit-class-success]
-                  :on-failure      [:api-request-error :edit-class]}}))
-
-
-(re-frame/reg-event-fx
-  ::edit-class-success
-  (fn [_ _]
-    {:dispatch-n (list [:complete-request :edit-class]
-                       [::load-classes])}))
-
-(re-frame/reg-event-fx
   ::delete-class
   (fn [{:keys [db]} [_ id]]
     {:db (assoc-in db [:loading :delete-class] true)
