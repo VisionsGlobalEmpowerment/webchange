@@ -1177,8 +1177,12 @@
 (re-frame/reg-event-fx
   ::save-progress-failure
   (fn [{:keys [db]} _]
-    {:dispatch-n [[:api-request-error :save-progress]
-                  [::events/redirect "/student-login"]]}))
+    (let [current-school (-> db :user :school-id)]
+      (if current-school
+        {:dispatch-n [[:api-request-error :save-progress]
+                      [::events/redirect "/student-login"]]}
+        {:dispatch-n [[:api-request-error :save-progress]
+                      [::events/location :logout]]}))))
 
 (re-frame/reg-event-fx
   ::save-progress-success
