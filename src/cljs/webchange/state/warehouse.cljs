@@ -363,6 +363,7 @@
                     handlers)))
 
 ;; Students
+
 (re-frame/reg-event-fx
   ::load-parent-students
   (fn [{:keys [_]} [_ handlers]]
@@ -412,4 +413,22 @@
                      :method :put
                      :uri    (str "/api/assets/retry-voice-recognition")
                      :params data}
+                    handlers)))
+
+;; Classes
+
+(re-frame/reg-event-fx
+  ::load-class
+  (fn [{:keys [_]} [_ class-id handlers]]
+    (create-request {:key    :load-class
+                     :method :get
+                     :uri    (str "/api/classes/" class-id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-class-profile
+  (fn [{:keys [_]} [_ class-id course-slug handlers]]
+    (create-request {:key    :load-class-profile
+                     :method :get
+                     :uri    (str "/api/class-profile/" class-id "/course/" course-slug)}
                     handlers)))

@@ -22,13 +22,13 @@
           path))
 
 (defn main-content
-  [main-content]
-  (case main-content
+  [{:keys [page props]}]
+  (case page
     :dashboard (do (redirect-to :dashboard-classes) [content-page {:title (translate [:content :redirect])}])
     :classes-list [classes-list]
     :schools-list [schools-list]
     :courses-list [courses-list-page]
-    :class-profile [class-profile]
+    :class-profile [class-profile props]
     :students-list [students-list]
     :student-profile [student-profile]
     [:div (translate [:content :not-defined])]))
@@ -49,7 +49,7 @@
 (defn dashboard
   []
   (let [drawer-open (r/atom true)]
-    (fn []
+    (fn [route-params]
       (let [is-loading? false
             current-main-content @(re-frame/subscribe [::dashboard-subs/current-main-content])]
         [:div
@@ -66,5 +66,6 @@
                               (get-shift-styles @drawer-open drawer-width))}
           (if is-loading?
             [progress-bar]
-            [main-content current-main-content])]
+            [main-content {:page  current-main-content
+                           :props route-params}])]
          [modal-windows]]))))
