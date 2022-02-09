@@ -65,7 +65,6 @@
   (-> (get-class-data db)
       (get :id)))
 
-
 (re-frame/reg-event-fx
   ::set-class-data
   (fn [{:keys [db]} [_ class-data]]

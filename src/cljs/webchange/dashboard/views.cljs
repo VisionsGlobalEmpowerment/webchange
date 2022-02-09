@@ -43,12 +43,12 @@
    [class-delete-modal]
    [student-modal]
    [student-remove-from-class-modal]
-   [student-delete-modal]
-   ])
+   [student-delete-modal]])
 
 (defn dashboard
   []
   (let [drawer-open (r/atom true)]
+
     (fn [route-params]
       (let [is-loading? false
             current-main-content @(re-frame/subscribe [::dashboard-subs/current-main-content])]

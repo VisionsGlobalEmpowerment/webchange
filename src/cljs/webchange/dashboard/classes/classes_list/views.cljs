@@ -4,6 +4,7 @@
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.dashboard.classes.classes-list.state :as state]
     [webchange.dashboard.classes.events :as classes-events]
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.events :as dashboard-events]
@@ -52,12 +53,15 @@
      [ui/icon-button {:on-click #(on-remove-click class)} [ic/delete]]]]])
 
 (defn- classes-list
-  [props classes]
-  [ui/table
-   [ui/table-body
-    (for [class classes]
-      ^{:key (:id class)}
-      [classes-list-item props class])]])
+  []
+  (re-frame/dispatch [::state/init])
+  (fn [props]
+    (let [classes @(re-frame/subscribe [::state/classes])]
+      [ui/table
+       [ui/table-body
+        (for [class classes]
+          ^{:key (:id class)}
+          [classes-list-item props class])]])))
 
 (defn classes-list-page
   []
@@ -72,8 +76,7 @@
          {:on-edit-click     (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/show-edit-class-form id]))
           :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::dashboard-events/show-delete-class-form id]))
           :on-profile-click  #(redirect-to :dashboard-class-profile :class-id (:id %))
-          :on-students-click #(redirect-to :dashboard-students :class-id (:id %))}
-         classes]
+          :on-students-click #(redirect-to :dashboard-students :class-id (:id %))}]
         [fab
          {:on-click   #(re-frame/dispatch [::classes-events/show-add-class-form])
           :color      "primary"

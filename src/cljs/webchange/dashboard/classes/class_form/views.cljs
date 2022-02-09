@@ -24,6 +24,7 @@
      [select {:value       value
               :options     options
               :on-change   handle-change
+              :type        "int"
               :placeholder "Select course"
               :variant     "outlined"}]]))
 

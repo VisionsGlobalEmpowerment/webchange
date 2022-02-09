@@ -3,8 +3,8 @@
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
+    [webchange.dashboard.classes.classes-menu.state :as state]
     [webchange.dashboard.classes.events :as classes-events]
-    [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.routes :refer [redirect-to]]))
 
 (defn- translate
@@ -22,7 +22,9 @@
 
 (defn classes-menu
   []
-  (let [classes @(re-frame/subscribe [::classes-subs/classes-list])]
+  (re-frame/dispatch [::state/init])
+  (fn []
+    (let [classes @(re-frame/subscribe [::state/classes])]
     [ui/expansion-panel {:default-expanded true}
      [ui/expansion-panel-summary
       [ui/typography {:variant "h6"}
@@ -41,4 +43,4 @@
        {:color    "secondary"
         :on-click #(re-frame/dispatch [::classes-events/show-add-class-form])}
        [ic/add]
-       (translate [:add-button])]]]))
+       (translate [:add-button])]]])))

@@ -14,7 +14,6 @@
   ::open-edit-class-window
   (fn [{:keys [_]} [_ class-id handlers]]
     {:dispatch-n [[::load-class class-id]
-                  [::set-class-id class-id]
                   [::set-form-state {:action       "edit"
                                      :class-id     class-id
                                      :handlers     handlers
@@ -167,7 +166,7 @@
 (re-frame/reg-event-fx
   ::save-success
   (fn [{:keys [db]} [_]]
-    (let [{:keys [on-success]} (get-handlers db)]
+    (let [{:keys [on-success]} (get-handlers db)]           ;; ToDo: remove handlers
       {:dispatch-n (cond-> [[::reset]]
                            (some? on-success) (conj on-success))})))
 
@@ -176,9 +175,9 @@
   (fn [{:keys [db]} [_ handlers]]
     (let [class-id (get-class-id db)
           form-data (get-form-data db)]
-      {:dispatch [::warehouse/save-class
-                  {:class-id class-id
-                   :data     form-data}
+      {:dispatch [::parent-state/edit-class
+                  {:id   class-id
+                   :data form-data}
                   handlers]})))
 
 (re-frame/reg-event-fx
