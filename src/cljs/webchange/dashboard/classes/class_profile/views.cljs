@@ -6,6 +6,7 @@
     [webchange.dashboard.common.views :refer [content-page content-page-section score-table]]
     [webchange.dashboard.classes.events :as classes-events]
     [webchange.dashboard.classes.subs :as classes-subs]
+    [webchange.dashboard.classes.class-profile.state :as state]
     [webchange.dashboard.classes.class-profile.stubs :refer [scores-stub profile-stub]]
     [webchange.dashboard.classes.class-profile.views-profile-table :refer [profile-table]]
     [webchange.dashboard.events :as dashboard-events]
@@ -33,16 +34,20 @@
   [{:keys [text value]}]
   [ui/typography
    {:variant "body1"
-    :style   {:padding "12px 0"}}
+    :style   {:padding        "12px 0"
+              :text-transform "capitalize"}}
    [:strong (str text ": ")] value])
 
 (defn- class-short-card
   [{:keys [class]}]
-  [ui/grid {:container true
-            :justify   "space-between"}
-   [ui/grid {:item true :xs 3}
-    [data-item {:text  (translate [:card :course])
-                :value (:course class)}]]])
+  (re-frame/dispatch [::state/load-course (:course-slug class)])
+  (fn []
+    (let [course-name @(re-frame/subscribe [::state/course-name])]
+      [ui/grid {:container true
+                :justify   "space-between"}
+       [ui/grid {:item true :xs 3}
+        [data-item {:text  (translate [:card :course])
+                    :value course-name}]]])))
 
 (defn- actions
   [{:keys [class on-edit-click on-remove-click on-students-click]}]
