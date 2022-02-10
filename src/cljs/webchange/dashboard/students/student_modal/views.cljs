@@ -11,7 +11,8 @@
     [webchange.validation.specs.student :as spec]
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.students.events :as students-events]
-    [webchange.dashboard.students.subs :as students-subs]))
+    [webchange.dashboard.students.subs :as students-subs]
+    [webchange.utils.map :refer [remove-nil-fields]]))
 
 (def not-nil? (complement nil?))
 (def not-equal (complement =))
@@ -64,15 +65,6 @@
             (for [class classes]
               (class->menu-item class))]]
           [ui/grid {:item true :xs 12}
-           [wui/select-validated
-            {:label        "Gender"
-             :value        (or (:gender @props) "")
-             :on-change    #(swap! props assoc :gender (->> % .-target .-value))
-             :spec         ::spec/gender
-             :custom-error (:gender form-errors)}
-            (for [gender genders]
-              (gender->menu-item gender))]]
-          [ui/grid {:item true :xs 12}
            [wui/text-field-validated {:label         "First Name"
                                       :default-value (:first-name @props)
                                       :required      true
@@ -82,20 +74,25 @@
           [ui/grid {:item true :xs 12}
            [wui/text-field-validated {:label         "Last Name"
                                       :default-value (:last-name @props)
-                                      :required      true
                                       :spec          ::spec/last-name
                                       :custom-error  (:last-name form-errors)
                                       :on-change     #(swap! props assoc :last-name (->> % .-target .-value))}]]
           [ui/grid {:item true :xs 12}
+           [wui/select-validated
+            {:label        "Gender"
+             :value        (or (:gender @props) "")
+             :on-change    #(swap! props assoc :gender (->> % .-target .-value))
+             :spec         ::spec/gender}
+            (for [gender genders]
+              (gender->menu-item gender))]]
+          [ui/grid {:item true :xs 12}
            [wui/text-field-validated
-            {:required        true
-             :label           "Date of Birth"
+            {:label           "Date of Birth"
              :type            "date"
              :default-value   date-of-birth
              :on-change       #(swap! props assoc :date-of-birth (->> % .-target .-value))
              :InputLabelProps {:shrink true}
-             :spec            ::spec/date-of-birth
-             :custom-error    (:date-of-birth form-errors)}]]
+             :spec            ::spec/date-of-birth}]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
             [ui/text-field
@@ -123,13 +120,13 @@
         {{first-name :first-name last-name :last-name} :user :as student} @(re-frame/subscribe [::students-subs/current-student])
         student-modal-state @(re-frame/subscribe [::students-subs/student-modal-state])
         student-data (r/atom (assoc student :first-name first-name
-                                    :last-name last-name
-                                    :class-id (if (= :add student-modal-state)
-                                                class-id
-                                                (:class-id student))))
+                                            :last-name last-name
+                                            :class-id (if (= :add student-modal-state)
+                                                        class-id
+                                                        (:class-id student))))
         handle-save (if (= :edit student-modal-state)
-                      (fn [student-data] (re-frame/dispatch [::students-events/edit-student (:class-id student-data) (:id student-data) student-data]))
-                      (fn [student-data] (re-frame/dispatch [::students-events/add-student (:class-id student-data) student-data])))
+                      (fn [student-data] (re-frame/dispatch [::students-events/edit-student (:class-id student-data) (:id student-data) (remove-nil-fields student-data)]))
+                      (fn [student-data] (re-frame/dispatch [::students-events/add-student (:class-id student-data) (remove-nil-fields student-data)])))
         handle-close #(re-frame/dispatch [::students-events/close-student-modal])
         loading @(re-frame/subscribe [::students-subs/student-loading])]
     [ui/dialog
@@ -215,24 +212,24 @@
             [ui/dialog-content
              [ui/dialog-content-text (str "You are about to complete progress for " first-name " " last-name)]
              [ui/text-field
-              {:label         "Level to complete"
-               :type          "text"
-               :helper-text   "Leave blank to complete all levels"
-               :on-change #(swap! data assoc :level (-> % .-target .-value js/parseInt))}]
+              {:label       "Level to complete"
+               :type        "text"
+               :helper-text "Leave blank to complete all levels"
+               :on-change   #(swap! data assoc :level (-> % .-target .-value js/parseInt))}]
              [ui/text-field
-              {:label         "Lesson to complete"
-               :type          "text"
-               :helper-text   "Leave blank to complete all lessons"
-               :on-change #(swap! data assoc :lesson (-> % .-target .-value js/parseInt))}]
+              {:label       "Lesson to complete"
+               :type        "text"
+               :helper-text "Leave blank to complete all lessons"
+               :on-change   #(swap! data assoc :lesson (-> % .-target .-value js/parseInt))}]
              [ui/text-field
-              {:label         "Activity to complete"
-               :type          "text"
-               :helper-text   "Leave blank to complete all activities"
-               :on-change #(swap! data assoc :activity (-> % .-target .-value js/parseInt))}]
-             [ui/checkbox {:label     "Navigation"
-                           :variant   "outlined"
+              {:label       "Activity to complete"
+               :type        "text"
+               :helper-text "Leave blank to complete all activities"
+               :on-change   #(swap! data assoc :activity (-> % .-target .-value js/parseInt))}]
+             [ui/checkbox {:label         "Navigation"
+                           :variant       "outlined"
                            :default-value false
-                           :on-change #(swap! data assoc :navigation (-> % .-target .-checked))}]]
+                           :on-change     #(swap! data assoc :navigation (-> % .-target .-checked))}]]
             [ui/dialog-actions
              [ui/button {:on-click #(re-frame/dispatch [::students-events/close-complete-modal])} "Cancel"]
              [ui/button

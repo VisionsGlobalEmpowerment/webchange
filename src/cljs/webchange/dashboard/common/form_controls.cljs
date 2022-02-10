@@ -31,9 +31,9 @@
 (defn select-validated
   []
   (let [dirty? (r/atom false)]
-    (fn [{:keys [label value on-change spec custom-error] :as props} & children]
+    (fn [{:keys [label value on-change spec custom-error required] :as props} & children]
       [ui/form-control {:margin "normal" :full-width true}
-       [ui/input-label {:required true} label]
+       [ui/input-label {:required required} label]
        [ui/select
         (merge (-> props
                    (dissoc :variant)
