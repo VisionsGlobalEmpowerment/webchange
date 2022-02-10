@@ -52,7 +52,9 @@ WHERE user_id = :user_id
 
 -- :name get-classes :? :*
 -- :doc retrieve all classes by school
-SELECT * from classes
+SELECT cl.*, cr.slug as course_slug
+FROM classes cl
+LEFT JOIN courses cr ON cl.course_id = cr.id
 WHERE school_id = :school_id
 
 -- :name get-class :? :1
