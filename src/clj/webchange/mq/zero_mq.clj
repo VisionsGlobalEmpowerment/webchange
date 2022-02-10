@@ -17,10 +17,9 @@
   (async/go
     (zmq/with-new-context
       (let [vent (zmq/socket :push {:bind vent-url})]
-          (while true
-            (let [task (async/<! chan)]
-            (zmq/send-msg vent (str task))))))
-    ))
+        (while true
+          (let [task (async/<! chan)]
+            (zmq/send-msg vent (str task) {:timeout 30000})))))))
 
 (defn sink-receive
   [queue-name on-receive-callback]
@@ -43,8 +42,11 @@
           sink (zmq/socket :push {:connect (get-in queues [queue-name :worker-sink-url])})]
       (log/debug "Connection started")
       (while true
-        (let [task (-> (zmq/receive-msg vent {:stringify true}) first edn/read-string)
-              _ (log/debug "Received task" task)
-              result (on-receive-callback task)]
-          (if result (zmq/send-msg sink (pr-str result))))))))
+        (let [task (-> (zmq/receive-msg vent {:stringify true :timeout 30000})
+                       first
+                       edn/read-string)]
+          (log/debug "Received task" task)
+          (when task
+            (when-let [result (on-receive-callback task)]
+              (zmq/send-msg sink (pr-str result)))))))))
 
