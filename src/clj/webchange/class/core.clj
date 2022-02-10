@@ -74,25 +74,31 @@
   (db/delete-class! {:id id})
   [true {:id id}])
 
+(defn- prepare-student-data
+  [data]
+  (let [date-of-birth (when (and (string? (:date-of-birth data))
+                                 (not (empty? (:date-of-birth data))))
+                        (jt/local-date "yyyy-MM-dd" (:date-of-birth data)))
+        transform #(db/transform-keys-one-level ->snake_case_keyword %)
+        optional-fields (->> [:last-name :gender :date-of-birth]
+                             (map #(vector % nil))
+                             (into {}))]
+    (->> (assoc data :date-of-birth date-of-birth)
+         (transform)
+         (merge optional-fields))))
+
 (defn create-student!
   [data]
-  (let [date-of-birth (jt/local-date "yyyy-MM-dd" (:date-of-birth data))
-        transform #(db/transform-keys-one-level ->snake_case_keyword %)
-        prepared-data (-> data
-                          (assoc :date-of-birth date-of-birth)
-                          transform)
+  (let [prepared-data (prepare-student-data data)
         [{id :id}] (db/create-student! prepared-data)]
     [true {:id id}]))
 
 (defn update-student!
   [id {class-id :class-id :as data}]
   (let [{user-id :user-id} (db/get-student {:id id})
-        date-of-birth (jt/local-date "yyyy-MM-dd" (:date-of-birth data))
-        transform #(db/transform-keys-one-level ->snake_case_keyword %)
         prepared-data (-> data
-                          (assoc :date-of-birth date-of-birth)
                           (assoc :id id)
-                          transform)]
+                          (prepare-student-data))]
     (db/update-student! prepared-data)
     (db/update-course-stat-class! {:user_id user-id :class_id class-id})))
 
