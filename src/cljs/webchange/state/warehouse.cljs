@@ -173,7 +173,6 @@
                      :method :get
                      :uri    (str "/api/skills")} handlers)))
 
-
 ;; Scene
 
 (re-frame/reg-event-fx
@@ -231,6 +230,7 @@
                      :method :put
                      :uri    (str "/api/courses/" course-slug "/scenes/" scene-slug "/preview")
                      :params {:preview preview}} handlers)))
+
 ;; Lesson sets
 
 (re-frame/reg-event-fx
@@ -450,10 +450,112 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::create-class
+  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+    (create-request {:key    :create-class
+                     :method :post
+                     :uri    (str "/api/classes")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::save-class
   (fn [{:keys [_]} [_ {:keys [class-id data]} handlers]]
     (create-request {:key    :save-class
                      :method :put
                      :uri    (str "/api/classes/" class-id)
                      :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::delete-class
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    (create-request {:key    :delete-class
+                     :method :delete
+                     :uri    (str "/api/classes/" class-id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-class-students
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    (create-request {:key    :load-class-students
+                     :method :get
+                     :uri    (str "/api/classes/" class-id "/students")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::remove-student-from-class
+  (fn [{:keys [_]} [_ {:keys [student-id]} handlers]]
+    (create-request {:key    :remove-student-from-class
+                     :method :delete
+                     :uri    (str "/api/students/" student-id "/class")}
+                    handlers)))
+
+;; Students
+
+(re-frame/reg-event-fx
+  ::load-unassigned-students
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-unassigned-students
+                     :method :get
+                     :uri    (str "/api/unassigned-students")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-student
+  (fn [{:keys [_]} [_ {:keys [student-id]} handlers]]
+    (create-request {:key    :load-student
+                     :method :get
+                     :uri    (str "/api/students/" student-id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-student-profile
+  (fn [{:keys [_]} [_ {:keys [student-id course-name]} handlers]]
+    (create-request {:key    :load-student-profile
+                     :method :get
+                     :uri    (str "/api/individual-profile/" student-id "/course/" course-name)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::add-student
+  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+    (create-request {:key    :add-student
+                     :method :post
+                     :uri    (str "/api/students")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::edit-student
+  (fn [{:keys [_]} [_ {:keys [student-id data]} handlers]]
+    (create-request {:key    :edit-student
+                     :method :put
+                     :uri    (str "/api/students/" student-id)
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::delete-student
+  (fn [{:keys [_]} [_ {:keys [student-id]} handlers]]
+    (create-request {:key    :delete-student
+                     :method :delete
+                     :uri    (str "/api/students/" student-id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::complete-student-progress
+  (fn [{:keys [_]} [_ {:keys [student-id course-name data]} handlers]]
+    (create-request {:key    :complete-student-progress
+                     :method :put
+                     :uri    (str "/api/individual-profile/" student-id "/course/" course-name "/complete")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::generate-access-code
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :generate-access-code
+                     :method :post
+                     :uri    (str "/api/next-access-code")}
                     handlers)))

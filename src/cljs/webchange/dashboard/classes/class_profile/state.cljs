@@ -2,8 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.dashboard.classes.class-form.state :as class-form]
+    [webchange.dashboard.classes.remove-form.state :as remove-form]
     [webchange.dashboard.classes.state :as parent-state]
-    [webchange.dashboard.events :as dashboard-events]
     [webchange.logger.index :as logger]
     [webchange.state.warehouse :as warehouse]))
 
@@ -119,4 +119,4 @@
   ::open-remove-class-form
   (fn [{:keys [db]} [_]]
     (let [class-id (get-class-id db)]
-      {:dispatch [::dashboard-events/show-delete-class-form class-id]})))
+      {:dispatch [::remove-form/open-remove-class-window class-id]})))

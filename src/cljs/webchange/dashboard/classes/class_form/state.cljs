@@ -20,6 +20,13 @@
                                      :window-open? true
                                      :window-title "Edit class"}]]}))
 
+(re-frame/reg-event-fx
+  ::open-add-class-window
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::set-form-state {:action       "add"
+                                     :window-open? true
+                                     :window-title "Add class"}]]}))
+
 ;; Form state
 
 (def form-state-path (path-to-db [:form-state]))
@@ -160,6 +167,7 @@
   (fn [{:keys [db]} [_]]
     (let [action (get-action db)]
       {:dispatch [(case action
+                    "add" ::add-class
                     "edit" ::edit-class)
                   {:on-success [::save-success]}]})))
 
@@ -169,6 +177,14 @@
     (let [{:keys [on-success]} (get-handlers db)]           ;; ToDo: remove handlers
       {:dispatch-n (cond-> [[::reset]]
                            (some? on-success) (conj on-success))})))
+
+(re-frame/reg-event-fx
+  ::add-class
+  (fn [{:keys [db]} [_ handlers]]
+    (let [form-data (get-form-data db)]
+      {:dispatch [::parent-state/add-class
+                  {:data form-data}
+                  handlers]})))
 
 (re-frame/reg-event-fx
   ::edit-class

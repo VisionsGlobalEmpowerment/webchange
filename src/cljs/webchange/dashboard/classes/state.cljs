@@ -43,16 +43,32 @@
     {:db (assoc-in db classes-path data)}))
 
 (re-frame/reg-event-fx
+  ::add-class
+  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+    {:dispatch [::warehouse/create-class
+                {:data data}
+                (-> handlers
+                    (assoc :on-success [::update-classes-list handlers]))]}))
+
+(re-frame/reg-event-fx
   ::edit-class
   (fn [{:keys [_]} [_ {:keys [id data]} handlers]]
     {:dispatch [::warehouse/save-class
                 {:class-id id
                  :data     data}
                 (-> handlers
-                    (assoc :on-success [::edit-class-success handlers]))]}))
+                    (assoc :on-success [::update-classes-list handlers]))]}))
 
 (re-frame/reg-event-fx
-  ::edit-class-success
+  ::delete-class
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    {:dispatch [::warehouse/delete-class
+                {:class-id class-id}
+                (-> handlers
+                    (assoc :on-success [::update-classes-list handlers]))]}))
+
+(re-frame/reg-event-fx
+  ::update-classes-list
   (fn [{:keys [_]} [_ {:keys [on-success]}]]
     {:dispatch-n (cond-> [[::load-classes]]
                          (some? on-success) (conj on-success))}))
