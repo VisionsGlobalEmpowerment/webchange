@@ -1,0 +1,31 @@
+.student-form {
+    .mui-control {
+        display: block;
+
+        & > * {
+            width: 100%;
+        }
+
+        input {
+            padding: 8px;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        fieldset {
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 6px;
+            width: 24px;
+            height: 24px;
+
+            svg {
+                width: 0.8em;
+                height: 0.8em;
+            }
+        }
+    }
+}

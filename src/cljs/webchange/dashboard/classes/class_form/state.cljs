@@ -147,7 +147,7 @@
   (fn [{:keys [_]} [_ value]]
     {:dispatch [::update-form-data name-key value]}))
 
-;;
+;; Load class
 
 (re-frame/reg-event-fx
   ::load-class
