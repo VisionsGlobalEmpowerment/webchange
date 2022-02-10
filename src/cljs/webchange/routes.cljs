@@ -53,7 +53,6 @@
       :course (re-frame/dispatch [::ie/start-course (:id route-params)])
       :sandbox (re-frame/dispatch [::ie/start-sandbox (:course-id route-params) (:scene-id route-params) (:encoded-items route-params)])
 
-      :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
       :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])
       :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
       :dashboard-schools (re-frame/dispatch [::dashboard-events/open-schools])
