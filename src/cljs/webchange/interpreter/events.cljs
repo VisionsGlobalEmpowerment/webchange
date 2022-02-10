@@ -33,7 +33,8 @@
     [webchange.state.warehouse :as warehouse]
     [webchange.logger.index :as logger]
     [webchange.interpreter.subs :as interpreter-subs]
-    [webchange.utils.numbers :as numbers]))
+    [webchange.utils.numbers :as numbers]
+    [webchange.events :as events]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :start-audio-recording ::execute-start-audio-recording)
@@ -1171,7 +1172,17 @@
                       :format          (json-request-format)
                       :response-format (json-response-format {:keywords? true})
                       :on-success      [::save-progress-success]
-                      :on-failure      [:api-request-error :save-progress]}}))))
+                      :on-failure      [::save-progress-failure]}}))))
+
+(re-frame/reg-event-fx
+  ::save-progress-failure
+  (fn [{:keys [db]} _]
+    (let [current-school (-> db :user :school-id)]
+      (if current-school
+        {:dispatch-n [[:api-request-error :save-progress]
+                      [::events/redirect "/student-login"]]}
+        {:dispatch-n [[:api-request-error :save-progress]
+                      [::events/location :logout]]}))))
 
 (re-frame/reg-event-fx
   ::save-progress-success

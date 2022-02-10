@@ -94,3 +94,8 @@
   :redirect
   (fn [args]
     (apply redirect-to args)))
+
+(re-frame/reg-fx
+  :location
+  (fn [args]
+    (redirect-to (apply location args))))
