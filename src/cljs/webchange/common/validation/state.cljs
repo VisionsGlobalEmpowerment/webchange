@@ -13,8 +13,8 @@
 
 (re-frame/reg-event-fx
   ::reset-errors
-  (fn [{:keys [db]} [_ id]]
-    {:db (update-in db (path-to-db []) dissoc id)}))
+  (fn [{:keys [_]} [_ id]]
+    {:dispatch  [::set-errors id {}]}))
 
 (re-frame/reg-sub
   ::errors
