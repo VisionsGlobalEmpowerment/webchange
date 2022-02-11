@@ -1,4 +1,4 @@
-FROM ubuntu:20.10
+FROM ubuntu:20.04
 
 RUN apt-get update
 RUN export DEBIAN_FRONTEND=noninteractive
@@ -7,7 +7,7 @@ RUN apt -y install tzdata
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
 RUN dpkg-reconfigure --frontend noninteractive tzdata
 
-RUN apt -y install openjdk-16-jre leiningen net-tools libgfortran5 ffmpeg wget
+RUN apt -y install openjdk-17-jre leiningen net-tools libgfortran5 ffmpeg wget
 
 WORKDIR /usr/src/app
 

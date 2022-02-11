@@ -9,7 +9,8 @@
       {:provided {:env {:database-url "jdbc:postgresql://localhost/webchange?user=webchange&password=webchange"
                         :public-dir   "resources/public"
                         :upload-dir   "resources/public/upload"
-                        :hardcoded-courses {"english" true}         ;; which course take from hardcoded edn
+						:session-key  "1234567890abcdef"
+                        :hardcoded-courses {"test" true}         ;; which course take from hardcoded edn
                         :dev?              true                     ;; is dev environment? 
                                                                     ;; affects on the way how resources list for sw are taken
        }}

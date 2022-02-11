@@ -29,6 +29,7 @@
             [clojure.data.json :as json]
             [webchange.common.hmac-sha256 :as sign]
             [ring.middleware.session.memory :as mem]
+            [ring.middleware.session.cookie :refer [cookie-store]]
             [webchange.common.handler :refer [handle current-user]]
             [config.core :refer [env]]
             [webchange.auth.website :as website]
@@ -218,13 +219,14 @@
   (not-found "Not Found"))
 
 (def dev-store (mem/memory-store))
+(def store (cookie-store {:key (env :session-key)}))
 
 
 (def handler
   (-> #'app
       (wrap-authorization auth-backend)
       (wrap-authentication auth-backend)
-      (wrap-session {:store dev-store})
+      (wrap-session {:store store})
       wrap-cookies
       wrap-body-as-string
       (muuntaja.middleware/wrap-params)
