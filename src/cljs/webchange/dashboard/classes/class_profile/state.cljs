@@ -116,7 +116,14 @@
       {:dispatch [::class-form/open-edit-class-window class-id {:on-success [::init {:class-id class-id}]}]})))
 
 (re-frame/reg-event-fx
+  ::open-classes-page
+  (fn [{:keys [_]} [_]]
+    {:redirect [:dashboard-classes]}))
+
+(re-frame/reg-event-fx
   ::open-remove-class-form
   (fn [{:keys [db]} [_]]
     (let [class-id (get-class-id db)]
-      {:dispatch [::remove-form/open-remove-class-window class-id]})))
+      {:dispatch [::remove-form/open-remove-class-window
+                  class-id
+                  {:on-success [::open-classes-page]}]})))

@@ -12,8 +12,9 @@
 
 (re-frame/reg-event-fx
   ::open-remove-class-window
-  (fn [{:keys [_]} [_ class-id]]
+  (fn [{:keys [_]} [_ class-id handlers]]
     {:dispatch-n [[::set-form-state {:class-id     class-id
+                                     :handlers     handlers
                                      :loading?     true
                                      :window-open? true}]
                   [::warehouse/load-class-students
@@ -38,6 +39,11 @@
   [db]
   (-> (get-form-state db)
       (get :class-id)))
+
+(defn get-handlers
+  [db]
+  (-> (get-form-state db)
+      (get :handlers)))
 
 (re-frame/reg-sub
   ::form-state
@@ -97,7 +103,14 @@
     (let [class-id (get-class-id db)]
       {:dispatch [::parent-state/delete-class
                   {:class-id class-id}
-                  {:on-success [::reset-form-state]}]})))
+                  {:on-success [::remove-class-success]}]})))
+
+(re-frame/reg-event-fx
+  ::remove-class-success
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-success]} (get-handlers db)]
+      {:dispatch-n (cond-> [[::reset-form-state]]
+                           (some? on-success) (conj on-success))})))
 
 (re-frame/reg-event-fx
   ::cancel

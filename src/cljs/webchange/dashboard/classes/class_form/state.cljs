@@ -187,8 +187,6 @@
     (let [action (get-action db)
           form-data (get-form-data db)
           validation-errors (validate ::class-spec/class form-data)]
-      (print "form-data" form-data)
-      (print "validation-errors" validation-errors)
       (if (nil? validation-errors)
         {:dispatch-n [[::validation-state/reset-errors validation-state-id]
                       [(case action
@@ -200,7 +198,7 @@
 (re-frame/reg-event-fx
   ::save-success
   (fn [{:keys [db]} [_]]
-    (let [{:keys [on-success]} (get-handlers db)]           ;; ToDo: remove handlers
+    (let [{:keys [on-success]} (get-handlers db)]
       {:dispatch-n (cond-> [[::reset]]
                            (some? on-success) (conj on-success))})))
 
