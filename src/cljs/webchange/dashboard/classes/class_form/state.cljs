@@ -1,14 +1,19 @@
 (ns webchange.dashboard.classes.class-form.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.common.validation.state :as validation-state]
     [webchange.dashboard.classes.state :as parent-state]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.validation.specs.class-spec :as class-spec]
+    [webchange.validation.validate :refer [validate]]))
 
 (defn path-to-db
   [relative-path]
   (->> relative-path
        (concat [:class-form])
        (parent-state/path-to-db)))
+
+(def validation-state-id :dashboard-class-form)
 
 (re-frame/reg-event-fx
   ::open-edit-class-window
@@ -122,6 +127,13 @@
     {:dispatch [::update-form-data course-id-key course-id]}))
 
 (re-frame/reg-sub
+  ::course-id-error
+  (fn []
+    [(re-frame/subscribe [::validation-state/error validation-state-id course-id-key])])
+  (fn [[error]]
+    error))
+
+(re-frame/reg-sub
   ::course-options
   (fn [_]
     (->> [{:id 4 :name "english"}
@@ -147,6 +159,13 @@
   (fn [{:keys [_]} [_ value]]
     {:dispatch [::update-form-data name-key value]}))
 
+(re-frame/reg-sub
+  ::name-error
+  (fn []
+    [(re-frame/subscribe [::validation-state/error validation-state-id name-key])])
+  (fn [[error]]
+    error))
+
 ;; Load class
 
 (re-frame/reg-event-fx
@@ -165,11 +184,18 @@
 (re-frame/reg-event-fx
   ::save
   (fn [{:keys [db]} [_]]
-    (let [action (get-action db)]
-      {:dispatch [(case action
-                    "add" ::add-class
-                    "edit" ::edit-class)
-                  {:on-success [::save-success]}]})))
+    (let [action (get-action db)
+          form-data (get-form-data db)
+          validation-errors (validate ::class-spec/class form-data)]
+      (print "form-data" form-data)
+      (print "validation-errors" validation-errors)
+      (if (nil? validation-errors)
+        {:dispatch-n [[::validation-state/reset-errors validation-state-id]
+                      [(case action
+                         "add" ::add-class
+                         "edit" ::edit-class)
+                       {:on-success [::save-success]}]]}
+        {:dispatch [::validation-state/set-errors validation-state-id validation-errors]}))))
 
 (re-frame/reg-event-fx
   ::save-success
