@@ -39,23 +39,23 @@
 
 (re-frame/reg-event-fx
   ::add-student
-  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [data class-id]} handlers]]
     {:dispatch [::warehouse/add-student
                 {:data data}
                 (-> handlers
-                    (assoc :on-success [::update-students-list handlers]))]}))
+                    (assoc :on-success [::update-students-list class-id handlers]))]}))
 
 (re-frame/reg-event-fx
   ::edit-student
-  (fn [{:keys [_]} [_ {:keys [id data]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [id data class-id]} handlers]]
     {:dispatch [::warehouse/edit-student
                 {:student-id id
                  :data       data}
                 (-> handlers
-                    (assoc :on-success [::update-students-list handlers]))]}))
+                    (assoc :on-success [::update-students-list class-id handlers]))]}))
 
 (re-frame/reg-event-fx
   ::update-students-list
-  (fn [{:keys [_]} [_ {:keys [on-success]}]]
-    {:dispatch-n (cond-> [[::load-students]]
+  (fn [{:keys [_]} [_ class-id {:keys [on-success]}]]
+    {:dispatch-n (cond-> [[::load-students class-id]]
                          (some? on-success) (conj on-success))}))

@@ -2,8 +2,11 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.common.core :as common]
+    [webchange.common.validation.state :as validation-state]
     [webchange.dashboard.students.state :as parent-state]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.validation.specs.student :as student-specs]
+    [webchange.validation.validate :refer [validate]]))
 
 (defn path-to-db
   [relative-path]
@@ -11,9 +14,18 @@
        (concat [:student-form])
        (parent-state/path-to-db)))
 
+(def class-key :class-id)
+(def gender-key :gender)
+(def first-name-key :first-name)
+(def last-name-key :last-name)
+(def birth-date-key :date-of-birth)
+(def access-code-key :access-code)
+
+(def validation-state-id :dashboard-student-form)
+
 (re-frame/reg-event-fx
   ::open-edit-student-window
-  (fn [{:keys [_]} [_ student-id handlers]]
+  (fn [{:keys [_]} [_ {:keys [student-id]} handlers]]
     {:dispatch-n [[::load-student student-id]
                   [::load-classes]
                   [::set-form-state {:action       "edit"
@@ -24,12 +36,31 @@
 
 (re-frame/reg-event-fx
   ::open-add-student-window
-  (fn [{:keys [_]} [_]]
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
     {:dispatch-n [[::load-classes]
+                  [::reset-form-data {class-key class-id}]
+                  [::generate-access-code]
                   [::set-form-state {:action       "add"
+                                     :handlers     handlers
                                      :window-open? true
                                      :window-title "Add student"}]]}))
 
+;; Load student
+
+(re-frame/reg-event-fx
+  ::load-student
+  (fn [{:keys [_]} [_ student-id]]
+    {:dispatch [::warehouse/load-student {:student-id student-id} {:on-success [::load-student-success]}]}))
+
+(re-frame/reg-event-fx
+  ::load-student-success
+  (fn [{:keys [_]} [_ {:keys [student]}]]
+    (let [{:keys [user]} student
+          student-data (merge
+                         (select-keys user [first-name-key last-name-key])
+                         (select-keys student [gender-key birth-date-key access-code-key])
+                         {:class-id (get-in student [:class :id])})]
+      {:dispatch [::set-form-data student-data]})))
 
 ;; Form state
 
@@ -98,8 +129,8 @@
 
 (re-frame/reg-event-fx
   ::reset-form-data
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::set-form-data {}]}))
+  (fn [{:keys [_]} [_ default-data]]
+    {:dispatch [::set-form-data (or default-data {})]}))
 
 (defn get-form-data
   [db]
@@ -110,8 +141,6 @@
   get-form-data)
 
 ;; Class
-
-(def class-key :class-id)
 
 (re-frame/reg-sub
   ::class
@@ -124,6 +153,13 @@
   ::set-class
   (fn [{:keys [_]} [_ value]]
     {:dispatch [::update-form-data class-key value]}))
+
+(re-frame/reg-sub
+  ::class-error
+  (fn []
+    [(re-frame/subscribe [::validation-state/error validation-state-id class-key])])
+  (fn [[error]]
+    error))
 
 ;; Classes options
 
@@ -161,8 +197,6 @@
 
 ;; Gender
 
-(def gender-key :gender)
-
 (re-frame/reg-sub
   ::gender
   (fn []
@@ -184,8 +218,6 @@
 
 ;; First name
 
-(def first-name-key :first-name)
-
 (re-frame/reg-sub
   ::first-name
   (fn []
@@ -198,9 +230,14 @@
   (fn [{:keys [_]} [_ value]]
     {:dispatch [::update-form-data first-name-key value]}))
 
-;; Last name
+(re-frame/reg-sub
+  ::first-name-error
+  (fn []
+    [(re-frame/subscribe [::validation-state/error validation-state-id first-name-key])])
+  (fn [[error]]
+    error))
 
-(def last-name-key :last-name)
+;; Last name
 
 (re-frame/reg-sub
   ::last-name
@@ -215,8 +252,6 @@
     {:dispatch [::update-form-data last-name-key value]}))
 
 ;; Birth date
-
-(def birth-date-key :date-of-birth)
 
 (re-frame/reg-sub
   ::birth-date
@@ -234,14 +269,12 @@
 
 ;; Access code
 
-(def access-code-key :access-code)
-
 (re-frame/reg-sub
   ::access-code
   (fn []
     [(re-frame/subscribe [::form-data])])
   (fn [[form-data]]
-    (get form-data access-code-key)))
+    (get form-data access-code-key "")))
 
 (re-frame/reg-event-fx
   ::set-access-code
@@ -258,34 +291,28 @@
   (fn [{:keys [_]} [_ {:keys [access-code]}]]
     {:dispatch [::set-access-code access-code]}))
 
-;; Load student
-
-(re-frame/reg-event-fx
-  ::load-student
-  (fn [{:keys [_]} [_ student-id]]
-    {:dispatch [::warehouse/load-student {:student-id student-id} {:on-success [::load-student-success]}]}))
-
-(re-frame/reg-event-fx
-  ::load-student-success
-  (fn [{:keys [_]} [_ {:keys [student]}]]
-    (let [{:keys [user]} student
-          student-data (merge
-                         (select-keys user [first-name-key last-name-key])
-                         (select-keys student [gender-key birth-date-key access-code-key])
-                         {:class-id (get-in student [:class :id])})]
-      (print "student-data" student-data)
-      {:dispatch [::set-form-data student-data]})))
+(re-frame/reg-sub
+  ::access-code-error
+  (fn []
+    [(re-frame/subscribe [::validation-state/error validation-state-id access-code-key])])
+  (fn [[error]]
+    error))
 
 ;; Save
 
 (re-frame/reg-event-fx
   ::save
   (fn [{:keys [db]} [_]]
-    (let [action (get-action db)]
-      {:dispatch [(case action
-                    "add" ::add-student
-                    "edit" ::edit-student)
-                  {:on-success [::save-success]}]})))
+    (let [action (get-action db)
+          form-data (get-form-data db)
+          validation-errors (validate ::student-specs/student form-data)]
+      (if (nil? validation-errors)
+        {:dispatch-n [[::validation-state/reset-errors validation-state-id]
+                      [(case action
+                         "add" ::add-student
+                         "edit" ::edit-student)
+                       {:on-success [::save-success]}]]}
+        {:dispatch [::validation-state/set-errors validation-state-id validation-errors]}))))
 
 (re-frame/reg-event-fx
   ::save-success
@@ -297,19 +324,23 @@
 (re-frame/reg-event-fx
   ::add-student
   (fn [{:keys [db]} [_ handlers]]
-    (let [form-data (get-form-data db)]
+    (let [form-data (get-form-data db)
+          class-id (get form-data class-key)]
       {:dispatch [::parent-state/add-student
-                  {:data form-data}
+                  {:data     form-data
+                   :class-id class-id}
                   handlers]})))
 
 (re-frame/reg-event-fx
   ::edit-student
   (fn [{:keys [db]} [_ handlers]]
     (let [student-id (get-student-id db)
-          form-data (get-form-data db)]
+          form-data (get-form-data db)
+          class-id (get form-data class-key)]
       {:dispatch [::parent-state/edit-student
-                  {:id   student-id
-                   :data form-data}
+                  {:id       student-id
+                   :data     form-data
+                   :class-id class-id}
                   handlers]})))
 
 (re-frame/reg-event-fx

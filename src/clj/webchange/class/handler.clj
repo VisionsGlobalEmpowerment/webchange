@@ -59,11 +59,12 @@
 (defn handle-update-student
   [id request]
   (let [owner-id (current-user request)
-        data (-> request :body)]
+        data (-> request :body)
+        student (core/get-student (Integer/parseInt id))]
     (when (:access-code data)
       (core/update-student-access-code! (Integer/parseInt id) (select-keys data [:access-code])))
     (core/update-student! (Integer/parseInt id) (select-keys data [:class-id :gender :date-of-birth]))
-    (auth/update-student-user! (:user-id data) (select-keys data [:first-name :last-name]))
+    (auth/update-student-user! (:user-id student) (select-keys data [:first-name :last-name]))
     (handle [true {:id id}])))
 
 (defn handle-unassign-student

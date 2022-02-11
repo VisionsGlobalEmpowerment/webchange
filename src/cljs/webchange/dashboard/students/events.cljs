@@ -160,24 +160,6 @@
     {:dispatch-n (list [:complete-request :complete-student-progress])}))
 
 (re-frame/reg-event-fx
-  ::show-add-student-form
-  (fn [{:keys [db]} _]
-    {:db (-> db
-             (clear-errors :student)
-             (assoc-in [:dashboard :current-student] nil))
-     :dispatch-n (list [::generate-access-code]
-                       [::student-form/open-add-student-window])}))
-
-(re-frame/reg-event-fx
-  ::show-edit-student-form
-  (fn [{:keys [db]} [_ id]]
-    {:db (-> db
-             (clear-errors :student)
-             (assoc-in [:dashboard :current-student-id] id))
-     :dispatch-n (list [::reset-access-code]
-                       [::student-form/open-edit-student-window id])}))
-
-(re-frame/reg-event-fx
   ::set-current-student
   (fn [{:keys [db]} [_ student-id]]
     {:db (assoc-in db [:dashboard :current-student-id] student-id)}))
