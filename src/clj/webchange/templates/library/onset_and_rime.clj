@@ -340,7 +340,7 @@
                                                                      {:type "action" :id "animate-finish-step"}]}]}
                         :cloud-center-dialog--1      {:type "empty" :duration 0}
                         :init-scene                  {:type "sequence-data"
-                                                      :data [{:type "start-activity", :id "onset-and-rime"},
+                                                      :data [{:type "start-activity"},
                                                              {:type "action" :id "introduce-task"}
                                                              {:type "set-variable" :var-name "left-click-unlocked" :var-value true}
                                                              {:type "set-variable" :var-name "unique-suffix" :var-value 0}
@@ -359,7 +359,7 @@
                                                       :phrase-description "Activity Introduction"}
                         :finish-scene                {:type "sequence-data",
                                                       :data [{:type "action" :id "finish-dialog"}
-                                                             {:type "finish-activity" :id "onset-and-rime"}]}
+                                                             {:type "finish-activity"}]}
                         :finish-dialog               {:type               "sequence-data",
                                                       :editor-type        "dialog",
                                                       :data               [{:type "sequence-data"
