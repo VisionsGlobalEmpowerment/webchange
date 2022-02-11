@@ -18,9 +18,9 @@
 (defn translate
   [path]
   (get-in {:header            "Student Profile"
-           :actions           {:edit   "Edit"
-                               :remove "Remove"
-                               :class  "Class"
+           :actions           {:edit     "Edit"
+                               :remove   "Remove"
+                               :class    "Class"
                                :complete "Complete"}
            :cumulative-scores {:title  "Cumulative Activity Score"
                                :legend {:gray   "Activity was started but not finished"
@@ -58,24 +58,26 @@
 
 (defn student-profile
   [{:keys [student profile class-id]}]
-  (let [student (map-student student)
-        handle-edit-click #(re-frame/dispatch [::state/edit-student (:id %)])]
-    [content-page
-     {:title         (translate [:header])
-      :current-title (:name student)
-      :actions       (actions {:student         student
-                               :on-edit-click   handle-edit-click
-                               :on-remove-click (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-remove-from-class-form id]))
-                               :on-class-click  (fn [] (redirect-to :dashboard-class-profile :class-id class-id))
-                               :on-complete-click (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-complete-form id]))})}
-     [personal-data student]
-     [student-scores [{:title  (translate [:cumulative-scores :title])
-                       :data   (-> profile :scores ->data)
-                       :legend (translate [:cumulative-scores :legend])}
-                      {:title  (translate [:activity-times :title])
-                       :data   (-> profile :times ->data)
-                       :legend (translate [:activity-times :legend])}]]
-     [student-modal-views/student-complete-modal]]))
+  (re-frame/dispatch [::state/init (:id student)])
+  (fn []
+    (let [student (map-student student)
+          handle-edit-click #(re-frame/dispatch [::state/edit-student (:id %)])]
+      [content-page
+       {:title         (translate [:header])
+        :current-title (:name student)
+        :actions       (actions {:student           student
+                                 :on-edit-click     handle-edit-click
+                                 :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-remove-from-class-form id]))
+                                 :on-class-click    (fn [] (redirect-to :dashboard-class-profile :class-id class-id))
+                                 :on-complete-click (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-complete-form id]))})}
+       [personal-data student]
+       [student-scores [{:title  (translate [:cumulative-scores :title])
+                         :data   (-> profile :scores ->data)
+                         :legend (translate [:cumulative-scores :legend])}
+                        {:title  (translate [:activity-times :title])
+                         :data   (-> profile :times ->data)
+                         :legend (translate [:activity-times :legend])}]]
+       [student-modal-views/student-complete-modal]])))
 
 (defn student-profile-page
   []

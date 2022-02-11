@@ -511,10 +511,10 @@
 
 (re-frame/reg-event-fx
   ::load-student-profile
-  (fn [{:keys [_]} [_ {:keys [student-id course-name]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [student-id course-id]} handlers]]
     (create-request {:key    :load-student-profile
                      :method :get
-                     :uri    (str "/api/individual-profile/" student-id "/course/" course-name)}
+                     :uri    (str "/api/individual-profile/" student-id "/course/" course-id)}
                     handlers)))
 
 (re-frame/reg-event-fx

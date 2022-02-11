@@ -18,12 +18,11 @@
 
 (re-frame/reg-event-fx
   ::open-student-profile
-  (fn [{:keys [db]} [_ student-id course-name]]
+  (fn [{:keys [_]} [_ student-id]]
     {:dispatch-n (list
                    [::classes-events/load-classes]
                    [::students-events/load-unassigned-students]
-                   [::students-events/load-student student-id]
-                   [::students-events/load-student-profile student-id course-name])}))
+                   [::students-events/load-student student-id])}))
 
 (re-frame/reg-event-fx
   ::open-students
