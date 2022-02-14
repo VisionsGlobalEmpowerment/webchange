@@ -13,5 +13,5 @@
   [{:text "Courses"
     :on-click #(location :courses)}
    {:text     "Course"
-    :on-click #(redirect-to :course-editor-v2 :id course-id)}
+    :on-click #(redirect-to :course-editor :id course-id)}
    {:text title}])

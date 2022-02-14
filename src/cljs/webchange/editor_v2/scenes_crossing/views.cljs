@@ -87,7 +87,7 @@
   [{:keys [course-id]}]
   (r/with-let [_ (re-frame/dispatch [::state/init course-id])]
     [layout {:breadcrumbs [{:text     "Course"
-                            :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                            :on-click #(redirect-to :course-editor :id course-id)}
                            {:text "Crossings"}]}
      [ui/grid {:container true :spacing 40
                :style     {:height "100%"}}

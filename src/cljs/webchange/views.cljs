@@ -73,8 +73,8 @@
     ;; sandbox
     :sandbox [course {:mode ::modes/sandbox}]
     ;; editor
-    :course-editor-v2 [editor-panel-v2 (:id route-params)]
-    :course-editor-v2-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
+    :course-editor [editor-panel-v2 (:id route-params)]
+    :course-editor-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
     :course-editor-v2-concept [editor-panel-v2-concept (:course-id route-params) (-> route-params :concept-id js/parseInt)]
     :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
     :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]

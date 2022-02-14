@@ -102,7 +102,7 @@
               [ui/icon-button {:on-click #(redirect-to :wizard-configured :course-slug course :scene-slug (-> scene :scene-id name))}
                [ic/warning]]
               [ui/icon-button {:aria-label "Edit"
-                               :on-click   #(redirect-to :course-editor-v2-scene :id course :scene-id (-> scene :scene-id name))}
+                               :on-click   #(redirect-to :course-editor-scene :id course :scene-id (-> scene :scene-id name))}
                [ic/edit {:style (:action-icon list-styles)}]])]])]
        [scene-info-window {:scene-id    @current-scene-info
                            :on-close handle-close-info}]

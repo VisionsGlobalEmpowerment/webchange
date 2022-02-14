@@ -133,7 +133,7 @@
                              rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
                              rows-count @(re-frame/subscribe [::pagination-state/page-rows])]
                          [layout {:breadcrumbs [{:text     "Course"
-                                                 :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                                                 :on-click #(redirect-to :course-editor :id course-id)}
                                                 {:text "Table"}]
                                   :styles      {:content-container {:padding "0"}}
                                   :content-ref handle-content-ref}

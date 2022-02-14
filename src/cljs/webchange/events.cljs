@@ -99,11 +99,6 @@
     {:db (assoc db :active-route params)}))
 
 (re-frame/reg-event-fx
-  ::redirect
-  (fn-traced [{:keys [db]} [_ & args]]
-    {:redirect args}))
-
-(re-frame/reg-event-fx
   ::location
   (fn-traced [{:keys [db]} [_ & args]]
     {:location args}))
