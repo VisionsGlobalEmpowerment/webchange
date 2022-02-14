@@ -11,23 +11,23 @@
   (get-in db [:course-data :levels level :lessons lesson :activities activity]))
 
 (defn finished?
-  [db activity]
+  [db activity activities]
   (let [finished (get-in db [:progress-data :finished])]
-    (activity/finished? finished activity)))
+    (activity/finished? finished activity activities)))
+
+(declare flatten-activities)
 
 (defn next-not-finished-for
   [db activity]
   (let [current-tags (get-in db [:progress-data :current-tags] [])
         levels (get-in db [:course-data :levels])
-        finished (get-in db [:progress-data :finished])]
-    (activity/next-not-finished-for current-tags levels finished activity)))
+        finished (get-in db [:progress-data :finished])
+        activities (flatten-activities (get-in db [:course-data :levels]))]
+    (activity/next-not-finished-for current-tags levels finished activity activities)))
 
 (defn finish
   [db finished]
-  (let [next (next-not-finished-for db finished)]
-    (-> db
-        (update-in [:progress-data :finished] activity/finish finished)
-        (assoc-in [:progress-data :next] next))))
+  (update-in db [:progress-data :finished] activity/finish finished))
 
 (defn activity-progress
   [db]
@@ -49,12 +49,14 @@
       (-> (keep-indexed #(when (= (:activity %2) activity-name) %1) activities)
           first))))
 
+(declare get-progress-next)
+
 ;TODO: level what if scene is not available in current level/lesson?
 (defn name->activity-action
   [db scene-name]
   (let [default {:level 0 :lesson 0 :activity 0}
         current (get-in db [:loaded-activity])
-        next (get-in db [:progress-data :next])
+        next (get-progress-next db)
         activity-action (merge default next current {:activity-name scene-name})
         activity-idx (workflow-action-idx db activity-action)]
     (assoc activity-action :activity activity-idx)))
@@ -85,3 +87,10 @@
   (->> levels
        (map-indexed flatten-level)
        flatten))
+
+(defn get-progress-next [db]
+  (let [activities (flatten-activities (get-in db [:course-data :levels]))
+        finished-activities (filter #(finished? db % activities) activities)]
+    (if (empty? finished-activities)
+      (first activities)
+      (next-not-finished-for db (last finished-activities)))))

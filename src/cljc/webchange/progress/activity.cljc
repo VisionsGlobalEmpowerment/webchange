@@ -4,11 +4,12 @@
 
 (defn activity-data-by-index
   [levels level lesson activity]
-  (let [{activity-name :activity} (get-in levels [level :lessons lesson :activities activity])]
+  (let [data (get-in levels [level :lessons lesson :activities activity])]
     {:level         level
      :lesson        lesson
      :activity      activity
-     :activity-name activity-name}))
+     :unique-id     (:unique-id data)
+     :activity-name (:activity data)}))
 
 (defn- indices
   [pred coll]
@@ -41,15 +42,24 @@
 (defn finish
   "Add given activity (level index, lesson index, activity index)
   into finished map from students progress"
-  [finished {:keys [level lesson activity]}]
-  (update-in finished [(num->keyword level) (num->keyword lesson)] #(-> % set (conj activity))))
+  [finished {:keys [level lesson unique-id] :as activity}]
+  (update-in finished [(num->keyword level) (num->keyword lesson)] #(-> % set (conj unique-id))))
+
+(defn activity-unique-id->index [activities unique-id]
+  (->> activities
+    (filter #(= (:unique-id %) unique-id))
+    first
+    :activity))
 
 (defn finished?
   "Check if given activity (level index, lesson index, activity index)
   is in finished map from students progress"
-  [finished {:keys [level lesson activity]}]
-  (let [activities (get-in finished [(num->keyword level) (num->keyword lesson)])]
-    (some #(= activity %) activities)))
+  [finished {:keys [level lesson activity]} activities]
+  (let [finished-unique-ids (get-in finished [(num->keyword level) (num->keyword lesson)])
+        finished-indices (map #(activity-unique-id->index activities %) finished-unique-ids)]
+    (if (empty? finished-indices)
+      false
+      (<= activity (apply max finished-indices)))))
 
 (defn- excluded-by-tags?
   [tags levels {:keys [level lesson activity]}]
@@ -74,12 +84,12 @@
   "Return next activity in course levels that is
   - not finished yet
   - satisfies provided tags"
-  [tags levels finished activity]
+  [tags levels finished activity activities]
   (loop [next (next-for levels activity)
          cur activity]
     (cond
       (nil? next) cur
-      (or (finished? finished next)
+      (or (finished? finished next activities)
           (excluded-by-tags? tags levels next)) (recur (next-for levels next)
                                                        next)
       :else next)))

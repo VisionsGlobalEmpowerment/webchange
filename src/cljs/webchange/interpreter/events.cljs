@@ -308,10 +308,6 @@
                     (re-frame/dispatch [::set-scene scene-id scene])
                     (re-frame/dispatch [::store-scene scene-id scene])))))
 
-(defn- progress-initialized?
-  [progress]
-  (and progress (:next progress)))
-
 (re-frame/reg-fx
   :load-progress
   (fn [{:keys [course-id scene-id options]}]
@@ -321,7 +317,7 @@
                                    (let [set-progress-callback [::progress-loaded course-id scene-id]]
                                      (cond
                                        sandbox? (re-frame/dispatch [::set-progress-data nil set-progress-callback])
-                                       (progress-initialized? progress) (re-frame/dispatch [::set-progress-data progress set-progress-callback])
+                                       progress (re-frame/dispatch [::set-progress-data progress set-progress-callback])
                                        :default (re-frame/dispatch [::init-default-progress progress set-progress-callback]))))))))
 
 (re-frame/reg-fx
@@ -568,7 +564,7 @@
      :location-id 'painting-tablet'}"
     (let [location-key (keyword location-id)
           locations (get-in db [:course-data :locations])
-          next (get-in db [:progress-data :next])
+          next (lessons-activity/get-progress-next db)
           scene-id (if (contains? locations location-key)
                      (resolve-scene-id (get locations location-key) next)
                      location-id)]
@@ -585,7 +581,7 @@
     Example:
     {:type     'scene',
      :scene-id 'map'}"
-    (let [next (get-in db [:progress-data :next])
+    (let [next (lessons-activity/get-progress-next db)
           location-scene-id (some-> (get-in db [:course-data :locations])
                                     (get (keyword scene-id))
                                     (resolve-scene-id next))
@@ -1067,7 +1063,7 @@
 
 (defn lesson-activity-finished?
   [db {activity-name :id}]
-  (let [next (get-in db [:progress-data :next])
+  (let [next (lessons-activity/get-progress-next db)
         activity-name (or activity-name (:current-scene db))
         activity-action (lessons-activity/name->activity-action db activity-name)
         current-activity? (= next activity-action)
@@ -1099,7 +1095,7 @@
 
 (defn- next-activity-name
   [db]
-  (get-in db [:progress-data :next :activity-name]))
+  (:activity-name (lessons-activity/get-progress-next db)))
 
 (defn- has-next-activity?
   [db]
@@ -1133,7 +1129,7 @@
                            :always (conj (activity-finished-event db action))
                            :always (conj [::reset-navigation]))
             lesson-activity-tags (get-lesson-activity-tags db action)
-            finished (get-in db [:progress-data :next])
+            finished (lessons-activity/get-progress-next db)
             db (cond-> db
                        :always lessons-activity/clear-loaded-activity
                        :always (assoc :activity-started false)
@@ -1726,7 +1722,7 @@
   (fn [{:keys [db]} [_ course-id scene-id]]
     (let [progress (:progress-data db)]
       {:dispatch-n (list [::load-settings]
-                         [::set-current-scene (or scene-id (get-in progress [:next :activity-name]))])})))
+                         [::set-current-scene (or scene-id (:activity-name (lessons-activity/get-progress-next db)))])})))
 
 (re-frame/reg-event-fx
   ::add-pending-event
