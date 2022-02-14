@@ -13,24 +13,9 @@
     (get-in db [:dashboard :unassigned-students])))
 
 (re-frame/reg-sub
-  ::current-student-id
-  (fn [db]
-    (get-in db [:dashboard :current-student-id])))
-
-(re-frame/reg-sub
   ::current-student
   (fn [db]
     (get-in db [:dashboard :current-student])))
-
-(re-frame/reg-sub
-  ::generated-code
-  (fn [db]
-    (get-in db [:dashboard :access-code])))
-
-(re-frame/reg-sub
-  ::student-modal-state
-  (fn [db]
-    (get-in db [:dashboard :student-modal-state])))
 
 (re-frame/reg-sub
   ::students-loading

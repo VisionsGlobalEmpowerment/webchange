@@ -4,6 +4,7 @@
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.dashboard.classes.classes-list.state :as state]
     [webchange.dashboard.classes.events :as classes-events]
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.events :as dashboard-events]
@@ -32,53 +33,51 @@
           path))
 
 (defn- classes-list-item
-  [{:keys [on-edit-click on-profile-click on-remove-click on-students-click]}
-   {:keys [name] :as class}]
-  [ui/table-row {:hover true}
-   [ui/table-cell {:on-click #(on-profile-click class)} name]
-   [ui/table-cell {:align "right"
-                   :style {:white-space "nowrap"}}
-    [ui/tooltip
-     {:title (translate [:actions :students])}
-     [ui/icon-button {:on-click #(on-students-click class)} [ic/people]]]
-    [ui/tooltip
-     {:title (translate [:actions :profile])}
-     [ui/icon-button {:on-click #(on-profile-click class)} [ic/data-usage]]]
-    [ui/tooltip
-     {:title (translate [:actions :edit])}
-     [ui/icon-button {:on-click #(on-edit-click class)} [ic/create]]]
-    [ui/tooltip
-     {:title (translate [:actions :remove])}
-     [ui/icon-button {:on-click #(on-remove-click class)} [ic/delete]]]]])
+  [{:keys [id name]}]
+  (let [handle-edit-click #(re-frame/dispatch [::state/edit id])
+        handle-remove-click #(re-frame/dispatch [::state/remove id])
+        handle-profile-click #(re-frame/dispatch [::state/open-profile id])
+        handle-students-click #(re-frame/dispatch [::state/open-students id])]
+    [ui/table-row {:hover true}
+     [ui/table-cell {:on-click handle-profile-click} name]
+     [ui/table-cell {:align "right"
+                     :style {:white-space "nowrap"}}
+      [ui/tooltip
+       {:title (translate [:actions :students])}
+       [ui/icon-button {:on-click handle-students-click} [ic/people]]]
+      [ui/tooltip
+       {:title (translate [:actions :profile])}
+       [ui/icon-button {:on-click handle-profile-click} [ic/data-usage]]]
+      [ui/tooltip
+       {:title (translate [:actions :edit])}
+       [ui/icon-button {:on-click handle-edit-click} [ic/create]]]
+      [ui/tooltip
+       {:title (translate [:actions :remove])}
+       [ui/icon-button {:on-click handle-remove-click} [ic/delete]]]]]))
 
 (defn- classes-list
-  [props classes]
-  [ui/table
-   [ui/table-body
-    (for [class classes]
-      ^{:key (:id class)}
-      [classes-list-item props class])]])
+  []
+  (re-frame/dispatch [::state/init])
+  (fn []
+    (let [classes @(re-frame/subscribe [::state/classes])]
+      [ui/table
+       [ui/table-body
+        (for [class classes]
+          ^{:key (:id class)}
+          [classes-list-item class])]])))
 
 (defn classes-list-page
   []
-  (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
-        is-loading? @(re-frame/subscribe [::classes-subs/classes-loading])]
-    (if is-loading?
-      [ui/linear-progress]
-      [content-page
-       {:title (translate [:title])}
-       [:div
-        [classes-list
-         {:on-edit-click     (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/show-edit-class-form id]))
-          :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::dashboard-events/show-delete-class-form id]))
-          :on-profile-click  #(redirect-to :dashboard-class-profile :class-id (:id %))
-          :on-students-click #(redirect-to :dashboard-students :class-id (:id %))}
-         classes]
-        [fab
-         {:on-click   #(re-frame/dispatch [::classes-events/show-add-class-form])
-          :color      "primary"
-          :variant    "extended"
-          :style      (:add-button styles)
-          :aria-label (translate [:add-class :text])}
-         [ic/add]
-         (translate [:add-class :text])]]])))
+  (let [handle-add-click #(re-frame/dispatch [::state/add])]
+    [content-page
+     {:title (translate [:title])}
+     [:div
+      [classes-list]
+      [fab
+       {:on-click   handle-add-click
+        :color      "primary"
+        :variant    "extended"
+        :style      (:add-button styles)
+        :aria-label (translate [:add-class :text])}
+       [ic/add]
+       (translate [:add-class :text])]]]))

@@ -47,23 +47,21 @@
   (bidi/match-route routes url))
 
 (defn- dispatch-route [{:keys [handler route-params] :as params}]
-  (let [current-course @(re-frame/subscribe [::subs/current-course])]
-    (re-frame/dispatch [::events/set-active-route params])
-    (case handler
-      :course (re-frame/dispatch [::ie/start-course (:id route-params)])
-      :sandbox (re-frame/dispatch [::ie/start-sandbox (:course-id route-params) (:scene-id route-params) (:encoded-items route-params)])
+  (re-frame/dispatch [::events/set-active-route params])
+  (case handler
+    :course (re-frame/dispatch [::ie/start-course (:id route-params)])
+    :sandbox (re-frame/dispatch [::ie/start-sandbox (:course-id route-params) (:scene-id route-params) (:encoded-items route-params)])
 
-      :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
-      :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])
-      :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
-      :dashboard-schools (re-frame/dispatch [::dashboard-events/open-schools])
-      :dashboard-courses (re-frame/dispatch [::dashboard-events/open-courses])
-      :dashboard-students (re-frame/dispatch [::dashboard-events/open-students (:class-id route-params)])
+    :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params)])
+    :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
+    :dashboard-schools (re-frame/dispatch [::dashboard-events/open-schools])
+    :dashboard-courses (re-frame/dispatch [::dashboard-events/open-courses])
+    :dashboard-students (re-frame/dispatch [::dashboard-events/open-students (:class-id route-params)])
 
-      ;; student dashboard
-      :student-course-dashboard (re-frame/dispatch [::ie/load-course (:id route-params)])
-      :finished-activities (re-frame/dispatch [::ie/load-course (:id route-params)])
-      nil)))
+    ;; student dashboard
+    :student-course-dashboard (re-frame/dispatch [::ie/load-course (:id route-params)])
+    :finished-activities (re-frame/dispatch [::ie/load-course (:id route-params)])
+    nil))
 
 (def history
   (pushy/pushy dispatch-route parse-url))

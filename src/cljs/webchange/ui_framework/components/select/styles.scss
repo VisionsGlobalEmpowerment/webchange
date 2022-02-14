@@ -86,6 +86,8 @@
     }
 
     &.wc-select-error {
-        border-color: $error-color !important;
+        select {
+            border-color: $error-color !important;
+        }
     }
 }

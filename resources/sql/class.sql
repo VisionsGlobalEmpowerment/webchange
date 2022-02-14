@@ -59,8 +59,10 @@ WHERE school_id = :school_id
 
 -- :name get-class :? :1
 -- :doc retrieve class record
-SELECT * from classes
-WHERE id = :id;
+SELECT cl.*, cr.slug as course_slug
+FROM classes cl
+LEFT JOIN courses cr ON cl.course_id = cr.id
+WHERE cl.id = :id;
 
 -- :name get-students-by-class :? :*
 -- :doc retrieve students given class id

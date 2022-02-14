@@ -8,6 +8,7 @@
     [webchange.dashboard.students.common.check-icon :refer [check-icon]]
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.students.events :as students-events]
+    [webchange.dashboard.students.students-list.state :as state]
     [webchange.dashboard.students.subs :as students-subs]
     [webchange.dashboard.students.common.map-students :refer [map-students-list]]
     [webchange.dashboard.students.students-list.utils :refer [filter-students-list]]
@@ -137,7 +138,10 @@
             classes @(re-frame/subscribe [::classes-subs/classes-list])
             students @(re-frame/subscribe [::students-subs/class-students class-id])
             is-loading? (or @(re-frame/subscribe [::students-subs/students-loading class-id])
-                            @(re-frame/subscribe [::classes-subs/classes-loading]))]
+                            @(re-frame/subscribe [::classes-subs/classes-loading]))
+
+            handle-add-student-click #(re-frame/dispatch [::state/add-student class-id])
+            handle-edit-student-click #(re-frame/dispatch [::state/edit-student (:id %) class-id])]
         (if is-loading?
           [ui/linear-progress]
           [content-page
@@ -151,13 +155,13 @@
              filter]
             [students-list
              {:on-profile-click (fn [{:keys [id class-id]}] (redirect-to :dashboard-student-profile :class-id class-id :student-id id))
-              :on-edit-click    (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
+              :on-edit-click    handle-edit-student-click
               :on-remove-click  (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-remove-from-class-form id]))}
              (->> students
                   (map-students-list)
                   (filter-students-list @filter))]
             [fab
-             {:on-click   #(re-frame/dispatch [::students-events/show-add-student-form])
+             {:on-click   handle-add-student-click
               :color      "primary"
               :variant    "extended"
               :style      {:margin   16

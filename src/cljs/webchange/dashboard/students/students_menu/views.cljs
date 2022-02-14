@@ -6,6 +6,7 @@
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.students.common.map-students :refer [map-students-list]]
     [webchange.dashboard.students.events :as students-events]
+    [webchange.dashboard.students.students-menu.state :as state]
     [webchange.dashboard.students.subs :as students-subs]
     [webchange.routes :refer [redirect-to]]))
 
@@ -37,7 +38,10 @@
         students (->> @(re-frame/subscribe [::students-subs/class-students class-id])
                       map-students-list)
         unassigned (->> @(re-frame/subscribe [::students-subs/unassigned-students])
-                        map-students-list)]
+                        map-students-list)
+
+        handle-add-student-click #(re-frame/dispatch [::state/add-student class-id])
+        handle-edit-student-click #(re-frame/dispatch [::state/edit-student (:id %) class-id])]
     [ui/expansion-panel
      {:disabled (->> class-id boolean not)
       :default-expanded true}
@@ -58,12 +62,12 @@
        (for [student unassigned]
          ^{:key (:id student)}
          [unassigned-students-menu-item
-          {:on-click #(re-frame/dispatch [::students-events/show-edit-student-form (:id %)])}
+          {:on-click handle-edit-student-click}
           student])
        ]]
      [ui/expansion-panel-actions
       [ui/button
        {:color    "secondary"
-        :on-click #(re-frame/dispatch [::students-events/show-add-student-form])}
+        :on-click handle-add-student-click}
        [ic/add]
        (translate [:add-button])]]]))

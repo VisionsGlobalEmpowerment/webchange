@@ -30,10 +30,16 @@
 (defn ->>with-group-end [message value] (group-end message) value)
 
 (defn- do-print-folded
-  [method caption args]
-  (let [group-name (if (sequential? caption) caption [caption])]
-    (apply group-folded group-name)
-    (apply method args)
-    (apply group-end group-name)))
+  ([method caption args]
+   (do-print-folded method caption args false))
+  ([method caption args partitions?]
+   (let [group-name (if (sequential? caption) caption [caption])]
+     (apply group-folded group-name)
+     (if partitions?
+       (doseq [pair (partition 2 args)]
+         (apply method pair))
+       (apply method args))
+     (apply group-end group-name))))
 
 (defn trace-folded [caption & args] (do-print-folded trace caption args))
+(defn trace-folded-defs [caption & args] (do-print-folded trace caption args true))

@@ -61,50 +61,6 @@
      :dispatch-n (list [:complete-request :student])}))
 
 (re-frame/reg-event-fx
-  ::add-student
-  [(re-frame/inject-cofx :validate ::spec/student)]
-  (fn [{:keys [db] :as co-effects} [_ class-id data]]
-    (when-valid :student co-effects
-                {:db         (assoc-in db [:loading :add-student] true)
-                 :http-xhrio {:method          :post
-                              :uri             (str "/api/students")
-                              :params          data
-                              :format          (json-request-format)
-                              :response-format (json-response-format {:keywords? true})
-                              :on-success      [::add-student-success class-id]
-                              :on-failure      [:api-request-error :student]}})))
-
-(re-frame/reg-event-fx
-  ::add-student-success
-  (fn [{:keys [db]} [_ class-id]]
-    {:dispatch-n (list [:complete-request :add-student]
-                       [::load-students class-id]
-                       [::close-student-modal])}))
-
-(re-frame/reg-event-fx
-  ::edit-student
-  [(re-frame/inject-cofx :validate ::spec/student)]
-  (fn [{:keys [db] :as co-effects} [_ class-id student-id data]]
-    (when-valid :student co-effects
-                {:db (assoc-in db [:loading :edit-student] true)
-                 :http-xhrio {:method          :put
-                              :uri             (str "/api/students/" student-id)
-                              :params          data
-                              :format          (json-request-format)
-                              :response-format (json-response-format {:keywords? true})
-                              :on-success      [::edit-student-success class-id student-id]
-                              :on-failure      [:api-request-error :student]}})))
-
-(re-frame/reg-event-fx
-  ::edit-student-success
-  (fn [_ [_ class-id student-id]]
-    {:dispatch-n (list [:complete-request :edit-student]
-                       [::load-unassigned-students]
-                       [::load-student student-id]
-                       [::load-students class-id]
-                       [::close-student-modal])}))
-
-(re-frame/reg-event-fx
   ::remove-student-from-class
   (fn [{:keys [db]} [_ class-id student-id]]
     {:db (assoc-in db [:loading :remove-student-from-class] true)
@@ -159,80 +115,14 @@
     {:dispatch-n (list [:complete-request :complete-student-progress])}))
 
 (re-frame/reg-event-fx
-  ::show-add-student-form
-  (fn [{:keys [db]} _]
-    {:db (-> db
-             (clear-errors :student)
-             (assoc-in [:dashboard :current-student] nil))
-     :dispatch-n (list [::generate-access-code]
-                       [::open-student-modal :add])}))
-
-(re-frame/reg-event-fx
-  ::show-edit-student-form
-  (fn [{:keys [db]} [_ id]]
-    {:db (-> db
-             (clear-errors :student)
-             (assoc-in [:dashboard :current-student-id] id))
-     :dispatch-n (list [::load-student id]
-                       [::reset-access-code]
-                       [::open-student-modal :edit])}))
-
-(re-frame/reg-event-fx
   ::set-current-student
   (fn [{:keys [db]} [_ student-id]]
     {:db (assoc-in db [:dashboard :current-student-id] student-id)}))
 
 (re-frame/reg-event-fx
-  ::generate-access-code
-  (fn [{:keys [db]} _]
-    (let []
-      {:db (assoc-in db [:loading :generate-access-code] true)
-       :http-xhrio {:method          :post
-                    :uri             (str "/api/next-access-code")
-                    :format          (json-request-format)
-                    :response-format (json-response-format {:keywords? true})
-                    :on-success      [::generate-access-code-success]
-                    :on-failure      [:api-request-error :generate-access-code]}})))
-
-
-(re-frame/reg-event-fx
-  ::generate-access-code-success
-  (fn [{:keys [db]} [_ {:keys [access-code]}]]
-    {:db (assoc-in db [:dashboard :access-code] access-code)
-     :dispatch [:complete-request :generate-access-code]}))
-
-(re-frame/reg-event-fx
-  ::reset-access-code
-  (fn [{:keys [db]} _]
-    {:db (update-in db [:dashboard] dissoc :access-code)}))
-
-(re-frame/reg-event-fx
-  ::close-student-modal
-  (fn [{:keys [db]} _]
-    {:db (assoc-in db [:dashboard :student-modal-state] nil)}))
-
-(re-frame/reg-event-fx
-  ::open-student-modal
-  (fn [{:keys [db]} [_ state]]
-    {:db (assoc-in db [:dashboard :student-modal-state] state)}))
-
-(re-frame/reg-event-fx
-  ::load-student-profile
-  (fn [{:keys [db]} [_ student-id course-name]]
-    {:db (-> db
-             (assoc-in [:loading :student-profile] true))
-     :http-xhrio {:method          :get
-                  :uri             (str "/api/individual-profile/" student-id "/course/" course-name)
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::load-student-profile-success]
-                  :on-failure      [:api-request-error :student-profile]}}))
-
-(re-frame/reg-event-fx
-  ::load-student-profile-success
-  (fn [{:keys [db]} [_ result]]
-    {:db (assoc-in db [:dashboard :student-profile] result)
-     :dispatch-n (list [:complete-request :student-profile])}))
+  ::set-student-profile
+  (fn [{:keys [db]} [_ student-profile]]
+    {:db (assoc-in db [:dashboard :student-profile] student-profile)}))
 
 (re-frame/reg-event-fx
   ::show-remove-from-class-form

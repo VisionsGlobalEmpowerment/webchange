@@ -61,7 +61,7 @@
     [::dashboard-events/set-main-content content
      {:class-id   (str->int-param route-params :class-id)
       :student-id (str->int-param route-params :student-id)}])
-  [dashboard])
+  [dashboard route-params])
 
 (defn- panels
   [panel-name route-params]
