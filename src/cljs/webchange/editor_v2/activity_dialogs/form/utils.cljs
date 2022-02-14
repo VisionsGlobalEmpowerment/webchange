@@ -78,7 +78,7 @@
 
                                (some #{inner-action-type} ["show-guide" "hide-guide" "highlight-guide"])
                                :guide
-                               
+
                                :else :unknown)]
              (-> data
                  (assoc :type action-type)
@@ -91,7 +91,7 @@
     (map-indexed (fn [idx {:keys [start end]}]
                    {:text    (subs text start end)
                     :filled? (->> action-chunks-numbers
-                                  (some #{idx} )
+                                  (some #{idx})
                                   (boolean))})
                  text-chunks)))
 
@@ -123,13 +123,13 @@
                    (= type :text-animation)
                    (merge {:text-object  target
                            :chunked-text (get-chunked-text-data
-                                          (->> (keyword target)
-                                               (get-scene-object scene-data)
-                                               (:text))
-                                          (->> (keyword target)
-                                               (get-scene-object scene-data)
-                                               (:chunks))
-                                          data)
+                                           (->> (keyword target)
+                                                (get-scene-object scene-data)
+                                                (:text))
+                                           (->> (keyword target)
+                                                (get-scene-object scene-data)
+                                                (:chunks))
+                                           data)
                            :text         (->> (keyword target)
                                               (get-scene-object scene-data)
                                               (:text))})

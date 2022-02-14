@@ -280,9 +280,12 @@
   (assoc-in scene-data [:metadata :available-actions] available-actions))
 
 (defn get-available-effects
-  [scene-data]
-  (->> (get-available-actions scene-data)
-       (map action-data/fix-available-effect)))
+  ([scene-data]
+   (get-available-effects scene-data []))
+  ([scene-data current-action-effects]
+   (->> (get-available-actions scene-data)
+        (concat current-action-effects)
+        (map action-data/fix-available-effect))))
 
 (defn get-history
   [scene-data]
@@ -321,7 +324,9 @@
   [scene-data]
   (-> (get-guide-settings scene-data)
       (get :show-guide false)))
-                                        ; General
+
+; General
+
 (defn get-guide-character
   [scene-data]
   (-> (get-guide-settings scene-data)
