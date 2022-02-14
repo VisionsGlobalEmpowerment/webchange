@@ -1,6 +1,7 @@
 (ns webchange.ui-framework.layout.views
   (:require
     [reagent.core :as r]
+    [webchange.page-title.views :refer [page-title]]
     [webchange.ui-framework.layout.navigation.views :refer [navigation-menu]]
     [webchange.ui-framework.layout.right-menu.views :refer [right-menu]]
     [webchange.views-modals :refer [modal-windows]]))
@@ -10,6 +11,7 @@
     :or   {show-navigation? true}}]
   (let [this (r/current-component)]
     [:div.page-layout
+     [page-title {:scene-data scene-data}]
      [:div.body
       (when show-navigation?
         [navigation-menu {:class-name "left-side-menu"}])
