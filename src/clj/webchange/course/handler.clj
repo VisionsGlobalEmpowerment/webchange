@@ -177,7 +177,7 @@
   [course-slug request]
   (let [user-id (current-user request)]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
-      (throw-unauthorized {:role eduction}))
+      (throw-unauthorized {:role :educator}))
     (-> (core/publish-course! course-slug)
         handle)))
 
@@ -186,7 +186,7 @@
   (let [user-id (current-user request)
         {owner-id :owner-id course-id :id} (core/get-course-info course-slug)]
     (when-not (= user-id owner-id)
-      (throw-unauthorized {:role eduction}))
+      (throw-unauthorized {:role :educator}))
     (-> (core/archive-course! course-slug course-id)
         handle)))
 
@@ -194,7 +194,7 @@
   [course-id review-result request]
   (let [user-id (current-user request)]
     (when-not (is-admin? user-id)
-      (throw-unauthorized {:role eduction}))
+      (throw-unauthorized {:role :educator}))
     (-> (core/review-course! course-id review-result)
         handle)))
 
@@ -202,7 +202,7 @@
   [type status request]
   (let [user-id (current-user request)]
     (when-not (is-admin? user-id)
-      (throw-unauthorized {:role eduction}))
+      (throw-unauthorized {:role :educator}))
     (-> (core/get-on-review-courses type status)
         handle)))
 

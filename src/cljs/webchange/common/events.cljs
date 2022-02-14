@@ -316,8 +316,46 @@
   [action sequence-position]
   (flatten [(:display-name action) sequence-position]))
 
+(defn destroy-timer
+  [timer]
+  (case (:type timer)
+    "interval" (.clearInterval js/window (:id timer))
+    "timeout" (.clearTimeout js/window (:id timer))
+    (throw (js/Error. (str "Timer type '" (:type timer) "' is not supported")))))
+
+(defn remove-timer
+  [name]
+  (let [timer (get @timers name)]
+    (when-not (nil? timer)
+      (destroy-timer timer))
+    (swap! timers dissoc name)
+    {}))
+
+(defn register-timer
+  [{:keys [name] :as timer}]
+  (swap! timers assoc name timer))
+
+(defn stop-timeout-instructions
+  []
+  (remove-timer "timeout-instructions"))
+
+(defn start-timeout-instructions
+  [db]
+  (stop-timeout-instructions)
+  (let [interval 15000
+        timeout-id (.setTimeout js/window
+                                (fn []
+                                  (let [scene-action (get-action "timeout-instructions" db)]
+                                    (execute-action db scene-action)))
+                                interval)]
+    (register-timer {:id timeout-id
+                     :name "timeout-instructions"
+                     :type "timeout"})))
+
 (defn execute-action
-  [db {:keys [callback unique-tag] :as action}]
+  [db {:keys [callback unique-tag user-event?] :as action}]
+  (when user-event?
+    (start-timeout-instructions db))
   (if (flow-not-registered? unique-tag)
     (let [action (as-> action a
                        (assoc a :current-scene (:current-scene db))
@@ -366,24 +404,10 @@
 
 
 
-(defn destroy-timer
-  [timer]
-  (case (:type timer)
-    "interval" (.clearInterval js/window (:id timer))
-    (throw (js/Error. (str "Timer type '" (:type timer) "' is not supported")))))
-
-(defn remove-timer
-  [name]
-  (let [timer (get @timers name)]
-    (when-not (nil? timer)
-      (destroy-timer timer))
-    (swap! timers dissoc name)
-    {}))
-
 (re-frame/reg-event-fx
   ::execute-register-timer
-  (fn [{:keys [db]} [_ {:keys [name] :as timer}]]
-    (swap! timers assoc name timer)
+  (fn [{:keys [db]} [_ timer]]
+    (register-timer timer)
     {}))
 
 (re-frame/reg-event-fx
@@ -634,6 +658,9 @@
                                       (not (:workflow-user-input action))
                                       (not (and dialog-action? ended?)))]
 
+     (when (and dialog-action? ended?)
+       (start-timeout-instructions db))
+     
      (if block-user-interaction?
        (interactions/block-user-interaction)
        (interactions/unblock-user-interaction))
@@ -649,8 +676,8 @@
              action-id (random-uuid)
              current-scene (:current-scene db)
              skippable? (or
-                          dialog-action?
-                          (->> action :previous-flow :tags (some #{"skip"})))
+                         dialog-action?
+                         (->> action :previous-flow :tags (some #{"skip"})))
              flow-data {:flow-id       flow-id
                         :actions       [action-id]
                         :type          :all
@@ -687,8 +714,9 @@
      :data [{:type 'animation', :id 'volley_call', :target 'vera'}
             {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
     (when (and
-            (action-data-utils/dialog-action? action)
-            (not (some #{(:fx action-data-utils/action-tags)} (get-action-tags action))))
+           (action-data-utils/dialog-action? action)
+           (not (some #{(:fx action-data-utils/action-tags)} (get-action-tags action))))
+      (stop-timeout-instructions)
       (skip))
     (execute-sequence-data! db action)
     {}))
