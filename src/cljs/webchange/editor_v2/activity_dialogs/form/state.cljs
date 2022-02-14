@@ -318,9 +318,8 @@
   (fn [[dialogs-paths current-concept scene-data selected-action]]
     (let [script-data (map (fn [{:keys [action-path title type]}]
                              (case type
-                               "dialog" (let [{:keys [available-activities phrase-description]} (get-in scene-data (concat [:actions] action-path))
-                                              available-actions (->> (scene-utils/get-available-effects scene-data)
-                                                                     (concat available-activities))]
+                               "dialog" (let [{:keys [available-activities phrase-description] :as a} (get-in scene-data (concat [:actions] action-path))
+                                              available-actions (scene-utils/get-available-effects scene-data available-activities)]
                                           {:type        "dialog"
                                            :title       phrase-description
                                            :action-path action-path
