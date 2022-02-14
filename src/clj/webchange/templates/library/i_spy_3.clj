@@ -97,6 +97,24 @@
                          :src     "/raw/img/i-spy-3/icons/22.png",
                          :actions {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
                          },
+                        :monument-text
+                        {:type           "text",
+                         :align          "center",
+                         :fill           "#83683E",
+                         :font-family    "Staatliches",
+                         :font-size      24,
+                         :scale-x        1,
+                         :scale-y        1,
+                         :text           "Maya\nAngelou",
+                         :vertical-align "middle",
+                         :visible        true,
+                         :x       675,
+                         :skew-y  -0.12,
+                         :y       545,
+                         :width   100,
+                         :height  100,
+                         :editable?      {:select true}
+                         },
                         :trash-bin-1
                         {:type           "text",
                          :x              1579,
@@ -232,11 +250,22 @@
                                        :fill          0xE4E4E4,
                                        :states        {:gray {:fill 0xE4E4E4}, :highlighted {:fill 0x76C700}}
                                        }
-                        :icon-max     {:type       "transparent",
+                        :icon-max     {:type           "text",
+                                       :align          "center",
+                                       :fill           "#BF7424",
+                                       :font-family    "Staatliches",
+                                       :font-size      36,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "MAX",
+                                       :vertical-align "middle",
+                                       :visible        true,
                                        :x          1545,
                                        :y          1008,
+                                       :skew-y     0.1,
                                        :width      60,
                                        :height     60,
+                                       :editable?      {:select true}
                                        :actions    {:click {:id "icon-max-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-park    {:type       "transparent",
                                        :x          575,
@@ -435,7 +464,7 @@
                         ["bar" "menu-rectangle" "schedule-rectangle" "trash-rectangle" "recycle-rectangle" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
                         ["icon-1" "icon-2" "icon-3" "icon-4" "icon-5"]
                         ["icon-br-1" "icon-br-2" "icon-br-3" "icon-br-4" "icon-br-5"]
-                        ["icon-max" "icon-park"]
+                        ["icon-max" "icon-park" "monument-text"]
                         ],
         :actions       {
                         :init-items         {:type "sequence-data",
