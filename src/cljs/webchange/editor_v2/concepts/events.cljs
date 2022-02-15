@@ -23,7 +23,7 @@
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)]
       {:dispatch-n (list [:complete-request :add-dataset-item] [::ee/load-lesson-sets course-id])
-       :redirect [:course-editor-v2 :id course-id]})))
+       :redirect [:course-editor :id course-id]})))
 
 (re-frame/reg-event-fx
   ::edit-dataset-item
@@ -42,7 +42,7 @@
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)]
       {:dispatch-n (list [:complete-request :edit-dataset-item] [::ee/load-lesson-sets course-id])
-       :redirect [:course-editor-v2 :id course-id]})))
+       :redirect [:course-editor :id course-id]})))
 
 (re-frame/reg-event-fx
   ::delete-dataset-item

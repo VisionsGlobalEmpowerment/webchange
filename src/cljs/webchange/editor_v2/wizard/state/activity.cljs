@@ -103,7 +103,7 @@
 (re-frame/reg-event-fx
   ::create-simple-activity-success
   (fn [{:keys [db]} [_ data result]]
-    (let [redirect #(redirect-to :course-editor-v2-scene :id (:course-slug %) :scene-id (:scene-slug %))]
+    (let [redirect #(redirect-to :course-editor-scene :id (:course-slug %) :scene-id (:scene-slug %))]
       {:dispatch-n (list [:complete-request :create-course]
                          [::create-activity (:slug result) data redirect])})))
 
@@ -126,7 +126,7 @@
 (re-frame/reg-event-fx
   ::create-book-success
   (fn [{:keys [db]} [_ data result]]
-    (let [redirect #(redirect-to :course-editor-v2-scene :id (:course-slug %) :scene-id (:scene-slug %))
+    (let [redirect #(redirect-to :course-editor-scene :id (:course-slug %) :scene-id (:scene-slug %))
           activity-name (:activity-name data)]
       {:dispatch-n (list [:complete-request :create-course]
                          [::create-activity (:slug result) (assoc data :name activity-name) redirect])})))

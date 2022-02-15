@@ -53,7 +53,7 @@
            [ui/card-actions {:style {:justify-content "flex-end"}}
             (when (:add-dataset-item loading)
               [ui/circular-progress])
-            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
+            [ui/button {:on-click #(redirect-to :course-editor :id course-id)}
              "Cancel"]
             [ui/button {:color    "secondary"
                         :variant  "contained"
@@ -79,7 +79,7 @@
            [ui/card-actions {:style {:justify-content "flex-end"}}
             (when (:edit-dataset-item loading)
               [ui/circular-progress])
-            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
+            [ui/button {:on-click #(redirect-to :course-editor :id course-id)}
              "Cancel"]
             [ui/button {:color    "secondary"
                         :variant  "contained"

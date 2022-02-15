@@ -140,7 +140,7 @@
   ::edit-lesson-success
   (fn [{:keys [db]} [_ course-id]]
     {:dispatch-n (list [:complete-request :edit-lesson] [::ee/load-lesson-sets course-id])
-     :redirect [:course-editor-v2 :id course-id]}))
+     :redirect [:course-editor :id course-id]}))
 
 (re-frame/reg-event-fx
   ::edit-lesson-set

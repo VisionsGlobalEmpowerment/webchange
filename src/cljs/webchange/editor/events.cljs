@@ -12,12 +12,6 @@
     [webchange.state.state :as state-core]))
 
 (re-frame/reg-event-fx
-  ::init-editor
-  (fn [_ [_ course-id scene-id]]
-    {:dispatch-n (list [::ie/start-course course-id scene-id]
-                       [::load-datasets])}))
-
-(re-frame/reg-event-fx
   ::load-datasets
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)]
@@ -62,37 +56,9 @@
     {:db (update-in db [:editor] dissoc :selected-scene-action)}))
 
 (re-frame/reg-event-fx
-  ::select-scene-action
-  (fn [{:keys [db]} [_ action scene-id]]
-    (when-not action (throw (js/Error. "Action is not defined")))
-    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
-    (let [action-data (get-in db [:scenes scene-id :actions (keyword action)])]
-      {:db       (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action})
-       :dispatch [::set-form-data action-data]})))
-
-(re-frame/reg-event-fx
-  ::set-form-data
-  (fn [{:keys [db]} [_ data]]
-    {:db (assoc-in db [:editor :action-form] {:data data :path [] :breadcrumb []})}))
-
-(re-frame/reg-event-fx
-  ::show-form
-  (fn [{:keys [db]} [_ form]]
-    {:db (assoc-in db [:editor :shown-form] form)}))
-
-(re-frame/reg-event-fx
   ::reset-shown-form
   (fn [{:keys [db]} [_]]
     {:db (update-in db [:editor] dissoc :shown-form)}))
-
-(re-frame/reg-event-fx
-  ::add-asset
-  (fn [{:keys [db]} [_ {:keys [scene-id state]}]]
-    (let [asset (assoc state :date (.getTime (js/Date.)))
-          assets (-> db
-                     (get-in [:scenes scene-id :assets] [])
-                     (conj asset))]
-      {:db (assoc-in db [:scenes scene-id :assets] assets)})))
 
 (re-frame/reg-event-fx
   ::reset-scene-assets
@@ -149,31 +115,6 @@
                        [::translator-form.scene/init-state]
                        [::state-core/update-last-saved]
                        [:complete-request :save-scene])}))
-
-(defn update-scene
-  [db course-id scene-id scene-data-patch]
-  (let [data (dissoc scene-data-patch :animations)]
-    {:db         (-> db
-                     (assoc-in [:loading :update-scene] true)
-                     (update-in [:scenes scene-id] merge data))
-     :http-xhrio {:method          :put
-                  :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
-                  :params          {:scene data}
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::update-scene-success]
-                  :on-failure      [:api-request-error :update-scene]}}))
-
-(re-frame/reg-event-fx
-  ::update-scene
-  (fn [{:keys [db]} [_ scene-id scene-data-patch]]
-    (let [course-id (:current-course db)]
-      (update-scene db course-id scene-id scene-data-patch))))
-
-(re-frame/reg-event-fx
-  ::update-scene-success
-  (fn [_ _]
-    {:dispatch-n (list [:complete-request :update-scene])}))
 
 (re-frame/reg-event-fx
   ::edit-dataset

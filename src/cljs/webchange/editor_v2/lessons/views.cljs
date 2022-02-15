@@ -38,7 +38,7 @@
                      :style (:actions-container styles)}
             (when (:edit-lesson loading)
               [ui/circular-progress])
-            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)
+            [ui/button {:on-click #(redirect-to :course-editor :id course-id)
                         :style    (:cancel-button styles)}
              "Cancel"]
             [ui/button {:color    "secondary"
@@ -69,7 +69,7 @@
                      :style (:actions-container styles)}
             (when (:add-lesson loading)
               [ui/circular-progress])
-            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)
+            [ui/button {:on-click #(redirect-to :course-editor :id course-id)
                         :style    (:cancel-button styles)}
              "Cancel"]
             [ui/button {:color    "secondary"
