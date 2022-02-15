@@ -68,7 +68,10 @@
   (let [{:keys [mode show-loader-screen?]
          :or   {show-loader-screen? true}} props]
     {:show-scene?          (and (some? viewport)
-                                (:done loading-state))
+                                (:done loading-state)
+                                (or (= mode ::modes/editor)
+                                    (= mode ::modes/preview)
+                                    (:started? scene-data)))
      :show-loader-screen?  (and show-loader-screen?
                                 (some? viewport)
                                 (or (not (:done loading-state))
@@ -86,8 +89,7 @@
                          :progress 0})
         current-scene-id (r/atom nil)
         handle-resize (get-handler handle-screen-resize container)
-        prev-viewport (atom nil)
-        scene-ready? (r/atom false)]
+        prev-viewport (atom nil)]
     (r/create-class
       {:display-name "web-gl-stage"
        :component-did-mount
@@ -128,14 +130,13 @@
                                     :objects  (:objects scene-data)
                                     :metadata (:metadata scene-data)
                                     :viewport viewport
-                                    :on-ready #(do (reset! scene-ready? true)
-                                                   (on-ready))}])
+                                    :on-ready on-ready
+                                    :started? (:started? scene-data)}])
                           (when show-loader-screen?
                             [overlay-wrapper {:viewport viewport}
                              [loader-screen {:on-start-click on-start-click
-                                             :done           (and (:done @loading)
-                                                                  @scene-ready?)
-                                             :progress       (:progress @loading)}]])
+                                             :loading        @loading}]])
                           (when show-waiting-screen?
                             [overlay-wrapper {:viewport viewport}
-                             [waiting-screen]])]))})))
+                             [waiting-screen {:on-start-click on-start-click
+                                              :loading        @loading}]])]))})))
