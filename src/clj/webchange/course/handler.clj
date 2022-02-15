@@ -405,6 +405,12 @@
   (GET "/courses/:course-slug/edit" [course-slug] (-> course-slug core/first-activity editor-url redirect))
   (GET "/courses/:course-slug/play" [course-slug] (-> course-slug core/first-activity sandbox-url redirect))
   (GET "/courses/:course-slug/editor" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor/:scene-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor/concepts/:concept-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor/add-concept" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor/levels/:level-id/lessons/:lesson-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor/levels/:level-id/add-lesson" request (collaborator-route request))
+  
   (GET "/courses/:course-slug/editor-v2" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2/:scene-id" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2/concepts/:concept-id" request (collaborator-route request))
