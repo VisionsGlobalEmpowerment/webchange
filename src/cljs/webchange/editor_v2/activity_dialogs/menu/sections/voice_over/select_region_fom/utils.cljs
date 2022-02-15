@@ -14,12 +14,15 @@
 
 (defn get-animation-sequence-data
   [{:keys [text audio-script selection-data]}]
-  (cond
-    (some? audio-script) (-> (get-region-data text audio-script (select-keys selection-data [:start :end]))
-                             (audio-analyzer/region-data->animation-sequence-data audio-script))
-    :else [{:start (:start selection-data)
-            :end   (:end selection-data)
-            :anim  "talk"}]))
+  (if (some? audio-script)
+    (let [text-recognition-result (-> (get-region-data text audio-script (select-keys selection-data [:start :end]))
+                                      (audio-analyzer/region-data->animation-sequence-data audio-script))]
+      (if-not (empty? text-recognition-result)
+        text-recognition-result
+        (audio-analyzer/region-data->animation-sequence-data selection-data audio-script)))
+    [{:start (:start selection-data)
+      :end   (:end selection-data)
+      :anim  "talk"}]))
 
 (defn get-text-animation-data
   [{:keys [text audio-script selection-data]}]
