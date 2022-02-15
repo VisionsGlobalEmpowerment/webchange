@@ -65,6 +65,7 @@
         [:div.select-region-form
          [toolbar (merge toolbar-props
                          {:ws ws})]
+         ^{:key (:url wave-form-data)}
          [audio-wave-form (merge wave-form-data
                                  {:on-change      handle-change-region
                                   :show-controls? true
