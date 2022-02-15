@@ -11,6 +11,7 @@
     [webchange.editor-v2.activity-form.common.state :as state-activity-form]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.state-activity :as state-activity]
+    [webchange.ui-framework.layout.state :as layout]
     [webchange.utils.flipbook :as flipbook-utils]))
 
 (defn path-to-db
@@ -312,7 +313,8 @@
     (let [metadata (get-in db [:current-scene-data :metadata])]
       (if (contains? metadata :flipbook-name)
         {:dispatch-n [[::select-flipbook-stage idx]
-                      [::state/reset-current-object]]}
+                      [::state/reset-current-object]
+                      [::layout/scroll-content]]}
         (let [objects (get-in db [:current-scene-data :scene-objects])
               stage (get-in db [:current-scene-data :metadata :stages idx])
               visible? (fn [name] (some #{name} (:objects stage)))]
