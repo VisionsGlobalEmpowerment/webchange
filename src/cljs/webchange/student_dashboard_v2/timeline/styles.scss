@@ -101,11 +101,7 @@
                 border-radius: 8px;
             }
 
-            .letter {
-                display: flex;
-                align-items: flex-start;
-                justify-content: flex-end;
-
+            .letter-wrapper {
                 position: absolute;
                 top: -1px;
                 right: -1px;
@@ -116,9 +112,26 @@
                 background: #fff;
                 border-radius: 0 0 0 24px;
 
-                color: #f00;
-                font-size: 4vh;
-                font-weight: bold;
+                .letter {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+
+                    $size: 80%;
+                    width: $size;
+                    height: $size;
+
+                    span {
+                        color: #f00;
+                        font-family: Tabschool;
+                        font-size: 3vh;
+                        font-weight: bold;
+                    }
+                }
             }
         }
 
