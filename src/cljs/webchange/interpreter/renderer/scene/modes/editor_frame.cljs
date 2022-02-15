@@ -246,15 +246,23 @@
     {:restrict-x restrict-x
      :restrict-y restrict-y}))
 
+(defn- filter-props
+  [props]
+  (->> props
+       (filter (fn [[_ value]]
+                 (or (number? value)
+                     (string? value)
+                     (map? value))))
+       (into {})))
+
 (defn- create-editor-container
   [props]
   (let [container (Container.)]
     (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
     (when (draggable? props)
       (enable-drag! container {:on-drag-start        #(handle-frame-click props)
-                               :on-drag-end          #(handle-drag container (select-keys props [:origin :width :height :scale :type]))
+                               :on-drag-end          #(handle-drag container (filter-props props))
                                :on-drag-move-options (drag-options props)}))
-
     container))
 
 (defn- wrap-in-container
