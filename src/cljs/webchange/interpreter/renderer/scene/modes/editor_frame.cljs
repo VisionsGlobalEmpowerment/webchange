@@ -59,11 +59,11 @@
 
 (re-frame/reg-event-fx
   ::change-position
-  (fn [{:keys [db]} [_ position container]]
+  (fn [{:keys [db]} [_ position container props]]
     (let [name (editor/selected-object db)
           current-scene (subs/current-scene db)
           init-state (subs/scene-object db current-scene name)
-          state (->> (fix-position position init-state container)
+          state (->> (fix-position position props container)
                      (merge init-state))
           dx (Math/abs (- (:x state) (:x init-state)))
           dy (Math/abs (- (:y state) (:y init-state)))
@@ -82,8 +82,8 @@
   (re-frame/dispatch [::editor/select-object (:object-name component)]))
 
 (defn- handle-drag
-  [container]
-  (re-frame/dispatch [::change-position (utils/get-position container) container]))
+  [container props]
+  (re-frame/dispatch [::change-position (utils/get-position container) container props]))
 
 (defn- wrap
   [name sprite]
@@ -252,7 +252,7 @@
     (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
     (when (draggable? props)
       (enable-drag! container {:on-drag-start        #(handle-frame-click props)
-                               :on-drag-end          #(handle-drag container)
+                               :on-drag-end          #(handle-drag container (select-keys props [:origin :width :height :scale :type]))
                                :on-drag-move-options (drag-options props)}))
 
     container))
