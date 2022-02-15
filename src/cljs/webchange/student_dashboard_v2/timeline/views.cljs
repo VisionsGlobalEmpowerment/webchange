@@ -15,7 +15,9 @@
                                       "timeline-item" true})}
    [:img {:src preview}]
    (when (some? letter)
-     [:div.letter [:span letter]])])
+     [:div.letter-wrapper
+      [:div.letter
+       [:span letter]]])])
 
 (defn- button-connector
   []
