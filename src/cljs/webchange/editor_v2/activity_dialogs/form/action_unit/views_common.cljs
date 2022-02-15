@@ -64,7 +64,7 @@
                                              (let [new-value (.. event -target -innerText)]
                                                (reset! current-value new-value)
                                                (on-change new-value)))]
-                         [:span (cond-> {:class-name (get-class-name {"text"          true
+                         [:p (cond-> {:class-name (get-class-name {"text"          true
                                                                       "text-disabled" (not editable?)})
                                          :ref        #(when (some? %) (reset! ref %))
                                          :on-focus   handle-focus
