@@ -67,3 +67,21 @@ Remove image:
 ```shell script
  $ docker rmi <Image id>
 ```
+
+
+
+### Build new docker image
+
+
+```
+lein clean
+lein uberjar
+```
+
+```
+sudo docker image build -t webchange-voice-recognition-dev -f ./docker/voice-recognition-dev/Dockerfile .
+```
+
+```
+$ docker run --mount type=bind,source="$(pwd)",target=/usr/src/app webchange-voice-recognition-dev
+```

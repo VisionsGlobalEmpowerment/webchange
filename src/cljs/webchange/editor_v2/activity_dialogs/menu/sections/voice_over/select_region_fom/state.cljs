@@ -7,6 +7,7 @@
     [webchange.editor-v2.components.audio-wave-form.utils :as ws-utils]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as state-scene]
+    [webchange.logger.index :as logger]
     [webchange.state.warehouse-recognition :as recognition]
     [webchange.utils.numbers :refer [to-precision]]
     [webchange.utils.scene-action-data :refer [text-animation-action?
@@ -171,7 +172,7 @@
           current-text (get-current-text db)
           audio-script (recognition/get-audio-script db url)
           inner-action (parent-state/get-current-inner-action db)
-          data-patch (cond-> region-data
+          data-patch (cond-> (select-keys region-data [:start :end :duration])
                              (text-animation-action? inner-action)
                              (assoc :data (utils/get-text-animation-data {:text           current-text
                                                                           :audio-script   audio-script
@@ -180,6 +181,7 @@
                              (assoc :data (utils/get-animation-sequence-data {:text           current-text
                                                                               :audio-script   audio-script
                                                                               :selection-data region-data})))]
+      (logger/trace "Change region" data-patch)
       {:dispatch [::update-action data-patch]})))
 
 (re-frame/reg-event-fx
