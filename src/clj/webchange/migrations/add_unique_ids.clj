@@ -4,18 +4,17 @@
             [webchange.progress.core :as progress]
             [webchange.db.core :refer [*db*] :as db]))
 
-(defn add-unique-ids [levels start-id]
-  (let [unique-id (atom (dec start-id))]
-    (mapv (fn [level]
-            (update-in level [:lessons]
-              (fn [l]
-                (mapv (fn [lesson]
-                        (update-in lesson [:activities]
-                          (fn [a]
-                            (mapv (fn [activity]
-                                    (assoc activity :unique-id
-                                      (swap! unique-id inc)))
-                              a)))) l)))) levels)))
+(defn add-unique-ids [levels unique-id]
+  (mapv (fn [level]
+          (update-in level [:lessons]
+            (fn [l]
+              (mapv (fn [lesson]
+                      (update-in lesson [:activities]
+                        (fn [a]
+                          (mapv (fn [activity]
+                                  (assoc activity :unique-id
+                                    (swap! unique-id inc)))
+                            a)))) l)))) levels))
 
 (defn map-map [func m]
   (apply merge (map func m)))
@@ -48,15 +47,17 @@
 
 (defn migrate-up [config]
   (mount/start)
-  (let [course-slug "english"
+  (let [unique-id (atom -1)
+        course-slug "english"
         course-id (:id (db/get-course {:slug course-slug}))
         new-course (-> (db/get-latest-course-version {:course_id course-id})
-                     (update-in [:data :levels] #(add-unique-ids % 0)))
+                     (update-in [:data :levels] #(add-unique-ids % unique-id))
+                     (assoc-in [:data :unique-id] @unique-id))
 
         new-progresses (->> (db/get-progress-for-course {:course_id course-id})
                          (map #(update-progress % (:data new-course))))]
     (db/save-course-data! new-course)
-    (doseq [{:keys [id data]} progresses]
+    (doseq [{:keys [id data]} new-progresses]
       (progress/update-progress! id data))))
 
 (defn migrate-down [config]

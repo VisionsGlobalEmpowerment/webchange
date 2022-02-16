@@ -6,8 +6,7 @@
     [webchange.editor-v2.course-table.state.edit-common :as common]
     [webchange.interpreter.subs :as interpreter.subs]
     [webchange.subs :as subs]
-    [webchange.state.state :as state]
-    [webchange.interpreter.lessons.activity :as lessons-activity]))
+    [webchange.state.state :as state]))
 
 (defn- get-lesson-set-items
   [db lesson-data scheme-name]
@@ -162,13 +161,10 @@
           target-position (cond-> (:activity-idx selection)
                                   (= relative-position :before) (identity)
                                   (= relative-position :after) (inc))
-          unique-id (->> (lessons-activity/flatten-activities (get-in db [:course-data :levels]))
-                      (map :unique-id)
-                      (filter (comp not nil?))
-                      (apply #(if (empty? %&) -1 (apply max %&)))
-                      inc)
+          unique-id (inc (:unique-id course-data))
           activity-data (assoc (get-default-activity-data course-data) :unique-id unique-id)
           updated-course-data (-> course-data
+                                  (update-in [:unique-id] inc)
                                   (utils/add-activity {:level-index   (:level-idx selection)
                                                        :lesson-index  (:lesson-idx selection)
                                                        :position      target-position
