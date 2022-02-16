@@ -26,6 +26,16 @@
   [value]
   (or (= value nil) (= value "")))
 
+(defn- select-content-editable-text!
+  [el]
+  (let [range (.createRange js/document)
+        selection (.getSelection js/window)
+        text-node (-> (.-childNodes el) (.item 0))]
+    (.setStart range text-node 0)
+    (.setEnd range text-node (.-length text-node))
+    (.removeAllRanges selection)
+    (.addRange selection range)))
+
 (defn text-control
   [{:keys [on-change on-enter-press on-ctrl-enter-press placeholder]}]
   (let [ref (atom nil)
@@ -38,8 +48,7 @@
                               (on-enter-press))))
         handle-focus (fn []
                        (when (empty-text-value? @current-value)
-                         (set! (.-innerText @ref) "")
-                         (on-change "")))
+                         (select-content-editable-text! @ref)))
 
         handle-blur (fn []
                       (when (empty-text-value? @current-value)
@@ -64,7 +73,7 @@
                                              (let [new-value (.. event -target -innerText)]
                                                (reset! current-value new-value)
                                                (on-change new-value)))]
-                         [:p (cond-> {:class-name (get-class-name {"text"          true
+                         [:span (cond-> {:class-name (get-class-name {"text"          true
                                                                       "text-disabled" (not editable?)})
                                          :ref        #(when (some? %) (reset! ref %))
                                          :on-focus   handle-focus
