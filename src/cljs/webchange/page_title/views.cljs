@@ -13,8 +13,9 @@
       (str "Book: " title))))
 
 (defn- get-page-title
-  [{:keys [scene-data] :as props}]
-  (or (cond
+  [{:keys [scene-data title] :as props}]
+  (or title
+      (cond
         (flipbook-utils/flipbook-activity? scene-data) (get-flipbook-title props))
       default-title))
 

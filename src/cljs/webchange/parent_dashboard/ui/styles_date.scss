@@ -1,0 +1,12 @@
+@import "mixins";
+
+.pd-date {
+    input {
+        background: #fff;
+        padding: 16px 18px;
+        font-size: 16px;
+
+        @include control-border;
+        @include control-font;
+    }
+}

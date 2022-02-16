@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.parent-dashboard.add-student.state :as state]
     [webchange.parent-dashboard.layout.views :refer [layout]]
-    [webchange.parent-dashboard.ui.index :refer [button circular-progress input select]]))
+    [webchange.parent-dashboard.ui.index :refer [button circular-progress date input select]]))
 
 (defn- name-control
   []
@@ -18,14 +18,13 @@
 (defn- age-control
   []
   (let [value @(re-frame/subscribe [::state/current-age])
-        options @(re-frame/subscribe [::state/age-options])
         handle-change #(re-frame/dispatch [::state/set-age %])
         error @(re-frame/subscribe [::state/age-validation-error])]
-    [select {:placeholder "Age*"
-             :value       value
-             :error       error
-             :options     options
-             :on-change   handle-change}]))
+    [date {:placeholder "Age*"
+           :mask        "mm/dd/yyy"
+           :value       value
+           :error       error
+           :on-change   handle-change}]))
 
 (defn- device-control
   []
