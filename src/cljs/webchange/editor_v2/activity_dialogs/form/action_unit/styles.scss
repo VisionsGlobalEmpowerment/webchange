@@ -141,6 +141,10 @@ $units-margin: 6px;
         &.text-disabled {
             cursor: default;
         }
+
+        &.placeholder {
+            color: #a6a6a6;
+        }
     }
 
     &:hover {
