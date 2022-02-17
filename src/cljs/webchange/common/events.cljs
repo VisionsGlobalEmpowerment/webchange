@@ -658,8 +658,10 @@
                                       (not (:workflow-user-input action))
                                       (not (and dialog-action? ended?)))]
 
-     (when (and dialog-action? ended?)
-       (start-timeout-instructions db))
+     (when dialog-action?
+       (if ended?
+         (start-timeout-instructions db)
+         (stop-timeout-instructions)))
      
      (if block-user-interaction?
        (interactions/block-user-interaction)

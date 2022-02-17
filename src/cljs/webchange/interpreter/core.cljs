@@ -305,9 +305,34 @@
          (< r2y (+ r1y r1height))
          (> r2y r1y))))
 
+(defn- merge-animations
+  "Try to merge talk animations when there is no silence between.
+  E.g (:next start) is the same as (:end current)"
+  [data]
+  (let [continued? (fn [current next]
+                     (< (- (:start next) (:end current)) 0.1))
+        merge-chunks (fn [current next]
+                       (assoc current :end (:end next)))]
+    (if (empty? data)
+      data
+      (loop [result []
+             current (first data)
+             tail (rest data)]
+        (let [next (first tail)]
+          (if (nil? next)
+            (concat result [current])
+            (if (continued? current next)
+              (recur result
+                     (merge-chunks current next)
+                     (rest tail))
+              (recur (concat result [current])
+                     next
+                     (rest tail)))))))))
+
 (defn animation-sequence->actions [{audio-start :start :keys [target track data skippable start end]}]
   (let [track (or track (get scene-action-data/animation-tracks :mouth))]
     (->> data
+         (merge-animations)
          (remove (fn [{chunk-end :end chunk-start :start}]
                    (or
                     (<= chunk-end start)
