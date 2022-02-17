@@ -18,7 +18,7 @@
 (deftest create-student
   (testing "Child student can be created"
     (let [parent (f/website-user-created)
-          result (-> (f/create-parent-student! {:name "Test" :age 3 :device "Tablet"} (:id parent))
+          result (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
                      :body
                      (slurp)
                      (json/read-str :key-fn keyword))]

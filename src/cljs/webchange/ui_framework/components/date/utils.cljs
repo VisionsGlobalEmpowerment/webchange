@@ -8,23 +8,28 @@
 
 (defn get-min-day
   [month year]
-  (let [short-month? (or (and (< month 7)
-                              (= (mod month 2) 0))
-                         (and (> month 8)
-                              (= (mod month 2) 1)))]
-    (if short-month?
-      (if (= month 2)
-        (if (leap-year? year)
-          29
-          28)
-        30)
-      31)))
+  (if (and (some? month)
+           (some? year))
+    (let [short-month? (or (and (< month 7)
+                                (= (mod month 2) 0))
+                           (and (> month 8)
+                                (= (mod month 2) 1)))]
+      (if short-month?
+        (if (= month 2)
+          (if (leap-year? year)
+            29
+            28)
+          30)
+        31))
+    31))
 
 (defn fix-date
   [{:keys [day month year]}]
-  (let [month (min month 12)
-        day (-> (get-min-day month year)
-                (min day))]
+  (let [month (when (some? month)
+                (min month 12))
+        day (when (some? day)
+              (-> (get-min-day month year)
+                  (min day)))]
     {:day   day
      :month month
      :year  year}))

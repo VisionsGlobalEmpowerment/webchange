@@ -17,7 +17,9 @@
                focused? (r/atom false)
                mask-data (get available-masks mask)
                handle-change (fn [value]
-                               (let [parsed-value (utils/parse-date value mask-data)]
+                               (let [parsed-value (-> value
+                                                      (utils/parse-date mask-data)
+                                                      (utils/fix-date))]
                                  (reset! real-value (utils/to-iso-format parsed-value))
                                  (reset! display-value (utils/apply-mask parsed-value mask-data))
                                  (on-change @real-value)))]

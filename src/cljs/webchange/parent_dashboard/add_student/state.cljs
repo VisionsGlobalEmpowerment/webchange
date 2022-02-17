@@ -78,7 +78,7 @@
 (re-frame/reg-event-fx
   ::set-birth-date
   (fn [{:keys [_]} [_ value]]
-    {:dispatch [::set-form-field birth-date-key value]}))
+    {:dispatch [::set-form-field birth-date-key (or value "")]}))
 
 (re-frame/reg-sub
   ::birth-date-validation-error
