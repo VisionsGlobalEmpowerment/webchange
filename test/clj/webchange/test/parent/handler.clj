@@ -27,7 +27,7 @@
 (deftest get-students
   (testing "Students can be found by parent"
     (let [parent (f/website-user-created)
-          _ (f/create-parent-student! {:name "Test" :age 3 :device "Tablet"} (:id parent))
+          _ (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
           result (-> (f/get-parent-students (:id parent))
                      :body
                      (slurp)
@@ -38,7 +38,7 @@
 (deftest delete-student
   (testing "Student can be deleted"
     (let [parent (f/website-user-created)
-          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :age 3 :device "Tablet"} (:id parent))
+          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
                              :body
                              (slurp)
                              (json/read-str :key-fn keyword))
@@ -52,7 +52,7 @@
 (deftest login-as
   (testing "Parent can login as child"
     (let [parent (f/website-user-created)
-          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :age 3 :device "Tablet"} (:id parent))
+          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
                              :body
                              (slurp)
                              (json/read-str :key-fn keyword))
