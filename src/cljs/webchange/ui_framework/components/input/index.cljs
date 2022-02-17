@@ -28,6 +28,7 @@
            on-enter-press
            on-esc-press
            on-focus
+           on-key-down
            placeholder
            required?
            select-on-focus?
@@ -55,6 +56,8 @@
           handle-click (fn [event]
                          (when select-on-focus? (.select (.-target event)))
                          (when (fn? on-click) (on-click event)))
+          handle-key-down (fn [event]
+                            (on-key-down {:key (.-key event)}))
           handle-key-press (fn [event]
                              (case (.-key event)
                                "Enter" (when (fn? on-enter-press) (on-enter-press (.. event -target -value)))
@@ -77,6 +80,7 @@
                        (some? value) (assoc :value value)
                        (some? default-value) (assoc :default-value default-value)
                        (fn? on-enter-press) (assoc :on-key-press handle-key-press)
+                       (fn? on-key-down) (assoc :on-key-down handle-key-down)
                        (fn? on-blur) (assoc :on-blur handle-blur)
                        (fn? on-focus) (assoc :on-focus handle-focus))]
        (when (some? error)

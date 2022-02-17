@@ -40,45 +40,49 @@
     (str (if (< number 10) "0" "") number)))
 
 (defn to-iso-format
-  [{:keys [day month year]}]
-  (when (and (number? day)
-             (number? month)
-             (number? year))
-    (str year
-         "-"
-         (add-leading-zero month)
-         "-"
-         (add-leading-zero day))))
+  [date]
+  (let [parse-int (fn [value]
+                    (when (some? value) (int value)))
+        day (parse-int (:day date))
+        month (parse-int (:month date))
+        year (parse-int (:year date))]
+    (when (and (number? day)
+               (number? month)
+               (number? year))
+      (str year
+           "-"
+           (add-leading-zero month)
+           "-"
+           (add-leading-zero day)))))
 
 (defn parse-date
-  [date-str {:keys [blocks delimiter]}]
+  [date-str {:keys [blocks]}]
   "Parse string to date:
    - date-str - e.g. '2014-09-19' or '12/31/2022'
    - blocks - expected day, month and year sequence, e.g. ['y' 'm' 'd'] or ['m' 'd' 'y']
-   - delimiter - blocks delimiter, e.g. '-' or '/'
-   Result: map of :day, :month and :year with integer value if parsed, nil otherwise.
+   Result: map of :day, :month and :year with string value if parsed, nil otherwise.
    "
   (let [patterns {"y" "\\d{1,4}"
                   "m" "\\d{1,2}"
                   "d" "\\d{1,2}"}
         pattern (->> blocks
-                     (map-indexed vector)
-                     (reduce (fn [pattern [idx block]]
+                     (reduce (fn [pattern block]
                                (str pattern
-                                    (if (= idx 0) "" (str delimiter "?"))
                                     "("
                                     (get patterns block)
                                     ")?"))
                              ""))
+        prepared-date-str (-> date-str
+                              (clojure.string/replace #"\D" "")
+                              (subs 0 8))
         matches (-> (re-pattern pattern)
-                    (re-matches date-str))
-
+                    (re-matches prepared-date-str))
         get-value (fn [key blocks matches]
                     (when (some? matches)
                       (if-let [str-value (->> (.indexOf blocks key)
                                               (inc)
                                               (nth matches))]
-                        (int str-value))))]
+                        str-value)))]
     {:day   (get-value "d" blocks matches)
      :month (get-value "m" blocks matches)
      :year  (get-value "y" blocks matches)}))
@@ -89,18 +93,13 @@
                            "m" month
                            "y" year} %)
                     blocks)]
-    (->> values
-         (map-indexed (fn [idx value]
-                        (let [small-value? (< value 10)
-                              has-next-value? (some? (nth values (inc idx) nil))
-                              last-value? (= idx (dec (count values)))]
-                          (str
-                            value
-                            (if has-next-value?
-                              delimiter
-                              (if (or last-value?
-                                      (and small-value?
-                                           (not last-value?)))
-                                ""
-                                delimiter))))))
+    (->> (map vector blocks values)
+         (map-indexed (fn [idx [block value]]
+                        (let [last-value? (-> values count dec (= idx))
+                              add-delimiter? (if last-value?
+                                               false
+                                               (= (count value) (get {"d" 2
+                                                                      "m" 2
+                                                                      "y" 4} block)))]
+                          (str value (if add-delimiter? delimiter "")))))
          (apply str))))

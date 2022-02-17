@@ -12,17 +12,31 @@
     :as   props
     :or   {mask      "mm/dd/yyyy"
            on-change #()}}]
-  (r/with-let [real-value (atom "")
-               display-value (r/atom "")
+  (r/with-let [display-value (r/atom "")
                focused? (r/atom false)
-               mask-data (get available-masks mask)
+               deleting? (atom false)
+               {:keys [delimiter] :as mask-data} (get available-masks mask)
                handle-change (fn [value]
-                               (let [parsed-value (-> value
-                                                      (utils/parse-date mask-data)
-                                                      (utils/fix-date))]
-                                 (reset! real-value (utils/to-iso-format parsed-value))
-                                 (reset! display-value (utils/apply-mask parsed-value mask-data))
-                                 (on-change @real-value)))]
+                               (if-not @deleting?
+                                 (let [parsed-value (-> value
+                                                        (utils/parse-date mask-data)
+                                                        ;(utils/fix-date)
+                                                        )]
+                                   (reset! display-value (utils/apply-mask parsed-value mask-data))
+                                   (let [result-value (utils/to-iso-format parsed-value)]
+                                     (on-change result-value)))
+                                 (reset! deleting? false)))
+               handle-key-down (fn [{:keys [key]}]
+                                 (let [last-char (->> (count @display-value)
+                                                      (dec)
+                                                      (subs @display-value))]
+                                   (when (and (= key "Backspace")
+                                              (= last-char delimiter))
+                                     (let [value-without-last-two-chars (->> (count @display-value)
+                                                                             (dec) (dec)
+                                                                             (subs @display-value 0))]
+                                       (reset! deleting? true)
+                                       (reset! display-value value-without-last-two-chars)))))]
     (if (some? mask-data)
       [:div {:class-name "wc-date-wrapper"}
        [input/component (merge props
@@ -30,6 +44,7 @@
                                 :placeholder (if @focused? mask placeholder)
                                 :on-change   handle-change
                                 :on-blur     #(reset! focused? false)
-                                :on-focus    #(reset! focused? true)})]]
+                                :on-focus    #(reset! focused? true)
+                                :on-key-down handle-key-down})]]
       [:div {:class-name "wc-date-wrapper"}
        (str "Not available mask: " mask)])))
