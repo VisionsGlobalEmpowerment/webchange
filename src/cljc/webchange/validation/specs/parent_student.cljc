@@ -4,7 +4,7 @@
     [webchange.validation.predicates :as p]))
 
 (s/def ::name (s/and string? p/not-empty?))
-(s/def ::age (s/and number?))
+(s/def ::date-of-birth (s/and string? p/date-string?))
 
-(s/def ::parent-student (s/keys :req-un [::name ::age]
+(s/def ::parent-student (s/keys :req-un [::name ::date-of-birth]
                                 :opt []))

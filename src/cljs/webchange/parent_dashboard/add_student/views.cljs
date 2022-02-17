@@ -10,18 +10,20 @@
   (let [value @(re-frame/subscribe [::state/current-name])
         handle-change #(re-frame/dispatch [::state/set-name %])
         error @(re-frame/subscribe [::state/name-validation-error])]
-    [input {:placeholder "Name*"
+    [input {:placeholder "Name"
+            :required?   true
             :value       value
             :error       error
             :on-change   handle-change}]))
 
-(defn- age-control
+(defn- birth-date-control
   []
-  (let [value @(re-frame/subscribe [::state/current-age])
-        handle-change #(re-frame/dispatch [::state/set-age %])
-        error @(re-frame/subscribe [::state/age-validation-error])]
-    [date {:placeholder "Age*"
-           :mask        "mm/dd/yyy"
+  (let [value @(re-frame/subscribe [::state/current-birth-date])
+        handle-change #(re-frame/dispatch [::state/set-birth-date %])
+        error @(re-frame/subscribe [::state/birth-date-validation-error])]
+    [date {:placeholder "Birth date"
+           :required?   true
+           :mask        "mm/dd/yyyy"
            :value       value
            :error       error
            :on-change   handle-change}]))
@@ -47,7 +49,7 @@
       [:div.add-student-form
        [:div.controls
         [name-control]
-        [age-control]
+        [birth-date-control]
         [device-control]]
        [:div.message
         [:p

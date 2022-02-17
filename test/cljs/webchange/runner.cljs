@@ -25,7 +25,7 @@
             [webchange.editor-v2.graph-builder.graph.volleyball-test]
             [webchange.editor-v2.graph-builder.graph.volleyball-letters-test]
             [webchange.editor-v2.graph-builder.graph.writing-lesson-test]
-            [webchange.editor-v2.graph-builder.graph.writing-practice-test]            
+            [webchange.editor-v2.graph-builder.graph.writing-practice-test]
             [webchange.editor-v2.graph-builder.filters.phrases-test]
             [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test]
             [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test]
@@ -52,7 +52,8 @@
             [webchange.common.svg-path.path-splitter-test]
             [webchange.interpreter.lessons.activity-test]
             [webchange.utils.list-test]
-            [webchange.utils.scene-common-actions-test]))
+            [webchange.utils.scene-common-actions-test]
+            [webchange.ui-components.date]))
 
 (doo-tests
   'webchange.core-test
@@ -108,4 +109,5 @@
   'webchange.interpreter.lessons.activity-test
   'webchange.utils.list-test
   'webchange.utils.scene-common-actions-test
+  'webchange.ui-components.date
   )

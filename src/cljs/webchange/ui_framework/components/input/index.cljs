@@ -27,7 +27,9 @@
            on-change
            on-enter-press
            on-esc-press
+           on-focus
            placeholder
+           required?
            select-on-focus?
            step
            type]
@@ -35,6 +37,7 @@
     :or   {disabled?        false
            on-change        #()
            placeholder      ""
+           required?        false
            select-on-focus? false
            step             1
            type             "str"}}]
@@ -56,13 +59,15 @@
                              (case (.-key event)
                                "Enter" (when (fn? on-enter-press) (on-enter-press (.. event -target -value)))
                                "default"))
-          handle-blur #(on-blur (.. % -target -value))]
+          handle-blur #(on-blur (.. % -target -value))
+          handle-focus on-focus]
       [:div {:class-name (get-class-name (-> {"wc-input-wrapper" true}
                                              (assoc class-name (some? class-name))))}
        [:input (cond-> {:class-name  (get-class-name {"wc-input"       true
                                                       "wc-input-error" (some? error)})
                         :disabled    disabled?
-                        :placeholder placeholder
+                        :placeholder (cond-> placeholder
+                                             required? (str " *"))
                         :on-change   handle-change
                         :on-click    handle-click}
                        (or (= type "int")
@@ -72,7 +77,8 @@
                        (some? value) (assoc :value value)
                        (some? default-value) (assoc :default-value default-value)
                        (fn? on-enter-press) (assoc :on-key-press handle-key-press)
-                       (fn? on-blur) (assoc :on-blur handle-blur))]
+                       (fn? on-blur) (assoc :on-blur handle-blur)
+                       (fn? on-focus) (assoc :on-focus handle-focus))]
        (when (some? error)
          [:label.wc-error error])])
     (finally
