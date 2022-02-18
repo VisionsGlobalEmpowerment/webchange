@@ -18,6 +18,14 @@
     (get-in db [:course-data :scene-list (keyword scene-id)])))
 
 (re-frame/reg-sub
+  ::current-scene-info
+  (fn []
+    [(re-frame/subscribe [::current-scene])
+     (re-frame/subscribe [::scene-list])])
+  (fn [[current-scene-id scene-list]]
+    (get scene-list (keyword current-scene-id))))
+
+(re-frame/reg-sub
   ::scene-list
   (fn [db]
     (get-in db [:course-data :scene-list])))
@@ -32,8 +40,8 @@
     (->> scene-list
          (remove #(-> % second :archived))
          (map #(assoc (second %)
-                      :scene-id (first %)
-                      :is-placeholder (get scene-placeholders (-> % first name js/decodeURIComponent) false)))
+                 :scene-id (first %)
+                 :is-placeholder (get scene-placeholders (-> % first name js/decodeURIComponent) false)))
          (sort-by :name))))
 
 (re-frame/reg-sub
