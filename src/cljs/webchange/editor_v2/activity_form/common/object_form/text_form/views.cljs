@@ -109,5 +109,5 @@
       [font-color-component {:id id}]]
      [:div.text-control
       [text-component {:id id}]
-      [voice-over-control {:id          id
+      #_[voice-over-control {:id          id
                            :object-name (first objects-names)}]]]))

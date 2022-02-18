@@ -26,7 +26,7 @@
        [:div.interpreter-wrapper
         [interpreter-stage {:class-name "generic-interpreter"}]]
        [asset-block {:activity-type activity-type}]
-       [icon-button {:icon       "dashboard"
+       #_[icon-button {:icon       "dashboard"
                      :class-name (get-class-name {"switch-activity-tracks" true
                                                   "active"                 @show-tracks?})
                      :on-click   #(swap! show-tracks? not)}
