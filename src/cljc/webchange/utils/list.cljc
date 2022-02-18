@@ -92,3 +92,33 @@
                {:result      []
                 :used-values {}})
        (:result)))
+
+(defn update-nth
+  [list idx & args]
+  (->> (concat [list idx] args)
+       (apply update)))
+
+(defn update-first
+  [list & args]
+  (->> (concat [list 0] args)
+       (apply update-nth)))
+
+(defn update-last
+  [list & args]
+  (let [last-idx (-> list count dec)]
+    (->> (concat [list last-idx] args)
+         (apply update-nth))))
+
+(defn reverse-operand
+  [f args]
+  (let [operand (last args)
+        params (butlast args)]
+    (apply f (concat [operand] params))))
+
+(defn update-first->>
+  [& args]
+  (reverse-operand update-first args))
+
+(defn update-last->>
+  [& args]
+  (reverse-operand update-last args))

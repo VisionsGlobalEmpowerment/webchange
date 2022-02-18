@@ -6,19 +6,6 @@
     [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [get-node-data]]
     [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]))
 
-(defn- set-parallel-marks
-  [actions]
-  (map-indexed (fn [idx {:keys [parallel-level] :as data}]
-                 (let [next-action (nth actions (inc idx) nil)
-                       next-y (get next-action :parallel-level 0)]
-                   (->> (cond
-                          (and (= parallel-level 0) (> next-y 0)) :start
-                          (and (> parallel-level 0) (> next-y 0)) :middle
-                          (and (> parallel-level 0) (= next-y 0)) :end
-                          :else :none)
-                        (assoc data :parallel-mark))))
-               actions))
-
 (defn- set-action-data
   [actions {:keys [concept-data scene-data]}]
   (map (fn [{:keys [scene-action-path concept-action-path parallel-mark]}]
@@ -186,10 +173,9 @@
   [{:keys [dialog-action-path concept-data scene-data available-effects current-action-path]
     :or   {concept-data      nil
            available-effects []}}]
-  (-> (get-phrases-sequence {:path       dialog-action-path
-                             :scene-data scene-data
-                             :concept    concept-data})
-      (set-parallel-marks)
+  (-> (get-phrases-sequence {:action-path  dialog-action-path
+                             :scene-data   scene-data
+                             :concept-data concept-data})
       (set-action-data {:concept-data concept-data
                         :scene-data   scene-data})
       (set-action-type {:available-effects available-effects})

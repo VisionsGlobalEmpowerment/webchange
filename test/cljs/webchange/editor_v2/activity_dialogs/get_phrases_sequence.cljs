@@ -7,38 +7,38 @@
     [webchange.editor-v2.activity-dialogs.form.utils.get-phrases-sequence :refer [get-phrases-sequence]]))
 
 (deftest test-prepare-phrase-actions
-  (let [params {:path       [:introduce-big-small]
-                :scene-data scene-data
-                :concept    concept-data}
+  (let [params {:action-path  [:introduce-big-small]
+                :scene-data   scene-data
+                :concept-data concept-data}
         actual-result (get-phrases-sequence params)
         expected-result [{:scene-action-path [:introduce-big-small :data 0]
-                          :parallel-level    0}
+                          :parallel-mark     :none}
                          {:scene-action-path [:introduce-big-small :data 1]
-                          :parallel-level    0}
+                          :parallel-mark     :none}
                          {:scene-action-path [:introduce-big-small :data 2]
-                          :parallel-level    0}
+                          :parallel-mark     :none}
                          {:scene-action-path   [:introduce-big-small :data 3]
                           :concept-action-path [:dialog-field-ef56a7df-3b1d-4abb-a43d-e06bad56bba5 :data 0]
-                          :parallel-level      0}
+                          :parallel-mark       :none}
                          {:scene-action-path [:introduce-big-small :data 4]
-                          :parallel-level    0}
+                          :parallel-mark     :none}
                          {:scene-action-path [:introduce-big-small :data 5 :data 0]
-                          :parallel-level    0}
+                          :parallel-mark     :start}
                          {:scene-action-path [:introduce-big-small :data 5 :data 1]
-                          :parallel-level    1}
+                          :parallel-mark     :end}
                          {:scene-action-path [:introduce-big-small :data 6]
-                          :parallel-level    0}
+                          :parallel-mark     :none}
                          {:scene-action-path [:introduce-big-small :data 7 :data 0]
-                          :parallel-level    0}
+                          :parallel-mark     :start}
                          {:scene-action-path [:introduce-big-small :data 7 :data 1]
-                          :parallel-level    1}
+                          :parallel-mark     :end}
                          {:scene-action-path [:introduce-big-small :data 8]
-                          :parallel-level    0}
+                          :parallel-mark     :none}
                          {:scene-action-path [:introduce-big-small :data 9]
-                          :parallel-level    0}
+                          :parallel-mark     :none}
                          {:scene-action-path   [:introduce-big-small :data 10]
                           :concept-action-path [:dialog-field-e0b429c2-cf25-4736-8160-75a9df533dac :data 0]
-                          :parallel-level      0}]]
+                          :parallel-mark       :none}]]
 
     (is (= (count actual-result)
            (count expected-result)))
