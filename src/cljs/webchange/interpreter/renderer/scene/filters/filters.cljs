@@ -215,7 +215,8 @@
                        (set-filter-value container "glow")))]
 
     (when-not (has-filter-by-name container "glow")
-      (apply-glow-filter container {:outer-strength 0}))
+      (apply-glow-filter container (merge {:outer-strength 0}
+                                          (select-keys params [:color]))))
 
     (reset-pulsation handler-key)
     (create-ticker handler)

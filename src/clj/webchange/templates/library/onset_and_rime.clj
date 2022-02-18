@@ -39,18 +39,24 @@
                                                                   :min-height 50
                                                                   :min-width  50}}}}}})
 
-(def cloud-states {:highlighted-0   {:glow-pulsation {:min-value 0
-                                                      :max-value 2
-                                                      :duration  200}}
-                   :highlighted-1   {:glow-pulsation {:min-value 0
-                                                      :max-value 2
-                                                      :duration  160}}
-                   :highlighted-2   {:glow-pulsation {:min-value 0
-                                                      :max-value 2
-                                                      :duration  130}}
-                   :highlighted-3   {:glow-pulsation {:min-value 0
-                                                      :max-value 2
-                                                      :duration  100}}
+(def glow-color 0x2a76ff)
+(def glow-strength 2)
+(def cloud-states {:highlighted-0   {:glow-pulsation {:duration  200
+                                                      :min-value 0
+                                                      :max-value glow-strength
+                                                      :color     glow-color}}
+                   :highlighted-1   {:glow-pulsation {:duration  160
+                                                      :min-value 0
+                                                      :max-value glow-strength
+                                                      :color     glow-color}}
+                   :highlighted-2   {:glow-pulsation {:duration  130
+                                                      :min-value 0
+                                                      :max-value glow-strength
+                                                      :color     glow-color}}
+                   :highlighted-3   {:glow-pulsation {:duration  100
+                                                      :min-value 0
+                                                      :max-value glow-strength
+                                                      :color     glow-color}}
                    :not-highlighted {:glow-pulsation false}})
 
 (def t {:assets        [{:url "/raw/img/onset-and-rime/background.png", :size 10 :type "image"}
