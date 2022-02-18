@@ -64,34 +64,26 @@
   (fn [error]
     error))
 
-;; Age
+;; Birth date
 
-(def age-key :age)
+(def birth-date-key :date-of-birth)
 
 (re-frame/reg-sub
-  ::current-age
+  ::current-birth-date
   (fn []
     (re-frame/subscribe [::form-data]))
   (fn [form-data]
-    (get form-data age-key)))
+    (get form-data birth-date-key)))
 
 (re-frame/reg-event-fx
-  ::set-age
+  ::set-birth-date
   (fn [{:keys [_]} [_ value]]
-    {:dispatch [::set-form-field age-key (.parseInt js/Number value)]}))
+    {:dispatch [::set-form-field birth-date-key (or value "")]}))
 
 (re-frame/reg-sub
-  ::age-options
-  (fn [_]
-    (->> (range 1 13)
-         (map (fn [age]
-                {:text  age
-                 :value age})))))
-
-(re-frame/reg-sub
-  ::age-validation-error
+  ::birth-date-validation-error
   (fn []
-    (re-frame/subscribe [::validation-error age-key]))
+    (re-frame/subscribe [::validation-error birth-date-key]))
   (fn [error]
     error))
 

@@ -7,6 +7,7 @@
     [webchange.ui-framework.components.chip.index :as chip]
     [webchange.ui-framework.components.circular-progress.index :as circular-progress]
     [webchange.ui-framework.components.confirm.index :as confirm]
+    [webchange.ui-framework.components.date.index :as date]
     [webchange.ui-framework.components.dialog.index :as dialog]
     [webchange.ui-framework.components.file.index :as file]
     [webchange.ui-framework.components.icon.index :as icon]
@@ -30,6 +31,7 @@
 (def checkbox checkbox/component)
 (def chip chip/component)
 (def circular-progress circular-progress/component)
+(def date date/component)
 (def dialog dialog/component)
 (def file file/component)
 (def icon icon/component)

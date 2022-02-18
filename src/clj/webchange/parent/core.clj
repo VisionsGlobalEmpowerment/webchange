@@ -59,9 +59,9 @@
     [true students]))
 
 (defn create-student
-  [{:keys [name age device]} parent-id]
+  [{:keys [name date-of-birth device]} parent-id]
   (let [[{user-id :id}] (auth/create-user! {:first-name name})]
-    (db/create-child! {:parent_id parent-id :child_id user-id :data {:age age :device device}})
+    (db/create-child! {:parent_id parent-id :child_id user-id :data {:date-of-birth date-of-birth :device device}})
     (auth/activate-user! user-id)
     [true (->student {:id         user-id
                       :first-name name})]))

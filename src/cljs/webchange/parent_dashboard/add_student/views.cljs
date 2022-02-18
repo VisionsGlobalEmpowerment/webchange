@@ -3,29 +3,30 @@
     [re-frame.core :as re-frame]
     [webchange.parent-dashboard.add-student.state :as state]
     [webchange.parent-dashboard.layout.views :refer [layout]]
-    [webchange.parent-dashboard.ui.index :refer [button circular-progress input select]]))
+    [webchange.parent-dashboard.ui.index :refer [button circular-progress date input select]]))
 
 (defn- name-control
   []
   (let [value @(re-frame/subscribe [::state/current-name])
         handle-change #(re-frame/dispatch [::state/set-name %])
         error @(re-frame/subscribe [::state/name-validation-error])]
-    [input {:placeholder "Name*"
+    [input {:placeholder "Name"
+            :required?   true
             :value       value
             :error       error
             :on-change   handle-change}]))
 
-(defn- age-control
+(defn- birth-date-control
   []
-  (let [value @(re-frame/subscribe [::state/current-age])
-        options @(re-frame/subscribe [::state/age-options])
-        handle-change #(re-frame/dispatch [::state/set-age %])
-        error @(re-frame/subscribe [::state/age-validation-error])]
-    [select {:placeholder "Age*"
-             :value       value
-             :error       error
-             :options     options
-             :on-change   handle-change}]))
+  (let [value @(re-frame/subscribe [::state/current-birth-date])
+        handle-change #(re-frame/dispatch [::state/set-birth-date %])
+        error @(re-frame/subscribe [::state/birth-date-validation-error])]
+    [date {:placeholder "Birth date"
+           :required?   true
+           :mask        "mm/dd/yyyy"
+           :value       value
+           :error       error
+           :on-change   handle-change}]))
 
 (defn- device-control
   []
@@ -48,7 +49,7 @@
       [:div.add-student-form
        [:div.controls
         [name-control]
-        [age-control]
+        [birth-date-control]
         [device-control]]
        [:div.message
         [:p

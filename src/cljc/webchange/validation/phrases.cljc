@@ -14,7 +14,7 @@
 
 (defphraser p/date-string?
             [_ _]
-            "Date must have format \"dd-mm-yyyy\" ")
+            "Invalid date format")
 
 (defphraser p/not-empty?
             [_ _]

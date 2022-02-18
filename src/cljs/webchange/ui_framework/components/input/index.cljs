@@ -27,7 +27,10 @@
            on-change
            on-enter-press
            on-esc-press
+           on-focus
+           on-key-down
            placeholder
+           required?
            select-on-focus?
            step
            type]
@@ -35,6 +38,7 @@
     :or   {disabled?        false
            on-change        #()
            placeholder      ""
+           required?        false
            select-on-focus? false
            step             1
            type             "str"}}]
@@ -52,17 +56,21 @@
           handle-click (fn [event]
                          (when select-on-focus? (.select (.-target event)))
                          (when (fn? on-click) (on-click event)))
+          handle-key-down (fn [event]
+                            (on-key-down {:key (.-key event)}))
           handle-key-press (fn [event]
                              (case (.-key event)
                                "Enter" (when (fn? on-enter-press) (on-enter-press (.. event -target -value)))
                                "default"))
-          handle-blur #(on-blur (.. % -target -value))]
+          handle-blur #(on-blur (.. % -target -value))
+          handle-focus on-focus]
       [:div {:class-name (get-class-name (-> {"wc-input-wrapper" true}
                                              (assoc class-name (some? class-name))))}
        [:input (cond-> {:class-name  (get-class-name {"wc-input"       true
                                                       "wc-input-error" (some? error)})
                         :disabled    disabled?
-                        :placeholder placeholder
+                        :placeholder (cond-> placeholder
+                                             required? (str " *"))
                         :on-change   handle-change
                         :on-click    handle-click}
                        (or (= type "int")
@@ -72,7 +80,9 @@
                        (some? value) (assoc :value value)
                        (some? default-value) (assoc :default-value default-value)
                        (fn? on-enter-press) (assoc :on-key-press handle-key-press)
-                       (fn? on-blur) (assoc :on-blur handle-blur))]
+                       (fn? on-key-down) (assoc :on-key-down handle-key-down)
+                       (fn? on-blur) (assoc :on-blur handle-blur)
+                       (fn? on-focus) (assoc :on-focus handle-focus))]
        (when (some? error)
          [:label.wc-error error])])
     (finally
