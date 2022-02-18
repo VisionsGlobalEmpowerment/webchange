@@ -49,16 +49,17 @@
   (mount/start)
   (let [unique-id (atom -1)
         course-slug "english"
-        course-id (:id (db/get-course {:slug course-slug}))
-        new-course (-> (db/get-latest-course-version {:course_id course-id})
-                     (update-in [:data :levels] #(add-unique-ids % unique-id))
-                     (assoc-in [:data :unique-id] @unique-id))
-
-        new-progresses (->> (db/get-progress-for-course {:course_id course-id})
-                         (map #(update-progress % (:data new-course))))]
-    (db/save-course-data! new-course)
-    (doseq [{:keys [id data]} new-progresses]
-      (progress/update-progress! id data))))
+        course-id (:id (db/get-course {:slug course-slug}))]
+    (if-let [new-course (db/get-latest-course-version {:course_id course-id})]
+      (let [new-course (-> new-course
+                         (update-in [:data :levels] #(add-unique-ids % unique-id))
+                         (assoc-in [:data :unique-id] @unique-id))
+            new-progresses (->> (db/get-progress-for-course {:course_id course-id})
+                             (map #(update-progress % (:data new-course))))]
+        (db/save-course-data! new-course)
+        (doseq [{:keys [id data]} new-progresses]
+          (progress/update-progress! id data)))
+      (print "no course version!"))))
 
 (defn migrate-down [config]
   (mount/start)
