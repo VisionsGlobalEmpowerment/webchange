@@ -1,38 +1,43 @@
 (ns webchange.editor-v2.activity-dialogs.form.utils
   (:require
     [clojure.set :refer [difference]]
+    [webchange.editor-v2.activity-dialogs.form.utils.get-phrases-sequence :refer [get-phrases-sequence]]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects guide-effects]]
-    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes get-node-data]]
+    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [get-node-data]]
     [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]))
 
 (defn- set-parallel-marks
   [actions]
-  (map-indexed (fn [idx {:keys [y] :as data}]
+  (map-indexed (fn [idx {:keys [parallel-level] :as data}]
                  (let [next-action (nth actions (inc idx) nil)
-                       next-y (get next-action :y 0)]
+                       next-y (get next-action :parallel-level 0)]
                    (->> (cond
-                          (and (= y 0) (> next-y 0)) :start
-                          (and (> y 0) (> next-y 0)) :middle
-                          (and (> y 0) (= next-y 0)) :end
+                          (and (= parallel-level 0) (> next-y 0)) :start
+                          (and (> parallel-level 0) (> next-y 0)) :middle
+                          (and (> parallel-level 0) (= next-y 0)) :end
                           :else :none)
                         (assoc data :parallel-mark))))
                actions))
 
 (defn- set-action-data
   [actions {:keys [concept-data scene-data]}]
-  (map (fn [{:keys [action-path node-path concept parallel-mark]}]
-         (let [concept-acton? (boolean concept)]
+  (map (fn [{:keys [scene-action-path concept-action-path parallel-mark]}]
+         (let [concept-acton? (some? concept-action-path)]
            {:parallel-mark  parallel-mark
             :concept-acton? concept-acton?
             :action-data    (if concept-acton?
-                              (get-in (:data concept-data) action-path)
-                              (get-in (:actions scene-data) action-path))
-            :action-path    action-path
+                              (get-in (:data concept-data) concept-action-path)
+                              (get-in (:actions scene-data) scene-action-path))
+            :action-path    (if concept-acton?
+                              concept-action-path
+                              scene-action-path)
             :node-data      (get-node-data {:concept-node?   concept-acton?
                                             :current-concept concept-data
                                             :scene-data      scene-data
-                                            :action-path     action-path
-                                            :node-path       node-path})}))
+                                            :action-path     (if concept-acton?
+                                                               concept-action-path
+                                                               scene-action-path)
+                                            :node-path       scene-action-path})}))
        actions))
 
 (defn set-action-type
@@ -172,11 +177,18 @@
               (assoc data :selected?)))
        actions))
 
+(defn- ->log
+  [data message]
+  (print message data)
+  data)
+
 (defn prepare-phrase-actions
   [{:keys [dialog-action-path concept-data scene-data available-effects current-action-path]
     :or   {concept-data      nil
            available-effects []}}]
-  (-> (prepare-nodes scene-data concept-data dialog-action-path)
+  (-> (get-phrases-sequence {:path       dialog-action-path
+                             :scene-data scene-data
+                             :concept    concept-data})
       (set-parallel-marks)
       (set-action-data {:concept-data concept-data
                         :scene-data   scene-data})

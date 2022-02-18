@@ -1,6 +1,7 @@
 (ns webchange.runner
   (:require [doo.runner :refer-macros [doo-tests]]
             [webchange.core-test]
+            [webchange.editor-v2.activity-dialogs.get-phrases-sequence]
             [webchange.editor-v2.activity-dialogs.prepare-phrase-actions]
             [webchange.editor-v2.course-table.fields.activities.state-test]
             [webchange.editor-v2.course-table.state.data-test]
@@ -58,6 +59,7 @@
 
 (doo-tests
   'webchange.core-test
+  'webchange.editor-v2.activity-dialogs.get-phrases-sequence
   'webchange.editor-v2.activity-dialogs.prepare-phrase-actions
   'webchange.editor-v2.course-table.fields.activities.state-test
   'webchange.editor-v2.course-table.state.data-test

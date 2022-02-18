@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.activity-dialogs.scene-data)
+(ns webchange.editor-v2.activity-dialogs.stub-scene-data)
 
 (def scene-data {:assets        [{:url "/raw/img/casa/background.jpg", :size 10, :type "image"}
                                  {:url "/raw/img/casa/painting_canvas.png", :size 10, :type "image"}
