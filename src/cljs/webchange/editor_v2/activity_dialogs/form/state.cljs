@@ -128,23 +128,6 @@
 ;; ---
 
 (re-frame/reg-sub
-  ::phrase-actions
-  (fn []
-    [(re-frame/subscribe [::translator-form.actions/current-dialog-action-info])
-     (re-frame/subscribe [::translator-form.actions/current-dialog-action-data])
-     (re-frame/subscribe [::translator-form.concepts/current-concept])
-     (re-frame/subscribe [::translator-form.scene/scene-data])
-     (re-frame/subscribe [::selected-action])])
-  (fn [[current-dialog-action {:keys [available-activities]} current-concept scene-data selected-action]]
-    (let [available-actions (->> (scene-utils/get-available-effects scene-data)
-                                 (concat available-activities))]
-      (prepare-phrase-actions {:dialog-action-path  (:path current-dialog-action)
-                               :concept-data        current-concept
-                               :scene-data          scene-data
-                               :available-effects   available-actions
-                               :current-action-path (:path selected-action)}))))
-
-(re-frame/reg-sub
   ::scene-available-actions
   (fn []
     [(re-frame/subscribe [::translator-form.scene/scene-data])])
