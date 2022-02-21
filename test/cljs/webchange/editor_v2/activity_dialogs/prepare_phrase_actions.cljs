@@ -206,9 +206,7 @@
         (when-not (= actual-phrase expected-phrase)
           (print "--- --- ---")
           (print "idx:" idx)
-          (print "path:" (if (= (:path actual-phrase) (:path expected-phrase))
-                           (:path actual-phrase)
-                           [(:path actual-phrase) (:path expected-phrase)]))
+          (print "type:" (:type expected-phrase))
           (print-maps-comparison actual-phrase expected-phrase))))))
 
 (deftest test-prepare-phrase-actions--case-2
