@@ -3,8 +3,6 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.dialog.dialog-form.state.common :as state-actions-common]
-    [webchange.editor-v2.text-animation-editor.state :as chunks]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.utils.text :refer [text->chunks]]))
 
@@ -48,31 +46,3 @@
     {:dispatch-n [[::translator-form.scene/set-changes]
                   [::state-actions-common/remove-action {:concept-action? (= source :concept)
                                                          :node-data       node-data}]]}))
-
-(re-frame/reg-event-fx
-  ::add-scene-parallel-action
-  (fn [{:keys [_]} [_ {:keys [node-data]}]]
-    {:pre [(pre_node-data node-data)]}
-    {:dispatch [::state-actions/add-new-empty-phrase-parallel-action {:node-data node-data}]}))
-
-(re-frame/reg-event-fx
-  ::add-effect-action
-  (fn [{:keys [_]} [_ {:keys [effect node-data relative-position]}]]
-    {:pre [(pre_node-data node-data)]}
-    {:dispatch [::state-actions/add-effect-action {:node-data         node-data
-                                                   :effect            effect
-                                                   :relative-position relative-position}]}))
-
-(re-frame/reg-event-fx
-  ::open-text-animation-window
-  (fn [{:keys [_]} [_ {:keys [node-data]}]]
-    {:pre [(pre_node-data node-data)]}
-    {:dispatch-n [[::translator-form.actions/set-current-phrase-action node-data]
-                  [::chunks/open]]}))
-
-(re-frame/reg-event-fx
-  ::add-text-animation-action
-  (fn [{:keys [_]} [_ {:keys [node-data relative-position]}]]
-    {:pre [(pre_node-data node-data)]}
-    {:dispatch [::state-actions/add-new-empty-text-animation-action {:node-data         node-data
-                                                                     :relative-position relative-position}]}))

@@ -15,16 +15,11 @@
             :action-data    (if concept-acton?
                               (get-in (:data concept-data) concept-action-path)
                               (get-in (:actions scene-data) scene-action-path))
-            :action-path    (if concept-acton?
-                              concept-action-path
-                              scene-action-path)
-            :node-data      (get-node-data {:concept-node?   concept-acton?
-                                            :current-concept concept-data
-                                            :scene-data      scene-data
-                                            :action-path     (if concept-acton?
-                                                               concept-action-path
-                                                               scene-action-path)
-                                            :node-path       scene-action-path})}))
+
+            :action-path    (cond-> {:scene scene-action-path}
+                                    concept-acton? (assoc :concept concept-action-path))
+
+            }))
        actions))
 
 (defn set-action-type
@@ -89,7 +84,7 @@
 
 (defn- get-component-data
   [actions {:keys [available-effects concept-data scene-data]}]
-  (map (fn [{:keys [type source action-data action-path node-data parallel-mark]}]
+  (map (fn [{:keys [type source action-data action-path parallel-mark]}]
          (let [concept-name (:name concept-data)
                {:keys [duration]} (get-empty-action action-data)
                {action-type :type
@@ -104,8 +99,8 @@
            (cond-> {:type          type
                     :source        source
                     :delay         duration
-                    :path          action-path
-                    :node-data     node-data
+                    :action-path   action-path
+                    :action-data   action-data
                     :parallel-mark parallel-mark}
                    (= type :phrase)
                    (merge {:character   target
@@ -159,8 +154,9 @@
 
 (defn- set-selected
   [actions current-action-path]
-  (map (fn [{:keys [path] :as data}]
-         (->> (= path current-action-path)
+  (map (fn [data]
+         (->> (get-in data [:action-path :scene])
+              (= current-action-path)
               (assoc data :selected?)))
        actions))
 

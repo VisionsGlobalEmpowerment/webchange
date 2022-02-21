@@ -35,11 +35,18 @@
                    :on-ctrl-enter-press handle-ctrl-enter-press}]))
 
 (defn phrase-unit
-  [{:keys [source concept-name] :as props}]
-  (let [concept? (= source :concept)]
+  [{:keys [action-data action-path character concept-name placeholder source text]}]
+  (let [concept? (= source :concept)
+        path (get action-path source)]
     [:div (cond-> {:class-name (get-class-name {"unit-content" true
                                                 "phrase-unit"  true
                                                 "concept-unit" concept?})}
                   concept? (assoc :title (str "Concept «" concept-name "»")))
-     [phrase-target-control props]
-     [phrase-text-control props]]))
+     [phrase-target-control {:path      path
+                             :source    source
+                             :character character}]
+     [phrase-text-control {:action-data action-data
+                           :path        path
+                           :source      source
+                           :text        text
+                           :placeholder placeholder}]]))
