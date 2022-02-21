@@ -1720,9 +1720,8 @@
 (re-frame/reg-event-fx
   ::progress-loaded
   (fn [{:keys [db]} [_ course-id scene-id]]
-    (let [progress (:progress-data db)]
-      {:dispatch-n (list [::load-settings]
-                         [::set-current-scene (or scene-id (:activity-name (lessons-activity/get-progress-next db)))])})))
+    {:dispatch-n (list [::load-settings]
+                       [::set-current-scene (or scene-id (:activity-name (lessons-activity/get-progress-next db)))])}))
 
 (re-frame/reg-event-fx
   ::add-pending-event

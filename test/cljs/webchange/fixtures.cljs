@@ -11,7 +11,7 @@
 (def test-courses
   {"table-course" table-course/data
    "test-course"  {:scenes        ["initial-scene" "next-scene" "last-scene"]
-                   :default-progress {:next {:level 0, :lesson 0, :activity 0, :activity-name "initial-scene"}}}})
+                   :levels [{:lessons [{:activities [{:level 0, :lesson 0, :activity "initial-scene"}]}]}]}})
 
 (def test-scenes
   {"table-course" {"scene-1" table-scene-1/data
