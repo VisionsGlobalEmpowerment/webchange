@@ -52,6 +52,10 @@
                            :action-data   action-data
                            :action-path   (cond-> {:scene (vec scene-action-path)}
                                                   concept-acton? (assoc :concept (vec concept-action-path)))
+
+                           ;; backward compatibility:
+                           :path          (if concept-acton? (vec concept-action-path) (vec scene-action-path))
+
                            :delay         duration
                            :parallel-mark parallel-mark}
                           concept-acton? (assoc :concept-name (:name concept-data)))))))))
@@ -132,7 +136,7 @@
 (defn- set-selected
   [actions current-action-path]
   (map (fn [data]
-         (->> (get-in data [:action-path :scene])
+         (->> (get data :path)
               (= current-action-path)
               (assoc data :selected?)))
        actions))
