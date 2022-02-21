@@ -1,10 +1,11 @@
 (ns webchange.editor-v2.components.character-form.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.components.character-form.data :refer [character->skeleton single-skin-character?]]
+    [webchange.editor-v2.components.character-form.data :refer [character->skeleton single-skin-character? sitting-character?]]
     [webchange.editor-v2.components.character-form.state :as state]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.ui-framework.layout.right-menu.views-menu-section :refer [menu-section]]))
+    [webchange.ui-framework.layout.right-menu.views-menu-section :refer [menu-section]]
+    [webchange.editor-v2.components.character-form.data :as data]))
 
 (defn- form-list-item
   [{:keys [background image name on-click selected? show-label?] :as props}]
@@ -95,6 +96,21 @@
                  :on-item-click handle-option-click
                  :class-name    "clothes-form"}]]))
 
+(defn- sitting-form
+  [{:keys [value on-change]}]
+  (let [{:keys [image color]} @(re-frame/subscribe [::state/current-character "vera-sitting"])
+        handle-option-click (fn [{:keys [value]}]
+                              (on-change {:change-skeleton? true
+                                          :character value
+                                          :skin "default"}))]
+    [menu-section {:title-text             "Select Character"
+                   :title-image            image
+                   :title-image-background color}
+     [form-list {:value         value
+                 :items         (data/sitting-character-options)
+                 :on-item-click handle-option-click
+                 :class-name    "clothes-form"}]]))
+
 (defn- form-data->skin-params
   [{:keys [change-skeleton? character clothes head skin]
     :or   {change-skeleton? false}}]
@@ -132,7 +148,8 @@
                             (on-change)))
         show-extra-params? (and (not only-characters?)
                                 (some? character)
-                                combined-skin?)]
+                                combined-skin?)
+        show-sitting? (sitting-character? character)]
     [:div {:class-name (get-class-name {class-name (some? class-name)})}
      [character-form {:value         character
                       :on-change     handle-change
@@ -151,4 +168,7 @@
        [clothes-form {:value     clothes
                       :character character
                       :skin      skin
+                      :on-change handle-change}])
+     (when show-sitting?
+       [sitting-form {:value     character
                       :on-change handle-change}])]))

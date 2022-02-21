@@ -48,7 +48,13 @@
                                      :height 691,
                                      :scale  {:x 0.5 :y 0.5}
                                      :speed  1
-                                     :meshes true}})
+                                     :meshes true}
+                        :vera-sitting {:width 473
+                                       :height 689}
+                        :girl-sitting {:width 524
+                                       :height 756}
+                        :boy-sitting {:width 510
+                                      :height 867}})
 
 (defn get-animations-resource-path
   [anim-name file]

@@ -20,11 +20,15 @@
                            "05" "#E8AE43"}
                 "teacher" "#CA215E"
                 "student" "#E73434"
-                "guide"   "#FFB053"}]
+                "guide"   "#FFB053"
+                "vera-sitting" "#B095C6"
+                "boy-sitting" "#B095C6"
+                "girl-sitting" "#B095C6"}]
     (cond
       (some #{character} ["boy" "girl"]) (get-in colors [character skin])
       (some #{character} ["man" "woman"]) (get-in colors ["adult" skin])
       (some #{character} ["teacher" "student" "guide"]) (get colors character)
+      (some #{character} ["vera-sitting" "boy-sitting" "girl-sitting"]) (get colors character)
       :else "#FFFFFF")))
 
 (def characters [{:name           "Man"
@@ -74,15 +78,39 @@
                  {:name       "Guide"
                   :value      "guide"
                   :background (get-background-color {:character "guide"})
-                  :defaults   {:skin "01 mari"}}])
+                  :defaults   {:skin "01 mari"}}
+                 {:name       "Sitting character"
+                  :value      "vera-sitting"
+                  :background (get-background-color {:character "vera-sitting"})
+                  :defaults   {:skin "default"}}])
 
 (def single-skin-characters {"teacher" "senoravaca"
                              "student" "vera"
-                             "guide"   "mari"})
+                             "guide"   "mari"
+                             "vera-sitting" "vera-sitting"
+                             "boy-sitting" "boy-sitting"
+                             "girl-sitting" "girl-sitting"})
+
+(def sitting-characters [{:name "Vera"
+                          :value "vera-sitting"
+                          :image "character_vera-sitting.png"
+                          :background "#b095c6"}
+                         {:name "Boy"
+                          :value "boy-sitting"
+                          :image "character_boy-sitting.png"
+                          :background "#bcccd3"}
+                         {:name "Girl"
+                          :value "girl-sitting"
+                          :image "character_girl-sitting.png"
+                          :background "#89c57f"}])
 
 (defn single-skin-character?
   [character-name]
   (some #{character-name} (keys single-skin-characters)))
+
+(defn sitting-character?
+  [character-name]
+  (some #{character-name} (map :value sitting-characters)))
 
 (defn skeleton->character
   [skeleton-name]
@@ -170,7 +198,7 @@
   [{:keys [entity character head skin clothes]
     :or   {head "01" skin "01" clothes "01"}}]
   {:pre [(some #{entity} ["character" "clothes" "head"])
-         (some #{character} ["boy" "girl" "man" "woman" "teacher" "student" "guide"])
+         (some #{character} ["boy" "girl" "man" "woman" "teacher" "student" "guide" "vera-sitting" "boy-sitting" "girl-sitting"])
          (some #{head} ["01" "02" "03"])
          (some #{skin} ["01" "02" "03" "04" "05"])
          (some #{clothes} ["01" "02" "03"])]}
@@ -179,3 +207,7 @@
                     (= entity "clothes") (str "clothes_" character "_" clothes "_" skin ".png")
                     (= entity "head") (str "head_" character "_" head "_" skin ".png"))]
     (local->absolute-path file-name)))
+
+(defn sitting-character-options
+  []
+  (map #(update % :image local->absolute-path) sitting-characters))
