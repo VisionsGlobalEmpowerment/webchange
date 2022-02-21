@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.activity-dialogs.stub-concept-data)
+(ns webchange.editor-v2.activity-dialogs.stub-case-1-concept-data)
 
 (def concept-data {:id         78,
                    :name       "(a) apple",
