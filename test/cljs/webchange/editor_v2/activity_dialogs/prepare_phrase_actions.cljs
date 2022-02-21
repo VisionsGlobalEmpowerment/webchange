@@ -220,219 +220,219 @@
                 :scene-data          scene-data
                 :concept-data        case-2/concept-data}
         actual-result (prepare-phrase-actions params)
-        expected-result [{:type          :phrase
-                          :source        :scene
-                          :delay         1000
+        expected-result [#_0 {:type          :phrase
+                              :source        :scene
+                              :delay         1000
 
-                          :parallel-mark :none
-                          :selected?     false
+                              :parallel-mark :none
+                              :selected?     false
 
-                          :character     "senora-vaca"
-                          :text          "The letter "
-                          :placeholder   nil
+                              :character     "senora-vaca"
+                              :text          "The letter "
+                              :placeholder   nil
 
-                          :action-path   {:scene [:describe-writing :data 0]}
-                          :action-data   (get-scene-action-data [:describe-writing :data 0])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         0
+                              :action-path   {:scene [:describe-writing :data 0]}
+                              :action-data   (get-scene-action-data [:describe-writing :data 0])}
+                         #_1 {:type          :phrase
+                              :source        :concept
+                              :delay         0
 
-                          :parallel-mark :none
-                          :selected?     false
+                              :parallel-mark :none
+                              :selected?     false
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "“a”. "
+                              :placeholder   nil
+                              :concept-name  "(a) apple"
+                              :character     "senora-vaca"
+                              :text          "“a”. "
 
-                          :action-path   {:scene   [:describe-writing :data 1]
-                                          :concept [:dialog-field-8d4ef5e3-6e37-4a69-988f-de8cf45903f9 :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-8d4ef5e3-6e37-4a69-988f-de8cf45903f9 :data 0])}
-                         {:type          :phrase
-                          :source        :scene
-                          :delay         500
+                              :action-path   {:scene   [:describe-writing :data 1]
+                                              :concept [:dialog-field-8d4ef5e3-6e37-4a69-988f-de8cf45903f9 :data 0]}
+                              :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-8d4ef5e3-6e37-4a69-988f-de8cf45903f9 :data 0])}
+                         #_2 {:type          :phrase
+                              :source        :scene
+                              :delay         500
 
-                          :parallel-mark :none
-                          :selected?     false
+                              :parallel-mark :none
+                              :selected?     false
 
-                          :character     "senora-vaca"
-                          :text          "goes "
-                          :placeholder   nil
+                              :character     "senora-vaca"
+                              :text          "goes "
+                              :placeholder   nil
 
-                          :action-path   {:scene [:describe-writing :data 2]}
-                          :action-data   (get-scene-action-data [:describe-writing :data 2])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         500
+                              :action-path   {:scene [:describe-writing :data 2]}
+                              :action-data   (get-scene-action-data [:describe-writing :data 2])}
+                         #_3 {:type          :phrase
+                              :source        :concept
+                              :delay         500
 
-                          :parallel-mark :none
-                          :selected?     false
+                              :parallel-mark :none
+                              :selected?     false
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "curve, line down"
+                              :placeholder   nil
+                              :concept-name  "(a) apple"
+                              :character     "senora-vaca"
+                              :text          "curve, line down"
 
-                          :action-path   {:scene   [:describe-writing :data 3]
-                                          :concept [:dialog-field-136fa9c0-4bde-45a0-a7aa-f933ab1cbdeb :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-136fa9c0-4bde-45a0-a7aa-f933ab1cbdeb :data 0])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         1000
+                              :action-path   {:scene   [:describe-writing :data 3]
+                                              :concept [:dialog-field-136fa9c0-4bde-45a0-a7aa-f933ab1cbdeb :data 0]}
+                              :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-136fa9c0-4bde-45a0-a7aa-f933ab1cbdeb :data 0])}
+                         #_4 {:type          :phrase
+                              :source        :concept
+                              :delay         1000
 
-                          :parallel-mark :none
-                          :selected?     true
+                              :parallel-mark :none
+                              :selected?     true
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "A"
+                              :placeholder   nil
+                              :concept-name  "(a) apple"
+                              :character     "senora-vaca"
+                              :text          "A"
 
-                          :action-path   {:scene   [:describe-writing :data 4]
-                                          :concept [:dialog-field-45d4b490-d167-4992-bf64-3487e8dbd862 :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-45d4b490-d167-4992-bf64-3487e8dbd862 :data 0])}
-                         {:type          :phrase
-                          :source        :scene
-                          :delay         500
+                              :action-path   {:scene   [:describe-writing :data 4]
+                                              :concept [:dialog-field-45d4b490-d167-4992-bf64-3487e8dbd862 :data 0]}
+                              :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-45d4b490-d167-4992-bf64-3487e8dbd862 :data 0])}
+                         #_5 {:type          :phrase
+                              :source        :scene
+                              :delay         500
 
-                          :parallel-mark :none
-                          :selected?     false
+                              :parallel-mark :none
+                              :selected?     false
 
-                          :placeholder   nil
-                          :text          "goes"
-                          :character     "senora-vaca"
+                              :placeholder   nil
+                              :text          "goes"
+                              :character     "senora-vaca"
 
-                          :action-path   {:scene [:describe-writing :data 5]}
-                          :action-data   (get-scene-action-data [:describe-writing :data 5])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         0
+                              :action-path   {:scene [:describe-writing :data 5]}
+                              :action-data   (get-scene-action-data [:describe-writing :data 5])}
+                         #_6 {:type          :phrase
+                              :source        :concept
+                              :delay         0
 
-                          :parallel-mark :start
-                          :selected?     false
+                              :parallel-mark :start
+                              :selected?     false
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "curve, line down"
+                              :placeholder   nil
+                              :concept-name  "(a) apple"
+                              :character     "senora-vaca"
+                              :text          "curve, line down"
 
 
-                          :action-path   {:scene   [:describe-writing :data 6]
-                                          :concept [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 0])}
-                         {:type          :effect
-                          :source        :concept
-                          :delay         0
+                              :action-path   {:scene   [:describe-writing :data 6]
+                                              :concept [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 0]}
+                              :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 0])}
+                         #_7 {:type          :effect
+                              :source        :concept
+                              :delay         0
 
-                          :parallel-mark :end
-                          :selected?     false
+                              :parallel-mark :end
+                              :selected?     false
 
-                          :concept-name  "(a) apple"
-                          :effect-name   "redraw letter"
-                          :effect        "redraw-letter"
+                              :concept-name  "(a) apple"
+                              :effect-name   "redraw letter"
+                              :effect        "redraw-letter"
 
-                          :action-path   {:scene   [:describe-writing :data 6]
-                                          :concept [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 1]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 1])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         0
+                              :action-path   {:scene   [:describe-writing :data 6]
+                                              :concept [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 1]}
+                              :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-e51a7576-061f-4e94-bbd6-936fc7df466c :data 0 :data 1])}
+                         #_8 {:type          :phrase
+                              :source        :concept
+                              :delay         0
 
-                          :parallel-mark :none
-                          :selected?     false
+                              :parallel-mark :none
+                              :selected?     false
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "A"
+                              :placeholder   nil
+                              :concept-name  "(a) apple"
+                              :character     "senora-vaca"
+                              :text          "A"
 
-                          :action-path   {:scene   [:describe-writing :data 7]
-                                          :concept [:dialog-field-7dcb4949-4ae7-4947-bdb9-e744399aef73 :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-7dcb4949-4ae7-4947-bdb9-e744399aef73 :data 0])}
-                         {:type          :phrase
-                          :source        :scene
-                          :delay         500
+                              :action-path   {:scene   [:describe-writing :data 7]
+                                              :concept [:dialog-field-7dcb4949-4ae7-4947-bdb9-e744399aef73 :data 0]}
+                              :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-7dcb4949-4ae7-4947-bdb9-e744399aef73 :data 0])}
+                         #_9 {:type          :phrase
+                              :source        :scene
+                              :delay         500
 
-                          :parallel-mark :none
-                          :selected?     false
+                              :parallel-mark :none
+                              :selected?     false
 
-                          :placeholder   nil
-                          :character     "senora-vaca"
-                          :text          "has a special sound it says"
+                              :placeholder   nil
+                              :character     "senora-vaca"
+                              :text          "has a special sound it says"
 
-                          :action-path   {:scene [:describe-writing :data 8]}
-                          :action-data   (get-scene-action-data [:describe-writing :data 8])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         0
+                              :action-path   {:scene [:describe-writing :data 8]}
+                              :action-data   (get-scene-action-data [:describe-writing :data 8])}
+                         #_10 {:type          :phrase
+                               :source        :concept
+                               :delay         0
 
-                          :parallel-mark :none
-                          :selected?     false
+                               :parallel-mark :none
+                               :selected?     false
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "/a/"
+                               :placeholder   nil
+                               :concept-name  "(a) apple"
+                               :character     "senora-vaca"
+                               :text          "/a/"
 
-                          :action-path   {:scene   [:describe-writing :data 9]
-                                          :concept [:dialog-field-fbc892e9-258e-4a27-be9e-eb4d7011d394 :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-fbc892e9-258e-4a27-be9e-eb4d7011d394 :data 0])}
-                         {:type          :phrase
-                          :source        :scene
-                          :delay         500
+                               :action-path   {:scene   [:describe-writing :data 9]
+                                               :concept [:dialog-field-fbc892e9-258e-4a27-be9e-eb4d7011d394 :data 0]}
+                               :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-fbc892e9-258e-4a27-be9e-eb4d7011d394 :data 0])}
+                         #_11 {:type          :phrase
+                               :source        :scene
+                               :delay         500
 
-                          :parallel-mark :none
-                          :selected?     false
+                               :parallel-mark :none
+                               :selected?     false
 
-                          :placeholder   nil
-                          :character     "senora-vaca"
-                          :text          "Say the"
+                               :placeholder   nil
+                               :character     "senora-vaca"
+                               :text          "Say the"
 
-                          :action-path   {:scene [:describe-writing :data 10]}
-                          :action-data   (get-scene-action-data [:describe-writing :data 10])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         0
+                               :action-path   {:scene [:describe-writing :data 10]}
+                               :action-data   (get-scene-action-data [:describe-writing :data 10])}
+                         #_12 {:type          :phrase
+                               :source        :concept
+                               :delay         0
 
-                          :parallel-mark :none
-                          :selected?     false
+                               :parallel-mark :none
+                               :selected?     false
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "/a/"
+                               :placeholder   nil
+                               :concept-name  "(a) apple"
+                               :character     "senora-vaca"
+                               :text          "/a/"
 
-                          :action-path   {:scene   [:describe-writing :data 11]
-                                          :concept [:dialog-field-2b1330ce-7745-4a8e-87cc-7e77398939b2 :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-2b1330ce-7745-4a8e-87cc-7e77398939b2 :data 0])}
-                         {:type          :phrase
-                          :source        :scene
-                          :delay         500
+                               :action-path   {:scene   [:describe-writing :data 11]
+                                               :concept [:dialog-field-2b1330ce-7745-4a8e-87cc-7e77398939b2 :data 0]}
+                               :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-2b1330ce-7745-4a8e-87cc-7e77398939b2 :data 0])}
+                         #_13 {:type          :phrase
+                               :source        :scene
+                               :delay         500
 
-                          :parallel-mark :none
-                          :selected?     false
+                               :parallel-mark :none
+                               :selected?     false
 
-                          :placeholder   nil
-                          :character     "senora-vaca"
-                          :text          "sound with me"
+                               :placeholder   nil
+                               :character     "senora-vaca"
+                               :text          "sound with me"
 
-                          :action-path   {:scene [:describe-writing :data 12]}
-                          :action-data   (get-scene-action-data [:describe-writing :data 12])}
-                         {:type          :phrase
-                          :source        :concept
-                          :delay         500
+                               :action-path   {:scene [:describe-writing :data 12]}
+                               :action-data   (get-scene-action-data [:describe-writing :data 12])}
+                         #_14 {:type          :phrase
+                               :source        :concept
+                               :delay         500
 
-                          :parallel-mark :none
-                          :selected?     false
+                               :parallel-mark :none
+                               :selected?     false
 
-                          :placeholder   nil
-                          :concept-name  "(a) apple"
-                          :character     "senora-vaca"
-                          :text          "/a/"
+                               :placeholder   nil
+                               :concept-name  "(a) apple"
+                               :character     "senora-vaca"
+                               :text          "/a/"
 
-                          :action-path   {:scene   [:describe-writing :data 13]
-                                          :concept [:dialog-field-02c7dada-5129-47cd-9f16-31298a67dca9 :data 0]}
-                          :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-02c7dada-5129-47cd-9f16-31298a67dca9 :data 0])}]]
+                               :action-path   {:scene   [:describe-writing :data 13]
+                                               :concept [:dialog-field-02c7dada-5129-47cd-9f16-31298a67dca9 :data 0]}
+                               :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-02c7dada-5129-47cd-9f16-31298a67dca9 :data 0])}]]
     (is (= (count actual-result)
            (count expected-result)))
     (doseq [idx (range (min (count actual-result)
