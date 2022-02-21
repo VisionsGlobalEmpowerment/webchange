@@ -478,3 +478,20 @@
           action-data (defaults/get-dialog-node {:type "highlight-guide"})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))
+
+(re-frame/reg-event-fx
+  ::remove-action
+  (fn [{:keys [_]} [_ {:keys [scene concept]}]]
+    {:pre [(vector? scene)
+           (or (nil? concept)
+               (vector? concept))]}
+    "Remove action by action path;
+    - scene - vector with action path in activity actions data
+              e.g. [:introduce-big-small :data 8 :data 1]
+    - concept - vector with action path in concept data
+              e.g. [:dialog-field-e61057a9-63a1-4066-8549-69cc9ba3bfd9 :data 0]"
+    (let [removed-action-path scene
+          concept-field (first concept)]
+      {:dispatch-n [[::translator-form.scene/set-changes]
+                    [::state-dialog-form/remove-action (cond-> {:action-path removed-action-path}
+                                                               (some? concept-field) (assoc :concept-field concept-field))]]})))

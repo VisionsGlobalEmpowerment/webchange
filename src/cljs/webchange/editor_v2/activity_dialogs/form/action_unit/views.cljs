@@ -12,7 +12,6 @@
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-phrase :refer [phrase-unit]]
     [webchange.editor-v2.activity-dialogs.form.action-unit.views-text-animation :refer [text-animation-unit]]
     [webchange.editor-v2.activity-dialogs.form.state :as state]
-    [webchange.editor-v2.activity-dialogs.form.state-actions :as state-actions]
     [webchange.logger.index :as logger]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.utils.drag-and-drop :as utils]))
@@ -65,7 +64,7 @@
                           drop-target)}))
 
 (defn action-unit
-  [{:keys [idx parallel-mark action-data type selected?] :as props}]
+  [{:keys [parallel-mark action-data action-path type selected?] :as props}]
   (r/with-let [container-ref (r/atom nil)
                handle-click #(re-frame/dispatch [::state/set-selected-action props])
 
@@ -74,7 +73,7 @@
                prevent-defaults #(do (.preventDefault %)
                                      (.stopPropagation %))
                handle-drag-start (fn [event]
-                                   (re-frame/dispatch [::state-actions/remove-action props])
+                                   (re-frame/dispatch [::state/remove-action action-path])
                                    (let [data-transfer (.-dataTransfer event)
                                          s (.stringify js/JSON (clj->js action-data))]
                                      (.setData data-transfer "action-data" s)))
@@ -133,8 +132,7 @@
        :background-music [background-music-unit props]
        :guide [guide-unit props]
        [unknown-element props])
-     [unit-menu {:idx         idx
-                 :action-data props}]]
+     [unit-menu props]]
     (finally
       (.removeEventListener @container-ref "dragstart" handle-drag-start)
       (.removeEventListener @container-ref "dragenter" handle-drag-enter)

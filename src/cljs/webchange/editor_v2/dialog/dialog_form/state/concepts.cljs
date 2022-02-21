@@ -50,6 +50,12 @@
                         (map remove-from-concept))})))
 
 (re-frame/reg-event-fx
+  ::remove-concept-field
+  (fn [{:keys [_]} [_ field-name]]
+    {:dispatch-n [[::remove-concepts-schema-field field-name]
+                  [::remove-var-from-concepts field-name]]}))
+
+(re-frame/reg-event-fx
   ::add-new-phrase-in-concept-action
   (fn [{:keys [db]} [_ action node relative-position]]
     (let [{:keys [concept-action? base-action base-path target-position]} (actions/get-node-data node)
@@ -60,7 +66,7 @@
         {:dispatch-n (list [::translator-form.concepts/update-current-concept base-path data-patch])}))))
 
 (re-frame/reg-event-fx
-  ::delete-phrase-in-concept-action
+  ::delete-phrase-in-concept-action                         ;; <<-
   (fn [{:keys [db]} [_ node]]
     (let [{:keys [concept-action? parent-action base-path item-position base-action target-position]} (actions/get-node-data node)]
       (if (and (actions/node-parallel? parent-action) (not= item-position 0))

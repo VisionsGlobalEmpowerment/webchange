@@ -16,8 +16,8 @@
                               (get-in (:data concept-data) concept-action-path)
                               (get-in (:actions scene-data) scene-action-path))
 
-            :action-path    (cond-> {:scene scene-action-path}
-                                    concept-acton? (assoc :concept concept-action-path))
+            :action-path    (cond-> {:scene (vec scene-action-path)}
+                                    concept-acton? (assoc :concept (vec concept-action-path)))
 
             }))
        actions))
