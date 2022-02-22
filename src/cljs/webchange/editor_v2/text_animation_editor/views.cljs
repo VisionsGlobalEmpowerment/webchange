@@ -14,7 +14,7 @@
         selected-chunk @(re-frame/subscribe [::state/selected-chunk])
         selected-audio @(re-frame/subscribe [::state/selected-audio])
         parts (chunks->parts (:text text-object-data) (:chunks text-object-data))
-        active-parts  @(re-frame/subscribe [::state/active-parts])
+        active-parts @(re-frame/subscribe [::state/active-parts])
         handle-chunks-change (fn [text-name text-data-patch]
                                (re-frame/dispatch [::state/set-current-text-data text-name text-data-patch]))]
     [:div.text-animation-editor

@@ -243,7 +243,7 @@
   ::update-inner-action
   (fn [{:keys [db]} [_ data-patch position]]
     (let [{:keys [path type]} (translator-form.actions/current-phrase-action-info db)
-          action-path (concat (au/node-path->action-path path) [:data position])]
+          action-path (concat path [:data position])]
       {:dispatch [::update-action-by-path {:action-path action-path
                                            :action-type (cond
                                                           (= type :concept-action) :concept

@@ -24,7 +24,7 @@
     [(re-frame/subscribe [::current-question-action-info])
      (re-frame/subscribe [::translator-form.scene/actions-data])])
   (fn [[info actions]]
-    (get-in actions (actions/node-path->action-path (drop-last (:path info))))))
+    (get-in actions (drop-last 2 (:path info)))))
 
 (re-frame/reg-sub
   ::is-question-dialog-action
@@ -49,6 +49,5 @@
   ::set-current-question-text-action
   (fn [{:keys [db]} [_ text]]
     (let [question-action (current-question-action-info db)
-          path (drop-last (:path question-action))
-          action-path (actions/node-path->action-path path)]
+          action-path (drop-last 2 (:path question-action))]
       {:dispatch-n (list [::translator-form.scene/update-action action-path {:text text}])})))

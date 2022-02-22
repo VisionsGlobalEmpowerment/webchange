@@ -56,9 +56,11 @@
   (fn [[{:keys [path]}]]
     (first path)))
 
+(def current-phrase-action-info-path (path-to-db [:current-phrase-action]))
+
 (defn current-phrase-action-info
   [db]
-  (get-in db (path-to-db [:current-phrase-action])))
+  (get-in db current-phrase-action-info-path))
 
 (re-frame/reg-sub
   ::current-phrase-action-info
@@ -71,12 +73,11 @@
          current-concept (translator-form.concepts/current-concept-data db)]
      (current-phrase-action phrase-action-info actions-data current-concept)))
   ([{:keys [path type]} actions-data current-concept]
-   (let [action-path (actions/node-path->action-path path)]
-     (when-not (nil? action-path)
-       (cond
-         (= type :concept-action) (get-in current-concept action-path)
-         (= type :scene-action) (get-in actions-data action-path)
-         :else nil)))))
+   (when-not (nil? path)
+     (cond
+       (= type :concept-action) (get-in current-concept path)
+       (= type :scene-action) (get-in actions-data path)
+       :else nil))))
 
 (re-frame/reg-sub
   ::current-phrase-action
@@ -106,7 +107,7 @@
    (let [{:keys [path type]} (cond
                                (= target-action :dialog) (current-dialog-action-info db)
                                (= target-action :phrase) (current-phrase-action-info db))
-         action-path (cond-> (actions/node-path->action-path path)
+         action-path (cond-> path
                              (some? sub-path) (concat sub-path))]
      [action-path type])))
 
@@ -212,11 +213,10 @@
 
 (re-frame/reg-event-fx
   ::set-current-phrase-action
-  (fn [{:keys [db]} [_ action-node]]
-    (let [action-info (if-not (nil? action-node)
-                        (actions/node->info action-node)
-                        nil)]
-      {:db (assoc-in db (path-to-db [:current-phrase-action]) action-info)})))
+  (fn [{:keys [db]} [_ current-action]]
+    (let [action-info (when (some? current-action)
+                        (actions/node->info current-action))]
+      {:db (assoc-in db current-phrase-action-info-path action-info)})))
 
 (re-frame/reg-event-fx
   ::init-current-phrase-action

@@ -18,8 +18,8 @@
 (re-frame/reg-event-fx
   ::open-text-animation-window
   (fn [{:keys [db]} [_]]
-    (let [{:keys [node-data]} (state-dialog/get-selected-action db)]
-      {:dispatch-n [[::translator-form.actions/set-current-phrase-action node-data]
+    (let [current-action (state-dialog/get-selected-action db)]
+      {:dispatch-n [[::translator-form.actions/set-current-phrase-action current-action]
                     [::chunks/open]]})))
 
 (re-frame/reg-sub
