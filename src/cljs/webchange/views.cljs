@@ -85,8 +85,8 @@
       :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
       :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]
       :course-editor-v2-add-lesson [editor-panel-v2-add-lesson (:course-id route-params) (-> route-params :level-id js/parseInt)]
-      :course-table [course-table {:course-id (:course-id route-params)}]
-      :scenes-crossing [scenes-crossing {:course-id (:course-id route-params)}]
+      :course-table [course-table {:course-id (:id route-params)}]
+      :scenes-crossing [scenes-crossing {:course-id (:id route-params)}]
 
       ;; teacher dashboard
       :dashboard [dashboard-panel :dashboard route-params]

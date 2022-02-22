@@ -145,16 +145,14 @@
            (GET "/courses/:id" request (student-route request))
            (GET "/courses/:id/dashboard" request (student-route request))
            (GET "/courses/:id/dashboard/finished" request (student-route request))
+           (GET "/courses/:id/book-library" request (student-route request))
+           (GET "/courses/:id/book-library/favorite" request (student-route request))
+           (GET "/courses/:id/book-library/search" request (student-route request))
 
            ;; parent routes
            (GET "/parents" request (parent-route request))
            (GET "/parents/add-student" request (parent-route request))
            (GET "/parents/help" request (parent-route request))
-
-           ;; book library
-           (GET "/book-library" request (student-route request))
-           (GET "/book-library/favorite" request (student-route request))
-           (GET "/book-library/search" request (student-route request))
 
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))
