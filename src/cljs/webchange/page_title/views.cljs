@@ -32,4 +32,4 @@
                          (->> (merge {:scene-info scene-info} props)
                               (get-page-title)
                               (set! (.-title js/document)))
-                         [:div]))}))
+                         [:div {:style {:display "none"}}]))}))

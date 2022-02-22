@@ -2,12 +2,14 @@
   (:require [bidi.bidi :as bidi]
             [pushy.core :as pushy]
             [re-frame.core :as re-frame]
+            [webchange.book-library.routes :as book-library-routes]
             [webchange.events :as events]
             [webchange.subs :as subs]
             [webchange.interpreter.events :as ie]
             [webchange.dashboard.events :as dashboard-events]))
 
 (def routes ["/" {""                  :home
+                  "book-library"      book-library-routes/routes
                   "login"             :login
                   "student-login"     :student-login
                   "register"          :register-user
@@ -114,3 +116,10 @@
   :redirect
   (fn [args]
     (apply redirect-to args)))
+
+(re-frame/reg-sub
+  ::active-route
+  (fn []
+    (re-frame/subscribe [::subs/active-route]))
+  (fn [active-route]
+    active-route))

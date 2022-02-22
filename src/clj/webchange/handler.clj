@@ -151,6 +151,11 @@
            (GET "/parents/add-student" request (parent-route request))
            (GET "/parents/help" request (parent-route request))
 
+           ;; book library
+           (GET "/book-library" request (student-route request))
+           (GET "/book-library/favorite" request (student-route request))
+           (GET "/book-library/search" request (student-route request))
+
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))
            (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))
