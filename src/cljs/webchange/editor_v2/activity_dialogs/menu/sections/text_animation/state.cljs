@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-dialogs.form.state :as state-dialog]
     [webchange.editor-v2.activity-dialogs.menu.state :as parent-state]
-    [webchange.editor-v2.dialog.dialog-form.state.actions :as state-actions]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [text-animation-action?]]
     [webchange.editor-v2.text-animation-editor.state :as chunks]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
@@ -27,12 +26,3 @@
   (fn []
     [{:text  "Add to scene"
       :value "scene"}]))
-
-;; Actions
-
-(re-frame/reg-event-fx
-  ::add-text-animation-action
-  (fn [{:keys [db]} [_ relative-position]]
-    (let [{:keys [node-data]} (state-dialog/get-selected-action db)]
-      {:dispatch [::state-actions/add-new-empty-text-animation-action {:node-data         node-data
-                                                                       :relative-position relative-position}]})))
