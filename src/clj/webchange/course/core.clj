@@ -70,12 +70,13 @@
   (db/get-course {:slug course-slug}))
 
 (defn save-course-info!
-  [id {:keys [name slug lang image-src]}]
+  [id {:keys [name slug lang image-src metadata]}]
   (db/save-course-info! {:id        id
                          :name      name
                          :slug      slug
                          :lang      lang
-                         :image_src image-src})
+                         :image_src image-src
+                         :metadata  metadata})
   [true {:id id}])
 
 (defn get-course-latest-version

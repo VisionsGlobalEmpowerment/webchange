@@ -68,7 +68,7 @@
                        (assoc-in [:loading :edit-course-info] true))
        :http-xhrio {:method          :put
                     :uri             (str "/api/courses/" course-id "/info")
-                    :params          (select-keys data [:name :slug :image-src :lang])
+                    :params          (select-keys data [:name :slug :image-src :lang :metadata])
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::edit-course-info-success]

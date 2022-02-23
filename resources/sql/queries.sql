@@ -57,7 +57,7 @@ INSERT INTO courses (name, slug, lang, image_src, status, owner_id, website_user
 -- :name save-course-info! :! :n
 -- :doc updates an existing course record
 UPDATE courses
-SET name = :name, slug = :slug, lang = :lang, image_src = :image_src
+SET name = :name, slug = :slug, lang = :lang, image_src = :image_src, metadata = :metadata
 WHERE id = :id
 
 -- :name update-course-status! :! :n

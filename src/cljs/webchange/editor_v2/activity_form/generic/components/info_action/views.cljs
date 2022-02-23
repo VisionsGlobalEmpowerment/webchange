@@ -1,8 +1,10 @@
 (ns webchange.editor-v2.activity-form.generic.components.info-action.views
   (:require
+    [clojure.string :as str]
     [webchange.ui-framework.components.index :refer [dialog]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.activity-form.generic.components.info-action.state :as state]
+    [webchange.state.state :as state]
+    [webchange.editor-v2.activity-form.generic.components.info-action.state :as info-state]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [reagent.core :as r]
@@ -65,8 +67,53 @@
               :on-change handle-input-change
               :style     (:file-input styles)}]]))
 
+(def categories
+  [{:name "Animals"
+    :value "animals"}
+   {:name "Family and Friends"
+    :value "family-and-friends"}
+   {:name "Science/STEM"
+    :value "science-stem"}
+   {:name "Sports"
+    :value "sports"}
+   {:name "Vehicals"
+    :value "vehicals"}])
+
+(defn- book?
+  [course-info]
+  (= "book" (:type course-info)))
+
+(defn- init-book-keywords!
+  [data]
+  (let [text-objects (-> @(re-frame/subscribe [::state/scene-data])
+                         :objects
+                         (select-keys [:page-cover-title-text :page-cover-illustrators :page-cover-authors]))
+        keywords (->> text-objects
+                      (map second)
+                      (map :text)
+                      (map #(str/split % #" "))
+                      (flatten))]
+    (swap! data assoc-in [:metadata :keywords] keywords)))
+
+(defn- book-info
+  [data]
+  (when (book? @data)
+    (init-book-keywords! data)
+    (fn [data]
+      [ui/form-control {:full-width true
+                        :margin     "normal"
+                        :style      {:margin-top 0}}
+       [ui/input-label "Select Category"]
+       [ui/select {:value (-> @data :metadata :categories (or []))
+                   :variant   "outlined"
+                   :multiple true
+                   :on-change #(swap! data assoc-in [:metadata :categories] (-> % .-target .-value))}
+        (for [{:keys [name value]} categories]
+          ^{:key value}
+          [ui/menu-item {:value value} name])]])))
+
 (defn course-info-modal
-  [{:keys [title iconFlag?]}]
+  [{:keys [title]}]
   (let [course-id @(re-frame/subscribe [::subs/current-course])
         info @(re-frame/subscribe [::state-course/course-info])]
     (if (empty? info)
@@ -90,7 +137,8 @@
                            :default-value (:lang @data)
                            :on-change     #(swap! data assoc :lang (-> % .-target .-value))}]]
           [ui/grid {:item true :xs 4}
-           [course-image {:data data}]]]
+           [course-image {:data data}]]
+          [book-info data]]
          [ui/card-actions
           [ui/button {:color    "secondary"
                       :style    {:margin-left "auto"}
@@ -99,8 +147,8 @@
 
 (defn info-window
   []
-  (let [open? @(re-frame/subscribe [::state/modal-state])
-        close #(re-frame/dispatch [::state/close])]
+  (let [open? @(re-frame/subscribe [::info-state/modal-state])
+        close #(re-frame/dispatch [::info-state/close])]
     (when open?
       [dialog {:open?    open?
                :on-close close
