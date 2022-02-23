@@ -666,10 +666,10 @@
        (if ended?
          (start-timeout-instructions db)
          (stop-timeout-instructions)))
-     
+
      (if block-user-interaction?
        (interactions/block-user-interaction)
-       (if (not= action-name "fx-dialog")
+       (if (not (some #{"fx"} (:tags action)))
          (interactions/unblock-user-interaction)))
 
      (if ended?
