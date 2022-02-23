@@ -48,11 +48,12 @@
       title)))
 
 (defn layout
-  [{:keys [title document-title]}]
+  [{:keys [class-name title document-title]}]
   [:div.book-library-layout
    [home]
    [toolbar {:title title}]
    [navigation]
-   (into [:div.content]
+   (into [:div {:class-name (get-class-name {"content"  true
+                                             class-name (some? class-name)})}]
          (-> (r/current-component) (r/children)))
    [page-title {:title (get-title document-title)}]])
