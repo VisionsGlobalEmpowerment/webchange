@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-dialogs.form.state :as activity-dialogs-state]
-    [webchange.editor-v2.activity-dialogs.form.utils :refer [prepare-phrase-actions]]
+    ;[webchange.editor-v2.activity-dialogs.form.utils :refer [prepare-phrase-actions]]
     [webchange.editor-v2.activity-dialogs.menu.state :as menu-state]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
     [webchange.editor-v2.activity-form.common.object-form.voice-over-control.utils :refer [get-actions-data]]
@@ -60,10 +60,10 @@
                            (flatten)
                            (vec))
           scene-data (subs/current-scene-data db)
-          action-data (-> (prepare-phrase-actions {:dialog-action-path  [dialog-action-name]
-                                                   :current-action-path action-path
-                                                   :scene-data          scene-data})
-                          first)]
+          action-data nil #_(-> (prepare-phrase-actions {:dialog-action-path  [dialog-action-name]
+                                                         :current-action-path action-path
+                                                         :scene-data          scene-data})
+                                first)]
       {:dispatch-n [[::layout-state/set-activity-dialogs]
                     [::activity-dialogs-state/set-selected-action action-data]
                     [::menu-state/set-current-section :voice-over]]})))

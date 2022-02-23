@@ -85,10 +85,9 @@
           phrase-action-info (translator-form.actions/current-phrase-action-info db)]
       {:db       (assoc-in db modal-state-path false)
        :dispatch-n (list [::translator-form.scene/update-action
-                          (au/node-path->action-path
-                            (:path phrase-action-info))  {:data data}]
+                          (:path phrase-action-info)  {:data data}]
                          [::translator-form.scene/update-action
-                          (au/node-path->action-path (drop-last (:path phrase-action-info)))
+                          (drop-last 2 (:path phrase-action-info))
                           (get-in db text-object-path)])})))
 
 (re-frame/reg-event-fx

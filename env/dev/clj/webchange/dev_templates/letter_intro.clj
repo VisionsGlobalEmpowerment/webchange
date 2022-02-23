@@ -20,7 +20,11 @@
         metadata (templates/metadata-from-template data)
         [_ {scene-slug :scene-slug}] (core/create-scene! activity metadata test-course-slug scene-slug [] t/user-id)]
     (str "/courses/" test-course-slug "/editor-v2/" scene-slug))
-  )
+
+  (def course-slug "english")
+  (def scene-slug "letter-intro-1")
+  (-> (core/get-scene-latest-version course-slug scene-slug)
+      (get-in [:actions :introduce-big-small])))
 
 (comment
   (let [course-slug "english"]

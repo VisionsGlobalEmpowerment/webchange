@@ -8,7 +8,7 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.dialog.utils.dialog-action :as actions-defaults]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [get-diagram-items]]
+    ;[webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [get-diagram-items]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.utils.scene-action-data :refer [dialog-action? get-inner-action]]))
@@ -41,7 +41,7 @@
 (defn simple-dialog
   [{:keys [path]}]                                          ;; data coming in is a string
   (let [scene-data @(re-frame/subscribe [::translator-form.scene/scene-data])
-        {:keys [nodes]} (get-diagram-items scene-data path)
+        nodes []                                            ; {:keys [nodes]} (get-diagram-items scene-data path)
         nodes-data (->> nodes
                         (map (fn [{:keys [data]}]
                                (let [inner-action (get-inner-action (:data data))]

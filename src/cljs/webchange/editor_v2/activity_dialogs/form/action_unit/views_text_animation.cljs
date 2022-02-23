@@ -21,8 +21,9 @@
                        :on-change        handle-target-change}])))
 
 (defn text-animation-unit
-  [{:keys [chunked-text path text text-object] :as props}]
-  (let [current-target @(re-frame/subscribe [::state/current-text-animation-target path])
+  [{:keys [action-path chunked-text source text text-object]}]
+  (let [path (get action-path source)
+        current-target @(re-frame/subscribe [::state/current-text-animation-target path])
         handle-text-change (fn [new-value]
                              (re-frame/dispatch [::state-actions/set-object-text {:object-name (keyword text-object)
                                                                                   :text        new-value}]))
@@ -31,7 +32,9 @@
                            (every? true?))]
     [:div {:class-name (get-class-name {"unit-content"        true
                                         "text-animation-unit" true})}
-     [text-animation-target-control props]
+     [text-animation-target-control {:path        path
+                                     :source      source
+                                     :text-object text-object}]
      ^{:key text-object}
      [text-control {:value     text
                     :editable? (some? current-target)

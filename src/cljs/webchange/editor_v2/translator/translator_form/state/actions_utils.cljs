@@ -3,21 +3,11 @@
     [webchange.utils.list :as utils]))
 
 (defn node->info
-  [action-node]
-  (let [concept-action? (get-in action-node [:data :concept-action])]
-    {:type (if concept-action?
-             :concept-action
-             :scene-action)
-     :path (:path action-node)}))
-
-(defn node-path->action-path
-  [path]
-  (->> path
-       (map (fn [path-step]
-              (if (number? path-step)
-                [:data path-step]
-                path-step)))
-       (flatten)))
+  [action-data]
+  {:type (case (:source action-data)
+           :concept :concept-action
+           :scene :scene-action)
+   :path (:path action-data)})
 
 (defn get-node-data
   [node current-concept]

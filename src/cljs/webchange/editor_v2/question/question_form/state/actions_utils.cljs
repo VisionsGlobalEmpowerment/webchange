@@ -9,12 +9,3 @@
     {:type :question
      :path (:path action-node)
      :question-path (get-in action-node [:data :question-path])}))
-
-(defn node-path->action-path
-  [path]
-  (->> path
-       (map (fn [path-step]
-              (if (number? path-step)
-                [:data path-step]
-                path-step)))
-       (flatten)))

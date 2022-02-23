@@ -1,89 +1,64 @@
 (ns webchange.editor-v2.activity-dialogs.form.utils
   (:require
     [clojure.set :refer [difference]]
+    [webchange.editor-v2.activity-dialogs.form.utils.get-phrases-sequence :refer [get-phrases-sequence]]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects guide-effects]]
-    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [prepare-nodes get-node-data]]
+    [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [get-node-data]]
     [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]))
 
-(defn- set-parallel-marks
-  [actions]
-  (map-indexed (fn [idx {:keys [y] :as data}]
-                 (let [next-action (nth actions (inc idx) nil)
-                       next-y (get next-action :y 0)]
-                   (->> (cond
-                          (and (= y 0) (> next-y 0)) :start
-                          (and (> y 0) (> next-y 0)) :middle
-                          (and (> y 0) (= next-y 0)) :end
-                          :else :none)
-                        (assoc data :parallel-mark))))
-               actions))
+(defn- get-action-type
+  [{:keys [action-data available-effects-ids]}]
+  (let [{:keys [id type phrase-text]} (get-inner-action action-data)]
+    (cond
+      (some #{id} available-effects-ids)
+      :effect
 
-(defn- set-action-data
-  [actions {:keys [concept-data scene-data]}]
-  (map (fn [{:keys [action-path node-path concept parallel-mark]}]
-         (let [concept-acton? (boolean concept)]
-           {:parallel-mark  parallel-mark
-            :concept-acton? concept-acton?
-            :action-data    (if concept-acton?
-                              (get-in (:data concept-data) action-path)
-                              (get-in (:actions scene-data) action-path))
-            :action-path    action-path
-            :node-data      (get-node-data {:concept-node?   concept-acton?
-                                            :current-concept concept-data
-                                            :scene-data      scene-data
-                                            :action-path     action-path
-                                            :node-path       node-path})}))
-       actions))
+      (= type "text-animation")
+      :text-animation
 
-(defn set-action-type
-  [actions {:keys [available-effects]}]
-  {:post [(every? (fn [{:keys [type]}]
-                    (some #{type} [:background-music
-                                   :character-animation
-                                   :character-movement
-                                   :effect
-                                   :phrase
-                                   :skip
-                                   :guide
-                                   :text-animation
-                                   :unknown])) %)
-          (every? (fn [{:keys [source]}]
-                    (some #{source} [:concept :scene])) %)]}
+      (some #{type} ["add-animation" "remove-animation"])
+      :character-animation
+
+      (some #{type} ["char-movement"])
+      :character-movement
+
+      (some? phrase-text)
+      :phrase
+
+      (some #{type} ["start-skip-region" "end-skip-region"])
+      :skip
+
+      (some #{type} ["mute-background-music" "unmute-background-music"])
+      :background-music
+
+      (some #{type} ["show-guide" "hide-guide" "highlight-guide"])
+      :guide
+
+      :else :unknown)))
+
+(defn- set-common-action-data
+  [actions {:keys [available-effects concept-data scene-data]}]
   (let [available-effects-ids (map :action available-effects)]
-    (map (fn [{:keys [action-data concept-acton?] :as data}]
-           (let [inner-action-id (-> action-data (get-inner-action) (get :id))
-                 inner-action-type (-> action-data (get-inner-action) (get :type))
-                 inner-action-phrase-text (-> action-data (get-inner-action) (get :phrase-text))
-                 action-type (cond
-                               (some #{inner-action-id} available-effects-ids)
-                               :effect
+    (->> actions
+         (map (fn [{:keys [scene-action-path concept-action-path parallel-mark]}]
+                (let [concept-acton? (some? concept-action-path)
+                      action-data (if concept-acton?
+                                    (get-in (:data concept-data) concept-action-path)
+                                    (get-in (:actions scene-data) scene-action-path))
+                      {:keys [duration]} (get-empty-action action-data)]
+                  (cond-> {:type          (get-action-type {:action-data           action-data
+                                                            :available-effects-ids available-effects-ids})
+                           :source        (if concept-acton? :concept :scene)
+                           :action-data   action-data
+                           :action-path   (cond-> {:scene (vec scene-action-path)}
+                                                  concept-acton? (assoc :concept (vec concept-action-path)))
 
-                               (= inner-action-type "text-animation")
-                               :text-animation
+                           ;; backward compatibility:
+                           :path          (if concept-acton? (vec concept-action-path) (vec scene-action-path))
 
-                               (some #{inner-action-type} ["add-animation" "remove-animation"])
-                               :character-animation
-
-                               (some #{inner-action-type} ["char-movement"])
-                               :character-movement
-
-                               (some? inner-action-phrase-text)
-                               :phrase
-
-                               (some #{inner-action-type} ["start-skip-region" "end-skip-region"])
-                               :skip
-
-                               (some #{inner-action-type} ["mute-background-music" "unmute-background-music"])
-                               :background-music
-
-                               (some #{inner-action-type} ["show-guide" "hide-guide" "highlight-guide"])
-                               :guide
-
-                               :else :unknown)]
-             (-> data
-                 (assoc :type action-type)
-                 (assoc :source (if concept-acton? :concept :scene)))))
-         actions)))
+                           :delay         duration
+                           :parallel-mark parallel-mark}
+                          concept-acton? (assoc :concept-name (:name concept-data)))))))))
 
 (defn- get-chunked-text-data
   [text text-chunks action-chunks]
@@ -95,80 +70,74 @@
                                   (boolean))})
                  text-chunks)))
 
-(defn- get-component-data
-  [actions {:keys [available-effects concept-data scene-data]}]
-  (map (fn [{:keys [type source action-data action-path node-data parallel-mark]}]
-         (let [concept-name (:name concept-data)
-               {:keys [duration]} (get-empty-action action-data)
-               {action-type :type
-                :keys       [action
-                             data
-                             id
-                             phrase-text
-                             phrase-placeholder
-                             target
-                             track
-                             transition-id]} (get-inner-action action-data)]
-           (cond-> {:type          type
-                    :source        source
-                    :delay         duration
-                    :path          action-path
-                    :node-data     node-data
-                    :parallel-mark parallel-mark}
-                   (= type :phrase)
-                   (merge {:character   target
-                           :text        phrase-text
-                           :placeholder phrase-placeholder})
+(def data-getters
+  {:background-music    (fn [{:keys [action-data]} {:keys [_]}]
+                          (let [{:keys [type]} (get-inner-action action-data)]
+                            {:effect-name (get-in skip-effects [(keyword type) :text])}))
 
-                   (= type :text-animation)
-                   (merge {:text-object  target
-                           :chunked-text (get-chunked-text-data
-                                           (->> (keyword target)
+   :character-animation (fn [{:keys [action-data]} {:keys [_]}]
+                          (let [{:keys [id target track]} (get-inner-action action-data)]
+                            {:animation-object target
+                             :animation-name   id
+                             :animation-track  track}))
+
+   :character-movement  (fn [{:keys [action-data]} {:keys [_]}]
+                          (let [{:keys [action target transition-id]} (get-inner-action action-data)]
+                            {:action    action
+                             :character transition-id
+                             :target    target}))
+
+   :effect              (fn [{:keys [action-data]} {:keys [available-effects]}]
+                          (let [{:keys [id]} (get-inner-action action-data)]
+                            {:effect      id
+                             :effect-name (->> available-effects
+                                               (some (fn [available-effect]
+                                                       (and (= (:action available-effect) id)
+                                                            available-effect)))
+                                               (:name))}))
+
+   :guide               (fn [{:keys [action-data]}]
+                          (let [{:keys [type]} (get-inner-action action-data)]
+                            {:effect-name (get-in guide-effects [(keyword type) :text])}))
+
+   :phrase              (fn [{:keys [action-data]}]
+                          (let [{:keys [target phrase-text phrase-placeholder]} (get-inner-action action-data)]
+                            {:character   target
+                             :text        phrase-text
+                             :placeholder phrase-placeholder}))
+
+   :skip                (fn [{:keys [action-data]} {:keys [_]}]
+                          (let [{:keys [type]} (get-inner-action action-data)]
+                            {:effect-name (get-in skip-effects [(keyword type) :text])}))
+
+   :text-animation      (fn [{:keys [action-data]} {:keys [scene-data]}]
+                          (let [{:keys [data target]} (get-inner-action action-data)]
+                            {:text-object  target
+                             :chunked-text (get-chunked-text-data
+                                             (->> (keyword target)
+                                                  (get-scene-object scene-data)
+                                                  (:text))
+                                             (->> (keyword target)
+                                                  (get-scene-object scene-data)
+                                                  (:chunks))
+                                             data)
+                             :text         (->> (keyword target)
                                                 (get-scene-object scene-data)
-                                                (:text))
-                                           (->> (keyword target)
-                                                (get-scene-object scene-data)
-                                                (:chunks))
-                                           data)
-                           :text         (->> (keyword target)
-                                              (get-scene-object scene-data)
-                                              (:text))})
+                                                (:text))}))})
 
-                   (= type :character-animation)
-                   (merge {:animation-object target
-                           :animation-name   id
-                           :animation-track  track})
-
-                   (= type :character-movement)
-                   (merge {:action    action
-                           :character transition-id
-                           :target    target})
-
-                   (= type :effect)
-                   (merge {:effect      id
-                           :effect-name (->> available-effects
-                                             (some (fn [available-effect]
-                                                     (and (= (:action available-effect) id)
-                                                          available-effect)))
-                                             (:name))})
-
-                   (= type :skip)
-                   (merge {:effect-name (get-in skip-effects [(keyword action-type) :text])})
-
-                   (= type :background-music)
-                   (merge {:action action-type})
-
-                   (= type :guide)
-                   (merge {:effect-name (get-in guide-effects [(keyword action-type) :text])})
-
-                   (= source :concept)
-                   (merge {:concept-name concept-name}))))
-       actions))
+(defn- set-specific-action-data
+  [actions params]
+  (->> actions
+       (map (fn [{:keys [type] :as data}]
+              (let [specific-data-getter (get data-getters type (constantly {}))]
+                (->> (specific-data-getter data params)
+                     (merge data)))))))
 
 (defn- set-selected
   [actions current-action-path]
-  (map (fn [{:keys [path] :as data}]
-         (->> (= path current-action-path)
+  (map (fn [data]
+         (->> (get data :path)
+              (= current-action-path)
               (assoc data :selected?)))
        actions))
 
@@ -176,14 +145,15 @@
   [{:keys [dialog-action-path concept-data scene-data available-effects current-action-path]
     :or   {concept-data      nil
            available-effects []}}]
-  (-> (prepare-nodes scene-data concept-data dialog-action-path)
-      (set-parallel-marks)
-      (set-action-data {:concept-data concept-data
-                        :scene-data   scene-data})
-      (set-action-type {:available-effects available-effects})
-      (get-component-data {:concept-data      concept-data
-                           :scene-data        scene-data
-                           :available-effects available-effects})
+  (-> (get-phrases-sequence {:action-path  dialog-action-path
+                             :scene-data   scene-data
+                             :concept-data concept-data})
+      (set-common-action-data {:concept-data      concept-data
+                               :scene-data        scene-data
+                               :available-effects available-effects})
+      (set-specific-action-data {:concept-data      concept-data
+                                 :scene-data        scene-data
+                                 :available-effects available-effects})
       (set-selected current-action-path)))
 
 (defn collect-untracked-actions

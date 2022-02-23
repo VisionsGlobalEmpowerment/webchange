@@ -24,7 +24,7 @@
 
 (def close-window! #(re-frame/dispatch [::question.window/close]))
 
-(defn question-modal
+(defn question-modal                                        ;; ToDo: Remove?
   []
   (let [open? @(re-frame/subscribe [::question.window/modal-state])
         handle-close #(close-window!)]

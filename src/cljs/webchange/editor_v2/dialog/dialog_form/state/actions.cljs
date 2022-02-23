@@ -197,28 +197,24 @@
                                             {:action-data dialog-action})]]})))
 
 (re-frame/reg-event-fx
-  ::delete-phrase-action
-  (fn [{:keys [db]} [_ node]]
-    (let [{:keys [concept-action? base-path parent-action base-action target-position item-position]} (actions/get-dialog-node-data node)]
-      (if (actions/node-parallel? parent-action)
-        (let [parent-action (assoc parent-action :data (vec (:data parent-action)))
-              parallel-data (-> parent-action
-                                (au/delete-child-action item-position))
-              parallel-data (if (= (count (:data parallel-data)) 1) (first (:data parallel-data)) parallel-data)
-              data-patch (-> base-action
-                             (actions/replace-child parallel-data target-position)
-                             (select-keys [:data]))]
-          {:dispatch-n (list [::update-scene-action base-path data-patch])})
-        (let [data-patch (-> base-action
-                             (au/delete-child-action target-position)
-                             (select-keys [:data]))]
-          (if concept-action?
-            (let [var-name (get-in node [:action-node-data :data :from-var 0 :var-property])]
-              {:dispatch-n (list
-                             [::dialog-form.concepts/remove-concepts-schema-field var-name]
-                             [::dialog-form.concepts/remove-var-from-concepts var-name]
-                             [::update-scene-action base-path data-patch])})
-            {:dispatch-n (list [::update-scene-action base-path data-patch])}))))))
+  ::remove-action
+  (fn [{:keys [db]} [_ {:keys [action-path concept-field]}]]
+    {:pre [(vector? action-path)
+           (or (nil? concept-field)
+               (keyword? concept-field))]}
+    "Remove action by action path;
+    - action-path - vector with action path in activity actions data
+                    e.g. [:introduce-big-small :data 8 :data 1]
+    - concept-field - name of concept field if used.
+                      e.g. :dialog-field-e61057a9-63a1-4066-8549-69cc9ba3bfd9"
+    (let [parent-path (drop-last 2 action-path)
+          removed-action-position (last action-path)
+
+          {parent-action-path :path parent-action-data :data} (get-parent-data db parent-path)
+          data-patch (-> (au/delete-child-action parent-action-data removed-action-position)
+                         (select-keys [:data]))]
+      {:dispatch-n (cond-> [[::update-scene-action parent-action-path data-patch]]
+                           (some? concept-field) (conj [::dialog-form.concepts/remove-concept-field concept-field]))})))
 
 (re-frame/reg-event-fx
   ::update-action-by-path
@@ -247,7 +243,7 @@
   ::update-inner-action
   (fn [{:keys [db]} [_ data-patch position]]
     (let [{:keys [path type]} (translator-form.actions/current-phrase-action-info db)
-          action-path (concat (au/node-path->action-path path) [:data position])]
+          action-path (concat path [:data position])]
       {:dispatch [::update-action-by-path {:action-path action-path
                                            :action-type (cond
                                                           (= type :concept-action) :concept

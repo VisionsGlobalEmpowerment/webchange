@@ -16,45 +16,23 @@
 
 (defn- get-current-effects-list
   [{:keys [available-effects effect-type]}]
-  (filter (fn [{:keys [text value selected? type]}]
+  (filter (fn [{:keys [type]}]
             (if (= "default" effect-type)
               (or (= nil type) (= effect-type type))
               (= effect-type type)))
           available-effects))
 
-(defn- actions
-  []
-  (let [selected-effect @(re-frame/subscribe [::state/selected-effect])
-        available-actions [["Before" "insert-before" #(re-frame/dispatch [::state/add-current-effect-action :before])]
-                           ["After" "insert-after" #(re-frame/dispatch [::state/add-current-effect-action :after])]
-                           ["Parallel" "insert-parallel" #(re-frame/dispatch [::state/add-current-effect-action :parallel])]]]
-    (when (some? selected-effect)
-      [:div.actions
-       [:span.input-label "Add:"]
-       (for [[idx [text icon handler]] (map-indexed vector available-actions)]
-         ^{:key idx}
-         [icon-button
-          {:icon     icon
-           :size     "small"
-           :on-click handler}
-          text])])))
-
 (defn- effects-list
   [{:keys [effect-type title]}]
   (let [available-effects @(re-frame/subscribe [::state/available-effects])
-        current-effects-list (get-current-effects-list {:available-effects available-effects :effect-type effect-type})
-        handle-click #(re-frame/dispatch [::state/set-selected-effect %])
-        show-actions? @(re-frame/subscribe [::state/show-actions?])]
+        current-effects-list (get-current-effects-list {:available-effects available-effects :effect-type effect-type})]
     (when (not-empty current-effects-list)
       [section-block {:title title}
        [:span.input-label "Available effects:"]
        [options-list {:options       current-effects-list
-                      :on-click      handle-click
                       :get-drag-data (fn [{:keys [value]}]
                                        {:action "add-effect-action"
-                                        :id     value})}]
-       (when show-actions?
-         [actions])])))
+                                        :id     value})}]])))
 
 (defn- guide-effects-list
   []
@@ -83,9 +61,7 @@
 (defn- actions-placeholder
   []
   [:div.placeholder
-   [:span "Drag and drop available effect"]
-   [:span "or"]
-   [:span "Select effect and phrase action to insert effect relative to phrase"]])
+   [:span "Drag and drop available effect"]])
 
 (defn form
   []

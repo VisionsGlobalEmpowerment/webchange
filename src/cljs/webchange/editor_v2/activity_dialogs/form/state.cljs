@@ -128,23 +128,6 @@
 ;; ---
 
 (re-frame/reg-sub
-  ::phrase-actions
-  (fn []
-    [(re-frame/subscribe [::translator-form.actions/current-dialog-action-info])
-     (re-frame/subscribe [::translator-form.actions/current-dialog-action-data])
-     (re-frame/subscribe [::translator-form.concepts/current-concept])
-     (re-frame/subscribe [::translator-form.scene/scene-data])
-     (re-frame/subscribe [::selected-action])])
-  (fn [[current-dialog-action {:keys [available-activities]} current-concept scene-data selected-action]]
-    (let [available-actions (->> (scene-utils/get-available-effects scene-data)
-                                 (concat available-activities))]
-      (prepare-phrase-actions {:dialog-action-path  (:path current-dialog-action)
-                               :concept-data        current-concept
-                               :scene-data          scene-data
-                               :available-effects   available-actions
-                               :current-action-path (:path selected-action)}))))
-
-(re-frame/reg-sub
   ::scene-available-actions
   (fn []
     [(re-frame/subscribe [::translator-form.scene/scene-data])])
@@ -495,3 +478,20 @@
           action-data (defaults/get-dialog-node {:type "highlight-guide"})]
       {:dispatch [::state-dialog-form/insert-action (merge {:action-data action-data}
                                                            position-data)]})))
+
+(re-frame/reg-event-fx
+  ::remove-action
+  (fn [{:keys [_]} [_ {:keys [scene concept]}]]
+    {:pre [(vector? scene)
+           (or (nil? concept)
+               (vector? concept))]}
+    "Remove action by action path;
+    - scene - vector with action path in activity actions data
+              e.g. [:introduce-big-small :data 8 :data 1]
+    - concept - vector with action path in concept data
+              e.g. [:dialog-field-e61057a9-63a1-4066-8549-69cc9ba3bfd9 :data 0]"
+    (let [removed-action-path scene
+          concept-field (first concept)]
+      {:dispatch-n [[::translator-form.scene/set-changes]
+                    [::state-dialog-form/remove-action (cond-> {:action-path removed-action-path}
+                                                               (some? concept-field) (assoc :concept-field concept-field))]]})))

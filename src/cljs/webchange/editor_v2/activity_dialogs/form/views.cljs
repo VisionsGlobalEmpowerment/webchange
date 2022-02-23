@@ -21,8 +21,8 @@
                  :on-change  handle-change
                  :label      "Block interactions"
                  :class-name "title-control"}]]
-     (for [[idx {:keys [path concept-name] :as action}] (map-indexed vector nodes)]
-       ^{:key (concat [(count nodes)] path [concept-name])}
+     (for [[idx {:keys [action-path concept-name] :as action}] (map-indexed vector nodes)]
+       ^{:key (concat [(count nodes)] (:scene action-path) (get action-path :concept []) [concept-name])}
        [action-unit (merge action
                            {:idx idx})])]))
 
