@@ -157,7 +157,11 @@
                                                       {:type "set-variable", :var-name "right-selected", :var-value false}
                                                       {:type "set-variable", :var-name "next-check-collide", :var-value true}
                                                       {:id "next-check-collide" :type "action"}
-                                                      {:type "action", :from-params [{:action-property "id" :param-property "tap-dialog"}]}]}
+                                                      {:type "action", :from-params [{:action-property "id" :param-property "tap-dialog"}]}
+                                                      {:type "action", :id "highlight" :from-params [{:param-property "target"}]}
+                                                      {:type "empty" :duration 1000}
+                                                      {:type "action", :id "unhighlight" :from-params [{:param-property "target"}]}
+                                                      ]}
                         :next-check-collide   {:type "sequence-data"
                                                :data [{:type     "set-timeout"
                                                        :action   "check-collide"
@@ -393,7 +397,13 @@
                        :draggable  true,
                        :editable?  true
                        :transition (name ball-group-name)
-                       :actions    {:drag-start
+                       :actions    {:click
+                                    {:type   "action",
+                                     :on     "click",
+                                     :id     "start-drag"
+                                     :params {:tap-dialog ball-dialog-name :target ball-name}}
+
+                                    :drag-start
                                     {:type   "action",
                                      :on     "drag-start",
                                      :id     "start-drag"
