@@ -656,11 +656,7 @@
          ended? (empty? (remove nil? (:data action)))
          block-user-interaction? (and (some #{(:user-interactions-blocked action-data-utils/action-tags)} action-tags)
                                       (not (:workflow-user-input action))
-                                      (not (and dialog-action? ended?)))
-         dn (:display-name action)
-         action-name (if (seq? dn)
-                       (first (doall dn))
-                       dn)]
+                                      (not (and dialog-action? ended?)))]
 
      (when dialog-action?
        (if ended?
