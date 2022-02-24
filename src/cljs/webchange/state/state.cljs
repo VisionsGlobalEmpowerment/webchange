@@ -25,6 +25,11 @@
   (fn [[scene-id]]
     scene-id))
 
+(re-frame/reg-event-fx
+  ::set-current-scene-id
+  (fn [{:keys [_]} [_ scene-id]]
+    {:dispatch [::core/set-current-scene-id scene-id]}))
+
 (defn scene-data
   ([db]
    (core/get-scene-data db (core/current-scene-id db)))
@@ -59,9 +64,14 @@
 (re-frame/reg-event-fx
   ::load-scene-success
   (fn [{:keys [_]} [_ {:keys [on-success]} scene-slug scene-data]]
-    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   scene-slug
-                                                  :scene-data scene-data}]]
+    {:dispatch-n (cond-> [[::set-scene-data scene-slug scene-data]]
                          (some? on-success) (conj (conj on-success scene-data)))}))
+
+(re-frame/reg-event-fx
+  ::set-scene-data
+  (fn [{:keys [_]} [_ scene-slug scene-data]]
+    {:dispatch [::core/set-scene-data {:scene-id   scene-slug
+                                       :scene-data scene-data}]}))
 
 (re-frame/reg-event-fx
   ::update-last-saved

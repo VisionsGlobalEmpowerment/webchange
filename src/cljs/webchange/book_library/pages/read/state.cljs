@@ -2,6 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.book-library.state :as parent-state]
+    [webchange.interpreter.events :as interpreter]
+    [webchange.state.state :as state]
     [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
@@ -23,12 +25,20 @@
       {:dispatch-n [[::warehouse/load-scene
                      {:course-slug book-id
                       :scene-slug  "book"}
-                     {:on-success [::load-book-success book-id]}]]})))
+                     {:on-success [::init-scene-data book-id]}]]})))
 
 (re-frame/reg-event-fx
-  ::load-book-success
+  ::init-scene-data
   (fn [{:keys [_]} [_ book-id book-data]]
-    {:dispatch [::set-book book-id book-data]}))
+    (let [course-slug book-id
+          scene-slug "book"
+          scene-data book-data]
+      {:dispatch-n [
+                    [::interpreter/load-course course-slug scene-slug]
+                    ;[::state/set-scene-data scene-slug scene-data]
+                    ;[::state/set-current-scene-id scene-slug]
+                    ;[::interpreter/load-lessons course-slug]
+                    ]})))
 
 ;; Book
 

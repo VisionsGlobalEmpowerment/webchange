@@ -15,7 +15,7 @@
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
     [webchange.interpreter.renderer.scene.components.group.propagate]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.logger.index :as logger]))
+    [webchange.state.state :as state]))
 
 (defn- get-layer-objects-data
   [scene-id layer-objects]
@@ -77,20 +77,23 @@
         (re-frame/dispatch [::ie/trigger :start])))))
 
 (defn stage-wrapper
-  [{:keys [mode scene-id scene-data dataset-items on-ready reset-resources?]
+  [{:keys [mode scene-id scene-data dataset-items on-ready reset-resources? stage-props]
     :or   {mode             ::modes/game
            on-ready         #()
            reset-resources? true
-           dataset-items    nil}}]
-  ^{:key scene-id}
-  [stage {:mode             mode
-          :scene-data       (get-scene-data scene-id scene-data dataset-items)
-          :on-ready         (fn []
-                              (when (modes/start-on-ready? mode)
-                                (start-triggers))
-                              (on-ready))
-          :on-start-click   start-scene
-          :reset-resources? reset-resources?}])
+           dataset-items    nil
+           stage-props      {}}}]
+  (let [prepared-scene-data (get-scene-data scene-id scene-data dataset-items)]
+    ^{:key scene-id}
+    [stage (merge {:mode             mode
+                   :scene-data       prepared-scene-data
+                   :on-ready         (fn []
+                                       (when (modes/start-on-ready? mode)
+                                         (start-triggers))
+                                       (on-ready))
+                   :on-start-click   start-scene
+                   :reset-resources? reset-resources?}
+                  stage-props)]))
 
 (defn- component-will-unmount
   []
@@ -100,22 +103,27 @@
   (-> (exit-fullscreen)
       (.catch #())))
 
-(defn course
-  [{:keys [mode]}]
+(defn interpreter
+  [{:keys [mode stage-props]}]
   (r/with-let []
-    (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-          scene-data @(re-frame/subscribe [::subs/scene scene-id])
+    (let [scene-id @(re-frame/subscribe [::state/current-scene-id])
+          scene-data @(re-frame/subscribe [::state/scene-data scene-id])
           dataset-items @(re-frame/subscribe [::isubs/dataset-items])
           user-mode (-> @(re-frame/subscribe [::isubs/user-mode])
                         (modes/get-mode))]
-      [:div {:style {:position "fixed"
-                     :top      0
-                     :left     0
-                     :width    "100%"
-                     :height   "100%"}}
-       [:style "html, body {margin: 0; max-width: 100%; overflow: hidden; background-color: black;}"]
-       [stage-wrapper {:mode          (or user-mode mode)
-                       :scene-id      scene-id
-                       :scene-data    scene-data
-                       :dataset-items dataset-items}]])
+      [stage-wrapper {:mode          (or user-mode mode)
+                      :scene-id      scene-id
+                      :scene-data    scene-data
+                      :dataset-items dataset-items
+                      :stage-props   stage-props}])
     (finally (component-will-unmount))))
+
+(defn course
+  [props]
+  [:div {:style {:position "fixed"
+                 :top      0
+                 :left     0
+                 :width    "100%"
+                 :height   "100%"}}
+   [:style "html, body {margin: 0; max-width: 100%; overflow: hidden; background-color: black;}"]
+   [interpreter props]])

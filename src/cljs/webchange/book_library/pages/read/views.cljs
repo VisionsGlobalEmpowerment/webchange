@@ -4,22 +4,17 @@
     [webchange.book-library.layout.views :refer [layout]]
     [webchange.book-library.pages.read.icons :refer [icons]]
     [webchange.book-library.pages.read.state :as state]
-    [webchange.interpreter.components :refer [stage-wrapper]]
+    [webchange.interpreter.components :refer [interpreter]]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- book
   []
   (let [{:keys [id data]} @(re-frame/subscribe [::state/book])]
-    (when (some? data)
-      [:div.book-wrapper
-       [stage-wrapper {
-                       ;:mode
-                       :scene-id   id
-                       :scene-data data
-                       ;:dataset-items []
-                       ;:on-ready
-                       ;:reset-resources?
-                       }]])))
+    [:div.book-wrapper
+     [interpreter {:mode        ::modes/game
+                   ;:stage-props {:show-loader-screen? false}
+                   }]]))
 
 (defn- menu-item
   [{:keys [big? icon on-click text]}]
@@ -42,11 +37,11 @@
                     :big?     true
                     :on-click handle-read-with-sound-click}]
         #_[menu-item {:text     "Read by myself"
-                    :icon     "no-volume"
-                    :on-click handle-read-without-sound-click}]
+                      :icon     "no-volume"
+                      :on-click handle-read-without-sound-click}]
         #_[menu-item {:text     "Favorite"
-                    :icon     "heart"
-                    :on-click handle-favorite-click}]]])))
+                      :icon     "heart"
+                      :on-click handle-favorite-click}]]])))
 
 (defn page
   [{:keys [id book-id]}]
