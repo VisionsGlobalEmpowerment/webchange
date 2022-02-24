@@ -18,12 +18,12 @@
     (->> [{:title "Library"
            :icon  "book"
            :page  :book-library}
-          {:title "Favorite"
-           :icon  "heart"
-           :page  :book-library-favorite}
-          {:title "Search"
-           :icon  "search"
-           :page  :book-library-search}]
+          #_{:title "Favorite"
+             :icon  "heart"
+             :page  :book-library-favorite}
+          #_{:title "Search"
+             :icon  "search"
+             :page  :book-library-search}]
          (map (fn [{:keys [page] :as item}]
                 (cond-> item
                         (= page handler) (assoc :active? true)))))))
