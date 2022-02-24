@@ -208,6 +208,7 @@
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
                      :url s/Str :lang (s/maybe s/Str)
+                     :metadata (s/maybe s/Any)
                      (s/optional-key :updated-at) s/Str
                      (s/optional-key :level) s/Str
                      (s/optional-key :subject) s/Str

@@ -258,7 +258,7 @@
   ([course]
    (->website-course course {}))
   ([course {:keys [with-host-name?] :or {with-host-name? true}}]
-   (cond-> (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status :updated-at])
+   (cond-> (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status :updated-at :metadata])
                (assoc :slug (-> course :slug (codec/url-encode)))
                (assoc :updated-at (-> course :updated-at (str)))
                (with-course-page)

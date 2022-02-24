@@ -199,6 +199,14 @@
                      :uri    (str "/api/book-library/all")}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::load-book-categories
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-course-books
+                     :method :get
+                     :uri    (str "/api/book-library/categories")}
+                    handlers)))
+
 ;;
 
 (re-frame/reg-event-fx

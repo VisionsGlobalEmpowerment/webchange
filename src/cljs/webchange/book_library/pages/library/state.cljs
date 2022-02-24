@@ -28,12 +28,15 @@
   (fn [{:keys [_]} [_ response]]
     (let [books (->> response
                      (map (fn [book]
-                            (map-keys book
-                                      {:id        :id
-                                       :image-src :cover
-                                       :lang      :lang
-                                       :name      :title
-                                       :slug      :book-id}))))]
+                            (-> (map-keys book
+                                          {:id        :id
+                                           :image-src :cover
+                                           :lang      :lang
+                                           :name      :title
+                                           :slug      :book-id})
+                                (assoc :categories (get-in book [:metadata :categories] []))
+                                (assoc :keywords (get-in book [:metadata :keywords] []))
+                                (dissoc :metadata)))))]
       {:dispatch [::set-available-books books]})))
 
 ;; Available books
@@ -58,12 +61,34 @@
 (re-frame/reg-sub
   ::books-list
   (fn []
-    [(re-frame/subscribe [::available-books])])
-  (fn [[available-books]]
-    available-books))
+    [(re-frame/subscribe [::available-books])
+     (re-frame/subscribe [::current-category])])
+  (fn [[available-books {:keys [value]}]]
+    (if (some? value)
+      (filter (fn [{:keys [categories]}]
+                (some #{value} categories))
+              available-books)
+      available-books)))
 
 (re-frame/reg-event-fx
   ::open-book
   (fn [{:keys [db]} [_ book-id]]
     (let [current-course (parent-state/get-current-course db)]
       {:dispatch [::routes/redirect :book-library-read :id current-course :book-id book-id]})))
+
+;; Current category
+
+(def current-category-path (path-to-db [:current-category]))
+
+(defn get-current-category
+  [db]
+  (get-in db current-category-path))
+
+(re-frame/reg-sub
+  ::current-category
+  get-current-category)
+
+(re-frame/reg-event-fx
+  ::set-current-category
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db current-category-path data)}))

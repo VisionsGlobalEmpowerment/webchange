@@ -1,4 +1,23 @@
 .book-library-page {
+    .current-category {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+
+        margin-bottom: 50px;
+
+        color: #fff;
+        font-family: Roboto;
+        font-weight: bold;
+        font-size: 36px;
+
+        img {
+            $size: 76px;
+            width: $size;
+            height: $size;
+        }
+    }
+
     .book-list {
         display: grid;
         grid-template-columns: repeat(5, 1fr);

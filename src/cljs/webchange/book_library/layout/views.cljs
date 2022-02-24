@@ -7,9 +7,11 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- toolbar
-  [{:keys [title]}]
+  [{:keys [title toolbar-control]}]
   [:div.toolbar
-   [:h1 title]])
+   [:h1 title]
+   (when (some? toolbar-control)
+     toolbar-control)])
 
 (defn- get-title
   [sub-title]
@@ -19,14 +21,15 @@
       title)))
 
 (defn layout
-  [{:keys [class-name show-navigation? show-toolbar? title document-title]
+  [{:keys [class-name show-navigation? show-toolbar? title toolbar-control document-title]
     :or   {show-navigation? true
            show-toolbar?    true}}]
   [:div.book-library-layout
    [side-menu {:show-navigation? show-navigation?}]
    [:div.main-block
     (when show-toolbar?
-      [toolbar {:title title}])
+      [toolbar {:title           title
+                :toolbar-control toolbar-control}])
     (into [:div {:class-name (get-class-name {"content"  true
                                               class-name (some? class-name)})}]
           (-> (r/current-component) (r/children)))]
