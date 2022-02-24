@@ -330,13 +330,19 @@
                      (rest tail)))))))))
 
 (defn animation-sequence->actions [{audio-start :start :keys [target track data skippable start end]}]
-  (let [track (or track (get scene-action-data/animation-tracks :mouth))]
+  (let [track (or track (get scene-action-data/animation-tracks :mouth))
+        with-default (fn [data] (if (empty? data)
+                                  [{:start start
+                                    :end end
+                                    :anim "talk"}]
+                                  data))]
     (->> data
          (merge-animations)
          (remove (fn [{chunk-end :end chunk-start :start}]
                    (or
                     (<= chunk-end start)
                     (>= chunk-start end))))
+         (with-default)
          (map (fn [{:keys [start end anim]}]
                 {:type         "sequence-data"
                  :data         [{:type "empty" :duration (* (- start audio-start) 1000)}
