@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.book-library.state :as parent-state]
+    [webchange.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
@@ -54,3 +55,9 @@
     [(re-frame/subscribe [::available-books])])
   (fn [[available-books]]
     available-books))
+
+(re-frame/reg-event-fx
+  ::open-book
+  (fn [{:keys [db]} [_ book-id]]
+    (let [current-course (parent-state/get-current-course db)]
+      {:dispatch [::routes/redirect :book-library-read :id current-course :book-id book-id]})))

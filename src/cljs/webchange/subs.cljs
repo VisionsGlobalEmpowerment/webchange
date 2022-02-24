@@ -273,10 +273,13 @@
   (fn [db [_ entity]]
     (get-in db (conj [:errors] entity))))
 
+(defn get-active-route
+  [db]
+  (:active-route db))
+
 (re-frame/reg-sub
   ::active-route
-  (fn [db]
-    (:active-route db)))
+  get-active-route)
 
 (re-frame/reg-sub
   ::navigation

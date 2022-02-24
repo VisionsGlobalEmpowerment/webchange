@@ -5,9 +5,11 @@
     [webchange.book-library.pages.library.state :as state]))
 
 (defn- book-list-item
-  [{:keys [cover title]}]
-  [:li.book-list-item {:title title}
-   [:img.book-title {:src cover}]])
+  [{:keys [book-id cover title]}]
+  (let [handle-click #(re-frame/dispatch [::state/open-book book-id])]
+    [:li.book-list-item {:title    title
+                         :on-click handle-click}
+     [:img.book-title {:src cover}]]))
 
 (defn- book-list
   []

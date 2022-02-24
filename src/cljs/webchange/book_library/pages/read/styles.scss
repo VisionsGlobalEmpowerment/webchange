@@ -1,0 +1,49 @@
+.book-read-page {
+    @import "../../mixins";
+
+    height: 100%;
+
+    & > .book-wrapper {
+        width: 100%;
+        height: 100%;
+    }
+
+    & > .menu-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 50%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 32px;
+
+            button {
+                @include button;
+
+                height: auto;
+                padding: 16px 40px;
+                justify-content: start;
+
+                svg {
+                    margin-right: 40px;
+                }
+
+                &.big {
+                    border-radius: 55px;
+                    font-size: 38px;
+                    padding: 32px 40px;
+                    margin-bottom: 48px;
+                }
+            }
+        }
+    }
+}

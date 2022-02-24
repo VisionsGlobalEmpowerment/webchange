@@ -114,6 +114,10 @@
   (fn [args]
     (apply redirect-to args)))
 
+(defn get-active-route
+  [db]
+  (subs/get-active-route db))
+
 (re-frame/reg-sub
   ::active-route
   (fn []

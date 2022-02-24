@@ -148,6 +148,7 @@
            (GET "/courses/:id/book-library" request (student-route request))
            (GET "/courses/:id/book-library/favorite" request (student-route request))
            (GET "/courses/:id/book-library/search" request (student-route request))
+           (GET "/courses/:id/book-library/read/:book-id" request (student-route request))
 
            ;; parent routes
            (GET "/parents" request (parent-route request))

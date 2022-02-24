@@ -198,7 +198,7 @@
                           :method :get
                           :uri    (str "/api/courses/available")}
                          handlers
-                         {:timeout 2000
+                         {:timeout 1000
                           :data    (let [cover-path "/images/book_library/tmp/"
                                          books {0 {:title    "Vera la Vaquita"
                                                    :cover    (str cover-path "cover1.png")
@@ -215,8 +215,8 @@
                                                    :cover    (str cover-path "cover5.png")
                                                    :category "animals"}}]
                                      (->> (multiply-and-shuffle {:data     books
-                                                                 :multiply 10})
-                                          (map #(merge % {:course-slug "whose-button-is-this-english-fxowbpua"}))))})))
+                                                                 :multiply 1})
+                                          (map #(merge % {:book-id "whose-button-is-this-english-fxowbpua"}))))})))
 
 ;;
 

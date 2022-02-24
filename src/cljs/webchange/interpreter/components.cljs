@@ -78,8 +78,10 @@
 
 (defn stage-wrapper
   [{:keys [mode scene-id scene-data dataset-items on-ready reset-resources?]
-    :or   {on-ready         #()
-           reset-resources? true}}]
+    :or   {mode             ::modes/game
+           on-ready         #()
+           reset-resources? true
+           dataset-items    nil}}]
   ^{:key scene-id}
   [stage {:mode             mode
           :scene-data       (get-scene-data scene-id scene-data dataset-items)

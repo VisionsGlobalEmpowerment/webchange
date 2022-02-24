@@ -1,0 +1,38 @@
+@mixin button-active {
+    background: #FFB800;
+    cursor: pointer;
+
+    svg {
+        filter: drop-shadow(0px 5px 2px #FF9900);
+    }
+}
+
+@mixin button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    $size: 96px;
+    height: $size;
+    min-width: $size;
+
+    background: linear-gradient(180deg, #FF9100 0%, #EA7000 100%);
+    border: none;
+    border-radius: $size / 2;
+
+    color: #fff;
+    font-family: Roboto;
+    font-size: 30px;
+    font-weight: bold;
+
+    text-shadow: 0px 4px 6px #D35005;
+
+    svg {
+        fill: #ffffff;
+        filter: drop-shadow(0px 5px 4px #D35005);
+    }
+
+    &:hover {
+        @include button-active;
+    }
+}

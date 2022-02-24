@@ -1,144 +1,53 @@
 .book-library-layout {
-    @mixin side-menu-button-active {
-        .icon {
-            background: #FFB800;
-
-            svg {
-                fill: #ffffff;
-                filter: drop-shadow(0px 5px 2px #FF9900);
-            }
-        }
-    }
-
-    @mixin side-menu-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 40px;
-
-        .icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            $size: 96px;
-            width: $size;
-            height: $size;
-
-            background: linear-gradient(180deg, #FF9100 0%, #EA7000 100%);
-            border-radius: 50%;
-
-            svg {
-                fill: #ffffff;
-                filter: drop-shadow(0px 5px 4px #D35005);
-            }
-        }
-
-        &:hover {
-            @include side-menu-button-active;
-        }
-
-        &.active {
-            @include side-menu-button-active;
-
-            $reflection-transparency: 0.6;
-            $reflection-transparency-delta: 0.2;
-
-            background-color: #ff8a00;
-            background-image:
-                linear-gradient(
-                    rgba(193, 52, 214, ($reflection-transparency + $reflection-transparency-delta)) 0%,
-                    rgba(152, 11, 173, $reflection-transparency) 10%,
-                    rgba(106, 0,  121, $reflection-transparency) 90%,
-                    rgba(69,  0,  79,  ($reflection-transparency + $reflection-transparency-delta)) 100%
-                ),
-                repeating-linear-gradient(
-                    45deg,
-                    #980BAD,
-                    #980BAD 10px,
-                    #6A0079 10px,
-                    #6A0079 20px
-                );
-
-            .icon {
-                box-shadow: 0px 14px 20px #5B075C;
-            }
-        }
-    }
+    @import "styles_variables.scss";
+    @import "side_menu/styles";
 
     $content-padding: 68px 120px;
-    $left-menu-background-color: #10043f;
 
-    display: grid;
-    grid-template-columns: 200px auto;
-    grid-template-rows: 40vh auto;
+    display: flex;
 
     width: 100%;
-    height: 100%;
+    min-height: 100%;
 
-    background-color: #2f2264;
+    background-color: #2F2264;
+    background-image:
+        url("/images/book_library/background/bg01.svg"),
+        url("/images/book_library/background/bg02.svg"),
+        url("/images/book_library/background/bg08.svg");
+    background-position:
+        0px 0px,
+        50px 80px,
+        50px 200px;
+    background-repeat: repeat;
 
-    & > .home {
-        background-color: $left-menu-background-color;
+    & > .main-block {
+        flex: 1 1;
 
-        button {
-            @include side-menu-button;
-            width: 100%;
+        & > .toolbar {
+            height: $toolbar-height;
+            padding: $content-padding;
+
+            background-color: #2d1c79;
+            background-image: url("/images/book_library/toolbar_background.png");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            h1 {
+                font-family: Luckiest Guy;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 64px;
+                line-height: 64px;
+                text-transform: uppercase;
+
+                color: #FFFFFF;
+            }
         }
-    }
 
-    & > .toolbar {
-        background-color: #2d1c79;
-        background-image: url("/images/book_library/toolbar_background.png");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        padding: $content-padding;
-
-        h1 {
-            font-family: Luckiest Guy;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 64px;
-            line-height: 64px;
-            text-transform: uppercase;
-
-            color: #FFFFFF;
+        & > .content {
+            padding: $content-padding;
+            position: relative;
         }
-    }
-
-    & > .navigation {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: flex-start;
-
-        background-color: $left-menu-background-color;
-
-        .navigation-item {
-            @include side-menu-button;
-        }
-    }
-
-    & > .content {
-        background-color: #2F2264;
-
-        background-image:
-            url("/images/book_library/background/bg01.svg"),
-            url("/images/book_library/background/bg02.svg"),
-            url("/images/book_library/background/bg08.svg");
-        background-position:
-            0px 0px,
-            50px 80px,
-            50px 200px;
-
-        background-repeat: repeat;
-
-
-        padding: $content-padding;
     }
 }

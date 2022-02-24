@@ -9,7 +9,7 @@
         target-dimension (get target-size key)]
     (->> (* scale target-dimension)
          (- viewport-dimension)
-         (* 0.5))))
+         (* (/ 0.5 scale)))))
 
 (defn- compute-scale
   [viewport target-size stage-size]
