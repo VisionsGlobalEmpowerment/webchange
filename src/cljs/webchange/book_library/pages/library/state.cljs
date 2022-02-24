@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.book-library.state :as parent-state]
     [webchange.routes :as routes]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.map :refer [map-keys]]))
 
 (defn path-to-db
   [relative-path]
@@ -27,7 +28,12 @@
   (fn [{:keys [_]} [_ response]]
     (let [books (->> response
                      (map (fn [book]
-                            (assoc book :id (random-uuid)))))]
+                            (map-keys book
+                                      {:id        :id
+                                       :image-src :cover
+                                       :lang      :lang
+                                       :name      :title
+                                       :slug      :book-id}))))]
       {:dispatch [::set-available-books books]})))
 
 ;; Available books

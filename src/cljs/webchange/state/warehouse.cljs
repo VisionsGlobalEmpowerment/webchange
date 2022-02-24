@@ -194,29 +194,10 @@
 (re-frame/reg-event-fx
   ::load-course-books
   (fn [{:keys [_]} [_ handlers]]
-    (create-request-stub {:key    :load-course-books
-                          :method :get
-                          :uri    (str "/api/courses/available")}
-                         handlers
-                         {:timeout 1000
-                          :data    (let [cover-path "/images/book_library/tmp/"
-                                         books {0 {:title    "Vera la Vaquita"
-                                                   :cover    (str cover-path "cover1.png")
-                                                   :category "family"}
-                                                1 {:title    "In Your Own Backyard"
-                                                   :cover    (str cover-path "cover2.png")
-                                                   :category "science"}
-                                                2 {:title    "Stargazing"
-                                                   :cover    (str cover-path "cover3.png")
-                                                   :category "family"}
-                                                3 {:title "The Biggest Book of HaHa ever"
-                                                   :cover (str cover-path "cover4.png")}
-                                                4 {:title    "Pete the Cat"
-                                                   :cover    (str cover-path "cover5.png")
-                                                   :category "animals"}}]
-                                     (->> (multiply-and-shuffle {:data     books
-                                                                 :multiply 1})
-                                          (map #(merge % {:book-id "whose-button-is-this-english-fxowbpua"}))))})))
+    (create-request {:key    :load-course-books
+                     :method :get
+                     :uri    (str "/api/book-library/all")}
+                    handlers)))
 
 ;;
 
