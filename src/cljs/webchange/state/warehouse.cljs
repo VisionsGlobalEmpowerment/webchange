@@ -39,10 +39,15 @@
 
 (re-frame/reg-event-fx
   ::generic-on-success-handler
-  (fn [{:keys [_]} [_ {:keys [request-type]} success-handler response]]
-    {:dispatch-n (cond-> []
-                         (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
-                         (some? success-handler) (conj (conj success-handler response)))}))
+  (fn [{:keys [_]} [_ {:keys [request-type delay]} success-handler response]]
+    (let [handle-success (conj success-handler response)]
+      (cond-> {:dispatch-n (cond-> []
+                                   (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
+                                   (and (nil? delay)
+                                        (some? success-handler)) (conj handle-success))}
+              (and (some? success-handler)
+                   (some? delay)) (assoc :timeout {:event handle-success
+                                                   :time  delay})))))
 
 (re-frame/reg-event-fx
   ::generic-failure-handler

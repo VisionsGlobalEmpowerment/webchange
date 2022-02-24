@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.book-library.components.categories.views :refer [book-categories category-image]]
+    [webchange.book-library.components.loading-indicator.views :refer [loading-indicator]]
     [webchange.book-library.layout.views :refer [layout]]
     [webchange.book-library.pages.library.state :as state]))
 
@@ -16,9 +17,11 @@
   []
   (let [books @(re-frame/subscribe [::state/books-list])]
     [:ul.book-list
-     (for [{:keys [id] :as book} books]
-       ^{:key id}
-       [book-list-item book])]))
+     (if-not (empty? books)
+       (for [{:keys [id] :as book} books]
+         ^{:key id}
+         [book-list-item book])
+       [:div.user-message "There are no books yet..."])]))
 
 (defn- categories
   []
@@ -39,8 +42,11 @@
   [{:keys [id]}]
   (re-frame/dispatch [::state/init {:course-id id}])
   (fn []
-    [layout {:title           "Book Library"
-             :class-name      "book-library-page"
-             :toolbar-control [categories]}
-     [current-category]
-     [book-list]]))
+    (let [loading? @(re-frame/subscribe [::state/loading?])]
+      [layout {:title           "Book Library"
+               :class-name      "book-library-page"
+               :toolbar-control [categories]}
+       [current-category]
+       (if loading?
+         [loading-indicator]
+         [book-list])])))

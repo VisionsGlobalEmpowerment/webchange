@@ -21,7 +21,8 @@
 (re-frame/reg-event-fx
   ::load-books
   (fn [{:keys [_]} [_]]
-    {:dispatch [::warehouse/load-course-books {:on-success [::load-books-success]}]}))
+    {:dispatch-n [[::warehouse/load-course-books {:on-success [::load-books-success]}]
+                  [::set-state {:loading? true}]]}))
 
 (re-frame/reg-event-fx
   ::load-books-success
@@ -37,7 +38,8 @@
                                 (assoc :categories (get-in book [:metadata :categories] []))
                                 (assoc :keywords (get-in book [:metadata :keywords] []))
                                 (dissoc :metadata)))))]
-      {:dispatch [::set-available-books books]})))
+      {:dispatch-n [[::set-available-books books]
+                    [::set-state {:loading? false}]]})))
 
 ;; Available books
 
@@ -92,3 +94,24 @@
   ::set-current-category
   (fn [{:keys [db]} [_ data]]
     {:db (assoc-in db current-category-path data)}))
+
+;; State
+
+(def state-path (path-to-db [:state]))
+
+(re-frame/reg-sub
+  ::state
+  (fn [db]
+    (get-in db state-path)))
+
+(re-frame/reg-sub
+  ::loading?
+  (fn []
+    (re-frame/subscribe [::state]))
+  (fn [state]
+    (get state :loading? true)))
+
+(re-frame/reg-event-fx
+  ::set-state
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db state-path data)}))
