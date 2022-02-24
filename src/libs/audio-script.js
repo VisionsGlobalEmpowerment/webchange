@@ -539,12 +539,12 @@ var AudioScriptPlugin = /*#__PURE__*/function () {
           x2: Math.min(x + width, i * _this4.maxCanvasWidth + canvas.width),
           y2: y + height
         };
-
+	  
         if (intersection.x1 < intersection.x2) {
           var ctx = canvas.getContext('2d');
-          var x1 = intersection.x1,
+          var x1 = intersection.x1 - i * _this4.maxCanvasWidth,
               y1 = intersection.y1,
-              x2 = intersection.x2,
+              x2 = intersection.x2 - i * _this4.maxCanvasWidth,
               y2 = intersection.y2;
 
           var _map = [0, 1, 2, 3].map(function (i) {
