@@ -40,11 +40,11 @@
 ;; Categories options
 
 (def category-images-path "/images/book_library/categories/")
-(def category-images {"animals"            "animals.png"
-                      "family-and-friends" "family.png"
-                      "science-stem"       "science.png"
-                      "sports"             "sports.png"
-                      "vehicles"           "transport.png"})
+(def category-images {"animals"            "animals.svg"
+                      "family-and-friends" "family.svg"
+                      "science-stem"       "science.svg"
+                      "sports"             "sports.svg"
+                      "vehicles"           "transport.svg"})
 
 (defn- get-category-image
   [category]
