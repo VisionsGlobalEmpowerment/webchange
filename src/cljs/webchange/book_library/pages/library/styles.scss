@@ -1,0 +1,71 @@
+.book-library-page {
+    .current-category {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+
+        margin-bottom: 50px;
+
+        color: #fff;
+        font-family: Roboto;
+        font-weight: bold;
+        font-size: 36px;
+
+        img {
+            $size: 76px;
+            width: $size;
+            height: $size;
+        }
+    }
+
+    .book-list {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-column-gap: 72px;
+        grid-row-gap: 72px;
+
+        width: 100%;
+        padding: 0;
+        margin: 0;
+
+        .book-list-item {
+            display: block;
+            padding-top: 120%;
+            position: relative;
+
+            border-radius: 8px;
+            overflow: hidden;
+
+            cursor: pointer;
+            box-shadow: 0px 0px 6px #37003e;
+
+            .book-title {
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+            }
+
+            &:hover {
+                $size-dif: 5%;
+                top: -$size-dif;
+                left: -$size-dif;
+                width: (100% + ($size-dif * 2));
+                height: (100% + ($size-dif * 2));
+
+                box-shadow: 0px 0px 20px #37003e;
+            }
+        }
+    }
+
+    .user-message {
+        color: #fff;
+        font-family: Roboto;
+        font-weight: bold;
+        font-size: 32px;
+        white-space: nowrap;
+    }
+}

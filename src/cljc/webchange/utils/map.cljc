@@ -10,3 +10,11 @@
 (defn remove-nil-fields
   [object]
   (apply merge (for [[k v] object :when (not (nil? v))] {k v})))
+
+(defn map-keys
+  [data keys-map]
+  (->> (keys keys-map)
+       (select-keys data)
+       (map (fn [[field-name field-value]]
+              [(get keys-map field-name) field-value]))
+       (into {})))

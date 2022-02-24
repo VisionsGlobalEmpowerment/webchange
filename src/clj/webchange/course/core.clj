@@ -255,13 +255,15 @@
     (assoc course field value)))
 
 (defn- ->website-course
-  [course]
-  (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status :updated-at])
-      (assoc :slug (-> course :slug (codec/url-encode)))
-      (assoc :updated-at (-> course :updated-at (str)))
-      (with-course-page)
-      (with-default-image)
-      (with-host-name :image-src)))
+  ([course]
+   (->website-course course {}))
+  ([course {:keys [with-host-name?] :or {with-host-name? true}}]
+   (cond-> (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status :updated-at :metadata])
+               (assoc :slug (-> course :slug (codec/url-encode)))
+               (assoc :updated-at (-> course :updated-at (str)))
+               (with-course-page)
+               (with-default-image))
+           with-host-name? (with-host-name :image-src))))
 
 (defn- ->website-scene
   [scene]
@@ -335,9 +337,12 @@
        (map ->website-course)))
 
 (defn get-book-library
-  []
-  (->> (db/get-courses-by-status-and-type {:type "book" :status "published"})
-       (map ->website-course)))
+  ([]
+   (get-book-library {}))
+  ([{:keys [with-host-name?]
+     :or   {with-host-name? true}}]
+   (->> (db/get-courses-by-status-and-type {:type "book" :status "published"})
+        (map #(->website-course % {:with-host-name? with-host-name?})))))
 
 (defn get-books-by-website-user
   [website-user-id]

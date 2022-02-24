@@ -123,8 +123,9 @@
                          [:div {:ref        #(when % (reset! container (.-parentNode %)))
                                 :class-name (get-class-name {"stage-container"                  true
                                                              (str "current-page-" current-page) (some? current-page)})
-                                :style      {:width  "100%"
-                                             :height "100%"}}
+                                :style      {:width    "100%"
+                                             :height   "100%"
+                                             :position "relative"}}
                           (when show-scene?
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)

@@ -2,6 +2,7 @@
   (:require [bidi.bidi :as bidi]
             [pushy.core :as pushy]
             [re-frame.core :as re-frame]
+            [webchange.book-library.routes :as book-library-routes]
             [webchange.events :as events]
             [webchange.subs :as subs]
             [webchange.interpreter.events :as ie]
@@ -18,22 +19,20 @@
                   "book-creator"      :book-creator
                   "s"                 {["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
                                        ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
-                  "courses"           {["/" [#"[\w-%]+" :id]]                           :course
-
-                                       ["/" [#"[\w-%]+" :id] "/editor"]                 {[""]                         :course-editor
-                                                                                         ["/" [#"[\w-%]+" :scene-id]] :course-editor-scene}
-                                       ["/" [#"[\w-%]+" :id] "/editor-v2"]              {[""]                         :course-editor-v2 #_redirected
-                                                                                         ["/concepts/" :concept-id]   :course-editor-v2-concept
-                                                                                         ["/add-concept"]             :course-editor-v2-add-concept
-                                                                                         ["/levels/" :level-id]       {["/add-lesson"]          :course-editor-v2-add-lesson
-                                                                                                                       ["/lessons/" :lesson-id] :course-editor-v2-lesson}
-                                                                                         ["/" [#"[\w-%]+" :scene-id]] :course-editor-v2-scene #_redirected}
-
-                                       ["/" [#"[\w-%]+" :course-id] "/table"]           :course-table
-                                       ["/" [#"[\w-%]+" :course-id] "/scenes-crossing"] :scenes-crossing
-
-                                       ["/" [#"[\w-%]+" :id] "/dashboard"]              :student-course-dashboard
-                                       ["/" [#"[\w-%]+" :id] "/dashboard/finished"]     :finished-activities}
+                  "courses"           {["/" [#"[\w-%]+" :id]] {[""]                    :course
+                                                               ["/editor"]             {[""]                         :course-editor
+                                                                                        ["/" [#"[\w-%]+" :scene-id]] :course-editor-scene}
+                                                               ["/editor-v2"]          {[""]                         :course-editor-v2 #_redirected
+                                                                                        ["/concepts/" :concept-id]   :course-editor-v2-concept
+                                                                                        ["/add-concept"]             :course-editor-v2-add-concept
+                                                                                        ["/levels/" :level-id]       {["/add-lesson"]          :course-editor-v2-add-lesson
+                                                                                                                      ["/lessons/" :lesson-id] :course-editor-v2-lesson}
+                                                                                        ["/" [#"[\w-%]+" :scene-id]] :course-editor-v2-scene #_redirected}
+                                                               ["/table"]              :course-table
+                                                               ["/scenes-crossing"]    :scenes-crossing
+                                                               ["/dashboard"]          :student-course-dashboard
+                                                               ["/dashboard/finished"] :finished-activities
+                                                               ["/book-library"]       book-library-routes/routes}}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
                                        ["/schools"]                                     :dashboard-schools
@@ -114,3 +113,14 @@
   :redirect
   (fn [args]
     (apply redirect-to args)))
+
+(defn get-active-route
+  [db]
+  (subs/get-active-route db))
+
+(re-frame/reg-sub
+  ::active-route
+  (fn []
+    (re-frame/subscribe [::subs/active-route]))
+  (fn [active-route]
+    active-route))

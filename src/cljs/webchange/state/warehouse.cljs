@@ -39,10 +39,15 @@
 
 (re-frame/reg-event-fx
   ::generic-on-success-handler
-  (fn [{:keys [_]} [_ {:keys [request-type]} success-handler response]]
-    {:dispatch-n (cond-> []
-                         (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
-                         (some? success-handler) (conj (conj success-handler response)))}))
+  (fn [{:keys [_]} [_ {:keys [request-type delay]} success-handler response]]
+    (let [handle-success (conj success-handler response)]
+      (cond-> {:dispatch-n (cond-> []
+                                   (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
+                                   (and (nil? delay)
+                                        (some? success-handler)) (conj handle-success))}
+              (and (some? success-handler)
+                   (some? delay)) (assoc :timeout {:event handle-success
+                                                   :time  delay})))))
 
 (re-frame/reg-event-fx
   ::generic-failure-handler
@@ -51,6 +56,38 @@
                          (not suppress-api-error?) (conj [:api-request-error key response])
                          (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                          (some? failure-handler) (conj (conj failure-handler response)))}))
+
+(re-frame.core/reg-fx
+  :timeout
+  (fn [{:keys [event time]}]
+    (js/setTimeout #(re-frame.core/dispatch event) time)))
+
+(defn- multiply-and-shuffle
+  [{:keys [data multiply]
+    :or   {multiply 1}}]
+  "- data: e.g. {0 {...} 1 {...}}"
+  (->> (range multiply)
+       (map #(->> (count data) (range)))
+       (flatten)
+       (shuffle)
+       (map #(get data %))))
+
+(defn- create-request-stub
+  [_
+   handlers
+   {:keys [timeout] :or {timeout 0} :as stub-params}]
+  {:timeout {:event [::request-stub-handler stub-params handlers]
+             :time  timeout}})
+
+(re-frame/reg-event-fx
+  ::request-stub-handler
+  (fn [{:keys [_]} [_
+                    {:keys [data result]
+                     :or   {result :success}}
+                    {:keys [on-success on-failure]}]]
+    (case result
+      :success (dispatch-if-defined on-success data)
+      :failure (dispatch-if-defined on-failure data))))
 
 (def sync-status-path (path-to-db [:sync-status]))
 
@@ -83,13 +120,8 @@
   (fn [{:keys [_]} [_ event data handlers {:keys [timeout attempts] :as poll-params}]]
     (if (= attempts 0)
       {:dispatch (:on-failure handlers)}
-      {:poll-timeout {:event [::poll-attempt event data handlers (update poll-params :attempts dec)]
-                      :time  timeout}})))
-
-(re-frame.core/reg-fx
-  :poll-timeout
-  (fn [{:keys [event time]}]
-    (js/setTimeout #(re-frame.core/dispatch event) time)))
+      {:timeout {:event [::poll-attempt event data handlers (update poll-params :attempts dec)]
+                 :time  timeout}})))
 
 ;; Templates
 
@@ -162,6 +194,22 @@
     (create-request {:key    :load-available-courses
                      :method :get
                      :uri    (str "/api/courses/available")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-course-books
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-course-books
+                     :method :get
+                     :uri    (str "/api/book-library/all")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-book-categories
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-course-books
+                     :method :get
+                     :uri    (str "/api/book-library/categories")}
                     handlers)))
 
 ;;

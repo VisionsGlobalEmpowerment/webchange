@@ -1463,12 +1463,6 @@
   (into {} (map #(identity [(:id %) %]) data)))
 
 (re-frame/reg-event-fx
-  ::set-course-dataset-items
-  (fn [{:keys [db]} [_ data]]
-    (let [prepared (prepare-datasets-items data)]
-      {:db (assoc db :dataset-items prepared)})))
-
-(re-frame/reg-event-fx
   ::set-course-datasets
   (fn [{:keys [db]} [_ data]]
     {:db (assoc db :datasets data)}))

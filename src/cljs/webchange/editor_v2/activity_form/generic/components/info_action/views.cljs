@@ -67,18 +67,6 @@
               :on-change handle-input-change
               :style     (:file-input styles)}]]))
 
-(def categories
-  [{:name "Animals"
-    :value "animals"}
-   {:name "Family and Friends"
-    :value "family-and-friends"}
-   {:name "Science/STEM"
-    :value "science-stem"}
-   {:name "Sports"
-    :value "sports"}
-   {:name "Vehicals"
-    :value "vehicals"}])
-
 (defn- book?
   [course-info]
   (= "book" (:type course-info)))
@@ -100,17 +88,18 @@
   (when (book? @data)
     (init-book-keywords! data)
     (fn [data]
-      [ui/form-control {:full-width true
-                        :margin     "normal"
-                        :style      {:margin-top 0}}
-       [ui/input-label "Select Category"]
-       [ui/select {:value (-> @data :metadata :categories (or []))
-                   :variant   "outlined"
-                   :multiple true
-                   :on-change #(swap! data assoc-in [:metadata :categories] (-> % .-target .-value))}
-        (for [{:keys [name value]} categories]
-          ^{:key value}
-          [ui/menu-item {:value value} name])]])))
+      (let [categories @(re-frame/subscribe [::info-state/book-categories])]
+        [ui/form-control {:full-width true
+                          :margin     "normal"
+                          :style      {:margin-top 0}}
+         [ui/input-label "Select Category"]
+         [ui/select {:value     (-> @data :metadata :categories (or []))
+                     :variant   "outlined"
+                     :multiple  true
+                     :on-change #(swap! data assoc-in [:metadata :categories] (-> % .-target .-value))}
+          (for [{:keys [name value]} categories]
+            ^{:key value}
+            [ui/menu-item {:value value} name])]]))))
 
 (defn course-info-modal
   [{:keys [title]}]

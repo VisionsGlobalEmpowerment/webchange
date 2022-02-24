@@ -8,6 +8,7 @@
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [ring.middleware.cookies :refer [wrap-cookies]]
             [webchange.auth.handler :refer [auth-routes]]
+            [webchange.book-library.handler :refer [book-library-api-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
             [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes]]
             [webchange.class.handler :refer [class-routes]]
@@ -145,6 +146,10 @@
            (GET "/courses/:id" request (student-route request))
            (GET "/courses/:id/dashboard" request (student-route request))
            (GET "/courses/:id/dashboard/finished" request (student-route request))
+           (GET "/courses/:id/book-library" request (student-route request))
+           (GET "/courses/:id/book-library/favorite" request (student-route request))
+           (GET "/courses/:id/book-library/search" request (student-route request))
+           (GET "/courses/:id/book-library/read/:book-id" request (student-route request))
 
            ;; parent routes
            (GET "/parents" request (parent-route request))
@@ -209,6 +214,7 @@
   global-sync-routes
   local-sync-routes
   asset-maintainer-routes
+  book-library-api-routes
   dataset-routes
   progress-routes
   child-api-routes

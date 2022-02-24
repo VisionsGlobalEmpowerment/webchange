@@ -10,13 +10,22 @@
   ::current-course-id
   current-course-id)
 
+;; Current scene id
+
+(def current-scene-id-path [:current-scene])
+
 (defn current-scene-id
   [db]
-  (get db :current-scene))
+  (get-in db current-scene-id-path))
 
 (re-frame/reg-sub
   ::current-scene-id
   current-scene-id)
+
+(re-frame/reg-event-fx
+  ::set-current-scene-id
+  (fn [{:keys [db]} [_ scene-id]]
+    {:db (assoc-in db current-scene-id-path scene-id)}))
 
 (defn scenes-data
   [db]

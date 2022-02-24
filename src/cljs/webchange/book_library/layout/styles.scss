@@ -1,0 +1,54 @@
+.book-library-layout {
+    @import "styles_variables.scss";
+    @import "side_menu/styles";
+
+    $content-padding: 68px 120px;
+
+    display: flex;
+
+    width: 100%;
+    min-height: 100%;
+
+    background-color: #2F2264;
+    background-image:
+        url("/images/book_library/background/bg01.svg"),
+        url("/images/book_library/background/bg02.svg"),
+        url("/images/book_library/background/bg08.svg");
+    background-position:
+        0px 0px,
+        50px 80px,
+        50px 200px;
+    background-repeat: repeat;
+
+    & > .main-block {
+        flex: 1 1;
+        overflow-x: hidden;
+
+        & > .toolbar {
+            height: $toolbar-height;
+            padding: $content-padding;
+
+            background-color: #2d1c79;
+            background-image: url("/images/book_library/toolbar_background.png");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            h1 {
+                font-family: Luckiest Guy;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 64px;
+                line-height: 64px;
+                text-transform: uppercase;
+
+                color: #FFFFFF;
+            }
+        }
+
+        & > .content {
+            padding: $content-padding;
+            position: relative;
+        }
+    }
+}

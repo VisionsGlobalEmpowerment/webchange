@@ -2,6 +2,7 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
+    [webchange.book-library.views :as book-library]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.events :as ee]
@@ -63,58 +64,63 @@
       :student-id (str->int-param route-params :student-id)}])
   [dashboard route-params])
 
+(def overall-views
+  (merge book-library/views))
+
 (defn- panels
-  [panel-name route-params]
-  (case panel-name
-    :home [login-switch]
-    :login [teacher-login :sign-in]
-    :register-user [teacher-login :sign-up]
-    :course [course {:mode ::modes/game}]
-    ;; sandbox
-    :sandbox [course {:mode ::modes/sandbox}]
-    ;; editor
-    :course-editor [editor-panel-v2 (:id route-params)]
-    :course-editor-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
-    :course-editor-v2-concept [editor-panel-v2-concept (:course-id route-params) (-> route-params :concept-id js/parseInt)]
-    :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
-    :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]
-    :course-editor-v2-add-lesson [editor-panel-v2-add-lesson (:course-id route-params) (-> route-params :level-id js/parseInt)]
-    :course-table [course-table {:course-id (:course-id route-params)}]
-    :scenes-crossing [scenes-crossing {:course-id (:course-id route-params)}]
+  [route-name route-params]
+  (if-let [view (get overall-views route-name)]
+    [view route-params]
+    (case route-name
+      :home [login-switch]
+      :login [teacher-login :sign-in]
+      :register-user [teacher-login :sign-up]
+      :course [course {:mode ::modes/game}]
+      ;; sandbox
+      :sandbox [course {:mode ::modes/sandbox}]
+      ;; editor
+      :course-editor [editor-panel-v2 (:id route-params)]
+      :course-editor-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
+      :course-editor-v2-concept [editor-panel-v2-concept (:course-id route-params) (-> route-params :concept-id js/parseInt)]
+      :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
+      :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]
+      :course-editor-v2-add-lesson [editor-panel-v2-add-lesson (:course-id route-params) (-> route-params :level-id js/parseInt)]
+      :course-table [course-table {:course-id (:id route-params)}]
+      :scenes-crossing [scenes-crossing {:course-id (:id route-params)}]
 
-    ;; teacher dashboard
-    :dashboard [dashboard-panel :dashboard route-params]
-    :dashboard-classes [dashboard-panel :classes-list route-params]
-    :dashboard-class-profile [dashboard-panel :class-profile route-params]
-    :dashboard-students [dashboard-panel :students-list route-params]
-    :dashboard-student-profile [dashboard-panel :student-profile route-params]
-    :dashboard-schools [dashboard-panel :schools-list route-params]
+      ;; teacher dashboard
+      :dashboard [dashboard-panel :dashboard route-params]
+      :dashboard-classes [dashboard-panel :classes-list route-params]
+      :dashboard-class-profile [dashboard-panel :class-profile route-params]
+      :dashboard-students [dashboard-panel :students-list route-params]
+      :dashboard-student-profile [dashboard-panel :student-profile route-params]
+      :dashboard-schools [dashboard-panel :schools-list route-params]
 
-    ;; admin dashboard
-    :dashboard-courses [dashboard-panel :courses-list route-params]
+      ;; admin dashboard
+      :dashboard-courses [dashboard-panel :courses-list route-params]
 
-    ;; student dashboard
-    :student-login [student-access-form]
-    :student-dashboard [student-dashboard]
-    :student-course-dashboard [student-dashboard]
-    :finished-activities [student-dashboard-finished-page]
+      ;; student dashboard
+      :student-login [student-access-form]
+      :student-dashboard [student-dashboard]
+      :student-course-dashboard [student-dashboard]
+      :finished-activities [student-dashboard-finished-page]
 
-    ;; parent dashboard
-    :parent-dashboard [parent-dashboard/dashboard]
-    :parent-add-student [parent-dashboard/add-student]
-    :parent-help [parent-dashboard/help]
+      ;; parent dashboard
+      :parent-dashboard [parent-dashboard/dashboard]
+      :parent-add-student [parent-dashboard/add-student]
+      :parent-help [parent-dashboard/help]
 
-    ;;wizard
-    :book-creator [wizard/book-creator-panel]
-    :wizard [wizard/wizard]
-    :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
-    :game-changer [game-changer/index]
+      ;;wizard
+      :book-creator [wizard/book-creator-panel]
+      :wizard [wizard/wizard]
+      :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
+      :game-changer [game-changer/index]
 
-    ;; technical
-    :test-ui [test-ui]
+      ;; technical
+      :test-ui [test-ui]
 
-    nil [:div]
-    [page-404]))
+      nil [:div]
+      [page-404])))
 
 (defn main-panel []
   (let [{:keys [handler route-params]} @(re-frame/subscribe [::subs/active-route])]
