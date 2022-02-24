@@ -72,8 +72,13 @@
      (when (some? description)
        [label {:class-name "field-label"} description])
      [file {:type           "image"
+            :icon-src            (:src @page-data)
             :on-change      #(swap! page-data assoc :src %)
             :upload-options (:options option)}]
+
+     (if-let [src (:src @page-data)]
+       [ui/avatar {:src src}])
+
      [error-message {:field-name :src}]]
     (finally
       (destroy))))
