@@ -662,10 +662,11 @@
        (if ended?
          (start-timeout-instructions db)
          (stop-timeout-instructions)))
-     
+
      (if block-user-interaction?
        (interactions/block-user-interaction)
-       (interactions/unblock-user-interaction))
+       (if (not (some #{"fx"} (:tags action)))
+         (interactions/unblock-user-interaction)))
 
      (if ended?
        (when-not (:workflow-user-input action)
