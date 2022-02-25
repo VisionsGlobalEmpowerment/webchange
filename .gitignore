@@ -27,3 +27,4 @@ package-lock.json
 !/test/clj/webchange/resources/raw/clipart-thumbs/.gitkeep
 **/.DS_Store
 /.clj-kondo
+**/node_modules/
