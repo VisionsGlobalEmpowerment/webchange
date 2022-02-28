@@ -41,6 +41,7 @@
                                               :image-correct {:label   "Correct image"
                                                               :description "Correct image"
                                                               :type    "image"
+                                                              :optional? true
                                                               :options {:max-width  100
                                                                         :max-height 100
                                                                         :min-height 50
@@ -48,6 +49,7 @@
                                               :image-wrong-1 {:label   "Wrong image 1"
                                                               :description "Wrong image 1"
                                                               :type    "image"
+                                                              :optional? true
                                                               :options {:max-width  100
                                                                         :max-height 100
                                                                         :min-height 50
@@ -55,6 +57,7 @@
                                               :image-wrong-2 {:label   "Wrong image 2"
                                                               :description "Wrong image 2"
                                                               :type    "image"
+                                                              :optional? true
                                                               :options {:max-width  100
                                                                         :max-height 100
                                                                         :min-height 50
@@ -492,10 +495,10 @@
                        (-> ad
                          (assoc-in [:actions (keyword round-name) :data id :var-value :image-src] src)
                          (update :assets concat [{:url src, :size 1, :type "image"}])))]
-    (-> activity-data
-      (change-image correct 0)
-      (change-image wrong-1 1)
-      (change-image wrong-2 2))))
+    (cond-> activity-data
+      correct (change-image correct 0)
+      wrong-1 (change-image wrong-1 1)
+      wrong-2 (change-image wrong-2 2))))
 
 (defn create-activity
   [args]
