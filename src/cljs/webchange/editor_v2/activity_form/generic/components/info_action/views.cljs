@@ -86,20 +86,35 @@
 (defn- book-info
   [data]
   (when (book? @data)
-    (init-book-keywords! data)
-    (fn [data]
-      (let [categories @(re-frame/subscribe [::info-state/book-categories])]
-        [ui/form-control {:full-width true
-                          :margin     "normal"
-                          :style      {:margin-top 0}}
-         [ui/input-label "Select Category"]
-         [ui/select {:value     (-> @data :metadata :categories (or []))
-                     :variant   "outlined"
-                     :multiple  true
-                     :on-change #(swap! data assoc-in [:metadata :categories] (-> % .-target .-value))}
-          (for [{:keys [name value]} categories]
-            ^{:key value}
-            [ui/menu-item {:value value} name])]]))))
+    (let [uploading (atom false)
+          handle-finish-upload (fn [result]
+                                 (reset! uploading false)
+                                 (swap! data assoc :image-src (:url result)))              
+          handle-start-upload (fn [blob]
+                                (reset! uploading true)
+                                (re-frame/dispatch [::assets-events/upload-asset blob {:type      :image
+                                                                                       :on-finish handle-finish-upload}]))]  
+      (init-book-keywords! data)
+      (fn [data]
+        (let [categories @(re-frame/subscribe [::info-state/book-categories])]
+          [:div
+           [ui/form-control {:full-width true
+                             :margin     "normal"
+                             :style      {:margin-top 0}}
+            [ui/input-label "Select Category"]
+            [ui/select {:value     (-> @data :metadata :categories (or []))
+                        :variant   "outlined"
+                        :multiple  true
+                        :on-change #(swap! data assoc-in [:metadata :categories] (-> % .-target .-value))}
+             (for [{:keys [name value]} categories]
+               ^{:key value}
+               [ui/menu-item {:value value} name])]]
+           (if @uploading
+             [ui/circular-progress]
+             [ui/button {:color    "secondary"
+                         :style    {:margin-left "auto"}
+                         :on-click #(re-frame/dispatch [::info-state/update-book-preview handle-start-upload])}
+              "Update book preview"])])))))
 
 (defn course-info-modal
   [{:keys [title]}]
