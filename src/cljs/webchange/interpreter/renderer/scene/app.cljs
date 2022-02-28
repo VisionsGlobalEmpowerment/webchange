@@ -112,3 +112,17 @@
                   (.canvas (.-extract renderer) (get-stage))
                   (.-view renderer))]
      (.toBlob canvas callback))))
+
+(defn take-object-screenshot
+  [object callback]
+  (let [renderer (get-renderer)
+        stage (get-stage)
+        current-parent (.-parent object)
+        visible-state (.-visible object)]
+    (aset object "visible" true)
+    (.addChild stage object)
+    (let [canvas (.canvas (.-extract renderer) object)]
+      (.toBlob canvas (fn [b]
+                        (.addChild current-parent object)
+                        (aset object "visible" visible-state)
+                        (callback b)) "image/png"))))
