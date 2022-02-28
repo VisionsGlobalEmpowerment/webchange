@@ -31,14 +31,13 @@
                                                                       :min-height 50
                                                                       :min-width  50}}}}
                       :remove-round {:title   "Remove round",
-                                     :options {:which {:label       "Round name"
-                                                       :placeholder "Round name..."
-                                                       :type        "string"}}}
-
+                                     :options {:which {:label   "Select Round"
+                                                       :type    "lookup"
+                                                       :options []}}}
                       :edit-round {:title    "Edit round"
-                                   :options  {:which {:label       "Round name"
-                                                      :placeholder "Round name..."
-                                                      :type        "string"}
+                                   :options  {:which {:label   "Select Round"
+                                                      :type    "lookup"
+                                                      :options []}
                                               :image-correct {:label   "Correct image"
                                                               :description "Correct image"
                                                               :type    "image"
@@ -347,6 +346,25 @@
          :available-actions [{:action "highlight-spot"
                               :name   "Highlight spot"}]}})
 
+(defn- rename-rounds [activity-data]
+  (let [tracks (get-in activity-data [:metadata :tracks])
+        index (atom 0)
+        new-tracks (mapv (fn [track]
+                           (if (.startsWith (:title track) "Round")
+                             (assoc track :title (str "Round " (swap! index inc)))
+                             track))
+                     tracks)]
+    (assoc-in activity-data [:metadata :tracks] new-tracks)))
+
+(defn recreate-drop-downs [activity-data]
+  (let [num-rounds (get-in activity-data [:metadata :num-rounds])
+        options (mapv (fn [i]
+                        {:name (str "Round " (inc i)) :value i})
+                  (range num-rounds))]
+    (-> activity-data
+      (assoc-in [:metadata :actions :edit-round :options :which :options] options)
+      (assoc-in [:metadata :actions :remove-round :options :which :options] options))))
+
 (defn- create-round
   [activity-data args]
   (let [next-round (-> activity-data
@@ -392,6 +410,8 @@
                      (drop 1 x)
                      (concat [main-track] x [round-track]))]
     (-> activity-data
+        (update-in [:metadata :num-rounds] inc)
+        recreate-drop-downs
         (assoc-in [:actions (keyword item1-click-name)] (dialog/default "Item correct click"))
         (assoc-in [:actions (keyword item2-click-name)] (dialog/default "Item 1 incorrect click"))
         (assoc-in [:actions (keyword item3-click-name)] (dialog/default "Item 2 incorrect click"))
@@ -429,12 +449,16 @@
         (assoc-in [:metadata :next-round-id] next-round)
         (update :assets concat [{:url (get-in args [:image-correct :src]), :size 1, :type "image"}
                                 {:url (get-in args [:image-wrong-1 :src]), :size 1, :type "image"}
-                                {:url (get-in args [:image-wrong-2 :src]), :size 1, :type "image"}]))))
+                                {:url (get-in args [:image-wrong-2 :src]), :size 1, :type "image"}])
+        (rename-rounds))))
+
+(defn- find-round-name [index tracks]
+  (:id (nth (filter #(.startsWith (:title %) "Round") tracks) index)))
 
 (defn- remove-round
   [activity-data args]
-  (let [round-name (clojure.string/join "-" (.split (.toLowerCase (:which args)) " "))
-        tracks (get-in activity-data [:metadata :tracks])
+  (let [tracks (get-in activity-data [:metadata :tracks])
+        round-name (find-round-name (:which args) tracks)
         main-track (-> tracks
                      first
                      (update :nodes (fn [nodes]
@@ -451,12 +475,16 @@
                         (fn [data]
                           (filter #(not (= (:id %) round-name)) data))))]
     (-> activity-data
+      (update-in [:metadata :num-rounds] dec)
+      recreate-drop-downs
       (assoc-in [:metadata :tracks] new-tracks)
-      (assoc-in [:actions] new-actions))))
+      (assoc-in [:actions] new-actions)
+      (rename-rounds))))
 
 (defn- edit-round
   [activity-data args]
-  (let [round-name (clojure.string/join "-" (.split (.toLowerCase (:which args)) " "))
+  (let [tracks (get-in activity-data [:metadata :tracks])
+        round-name (find-round-name (:which args) tracks)
         correct (get-in args [:image-correct :src])
         wrong-1 (get-in args [:image-wrong-1 :src])
         wrong-2 (get-in args [:image-wrong-2 :src])
@@ -469,9 +497,10 @@
       (change-image wrong-1 1)
       (change-image wrong-2 2))))
 
-(defn create
+(defn create-activity
   [args]
-  (common/init-metadata m t args))
+  (-> (common/init-metadata m t args)
+    (assoc-in [:metadata :num-rounds] 0)))
 
 (defn update-activity
   [old-data args]
@@ -480,4 +509,4 @@
     "remove-round" (remove-round old-data args)
     "edit-round" (edit-round old-data args)))
 
-(core/register-template m create update-activity)
+(core/register-template m create-activity update-activity)
