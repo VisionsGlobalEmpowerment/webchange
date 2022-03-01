@@ -37,7 +37,11 @@
 
 (defn get-current-lang
   [db]
-  (get-in db current-lang-path))
+  (let [scene-id (translator-form.scene/scene-id db)]
+    (or
+      (get-in db [:scenes scene-id :language])
+      (get-in db [:scenes scene-id :metadata :language])
+      (get-in db [:current-course]))))
 
 (re-frame/reg-sub
   ::current-lang
@@ -46,7 +50,8 @@
 (re-frame/reg-event-fx
   ::set-current-lang
   (fn [{:keys [db]} [_ current-lang]]
-    {:db (assoc-in db current-lang-path current-lang)}))
+    (let [scene-id (translator-form.scene/scene-id db)]
+      {:db (assoc-in db [:scenes scene-id :language] current-lang)})))
 
 ;; Events
 
