@@ -12,6 +12,8 @@
        (concat [:read])
        (parent-state/path-to-db)))
 
+(def scene-slug "book")
+
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ {:keys [book-id course-id]}]]
@@ -30,14 +32,13 @@
     (let []
       {:dispatch-n [[::warehouse/load-scene
                      {:course-slug book-id
-                      :scene-slug  "book"}
+                      :scene-slug  scene-slug}
                      {:on-success [::init-scene-data]}]]})))
 
 (re-frame/reg-event-fx
   ::init-scene-data
   (fn [{:keys [_]} [_ book-data]]
-    (let [scene-slug "book"
-          scene-data book-data]
+    (let [scene-data book-data]
       {:dispatch-n [[::state/set-scene-data scene-slug scene-data]
                     [::state/set-current-scene-id scene-slug]
                     [::set-book-loaded true]]})))
@@ -147,6 +148,23 @@
 
 (re-frame/reg-event-fx
   ::read-with-sound
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::set-read-page true]
+                  [::read]]}))
+
+(re-frame/reg-event-fx
+  ::read-without-sound
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::set-read-page false]
+                  [::read]]}))
+
+(re-frame/reg-event-fx
+  ::set-read-page
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::state/update-scene-data scene-slug [:metadata :flipbook] {:read-page? value}]}))
+
+(re-frame/reg-event-fx
+  ::read
   (fn [{:keys [_]} [_]]
     {:dispatch-n [[::interpreter/start-scene]
                   [::set-reading-in-progress true]]}))

@@ -43,3 +43,8 @@
   ::set-scene-data
   (fn [{:keys [db]} [_ {:keys [scene-id scene-data]}]]
     {:db (assoc-in db [:scenes scene-id] scene-data)}))
+
+(re-frame/reg-event-fx
+  ::update-scene-data
+  (fn [{:keys [db]} [_ {:keys [scene-id data-path data-patch]}]]
+    {:db (update-in db (concat [:scenes scene-id] data-path) merge data-patch)}))

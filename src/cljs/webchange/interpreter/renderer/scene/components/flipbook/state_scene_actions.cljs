@@ -9,16 +9,32 @@
 (ce/reg-simple-executor :flipbook-read-left ::execute-flipbook-read-left)
 (ce/reg-simple-executor :flipbook-read-right ::execute-flipbook-read-right)
 
+(re-frame/reg-cofx
+  :flipbook-metadata
+  (fn [{:keys [db] :as co-effects}]
+    (let [scene-data (ce/get-scene-data db)
+          flipbook-metadata (get-in scene-data [:metadata :flipbook])]
+      (assoc co-effects :flipbook-metadata flipbook-metadata))))
+
 ;; Init
+
+(defn- read-page?
+  [action metadata]
+  (cond
+    (contains? action :read) (get action :read)
+    (contains? metadata :read-page?) (get metadata :read-page?)
+    :default true))
 
 (re-frame/reg-event-fx
   ::execute-flipbook-init
-  (fn [{:keys [db]} [_ {:keys [target read] :or {read true} :as action}]]
+  [(re-frame/inject-cofx :flipbook-metadata)]
+  (fn [{:keys [db flipbook-metadata]} [_ {:keys [target] :as action}]]
     (let [scene-id (:current-scene db)
-          component-wrapper @(get-in db [:transitions scene-id target])]
+          component-wrapper @(get-in db [:transitions scene-id target])
+          read? (read-page? action flipbook-metadata)]
       {:flipbook-init {:component-wrapper component-wrapper
-                       :read read
-                       :on-end #(ce/dispatch-success-fn action)}})))
+                       :read              read?
+                       :on-end            #(ce/dispatch-success-fn action)}})))
 
 (re-frame/reg-fx
   :flipbook-init
@@ -30,34 +46,38 @@
 
 (re-frame/reg-event-fx
   ::execute-flipbook-flip-forward
-  (fn [{:keys [db]} [_ {:keys [target read] :or {read true} :as action}]]
+  [(re-frame/inject-cofx :flipbook-metadata)]
+  (fn [{:keys [db flipbook-metadata]} [_ {:keys [target] :as action}]]
     (let [scene-id (:current-scene db)
-          component-wrapper @(get-in db [:transitions scene-id target])]
+          component-wrapper @(get-in db [:transitions scene-id target])
+          read? (read-page? action flipbook-metadata)]
       {:flipbook-flip-forward {:component-wrapper component-wrapper
-                               :read              read
+                               :read              read?
                                :on-end            #(ce/dispatch-success-fn action)}})))
 
 (re-frame/reg-fx
   :flipbook-flip-forward
   (fn [{:keys [component-wrapper read on-end]}]
-    ((:flip-forward component-wrapper) {:read read
+    ((:flip-forward component-wrapper) {:read   read
                                         :on-end on-end})))
 
 ;; Flip backward
 
 (re-frame/reg-event-fx
   ::execute-flipbook-flip-backward
-  (fn [{:keys [db]} [_ {:keys [target read] :or {read true} :as action}]]
+  [(re-frame/inject-cofx :flipbook-metadata)]
+  (fn [{:keys [db flipbook-metadata]} [_ {:keys [target] :as action}]]
     (let [scene-id (:current-scene db)
-          component-wrapper @(get-in db [:transitions scene-id target])]
+          component-wrapper @(get-in db [:transitions scene-id target])
+          read? (read-page? action flipbook-metadata)]
       {:flipbook-flip-backward {:component-wrapper component-wrapper
-                                :read              read
+                                :read              read?
                                 :on-end            #(ce/dispatch-success-fn action)}})))
 
 (re-frame/reg-fx
   :flipbook-flip-backward
   (fn [{:keys [component-wrapper read on-end]}]
-    ((:flip-backward component-wrapper) {:read read
+    ((:flip-backward component-wrapper) {:read   read
                                          :on-end on-end})))
 
 (re-frame/reg-event-fx

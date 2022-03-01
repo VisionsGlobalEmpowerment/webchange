@@ -74,6 +74,13 @@
                                        :scene-data scene-data}]}))
 
 (re-frame/reg-event-fx
+  ::update-scene-data
+  (fn [{:keys [_]} [_ scene-slug data-path data-patch]]
+    {:dispatch [::core/update-scene-data {:scene-id   scene-slug
+                                          :data-path  data-path
+                                          :data-patch data-patch}]}))
+
+(re-frame/reg-event-fx
   ::update-last-saved
   (fn [{:keys [db]} _]
     {:db (assoc-in db last-saved-path (js/Date.))}))
