@@ -2,7 +2,13 @@
     @import "styles_variables.scss";
     @import "side_menu/styles";
 
-    $content-padding: 68px 120px;
+    font-size: 3vh;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    color: #FFFFFF;
+
+    $content-padding: 5vh 5vw;
 
     display: flex;
 
@@ -35,6 +41,10 @@
         overflow-x: hidden;
 
         & > .toolbar {
+            display: flex;
+            flex-direction: column;
+            gap: 4vh;
+
             height: $toolbar-height;
             padding: $content-padding;
 
@@ -46,13 +56,14 @@
 
             h1 {
                 font-family: Luckiest Guy;
-                font-style: normal;
                 font-weight: normal;
-                font-size: 64px;
-                line-height: 64px;
+                font-size: 2em;
                 text-transform: uppercase;
 
                 color: #FFFFFF;
+
+                margin: 0;
+                padding: 0;
             }
         }
 
