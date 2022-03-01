@@ -28,7 +28,7 @@
     (let [scenes (get-in db [:course-data :scene-list])
           activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
       (->> activities
-           (filter #(lessons-activity/finished? db %))
+           (filter #(lessons-activity/finished? db % activities))
            (map #(activity-letter db %))
            (map (fn [{:keys [activity activity-name level lesson letter] :as activity-data}]
                   (let [{:keys [name preview]} (get scenes (keyword activity-name))]
@@ -41,7 +41,7 @@
 (defn get-next-activity
   [db]
   (let [scenes (get-in db [:course-data :scene-list])
-        next (get-in db [:progress-data :next])
+        next (lessons-activity/get-progress-next db)
         activity (-> (get-in db [:course-data :levels])
                      (get-in [(:level next) :lessons (:lesson next) :activities (:activity next)]))]
     (merge next (scene-name->scene (:activity activity) scenes))))

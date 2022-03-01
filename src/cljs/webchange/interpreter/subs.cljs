@@ -59,7 +59,7 @@
 (re-frame/reg-sub
   ::after-current-activity
   (fn [db]
-    (->> (get-in db [:progress-data :next])
+    (->> (activity/get-progress-next db)
          (activity/next-not-finished-for db))))
 
 (re-frame/reg-sub

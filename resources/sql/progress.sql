@@ -16,6 +16,12 @@ WHERE id = :id
 SELECT * FROM course_progresses
 WHERE user_id = :user_id and course_id = :course_id
 
+-- :name get-progress-for-course :? :*
+-- :doc get all the users associated with course id
+-- :result many
+SELECT * FROM course_progresses
+WHERE course_id = :course_id
+
 -- :name get-course-progresses-by-school :? :*
 -- :doc retrieves a progress record given the user id and course id
 SELECT cp.* FROM course_progresses cp

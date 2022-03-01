@@ -1,0 +1,3 @@
+{:ns webchange.migrations.add-unique-ids
+ :up-fn migrate-up
+ :down-fn migrate-down}
