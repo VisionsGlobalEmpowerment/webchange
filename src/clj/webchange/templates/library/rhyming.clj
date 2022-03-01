@@ -5,11 +5,6 @@
     [clojure.string :as str]
     [webchange.templates.utils.dialog :as dialog]))
 
-(def concept-image-options {:max-width  100
-                            :max-height 100
-                            :min-height 20
-                            :min-width  20})
-
 (def m {:id          27
         :name        "Rhyming"
         :tags        ["Independent Practice"]
@@ -37,7 +32,10 @@
                                                       :type        "string"}
                                                :img  {:label   "Dialog"
                                                       :type    "image"
-                                                      :options concept-image-options}}}
+                                                      :options {:max-width  100
+                                                                :max-height 100
+                                                                :min-height 20
+                                                                :min-width  20}}}}
                       :remove-ball {:title   "Remove ball"
                                     :options {:remove-ball {:label "Remove ball"
                                                             :type  "remove-editable-object"}}}}})
@@ -364,18 +362,17 @@
                                     :edit-form  {:select-image true
                                                  :scale true
                                                  :apply-to-all true}}}
-      ball-img-name   (merge {:type    "image"
-                              :src     (:src img)
-                              :x       100
-                              :y       85
-                              :origin {:type "center-center"}
-                              :alias   "Concept image"
-                              :editable? {:edit-form {:select-image true
-                                                      :upload-image true
-                                                      :scale true
-                                                      :flip true
-                                                      :visible true}}}
-                             concept-image-options)
+      ball-img-name {:type    "image"
+                     :src     (:src img)
+                     :x       100
+                     :y       85
+                     :origin {:type "center-center"}
+                     :alias   "Concept image"
+                     :editable? {:edit-form {:select-image true
+                                             :upload-image true
+                                             :scale true
+                                             :flip true
+                                             :visible true}}}
       ball-text-name  {:type           "text"
                        :text           text
                        :x              100
