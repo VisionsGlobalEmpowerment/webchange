@@ -115,7 +115,7 @@
                :description "Some description of flipbook mechanics and covered skills"
                :lesson-sets []
                :options     book-options
-               :actions     {:add-page       {:title   "Add page",
+               :actions     {:add-page       {:title   "Choose layout",
                                               :options page-options}
                              :add-empty-page {:title   "Add empty page",
                                               :options []}
