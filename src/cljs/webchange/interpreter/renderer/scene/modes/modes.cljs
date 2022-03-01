@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.modes.modes)
 
-(def available-modes [::game ::game-with-nav ::sandbox ::editor])
+(def available-modes [::game ::game-with-nav ::sandbox ::editor ::book-reader])
 
 (defn get-mode
   [mode-name]

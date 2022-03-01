@@ -13,11 +13,21 @@
     background-image:
         url("/images/book_library/background/bg01.svg"),
         url("/images/book_library/background/bg02.svg"),
+        url("/images/book_library/background/bg03.svg"),
+        url("/images/book_library/background/bg04.svg"),
+        url("/images/book_library/background/bg05.svg"),
+        url("/images/book_library/background/bg06.svg"),
+        url("/images/book_library/background/bg07.svg"),
         url("/images/book_library/background/bg08.svg");
     background-position:
         0px 0px,
-        50px 80px,
-        50px 200px;
+        220px 280px,
+        320px 190px,
+        320px -50px,
+        210px 20px,
+        75px 270px,
+        120px 85px,
+        560px 240px;
     background-repeat: repeat;
 
     & > .main-block {

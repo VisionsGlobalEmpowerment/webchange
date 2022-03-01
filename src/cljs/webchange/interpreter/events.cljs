@@ -10,6 +10,7 @@
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.sound :as sound]
+    [webchange.interpreter.renderer.scene.full-screen :as full-screen]
     [webchange.interpreter.renderer.question.component :as question-component]
     [webchange.progress.tags :as tags]
     [webchange.interpreter.utils :refer [add-scene-tag merge-scene-data]]
@@ -98,10 +99,7 @@
       {:db         (-> db
                        (update-in [:progress-data :student-assets level lesson activity-name] conj screenshot)
                        (update-in [:progress-data :student-assets level lesson activity-name] vec))
-       :dispatch-n (list [:progress-data-changed])
-       })))
-
-
+       :dispatch-n (list [:progress-data-changed])})))
 
 (re-frame/reg-event-fx
   ::execute-upload-screenshot
@@ -1161,18 +1159,19 @@
           progress (:progress-data db)
           events (:pending-events db)
           loading? (get-in db [:loading :save-progress])]
-      (if loading?
-        {:db (assoc db :schedule-save-progress true)}
-        {:db         (-> db
-                         (assoc-in [:loading :save-progress] true)
-                         (dissoc :pending-events))
-         :http-xhrio {:method          :post
-                      :uri             (str "/api/courses/" course-id "/current-progress")
-                      :params          {:progress progress :events events}
-                      :format          (json-request-format)
-                      :response-format (json-response-format {:keywords? true})
-                      :on-success      [::save-progress-success]
-                      :on-failure      [::save-progress-failure]}}))))
+      (cond
+        loading? {:db (assoc db :schedule-save-progress true)}
+        (some? progress) {:db         (-> db
+                                          (assoc-in [:loading :save-progress] true)
+                                          (dissoc :pending-events))
+                          :http-xhrio {:method          :post
+                                       :uri             (str "/api/courses/" course-id "/current-progress")
+                                       :params          {:progress progress :events events}
+                                       :format          (json-request-format)
+                                       :response-format (json-response-format {:keywords? true})
+                                       :on-success      [::save-progress-success]
+                                       :on-failure      [::save-progress-failure]}}
+        :default {}))))
 
 (re-frame/reg-event-fx
   ::save-progress-failure
@@ -1739,6 +1738,27 @@
                    (assoc :playing true)
                    (assoc :scene-started true))
      :dispatch [::add-pending-event :course-started]}))
+
+(re-frame/reg-event-fx
+  ::start-scene
+  (fn [{:keys [_]} [_]]
+    (vars.core/set-variable! "status" :running)
+    {:init-sound         true
+     :request-fullscreen true
+     :dispatch-n         [[::start-playing]
+                          [::trigger :start]]}))
+
+(re-frame.core/reg-fx
+  :init-sound
+  (fn []
+    (sound/init)))
+
+(re-frame.core/reg-fx
+  :request-fullscreen
+  (fn []
+    (-> (full-screen/request-fullscreen)
+        (.then full-screen/lock-screen-orientation)
+        (.catch #()))))
 
 (re-frame/reg-event-fx
   ::stop-playing

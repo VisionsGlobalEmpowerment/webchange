@@ -1,6 +1,7 @@
 (ns webchange.book-library.pages.read.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.book-library.components.loading-indicator.views :refer [loading-indicator]]
     [webchange.book-library.layout.views :refer [layout]]
     [webchange.book-library.pages.read.icons :refer [icons]]
     [webchange.book-library.pages.read.state :as state]
@@ -10,11 +11,16 @@
 
 (defn- book
   []
-  (let [{:keys [id data]} @(re-frame/subscribe [::state/book])]
-    [:div.book-wrapper
-     [interpreter {:mode        ::modes/game
-                   ;:stage-props {:show-loader-screen? false}
-                   }]]))
+  (let [book-loaded? @(re-frame/subscribe [::state/book-loaded?])
+        stage-ready? @(re-frame/subscribe [::state/stage-ready?])
+        set-stage-ready #(re-frame/dispatch [::state/set-stage-ready true])]
+    [:div {:class-name (get-class-name {"book-wrapper" true
+                                        "hidden"       (not stage-ready?)})}
+     (when book-loaded?
+       [interpreter {:mode        ::modes/book-reader
+                     :stage-props {:show-loader-screen? false
+                                   :force-show-scene?   true}
+                     :on-ready    set-stage-ready}])]))
 
 (defn- menu-item
   [{:keys [big? icon on-click text]}]
@@ -26,7 +32,7 @@
 (defn- menu
   []
   (let [show-menu? @(re-frame/subscribe [::state/show-menu?])
-        handle-read-with-sound-click #(print "read-with-sound")
+        handle-read-with-sound-click #(re-frame/dispatch [::state/read-with-sound])
         handle-read-without-sound-click #(print "read-without-sound")
         handle-favorite-click #(print "favorite")]
     (when show-menu?
@@ -43,6 +49,13 @@
                       :icon     "heart"
                       :on-click handle-favorite-click}]]])))
 
+(defn- loading
+  []
+  (let [show-loading? @(re-frame/subscribe [::state/show-loading?])]
+    (when show-loading?
+      [:div.loading-indicator-wrapper
+       [loading-indicator]])))
+
 (defn page
   [{:keys [id book-id]}]
   (re-frame/dispatch [::state/init {:course-id id
@@ -53,4 +66,5 @@
              :show-toolbar?    false
              :show-navigation? false}
      [book]
-     [menu]]))
+     [menu]
+     [loading]]))

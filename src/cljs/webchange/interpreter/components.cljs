@@ -47,7 +47,6 @@
     (and course-started
          (or scene-started auto-start))))
 
-
 (defn- get-scene-data
   [scene-id scene-data dataset-items]
   (cond
@@ -60,7 +59,7 @@
            :metadata  (:metadata scene-data)
            :started?  (scene-started? scene-id)}))
 
-(defn- start-scene
+(defn start-scene
   []
   (sound/init)
   (re-frame/dispatch [::ie/start-playing])
@@ -90,7 +89,8 @@
                    :on-ready         (fn []
                                        (when (modes/start-on-ready? mode)
                                          (start-triggers))
-                                       (on-ready))
+                                       (when (fn? on-ready)
+                                         (on-ready)))
                    :on-start-click   start-scene
                    :reset-resources? reset-resources?}
                   stage-props)]))
@@ -104,7 +104,7 @@
       (.catch #())))
 
 (defn interpreter
-  [{:keys [mode stage-props]}]
+  [{:keys [mode on-ready stage-props]}]
   (r/with-let []
     (let [scene-id @(re-frame/subscribe [::state/current-scene-id])
           scene-data @(re-frame/subscribe [::state/scene-data scene-id])
@@ -115,7 +115,8 @@
                       :scene-id      scene-id
                       :scene-data    scene-data
                       :dataset-items dataset-items
-                      :stage-props   stage-props}])
+                      :stage-props   stage-props
+                      :on-ready      on-ready}])
     (finally (component-will-unmount))))
 
 (defn course
