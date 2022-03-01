@@ -29,7 +29,39 @@
                                                             :options {:max-width  100
                                                                       :max-height 100
                                                                       :min-height 50
-                                                                      :min-width  50}}}}}})
+                                                                      :min-width  50}}}}
+                      :remove-round {:title   "Remove round",
+                                     :options {:which {:label   "Select Round"
+                                                       :type    "lookup"
+                                                       :options []}}}
+                      :edit-round {:title    "Edit round"
+                                   :options  {:which {:label   "Select Round"
+                                                      :type    "lookup"
+                                                      :options []}
+                                              :image-correct {:label   "Correct image"
+                                                              :description "Correct image"
+                                                              :type    "image"
+                                                              :optional? true
+                                                              :options {:max-width  100
+                                                                        :max-height 100
+                                                                        :min-height 50
+                                                                        :min-width  50}}
+                                              :image-wrong-1 {:label   "Wrong image 1"
+                                                              :description "Wrong image 1"
+                                                              :type    "image"
+                                                              :optional? true
+                                                              :options {:max-width  100
+                                                                        :max-height 100
+                                                                        :min-height 50
+                                                                        :min-width  50}}
+                                              :image-wrong-2 {:label   "Wrong image 2"
+                                                              :description "Wrong image 2"
+                                                              :type    "image"
+                                                              :optional? true
+                                                              :options {:max-width  100
+                                                                        :max-height 100
+                                                                        :min-height 50
+                                                                        :min-width  50}}}}}})
 
 (def t {:assets
         [{:url "/raw/img/park/slide/background2.jpg", :type "image"}
@@ -64,7 +96,8 @@
                                     :id     "stop-drag",
                                     :params {:box           "box1"
                                              :init-position {:x 810, :y 216 :duration 1}}},
-                       :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+                       :drag-start {:id "start-drag", :on "drag-start", :type "action",
+                                    :params {:box "box1"}}},
           :states     {:init-position {:x 810, :y 216}}},
          :box2
          {:type       "animation",
@@ -91,7 +124,8 @@
                                     :id     "stop-drag",
                                     :params {:box           "box2"
                                              :init-position {:x 500, :y 287 :duration 1}}},
-                       :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+                       :drag-start {:id "start-drag", :on "drag-start", :type "action",
+                                    :params {:box "box2"}}},
           :states     {:init-position {:x 500, :y 287}}},
          :box3
          {:type       "animation",
@@ -118,7 +152,8 @@
                                     :id     "stop-drag",
                                     :params {:box           "box3"
                                              :init-position {:x 655, :y 212 :duration 1}}},
-                       :drag-start {:id "start-drag", :on "drag-start", :type "action"}},
+                       :drag-start {:id "start-drag", :on "drag-start", :type "action",
+                                    :params {:box "box3"}}},
           :states     {:init-position {:x 655, :y 212}}},
          :spot
          {:type    "image",
@@ -171,9 +206,10 @@
          :check-collide        {:type "sequence-data",
                                 :data
                                 [{:fail        "unhighlight",
-                                  :type        "test-transitions-and-pointer-collide",
+                                  :type        "test-transitions-collide",
                                   :success     "highlight",
-                                  :transitions ["spot"]}]},
+                                  :from-params  [{:param-property "box", :action-property "transition-1"}]
+                                  :transition-2 "spot"}]},
          :revert-position
          {:type        "transition"
           :from-params [{:param-property "box", :action-property "transition-id"}
@@ -186,13 +222,17 @@
                                        {:type "action" :id "revert-position"}]},
          :pick-correct         {:type "sequence-data",
                                 :data
-                                [{:type     "action"
-                                  :from-var [{:var-name        "dragged-item"
-                                              :var-property    "dragged-dialog"
-                                              :action-property "id"}]}
-                                 {:id "slide-current-target", :type "action"}
-                                 {:type "empty", :duration 1000}
-                                 {:type "action" :id "script"}]},
+                                [{:type "parallel"
+                                  :data [{:type "sequence-data",
+                                          :data [{:type "empty", :duration 2000}
+                                                 {:id "slide-current-target", :type "action"}]}
+                                         {:type "sequence-data",
+                                          :data [{:type     "action"
+                                                  :from-var [{:var-name        "dragged-item"
+                                                              :var-property    "dragged-dialog"
+                                                              :action-property "id"}]}
+                                                 {:type "empty", :duration 1000}
+                                                 {:type "action" :id "script"}]}]}]},
          :spot-selected        {:type "sequence-data",
                                 :data
                                 [{:type "action" :id "unhighlight"}
@@ -236,11 +276,7 @@
            {:type "set-attribute" :target "box3" :attr-name "visible" :attr-value true}]},
          :slide-current-target
          {:type "sequence-data",
-          :data [{:to          {:ease [0.1 0.1], :bezier [{:x 770, :y 90} {:x 865, :y 460}], :duration 1.0},
-                  :type        "transition",
-                  :from-params [{:param-property "box", :action-property "transition-id"}]
-                  }
-                 {:to          {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
+          :data [{:to          {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
                   :type        "transition",
                   :from-params [{:param-property "box", :action-property "transition-id"}]}
                  {:type "empty", :duration 1000}]},
@@ -313,7 +349,26 @@
          :available-actions [{:action "highlight-spot"
                               :name   "Highlight spot"}]}})
 
-(defn- round
+(defn- rename-rounds [activity-data]
+  (let [tracks (get-in activity-data [:metadata :tracks])
+        index (atom 0)
+        new-tracks (mapv (fn [track]
+                           (if (.startsWith (:title track) "Round")
+                             (assoc track :title (str "Round " (swap! index inc)))
+                             track))
+                     tracks)]
+    (assoc-in activity-data [:metadata :tracks] new-tracks)))
+
+(defn recreate-drop-downs [activity-data]
+  (let [num-rounds (get-in activity-data [:metadata :num-rounds])
+        options (mapv (fn [i]
+                        {:name (str "Round " (inc i)) :value i})
+                  (range num-rounds))]
+    (-> activity-data
+      (assoc-in [:metadata :actions :edit-round :options :which :options] options)
+      (assoc-in [:metadata :actions :remove-round :options :which :options] options))))
+
+(defn- create-round
   [activity-data args]
   (let [next-round (-> activity-data
                        (get-in [:metadata :next-round-id])
@@ -358,6 +413,8 @@
                      (drop 1 x)
                      (concat [main-track] x [round-track]))]
     (-> activity-data
+        (update-in [:metadata :num-rounds] inc)
+        recreate-drop-downs
         (assoc-in [:actions (keyword item1-click-name)] (dialog/default "Item correct click"))
         (assoc-in [:actions (keyword item2-click-name)] (dialog/default "Item 1 incorrect click"))
         (assoc-in [:actions (keyword item3-click-name)] (dialog/default "Item 2 incorrect click"))
@@ -395,15 +452,64 @@
         (assoc-in [:metadata :next-round-id] next-round)
         (update :assets concat [{:url (get-in args [:image-correct :src]), :size 1, :type "image"}
                                 {:url (get-in args [:image-wrong-1 :src]), :size 1, :type "image"}
-                                {:url (get-in args [:image-wrong-2 :src]), :size 1, :type "image"}]))))
+                                {:url (get-in args [:image-wrong-2 :src]), :size 1, :type "image"}])
+        (rename-rounds))))
 
-(defn create
+(defn- find-round-name [index tracks]
+  (:id (nth (filter #(.startsWith (:title %) "Round") tracks) index)))
+
+(defn- remove-round
+  [activity-data args]
+  (let [tracks (get-in activity-data [:metadata :tracks])
+        round-name (find-round-name (:which args) tracks)
+        main-track (-> tracks
+                     first
+                     (update :nodes (fn [nodes]
+                                      (vec (filter #(not= (:track-id %) round-name) nodes)))))
+        new-tracks (->> tracks
+                     (filter #(not= (:id %) round-name))
+                     (drop 1)
+                     (concat [main-track])
+                     (vec))
+        actions (:actions activity-data)
+        new-actions (->  actions
+                      (select-keys (filter #(not (.startsWith (name %) round-name)) (keys actions)))
+                      (update-in [:script :data]
+                        (fn [data]
+                          (filter #(not (= (:id %) round-name)) data))))]
+    (-> activity-data
+      (update-in [:metadata :num-rounds] dec)
+      recreate-drop-downs
+      (assoc-in [:metadata :tracks] new-tracks)
+      (assoc-in [:actions] new-actions)
+      (rename-rounds))))
+
+(defn- edit-round
+  [activity-data args]
+  (let [tracks (get-in activity-data [:metadata :tracks])
+        round-name (find-round-name (:which args) tracks)
+        correct (get-in args [:image-correct :src])
+        wrong-1 (get-in args [:image-wrong-1 :src])
+        wrong-2 (get-in args [:image-wrong-2 :src])
+        change-image (fn [ad src id]
+                       (-> ad
+                         (assoc-in [:actions (keyword round-name) :data id :var-value :image-src] src)
+                         (update :assets concat [{:url src, :size 1, :type "image"}])))]
+    (cond-> activity-data
+      correct (change-image correct 0)
+      wrong-1 (change-image wrong-1 1)
+      wrong-2 (change-image wrong-2 2))))
+
+(defn create-activity
   [args]
-  (common/init-metadata m t args))
+  (-> (common/init-metadata m t args)
+    (assoc-in [:metadata :num-rounds] 0)))
 
 (defn update-activity
   [old-data args]
   (case (:action-name args)
-    "add-round" (round old-data args)))
+    "add-round" (create-round old-data args)
+    "remove-round" (remove-round old-data args)
+    "edit-round" (edit-round old-data args)))
 
-(core/register-template m create update-activity)
+(core/register-template m create-activity update-activity)
