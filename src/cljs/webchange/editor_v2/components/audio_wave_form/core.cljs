@@ -47,11 +47,11 @@
                                                  :plugins      [(.create RegionsPlugin (clj->js {:dragSelection false
                                                                                                  :slop          5
                                                                                                  :color         "hsla(400, 100%, 30%, 0.5)"}))
-                                                                (.create AudioScriptPlugin (clj->js {:container        script-div
-                                                                                                     :primaryColor     "#979797"
-                                                                                                     :secondaryColor   "#979797"
-                                                                                                     :primaryFontColor "#979797"
-                                                                                                     :timing           []}))
+                                                                (.create (.-default AudioScriptPlugin) (clj->js {:container        script-div
+                                                                                                                 :primaryColor     "#979797"
+                                                                                                                 :secondaryColor   "#979797"
+                                                                                                                 :primaryFontColor "#979797"
+                                                                                                                 :timing           []}))
                                                                 (.create TimelinePlugin (clj->js {:container          timeline-div
                                                                                                   :primaryFontColor   font-color
                                                                                                   :secondaryFontColor font-color}))]}))]
