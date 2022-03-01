@@ -9,13 +9,7 @@
                                {:url "/raw/img/flipbook/corner_left.png" :size 1 :type "image"}
                                {:url "/raw/img/flipbook/corner_right.png" :size 1 :type "image"}
                                {:url "/raw/img/flipbook/logo_2.png" :size 1 :type "image"}]
-               :objects       {:background        {:type       "rectangle"
-                                                   :x          0
-                                                   :y          0
-                                                   :width      "---"
-                                                   :height     "---"
-                                                   :fill       0xf5f5f5}
-                               :book              {:type         "flipbook"
+               :objects       {:book              {:type         "flipbook"
                                                    :transition   "book"
                                                    :x            0
                                                    :y            0
@@ -60,9 +54,11 @@
                                                    :src              "/raw/img/flipbook/corner_right.png"
                                                    :actions          {:click {:id "next-page-click" :on "click" :type "action"}}
                                                    :interpreter-mode "!editor"}}
-               :scene-objects [["background"] ["book"] ["prev-page" "next-page" "page-numbers"]]
-               :actions       {:start-scene     {:type "sequence-data"
-                                                 :data [{:type   "flipbook-init"
+               :scene-objects [["book"] ["prev-page" "next-page" "page-numbers"]]
+               :actions       {:render-scene    {:type   "flipbook-init"
+                                                 :target "book"}
+                               :start-scene     {:type "sequence-data"
+                                                 :data [{:type   "flipbook-read-cover"
                                                          :target "book"}]}
                                :prev-page-click {:type "sequence-data"
                                                  :data [{:type   "flipbook-flip-backward"
@@ -70,8 +66,10 @@
                                :next-page-click {:type "sequence-data"
                                                  :data [{:type   "flipbook-flip-forward"
                                                          :target "book"}]}}
-               :triggers      {:start {:on     "start"
-                                       :action "start-scene"}}
+               :triggers      {:render {:on     "render"
+                                        :action "render-scene"}
+                               :start  {:on     "start"
+                                        :action "start-scene"}}
                :metadata      {:autostart      true
                                :stage-size     :contain
                                :stages         []
@@ -85,8 +83,6 @@
   (let [page-number-margin {:h 64
                             :v 32}]
     (-> activity-data
-        (assoc-in [:objects :background :width] (* width 2))
-        (assoc-in [:objects :background :height] height)
         (assoc-in [:objects :book :width] (* width 2))
         (assoc-in [:objects :book :height] height)
         (assoc-in [:objects :page-numbers :y] (:v page-number-margin))

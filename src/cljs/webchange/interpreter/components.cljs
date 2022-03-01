@@ -87,6 +87,7 @@
     [stage (merge {:mode             mode
                    :scene-data       prepared-scene-data
                    :on-ready         (fn []
+                                       (re-frame/dispatch [::ie/trigger :render])
                                        (when (modes/start-on-ready? mode)
                                          (start-triggers))
                                        (when (fn? on-ready)
