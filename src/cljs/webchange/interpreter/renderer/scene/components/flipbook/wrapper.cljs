@@ -167,16 +167,20 @@
                    :init          (fn [{:keys [on-end]}]
                                     (let [first-page-index 0
                                           first-page (keyword (get-page-object-name @state first-page-index))
-                                          prev-control (keyword (:prev-control @state))]
+                                          prev-control (keyword (:prev-control @state))
+                                          next-control (keyword (:next-control @state))]
                                       (swap! state assoc :current-spread {:left  (dec first-page-index)
                                                                           :right first-page-index})
                                       (utils/set-position first-page (get-right-page-position @state))
                                       (utils/set-visibility first-page true)
                                       (utils/set-visibility prev-control false)
+                                      (utils/set-visibility next-control false)
                                       (on-end)))
                    :read-cover    (fn [{:keys [on-end read]}]
                                     (let [first-page-index 0
-                                          first-action (get-page-action-name @state first-page-index)]
+                                          first-action (get-page-action-name @state first-page-index)
+                                          next-control (keyword (:next-control @state))]
+                                      (utils/set-visibility next-control true)
                                       (if read
                                         (let [action (sequence-for first-action on-end)]
                                           (utils/execute-action action))

@@ -53,8 +53,9 @@
                                                    :opacity          0.7
                                                    :src              "/raw/img/flipbook/corner_right.png"
                                                    :actions          {:click {:id "next-page-click" :on "click" :type "action"}}
-                                                   :interpreter-mode "!editor"}}
-               :scene-objects [["book"] ["prev-page" "next-page" "page-numbers"]]
+                                                   :interpreter-mode "!editor"}
+                               :spine             {:type "group" :x "---" :y 0 :children []}}
+               :scene-objects [["spine" "book"] ["prev-page" "next-page" "page-numbers"]]
                :actions       {:render-scene    {:type   "flipbook-init"
                                                  :target "book"}
                                :start-scene     {:type "sequence-data"
@@ -85,11 +86,54 @@
     (-> activity-data
         (assoc-in [:objects :book :width] (* width 2))
         (assoc-in [:objects :book :height] height)
+        (assoc-in [:objects :spine :x] width)
         (assoc-in [:objects :page-numbers :y] (:v page-number-margin))
         (assoc-in [:objects :left-page-number :x] (:h page-number-margin))
         (assoc-in [:objects :right-page-number :x] (- (* width 2) (:h page-number-margin))))))
 
+(defn- add-book-spine
+  [activity-data spine-name {:keys [height]}]
+  (let [half-height (-> height (/ 2) (Math/ceil))
+        right-part-width 30
+        left-part-width 20]
+    (-> activity-data
+        (update-in [:objects spine-name :children] concat ["spine-pt-1" "spine-pt-2"
+                                                           "spine-pt-3" "spine-pt-3-2"
+                                                           "spine-pt-4" "spine-pt-4-2"])
+        (update :objects merge
+                {:spine-pt-1   {:type "polygon"
+                                :x    -30
+                                :y    0
+                                :path [[0 20] [30 0] [30 height] [0 (- height 20)]]
+                                :fill 0x349B65}
+                 :spine-pt-2   {:type "polygon"
+                                :x    (-> (- right-part-width) (- left-part-width))
+                                :y    0
+                                :fill 0x1C7D4A
+                                :path [[0 50] [left-part-width 20] [left-part-width (- height 20)] [0 (- height 50)]]}
+                 :spine-pt-3   {:type "polygon"
+                                :x    -30
+                                :y    (- half-height 300)
+                                :fill 0xBEC155
+                                :path [[0 20] [30 0] [30 20] [0 40]]}
+                 :spine-pt-3-2 {:type "polygon"
+                                :x    (-> (- right-part-width) (- left-part-width))
+                                :y    (- half-height 280)
+                                :fill 0xAFB224
+                                :path [[0 30] [left-part-width 0] [left-part-width 20] [0 50]]}
+                 :spine-pt-4   {:type "polygon"
+                                :x    -30
+                                :y    (+ half-height 300)
+                                :fill 0xBEC155
+                                :path [[0 20] [30 40] [30 20] [0 0]]}
+                 :spine-pt-4-2 {:type "polygon"
+                                :x    (-> (- right-part-width) (- left-part-width))
+                                :y    (+ half-height 270)
+                                :fill 0xAFB224
+                                :path [[0 20] [left-part-width 50] [left-part-width 30] [0 0]]}}))))
+
 (defn get-template
   [page-params]
   (-> template
-      (apply-page-size page-params)))
+      (apply-page-size page-params)
+      (add-book-spine :spine page-params)))
