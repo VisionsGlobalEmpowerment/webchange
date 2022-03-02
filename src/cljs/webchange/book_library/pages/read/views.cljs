@@ -33,7 +33,7 @@
   []
   (let [show-menu? @(re-frame/subscribe [::state/show-menu?])
         handle-read-with-sound-click #(re-frame/dispatch [::state/read-with-sound])
-        handle-read-without-sound-click #(print "read-without-sound")
+        handle-read-without-sound-click #(re-frame/dispatch [::state/read-without-sound])
         handle-favorite-click #(print "favorite")]
     (when show-menu?
       [:div.menu-wrapper
@@ -42,9 +42,9 @@
                     :icon     "volume"
                     :big?     true
                     :on-click handle-read-with-sound-click}]
-        #_[menu-item {:text     "Read by myself"
-                      :icon     "no-volume"
-                      :on-click handle-read-without-sound-click}]
+        [menu-item {:text     "Read by myself"
+                    :icon     "no-volume"
+                    :on-click handle-read-without-sound-click}]
         #_[menu-item {:text     "Favorite"
                       :icon     "heart"
                       :on-click handle-favorite-click}]]])))

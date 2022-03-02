@@ -13,6 +13,7 @@
     [webchange.interpreter.renderer.scene.components.image.component :as image]
     [webchange.interpreter.renderer.scene.components.layered-background.component :as layered-background]
     [webchange.interpreter.renderer.scene.components.painting-area.component :as painting-area]
+    [webchange.interpreter.renderer.scene.components.polygon.component :as polygon]
     [webchange.interpreter.renderer.scene.components.progress.component :as progress]
     [webchange.interpreter.renderer.scene.components.rectangle.component :as rectangle]
     [webchange.interpreter.renderer.scene.components.slider.component :as slider]
@@ -51,6 +52,8 @@
                                                                     :default-props layered-background/default-props}
                                  painting-area/component-type {:constructor   painting-area/create
                                                                :default-props painting-area/default-props}
+                                 polygon/component-type {:constructor   polygon/create
+                                                         :default-props polygon/default-props}
                                  progress/component-type {:constructor   progress/create
                                                           :default-props progress/default-props}
                                  rectangle/component-type {:constructor   rectangle/create

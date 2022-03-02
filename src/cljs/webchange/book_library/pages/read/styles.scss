@@ -34,6 +34,7 @@
 
     & > .menu-wrapper {
         @include menu-container;
+        margin-left: -6vw;
 
         .menu {
             display: flex;

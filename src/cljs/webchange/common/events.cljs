@@ -256,7 +256,7 @@
                     action (->with-vars db event)]
                 (assoc-in context [:coeffects :event] action)))))
 
-(defn- get-scene-data
+(defn get-scene-data
   [db]
   (get-in db [:scenes (:current-scene db)]))
 

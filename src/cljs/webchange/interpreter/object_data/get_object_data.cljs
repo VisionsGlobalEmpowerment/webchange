@@ -107,6 +107,11 @@
                                       (with-filter-params)
                                       (merge {:object-name (keyword name)})
                                       (filter-extra-props []))
+                       :polygon (-> object
+                                    (with-group-params)
+                                    (with-filter-params)
+                                    (merge {:object-name (keyword name)})
+                                    (filter-extra-props []))
                        :carousel (-> object
                                      (merge {:object-name (keyword name)})
                                      (filter-extra-props []))
