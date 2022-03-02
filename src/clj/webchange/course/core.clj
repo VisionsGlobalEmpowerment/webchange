@@ -759,8 +759,7 @@
            (-> (get editable? :drag) true? not)
            (not (true? editable?))) (concat [:x :y])
           (not editable?) (concat [:visible])
-          (= type "group") (concat [:children])
-          (= type "text") (concat [:fill :font-family :font-size])))
+          (= type "group") (concat [:children])))
 
 (defn- update-object
   [created-activity]
