@@ -84,7 +84,7 @@
           (if iconFlag?
             [:div
              [ui/tooltip {:title "Show course table"}
-              [ui/icon-button {:on-click #(redirect-to :course-table :course-id course-id)
+              [ui/icon-button {:on-click #(redirect-to :course-table :id course-id)
                                :style    {:position "absolute"
                                           :margin   "8px"
                                           :top      "0"

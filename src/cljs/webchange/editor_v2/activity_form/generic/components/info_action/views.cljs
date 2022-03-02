@@ -93,6 +93,7 @@
           handle-start-upload (fn [blob]
                                 (reset! uploading true)
                                 (re-frame/dispatch [::assets-events/upload-asset blob {:type      :image
+                                                                                       :options {:max-width 384 :max-height 432}
                                                                                        :on-finish handle-finish-upload}]))]  
       (init-book-keywords! data)
       (fn [data]
