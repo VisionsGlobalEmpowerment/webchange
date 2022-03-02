@@ -15,8 +15,8 @@
       (get icons icon)]]))
 
 (defn- navigation-item
-  [{:keys [active? icon on-click page title]}]
-  (let [handle-click #(on-click page)]
+  [{:keys [active? icon on-click title] :as props}]
+  (let [handle-click #(on-click props)]
     [:button {:class-name (get-class-name {"navigation-item" true
                                            "active"          active?})
               :on-click   handle-click

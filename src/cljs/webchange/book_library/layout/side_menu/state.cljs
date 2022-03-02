@@ -1,6 +1,7 @@
 (ns webchange.book-library.layout.side-menu.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.book-library.pages.library.state :as library]
     [webchange.book-library.state :as paren-state]
     [webchange.routes :as routes]))
 
@@ -17,7 +18,8 @@
   (fn [{:keys [handler]}]
     (->> [{:title "Library"
            :icon  "book"
-           :page  :book-library}
+           :page  :book-library
+           :event [::library/reset]}
           #_{:title "Favorite"
              :icon  "heart"
              :page  :book-library-favorite}
@@ -30,9 +32,10 @@
 
 (re-frame/reg-event-fx
   ::open-page
-  (fn [{:keys [db]} [_ page]]
+  (fn [{:keys [db]} [_ {:keys [event page]}]]
     (let [current-course (paren-state/get-current-course db)]
-      {:dispatch [::routes/redirect page :id current-course]})))
+      {:dispatch-n (cond-> [[::routes/redirect page :id current-course]]
+                           (some? event) (conj event))})))
 
 (def back-button-values
   {:book-library-read {:icon     "book"
