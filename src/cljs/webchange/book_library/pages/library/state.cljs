@@ -19,6 +19,11 @@
                   [::load-books]]}))
 
 (re-frame/reg-event-fx
+  ::reset
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::reset-current-category]}))
+
+(re-frame/reg-event-fx
   ::load-books
   (fn [{:keys [_]} [_]]
     {:dispatch-n [[::warehouse/load-course-books {:on-success [::load-books-success]}]
@@ -94,6 +99,11 @@
   ::set-current-category
   (fn [{:keys [db]} [_ data]]
     {:db (assoc-in db current-category-path data)}))
+
+(re-frame/reg-event-fx
+  ::reset-current-category
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::set-current-category nil]}))
 
 ;; State
 
