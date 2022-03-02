@@ -7,10 +7,8 @@
             [webchange.dataset.loader :as datasets]
             [webchange.secondary.loader :as secondary]
             [webchange.assets.loader :as assets]
-            [webchange.hackathon.loader :as hackathon]
+            [webchange.templates.loader :as templates]
             [webchange.voice-recognizer.loader :as voice-recognizer]
-            [webchange.migrations.kitkit.loader :as kitkit-book-import]
-            [webchange.migrations.onebillion.loader :as onebillion-book-import]
             [webchange.mq.zero-mq :as queues]
             [webchange.mq.zero-mq-init :as zmq-init]
             [webchange.course.loader :as courses])
@@ -33,21 +31,6 @@
       (mount/start-without #'zmq-init/zero-mq-init)
       (assets/execute args env)
       (System/exit 0))
-    (kitkit-book-import/command? args)
-    (do
-      (mount/start-without #'zmq-init/zero-mq-init)
-      (kitkit-book-import/execute args env)
-      (System/exit 0))
-    (onebillion-book-import/command? args)
-    (do
-      (mount/start-without #'zmq-init/zero-mq-init)
-      (onebillion-book-import/execute args env)
-      (System/exit 0))
-    (hackathon/command? args)
-    (do
-      (mount/start-without #'zmq-init/zero-mq-init)
-      (hackathon/execute args {})
-      (System/exit 0))
     (voice-recognizer/command? args)
     (do
       (voice-recognizer/execute args {})
@@ -61,6 +44,11 @@
     (do
       (mount/start-without #'zmq-init/zero-mq-init)
       (secondary/execute args {})
+      (System/exit 0))
+    (templates/command? args)
+    (do
+      (mount/start-without #'zmq-init/zero-mq-init)
+      (templates/execute args {})
       (System/exit 0))
     :else
     (let [port (Integer/parseInt (or (env :port) "3000"))]
