@@ -45,6 +45,10 @@
 
         right-margin {:x     (+ (:x screen) (:width screen))
                       :width screen-margin-x}
+        bottom-margin {:y      (+ (:y screen) (:height screen))
+                       :height (- (:height canvas)
+                                  (:height screen)
+                                  (:y screen))}
 
         concept-image {:x      (+ (:x screen) (:padding-x screen))
                        :y      (+ (:y screen) (:padding-y screen))
@@ -57,11 +61,21 @@
                                    (- (/ approve-button-size 2)))
                         :y      (:y screen)
                         :width  approve-button-size
-                        :height approve-button-size}]
+                        :height approve-button-size}
+
+        sound-bar-height 115
+        sound-bar {:x      screen-margin-x
+                   :y      (+ (:y bottom-margin)
+                              (/ (- (:height bottom-margin)
+                                    sound-bar-height)
+                                 2))
+                   :width  472
+                   :height sound-bar-height}]
 
     {:approve-button approve-button
      :concept-image  concept-image
-     :screen         screen}))
+     :screen         screen
+     :sound-bar      sound-bar}))
 
 (def layout-params (get-layout-params))
 
@@ -169,8 +183,11 @@
                                                          :height  128
                                                          :fill    "#FFFFFF",
                                                          :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
-                                                         :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}
-               :scene-objects [["background" "screen"]
+                                                         :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}
+                               :sound-bar               (merge {:type "sound-bar"}
+                                                               (select-keys (:sound-bar layout-params)
+                                                                            [:x :y :width :height]))}
+               :scene-objects [["background" "screen" "sound-bar"]
                                ["concept-image"]
                                ["record-button" "playback-group" "approve-group"]]
                :actions       {:show-button-record        {:type "parallel"

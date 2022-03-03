@@ -1,6 +1,5 @@
 (ns webchange.interpreter.renderer.scene.components.polygon.component
   (:require
-    [goog.object :as g]
     [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.polygon.wrapper :refer [wrap]]))
