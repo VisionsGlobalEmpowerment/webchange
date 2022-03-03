@@ -29,37 +29,63 @@
                                                         :label       "Prompt Image"
                                                         :description "What visual prompt do you want to show on the screen?"}}}}})
 
-(def template {:assets        [{:url "/raw/clipart/recording_studio/recording_studio_background.png" :type "image"}
-                               {:url "/raw/clipart/recording_studio/recording_studio_decoration.png" :type "image"}
-                               {:url "/raw/clipart/recording_studio/recording_studio_surface.png" :type "image"}
-                               {:url "/raw/clipart/recording_studio/mic.png" :type "image"}
-                               {:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}]
-               :objects       {:background              {:type       "layered-background"
-                                                         :background {:src "/raw/clipart/recording_studio/recording_studio_background.png"}
-                                                         :decoration {:src "/raw/clipart/recording_studio/recording_studio_decoration.png"}
-                                                         :surface    {:src "/raw/clipart/recording_studio/recording_studio_surface.png"}}
-                               :concept-image           {:type       "image"
-                                                         :x          965
-                                                         :y          270
-                                                         :origin     {:type "center-center"}
-                                                         :scale-x    10
-                                                         :scale-y    10
-                                                         :max-width  400
-                                                         :max-height 300
-                                                         :min-height 300
-                                                         :src        ""
-                                                         :visible    false}
-                               :mic                     {:type    "image"
-                                                         :x       960
-                                                         :y       750
-                                                         :origin  {:type "center-center"}
-                                                         :width   360
-                                                         :height  656
-                                                         :src     "/raw/clipart/recording_studio/mic.png"
-                                                         :visible true}
+(defn- get-layout-params
+  []
+  (let [canvas {:width  1920
+                :height 1080}
+
+        screen-margin-x 208
+        screen-margin-y 48
+        screen {:x         screen-margin-x
+                :y         screen-margin-y
+                :width     (- (:width canvas) (* 2 screen-margin-x))
+                :height    768
+                :padding-x 200
+                :padding-y 100}
+
+        right-margin {:x     (+ (:x screen) (:width screen))
+                      :width screen-margin-x}
+
+        concept-image {:x      (+ (:x screen) (:padding-x screen))
+                       :y      (+ (:y screen) (:padding-y screen))
+                       :width  (- (:width screen) (* 2 (:padding-x screen)))
+                       :height (- (:height screen) (* 2 (:padding-y screen)))}
+
+        approve-button-size 96
+        approve-button {:x      (+ (:x right-margin)
+                                   (/ (:width right-margin) 2)
+                                   (- (/ approve-button-size 2)))
+                        :y      (:y screen)
+                        :width  approve-button-size
+                        :height approve-button-size}]
+
+    {:approve-button approve-button
+     :concept-image  concept-image
+     :screen         screen}))
+
+(def layout-params (get-layout-params))
+
+(def template {:assets        [{:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}]
+               :objects       {:background              {:type   "rectangle"
+                                                         :x      0
+                                                         :y      0
+                                                         :width  1920
+                                                         :height 1080
+                                                         :fill   0x163760}
+                               :screen                  (merge {:type          "rectangle"
+                                                                :border-radius 32
+                                                                :fill          0xB9D8E8}
+                                                               (select-keys (:screen layout-params)
+                                                                            [:x :y :width :height]))
+                               :concept-image           (merge {:type       "image"
+                                                                :image-size "contain"
+                                                                :src        ""
+                                                                :visible    false}
+                                                               (select-keys (:concept-image layout-params)
+                                                                            [:x :y :width :height]))
                                :mari                    {:type       "animation"
-                                                         :x          1300
-                                                         :y          620
+                                                         :x          1600
+                                                         :y          800
                                                          :width      473
                                                          :height     511
                                                          :scene-name "mari"
@@ -75,7 +101,7 @@
                                                          :states     {:left {:scale-x 1} :right {:scale-x -1}}
                                                          :actions    {:click {:id "mari-click" :on "click" :type "action"}}}
                                :record-button           {:type       "group"
-                                                         :x          896 :y 513
+                                                         :x          996 :y 879
                                                          :transition "record-button"
                                                          :scene-name "record-button"
                                                          :width      128 :height 128
@@ -100,15 +126,14 @@
                                                          :width         48 :height 48
                                                          :border-radius 32
                                                          :fill          0xFFFFFF}
-                               :approve-group           {:type     "group"
-                                                         :x        1706
-                                                         :y        132
-                                                         :width    96 :height 96
-                                                         :visible  false
-                                                         :filters  [{:name "brightness" :value 0}
-                                                                    {:name "glow" :outer-strength 0 :color 0xffd700}]
-                                                         :children ["approve-background"
-                                                                    "approve-playback-button"]}
+                               :approve-group           (merge {:type     "group"
+                                                                :visible  false
+                                                                :filters  [{:name "brightness" :value 0}
+                                                                           {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                                                :children ["approve-background"
+                                                                           "approve-playback-button"]}
+                                                               (select-keys (:approve-button layout-params)
+                                                                            [:x :y :width :height]))
                                :approve-background      {:type          "rectangle"
                                                          :x             0
                                                          :y             0
@@ -118,7 +143,7 @@
                                                          :border-radius 48
                                                          :fill          0xFF5C00}
                                :playback-group          {:type     "group"
-                                                         :x        896 :y 667
+                                                         :x        796 :y 879
                                                          :width    128 :height 128
                                                          :filters  [{:name "brightness" :value 0}
                                                                     {:name "glow" :outer-strength 0 :color 0xffd700}]
@@ -162,8 +187,8 @@
                                                          :fill    "#FFFFFF",
                                                          :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
                                                          :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}
-               :scene-objects [["background"]
-                               ["concept-image" "mic" "mari"]
+               :scene-objects [["background" "screen"]
+                               ["concept-image" "mari"]
                                ["record-button" "playback-group" "approve-group"]]
                :actions       {:move-mari                 {:type "sequence-data"
                                                            :data [{:type          "transition"
