@@ -83,23 +83,6 @@
                                                                 :visible    false}
                                                                (select-keys (:concept-image layout-params)
                                                                             [:x :y :width :height]))
-                               :mari                    {:type       "animation"
-                                                         :x          1600
-                                                         :y          800
-                                                         :width      473
-                                                         :height     511
-                                                         :scene-name "mari"
-                                                         :transition "mari"
-                                                         :anim       "idle"
-                                                         :loop       true
-                                                         :name       "mari"
-                                                         :editable?  true
-                                                         :scale-x    0.5
-                                                         :scale-y    0.5
-                                                         :speed      0.35
-                                                         :start      true
-                                                         :states     {:left {:scale-x 1} :right {:scale-x -1}}
-                                                         :actions    {:click {:id "mari-click" :on "click" :type "action"}}}
                                :record-button           {:type       "group"
                                                          :x          996 :y 879
                                                          :transition "record-button"
@@ -188,20 +171,9 @@
                                                          :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
                                                          :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}
                :scene-objects [["background" "screen"]
-                               ["concept-image" "mari"]
+                               ["concept-image"]
                                ["record-button" "playback-group" "approve-group"]]
-               :actions       {:move-mari                 {:type "sequence-data"
-                                                           :data [{:type          "transition"
-                                                                   :transition-id "mari"
-                                                                   :to            {:x 450 :y 300 :duration 2}}
-                                                                  {:type "state" :id "right" :target "mari"}]}
-                               :move-mari-back            {:type "sequence-data"
-                                                           :data [{:type          "transition"
-                                                                   :transition-id "mari"
-                                                                   :to            {:x 1300 :y 620 :duration 2}}
-                                                                  {:type "state" :id "left" :target "mari"}]}
-
-                               :show-button-record        {:type "parallel"
+               :actions       {:show-button-record        {:type "parallel"
                                                            :data [{:type          "transition"
                                                                    :transition-id "record-button-icon"
                                                                    :to            {:border-radius 48 :duration 0.2
@@ -237,11 +209,6 @@
                                                            :return-immediately true
                                                            :from               {:brightness 0 :glow 0}
                                                            :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
-
-                               :mari-click                {:type       "action"
-                                                           :unique-tag "instructions"
-                                                           :from-var   [{:var-name        "tap-instructions-action"
-                                                                         :action-property "id"}]}
 
                                :record-button-click       {:type     "test-var-scalar"
                                                            :var-name "record-button-state"
@@ -337,6 +304,8 @@
                                :start {:on "start" :action "script"}}
                :metadata      {:autostart         true
                                :resources         []
+                               :guide-settings    {:show-guide true
+                                                   :character  "mari"}
                                :tracks            [{:id    "main"
                                                     :title "Main Track"
                                                     :nodes [{:type      "dialog"
