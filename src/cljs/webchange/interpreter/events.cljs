@@ -87,6 +87,7 @@
 (ce/reg-simple-executor :char-movement ::execute-char-movement)
 (ce/reg-simple-executor :log ::execute-log)
 (ce/reg-simple-executor :log-var ::execute-log-var)
+(ce/reg-simple-executor :component-action ::execute-component-action)
 
 
 (re-frame/reg-event-fx
@@ -1972,6 +1973,27 @@
   (fn [{:keys [_]} [_ {:keys [var-name] :as action}]]
     (logger/trace ">>> Log variable: " var-name ": " (vars.core/get-variable var-name))
     {:dispatch (ce/success-event action)}))
+
+(re-frame/reg-event-fx
+  ::execute-component-action
+  (fn [{:keys [db]} [_ {:keys [target action] :as a}]]
+    (let [scene-id (:current-scene db)
+          callback #(ce/dispatch-success-fn a)]
+      (if-let [component-wrapper (get-in db [:transitions scene-id target])]
+        {:component-action {:component-wrapper @component-wrapper
+                            :component-action  action
+                            :callback          callback}}
+        (do (logger/error (str "Wrapper for component '" target "' was not found"))
+            (callback))))))
+
+(re-frame/reg-fx
+  :component-action
+  (fn [{:keys [component-action component-wrapper callback]}]
+    (let [wrapper-method (get component-wrapper (keyword component-action))]
+      (if (fn? wrapper-method)
+        (wrapper-method {:callback callback})
+        (do (logger/error (str "Wrapper method '" component-action "' was not found"))
+            (callback))))))
 
 (comment
   (let [db @re-frame.db/app-db
