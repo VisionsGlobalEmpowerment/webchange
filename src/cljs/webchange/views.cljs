@@ -15,7 +15,6 @@
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.game-changer.views :as game-changer]
     [webchange.parent-dashboard.views :as parent-dashboard]
-    [webchange.student-dashboard.views :refer [student-dashboard-page student-dashboard-finished-page]]
     [webchange.student-dashboard-v2.views :refer [student-dashboard]]
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.views-login-switch :refer [login-switch]]
@@ -103,7 +102,6 @@
       :student-login [student-access-form]
       :student-dashboard [student-dashboard]
       :student-course-dashboard [student-dashboard]
-      :finished-activities [student-dashboard-finished-page]
 
       ;; parent dashboard
       :parent-dashboard [parent-dashboard/dashboard]

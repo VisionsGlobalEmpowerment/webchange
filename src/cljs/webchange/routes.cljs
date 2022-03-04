@@ -31,7 +31,6 @@
                                                                ["/table"]              :course-table
                                                                ["/scenes-crossing"]    :scenes-crossing
                                                                ["/dashboard"]          :student-course-dashboard
-                                                               ["/dashboard/finished"] :finished-activities
                                                                ["/book-library"]       book-library-routes/routes}}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
@@ -71,7 +70,6 @@
 
         ;; student dashboard
         :student-course-dashboard (re-frame/dispatch [::ie/load-course (:id route-params)])
-        :finished-activities (re-frame/dispatch [::ie/load-course (:id route-params)])
         nil))))
 
 (def history

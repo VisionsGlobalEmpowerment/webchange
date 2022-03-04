@@ -4,7 +4,7 @@
     [webchange.interpreter.utils.find-exit :refer [find-path]]
     [webchange.subs :as subs]
     [webchange.interpreter.subs :as interpreter-subs]
-    [webchange.student-dashboard.subs :as student-dashboard-subs]))
+    [webchange.student-dashboard-v2.subs :as student-dashboard-subs]))
 
 (defn- lock-object [o]
   (let [o (-> o
