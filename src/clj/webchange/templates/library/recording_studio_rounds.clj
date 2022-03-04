@@ -184,7 +184,8 @@
                                                          :fill    "#FFFFFF",
                                                          :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
                                                          :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}
-                               :sound-bar               (merge {:type "sound-bar"}
+                               :sound-bar               (merge {:type       "sound-bar"
+                                                                :transition "sound-bar"}
                                                                (select-keys (:sound-bar layout-params)
                                                                             [:x :y :width :height]))}
                :scene-objects [["background" "screen" "sound-bar"]
@@ -285,8 +286,14 @@
                                                                      :data [{:type "set-variable" :var-name "record-button-state" :var-value "record"}
                                                                             {:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
                                                                             {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
+                                                                    {:type   "component-action"
+                                                                     :target "sound-bar"
+                                                                     :action "activate"}
                                                                     {:type "action" :id "intro-dialog"}
-                                                                    {:type "action" :id "reset-controls"}]
+                                                                    {:type "action" :id "reset-controls"}
+                                                                    {:type   "component-action"
+                                                                     :target "sound-bar"
+                                                                     :action "deactivate"}]
                                                            :on-end "finish"}
                                :reset-controls            {:type "sequence-data"
                                                            :data [{:type "action" :id "hide-playback-group"}]}
