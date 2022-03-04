@@ -51,7 +51,7 @@
   ::edit-concept
   (fn [{:keys [db]} [_ concept-id]]
     (let [course-id (:current-course db)]
-      {:redirect [:course-editor-v2-concept :course-id course-id :concept-id concept-id]})))
+      {:redirect [:course-editor-v2-concept :id course-id :concept-id concept-id]})))
 
 (re-frame/reg-event-fx
   ::edit-action

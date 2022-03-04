@@ -16,7 +16,7 @@
         styles (get-styles)]
     [list-card {:title        title
                 :full-height  true
-                :on-add-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
+                :on-add-click #(redirect-to :course-editor-v2-add-concept :id course)}
      [ui/list {:style (:list-full-height styles)}
       (for [concept concepts]
         ^{:key (:id concept)}
@@ -25,7 +25,7 @@
          [ui/list-item-secondary-action
           [ui/icon-button {:aria-label "Edit"
                            :size       "small"
-                           :on-click   #(redirect-to :course-editor-v2-concept :course-id course :concept-id (:id concept))}
+                           :on-click   #(redirect-to :course-editor-v2-concept :id course :concept-id (:id concept))}
            [ic/edit {:style (:action-icon styles)}]]
           [ui/icon-button {:on-click   #(re-frame/dispatch [::concepts-events/open-delete-dataset-item-modal concept])
                            :aria-label "Delete"}
