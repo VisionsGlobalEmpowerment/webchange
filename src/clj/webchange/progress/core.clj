@@ -7,7 +7,8 @@
             [webchange.progress.tags :as tags]
             [webchange.class.core :as class]
             [webchange.course.core :as course]
-            [java-time :as jt]))
+            [java-time :as jt]
+            [clojure.string :as str]))
 
 (defn update-default-tags
   [user-id progress]
@@ -43,12 +44,20 @@
 
 (defn workflow->grid
   [levels f]
-  (let [->lesson (fn [lesson level] {:name   (str "L" (:lesson lesson))
-                                     :values (map #(f % level (:lesson lesson)) (:activities lesson))})
-        ->level (fn [level] [(:level level) (map #(->lesson % (:level level)) (:lessons level))])]
+  (let [->lesson (fn [idx lesson level] {:name   (str "L" idx)
+                                         :values (map-indexed #(f %1 %2 level idx) (:activities lesson))})
+        ->level (fn [idx level] [idx (map-indexed #(->lesson %1 %2 idx) (:lessons level))])]
     (->> levels
-         (map ->level)
+         (map-indexed ->level)
          (into {}))))
+
+(defn- with-lesson-info
+  [stat]
+  (let [[level lesson activity] (str/split (:activity-id stat) #"-")]
+    (-> stat
+        (assoc-in [:data :level] (if (empty? level) 0 (Integer/parseInt level)))
+        (assoc-in [:data :lesson] (if (empty? lesson) 0 (Integer/parseInt lesson)))
+        (assoc-in [:data :activity] (if (empty? activity) 0 (Integer/parseInt activity))))))
 
 (defn- stats->hash
   [stats]
@@ -61,6 +70,7 @@
                                                         (map ->lesson)
                                                         (into {}))])]
     (->> stats
+         (map with-lesson-info)
          (map :data)
          (group-by :level)
          (map ->level)
@@ -86,8 +96,8 @@
                                                  (get level)
                                                  (get lesson)
                                                  (get activity)))]
-    (fn [{:keys [activity scored]} level lesson]
-      (let [data (get-stat level lesson activity)]
+    (fn [activity-idx {:keys [activity scored]} level lesson]
+      (let [data (get-stat level lesson activity-idx)]
         {:label      activity
          :started    (boolean data)
          :finished   (-> data :score boolean)
@@ -116,23 +126,25 @@
                                                  (get level)
                                                  (get lesson)
                                                  (get activity)))]
-    (fn [{:keys [activity time-expected]} level lesson]
-      (let [data (get-stat level lesson activity)]
+    (fn [activity-idx {:keys [activity time-expected]} level lesson]
+      (let [data (get-stat level lesson activity-idx)]
         {:label      activity
          :started    (boolean data)
          :finished   (-> data :score boolean)
          :percentage (time->percentage (-> data :time-spent) time-expected)
          :value      (time->value (-> data (:time-spent 0)))}))))
 
-(defn get-individual-progress [course-slug student-id]
+(defn get-individual-progress [course-id student-id]
   (let [{user-id :user-id} (db/get-student {:id student-id})
-        {course-id :id} (db/get-course {:slug course-slug})
-        course-data (course/get-course-data course-slug)
+        course-data (-> (db/get-latest-course-version {:course_id course-id})
+                        :data)
         stats (db/get-user-activity-stats {:user_id user-id :course_id course-id})]
     [true {:stats  stats
            :scores (workflow->grid (:levels course-data) (activity->score stats))
            :times  (workflow->grid (:levels course-data) (activity->time stats))}]))
 
+(comment
+  (get-individual-progress 4 4))
 (defn save-events! [owner-id course-id events]
   (doseq [{created-at-string :created-at type :type :as data} events]
     (let [created-at (jt/offset-date-time created-at-string)]

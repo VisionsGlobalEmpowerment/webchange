@@ -72,6 +72,6 @@
     (is (= 1 (count retrieved)))))
 
 (deftest individual-profile-can-be-retrieved
-  (let [{student-id :student-id course-slug :course-slug data :data} (fp/activity-stat-created)
-        retrieved (-> (fp/get-individual-profile student-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats)]
+  (let [{student-id :student-id course-id :course-id data :data} (fp/activity-stat-created)
+        retrieved (-> (fp/get-individual-profile student-id course-id) :body slurp (json/read-str :key-fn keyword) :stats)]
     (is (= data (-> retrieved first :data)))))

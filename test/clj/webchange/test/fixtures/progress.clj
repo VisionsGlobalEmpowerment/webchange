@@ -48,7 +48,7 @@
   ([options]
    (let [{student-id :id user-id :user-id} (f/student-created)
          {course-id :id course-slug :slug} (f/course-created)
-         defaults {:user-id user-id :course-id course-id :activity-id "test-1-1" :data {:activity "test" :lesson 1 :level 1 :test "test"}}
+         defaults {:user-id user-id :course-id course-id :activity-id "1-1-1-test" :data {:activity-name "test" :activity 1 :lesson 1 :level 1 :test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
@@ -82,8 +82,8 @@
     (handler/dev-handler request)))
 
 (defn get-individual-profile
-  [user-id course-slug]
-  (let [url (str "/api/individual-profile/" user-id "/course/" course-slug)
+  [user-id course-id]
+  (let [url (str "/api/individual-profile/" user-id "/course/" course-id)
         request (-> (mock/request :get url)
                     f/teacher-logged-in)]
     (handler/dev-handler request)))
