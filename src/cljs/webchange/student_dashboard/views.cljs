@@ -1,5 +1,7 @@
 (ns webchange.student-dashboard.views
   (:require
+    [re-frame.core :as re-frame]
+    [webchange.student-dashboard.state :as state]
     [webchange.student-dashboard.header.views :refer [header]]
     [webchange.student-dashboard.timeline.views :refer [timeline]]
     [webchange.student-dashboard.toolbar.views :refer [toolbar]]
@@ -11,11 +13,16 @@
    [:img {:src "/images/student_dashboard/tabschool_logo.svg"}]])
 
 (defn student-dashboard
-  []
-  [:div.student-dashboard
-   [header
-    [user]
-    [logo]
-    [toolbar]]
-   [:div.content
-    [timeline]]])
+  [{:keys [id]}]
+  (re-frame/dispatch [::state/init {:course-id id}])
+  (fn []
+    [:div.student-dashboard
+     [header
+      [user]
+      [logo]
+      [toolbar]]
+     [:div.content
+      [timeline]]]))
+
+(def views
+  {:student-course-dashboard student-dashboard})

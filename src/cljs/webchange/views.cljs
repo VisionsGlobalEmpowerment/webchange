@@ -15,7 +15,7 @@
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.game-changer.views :as game-changer]
     [webchange.parent-dashboard.views :as parent-dashboard]
-    [webchange.student-dashboard.views :refer [student-dashboard]]
+    [webchange.student-dashboard.views :as student-dashboard]
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.views-login-switch :refer [login-switch]]
     [webchange.editor-v2.wizard.views :as wizard]
@@ -64,7 +64,8 @@
   [dashboard route-params])
 
 (def overall-views
-  (merge book-library/views))
+  (merge book-library/views
+         student-dashboard/views))
 
 (defn- panels
   [route-name route-params]
@@ -100,8 +101,6 @@
 
       ;; student dashboard
       :student-login [student-access-form]
-      :student-dashboard [student-dashboard]
-      :student-course-dashboard [student-dashboard]
 
       ;; parent dashboard
       :parent-dashboard [parent-dashboard/dashboard]

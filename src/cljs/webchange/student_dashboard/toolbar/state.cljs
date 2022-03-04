@@ -1,13 +1,36 @@
 (ns webchange.student-dashboard.toolbar.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.book-library.routes :as book-library]
     [webchange.events :as events]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.student-dashboard.state :as parent-state]))
+
+(re-frame/reg-sub
+  ::toolbar-items
+  (fn []
+    (->> [#_{:id    :awards
+             :title "Awards"
+             :img   "awards.png"}
+          #_{:id    :video-library
+             :title "Video Library"
+             :img   "video_library.png"}
+          {:id    :book-library
+           :title "Book Library"
+           :img   "book_library.png"}
+          {:id    :exit
+           :title "Exit"
+           :img   "exit.png"}]
+         (map (fn [{:keys [img] :as item}]
+                (assoc item :img (str "/images/student_dashboard/" img)))))))
 
 (re-frame/reg-event-fx
-  ::open-page
-  (fn [{:keys [_]} [_ page-id]]
-    {:dispatch [::events/redirect :student-dashboard]}))
+  ::handle-toolbar-item-click
+  (fn [{:keys [_]} [_ item-id]]
+    (case item-id
+      :exit {:dispatch [::exit]}
+      :book-library {:dispatch [::open-book-library]}
+      {})))
 
 (re-frame/reg-event-fx
   ::login-as-parent
@@ -28,3 +51,9 @@
       (if current-school
         {:dispatch [::events/redirect :student-login]}
         {:dispatch [::login-as-parent]}))))
+
+(re-frame/reg-event-fx
+  ::open-book-library
+  (fn [{:keys [db]} [_]]
+    (let [course-id (parent-state/get-current-course db)]
+      {:dispatch [::book-library/open-book-library {:course-id course-id}]})))
