@@ -4,20 +4,13 @@
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.progress.activity :as common-activity]))
 
-(defn- scene-name->scene [scene-name scenes]
+(defn- scene-name->scene
+  [scene-name scenes]
   (let [{:keys [name preview type]} (get scenes (keyword scene-name))]
-    {:id scene-name
-     :type type
-     :name name
+    {:id    scene-name
+     :type  type
+     :name  name
      :image preview}))
-
-(re-frame/reg-sub
-  ::course-activities
-  (fn [db]
-    (let [scenes (get-in db [:course-data :scene-list])
-          activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
-      (->> activities
-           (map #(merge % (scene-name->scene (:activity-name %) scenes)))))))
 
 (defn- activity-letter
   [db {:keys [level lesson] :as activity}]
@@ -39,35 +32,14 @@
            (map #(assoc % :completed true))
            (map #(activity-letter db %))))))
 
-(defn next-activity
-  [db]
-  (let [scenes (get-in db [:course-data :scene-list])
-        next (lessons-activity/get-progress-next db)
-        activity (-> (get-in db [:course-data :levels])
-                     (get-in [(:level next) :lessons (:lesson next) :activities (:activity next)]))]
-    (merge next (scene-name->scene (:activity activity) scenes))))
-
 (re-frame/reg-sub
   ::next-activity
-  next-activity)
-
-(re-frame/reg-sub
-  ::assessments
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))
-          is-assessment? #(= "assessment" (:type %))]
-      (->> activities
-           (map #(merge % (scene-name->scene (:activity-name %) scenes)))
-           (map #(if (lessons-activity/finished? db % activities) (assoc % :completed true) %))
-           (filter is-assessment?)))))
-
-(re-frame/reg-sub
-  ::progress-loading
-  (fn [db]
-    (or
-      (get-in db [:loading :load-course])
-      (get-in db [:loading :load-progress]))))
+          next (lessons-activity/get-progress-next db)
+          activity (-> (get-in db [:course-data :levels])
+                       (get-in [(:level next) :lessons (:lesson next) :activities (:activity next)]))]
+      (merge next (scene-name->scene (:activity activity) scenes)))))
 
 (defn last-level-done [finished]
   (apply max (map #(js/parseInt (name %)) (keys finished))))
@@ -88,23 +60,3 @@
            (map #(common-activity/activity-unique-id->index all-activities %))
            (map #(get lesson-activities %))
            (map :activity)))))
-
-(defn lesson-progress
-  [db]
-  (let [finished (get-in db [:progress-data :finished])
-        last-level (last-level-done finished)
-        last-lesson (last-lesson-done finished last-level)
-
-        finished-activities (get-in finished [last-level last-lesson])
-        activities (lessons-activity/get-activities db last-level last-lesson)]
-    (/ (count finished-activities)
-       (count activities))))
-
-(re-frame/reg-sub
-  ::overall-progress
-  (fn []
-    [(re-frame/subscribe [::course-activities])
-     (re-frame/subscribe [::finished-activities])])
-  (fn [[course-activities finished-activities]]
-    (/ (count finished-activities)
-       (count course-activities))))

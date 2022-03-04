@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard-v2.timeline.state
+(ns webchange.student-dashboard.timeline.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.events :as events]

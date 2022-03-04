@@ -1,7 +1,6 @@
 (ns webchange.interpreter.renderer.state.overlays
   (:require
     [re-frame.core :as re-frame]
-    [webchange.student-dashboard.subs :as subs]
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]

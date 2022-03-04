@@ -3,6 +3,7 @@
             [pushy.core :as pushy]
             [re-frame.core :as re-frame]
             [webchange.book-library.routes :as book-library-routes]
+            [webchange.student-dashboard.routes :as student-dashboard-routes]
             [webchange.events :as events]
             [webchange.subs :as subs]
             [webchange.interpreter.events :as ie]
@@ -30,8 +31,7 @@
                                                                                         ["/" [#"[\w-%]+" :scene-id]] :course-editor-v2-scene #_redirected}
                                                                ["/table"]              :course-table
                                                                ["/scenes-crossing"]    :scenes-crossing
-                                                               ["/dashboard"]          :student-course-dashboard
-                                                               ["/dashboard/finished"] :finished-activities
+                                                               ["/dashboard"]          student-dashboard-routes/routes
                                                                ["/book-library"]       book-library-routes/routes}}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
@@ -71,7 +71,6 @@
 
         ;; student dashboard
         :student-course-dashboard (re-frame/dispatch [::ie/load-course (:id route-params)])
-        :finished-activities (re-frame/dispatch [::ie/load-course (:id route-params)])
         nil))))
 
 (def history

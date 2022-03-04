@@ -17,6 +17,7 @@
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.variables.core :as vars.core]
+    [webchange.student-dashboard.routes :as student-dashboard]
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.events-objects-emitter]
     [webchange.interpreter.renderer.state.scene :as scene]
@@ -1430,13 +1431,13 @@
   (fn [{:keys [db]} [_ _]]
     (let [course-id (:current-course db)]
       {:dispatch-n (list [::clear-current-scene]
-                         [:open-student-course-dashboard course-id])})))
+                         [::student-dashboard/open-student-course-dashboard {:course-id course-id}])})))
 
 (re-frame/reg-event-fx
   ::open-student-course-dashboard
   (fn [{:keys [db]} [_ course-id]]
     {:dispatch-n (list [::clear-current-scene]
-                       [:open-student-course-dashboard course-id])}))
+                       [::student-dashboard/open-student-course-dashboard {:course-id course-id}])}))
 
 (re-frame/reg-event-fx
   ::load-progress

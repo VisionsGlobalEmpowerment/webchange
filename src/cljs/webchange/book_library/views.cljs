@@ -5,11 +5,6 @@
     [webchange.book-library.pages.read.views :as read]
     [webchange.book-library.pages.search.views :as search]))
 
-(defn book-library-page
-  []
-  (fn []
-    [library/page]))
-
 (def views
   {:book-library          library/page
    :book-library-favorite favorite/page

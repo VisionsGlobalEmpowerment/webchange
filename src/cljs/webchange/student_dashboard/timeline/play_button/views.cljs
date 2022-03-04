@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard-v2.timeline.play-button.views
+(ns webchange.student-dashboard.timeline.play-button.views
   (:require
     [reagent.core :as r]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))

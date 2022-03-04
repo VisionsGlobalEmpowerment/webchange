@@ -1,1 +1,39 @@
-@import "./toolbar/course_name/styles";
+.student-dashboard {
+    $play-button-size: 30vh;
+
+    @import "header/styles.scss";
+    @import "toolbar/styles.scss";
+    @import "user/styles.scss";
+    @import "timeline/styles.scss";
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    background: url("/images/student_dashboard/background_forest.png");
+    background-position: center;
+    background-size: cover;
+
+    .header-logo {
+        position: relative;
+        align-self: stretch;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+
+            object-fit: contain;
+        }
+    }
+
+    .content {
+        position: relative;
+        flex-grow: 1;
+    }
+}

@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard-v2.user.views
+(ns webchange.student-dashboard.user.views
   (:require
     [re-frame.core :as re-frame]
     [webchange.auth.subs :as as]))
