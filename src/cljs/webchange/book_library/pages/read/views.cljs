@@ -31,30 +31,26 @@
 
 (defn- menu
   []
-  (let [show-menu? @(re-frame/subscribe [::state/show-menu?])
+  (let [show-buttons? @(re-frame/subscribe [::state/show-buttons?])
+        loading? @(re-frame/subscribe [::state/show-loading?])
+
         handle-read-with-sound-click #(re-frame/dispatch [::state/read-with-sound])
         handle-read-without-sound-click #(re-frame/dispatch [::state/read-without-sound])
         handle-favorite-click #(print "favorite")]
-    (when show-menu?
-      [:div.menu-wrapper
-       [:div.menu
-        [menu-item {:text     "Read to me"
-                    :icon     "volume"
-                    :big?     true
-                    :on-click handle-read-with-sound-click}]
-        [menu-item {:text     "Read by myself"
-                    :icon     "no-volume"
-                    :on-click handle-read-without-sound-click}]
-        #_[menu-item {:text     "Favorite"
-                      :icon     "heart"
-                      :on-click handle-favorite-click}]]])))
-
-(defn- loading
-  []
-  (let [show-loading? @(re-frame/subscribe [::state/show-loading?])]
-    (when show-loading?
-      [:div.loading-indicator-wrapper
-       [loading-indicator]])))
+    [:div.menu-wrapper
+     (into [:div.menu]
+           (cond-> []
+                   loading? (concat [[loading-indicator]])
+                   show-buttons? (concat [[menu-item {:text     "Read to me"
+                                                      :icon     "volume"
+                                                      :big?     true
+                                                      :on-click handle-read-with-sound-click}]
+                                          [menu-item {:text     "Read by myself"
+                                                      :icon     "no-volume"
+                                                      :on-click handle-read-without-sound-click}]
+                                          #_[menu-item {:text     "Favorite"
+                                                        :icon     "heart"
+                                                        :on-click handle-favorite-click}]])))]))
 
 (defn page
   [{:keys [id book-id]}]
@@ -66,5 +62,4 @@
              :show-toolbar?    false
              :show-navigation? false}
      [book]
-     [menu]
-     [loading]]))
+     [menu]]))

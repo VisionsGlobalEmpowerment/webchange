@@ -1,6 +1,7 @@
 (ns webchange.book-library.layout.side-menu.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.book-library.components.button.views :refer [button]]
     [webchange.book-library.layout.icons.index :refer [icons]]
     [webchange.book-library.layout.side-menu.state :as state]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
@@ -9,20 +10,21 @@
   []
   (let [{:keys [icon title]} @(re-frame/subscribe [::state/back-button-data])
         handle-click #(re-frame/dispatch [::state/handle-back-button-click])]
-    [:div.back-button
-     [:button {:on-click handle-click
-               :title    title}
-      (get icons icon)]]))
+    [:div.back-button-container
+     [button {:icon     icon
+              :title    title
+              :on-click handle-click}]]))
 
 (defn- navigation-item
   [{:keys [active? icon on-click title] :as props}]
   (let [handle-click #(on-click props)]
-    [:button {:class-name (get-class-name {"navigation-item" true
-                                           "active"          active?})
-              :on-click   handle-click
-              :title      title}
-     [:div.icon
-      (get icons icon)]]))
+    [:div {:class-name (get-class-name {"navigation-item" true
+                                        "active"          active?})
+           :on-click   handle-click
+           :title      title}
+     [button {:icon              icon
+              :active?           active?
+              :button-class-name "navigation-item-button"}]]))
 
 (defn- navigation
   []
