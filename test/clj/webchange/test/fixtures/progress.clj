@@ -82,8 +82,8 @@
     (handler/dev-handler request)))
 
 (defn get-individual-profile
-  [user-id course-slug]
-  (let [url (str "/api/individual-profile/" user-id "/course/" course-slug)
+  [user-id course-id]
+  (let [url (str "/api/individual-profile/" user-id "/course/" course-id)
         request (-> (mock/request :get url)
                     f/teacher-logged-in)]
     (handler/dev-handler request)))

@@ -30,9 +30,9 @@
         handle)))
 
 (defn handle-get-individual-progress
-  [student-id course-slug request]
+  [student-id course-id request]
   (let [user-id (current-user request)]
-    (-> (core/get-individual-progress course-slug (Integer/parseInt student-id))
+    (-> (core/get-individual-progress (Integer/parseInt course-id) (Integer/parseInt student-id))
         handle)))
 
 (defn handle-complete-progress

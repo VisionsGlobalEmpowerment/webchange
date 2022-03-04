@@ -29,7 +29,7 @@
               :style    {:font-size       "0.8125rem"
                          :justify-content "center"
                          :padding         "5px 0px"}}
-             level])]]
+             (name level)])]]
         [ui/grid {:item true :xs 10}
          [score-table
           {:title       (:title data)

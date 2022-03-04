@@ -59,7 +59,7 @@
 (defn student-profile
   [{:keys [student profile class-id]}]
   (re-frame/dispatch [::state/init (:id student)])
-  (fn []
+  (fn [{:keys [student profile class-id]}]
     (let [student (map-student student)
           handle-edit-click #(re-frame/dispatch [::state/edit-student (:id %)])]
       [content-page
