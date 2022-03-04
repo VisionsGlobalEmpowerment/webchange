@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard-v2.subs
+(ns webchange.student-dashboard.subs
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.lessons.activity :as lessons-activity]

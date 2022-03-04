@@ -1,10 +1,10 @@
-(ns webchange.student-dashboard-v2.timeline.views
+(ns webchange.student-dashboard.timeline.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.student-dashboard-v2.timeline.state :as state]
-    [webchange.student-dashboard-v2.timeline.play-button.views :refer [play-button]]
-    [webchange.student-dashboard-v2.timeline.views-great-work :refer [great-work-button]]
+    [webchange.student-dashboard.timeline.state :as state]
+    [webchange.student-dashboard.timeline.play-button.views :refer [play-button]]
+    [webchange.student-dashboard.timeline.views-great-work :refer [great-work-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- timeline-item

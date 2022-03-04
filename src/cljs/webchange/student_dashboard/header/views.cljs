@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard-v2.header.views
+(ns webchange.student-dashboard.header.views
   (:require
     [reagent.core :as r]))
 

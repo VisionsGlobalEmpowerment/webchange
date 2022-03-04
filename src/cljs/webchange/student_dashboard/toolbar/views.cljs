@@ -1,8 +1,8 @@
-(ns webchange.student-dashboard-v2.toolbar.views
+(ns webchange.student-dashboard.toolbar.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.student-dashboard-v2.toolbar.state :as state]))
+    [webchange.student-dashboard.toolbar.state :as state]))
 
 (defn- toolbar-item
   [{:keys [img on-click title]}]

@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard-v2.toolbar.state
+(ns webchange.student-dashboard.toolbar.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.events :as events]
