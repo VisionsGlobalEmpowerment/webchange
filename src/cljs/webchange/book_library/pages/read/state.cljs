@@ -125,7 +125,7 @@
 ; show-menu?
 
 (re-frame/reg-sub
-  ::show-menu?
+  ::show-buttons?
   (fn []
     [(re-frame/subscribe [::book-loaded?])
      (re-frame/subscribe [::stage-ready?])

@@ -12,13 +12,11 @@
     align-items: center;
     justify-content: center;
 
-    $size: 96px;
-    height: $size;
-    min-width: $size;
+    width: 5vw;
 
     background: linear-gradient(180deg, #FF9100 0%, #EA7000 100%);
     border: none;
-    border-radius: $size / 2;
+    border-radius: 50%;
 
     color: #fff;
     font-family: Roboto;

@@ -1,15 +1,14 @@
 .side-menu {
     @import "../../mixins";
 
-    $block-padding: 40px;
-
-    min-width: 200px;
+    width: 11vw;
+    $block-padding: 3vw;
 
     &.with-background {
         background-color: #10043f;
     }
 
-    & > .back-button {
+    & > .back-button-container {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -17,10 +16,6 @@
 
         height: $toolbar-height;
         padding: $block-padding;
-
-        button {
-            @include button;
-        }
     }
 
     & > .navigation {
@@ -34,20 +29,11 @@
             align-items: center;
             justify-content: center;
 
+            padding: 2vw $block-padding;
+
             background: transparent;
             border: none;
             cursor: pointer;
-            padding: 40px;
-
-            .icon {
-                @include button;
-            }
-
-            &:hover {
-                .icon {
-                    @include button-active;
-                }
-            }
 
             &.active {
                 $reflection-transparency: 0.6;
@@ -69,8 +55,7 @@
                         #6A0079 20px
                     );
 
-                .icon {
-                    @include button-active;
+                .navigation-item-button {
                     box-shadow: 0px 14px 20px #5B075C;
                 }
             }

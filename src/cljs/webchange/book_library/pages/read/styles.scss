@@ -1,17 +1,7 @@
 .book-read-page {
     @import "../../mixins";
 
-    @mixin menu-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
 
-        width: 50%;
-        height: 100%;
-
-        position: absolute;
-        top: 0;
-    }
 
     height: 100%;
 
@@ -24,40 +14,54 @@
         }
     }
 
-    & > .loading-indicator-wrapper {
-        @include menu-container;
-
-        .loading-indicator {
-            width: 200px;
-        }
+    .loading-indicator {
+        width: 200px;
     }
 
     & > .menu-wrapper {
-        @include menu-container;
-        margin-left: -6vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 50%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
 
         .menu {
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            gap: 32px;
+            gap: 4vh;
+
+            width: 22vw;
 
             button {
                 @include button;
 
-                height: auto;
-                padding: 16px 40px;
+                $button-height: 6.5vh;
+
                 justify-content: start;
+                gap: $button-height / 2;
+
+                width: auto;
+                height: $button-height;
+                padding: $button-height / 2;
+
+                font-size: 0.9em;
+                border-radius: $button-height / 2;
+
+                white-space: nowrap;
 
                 svg {
-                    margin-right: 40px;
+                    height: 4vh;
                 }
 
                 &.big {
-                    border-radius: 55px;
-                    font-size: 38px;
-                    padding: 32px 40px;
-                    margin-bottom: 48px;
+                    height: 9.5vh;
+                    font-size: 1.2em;
+                    border-radius: 4.75vh;
                 }
             }
         }

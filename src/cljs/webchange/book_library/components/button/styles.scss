@@ -1,0 +1,60 @@
+.book-library-button {
+    position: relative;
+
+    width: 5vw;
+    height: 5vw;
+
+    @mixin button-active {
+        background: #FFB800;
+        cursor: pointer;
+
+        svg {
+            filter: drop-shadow(0px 5px 2px #FF9900);
+        }
+    }
+
+    & > button {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        height: 100%;
+
+        background: linear-gradient(180deg, #FF9100 0%, #EA7000 100%);
+        border: none;
+        border-radius: 50%;
+
+        color: #fff;
+        font-family: Roboto;
+        font-size: 30px;
+        font-weight: bold;
+
+        text-shadow: 0px 4px 6px #D35005;
+
+        svg {
+            position: relative;
+
+            width: 65%;
+
+            fill: #ffffff;
+            filter: drop-shadow(0px 5px 4px #D35005);
+        }
+
+        &:hover {
+            @include button-active;
+        }
+    }
+
+    &.active {
+        & > button {
+            @include button-active;
+        }
+    }
+}
+
+
