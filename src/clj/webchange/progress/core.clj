@@ -106,8 +106,10 @@
 
 (defn time->percentage
   [time expected]
-  (if (and time expected)
-    (let [elapsed (-> time (/ 1000) float Math/round)]
+  (if time
+    (let [default-expected 300
+          expected (or expected default-expected)
+          elapsed (-> time (/ 1000) float Math/round)]
       (if (> elapsed expected)
         (-> (/ expected elapsed) ->percentage)
         100))))
