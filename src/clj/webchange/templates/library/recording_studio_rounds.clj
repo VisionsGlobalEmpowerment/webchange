@@ -63,6 +63,28 @@
                         :width  approve-button-size
                         :height approve-button-size}
 
+        button-size 168
+        button-border 16
+
+        play-button {:x            50
+                     :y            300
+                     :width        button-size
+                     :height       button-size
+                     :border-width button-border}
+
+        start-record-button {:x            50
+                             :y            500
+                             :width        button-size
+                             :height       button-size
+                             :border-width button-border}
+
+        stop-record-button-size (-> button-size (* 0.8) (Math/ceil))
+        stop-record-button {:x            50
+                            :y            700
+                            :width        stop-record-button-size
+                            :height       stop-record-button-size
+                            :border-width button-border}
+
         sound-bar-height 115
         sound-bar {:x      screen-margin-x
                    :y      (+ (:y bottom-margin)
@@ -72,125 +94,239 @@
                    :width  472
                    :height sound-bar-height}]
 
-    {:approve-button approve-button
-     :concept-image  concept-image
-     :screen         screen
-     :sound-bar      sound-bar}))
+    {:approve-button      approve-button
+     :concept-image       concept-image
+     :play-button         play-button
+     :start-record-button start-record-button
+     :stop-record-button  stop-record-button
+     :screen              screen
+     :sound-bar           sound-bar}))
 
 (def layout-params (get-layout-params))
 
+(defn- add-record-button
+  [objects-data name]
+  (merge objects-data
+         {(keyword name)          {:type       "group"
+                                   :x          996 :y 879
+                                   :transition "record-button"
+                                   :scene-name "record-button"
+                                   :width      128 :height 128
+                                   :filters    [{:name "brightness" :value 0}
+                                                {:name "glow" :outer-strength 0 :color 0xffd700}],
+                                   :children   ["record-button-back" "record-button-icon" "record-button-icon-int"]
+                                   :actions    {:click {:id "record-button-click" :on "click" :type "action" :unique-tag "intro"}}}
+          :record-button-back     {:type          "rectangle"
+                                   :x             0 :y 0
+                                   :width         128 :height 128
+                                   :border-radius 24
+                                   :fill          0xFFFFFF}
+          :record-button-icon     {:type          "rectangle"
+                                   :transition    "record-button-icon"
+                                   :x             16 :y 16
+                                   :width         96 :height 96
+                                   :border-radius 48
+                                   :fill          0xED1C24}
+          :record-button-icon-int {:type          "rectangle"
+                                   :transition    "record-button-icon-int"
+                                   :x             40 :y 40
+                                   :width         48 :height 48
+                                   :border-radius 32
+                                   :fill          0xFFFFFF}}))
+
+(defn- add-play-button
+  [objects-data name]
+  (let [{:keys [x y width border-width]} (:play-button layout-params)
+
+        bg-1-size width
+        bg-2-size (- width (* 2 border-width))
+        icon-size 68
+
+        background-1-name (-> name (str "-background-1"))
+        background-2-name (-> name (str "-background-2"))
+        icon-name (-> name (str "-icon"))]
+    (merge objects-data
+           {(keyword name)              {:type     "group"
+                                         :children [background-1-name background-2-name icon-name]
+                                         :x        x
+                                         :y        y}
+            (keyword background-1-name) {:type          "rectangle"
+                                         :x             0
+                                         :y             0
+                                         :width         bg-1-size
+                                         :height        bg-1-size
+                                         :border-radius (/ bg-1-size 2)
+                                         :fill          0xFFFFFF}
+            (keyword background-2-name) {:type          "rectangle"
+                                         :x             border-width
+                                         :y             border-width
+                                         :width         bg-2-size
+                                         :height        bg-2-size
+                                         :border-radius (/ bg-2-size 2)
+                                         :fill          0x10BC2B}
+            (keyword icon-name)         {:type   "svg-path"
+                                         :x      (-> (- bg-1-size icon-size) (/ 2) (+ 15))
+                                         :y      (/ (- bg-1-size icon-size) 2)
+                                         :width  icon-size
+                                         :height icon-size
+                                         :fill   "#FFFFFF"
+                                         :data   "M50.95 27.57L6.05798 0.63479C3.39189 -0.964869 0 0.955585 0 4.06476V57.9352C0 61.0444 3.39189 62.9649 6.05798 61.3652L50.95 34.43C53.5394 32.8764 53.5394 29.1236 50.95 27.57Z"}})))
+
+(defn- add-start-record-button
+  [objects-data name]
+  (let [{:keys [x y width border-width]} (:start-record-button layout-params)
+        bg-1-size width
+        bg-2-size (- width (* 2 border-width))
+
+        background-1-name (-> name (str "-background-1"))
+        background-2-name (-> name (str "-background-2"))]
+    (merge objects-data
+           {(keyword name)              {:type     "group"
+                                         :children [background-1-name background-2-name]
+                                         :x        x
+                                         :y        y}
+            (keyword background-1-name) {:type          "rectangle"
+                                         :x             0
+                                         :y             0
+                                         :width         bg-1-size
+                                         :height        bg-1-size
+                                         :border-radius (/ bg-1-size 2)
+                                         :fill          0xFFFFFF}
+            (keyword background-2-name) {:type          "rectangle"
+                                         :x             border-width
+                                         :y             border-width
+                                         :width         bg-2-size
+                                         :height        bg-2-size
+                                         :border-radius (/ bg-2-size 2)
+                                         :fill          0xED1C24}})))
+
+(defn- add-stop-record-button
+  [objects-data name]
+  (let [{:keys [x y width border-width]} (:stop-record-button layout-params)
+        bg-1-size width
+        bg-2-size (- width (* 2 border-width))
+
+        background-1-name (-> name (str "-background-1"))
+        background-2-name (-> name (str "-background-2"))]
+    (merge objects-data
+           {(keyword name)              {:type     "group"
+                                         :children [background-1-name background-2-name]
+                                         :x        x
+                                         :y        y}
+            (keyword background-1-name) {:type          "rectangle"
+                                         :x             0
+                                         :y             0
+                                         :width         bg-1-size
+                                         :height        bg-1-size
+                                         :border-radius (* border-width 1.5)
+                                         :fill          0xFFFFFF}
+            (keyword background-2-name) {:type          "rectangle"
+                                         :x             (/ (- bg-1-size bg-2-size) 2)
+                                         :y             (/ (- bg-1-size bg-2-size) 2)
+                                         :width         bg-2-size
+                                         :height        bg-2-size
+                                         :border-radius border-width
+                                         :fill          0xED1C24}})))
+
+(defn- add-approve-button
+  [objects-data name]
+  (merge objects-data
+         {(keyword name)           (merge {:type     "group"
+                                           :visible  false
+                                           :filters  [{:name "brightness" :value 0}
+                                                      {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                           :children ["approve-background"
+                                                      "approve-playback-button"]}
+                                          (select-keys (:approve-button layout-params)
+                                                       [:x :y :width :height]))
+          :approve-background      {:type          "rectangle"
+                                    :x             0
+                                    :y             0
+                                    :transition    "approve-background"
+                                    :width         96
+                                    :height        96
+                                    :border-radius 48
+                                    :fill          0xFF5C00}
+          :approve-playback-button {:type    "svg-path"
+                                    :x       20
+                                    :y       25
+                                    :width   128
+                                    :height  128
+                                    :fill    "#FFFFFF",
+                                    :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
+                                    :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}))
+
 (def template {:assets        [{:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}]
-               :objects       {:background              {:type   "rectangle"
-                                                         :x      0
-                                                         :y      0
-                                                         :width  1920
-                                                         :height 1080
-                                                         :fill   0x163760}
-                               :screen                  (merge {:type          "rectangle"
-                                                                :border-radius 32
-                                                                :fill          0xB9D8E8}
-                                                               (select-keys (:screen layout-params)
-                                                                            [:x :y :width :height]))
-                               :concept-image           (merge {:type       "image"
-                                                                :image-size "contain"
-                                                                :src        ""
-                                                                :visible    false}
-                                                               (select-keys (:concept-image layout-params)
-                                                                            [:x :y :width :height]))
-                               :record-button           {:type       "group"
-                                                         :x          996 :y 879
-                                                         :transition "record-button"
-                                                         :scene-name "record-button"
-                                                         :width      128 :height 128
-                                                         :filters    [{:name "brightness" :value 0}
-                                                                      {:name "glow" :outer-strength 0 :color 0xffd700}],
-                                                         :children   ["record-button-back" "record-button-icon" "record-button-icon-int"]
-                                                         :actions    {:click {:id "record-button-click" :on "click" :type "action" :unique-tag "intro"}}}
-                               :record-button-back      {:type          "rectangle"
-                                                         :x             0 :y 0
-                                                         :width         128 :height 128
-                                                         :border-radius 24
-                                                         :fill          0xFFFFFF}
-                               :record-button-icon      {:type          "rectangle"
-                                                         :transition    "record-button-icon"
-                                                         :x             16 :y 16
-                                                         :width         96 :height 96
-                                                         :border-radius 48
-                                                         :fill          0xED1C24}
-                               :record-button-icon-int  {:type          "rectangle"
-                                                         :transition    "record-button-icon-int"
-                                                         :x             40 :y 40
-                                                         :width         48 :height 48
-                                                         :border-radius 32
-                                                         :fill          0xFFFFFF}
-                               :approve-group           (merge {:type     "group"
-                                                                :visible  false
-                                                                :filters  [{:name "brightness" :value 0}
-                                                                           {:name "glow" :outer-strength 0 :color 0xffd700}]
-                                                                :children ["approve-background"
-                                                                           "approve-playback-button"]}
-                                                               (select-keys (:approve-button layout-params)
-                                                                            [:x :y :width :height]))
-                               :approve-background      {:type          "rectangle"
-                                                         :x             0
-                                                         :y             0
-                                                         :transition    "approve-background"
-                                                         :width         96
-                                                         :height        96
-                                                         :border-radius 48
-                                                         :fill          0xFF5C00}
-                               :playback-group          {:type     "group"
-                                                         :x        796 :y 879
-                                                         :width    128 :height 128
-                                                         :filters  [{:name "brightness" :value 0}
-                                                                    {:name "glow" :outer-strength 0 :color 0xffd700}]
-                                                         :visible  false
-                                                         :children ["playback-background"
-                                                                    "green"
-                                                                    "run-playback-button"
-                                                                    "stop-playback-button"]}
-                               :playback-background     {:type          "rectangle"
-                                                         :x             0 :y 0
-                                                         :width         128 :height 128
-                                                         :border-radius 24
-                                                         :fill          0xFFFFFF}
-                               :green                   {:type          "rectangle"
-                                                         :transition    "green"
-                                                         :x             16 :y 16
-                                                         :width         96 :height 96
-                                                         :border-radius 48
-                                                         :fill          0x10BC2B}
-                               :run-playback-button     {:type    "svg-path"
-                                                         :x       52
-                                                         :y       42
-                                                         :fill    "#FFFFFF",
-                                                         :actions {:click {:id "run-playback-click" :on "click" :type "action"}}
-                                                         :data    "M34.2834 17.57L6.05798 0.63479C3.39189 -0.964869 0 0.955583 0 4.06476V37.9352C0 41.0444 3.39189 42.9649 6.05798 41.3652L34.2834 24.43C36.8727 22.8764 36.8727 19.1236 34.2834 17.57"}
-                               :stop-playback-button    {:type          "rectangle"
-                                                         :x             45
-                                                         :y             45
-                                                         :width         40
-                                                         :height        40
-                                                         :scene-name    "stop-playback-button"
-                                                         :visible       false
-                                                         :border-radius 10
-                                                         :actions       {:click {:id "stop-playback-click" :on "click" :type "action"}}
-                                                         :fill          0xFFFFFF}
-                               :approve-playback-button {:type    "svg-path"
-                                                         :x       20
-                                                         :y       25
-                                                         :width   128
-                                                         :height  128
-                                                         :fill    "#FFFFFF",
-                                                         :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
-                                                         :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}
-                               :sound-bar               (merge {:type       "sound-bar"
-                                                                :transition "sound-bar"}
-                                                               (select-keys (:sound-bar layout-params)
-                                                                            [:x :y :width :height]))}
+               :objects       (-> {:background           {:type   "rectangle"
+                                                          :x      0
+                                                          :y      0
+                                                          :width  1920
+                                                          :height 1080
+                                                          :fill   0x163760}
+                                   :screen               (merge {:type          "rectangle"
+                                                                 :border-radius 32
+                                                                 :fill          0xB9D8E8}
+                                                                (select-keys (:screen layout-params)
+                                                                             [:x :y :width :height]))
+                                   :concept-image        (merge {:type       "image"
+                                                                 :image-size "contain"
+                                                                 :src        ""
+                                                                 :visible    false}
+                                                                (select-keys (:concept-image layout-params)
+                                                                             [:x :y :width :height]))
+
+
+                                   :playback-group       {:type     "group"
+                                                          :x        796 :y 879
+                                                          :width    128 :height 128
+                                                          :filters  [{:name "brightness" :value 0}
+                                                                     {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                                          :visible  false
+                                                          :children ["playback-background"
+                                                                     "green"
+                                                                     "run-playback-button"
+                                                                     "stop-playback-button"]}
+                                   :playback-background  {:type          "rectangle"
+                                                          :x             0 :y 0
+                                                          :width         128 :height 128
+                                                          :border-radius 24
+                                                          :fill          0xFFFFFF}
+                                   :green                {:type          "rectangle"
+                                                          :transition    "green"
+                                                          :x             16 :y 16
+                                                          :width         96 :height 96
+                                                          :border-radius 48
+                                                          :fill          0x10BC2B}
+                                   :run-playback-button  {:type    "svg-path"
+                                                          :x       52
+                                                          :y       42
+                                                          :fill    "#FFFFFF",
+                                                          :actions {:click {:id "run-playback-click" :on "click" :type "action"}}
+                                                          :data    "M34.2834 17.57L6.05798 0.63479C3.39189 -0.964869 0 0.955583 0 4.06476V37.9352C0 41.0444 3.39189 42.9649 6.05798 41.3652L34.2834 24.43C36.8727 22.8764 36.8727 19.1236 34.2834 17.57"}
+                                   :stop-playback-button {:type          "rectangle"
+                                                          :x             45
+                                                          :y             45
+                                                          :width         40
+                                                          :height        40
+                                                          :scene-name    "stop-playback-button"
+                                                          :visible       false
+                                                          :border-radius 10
+                                                          :actions       {:click {:id "stop-playback-click" :on "click" :type "action"}}
+                                                          :fill          0xFFFFFF}
+                                   :sound-bar            (merge {:type       "sound-bar"
+                                                                 :transition "sound-bar"}
+                                                                (select-keys (:sound-bar layout-params)
+                                                                             [:x :y :width :height]))}
+                                  (add-record-button "record-button")
+                                  (add-approve-button "approve-group")
+                                  (add-play-button "play-button")
+                                  (add-start-record-button "start-record-button")
+                                  (add-stop-record-button "stop-record-button")
+                                  )
                :scene-objects [["background" "screen" "sound-bar"]
                                ["concept-image"]
-                               ["record-button" "playback-group" "approve-group"]]
+                               ["record-button" "playback-group" "approve-group"
+                                "play-button" "start-record-button" "stop-record-button"]]
                :actions       {:show-button-record        {:type "parallel"
                                                            :data [{:type          "transition"
                                                                    :transition-id "record-button-icon"
