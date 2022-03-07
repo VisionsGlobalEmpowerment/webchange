@@ -112,36 +112,6 @@
 
 (def layout-params (get-layout-params))
 
-(defn- add-record-button
-  [objects-data name]
-  (merge objects-data
-         {(keyword name)          {:type       "group"
-                                   :x          996 :y 879
-                                   :transition "record-button"
-                                   :scene-name "record-button"
-                                   :width      128 :height 128
-                                   :filters    [{:name "brightness" :value 0}
-                                                {:name "glow" :outer-strength 0 :color 0xffd700}],
-                                   :children   ["record-button-back" "record-button-icon" "record-button-icon-int"]
-                                   :actions    {:click {:id "record-button-click" :on "click" :type "action" :unique-tag "intro"}}}
-          :record-button-back     {:type          "rectangle"
-                                   :x             0 :y 0
-                                   :width         128 :height 128
-                                   :border-radius 24
-                                   :fill          0xFFFFFF}
-          :record-button-icon     {:type          "rectangle"
-                                   :transition    "record-button-icon"
-                                   :x             16 :y 16
-                                   :width         96 :height 96
-                                   :border-radius 48
-                                   :fill          0xED1C24}
-          :record-button-icon-int {:type          "rectangle"
-                                   :transition    "record-button-icon-int"
-                                   :x             40 :y 40
-                                   :width         48 :height 48
-                                   :border-radius 32
-                                   :fill          0xFFFFFF}}))
-
 (defn- with-highlight-filters
   [object-data]
   (assoc object-data :filters [{:name "brightness" :value 0}
@@ -284,7 +254,7 @@
                                          :fill          0xED1C24}})))
 
 (defn- add-approve-button
-  [objects-data name]
+  [objects-data name {:keys [on-click]}]
   (merge objects-data
          {(keyword name)           (merge {:type     "group"
                                            :visible  false
@@ -308,7 +278,7 @@
                                     :width   128
                                     :height  128
                                     :fill    "#FFFFFF",
-                                    :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
+                                    :actions {:click {:id on-click :on "click" :type "action" :unique-tag "intro"}}
                                     :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}))
 
 (defn- highlight-action
@@ -319,185 +289,59 @@
    :from               {:brightness 0 :glow 0}
    :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}})
 
-(def template {:assets        [{:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}]
-               :objects       (-> {:background           {:type   "rectangle"
-                                                          :x      0
-                                                          :y      0
-                                                          :width  1920
-                                                          :height 1080
-                                                          :fill   0x163760}
-                                   :screen               (merge {:type          "rectangle"
-                                                                 :border-radius 32
-                                                                 :fill          0xB9D8E8}
-                                                                (select-keys (:screen layout-params)
-                                                                             [:x :y :width :height]))
-                                   :concept-image        (merge {:type       "image"
-                                                                 :image-size "contain"
-                                                                 :src        ""
-                                                                 :visible    false}
-                                                                (select-keys (:concept-image layout-params)
-                                                                             [:x :y :width :height]))
-
-
-                                   :playback-group       {:type     "group"
-                                                          :x        796 :y 879
-                                                          :width    128 :height 128
-                                                          :filters  [{:name "brightness" :value 0}
-                                                                     {:name "glow" :outer-strength 0 :color 0xffd700}]
-                                                          :visible  false
-                                                          :children ["playback-background"
-                                                                     "green"
-                                                                     "run-playback-button"
-                                                                     "stop-playback-button"]}
-                                   :playback-background  {:type          "rectangle"
-                                                          :x             0 :y 0
-                                                          :width         128 :height 128
-                                                          :border-radius 24
-                                                          :fill          0xFFFFFF}
-                                   :green                {:type          "rectangle"
-                                                          :transition    "green"
-                                                          :x             16 :y 16
-                                                          :width         96 :height 96
-                                                          :border-radius 48
-                                                          :fill          0x10BC2B}
-                                   :run-playback-button  {:type    "svg-path"
-                                                          :x       52
-                                                          :y       42
-                                                          :fill    "#FFFFFF",
-                                                          :actions {:click {:id "run-playback-click" :on "click" :type "action"}}
-                                                          :data    "M34.2834 17.57L6.05798 0.63479C3.39189 -0.964869 0 0.955583 0 4.06476V37.9352C0 41.0444 3.39189 42.9649 6.05798 41.3652L34.2834 24.43C36.8727 22.8764 36.8727 19.1236 34.2834 17.57"}
-                                   :stop-playback-button {:type          "rectangle"
-                                                          :x             45
-                                                          :y             45
-                                                          :width         40
-                                                          :height        40
-                                                          :scene-name    "stop-playback-button"
-                                                          :visible       false
-                                                          :border-radius 10
-                                                          :actions       {:click {:id "stop-playback-click" :on "click" :type "action"}}
-                                                          :fill          0xFFFFFF}
-                                   :sound-bar            (merge {:type       "sound-bar"
-                                                                 :transition "sound-bar"
-                                                                 :visible    false}
-                                                                (select-keys (:sound-bar layout-params)
-                                                                             [:x :y :width :height]))}
-                                  (add-record-button "record-button")
-                                  (add-approve-button "approve-group")
+(def template {:assets        []
+               :objects       (-> {:background    {:type   "rectangle"
+                                                   :x      0
+                                                   :y      0
+                                                   :width  1920
+                                                   :height 1080
+                                                   :fill   0x163760}
+                                   :screen        (merge {:type          "rectangle"
+                                                          :border-radius 32
+                                                          :fill          0xB9D8E8}
+                                                         (select-keys (:screen layout-params)
+                                                                      [:x :y :width :height]))
+                                   :concept-image (merge {:type       "image"
+                                                          :image-size "contain"
+                                                          :src        ""
+                                                          :visible    false}
+                                                         (select-keys (:concept-image layout-params)
+                                                                      [:x :y :width :height]))
+                                   :sound-bar     (merge {:type       "sound-bar"
+                                                          :transition "sound-bar"
+                                                          :visible    false}
+                                                         (select-keys (:sound-bar layout-params)
+                                                                      [:x :y :width :height]))}
+                                  (add-approve-button "approve-group" {:on-click "approve-button-click-handler"})
                                   (add-start-play-button "start-play-button" {:on-click "start-play-button-click-handler"})
                                   (add-stop-play-button "stop-play-button" {:on-click "stop-play-button-click-handler"})
                                   (add-start-record-button "start-record-button" {:on-click "start-record-button-click-handler"})
                                   (add-stop-record-button "stop-record-button" {:on-click "stop-record-button-click-handler"}))
                :scene-objects [["background" "screen" "sound-bar"]
                                ["concept-image"]
-                               ["record-button" "playback-group" "approve-group"
-                                "start-play-button" "stop-play-button" "start-record-button" "stop-record-button"]]
-               :actions       {:show-button-record                {:type "parallel"
-                                                                   :data [{:type          "transition"
-                                                                           :transition-id "record-button-icon"
-                                                                           :to            {:border-radius 48 :duration 0.2
-                                                                                           :fill          0xED1C24}}
-                                                                          {:type          "transition"
-                                                                           :transition-id "record-button-icon-int"
-                                                                           :to            {:border-radius 32 :duration 0.2}}]}
-
-                               :show-button-stop                  {:type "parallel"
-                                                                   :data [{:type          "transition"
-                                                                           :transition-id "record-button-icon"
-                                                                           :to            {:border-radius 24 :duration 0.2
-                                                                                           :fill          0x0000FF}}
-                                                                          {:type          "transition"
-                                                                           :transition-id "record-button-icon-int"
-                                                                           :to            {:border-radius 16 :duration 0.2}}]}
-
-                               :record-button-click               {:type     "test-var-scalar"
-                                                                   :var-name "record-button-state"
-                                                                   :value    "stop"
-                                                                   :success  "stop-record-click"
-                                                                   :fail     "start-record-click"}
-
-                               :start-record-click                {:type "sequence-data"
-                                                                   :data [{:type "set-variable" :var-name "record-button-state" :var-value "stop"}
-                                                                          {:type "action" :id "start-recording-dialog"}
-                                                                          {:type "start-audio-recording"}
-                                                                          {:type "action" :id "timeout-timer"}
-                                                                          {:type "action" :id "show-button-stop"}
-                                                                          ]}
-
-                               :stop-record-click                 {:type "parallel"
-                                                                   :data [{:type "action" :id "show-button-record"}
-                                                                          {:type "set-variable" :var-name "record-button-state" :var-value "record"}
-                                                                          {:type "sequence-data"
-                                                                           :data [{:type "stop-audio-recording" :var-name "recording-studio-audio"}
-                                                                                  {:type     "set-progress"
-                                                                                   :var-name "recording-studio"
-                                                                                   :from-var [{:var-name        "recording-studio-audio"
-                                                                                               :action-property "var-value"}]}
-                                                                                  {:type "action" :id "show-playback-group"}
-                                                                                  {:type "action" :id "remove-timeout-timer"}
-                                                                                  {:type "action" :id "stop-recording-dialog"}]}]}
-
-                               :show-playback-group               {:type "parallel"
-                                                                   :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value true}
-                                                                          {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value true}]}
-
-                               :hide-playback-group               {:type "parallel"
-                                                                   :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value false}
-                                                                          {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value false}]}
-
-                               :run-record-playing                {:type "parallel"
-                                                                   :data [{:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value false}
-                                                                          {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value true}
-                                                                          {:type     "audio"
-                                                                           :tags     ["recorded-audio-flow"]
-                                                                           :from-var [{:var-name        "recording-studio-audio"
-                                                                                       :action-property "id"}]}]}
-                               :stop-record-playing               {:type "parallel"
-                                                                   :data [{:type "remove-flows" :flow-tag "recorded-audio-flow"}
-                                                                          {:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value true}
-                                                                          {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value false}]}
-                               :run-playback-click                {:type "sequence-data"
-                                                                   :data [{:type "action" :id "remove-timeout-timer"}
-                                                                          {:type "action" :id "start-playback-dialog"}
-                                                                          {:type "action" :id "run-record-playing"}
-                                                                          {:type "action" :id "stop-record-playing"}]}
-                               :stop-playback-click               {:type "sequence-data"
-                                                                   :data [{:type "action" :id "timeout-timer"}
-                                                                          {:type "action" :id "stop-playback-dialog"}
-                                                                          {:type "action" :id "stop-record-playing"}]}
-
-                               :set-demo-image-src                {:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
-                               :script                            {:type   "workflow"
+                               ["approve-group" "start-play-button" "stop-play-button" "start-record-button" "stop-record-button"]]
+               :actions       {:script                            {:type   "workflow"
                                                                    :data   [{:type "start-activity"}
                                                                             {:type "parallel"
-                                                                             :data [{:type "set-variable" :var-name "record-button-state" :var-value "record"}
-                                                                                    {:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
+                                                                             :data [{:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
                                                                                     {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
                                                                             {:type "action" :id "intro-dialog"}
                                                                             {:type "action" :id "reset-controls"}
                                                                             {:type "action" :id "show-start-record-button"}]
                                                                    :on-end "finish"}
-                               :reset-controls                    {:type "sequence-data"
-                                                                   :data [{:type "action" :id "hide-playback-group"}]}
-                               :approve-playback-click            {:type "action" :id "script"}
+
                                :finish                            {:type "sequence-data"
                                                                    :data [{:type "action" :id "remove-timeout-timer"}
                                                                           {:type "action" :id "finish-dialog"}
                                                                           {:type "finish-activity"}]}
+
+                               :set-demo-image-src                {:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
+
+                               :approve-button-click-handler      {:type "action" :id "script"}
+
                                :stop-activity                     {:type "sequence-data"
                                                                    :data [{:type "action" :id "remove-timeout-timer"}
                                                                           {:type "stop-activity" :id "recording-studio"}]}
-                               :remove-timeout-timer              {:type "remove-interval"
-                                                                   :id   "incorrect-answer-checker"}
-                               :timeout-timer                     {:type     "set-interval"
-                                                                   :id       "incorrect-answer-checker"
-                                                                   :interval 25000
-                                                                   :action   "timeout"}
-                               :timeout                           {:type       "action"
-                                                                   :unique-tag "instructions"
-                                                                   :from-var   [{:var-name        "timeout-instructions-action"
-                                                                                 :action-property "id"}]}
-                               :empty                             {:type "empty" :duration 100}
-
 
                                ;; UI actions
 
@@ -521,6 +365,10 @@
                                :highlight-record-button           (highlight-action "start-record-button")
                                :highlight-playback-button         (highlight-action "start-play-button")
                                :highlight-approve-button          (highlight-action "approve-group")
+
+                               :reset-controls                    {:type "sequence-data"
+                                                                   :data [{:id "hide-approve-button" :type "action"}
+                                                                          {:id "hide-start-play-button" :type "action"}]}
 
                                ;; Click handlers
 
@@ -590,6 +438,21 @@
                                                                           {:type "action" :id "remove-timeout-timer"}
                                                                           {:type "action" :id "stop-recording-dialog"}]}
 
+                               ;; Timeout Timer
+
+                               :timeout-timer                     {:type     "set-interval"
+                                                                   :id       "incorrect-answer-checker"
+                                                                   :interval 25000
+                                                                   :action   "timeout"}
+
+                               :timeout                           {:type       "action"
+                                                                   :unique-tag "instructions"
+                                                                   :from-var   [{:var-name        "timeout-instructions-action"
+                                                                                 :action-property "id"}]}
+
+                               :remove-timeout-timer              {:type "remove-interval"
+                                                                   :id   "incorrect-answer-checker"}
+
                                ;; Dialogs
 
                                :intro-dialog                      (-> (dialog/default "Intro")
@@ -600,7 +463,15 @@
                                :stop-playback-dialog              (dialog/default "Stop playback")
                                :finish-dialog                     (dialog/default "Finish")
 
-                               }
+                               ;; Available actions
+
+                               :show-button-record                {:type "parallel"
+                                                                   :data [{:type "action" :id "hide-stop-record-button"}
+                                                                          {:type "action" :id "show-start-record-button"}]}
+
+                               :show-button-stop                  {:type "parallel"
+                                                                   :data [{:type "action" :id "hide-start-record-button"}
+                                                                          {:type "action" :id "show-stop-record-button"}]}}
 
                :triggers      {:stop  {:on "back" :action "stop-activity"}
                                :start {:on "start" :action "script"}}
@@ -667,7 +538,6 @@
                                      {:type "set-variable" :var-name "tap-instructions-action" :var-value round-tap}
                                      {:type "set-variable" :var-name "timeout-instructions-action" :var-value round-timeout}
                                      {:type "action" :id round-dialog}
-                                     ;{:type "set-attribute" :target "start-record-button" :attr-name "visible" :attr-value true}
                                      {:type "action" :id "timeout-timer"}]}
      (keyword round-dialog)  (dialog/default (str "Round " round-id))
      (keyword round-tap)     (dialog/default (str "Round " round-id " tap instructions"))
