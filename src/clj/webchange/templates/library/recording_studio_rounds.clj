@@ -66,11 +66,18 @@
         button-size 168
         button-border 16
 
-        play-button {:x            50
-                     :y            300
-                     :width        button-size
-                     :height       button-size
-                     :border-width button-border}
+        start-play-button {:x            50
+                           :y            300
+                           :width        button-size
+                           :height       button-size
+                           :border-width button-border}
+
+        stop-play-button-size (-> button-size (* 0.8) (Math/ceil))
+        stop-play-button {:x            50
+                          :y            100
+                          :width        stop-play-button-size
+                          :height       stop-play-button-size
+                          :border-width button-border}
 
         start-record-button {:x            50
                              :y            500
@@ -96,7 +103,8 @@
 
     {:approve-button      approve-button
      :concept-image       concept-image
-     :play-button         play-button
+     :start-play-button   start-play-button
+     :stop-play-button    stop-play-button
      :start-record-button start-record-button
      :stop-record-button  stop-record-button
      :screen              screen
@@ -134,9 +142,14 @@
                                    :border-radius 32
                                    :fill          0xFFFFFF}}))
 
-(defn- add-play-button
-  [objects-data name]
-  (let [{:keys [x y width border-width]} (:play-button layout-params)
+(defn- with-highlight-filters
+  [object-data]
+  (assoc object-data :filters [{:name "brightness" :value 0}
+                               {:name "glow" :outer-strength 0 :color 0xffd700}]))
+
+(defn- add-start-play-button
+  [objects-data name {:keys [on-click]}]
+  (let [{:keys [x y width border-width]} (:start-play-button layout-params)
 
         bg-1-size width
         bg-2-size (- width (* 2 border-width))
@@ -146,10 +159,14 @@
         background-2-name (-> name (str "-background-2"))
         icon-name (-> name (str "-icon"))]
     (merge objects-data
-           {(keyword name)              {:type     "group"
-                                         :children [background-1-name background-2-name icon-name]
-                                         :x        x
-                                         :y        y}
+           {(keyword name)              (-> {:type       "group"
+                                             :children   [background-1-name background-2-name icon-name]
+                                             :transition name
+                                             :x          x
+                                             :y          y
+                                             :visible    false
+                                             :actions    {:click {:id on-click :on "click" :type "action"}}}
+                                            (with-highlight-filters))
             (keyword background-1-name) {:type          "rectangle"
                                          :x             0
                                          :y             0
@@ -172,8 +189,39 @@
                                          :fill   "#FFFFFF"
                                          :data   "M50.95 27.57L6.05798 0.63479C3.39189 -0.964869 0 0.955585 0 4.06476V57.9352C0 61.0444 3.39189 62.9649 6.05798 61.3652L50.95 34.43C53.5394 32.8764 53.5394 29.1236 50.95 27.57Z"}})))
 
+(defn- add-stop-play-button
+  [objects-data name {:keys [on-click]}]
+  (let [{:keys [x y width border-width]} (:stop-play-button layout-params)
+        bg-1-size width
+        bg-2-size (- width (* 2 border-width))
+
+        background-1-name (-> name (str "-background-1"))
+        background-2-name (-> name (str "-background-2"))]
+    (merge objects-data
+           {(keyword name)              {:type       "group"
+                                         :children   [background-1-name background-2-name]
+                                         :transition name
+                                         :x          x
+                                         :y          y
+                                         :visible    false
+                                         :actions    {:click {:id on-click :on "click" :type "action"}}}
+            (keyword background-1-name) {:type          "rectangle"
+                                         :x             0
+                                         :y             0
+                                         :width         bg-1-size
+                                         :height        bg-1-size
+                                         :border-radius (* border-width 1.5)
+                                         :fill          0xFFFFFF}
+            (keyword background-2-name) {:type          "rectangle"
+                                         :x             (/ (- bg-1-size bg-2-size) 2)
+                                         :y             (/ (- bg-1-size bg-2-size) 2)
+                                         :width         bg-2-size
+                                         :height        bg-2-size
+                                         :border-radius border-width
+                                         :fill          0x10BC2B}})))
+
 (defn- add-start-record-button
-  [objects-data name]
+  [objects-data name {:keys [on-click]}]
   (let [{:keys [x y width border-width]} (:start-record-button layout-params)
         bg-1-size width
         bg-2-size (- width (* 2 border-width))
@@ -181,10 +229,14 @@
         background-1-name (-> name (str "-background-1"))
         background-2-name (-> name (str "-background-2"))]
     (merge objects-data
-           {(keyword name)              {:type     "group"
-                                         :children [background-1-name background-2-name]
-                                         :x        x
-                                         :y        y}
+           {(keyword name)              (-> {:type       "group"
+                                             :children   [background-1-name background-2-name]
+                                             :transition name
+                                             :x          x
+                                             :y          y
+                                             :visible    false
+                                             :actions    {:click {:id on-click :on "click" :type "action"}}}
+                                            (with-highlight-filters))
             (keyword background-1-name) {:type          "rectangle"
                                          :x             0
                                          :y             0
@@ -201,7 +253,7 @@
                                          :fill          0xED1C24}})))
 
 (defn- add-stop-record-button
-  [objects-data name]
+  [objects-data name {:keys [on-click]}]
   (let [{:keys [x y width border-width]} (:stop-record-button layout-params)
         bg-1-size width
         bg-2-size (- width (* 2 border-width))
@@ -209,10 +261,13 @@
         background-1-name (-> name (str "-background-1"))
         background-2-name (-> name (str "-background-2"))]
     (merge objects-data
-           {(keyword name)              {:type     "group"
-                                         :children [background-1-name background-2-name]
-                                         :x        x
-                                         :y        y}
+           {(keyword name)              {:type       "group"
+                                         :children   [background-1-name background-2-name]
+                                         :transition name
+                                         :x          x
+                                         :y          y
+                                         :visible    false
+                                         :actions    {:click {:id on-click :on "click" :type "action"}}}
             (keyword background-1-name) {:type          "rectangle"
                                          :x             0
                                          :y             0
@@ -255,6 +310,14 @@
                                     :fill    "#FFFFFF",
                                     :actions {:click {:id "approve-playback-click" :on "click" :type "action" :unique-tag "intro"}}
                                     :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}))
+
+(defn- highlight-action
+  [transition-id]
+  {:type               "transition"
+   :transition-id      transition-id
+   :return-immediately true
+   :from               {:brightness 0 :glow 0}
+   :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}})
 
 (def template {:assets        [{:url "/raw/clipart/recording_studio/green-circle.png" :type "image"}]
                :objects       (-> {:background           {:type   "rectangle"
@@ -314,151 +377,230 @@
                                                           :actions       {:click {:id "stop-playback-click" :on "click" :type "action"}}
                                                           :fill          0xFFFFFF}
                                    :sound-bar            (merge {:type       "sound-bar"
-                                                                 :transition "sound-bar"}
+                                                                 :transition "sound-bar"
+                                                                 :visible    false}
                                                                 (select-keys (:sound-bar layout-params)
                                                                              [:x :y :width :height]))}
                                   (add-record-button "record-button")
                                   (add-approve-button "approve-group")
-                                  (add-play-button "play-button")
-                                  (add-start-record-button "start-record-button")
-                                  (add-stop-record-button "stop-record-button")
-                                  )
+                                  (add-start-play-button "start-play-button" {:on-click "start-play-button-click-handler"})
+                                  (add-stop-play-button "stop-play-button" {:on-click "stop-play-button-click-handler"})
+                                  (add-start-record-button "start-record-button" {:on-click "start-record-button-click-handler"})
+                                  (add-stop-record-button "stop-record-button" {:on-click "stop-record-button-click-handler"}))
                :scene-objects [["background" "screen" "sound-bar"]
                                ["concept-image"]
                                ["record-button" "playback-group" "approve-group"
-                                "play-button" "start-record-button" "stop-record-button"]]
-               :actions       {:show-button-record        {:type "parallel"
-                                                           :data [{:type          "transition"
-                                                                   :transition-id "record-button-icon"
-                                                                   :to            {:border-radius 48 :duration 0.2
-                                                                                   :fill          0xED1C24}}
-                                                                  {:type          "transition"
-                                                                   :transition-id "record-button-icon-int"
-                                                                   :to            {:border-radius 32 :duration 0.2}}]}
+                                "start-play-button" "stop-play-button" "start-record-button" "stop-record-button"]]
+               :actions       {:show-button-record                {:type "parallel"
+                                                                   :data [{:type          "transition"
+                                                                           :transition-id "record-button-icon"
+                                                                           :to            {:border-radius 48 :duration 0.2
+                                                                                           :fill          0xED1C24}}
+                                                                          {:type          "transition"
+                                                                           :transition-id "record-button-icon-int"
+                                                                           :to            {:border-radius 32 :duration 0.2}}]}
 
-                               :show-button-stop          {:type "parallel"
-                                                           :data [{:type          "transition"
-                                                                   :transition-id "record-button-icon"
-                                                                   :to            {:border-radius 24 :duration 0.2
-                                                                                   :fill          0x0000FF}}
-                                                                  {:type          "transition"
-                                                                   :transition-id "record-button-icon-int"
-                                                                   :to            {:border-radius 16 :duration 0.2}}]}
+                               :show-button-stop                  {:type "parallel"
+                                                                   :data [{:type          "transition"
+                                                                           :transition-id "record-button-icon"
+                                                                           :to            {:border-radius 24 :duration 0.2
+                                                                                           :fill          0x0000FF}}
+                                                                          {:type          "transition"
+                                                                           :transition-id "record-button-icon-int"
+                                                                           :to            {:border-radius 16 :duration 0.2}}]}
 
-                               :highlight-record-button   {:type               "transition"
-                                                           :transition-id      "record-button"
-                                                           :return-immediately true
-                                                           :from               {:brightness 0 :glow 0}
-                                                           :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
+                               :record-button-click               {:type     "test-var-scalar"
+                                                                   :var-name "record-button-state"
+                                                                   :value    "stop"
+                                                                   :success  "stop-record-click"
+                                                                   :fail     "start-record-click"}
+
+                               :start-record-click                {:type "sequence-data"
+                                                                   :data [{:type "set-variable" :var-name "record-button-state" :var-value "stop"}
+                                                                          {:type "action" :id "start-recording-dialog"}
+                                                                          {:type "start-audio-recording"}
+                                                                          {:type "action" :id "timeout-timer"}
+                                                                          {:type "action" :id "show-button-stop"}
+                                                                          ]}
+
+                               :stop-record-click                 {:type "parallel"
+                                                                   :data [{:type "action" :id "show-button-record"}
+                                                                          {:type "set-variable" :var-name "record-button-state" :var-value "record"}
+                                                                          {:type "sequence-data"
+                                                                           :data [{:type "stop-audio-recording" :var-name "recording-studio-audio"}
+                                                                                  {:type     "set-progress"
+                                                                                   :var-name "recording-studio"
+                                                                                   :from-var [{:var-name        "recording-studio-audio"
+                                                                                               :action-property "var-value"}]}
+                                                                                  {:type "action" :id "show-playback-group"}
+                                                                                  {:type "action" :id "remove-timeout-timer"}
+                                                                                  {:type "action" :id "stop-recording-dialog"}]}]}
+
+                               :show-playback-group               {:type "parallel"
+                                                                   :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value true}
+                                                                          {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value true}]}
+
+                               :hide-playback-group               {:type "parallel"
+                                                                   :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value false}
+                                                                          {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value false}]}
+
+                               :run-record-playing                {:type "parallel"
+                                                                   :data [{:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value false}
+                                                                          {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value true}
+                                                                          {:type     "audio"
+                                                                           :tags     ["recorded-audio-flow"]
+                                                                           :from-var [{:var-name        "recording-studio-audio"
+                                                                                       :action-property "id"}]}]}
+                               :stop-record-playing               {:type "parallel"
+                                                                   :data [{:type "remove-flows" :flow-tag "recorded-audio-flow"}
+                                                                          {:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value true}
+                                                                          {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value false}]}
+                               :run-playback-click                {:type "sequence-data"
+                                                                   :data [{:type "action" :id "remove-timeout-timer"}
+                                                                          {:type "action" :id "start-playback-dialog"}
+                                                                          {:type "action" :id "run-record-playing"}
+                                                                          {:type "action" :id "stop-record-playing"}]}
+                               :stop-playback-click               {:type "sequence-data"
+                                                                   :data [{:type "action" :id "timeout-timer"}
+                                                                          {:type "action" :id "stop-playback-dialog"}
+                                                                          {:type "action" :id "stop-record-playing"}]}
+
+                               :set-demo-image-src                {:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
+                               :script                            {:type   "workflow"
+                                                                   :data   [{:type "start-activity"}
+                                                                            {:type "parallel"
+                                                                             :data [{:type "set-variable" :var-name "record-button-state" :var-value "record"}
+                                                                                    {:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
+                                                                                    {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
+                                                                            {:type "action" :id "intro-dialog"}
+                                                                            {:type "action" :id "reset-controls"}
+                                                                            {:type "action" :id "show-start-record-button"}]
+                                                                   :on-end "finish"}
+                               :reset-controls                    {:type "sequence-data"
+                                                                   :data [{:type "action" :id "hide-playback-group"}]}
+                               :approve-playback-click            {:type "action" :id "script"}
+                               :finish                            {:type "sequence-data"
+                                                                   :data [{:type "action" :id "remove-timeout-timer"}
+                                                                          {:type "action" :id "finish-dialog"}
+                                                                          {:type "finish-activity"}]}
+                               :stop-activity                     {:type "sequence-data"
+                                                                   :data [{:type "action" :id "remove-timeout-timer"}
+                                                                          {:type "stop-activity" :id "recording-studio"}]}
+                               :remove-timeout-timer              {:type "remove-interval"
+                                                                   :id   "incorrect-answer-checker"}
+                               :timeout-timer                     {:type     "set-interval"
+                                                                   :id       "incorrect-answer-checker"
+                                                                   :interval 25000
+                                                                   :action   "timeout"}
+                               :timeout                           {:type       "action"
+                                                                   :unique-tag "instructions"
+                                                                   :from-var   [{:var-name        "timeout-instructions-action"
+                                                                                 :action-property "id"}]}
+                               :empty                             {:type "empty" :duration 100}
 
 
-                               :highlight-playback-button {:type               "transition"
-                                                           :transition-id      "playback-group"
-                                                           :return-immediately true
-                                                           :from               {:brightness 0 :glow 0}
-                                                           :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
+                               ;; UI actions
 
-                               :highlight-approve-button  {:type               "transition"
-                                                           :transition-id      "approve-group"
-                                                           :return-immediately true
-                                                           :from               {:brightness 0 :glow 0}
-                                                           :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
+                               :activate-sound-bar                {:type "sequence-data"
+                                                                   :data [{:type "set-attribute" :target "sound-bar" :attr-name "visible" :attr-value true}
+                                                                          {:type "component-action" :target "sound-bar" :action "activate"}]}
+                               :deactivate-sound-bar              {:type "sequence-data"
+                                                                   :data [{:type "set-attribute" :target "sound-bar" :attr-name "visible" :attr-value false}
+                                                                          {:type "component-action" :target "sound-bar" :action "deactivate"}]}
+                               :show-start-play-button            {:type "set-attribute" :target "start-play-button" :attr-name "visible" :attr-value true}
+                               :hide-start-play-button            {:type "set-attribute" :target "start-play-button" :attr-name "visible" :attr-value false}
+                               :show-stop-play-button             {:type "set-attribute" :target "stop-play-button" :attr-name "visible" :attr-value true}
+                               :hide-stop-play-button             {:type "set-attribute" :target "stop-play-button" :attr-name "visible" :attr-value false}
+                               :show-start-record-button          {:type "set-attribute" :target "start-record-button" :attr-name "visible" :attr-value true}
+                               :hide-start-record-button          {:type "set-attribute" :target "start-record-button" :attr-name "visible" :attr-value false}
+                               :show-stop-record-button           {:type "set-attribute" :target "stop-record-button" :attr-name "visible" :attr-value true}
+                               :hide-stop-record-button           {:type "set-attribute" :target "stop-record-button" :attr-name "visible" :attr-value false}
+                               :show-approve-button               {:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value true}
+                               :hide-approve-button               {:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value false}
 
-                               :record-button-click       {:type     "test-var-scalar"
-                                                           :var-name "record-button-state"
-                                                           :value    "stop"
-                                                           :success  {:type "parallel"
-                                                                      :data [{:type "action" :id "show-button-record"}
-                                                                             {:type "set-variable" :var-name "record-button-state" :var-value "record"}
-                                                                             {:type "sequence-data"
-                                                                              :data [{:type "stop-audio-recording" :var-name "recording-studio-audio"}
-                                                                                     {:type     "set-progress"
-                                                                                      :var-name "recording-studio"
-                                                                                      :from-var [{:var-name        "recording-studio-audio"
-                                                                                                  :action-property "var-value"}]}
-                                                                                     {:type "action" :id "show-playback-group"}
-                                                                                     {:type "action" :id "remove-timeout-timer"}
-                                                                                     {:type "action" :id "stop-recording-dialog"}]}]}
-                                                           :fail     {:type "sequence-data"
-                                                                      :data [{:type "set-variable" :var-name "record-button-state" :var-value "stop"}
-                                                                             {:type "action" :id "start-recording-dialog"}
-                                                                             {:type "start-audio-recording"}
-                                                                             {:type "action" :id "timeout-timer"}
-                                                                             {:type "action" :id "show-button-stop"}]}}
+                               :highlight-record-button           (highlight-action "start-record-button")
+                               :highlight-playback-button         (highlight-action "start-play-button")
+                               :highlight-approve-button          (highlight-action "approve-group")
 
-                               :show-playback-group       {:type "parallel"
-                                                           :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value true}
-                                                                  {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value true}]}
+                               ;; Click handlers
 
-                               :hide-playback-group       {:type "parallel"
-                                                           :data [{:type "set-attribute" :target "approve-group" :attr-name "visible" :attr-value false}
-                                                                  {:type "set-attribute" :target "playback-group" :attr-name "visible" :attr-value false}]}
+                               :start-play-button-click-handler   {:type "sequence-data"
+                                                                   :data [{:id "activate-sound-bar" :type "action"}
+                                                                          {:id "hide-start-play-button" :type "action"}
+                                                                          {:id "hide-start-record-button" :type "action"}
+                                                                          {:id "hide-approve-button" :type "action"}
+                                                                          {:id "show-stop-play-button" :type "action"}
 
-                               :run-record-playing        {:type "parallel"
-                                                           :data [{:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value false}
-                                                                  {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value true}
-                                                                  {:type     "audio"
-                                                                   :tags     ["recorded-audio-flow"]
-                                                                   :from-var [{:var-name        "recording-studio-audio"
-                                                                               :action-property "id"}]}]}
-                               :stop-record-playing       {:type "parallel"
-                                                           :data [{:type "remove-flows" :flow-tag "recorded-audio-flow"}
-                                                                  {:type "set-attribute" :target "run-playback-button" :attr-name "visible" :attr-value true}
-                                                                  {:type "set-attribute" :target "stop-playback-button" :attr-name "visible" :attr-value false}]}
-                               :run-playback-click        {:type "sequence-data"
-                                                           :data [{:type "action" :id "remove-timeout-timer"}
-                                                                  {:type "action" :id "start-playback-dialog"}
-                                                                  {:type "action" :id "run-record-playing"}
-                                                                  {:type "action" :id "stop-record-playing"}]}
-                               :stop-playback-click       {:type "sequence-data"
-                                                           :data [{:type "action" :id "timeout-timer"}
-                                                                  {:type "action" :id "stop-playback-dialog"}
-                                                                  {:type "action" :id "stop-record-playing"}]}
+                                                                          {:id "start-playing" :type "action"}]}
 
-                               :set-demo-image-src        {:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
-                               :script                    {:type   "workflow"
-                                                           :data   [{:type "start-activity"}
-                                                                    {:type "parallel"
-                                                                     :data [{:type "set-variable" :var-name "record-button-state" :var-value "record"}
-                                                                            {:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
-                                                                            {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
-                                                                    {:type   "component-action"
-                                                                     :target "sound-bar"
-                                                                     :action "activate"}
-                                                                    {:type "action" :id "intro-dialog"}
-                                                                    {:type "action" :id "reset-controls"}
-                                                                    {:type   "component-action"
-                                                                     :target "sound-bar"
-                                                                     :action "deactivate"}]
-                                                           :on-end "finish"}
-                               :reset-controls            {:type "sequence-data"
-                                                           :data [{:type "action" :id "hide-playback-group"}]}
-                               :approve-playback-click    {:type "action" :id "script"}
-                               :finish                    {:type "sequence-data"
-                                                           :data [{:type "action" :id "remove-timeout-timer"}
-                                                                  {:type "action" :id "finish-dialog"}
-                                                                  {:type "finish-activity"}]}
-                               :stop-activity             {:type "sequence-data"
-                                                           :data [{:type "action" :id "remove-timeout-timer"}
-                                                                  {:type "stop-activity" :id "recording-studio"}]}
-                               :remove-timeout-timer      {:type "remove-interval"
-                                                           :id   "incorrect-answer-checker"}
-                               :timeout-timer             {:type     "set-interval"
-                                                           :id       "incorrect-answer-checker"
-                                                           :interval 25000
-                                                           :action   "timeout"}
-                               :timeout                   {:type       "action"
-                                                           :unique-tag "instructions"
-                                                           :from-var   [{:var-name        "timeout-instructions-action"
-                                                                         :action-property "id"}]}
-                               :empty                     {:type "empty" :duration 100}
-                               :intro-dialog              (-> (dialog/default "Intro")
-                                                              (assoc :unique-tag "intro"))
-                               :start-recording-dialog    (dialog/default "Start recording")
-                               :stop-recording-dialog     (dialog/default "Stop recording")
-                               :start-playback-dialog     (dialog/default "Start playback")
-                               :stop-playback-dialog      (dialog/default "Stop playback")
-                               :finish-dialog             (dialog/default "Finish")}
+                               :stop-play-button-click-handler    {:type "sequence-data"
+                                                                   :data [{:id "deactivate-sound-bar" :type "action"}
+                                                                          {:id "hide-stop-play-button" :type "action"}
+                                                                          {:id "show-start-play-button" :type "action"}
+                                                                          {:id "show-start-record-button" :type "action"}
+                                                                          {:id "show-approve-button" :type "action"}
+
+                                                                          {:id "stop-playing" :type "action"}]}
+
+                               :start-record-button-click-handler {:type "sequence-data"
+                                                                   :data [{:id "activate-sound-bar" :type "action"}
+                                                                          {:id "hide-start-play-button" :type "action"}
+                                                                          {:id "hide-start-record-button" :type "action"}
+                                                                          {:id "hide-approve-button" :type "action"}
+                                                                          {:id "show-stop-record-button" :type "action"}
+
+                                                                          {:id "start-recording" :type "action"}]}
+
+                               :stop-record-button-click-handler  {:type "sequence-data"
+                                                                   :data [{:id "deactivate-sound-bar" :type "action"}
+                                                                          {:id "hide-stop-record-button" :type "action"}
+                                                                          {:id "show-start-record-button" :type "action"}
+                                                                          {:id "show-start-play-button" :type "action"}
+                                                                          {:id "show-approve-button" :type "action"}
+
+                                                                          {:id "stop-recording" :type "action"}]}
+
+                               ;; Record audio actions
+
+                               :start-playing                     {:type "sequence-data"
+                                                                   :data [{:type "action" :id "remove-timeout-timer"}
+                                                                          {:type "action" :id "start-playback-dialog"}
+                                                                          {:type     "audio"
+                                                                           :tags     ["recorded-audio-flow"]
+                                                                           :from-var [{:var-name        "recording-studio-audio"
+                                                                                       :action-property "id"}]}
+                                                                          {:type "remove-flows" :flow-tag "recorded-audio-flow"}]}
+
+                               :stop-playing                      {:type "sequence-data"
+                                                                   :data [{:type "action" :id "timeout-timer"}
+                                                                          {:type "action" :id "stop-playback-dialog"}
+                                                                          {:type "remove-flows" :flow-tag "recorded-audio-flow"}]}
+
+                               :start-recording                   {:type "sequence-data"
+                                                                   :data [{:type "action" :id "start-recording-dialog"}
+                                                                          {:type "action" :id "timeout-timer"}
+                                                                          {:type "start-audio-recording"}]}
+
+                               :stop-recording                    {:type "sequence-data"
+                                                                   :data [{:type "stop-audio-recording" :var-name "recording-studio-audio"}
+                                                                          {:type     "set-progress"
+                                                                           :var-name "recording-studio"
+                                                                           :from-var [{:var-name        "recording-studio-audio"
+                                                                                       :action-property "var-value"}]}
+                                                                          {:type "action" :id "remove-timeout-timer"}
+                                                                          {:type "action" :id "stop-recording-dialog"}]}
+
+                               ;; Dialogs
+
+                               :intro-dialog                      (-> (dialog/default "Intro")
+                                                                      (assoc :unique-tag "intro"))
+                               :start-recording-dialog            (dialog/default "Start recording")
+                               :stop-recording-dialog             (dialog/default "Stop recording")
+                               :start-playback-dialog             (dialog/default "Start playback")
+                               :stop-playback-dialog              (dialog/default "Stop playback")
+                               :finish-dialog                     (dialog/default "Finish")
+
+                               }
 
                :triggers      {:stop  {:on "back" :action "stop-activity"}
                                :start {:on "start" :action "script"}}
@@ -525,6 +667,7 @@
                                      {:type "set-variable" :var-name "tap-instructions-action" :var-value round-tap}
                                      {:type "set-variable" :var-name "timeout-instructions-action" :var-value round-timeout}
                                      {:type "action" :id round-dialog}
+                                     ;{:type "set-attribute" :target "start-record-button" :attr-name "visible" :attr-value true}
                                      {:type "action" :id "timeout-timer"}]}
      (keyword round-dialog)  (dialog/default (str "Round " round-id))
      (keyword round-tap)     (dialog/default (str "Round " round-id " tap instructions"))
