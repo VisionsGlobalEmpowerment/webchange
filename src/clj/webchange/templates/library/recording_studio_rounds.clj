@@ -31,7 +31,9 @@
 
 (defn- get-layout-params
   []
-  (let [canvas {:width  1920
+  (let [take-half #(-> % (/ 2) (Math/ceil))
+
+        canvas {:width  1920
                 :height 1080}
 
         screen-margin-x 208
@@ -55,6 +57,8 @@
                        :width  (- (:width screen) (* 2 (:padding-x screen)))
                        :height (- (:height screen) (* 2 (:padding-y screen)))}
 
+
+
         approve-button-size 96
         approve-button {:x      (+ (:x right-margin)
                                    (/ (:width right-margin) 2)
@@ -65,48 +69,53 @@
 
         button-size 168
         button-border 16
+        button-half-size (take-half button-size)
+        button-small-size (-> button-size (* 0.8) (Math/ceil))
+        button-half-small-size (take-half button-small-size)
 
-        start-play-button {:x            50
-                           :y            300
-                           :width        button-size
-                           :height       button-size
-                           :border-width button-border}
+        record-buttons-center {:x (-> (+ (:x screen)
+                                         (take-half (:width screen))))
+                               :y (+ (:y bottom-margin)
+                                     (-> (:height bottom-margin) (take-half)))}
 
-        stop-play-button-size (-> button-size (* 0.8) (Math/ceil))
-        stop-play-button {:x            50
-                          :y            100
-                          :width        stop-play-button-size
-                          :height       stop-play-button-size
-                          :border-width button-border}
-
-        start-record-button {:x            50
-                             :y            500
-                             :width        button-size
-                             :height       button-size
-                             :border-width button-border}
-
-        stop-record-button-size (-> button-size (* 0.8) (Math/ceil))
-        stop-record-button {:x            50
-                            :y            700
-                            :width        stop-record-button-size
-                            :height       stop-record-button-size
-                            :border-width button-border}
+        play-back-buttons-center {:x (- (:x record-buttons-center)
+                                        button-size
+                                        64)
+                                  :y (:y record-buttons-center)}
 
         sound-bar-height 115
         sound-bar {:x      screen-margin-x
                    :y      (+ (:y bottom-margin)
-                              (/ (- (:height bottom-margin)
-                                    sound-bar-height)
-                                 2))
-                   :width  472
+                              (take-half (- (:height bottom-margin)
+                                            sound-bar-height)))
+                   :width  (- (:x play-back-buttons-center)
+                              button-half-size
+                              80
+                              screen-margin-x)
                    :height sound-bar-height}]
 
     {:approve-button      approve-button
      :concept-image       concept-image
-     :start-play-button   start-play-button
-     :stop-play-button    stop-play-button
-     :start-record-button start-record-button
-     :stop-record-button  stop-record-button
+     :start-play-button   {:x            (-> (:x play-back-buttons-center) (- button-half-size))
+                           :y            (-> (:y play-back-buttons-center) (- button-half-size))
+                           :width        button-size
+                           :height       button-size
+                           :border-width button-border}
+     :stop-play-button    {:x            (-> (:x play-back-buttons-center) (- button-half-small-size))
+                           :y            (-> (:y play-back-buttons-center) (- button-half-small-size))
+                           :width        button-small-size
+                           :height       button-small-size
+                           :border-width button-border}
+     :start-record-button {:x            (-> (:x record-buttons-center) (- button-half-size))
+                           :y            (-> (:y record-buttons-center) (- button-half-size))
+                           :width        button-size
+                           :height       button-size
+                           :border-width button-border}
+     :stop-record-button  {:x            (-> (:x record-buttons-center) (- button-half-small-size))
+                           :y            (-> (:y record-buttons-center) (- button-half-small-size))
+                           :width        button-small-size
+                           :height       button-small-size
+                           :border-width button-border}
      :screen              screen
      :sound-bar           sound-bar}))
 
