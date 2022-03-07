@@ -61,12 +61,31 @@
       false
       (<= activity (apply max finished-indices)))))
 
+(defn- flatten-activity
+  [level-idx lesson-idx activity-idx activity]
+  (let [activity-name (:activity activity)]
+    (assoc activity :level level-idx :lesson lesson-idx :activity activity-idx :activity-name activity-name)))
+
+(defn- flatten-lesson
+  [level-idx lesson-idx lesson]
+  (map-indexed (fn [activity-idx activity] (flatten-activity level-idx lesson-idx activity-idx activity)) (:activities lesson)))
+
+(defn- flatten-level
+  [level-idx level]
+  (map-indexed (fn [lesson-idx lesson] (flatten-lesson level-idx lesson-idx lesson)) (:lessons level)))
+
+(defn flatten-activities
+  [levels]
+  (->> levels
+       (map-indexed flatten-level)
+       flatten))
+
 (defn- excluded-by-tags?
   [tags levels {:keys [level lesson activity]}]
   (let [workflow-action (get-in levels [level :lessons lesson :activities activity])]
     (and
-      (:only workflow-action)
-      (not (tags/has-one-from tags (:only workflow-action))))))
+     (:only workflow-action)
+     (not (tags/has-one-from tags (:only workflow-action))))))
 
 (defn next-for
   [levels {:keys [level lesson activity]}]
@@ -84,12 +103,15 @@
   "Return next activity in course levels that is
   - not finished yet
   - satisfies provided tags"
-  [tags levels finished activity activities]
-  (loop [next (next-for levels activity)
-         cur activity]
-    (cond
-      (nil? next) cur
-      (or (finished? finished next activities)
-          (excluded-by-tags? tags levels next)) (recur (next-for levels next)
-                                                       next)
-      :else next)))
+  [tags levels finished activity]
+  (let [activities (flatten-activities levels)]
+    (loop [next (next-for levels activity)
+           cur activity]
+      (cond
+        (nil? next) cur
+        (or (finished? finished next activities)
+            (excluded-by-tags? tags levels next)) (recur (next-for levels next)
+                                                         next)
+        :else next))))
+
+

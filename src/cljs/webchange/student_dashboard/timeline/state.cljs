@@ -4,6 +4,7 @@
     [webchange.events :as events]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.lessons.activity :as lessons-activity]
+    [webchange.progress.activity :as common-activity]
     [webchange.state.state-course :as state-course]))
 
 (defn- scene-name->scene [scene-name scenes]
@@ -26,7 +27,7 @@
   ::finished-activities
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
+          activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
       (->> activities
            (filter #(lessons-activity/finished? db % activities))
            (map #(activity-letter db %))

@@ -25,7 +25,7 @@
   ::finished-activities
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
+          activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
       (->> activities
            (filter #(lessons-activity/finished? db % activities))
            (map #(merge % (scene-name->scene (:activity-name %) scenes)))
@@ -55,7 +55,7 @@
           last-level (last-level-done finished)
           last-lesson (last-lesson-done finished last-level)
           lesson-activities (get-in levels [last-level :lessons last-lesson :activities])
-          all-activities (lessons-activity/flatten-activities levels)]
+          all-activities (common-activity/flatten-activities levels)]
       (->> (get-in finished [last-level last-lesson])
            (map #(common-activity/activity-unique-id->index all-activities %))
            (map #(get lesson-activities %))

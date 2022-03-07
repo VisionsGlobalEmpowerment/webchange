@@ -59,15 +59,19 @@
                   :class-id class-id
                   :student-id student-id]})))
 
+(defn- time->value
+  [time]
+  (let [elapsed (-> time (/ 1000) js/Math.round)
+        minutes (int (/ elapsed 60))
+        seconds (int (- elapsed (* minutes 60)))]
+    (str minutes "m " seconds "s")))
+
 (re-frame/reg-sub
   ::students
   (fn []
     [(re-frame/subscribe [::class-profile])])
   (fn [[class-profile]]
     (let [float->percentage (fn [float] (-> float (* 100) js/Math.round (str "%")))
-          defaults {:activities 15
-                    :time-goal  3600}
-
           ->latest-activity (fn [data]
                               (str (:lesson data) " - " (:id data)))
           ->cumulative-score (fn [data]
@@ -81,16 +85,12 @@
                                  "-"))
           ->activity-progress (fn [data]
                                 (if data
-                                  (let [overall (:activities defaults)]
-                                    (-> data (/ overall) float->percentage))
+                                  (let [overall (:course-activities-number class-profile)]
+                                    (str data " / " overall))
                                   "-"))
           ->cumulative-time (fn [data]
                               (if data
-                                (let [overall (:time-goal defaults)
-                                      elapsed (-> data (/ 1000) js/Math.round)]
-                                  (if (> elapsed overall)
-                                    (-> elapsed (/ overall) float->percentage)
-                                    "100%"))
+                                (time->value data)
                                 "-"))]
       (->> (get class-profile :stats [])
            (map (fn [profile-record]

@@ -11,9 +11,9 @@
               :started-at        "Program start date"
               :latest-activity   "Latest activity"
               :last-login        "Last log-in date"
-              :cumulative-score  "Cumulative Activity Score"
+                                        ;:cumulative-score  "Cumulative Activity Score"
               :activity-progress "Activity Progress"
-              :cumulative-time   "Progress towards Time Goal"})
+              :cumulative-time   "Total Time Played"})
 
 (defn profile-table
   [{:keys [class-id course-slug]}]

@@ -15,15 +15,12 @@
   (let [finished (get-in db [:progress-data :finished])]
     (activity/finished? finished activity activities)))
 
-(declare flatten-activities)
-
 (defn next-not-finished-for
   [db activity]
   (let [current-tags (get-in db [:progress-data :current-tags] [])
         levels (get-in db [:course-data :levels])
-        finished (get-in db [:progress-data :finished])
-        activities (flatten-activities (get-in db [:course-data :levels]))]
-    (activity/next-not-finished-for current-tags levels finished activity activities)))
+        finished (get-in db [:progress-data :finished])]
+    (activity/next-not-finished-for current-tags levels finished activity)))
 
 (defn finish
   [db finished]
@@ -69,27 +66,8 @@
   [db activity]
   (assoc db :loaded-activity activity))
 
-(defn- flatten-activity
-  [level-idx lesson-idx activity-idx activity]
-  (let [activity-name (:activity activity)]
-    (assoc activity :level level-idx :lesson lesson-idx :activity activity-idx :activity-name activity-name)))
-
-(defn- flatten-lesson
-  [level-idx lesson-idx lesson]
-  (map-indexed (fn [activity-idx activity] (flatten-activity level-idx lesson-idx activity-idx activity)) (:activities lesson)))
-
-(defn- flatten-level
-  [level-idx level]
-  (map-indexed (fn [lesson-idx lesson] (flatten-lesson level-idx lesson-idx lesson)) (:lessons level)))
-
-(defn flatten-activities
-  [levels]
-  (->> levels
-       (map-indexed flatten-level)
-       flatten))
-
 (defn get-progress-next [db]
-  (let [activities (flatten-activities (get-in db [:course-data :levels]))
+  (let [activities (activity/flatten-activities (get-in db [:course-data :levels]))
         finished-activities (filter #(finished? db % activities) activities)]
     (if (empty? finished-activities)
       (first activities)

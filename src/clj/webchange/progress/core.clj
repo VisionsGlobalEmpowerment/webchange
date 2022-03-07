@@ -35,12 +35,17 @@
 
 (defn get-class-profile [course-slug class-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
+        activities-count (-> (course/get-course-data course-slug)
+                             (get :levels)
+                             (activity/flatten-activities)
+                             (count))
         stats (->> (db/get-course-stats {:class_id class-id :course_id course-id})
                    (map class/with-user)
                    (map class/with-student-by-user))]
     [true {:stats       stats
            :class-id    class-id
-           :course-name course-slug}]))
+           :course-name course-slug
+           :course-activities-number activities-count}]))
 
 (defn workflow->grid
   [levels f]
@@ -145,8 +150,6 @@
            :scores (workflow->grid (:levels course-data) (activity->score stats))
            :times  (workflow->grid (:levels course-data) (activity->time stats))}]))
 
-(comment
-  (get-individual-progress 4 4))
 (defn save-events! [owner-id course-id events]
   (doseq [{created-at-string :created-at type :type :as data} events]
     (let [created-at (jt/offset-date-time created-at-string)]

@@ -1,7 +1,7 @@
 (ns webchange.interpreter.lessons.activity-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.interpreter.lessons.activity :as activity]
+    [webchange.progress.activity :as activity]
     [webchange.sample-data :as sample-data]))
 
 (deftest flatten-activities
