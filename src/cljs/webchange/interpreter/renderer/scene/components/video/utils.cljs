@@ -29,6 +29,13 @@
       (set-volume video volume))
     (utils/play video)))
 
+(defn reset-video
+  [sprite resource options]
+  (let [video (->video sprite)]
+    (set-handler video "end" (or (:on-end options) #()))
+    (utils/stop video)
+    (utils/play video)))
+
 (defn set-src
   [sprite resource {:keys [play start end on-end volume]
                     :or   {on-end #()}}]
