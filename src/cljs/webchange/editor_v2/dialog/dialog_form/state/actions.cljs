@@ -204,17 +204,29 @@
                (keyword? concept-field))]}
     "Remove action by action path;
     - action-path - vector with action path in activity actions data
-                    e.g. [:introduce-big-small :data 8 :data 1]
+                    e.g. [:introduce-big-small :data 8] for sequenced action 
+                         [:dialog-7-wrong :data 1 :data 1] for parallel action
     - concept-field - name of concept field if used.
                       e.g. :dialog-field-e61057a9-63a1-4066-8549-69cc9ba3bfd9"
+    (js/console.log "remove action" action-path)
     (let [parent-path (drop-last 2 action-path)
           removed-action-position (last action-path)
 
           {parent-action-path :path parent-action-data :data} (get-parent-data db parent-path)
+          parallel? (actions/node-parallel? parent-action-data)
+
           data-patch (-> (au/delete-child-action parent-action-data removed-action-position)
-                         (select-keys [:data]))]
-      {:dispatch-n (cond-> [[::update-scene-action parent-action-path data-patch]]
-                           (some? concept-field) (conj [::dialog-form.concepts/remove-concept-field concept-field]))})))
+                         (select-keys [:data]))
+          last? (> 2 (-> data-patch :data count))]
+      (if (and parallel? last?)
+        (let [parallel-parent-path (drop-last 2 parent-path)
+              parallel-action-position (last parent-path)]
+          {:dispatch-n (cond-> [[::replace-child-action {:child-action (-> data-patch :data first)
+                                                         :parent-path  parallel-parent-path
+                                                         :position     parallel-action-position}]]
+                               (some? concept-field) (conj [::dialog-form.concepts/remove-concept-field concept-field]))})
+        {:dispatch-n (cond-> [[::update-scene-action parent-action-path data-patch]]
+                             (some? concept-field) (conj [::dialog-form.concepts/remove-concept-field concept-field]))}))))
 
 (re-frame/reg-event-fx
   ::update-action-by-path
