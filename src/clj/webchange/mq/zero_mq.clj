@@ -26,8 +26,9 @@
   (zmq/with-new-context
     (let [sink (zmq/socket :pull {:bind (get-in queues [queue-name :sink-url])})]
       (while true
-        (let [result (-> (zmq/receive-msg sink {:stringify true}) first)]
-          (on-receive-callback (edn/read-string  result)))))))
+        (let [result (-> (zmq/receive-msg sink {:stringify true :timeout 30000}) first)]
+          (when result
+            (on-receive-callback (edn/read-string  result))))))))
 
 (defn send
   [queue-name message]
