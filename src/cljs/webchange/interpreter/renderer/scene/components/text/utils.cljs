@@ -64,3 +64,16 @@
           (->> (keys placeholder-style)
                (select-keys props)
                (set-text-props text-object))))))
+
+(defn set-align-anchor
+  [text align]
+  (case align
+    ;; horizontal
+    "left" (aset (.-anchor text) "x" 0)
+    "center" (aset (.-anchor text) "x" 0.5)
+    "right" (aset (.-anchor text) "x" 1)
+    ;; vertical
+    "top" (aset (.-anchor text) "y" 0)
+    "middle" (aset (.-anchor text) "y" 0.5)
+    "bottom" (aset (.-anchor text) "y" 1)
+    nil))

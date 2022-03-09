@@ -48,7 +48,7 @@
 (defn set-image-size
   [container sprite {:keys [image-size width height scale]}]
   (cond
-    (some? image-size) (let [sprite-size (utils/get-size sprite)
+    (some? image-size) (let [sprite-size (utils/get-local-bounds sprite)
                              {scale-x :x scale-y :y} scale
                              w-scale (/ (* width scale-x) (:width sprite-size))
                              h-scale (/ (* height scale-y) (:height sprite-size))
@@ -66,7 +66,7 @@
 (defn set-image-position
   [sprite {:keys [mask-width mask-height mask-align]}]
   (when (every? some? [mask-width mask-height mask-align])
-    (let [{:keys [width]} (utils/get-size sprite)
+    (let [{:keys [width]} (utils/get-local-bounds sprite)
           diff (- (/ width 2) mask-width)
           position (case mask-align
                      "right-of-center" {:x (* -1 (- (/ width 2) diff))}

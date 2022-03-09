@@ -1,32 +1,44 @@
 (ns webchange.interpreter.renderer.scene.components.timer.clock.numbers-block
   (:require
-    [webchange.interpreter.pixi :refer [Container]]
+    [camel-snake-kebab.core :refer [->camelCase]]
+    [camel-snake-kebab.extras :refer [transform-keys]]
+    [webchange.interpreter.pixi :refer [Container Text]]
+    [webchange.interpreter.renderer.scene.components.text.utils :refer [set-align-anchor]]
     [webchange.interpreter.renderer.scene.components.timer.clock.number :refer [number]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
 (defn- create-container
-  [{:keys [x y]}]
+  [{:keys [position]}]
   (doto (Container.)
-    (utils/set-position {:x x :y y})))
+    (utils/set-position position)))
+
+(defn- create-text
+  [{:keys [align style position]}]
+  (doto (Text. "" (->> style
+                       (transform-keys ->camelCase)
+                       (clj->js)))
+    (set-align-anchor align)
+    (utils/set-position position)))
+
 
 (defn- set-value
-  [set-left-component-value set-right-component-value value]
+  [component show-leading-zero? value]
   (let [fixed-value (-> value (Math/max 0) (Math/min 99))
-        left-value (quot fixed-value 10)
-        right-value (mod fixed-value 10)]
-    (set-left-component-value left-value)
-    (set-right-component-value right-value)))
+        str-value (str (when (and show-leading-zero?
+                                  (< fixed-value 10))
+                         "0")
+                       fixed-value)]
+    (aset component "text" str-value)))
 
 (defn numbers-block
-  [{:keys [padding style value] :as props
-    :or   {value 0}}]
-  (let [container (create-container props)
-        {left-component :component set-left-component-value :set-value} (number {:x 0 :text 0 :style style})
-        {right-component :component set-right-component-value :set-value} (number {:x padding :text 0 :style style})
-        set-value (partial set-value set-left-component-value set-right-component-value)]
-    (set-value value)
-    (.addChild container left-component)
-    (.addChild container right-component)
+  [{:keys [align show-leading-zero? style width x y]}]
+  (let [container (create-container {:position {:x x :y y}})
+        text (create-text {:align    align
+                           :style    style
+                           :position {:x (if (= align "right") width 0)}})
+        set-value (partial set-value text show-leading-zero?)]
+    (set-value 0)
+    (.addChild container text)
     {:component container
      :set-value (fn [value]
                   {:pre [(number? value)]}

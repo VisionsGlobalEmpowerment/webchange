@@ -22,35 +22,40 @@
     (utils/set-position {:x x
                          :y y})))
 
-(defn- get-dimensions
-  [show-minutes? text-style]
-  (let [delimiter-width (:width (measure ":" text-style))
-        minutes-width (:width (measure "00" text-style))]
-    (if show-minutes?
-      {:delimiter-x    minutes-width
-       :seconds-x      (+ minutes-width delimiter-width)
-       :component-size (measure "00:00" text-style)}
-      {:delimiter-x    0
-       :seconds-x      delimiter-width
-       :component-size (measure ":00" text-style)})))
-
 (defn clock
-  [{:keys [minutes seconds show-minutes? font-size] :as props}]
+  [{:keys [show-leading-zero? show-minutes? font-size] :as props}]
   (let [container (create-container props)
         text-style (get-text-style props)
         numbers-padding (:width (measure "0" text-style))
-        component-props {:padding numbers-padding
-                         :style   text-style}
-        {:keys [delimiter-x seconds-x component-size]} (get-dimensions show-minutes? text-style)
-        {minutes :component set-minutes :set-value} (numbers-block (merge component-props {:x 0 :value minutes}))
-        {delimiter :component set-activated :set-activated} (delimiter (merge component-props {:x delimiter-x :y (+ (* 0.15 font-size) -5.2)}))
-        {seconds :component set-seconds :set-value} (numbers-block (merge component-props {:x seconds-x :value seconds}))]
-    (when show-minutes? (.addChild container minutes))
-    (.addChild container delimiter)
+        component-props {:padding            numbers-padding
+                         :show-leading-zero? show-leading-zero?
+                         :style              text-style}
+
+        {block-width :width} (measure "00" text-style)
+        {delimiter-width :width} (measure ":" text-style)
+
+        {minutes :component set-minutes :set-value} (numbers-block {:x                  0
+                                                                    :y                  0
+                                                                    :width              block-width
+                                                                    :align              "right"
+                                                                    :show-leading-zero? false
+                                                                    :style              text-style})
+        {seconds :component set-seconds :set-value} (numbers-block {:x                  (+ block-width delimiter-width)
+                                                                    :y                  0
+                                                                    :width              block-width
+                                                                    :align              "left"
+                                                                    :show-leading-zero? show-leading-zero?
+                                                                    :style              text-style})
+
+        {delimiter :component set-activated :set-activated} (delimiter (merge component-props
+                                                                              {:x block-width
+                                                                               :y (+ (* 0.15 font-size) -5.2)}))]
+    (when show-minutes?
+      (.addChild container delimiter)
+      (.addChild container minutes))
     (.addChild container seconds)
     {:component     container
-     :size          component-size
      :set-activated set-activated
      :set-value     (fn [{:keys [minutes seconds]}]
-                      (when (and show-minutes? (some? minutes)) (set-minutes minutes))
-                      (when (some? seconds) (set-seconds seconds)))}))
+                      (when (and show-minutes? (some? minutes)) (set-minutes minutes {:keys show-leading-zero?}))
+                      (when (some? seconds) (set-seconds seconds show-leading-zero?)))}))

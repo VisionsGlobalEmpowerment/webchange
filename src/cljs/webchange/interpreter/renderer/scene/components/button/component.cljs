@@ -92,7 +92,7 @@
 
   [{:keys [parent on-click padding-left padding-right padding-top padding-bottom object-name type ref filters] :as props}]
   (let [text (create-text props)
-        text-size (utils/get-size text)
+        text-size (utils/get-local-bounds text)
         button-size {:width  (+ padding-left (:width text-size) padding-right)
                      :height (+ padding-top (:height text-size) padding-bottom)}
         mask (create-mask (merge button-size props))

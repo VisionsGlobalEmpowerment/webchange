@@ -35,7 +35,7 @@
 
 (defn get-background-props [{:keys [size] :as props}]
   (merge props {:color 0xECECEC
-   :size size}))
+                :size  size}))
 
 (defn progress
   [{:keys [radius thickness progress] :as props
