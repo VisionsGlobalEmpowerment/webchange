@@ -41,5 +41,5 @@
                                                                   :phrase-text text}})]
     (-> activity-data
         (update :objects assoc (keyword text-name) text-data)
-        (update-in [:objects (keyword object) :children] conj text-name)
-        (update-in [:actions (keyword action) :data] conj text-action))))
+        (update-in [:objects (keyword object) :children] concat [text-name])
+        (update-in [:actions (keyword action) :data] concat [text-action]))))
