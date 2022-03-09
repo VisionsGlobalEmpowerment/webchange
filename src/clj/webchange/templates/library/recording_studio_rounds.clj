@@ -45,6 +45,15 @@
                 :padding-x 200
                 :padding-y 100}
 
+        timer-size 600
+        timer {:x    (+ (:x screen)
+                        (take-half (:width screen))
+                        (- (take-half timer-size)))
+               :y    (+ (:y screen)
+                        (take-half (:height screen))
+                        (- (take-half timer-size)))
+               :size timer-size}
+
         right-margin {:x     (+ (:x screen) (:width screen))
                       :width screen-margin-x}
         bottom-margin {:y      (+ (:y screen) (:height screen))
@@ -117,7 +126,8 @@
                            :height       button-small-size
                            :border-width button-border}
      :screen              screen
-     :sound-bar           sound-bar}))
+     :sound-bar           sound-bar
+     :timer               timer}))
 
 (def layout-params (get-layout-params))
 
@@ -320,6 +330,30 @@
                                                           :transition "sound-bar"
                                                           :visible    false}
                                                          (select-keys (:sound-bar layout-params)
+                                                                      [:x :y :width :height]))
+                                   :timer         (merge {:type              "timer"
+                                                          :transition        "timer"
+                                                          :show-minutes      false
+                                                          :show-progress     true
+                                                          :show-leading-zero false
+                                                          :time              3
+                                                          :font-size         124
+                                                          :thickness         12
+                                                          :font-weight       "normal"
+                                                          :font-family       "Roboto"
+                                                          :progress-color    0xff9000
+                                                          :color             0x010101
+                                                          :visible           false
+                                                          :actions           {:end {:on "end" :type "action" :id "recording-countdown-ended"}}}
+                                                         (select-keys (:timer layout-params)
+                                                                      [:x :y :size]))
+                                   :timer-screen  (merge {:type          "rectangle"
+                                                          :transition    "timer-screen"
+                                                          :border-radius 32
+                                                          :fill          0xCCCCCC
+                                                          :opacity       0.4
+                                                          :visible       false}
+                                                         (select-keys (:screen layout-params)
                                                                       [:x :y :width :height]))}
                                   (add-approve-button "approve-group" {:on-click "approve-button-click-handler"})
                                   (add-start-play-button "start-play-button" {:on-click "start-play-button-click-handler"})
@@ -327,7 +361,7 @@
                                   (add-start-record-button "start-record-button" {:on-click "start-record-button-click-handler"})
                                   (add-stop-record-button "stop-record-button" {:on-click "stop-record-button-click-handler"}))
                :scene-objects [["background" "screen" "sound-bar"]
-                               ["concept-image"]
+                               ["concept-image" "timer-screen" "timer"]
                                ["approve-group" "start-play-button" "stop-play-button" "start-record-button" "stop-record-button"]]
                :actions       {:script                            {:type   "workflow"
                                                                    :data   [{:type "start-activity"}
@@ -400,13 +434,12 @@
                                                                           {:id "stop-playing" :type "action"}]}
 
                                :start-record-button-click-handler {:type "sequence-data"
-                                                                   :data [{:id "activate-sound-bar" :type "action"}
-                                                                          {:id "hide-start-play-button" :type "action"}
+                                                                   :data [{:id "hide-start-play-button" :type "action"}
                                                                           {:id "hide-start-record-button" :type "action"}
                                                                           {:id "hide-approve-button" :type "action"}
                                                                           {:id "show-stop-record-button" :type "action"}
 
-                                                                          {:id "start-recording" :type "action"}]}
+                                                                          {:id "start-recording-countdown" :type "action"}]}
 
                                :stop-record-button-click-handler  {:type "sequence-data"
                                                                    :data [{:id "deactivate-sound-bar" :type "action"}
@@ -416,6 +449,23 @@
                                                                           {:id "show-approve-button" :type "action"}
 
                                                                           {:id "stop-recording" :type "action"}]}
+
+                               ;; Recording Timer
+
+                               :start-recording-countdown         {:type "sequence-data"
+                                                                   :data [{:type "set-attribute" :target "timer" :attr-name "visible" :attr-value true}
+                                                                          {:type "set-attribute" :target "timer-screen" :attr-name "visible" :attr-value true}
+                                                                          {:type "timer-start" :target "timer"}]}
+
+                               :reset-timer                       {:type "sequence-data"
+                                                                   :data [{:type "set-attribute" :target "timer" :attr-name "visible" :attr-value false}
+                                                                          {:type "set-attribute" :target "timer-screen" :attr-name "visible" :attr-value false}
+                                                                          {:type "timer-reset" :target "timer"}]}
+
+                               :recording-countdown-ended         {:type "sequence-data"
+                                                                   :data [{:type "action" :id "reset-timer"}
+                                                                          {:type "action" :id "activate-sound-bar"}
+                                                                          {:type "action" :id "start-recording"}]}
 
                                ;; Record audio actions
 
@@ -447,7 +497,7 @@
                                                                           {:type "action" :id "remove-timeout-timer"}
                                                                           {:type "action" :id "stop-recording-dialog"}]}
 
-                               ;; Timeout Timer
+                               ;; Timeout
 
                                :timeout-timer                     {:type     "set-interval"
                                                                    :id       "incorrect-answer-checker"
