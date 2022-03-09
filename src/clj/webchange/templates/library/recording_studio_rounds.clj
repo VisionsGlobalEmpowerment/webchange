@@ -369,8 +369,7 @@
                                                                              :data [{:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
                                                                                     {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
                                                                             {:type "action" :id "intro-dialog"}
-                                                                            {:type "action" :id "reset-controls"}
-                                                                            {:type "action" :id "show-start-record-button"}]
+                                                                            {:type "action" :id "reset-controls"}]
                                                                    :on-end "finish"}
 
                                :finish                            {:type "sequence-data"
@@ -437,7 +436,6 @@
                                                                    :data [{:id "hide-start-play-button" :type "action"}
                                                                           {:id "hide-start-record-button" :type "action"}
                                                                           {:id "hide-approve-button" :type "action"}
-                                                                          {:id "show-stop-record-button" :type "action"}
 
                                                                           {:id "start-recording-countdown" :type "action"}]}
 
@@ -465,6 +463,7 @@
                                :recording-countdown-ended         {:type "sequence-data"
                                                                    :data [{:type "action" :id "reset-timer"}
                                                                           {:type "action" :id "activate-sound-bar"}
+                                                                          {:type "action" :id "show-stop-record-button"}
                                                                           {:type "action" :id "start-recording"}]}
 
                                ;; Record audio actions
@@ -563,13 +562,13 @@
                                :available-actions [{:action "highlight-record-button"
                                                     :name   "Highlight record"}
                                                    {:action "show-button-record"
-                                                    :name   "Show record (record button goes red)"}
+                                                    :name   "Show record"}
                                                    {:action "highlight-playback-button"
                                                     :name   "Highlight play"}
                                                    {:action "highlight-approve-button"
-                                                    :name   "Highligh approve"}
+                                                    :name   "Highlight approve"}
                                                    {:action "show-button-stop"
-                                                    :name   "Show stop (record button goes blue)"}]}})
+                                                    :name   "Show stop"}]}})
 
 (defn- round-action-name [round-id]
   (str "round-" round-id))

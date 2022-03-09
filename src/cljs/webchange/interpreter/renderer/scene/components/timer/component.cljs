@@ -5,8 +5,7 @@
     [webchange.interpreter.renderer.scene.components.timer.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.timer.clock.clock :refer [clock]]
     [webchange.interpreter.renderer.scene.components.timer.progress-circle.progress :refer [progress]]
-    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
-    [webchange.interpreter.renderer.scene.components.timer.utils :refer [time->min-sec]]))
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]))
 
 (def default-props {:x                 {}
                     :y                 {}
@@ -35,8 +34,8 @@
 
 (defn- get-clock-params
   [{:keys [color show-leading-zero show-minutes time] :as props}]
-  (merge (time->min-sec time)
-         {:show-leading-zero? show-leading-zero
+  (merge {:time               time
+          :show-leading-zero? show-leading-zero
           :show-minutes?      show-minutes
           :color              color}
          (select-keys props [:font-family :font-size :font-weight])))

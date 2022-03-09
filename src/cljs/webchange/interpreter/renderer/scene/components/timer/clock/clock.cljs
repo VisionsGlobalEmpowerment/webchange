@@ -4,6 +4,7 @@
     [webchange.interpreter.renderer.scene.components.timer.clock.delimiter :refer [delimiter]]
     [webchange.interpreter.renderer.scene.components.timer.clock.numbers-block :refer [numbers-block]]
     [webchange.interpreter.renderer.scene.components.timer.clock.utils :refer [measure]]
+    [webchange.interpreter.renderer.scene.components.timer.utils :refer [time->min-sec]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
 (defn get-text-style
@@ -23,7 +24,7 @@
                          :y y})))
 
 (defn clock
-  [{:keys [show-leading-zero? show-minutes? font-size] :as props}]
+  [{:keys [show-leading-zero? show-minutes? time font-size] :as props}]
   (let [container (create-container props)
         text-style (get-text-style props)
         numbers-padding (:width (measure "0" text-style))
@@ -49,13 +50,16 @@
 
         {delimiter :component set-activated :set-activated} (delimiter (merge component-props
                                                                               {:x block-width
-                                                                               :y (+ (* 0.15 font-size) -5.2)}))]
+                                                                               :y (+ (* 0.15 font-size) -5.2)}))
+
+        set-value (fn [{:keys [minutes seconds]}]
+                    (when (and show-minutes? (some? minutes)) (set-minutes minutes {:keys show-leading-zero?}))
+                    (when (some? seconds) (set-seconds seconds show-leading-zero?)))]
     (when show-minutes?
       (.addChild container delimiter)
       (.addChild container minutes))
     (.addChild container seconds)
+    (set-value (time->min-sec time))
     {:component     container
      :set-activated set-activated
-     :set-value     (fn [{:keys [minutes seconds]}]
-                      (when (and show-minutes? (some? minutes)) (set-minutes minutes {:keys show-leading-zero?}))
-                      (when (some? seconds) (set-seconds seconds show-leading-zero?)))}))
+     :set-value     set-value}))
