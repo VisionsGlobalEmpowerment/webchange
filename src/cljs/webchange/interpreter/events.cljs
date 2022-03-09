@@ -705,8 +705,7 @@
   (fn [{:keys [_]} [_ {:keys [target src] :as action}]]
     (let [target (keyword target)]
       {:dispatch-n (list [::scene/change-scene-object target [[:reset-video {:src     src
-                                                                             :options {}}]]]
-                         (ce/success-event action))})))
+                                                                             :options {:on-end #(ce/dispatch-success-fn action)}}]]])})))
 
 (re-frame/reg-event-fx
   ::execute-path-animation
