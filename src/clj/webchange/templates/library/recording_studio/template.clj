@@ -22,7 +22,7 @@
                          :preview-activity {:course-slug   "recording-studio-test-english-gvfoggox"
                                             :activity-slug "recording-apple"}}
         :options        {:demo-image {:type        "image"
-                                      :optional?   true
+                                      :optional?   false
                                       :label       "Demo Image"
                                       :description "What demo image you want to show on the screen?"}
                          :image      {:type        "image"
@@ -32,10 +32,7 @@
         :options-groups [{:title   "Add Content"
                           :options ["demo-image" "image"]}]
         :actions        {:add-round {:title    "Add Round"
-                                     :track-id "main"
-                                     :options  {:image {:type        "image"
-                                                        :label       "Prompt Image"
-                                                        :description "What visual prompt do you want to show on the screen?"}}}}})
+                                     :track-id "main"}}})
 
 (def template (-> {:assets        []
                    :objects       (-> {:background    {:type   "rectangle"
@@ -60,6 +57,12 @@
                                                               :visible    false}
                                                              (select-keys (:sound-bar layout-params)
                                                                           [:x :y :width :height]))
+                                       :timer-group   {:type     "group"
+                                                       :x        0
+                                                       :y        0
+                                                       :visible  false
+                                                       :overlay? true
+                                                       :children ["timer-screen" "timer"]}
                                        :timer         (merge {:type              "timer"
                                                               :transition        "timer"
                                                               :show-minutes      false
@@ -72,7 +75,6 @@
                                                               :font-family       "Roboto"
                                                               :progress-color    0xff9000
                                                               :color             0x010101
-                                                              :visible           false
                                                               :actions           {:end {:on "end" :type "action" :id "recording-countdown-ended"}}}
                                                              (select-keys (:timer layout-params)
                                                                           [:x :y :size]))
@@ -80,8 +82,7 @@
                                                               :transition    "timer-screen"
                                                               :border-radius 32
                                                               :fill          0xCCCCCC
-                                                              :opacity       0.4
-                                                              :visible       false}
+                                                              :opacity       0.4}
                                                              (select-keys (:screen layout-params)
                                                                           [:x :y :width :height]))}
                                       (add-approve-button "approve-button" {:on-click "approve-button-click-handler"})
@@ -90,7 +91,7 @@
                                       (add-start-record-button "start-record-button" {:on-click "start-record-button-click-handler"})
                                       (add-stop-record-button "stop-record-button" {:on-click "stop-record-button-click-handler"}))
                    :scene-objects [["background" "screen" "sound-bar"]
-                                   ["concept-image" "timer-screen" "timer"]
+                                   ["concept-image" "timer-group"]
                                    ["approve-button" "start-play-button" "stop-play-button" "start-record-button" "stop-record-button"]]
                    :actions       {:script                            {:type   "workflow"
                                                                        :data   [{:type "start-activity"}
@@ -135,8 +136,10 @@
                                    :plug-out-sound-bar                {:type "sequence" :data ["deactivate-sound-bar" "hide-sound-bar"]}
 
                                    :reset-controls                    {:type "sequence-data"
-                                                                       :data [{:id "hide-approve-button" :type "action"}
-                                                                              {:id "hide-start-play-button" :type "action"}]}
+                                                                       :data [{:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
+                                                                              {:id "hide-approve-button" :type "action"}
+                                                                              {:id "hide-start-play-button" :type "action"}
+                                                                              {:id "hide-start-record-button" :type "action"}]}
 
                                    ;; Click handlers
 
@@ -177,13 +180,11 @@
                                    ;; Recording Timer
 
                                    :start-recording-countdown         {:type "sequence-data"
-                                                                       :data [{:type "set-attribute" :target "timer" :attr-name "visible" :attr-value true}
-                                                                              {:type "set-attribute" :target "timer-screen" :attr-name "visible" :attr-value true}
+                                                                       :data [{:type "set-attribute" :target "timer-group" :attr-name "visible" :attr-value true}
                                                                               {:type "timer-start" :target "timer"}]}
 
                                    :reset-timer                       {:type "sequence-data"
-                                                                       :data [{:type "set-attribute" :target "timer" :attr-name "visible" :attr-value false}
-                                                                              {:type "set-attribute" :target "timer-screen" :attr-name "visible" :attr-value false}
+                                                                       :data [{:type "set-attribute" :target "timer-group" :attr-name "visible" :attr-value false}
                                                                               {:type "timer-reset" :target "timer"}]}
 
                                    :recording-countdown-ended         {:type "sequence-data"
@@ -319,14 +320,15 @@
         round-tap (round-tap-name round-id)
         round-timeout (round-timeout-name round-id)]
     {(keyword round-action)  {:type "sequence-data"
-                              :data [{:type       "set-attribute"
-                                      :target     "concept-image"
-                                      :attr-name  "src"
-                                      :attr-value image}
-                                     {:type "set-variable" :var-name "tap-instructions-action" :var-value round-tap}
-                                     {:type "set-variable" :var-name "timeout-instructions-action" :var-value round-timeout}
-                                     {:type "action" :id round-dialog}
-                                     {:type "action" :id "timeout-timer"}]}
+                              :data (cond-> [{:type "action" :id "reset-controls"}]
+                                            (some? image) (conj {:type       "set-attribute"
+                                                                 :target     "concept-image"
+                                                                 :attr-name  "src"
+                                                                 :attr-value image})
+                                            :always (concat [{:type "set-variable" :var-name "tap-instructions-action" :var-value round-tap}
+                                                             {:type "set-variable" :var-name "timeout-instructions-action" :var-value round-timeout}
+                                                             {:type "action" :id round-dialog}
+                                                             {:type "action" :id "timeout-timer"}]))}
      (keyword round-dialog)  (dialog/default (str "Round " round-id))
      (keyword round-tap)     (dialog/default (str "Round " round-id " tap instructions"))
      (keyword round-timeout) (dialog/default (str "Round " round-id " timeout instructions"))}))
@@ -358,12 +360,12 @@
                      (get-in x [:metadata :tracks])
                      (drop 1 x)
                      (concat [main-track] x [round-track]))]
-    (-> activity-data
-        (update :actions merge actions)
-        (update-in [:actions :script :data] concat [{:type "action" :id round-action :workflow-user-input true}])
-        (assoc-in [:metadata :tracks] tracks)
-        (update-in [:metadata :resources] conj image)
-        (assoc-in [:metadata :next-round-id] next-round))))
+    (cond-> (-> activity-data
+                (update :actions merge actions)
+                (update-in [:actions :script :data] concat [{:type "action" :id round-action :workflow-user-input true}])
+                (assoc-in [:metadata :tracks] tracks)
+                (assoc-in [:metadata :next-round-id] next-round))
+            (some? image) (update-in [:metadata :resources] conj image))))
 
 (defn- add-demo
   [activity-data image]
@@ -375,8 +377,7 @@
                                                    :target     "concept-image"
                                                    :attr-name  "visible"
                                                    :attr-value true}
-                                                  {:type "action" :id "demo-dialog"}
-                                                  {:type "action" :id "reset-controls"}])
+                                                  {:type "action" :id "demo-dialog"}])
       (update-in [:metadata :tracks 0 :nodes] concat [{:type "prompt"
                                                        :text "Plays after the instructions and before round 1:"}
                                                       {:type      "dialog"

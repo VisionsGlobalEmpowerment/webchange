@@ -48,7 +48,7 @@
                                               (image-utils/set-image-size container sprite-object @state)
                                               (utils/emit container "scaleChanged"))
                    :set-src                 (fn [src]
-                                              (when src
+                                              (if-not (empty? src)
                                                 (resources/load-resource
                                                   src
                                                   (fn [resource]
@@ -58,4 +58,6 @@
                                                       (image-utils/set-image-position sprite-object @state)
                                                       (image-utils/apply-boundaries container @state)
                                                       (image-utils/apply-origin container @state)
-                                                      (utils/emit container "srcChanged"))))))}))
+                                                      (utils/emit container "srcChanged")
+                                                      (aset sprite-object "visible" true))))
+                                                (aset sprite-object "visible" false)))}))
