@@ -16,7 +16,8 @@
         cursor: pointer;
 
         img {
-            height: 100%;
+            position: relative;
+            height: 18vh;
         }
 
         &.selected {
@@ -26,5 +27,19 @@
                 filter: brightness(1.2);
             }
         }
+
+        @mixin adjust($id, $height, $top: 0) {
+            &#{$id} {
+                img {
+                    height: #{$height};
+                    top: #{$top};
+                }
+            }
+        }
+
+        @include adjust(#family-and-friends, 17.3vh, -0.3vh);
+        @include adjust(#science-stem, 15.9vh, 1vh);
+        @include adjust(#sports, 17.7vh);
+        @include adjust(#vehicles, 15.5vh, 1.6vh);
     }
 }
