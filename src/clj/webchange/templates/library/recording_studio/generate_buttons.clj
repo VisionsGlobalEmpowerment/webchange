@@ -140,7 +140,8 @@
                                            :filters  [{:name "brightness" :value 0}
                                                       {:name "glow" :outer-strength 0 :color 0xffd700}]
                                            :children ["approve-background"
-                                                      "approve-playback-button"]}
+                                                      "approve-playback-button"]
+                                           :actions  {:click {:id on-click :on "click" :type "action"}}}
                                           (select-keys (:approve-button layout-params)
                                                        [:x :y :width :height]))
           :approve-background      {:type          "rectangle"
@@ -151,11 +152,10 @@
                                     :height        96
                                     :border-radius 48
                                     :fill          0xFF5C00}
-          :approve-playback-button {:type    "svg-path"
-                                    :x       20
-                                    :y       25
-                                    :width   128
-                                    :height  128
-                                    :fill    "#FFFFFF",
-                                    :actions {:click {:id on-click :on "click" :type "action" :unique-tag "intro"}}
-                                    :data    "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}))
+          :approve-playback-button {:type   "svg-path"
+                                    :x      20
+                                    :y      25
+                                    :width  128
+                                    :height 128
+                                    :fill   "#FFFFFF"
+                                    :data   "M 9.29193 13.1343L0 22.3134L22.6633 45L59 9.47761L49.1793 0L22.6633 26.194L9.29193 13.1343"}}))

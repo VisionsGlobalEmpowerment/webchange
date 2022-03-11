@@ -1,5 +1,6 @@
 (ns webchange.templates.library.recording-studio.template
   (:require
+    [webchange.templates.common-actions :refer [update-activity]]
     [webchange.templates.library.recording-studio.generate-actions :refer [add-control-actions
                                                                            add-backward-compatibility-action]]
     [webchange.templates.library.recording-studio.generate-buttons :refer [add-start-play-button
@@ -93,23 +94,20 @@
                    :scene-objects [["background" "screen" "sound-bar"]
                                    ["concept-image" "timer-group"]
                                    ["approve-button" "start-play-button" "stop-play-button" "start-record-button" "stop-record-button"]]
-                   :actions       {:script                            {:type   "workflow"
-                                                                       :data   [{:type "start-activity"}
-                                                                                {:type "parallel"
-                                                                                 :data [{:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
-                                                                                        {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}]}
-                                                                                {:type "action" :id "intro-dialog"}
-                                                                                {:type "action" :id "reset-controls"}]
-                                                                       :on-end "finish"}
+                   :actions       {:main                              {:type "sequence-data",
+                                                                       :data [{:type "start-activity"}
+                                                                              {:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
+                                                                              {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}
+                                                                              {:type "action" :id "intro-dialog"}
+                                                                              {:type "action" :id "finish"}]}
 
                                    :finish                            {:type "sequence-data"
                                                                        :data [{:type "action" :id "remove-timeout-timer"}
-                                                                              {:type "action" :id "finish-dialog"}
                                                                               {:type "finish-activity"}]}
 
                                    :set-demo-image-src                {:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
 
-                                   :approve-button-click-handler      {:type "action" :id "script"}
+                                   :approve-button-click-handler      {:type "finish-flows" :tag "ask-recording"}
 
                                    :stop-activity                     {:type "sequence-data"
                                                                        :data [{:type "action" :id "remove-timeout-timer"}
@@ -134,12 +132,6 @@
 
                                    :plug-in-sound-bar                 {:type "sequence" :data ["show-sound-bar" "activate-sound-bar"]}
                                    :plug-out-sound-bar                {:type "sequence" :data ["deactivate-sound-bar" "hide-sound-bar"]}
-
-                                   :reset-controls                    {:type "sequence-data"
-                                                                       :data [{:type "set-attribute" :target "concept-image" :attr-name "src" :attr-value ""}
-                                                                              {:id "hide-approve-button" :type "action"}
-                                                                              {:id "hide-start-play-button" :type "action"}
-                                                                              {:id "hide-start-record-button" :type "action"}]}
 
                                    ;; Click handlers
 
@@ -238,15 +230,15 @@
                                    :remove-timeout-timer              {:type "remove-interval"
                                                                        :id   "incorrect-answer-checker"}
 
+                                   :empty                             {:type "empty" :duration 100}
+
                                    ;; Dialogs
 
-                                   :intro-dialog                      (-> (dialog/default "Intro")
-                                                                          (assoc :unique-tag "intro"))
+                                   :intro-dialog                      (dialog/default "Main")
                                    :start-recording-dialog            (dialog/default "Start recording")
                                    :stop-recording-dialog             (dialog/default "Stop recording")
                                    :start-playback-dialog             (dialog/default "Start playback")
                                    :stop-playback-dialog              (dialog/default "Stop playback")
-                                   :finish-dialog                     (dialog/default "Finish")
 
                                    ;; Available actions
 
@@ -256,10 +248,19 @@
 
                                    :show-button-stop                  {:type "parallel"
                                                                        :data [{:type "action" :id "hide-start-record-button"}
-                                                                              {:type "action" :id "show-stop-record-button"}]}}
+                                                                              {:type "action" :id "show-stop-record-button"}]}
+
+                                   :ask-recording                     {:type                "sequence-data"
+                                                                       :workflow-user-input true
+                                                                       :tags                ["ask-recording"]
+                                                                       :data                [{:type "action" :id "hide-approve-button"}
+                                                                                             {:type "action" :id "hide-start-play-button"}
+                                                                                             {:type "action" :id "hide-stop-play-button"}
+                                                                                             {:type "action" :id "hide-stop-record-button"}
+                                                                                             {:type "action" :id "show-start-record-button"}]}}
 
                    :triggers      {:stop  {:on "back" :action "stop-activity"}
-                                   :start {:on "start" :action "script"}}
+                                   :start {:on "start" :action "main"}}
                    :metadata      {:autostart         true
                                    :resources         []
                                    :guide-settings    {:show-guide true
@@ -267,7 +268,11 @@
                                    :tracks            [{:id    "main"
                                                         :title "Main Track"
                                                         :nodes [{:type      "dialog"
-                                                                 :action-id "intro-dialog"}
+                                                                 :action-id "intro-dialog"}]}
+                                                       {:id    "recording"
+                                                        :title "Ask Recording Dialogs"
+                                                        :nodes [{:type "prompt"
+                                                                 :text "Plays when the user taps the record button:"}
                                                                 {:type      "dialog"
                                                                  :action-id "start-recording-dialog"}
                                                                 {:type "prompt"
@@ -281,15 +286,13 @@
                                                                 {:type "prompt"
                                                                  :text "Plays when the user stops the playback:"}
                                                                 {:type      "dialog"
-                                                                 :action-id "stop-playback-dialog"}
-                                                                {:type "prompt"
-                                                                 :text "Plays after check mark button click:"}
-                                                                {:type      "dialog"
-                                                                 :action-id "finish-dialog"}]}]
+                                                                 :action-id "stop-playback-dialog"}]}]
                                    :available-actions [{:action "activate-sound-bar"
                                                         :name   "Turn on sound bar"}
                                                        {:action "deactivate-sound-bar"
-                                                        :name   "Turn off sound bar"}]}}
+                                                        :name   "Turn off sound bar"}
+                                                       {:action "ask-recording"
+                                                        :name   "Ask user to record"}]}}
                   (add-control-actions "approve-button")
                   (add-control-actions "start-play-button")
                   (add-control-actions "stop-play-button")
@@ -301,102 +304,30 @@
                   (add-backward-compatibility-action "show-button-record" "start-record-button" "show")
                   (add-backward-compatibility-action "show-button-stop" "stop-record-button" "show")))
 
-(defn- round-action-name [round-id]
-  (str "round-" round-id))
-
-(defn- round-dialog-name [round-id]
-  (str "round-dialog-" round-id))
-
-(defn- round-tap-name [round-id]
-  (str "round-tap-dialog-" round-id))
-
-(defn- round-timeout-name [round-id]
-  (str "round-timeout-dialog-" round-id))
-
-(defn- create-round-actions
-  [round-id image]
-  (let [round-action (round-action-name round-id)
-        round-dialog (round-dialog-name round-id)
-        round-tap (round-tap-name round-id)
-        round-timeout (round-timeout-name round-id)]
-    {(keyword round-action)  {:type "sequence-data"
-                              :data (cond-> [{:type "action" :id "reset-controls"}]
-                                            (some? image) (conj {:type       "set-attribute"
-                                                                 :target     "concept-image"
-                                                                 :attr-name  "src"
-                                                                 :attr-value image})
-                                            :always (concat [{:type "set-variable" :var-name "tap-instructions-action" :var-value round-tap}
-                                                             {:type "set-variable" :var-name "timeout-instructions-action" :var-value round-timeout}
-                                                             {:type "action" :id round-dialog}
-                                                             {:type "action" :id "timeout-timer"}]))}
-     (keyword round-dialog)  (dialog/default (str "Round " round-id))
-     (keyword round-tap)     (dialog/default (str "Round " round-id " tap instructions"))
-     (keyword round-timeout) (dialog/default (str "Round " round-id " timeout instructions"))}))
-
 (defn- add-round
-  [activity-data image]
+  [activity-data image-src]
   (let [next-round (-> activity-data
                        (get-in [:metadata :next-round-id])
                        (or 0)
-                       (inc))
-        round-action (round-action-name next-round)
-        round-dialog (round-dialog-name next-round)
-        round-tap (round-tap-name next-round)
-        round-timeout (round-timeout-name next-round)
-        actions (create-round-actions next-round image)
-        main-track (-> activity-data
-                       (get-in [:metadata :tracks])
-                       (first)
-                       (update :nodes concat [{:type "track" :track-id round-action}]))
-        round-track {:id    round-action
-                     :title (str "Round " next-round)
-                     :nodes [{:type      "dialog"
-                              :action-id round-dialog}
-                             {:type      "dialog"
-                              :action-id round-tap}
-                             {:type      "dialog"
-                              :action-id round-timeout}]}
-        tracks (as-> activity-data x
-                     (get-in x [:metadata :tracks])
-                     (drop 1 x)
-                     (concat [main-track] x [round-track]))]
-    (cond-> (-> activity-data
-                (update :actions merge actions)
-                (update-in [:actions :script :data] concat [{:type "action" :id round-action :workflow-user-input true}])
-                (assoc-in [:metadata :tracks] tracks)
-                (assoc-in [:metadata :next-round-id] next-round))
-            (some? image) (update-in [:metadata :resources] conj image))))
-
-(defn- add-demo
-  [activity-data image]
-  (-> activity-data
-      (assoc-in [:actions :set-demo-image-src :attr-value] image)
-      (assoc-in [:actions :demo-dialog] (dialog/default "Demo"))
-      (update-in [:actions :script :data] concat [{:type "action" :id "set-demo-image-src"}
-                                                  {:type       "set-attribute"
-                                                   :target     "concept-image"
-                                                   :attr-name  "visible"
-                                                   :attr-value true}
-                                                  {:type "action" :id "demo-dialog"}])
-      (update-in [:metadata :tracks 0 :nodes] concat [{:type "prompt"
-                                                       :text "Plays after the instructions and before round 1:"}
-                                                      {:type      "dialog"
-                                                       :action-id "demo-dialog"}])
-      (update-in [:metadata :resources] conj image)))
+                       (inc))]
+    (cond-> activity-data
+            (some? image-src) (-> (update-activity "add-image" {:name  (str "Image " next-round)
+                                                                :image {:src image-src}})
+                                  (assoc-in [:metadata :next-round-id] next-round)))))
 
 (defn create
   [args]
   (let [demo-image (get-in args [:demo-image :src])
         image (get-in args [:image :src])]
     (cond-> template
-            demo-image (add-demo demo-image)
+            demo-image (add-round demo-image)
             image (add-round image)
             :always (assoc-in [:metadata :actions] (:actions m)))))
 
 (defn update-template
-  [old-data {:keys [action-name image]}]
+  [activity-data {:keys [action-name image]}]
   (case action-name
-    "add-round" (add-round old-data (:src image))))
+    "add-round" (add-round activity-data (:src image))))
 
 (core/register-template
   m
