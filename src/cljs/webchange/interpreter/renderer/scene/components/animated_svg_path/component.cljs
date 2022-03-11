@@ -86,10 +86,11 @@
     :offset - container position offset. Default: {:x 0 :y 0}.
     :duration - animation duration in seconds
     :traceable - flag indicating whether finger tracing allowed"
-  [{:keys [parent type object-name group-name traceable] :as props}]
+  [{:keys [x y scale parent type object-name group-name traceable] :as props}]
   (let [container (create-container props)
         state (create-state props)
-        wrapped-container (wrap type object-name group-name container state)]
+        dimensions {:x x :y y :scale (:x scale)}
+        wrapped-container (wrap type object-name group-name container state dimensions)]
     (logger/trace-folded "Create animated-svg-path" props)
     (.addChild container (Sprite. (:texture @state)))
 
