@@ -53,5 +53,5 @@
         updated-activity-data (-> activity-data
                                   (update :assets conj image-asset)
                                   (update :objects assoc (keyword image-name) image-data)
-                                  (update-in [:objects (keyword object) :children] conj image-name))]
+                                  (update-in [:objects (keyword object) :children] concat [image-name]))]
     (update-in updated-activity-data [:objects (keyword object) :children] sort-children updated-activity-data)))

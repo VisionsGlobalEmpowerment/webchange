@@ -34,10 +34,15 @@
                                               (.addChild (:object parent) container))
                    :set-position            (fn [position]
                                               (utils/set-position container position))
-                   :set-scale               (fn [scale]
-                                              (swap! state assoc :scale scale)
+                   :set-scale               (fn [new-scale]
+                                              (let [{:keys [offset scale]} @state
+                                                    position (utils/get-position container)]
+                                                (utils/set-position container (-> position
+                                                                                  (update :x - (* (:x offset) (- (:x new-scale) (:x scale))))
+                                                                                  (update :y - (* (:y offset) (- (:y new-scale) (:y scale)))))))
+                                              (swap! state assoc :scale new-scale)
                                               (image-utils/set-image-size container sprite-object @state)
-                                              (utils/emit container "scaleChanged" scale))
+                                              (utils/emit container "scaleChanged" new-scale))
                    :set-image-size          (fn [image-size]
                                               (swap! state assoc :image-size image-size)
                                               (image-utils/set-image-size container sprite-object @state)

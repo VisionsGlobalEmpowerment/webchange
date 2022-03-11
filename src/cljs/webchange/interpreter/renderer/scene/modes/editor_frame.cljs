@@ -34,9 +34,10 @@
 
 (defn- apply-text-align
   [position {:keys [align width]} container]
-  (let [local-bounds (.getLocalBounds container)]
+  (let [local-bounds (.getLocalBounds container)
+        x-align (aget container "x-align")]
     (-> position
-        (update :x - (case align
+        (update :x - (case (or x-align align)
                        "center" (/ width 2)
                        "right" (- width
                                   (.-width local-bounds)
@@ -108,10 +109,13 @@
   [object]
   (let [local-bounds (get-object-local-bounds object)
         pivot (utils/get-pivot object)
-        scale (utils/get-scale object {:abs? true})]
+        scale (utils/get-scale object {:abs? true})
+        pos (utils/get-position object)]
     (-> local-bounds
         (update :width * (:x scale))
         (update :height * (:y scale))
+        (update :x + (:x pos))
+        (update :y + (:y pos))
         (update :x - (* (:x pivot) (:x scale)))
         (update :y - (* (:y pivot) (:y scale))))))
 
@@ -193,6 +197,7 @@
                     :position-x (+ x (/ width 2))}
           "right" {:anchor-x   1
                    :position-x (+ x width)})]
+    (aset frame-container "x-align" align)
     (aset (.-anchor text-object) "x" anchor-x)
     (utils/set-position frame-container {:x position-x})))
 
