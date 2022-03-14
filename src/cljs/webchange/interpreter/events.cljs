@@ -42,6 +42,7 @@
 (ce/reg-simple-executor :start-audio-recording ::execute-start-audio-recording)
 (ce/reg-simple-executor :stop-audio-recording ::execute-stop-audio-recording)
 (ce/reg-simple-executor :play-video ::execute-play-video)
+(ce/reg-simple-executor :reset-video ::execute-reset-video)
 (ce/reg-simple-executor :path-animation ::execute-path-animation)
 (ce/reg-simple-executor :state ::execute-state)
 (ce/reg-simple-executor :mass-state ::execute-mass-state)
@@ -701,6 +702,12 @@
                                                                            :start  start
                                                                            :end    end
                                                                            :on-end #(ce/dispatch-success-fn action)}}]]]})))
+(re-frame/reg-event-fx
+  ::execute-reset-video
+  (fn [{:keys [_]} [_ {:keys [target src] :as action}]]
+    (let [target (keyword target)]
+      {:dispatch-n (list [::scene/change-scene-object target [[:reset-video {:src     src
+                                                                             :options {:on-end #(ce/dispatch-success-fn action)}}]]])})))
 
 (re-frame/reg-event-fx
   ::execute-path-animation

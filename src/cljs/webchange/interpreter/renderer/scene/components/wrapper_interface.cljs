@@ -42,6 +42,7 @@
 (defn set-skeleton [wrapper & params] (execute wrapper :set-skeleton params))
 (defn set-slot [wrapper & params] (execute wrapper :set-slot params))
 (defn set-src [wrapper & params] (execute wrapper :set-src params))
+(defn reset-video [wrapper & params] (execute wrapper :reset-video params))
 (defn set-highlight [wrapper & params] (execute wrapper :set-highlight params))
 (defn set-permanent-pulsation [wrapper & params] (execute wrapper :set-permanent-pulsation params))
 (defn set-alpha-pulsation [wrapper & params] (execute wrapper :set-alpha-pulsation params))

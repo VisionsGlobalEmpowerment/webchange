@@ -84,6 +84,7 @@
    {:action :set-scale :params [:scale :scale-x :scale-y]}
    {:action :set-visibility :params [:visible]}
    {:action :set-src :params [:src]}
+   {:action :reset-video :params [:src]}
    {:action :set-text :params [:text]}
    {:action :clear-area :params []}
    {:action :set-filter :params [:filter :brightness :eager]}
@@ -230,6 +231,11 @@
   :set-src
   (fn [[object-wrapper {:keys [src options]}]]
     (apply-to-wrapper w/set-src object-wrapper src options)))
+
+(re-frame/reg-fx
+  :reset-video
+  (fn [[object-wrapper {:keys [src options]}]]
+    (apply-to-wrapper w/reset-video object-wrapper src options)))
 
 (re-frame/reg-fx
   :set-highlight

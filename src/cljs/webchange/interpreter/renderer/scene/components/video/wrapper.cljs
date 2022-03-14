@@ -15,6 +15,11 @@
                                   (throw (js/Error. (str "Resources for '" src "' were not loaded"))))
                                 (v-utils/set-src sprite-object resource (merge options
                                                                                {:volume (get-in @state [:props :volume])}))))
+                   :reset-video (fn [src options]
+                                  (let [resource (resources/get-resource src)]
+                                    (when (nil? resource)
+                                      (throw (js/Error. (str "Resources for '" src "' were not loaded"))))
+                                    (v-utils/reset-video sprite-object resource options)))
                    :play    (fn []
                               (v-utils/play-video sprite-object (get-in @state [:props :volume])))
                    :stop    (fn []
