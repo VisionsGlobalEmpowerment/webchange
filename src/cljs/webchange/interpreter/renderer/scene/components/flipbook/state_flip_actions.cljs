@@ -42,9 +42,10 @@
 
 (defn- apply-mask
   [container mask]
-  (remove-mask container)
-  (.addChild container mask)
-  (aset container "mask" mask))
+  (when container
+    (remove-mask container)
+    (.addChild container mask)
+    (aset container "mask" mask)))
 
 (defn- update-mask
   [mask {:keys [x y width height]
