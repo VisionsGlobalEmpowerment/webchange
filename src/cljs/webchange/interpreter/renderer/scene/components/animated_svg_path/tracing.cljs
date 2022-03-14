@@ -40,8 +40,20 @@
         touch? {:updated? true :path-finished true}
         :else {:updated? updated? :next-point-idx point-idx}))))
 
+(def arrow (atom nil))
+
+(defn- get-direction [points index]
+  (let [index (if (= index (dec (count points)))
+                (dec index)
+                index)
+        {x1 :x y1 :y} (nth points index)
+        {x2 :x y2 :y} (nth points (inc index))
+        vx (- x2 x1)
+        vy (- y2 y1)]
+    (* (Math/atan2 vy vx) (/ 180.0 Math/PI))))
+
 (defn draw
-  [state {:keys [path-idx point-idx]}]
+  [state {:keys [path-idx point-idx]} dimensions]
   (let [{:keys [ctx texture paths width height]} @state
         idx (atom 0)]
     (.clearRect ctx 0 0 width height)
@@ -53,22 +65,29 @@
         (swap! idx inc)))
 
     (when-let [{:keys [path length points]} (get paths path-idx)]
+      (.save ctx)
+      (.setLineDash ctx #js [7 7])
+      (set! ctx -strokeStyle "#00c3ff")
+      (set! ctx -lineWidth 4)
+      (.stroke ctx (js/Path2D. path))
+      (.restore ctx)
+
       (when (> point-idx 0)
         (.setLineDash ctx #js [(* point-idx precision) length])
         (.stroke ctx (js/Path2D. path)))
 
-      (let [{:keys [x y]} (-> points (nth point-idx))
-            radius 4
-            color "#1e90ff"]
-        (.beginPath ctx)
-        (.arc ctx x y radius 0 (* 2 js/Math.PI) false)
-        (set! ctx -fillStyle color)
-        (.fill ctx)))
-
+      (when @arrow
+        ((:set-rotation @arrow) (get-direction points point-idx))
+        (let [{:keys [x y]} (nth points point-idx)
+              dx (:x dimensions)
+              dy (:y dimensions)
+              ds (:scale dimensions)]
+          ((:set-position @arrow) {:x (+ dx (* ds x))
+                                   :y (+ dy (* ds y))}))))
     (.update texture)))
 
 (defn- drag
-  [state {:keys [scale offset on-finish]} pointer]
+  [state {:keys [x y scale offset on-finish]} pointer]
   (let [{:keys [paths] {:keys [path-idx point-idx] :or {path-idx 0 point-idx 0}} :next-point} @state
         points (some-> paths (nth path-idx nil) :points)
         {:keys [updated? path-finished next-point-idx]} (complete-path points point-idx pointer scale offset)
@@ -77,10 +96,11 @@
                       :point-idx 0}
                      {:path-idx  path-idx
                       :point-idx next-point-idx})
-        all-paths-finished (and path-finished (= (inc path-idx) (count paths)))]
+        all-paths-finished (and path-finished (= (inc path-idx) (count paths)))
+        dimensions {:x x :y y :scale (:x scale)}]
     (when updated?
       (swap! state assoc :next-point next-point)
-      (draw state next-point))
+      (draw state next-point dimensions))
 
     (when (and all-paths-finished on-finish)
       (on-finish))))
@@ -126,9 +146,9 @@
           (drag state props pointer))))))
 
 (defn create-trigger
-  [state {:keys [width height scale] :as props}]
+  [state {:keys [x y width height scale] :as props}]
   (when (:active @state)
-    (draw state {:path-idx 0 :point-idx 0}))
+    (draw state {:path-idx 0 :point-idx 0} {:x x :y y :scale (:x scale)}))
   (doto (Sprite. (.-EMPTY Texture))
     (utils/set-size {:width (* width (:x scale)) :height (* height (:y scale))})
     (set! -interactive true)

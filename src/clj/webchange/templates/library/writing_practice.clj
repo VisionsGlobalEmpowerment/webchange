@@ -26,14 +26,14 @@
          {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
          {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}
          {:url "/raw/img/ui/circle.png" :size 1 :type "image"}
-         {:url "/raw/img/ui/checkmark.png" :size 1 :type "image"}],
+         {:url "/raw/img/ui/checkmark.png" :size 1 :type "image"}
+         {:url "/raw/clipart/writing/arrow.png" :type "image"}
+         {:url "/raw/clipart/writing/hand.png" :type "image"}],
         :objects
         {:background  {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
-         :letter-tutorial-image
-         {:type "image", :x 1065, :y 125, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
          :letter-tutorial-path
          {:type         "animated-svg-path",
-          :x            600,
+          :x            400,
           :y            -37,
           :width        225,
           :height       300,
@@ -41,14 +41,14 @@
           :fill         "transparent",
           :line-cap     "round",
           :path         "",
-          :scale-x      1.8,
-          :scale-y      1.8,
+          :scale-x      4,
+          :scale-y      4,
           :states       {:hidden {:visible false}, :visible {:visible true}},
           :stroke       "#323232",
           :stroke-width 10},
          :letter-tutorial-trace
          {:type         "svg-path",
-          :x            600,
+          :x            400,
           :y            -37,
           :width        225,
           :height       300,
@@ -57,21 +57,22 @@
           :data         "",
           :line-cap     "round",
           :rotation     0,
-          :scale-x      1.8,
-          :scale-y      1.8,
+          :scale-x      4,
+          :scale-y      4,
           :states       {:hidden {:visible false}, :visible {:visible true}},
           :stroke       "#898989",
           :stroke-width 4},
          :text-tracing-pattern
          {:type        "text-tracing-pattern"
           :traceable   true
-          :repeat-text 3
+          :repeat-text 2
           :text        " "
           :enable?     false
+          :visible     false
+          :height      1000
           :actions     {:next-letter {:on "next-letter-activated" :type "action" :id "letter-finished-dialog"}
                         :finish      {:on "finish" :type "action" :id "text-finished"}
                         :click       {:on "click" :type "action" :id "timeout-timer"}}}
-
          :practice-canvas
          {:type    "painting-area"
           :tool    "felt-tip"
@@ -90,22 +91,13 @@
           :height     150
           :actions    {:change {:on "change" :type "action", :id "set-current-color" :pick-event-param "color"}}
           :visible    false}
-         :mari
-         {:type       "animation",
+         :hand
+         {:type       "image",
           :x          1600,
           :y          225,
-          :width      473,
-          :height     511,
-          :scene-name "mari",
-          :transition "mari",
-          :anim       "idle",
-          :name       "mari",
-          :scale-x    0.5,
-          :scale-y    0.5,
-          :speed      0.35,
-          :start      true
-          :editable?  {:select true :drag true :show-in-tree? true}
-          :actions    {:click {:on "click" :type "action" :id "tap-instructions"}}},
+          :src        "/raw/clipart/writing/hand.png"
+          :transition "hand",
+          :scale 1.5},
          :next-button {:type    "image"
                        :x       1706 :y 132
                        :actions {:click {:id "finish-activity", :on "click", :type "action"}}
@@ -117,21 +109,17 @@
         [["background"]
          ["letter-tutorial-trace"
           "letter-tutorial-path"
-          "letter-tutorial-image"
-
           "text-tracing-pattern"
-
           "practice-canvas"
           "painting-toolset"
           "colors-palette"
-
           "next-button"
-          "mari"]],
+          "hand"]],
         :actions
         {:start-scene                 {:type "sequence-data",
                                        :data [{:type "start-activity"}
                                               {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]}
-
+                                              {:type "set-variable" :var-name "stage" :var-value "1"}
                                               {:type      "set-attribute",
                                                :target    "letter-tutorial-trace",
                                                :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
@@ -141,44 +129,44 @@
                                                :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
                                                :attr-name "path"}
                                               {:type      "set-attribute",
-                                               :target    "letter-tutorial-image",
-                                               :from-var  [{:var-name "current-concept", :action-property "attr-value", :var-property "letter-src"}],
-                                               :attr-name "src"}
-                                              {:type      "set-attribute",
                                                :target    "text-tracing-pattern",
                                                :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
                                                :attr-name "text"}
-                                              {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
                                               {:type "action" :id "dialog-instructions"}
                                               {:type      "set-attribute",
                                                :target    "text-tracing-pattern",
                                                :attr-name "enable?",
                                                :attr-value true}
-                                              {:type "action" :id "timeout-timer"}]},
+                                              {:type "action" :id "timeout-timer"}
+                                              {:type "action" :id "show-example"}]},
          :stop-activity               {:type "sequence-data"
                                        :data [{:type "remove-interval" :id "instructions-timeout"}
                                               {:type "stop-activity"}]}
          :finish-activity             {:type "sequence-data"
                                        :data [{:type "remove-interval" :id "instructions-timeout"}
                                               {:type "finish-activity"}]},
-         :dialog-instructions         (-> (dialog/default "Instructions")
-                                          (assoc :concept-var "current-concept")
-                                          (assoc :available-activities ["show-example"])
-                                          (assoc :unique-tag "instruction"))
-         :dialog-instructions-second-stage
-         (-> (dialog/default "Instructions second stage")
-             (assoc :concept-var "current-concept")
-             (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
+         :dialog-instructions (-> (dialog/default "Instructions..")
+                                  (assoc :concept-var "current-concept")
+                                  (assoc :available-activities ["show-example"])
+                                  (assoc :unique-tag "instruction"))
+         :dialog-instructions-second-stage (-> (dialog/default "Instructions second stage")
+                                               (assoc :concept-var "current-concept")
+                                               (assoc :available-activities []))
+         :dialog-instructions-third-stage (-> (dialog/default "Instructions third stage")
+                                              (assoc :concept-var "current-concept")
+                                              (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
+
          :show-example                {:type "sequence-data"
-                                       :data [{:to {:x 1080, :y 360, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+                                       :data [{:to {:x 860, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "hand"}
                                               {:id "visible", :type "state", :target "letter-tutorial-path"}
                                               {:data [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
-                                                      {:to            {:letter-path "", :scale {:x 1.8, :y 1.8}, :origin {:x 780, :y 0}, :duration 5},
+                                                      {:to            {:letter-path "", :scale {:x 4, :y 4}, :origin {:x 260, :y -80}, :duration 5},
                                                        :type          "transition",
                                                        :from-var      [{:var-name "current-concept", :action-property "to.letter-path" :var-property "letter"}],
-                                                       :transition-id "mari"}],
+                                                       :transition-id "hand"}],
                                                :type "parallel"}
-                                              {:to {:x 1490, :y 180, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}]}
+                                              {:to {:x 1490, :y 180, :loop false, :duration 1.5}, :type "transition", :transition-id "hand"}
+                                              {:type "action" :id "demo-finished"}]}
 
          :highlight-tools             {:type               "transition"
                                        :transition-id      "painting-toolset"
@@ -211,6 +199,7 @@
                                                :from-params [{:param-property "color", :action-property "attr-value"}]}
                                               {:type        "action"
                                                :from-params [{:param-property "color", :action-property "id" :template "dialog-color-%"}]}]}
+
          :dialog-tool-brush           (dialog/default "tool brush")
          :dialog-tool-felt-tip        (dialog/default "tool felt-tip")
          :dialog-tool-pencil          (dialog/default "tool pencil")
@@ -222,22 +211,28 @@
          :dialog-color-65793          (dialog/default "color black")
          :letter-finished-dialog      (-> (dialog/default "letter finished")
                                           (assoc :concept-var "current-concept"))
+
+         :demo-finished               {:type "sequence-data"
+                                       :data [{:type "set-attribute" :target "letter-tutorial-path" :attr-name "visible" :attr-value false}
+                                              {:type "set-attribute" :target "letter-tutorial-trace" :attr-name "visible" :attr-value false}
+                                              {:type "set-attribute" :target "hand" :attr-name "visible" :attr-value false}
+                                              {:type "set-attribute" :target "text-tracing-pattern" :attr-name "visible" :attr-value true}
+                                              {:type "set-variable" :var-name "stage" :var-value "2"}
+                                              {:type "action" :id "dialog-instructions-second-stage"}]}
+
          :text-finished               {:type "sequence-data"
                                        :data [{:type "remove-interval" :id "instructions-timeout"}
                                               {:type "action" :id "letter-finished-dialog"}
                                               {:type "action" :id "text-finished-dialog"}
-                                              {:type "set-attribute" :target "letter-tutorial-image" :attr-name "visible" :attr-value false}
                                               {:type "set-attribute" :target "letter-tutorial-path" :attr-name "visible" :attr-value false}
                                               {:type "set-attribute" :target "letter-tutorial-trace" :attr-name "visible" :attr-value false}
                                               {:type "set-attribute" :target "text-tracing-pattern" :attr-name "visible" :attr-value false}
-
                                               {:type "set-attribute" :target "practice-canvas" :attr-name "visible" :attr-value true}
                                               {:type "set-attribute" :target "painting-toolset" :attr-name "visible" :attr-value true}
                                               {:type "set-attribute" :target "colors-palette" :attr-name "visible" :attr-value true}
                                               {:type "set-attribute" :target "next-button" :attr-name "visible" :attr-value true}
-
-                                              {:type "set-variable" :var-name "second-stage" :var-value true}
-                                              {:type "action" :id "dialog-instructions-second-stage"}
+                                              {:type "set-variable" :var-name "stage" :var-value "3"}
+                                              {:type "action" :id "dialog-instructions-third-stage"}
                                               {:type "action" :id "timeout-timer"}]}
          :text-finished-dialog        (-> (dialog/default "text finished")
                                           (assoc :concept-var "current-concept"))
@@ -246,17 +241,15 @@
                                        :action   "timeout-instructions",
                                        :interval 25000}
 
-         :timeout-instructions        {:type     "test-value",
-                                       :value2   true,
-                                       :success  {:type "action" :id "dialog-timeout-instructions-second-stage"},
-                                       :fail     {:type "action" :id "dialog-timeout-instructions"},
-                                       :from-var [{:var-name "second-stage", :action-property "value1"}]}
-         :tap-instructions            {:unique-tag "instruction"
-                                       :type       "test-value",
-                                       :value2     true,
-                                       :success    {:type "action" :id "dialog-tap-instructions-second-stage"},
-                                       :fail       {:type "action" :id "dialog-tap-instructions"},
-                                       :from-var   [{:var-name "second-stage", :action-property "value1"}]}
+         :timeout-instructions {:type "test-var-scalar"
+                                :var-name "stage"
+                                :value    "1"
+                                :success {:type "action" :id "dialog-timeout-instructions"}
+                                :fail {:type "test-var-scalar"
+                                       :var-name "stage"
+                                       :value    "2"
+                                       :success {:type "action" :id "dialog-timeout-instructions-second-stage"}
+                                       :fail {:type "action" :id "dialog-timeout-instructions-third-stage"}}}
 
          :dialog-timeout-instructions (-> (dialog/default "Timeout instructions")
                                           (assoc :concept-var "current-concept")
@@ -264,13 +257,9 @@
          :dialog-timeout-instructions-second-stage
          (-> (dialog/default "Timeout instructions second stage")
              (assoc :concept-var "current-concept")
-             (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
-
-         :dialog-tap-instructions     (-> (dialog/default "Tap instructions")
-                                          (assoc :concept-var "current-concept")
-                                          (assoc :available-activities ["show-example"]))
-         :dialog-tap-instructions-second-stage
-         (-> (dialog/default "Tap instructions second stage")
+             (assoc :available-activities []))
+         :dialog-timeout-instructions-third-stage
+         (-> (dialog/default "Timeout instructions third stage")
              (assoc :concept-var "current-concept")
              (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
          },
@@ -281,15 +270,19 @@
                                       :action-id :dialog-instructions}
                                      {:type      "dialog"
                                       :action-id :dialog-timeout-instructions}
-                                     {:type      "dialog"
-                                      :action-id :dialog-tap-instructions}]}
+                                     ]}
                             {:title "2 Instructions stage 2"
                              :nodes [{:type      "dialog"
                                       :action-id :dialog-instructions-second-stage}
                                      {:type      "dialog"
                                       :action-id :dialog-timeout-instructions-second-stage}
+                                     ]}
+                            {:title "3 Instructions stage 3"
+                             :nodes [{:type      "dialog"
+                                      :action-id :dialog-instructions-third-stage}
                                      {:type      "dialog"
-                                      :action-id :dialog-tap-instructions-second-stage}]}
+                                      :action-id :dialog-timeout-instructions-third-stage}
+                                     ]}
                             {:title "3 Colors"
                              :nodes [{:type      "dialog"
                                       :action-id :dialog-color-4487611}

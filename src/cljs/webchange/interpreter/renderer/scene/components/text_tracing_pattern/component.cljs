@@ -7,8 +7,10 @@
     [webchange.interpreter.renderer.scene.components.svg-path.component :as s]
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.utils :refer [set-enable!]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
+    [webchange.interpreter.renderer.scene.components.image.component :as i]
     [webchange.interpreter.renderer.scene.components.letters-path :refer [alphabet-path alphabet-traceable-path]]
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]))
 
 (def default-props {:x                        {:default 0}
                     :y                        {:default 300}
@@ -51,14 +53,14 @@
 (defn- path->letter
   [scale path]
   {:type         "svg-path",
-   :dash         [7 7],
+   :dash         [],
    :width        base-width
    :height       base-height
    :data         path,
    :scale        {:x scale :y scale}
    :line-cap     "round",
    :stroke       "#898989",
-   :stroke-width 4})
+   :stroke-width 12})
 
 (defn- path->animated-letter
   [letter-scale padding-scale path]
@@ -75,7 +77,7 @@
      :offset       {:x (- padding) :y 0}
      :line-cap     "round",
      :stroke       "#323232",
-     :stroke-width 10}))
+     :stroke-width 12}))
 
 (defn- draw-pattern!
   [group {:keys [width text repeat-text]} {letter-scale :letter padding-scale :padding} topline-y]
@@ -144,6 +146,15 @@
                                             :parent group))]
           (swap! state update :letters conj animated-svg-path)
           (swap! state update :all-letters conj animated-svg-path))))
+    (reset! tracing/arrow (i/create {:type "image"
+                                     :x -100
+                                     :y 100
+                                     :width 100
+                                     :height 100
+                                     :src "/raw/clipart/writing/arrow.png"
+                                     :origin {:type "center-center"}
+                                     :object-name "text-tracing-pattern-arrow"
+                                     :parent group}))
     (activate-next-letter state)))
 
 (defn- padding-scale
