@@ -174,9 +174,9 @@
   (fn [{:keys [_]} [_ {:keys [field-name action-data]}]]
     (let [concept-schema {:name     field-name
                           :type     "action"
-                          :template defaults/default-action}
+                          :template defaults/default-concept-action}
           action (cond-> defaults/default-concept-action
-                         (some? action-data) (defaults/update-inner-concept-action action-data))]
+                         (some? action-data) (defaults/update-inner-concept-action (defaults/get-inner-action action-data)))]
       {:dispatch-n [[::dialog-form.concepts/add-concepts-schema-fields concept-schema]
                     [::translator-form.concepts/update-current-concept [(keyword field-name)] action]]})))
 

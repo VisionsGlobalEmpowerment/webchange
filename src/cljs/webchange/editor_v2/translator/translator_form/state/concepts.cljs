@@ -219,14 +219,13 @@
       {:db         (-> db
                        (assoc-in (path-to-db (concat [:concepts :data] [concept-id :data] action-path)) updated-data)
                        (assoc-in (path-to-db [:concepts :patch concept-id (first action-path)]) true))
-       :dispatch-n (->> (list [::add-edited-concepts concept-id]
-                              (when-not suppress-history?
-                                [::history/add-history-event {:type       :concept-action
-                                                              :concept-id concept-id
-                                                              :path       action-path
-                                                              :from       (->> data-patch (keys) (select-keys action-data))
-                                                              :to         data-patch}]))
-                        (remove nil?))})))
+       :dispatch-n (cond-> [[::add-edited-concepts concept-id]]
+                           (not suppress-history?)
+                           (conj [::history/add-history-event {:type       :concept-action
+                                                               :concept-id concept-id
+                                                               :path       action-path
+                                                               :from       (->> data-patch (keys) (select-keys action-data))
+                                                               :to         data-patch}]))})))
 
 (re-frame/reg-event-fx
   ::reset-concept
