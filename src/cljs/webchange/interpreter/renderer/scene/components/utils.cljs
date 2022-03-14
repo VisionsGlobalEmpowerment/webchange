@@ -89,10 +89,12 @@
         (.on display-object event event-handler))
       (.on display-object event-name event-handler))))
 
-(defn get-size
+(defn get-local-bounds
   [object]
   (let [bounds (.getLocalBounds object)]
-    {:width  (.-width bounds)
+    {:x      (.-x bounds)
+     :y      (.-y bounds)
+     :width  (.-width bounds)
      :height (.-height bounds)}))
 
 (defn set-size

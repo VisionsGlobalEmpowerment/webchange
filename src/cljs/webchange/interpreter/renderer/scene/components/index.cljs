@@ -17,6 +17,7 @@
     [webchange.interpreter.renderer.scene.components.progress.component :as progress]
     [webchange.interpreter.renderer.scene.components.rectangle.component :as rectangle]
     [webchange.interpreter.renderer.scene.components.slider.component :as slider]
+    [webchange.interpreter.renderer.scene.components.sound-bar.component :as sound-bar]
     [webchange.interpreter.renderer.scene.components.svg-path.component :as svg-path]
     [webchange.interpreter.renderer.scene.components.text.component :as text]
     [webchange.interpreter.renderer.scene.components.timer.component :as timer]
@@ -60,6 +61,8 @@
                                                            :default-props rectangle/default-props}
                                  slider/component-type {:constructor   slider/create
                                                         :default-props slider/default-props}
+                                 sound-bar/component-type {:constructor   sound-bar/create
+                                                           :default-props sound-bar/default-props}
                                  svg-path/component-type {:constructor   svg-path/create
                                                           :default-props svg-path/default-props}
                                  text/component-type {:constructor   text/create

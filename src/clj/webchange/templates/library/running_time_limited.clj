@@ -46,11 +46,12 @@
                         :timer                 {:type           "timer"
                                                 :transition     "timer"
                                                 :x              1126
-                                                :y              129
+                                                :y              88
                                                 :show-minutes   true
                                                 :show-progress  true
+                                                :size           104
                                                 :time           60
-                                                :font-size      21
+                                                :font-size      24
                                                 :thickness      12
                                                 :font-weight    "normal"
                                                 :font-family    "Roboto"

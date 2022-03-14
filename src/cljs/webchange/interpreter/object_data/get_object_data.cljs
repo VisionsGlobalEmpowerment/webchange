@@ -131,6 +131,10 @@
                                               (with-group-params)
                                               (assoc :object-name (keyword name))
                                               (filter-extra-props []))
+                       :sound-bar (-> object
+                                      (with-group-params)
+                                      (with-filter-params)
+                                      (merge {:object-name (keyword name)}))
                        :svg-path (-> object
                                      (with-group-params)
                                      (assoc :object-name (keyword name))

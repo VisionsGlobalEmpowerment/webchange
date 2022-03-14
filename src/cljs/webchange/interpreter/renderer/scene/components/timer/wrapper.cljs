@@ -21,6 +21,13 @@
                     :on-end      #(do (set-clock-activated false)
                                       (on-end))})))
 
+(defn- reset-timer
+  [state {:keys [set-clock-value set-progress set-clock-activated]}]
+  (let [initial-time (-> (:initial-time @state) (time->min-sec))]
+    (set-clock-activated false)
+    (set-clock-value initial-time)
+    (set-progress 1)))
+
 (defn wrap
   [type name container state methods]
   (let [destroy-timer (atom nil)]
@@ -30,6 +37,8 @@
                      :start      (fn []
                                    (->> (start-timer state methods)
                                         (reset! destroy-timer)))
+                     :reset      (fn []
+                                   (reset-timer state methods))
                      :on-destroy (fn []
                                    (when (fn? @destroy-timer)
                                      (@destroy-timer)))})))
