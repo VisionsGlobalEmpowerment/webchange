@@ -38,14 +38,10 @@
 
 (defn update-stages
   [activity-data {:keys [book-name]}]
-  (let [origin-pages (->> (get-in activity-data [:objects book-name :pages])
-                          (map-indexed (fn [idx page]
-                                         (assoc page :idx idx))))
-        omit-filler? (-> (count origin-pages)
-                         (odd?))
-        pages (if omit-filler?
-                (filter #(not (:back-cover-filler? %)) origin-pages)
-                origin-pages)
+  (let [pages (->> (get-in activity-data [:objects book-name :pages])
+                   (map-indexed (fn [idx page]
+                                  (assoc page :idx idx))))
+        last-page-odd? (-> (count pages) (odd?))
         stages-number (-> (count pages) (quot 2) (inc))
         stages (map (fn [stage-index]
                       (let [left-page-index (-> (* stage-index 2) (dec) (page-position->page-idx pages))
@@ -62,4 +58,4 @@
                     (range stages-number))]
     (-> activity-data
         (assoc-in [:metadata :stages] stages)
-        (assoc-in [:metadata :flipbook-pages :current-side] (if omit-filler? "right" "left")))))
+        (assoc-in [:metadata :flipbook-pages :current-side] (if last-page-odd? "left" "right")))))

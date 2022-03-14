@@ -70,7 +70,9 @@
                                     (with-filter-params)
                                     (filter-extra-props [:width :height])))
                        :flipbook (let [group-params (with-group-params object)
+                                       remove-back-filler (odd? (count (:pages object)))
                                        pages-params (->> (:pages object)
+                                                         (remove #(and remove-back-filler (:back-cover-filler? %)))
                                                          (map (fn [{:keys [object action]}]
                                                                 [(prepare-object-data object scene-id get-data) action]))
                                                          (map (fn [[object-params action]]
