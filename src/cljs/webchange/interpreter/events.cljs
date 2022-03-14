@@ -820,7 +820,7 @@
                (numbers/try-parse-int duration)
                duration)]
       (if (number? ms)
-        {:dispatch-later [{:ms       (:duration action)
+        {:dispatch-later [{:ms       ms
                            :dispatch (ce/success-event action)}]}
         {:dispatch (ce/success-event action)}))))
 
