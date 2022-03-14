@@ -13,7 +13,8 @@
   [{:keys [image name value selected? on-click]}]
   (let [handle-click #(on-click (if selected? nil {:name  name
                                                    :value value}))]
-    [:li {:class-name (get-class-name {"category-item" true
+    [:li {:id         value
+          :class-name (get-class-name {"category-item" true
                                        "selected"      selected?})
           :title      name
           :on-click   handle-click}
