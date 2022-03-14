@@ -20,4 +20,4 @@
     (let [{:keys [path source]} (state-dialog/get-selected-action db)]
       {:dispatch [::state-actions/update-empty-action-by-path {:action-path path
                                                                :action-type source
-                                                               :data-patch  {:duration (float value)}}]})))
+                                                               :data-patch  {:duration value}}]})))
