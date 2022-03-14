@@ -45,6 +45,6 @@
     [webchange.templates.library.cinema]
     [webchange.templates.library.first-words-book]
     [webchange.templates.library.interactive-read-aloud-import]
-    [webchange.templates.library.recording-studio-rounds]
+    [webchange.templates.library.recording-studio.template]
     [webchange.templates.library.sandbox-digging]
     [webchange.templates.library.repeat-rhyme]))

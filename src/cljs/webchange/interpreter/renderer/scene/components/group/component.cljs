@@ -13,6 +13,7 @@
                     :ref            {}
                     :on-click       {}
                     :filters        {}
+                    :overlay?       {:default false}
                     :type           {:default "group"}
                     :metadata       {}
                     :mask           {}
@@ -63,9 +64,9 @@
     :on-click - on click event handler.
     :ref - callback function that must be called with component wrapper.
     :children - vector og object names to group"
-  [{:keys [parent type ref on-click filters metadata flipbook-page? mode mask pivot] :as props}]
+  [{:keys [parent type ref on-click filters metadata flipbook-page? overlay? mode mask pivot] :as props}]
   (let [group (create-container (cond-> props
-                                        (:question? metadata) (assoc :z-index 100)))
+                                        (or overlay? (:question? metadata)) (assoc :z-index 100)))
         wrapped-group (wrap type (:object-name props) group {:question? (:question? metadata)})]
 
     (when (some? pivot)

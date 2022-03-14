@@ -150,6 +150,28 @@
                  (predicate {:name action-name
                              :data action-data})))))
 
+(defn- find-recursively
+  [action-data predicate action-path]
+  (cond
+    (predicate action-data)
+    {:path action-path}
+
+    (some #{(:type action-data)} ["sequence-data" "parallel"])
+    (map-indexed (fn [idx action-data]
+                   (find-recursively action-data predicate (concat action-path [:data idx])))
+                 (:data action-data))
+
+    :default nil))
+
+(defn find-actions-paths
+  [scene-data predicate]
+  (->> (get-scene-actions scene-data)
+       (map (fn [[action-name action-data]]
+              (find-recursively action-data predicate [action-name])))
+       (flatten)
+       (filter some?)
+       (map :path)))
+
 (defn find-actions-by-tag
   [scene-data tag]
   (->> (fn [{:keys [data]}]
@@ -279,13 +301,25 @@
   [scene-data available-actions]
   (assoc-in scene-data [:metadata :available-actions] available-actions))
 
+(defn- add-synonyms
+  [available-actions]
+  (->> available-actions
+       (map (fn [{:keys [synonyms] :as available-action}]
+              (->> synonyms
+                   (map #(assoc available-action :action %))
+                   (concat [available-action]))))
+       (flatten)))
+
 (defn get-available-effects
   ([scene-data]
    (get-available-effects scene-data []))
   ([scene-data current-action-effects]
-   (->> (get-available-actions scene-data)
-        (concat current-action-effects)
-        (map action-data/fix-available-effect))))
+   (get-available-effects scene-data current-action-effects {}))
+  ([scene-data current-action-effects {:keys [add-synonyms?] :or {add-synonyms? false}}]
+   (cond-> (->> (get-available-actions scene-data)
+                (concat current-action-effects)
+                (map action-data/fix-available-effect))
+           add-synonyms? (add-synonyms))))
 
 (defn get-history
   [scene-data]
