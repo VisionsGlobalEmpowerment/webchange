@@ -10,7 +10,9 @@
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.concepts-utils :refer [get-concepts-audio-assets]]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.editor-v2.translator.translator-form.state.window-confirmation :as confirm]))
+    [webchange.editor-v2.translator.translator-form.state.window-confirmation :as confirm]
+    [webchange.logger.index :as logger]
+    [webchange.utils.scene-action-validator :refer [fix-action]]))
 
 ;; Subs
 
@@ -211,6 +213,12 @@
       {:dispatch [::update-concept concept-id action-path data-patch]})))
 
 (re-frame/reg-event-fx
+  ::fix-current-concept
+  (fn [{:keys [db]} [_ action-path action-type]]
+    (let [concept-id (current-concept-id db)]
+      {:dispatch [::fix-concept concept-id action-path action-type]})))
+
+(re-frame/reg-event-fx
   ::update-concept
   (fn [{:keys [db]} [_ concept-id action-path data-patch {:keys [suppress-history?]}]]
     (let [concept (get-concept-by-id db concept-id)
@@ -226,6 +234,18 @@
                                                                :path       action-path
                                                                :from       (->> data-patch (keys) (select-keys action-data))
                                                                :to         data-patch}]))})))
+
+(re-frame/reg-event-fx
+  ::fix-concept
+  (fn [{:keys [db]} [_ concept-id action-path action-type]]
+    (let [concept (get-concept-by-id db concept-id)
+          action-data (get-in concept (concat [:data] action-path))
+          fixed-action-data (fix-action action-type action-data)]
+      (logger/group-folded "Fix concept action")
+      (logger/trace "Origin action data:" action-data)
+      (logger/trace "Fixed action data:" fixed-action-data)
+      (logger/group-end "Fix concept action")
+      {:dispatch [::update-concept concept-id action-path fixed-action-data]})))
 
 (re-frame/reg-event-fx
   ::reset-concept

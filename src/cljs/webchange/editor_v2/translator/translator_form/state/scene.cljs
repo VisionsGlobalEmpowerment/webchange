@@ -7,7 +7,9 @@
                                                                               remove-by-key
                                                                               update-by-key]]
     [webchange.editor-v2.translator.translator-form.state.window-confirmation :as confirm]
-    [webchange.subs :as subs]))
+    [webchange.logger.index :as logger]
+    [webchange.subs :as subs]
+    [webchange.utils.scene-action-validator :refer [fix-action]]))
 
 ;; Subs
 
@@ -181,6 +183,18 @@
                                                               :from (->> data-patch (keys) (select-keys action-data))
                                                               :to   data-patch}]))
                         (remove nil?))})))
+
+(re-frame/reg-event-fx
+  ::fix-action
+  (fn [{:keys [db]} [_ action-path action-type]]
+    (let [actions-data (actions-data db)
+          action-data (get-in actions-data action-path)
+          fixed-action-data (fix-action action-type action-data)]
+      (logger/group-folded "Fix scene action")
+      (logger/trace "Origin action data:" action-data)
+      (logger/trace "Fixed action data:" fixed-action-data)
+      (logger/group-end "Fix scene action")
+      {:dispatch [::update-action action-path fixed-action-data]})))
 
 (re-frame/reg-event-fx
   ::update-object

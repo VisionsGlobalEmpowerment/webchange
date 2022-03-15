@@ -26,7 +26,7 @@
       (get @levels method)
       (get @levels :log))))
 
-(defn- dev-mode? [] js/goog.DEBUG)
+(defn dev-mode? [] js/goog.DEBUG)
 
 (defn- allowed-level?
   [method]

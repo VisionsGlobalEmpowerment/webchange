@@ -238,6 +238,14 @@
                 data-patch]}))
 
 (re-frame/reg-event-fx
+  ::fix-action-by-path
+  (fn [{:keys [_]} [_ {:keys [action-path action-source action-type]}]]
+    {:dispatch [(case action-source
+                  :concept ::translator-form.concepts/fix-current-concept
+                  :scene ::translator-form.scene/fix-action)
+                action-path action-type]}))
+
+(re-frame/reg-event-fx
   ::update-empty-action-by-path
   (fn [{:keys [_]} [_ {:keys [action-path action-type data-patch]}]]
     {:dispatch [::update-action-by-path {:action-path (concat action-path defaults/empty-action-path)
@@ -250,6 +258,13 @@
     {:dispatch [::update-action-by-path {:action-path (concat action-path defaults/inner-action-path)
                                          :action-type action-type
                                          :data-patch  data-patch}]}))
+
+(re-frame/reg-event-fx
+  ::fix-inner-action-by-path
+  (fn [{:keys [_]} [_ {:keys [action-path action-source action-type]}]]
+    {:dispatch [::fix-action-by-path {:action-path   (concat action-path defaults/inner-action-path)
+                                      :action-source action-source
+                                      :action-type   action-type}]}))
 
 (re-frame/reg-event-fx
   ::update-inner-action
