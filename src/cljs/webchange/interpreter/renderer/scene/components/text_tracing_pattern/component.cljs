@@ -1,5 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.text-tracing-pattern.component
   (:require
+    [re-frame.core :as re-frame]
     [webchange.interpreter.pixi :refer [Container]]
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
@@ -8,9 +9,9 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.image.component :as i]
-    [webchange.renderer.letters-path :refer [alphabet-path alphabet-traceable-path]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.letters-path :refer [get-svg-path]]
+    [webchange.interpreter.renderer.state.scene :as state]
     [webchange.logger.index :as logger]))
 
 (def default-props {:x                        {:default 0}
@@ -63,7 +64,9 @@
    :scale        {:x scale :y scale}
    :line-cap     "round",
    :stroke       "#898989",
-   :stroke-width 12})
+   :stroke-width 12
+   :filters [{:name "brightness" :value 0}
+             {:name "glow" :outer-strength 0 :color 0xffd700}]})
 
 (defn- path->animated-letter
   [letter-scale path]
@@ -105,17 +108,19 @@
         total (last widths)
         positions (->> (range length)
                        (map (fn [pos]
-                              {:x (+ (nth widths pos) (or x-offset (/ (- width total) 2)))
-                               :y topline-y})))
+                              {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
+                               :y topline-y
+                               :index pos})))
         letters (->> text
-                     (map alphabet-path)
+                     (map #(get-svg-path % {:trace? false}))
                      (map #(path->letter letter-scale %))
                      (map merge positions))]
     (doall
       (for [letter letters]
-        (s/create (assoc letter
-                         :object-name (str "text-tracing-pattern-" (:x letter))
-                         :parent group))))))
+        (let [component (s/create (assoc letter
+                                         :object-name (keyword (str "text-tracing-pattern-" (:index letter)))
+                                         :parent group))]
+          (re-frame/dispatch [::state/register-object component]))))))
 
 (defn- activate-next-letter
   ([state]
@@ -141,11 +146,11 @@
         total (last widths)
         positions (->> (range length)
                        (map (fn [pos]
-                              {:x (+ (nth widths pos) (or x-offset (/ (- width total) 2)))
+                              {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
                                :y topline-y})))
 
         letters (->> text
-                     (map alphabet-traceable-path)
+                     (map #(get-svg-path % {:trace? true}))
                      (map #(path->animated-letter letter-scale %))
                      (map merge positions))]
     (doall
@@ -192,52 +197,6 @@
       {:type    :by-width
        :letter  scale-by-width
        :padding 1})))
-
-(comment
-  (let [width 1920
-        topline-y 0
-        text "ono"
-        {letter-scale :letter padding-scale :padding} (get-scale {:text text :width 1920 :height 680})
-        length (count text)
-        letter-width (* letter-scale base-width)
-        letter-padding (* letter-scale padding-scale safe-padding)
-        positions (->> (range length)
-                       (map (fn [pos]
-                              (if (> padding-scale 0)
-                                {:x (- (* letter-width pos) (* letter-padding pos 2))
-                                 :y topline-y}
-                                {:x (+ (* letter-width pos) (/ (- width (* letter-width length)) 2))
-                                 :y topline-y}))))
-        letters (->> text
-                     (map alphabet-path)
-                     (map #(path->letter letter-scale %))
-                     (map merge positions))]
-    (->> letters
-         (map #(select-keys % [:x :scale]))))
-
-  (let [width 1920
-        topline-y 0
-        text "uu"
-        {letter-scale :letter padding-scale :padding} (get-scale {:text text :width 1920 :height 680})
-
-        length (count text)
-        letter-width (* letter-scale base-width)
-        letter-padding (* padding-scale safe-padding)
-        letter-width (- letter-width (* 2 letter-padding letter-scale))
-        positions (->> (range length)
-                       (map (fn [pos]
-                              (if (> padding-scale 0)
-                                {:x (+ (* letter-width pos) (* letter-padding letter-scale))
-                                 :y topline-y}
-                                {:x (+ (* letter-width pos) (/ (- width (* (* letter-scale base-width) length)) 2))
-                                 :y topline-y}))))
-        letters (->> text
-                     (map alphabet-traceable-path)
-                     (map #(path->animated-letter letter-scale padding-scale %))
-                     (map merge positions))]
-    (->> letters
-         (map #(select-keys % [:x :width :offset :scale]))))
-  )
 
 (defn- reset-group!
   [group]

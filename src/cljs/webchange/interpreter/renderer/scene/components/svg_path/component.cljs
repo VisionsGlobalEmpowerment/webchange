@@ -4,6 +4,7 @@
     [webchange.interpreter.renderer.scene.components.svg-path.utils :as svg-utils]
     [webchange.interpreter.renderer.scene.components.svg-path.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.logger.index :as logger]))
 
 (def default-props {:x            {}
@@ -18,6 +19,7 @@
                     :fill         {:default false}
                     :stroke-width {}
                     :line-cap     {:default "round"}
+                    :filters      {}
                     :scale        {:default {:x 1 :y 1}}})
 
 (defn- create-container
@@ -59,7 +61,7 @@
               'butt' The ends of lines are squared off at the endpoints.
               'round' The ends of lines are rounded.
               'square' The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness."
-  [{:keys [parent type object-name group-name on-click] :as props}]
+  [{:keys [parent type object-name group-name on-click filters] :as props}]
   (let [state (atom props)
         container (create-container props)
         {:keys [sprite texture canvas-context]} (create-graphics props)
@@ -67,6 +69,8 @@
     (logger/trace-folded "Create svg-path" props)
     (.addChild container sprite)
     (.addChild parent container)
+
+    (apply-filters container filters)
 
     (when-not (nil? on-click) (utils/set-handler container "click" on-click))
 

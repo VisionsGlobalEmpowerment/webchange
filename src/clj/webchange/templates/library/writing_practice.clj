@@ -33,7 +33,7 @@
         {:background  {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
          :letter-tutorial-path
          {:type         "animated-svg-path",
-          :x            400,
+          :x            750,
           :y            -37,
           :width        225,
           :height       300,
@@ -48,7 +48,7 @@
           :stroke-width 10},
          :letter-tutorial-trace
          {:type         "svg-path",
-          :x            400,
+          :x            750,
           :y            -37,
           :width        225,
           :height       300,
@@ -70,6 +70,8 @@
           :enable?     false
           :visible     false
           :height      1000
+          :spacing     150
+          :x-offset    350
           :actions     {:next-letter {:on "next-letter-activated" :type "action" :id "letter-finished-dialog"}
                         :finish      {:on "finish" :type "action" :id "text-finished"}
                         :click       {:on "click" :type "action" :id "timeout-timer"}}}
@@ -157,10 +159,10 @@
                                               (assoc :available-activities ["highlight-tools" "highlight-colors" "highlight-next"]))
 
          :show-example                {:type "sequence-data"
-                                       :data [{:to {:x 860, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "hand"}
+                                       :data [{:to {:x 1210, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "hand"}
                                               {:id "visible", :type "state", :target "letter-tutorial-path"}
                                               {:data [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
-                                                      {:to            {:letter-path "", :scale {:x 4, :y 4}, :origin {:x 260, :y -80}, :duration 5},
+                                                      {:to            {:letter-path "", :scale {:x 4, :y 4}, :origin {:x 610, :y -80}, :duration 5},
                                                        :type          "transition",
                                                        :from-var      [{:var-name "current-concept", :action-property "to.letter-path" :var-property "letter"}],
                                                        :transition-id "hand"}],

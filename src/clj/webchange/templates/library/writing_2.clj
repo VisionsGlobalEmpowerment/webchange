@@ -33,8 +33,6 @@
                         :text-tracing-pattern
                         {:type "text-tracing-pattern"
                          :text ""
-                         :x-offset 200
-                         :spacing 50
                          :y    300}
                         :practice-canvas
                         {:type   "painting-area"
@@ -69,26 +67,6 @@
                          :start      true
                          :editable?  {:select true :drag true :show-in-tree? true}
                          :actions    {:click {:on "click" :type "action" :id "dialog-tap-instructions"}}}
-                        :rect {:type "rectangle"
-                               :x 100
-                               :y 100
-                               :width 100
-                               :height 100
-                               :fill 0xff0000
-                               :actions {:click {:id "my-action" :on "click" :type "action"}}
-                               }
-
-                        :letter {:type "svg-path"
-                                 :x 300
-                                 :y 100
-                                 :dash [7 7]
-                                 :data "M 10 10 H 90 V 90 H 10 L 10 10"
-                                 :line-cap "round"
-                                 :stroke "#ff0000"
-                                 :stroke-width 4
-                                 :filters [{:name "brightness" :value 0}
-                                           {:name "glow" :outer-strength 0 :color 0xffd700}]
-                               }
                         },
         :scene-objects [["background"
                          "text-tracing-pattern"
@@ -96,10 +74,7 @@
                          "painting-toolset"
                          "colors-palette"
                          "next-button"
-                         "mari"
-                         "rect"
-                         "letter"
-                         ]],
+                         "mari"]],
         :actions       {:finish-activity         {:type "sequence-data"
                                                   :data [{:type "action" :id "remove-timeout-timer"}
                                                          {:type "action" :id "correct-answer-dialog"}
@@ -116,12 +91,6 @@
                                                   :action   "incorrect-answer-dialog"}
                         :remove-timeout-timer    {:type "remove-interval"
                                                   :id   "incorrect-answer-checker"}
-                        :my-action {:type               "transition"
-                                    :transition-id      "letter"
-                                    :return-immediately true
-                                    :from               {:brightness 0 :glow 0}
-                                    :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}
-
                         :incorrect-answer-dialog (dialog/default "Timeout instrucitons")
                         :correct-answer-dialog   (dialog/default "Finish activity")
                         :introduction-dialog     (-> (dialog/default "introduction")
@@ -182,19 +151,36 @@
                                                      {:type      "dialog"
                                                       :action-id :dialog-tool-eraser}]}]}})
 
+(defn- remove-letter-highlights
+  [available-actions]
+  (filter #(not (.startsWith
+                  (:action %)
+                  "highlight-text-tracing-pattern-"))
+          available-actions))
+
+(defn- create-letter-effects
+  [activity-data word]
+  (let [number-names ["first" "second" "third" "fourth"
+                      "fifth" "sixth" "seventh" "eight"]]
+    (reduce (fn [ad n]
+              (let [name (get number-names n (str (inc n) "th"))]
+                (common/add-highlight ad
+                                      (str "text-tracing-pattern-" n)
+                                      (str "Highlight " name " letter"))))
+            activity-data
+            (range (count word)))))
+
 (defn- change-word
-  [activity-data args]
-  (assoc-in activity-data [:objects :text-tracing-pattern :text] (:word args)))
+  [activity-data word]
+  (-> activity-data
+      (update-in [:metadata :available-actions] remove-letter-highlights)
+      (create-letter-effects word)
+      (assoc-in [:objects :text-tracing-pattern :text] word)))
 
 (defn update-activity
   [old-data args]
   (case (:action-name args)
-    "change-word" (change-word old-data args)))
-
-(defn- config-text
-  [template text]
-  (-> template
-      (assoc-in [:objects :text-tracing-pattern :text] text)))
+    "change-word" (change-word old-data (:word args))))
 
 (defn f
   [args]
@@ -202,6 +188,6 @@
       (common/add-highlight "next-button" "Highlight next button")
       (common/add-highlight "painting-toolset" "Highlight tools")
       (common/add-highlight "colors-palette" "Highlight colors")
-      (config-text (:text args))))
+      (change-word (:text args))))
 
 (core/register-template m f update-activity)
