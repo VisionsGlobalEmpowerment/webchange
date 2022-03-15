@@ -95,17 +95,15 @@ $units-margin: 6px;
         }
     }
 
-    .text-animation-unit {
-        .chunks-warn {
-            position: absolute;
-            padding: 0;
-            left: -$main-padding-horizontal;
-            top: 6px;
-            width: 20px;
+    .action-unit-warn {
+        position: absolute;
+        padding: 0;
+        left: -$main-padding-horizontal;
+        top: 6px;
+        width: 20px;
 
-            svg {
-                fill: #d4b500;
-            }
+        svg {
+            fill: #d4b500;
         }
     }
 

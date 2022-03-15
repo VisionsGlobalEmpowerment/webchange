@@ -25,6 +25,14 @@
                                                              :action-type action-type
                                                              :data-patch  {:target value}}]}))
 
+(re-frame/reg-event-fx
+  ::fix-phrase-action
+  (fn [{:keys [_]} [_ {:keys [action-path action-source]}]]
+    {:pre [(pre_action-type action-source)]}
+    {:dispatch [::state-actions/fix-inner-action-by-path {:action-path   action-path
+                                                          :action-source action-source
+                                                          :action-type   "animation-sequence"}]}))
+
 ;; Text Animation
 
 (re-frame/reg-event-fx

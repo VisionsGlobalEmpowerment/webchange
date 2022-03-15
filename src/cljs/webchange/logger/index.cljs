@@ -1,12 +1,14 @@
 (ns webchange.logger.index
   (:require
-    [webchange.logger.levels :refer [allowed?]]
+    [webchange.logger.levels :refer [allowed? dev-mode?]]
     [webchange.logger.printer :refer [print!]]))
 
 (defn- do-print
   [method args]
   (when (allowed? method)
     (print! method args)))
+
+(def log-enable? dev-mode?)
 
 (defn trace [& args] (do-print :trace args))
 (defn log [& args] (do-print :log args))

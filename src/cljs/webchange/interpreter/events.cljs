@@ -807,7 +807,7 @@
 
 (re-frame/reg-event-fx
   ::execute-empty
-  (fn [{:keys [_]} [_ action]]
+  (fn [{:keys [_]} [_ {:keys [duration] :as action}]]
     "Execute `empty` action - delay in ms.
 
     Action params:
@@ -816,7 +816,13 @@
     Example:
     {:type     'empty',
      :duration 700}"
-    {:dispatch-later [{:ms (int (:duration action)) :dispatch (ce/success-event action)}]}))
+    (let [ms (if (string? duration)
+               (numbers/try-parse-int duration)
+               duration)]
+      (if (number? ms)
+        {:dispatch-later [{:ms       ms
+                           :dispatch (ce/success-event action)}]}
+        {:dispatch (ce/success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-animation

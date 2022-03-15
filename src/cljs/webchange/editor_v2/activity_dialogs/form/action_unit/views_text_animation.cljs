@@ -42,4 +42,4 @@
      (when-not full-defined?
        [icon {:icon       "warning"
               :title      "Not all text chunks defined"
-              :class-name "chunks-warn"}])]))
+              :class-name "action-unit-warn"}])]))

@@ -19,12 +19,20 @@
   (-> (get-action-type action-data)
       (= "animation-sequence")))
 
+(defn- dialog-inner-action?
+  [{:keys [type audio]}]
+  (and (= type "animation-sequence")
+       (some? audio)))
+
+(defn- dialog-main-action?
+  [{:keys [type editor-type]}]
+  (and (= type "sequence-data")
+       (= editor-type "dialog")))
+
 (defn dialog-action?
   [action-data]
-  (or (contains? action-data :phrase)
-      (contains? action-data :phrase-text)
-      (-> (:editor-type action-data)
-          (= "dialog"))))
+  (or (dialog-inner-action? action-data)
+      (dialog-main-action? action-data)))
 
 (defn fix-available-effect
   [available-effect]

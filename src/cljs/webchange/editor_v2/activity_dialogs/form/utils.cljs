@@ -4,6 +4,7 @@
     [webchange.editor-v2.activity-dialogs.form.utils.get-phrases-sequence :refer [get-phrases-sequence]]
     [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects guide-effects]]
     [webchange.editor-v2.dialog.dialog-form.diagram.items-factory.nodes-factory :refer [get-node-data]]
+    [webchange.utils.scene-action-validator :refer [validate-action]]
     [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]))
 
 (defn- get-action-type
@@ -101,10 +102,12 @@
                             {:effect-name (get-in guide-effects [(keyword type) :text])}))
 
    :phrase              (fn [{:keys [action-data]}]
-                          (let [{:keys [target phrase-text phrase-placeholder]} (get-inner-action action-data)]
-                            {:character   target
-                             :text        phrase-text
-                             :placeholder phrase-placeholder}))
+                          (let [{:keys [target phrase-text phrase-placeholder] :as inner-action-data} (get-inner-action action-data)
+                                validation-result (validate-action "animation-sequence" inner-action-data)]
+                            (cond-> {:character   target
+                                     :text        phrase-text
+                                     :placeholder phrase-placeholder}
+                                    (-> validation-result :valid? not) (assoc :inner-action-validation validation-result))))
 
    :skip                (fn [{:keys [action-data]} {:keys [_]}]
                           (let [{:keys [type]} (get-inner-action action-data)]
