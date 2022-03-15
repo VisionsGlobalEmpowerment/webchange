@@ -48,7 +48,7 @@
                                  :scene-name  "letter-big",
                                  :align       "center",
                                  :fill        "#ef545c",
-                                 :font-family "Lexend Deca",
+                                 :font-family "Tabschool",
                                  :font-size   120,
                                  :states      {:glow      {:permanent-pulsation {:speed 2}}
                                                :stop-glow {:permanent-pulsation false}
@@ -64,7 +64,7 @@
                                  :height      130,
                                  :align       "center",
                                  :fill        "#ef545c",
-                                 :font-family "Lexend Deca",
+                                 :font-family "Tabschool",
                                  :font-size   120,
                                  :states      {:glow      {:permanent-pulsation {:speed 2}}
                                                :stop-glow {:permanent-pulsation false}
@@ -122,7 +122,7 @@
                                  :align          "center"
                                  :vertical-align "bottom"
                                  :font-size      80
-                                 :font-family    "Lexend Deca"
+                                 :font-family    "Tabschool"
                                  :fill           "#fc8e51"
                                  :x              720
                                  :y              450
