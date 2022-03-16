@@ -1,10 +1,10 @@
 (ns webchange.common.svg-path.path-to-transitions
   (:require
     [clojure.string :as s]
+    [svg-arc-to-cubic-bezier :as arcToBezier]
     [webchange.common.svg-path.path-splitter :refer [split-path apply-path-to-point]]
     [webchange.common.svg-path.path-element :refer [length]]
-    [webchange.interpreter.renderer.scene.components.letters-path :refer [get-svg-path]]
-    [svg-arc-to-cubic-bezier :as arcToBezier]
+    [webchange.renderer.letters-path :refer [get-svg-path]]
     [webchange.utils.numbers :refer [to-precision]]))
 
 (defn- apply-origin

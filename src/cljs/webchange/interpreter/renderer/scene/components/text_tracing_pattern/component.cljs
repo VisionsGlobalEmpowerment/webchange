@@ -1,16 +1,15 @@
 (ns webchange.interpreter.renderer.scene.components.text-tracing-pattern.component
   (:require
-    [clojure.string :as str]
     [webchange.interpreter.pixi :refer [Container]]
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.svg-path.component :as s]
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.utils :refer [set-enable!]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.image.component :as i]
-    [webchange.interpreter.renderer.scene.components.letters-path :refer [alphabet-path alphabet-traceable-path]]
     [webchange.logger.index :as logger]
-    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]))
+    [webchange.renderer.letters-path :refer [alphabet-path alphabet-traceable-path]]))
 
 (def default-props {:x                        {:default 0}
                     :y                        {:default 300}

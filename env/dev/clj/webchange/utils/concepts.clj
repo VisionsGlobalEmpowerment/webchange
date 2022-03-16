@@ -11,12 +11,24 @@
   [dataset-items {:keys [id]}]
   (some #(and (= (:id %) id) %) dataset-items))
 
+(defn find-dataset-by-data
+  [dataset-items predicate]
+  (some #(and (predicate (:data %)) %) dataset-items))
+
 (defn get-item-fields
   [dataset-item fields]
   (->> (get dataset-item :data [])
        (filter (fn [[field-name _]]
                  (some #{field-name} fields)))
        (into {})))
+
+(defn update-dataset-item-data
+  [id data-patch]
+  (let [dataset-item (dataset/get-item id)
+        updated-dataset-item (-> dataset-item
+                                 (select-keys [:data :name :version])
+                                 (update :data merge data-patch))]
+    (dataset/update-dataset-item-with-version! id updated-dataset-item)))
 
 (comment
   "Get course dataset items"
