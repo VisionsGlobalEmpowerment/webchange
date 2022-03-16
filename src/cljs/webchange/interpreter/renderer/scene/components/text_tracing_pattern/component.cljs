@@ -20,6 +20,7 @@
                     :height                   {:default 680}
                     :x-offset                 {:default nil}
                     :spacing                  {:default 20}
+                    :dashed                   {:default false}
                     :text                     {}
                     :name                     {}
                     :on-change                {}
@@ -32,12 +33,12 @@
                     :enable?                  {:default true}})
 
 (def base-height 275)
-(def midline-offset 70)
-(def baseline-offset 150)
+(def midline-offset 76)
+(def baseline-offset 162)
 
 (def base-width 225)
 (def line-height 10)
-(def letter-offset-y -34)
+(def letter-offset-y -26)
 
 (def safe-padding 60)
 
@@ -55,16 +56,16 @@
     (utils/set-position {:x x :y y})))
 
 (defn- path->letter
-  [scale path]
+  [scale path dashed]
   {:type         "svg-path",
-   :dash         [],
+   :dash         (if dashed [7 7] [])
    :width        base-width
    :height       base-height
    :data         path,
    :scale        {:x scale :y scale}
    :line-cap     "round",
    :stroke       "#898989",
-   :stroke-width 12
+   :stroke-width (if dashed 4 12)
    :filters [{:name "brightness" :value 0}
              {:name "glow" :outer-strength 0 :color 0xffd700}]})
 
@@ -101,7 +102,7 @@
     (rec [0] list)))
 
 (defn- draw-pattern!
-  [group {:keys [width text repeat-text x-offset spacing]} {letter-scale :letter} topline-y]
+  [group {:keys [width text repeat-text x-offset spacing dashed]} {letter-scale :letter} topline-y]
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
         widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
@@ -113,7 +114,7 @@
                                :index pos})))
         letters (->> text
                      (map #(get-svg-path % {:trace? false}))
-                     (map #(path->letter letter-scale %))
+                     (map #(path->letter letter-scale % dashed))
                      (map merge positions))]
     (doall
       (for [letter letters]

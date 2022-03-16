@@ -33,7 +33,9 @@
                         :text-tracing-pattern
                         {:type "text-tracing-pattern"
                          :text ""
-                         :y    300}
+                         :y    300
+                         :dashed true
+                         :editable?  {:select false :drag false :show-in-tree? true}}
                         :practice-canvas
                         {:type   "painting-area"
                          :tool   "felt-tip"

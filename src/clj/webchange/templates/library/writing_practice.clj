@@ -67,6 +67,7 @@
           :traceable   true
           :repeat-text 2
           :text        " "
+          :y           100
           :enable?     false
           :visible     false
           :height      1000
