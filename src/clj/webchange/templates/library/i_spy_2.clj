@@ -10,115 +10,115 @@
         :options     {}})
 
 (def t {:assets
-        [{:url "/raw/img/i-spy-2/background.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/decoration.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/surface.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-1.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-2.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-3.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-4.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-5.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-6.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-7.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-8.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-9.png", :size 10, :type "image"}
-         {:url "/raw/img/i-spy-2/icons/img-10.png", :size 10, :type "image"}],
+                       [{:url "/raw/img/i-spy-2/background.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/decoration.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/surface.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-1.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-2.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-3.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-4.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-5.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-6.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-7.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-8.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-9.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-10.png", :size 10, :type "image"}],
         :objects       {:layered-background
-                        {:type       "layered-background",
-                         :background {:src "/raw/img/i-spy-2/background.png"},
-                         :decoration {:src "/raw/img/i-spy-2/decoration.png"},
-                         :surface    {:src "/raw/img/i-spy-2/surface.png"}
-                         }
+                                            {:type       "layered-background",
+                                             :background {:src "/raw/img/i-spy-2/background.png"},
+                                             :decoration {:src "/raw/img/i-spy-2/decoration.png"},
+                                             :surface    {:src "/raw/img/i-spy-2/surface.png"}
+                                             }
                         :bus-stop
-                        {:type           "text",
-                         :x              564,
-                         :y              463,
-                         :width          138,
-                         :height         39,
-                         :align          "center",
-                         :fill           "#ff3857",
-                         :font-family    "Roboto",
-                         :font-size      30,
-                         :scale-x        1,
-                         :scale-y        1,
-                         :text           "BUS STOP",
-                         :vertical-align "middle",
-                         :editable?      {:select true}
-                         :visible        true
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
-                         },
+                                            {:type           "text",
+                                             :x              564,
+                                             :y              463,
+                                             :width          138,
+                                             :height         39,
+                                             :align          "center",
+                                             :fill           "#ff3857",
+                                             :font-family    "Roboto",
+                                             :font-size      30,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "BUS STOP",
+                                             :vertical-align "middle",
+                                             :editable?      {:select true}
+                                             :visible        true
+                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
+                                             },
                         :t-shirt
-                        {:type           "text",
-                         :x              392,
-                         :y              536,
-                         :width          61,
-                         :height         78,
-                         :align          "center",
-                         :fill           "#FFFFFF",
-                         :font-family    "Roboto",
-                         :font-size      34,
-                         :scale-x        1,
-                         :scale-y        1,
-                         :text           "BE \nKIND",
-                         :vertical-align "middle",
-                         :visible        true
-                         :editable?      {:select true}
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
-                         },
+                                            {:type           "text",
+                                             :x              392,
+                                             :y              536,
+                                             :width          61,
+                                             :height         78,
+                                             :align          "center",
+                                             :fill           "#FFFFFF",
+                                             :font-family    "Roboto",
+                                             :font-size      34,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "BE \nKIND",
+                                             :vertical-align "middle",
+                                             :visible        true
+                                             :editable?      {:select true}
+                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
+                                             },
                         :sale-plate
-                        {:type           "text",
-                         :x              1287,
-                         :y              584,
-                         :width          113,
-                         :height         56,
-                         :align          "center",
-                         :fill           "#DC1111",
-                         :font-family    "Roboto",
-                         :font-size      60,
-                         :scale-x        1,
-                         :scale-y        1,
-                         :text           "SALE",
-                         :vertical-align "middle",
-                         :visible        true,
-                         :editable?      {:select true}
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
-                         },
+                                            {:type           "text",
+                                             :x              1287,
+                                             :y              584,
+                                             :width          113,
+                                             :height         56,
+                                             :align          "center",
+                                             :fill           "#DC1111",
+                                             :font-family    "Roboto",
+                                             :font-size      60,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "SALE",
+                                             :vertical-align "middle",
+                                             :visible        true,
+                                             :editable?      {:select true}
+                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
+                                             },
                         :stop-sign
-                        {:type           "text",
-                         :x              1661,
-                         :y              417,
-                         :width          116,
-                         :height         58,
-                         :align          "center",
-                         :fill           "#FFFFFF",
-                         :font-family    "Roboto",
-                         :font-size      50,
-                         :scale-x        1,
-                         :scale-y        1,
-                         :text           "STOP",
-                         :vertical-align "middle",
-                         :visible        true
-                         :editable?      {:select true}
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
-                         },
+                                            {:type           "text",
+                                             :x              1661,
+                                             :y              417,
+                                             :width          116,
+                                             :height         58,
+                                             :align          "center",
+                                             :fill           "#FFFFFF",
+                                             :font-family    "Roboto",
+                                             :font-size      50,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "STOP",
+                                             :vertical-align "middle",
+                                             :visible        true
+                                             :editable?      {:select true}
+                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
+                                             },
                         :street-sign
-                        {:type           "text",
-                         :x              1634,
-                         :y              261,
-                         :width          209,
-                         :height         44,
-                         :align          "center",
-                         :fill           "#FFFFFF",
-                         :font-family    "Roboto",
-                         :font-size      35,
-                         :scale-x        1,
-                         :scale-y        1,
-                         :text           "LETTER LANE",
-                         :vertical-align "middle",
-                         :editable?      {:select true}
-                         :visible        true
-                         :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
-                         },
+                                            {:type           "text",
+                                             :x              1634,
+                                             :y              261,
+                                             :width          209,
+                                             :height         44,
+                                             :align          "center",
+                                             :fill           "#FFFFFF",
+                                             :font-family    "Roboto",
+                                             :font-size      35,
+                                             :scale-x        1,
+                                             :scale-y        1,
+                                             :text           "LETTER LANE",
+                                             :vertical-align "middle",
+                                             :editable?      {:select true}
+                                             :visible        true
+                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
+                                             },
                         :bar                {:type          "rectangle",
                                              :x             672,
                                              :y             912,
@@ -222,12 +222,12 @@
                                              :text           "POST",
                                              :vertical-align "middle",
                                              :visible        true
-                                             :x          75,
-                                             :y          900,
-                                             :width      210,
-                                             :height     140,
+                                             :x              75,
+                                             :y              900,
+                                             :width          210,
+                                             :height         140,
                                              :editable?      {:select true}
-                                             :actions    {:click {:id "icon-post-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions        {:click {:id "icon-post-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-street-closed {:type           "text",
                                              :align          "center",
                                              :fill           "#EB9189",
@@ -238,13 +238,13 @@
                                              :text           "STREET\nCLOSED",
                                              :vertical-align "middle",
                                              :visible        true
-                                             :x          1800,
-                                             :y          660,
+                                             :x              1800,
+                                             :y              660,
                                              :skew-y         0.05
-                                             :width      120,
-                                             :height     90,
+                                             :width          120,
+                                             :height         90,
                                              :editable?      {:select true}
-                                             :actions    {:click {:id "icon-street-closed-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions        {:click {:id "icon-street-closed-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-2942          {:type           "text",
                                              :align          "center",
                                              :fill           "#15254B",
@@ -255,12 +255,12 @@
                                              :text           "2942",
                                              :vertical-align "middle",
                                              :visible        true
-                                             :x          610,
-                                             :y          508,
-                                             :width      50,
-                                             :height     20,
+                                             :x              610,
+                                             :y              508,
+                                             :width          50,
+                                             :height         20,
                                              :editable?      {:select true}
-                                             :actions    {:click {:id "icon-2942-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions        {:click {:id "icon-2942-click", :on "click", :type "action" :unique-tag "speech"}}}
                         :icon-br-1          {:type       "image",
                                              :x          713,
                                              :y          940,
@@ -269,8 +269,8 @@
                                              :transition "door",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy-2/icons/img-1.png"
-                                             :visible  false,
-                                             :states   {:show {:visible true}, :hide {:visible false}}},
+                                             :visible    false,
+                                             :states     {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-2          {:type       "image",
                                              :x          812,
                                              :y          947,
@@ -279,8 +279,8 @@
                                              :transition "door",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy-2/icons/img-3.png"
-                                             :visible  false,
-                                             :states   {:show {:visible true}, :hide {:visible false}}},
+                                             :visible    false,
+                                             :states     {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-3          {:type       "image",
                                              :x          924,
                                              :y          961,
@@ -289,8 +289,8 @@
                                              :transition "door",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy-2/icons/img-5.png"
-                                             :visible  false,
-                                             :states   {:show {:visible true}, :hide {:visible false}}},
+                                             :visible    false,
+                                             :states     {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-4          {:type       "image",
                                              :x          1036,
                                              :y          940,
@@ -299,8 +299,8 @@
                                              :transition "door",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy-2/icons/img-9.png"
-                                             :visible  false,
-                                             :states   {:show {:visible true}, :hide {:visible false}}},
+                                             :visible    false,
+                                             :states     {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-5          {:type       "image",
                                              :x          1148,
                                              :y          967,
@@ -309,8 +309,8 @@
                                              :transition "door",
                                              :filter     "brighten",
                                              :src        "/raw/img/i-spy-2/icons/img-7.png"
-                                             :visible  false,
-                                             :states   {:show {:visible true}, :hide {:visible false}}},
+                                             :visible    false,
+                                             :states     {:show {:visible true}, :hide {:visible false}}},
                         },
         :scene-objects [["layered-background"] ["bus-stop" "t-shirt" "sale-plate" "street-sign" "stop-sign"]
                         ["bar" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
@@ -330,10 +330,10 @@
                                                           ]
                                                    }
                         :test-complete
-                        {:type      "test-var-list",
-                         :success   "finish-activity",
-                         :values    [true true true true true true],
-                         :var-names ["item-1" "item-2" "item-3" "item-4" "item-5" "finish-not-played"]},
+                                                  {:type      "test-var-list",
+                                                   :success   "finish-activity",
+                                                   :values    [true true true true true true],
+                                                   :var-names ["item-1" "item-2" "item-3" "item-4" "item-5" "finish-not-played"]},
                         :finish-activity          {:type "sequence-data"
                                                    :data [
                                                           {:type "set-variable", :var-name "finish-not-played" :var-value false}
@@ -347,13 +347,13 @@
                                                                                 {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                    :phrase             "finish-dialog",
                                                    :phrase-description "Activity completion script"}
-                        :item-1-next-dialog            {:type               "sequence-data",
-                                                        :editor-type        "dialog",
-                                                        :data               [{:type "sequence-data"
-                                                                              :data [{:type "empty" :duration 0}
-                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                        :phrase             "bus-stop-next-dialog",
-                                                        :phrase-description "Bus stop description next time"}
+                        :item-1-next-dialog       {:type               "sequence-data",
+                                                   :editor-type        "dialog",
+                                                   :data               [{:type "sequence-data"
+                                                                         :data [{:type "empty" :duration 0}
+                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                   :phrase             "bus-stop-next-dialog",
+                                                   :phrase-description "Bus stop description next time"}
 
                         :item-1-dialog            {:type               "sequence-data",
                                                    :editor-type        "dialog",
@@ -369,13 +369,13 @@
                                                                                 {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                    :phrase             "t-shirt-dialog",
                                                    :phrase-description "T-shirt description"}
-                        :item-2-next-dialog            {:type               "sequence-data",
-                                                        :editor-type        "dialog",
-                                                        :data               [{:type "sequence-data"
-                                                                              :data [{:type "empty" :duration 0}
-                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                        :phrase             "t-shirt-next-dialog",
-                                                        :phrase-description "T-shirt next click"}
+                        :item-2-next-dialog       {:type               "sequence-data",
+                                                   :editor-type        "dialog",
+                                                   :data               [{:type "sequence-data"
+                                                                         :data [{:type "empty" :duration 0}
+                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                   :phrase             "t-shirt-next-dialog",
+                                                   :phrase-description "T-shirt next click"}
                         :item-3-dialog            {:type               "sequence-data",
                                                    :editor-type        "dialog",
                                                    :data               [{:type "sequence-data"
@@ -383,13 +383,13 @@
                                                                                 {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                    :phrase             "sale-plate-dialog",
                                                    :phrase-description "Sale sign"}
-                        :item-3-next-dialog            {:type               "sequence-data",
-                                                        :editor-type        "dialog",
-                                                        :data               [{:type "sequence-data"
-                                                                              :data [{:type "empty" :duration 0}
-                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                        :phrase             "sale-plate-next-dialog",
-                                                        :phrase-description "Sale sign next click"}
+                        :item-3-next-dialog       {:type               "sequence-data",
+                                                   :editor-type        "dialog",
+                                                   :data               [{:type "sequence-data"
+                                                                         :data [{:type "empty" :duration 0}
+                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                   :phrase             "sale-plate-next-dialog",
+                                                   :phrase-description "Sale sign next click"}
                         :item-4-dialog            {:type               "sequence-data",
                                                    :editor-type        "dialog",
                                                    :data               [{:type "sequence-data"
@@ -397,13 +397,13 @@
                                                                                 {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                    :phrase             "stop-sign-dialog",
                                                    :phrase-description "Stop sign description"}
-                        :item-4-next-dialog            {:type               "sequence-data",
-                                                        :editor-type        "dialog",
-                                                        :data               [{:type "sequence-data"
-                                                                              :data [{:type "empty" :duration 0}
-                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                        :phrase             "stop-sign-next-dialog",
-                                                        :phrase-description "Stop sign next click"}
+                        :item-4-next-dialog       {:type               "sequence-data",
+                                                   :editor-type        "dialog",
+                                                   :data               [{:type "sequence-data"
+                                                                         :data [{:type "empty" :duration 0}
+                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                   :phrase             "stop-sign-next-dialog",
+                                                   :phrase-description "Stop sign next click"}
                         :item-5-dialog            {:type               "sequence-data",
                                                    :editor-type        "dialog",
                                                    :data               [{:type "sequence-data"
@@ -411,13 +411,13 @@
                                                                                 {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                    :phrase             "street-sign-dialog",
                                                    :phrase-description "Street sign description"}
-                        :item-5-next-dialog            {:type               "sequence-data",
-                                                        :editor-type        "dialog",
-                                                        :data               [{:type "sequence-data"
-                                                                              :data [{:type "empty" :duration 0}
-                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                        :phrase             "street-sign-next-dialog",
-                                                        :phrase-description "Street sign next click"}
+                        :item-5-next-dialog       {:type               "sequence-data",
+                                                   :editor-type        "dialog",
+                                                   :data               [{:type "sequence-data"
+                                                                         :data [{:type "empty" :duration 0}
+                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                   :phrase             "street-sign-next-dialog",
+                                                   :phrase-description "Street sign next click"}
                         :icon-post-click          {:type               "sequence-data",
                                                    :editor-type        "dialog",
                                                    :data               [{:type "sequence-data"
@@ -482,10 +482,10 @@
                                                    }
 
                         :stop-activity            {:type "stop-activity", :id "home"},
-                        :intro                    {:type "sequence-data",
-                                                   :data [{:type "start-activity"}
-                                                          {:type "action" :id "init-items"}
-                                                          {:type "action" :id "intro-dialog"}]
+                        :intro                    {:type       "sequence-data",
+                                                   :data       [{:type "start-activity"}
+                                                                {:type "action" :id "init-items"}
+                                                                {:type "action" :id "intro-dialog"}]
                                                    :unique-tag "speech"}
                         :intro-dialog             {:type               "sequence-data",
                                                    :editor-type        "dialog",
@@ -496,8 +496,8 @@
                                                    :phrase-description "Introduce task"}
                         },
         :triggers
-        {:back  {:on "back", :action "stop-activity"},
-         :start {:on "start", :action "intro"}},
+                       {:back  {:on "back", :action "stop-activity"},
+                        :start {:on "start", :action "intro"}},
         :metadata      {:autostart true
                         :tracks    [{:title "Dialogs"
                                      :nodes [{:type      "dialog"
