@@ -29,6 +29,41 @@
                                       :background {:src "/raw/img/i-spy/background.png"},
                                       :decoration {:src "/raw/img/i-spy/decoration.png"},
                                       :surface    {:src "/raw/img/i-spy/surface.png"}}
+                        :target-1    {:type      "transparent"
+                                      :x         381
+                                      :y         195
+                                      :width     200
+                                      :height    200
+                                      :editable? {:drag true :select true :show-in-tree? true}
+                                      :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "1"}}}}
+                        :target-2    {:type      "transparent"
+                                      :x         708
+                                      :y         690
+                                      :width     200
+                                      :height    130
+                                      :editable? {:drag true :select true :show-in-tree? true}
+                                      :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "2"}}}}
+                        :target-3    {:type      "transparent"
+                                      :x         1480
+                                      :y         512
+                                      :width     300
+                                      :height    200
+                                      :editable? {:drag true :select true :show-in-tree? true}
+                                      :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "3"}}}}
+                        :target-4    {:type      "transparent"
+                                      :x         1022
+                                      :y         512
+                                      :width     400
+                                      :height    160
+                                      :editable? {:drag true :select true :show-in-tree? true}
+                                      :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "4"}}}}
+                        :target-5    {:type      "transparent"
+                                      :x         102
+                                      :y         823
+                                      :width     400
+                                      :height    250
+                                      :editable? {:drag true :select true :show-in-tree? true}
+                                      :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "5"}}}}
                         :cap
                                      {:type           "text",
                                       :x              1555,
@@ -44,8 +79,7 @@
                                       :text           "Wombats",
                                       :vertical-align "middle",
                                       :visible        true
-                                      :editable?      {:select true}
-                                      :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}}}
+                                      :editable?      {:select true}}
                         :newspaper
                                      {:type           "text",
                                       :x              210,
@@ -61,8 +95,7 @@
                                       :text           "The Wordbury Times",
                                       :vertical-align "middle",
                                       :visible        true
-                                      :editable?      {:select true}
-                                      :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},}
+                                      :editable?      {:select true}}
                         :fire-station
                                      {:type           "text",
                                       :x              1102,
@@ -78,8 +111,7 @@
                                       :text           "FIRE STATION",
                                       :vertical-align "middle",
                                       :visible        true,
-                                      :editable?      {:select true}
-                                      :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},}
+                                      :editable?      {:select true}}
                         :bakery
                                      {:type           "text",
                                       :x              392,
@@ -95,8 +127,7 @@
                                       :text           "Bakery",
                                       :vertical-align "middle",
                                       :visible        true
-                                      :editable?      {:select true}
-                                      :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},}
+                                      :editable?      {:select true},}
                         :plate
                                      {:type           "text",
                                       :x              759,
@@ -112,8 +143,7 @@
                                       :text           "6TRJ244",
                                       :vertical-align "middle",
                                       :visible        true
-                                      :editable?      {:select true}
-                                      :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},}
+                                      :editable?      {:select true}}
                         :bar         {:type          "rectangle",
                                       :x             672,
                                       :y             912,
@@ -304,11 +334,13 @@
                                       :visible    false,
                                       :states     {:show {:visible true}, :hide {:visible false}}},
                         },
-        :scene-objects [["layered-background"] ["cap" "newspaper" "fire-station" "bakery" "plate"]
+        :scene-objects [["layered-background"]
                         ["bar" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
                         ["icon-1" "icon-2" "icon-3" "icon-4" "icon-5"]
                         ["icon-br-1" "icon-br-2" "icon-br-3" "icon-br-4" "icon-br-5"]
-                        ["icon-59" "icon-open" "icon-276"]],
+                        ["icon-59" "icon-open" "icon-276"]
+                        ["target-1" "target-2" "target-3" "target-4" "target-5"]
+                        ["cap" "newspaper" "fire-station" "bakery" "plate"]],
         :actions       {:init-items         {:type "sequence-data",
                                              :data [{:type "set-attribute", :target "icon-br-1", :attr-name "visible", :attr-value false}
                                                     {:type "set-attribute", :target "icon-br-2", :attr-name "visible", :attr-value false}

@@ -70,6 +70,7 @@
           dy (Math/abs (- (:y state) (:y init-state)))
           delta 1]
       (when (or (> dx delta) (> dy delta))
+        (logger/trace-folded-defs (str "change position: " name) "x" (:x state) "y" (:y state))
         {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
                                                         :target   name
                                                         :state    state}]
