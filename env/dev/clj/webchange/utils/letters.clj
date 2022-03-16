@@ -1,6 +1,7 @@
 (ns webchange.utils.letters
   (:require
-    [webchange.renderer.letters-path :refer [letters-path]]))
+    [webchange.renderer.letters-path :refer [letters-path]]
+    [webchange.utils.concepts :as concepts]))
 
 " How draw a letter:
 
@@ -104,3 +105,19 @@
           (v right-small)
           (v right-big)]
          (clojure.string/join " "))))
+
+(comment
+  "Update dataset items letter path"
+
+  (def course-slug "spanish")
+
+  (doseq [letter (-> (get-lower-case-letters)
+                     (sort))]
+    (let [svg-path (get-in letters-path [letter :trace])
+          {:keys [id] :as dataset-item} (-> (concepts/get-dataset-items course-slug)
+                                            (concepts/find-dataset-by-data #(= letter (:letter %))))]
+      (when (and (some? svg-path)
+                 (some? dataset-item))
+        (let [[ok?] (concepts/update-dataset-item-data id {:letter-path          svg-path
+                                                           :letter-tutorial-path svg-path})]
+          (print letter ": id" id "-" (if ok? "ok" "fail") "\n"))))))
