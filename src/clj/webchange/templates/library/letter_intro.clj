@@ -75,7 +75,7 @@
                     :letter-path
                                 {:type         "animated-svg-path",
                                  :x            870,
-                                 :y            230,
+                                 :y            215,
                                  :width        325
                                  :height       300,
                                  :scene-name   "letter-path",
