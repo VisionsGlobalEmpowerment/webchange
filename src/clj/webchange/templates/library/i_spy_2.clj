@@ -29,6 +29,41 @@
                                              :decoration {:src "/raw/img/i-spy-2/decoration.png"},
                                              :surface    {:src "/raw/img/i-spy-2/surface.png"}
                                              }
+                        :target-1           {:type      "transparent"
+                                             :x         529
+                                             :y         305
+                                             :width     200
+                                             :height    300
+                                             :editable? {:drag true :select true :show-in-tree? true}
+                                             :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "1"}}}}
+                        :target-2           {:type      "transparent"
+                                             :x         304
+                                             :y         479
+                                             :width     200
+                                             :height    200
+                                             :editable? {:drag true :select true :show-in-tree? true}
+                                             :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "2"}}}}
+                        :target-3           {:type      "transparent"
+                                             :x         1259
+                                             :y         511
+                                             :width     200
+                                             :height    200
+                                             :editable? {:drag true :select true :show-in-tree? true}
+                                             :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "3"}}}}
+                        :target-4           {:type      "transparent"
+                                             :x         1619
+                                             :y         345
+                                             :width     200
+                                             :height    200
+                                             :editable? {:drag true :select true :show-in-tree? true}
+                                             :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "4"}}}}
+                        :target-5           {:type      "transparent"
+                                             :x         1530
+                                             :y         229
+                                             :width     380
+                                             :height    100
+                                             :editable? {:drag true :select true :show-in-tree? true}
+                                             :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "5"}}}}
                         :bus-stop
                                             {:type           "text",
                                              :x              564,
@@ -45,7 +80,6 @@
                                              :vertical-align "middle",
                                              :editable?      {:select true}
                                              :visible        true
-                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
                                              },
                         :t-shirt
                                             {:type           "text",
@@ -63,7 +97,6 @@
                                              :vertical-align "middle",
                                              :visible        true
                                              :editable?      {:select true}
-                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
                                              },
                         :sale-plate
                                             {:type           "text",
@@ -81,7 +114,6 @@
                                              :vertical-align "middle",
                                              :visible        true,
                                              :editable?      {:select true}
-                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
                                              },
                         :stop-sign
                                             {:type           "text",
@@ -99,7 +131,6 @@
                                              :vertical-align "middle",
                                              :visible        true
                                              :editable?      {:select true}
-                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
                                              },
                         :street-sign
                                             {:type           "text",
@@ -117,7 +148,6 @@
                                              :vertical-align "middle",
                                              :editable?      {:select true}
                                              :visible        true
-                                             :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
                                              },
                         :bar                {:type          "rectangle",
                                              :x             672,
@@ -312,11 +342,13 @@
                                              :visible    false,
                                              :states     {:show {:visible true}, :hide {:visible false}}},
                         },
-        :scene-objects [["layered-background"] ["bus-stop" "t-shirt" "sale-plate" "street-sign" "stop-sign"]
+        :scene-objects [["layered-background"]
                         ["bar" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
                         ["icon-1" "icon-2" "icon-3" "icon-4" "icon-5"]
                         ["icon-br-1" "icon-br-2" "icon-br-3" "icon-br-4" "icon-br-5"]
                         ["icon-post" "icon-street-closed" "icon-2942"]
+                        ["target-1" "target-2" "target-3" "target-4" "target-5"]
+                        ["bus-stop" "t-shirt" "sale-plate" "street-sign" "stop-sign"]
                         ],
         :actions       {
                         :init-items               {:type "sequence-data",
