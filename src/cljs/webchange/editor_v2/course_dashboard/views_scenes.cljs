@@ -9,7 +9,8 @@
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
     [webchange.ui.theme :refer [get-in-theme]]
-    [webchange.editor-v2.course-dashboard.state :as state]))
+    [webchange.editor-v2.course-dashboard.state :as state]
+    [webchange.ui-framework.components.index :refer [input]]))
 
 (defn- get-styles
   []
@@ -41,16 +42,16 @@
                      :variant       "outlined"
                      :on-change     #(swap! data assoc :name (-> % .-target .-value))}]
      [ui/typography {:variant "title"} "Archived:"]
-     [ui/checkbox {:label     "Archived"
-                   :variant   "outlined"
+     [ui/checkbox {:label         "Archived"
+                   :variant       "outlined"
                    :default-value (:archived scene-info)
-                   :on-change #(swap! data assoc :archived (-> % .-target .-checked))}]]))
+                   :on-change     #(swap! data assoc :archived (-> % .-target .-checked))}]]))
 
 (defn- scene-info-window
   [{:keys [scene-id on-close]}]
   (let [data (atom {})
         save #(do (re-frame/dispatch [::state/save-scene-info {:scene-id scene-id :data @data}])
-                 (on-close))]
+                  (on-close))]
     [ui/dialog
      {:open     (some? scene-id)
       :on-close on-close}
@@ -85,9 +86,16 @@
                new-activity-name (r/atom nil)]
     (let [course @(re-frame/subscribe [::subs/current-course])
           scene-list @(re-frame/subscribe [::subs/scene-list-ordered])
-          list-styles (card/get-styles)]
-      [list-card {:title       title
-                  :full-height true
+          list-styles (card/get-styles)
+
+          filter @(re-frame/subscribe [::subs/scene-list-filter])
+          set-filter #(re-frame/dispatch [::subs/set-scene-list-filter %])]
+      [list-card {:title        title
+                  :title-action [input {:value        filter
+                                        :on-change    set-filter
+                                        :placeholder  "Filter"
+                                        :on-esc-press #(set-filter "")}]
+                  :full-height  true
                   :on-add-click #(reset! show-name-picker true)}
        [ui/list {:style (:list-full-height list-styles)}
         (for [scene scene-list]
@@ -104,13 +112,13 @@
               [ui/icon-button {:aria-label "Edit"
                                :on-click   #(redirect-to :course-editor-scene :id course :scene-id (-> scene :scene-id name))}
                [ic/edit {:style (:action-icon list-styles)}]])]])]
-       [scene-info-window {:scene-id    @current-scene-info
+       [scene-info-window {:scene-id @current-scene-info
                            :on-close handle-close-info}]
-       [scene-pick-name-window {:show @show-name-picker
-                                :on-ok #(do
-                                          (reset! show-name-picker false)
-                                          (if (empty? @new-activity-name)
-                                            (print "error")
-                                            (re-frame/dispatch [::state/create-new-activity @new-activity-name course])))
+       [scene-pick-name-window {:show      @show-name-picker
+                                :on-ok     #(do
+                                              (reset! show-name-picker false)
+                                              (if (empty? @new-activity-name)
+                                                (print "error")
+                                                (re-frame/dispatch [::state/create-new-activity @new-activity-name course])))
                                 :on-cancel #(reset! show-name-picker false)
-                                :name new-activity-name}]])))
+                                :name      new-activity-name}]])))

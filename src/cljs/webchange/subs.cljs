@@ -30,18 +30,38 @@
   (fn [db]
     (get-in db [:course-data :scene-list])))
 
+(def scene-list-filter-path [:course-scene-list-filter])
+
+(defn get-scene-list-filter
+  [db]
+  (get-in db scene-list-filter-path))
+
+(re-frame/reg-sub
+  ::scene-list-filter
+  get-scene-list-filter)
+
+(re-frame/reg-event-fx
+  ::set-scene-list-filter
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db scene-list-filter-path data)}))
 
 (re-frame/reg-sub
   ::scene-list-ordered
   (fn []
     [(re-frame/subscribe [::scene-list])
-     (re-frame/subscribe [::scene-placeholders])])
-  (fn [[scene-list scene-placeholders]]
+     (re-frame/subscribe [::scene-placeholders])
+     (re-frame/subscribe [::scene-list-filter])])
+  (fn [[scene-list scene-placeholders filter-str]]
     (->> scene-list
          (remove #(-> % second :archived))
          (map #(assoc (second %)
                  :scene-id (first %)
                  :is-placeholder (get scene-placeholders (-> % first name js/decodeURIComponent) false)))
+         (filter (fn [{:keys [name]}]
+                   (if-not (empty? filter-str)
+                     (clojure.string/includes? (clojure.string/lower-case name)
+                                               (clojure.string/lower-case filter-str))
+                     true)))
          (sort-by :name))))
 
 (re-frame/reg-sub
