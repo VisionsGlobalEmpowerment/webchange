@@ -321,6 +321,10 @@
         ;
         :triggers  {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata  {:prev   "map", :autostart true
+                    :available-actions [{:name "Whole word glow"
+                                         :action "whole-word-glow"}
+                                        {:name "Whole word stop glow"
+                                         :action "whole-word-stop-glow"}]
                     :tracks [{:title "Dialogs"
                               :nodes [{:type "prompt"
                                        :text "Introduce big and small letters"}
