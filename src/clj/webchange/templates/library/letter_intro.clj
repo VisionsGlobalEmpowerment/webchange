@@ -42,7 +42,7 @@
                     :letter-big
                                 {:type        "text",
                                  :x           720,
-                                 :y           260,
+                                 :y           280,
                                  :width       165,
                                  :height      130,
                                  :scene-name  "letter-big",
@@ -58,8 +58,8 @@
                                  :transition  "letter-big"},
                     :letter-small
                                 {:type        "text",
-                                 :x           885,
-                                 :y           260,
+                                 :x           895,
+                                 :y           280,
                                  :width       150,
                                  :height      130,
                                  :align       "center",
