@@ -266,13 +266,13 @@
                                              :width          60,
                                              :height         60,
                                              :editable?      {:select true}
-                                             :actions        {:click {:id "icon-max-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions        {:click {:id "icon-max-click", :on "click", :type "action"}}}
                         :icon-park          {:type    "transparent",
                                              :x       575,
                                              :y       230,
                                              :width   530,
                                              :height  120,
-                                             :actions {:click {:id "icon-park-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions {:click {:id "icon-park-click", :on "click", :type "action"}}}
                         :icon-1             {:type       "image",
                                              :x          700,
                                              :y          940,
@@ -523,14 +523,12 @@
                                                                           :action-property "var-name"}]}
                                                           {:type "action"
                                                            :id   "test-complete"}
-                                                          ]
-                                             :unique-tag "speech"}
+                                                          ]}
                         :stop-activity      {:type "stop-activity", :id "home"},
                         :intro              {:type       "sequence-data",
                                              :data       [{:type "start-activity"}
                                                           {:type "action" :id "init-items"}
-                                                          {:type "action" :id "intro-dialog"}]
-                                             :unique-tag "speech"}
+                                                          {:type "action" :id "intro-dialog"}]}
                         :intro-dialog       {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"

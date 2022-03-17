@@ -51,8 +51,8 @@
                                       :editable? {:drag true :select true :show-in-tree? true}
                                       :actions   {:click {:id "check-and-set-item" :on "click" :type "action" :params {:target "3"}}}}
                         :target-4    {:type      "transparent"
-                                      :x         1022
-                                      :y         512
+                                      :x         1017
+                                      :y         290
                                       :width     400
                                       :height    160
                                       :editable? {:drag true :select true :show-in-tree? true}
@@ -247,7 +247,7 @@
                                       :height         55,
                                       :transition     "icon-59",
                                       :editable?      {:drag true, :select true},
-                                      :actions        {:click {:id "icon-59-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                      :actions        {:click {:id "icon-59-click", :on "click", :type "action"}}}
                         :icon-open   {:type           "text",
                                       :align          "center",
                                       :fill           "#FFC2CE"
@@ -265,7 +265,7 @@
                                       :height         80,
                                       :transition     "icon-open",
                                       :editable?      {:drag true, :select true},
-                                      :actions        {:click {:id "icon-open-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                      :actions        {:click {:id "icon-open-click", :on "click", :type "action"}}}
                         :icon-276    {:type           "text",
                                       :align          "center",
                                       :fill           "#E7C6CB"
@@ -282,7 +282,7 @@
                                       :height         25,
                                       :transition     "icon-276",
                                       :editable?      {:drag true, :select true},
-                                      :actions        {:click {:id "icon-276-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                      :actions        {:click {:id "icon-276-click", :on "click", :type "action"}}}
                         :icon-br-1   {:type       "image",
                                       :x          700,
                                       :y          940,
@@ -493,15 +493,13 @@
                                                                           :param-property  "target",
                                                                           :action-property "var-name"}]}
                                                           {:type "action"
-                                                           :id   "test-complete"}]
-                                             :unique-tag "speech"}
+                                                           :id   "test-complete"}]}
 
                         :stop-activity      {:type "stop-activity", :id "home"},
                         :intro              {:type       "sequence-data",
                                              :data       [{:type "start-activity"}
                                                           {:type "action" :id "init-items"}
-                                                          {:type "action" :id "intro-dialog"}]
-                                             :unique-tag "speech"}
+                                                          {:type "action" :id "intro-dialog"}]}
                         :intro-dialog       {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"

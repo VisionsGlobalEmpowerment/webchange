@@ -257,7 +257,7 @@
                                              :width          210,
                                              :height         140,
                                              :editable?      {:select true}
-                                             :actions        {:click {:id "icon-post-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions        {:click {:id "icon-post-click", :on "click", :type "action"}}}
                         :icon-street-closed {:type           "text",
                                              :align          "center",
                                              :fill           "#EB9189",
@@ -274,7 +274,7 @@
                                              :width          120,
                                              :height         90,
                                              :editable?      {:select true}
-                                             :actions        {:click {:id "icon-street-closed-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions        {:click {:id "icon-street-closed-click", :on "click", :type "action"}}}
                         :icon-2942          {:type           "text",
                                              :align          "center",
                                              :fill           "#15254B",
@@ -290,7 +290,7 @@
                                              :width          50,
                                              :height         20,
                                              :editable?      {:select true}
-                                             :actions        {:click {:id "icon-2942-click", :on "click", :type "action" :unique-tag "speech"}}}
+                                             :actions        {:click {:id "icon-2942-click", :on "click", :type "action"}}}
                         :icon-br-1          {:type       "image",
                                              :x          713,
                                              :y          940,
@@ -509,16 +509,13 @@
                                                                                 :action-property "var-name"}]}
                                                                 {:type "action"
                                                                  :id   "test-complete"}
-                                                                ]
-                                                   :unique-tag "speech"
-                                                   }
+                                                                ]}
 
                         :stop-activity            {:type "stop-activity", :id "home"},
                         :intro                    {:type       "sequence-data",
                                                    :data       [{:type "start-activity"}
                                                                 {:type "action" :id "init-items"}
-                                                                {:type "action" :id "intro-dialog"}]
-                                                   :unique-tag "speech"}
+                                                                {:type "action" :id "intro-dialog"}]}
                         :intro-dialog             {:type               "sequence-data",
                                                    :editor-type        "dialog",
                                                    :data               [{:type "sequence-data"
