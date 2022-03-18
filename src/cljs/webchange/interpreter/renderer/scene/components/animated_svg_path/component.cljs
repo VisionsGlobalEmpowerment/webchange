@@ -8,7 +8,7 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.utils :as a-svg-utils]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.logger.index :as logger]
-    [webchange.renderer.letters-path :refer [get-svg-path]]))
+    [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]))
 
 (def default-props {:x            {}
                     :y            {}

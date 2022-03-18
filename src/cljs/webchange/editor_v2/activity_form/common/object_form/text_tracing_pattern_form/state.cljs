@@ -6,7 +6,7 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-      {:dispatch [::state/init id {:data  objects-data
+      {:dispatch [::state/init id {:data  (select-keys objects-data [:dashed])
                                    :names objects-names}]}))
 (re-frame/reg-sub
   ::current-dashed

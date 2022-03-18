@@ -10,7 +10,7 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.image.component :as i]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
-    [webchange.interpreter.renderer.scene.components.letters-path :refer [get-svg-path]]
+    [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.logger.index :as logger]))
 

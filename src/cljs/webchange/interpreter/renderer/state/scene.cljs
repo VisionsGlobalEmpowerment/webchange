@@ -82,6 +82,7 @@
    {:action :set-image-size :params [:image-size]}
    {:action :set-position :params [:x :y]}
    {:action :set-scale :params [:scale :scale-x :scale-y]}
+   {:action :set-dashed :params [:dashed]}
    {:action :set-visibility :params [:visible]}
    {:action :set-src :params [:src]}
    {:action :reset-video :params [:src]}
@@ -143,6 +144,7 @@
                                   (let [executor-name (->> param-name clojure.core/name (str "set-") keyword)]
                                     [executor-name param-value]))
                                 not-handled-params)]
+
       {:dispatch [::change-scene-object
                   object-name
                   (cond-> execute-actions
@@ -196,6 +198,11 @@
   :set-scale
   (fn [[object-wrapper scale]]
     (apply-to-wrapper w/set-scale object-wrapper (or (:scale scale) scale))))
+
+(re-frame/reg-fx
+  :set-dashed
+  (fn [[object-wrapper {:keys [dashed]}]]
+    (apply-to-wrapper w/set-dashed object-wrapper dashed)))
 
 (re-frame/reg-fx
   :set-visibility
