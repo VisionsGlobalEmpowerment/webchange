@@ -6,7 +6,7 @@
     [webchange.interpreter.renderer.scene.components.debug :as debug]
     [webchange.logger.index :as logger]))
 
-(def touch-distance 15)
+(def touch-distance 25)
 
 (defn- scale-distance
   [distance {:keys [x]}]
