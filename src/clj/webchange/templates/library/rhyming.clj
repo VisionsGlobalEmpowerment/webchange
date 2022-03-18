@@ -205,9 +205,9 @@
                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                :phrase             "wrong-answer",
                                                :phrase-description "wrong answer"}
-                        :check-wrong-option   {:type      "test-var-list-at-least-one-true"
-                                               :var-names ["saved-left-selected" "saved-right-selected"]
-                                               :success   "wrong-option"}
+                        :check-wrong-option   {:type "test-expression"
+                                               :expression "#collided-object-name"
+                                               :success     "wrong-option"}
                         :end-dragging         {:type "sequence-data"
                                                :data [{:type        "state"
                                                        :id          "not-highlighted"
@@ -218,13 +218,10 @@
                                                       {:type      "copy-variables",
                                                        :var-names ["saved-left-selected" "saved-right-selected"]
                                                        :from-list ["left-selected" "right-selected"]}
-                                                      {:type        "test-var-scalar",
-                                                       :success     "correct-option",
-                                                       :fail        "check-wrong-option",
-                                                       :value       true,
-                                                       :from-params [{:param-property  "side",
-                                                                      :template        "saved-%-selected",
-                                                                      :action-property "var-name"}]}]}
+                                                      {:type "test-expression"
+                                                       :expression ["eq" "#collided-object-name" "#gate"]
+                                                       :success     "correct-option"
+                                                       :fail        "check-wrong-option"}]}
                         :init-total-balls-number {:type "set-variable" :var-name "total-balls-number" :var-value 0}
                         :correct-option       {:type "sequence-data",
                                                :data [{:type "counter" :counter-action "increase" :counter-id "sorted-counter"}
@@ -412,6 +409,7 @@
                                     {:id     "end-dragging",
                                      :on     "drag-end",
                                      :type   "action",
+                                     :pick-event-param [:collided-object-name]
                                      :params {:gate           (str side "-gate")
                                               :side           side
                                               :target         ball-group-name
