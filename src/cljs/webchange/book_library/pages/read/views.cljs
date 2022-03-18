@@ -1,6 +1,7 @@
 (ns webchange.book-library.pages.read.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.book-library.components.error-message.views :refer [error-message]]
     [webchange.book-library.components.loading-indicator.views :refer [loading-indicator]]
     [webchange.book-library.layout.views :refer [layout]]
     [webchange.book-library.pages.read.icons :refer [icons]]
@@ -33,6 +34,7 @@
   []
   (let [show-buttons? @(re-frame/subscribe [::state/show-buttons?])
         loading? @(re-frame/subscribe [::state/show-loading?])
+        error? @(re-frame/subscribe [::state/show-error?])
 
         handle-read-with-sound-click #(re-frame/dispatch [::state/read-with-sound])
         handle-read-without-sound-click #(re-frame/dispatch [::state/read-without-sound])
@@ -41,6 +43,7 @@
      (into [:div.menu]
            (cond-> []
                    loading? (concat [[loading-indicator]])
+                   error? (concat [[error-message]])
                    show-buttons? (concat [[menu-item {:text     "Read to me"
                                                       :icon     "volume"
                                                       :big?     true

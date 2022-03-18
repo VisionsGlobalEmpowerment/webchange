@@ -19,7 +19,8 @@
                   [::set-page-state {:show-menu?           false
                                      :book-loaded?         false
                                      :stage-ready?         false
-                                     :reading-in-progress? false}]
+                                     :reading-in-progress? false
+                                     :error                nil}]
                   [::load-book book-id]
                   [::interpreter/load-lessons book-id]]}))
 
@@ -28,7 +29,8 @@
   (fn [{:keys [_]} [_ book-id]]
     {:dispatch-n [[::warehouse/load-first-scene
                    {:course-slug book-id}
-                   {:on-success [::init-scene-data]}]]}))
+                   {:on-success [::init-scene-data]
+                    :on-failure [::load-book-failed]}]]}))
 
 (re-frame/reg-event-fx
   ::init-scene-data
@@ -37,6 +39,11 @@
       {:dispatch-n [[::state/set-scene-data scene-slug book-data]
                     [::state/set-current-scene-id scene-slug]
                     [::set-book-loaded true]]})))
+
+(re-frame/reg-event-fx
+  ::load-book-failed
+  (fn [{:keys [_]} [_ _]]
+    {:dispatch [::set-error {:message "Book loading failed"}]}))
 
 ;; Book
 
@@ -89,6 +96,20 @@
   (fn [{:keys [_]} [_ value]]
     {:dispatch [::update-page-state {:book-loaded? value}]}))
 
+;; error
+
+(re-frame/reg-sub
+  ::error
+  (fn []
+    (re-frame/subscribe [::page-state]))
+  (fn [menu-state]
+    (get menu-state :error)))
+
+(re-frame/reg-event-fx
+  ::set-error
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::update-page-state {:error value}]}))
+
 ; stage-ready?
 
 (re-frame/reg-sub
@@ -131,13 +152,22 @@
          (not reading-in-progress?))))
 
 (re-frame/reg-sub
+  ::show-error?
+  (fn []
+    [(re-frame/subscribe [::error])])
+  (fn [[error]]
+    (some? error)))
+
+(re-frame/reg-sub
   ::show-loading?
   (fn []
     [(re-frame/subscribe [::book-loaded?])
-     (re-frame/subscribe [::stage-ready?])])
-  (fn [[book-loaded? stage-ready?]]
-    (or (not book-loaded?)
-        (not stage-ready?))))
+     (re-frame/subscribe [::stage-ready?])
+     (re-frame/subscribe [::show-error?])])
+  (fn [[book-loaded? stage-ready? show-error?]]
+    (and (not show-error?)
+         (or (not book-loaded?)
+             (not stage-ready?)))))
 
 ;; Menu
 
