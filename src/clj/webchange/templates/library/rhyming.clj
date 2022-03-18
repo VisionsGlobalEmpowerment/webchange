@@ -153,30 +153,32 @@
         :actions       {:start-drag           {:type "sequence-data"
                                                :data [{:type "set-variable", :var-name "left-selected", :var-value false}
                                                       {:type "set-variable", :var-name "right-selected", :var-value false}
-                                                      {:type "set-variable", :var-name "next-check-collide", :var-value true}
-                                                      {:id "next-check-collide" :type "action"}
                                                       {:type "action", :from-params [{:action-property "id" :param-property "tap-dialog"}]}
                                                       {:type "action", :id "highlight" :from-params [{:param-property "target"}]}
                                                       {:type "empty" :duration 1000}
                                                       {:type "action", :id "unhighlight" :from-params [{:param-property "target"}]}
                                                       ]}
-                        :next-check-collide   {:type "sequence-data"
-                                               :data [{:type     "set-timeout"
-                                                       :action   "check-collide"
-                                                       :interval 10}]}
-                        :check-collide        {:type "sequence-data"
-                                               :data [{:type          "test-transitions-and-pointer-collide",
-                                                       :success       "highlight",
-                                                       :fail          "unhighlight",
-                                                       :transitions   ["right-gate" "left-gate"]
-                                                       :action-params [{:target   "right-gate"
-                                                                        :variable "right-selected"}
-                                                                       {:target   "left-gate"
-                                                                        :variable "left-selected"}]}
-                                                      {:type     "test-var-scalar",
-                                                       :success  "next-check-collide",
-                                                       :value    true,
-                                                       :var-name "next-check-collide"}]}
+
+                        :handle-collide-enter {:type        "case",
+                                               :options     {:left-gate {:id "highlight" :type "action"
+                                                                         :params {:target   "left-gate"
+                                                                                  :variable "left-selected"}}
+                                                             :right-gate {:id "highlight" :type "action"
+                                                                          :params {:target   "right-gate"
+                                                                                   :variable "right-selected"}}}
+                                               :from-params [{:param-property  "target"
+                                                              :action-property "value"}]}
+
+                        :handle-collide-leave {:type        "case",
+                                               :options     {:left-gate {:id "unhighlight" :type "action"
+                                                                         :params {:target   "left-gate"
+                                                                                  :variable "left-selected"}}
+                                                             :right-gate {:id "unhighlight" :type "action"
+                                                                          :params {:target   "right-gate"
+                                                                                   :variable "right-selected"}}}
+                                               :from-params [{:param-property  "target"
+                                                              :action-property "value"}]}
+
                         :highlight            {:type "sequence-data"
                                                :data [{:type        "set-variable",
                                                        :var-value   true
@@ -207,8 +209,7 @@
                                                :var-names ["saved-left-selected" "saved-right-selected"]
                                                :success   "wrong-option"}
                         :end-dragging         {:type "sequence-data"
-                                               :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
-                                                      {:type        "state"
+                                               :data [{:type        "state"
                                                        :id          "not-highlighted"
                                                        :target      "left-gate"}
                                                       {:type        "state"
@@ -224,19 +225,21 @@
                                                        :from-params [{:param-property  "side",
                                                                       :template        "saved-%-selected",
                                                                       :action-property "var-name"}]}]}
+                        :init-total-balls-number {:type "set-variable" :var-name "total-balls-number" :var-value 0}
                         :correct-option       {:type "sequence-data",
-                                               :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
-                                                      {:type "counter" :counter-action "increase" :counter-id "sorted-counter"}
+                                               :data [{:type "counter" :counter-action "increase" :counter-id "sorted-counter"}
                                                       {:id "object-in-right-gate", :type "action"}
                                                       {:id "correct-answer", :type "action"}
                                                       {:type       "test-var-inequality"
                                                        :var-name   "sorted-counter",
-                                                       :value      0,
                                                        :inequality ">=",
-                                                       :success    "finish-scene",}]}
+                                                       :success    "finish-scene"
+                                                       :from-var  [{:var-name        "total-balls-number"
+                                                                    :action-property "value"}]}]}
                         :init-activity        {:type "sequence-data"
                                                :data [{:type "start-activity"}
                                                       {:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-counter"}
+                                                      {:type "action" :id "init-total-balls-number"}
                                                       {:type "action" :id "intro"}]}
                         :intro                {:type               "sequence-data",
                                                :editor-type        "dialog",
@@ -256,9 +259,7 @@
                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                :phrase             "correct-answer",
                                                :phrase-description "correct answer"}
-                        :stop-activity        {:type "sequence-data",
-                                               :data [{:type "set-variable", :var-name "next-check-collide", :var-value false}
-                                                      {:type "stop-activity"},]}
+                        :stop-activity        {:type "stop-activity"}
                         :read-all-word-left   {:type "sequence-data",
                                                :data [],}
                         :read-all-word-right  {:type "sequence-data",
@@ -391,8 +392,9 @@
                        :children   [ball-name
                                     ball-img-name
                                     ball-text-name]
-                       :draggable  true,
+                       :draggable  true
                        :editable?  true
+                       :collidable? true
                        :transition (name ball-group-name)
                        :actions    {:click
                                     {:type   "action",
@@ -404,7 +406,7 @@
                                     {:type   "action",
                                      :on     "drag-start",
                                      :id     "start-drag"
-                                     :params {:tap-dialog ball-dialog-name}}
+                                     :params {:tap-dialog ball-dialog-name :target ball-name}}
 
                                     :drag-end
                                     {:id     "end-dragging",
@@ -413,7 +415,21 @@
                                      :params {:gate           (str side "-gate")
                                               :side           side
                                               :target         ball-group-name
-                                              :check-variable (str side "-selected")}}}
+                                              :check-variable (str side "-selected")}}
+
+                                    :collide-enter
+                                    {:on               "collide-enter"
+                                     :test             ["#^.*-gate"]
+                                     :type             "action"
+                                     :id               "handle-collide-enter"
+                                     :pick-event-param ["target"]}
+
+                                    :collide-leave
+                                    {:on               "collide-leave"
+                                     :test             ["#^.*-gate"]
+                                     :type             "action"
+                                     :id               "handle-collide-leave"
+                                     :pick-event-param ["target"]}}
                        :states     {:park-position (park-ball-position side balls)}}}
      {ball-dialog-name (dialog/default text)}
      [{:url (:src img), :size 10, :type "image"}]
@@ -447,7 +463,7 @@
         (update-in [:metadata :balls (keyword side)] inc)
         (common/add-scene-object scene-objects)
         (common/update-unique-suffix)
-        (update-in [:actions :correct-option :data 4 :value] inc))))
+        (update-in [:actions :init-total-balls-number :var-value] inc))))
 
 (defn- move-side-balls-to-remove-gaps
   [old-data side]
@@ -493,7 +509,7 @@
                    :id
                    (name ball-dialog-name))
         (update-in [:metadata :balls (keyword side)] dec)
-        (update-in [:actions :correct-option :data 4 :value] dec)
+        (update-in [:actions :init-total-balls-number :var-value] dec)
         (move-side-balls-to-remove-gaps side)
         (common/remove-action-from-tracks ball-dialog-name))))
 
