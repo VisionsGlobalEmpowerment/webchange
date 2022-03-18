@@ -12,34 +12,29 @@
        (concat [:read])
        (parent-state/path-to-db)))
 
-(def scene-slug "book")
-
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ {:keys [book-id course-id]}]]
-    (let []
-      {:dispatch-n [[::parent-state/init {:course-id course-id}]
-                    [::set-page-state {:show-menu?           false
-                                       :book-loaded?         false
-                                       :stage-ready?         false
-                                       :reading-in-progress? false}]
-                    [::load-book book-id]
-                    [::interpreter/load-lessons book-id]]})))
+    {:dispatch-n [[::parent-state/init {:course-id course-id}]
+                  [::set-page-state {:show-menu?           false
+                                     :book-loaded?         false
+                                     :stage-ready?         false
+                                     :reading-in-progress? false}]
+                  [::load-book book-id]
+                  [::interpreter/load-lessons book-id]]}))
 
 (re-frame/reg-event-fx
   ::load-book
   (fn [{:keys [_]} [_ book-id]]
-    (let []
-      {:dispatch-n [[::warehouse/load-scene
-                     {:course-slug book-id
-                      :scene-slug  scene-slug}
-                     {:on-success [::init-scene-data]}]]})))
+    {:dispatch-n [[::warehouse/load-first-scene
+                   {:course-slug book-id}
+                   {:on-success [::init-scene-data]}]]}))
 
 (re-frame/reg-event-fx
   ::init-scene-data
   (fn [{:keys [_]} [_ book-data]]
-    (let [scene-data book-data]
-      {:dispatch-n [[::state/set-scene-data scene-slug scene-data]
+    (let [scene-slug (:scene-slug book-data)]
+      {:dispatch-n [[::state/set-scene-data scene-slug book-data]
                     [::state/set-current-scene-id scene-slug]
                     [::set-book-loaded true]]})))
 
@@ -160,8 +155,9 @@
 
 (re-frame/reg-event-fx
   ::set-read-page
-  (fn [{:keys [_]} [_ value]]
-    {:dispatch [::state/update-scene-data scene-slug [:metadata :flipbook] {:read-page? value}]}))
+  (fn [{:keys [db]} [_ value]]
+    (let [scene-slug (:current-scene db)]
+      {:dispatch [::state/update-scene-data scene-slug [:metadata :flipbook] {:read-page? value}]})))
 
 (re-frame/reg-event-fx
   ::read

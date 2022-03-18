@@ -426,26 +426,28 @@
 
   ;; Scenes
   (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name]
-    (-> (core/get-scene-data course-slug scene-name) response))
+       (-> (core/get-scene-data course-slug scene-name) response))
+  (GET "/api/courses/:course-slug/first-scene" [course-slug]
+       (-> (core/get-first-scene-data course-slug) response))
   (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
-    (handle-save-scene course-slug scene-name request))
+        (handle-save-scene course-slug scene-name request))
   (PUT "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
-    (handle-update-scene course-slug scene-name request))
+       (handle-update-scene course-slug scene-name request))
   (POST "/api/courses/:course-slug/scenes/:scene-name/skills" [course-slug scene-name :as request]
-    (handle-update-scene-skills course-slug scene-name request))
+        (handle-update-scene-skills course-slug scene-name request))
 
   (POST "/api/courses/:course-slug" [course-slug :as request]
-    (handle-save-course course-slug request))
+        (handle-save-course course-slug request))
 
   (GET "/api/courses/:course-slug/info" [course-slug]
-    (-> course-slug core/get-course-info response))
+       (-> course-slug core/get-course-info response))
   (PUT "/api/courses/:course-id/info" [course-id :as request]
-    (handle-save-course-info course-id request))
+       (handle-save-course-info course-id request))
 
   (GET "/api/courses/:course-slug/versions" [course-slug] (-> course-slug core/get-course-versions response))
   (GET "/api/courses/:course-slug/scenes/:scene-name/versions" [course-slug scene-name]
-    (-> (core/get-scene-versions course-slug scene-name) response))
+       (-> (core/get-scene-versions course-slug scene-name) response))
   (POST "/api/course-versions/:version-id/restore" [version-id :as request]
-    (handle-restore-course-version version-id request))
+        (handle-restore-course-version version-id request))
   (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-    (handle-restore-scene-version version-id request)))
+        (handle-restore-scene-version version-id request)))

@@ -232,6 +232,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-first-scene
+  (fn [{:keys [_]} [_ {:keys [course-slug]} handlers]]
+    (create-request {:key    :load-first-activity
+                     :method :get
+                     :uri    (str "/api/courses/" course-slug "/first-scene")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::create-activity
   (fn [{:keys [_]} [_ {:keys [course-slug activity-data]} handlers]]
     {:pre [(string? course-slug)

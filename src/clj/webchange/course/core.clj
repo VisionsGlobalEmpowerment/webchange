@@ -124,6 +124,19 @@
         (merge (:data latest-version)
                {:skills scene-skills})))))
 
+(defn first-activity
+  [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        {scene-slug :name} (-> (db/get-scenes-by-course-id {:course_id course-id}) first)]
+    {:course-slug course-slug
+     :scene-slug  scene-slug}))
+
+(defn get-first-scene-data
+  [course-slug]
+  (let [{scene-slug :scene-slug} (first-activity course-slug)]
+    (-> (get-scene-data course-slug scene-slug)
+        (assoc :scene-slug scene-slug))))
+
 (defn get-or-create-scene! [course-id scene-name]
   (if-let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]
     scene-id
@@ -833,9 +846,3 @@
   (let [courses (db/get-courses-by-status-and-type {:type type :status status})]
     [true (map ->website-course courses)]))
 
-(defn first-activity
-  [course-slug]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
-        {scene-slug :name} (-> (db/get-scenes-by-course-id {:course_id course-id}) first)]
-    {:course-slug course-slug
-     :scene-slug  scene-slug}))
