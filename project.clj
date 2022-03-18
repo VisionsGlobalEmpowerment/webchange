@@ -49,7 +49,8 @@
                  [com.cemerick/url "0.1.1"]
                  [org.clojure/data.csv "1.0.0"]
                  [me.raynes/fs "1.4.6"]
-                 [io.djy/ezzmq "0.8.2"]]
+                 [io.djy/ezzmq "0.8.2"]
+                 [com.taoensso/tempura "1.2.1"]]
 
   ;:node-dependencies [[source-map-support "0.2.8"]]
 

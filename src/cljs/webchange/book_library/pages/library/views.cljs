@@ -4,7 +4,8 @@
     [webchange.book-library.components.categories.views :refer [book-categories category-image]]
     [webchange.book-library.components.loading-indicator.views :refer [loading-indicator]]
     [webchange.book-library.layout.views :refer [layout]]
-    [webchange.book-library.pages.library.state :as state]))
+    [webchange.book-library.pages.library.state :as state]
+    [webchange.i18n.translate :as i18n]))
 
 (defn- book-list-item
   [{:keys [book-id cover title]}]
@@ -43,7 +44,7 @@
   (re-frame/dispatch [::state/init {:course-id id}])
   (fn []
     (let [loading? @(re-frame/subscribe [::state/loading?])]
-      [layout {:title           "Book Library"
+      [layout {:title           @(re-frame/subscribe [::i18n/t [:book-library/book-library]])
                :class-name      "book-library-page"
                :toolbar-control [categories]}
        [current-category]

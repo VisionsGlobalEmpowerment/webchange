@@ -71,7 +71,13 @@
 
         ;; student dashboard
         :student-course-dashboard (re-frame/dispatch [::ie/load-course (:id route-params)])
-        nil))))
+        nil)
+
+      (let [module-routes {:book-library {:routes   (vals book-library-routes/routes)
+                                          :dispatch book-library-routes/dispatch-route}}]
+        (doseq [[_ {:keys [routes dispatch]}] module-routes]
+          (when (some #{handler} routes)
+            (dispatch params)))))))
 
 (def history
   (pushy/pushy dispatch-route parse-url))
