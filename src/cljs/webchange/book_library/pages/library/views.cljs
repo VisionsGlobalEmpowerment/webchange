@@ -44,7 +44,7 @@
   (re-frame/dispatch [::state/init {:course-id id}])
   (fn []
     (let [loading? @(re-frame/subscribe [::state/loading?])]
-      [layout {:title           @(re-frame/subscribe [::i18n/t [:book-library/book-library]])
+      [layout {:title           @(re-frame/subscribe [::i18n/t [:book-library]])
                :class-name      "book-library-page"
                :toolbar-control [categories]}
        [current-category]

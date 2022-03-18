@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.book-library.components.categories.state :as state]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.i18n.translate :as i18n]))
 
 (defn category-image
   [{:keys [value]}]
@@ -18,7 +19,8 @@
                                        "selected"      selected?})
           :title      name
           :on-click   handle-click}
-     [:img {:src image}]]))
+     [:img {:src image}]
+     [:span.name @(re-frame/subscribe [::i18n/t [(keyword :categories value)]])]]))
 
 (defn book-categories
   []

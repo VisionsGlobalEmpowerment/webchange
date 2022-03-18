@@ -5,8 +5,18 @@
     [webchange.state.core :as state]))
 
 (def translations
-  {"english" {:book-library {:book-library "Book library"}}
-   "spanish" {:book-library {:book-library "Biblioteca"}}})
+  {"english" {:book-library "Book library"
+              :categories   {:animals            "Animals"
+                             :family-and-friends "Family & Friends" ;; <- non-breaking space before "Friends"
+                             :science-stem       "Science"
+                             :sports             "Sports"
+                             :vehicles           "Vehicles"}}
+   "spanish" {:book-library "Biblioteca"
+              :categories   {:animals            "Animales"
+                             :family-and-friends "Familia y Amigos" ;; <- non-breaking space before "Amigos"
+                             :science-stem       "Ciencia"
+                             :sports             "Deportes"
+                             :vehicles           "Vehículos"}}})
 
 (re-frame/reg-sub
   ::t

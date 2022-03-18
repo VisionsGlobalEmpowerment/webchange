@@ -14,10 +14,90 @@
         display: block;
         height: 100%;
         cursor: pointer;
+        position: relative;
 
         img {
             position: relative;
             height: 18vh;
+        }
+
+        .name {
+            position: absolute;
+            left: 0;
+
+            display: block;
+            width: 100%;
+
+            font-weight: 700;
+            line-height: 1.2em;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        &#animals {
+            img {
+                height: 18vh;
+                top: 0;
+            }
+
+            .name {
+                color: #fff;
+                font-size: 1em;
+                top: 13.6vh;
+            }
+        }
+
+        &#family-and-friends {
+            img {
+                height: 17.3vh;
+                top: -0.3vh;
+            }
+
+            .name {
+                color: #1a510e;
+                font-size: 0.64em;
+                top: 12vh;
+            }
+        }
+
+        &#science-stem {
+            img {
+                height: 15.9vh;
+                top: 1vh;
+            }
+
+            .name {
+                color: #fff;
+                font-size: 0.86em;
+                top: 13.3vh;
+            }
+        }
+
+        &#sports {
+            img {
+                height: 17.7vh;
+                top: 0;
+            }
+
+            .name {
+                color: #fff;
+                font-size: 0.75em;
+                top: 13.4vh;
+                padding-left: 1vh;
+            }
+        }
+
+        &#vehicles {
+            img {
+                height: 15.5vh;
+                top: 1.6vh;
+            }
+
+            .name {
+                color: #7b3b00;
+                font-size: 0.7em;
+                top: 13.6vh;
+            }
         }
 
         &.selected {
@@ -27,19 +107,5 @@
                 filter: brightness(1.2);
             }
         }
-
-        @mixin adjust($id, $height, $top: 0) {
-            &#{$id} {
-                img {
-                    height: #{$height};
-                    top: #{$top};
-                }
-            }
-        }
-
-        @include adjust(#family-and-friends, 17.3vh, -0.3vh);
-        @include adjust(#science-stem, 15.9vh, 1vh);
-        @include adjust(#sports, 17.7vh);
-        @include adjust(#vehicles, 15.5vh, 1.6vh);
     }
 }
