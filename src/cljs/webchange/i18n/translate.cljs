@@ -12,8 +12,10 @@
                                     :sports             "Sports"
                                     :vehicles           "Vehicles"}
               :error-general       "Something went wrong.. :("
+              :exit                "Exit"
               :favorite            "Favorite"
               :favorite-books      "My Favorite books"
+              :great-work          "Great work!"
               :home-page           "Home"
               :loading             "Loading"
               :no-books            "There are no books yet..."
@@ -29,8 +31,10 @@
                                     :sports             "Deportes"
                                     :vehicles           "Vehículos"}
               :error-general       "Algo salió mal.. :("
+              :exit                "Salida"
               :favorite            "Favoritos"
               :favorite-books      "Mis libros favoritos"
+              :great-work          "¡Bien hecho!"
               :home-page           "Inicio"
               :loading             "Cargando"
               :no-books            "Aún no hay libros..."

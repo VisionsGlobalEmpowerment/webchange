@@ -3,12 +3,16 @@
     [re-frame.core :as re-frame]
     [webchange.book-library.routes :as book-library]
     [webchange.events :as events]
+    [webchange.i18n.translate :as i18n]
     [webchange.state.warehouse :as warehouse]
     [webchange.student-dashboard.state :as parent-state]))
 
 (re-frame/reg-sub
   ::toolbar-items
   (fn []
+    (re-frame/subscribe [::i18n/t {:exit-title    [:exit]
+                                   :library-title [:book-library]}]))
+  (fn [{:keys [exit-title library-title]}]
     (->> [#_{:id    :awards
              :title "Awards"
              :img   "awards.png"}
@@ -16,10 +20,10 @@
              :title "Video Library"
              :img   "video_library.png"}
           {:id    :book-library
-           :title "Book Library"
+           :title library-title
            :img   "book_library.png"}
           {:id    :exit
-           :title "Exit"
+           :title exit-title
            :img   "exit.png"}]
          (map (fn [{:keys [img] :as item}]
                 (assoc item :img (str "/images/student_dashboard/" img)))))))
