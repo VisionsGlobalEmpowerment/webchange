@@ -62,7 +62,7 @@
                                  :y           280,
                                  :width       150,
                                  :height      130,
-                                 :align       "center",
+                                 :align       "left",
                                  :fill        "#ef545c",
                                  :font-family "Tabschool",
                                  :font-size   120,
