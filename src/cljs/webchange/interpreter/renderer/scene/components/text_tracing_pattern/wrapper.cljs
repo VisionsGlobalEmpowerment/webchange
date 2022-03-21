@@ -10,6 +10,8 @@
                    :object     container
                    :set-text   (fn [text]
                                  (draw! container (assoc props :text text) state))
+                   :set-dashed (fn [dashed]
+                                 (draw! container (assoc props :dashed dashed) state))
                    :set-enable (fn [value]
                                  (swap! state assoc :enable? value)
                                  (set-enable! state))}))

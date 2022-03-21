@@ -5,6 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.activity-form.common.object-form.state :as state]
     [webchange.editor-v2.activity-form.common.object-form.animation-form.views :as animation-form]
+    [webchange.editor-v2.activity-form.common.object-form.text-tracing-pattern-form.views :as text-tracing-pattern-form]
     [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
     [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
     [webchange.editor-v2.activity-form.common.object-form.video-form.views :as video-form]
@@ -16,6 +17,7 @@
 
 (def form-components
   {"animation" animation-form/form
+   "text-tracing-pattern" text-tracing-pattern-form/form
    "text"      text-form/form
    "image"     image-form/form
    "video"     video-form/form})

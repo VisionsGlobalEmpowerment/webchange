@@ -61,8 +61,8 @@
          :trace "M 125 32 a 75 80 0 1 0 1 0 z"}
    "o"  {:shape "M 125 110 a 41 41 0 1 0 1 0 z"
          :trace "M 125 110 a 41 41 0 1 0 1 0 z"}
-   "P"  {:shape "M 76 35 v 155 m 0 -155 h 55 a 43 43 0 0 1 0 86 H 76"
-         :trace "M 76 35 v 155 m 0 -155 h 55 a 43 43 0 0 1 0 86 H 76"}
+   "P"  {:shape "M 76 35 v 155 m 0 -155 h 55 a 43 43 0 0 1 0 86 h -55"
+         :trace "M 76 35 v 155 m 0 -155 h 55 a 43 43 0 0 1 0 86 h -55"}
    "p"  {:shape "M 87 109 v 155 m 0 -137 a 42 41 0 1 1 0 47"
          :trace "M 87 109 v 155 m 0 0 l 0 -137 a 42 41 0 1 1 0 47"}
    "Q"  {:shape "M 125 32 a 75 80 0 1 0 1 0 z m 7 111 l 53 72"
@@ -72,7 +72,7 @@
    "R"  {:shape "M 73 36 v 155 m 0 -155 h 59 a 1 1 0 0 1 0 86 h -59 m 62 0 l 39 69"
          :trace "M 73 36 v 155 m 0 -155 h 59 a 1 1 0 0 1 0 86 h -59 m 62 0 l 39 69"}
    "r"  {:shape "M 100 107 v 86 m 0 -67 a 32 25 0 0 1 58 -2"
-         :trace "M 100 107 v 86 M 100 193 l 0 -67 a 32 25 0 0 1 58 -2"}
+         :trace "M 100 107 v 86 m 0 0 l 0 -67 a 32 25 0 0 1 58 -2"}
    "S"  {:shape "M 170 50 c -16 -15 -22 -16 -41 -17 a 48 48 90 0 0 -38 16 a 35 35 90 0 0 -9 35 c 4 11 13 20 26 24 c 15 7 31 9 47 17 c 15 9 24 26 15 46 c -9 21 -62 40 -96 -3"
          :trace "M 170 50 c -16 -15 -22 -16 -41 -17 a 48 48 90 0 0 -38 16 a 35 35 90 0 0 -9 35 c 4 11 13 20 26 24 c 15 7 31 9 47 17 c 15 9 24 26 15 46 c -9 21 -62 40 -96 -3"}
    "s"  {:shape "M 146 126 c 1.1 -9.9 -11 -15.4 -19.8 -15.4 a 24.2 24.2 90 0 0 -17.6 6.6 a 17.6 17.6 90 0 0 -4.4 17.6 c 2.2 5.5 6.6 9.9 12.1 12.1 c 7.7 3.3 15.4 4.4 22 8.8 c 7.7 4.4 12.1 13.2 8.8 22 c -5.5 15.4 -30.8 19.8 -41.8 6.6 a 20.9 20.9 90 0 1 -4.4 -11"
@@ -133,12 +133,3 @@
 
 (def alphabet-path (get-letters-path-variant :shape))
 (def alphabet-traceable-path (get-letters-path-variant :trace))
-
-(defn get-svg-path
-  ([path]
-   (get-svg-path path {}))
-  ([path {:keys [trace?] :or {trace? false}}]
-   (let [source (if trace? alphabet-traceable-path alphabet-path)]
-     (if (contains? source path)
-       (get source path)
-       path))))

@@ -1,5 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.text-tracing-pattern.component
   (:require
+    [re-frame.core :as re-frame]
     [webchange.interpreter.pixi :refer [Container]]
     [webchange.interpreter.renderer.scene.components.text-tracing-pattern.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
@@ -8,13 +9,18 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.image.component :as i]
-    [webchange.logger.index :as logger]
-    [webchange.renderer.letters-path :refer [alphabet-path alphabet-traceable-path]]))
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
+    [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]
+    [webchange.interpreter.renderer.state.scene :as state]
+    [webchange.logger.index :as logger]))
 
 (def default-props {:x                        {:default 0}
                     :y                        {:default 300}
                     :width                    {:default 1920}
                     :height                   {:default 680}
+                    :x-offset                 {:default nil}
+                    :spacing                  {:default 20}
+                    :dashed                   {:default false}
                     :text                     {}
                     :name                     {}
                     :on-change                {}
@@ -27,12 +33,12 @@
                     :enable?                  {:default true}})
 
 (def base-height 275)
-(def midline-offset 70)
-(def baseline-offset 150)
+(def midline-offset 76)
+(def baseline-offset 162)
 
 (def base-width 225)
 (def line-height 10)
-(def letter-offset-y -34)
+(def letter-offset-y -26)
 
 (def safe-padding 60)
 
@@ -50,56 +56,72 @@
     (utils/set-position {:x x :y y})))
 
 (defn- path->letter
-  [scale path]
+  [scale path dashed]
   {:type         "svg-path",
-   :dash         [],
+   :dash         (if dashed [7 7] [])
    :width        base-width
    :height       base-height
    :data         path,
    :scale        {:x scale :y scale}
    :line-cap     "round",
    :stroke       "#898989",
-   :stroke-width 12})
+   :stroke-width (if dashed 4 12)
+   :filters [{:name "brightness" :value 0}
+             {:name "glow" :outer-strength 0 :color 0xffd700}]})
 
 (defn- path->animated-letter
-  [letter-scale padding-scale path]
-  (let [padding (if (> padding-scale 0)
-                  (* safe-padding padding-scale)
-                  0)]
+  [letter-scale path]
     {:type         "animated-svg-path",
      :duration     1000
-     :width        (- base-width (* 2 padding))
+     :width        base-width
      :height       base-height
      :path         path,
      :traceable    true
      :scale        {:x letter-scale :y letter-scale}
-     :offset       {:x (- padding) :y 0}
      :line-cap     "round",
      :stroke       "#323232",
-     :stroke-width 12}))
+     :stroke-width 12})
+
+(defn get-path-width [data]
+  (let [svg-node (.createElementNS js/document "http://www.w3.org/2000/svg" "svg")
+        path-node (.createElementNS js/document "http://www.w3.org/2000/svg" "path")
+        body (.-body js/document)]
+    (.setAttribute path-node "d" data)
+    (.appendChild svg-node path-node)
+    (.appendChild body svg-node)
+    (let [width (.-width (.getBBox svg-node))]
+      (.removeChild body svg-node)
+      width)))
+
+(defn accumulate [list]
+  (let [rec (fn [acc lst]
+              (if (empty? lst)
+                acc
+                (recur (conj acc (+ (last acc) (first lst)))
+                       (rest lst))))]
+    (rec [0] list)))
 
 (defn- draw-pattern!
-  [group {:keys [width text repeat-text]} {letter-scale :letter padding-scale :padding} topline-y]
+  [group {:keys [width text repeat-text x-offset spacing dashed]} {letter-scale :letter} topline-y]
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
-        letter-width (* letter-scale base-width)
-        letter-padding (* letter-scale padding-scale safe-padding)
+        widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
+        total (last widths)
         positions (->> (range length)
                        (map (fn [pos]
-                              (if (> letter-padding 0)
-                                {:x (- (* letter-width pos) (* letter-padding pos 2))
-                                 :y topline-y}
-                                {:x (+ (* letter-width pos) (/ (- width (* letter-width length)) 2))
-                                 :y topline-y}))))
+                              {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
+                               :y topline-y
+                               :index pos})))
         letters (->> text
-                     (map alphabet-path)
-                     (map #(path->letter letter-scale %))
+                     (map #(get-svg-path % {:trace? false}))
+                     (map #(path->letter letter-scale % dashed))
                      (map merge positions))]
     (doall
       (for [letter letters]
-        (s/create (assoc letter
-                         :object-name (str "text-tracing-pattern-" (:x letter))
-                         :parent group))))))
+        (let [component (s/create (assoc letter
+                                         :object-name (keyword (str "text-tracing-pattern-" (:index letter)))
+                                         :parent group))]
+          (re-frame/dispatch [::state/register-object component]))))))
 
 (defn- activate-next-letter
   ([state]
@@ -118,23 +140,19 @@
          (on-finish))))))
 
 (defn- draw-traceable-pattern!
-  [group {:keys [width text repeat-text] :as props} {letter-scale :letter padding-scale :padding} topline-y state]
+  [group {:keys [width text repeat-text x-offset spacing] :as props} {letter-scale :letter} topline-y state]
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
-        letter-width (* letter-scale base-width)
-        letter-padding (* padding-scale safe-padding)
-        reduced-letter-width (- letter-width (* 2 letter-padding letter-scale))
+        widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
+        total (last widths)
         positions (->> (range length)
                        (map (fn [pos]
-                              (if (> padding-scale 0)
-                                {:x (+ (* reduced-letter-width pos) (* letter-padding letter-scale))
-                                 :y topline-y}
-                                {:x (+ (* letter-scale base-width pos) (/ (- width (* letter-scale base-width length)) 2))
-                                 :y topline-y}))))
+                              {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
+                               :y topline-y})))
 
         letters (->> text
-                     (map alphabet-traceable-path)
-                     (map #(path->animated-letter letter-scale padding-scale %))
+                     (map #(get-svg-path % {:trace? true}))
+                     (map #(path->animated-letter letter-scale %))
                      (map merge positions))]
     (doall
       (for [letter letters]
@@ -180,52 +198,6 @@
       {:type    :by-width
        :letter  scale-by-width
        :padding 1})))
-
-(comment
-  (let [width 1920
-        topline-y 0
-        text "ono"
-        {letter-scale :letter padding-scale :padding} (get-scale {:text text :width 1920 :height 680})
-        length (count text)
-        letter-width (* letter-scale base-width)
-        letter-padding (* letter-scale padding-scale safe-padding)
-        positions (->> (range length)
-                       (map (fn [pos]
-                              (if (> padding-scale 0)
-                                {:x (- (* letter-width pos) (* letter-padding pos 2))
-                                 :y topline-y}
-                                {:x (+ (* letter-width pos) (/ (- width (* letter-width length)) 2))
-                                 :y topline-y}))))
-        letters (->> text
-                     (map alphabet-path)
-                     (map #(path->letter letter-scale %))
-                     (map merge positions))]
-    (->> letters
-         (map #(select-keys % [:x :scale]))))
-
-  (let [width 1920
-        topline-y 0
-        text "uu"
-        {letter-scale :letter padding-scale :padding} (get-scale {:text text :width 1920 :height 680})
-
-        length (count text)
-        letter-width (* letter-scale base-width)
-        letter-padding (* padding-scale safe-padding)
-        letter-width (- letter-width (* 2 letter-padding letter-scale))
-        positions (->> (range length)
-                       (map (fn [pos]
-                              (if (> padding-scale 0)
-                                {:x (+ (* letter-width pos) (* letter-padding letter-scale))
-                                 :y topline-y}
-                                {:x (+ (* letter-width pos) (/ (- width (* (* letter-scale base-width) length)) 2))
-                                 :y topline-y}))))
-        letters (->> text
-                     (map alphabet-traceable-path)
-                     (map #(path->animated-letter letter-scale padding-scale %))
-                     (map merge positions))]
-    (->> letters
-         (map #(select-keys % [:x :width :offset :scale]))))
-  )
 
 (defn- reset-group!
   [group]

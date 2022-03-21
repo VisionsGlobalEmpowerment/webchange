@@ -37,6 +37,7 @@
 (defn set-rotation [wrapper & params] (execute wrapper :set-rotation params))
 (defn set-scale [wrapper & params] (execute wrapper :set-scale params))
 (defn get-scale [wrapper & params] (execute wrapper :get-scale params))
+(defn set-dashed [wrapper & params] (execute wrapper :set-dashed params))
 (defn set-skin [wrapper & params] (execute wrapper :set-skin params))
 (defn set-combined-skin [wrapper & params] (execute wrapper :set-combined-skin params))
 (defn set-skeleton [wrapper & params] (execute wrapper :set-skeleton params))
