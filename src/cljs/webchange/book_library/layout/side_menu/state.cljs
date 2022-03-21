@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.book-library.pages.library.state :as library]
     [webchange.book-library.state :as paren-state]
+    [webchange.i18n.translate :as i18n]
     [webchange.routes :as routes]))
 
 (defn path-to-db
@@ -14,16 +15,19 @@
 (re-frame/reg-sub
   ::navigation-items
   (fn []
-    (re-frame/subscribe [::routes/active-route]))
-  (fn [{:keys [handler]}]
-    (->> [{:title "Library"
+    [(re-frame/subscribe [::routes/active-route])
+     (re-frame/subscribe [::i18n/t {:book-library-title [:book-library]
+                                    :favorite-title     [:favorite]
+                                    :search-title       [:search]}])])
+  (fn [[{:keys [handler]} {:keys [book-library-title favorite-title search-title]}]]
+    (->> [{:title book-library-title
            :icon  "book"
            :page  :book-library
            :event [::library/reset]}
-          #_{:title "Favorite"
+          #_{:title favorite-title
              :icon  "heart"
              :page  :book-library-favorite}
-          #_{:title "Search"
+          #_{:title search-title
              :icon  "search"
              :page  :book-library-search}]
          (map (fn [{:keys [page] :as item}]
@@ -39,10 +43,10 @@
 
 (def back-button-values
   {:book-library-read {:icon     "book"
-                       :title    "Library"
+                       :title    :book-library
                        :location [:book-library]}
    :default           {:icon     "home"
-                       :title    "Home"
+                       :title    :home-page
                        :location [:student-course-dashboard]}})
 
 (defn- get-back-button-data
@@ -54,9 +58,12 @@
 (re-frame/reg-sub
   ::back-button-data
   (fn []
-    (re-frame/subscribe [::routes/active-route]))
-  (fn [{:keys [handler]}]
-    (get-back-button-data handler)))
+    [(re-frame/subscribe [::routes/active-route])
+     (re-frame/subscribe [::i18n/t {:book-library [:book-library]
+                                    :home-page    [:home-page]}])])
+  (fn [[{:keys [handler]} translations]]
+    (-> (get-back-button-data handler)
+        (update :title #(get translations %)))))
 
 (re-frame/reg-event-fx
   ::handle-back-button-click

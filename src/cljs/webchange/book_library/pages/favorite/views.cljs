@@ -1,9 +1,11 @@
 (ns webchange.book-library.pages.favorite.views
   (:require
-    [webchange.book-library.layout.views :refer [layout]]))
+    [re-frame.core :as re-frame]
+    [webchange.book-library.layout.views :refer [layout]]
+    [webchange.i18n.translate :as i18n]))
 
 (defn page
   []
-  [layout {:title          "My Favorite books"
-           :document-title "Favorite"}
+  [layout {:title          @(re-frame/subscribe [::i18n/t [:favorite-books]])
+           :document-title @(re-frame/subscribe [::i18n/t [:favorite]])}
    [:div]])

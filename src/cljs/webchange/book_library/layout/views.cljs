@@ -1,9 +1,11 @@
 (ns webchange.book-library.layout.views
   (:require
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.book-library.layout.icons.index :refer [icons]]
     [webchange.book-library.layout.side-menu.views :refer [side-menu]]
     [webchange.page-title.views :refer [page-title]]
+    [webchange.i18n.translate :as i18n]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- toolbar
@@ -15,7 +17,7 @@
 
 (defn- get-title
   [sub-title]
-  (let [title "Book Library"]
+  (let [title @(re-frame/subscribe [::i18n/t [:book-library]])]
     (if (some? sub-title)
       (str title " - " sub-title)
       title)))

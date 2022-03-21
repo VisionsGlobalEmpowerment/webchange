@@ -2,13 +2,20 @@
   (:require
     [re-frame.core :as re-frame]))
 
+(def current-course-id-path [:current-course])
+
 (defn current-course-id
   [db]
-  (get db :current-course))
+  (get-in db current-course-id-path))
 
 (re-frame/reg-sub
   ::current-course-id
   current-course-id)
+
+(re-frame/reg-event-fx
+  ::set-current-course-id
+  (fn [{:keys [db]} [_ course-id]]
+    {:db (assoc-in db current-course-id-path course-id)}))
 
 ;; Current scene id
 
