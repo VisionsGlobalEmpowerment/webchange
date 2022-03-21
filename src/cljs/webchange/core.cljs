@@ -3,12 +3,14 @@
     [cljsjs.material-ui]
     [reagent.core :as reagent]
     [re-frame.core :as re-frame]
+    [webchange.error-message.state :as error]
     [webchange.events :as events]
     [webchange.views :as views]
     [webchange.config :as config]
     [webchange.routes :as routes]
     [webchange.sw-utils.register :as sw]
-    [webchange.ui.theme :refer [with-mui-theme]]))
+    [webchange.ui.theme :refer [with-mui-theme]]
+    [webchange.utils.browser-history :as history]))
 
 (defn dev-setup []
   (when config/debug?
@@ -21,6 +23,10 @@
     [with-mui-theme {:type "light"}
      [views/main-panel]]
     (.getElementById js/document "app")))
+
+(defn- handle-history-back
+  []
+  (re-frame/dispatch [::error/show "Back was clicked"]))
 
 (defn reset-viewport
   []
@@ -41,5 +47,6 @@
   (re-frame/dispatch [::events/init-current-school])
   (re-frame/dispatch [::events/init-current-user])
   (init-viewport)
+  (history/add-event-handler :back handle-history-back)
   (dev-setup)
   (mount-root))
