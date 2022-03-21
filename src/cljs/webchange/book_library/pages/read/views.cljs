@@ -6,6 +6,7 @@
     [webchange.book-library.layout.views :refer [layout]]
     [webchange.book-library.pages.read.icons :refer [icons]]
     [webchange.book-library.pages.read.state :as state]
+    [webchange.i18n.translate :as i18n]
     [webchange.interpreter.components :refer [interpreter]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
@@ -44,14 +45,14 @@
            (cond-> []
                    loading? (concat [[loading-indicator]])
                    error? (concat [[error-message]])
-                   show-buttons? (concat [[menu-item {:text     "Read to me"
+                   show-buttons? (concat [[menu-item {:text     @(re-frame/subscribe [::i18n/t [:read/to-me]])
                                                       :icon     "volume"
                                                       :big?     true
                                                       :on-click handle-read-with-sound-click}]
-                                          [menu-item {:text     "Read by myself"
+                                          [menu-item {:text     @(re-frame/subscribe [::i18n/t [:read/by-myself]])
                                                       :icon     "no-volume"
                                                       :on-click handle-read-without-sound-click}]
-                                          #_[menu-item {:text     "Favorite"
+                                          #_[menu-item {:text     @(re-frame/subscribe [::i18n/t [:favorite]])
                                                         :icon     "heart"
                                                         :on-click handle-favorite-click}]])))]))
 
@@ -61,7 +62,7 @@
                                     :book-id   book-id}])
   (fn []
     [layout {:class-name       "book-read-page"
-             :document-title   "Read"
+             :document-title   @(re-frame/subscribe [::i18n/t [:read/read]])
              :show-toolbar?    false
              :show-navigation? false}
      [book]

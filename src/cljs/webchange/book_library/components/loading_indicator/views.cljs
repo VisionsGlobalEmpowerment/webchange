@@ -1,6 +1,8 @@
 (ns webchange.book-library.components.loading-indicator.views
   (:require
-    [reagent.core :as r]))
+    [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.i18n.translate :as i18n]))
 
 (defn- init-timer
   [callback]
@@ -19,6 +21,6 @@
                                (swap! counter inc)))
                timer-id (atom (init-timer handle-tick))]
     [:div.loading-indicator
-     (apply str (concat ["Loading"] (take @counter (repeat "."))))]
+     (apply str (concat [@(re-frame/subscribe [::i18n/t [:loading]])] (take @counter (repeat "."))))]
     (finally
       (reset-timer @timer-id))))

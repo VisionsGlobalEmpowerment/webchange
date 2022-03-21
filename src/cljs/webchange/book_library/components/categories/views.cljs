@@ -13,14 +13,15 @@
 (defn category-item
   [{:keys [image name value selected? on-click]}]
   (let [handle-click #(on-click (if selected? nil {:name  name
-                                                   :value value}))]
+                                                   :value value}))
+        translated-name @(re-frame/subscribe [::i18n/t [(keyword :categories value)]])]
     [:li {:id         value
           :class-name (get-class-name {"category-item" true
                                        "selected"      selected?})
-          :title      name
+          :title      translated-name
           :on-click   handle-click}
      [:img {:src image}]
-     [:span.name @(re-frame/subscribe [::i18n/t [(keyword :categories value)]])]]))
+     [:span.name translated-name]]))
 
 (defn book-categories
   []

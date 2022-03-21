@@ -22,7 +22,7 @@
        (for [{:keys [id] :as book} books]
          ^{:key id}
          [book-list-item book])
-       [:div.user-message "There are no books yet..."])]))
+       [:div.user-message @(re-frame/subscribe [::i18n/t [:no-books]])])]))
 
 (defn- categories
   []
@@ -33,11 +33,11 @@
 
 (defn- current-category
   []
-  (let [{:keys [name value] :as category} @(re-frame/subscribe [::state/current-category])]
+  (let [{:keys [value] :as category} @(re-frame/subscribe [::state/current-category])]
     (when (some? category)
       [:div.current-category
        [category-image {:value value}]
-       name])))
+       @(re-frame/subscribe [::i18n/t [(keyword :categories value)]])])))
 
 (defn page
   [{:keys [id]}]
