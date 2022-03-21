@@ -1,5 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.animated-svg-path.tracing
   (:require
+    [re-frame.core :as re-frame]
     [webchange.interpreter.pixi :refer [Sprite Texture Graphics]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.path :refer [precision]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
@@ -40,7 +41,7 @@
         touch? {:updated? true :path-finished true}
         :else {:updated? updated? :next-point-idx point-idx}))))
 
-(def arrow (atom nil))
+(def hint (atom nil))
 
 (defn- get-direction [points index]
   (let [index (if (= index (dec (count points)))
@@ -76,14 +77,20 @@
         (.setLineDash ctx #js [(* point-idx precision) length])
         (.stroke ctx (js/Path2D. path)))
 
-      (when @arrow
-        ((:set-rotation @arrow) (get-direction points point-idx))
-        (let [{:keys [x y]} (nth points point-idx)
+      (if-let [arrow (:arrow @hint)]
+        (let [dot (:dot @hint)
+              {:keys [x y]} (nth points point-idx)
               dx (:x dimensions)
               dy (:y dimensions)
               ds (:scale dimensions)]
-          ((:set-position @arrow) {:x (+ dx (* ds x))
-                                   :y (+ dy (* ds y))}))))
+          (if (< (count points) 7)
+            (do
+              ((:set-position arrow) {:x -100 :y 100})
+              ((:set-position dot) {:x (+ dx (* ds x)) :y (+ dy (* ds y))}))
+            (do
+              ((:set-position dot) {:x -100 :y 100})
+              ((:set-rotation arrow) (get-direction points point-idx))
+              ((:set-position arrow) {:x (+ dx (* ds x)) :y (+ dy (* ds y))}))))))
     (.update texture)))
 
 (defn- drag
@@ -112,7 +119,7 @@
     (-> points (nth point-idx))))
 
 (defn- on-start
-  [state {:keys [scale offset]}]
+  [state {:keys [scale offset] :as props}]
   (fn [event]
     (this-as this
       (let [point (-> state (next-point-pos) (translate-point offset) (scale-point scale))
@@ -123,10 +130,16 @@
         (debug/mark :next (:x point) (:y point) 4 0x00ff00 (.-parent this))
 
         (logger/trace-folded "animated-svg-path tracing on-start" this)
+
         (when (and (:active @state) (in-area {:x (.-x pos) :y (.-y pos)} point (scale-distance touch-distance scale)))
           (set! (.-drag-offset this) drag-offset)
           (set! (.-data this) (.-data event))
-          (set! (.-drawing this) true))))))
+          (set! (.-drawing this) true)
+
+          (let [{offset-x :x offset-y :y} (-> this .-drag-offset)
+                pos (-> this .-data (.getLocalPosition (.-parent this)))
+                pointer {:x (+ offset-x (.-x pos)) :y (+ offset-y (.-y pos))}]
+            (drag state props pointer)))))))
 
 (defn- on-end
   []

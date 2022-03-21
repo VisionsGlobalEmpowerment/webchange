@@ -106,7 +106,7 @@
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
         widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
-        total (last widths)
+        total (- (last widths) spacing)
         positions (->> (range length)
                        (map (fn [pos]
                               {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
@@ -144,7 +144,7 @@
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
         widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
-        total (last widths)
+        total (- (last widths) spacing)
         positions (->> (range length)
                        (map (fn [pos]
                               {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
@@ -163,16 +163,26 @@
                                             :parent group))]
           (swap! state update :letters conj animated-svg-path)
           (swap! state update :all-letters conj animated-svg-path))))
-    (reset! tracing/arrow (i/create {:type "image"
-                                     :x -100
-                                     :y 100
-                                     :width 100
-                                     :height 100
-                                     :src "/raw/clipart/writing/arrow.png"
-                                     :origin {:type "center-center"}
-                                     :object-name "text-tracing-pattern-arrow"
-                                     :parent group}))
-    (activate-next-letter state)))
+
+    (reset! tracing/hint {:arrow (i/create {:type "image"
+                                            :x -100
+                                            :y 100
+                                            :width 100
+                                            :height 100
+                                            :src "/raw/clipart/writing/arrow.png"
+                                            :origin {:type "center-center"}
+                                            :object-name "text-tracing-pattern-arrow"
+                                            :parent group})
+                          :dot (i/create {:type "image"
+                                          :x -100
+                                          :y 100
+                                          :width 100
+                                          :height 100
+                                          :src "/raw/clipart/writing/dot.png"
+                                          :origin {:type "center-center"}
+                                          :object-name "text-tracing-pattern-dot"
+                                          :parent group})})
+      (activate-next-letter state)))
 
 (defn- padding-scale
   [length scale-by-height width]
