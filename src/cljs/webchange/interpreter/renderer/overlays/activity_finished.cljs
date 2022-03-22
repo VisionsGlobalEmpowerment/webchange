@@ -1,11 +1,11 @@
 (ns webchange.interpreter.renderer.overlays.activity-finished
   (:require
     [re-frame.core :as re-frame]
+    [webchange.i18n.translate :as i18n]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.interpreter.utils.i18n :refer [t]]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn show-overlay?
   [mode]
@@ -43,7 +43,9 @@
     {:x               964
      :y               232
      :type            "text"
-     :text            "GREAT\nWORK!"
+     :text            (-> @(re-frame/subscribe [::i18n/t [:great-work]])
+                          (clojure.string/upper-case)
+                          (clojure.string/replace " " "\n"))
      :object-name     :form-title
      :vertical-align  "top"
      :align           "center"
@@ -63,34 +65,34 @@
    :object-name :activity-finished-overlay
    :visible     false
    :children    [(get-background)
-                 {:type "animation",
-                  :x 960
-                  :y 590
-                  :scale {:x 1, :y 1},
-                  :anim "opt-1",
-                  :meshes true,
-                  :name "ui-shooting-star",
-                  :skin "default",
-                  :speed 1,
-                  :start false,
-                  :visible true
+                 {:type        "animation",
+                  :x           960
+                  :y           590
+                  :scale       {:x 1, :y 1},
+                  :anim        "opt-1",
+                  :meshes      true,
+                  :name        "ui-shooting-star",
+                  :skin        "default",
+                  :speed       1,
+                  :start       false,
+                  :visible     true
                   :object-name :form-shooting-star}
                  {:type        "image"
                   :src         "/raw/img/ui/activity_finished/form.png"
                   :object-name :form-bg
-                  :x 612
-                  :y 147}
+                  :x           612
+                  :y           147}
                  {:type        "image"
                   :src         "/raw/img/ui/activity_finished/vera.png"
                   :object-name :form-vera
-                  :x 828
-                  :y 447}
+                  :x           828
+                  :y           447}
                  {:type        "image"
                   :src         "/raw/img/ui/activity_finished/next.png"
                   :object-name :form-next
-                  :x 872
-                  :y 748
-                  :on-click #(re-frame/dispatch [::ie/run-next-activity])}
+                  :x           872
+                  :y           748
+                  :on-click    #(re-frame/dispatch [::ie/run-next-activity])}
                  (get-title)
                  (get-home-button {:viewport viewport})]})
 

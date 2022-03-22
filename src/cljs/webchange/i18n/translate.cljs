@@ -11,34 +11,52 @@
                                     :science-stem       "Science"
                                     :sports             "Sports"
                                     :vehicles           "Vehicles"}
+              :continue            "Continue"
               :error-general       "Something went wrong.. :("
+              :exit                "Exit"
               :favorite            "Favorite"
               :favorite-books      "My Favorite books"
+              :goodbye             "Goodbye!"
+              :great-work          "Great work!"
               :home-page           "Home"
               :loading             "Loading"
+              :next                "Next"
               :no-books            "There are no books yet..."
+              :play                "Play"
               :read                {:read      "Read"
                                     :to-me     "Read to me"
                                     :by-myself "Read by myself"}
               :search              "Search"
-              :search-book-library "Search Book Library"}
+              :search-book-library "Search Book Library"
+              :skip                "Skip"
+              :wait                "Please, wait..."
+              :watch               "Watch"}
    "spanish" {:book-library        "Biblioteca"
               :categories          {:animals            "Animales"
                                     :family-and-friends "Familia y Amigos" ;; <- non-breaking space before "Amigos"
                                     :science-stem       "Ciencia"
                                     :sports             "Deportes"
                                     :vehicles           "Vehículos"}
+              :continue            "Seguir"
               :error-general       "Algo salió mal.. :("
+              :exit                "Salida"
               :favorite            "Favoritos"
               :favorite-books      "Mis libros favoritos"
+              :goodbye             "Adiós!"
+              :great-work          "¡Bien hecho!"
               :home-page           "Inicio"
               :loading             "Cargando"
+              :next                "Sigue"
               :no-books            "Aún no hay libros..."
+              :play                "Juega"
               :read                {:read      "Leer"
                                     :to-me     "¡Leeme!"
                                     :by-myself "Yo leo"}
               :search              "Buscar"
-              :search-book-library "Buscar"}})
+              :search-book-library "Buscar"
+              :skip                "Omitir"
+              :wait                "Espere por favor..."
+              :watch               "Mira"}})
 
 (defn- translate
   [language key]

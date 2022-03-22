@@ -16,28 +16,29 @@
                                    :max   3}}})
 
 (def t {:assets        [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
-                        {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}],
+                        {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
+                        {:url "/raw/img/ui/play_button/play_button.png", :size 10, :type "image"}],
         :objects
                        {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
                         :letter-video
-                                    {:type    "video",
-                                     :x       342,
-                                     :y       111,
-                                     :width   1236,
-                                     :height  674,
-                                     :visible false,
+                                    {:type      "video",
+                                     :x         342,
+                                     :y         111,
+                                     :width     1236,
+                                     :height    674,
+                                     :visible   false,
                                      :editable? {:select        true
                                                  :show-in-tree? true}},
                         :play-button
-                                    {:type      "button",
-                                     :x         816,
-                                     :y         400,
-                                     :actions   {:click {:id "play-video", :on "click", :type "action"}},
-                                     :font-size 76,
-                                     :text      "Play"
-                                     :filters       [{:name "brightness" :value 0}
-                                                     {:name "glow" :outer-strength 0 :color 0xffd700}]
-                                     :transition    "play-button"},
+                                    {:type       "button",
+                                     :x          883,
+                                     :y          347,
+                                     :actions    {:click {:id "play-video", :on "click", :type "action"}},
+                                     :font-size  76,
+                                     :img        "/raw/img/ui/play_button/play_button.png"
+                                     :filters    [{:name "brightness" :value 0}
+                                                  {:name "glow" :outer-strength 0 :color 0xffd700}]
+                                     :transition "play-button"},
                         :screen-overlay
                                     {:type    "image",
                                      :x       342,
@@ -73,23 +74,23 @@
                                                                     {:type "action" :id "dialog-intro"}
                                                                     {:type "action" :id "start-timeout"}],
                                                       :description "Initial action"
-                                                      :tags ["instruction"]},
+                                                      :tags        ["instruction"]},
                         :stop-activity               {:type "stop-activity"}
-                        :start-timeout        {:type      "start-timeout-counter",
-                                               :id        "inactive-counter",
-                                               :action    "continue-try",
-                                               :autostart true
-                                               :interval  30000}
-                        :stop-timeout      {:type "remove-interval"
-                                            :id        "inactive-counter"}
-                        :continue-try         {:type "sequence",
-                                               :data ["start-timeout"
-                                                      "dialog-timeout-instructions"]},
-                        :highlight-play {:type               "transition"
-                                         :transition-id      "play-button"
-                                         :return-immediately true
-                                         :from               {:brightness 0 :glow 0}
-                                         :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}},
+                        :start-timeout               {:type      "start-timeout-counter",
+                                                      :id        "inactive-counter",
+                                                      :action    "continue-try",
+                                                      :autostart true
+                                                      :interval  30000}
+                        :stop-timeout                {:type "remove-interval"
+                                                      :id   "inactive-counter"}
+                        :continue-try                {:type "sequence",
+                                                      :data ["start-timeout"
+                                                             "dialog-timeout-instructions"]},
+                        :highlight-play              {:type               "transition"
+                                                      :transition-id      "play-button"
+                                                      :return-immediately true
+                                                      :from               {:brightness 0 :glow 0}
+                                                      :to                 {:brightness 1 :glow 10 :yoyo true :duration 0.5 :repeat 5}}},
         :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata      {:prev "map", :autostart true}})
 

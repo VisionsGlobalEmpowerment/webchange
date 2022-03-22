@@ -1,7 +1,8 @@
 (ns webchange.interpreter.renderer.waiting-screen
   (:require
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.utils.i18n :refer [t]]))
+    [webchange.i18n.translate :as i18n]))
 
 (defn get-styles
   []
@@ -47,7 +48,7 @@
   (let [styles (get-styles)]
     [:div {:style (:text-container styles)}
      [:span {:style (:text styles)}
-      (t "Please, wait...")]]))
+      @(re-frame/subscribe [::i18n/t [:wait]])]]))
 
 (defn waiting-screen
   []
