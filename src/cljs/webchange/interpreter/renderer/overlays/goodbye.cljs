@@ -1,10 +1,10 @@
 (ns webchange.interpreter.renderer.overlays.goodbye
   (:require
     [re-frame.core :as re-frame]
+    [webchange.i18n.translate :as i18n]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.interpreter.utils.i18n :refer [t]]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn show-overlay?
   [mode]
@@ -36,7 +36,7 @@
     {:x              (/ (:width goodbye-window-size) 2)
      :y              (+ (:height goodbye-window-size) 20)
      :type           "text"
-     :text           (t "goodbye!")
+     :text           @(re-frame/subscribe [::i18n/t [:goodbye]])
      :object-name    :goodbye-title
      :align          "center"
      :vertical-align "bottom"

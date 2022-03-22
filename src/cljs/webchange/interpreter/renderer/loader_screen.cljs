@@ -1,7 +1,8 @@
 (ns webchange.interpreter.renderer.loader-screen
   (:require
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.utils.i18n :refer [t]]))
+    [webchange.i18n.translate :as i18n]))
 
 (defn get-styles
   []
@@ -79,7 +80,7 @@
     [:div {:style (:button-container styles)}
      [:button {:on-click on-click
                :style    (:button styles)}
-      (t "play")]]))
+      @(re-frame/subscribe [::i18n/t [:play]])]]))
 
 (defn- progress-bar
   [{:keys [value]}]

@@ -5,8 +5,7 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.interpreter.utils.i18n :refer [t]]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn show-overlay?
   [mode]

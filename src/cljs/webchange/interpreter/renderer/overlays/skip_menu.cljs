@@ -2,10 +2,10 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.common.events :as ce]
+    [webchange.i18n.translate :as i18n]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.interpreter.utils.i18n :refer [t]]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn show-overlay?
   [mode]
@@ -29,7 +29,7 @@
   (let [skip-button (merge {:type        "button"
                             :object-name button-name
                             :on-click    ce/skip
-                            :text        (t "skip")}
+                            :text        @(re-frame/subscribe [::i18n/t [:skip]])}
                            (get-button-position viewport))]
     {:type        "group"
      :object-name :skip-menu
