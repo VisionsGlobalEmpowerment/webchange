@@ -28,7 +28,8 @@
          {:url "/raw/img/ui/circle.png" :size 1 :type "image"}
          {:url "/raw/img/ui/checkmark.png" :size 1 :type "image"}
          {:url "/raw/clipart/writing/arrow.png" :type "image"}
-         {:url "/raw/clipart/writing/hand.png" :type "image"}],
+         {:url "/raw/clipart/writing/hand.png" :type "image"}
+         {:url "/raw/clipart/writing/dot.png" :type "image"}],
         :objects
         {:background  {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
          :letter-tutorial-path

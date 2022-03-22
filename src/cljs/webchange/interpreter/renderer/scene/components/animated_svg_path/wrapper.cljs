@@ -23,5 +23,4 @@
                    :activate                #(do
                                                (swap! state assoc :active true)
                                                (tracing/draw state {:path-idx 0 :point-idx 0} dimensions))
-                   :set-enable              #(do (print "set-enable" %)
-                                                 (swap! state assoc :enable? %))}))
+                   :set-enable              #(swap! state assoc :enable? %)}))
