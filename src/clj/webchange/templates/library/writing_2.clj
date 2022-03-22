@@ -157,7 +157,7 @@
   [available-actions]
   (filter #(not (.startsWith
                   (:action %)
-                  "highlight-text-tracing-pattern-"))
+                  "blink-text-tracing-pattern-"))
           available-actions))
 
 (defn- create-letter-effects
@@ -166,9 +166,9 @@
                       "fifth" "sixth" "seventh" "eight"]]
     (reduce (fn [ad n]
               (let [name (get number-names n (str (inc n) "th"))]
-                (common/add-highlight ad
-                                      (str "text-tracing-pattern-" n)
-                                      (str "Highlight " name " letter"))))
+                (common/add-blink ad
+                                  (str "text-tracing-pattern-" n)
+                                  (str "Highlight " name " letter"))))
             activity-data
             (range (count word)))))
 
