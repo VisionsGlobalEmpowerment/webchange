@@ -71,8 +71,7 @@
           :enable?     false
           :visible     false
           :height      1000
-          :spacing     150
-          :x-offset    350
+          :spacing     100
           :actions     {:next-letter {:on "next-letter-activated" :type "action" :id "letter-finished-dialog"}
                         :finish      {:on "finish" :type "action" :id "text-finished"}
                         :click       {:on "click" :type "action" :id "timeout-timer"}}}
