@@ -55,7 +55,8 @@
                styles (get-styles)]
     [ui/grid {:container   true
               :justify     "flex-start"
-              :align-items "center"}
+              :align-items "center"
+              :style       {:margin-top 16}}
      [ui/typography {:variant "body1"
                      :style   (:image-label styles)}
       "Course Image"]
@@ -103,9 +104,7 @@
   (let [current-value (-> @data :metadata :categories (or []))
         available-categories @(re-frame/subscribe [::info-state/book-categories])
         handle-change #(swap! data assoc-in [:metadata :categories] %)]
-    [ui/form-control {:full-width true
-                      :margin     "normal"
-                      :style      {:margin-top 0}}
+    [ui/form-control {:full-width true}
      [ui/input-label "Categories"]
      [ui/select {:value     current-value
                  :variant   "outlined"
@@ -160,31 +159,39 @@
         [ui/menu-item {:value value} name])]]))
 
 (defn- book-info
-  [data]
-  (when (book? @data)
-    (let [uploading (atom false)
-          handle-finish-upload (fn [result]
-                                 (reset! uploading false)
-                                 (swap! data assoc :image-src (:url result)))
-          handle-start-upload (fn [blob]
-                                (reset! uploading true)
-                                (re-frame/dispatch [::assets-events/upload-asset blob {:type      :image
-                                                                                       :options   {:max-width 384 :max-height 432}
-                                                                                       :on-finish handle-finish-upload}]))]
-      (init-book-keywords! data)
-      (fn [data]
-        [:div
-         [age-control {:data data}]
-         [category-control {:data data}]
-         [genre-control {:data data}]
-         [reading-level-control {:data data}]
-         [tags-control {:data data}]
-         (if @uploading
-           [ui/circular-progress]
-           [ui/button {:color    "secondary"
-                       :style    {:margin-left "auto"}
-                       :on-click #(re-frame/dispatch [::info-state/update-book-preview handle-start-upload])}
-            "Update book preview"])]))))
+  [{:keys [data]}]
+  (let [uploading (atom false)
+        handle-finish-upload (fn [result]
+                               (reset! uploading false)
+                               (swap! data assoc :image-src (:url result)))
+        handle-start-upload (fn [blob]
+                              (reset! uploading true)
+                              (re-frame/dispatch [::assets-events/upload-asset blob {:type      :image
+                                                                                     :options   {:max-width 384 :max-height 432}
+                                                                                     :on-finish handle-finish-upload}]))]
+    (init-book-keywords! data)
+    (fn [{:keys [data]}]
+      [ui/grid {:container   true
+                :justify     "space-between"
+                :spacing     24
+                :align-items "center"}
+       [ui/grid {:item true :xs 6}
+        [age-control {:data data}]]
+       [ui/grid {:item true :xs 6}
+        [genre-control {:data data}]]
+       [ui/grid {:item true :xs 6}
+        [reading-level-control {:data data}]]
+       [ui/grid {:item true :xs 6}
+        [category-control {:data data}]]
+       [ui/grid {:item true :xs 12}
+        [tags-control {:data data}]]
+       [ui/grid {:item true :xs 12}
+        (if @uploading
+          [ui/circular-progress]
+          [ui/button {:color    "secondary"
+                      :style    {:margin-left "auto"}
+                      :on-click #(re-frame/dispatch [::info-state/update-book-preview handle-start-upload])}
+           "Update book preview"])]])))
 
 (defn- language-control
   [{:keys [data]}]
@@ -212,16 +219,20 @@
                    :spacing     24
                    :align-items "center"}
           [ui/grid {:item true :xs 4}
-           [ui/text-field {:label         "Name"
-                           :full-width    true
-                           :default-value (:name @data)
-                           :variant       "outlined"
-                           :on-change     #(swap! data assoc :name (-> % .-target .-value))}]]
+           [ui/form-control {:full-width true}
+            [ui/text-field {:label         "Name"
+                            :full-width    true
+                            :default-value (:name @data)
+                            :variant       "outlined"
+                            :on-change     #(swap! data assoc :name (-> % .-target .-value))
+                            :style         {:margin-top 16}}]]]
           [ui/grid {:item true :xs 4}
            [language-control {:data data}]]
           [ui/grid {:item true :xs 4}
            [course-image {:data data}]]
-          [book-info data]]
+          (when (book? @data)
+            [ui/grid {:item true :xs 12}
+             [book-info {:data data}]])]
          [ui/card-actions
           [ui/button {:color    "secondary"
                       :style    {:margin-left "auto"}
