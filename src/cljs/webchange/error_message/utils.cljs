@@ -4,11 +4,10 @@
 
 (defn get-error-title
   [{:keys [type]}]
-  (-> (cond
-        (keyword? type) (-> type (clojure.core/name) (->Camel_Snake_Case) (clojure.string/replace "_" " "))
-        (string? type) type
-        :else nil)
-      (str " Error")))
+  (cond
+    (keyword? type) (-> type (clojure.core/name) (->Camel_Snake_Case) (clojure.string/replace "_" " "))
+    (string? type) type
+    :else nil))
 
 (defn get-error-messages
   [{:keys [message]}]
