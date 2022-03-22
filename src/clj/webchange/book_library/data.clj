@@ -57,7 +57,6 @@
                 {:name "Dhopadhola" :value "dhopadhola"}
                 {:name "Echiziinza" :value "echiziinza"}
                 {:name "Echuwabo" :value "echuwabo"}
-                {:name "Echuwabo" :value "echuwabo"}
                 {:name "Ekegusii" :value "ekegusii"}
                 {:name "Elomwe" :value "elomwe"}
                 {:name "Emakhuwa" :value "emakhuwa"}
@@ -91,7 +90,6 @@
                 {:name "Myanmar" :value "myanmar"}
                 {:name "Nepali" :value "nepali"}
                 {:name "Ng'aturkana" :value "ng'aturkana"}
-                {:name "Olunyaneka" :value "olunyaneka"}
                 {:name "Olunyaneka" :value "olunyaneka"}
                 {:name "Oluwanga" :value "oluwanga"}
                 {:name "Persian" :value "persian"}

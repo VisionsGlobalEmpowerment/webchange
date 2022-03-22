@@ -8,6 +8,11 @@
     [webchange.interpreter.renderer.scene.components.flipbook.decorations :as decorations]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
+(defn path-to-db
+  [relative-path]
+  (->> relative-path
+       (concat [:editor-v2 :info-action-modal])))
+
 (def modal-state-path [:editor-v2 :info-action-modal :state])
 (def book-categories-path [:editor-v2 :info-action-modal :book-categories])
 
@@ -25,8 +30,13 @@
 (re-frame/reg-event-fx
   ::open
   (fn [{:keys [db]} [_]]
-    {:db       (assoc-in db modal-state-path true)
-     :dispatch [::warehouse/load-book-categories {:on-success [::set-book-categories]}]}))
+    {:db         (assoc-in db modal-state-path true)
+     :dispatch-n [[::warehouse/load-book-categories {:on-success [::set-book-categories]}]
+                  [::warehouse/load-book-languages {:on-success [::set-available-languages]}]
+                  [::warehouse/load-book-ages {:on-success [::set-available-ages]}]
+                  [::warehouse/load-book-genres {:on-success [::set-available-genres]}]
+                  [::warehouse/load-book-reading-levels {:on-success [::set-available-reading-levels]}]
+                  [::warehouse/load-book-tags {:on-success [::set-available-tags]}]]}))
 
 (re-frame/reg-event-fx
   ::close
@@ -36,6 +46,20 @@
 (defn open-info-window
   []
   (re-frame/dispatch [::open]))
+
+;; Languages
+
+(def available-languages-path (path-to-db [:available-languages]))
+
+(re-frame/reg-sub
+  ::available-languages
+  (fn [db]
+    (get-in db available-languages-path)))
+
+(re-frame/reg-event-fx
+  ::set-available-languages
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db available-languages-path data)}))
 
 ;; Book categories
 
@@ -53,6 +77,62 @@
     {:db (->> data
               (sort-by :name)
               (assoc-in db book-categories-path))}))
+
+;; Ages
+
+(def available-ages-path (path-to-db [:available-ages]))
+
+(re-frame/reg-sub
+  ::available-ages
+  (fn [db]
+    (get-in db available-ages-path)))
+
+(re-frame/reg-event-fx
+  ::set-available-ages
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db available-ages-path data)}))
+
+;; Genres
+
+(def available-genres-path (path-to-db [:available-genres]))
+
+(re-frame/reg-sub
+  ::available-genres
+  (fn [db]
+    (get-in db available-genres-path)))
+
+(re-frame/reg-event-fx
+  ::set-available-genres
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db available-genres-path data)}))
+
+;; Reading levels
+
+(def available-reading-levels-path (path-to-db [:available-reading-levels]))
+
+(re-frame/reg-sub
+  ::available-reading-levels
+  (fn [db]
+    (get-in db available-reading-levels-path)))
+
+(re-frame/reg-event-fx
+  ::set-available-reading-levels
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db available-reading-levels-path data)}))
+
+;; Tags
+
+(def available-tags-path (path-to-db [:available-tags]))
+
+(re-frame/reg-sub
+  ::available-tags
+  (fn [db]
+    (get-in db available-tags-path)))
+
+(re-frame/reg-event-fx
+  ::set-available-tags
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db available-tags-path data)}))
 
 ;; Book preview
 
