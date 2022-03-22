@@ -208,44 +208,44 @@
         [ui/menu-item {:value value} name])]]))
 
 (defn course-info-modal
-  [{:keys []}]
-  (let [info @(re-frame/subscribe [::state-course/course-info])]
-    (if (empty? info)
-      [ui/circular-progress]
-      (r/with-let [data (r/atom info)]
-        [:div
-         [ui/grid {:container   true
-                   :justify     "space-between"
-                   :spacing     24
-                   :align-items "center"}
-          [ui/grid {:item true :xs 4}
-           [ui/form-control {:full-width true}
-            [ui/text-field {:label         "Name"
-                            :full-width    true
-                            :default-value (:name @data)
-                            :variant       "outlined"
-                            :on-change     #(swap! data assoc :name (-> % .-target .-value))
-                            :style         {:margin-top 16}}]]]
-          [ui/grid {:item true :xs 4}
-           [language-control {:data data}]]
-          [ui/grid {:item true :xs 4}
-           [course-image {:data data}]]
-          (when (book? @data)
-            [ui/grid {:item true :xs 12}
-             [book-info {:data data}]])]
-         [ui/card-actions
-          [ui/button {:color    "secondary"
-                      :style    {:margin-left "auto"}
-                      :on-click #(do (re-frame/dispatch [::editor-events/edit-course-info @data])
-                                     (re-frame/dispatch [::info-state/close]))}
-           "Save"]]]))))
+  [{:keys [info]}]
+  (r/with-let [data (r/atom info)]
+    [:div
+     [ui/grid {:container   true
+               :justify     "space-between"
+               :spacing     24
+               :align-items "center"}
+      [ui/grid {:item true :xs 4}
+       [ui/form-control {:full-width true}
+        [ui/text-field {:label         "Name"
+                        :full-width    true
+                        :default-value (:name @data)
+                        :variant       "outlined"
+                        :on-change     #(swap! data assoc :name (-> % .-target .-value))
+                        :style         {:margin-top 16}}]]]
+      [ui/grid {:item true :xs 4}
+       [language-control {:data data}]]
+      [ui/grid {:item true :xs 4}
+       [course-image {:data data}]]
+      (when (book? @data)
+        [ui/grid {:item true :xs 12}
+         [book-info {:data data}]])]
+     [ui/card-actions
+      [ui/button {:color    "secondary"
+                  :style    {:margin-left "auto"}
+                  :on-click #(do (re-frame/dispatch [::editor-events/edit-course-info @data])
+                                 (re-frame/dispatch [::info-state/close]))}
+       "Save"]]]))
 
 (defn info-window
   []
   (let [open? @(re-frame/subscribe [::info-state/modal-state])
-        close #(re-frame/dispatch [::info-state/close])]
+        close #(re-frame/dispatch [::info-state/close])
+        course-info @(re-frame/subscribe [::state-course/course-info])]
     (when open?
       [dialog {:open?    open?
                :on-close close
                :title    "Course Info"}
-       [course-info-modal]])))
+       (if (empty? course-info)
+         [ui/circular-progress]
+         [course-info-modal {:info course-info}])])))
