@@ -16,7 +16,8 @@
                                    :max   3}}})
 
 (def t {:assets        [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
-                        {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}],
+                        {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
+                        {:url "/raw/img/ui/play_button/play_button.png", :size 10, :type "image"}],
         :objects
                        {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
                         :letter-video
@@ -30,11 +31,11 @@
                                                  :show-in-tree? true}},
                         :play-button
                                     {:type       "button",
-                                     :x          816,
-                                     :y          400,
+                                     :x          883,
+                                     :y          347,
                                      :actions    {:click {:id "play-video", :on "click", :type "action"}},
                                      :font-size  76,
-                                     :text       "Play"
+                                     :img        "/raw/img/ui/play_button/play_button.png"
                                      :filters    [{:name "brightness" :value 0}
                                                   {:name "glow" :outer-strength 0 :color 0xffd700}]
                                      :transition "play-button"},

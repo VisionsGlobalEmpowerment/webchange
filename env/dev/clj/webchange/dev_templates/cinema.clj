@@ -1,6 +1,7 @@
 (ns webchange.dev-templates.cinema
   (:require [webchange.dev-templates :as t]
             [webchange.templates.core :as templates]
+            [webchange.templates.library.cinema]
             [webchange.course.core :as core]))
 
 (comment
@@ -11,6 +12,10 @@
 
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
   (core/update-activity-template! test-course-slug scene-slug t/user-id)
+
+  (def course-slug "english")
+  (def scene-slug "alphabet-letter-video")
+  (core/update-activity-template! course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Cinema"
               :template-id   43
