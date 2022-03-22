@@ -3,12 +3,18 @@
     [clojure.tools.logging :as log]
     [compojure.api.sweet :refer [GET POST PUT DELETE api context defroutes]]
     [schema.core :as s]
+    [webchange.book-library.data :refer [ages categories genres languages reading-levels tags]]
     [webchange.common.handler :refer [handle]]
     [webchange.course.core :as core]
     [webchange.course.handler :refer [Course]]))
 
-(s/defschema Category {:name  s/Str
-                       :value s/Str})
+(s/defschema SimpleListItem {:name  s/Str
+                             :value s/Str})
+
+(s/defschema CategoryMetadata {(s/optional-key :book-library?) s/Bool})
+(s/defschema Category {:name                      s/Str
+                       :value                     s/Str
+                       (s/optional-key :metadata) CategoryMetadata})
 
 (defn- handle-get-books
   [_]
@@ -17,17 +23,8 @@
 
 (defn- handle-get-categories
   [_]
-  (let [categories [{:name  "Animals"
-                     :value "animals"}
-                    {:name  "Family and Friends"
-                     :value "family-and-friends"}
-                    {:name  "Science/STEM"
-                     :value "science-stem"}
-                    {:name  "Sports"
-                     :value "sports"}
-                    {:name  "Vehicles"
-                     :value "vehicles"}]]
-    (handle [true categories])))
+  (handle [true categories]))
+
 
 (defroutes book-library-api-routes
   (context "/api/book-library" []
@@ -39,4 +36,24 @@
     (GET "/categories" request
       :return [Category]
       :summary "Returns available categories"
-      (handle-get-categories request))))
+      (handle-get-categories request))
+    (GET "/ages" _
+      :return [SimpleListItem]
+      :summary "Returns available ages"
+      (handle [true ages]))
+    (GET "/genres" _
+      :return [SimpleListItem]
+      :summary "Returns available genres"
+      (handle [true genres]))
+    (GET "/languages" _
+      :return [SimpleListItem]
+      :summary "Returns available languages"
+      (handle [true languages]))
+    (GET "/reading-levels" _
+      :return [SimpleListItem]
+      :summary "Returns available reading levels"
+      (handle [true reading-levels]))
+    (GET "/tags" _
+      :return [SimpleListItem]
+      :summary "Returns available tags"
+      (handle [true tags]))))

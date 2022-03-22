@@ -50,7 +50,9 @@
 (re-frame/reg-event-fx
   ::set-book-categories
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc-in db book-categories-path data)}))
+    {:db (->> data
+              (sort-by :name)
+              (assoc-in db book-categories-path))}))
 
 ;; Book preview
 

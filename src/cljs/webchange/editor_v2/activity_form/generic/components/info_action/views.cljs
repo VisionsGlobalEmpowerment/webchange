@@ -83,39 +83,45 @@
                       (flatten))]
     (swap! data assoc-in [:metadata :keywords] keywords)))
 
+(defn- book-categories-control
+  [{:keys [data]}]
+  (let [current-value (-> @data :metadata :categories (or []))
+        available-categories @(re-frame/subscribe [::info-state/book-categories])
+        handle-change #(swap! data assoc-in [:metadata :categories] %)]
+    [ui/select {:value     current-value
+                :variant   "outlined"
+                :multiple  true
+                :on-change #(handle-change (-> % .-target .-value))}
+     (for [{:keys [name value]} available-categories]
+       ^{:key value}
+       [ui/menu-item {:value value} name])]))
+
 (defn- book-info
   [data]
   (when (book? @data)
     (let [uploading (atom false)
           handle-finish-upload (fn [result]
                                  (reset! uploading false)
-                                 (swap! data assoc :image-src (:url result)))              
+                                 (swap! data assoc :image-src (:url result)))
           handle-start-upload (fn [blob]
                                 (reset! uploading true)
                                 (re-frame/dispatch [::assets-events/upload-asset blob {:type      :image
-                                                                                       :options {:max-width 384 :max-height 432}
-                                                                                       :on-finish handle-finish-upload}]))]  
+                                                                                       :options   {:max-width 384 :max-height 432}
+                                                                                       :on-finish handle-finish-upload}]))]
       (init-book-keywords! data)
       (fn [data]
-        (let [categories @(re-frame/subscribe [::info-state/book-categories])]
-          [:div
-           [ui/form-control {:full-width true
-                             :margin     "normal"
-                             :style      {:margin-top 0}}
-            [ui/input-label "Select Category"]
-            [ui/select {:value     (-> @data :metadata :categories (or []))
-                        :variant   "outlined"
-                        :multiple  true
-                        :on-change #(swap! data assoc-in [:metadata :categories] (-> % .-target .-value))}
-             (for [{:keys [name value]} categories]
-               ^{:key value}
-               [ui/menu-item {:value value} name])]]
-           (if @uploading
-             [ui/circular-progress]
-             [ui/button {:color    "secondary"
-                         :style    {:margin-left "auto"}
-                         :on-click #(re-frame/dispatch [::info-state/update-book-preview handle-start-upload])}
-              "Update book preview"])])))))
+        [:div
+         [ui/form-control {:full-width true
+                           :margin     "normal"
+                           :style      {:margin-top 0}}
+          [ui/input-label "Select Category"]
+          [book-categories-control {:data data}]]
+         (if @uploading
+           [ui/circular-progress]
+           [ui/button {:color    "secondary"
+                       :style    {:margin-left "auto"}
+                       :on-click #(re-frame/dispatch [::info-state/update-book-preview handle-start-upload])}
+            "Update book preview"])]))))
 
 (defn course-info-modal
   [{:keys [title]}]
