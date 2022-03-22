@@ -6,7 +6,8 @@
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.interpreter.renderer.state.editor :as editor-state]
     [webchange.interpreter.renderer.scene.components.flipbook.decorations :as decorations]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.utils.list :refer [sort-by-getters]]))
 
 (defn path-to-db
   [relative-path]
@@ -59,7 +60,10 @@
 (re-frame/reg-event-fx
   ::set-available-languages
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc-in db available-languages-path data)}))
+    {:db (->> data
+              (sort-by-getters [#(get-in % [:metadata :primary?] false) #(get % :name)])
+              (map #(select-keys % [:name :value]))
+              (assoc-in db available-languages-path ))}))
 
 ;; Book categories
 

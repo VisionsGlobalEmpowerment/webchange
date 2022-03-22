@@ -122,3 +122,18 @@
 (defn update-last->>
   [& args]
   (reverse-operand update-last args))
+
+(defn sort-by-getters
+  [[getter & other-getters] list]
+  (let [v #(case %
+             true 0
+             false 1
+             %)
+        g #(-> % getter v)]
+    (if-not (empty? other-getters)
+      (->> (sort-by g list)
+           (group-by g)
+           (map second)
+           (map #(sort-by-getters other-getters %))
+           (apply concat))
+      (sort-by g list))))

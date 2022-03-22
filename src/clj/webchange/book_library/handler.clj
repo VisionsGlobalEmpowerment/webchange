@@ -16,6 +16,11 @@
                        :value                     s/Str
                        (s/optional-key :metadata) CategoryMetadata})
 
+(s/defschema LanguageMetadata {(s/optional-key :primary?) s/Bool})
+(s/defschema Language {:name                      s/Str
+                       :value                     s/Str
+                       (s/optional-key :metadata) LanguageMetadata})
+
 (defn- handle-get-books
   [_]
   (let [books (core/get-book-library {:with-host-name? false})]
@@ -46,7 +51,7 @@
       :summary "Returns available genres"
       (handle [true genres]))
     (GET "/languages" _
-      :return [SimpleListItem]
+      :return [Language]
       :summary "Returns available languages"
       (handle [true languages]))
     (GET "/reading-levels" _
