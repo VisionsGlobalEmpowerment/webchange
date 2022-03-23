@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.book-library.state :as parent-state]
     [webchange.routes :as routes]
+    [webchange.state.core :as state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.map :refer [map-keys]]))
 
@@ -25,9 +26,10 @@
 
 (re-frame/reg-event-fx
   ::load-books
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n [[::warehouse/load-course-books {:on-success [::load-books-success]}]
-                  [::set-state {:loading? true}]]}))
+  (fn [{:keys [db]} [_]]
+    (let [current-course (state/current-course-id db)]
+      {:dispatch-n [[::warehouse/load-books {:language current-course} {:on-success [::load-books-success]}]
+                    [::set-state {:loading? true}]]})))
 
 (re-frame/reg-event-fx
   ::load-books-success

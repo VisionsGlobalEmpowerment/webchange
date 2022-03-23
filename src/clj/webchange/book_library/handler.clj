@@ -22,9 +22,12 @@
                        (s/optional-key :metadata) LanguageMetadata})
 
 (defn- handle-get-books
-  [_]
-  (let [books (core/get-book-library {:with-host-name? false})]
-    (handle [true books])))
+  ([request]
+   (handle-get-books request nil))
+  ([_ language]
+   (let [books (cond->> (core/get-book-library {:with-host-name? false})
+                        (some? language) (filter #(= (:lang %) language)))]
+     (handle [true books]))))
 
 (defn- handle-get-categories
   [_]
@@ -61,4 +64,9 @@
     (GET "/tags" _
       :return [SimpleListItem]
       :summary "Returns available tags"
-      (handle [true tags]))))
+      (handle [true tags]))
+    (GET "/:language" request
+      :path-params [language :- s/Str]
+      :return [Course]
+      :summary "Returns published books for specified language"
+      (handle-get-books request language))))
