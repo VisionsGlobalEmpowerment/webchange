@@ -4,6 +4,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.interpreter-stage.state :as state-stage]
     [webchange.interpreter.events :as interpreter.events]
+    [webchange.editor-v2.layout.state :as state-layout]
     [webchange.state.core :as core]
     [webchange.state.warehouse :as warehouse]
     [webchange.subs :as subs]))
@@ -34,7 +35,8 @@
                                           :scene-data data}]
                   [::interpreter.events/set-scene name data]
                   [::interpreter.events/store-scene name data]
-                  [::state-stage/reset-stage]]}))
+                  [::state-stage/reset-stage]
+                  [::state-layout/set-current-content :activity-stage]]}))
 
 (re-frame/reg-event-fx
   ::load-versions
