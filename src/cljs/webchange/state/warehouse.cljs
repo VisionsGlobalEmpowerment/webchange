@@ -197,11 +197,12 @@
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::load-course-books
-  (fn [{:keys [_]} [_ handlers]]
+  ::load-books
+  (fn [{:keys [_]} [_ {:keys [language]} handlers]]
     (create-request {:key    :load-course-books
                      :method :get
-                     :uri    (str "/api/book-library/all")}
+                     :uri    (->> (or language "all")
+                                  (str "/api/book-library/"))}
                     handlers)))
 
 (re-frame/reg-event-fx
