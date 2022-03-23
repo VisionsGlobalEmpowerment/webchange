@@ -150,49 +150,68 @@
                                                 }
                         },
         :scene-objects [["layered-background"] ["left-gate" "right-gate" "left-gate-text-group" "right-gate-text-group"]],
-        :actions       {:start-drag              {:type "sequence-data"
-                                                  :data [{:type "set-variable", :var-name "left-selected", :var-value false}
-                                                         {:type "set-variable", :var-name "right-selected", :var-value false}
-                                                         {:type "action", :from-params [{:action-property "id" :param-property "tap-dialog"}]}
-                                                         {:type "action", :id "highlight" :from-params [{:param-property "target"}]}
-                                                         {:type "empty" :duration 1000}
-                                                         {:type "action", :id "unhighlight" :from-params [{:param-property "target"}]}
-                                                         ]}
+        :actions       {:handle-drag-start       {:type "sequence-data"
+                                                  :data [{:type "set-variable" :var-name "is-ball-picked?" :var-value true}
+                                                         {:type "action" :id "pick-ball"}]}
+
+                        :handle-drag-end         {:type "sequence-data"
+                                                  :data [{:type "set-variable" :var-name "is-ball-picked?" :var-value false}
+                                                         {:type       "test-expression"
+                                                          :expression ["eq" "@current-gate" "#gate"]
+                                                          :success    "correct-option"
+                                                          :fail       "check-wrong-option"}
+                                                         {:type "action" :id "reset-state"}]}
 
                         :handle-collide-enter    {:type        "case",
-                                                  :options     {:left-gate  {:id     "highlight" :type "action"
-                                                                             :params {:target   "left-gate"
-                                                                                      :variable "left-selected"}}
-                                                                :right-gate {:id     "highlight" :type "action"
-                                                                             :params {:target   "right-gate"
-                                                                                      :variable "right-selected"}}}
+                                                  :options     {:left-gate  {:id     "pick-gate" :type "action"
+                                                                             :params {:target "left-gate"}}
+                                                                :right-gate {:id     "pick-gate" :type "action"
+                                                                             :params {:target "right-gate"}}}
                                                   :from-params [{:param-property  "target"
                                                                  :action-property "value"}]}
 
                         :handle-collide-leave    {:type        "case",
-                                                  :options     {:left-gate  {:id     "unhighlight" :type "action"
-                                                                             :params {:target   "left-gate"
-                                                                                      :variable "left-selected"}}
-                                                                :right-gate {:id     "unhighlight" :type "action"
-                                                                             :params {:target   "right-gate"
-                                                                                      :variable "right-selected"}}}
+                                                  :options     {:left-gate  {:id     "unpick-gate" :type "action"
+                                                                             :params {:target "left-gate"}}
+                                                                :right-gate {:id     "unpick-gate" :type "action"
+                                                                             :params {:target "right-gate"}}}
                                                   :from-params [{:param-property  "target"
                                                                  :action-property "value"}]}
 
-                        :highlight               {:type "sequence-data"
-                                                  :data [{:type        "set-variable",
-                                                          :var-value   true
-                                                          :from-params [{:action-property "var-name" :param-property "variable"}]}
-                                                         {:type        "state"
-                                                          :id          "highlighted"
-                                                          :from-params [{:action-property "target" :param-property "target"}]}]}
-                        :unhighlight             {:type "sequence-data"
-                                                  :data [{:type        "set-variable",
-                                                          :var-value   false
-                                                          :from-params [{:action-property "var-name" :param-property "variable"}]}
-                                                         {:type        "state"
-                                                          :id          "not-highlighted"
-                                                          :from-params [{:action-property "target" :param-property "target"}]}]}
+                        :pick-ball               {:type       "sequence-data"
+                                                  :unique-tag "pick-ball"
+                                                  :data       [{:type "state" :id "highlighted" :from-params [{:action-property "target" :param-property "target"}]}
+                                                               {:type "action" :from-params [{:action-property "id" :param-property "tap-dialog"}]}
+                                                               {:type "state" :id "not-highlighted" :from-params [{:action-property "target" :param-property "target"}]}]}
+
+                        :pick-gate               {:type     "test-var-scalar"
+                                                  :var-name "is-ball-picked?"
+                                                  :value    true
+                                                  :success  {:type "sequence-data"
+                                                             :data [{:type        "set-variable"
+                                                                     :var-name    "current-gate"
+                                                                     :from-params [{:action-property "var-value" :param-property "target"}]}
+                                                                    {:type        "state"
+                                                                     :id          "highlighted"
+                                                                     :from-params [{:action-property "target" :param-property "target"}]}]}}
+
+                        :unpick-gate             {:type     "test-var-scalar"
+                                                  :var-name "is-ball-picked?"
+                                                  :value    true
+                                                  :success  {:type "sequence-data"
+                                                             :data [{:type      "set-variable"
+                                                                     :var-name  "current-gate"
+                                                                     :var-value nil}
+                                                                    {:type        "state"
+                                                                     :id          "not-highlighted"
+                                                                     :from-params [{:action-property "target" :param-property "target"}]}]}}
+
+                        :reset-state             {:type "parallel"
+                                                  :data [{:type "set-variable" :var-name "is-ball-picked?" :var-value false}
+                                                         {:type "set-variable" :var-name "current-gate" :var-value nil}
+                                                         {:type "state" :id "not-highlighted" :target "left-gate"}
+                                                         {:type "state" :id "not-highlighted" :target "right-gate"}]}
+
                         :wrong-option            {:type "parallel",
                                                   :data [{:id "wrong-answer-dialog", :type "action"}
                                                          {:to          {:init-position true :duration 0.5},
@@ -208,20 +227,7 @@
                         :check-wrong-option      {:type       "test-expression"
                                                   :expression "#collided-object-name"
                                                   :success    "wrong-option"}
-                        :end-dragging            {:type "sequence-data"
-                                                  :data [{:type   "state"
-                                                          :id     "not-highlighted"
-                                                          :target "left-gate"}
-                                                         {:type   "state"
-                                                          :id     "not-highlighted"
-                                                          :target "right-gate"}
-                                                         {:type      "copy-variables",
-                                                          :var-names ["saved-left-selected" "saved-right-selected"]
-                                                          :from-list ["left-selected" "right-selected"]}
-                                                         {:type       "test-expression"
-                                                          :expression ["eq" "#collided-object-name" "#gate"]
-                                                          :success    "correct-option"
-                                                          :fail       "check-wrong-option"}]}
+
                         :init-total-balls-number {:type "set-variable" :var-name "total-balls-number" :var-value 0}
                         :correct-option          {:type "sequence-data",
                                                   :data [{:type "counter" :counter-action "increase" :counter-id "sorted-counter"}
@@ -396,17 +402,17 @@
                        :actions     {:click
                                      {:type   "action",
                                       :on     "click",
-                                      :id     "start-drag"
+                                      :id     "pick-ball"
                                       :params {:tap-dialog ball-dialog-name :target ball-name}}
 
                                      :drag-start
                                      {:type   "action",
                                       :on     "drag-start",
-                                      :id     "start-drag"
+                                      :id     "handle-drag-start"
                                       :params {:tap-dialog ball-dialog-name :target ball-name}}
 
                                      :drag-end
-                                     {:id               "end-dragging",
+                                     {:id               "handle-drag-end",
                                       :on               "drag-end",
                                       :type             "action",
                                       :pick-event-param [:collided-object-name]
