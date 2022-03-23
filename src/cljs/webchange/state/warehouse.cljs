@@ -207,9 +207,49 @@
 (re-frame/reg-event-fx
   ::load-book-categories
   (fn [{:keys [_]} [_ handlers]]
-    (create-request {:key    :load-course-books
+    (create-request {:key    :load-book-categories
                      :method :get
                      :uri    (str "/api/book-library/categories")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-book-languages
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-book-languages
+                     :method :get
+                     :uri    (str "/api/book-library/languages")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-book-ages
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-book-ages
+                     :method :get
+                     :uri    (str "/api/book-library/ages")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-book-genres
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-book-genres
+                     :method :get
+                     :uri    (str "/api/book-library/genres")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-book-reading-levels
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-book-reading-levels
+                     :method :get
+                     :uri    (str "/api/book-library/reading-levels")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-book-tags
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-book-tags
+                     :method :get
+                     :uri    (str "/api/book-library/tags")}
                     handlers)))
 
 ;;

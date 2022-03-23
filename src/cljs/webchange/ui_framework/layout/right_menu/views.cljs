@@ -17,9 +17,11 @@
     [webchange.editor-v2.activity-form.generic.components.animation-settings.views :refer [animation-settings-window open-animation-settings-window]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
     [webchange.ui-framework.layout.right-menu.edit-menu.views :refer [edit-menu]]
+    [webchange.utils.flipbook :refer [flipbook-activity?]]
     [webchange.editor-v2.components.activity-tracks.state :as state]))
 
-(def default-actions-list
+(defn- get-default-actions-list
+  [{:keys [book-editor?]}]
   [{:text     "Change Background"
     :on-click background/open-change-background-window}
    {:text     "Background music"
@@ -36,7 +38,7 @@
     :on-click add-character/open-add-character-window}
    {:text     "Add question"
     :on-click add-question/open-add-question-window}
-   {:text     "Course Info"
+   {:text     (if book-editor? "Book Info" "Course Info")
     :on-click info-action-state/open-info-window}
    {:text     "Add anchor"
     :on-click add-anchor}
@@ -91,6 +93,6 @@
          [:div.scene-section
           [:h3 "Scene Layers"]
           [objects-tree-menu]]
-         (for [{:keys [text] :as props} default-actions-list]
+         (for [{:keys [text] :as props} (get-default-actions-list {:book-editor? (flipbook-activity? scene-data)})]
            ^{:key text}
            [default-actions-item props])])]]))

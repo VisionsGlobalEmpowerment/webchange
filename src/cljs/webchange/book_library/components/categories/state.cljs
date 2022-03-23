@@ -18,7 +18,9 @@
 (re-frame/reg-event-fx
   ::load-book-categories-success
   (fn [{:keys [_]} [_ categories]]
-    {:dispatch [::set-available-categories categories]}))
+    {:dispatch [::set-available-categories (->> categories
+                                                (filter (fn [{:keys [metadata]}]
+                                                          (:book-library? metadata))))]}))
 
 ;; Available categories
 

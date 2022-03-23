@@ -71,13 +71,14 @@
                     :params          (select-keys data [:name :slug :image-src :lang :metadata])
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
-                    :on-success      [::edit-course-info-success]
+                    :on-success      [::edit-course-info-success data]
                     :on-failure      [:api-request-error :edit-course-info]}})))
 
 (re-frame/reg-event-fx
   ::edit-course-info-success
-  (fn [{:keys [db]} _]
-    {:dispatch-n (list [:complete-request :edit-course-info])}))
+  (fn [{:keys [db]} [_ data]]
+    {:dispatch-n [[:complete-request :edit-course-info]
+                  [::state-course/set-course-info data]]}))
 
 (re-frame/reg-event-fx
   ::show-dialog-translator-form
