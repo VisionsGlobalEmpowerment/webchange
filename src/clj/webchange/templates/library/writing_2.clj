@@ -156,8 +156,8 @@
 (defn- remove-letter-highlights
   [available-actions]
   (filter #(not (.startsWith
-                  (:action %)
-                  "blink-text-tracing-pattern-"))
+                 (:action %)
+                 "blink-text-tracing-pattern-"))
           available-actions))
 
 (defn- create-letter-effects
@@ -172,11 +172,26 @@
             activity-data
             (range (count word)))))
 
+(defn- create-word-effect
+  [activity-data word]
+  (let [letter-actions (->> word
+                            count
+                            range
+                            (map #(str "blink-text-tracing-pattern-" %))
+                            (map (fn [action-name] {:type "action" :id action-name}))
+                            (into []))
+        word-action {:type "parallel"
+                     :data letter-actions}]
+    (-> activity-data
+        (assoc-in [:actions :highlight-word] word-action)
+        (common/add-available-action "highlight-word" "Highlight word"))))
+
 (defn- change-word
   [activity-data word]
   (-> activity-data
       (update-in [:metadata :available-actions] remove-letter-highlights)
       (create-letter-effects word)
+      (create-word-effect word)
       (assoc-in [:objects :text-tracing-pattern :text] word)))
 
 (defn update-activity
