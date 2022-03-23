@@ -131,6 +131,17 @@
     (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) user-id)
         handle)))
 
+(defn handle-duplicate-activity
+  [course-slug data request]
+  (let [user-id (current-user request)
+        scene-data (core/get-scene-latest-version course-slug (:old-name data))
+        metadata (:metadata scene-data)
+        skills (:skills scene-data)]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/create-scene! scene-data metadata course-slug (:new-name data) skills (current-user request))
+        handle)))
+
 (defn handle-create-activity-placeholder
   [course-slug data request]
   (let [user-id (current-user request)]
@@ -229,6 +240,7 @@
 (s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})
 (s/defschema CreateActivityVersion {:template-id s/Int s/Keyword s/Any})
 (s/defschema CreateActivityPlaceholder {:name s/Str})
+(s/defschema DuplicateActivity {:old-name s/Str :new-name s/Str})
 (s/defschema SetActivityPreview {:preview s/Str})
 (s/defschema Activity {:id s/Int :name s/Str :scene-slug s/Str :course-slug s/Str})
 
@@ -352,6 +364,12 @@
       :body [activity-data CreateActivityPlaceholder]
       :summary "Creates a new activity placeholder"
       (handle-create-activity-placeholder course-slug activity-data request))
+    (POST "/:course-slug/duplicate-activity" request
+      :path-params [course-slug :- s/Str]
+      :return Activity
+      :body [data DuplicateActivity]
+      :summary "Creates a new activity as a copy of an existing one"
+      (handle-duplicate-activity course-slug data request))
     (POST "/:course-slug/scenes/:scene-slug/versions" request
       :path-params [course-slug :- s/Str scene-slug :- s/Str]
       :return Activity

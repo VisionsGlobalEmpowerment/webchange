@@ -373,6 +373,13 @@
                      :uri    (str "/api/courses/" course-id "/create-activity-placeholder")
                      :params data} handlers)))
 
+(re-frame/reg-event-fx
+  ::duplicate-activity
+  (fn [_ [_ {:keys [course-id data]} handlers]]
+    (create-request {:key    :duplicate-activity
+                     :method :post
+                     :uri    (str "/api/courses/" course-id "/duplicate-activity")
+                     :params data} handlers)))
 ;; Static assets
 
 (re-frame/reg-event-fx
