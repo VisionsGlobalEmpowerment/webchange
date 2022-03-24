@@ -781,7 +781,9 @@
           object-keys-to-update (get-object-keys-to-update created-object)
           object-props-to-update (select-keys created-object object-keys-to-update)
           dissoc-updated #(apply dissoc % object-keys-to-update)]
-      [key (-> created-object
+      [key (-> (if (= key :layered-background)
+                 (select-keys created-object (keys object))
+                 created-object)
                (merge object)
                (dissoc-updated)
                (merge object-props-to-update))])))
