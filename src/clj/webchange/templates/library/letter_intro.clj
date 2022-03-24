@@ -59,7 +59,7 @@
           :transition  "letter-big"},
          :letter-small
          {:type        "text",
-          :x           895,
+          :x           915,
           :y           280,
           :width       150,
           :height      130,
@@ -75,7 +75,7 @@
           :transition  "letter-small"},
          :letter-path
          {:type         "animated-svg-path",
-          :x            890,
+          :x            915,
           :y            230,
           :width        325
           :height       300,
@@ -119,6 +119,7 @@
           :start      true},
          :word
          {:type           "text"
+          :transition     "word"
           :text           ""
           :align          "center"
           :vertical-align "bottom"
@@ -179,16 +180,28 @@
                                      :from-var  [{:var-name "current-concept", :var-property "letter-big", :action-property "attr-value"}],
                                      :attr-name "text"}
                                     {:id "hidden", :type "state", :target "word"}
-                                    {:type      "set-attribute",
-                                     :target    "word",
-                                     :from-var  [{:var-name "current-concept", :var-property "concept-name", :action-property "attr-value"}],
-                                     :attr-name "text"}
+                                    {:id "update-word" :type "action"}
                                     {:id "init-position", :type "state", :target "image"}
                                     {:type      "set-attribute",
                                      :target    "image",
                                      :from-var  [{:var-name "current-concept", :var-property "image-src", :action-property "attr-value"}],
                                      :attr-name "src"}
                                     ]},
+
+         :update-word        {:type "sequence-data"
+                              :data [{:type      "set-attribute",
+                                      :target    "word",
+                                      :from-var  [{:var-name "current-concept", :var-property "concept-name", :action-property "attr-value"}],
+                                      :attr-name "text"}
+                                     {:type   "component-action"
+                                      :target "word"
+                                      :action "update-chunks"
+                                      :params {:chunks [{:end 1}
+                                                        {:start 1}]}
+                                      :from-expression [{:expression ["len" ["." "@current-concept" ":letter"]]
+                                                         :action-property   "params.chunks.0.end"}
+                                                        {:expression ["len" ["." "@current-concept" ":letter"]]
+                                                         :action-property   "params.chunks.1.start"}]}]}
 
          :glow-big                {:type "state" :target "letter-big" :id "glow"}
          :stop-glow-big           {:type "state" :target "letter-big" :id "stop-glow"}
@@ -250,8 +263,8 @@
                                           {:id "visible" :type "state" :target "image"}
 
                                           {:data
-                                           [{:to {:x 1146, :y 295, :loop false, :duration 2}, :type "transition", :transition-id "mari"}
-                                            {:to {:x 1025, :y 240, :loop false, :duration 2}, :type "transition", :transition-id "image"}],
+                                           [{:to {:x 1166, :y 295, :loop false, :duration 2}, :type "transition", :transition-id "mari"}
+                                            {:to {:x 1045, :y 240, :loop false, :duration 2}, :type "transition", :transition-id "image"}],
                                            :type "parallel"}
                                           {:type "empty", :duration 1000}
                                           {:id "mari-init-wand", :type "action"}
@@ -300,11 +313,25 @@
                                    :kill-after         3000}
          :dialog-tap-instructions (-> (dialog/default "Tap instructions")
                                       (assoc :concept-var "current-concept"))
+         :show-small-letter {:type "state", :id "visible", :target "letter-small"}
+         :hide-small-letter {:type "state", :id "hidden", :target "letter-small"}
+         :show-letter-path {:type "state", :id "visible", :target "letter-path"}
+         :hide-letter-path {:type "state", :id "hidden", :target "letter-path"}
          },
                                         ;
         :triggers  {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata  {:prev   "map", :autostart true
-                    :available-actions [{:name "Whole word glow"
+                    :available-actions [{:name "Redraw letter"
+                                         :action "redraw-letter"}
+                                        {:name "Show small letter"
+                                         :action "show-small-letter"}
+                                        {:name "Hide small letter"
+                                         :action "hide-small-letter"}
+                                        {:name "Show letter path"
+                                         :action "show-letter-path"}
+                                        {:name "Hide letter path"
+                                         :action "hide-letter-path"}
+                                        {:name "Whole word glow"
                                          :action "whole-word-glow"}
                                         {:name "Whole word stop glow"
                                          :action "whole-word-stop-glow"}]

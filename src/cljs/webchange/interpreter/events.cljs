@@ -1990,22 +1990,24 @@
 
 (re-frame/reg-event-fx
   ::execute-component-action
-  (fn [{:keys [db]} [_ {:keys [target action] :as a}]]
+  (fn [{:keys [db]} [_ {:keys [target action params] :as a}]]
     (let [scene-id (:current-scene db)
           callback #(ce/dispatch-success-fn a)]
       (if-let [component-wrapper (get-in db [:transitions scene-id target])]
         {:component-action {:component-wrapper @component-wrapper
                             :component-action  action
+                            :actions-params    params
                             :callback          callback}}
         (do (logger/error (str "Wrapper for component '" target "' was not found"))
             (callback))))))
 
 (re-frame/reg-fx
   :component-action
-  (fn [{:keys [component-action component-wrapper callback]}]
+  (fn [{:keys [actions-params component-action component-wrapper callback]}]
     (let [wrapper-method (get component-wrapper (keyword component-action))]
       (if (fn? wrapper-method)
-        (wrapper-method {:callback callback})
+        (wrapper-method (cond-> {:callback callback}
+                                (some? actions-params) (assoc :params actions-params)))
         (do (logger/error (str "Wrapper method '" component-action "' was not found"))
             (callback))))))
 

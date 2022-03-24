@@ -7,6 +7,7 @@
     [webchange.auth.subs :as as]
     [webchange.state.lessons.subs :as lessons]
     [webchange.interpreter.variables.core :as core]
+    [webchange.interpreter.variables.expressions :refer [eval-expression]]
     [webchange.logger.index :as logger]))
 
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
@@ -434,32 +435,6 @@
         (if fail
           {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
           {:dispatch-n (list (e/success-event action))})))))
-
-(declare eval-expression)
-
-(defn- do-eval-expression
-  [db action [ex & args]]
-  (case ex
-    "eq" (apply = (map #(eval-expression db action %) args))
-    "and" (every? identity (map #(eval-expression db action %) args))
-    "or" (some identity (map #(eval-expression db action %) args))))
-
-(defn- expression->value
-  [db action expression]
-  (let [variable? #(-> % first (= "@"))
-        param? #(-> % first (= "#"))
-        ->name #(subs % 1)]
-    (cond
-      (variable? expression) (core/get-variable (->name expression))
-      (param? expression) (get-in action [:params (keyword (->name expression))])
-      :else expression)))
-
-(defn- eval-expression
-  [db action expression]
-  (cond
-    (string? expression) (expression->value db action expression)
-    (int? expression) expression
-    (vector? expression) (do-eval-expression db action expression)))
 
 (re-frame/reg-event-fx
   ::execute-test-expression
