@@ -78,6 +78,7 @@
         (register-chunks chunks object-name type state)
 
         (when-not (nil? on-click) (utils/set-handler text-container "click" on-click))
+        (when-not (nil? ref) (ref wrapped-text))
 
         wrapped-text)
       (let [text (create-simple-text props)

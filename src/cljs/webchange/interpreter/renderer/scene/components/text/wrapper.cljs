@@ -26,21 +26,33 @@
   [chunks object-name type state]
   (doall (map #(register-chunk % type object-name state) chunks)))
 
-(defn- reset-text-chunks
-  [state value]
+(defn- create-chunks!
+  [state]
+  (let [{:keys [container props]} @state
+        chunks (create-chunked-text container props)]
+    (register-chunks chunks (:object-name props) (:type props) state)))
+
+(defn- reset-chunks!
+  [state]
   (let [{:keys [chunks container]} @state]
     (doseq [chunk-name chunks]
       (re-frame/dispatch [::scene/unregister-object (keyword chunk-name)])
       (re-frame/dispatch [::events/unregister-transition chunk-name]))
     (doseq [child (.removeChildren container)]
       (.destroy child))
+    (swap! state assoc :chunks [])))
 
-    (swap! state assoc :chunks [])
-    (swap! state assoc-in [:props :text] value)
+(defn- update-chunks!
+  [state chunks]
+  (reset-chunks! state)
+  (swap! state assoc-in [:props :chunks] chunks)
+  (create-chunks! state))
 
-    (let [props (:props @state)
-          chunks (create-chunked-text container props)]
-      (register-chunks chunks (:object-name props) (:type props) state))))
+(defn- update-text!
+  [state text]
+  (reset-chunks! state)
+  (swap! state assoc-in [:props :text] text)
+  (create-chunks! state))
 
 (defn wrap
   [type name text-object chunks state]
@@ -52,10 +64,18 @@
                                               (swap! state assoc-in [:props :text] value)
 
                                               (if (:chunked? @state)
-                                                (reset-text-chunks state value)
+                                                (update-text! state value)
                                                 (utils/check-text-placeholder text-object (:props @state)))
 
                                               (emit text-object "textChanged"))
+                   :update-chunks           (fn [{:keys [callback params]}]
+                                              (print "new chunks" (get params :chunks []))
+                                              (->> (map merge
+                                                        (get-in @state [:props :chunks])
+                                                        (get params :chunks []))
+                                                   (update-chunks! state))
+                                              (when (fn? callback)
+                                                (callback)))
                    :set-highlight           (fn [highlight]
                                               (let [highlight-filter-set (f/has-filter-by-name text-object "glow")]
                                                 (if (and (not highlight) highlight-filter-set) (f/set-filter text-object "" {}))
