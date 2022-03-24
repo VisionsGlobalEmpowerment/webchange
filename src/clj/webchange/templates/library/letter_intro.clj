@@ -59,7 +59,7 @@
           :transition  "letter-big"},
          :letter-small
          {:type        "text",
-          :x           895,
+          :x           915,
           :y           280,
           :width       150,
           :height      130,
@@ -75,7 +75,7 @@
           :transition  "letter-small"},
          :letter-path
          {:type         "animated-svg-path",
-          :x            890,
+          :x            915,
           :y            230,
           :width        325
           :height       300,
@@ -263,8 +263,8 @@
                                           {:id "visible" :type "state" :target "image"}
 
                                           {:data
-                                           [{:to {:x 1146, :y 295, :loop false, :duration 2}, :type "transition", :transition-id "mari"}
-                                            {:to {:x 1025, :y 240, :loop false, :duration 2}, :type "transition", :transition-id "image"}],
+                                           [{:to {:x 1166, :y 295, :loop false, :duration 2}, :type "transition", :transition-id "mari"}
+                                            {:to {:x 1045, :y 240, :loop false, :duration 2}, :type "transition", :transition-id "image"}],
                                            :type "parallel"}
                                           {:type "empty", :duration 1000}
                                           {:id "mari-init-wand", :type "action"}
