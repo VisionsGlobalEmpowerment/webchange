@@ -6,7 +6,7 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
-      {:dispatch [::state/init id {:data  (select-keys objects-data [:dashed])
+      {:dispatch [::state/init id {:data  (select-keys objects-data [:dashed :show-lines])
                                    :names objects-names}]}))
 (re-frame/reg-sub
   ::current-dashed
@@ -20,3 +20,16 @@
   ::set-current-dashed
   (fn [{:keys [db]} [_ id value]]
     {:dispatch [::state/update-current-data id {:dashed value}]}))
+
+(re-frame/reg-sub
+  ::current-show-lines
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :show-lines true)))
+
+(re-frame/reg-event-fx
+  ::set-current-show-lines
+  (fn [{:keys [db]} [_ id value]]
+    {:dispatch [::state/update-current-data id {:show-lines value}]}))
