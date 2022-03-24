@@ -313,11 +313,25 @@
                                    :kill-after         3000}
          :dialog-tap-instructions (-> (dialog/default "Tap instructions")
                                       (assoc :concept-var "current-concept"))
+         :show-small-letter {:type "state", :id "visible", :target "letter-small"}
+         :hide-small-letter {:type "state", :id "hidden", :target "letter-small"}
+         :show-letter-path {:type "state", :id "visible", :target "letter-path"}
+         :hide-letter-path {:type "state", :id "hidden", :target "letter-path"}
          },
                                         ;
         :triggers  {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata  {:prev   "map", :autostart true
-                    :available-actions [{:name "Whole word glow"
+                    :available-actions [{:name "Redraw letter"
+                                         :action "redraw-letter"}
+                                        {:name "Show small letter"
+                                         :action "show-small-letter"}
+                                        {:name "Hide small letter"
+                                         :action "hide-small-letter"}
+                                        {:name "Show letter path"
+                                         :action "show-letter-path"}
+                                        {:name "Hide letter path"
+                                         :action "hide-letter-path"}
+                                        {:name "Whole word glow"
                                          :action "whole-word-glow"}
                                         {:name "Whole word stop glow"
                                          :action "whole-word-stop-glow"}]
