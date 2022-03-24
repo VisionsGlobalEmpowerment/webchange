@@ -65,15 +65,43 @@
       [ui/button {:on-click on-close}
        "Cancel"]]]))
 
-(defn- scene-pick-name-window [{:keys [show on-ok on-cancel name]}]
+(defn- new-or-duplicate-window [{:keys [show on-new on-duplicate]}]
+  [ui/dialog
+   {:open show}
+   [ui/dialog-title "Create Activity"]
+   [ui/dialog-actions
+    [ui/button {:on-click on-new} "New"]
+    [ui/button {:on-click on-duplicate} "Duplicate"]]])
+
+(defn- new-window [{:keys [show on-ok on-cancel name]}]
   [ui/dialog
    {:open show}
    [ui/dialog-title "Choose name"]
    [ui/text-field {:placeholder "New Activity"
+                   :style    {:padding "0px 20px"}
                    :on-click    #(.stopPropagation %)
                    :on-change   #(reset! name (->> % .-target .-value))}]
    [ui/dialog-actions
     [ui/button {:on-click on-ok} "Ok"]
+    [ui/button {:on-click on-cancel} "Cancel"]]])
+
+(defn- duplicate-window [{:keys [show on-duplicate on-cancel scene-list old-name new-name]}]
+  [ui/dialog
+   {:open show}
+   [ui/dialog-title "Choose Activity To Duplicate"]
+   [ui/select {:value @old-name
+               :variant   "outlined"
+               :on-change #(reset! old-name (->> % .-target .-value))
+               :style    {:padding "10px 20px"}}
+    (for [{:keys [name scene-id]} scene-list]
+      ^{:key scene-id}
+      [ui/menu-item {:value scene-id} name])]
+   [ui/text-field {:placeholder "Activity Name*"
+                   :style    {:padding "10px 20px"}
+                   :on-click    #(.stopPropagation %)
+                   :on-change   #(reset! new-name (->> % .-target .-value))}]
+   [ui/dialog-actions
+    [ui/button {:on-click on-duplicate} "Duplicate"]
     [ui/button {:on-click on-cancel} "Cancel"]]])
 
 (defn scenes-list
@@ -81,22 +109,23 @@
   (r/with-let [current-scene-info (r/atom nil)
                handle-open-info #(reset! current-scene-info %)
                handle-close-info #(reset! current-scene-info nil)
-
-               show-name-picker (r/atom false)
-               new-activity-name (r/atom nil)]
+               show-new-or-duplicate-window (r/atom false)
+               show-new-window (r/atom false)
+               show-duplicate-window (r/atom false)]
     (let [course @(re-frame/subscribe [::subs/current-course])
           scene-list @(re-frame/subscribe [::subs/scene-list-ordered])
           list-styles (card/get-styles)
-
           filter @(re-frame/subscribe [::subs/scene-list-filter])
-          set-filter #(re-frame/dispatch [::subs/set-scene-list-filter %])]
+          set-filter #(re-frame/dispatch [::subs/set-scene-list-filter %])
+          new-activity-name (r/atom nil)
+          old-activity-name (r/atom (:scene-id (first scene-list)))]
       [list-card {:title        title
                   :title-action [input {:value        filter
                                         :on-change    set-filter
                                         :placeholder  "Filter"
                                         :on-esc-press #(set-filter "")}]
                   :full-height  true
-                  :on-add-click #(reset! show-name-picker true)}
+                  :on-add-click #(reset! show-new-or-duplicate-window true)}
        [ui/list {:style (:list-full-height list-styles)}
         (for [scene scene-list]
           ^{:key (:scene-id scene)}
@@ -114,11 +143,31 @@
                [ic/edit {:style (:action-icon list-styles)}]])]])]
        [scene-info-window {:scene-id @current-scene-info
                            :on-close handle-close-info}]
-       [scene-pick-name-window {:show      @show-name-picker
-                                :on-ok     #(do
-                                              (reset! show-name-picker false)
-                                              (if (empty? @new-activity-name)
-                                                (print "error")
-                                                (re-frame/dispatch [::state/create-new-activity @new-activity-name course])))
-                                :on-cancel #(reset! show-name-picker false)
-                                :name      new-activity-name}]])))
+       [new-or-duplicate-window
+        {:show  @show-new-or-duplicate-window
+         :on-new #(do
+                    (reset! show-new-or-duplicate-window false)
+                    (reset! show-new-window true))
+         :on-duplicate #(do
+                          (reset! show-new-or-duplicate-window false)
+                          (reset! show-duplicate-window true))}]
+       [new-window
+        {:show @show-new-window
+         :on-ok #(do
+                   (reset! show-new-window false)
+                   (if (empty? @new-activity-name)
+                     (print "Error creating activity")
+                     (re-frame/dispatch [::state/create-new-activity @new-activity-name course])))
+         :on-cancel #(reset! show-new-window false)
+         :name new-activity-name}]
+       [duplicate-window
+        {:show @show-duplicate-window
+         :on-duplicate #(do
+                          (reset! show-duplicate-window false)
+                          (if (empty? @new-activity-name)
+                            (print "Error duplicating activity")
+                            (re-frame/dispatch [::state/duplicate-activity @old-activity-name @new-activity-name course])))
+         :on-cancel #(reset! show-duplicate-window false)
+         :scene-list scene-list
+         :old-name old-activity-name
+         :new-name new-activity-name}]])))
