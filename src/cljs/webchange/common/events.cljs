@@ -4,12 +4,14 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.interactions :as interactions]
     [webchange.interpreter.variables.core :refer [variables]]
+    [webchange.interpreter.variables.expressions :refer [eval-expression]]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.sound :as sound]
     [webchange.logger.index :as logger]
     [webchange.question.common.params :as question-params]
+    [webchange.utils.numbers :refer [number-str? try-parse-int]]
     [webchange.utils.scene-data :as utils]
     [webchange.utils.scene-action-data :as action-data-utils]))
 
@@ -241,11 +243,34 @@
     (reduce (with-var-object-property db) action from-var-object)
     action))
 
+(defn- set-action-property
+  [action action-property-str value]
+  (let [action-property-path (->> (clojure.string/split action-property-str ".")
+                                  (map (fn [path-step]
+                                         (if (number-str? path-step)
+                                           (try-parse-int path-step)
+                                           (keyword path-step)))))]
+    (assoc-in action action-property-path value)))
+
+(defn- with-expression-property
+  [action db {:keys [action-property expression] :as x}]
+  (->> (eval-expression db action expression)
+       (set-action-property action action-property)))
+
+(defn- with-expression-properties
+  [action db]
+  (if-let [from-expression (:from-expression action)]
+    (reduce #(with-expression-property %1 db %2)
+            action
+            from-expression)
+    action))
+
 (defn ->with-vars
   [db action]
   (-> action
       (with-param-properties)
       (with-var-properties)
+      (with-expression-properties db)
       (with-progress-properties db)
       (with-var-object-properties db)))
 
@@ -348,7 +373,7 @@
                                   (let [scene-action (get-action "timeout-instructions" db)]
                                     (execute-action db scene-action)))
                                 interval)]
-    (register-timer {:id timeout-id
+    (register-timer {:id   timeout-id
                      :name "timeout-instructions"
                      :type "timeout"})))
 
@@ -679,8 +704,8 @@
              action-id (random-uuid)
              current-scene (:current-scene db)
              skippable? (or
-                         dialog-action?
-                         (->> action :previous-flow :tags (some #{"skip"})))
+                          dialog-action?
+                          (->> action :previous-flow :tags (some #{"skip"})))
              flow-data {:flow-id       flow-id
                         :actions       [action-id]
                         :type          :all
@@ -717,8 +742,8 @@
      :data [{:type 'animation', :id 'volley_call', :target 'vera'}
             {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
     (when (and
-           (action-data-utils/dialog-action? action)
-           (not (some #{(:fx action-data-utils/action-tags)} (get-action-tags action))))
+            (action-data-utils/dialog-action? action)
+            (not (some #{(:fx action-data-utils/action-tags)} (get-action-tags action))))
       (stop-timeout-instructions)
       (skip))
     (execute-sequence-data! db action)

@@ -69,7 +69,6 @@
 
                                               (emit text-object "textChanged"))
                    :update-chunks           (fn [{:keys [callback params]}]
-                                              (print "new chunks" (get params :chunks []))
                                               (->> (map merge
                                                         (get-in @state [:props :chunks])
                                                         (get params :chunks []))
