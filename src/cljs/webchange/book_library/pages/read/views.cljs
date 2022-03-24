@@ -33,28 +33,30 @@
 
 (defn- menu
   []
-  (let [show-buttons? @(re-frame/subscribe [::state/show-buttons?])
+  (let [show-menu? (not @(re-frame/subscribe [::state/reading-in-progress?]))
+        show-buttons? @(re-frame/subscribe [::state/show-buttons?])
         loading? @(re-frame/subscribe [::state/show-loading?])
         error? @(re-frame/subscribe [::state/show-error?])
 
         handle-read-with-sound-click #(re-frame/dispatch [::state/read-with-sound])
         handle-read-without-sound-click #(re-frame/dispatch [::state/read-without-sound])
         handle-favorite-click #(print "favorite")]
-    [:div.menu-wrapper
-     (into [:div.menu]
-           (cond-> []
-                   loading? (concat [[loading-indicator]])
-                   error? (concat [[error-message]])
-                   show-buttons? (concat [[menu-item {:text     @(re-frame/subscribe [::i18n/t [:read/to-me]])
-                                                      :icon     "volume"
-                                                      :big?     true
-                                                      :on-click handle-read-with-sound-click}]
-                                          [menu-item {:text     @(re-frame/subscribe [::i18n/t [:read/by-myself]])
-                                                      :icon     "no-volume"
-                                                      :on-click handle-read-without-sound-click}]
-                                          #_[menu-item {:text     @(re-frame/subscribe [::i18n/t [:favorite]])
-                                                        :icon     "heart"
-                                                        :on-click handle-favorite-click}]])))]))
+    (when show-menu?
+      [:div.menu-wrapper
+       (into [:div.menu]
+             (cond-> []
+                     loading? (concat [[loading-indicator]])
+                     error? (concat [[error-message]])
+                     show-buttons? (concat [[menu-item {:text     @(re-frame/subscribe [::i18n/t [:read/to-me]])
+                                                        :icon     "volume"
+                                                        :big?     true
+                                                        :on-click handle-read-with-sound-click}]
+                                            [menu-item {:text     @(re-frame/subscribe [::i18n/t [:read/by-myself]])
+                                                        :icon     "no-volume"
+                                                        :on-click handle-read-without-sound-click}]
+                                            #_[menu-item {:text     @(re-frame/subscribe [::i18n/t [:favorite]])
+                                                          :icon     "heart"
+                                                          :on-click handle-favorite-click}]])))])))
 
 (defn page
   [{:keys [id book-id]}]
