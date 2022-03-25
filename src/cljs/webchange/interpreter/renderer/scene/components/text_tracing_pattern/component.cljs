@@ -108,10 +108,12 @@
         length (count text)
         widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
         total (- (last widths) spacing)
+        to-offset "FfiíU"
         positions (->> (range length)
                        (map (fn [pos]
                               {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
                                :y topline-y
+                               :dash-offset (if (some #{(nth text pos)} to-offset) 4 0)
                                :index pos})))
         letters (->> text
                      (map #(get-svg-path % {:trace? false}))
@@ -218,7 +220,7 @@
         (.destroy child)))))
 
 (defn draw!
-  [group {:keys [traceable height text show-lines] :as props} state]
+  [group {:keys [traceable height text show-lines dashed] :as props} state]
   (let [{letter-scale :letter :as scale} (get-scale props)
         letter-height (* letter-scale base-height)
         topline-y (-> (- height letter-height) (/ 2))
@@ -231,20 +233,19 @@
     (reset-group! group)
 
     (logger/trace-folded "text-tracing-pattern draw!" scale topline-y midline-y baseline-y)
-
     (when show-lines
       (s/create (merge line-props {:object-name (str "text-tracint-pattern-topline")
                                    :parent      group
-                                   :y           (- topline-y 5),
+                                   :y           (+ topline-y (if dashed 0 -5))
                                    :stroke      "#323232"}))
       (s/create (merge line-props {:object-name (str "text-tracint-pattern-midline")
                                    :parent      group
-                                   :y           midline-y,
+                                   :y           (+ midline-y (if dashed 0 -5))
                                    :dash        [7 7]
                                    :stroke      "#898989"}))
       (s/create (merge line-props {:object-name (str "text-tracint-pattern-baseline")
                                    :parent      group
-                                   :y           baseline-y,
+                                   :y           (+ baseline-y (if dashed 0 10))
                                    :stroke      "#323232"})))
 
     (when has-text?

@@ -14,6 +14,7 @@
                     :name         {}
                     :data         {}
                     :dash         {}
+                    :dash-offset  {}
                     :on-click     {}
                     :stroke       {:default "#000000"}
                     :fill         {:default false}
