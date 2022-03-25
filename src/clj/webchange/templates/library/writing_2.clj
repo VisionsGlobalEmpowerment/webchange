@@ -34,7 +34,9 @@
                         {:type "text-tracing-pattern"
                          :text ""
                          :y    300
+                         :alias "writing options",
                          :dashed true
+                         :show-lines true
                          :editable?  {:select false :drag false :show-in-tree? true}}
                         :practice-canvas
                         {:type   "painting-area"

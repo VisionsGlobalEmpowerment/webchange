@@ -21,6 +21,7 @@
                     :x-offset                 {:default nil}
                     :spacing                  {:default 20}
                     :dashed                   {:default false}
+                    :show-lines               {:default true}
                     :text                     {}
                     :name                     {}
                     :on-change                {}
@@ -217,7 +218,7 @@
         (.destroy child)))))
 
 (defn draw!
-  [group {:keys [traceable height text] :as props} state]
+  [group {:keys [traceable height text show-lines] :as props} state]
   (let [{letter-scale :letter :as scale} (get-scale props)
         letter-height (* letter-scale base-height)
         topline-y (-> (- height letter-height) (/ 2))
@@ -230,19 +231,21 @@
     (reset-group! group)
 
     (logger/trace-folded "text-tracing-pattern draw!" scale topline-y midline-y baseline-y)
-    (s/create (merge line-props {:object-name (str "text-tracint-pattern-topline")
-                                 :parent      group
-                                 :y           (- topline-y 5),
-                                 :stroke      "#323232"}))
-    (s/create (merge line-props {:object-name (str "text-tracint-pattern-midline")
-                                 :parent      group
-                                 :y           midline-y,
-                                 :dash        [7 7]
-                                 :stroke      "#898989"}))
-    (s/create (merge line-props {:object-name (str "text-tracint-pattern-baseline")
-                                 :parent      group
-                                 :y           baseline-y,
-                                 :stroke      "#323232"}))
+
+    (when show-lines
+      (s/create (merge line-props {:object-name (str "text-tracint-pattern-topline")
+                                   :parent      group
+                                   :y           (- topline-y 5),
+                                   :stroke      "#323232"}))
+      (s/create (merge line-props {:object-name (str "text-tracint-pattern-midline")
+                                   :parent      group
+                                   :y           midline-y,
+                                   :dash        [7 7]
+                                   :stroke      "#898989"}))
+      (s/create (merge line-props {:object-name (str "text-tracint-pattern-baseline")
+                                   :parent      group
+                                   :y           baseline-y,
+                                   :stroke      "#323232"})))
 
     (when has-text?
       (draw-pattern! group props scale text-offset-y)

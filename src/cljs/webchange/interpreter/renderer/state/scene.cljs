@@ -83,6 +83,7 @@
    {:action :set-position :params [:x :y]}
    {:action :set-scale :params [:scale :scale-x :scale-y]}
    {:action :set-dashed :params [:dashed]}
+   {:action :set-show-lines :params [:show-lines]}
    {:action :set-visibility :params [:visible]}
    {:action :set-src :params [:src]}
    {:action :reset-video :params [:src]}
@@ -203,6 +204,11 @@
   :set-dashed
   (fn [[object-wrapper {:keys [dashed]}]]
     (apply-to-wrapper w/set-dashed object-wrapper dashed)))
+
+(re-frame/reg-fx
+  :set-show-lines
+  (fn [[object-wrapper {:keys [show-lines]}]]
+    (apply-to-wrapper w/set-show-lines object-wrapper show-lines)))
 
 (re-frame/reg-fx
   :set-visibility
