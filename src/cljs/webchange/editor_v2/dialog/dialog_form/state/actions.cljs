@@ -208,7 +208,6 @@
                          [:dialog-7-wrong :data 1 :data 1] for parallel action
     - concept-field - name of concept field if used.
                       e.g. :dialog-field-e61057a9-63a1-4066-8549-69cc9ba3bfd9"
-    (js/console.log "remove action" action-path)
     (let [parent-path (drop-last 2 action-path)
           removed-action-position (last action-path)
 

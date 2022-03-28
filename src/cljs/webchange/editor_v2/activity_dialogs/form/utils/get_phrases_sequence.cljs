@@ -50,7 +50,11 @@
                                  (map (fn [{:keys [scene-action-path] :as phrase-data}]
                                         (-> phrase-data
                                             (assoc :scene-action-path phrase-action-path)
-                                            (assoc :concept-action-path scene-action-path))))))))))
+                                            (assoc :concept-action-path scene-action-path))))))
+
+                          :default
+                          {:scene-action-path phrase-action-path
+                           :parallel-mark     :none}))))
        (flatten)
        (vec)))
 
