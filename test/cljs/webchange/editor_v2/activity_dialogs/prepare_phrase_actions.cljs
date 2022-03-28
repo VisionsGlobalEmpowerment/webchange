@@ -15,6 +15,21 @@
   [concept-data action-path]
   (get-in concept-data (concat [:data] action-path)))
 
+(defn- compare-results!
+  [actual-result expected-result]
+  (is (= (count actual-result)
+         (count expected-result)))
+  (doseq [idx (range (min (count actual-result)
+                          (count expected-result)))]
+    (let [actual-phrase (nth actual-result idx)
+          expected-phrase (nth expected-result idx)]
+      (is (= actual-phrase expected-phrase))
+      (when-not (= actual-phrase expected-phrase)
+        (print "--- --- ---")
+        (print "idx:" idx)
+        (print "type:" (:type expected-phrase))
+        (print-maps-comparison actual-phrase expected-phrase)))))
+
 (deftest test-prepare-phrase-actions--case-1
   (let [params {:dialog-action-path  [:introduce-big-small]
                 :current-action-path [:introduce-big-small :data 2]
@@ -209,18 +224,7 @@
                                                :concept [:dialog-field-e0b429c2-cf25-4736-8160-75a9df533dac :data 0]}
                                :action-data   (get-concept-action-data case-1/concept-data [:dialog-field-e0b429c2-cf25-4736-8160-75a9df533dac :data 0])
                                :path          [:dialog-field-e0b429c2-cf25-4736-8160-75a9df533dac :data 0]}]]
-    (is (= (count actual-result)
-           (count expected-result)))
-    (doseq [idx (range (min (count actual-result)
-                            (count expected-result)))]
-      (let [actual-phrase (nth actual-result idx)
-            expected-phrase (nth expected-result idx)]
-        (is (= actual-phrase expected-phrase))
-        (when-not (= actual-phrase expected-phrase)
-          (print "--- --- ---")
-          (print "idx:" idx)
-          (print "type:" (:type expected-phrase))
-          (print-maps-comparison actual-phrase expected-phrase))))))
+    (compare-results! actual-result expected-result)))
 
 (deftest test-prepare-phrase-actions--case-2
   (let [params {:dialog-action-path  [:describe-writing]
@@ -458,17 +462,40 @@
                                                :concept [:dialog-field-02c7dada-5129-47cd-9f16-31298a67dca9 :data 0]}
                                :action-data   (get-concept-action-data case-2/concept-data [:dialog-field-02c7dada-5129-47cd-9f16-31298a67dca9 :data 0])
                                :path          [:dialog-field-02c7dada-5129-47cd-9f16-31298a67dca9 :data 0]}]]
-    (is (= (count actual-result)
-           (count expected-result)))
-    (doseq [idx (range (min (count actual-result)
-                            (count expected-result)))]
-      (let [actual-phrase (nth actual-result idx)
-            expected-phrase (nth expected-result idx)]
-        (is (= actual-phrase expected-phrase))
-        (when-not (= actual-phrase expected-phrase)
-          (print "--- --- ---")
-          (print "idx:" idx)
-          (print "path:" (if (= (:path actual-phrase) (:path expected-phrase))
-                           (:path actual-phrase)
-                           [(:path actual-phrase) (:path expected-phrase)]))
-          (print-maps-comparison actual-phrase expected-phrase))))))
+    (compare-results! actual-result expected-result)))
+
+(deftest test-prepare-phrase-actions--case-3
+  (let [params {:dialog-action-path  [:dialog-main]
+                :current-action-path [:dialog-main :data 1]
+                :available-effects   []
+                :scene-data          scene-data
+                :concept-data        case-2/concept-data}
+        actual-result (prepare-phrase-actions params)
+        expected-result [{:type          :unknown
+                          :source        :scene
+                          :action-data   (get-scene-action-data [:dialog-main :data 0])
+                          :action-path   {:scene [:dialog-main :data 0]}
+                          :path          [:dialog-main :data 0]
+                          :delay         0
+                          :parallel-mark :none
+                          :selected?     false}
+                         {:path          [:dialog-main :data 1]
+                          :action-path   {:scene [:dialog-main :data 1]}
+                          :placeholder   "Enter phrase text"
+                          :action-data   (get-scene-action-data [:dialog-main :data 1])
+                          :type          :phrase
+                          :source        :scene
+                          :parallel-mark :none
+                          :selected?     true
+                          :delay         0
+                          :character     "teacher"
+                          :text          "¡Buena pregunta, Vera! ¡Yo me siento feliz cuando veo que mis estudiantes se ayudan entre ellos!"}
+                         {:type          :unknown
+                          :source        :scene
+                          :action-data   (get-scene-action-data [:dialog-main :data 2])
+                          :action-path   {:scene [:dialog-main :data 2]}
+                          :path          [:dialog-main :data 2]
+                          :delay         nil
+                          :parallel-mark :none
+                          :selected?     false}]]
+    (compare-results! actual-result expected-result)))
