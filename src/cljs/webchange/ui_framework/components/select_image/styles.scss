@@ -102,7 +102,7 @@ $arrow-width: 28px;
             display: flex;
             flex-direction: column;
             gap: $padding;
-            padding: ($padding / 2);
+            padding: ($padding * 0.5);
             padding-right: $padding;
 
             max-height: 500px;

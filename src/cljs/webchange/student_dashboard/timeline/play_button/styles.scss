@@ -1,7 +1,7 @@
 .play-button {
     $size: $play-button-size;
-    $outer-border: $size / 16;
-    $inner-border: $size / 24;
+    $outer-border: $size * 0.0625; // * 1/16
+    $inner-border: $size * 0.04167; // * 1/24
 
     position: relative;
 
@@ -11,6 +11,7 @@
     background: linear-gradient(to top, #D8003A, #FFAD67);
     border: solid $outer-border #fff;
     border-radius: 50%;
+    box-sizing: content-box;
 
     transition: box-shadow 2s;
 
