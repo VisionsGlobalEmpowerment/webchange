@@ -86,6 +86,7 @@
   (when (not (nil? @loader))
     (reset-que)
     (.reset @loader)
+    (reset-callbacks @loader)
     (hack-parsing-resources-for-spine)))
 
 (defn get-or-load-resource

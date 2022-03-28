@@ -21,13 +21,23 @@
             (not= scene-id @current-scene-id))
     (vars.core/set-global-variable! :force-scene-update false)
     (reset! current-scene-id scene-id)
-    (reset! loading {:done false :progress 0})
-    (reset-app! {:reset-textures? reset-resources?})
-    (when reset-resources?
-      (resources/reset-loader!))
-    (resources/load-resources resources
-                              {:on-complete (fn [] (swap! loading assoc :done true))
-                               :on-progress (fn [progress] (swap! loading assoc :progress progress))})))
+    (let [load (fn [on-complete-by-progress]
+                 (reset! loading {:done false :progress 0})
+                 (reset-app! {:reset-textures? reset-resources?})
+                 (when reset-resources?
+                   (resources/reset-loader!))
+                 (resources/load-resources resources
+                                           {:on-complete (fn [] (swap! loading assoc :done true))
+                                            :on-progress (fn [progress]
+                                                           (swap! loading assoc :progress progress)
+                                                           (let [e 0.0001
+                                                                 left (- 1 progress)]
+                                                             (when (and (> e left) on-complete-by-progress)
+                                                               (js/setTimeout #(when (not (:done @loading))
+                                                                                 (on-complete-by-progress))
+                                                                              10000))))}))
+          reload #(load nil)]
+      (load reload))))
 
 (defn- element->viewport
   [el]
