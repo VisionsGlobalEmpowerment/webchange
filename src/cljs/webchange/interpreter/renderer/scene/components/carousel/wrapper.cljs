@@ -7,4 +7,6 @@
   (create-wrapper {:name   name
                    :type   type
                    :object container
-                   :state  state}))
+                   :state  state
+                   :set-speed (fn [speed]
+                                (swap! state assoc :speed speed))}))
