@@ -519,10 +519,10 @@
                                                          {:type "set-attribute" :target "background" :attr-name "speed" :attr-value 4}]}
 
                         :stop-running            {:type "sequence-data"
-                                                  :data [{:type "set-attribute" :target "vera-stopped" :attr-name "visible" :attr-value true}
-                                                         {:type "set-attribute" :target "vera-group" :attr-name "visible" :attr-value false}
+                                                  :data [{:type "set-attribute" :target "emit-group" :attr-name "visible" :attr-value false}
                                                          {:type "set-attribute" :target "background" :attr-name "speed" :attr-value 0}
-                                                         {:type "set-attribute" :target "emit-group" :attr-name "visible" :attr-value false}]}
+                                                         {:type "set-attribute" :target "vera-group" :attr-name "visible" :attr-value false}
+                                                         {:type "set-attribute" :target "vera-stopped" :attr-name "visible" :attr-value true}]}
 
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
