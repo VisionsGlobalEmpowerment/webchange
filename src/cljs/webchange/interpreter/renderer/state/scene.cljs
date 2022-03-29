@@ -108,7 +108,8 @@
    {:action :set-skeleton :params [:name] :accompany-params [:skin :skin-names]}
    {:action :set-animation-skin :params [:skin]}
    {:action :set-combined-skin :params [:skin-names]}
-   {:action :set-enable :params [:enable?]}])
+   {:action :set-enable :params [:enable?]}
+   {:action :set-speed :params [:speed]}])
 
 (defn- get-action-params
   [{:keys [params accompany-params] :or {params [] accompany-params []}} overall-params]
@@ -350,6 +351,11 @@
   :set-enable
   (fn [[object-wrapper {:keys [enable?]}]]
     (apply-to-wrapper w/set-enable object-wrapper enable?)))
+
+(re-frame/reg-fx
+  :set-speed
+  (fn [[object-wrapper {:keys [speed]}]]
+    (apply-to-wrapper w/set-speed object-wrapper speed)))
 
 (re-frame/reg-fx
   :set-skeleton

@@ -43,34 +43,35 @@
     (set! (.-x last) width)))
 
 (defn- start-carousel
-  [state first last next {:keys [speed width]}]
+  [state first last next {:keys [width]}]
   (let [tile-width (-> next .-texture .-width)
         last-width (-> last .-texture .-width)]
     (fn [delta]
-      (case @state
-        :starting (let [first-x (- (-> first .-x) (* speed delta))
-                        next-x (- (-> next .-x) (* speed delta))]
-                    (if (> next-x 0)
-                      (do
-                        (set! (.-x first) first-x)
-                        (set! (.-x next) next-x))
-                      (do
-                        (set! (.-x next) 0)
-                        (reset! state :running))))
-        :running (let [next-x (- (-> next .-tilePosition .-x) (* speed delta))]
-                   (if (< next-x (- tile-width))
-                     (-> next .-tilePosition (set! -x (+ next-x tile-width)))
-                     (-> next .-tilePosition (set! -x next-x))))
-        :stopping (let [next-x (- (-> next .-x) (* speed delta))
-                        last-x (- (-> last .-x) (* speed delta))]
-                    (if (< (+ last-x last-width) width)
-                      (do
-                        (set! (.-x next) next-x)
-                        (set! (.-x last) last-x))
-                      (do
-                        (set! (.-x last) 0)
-                        (reset! state :stopped))))
-        nil))))
+      (let [speed (:speed @state)]
+        (case (:status @state)
+          :starting (let [first-x (- (-> first .-x) (* speed delta))
+                          next-x (- (-> next .-x) (* speed delta))]
+                      (if (> next-x 0)
+                        (do
+                          (set! (.-x first) first-x)
+                          (set! (.-x next) next-x))
+                        (do
+                          (set! (.-x next) 0)
+                          (swap! state assoc :status :running))))
+          :running (let [next-x (- (-> next .-tilePosition .-x) (* speed delta))]
+                     (if (< next-x (- tile-width))
+                       (-> next .-tilePosition (set! -x (+ next-x tile-width)))
+                       (-> next .-tilePosition (set! -x next-x))))
+          :stopping (let [next-x (- (-> next .-x) (* speed delta))
+                          last-x (- (-> last .-x) (* speed delta))]
+                      (if (< (+ last-x last-width) width)
+                        (do
+                          (set! (.-x next) next-x)
+                          (set! (.-x last) last-x))
+                        (do
+                          (set! (.-x last) 0)
+                          (swap! state assoc :status :stopped))))
+          nil)))))
 
 (defn create
   "Create `carousel` component.
@@ -90,7 +91,8 @@
         first (create-sprite :first props)
         last (create-sprite :last props)
         next (create-tiling-sprite :next props)
-        state (atom :starting)
+        state (atom {:status :starting
+                     :speed (:speed props)})
         wrapped-image (wrap type object-name container state)]
 
     (.addChild container first)

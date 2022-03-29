@@ -1,6 +1,7 @@
 (ns webchange.templates.library.running-time-limited
   (:require
     [webchange.templates.core :as core]
+    [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
 (def m {:id          34
@@ -20,19 +21,28 @@
                              :type        "lookup"
                              :description "Time in seconds"
                              :options     [{:name "30" :value 30}
-                                           {:name "45" :value 45}
-                                           {:name "60" :value 60}]}}})
+                                           {:name "40" :value 40}
+                                           {:name "50" :value 50}
+                                           {:name "60" :value 60}]}}
+        :actions     {:change-time    {:title    "Change time"
+                                       :options  {:time {:type        "lookup"
+                                                         :options     [{:name "30" :value 30}
+                                                                       {:name "40" :value 40}
+                                                                       {:name "50" :value 50}
+                                                                       {:name "60" :value 60}]}}}}})
 
 (def concept-var "current-concept")
 
 (def t {:assets        [{:url "/raw/img/running-with-letters/bg_01.jpg" :type "image"}
                         {:url "/raw/img/running-with-letters/bg_02.png" :type "image"}
+                        {:url "/raw/img/vera.png" :type "image"}
                         {:url "/raw/img/running-with-letters/box.png" :type "image"}]
         :objects       {:background            {:type   "carousel"
                                                 :x      0
                                                 :y      0
                                                 :width  1920
                                                 :height 1080
+                                                :speed 0
                                                 :first  "/raw/img/running-with-letters/bg_02.png"
                                                 :last   "/raw/img/running-with-letters/bg_02.png"
                                                 :next   "/raw/img/running-with-letters/bg_02.png"}
@@ -162,6 +172,7 @@
                                                 :x          500
                                                 :y          865
                                                 :transition "vera-group"
+                                                :visible    false
                                                 :children   ["vera" "vera-collision-test"]}
                         :emit-group            {:type "group"}
                         :vera                  {:type       "animation"
@@ -179,6 +190,13 @@
                                                 :skin       "default"
                                                 :speed      1
                                                 :start      true}
+                        :vera-stopped {:type       "image",
+                                       :x          300
+                                       :y          370
+                                       :width      727
+                                       :scale      {:x 0.75 :y 0.75}
+                                       :height     1091
+                                       :src        "/raw/img/vera.png"}
                         :vera-collision-test   {:type        "transparent"
                                                 :x           150
                                                 :y           -55
@@ -195,7 +213,7 @@
         :scene-objects [["background"]
                         ["frame"]
                         ["emit-group"]
-                        ["vera-group" "mari"]
+                        ["vera-stopped" "vera-group" "mari"]
                         ["target-group" "timer" "line-1" "line-2" "line-3"]]
         :actions       {:dialog-1-welcome        {:type                 "sequence-data"
                                                   :editor-type          "dialog"
@@ -378,7 +396,7 @@
                                                           :data [{:type "action" :id "emit-object-line-1"}
                                                                  {:type "action" :id "emit-object-line-2"}
                                                                  {:type "action" :id "emit-object-line-3"}]}
-                                                         {:type "empty" :duration 1500}
+                                                         {:type "empty" :duration 3000}
                                                          {:type     "test-var-scalar"
                                                           :var-name "game-finished"
                                                           :value    false
@@ -490,10 +508,21 @@
 
                         :move-emitted-letter     {:type        "transition"
                                                   :from-params [{:param-property "transition", :action-property "transition-id"}]
-                                                  :to          {:x -700 :duration 5}}
+                                                  :to          {:x -700 :duration 10}}
 
                         :dialog-tap-instructions (-> (dialog/default "Tap instructions")
                                                      (assoc :concept-var concept-var))
+
+                        :start-running           {:type "sequence-data"
+                                                  :data [{:type "set-attribute" :target "vera-stopped" :attr-name "visible" :attr-value false}
+                                                         {:type "set-attribute" :target "vera-group" :attr-name "visible" :attr-value true}
+                                                         {:type "set-attribute" :target "background" :attr-name "speed" :attr-value 4}]}
+
+                        :stop-running            {:type "sequence-data"
+                                                  :data [{:type "set-attribute" :target "emit-group" :attr-name "visible" :attr-value false}
+                                                         {:type "set-attribute" :target "background" :attr-name "speed" :attr-value 0}
+                                                         {:type "set-attribute" :target "vera-group" :attr-name "visible" :attr-value false}
+                                                         {:type "set-attribute" :target "vera-stopped" :attr-name "visible" :attr-value true}]}
 
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
@@ -502,10 +531,13 @@
                                                          "intro"
                                                          "start"
                                                          "init-vars"
+                                                         "start-running"
                                                          "start-timer"
                                                          "emit-objects"]}
 
-                        :finish-game             {:type "set-variable" :var-name "game-finished" :var-value true}
+                        :finish-game             {:type "sequence-data"
+                                                  :data [{:type "action" :id "stop-running"}
+                                                         {:type "set-variable" :var-name "game-finished" :var-value true}]}
                         :start-timer             {:type "timer-start" :target "timer"}
                         :stay-on-line            {:type "empty" :duration 100}
                         :stop-scene              {:type "sequence" :data ["stop-activity"]}
@@ -522,9 +554,14 @@
         :metadata      {:autostart true}})
 
 (defn f
-  [t args]
-  (assoc-in t [:objects :timer :time] (:time args)))
+  [args]
+  (-> (common/init-metadata m t args)
+      (assoc-in [:objects :timer :time] (:time args))))
+
+(defn fu
+  [old-data {:keys [action-name] :as args}]
+  (case action-name
+    "change-time" (assoc-in old-data [:objects :timer :time] (:time args))))
 
 (core/register-template
-  m
-  (partial f t))
+  m f fu)
