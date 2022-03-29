@@ -81,14 +81,17 @@
     (add-filter container)))
 
 (defn apply-outline-filter
-  [container {:keys [width color quality]
-              :or   {width   1
-                     color   0x000000
-                     quality 0.1}}]
-  (doto (OutlineFilter. width color quality)
-    (aset "name" "outline")
-    (aset "padding" width)
-    (add-filter container)))
+  [container filter]
+  (if (:width filter)
+    (let [{:keys [width color quality]
+           :or   {width   1
+                  color   0x000000
+                  quality 0.1}} filter]
+      (doto (OutlineFilter. width color quality)
+        (aset "name" "outline")
+        (aset "padding" width)
+        (add-filter container)))
+    container))
 
 (defn apply-shadow-filter
   [container {:keys [distance color blur]
