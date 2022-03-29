@@ -1,9 +1,7 @@
-@use "sass:math";
-
 .play-button {
     $size: $play-button-size;
-    $outer-border: math.div($size, 16);
-    $inner-border: math.div($size, 24);
+    $outer-border: $size / 16;
+    $inner-border: $size / 24;
 
     position: relative;
 

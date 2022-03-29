@@ -43,14 +43,14 @@
                 $button-height: 6.5vh;
 
                 justify-content: start;
-                gap: $button-height * 0.5;
+                gap: $button-height / 2;
 
                 width: auto;
                 height: $button-height;
-                padding: $button-height * 0.5;
+                padding: $button-height / 2;
 
                 font-size: 0.9em;
-                border-radius: $button-height * 0.5;
+                border-radius: $button-height / 2;
 
                 white-space: nowrap;
 
