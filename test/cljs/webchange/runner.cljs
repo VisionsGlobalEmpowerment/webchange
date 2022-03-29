@@ -54,6 +54,7 @@
             [webchange.common.svg-path.path-splitter-test]
             [webchange.interpreter.lessons.activity-test]
             [webchange.utils.list-test]
+            [webchange.utils.preserve-objects-test]
             [webchange.utils.scene-common-actions-test]
             [webchange.ui-components.date]))
 
@@ -112,6 +113,7 @@
   'webchange.common.svg-path.path-splitter-test
   'webchange.interpreter.lessons.activity-test
   'webchange.utils.list-test
+  'webchange.utils.preserve-objects-test
   'webchange.utils.scene-common-actions-test
   'webchange.ui-components.date
   )

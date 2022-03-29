@@ -13,7 +13,8 @@
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]
             [webchange.course.skills :refer [skills]]
-            [ring.util.codec :as codec]))
+            [ring.util.codec :as codec]
+            [webchange.utils.preserve-objects :refer [update-preserved-objects]]))
 
 (def editor_asset_type_single-background "single-background")
 (def editor_asset_type_background "background")
@@ -755,50 +756,6 @@
                                    [key (merge action created-action)])))
          (into {}))))
 
-(defn- editable-object-names
-  [{:keys [objects]}]
-  (->> objects
-       (filter (fn [[_ object]] (or
-                                  (:editable? object)
-                                  (= "background" (:type object))
-                                  (= "layered-background" (:type object)))))
-       (map first)))
-
-
-(defn- get-object-keys-to-update
-  [{:keys [editable? type]}]
-  (cond-> [:type :editable? :origin :max-width :max-height :width :height :image-size :metadata :actions :filters]
-          (and
-           (-> (get editable? :drag) true? not)
-           (not (true? editable?))) (concat [:x :y])
-          (not editable?) (concat [:visible])
-          (= type "group") (concat [:children])))
-
-(defn- update-object
-  [created-activity]
-  (fn [[key object]]
-    (let [created-object (get-in created-activity [:objects key])
-          object-keys-to-update (get-object-keys-to-update created-object)
-          object-props-to-update (select-keys created-object object-keys-to-update)
-          dissoc-updated #(apply dissoc % object-keys-to-update)]
-      [key (-> (if (= key :layered-background)
-                 (select-keys created-object (keys object))
-                 created-object)
-               (merge object)
-               (dissoc-updated)
-               (merge object-props-to-update))])))
-
-(defn- preserve-objects
-  [scene-data created-activity]
-  (let [object-names (->> (editable-object-names scene-data)
-                          (filter #(contains? (:objects created-activity) %)))
-        preserve-objects (-> scene-data
-                             :objects
-                             (select-keys object-names))]
-    (->> preserve-objects
-         (map (update-object created-activity))
-         (into {}))))
-
 (defn update-activity-template!
   [course-slug scene-slug user-id]
   (let [scene-data (get-scene-latest-version course-slug scene-slug)
@@ -807,10 +764,9 @@
                                (reduce #(templates/update-activity-from-template %1 %2) a updated))
         original-assets (:assets scene-data)
         preserved-actions (preserve-actions scene-data created-activity)
-        preserved-objects (preserve-objects scene-data created-activity)
         activity (-> created-activity
                      (update :actions merge preserved-actions)
-                     (update :objects merge preserved-objects)
+                     (update-preserved-objects scene-data)
                      (update :assets #(->> (concat original-assets %)
                                            (flatten)
                                            (distinct))))]
