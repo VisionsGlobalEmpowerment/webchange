@@ -90,7 +90,7 @@ $items-connector-width: 2px;
                 position: absolute;
 
                 top: $idx-size + $idx-margin;
-                left: ($idx-size * 0.5) - ($items-connector-width * 0.5);
+                left: ($idx-size / 2) - ($items-connector-width / 2);
                 height: $item-margin - ($idx-margin * 2);
             }
         }
