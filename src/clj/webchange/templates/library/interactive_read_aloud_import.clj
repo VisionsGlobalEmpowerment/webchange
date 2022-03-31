@@ -69,11 +69,13 @@
                                :show-book
                                                 {:type "parallel"
                                                  :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "book-background"}
-                                                        {:type "set-attribute" :attr-name "visible", :attr-value true :target "book"}]}
+                                                        {:type "set-attribute" :attr-name "visible", :attr-value true :target "book"}
+                                                        {:type "set-attribute" :attr-name "visible", :attr-value true :target "page-numbers"}]}
                                :hide-book
                                                 {:type "parallel"
                                                  :data [{:type "set-attribute" :attr-name "visible", :attr-value false :target "book-background"}
-                                                        {:type "set-attribute" :attr-name "visible", :attr-value false :target "book"}]}
+                                                        {:type "set-attribute" :attr-name "visible", :attr-value false :target "book"}
+                                                        {:type "set-attribute" :attr-name "visible", :attr-value false :target "page-numbers"}]}
 
                                :next-page       {:type   "flipbook-flip-forward"
                                                  :target "book"
@@ -188,6 +190,8 @@
     (-> activity-data
         (update :assets concat assets)
         (update :objects merge (remove-editable objects))
+        (assoc-in [:objects :left-page-number :text] "")
+        (assoc-in [:objects :right-page-number :text] "")
         (assoc-in [:objects :book :visible] false))))
 
 (defn- create-template
