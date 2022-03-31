@@ -663,3 +663,12 @@
                      :method :post
                      :uri    (str "/api/next-access-code")}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::send-system-log
+  (fn [{:keys [_]} [_ data handlers]]
+    (create-request {:key    :send-system-log
+                     :method :post
+                     :uri    (str "/api/system/log")
+                     :params data}
+                    handlers)))

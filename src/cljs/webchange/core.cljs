@@ -10,7 +10,8 @@
     [webchange.routes :as routes]
     [webchange.sw-utils.register :as sw]
     [webchange.ui.theme :refer [with-mui-theme]]
-    [webchange.utils.browser-history :as history]))
+    [webchange.utils.browser-history :as history]
+    [webchange.state.warehouse :as warehouse]))
 
 (defn dev-setup []
   (when config/debug?
@@ -26,7 +27,7 @@
 
 (defn- handle-history-back
   []
-  (re-frame/dispatch [::error/show "Back was clicked"]))
+  (re-frame/dispatch [::warehouse/send-system-log {:type :back}]))
 
 (defn reset-viewport
   []
@@ -40,13 +41,14 @@
   (reset-viewport))
 
 (defn ^:export init
-  [service-worker-enabled]
-  ;(sw/setup (and service-worker-enabled config/use-cache) "/service-worker.js")
+  [student-page]
+                                        ;(sw/setup (and service-worker-enabled config/use-cache) "/service-worker.js")
   (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (re-frame/dispatch [::events/init-current-school])
   (re-frame/dispatch [::events/init-current-user])
   (init-viewport)
-  (history/add-event-handler :back handle-history-back)
+  (when student-page
+    (history/add-event-handler :back handle-history-back))
   (dev-setup)
   (mount-root))

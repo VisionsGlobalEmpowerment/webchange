@@ -179,6 +179,18 @@
            (GET "/service-worker.js.map" [] (-> (resource-response "js/compiled/service-worker.js.map" {:root "public"})
                                                 (assoc-in [:headers "Content-Type"] "application/json"))))
 
+(defn handle-save-log
+  [request]
+  (let [user (-> request :session :identity :id)
+        body (:body request)
+        type (:type body)]
+    (log/info "system-log - user:" user "type:" type "body:" body)
+    (response {:message "ok"})))
+
+(defroutes system-routes
+           (POST "/api/system/log" request
+                (handle-save-log request)))
+
 (defn wrap-body-as-string
   [handler]
   (fn [{body-params :body-params :as request}]
@@ -222,6 +234,7 @@
   resources-routes
   service-worker-route
   asset-routes
+  system-routes
   (not-found "Not Found"))
 
 (def dev-store (mem/memory-store))
