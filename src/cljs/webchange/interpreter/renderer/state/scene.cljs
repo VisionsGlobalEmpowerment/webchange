@@ -77,38 +77,34 @@
        (filter (fn [[prop-name]] (not (some #{prop-name} extra-props-names))))
        (into {})))
 
-; Actions matching the template:
-; 'handler-name = "set-" + param-name'
-; (e.g. ':set-text' wrapper method for ':text' param)
-; should be handled by 'generic-handler'
-; Here should be defined only actions with different params
-; (e.g. ':set-filter' wrapper method for ':brightness' param)
 (def available-actions
-  [{:action :set-align :params [:align] :to-generic? true}
-   {:action :set-image-size :params [:image-size] :to-generic? true}
+  [{:action :set-align :params [:align]}
+   {:action :set-image-size :params [:image-size]}
    {:action :set-position :params [:x :y]}
    {:action :set-scale :params [:scale :scale-x :scale-y]}
-   {:action :set-dashed :params [:dashed] :to-generic? true}
-   {:action :set-show-lines :params [:show-lines] :to-generic? true}
+   {:action :set-dashed :params [:dashed]}
+   {:action :set-show-lines :params [:show-lines]}
    {:action :set-visibility :params [:visible]}
-   {:action :set-src :params [:src] :to-generic? true}
+   {:action :set-src :params [:src]}
    {:action :reset-video :params [:src]}
-   {:action :set-text :params [:text] :to-generic? true}
+   {:action :set-text :params [:text]}
    {:action :clear-area :params []}
    {:action :set-filter :params [:filter :brightness :eager]}
-   {:action :set-opacity :params [:opacity] :to-generic? true}
-   {:action :set-stroke :params [:stroke] :to-generic? true}
-   {:action :set-data :params [:data] :to-generic? true}
-   {:action :set-path :params [:path] :to-generic? true}
-   {:action :set-fill :params [:fill] :to-generic? true}
-   {:action :set-border-color :params [:border-color] :to-generic? true}
-   {:action :set-highlight :params [:highlight] :to-generic? true}
-   {:action :set-permanent-pulsation :params [:permanent-pulsation] :to-generic? true}
-   {:action :set-alpha-pulsation :params [:alpha-pulsation] :to-generic? true}
-   {:action :set-draggable :params [:draggable] :to-generic? true}
+   {:action :set-opacity :params [:opacity]}
+   {:action :set-tool :params [:tool]}
+   {:action :set-color :params [:color]}
+   {:action :set-stroke :params [:stroke]}
+   {:action :set-data :params [:data]}
+   {:action :set-path :params [:path]}
+   {:action :set-fill :params [:fill]}
+   {:action :set-border-color :params [:border-color]}
+   {:action :set-highlight :params [:highlight]}
+   {:action :set-permanent-pulsation :params [:permanent-pulsation]}
+   {:action :set-alpha-pulsation :params [:alpha-pulsation]}
+   {:action :set-draggable :params [:draggable]}
    {:action :set-children :params [:children]}
-   {:action :set-font-size :params [:font-size] :to-generic? true}
-   {:action :set-font-family :params [:font-family] :to-generic? true}
+   {:action :set-font-size :params [:font-size]}
+   {:action :set-font-family :params [:font-family]}
    {:action :set-skeleton :params [:name] :accompany-params [:skin :skin-names]}
    {:action :set-animation-skin :params [:skin]}
    {:action :set-combined-skin :params [:skin-names]}
@@ -116,10 +112,7 @@
    {:action :set-speed :params [:speed]}])
 
 (defn- get-action-params
-  [{:keys [params accompany-params]
-    :or   {params           []
-           accompany-params []}}
-   overall-params]
+  [{:keys [params accompany-params] :or {params [] accompany-params []}} overall-params]
   ":params - used to get action params and determine if action is needed for current params set
    :accompany-params - also needed for action but NOT used to determine if action is needed.
    For example apply params 'name', 'skin' and 'skin-names' to 'set-skeleton' action only if 'name' is defined.
@@ -134,45 +127,43 @@
        :action-params {}
        :rest-params   overall-params})))
 
-(declare change-scene-object)
-
-(defn set-scene-object-state
-  [db object-name state]
-  (let [filtered-state (filter-extra-props state [:revert :start :target :volume])
-        [execute-actions not-handled-params] (loop [actions-to-execute []
-                                                    [{:keys [action to-generic?] :as available-action} & rest-available-actions] available-actions
-                                                    current-state filtered-state]
-                                               (when to-generic? ;; Remove check when no :to-generic? field in available-actions
-                                                 (logger/warn (str "Change set param handler (" action ") to generic.")))
-                                               (if (nil? available-action)
-                                                 [actions-to-execute current-state]
-                                                 (let [{:keys [action-used? action-params rest-params]} (get-action-params available-action current-state)]
-                                                   (recur (if action-used?
-                                                            (conj actions-to-execute [action action-params])
-                                                            actions-to-execute)
-                                                          rest-available-actions
-                                                          rest-params))))
-        generic-handlers (map (fn [[param-name param-value]]
-                                (let [executor-name (->> param-name clojure.core/name (str "set-") keyword)]
-                                  [executor-name param-value]))
-                              not-handled-params)
-
-        result-actions (cond-> execute-actions
-                               (-> generic-handlers empty? not) (conj [:generic-handler generic-handlers]))]
-    (change-scene-object {:db db} [nil object-name result-actions])))
-
-(defn- event-handler
-  [handler {:keys [db]} [_ & params]]
-  (apply handler (concat [db] params)))
-
 (re-frame/reg-event-fx
   ::set-scene-object-state
-  (partial event-handler set-scene-object-state))
+  (fn [{:keys [_]} [_ object-name state]]
+    (let [filtered-state (filter-extra-props state [:revert :start :target :volume])
+          [execute-actions not-handled-params] (loop [actions-to-execute []
+                                                      [{:keys [action] :as available-action} & rest-available-actions] available-actions
+                                                      current-state filtered-state]
+                                                 (if (nil? available-action)
+                                                   [actions-to-execute current-state]
+                                                   (let [{:keys [action-used? action-params rest-params]} (get-action-params available-action current-state)]
+                                                     (recur (if action-used?
+                                                              (conj actions-to-execute [action action-params])
+                                                              actions-to-execute)
+                                                            rest-available-actions
+                                                            rest-params))))
+          generic-handlers (map (fn [[param-name param-value]]
+                                  (let [executor-name (->> param-name clojure.core/name (str "set-") keyword)]
+                                    [executor-name param-value]))
+                                not-handled-params)]
+
+      {:dispatch [::change-scene-object
+                  object-name
+                  (cond-> execute-actions
+                          (-> generic-handlers empty? not) (conj [:generic-handler generic-handlers]))]})))
 
 (defn get-object-name
   [db object-name]
   (or (get-scene-object db object-name)
       (get-scene-group db object-name)))
+
+(re-frame/reg-event-fx
+  ::change-scene-object
+  (fn [{:keys [db]} [_ object-name actions]]
+    (let [wrappers (get-object-name db object-name)]
+      (->> actions
+           (map (fn [[action params]] [action [wrappers params db]]))
+           (into {})))))
 
 (defn- apply-to-wrapper
   [method target & params]
@@ -220,13 +211,10 @@
   (fn [[object-wrapper {:keys [show-lines]}]]
     (apply-to-wrapper w/set-show-lines object-wrapper show-lines)))
 
-(defn set-visibility
-  [[object-wrapper {:keys [visible]}]]
-  (apply-to-wrapper w/set-visibility object-wrapper visible))
-
 (re-frame/reg-fx
   :set-visibility
-  set-visibility)
+  (fn [[object-wrapper {:keys [visible]}]]
+    (apply-to-wrapper w/set-visibility object-wrapper visible)))
 
 (re-frame/reg-fx
   :set-value
@@ -309,6 +297,11 @@
     (apply-to-wrapper w/set-tool object-wrapper tool)))
 
 (re-frame/reg-fx
+  :set-color
+  (fn [[object-wrapper {:keys [color]}]]
+    (apply-to-wrapper w/set-color object-wrapper color)))
+
+(re-frame/reg-fx
   :stop
   (fn [[object-wrapper]]
     (apply-to-wrapper w/stop object-wrapper)))
@@ -369,31 +362,8 @@
   (fn [[object-wrapper params]]
     (apply-to-wrapper w/set-skeleton object-wrapper params)))
 
-(defn- generic-handler
-  [[object-wrapper props _]]
-  (doseq [[method params] props]
-    (apply-to-wrapper w/execute-method object-wrapper method params)))
-
-(re-frame/reg-fx :generic-handler generic-handler)
-
-; Methods which can be used as function, not re-frame effect
-(def fixed-methods {:generic-handler generic-handler
-                    :set-visibility  set-visibility})
-
-(defn- change-scene-object
-  [{:keys [db]} [_ object-name actions]]
-  (let [wrappers (get-object-name db object-name)
-        handlers (reduce (fn [result [action params]]
-                           (if-let [fn-handler (get fixed-methods action)]
-                             (update result :fn conj [fn-handler [wrappers params db]])
-                             (update result :fx assoc action [wrappers params db])))
-                         {:fn []
-                          :fx {}}
-                         actions)]
-    (doseq [[fn-handler args] (:fn handlers)]
-      (fn-handler args))
-    (:fx handlers)))
-
-(re-frame/reg-event-fx
-  ::change-scene-object
-  change-scene-object)
+(re-frame/reg-fx
+  :generic-handler
+  (fn [[object-wrapper props _]]
+    (doseq [[method params] props]
+      (apply-to-wrapper w/execute-method object-wrapper method params))))

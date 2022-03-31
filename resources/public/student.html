@@ -19,6 +19,9 @@
     <link rel="manifest" href="/manifest.json">
     <script>
         var global = global || window;
+
+        // Hide re-frame-10x panel by default. Open panel pressing Ctrl + H
+        localStorage.setItem("day8.re-frame-10x.show-panel","\"false\"")
     </script>
     <script src="/js/fix-wheel-event.js"></script>
   </head>
