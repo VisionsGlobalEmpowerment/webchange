@@ -46,5 +46,5 @@
     [webchange.templates.library.first-words-book]
     [webchange.templates.library.interactive-read-aloud-import]
     [webchange.templates.library.recording-studio.template]
-    [webchange.templates.library.sandbox-digging]
-    [webchange.templates.library.repeat-rhyme]))
+    [webchange.templates.library.recording-studio.rhyme]
+    [webchange.templates.library.sandbox-digging]))
