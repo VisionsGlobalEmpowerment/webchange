@@ -96,7 +96,6 @@
                                    ["approve-button" "start-play-button" "stop-play-button" "start-record-button" "stop-record-button"]]
                    :actions       {:main                              {:type "sequence-data",
                                                                        :data [{:type "start-activity"}
-                                                                              {:type "set-variable" :var-name "tap-instructions-action" :var-value "empty"}
                                                                               {:type "set-variable" :var-name "timeout-instructions-action" :var-value "empty"}
                                                                               {:type "action" :id "intro-dialog"}
                                                                               {:type "action" :id "finish"}]}
