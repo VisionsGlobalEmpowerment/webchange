@@ -802,9 +802,8 @@
      :attr-name  'x'
      :attr-value 0}"
     (let [patch {(keyword attr-name) attr-value}]
-      (scene/set-scene-object-state db (keyword target) patch)
-      (ce/dispatch-success-fn action)
-      {})))
+      (merge (scene/set-scene-object-state db (keyword target) patch)
+             {:dispatch (ce/success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-empty
