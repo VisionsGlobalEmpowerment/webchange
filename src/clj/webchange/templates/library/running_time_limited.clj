@@ -94,7 +94,7 @@
                                                 :fill           0xFFFFFF
                                                 :font-family    "Lexend Deca"
                                                 :font-size      72
-                                                :text           "a"
+                                                :text           " "
                                                 :vertical-align "middle"}
                         :box-target-background {:type          "rectangle"
                                                 :x             168
