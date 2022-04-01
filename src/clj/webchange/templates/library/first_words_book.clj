@@ -135,13 +135,13 @@
                                   :children ["spread-4-left-image" "spread-4-left-text" "spread-4-right-image" "spread-4-right-text"]}
          :spread-0-title-letters {:type           "text",
                                   :x              929,
-                                  :y              164,
+                                  :y              244,
                                   :width          680,
                                   :height         800,
                                   :align          "center",
                                   :chunks         [],
                                   :fill           "white",
-                                  :font-family    "Lexend Deca",
+                                  :font-family    "Tabschool",
                                   :font-size      290,
                                   :shadow-blur    5,
                                   :shadow-color   "#1a1a1a",
@@ -157,7 +157,7 @@
                                   :align          "center",
                                   :chunks         [],
                                   :fill           "white",
-                                  :font-family    "Lexend Deca",
+                                  :font-family    "Tabschool",
                                   :font-size      120,
                                   :shadow-blur    5,
                                   :shadow-color   "#1a1a1a",
@@ -173,7 +173,7 @@
                                   :align          "center",
                                   :chunks         [],
                                   :fill           "black",
-                                  :font-family    "Lexend Deca",
+                                  :font-family    "Tabschool",
                                   :font-size      90,
                                   :text           "",
                                   :vertical-align "middle"}
@@ -185,7 +185,7 @@
                                   :align          "center",
                                   :chunks         [],
                                   :fill           "black",
-                                  :font-family    "Lexend Deca",
+                                  :font-family    "Tabschool",
                                   :font-size      90,
                                   :text           "",
                                   :vertical-align "middle"}
@@ -195,14 +195,13 @@
                                   :vertical-align "top"
                                   :align          "center"
                                   :font-size      98
-                                  :font-family    "Lexend Deca"
+                                  :font-family    "Tabschool"
                                   :x              300
                                   :y              700
                                   :width          600
                                   :height         200
                                   :fill           "black"
                                   :text           "text"
-                                  :editable?      {:select true}
                                   :chunks         []}
          :spread-2-right-image   image-right-params
          :spread-2-right-text    {:type           "text"
@@ -210,14 +209,13 @@
                                   :vertical-align "top"
                                   :align          "center"
                                   :font-size      98
-                                  :font-family    "Lexend Deca"
+                                  :font-family    "Tabschool"
                                   :x              950
                                   :y              700
                                   :width          600
                                   :height         200
                                   :fill           "black"
                                   :text           "text"
-                                  :editable?      {:select true}
                                   :chunks         []}
          :spread-3-left-image    image-left-params
          :spread-3-left-text     {:type           "text"
@@ -225,14 +223,13 @@
                                   :vertical-align "top"
                                   :align          "center"
                                   :font-size      98
-                                  :font-family    "Lexend Deca"
+                                  :font-family    "Tabschool"
                                   :x              300
                                   :y              700
                                   :width          600
                                   :height         200
                                   :fill           "black"
                                   :text           "text"
-                                  :editable?      {:select true}
                                   :chunks         []}
          :spread-3-right-image   image-right-params
          :spread-3-right-text    {:type           "text"
@@ -240,14 +237,13 @@
                                   :vertical-align "top"
                                   :align          "center"
                                   :font-size      98
-                                  :font-family    "Lexend Deca"
+                                  :font-family    "Tabschool"
                                   :x              950
                                   :y              700
                                   :width          600
                                   :height         200
                                   :fill           "black"
                                   :text           "text"
-                                  :editable?      {:select true}
                                   :chunks         []}
          :spread-4-left-image    image-left-params
          :spread-4-left-text     {:type           "text"
@@ -255,14 +251,13 @@
                                   :vertical-align "top"
                                   :align          "center"
                                   :font-size      98
-                                  :font-family    "Lexend Deca"
+                                  :font-family    "Tabschool"
                                   :x              300
                                   :y              700
                                   :width          600
                                   :height         200
                                   :fill           "black"
                                   :text           "text"
-                                  :editable?      {:select true}
                                   :chunks         []}
          :spread-4-right-image   image-right-params
          :spread-4-right-text    {:type           "text"
@@ -270,14 +265,13 @@
                                   :vertical-align "top"
                                   :align          "center"
                                   :font-size      98
-                                  :font-family    "Lexend Deca"
+                                  :font-family    "Tabschool"
                                   :x              950
                                   :y              700
                                   :width          600
                                   :height         200
                                   :fill           "black"
                                   :text           "text"
-                                  :editable?      {:select true}
                                   :chunks         []}
          :next-button            {:type    "image",
                                   :visible false

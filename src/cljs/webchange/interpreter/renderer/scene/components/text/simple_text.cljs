@@ -70,7 +70,8 @@
                                                         :fontFamily    font-family
                                                         :fontWeight    font-weight
                                                         :fill          fill
-                                                        :wordWrapWidth width}
+                                                        :wordWrapWidth width
+                                                        :padding       23}
                                                        (some? line-height) (assoc :lineHeight line-height)
                                                        (some? font-size) (assoc :fontSize font-size)
                                                        (true? word-wrap) (assoc :wordWrap true))))
