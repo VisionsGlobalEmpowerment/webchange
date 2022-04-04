@@ -70,6 +70,13 @@
                                          :left-shift left-shift})
        :dispatch [::handle-change]})))
 
+(re-frame/reg-event-fx
+  ::handle-origin-text-changed
+  (fn [{:keys [_]} [_ origin-text]]
+    (let [chunks (text->chunks origin-text)]
+      {:dispatch-n [[::set-text origin-text]
+                    [::set-chunks chunks]]})))
+
 ;; Parts
 
 (re-frame/reg-sub
@@ -87,12 +94,12 @@
 (re-frame/reg-event-fx
   ::handle-parts-changed
   (fn [{:keys [db]} [_ parts]]
-    (let [{:keys [trimmed left-shift]} (get-text db)
-          chunks (->> (text->chunks trimmed parts)
-                      (map #(-> %
-                                (update :start + left-shift)
-                                (update :end + left-shift))))]
-      {:dispatch [::set-chunks chunks]})))
+    (let [{:keys [trimmed left-shift]} (get-text db)]
+      (when (text-equals-parts? trimmed parts)
+        {:dispatch [::set-chunks (->> (text->chunks trimmed parts)
+                                      (map #(-> %
+                                                (update :start + left-shift)
+                                                (update :end + left-shift))))]}))))
 
 ;; Callback
 
@@ -113,12 +120,12 @@
     (let [{:keys [origin]} (get-text db)
           chunks (get-chunks db)
           callback (get-callback db)]
-      {:callback {:fn   callback
+      {::callback {:fn   callback
                   :args {:text   origin
                          :chunks chunks}}})))
 
 (re-frame/reg-fx
-  :callback
+  ::callback
   (fn [{:keys [fn args]}]
     (when (fn? fn)
       (fn args))))

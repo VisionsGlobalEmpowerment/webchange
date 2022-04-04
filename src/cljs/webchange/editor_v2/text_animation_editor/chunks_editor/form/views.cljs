@@ -9,7 +9,7 @@
 (defn- text-form
   [{:keys [disabled?]}]
   (let [text @(re-frame/subscribe [::state/origin-text])
-        handle-changed #(re-frame/dispatch [::state/set-text %])]
+        handle-changed #(re-frame/dispatch [::state/handle-origin-text-changed %])]
     [:div
      [label {:class-name "chunks-editor-label"}
       "Text value:"]
