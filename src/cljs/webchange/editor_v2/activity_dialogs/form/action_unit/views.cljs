@@ -66,7 +66,12 @@
 (defn action-unit
   [{:keys [parallel-mark action-data action-path type selected?] :as props}]
   (r/with-let [container-ref (r/atom nil)
-               handle-click #(re-frame/dispatch [::state/set-selected-action props])
+               on-focus (atom [])
+               handle-click #(do
+                               (doall
+                                (for [callback @on-focus]
+                                  (callback)))
+                               (re-frame/dispatch [::state/set-selected-action props]))
 
                ;; d&d
                drop-target (r/atom nil)
@@ -93,10 +98,10 @@
                                                      {:action "move-action-unit" :action-data action-data})
                                                    transfer-data)]
                                (re-frame/dispatch [::state/handle-drag-n-drop (merge
-                                                                                transfer-data
-                                                                                {:target-type       type
-                                                                                 :target-path       target-path
-                                                                                 :relative-position relative-position})])
+                                                                               transfer-data
+                                                                               {:target-type       type
+                                                                                :target-path       target-path
+                                                                                :relative-position relative-position})])
                                (reset! drop-target nil)))
 
                init-dnd (fn []
@@ -126,7 +131,7 @@
        :character-animation [animation-unit props]
        :character-movement [movement-unit props]
        :effect [effect-unit props]
-       :phrase [phrase-unit props]
+       :phrase [phrase-unit (assoc props :on-focus on-focus)]
        :text-animation [text-animation-unit props]
        :skip [skip-unit props]
        :background-music [background-music-unit props]

@@ -28,17 +28,13 @@
 
 (defn- select-content-editable-text!
   [el]
-  (let [range (.createRange js/document)
-        selection (.getSelection js/window)
-        text-node (-> (.-childNodes el) (.item 0))]
-    (.setStart range text-node 0)
-    (.setEnd range text-node (.-length text-node))
-    (.removeAllRanges selection)
-    (.addRange selection range)))
+  (let [selection (.getSelection js/window)]
+    (.selectAllChildren selection el)
+    (.collapseToEnd selection)))
 
 (defn text-control
-  [{:keys [on-change on-enter-press on-ctrl-enter-press placeholder]}]
-  (r/with-let [ref (atom nil)
+  [{:keys [on-change on-enter-press on-ctrl-enter-press placeholder on-parent-focus]}]
+  (let [ref (atom nil)
                current-value (atom nil)
                empty-value? (r/atom false)
                handle-key-down (fn [e]
@@ -53,11 +49,14 @@
                                           (->> (or placeholder "Enter text")
                                                (set! (.-innerText @ref))))
                                       (reset! empty-value? false)))
-               handle-focus (fn []
-                              (when (empty-text-value? @current-value)
-                                (select-content-editable-text! @ref)))
-
-               handle-blur check-empty-value!]
+                handle-blur (fn [] (check-empty-value!))]
+    (when on-parent-focus
+      (swap! on-parent-focus conj (fn []
+                                    (when @ref
+                                      (when @empty-value?
+                                        (set! (.-innerText @ref) "")
+                                        (reset! empty-value? false))
+                                      (select-content-editable-text! @ref)))))
     (r/create-class
       {:display-name "text-control"
        :should-component-update
@@ -78,13 +77,11 @@
                              handle-change (fn [event]
                                              (let [new-value (.. event -target -innerText)]
                                                (reset! current-value new-value)
-                                               (on-change new-value)
-                                               (check-empty-value!)))]
+                                               (on-change new-value)))]
                          [:span (cond-> {:class-name (get-class-name {"text"          true
                                                                       "text-disabled" (not editable?)
                                                                       "placeholder"   @empty-value?})
                                          :ref        #(when (some? %) (reset! ref %))
-                                         :on-focus   handle-focus
                                          :on-blur    handle-blur}
                                         editable? (merge {:on-input                          handle-change
                                                           :content-editable                  true
