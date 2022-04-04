@@ -76,7 +76,7 @@ $size-big-svg: 36px;
     &.size-small {
         height: $size-small;
         min-width: $size-small;
-        border-radius: $size-small / 2;
+        border-radius: $size-small * 0.5;
 
         svg {
             height: $size-small-svg;
@@ -87,7 +87,7 @@ $size-big-svg: 36px;
     &.size-normal {
         height: $size-normal;
         min-width: $size-normal;
-        border-radius: $size-normal / 2;
+        border-radius: $size-normal * 0.5;
 
         svg {
             height: $size-normal-svg;
@@ -98,7 +98,7 @@ $size-big-svg: 36px;
     &.size-big {
         height: $size-big;
         min-width: $size-big;
-        border-radius: $size-big / 2;
+        border-radius: $size-big * 0.5;
 
         svg {
             height: $size-big-svg;
