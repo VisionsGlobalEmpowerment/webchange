@@ -4,6 +4,8 @@
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
+(def available-times (mapv (fn [v] {:name (str v) :value v}) (range 30 70 10)))
+
 (def m {:id          34
         :name        "Running (time limited)"
         :tags        ["Independent Practice"]
@@ -20,16 +22,14 @@
         :options     {:time {:label       "Time in seconds"
                              :type        "lookup"
                              :description "Time in seconds"
-                             :options     [{:name "30" :value 30}
-                                           {:name "40" :value 40}
-                                           {:name "50" :value 50}
-                                           {:name "60" :value 60}]}}
+                             :options     available-times}}
         :actions     {:change-time    {:title    "Change time"
-                                       :options  {:time {:type        "lookup"
-                                                         :options     [{:name "30" :value 30}
-                                                                       {:name "40" :value 40}
-                                                                       {:name "50" :value 50}
-                                                                       {:name "60" :value 60}]}}}}})
+                                       :options  {:time {:type    "lookup"
+                                                         :options available-times}}}
+                      :change-speed    {:title    "Change speed"
+                                        :default-props "change-speed"
+                                        :options  {:speed {:type    "lookup"
+                                                           :options (mapv (fn [v] {:name (str v) :value v}) (range 1 11))}}}}})
 
 (def concept-var "current-concept")
 
@@ -396,7 +396,7 @@
                                                           :data [{:type "action" :id "emit-object-line-1"}
                                                                  {:type "action" :id "emit-object-line-2"}
                                                                  {:type "action" :id "emit-object-line-3"}]}
-                                                         {:type "empty" :duration 3000}
+                                                         {:type "empty" :from-var [{:var-name "emit-duration" :action-property "duration"}]}
                                                          {:type     "test-var-scalar"
                                                           :var-name "game-finished"
                                                           :value    false
@@ -508,7 +508,7 @@
 
                         :move-emitted-letter     {:type        "transition"
                                                   :from-params [{:param-property "transition", :action-property "transition-id"}]
-                                                  :to          {:x -700 :duration 10}}
+                                                  :from-var [{:var-name "move-letter-to" :action-property "to"}]}
 
                         :dialog-tap-instructions (-> (dialog/default "Tap instructions")
                                                      (assoc :concept-var concept-var))
@@ -516,7 +516,10 @@
                         :start-running           {:type "sequence-data"
                                                   :data [{:type "set-attribute" :target "vera-stopped" :attr-name "visible" :attr-value false}
                                                          {:type "set-attribute" :target "vera-group" :attr-name "visible" :attr-value true}
-                                                         {:type "set-attribute" :target "background" :attr-name "speed" :attr-value 4}]}
+                                                         {:type "set-attribute" :target "background" :attr-name "speed"
+                                                          :from-var [{:var-name "background-speed" :action-property "attr-value"}]}
+                                                         {:type "set-attribute" :target "vera" :attr-name "speed"
+                                                          :from-var [{:var-name "animation-speed" :action-property "attr-value"}]}]}
 
                         :stop-running            {:type "sequence-data"
                                                   :data [{:type "set-attribute" :target "emit-group" :attr-name "visible" :attr-value false}
@@ -553,15 +556,41 @@
         :triggers      {:stop {:on "back" :action "stop-scene"} :start {:on "start" :action "start-scene"}}
         :metadata      {:autostart true}})
 
+(defn map-between-ranges [value min-a max-a min-b max-b]
+  (let [a-size (- max-a min-a)
+        b-size (- max-b min-b)
+        proportion (/ (- value min-a) a-size)]
+    (float (+ (* proportion b-size) min-b))))
+
+(defn set-speed [data speed]
+  (let [s (map-between-ranges (if (string? speed)
+                                (Integer/parseInt speed)
+                                speed)
+                              1 10 2 10)]
+    (-> data
+        (update-in [:actions :init-vars :data] concat
+                   [{:type "set-variable" :var-name "background-speed" :var-value s}
+                    {:type "set-variable" :var-name "animation-speed" :var-value (/ s 4)}
+                    {:type "set-variable" :var-name "emit-duration" :var-value (/ 12000 s)}
+                    {:type "set-variable" :var-name "move-letter-to" :var-value {:x -700 :duration (/ 40 s)}}])
+        (assoc-in [:metadata :saved-props :change-speed] {:speed speed}))))
+
 (defn f
   [args]
   (-> (common/init-metadata m t args)
-      (assoc-in [:objects :timer :time] (:time args))))
+      (assoc-in [:objects :timer :time] (:time args))
+      (set-speed 5)))
+
+(defn change-speed [data speed]
+  (-> data
+      (update-in [:actions :init-vars :data] #(vec (drop-last 4 %)))
+      (set-speed speed)))
 
 (defn fu
   [old-data {:keys [action-name] :as args}]
   (case action-name
-    "change-time" (assoc-in old-data [:objects :timer :time] (:time args))))
+    "change-time" (assoc-in old-data [:objects :timer :time] (:time args))
+    "change-speed" (change-speed old-data (:speed args))))
 
 (core/register-template
   m f fu)
