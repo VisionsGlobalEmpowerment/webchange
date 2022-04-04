@@ -195,7 +195,7 @@
 
 (defn- language-control
   [{:keys [data]}]
-  (let [current-value (:lang @data)
+  (let [current-value (get @data :lang "")
         handle-change #(swap! data assoc :lang %)
         available-languages @(re-frame/subscribe [::info-state/available-languages])]
     [ui/form-control {:full-width true}
