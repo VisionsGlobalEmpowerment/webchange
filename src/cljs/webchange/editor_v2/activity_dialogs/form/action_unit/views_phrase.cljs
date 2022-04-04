@@ -22,7 +22,7 @@
                        :on-change handle-target-change}])))
 
 (defn- phrase-text-control
-  [{:keys [path source text placeholder]}]
+  [{:keys [path source text placeholder on-parent-focus]}]
   (let [handle-enter-press #()
         handle-ctrl-enter-press #()
         handle-text-change (fn [new-value] (re-frame/dispatch [::state-actions/set-phrase-text {:action-path path
@@ -33,10 +33,11 @@
                    :editable?           true
                    :on-change           handle-text-change
                    :on-enter-press      handle-enter-press
-                   :on-ctrl-enter-press handle-ctrl-enter-press}]))
+                   :on-ctrl-enter-press handle-ctrl-enter-press
+                   :on-parent-focus     on-parent-focus}]))
 
 (defn phrase-unit
-  [{:keys [action-data action-path character concept-name placeholder source text inner-action-validation]}]
+  [{:keys [action-data action-path character concept-name placeholder source text inner-action-validation on-focus]}]
   (let [concept? (= source :concept)
         path (get action-path source)
         handle-fix-action (fn [] (re-frame/dispatch [::state-actions/fix-phrase-action {:action-path   path
@@ -52,7 +53,8 @@
                            :path        path
                            :source      source
                            :text        text
-                           :placeholder placeholder}]
+                           :placeholder placeholder
+                           :on-parent-focus    on-focus}]
      (when (some? inner-action-validation)
        [icon {:icon       "warning"
               :title      (->> (cond-> ["Phrase action is not valid. Click on icon to fix it."]
