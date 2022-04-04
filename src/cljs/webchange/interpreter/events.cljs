@@ -796,7 +796,7 @@
 
 (re-frame/reg-event-fx
   ::execute-set-attribute
-  (fn [{:keys [_]} [_ {:keys [target attr-name attr-value] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [target attr-name attr-value] :as action}]]
     "Execute `set-attribute` action - set component attribute value.
 
     Action params:
@@ -810,8 +810,8 @@
      :attr-name  'x'
      :attr-value 0}"
     (let [patch {(keyword attr-name) attr-value}]
-      {:dispatch-n (list [::scene/set-scene-object-state (keyword target) patch]
-                         (ce/success-event action))})))
+      (merge (scene/set-scene-object-state db (keyword target) patch)
+             {:dispatch (ce/success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-empty
@@ -891,9 +891,10 @@
       (let [animation-actions (i/animation-sequence->actions action)
             audio-action (i/animation-sequence->audio-action action)]
         (if audio-action
-          {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
-          {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))
-      {:dispatch (ce/success-event action)})))
+          (ce/execute-parallel! db (assoc action :data (conj animation-actions audio-action)))
+          (ce/execute-parallel! db (assoc action :data animation-actions))))
+      (ce/dispatch-success-fn action))
+    {}))
 
 (re-frame/reg-event-fx
   ::execute-add-animation
