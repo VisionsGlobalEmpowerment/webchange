@@ -24,12 +24,19 @@
     (utils/set-scale scale)))
 
 (defn- on-draw-start
-  [event]
-  (this-as this
-    (let [pos (-> event .-data (.getLocalPosition (.-parent this)))]
-      (set! (.-lastDrawPosition this) pos))
-    (set! (.-data this) (.-data event))
-    (set! (.-drawing this) true)))
+  [texture atool]
+  (fn [event]
+    (this-as this
+      (let [pos (-> event .-data (.getLocalPosition (.-parent this)))
+            graphic (@atool pos (clj->js {"x" (inc (.-x pos))
+                                          "y" (.-y pos)}))]
+        (set! (.-lastDrawPosition this) pos)
+        (set! (.-data this) (.-data event))
+        (set! (.-drawing this) true)
+        (.render (app/get-renderer)
+                 graphic
+                 texture false nil false)
+        (.destroy graphic)))))
 
 (defn- on-draw-end
   []
@@ -56,7 +63,7 @@
   (doto (Sprite. (.-EMPTY Texture))
     (utils/set-size {:width width :height height})
     (set! -interactive true)
-    (.on "pointerdown" on-draw-start)
+    (.on "pointerdown" (on-draw-start texture tool))
     (.on "pointerup" on-draw-end)
     (.on "pointerupoutside" on-draw-end)
     (.on "pointermove" (on-draw-move texture tool))))

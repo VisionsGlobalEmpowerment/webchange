@@ -61,7 +61,11 @@
                         :text-tracing-pattern
                         {:type "text-tracing-pattern"
                          :text " "
-                         :y    400}
+                         :y    400
+                         :alias       "writing options"
+                         :dashed false
+                         :show-lines true
+                         :editable?  {:select false :drag false :show-in-tree? true}}
 
                         :practice-canvas
                         {:type   "painting-area"
