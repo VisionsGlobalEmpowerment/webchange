@@ -230,7 +230,8 @@
                           :value       (clojure.core/name object-name)})))
              (flipbook-activity? scene-data) (map (fn [{:keys [value]}]
                                                     {:text  (get-book-text-name value scene-data)
-                                                     :value value})))))
+                                                     :value value}))
+             :always (sort-by :value))))
 
 (def current-text-animation-target-path :current-target)
 

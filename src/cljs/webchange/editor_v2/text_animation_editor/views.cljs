@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.text-animation-editor.state :as state]
-    [webchange.editor-v2.text-animation-editor.chunks-editor.views-form :refer [chunks-editor-form]]
+    [webchange.editor-v2.text-animation-editor.chunks-editor.form.views :refer [chunks-editor-form]]
     [webchange.editor-v2.text-animation-editor.views-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.ui-framework.components.index :refer [button dialog message]]
