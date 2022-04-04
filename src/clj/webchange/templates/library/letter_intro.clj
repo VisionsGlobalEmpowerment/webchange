@@ -127,7 +127,7 @@
           :font-family    "Tabschool"
           :fill           "#fc8e51"
           :x              720
-          :y              450
+          :y              500
           :width          470
           :height         60
           :states         {:glow      {:permanent-pulsation {:speed 2}}
