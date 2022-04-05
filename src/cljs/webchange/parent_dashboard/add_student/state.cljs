@@ -5,7 +5,8 @@
     [webchange.parent-dashboard.state :as parent-state]
     [webchange.state.warehouse :as warehouse]
     [webchange.validation.specs.parent-student :as parent-student-specs]
-    [webchange.validation.validate :refer [validate]]))
+    [webchange.validation.validate :refer [validate]]
+    [webchange.utils.map :refer [map-keys]]))
 
 (defn path-to-db
   [relative-path]
@@ -17,7 +18,8 @@
   ::init
   (fn [{:keys [_]} [_]]
     {:dispatch-n [[::reset-form]
-                  [::reset-validation-errors]]}))
+                  [::reset-validation-errors]
+                  [::warehouse/load-parent-courses {:on-success [::set-available-courses]}]]}))
 
 ;; Form data
 
@@ -132,7 +134,7 @@
 
 ;; Course
 
-(def course-key :course-slug)
+(def course-key :course-id)
 
 (re-frame/reg-sub
   ::current-course
@@ -149,10 +151,10 @@
 (re-frame/reg-sub
   ::course-options
   (fn []
-    [{:text  "English"
-      :value "english"}
-     {:text  "Spanish"
-      :value "spanish"}]))
+    (re-frame/subscribe [::available-courses]))
+  (fn [available-courses]
+    (->> available-courses
+         (map #(map-keys % {:name :text :id :value})))))
 
 (re-frame/reg-sub
   ::course-validation-error
@@ -160,6 +162,18 @@
     (re-frame/subscribe [::validation-error course-key]))
   (fn [error]
     error))
+
+(def available-courses-path (path-to-db [:available-courses]))
+
+(re-frame/reg-sub
+  ::available-courses
+  (fn [db]
+    (get-in db available-courses-path [])))
+
+(re-frame/reg-event-fx
+  ::set-available-courses
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db available-courses-path value)}))
 
 ;; Validation
 
