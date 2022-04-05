@@ -32,6 +32,7 @@
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.editor-v2.assets.events :as assets-events]
+    [webchange.state.state-progress :as progress-state]
     [webchange.state.warehouse :as warehouse]
     [webchange.logger.index :as logger]
     [webchange.interpreter.subs :as interpreter-subs]
@@ -1027,6 +1028,7 @@
        :dispatch-n (list
                      [::disable-navigation]
                      [::add-pending-event :activity-started activity-action]
+                     [::progress-state/set-current-activity (select-keys activity-action [:activity-name])]
                      (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -1149,7 +1151,8 @@
                            show-goodbye (conj [::goodbye-activity])
                            (not show-goodbye) (conj [::overlays/show-activity-finished])
                            :always (conj (activity-finished-event db action))
-                           :always (conj [::reset-navigation]))
+                           :always (conj [::reset-navigation])
+                           :always (conj [::progress-state/reset-current-activity]))
             lesson-activity-tags (get-lesson-activity-tags db action)
             finished (lessons-activity/get-progress-next db)
             db (cond-> db
@@ -1174,43 +1177,17 @@
 
 (re-frame/reg-event-fx
   :progress-data-changed
-  (fn [{:keys [db]} _]
-    (let [course-id (:current-course db)
-          progress (:progress-data db)
-          events (:pending-events db)
-          loading? (get-in db [:loading :save-progress])]
-      (cond
-        loading? {:db (assoc db :schedule-save-progress true)}
-        (some? progress) {:db         (-> db
-                                          (assoc-in [:loading :save-progress] true)
-                                          (dissoc :pending-events))
-                          :http-xhrio {:method          :post
-                                       :uri             (str "/api/courses/" course-id "/current-progress")
-                                       :params          {:progress progress :events events}
-                                       :format          (json-request-format)
-                                       :response-format (json-response-format {:keywords? true})
-                                       :on-success      [::save-progress-success]
-                                       :on-failure      [::save-progress-failure]}}
-        :default {}))))
+  (fn [{:keys [_]} _]
+    {:dispatch [::progress-state/progress-data-changed
+                {:on-failure [::save-progress-failure]}]}))
 
 (re-frame/reg-event-fx
   ::save-progress-failure
   (fn [{:keys [db]} _]
     (let [current-school (-> db :user :school-id)]
       (if current-school
-        {:dispatch-n [[:api-request-error :save-progress]
-                      [::events/redirect "/student-login"]]}
-        {:dispatch-n [[:api-request-error :save-progress]
-                      [::events/location :logout]]}))))
-
-(re-frame/reg-event-fx
-  ::save-progress-success
-  (fn [{:keys [db]} _]
-    (let [scheduled? (:schedule-save-progress db)]
-      (if scheduled?
-        {:db         (assoc db :schedule-save-progress false)
-         :dispatch-n (list [:complete-request :save-progress] [:progress-data-changed])}
-        {:dispatch-n (list [:complete-request :save-progress])}))))
+        {:dispatch [::events/redirect "/student-login"]}
+        {:dispatch [::events/location :logout]}))))
 
 (re-frame/reg-event-fx
   ::set-music-volume
@@ -1737,8 +1714,11 @@
 (re-frame/reg-event-fx
   ::progress-loaded
   (fn [{:keys [db]} [_ course-id scene-id]]
-    {:dispatch-n (list [::load-settings]
-                       [::set-current-scene (or scene-id (:activity-name (lessons-activity/get-progress-next db)))])}))
+    (let [current-scene-id (or scene-id
+                               (:activity-name (progress-state/get-current-activity db))
+                               (:activity-name (lessons-activity/get-progress-next db)))]
+      {:dispatch-n (list [::load-settings]
+                         [::set-current-scene current-scene-id])})))
 
 (re-frame/reg-event-fx
   ::add-pending-event
