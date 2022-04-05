@@ -9,9 +9,9 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.image.component :as i]
-    [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]
     [webchange.interpreter.renderer.state.scene :as state]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.logger.index :as logger]))
 
 (def default-props {:x                        {:default 0}
@@ -31,7 +31,8 @@
                     :on-finish                {}
                     :on-click                 {}
                     :debug                    {:default false}
-                    :enable?                  {:default true}})
+                    :enable?                  {:default true}
+                    :filters                  {:default []}})
 
 (def base-height 275)
 (def midline-offset 76)
@@ -52,9 +53,10 @@
                  :stroke-width 4})
 
 (defn- create-container
-  [{:keys [x y]}]
+  [{:keys [x y filters]}]
   (doto (Container.)
-    (utils/set-position {:x x :y y})))
+    (utils/set-position {:x x :y y})
+    (apply-filters filters)))
 
 (defn- path->letter
   [scale path dashed]
