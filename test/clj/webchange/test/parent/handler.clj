@@ -27,7 +27,7 @@
 (deftest get-students
   (testing "Students can be found by parent"
     (let [parent (f/website-user-created)
-          _ (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
+          _ (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet" :course-slug "english"} (:id parent))
           result (-> (f/get-parent-students (:id parent))
                      :body
                      (slurp)
