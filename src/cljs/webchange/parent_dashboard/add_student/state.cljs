@@ -134,7 +134,7 @@
 
 ;; Course
 
-(def course-key :course-id)
+(def course-key :course-slug)
 
 (re-frame/reg-sub
   ::current-course
@@ -154,7 +154,7 @@
     (re-frame/subscribe [::available-courses]))
   (fn [available-courses]
     (->> available-courses
-         (map #(map-keys % {:name :text :id :value})))))
+         (map #(map-keys % {:name :text :slug :value})))))
 
 (re-frame/reg-sub
   ::course-validation-error

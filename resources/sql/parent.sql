@@ -6,7 +6,7 @@ VALUES (:child_id, :parent_id, :data);
 
 -- :name find-users-by-parent :? :*
 -- :doc retrieve users by parent
-SELECT u.* FROM users u INNER JOIN children c ON u.id = c.child_id
+SELECT u.*, c.data FROM users u INNER JOIN children c ON u.id = c.child_id
 WHERE c.parent_id = :parent_id;
 
 -- :name is-parent? :? :1

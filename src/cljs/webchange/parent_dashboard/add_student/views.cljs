@@ -35,7 +35,6 @@
         handle-change #(re-frame/dispatch [::state/set-course %])
         error @(re-frame/subscribe [::state/course-validation-error])]
     [select {:placeholder "Course"
-             :type        "int"
              :required?   true
              :value       value
              :error       error
