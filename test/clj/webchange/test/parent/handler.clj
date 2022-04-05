@@ -38,7 +38,7 @@
 (deftest delete-student
   (testing "Student can be deleted"
     (let [parent (f/website-user-created)
-          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
+          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet" :course-slug "english"} (:id parent))
                              :body
                              (slurp)
                              (json/read-str :key-fn keyword))
