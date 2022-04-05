@@ -12,7 +12,7 @@
 (s/defschema Student {:id s/Int :name s/Str :first-name s/Str :last-name (s/maybe s/Str) :course-slug s/Str
                       :level (s/maybe s/Int) :lesson (s/maybe s/Int) :finished (s/maybe s/Bool)})
 (s/defschema Parent {:id s/Int :name s/Str :first-name s/Str :last-name (s/maybe s/Str)})
-(s/defschema CreateStudent {:name s/Str :date-of-birth s/Str (s/optional-key :device) s/Str})
+(s/defschema CreateStudent {:name s/Str :date-of-birth s/Str :course-slug s/Str (s/optional-key :device) s/Str})
 
 (s/defschema LoginAs {:id s/Int})
 

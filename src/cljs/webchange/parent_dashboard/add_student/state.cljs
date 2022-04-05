@@ -106,27 +106,58 @@
 (re-frame/reg-sub
   ::device-options
   (fn [_]
-    [{:text "Android Tablet"
+    [{:text  "Android Tablet"
       :value "android-tablet"}
-     {:text "iPad"
+     {:text  "iPad"
       :value "ipad"}
-     {:text "Android Mobile Phone"
+     {:text  "Android Mobile Phone"
       :value "android-mobile-phone"}
-     {:text "iPhone"
+     {:text  "iPhone"
       :value "iphone"}
-     {:text "Desktop Computer: PC"
+     {:text  "Desktop Computer: PC"
       :value "desktop-computer-pc"}
-     {:text "Desktop Computer: Mac"
+     {:text  "Desktop Computer: Mac"
       :value "desktop-computer-mac"}
-     {:text "Laptop Computer: PC"
+     {:text  "Laptop Computer: PC"
       :value "laptop-computer-pc"}
-     {:text "Laptop Computer: Mac"
+     {:text  "Laptop Computer: Mac"
       :value "laptop-computer-mac"}]))
 
 (re-frame/reg-sub
   ::device-validation-error
   (fn []
     (re-frame/subscribe [::validation-error device-key]))
+  (fn [error]
+    error))
+
+;; Course
+
+(def course-key :course-slug)
+
+(re-frame/reg-sub
+  ::current-course
+  (fn []
+    (re-frame/subscribe [::form-data]))
+  (fn [form-data]
+    (get form-data course-key)))
+
+(re-frame/reg-event-fx
+  ::set-course
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::set-form-field course-key value]}))
+
+(re-frame/reg-sub
+  ::course-options
+  (fn []
+    [{:text  "English"
+      :value "english"}
+     {:text  "Spanish"
+      :value "spanish"}]))
+
+(re-frame/reg-sub
+  ::course-validation-error
+  (fn []
+    (re-frame/subscribe [::validation-error course-key]))
   (fn [error]
     error))
 

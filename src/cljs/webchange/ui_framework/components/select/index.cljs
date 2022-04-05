@@ -28,6 +28,7 @@
            on-change
            options
            placeholder
+           required?
            show-buttons?
            type
            value
@@ -40,6 +41,7 @@
            on-arrow-down-click #()
            on-arrow-up-click   #()
            placeholder         ""
+           required?           false
            show-buttons?       false
            type                "str"
            with-arrow?         true}

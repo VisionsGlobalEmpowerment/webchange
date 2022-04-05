@@ -26,16 +26,23 @@
                     (dissoc :enable?))
                 option)))))
 
+(defn- add-empty-option
+  [options {:keys [placeholder required?]}]
+  (concat [{:text      (cond-> placeholder
+                               required? (str " *"))
+            :value     ""
+            :disabled? true}]
+          options))
+
 (defn- fix-empty-option
-  [options {:keys [placeholder value]}]
+  [options {:keys [placeholder value] :as props}]
   (let [has-empty-option? (some (fn [{:keys [value]}]
                                   (empty-string? value))
-                                options)
-        add-empty-option (fn [options] (concat [{:text placeholder :value "" :disabled? true}] options))]
+                                options)]
     (if (and (empty-value? value)
              (not has-empty-option?)
              (some? placeholder))
-      (add-empty-option options)
+      (add-empty-option options props)
       options)))
 
 (defn fix-options
