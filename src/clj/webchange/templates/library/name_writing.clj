@@ -25,10 +25,10 @@
                                       :src     "/raw/img/ui/checkmark.png"},
                         :text-tracing-pattern
                         {:type "text-tracing-pattern"
-                         :text ""
-                         :y    300
-                         :alias "writing options",
-                         :dashed true
+                         :text " "
+                         :y    400
+                         :alias       "writing options"
+                         :dashed false
                          :show-lines true
                          :editable?  {:select false :drag false :show-in-tree? true}}
                         :practice-canvas

@@ -73,6 +73,10 @@
           :visible     false
           :height      1000
           :spacing     100
+          :alias       "Round 2 writing options"
+          :dashed false
+          :show-lines true
+          :editable?  {:select false :drag false :show-in-tree? true}
           :actions     {:next-letter {:on "next-letter-activated" :type "action" :id "letter-finished-dialog"}
                         :finish      {:on "finish" :type "action" :id "text-finished"}
                         :click       {:on "click" :type "action" :id "timeout-timer"}}}
