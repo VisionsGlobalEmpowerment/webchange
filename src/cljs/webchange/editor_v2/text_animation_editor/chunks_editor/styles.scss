@@ -1,17 +1,1 @@
-.chunks-editor-from {
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-
-    & > * {
-        margin-bottom: 32px;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-
-    .chunks-editor-label {
-        margin-bottom: 8px;
-    }
-}
+@import "form/styles";

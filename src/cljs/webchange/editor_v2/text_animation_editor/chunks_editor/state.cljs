@@ -4,8 +4,13 @@
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
-(def modal-state-path [:editor-v2 :translator :text :configuration-modal-state])
-(def current-text-info-path [:editor-v2 :translator :text :current-text-info])
+(defn path-to-db
+  [relative-path]
+  (->> relative-path
+       (concat [:editor-v2 :translator :text])))
+
+(def modal-state-path (path-to-db [:configuration-modal-state]))
+(def current-text-info-path (path-to-db [:current-text-info]))
 
 (re-frame/reg-event-fx
   ::open
