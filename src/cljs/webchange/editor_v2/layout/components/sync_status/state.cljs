@@ -9,11 +9,3 @@
     [(re-frame/subscribe [::warehouse/sync-status :update-activity])])
   (fn [[activity-updating?]]
     activity-updating?))
-
-
-
-
-
-
-
-

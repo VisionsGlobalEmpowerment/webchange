@@ -25,8 +25,8 @@
     {}))
 
 (defn- create-request
-  [{:keys [method uri body params request-type] :as props} {:keys [on-success on-failure suppress-api-error?] :or {suppress-api-error? false}}]
-  {:dispatch-n (cond-> []
+  [{:keys [key method uri body params request-type] :as props} {:keys [on-success on-failure suppress-api-error?] :or {suppress-api-error? false}}]
+  {:dispatch-n (cond-> [[::start-request key]]
                        (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? true}]))
    :http-xhrio (cond-> {:method          method
                         :uri             uri
@@ -39,9 +39,9 @@
 
 (re-frame/reg-event-fx
   ::generic-on-success-handler
-  (fn [{:keys [_]} [_ {:keys [request-type delay]} success-handler response]]
+  (fn [{:keys [_]} [_ {:keys [key request-type delay]} success-handler response]]
     (let [handle-success (conj success-handler response)]
-      (cond-> {:dispatch-n (cond-> []
+      (cond-> {:dispatch-n (cond-> [[::finish-request key]]
                                    (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                                    (and (nil? delay)
                                         (some? success-handler)) (conj handle-success))}
@@ -52,7 +52,7 @@
 (re-frame/reg-event-fx
   ::generic-failure-handler
   (fn [{:keys [_]} [_ {:keys [key request-type]} failure-handler suppress-api-error? response]]
-    {:dispatch-n (cond-> []
+    {:dispatch-n (cond-> [[::finish-request key]]
                          (not suppress-api-error?) (conj [:api-request-error key response])
                          (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                          (some? failure-handler) (conj (conj failure-handler response)))}))
@@ -88,6 +88,32 @@
     (case result
       :success (dispatch-if-defined on-success data)
       :failure (dispatch-if-defined on-failure data))))
+
+;; Request status
+
+(def request-status-path (path-to-db [:request-status]))
+
+(re-frame/reg-event-fx
+  ::start-request
+  (fn [{:keys [db]} [_ key]]
+    {:db (update-in db request-status-path assoc key {:in-progress? true})}))
+
+(re-frame/reg-event-fx
+  ::finish-request
+  (fn [{:keys [db]} [_ key]]
+    {:db (update-in db request-status-path dissoc key)}))
+
+(defn request-in-progress?
+  [db key]
+  (-> (get-in db request-status-path)
+      (contains? key)))
+
+(re-frame/reg-sub
+  ::request-in-progress?
+  (fn [db [_ key]]
+    (request-in-progress? db key)))
+
+;;
 
 (def sync-status-path (path-to-db [:sync-status]))
 
@@ -141,6 +167,20 @@
                      :uri          (str "/api/courses/" course-id "/update-activity/" scene-id)
                      :params       data
                      :request-type :update-activity}
+                    handlers)))
+
+;; Progress Data
+
+(re-frame/reg-event-fx
+  ::save-progress-data
+  (fn [{:keys [_]} [_ {:keys [course-slug progress-data]} handlers]]
+    {:pre [(string? course-slug)
+           (contains? progress-data :progress)
+           (contains? progress-data :events)]}
+    (create-request {:key    :save-progress-data
+                     :method :post
+                     :params progress-data
+                     :uri    (str "/api/courses/" course-slug "/current-progress")}
                     handlers)))
 
 ;; Courses
