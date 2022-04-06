@@ -174,6 +174,6 @@
   (fn [{:keys [db]} [_ user]]
     {:db (-> db
              (assoc-in [:current-course] (:course-slug user))
-             (update-in [:user] merge user))
+             (assoc-in [:user] user))
      :dispatch-n (list [::ie/open-student-course-dashboard (:course-slug user)]
                        [::set-submit-status {:loading? false}])}))
