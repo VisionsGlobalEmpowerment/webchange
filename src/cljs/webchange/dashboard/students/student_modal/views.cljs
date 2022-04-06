@@ -55,7 +55,11 @@
   (r/with-let [data (r/atom {})]
     (let [modal-state @(re-frame/subscribe [::students-subs/complete-modal-state])
           is-loading? @(re-frame/subscribe [::students-subs/student-loading])
-          {{first-name :first-name last-name :last-name} :user student-id :id} @(re-frame/subscribe [::students-subs/current-student])]
+          current-student @(re-frame/subscribe [::students-subs/current-student])
+          {{first-name :first-name
+            last-name  :last-name}    :user
+           {course-slug :course-slug} :class
+           student-id                 :id} current-student]
       (when modal-state
         [ui/dialog {:open true}
          (if is-loading?
@@ -88,5 +92,5 @@
              [ui/button
               {:variant  "contained"
                :color    "primary"
-               :on-click #(re-frame/dispatch [::students-events/confirm-complete student-id @data])}
+               :on-click #(re-frame/dispatch [::students-events/confirm-complete student-id course-slug @data])}
               "Confirm"]]])]))))
