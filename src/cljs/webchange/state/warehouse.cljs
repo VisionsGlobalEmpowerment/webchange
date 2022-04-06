@@ -420,6 +420,7 @@
                      :method :post
                      :uri    (str "/api/courses/" course-id "/duplicate-activity")
                      :params data} handlers)))
+
 ;; Static assets
 
 (re-frame/reg-event-fx
@@ -565,6 +566,14 @@
                      :method :put
                      :uri    (str "/api/assets/retry-voice-recognition")
                      :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-parent-courses
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-parent-courses
+                     :method :get
+                     :uri    "/api/parent/courses"}
                     handlers)))
 
 ;; Classes

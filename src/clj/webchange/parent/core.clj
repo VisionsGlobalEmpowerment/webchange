@@ -5,8 +5,8 @@
     [java-time :as jt]
     [clojure.tools.logging :as log]))
 
-(def course {:id   4
-             :slug "english"})
+(def default-course {:id   4
+                     :slug "english"})
 
 (defn- ->display-value
   [number]
@@ -25,7 +25,7 @@
 (defn- with-progress
   [{id :id :as child}]
   (let [progress (db/get-progress {:user_id   id
-                                   :course_id (:id course)})
+                                   :course_id (:id default-course)})
         {:keys [level lesson]} (get-in progress [:data :next])]
     (assoc child
       :level (->display-value level)
@@ -38,7 +38,7 @@
    :name        (:first-name child)
    :first-name  (:first-name child)
    :last-name   (:last-name child)
-   :course-slug (:slug course)
+   :course-slug (get-in child [:data :course-slug] (:slug default-course))
    :level       (:level child)
    :lesson      (:lesson child)
    :finished    (:finished child)})
@@ -59,9 +59,9 @@
     [true students]))
 
 (defn create-student
-  [{:keys [name date-of-birth device]} parent-id]
+  [{:keys [name course-slug date-of-birth device]} parent-id]
   (let [[{user-id :id}] (auth/create-user! {:first-name name})]
-    (db/create-child! {:parent_id parent-id :child_id user-id :data {:date-of-birth date-of-birth :device device}})
+    (db/create-child! {:parent_id parent-id :child_id user-id :data {:date-of-birth date-of-birth :device device :course-slug course-slug}})
     (auth/activate-user! user-id)
     [true (->student {:id         user-id
                       :first-name name})]))
@@ -84,8 +84,9 @@
   [child-id]
   (if-let [child (db/get-child-by-id {:child_id child-id})]
     (let [user (-> (db/get-user {:id (:child-id child)})
+                   (merge child)
                    with-progress
-                   ->student)]
+                   (->student))]
       [true user])
     [false {:errors {:form "Child not found"}}]))
 

@@ -5,7 +5,8 @@
     [webchange.parent-dashboard.state :as parent-state]
     [webchange.state.warehouse :as warehouse]
     [webchange.validation.specs.parent-student :as parent-student-specs]
-    [webchange.validation.validate :refer [validate]]))
+    [webchange.validation.validate :refer [validate]]
+    [webchange.utils.map :refer [map-keys]]))
 
 (defn path-to-db
   [relative-path]
@@ -17,7 +18,8 @@
   ::init
   (fn [{:keys [_]} [_]]
     {:dispatch-n [[::reset-form]
-                  [::reset-validation-errors]]}))
+                  [::reset-validation-errors]
+                  [::warehouse/load-parent-courses {:on-success [::set-available-courses]}]]}))
 
 ;; Form data
 
@@ -106,21 +108,21 @@
 (re-frame/reg-sub
   ::device-options
   (fn [_]
-    [{:text "Android Tablet"
+    [{:text  "Android Tablet"
       :value "android-tablet"}
-     {:text "iPad"
+     {:text  "iPad"
       :value "ipad"}
-     {:text "Android Mobile Phone"
+     {:text  "Android Mobile Phone"
       :value "android-mobile-phone"}
-     {:text "iPhone"
+     {:text  "iPhone"
       :value "iphone"}
-     {:text "Desktop Computer: PC"
+     {:text  "Desktop Computer: PC"
       :value "desktop-computer-pc"}
-     {:text "Desktop Computer: Mac"
+     {:text  "Desktop Computer: Mac"
       :value "desktop-computer-mac"}
-     {:text "Laptop Computer: PC"
+     {:text  "Laptop Computer: PC"
       :value "laptop-computer-pc"}
-     {:text "Laptop Computer: Mac"
+     {:text  "Laptop Computer: Mac"
       :value "laptop-computer-mac"}]))
 
 (re-frame/reg-sub
@@ -129,6 +131,49 @@
     (re-frame/subscribe [::validation-error device-key]))
   (fn [error]
     error))
+
+;; Course
+
+(def course-key :course-slug)
+
+(re-frame/reg-sub
+  ::current-course
+  (fn []
+    (re-frame/subscribe [::form-data]))
+  (fn [form-data]
+    (get form-data course-key)))
+
+(re-frame/reg-event-fx
+  ::set-course
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::set-form-field course-key value]}))
+
+(re-frame/reg-sub
+  ::course-options
+  (fn []
+    (re-frame/subscribe [::available-courses]))
+  (fn [available-courses]
+    (->> available-courses
+         (map #(map-keys % {:name :text :slug :value})))))
+
+(re-frame/reg-sub
+  ::course-validation-error
+  (fn []
+    (re-frame/subscribe [::validation-error course-key]))
+  (fn [error]
+    error))
+
+(def available-courses-path (path-to-db [:available-courses]))
+
+(re-frame/reg-sub
+  ::available-courses
+  (fn [db]
+    (get-in db available-courses-path [])))
+
+(re-frame/reg-event-fx
+  ::set-available-courses
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db available-courses-path value)}))
 
 ;; Validation
 

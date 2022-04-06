@@ -28,6 +28,19 @@
            :error       error
            :on-change   handle-change}]))
 
+(defn- course-control
+  []
+  (let [value @(re-frame/subscribe [::state/current-course])
+        options @(re-frame/subscribe [::state/course-options])
+        handle-change #(re-frame/dispatch [::state/set-course %])
+        error @(re-frame/subscribe [::state/course-validation-error])]
+    [select {:placeholder "Course"
+             :required?   true
+             :value       value
+             :error       error
+             :options     options
+             :on-change   handle-change}]))
+
 (defn- device-control
   []
   (let [value @(re-frame/subscribe [::state/current-device])
@@ -50,6 +63,7 @@
        [:div.controls
         [name-control]
         [birth-date-control]
+        [course-control]
         [device-control]]
        [:div.message
         [:p

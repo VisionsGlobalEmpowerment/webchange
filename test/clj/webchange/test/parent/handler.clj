@@ -18,7 +18,7 @@
 (deftest create-student
   (testing "Child student can be created"
     (let [parent (f/website-user-created)
-          result (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
+          result (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :course-slug "english" :device "Tablet"} (:id parent))
                      :body
                      (slurp)
                      (json/read-str :key-fn keyword))]
@@ -27,7 +27,7 @@
 (deftest get-students
   (testing "Students can be found by parent"
     (let [parent (f/website-user-created)
-          _ (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
+          _ (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet" :course-slug "english"} (:id parent))
           result (-> (f/get-parent-students (:id parent))
                      :body
                      (slurp)
@@ -38,7 +38,7 @@
 (deftest delete-student
   (testing "Student can be deleted"
     (let [parent (f/website-user-created)
-          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
+          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet" :course-slug "english"} (:id parent))
                              :body
                              (slurp)
                              (json/read-str :key-fn keyword))
@@ -52,7 +52,7 @@
 (deftest login-as
   (testing "Parent can login as child"
     (let [parent (f/website-user-created)
-          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet"} (:id parent))
+          {saved-id :id} (-> (f/create-parent-student! {:name "Test" :date-of-birth "2010-12-31" :device "Tablet" :course-slug "english"} (:id parent))
                              :body
                              (slurp)
                              (json/read-str :key-fn keyword))
