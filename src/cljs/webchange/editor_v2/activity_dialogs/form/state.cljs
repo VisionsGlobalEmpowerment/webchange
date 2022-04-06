@@ -317,6 +317,8 @@
                            dialogs-paths)]
       (cond
         (flipbook-activity? scene-data) (let [pages-data (flipbook-utils/get-pages-data scene-data)]
+                                          ;(print "script-data" script-data)
+                                          ;(print "pages-data" pages-data)
                                           (->> script-data
                                                (filter (fn [dialog-data]
                                                          (-> (dialog-data->page-number dialog-data pages-data)

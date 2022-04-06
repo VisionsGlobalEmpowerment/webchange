@@ -750,7 +750,7 @@
                              :actions
                              (select-keys action-names))]
     (->> preserve-actions
-         (map (fn [[key action]] (let [preserved-action-keys [:available-activities :concept-var :tags :skippable :unique-tag]
+         (map (fn [[key action]] (let [preserved-action-keys [:available-activities :concept-var :tags :skippable :unique-tag :phrase-description]
                                        created-action (-> (get-in created-activity [:actions key])
                                                           (select-keys preserved-action-keys))]
                                    [key (merge action created-action)])))

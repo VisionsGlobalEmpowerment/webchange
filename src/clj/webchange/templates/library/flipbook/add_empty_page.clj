@@ -1,6 +1,6 @@
 (ns webchange.templates.library.flipbook.add-empty-page
   (:require
-    [webchange.templates.library.flipbook.stages :refer [update-stages]]
+    [webchange.templates.library.flipbook.recalculate-data :refer [recalculate-data]]
     [webchange.utils.flipbook :as f]
     [webchange.utils.list :refer [insert-at-position]]))
 
@@ -55,5 +55,5 @@
         (update :objects merge {(keyword page-object-name)     page-object-data
                                 (keyword page-background-name) page-background-data})
         (update :actions assoc (keyword page-action-name) page-action-data)
-        (update-stages {:book-name flipbook-name})
-        (assoc-in [:metadata :next-page-id] next-page-id))))
+        (assoc-in [:metadata :next-page-id] next-page-id)
+        (recalculate-data flipbook-name))))

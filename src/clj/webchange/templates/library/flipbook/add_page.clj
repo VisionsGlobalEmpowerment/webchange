@@ -1,6 +1,6 @@
 (ns webchange.templates.library.flipbook.add-page
   (:require
-    [webchange.templates.library.flipbook.stages :refer [update-stages]]
+    [webchange.templates.library.flipbook.recalculate-data :refer [recalculate-data]]
     [webchange.utils.list :refer [insert-at-position]]
     [webchange.templates.library.flipbook.utils :refer [get-book-object-name]]))
 
@@ -90,11 +90,11 @@
                                     :text       text-name
                                     :removable? removable?}
                                    back-cover-filler? (assoc :back-cover-filler? true))
-                           new-page-position)
-                (update-stages {:book-name book-object-name}))
+                           new-page-position))
             (and with-action?
                  (or (some? action)
-                     (some? text-name))) (add-text-animation-action new-page-position content-data page-data))))
+                     (some? text-name))) (add-text-animation-action new-page-position content-data page-data)
+            :always (recalculate-data book-object-name))))
 
 (defn add-page
   ([activity-data page-constructor page-params]
