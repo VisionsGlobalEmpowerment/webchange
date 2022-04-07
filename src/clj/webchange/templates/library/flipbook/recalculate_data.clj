@@ -6,7 +6,6 @@
 
 (defn recalculate-data
   [activity-data book-name]
-  (log/debug ">>> recalculate-data")
   (-> activity-data
       (update-stages {:book-name book-name})
       (update-display-names {:book-name book-name})))
