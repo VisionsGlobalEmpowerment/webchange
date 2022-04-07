@@ -31,7 +31,7 @@
   ([resources callbacks]
    (logger/trace "load resources" resources)
    (que/reset callbacks)
-   (let [resources-to-load (->> resources
+   (let [resources-to-load (->> (or resources [])
                                 (map (fn [resource]
                                        (if (sequential? resource)
                                          [(first resource) (second resource)]
@@ -43,13 +43,15 @@
                                        {:name       name
                                         :url        url
                                         :onComplete #(-> (.-name %) (que/complete))})))]
-     (->> resources-to-load
-          (map :name)
-          (que/add-all))
+     (if-not (empty? resources-to-load)
+       (do (->> resources-to-load
+                (map :name)
+                (que/add-all))
 
-     (doto @loader
-       (.add (clj->js resources-to-load))
-       (.load)))))
+           (doto @loader
+             (.add (clj->js resources-to-load))
+             (.load)))
+       (que/call-callback :on-complete)))))
 
 (defn load-resource
   [src callback]
