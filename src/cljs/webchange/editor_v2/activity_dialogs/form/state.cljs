@@ -11,6 +11,7 @@
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.utils.flipbook :as flipbook-utils :refer [flipbook-activity?]]
+    [webchange.utils.list :refer [sort-by-getters]]
     [webchange.utils.scene-action-data :as action-data-utils]
     [webchange.utils.scene-data :as scene-utils]
     [webchange.logger.index :as logger]))
@@ -209,12 +210,14 @@
     (->> targets
          (filter (fn [[_ {:keys [metadata]}]]
                 (get metadata :text-animation-target? true)))
+         (sort-by-getters [#(get-in (second %) [:metadata :page-idx] ##Inf)
+                           #(get-in (second %) [:metadata :text-idx] ##Inf)
+                           #(first %)])
          (map (fn [[object-name {:keys [metadata text]}]]
                 {:text        text
                  :text-prefix (or (:display-name metadata)
                                   (clojure.core/name object-name))
-                 :value       (clojure.core/name object-name)}))
-         (sort-by :value))))
+                 :value       (clojure.core/name object-name)})))))
 
 (def current-text-animation-target-path :current-target)
 

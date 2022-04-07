@@ -23,7 +23,9 @@
 
 (defn- set-text-display-name
   [activity-data text-name page-idx text-idx]
-  (->> {:display-name (get-text-display-name page-idx text-idx)}
+  (->> {:display-name (get-text-display-name page-idx text-idx)
+        :page-idx     page-idx
+        :text-idx     text-idx}
        (update-in activity-data [:objects (keyword text-name) :metadata] merge)))
 
 (defn- set-texts-display-names
