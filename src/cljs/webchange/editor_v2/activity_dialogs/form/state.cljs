@@ -207,6 +207,8 @@
     [(re-frame/subscribe [::translator-form.scene/text-objects])])
   (fn [[targets]]
     (->> targets
+         (filter (fn [[_ {:keys [metadata]}]]
+                (get metadata :text-animation-target? true)))
          (map (fn [[object-name {:keys [metadata text]}]]
                 {:text        text
                  :text-prefix (or (:display-name metadata)

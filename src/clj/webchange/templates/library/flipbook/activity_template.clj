@@ -30,7 +30,8 @@
                                                    :fill           0x323232
                                                    :x              "---"
                                                    :y              0
-                                                   :text           "00"}
+                                                   :text           "00"
+                                                   :metadata       {:text-animation-target? false}}
                                :right-page-number {:type           "text"
                                                    :vertical-align "top"
                                                    :font-size      24
@@ -39,7 +40,8 @@
                                                    :x              "---"
                                                    :y              0
                                                    :align          "right"
-                                                   :text           "01"}
+                                                   :text           "01"
+                                                   :metadata       {:text-animation-target? false}}
                                :prev-page         {:type             "image"
                                                    :x                32
                                                    :y                979
