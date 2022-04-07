@@ -19,7 +19,7 @@
   ([handlers]
    (reset! callbacks handlers)))
 
-(defn- call-callback
+(defn call-callback
   [key & args]
   (let [callback (get @callbacks key)]
     (when (fn? callback)
