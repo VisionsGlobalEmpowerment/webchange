@@ -28,8 +28,9 @@
   [{:keys [big? icon on-click text]}]
   [:button {:class-name (get-class-name {"big" big?})
             :on-click   on-click}
-   (get icons icon)
-   text])
+   [:div
+    (get icons icon)]
+   [:span text]])
 
 (defn- menu
   []

@@ -43,19 +43,29 @@
                 $button-height: 6.5vh;
 
                 justify-content: start;
-                gap: $button-height * 0.5;
+                gap: $button-height * 0.25;
 
                 width: auto;
                 height: $button-height;
                 padding: $button-height * 0.5;
+                margin-bottom: 30px;
 
                 font-size: 0.9em;
                 border-radius: $button-height * 0.5;
 
                 white-space: nowrap;
 
-                svg {
-                    height: 4vh;
+                & > div {
+                    display: flex;
+
+                    svg {
+                        height: 4vh;
+                    }
+                }
+
+                & > span {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 &.big {
