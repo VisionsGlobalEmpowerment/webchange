@@ -35,6 +35,7 @@
                                                        :type    "lookup"
                                                        :options []}}}
                       :edit-round {:title    "Edit round"
+                                   :default-props "edit-round"
                                    :options  {:which {:label   "Select Round"
                                                       :type    "lookup"
                                                       :options []}
@@ -453,10 +454,11 @@
         (update :assets concat [{:url (get-in args [:image-correct :src]), :size 1, :type "image"}
                                 {:url (get-in args [:image-wrong-1 :src]), :size 1, :type "image"}
                                 {:url (get-in args [:image-wrong-2 :src]), :size 1, :type "image"}])
-        (rename-rounds))))
+        rename-rounds)))
 
 (defn- find-round-name [index tracks]
-  (:id (nth (filter #(.startsWith (:title %) "Round") tracks) index)))
+  (let [index (if (string? index) (Integer/parseInt index) index)]
+    (:id (nth (filter #(.startsWith (:title %) "Round") tracks) index))))
 
 (defn- remove-round
   [activity-data args]
@@ -482,7 +484,7 @@
       recreate-drop-downs
       (assoc-in [:metadata :tracks] new-tracks)
       (assoc-in [:actions] new-actions)
-      (rename-rounds))))
+      rename-rounds)))
 
 (defn- edit-round
   [activity-data args]
@@ -495,21 +497,47 @@
                        (-> ad
                          (assoc-in [:actions (keyword round-name) :data id :var-value :image-src] src)
                          (update :assets concat [{:url src, :size 1, :type "image"}])))]
-    (cond-> activity-data
-      correct (change-image correct 0)
-      wrong-1 (change-image wrong-1 1)
-      wrong-2 (change-image wrong-2 2))))
+    (-> activity-data
+      (change-image correct 0)
+      (change-image wrong-1 1)
+      (change-image wrong-2 2))))
 
 (defn create-activity
   [args]
   (-> (common/init-metadata m t args)
     (assoc-in [:metadata :num-rounds] 0)))
 
+(defn- get-round-data [activity-data round-id]
+  (let [tracks (get-in activity-data [:metadata :tracks])
+        round-name (find-round-name round-id tracks)
+        get-image #(get-in activity-data [:actions (keyword round-name) :data % :var-value :image-src])]
+    {:which round-id
+     :image-correct {:src (get-image 0)}
+     :image-wrong-1 {:src (get-image 1)}
+     :image-wrong-2 {:src (get-image 2)}}))
+
+(defn- create-paired-changes [activity-data]
+  (into {}
+        (map (fn [n]
+               [n (get-round-data activity-data n)])
+             (range (get-in activity-data [:metadata :num-rounds])))))
+
+(defn- create-saved-props
+  [activity-data]
+  (if (> (get-in activity-data [:metadata :num-rounds]) 0)
+    (-> activity-data
+        (assoc-in [:metadata :saved-props :edit-round]
+                  (get-round-data activity-data 0))
+        (assoc-in [:metadata :actions :edit-round :options :which :paired-changes]
+                  (create-paired-changes activity-data)))
+    activity-data))
+
 (defn update-activity
   [old-data args]
-  (case (:action-name args)
-    "add-round" (create-round old-data args)
-    "remove-round" (remove-round old-data args)
-    "edit-round" (edit-round old-data args)))
+  (create-saved-props
+    (case (:action-name args)
+      "add-round" (create-round old-data args)
+      "remove-round" (remove-round old-data args)
+      "edit-round" (edit-round old-data args))))
 
 (core/register-template m create-activity update-activity)
