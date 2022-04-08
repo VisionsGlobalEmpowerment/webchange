@@ -224,9 +224,15 @@
                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                   :phrase             "wrong-answer",
                                                   :phrase-description "wrong answer"}
+
+                        :no-option               {:to          {:init-position true :duration 0.5},
+                                                  :from-params [{:action-property "transition-id" :param-property "target"}]
+                                                  :type        "transition"}
+
                         :check-wrong-option      {:type       "test-expression"
-                                                  :expression "#collided-object-name"
-                                                  :success    "wrong-option"}
+                                                  :expression "@current-gate"
+                                                  :success    "wrong-option"
+                                                  :fail       "no-option"}
 
                         :init-total-balls-number {:type "set-variable" :var-name "total-balls-number" :var-value 0}
                         :correct-option          {:type "sequence-data",
@@ -525,4 +531,3 @@
 
 (core/register-template
   m f fu)
-
