@@ -286,9 +286,10 @@
   (let [id (Integer/parseInt id)
         school (db/get-school {:id id})
         courses (db/get-available-courses)
-        courses (cond-> courses
-                        (some? #(#{"english"} (:slug %))) (conj (db/get-course {:slug "english"}))
-                        (some? #(#{"spanish"} (:slug %))) (conj (db/get-course {:slug "spanish"})))
+        courses (cond->> courses
+                         (not-any? #(#{"english"} (:slug %)) courses) (concat [(db/get-course {:slug "english"})])
+                         (not-any? #(#{"spanish"} (:slug %)) courses) (concat [(db/get-course {:slug "spanish"})])
+                         :always (remove empty?))
 
         course-versions (->> courses
                              (map #(db/get-latest-course-version {:course_id (:id %)}))

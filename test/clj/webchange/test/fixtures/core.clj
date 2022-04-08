@@ -149,7 +149,7 @@
 
 (defn dataset-created
   ([]
-   (let [{course-id :id} (course-created)]
+   (let [{course-id :id} (course-created {:status "published"})]
      (dataset-created {:course-id course-id})))
   ([options]
    (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "image"} {:name "width" :type "number"}]}}
@@ -716,8 +716,8 @@
     (handler/dev-handler request)))
 
 (defn asset-hash-created [options]
-  (let [params (merge {:path_hash (assets/md5 "test/clj/webchange/resources/raw/background.png")
-                       :path "test/clj/webchange/resources/raw/background.png"
+  (let [params (merge {:path_hash (assets/md5 "/raw/background.png")
+                       :path "/raw/background.png"
                        :file_hash (assets/crc32 "test content")} options)]
     (db/create-asset-hash!  params)
     {:path-hash (:path_hash params)
