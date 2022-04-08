@@ -2,6 +2,7 @@
   (:require
     [clojure.tools.logging :as log]
     [webchange.templates.library.flipbook.actions-utils :refer [create-dialog-action]]
+    [webchange.templates.library.flipbook.display-names :refer [get-text-display-name]]
     [webchange.utils.text :as text-utils]))
 
 (def page-name "credits-page")
@@ -31,7 +32,9 @@
                              :font-family "Lexend Deca"
                              :align       "center"
                              :text        "---"
-                             :editable?   {:select true}}})
+                             :editable?   {:select true}
+                             :metadata    {:display-name (get-text-display-name :authors "Title")
+                                           :page-idx     2}}})
 
 (defn- get-action-data
   [{:keys [action-name texts-data]}]
@@ -62,7 +65,9 @@
                                                                   :font-family "Lexend Deca"
                                                                   :text        text
                                                                   :editable?   {:select true}
-                                                                  :chunks      (text-utils/text->chunks text)}))))
+                                                                  :chunks      (text-utils/text->chunks text)
+                                                                  :metadata    {:display-name (get-text-display-name :authors (str label " " (inc index)))
+                                                                                :page-idx     2}}))))
                  {:texts-data [{:name label-name
                                 :text label}]
                   :data       (-> {}
@@ -79,7 +84,9 @@
                                                                :font-family "Lexend Deca"
                                                                :text        label
                                                                :editable?   {:select true}
-                                                               :chunks      (text-utils/text->chunks label)}))}))))
+                                                               :chunks      (text-utils/text->chunks label)
+                                                               :metadata    {:display-name (get-text-display-name :authors label)
+                                                                             :page-idx     2}}))}))))
 
 (defn- generate-authors-block
   [{:keys [data]}]
@@ -87,9 +94,9 @@
                       :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
-                                {:name     "credits-page-authors"
-                                 :label    "Written By"
-                                 :data     data}))))
+                                {:name  "credits-page-authors"
+                                 :label "Written By"
+                                 :data  data}))))
 
 (defn- generate-illustrators-block
   [{:keys [data]}]
@@ -97,9 +104,9 @@
                       :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
-                                {:name     "credits-page-illustrators"
-                                 :label    (if (empty? data) "" "Illustrated By")
-                                 :data     data}))))
+                                {:name  "credits-page-illustrators"
+                                 :label (if (empty? data) "" "Illustrated By")
+                                 :data  data}))))
 
 (defn- apply-page-size
   [page-data {:keys [width height]}]

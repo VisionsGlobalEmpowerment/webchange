@@ -1,6 +1,7 @@
 (ns webchange.templates.library.flipbook.add-text
   (:require
     [clojure.tools.logging :as log]
+    [webchange.templates.library.flipbook.display-names :refer [update-display-names]]
     [webchange.utils.flipbook :as f]
     [webchange.utils.scene-action-data :refer [create-text-animation-action]]
     [webchange.utils.scene-data :as s]
@@ -42,4 +43,5 @@
     (-> activity-data
         (update :objects assoc (keyword text-name) text-data)
         (update-in [:objects (keyword object) :children] concat [text-name])
-        (update-in [:actions (keyword action) :data] concat [text-action]))))
+        (update-in [:actions (keyword action) :data] concat [text-action])
+        (update-display-names))))

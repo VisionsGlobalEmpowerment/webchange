@@ -1,6 +1,7 @@
 (ns webchange.templates.library.flipbook.cover-front
   (:require
     [clojure.string :refer [join]]
+    [webchange.templates.library.flipbook.display-names :refer [get-text-display-name]]
     [webchange.utils.text :as text-utils]))
 
 (def page-name "page-cover")
@@ -25,13 +26,13 @@
                              :image-size "contain"
                              :origin     {:type "center-center"}
                              :src        "---"
-                             :editable?  {:select true
-                                          :drag   true
+                             :editable?  {:select    true
+                                          :drag      true
                                           :edit-form {:select-image true
                                                       :upload-image true
-                                                      :scale true
-                                                      :flip true
-                                                      :visible true}}}
+                                                      :scale        true
+                                                      :flip         true
+                                                      :visible      true}}}
    :page-cover-title        {:type     "group"
                              :x        "---"
                              :y        "---"
@@ -47,7 +48,10 @@
                              :width          "---"
                              :chunks         "---"
                              :fill           "---"
-                             :text           "---"}
+                             :text           "---"
+                             :metadata       {:display-name (get-text-display-name :cover "Title")
+                                              :page-idx     0
+                                              :text-idx     0}}
    :page-cover-authors      {:type           "text"
                              :x              0
                              :y              85
@@ -57,7 +61,10 @@
                              :align          "left"
                              :font-size      24
                              :font-family    "Lexend Deca"
-                             :text           "---"}
+                             :text           "---"
+                             :metadata       {:display-name (get-text-display-name :cover "Authors")
+                                              :page-idx     0
+                                              :text-idx     1}}
    :page-cover-illustrators {:type           "text"
                              :x              0
                              :y              125
@@ -67,7 +74,10 @@
                              :align          "left"
                              :font-size      24
                              :font-family    "Lexend Deca"
-                             :text           "---"}
+                             :text           "---"
+                             :metadata       {:display-name (get-text-display-name :cover "Illustrators")
+                                              :page-idx     0
+                                              :text-idx     2}}
    })
 
 (defn- apply-page-size

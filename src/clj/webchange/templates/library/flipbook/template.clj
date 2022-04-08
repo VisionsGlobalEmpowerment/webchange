@@ -12,6 +12,7 @@
     [webchange.templates.library.flipbook.back-filler :as back-filler]
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
+    [webchange.templates.library.flipbook.display-names :refer [update-display-names]]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
     [webchange.templates.library.flipbook.remake-covers :refer [remake-covers]]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
@@ -162,6 +163,10 @@
             activity-data
             constructors)))
 
+(defn- update-names
+  [activity-data]
+  (update-display-names activity-data))
+
 (defn update-activity
   [activity-data {action-name :action-name :as props}]
   (case action-name
@@ -172,7 +177,8 @@
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)
     "remake-covers" (-> (remake-covers activity-data props page-params)
-                        (assoc-in [:metadata :saved-props :wizard] props))))
+                        (assoc-in [:metadata :saved-props :wizard] props))
+    "update-names" (update-names activity-data)))
 
 (core/register-template
   metadata create-activity update-activity)

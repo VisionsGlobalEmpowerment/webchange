@@ -116,10 +116,8 @@
 
 (defn get-action
   [scene-data action-name]
-  (->> (get-scene-actions scene-data)
-       (some (fn [[name data]]
-               (and (= name action-name)
-                    data)))))
+  (-> (get-scene-actions scene-data)
+      (get action-name)))
 
 (defn get-dialog-actions
   [scene-data]

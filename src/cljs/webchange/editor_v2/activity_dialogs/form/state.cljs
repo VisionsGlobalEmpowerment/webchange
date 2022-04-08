@@ -11,6 +11,7 @@
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.utils.flipbook :as flipbook-utils :refer [flipbook-activity?]]
+    [webchange.utils.list :refer [sort-by-getters]]
     [webchange.utils.scene-action-data :as action-data-utils]
     [webchange.utils.scene-data :as scene-utils]
     [webchange.logger.index :as logger]))
@@ -201,37 +202,22 @@
 
 ;; Text animation target
 
-(defn- get-book-text-name
-  [object-name scene-data]
-  (let [pages-data (flipbook-utils/get-pages-data scene-data)
-        stages-data (flipbook-utils/get-stages-data scene-data)
-
-        page-idx (->> pages-data
-                      (map-indexed vector)
-                      (some (fn [[idx {:keys [text]}]]
-                              (and (= text object-name)
-                                   idx))))
-        {:keys [idx pages-idx]} (some (fn [{:keys [idx pages-idx] :as stage-data}]
-                                        (and (some #{page-idx} pages-idx) stage-data))
-                                      stages-data)
-        page-name (if (= page-idx (first pages-idx)) "left" "right")]
-    (str "Stage " (inc idx) ", " page-name " page")))
-
 (re-frame/reg-sub
   ::available-text-animation-targets
   (fn [_]
-    [(re-frame/subscribe [::translator-form.scene/text-objects])
-     (re-frame/subscribe [::translator-form.scene/scene-data])])
-  (fn [[targets scene-data]]
-    (cond->> (->> targets
-                  (map (fn [[object-name {:keys [text]}]]
-                         {:text        text
-                          :text-prefix (clojure.core/name object-name)
-                          :value       (clojure.core/name object-name)})))
-             (flipbook-activity? scene-data) (map (fn [{:keys [value]}]
-                                                    {:text  (get-book-text-name value scene-data)
-                                                     :value value}))
-             :always (sort-by :value))))
+    [(re-frame/subscribe [::translator-form.scene/text-objects])])
+  (fn [[targets]]
+    (->> targets
+         (filter (fn [[_ {:keys [metadata]}]]
+                (get metadata :text-animation-target? true)))
+         (sort-by-getters [#(get-in (second %) [:metadata :page-idx] ##Inf)
+                           #(get-in (second %) [:metadata :text-idx] ##Inf)
+                           #(first %)])
+         (map (fn [[object-name {:keys [metadata text]}]]
+                {:text        text
+                 :text-prefix (or (:display-name metadata)
+                                  (clojure.core/name object-name))
+                 :value       (clojure.core/name object-name)})))))
 
 (def current-text-animation-target-path :current-target)
 

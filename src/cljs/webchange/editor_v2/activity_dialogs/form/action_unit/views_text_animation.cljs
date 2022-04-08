@@ -14,8 +14,13 @@
     (let [current-target @(re-frame/subscribe [::state/current-text-animation-target path])
           available-targets @(re-frame/subscribe [::state/available-text-animation-targets])
           handle-target-change (fn [target]
-                                 (re-frame/dispatch [::state/set-text-animation-action-target path source target]))]
+                                 (re-frame/dispatch [::state/set-text-animation-action-target path source target]))
+          display-value (some (fn [{:keys [text-prefix value]}]
+                                (and (= value current-target)
+                                     (or text-prefix value)))
+                              available-targets)]
       [target-control {:value            current-target
+                       :display-value    display-value
                        :show-value-only? true
                        :options          available-targets
                        :on-change        handle-target-change}])))

@@ -1,5 +1,6 @@
 (ns webchange.templates.library.flipbook.cover-back
   (:require
+    [webchange.templates.library.flipbook.display-names :refer [get-text-display-name]]
     [webchange.utils.scene-data :refer [generate-name rename-object]]))
 
 (def page-name "page-cover-back")
@@ -35,7 +36,8 @@
                                 :fill           "---"
                                 :text           "---"
                                 :editable?      {:select true}
-                                :placeholder    "Add attributions"}})
+                                :placeholder    "Add attributions"
+                                :metadata       {:display-name (get-text-display-name :cover-back "License")}}})
 
 (defn- apply-page-size
   [page-data {:keys [width height padding]}]

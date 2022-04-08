@@ -5,15 +5,15 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn target-control
-  [{:keys [value options on-change show-value-only?]}]
+  [{:keys [value display-value options on-change show-value-only?]}]
   (let [value-str (cond
                     (empty? value) "select target"
-                    show-value-only? value
+                    show-value-only? (or display-value value)
                     :default (or (some (fn [option]
                                          (and (= value (:value option))
                                               (:text option)))
                                        options)
-                                 value))]
+                                 (or display-value value)))]
     [menu {:class-name "targets-menu"
            :el         (r/as-element [:span.target-value value-str])
            :items      (->> options
