@@ -26,6 +26,8 @@
        [select {:value     @lookup-data
                 :options   options
                 :variant   "outlined"
-                :on-change #(reset! lookup-data %)
+                :on-change (fn [value]
+                             (swap! data merge (get-in option [:paired-changes (keyword value)]))
+                             (reset! lookup-data value))
                 :width     160}]
        [error-message {:field-name :root}]])))

@@ -6,6 +6,7 @@
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.icon.index :as icon]
+    [cljs-react-material-ui.reagent :as ui]
     [webchange.ui-framework.components.input.index :as input]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -81,6 +82,7 @@
            on-upload-start
            show-file-name?
            show-icon?
+           icon-src
            show-input?
            type
            upload-options
@@ -116,8 +118,11 @@
               :accept    (get-accept-extensions type)
               :on-change #(-> % change-event->file handle-change)
               :ref       #(reset! file-input %)}]
-     (when (and show-icon? (some? type))
-       [icon/component {:icon type}])
+     (when show-icon?
+       (if icon-src
+         [ui/avatar {:src icon-src}]
+         (if (some? type)
+           [icon/component {:icon type}])))
 
      (when show-input?
        [:div {:class-name "file-name-wrapper"

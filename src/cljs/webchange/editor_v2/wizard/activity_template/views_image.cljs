@@ -62,23 +62,21 @@
 
 (defn image-option
   [{:keys [key data validator option]}]
-  (r/with-let [page-data (connect-data data [key] nil)
-               {:keys [description]} option
-               {:keys [error-message destroy]} (v/init
-                                                 page-data
-                                                 (assoc-in image-validation-map [:src :optional?] (:optional? option))
-                                                 validator)]
-    [:div.image-option
-     (when (some? description)
-       [label {:class-name "field-label"} description])
-     [file {:type           "image"
-            :icon-src            (:src @page-data)
-            :on-change      #(swap! page-data assoc :src %)
-            :upload-options (:options option)}]
+  (let [page-data (connect-data data [key] nil)]
+    (r/with-let [{:keys [description]} option
+                 {:keys [error-message destroy]} (v/init
+                                                   page-data
+                                                   (assoc-in image-validation-map [:src :optional?] (:optional? option))
+                                                   validator)]
+      [:div.image-option
+       (when (some? description)
+         [label {:class-name "field-label"} description])
 
-     (if-let [src (:src @page-data)]
-       [ui/avatar {:src src}])
+       [file {:type           "image"
+              :icon-src       (:src @page-data)
+              :on-change      #(swap! page-data assoc :src %)
+              :upload-options (:options option)}]
 
-     [error-message {:field-name :src}]]
-    (finally
-      (destroy))))
+       [error-message {:field-name :src}]]
+      (finally
+        (destroy)))))
