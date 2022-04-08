@@ -8,4 +8,4 @@
   [activity-data book-name]
   (-> activity-data
       (update-stages {:book-name book-name})
-      (update-display-names {:book-name book-name})))
+      (update-display-names)))

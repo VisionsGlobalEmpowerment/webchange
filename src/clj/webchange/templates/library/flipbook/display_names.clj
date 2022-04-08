@@ -1,14 +1,18 @@
 (ns webchange.templates.library.flipbook.display-names
   (:require
     [clojure.tools.logging :as log]
+    [webchange.utils.flipbook :as flipbook]
     [webchange.utils.scene-action-data :refer [get-inner-action text-animation-action?]]
     [webchange.utils.scene-data :refer [get-action]]))
 
-(defn- get-dialog-display-name
+(defn get-dialog-display-name
   [page-idx]
   (cond
-    (= page-idx 0) "Cover Page"
-    (= page-idx 2) "Authors Page"
+    (or (= page-idx 0)
+        (= page-idx :cover)) "Cover Page"
+    (or (= page-idx 2)
+        (= page-idx :authors)) "Authors Page"
+    (= page-idx :cover-back) "Back Cover Page"
     :default (str "Page " page-idx)))
 
 (defn- set-dialog-name
@@ -16,10 +20,12 @@
   (->> (get-dialog-display-name page-idx)
        (assoc-in activity-data [:actions (keyword action-name) :phrase-description])))
 
-(defn- get-text-display-name
+(defn get-text-display-name
   [page-idx text-idx]
   (-> (get-dialog-display-name page-idx)
-      (str " - Text " text-idx)))
+      (str " - " (if (number? text-idx)
+                   (str "Text " text-idx)
+                   text-idx))))
 
 (defn- set-text-display-name
   [activity-data text-name page-idx text-idx]
@@ -38,18 +44,19 @@
                activity-data)))
 
 (defn update-display-names
-  [activity-data {:keys [book-name]}]
-  (->> (get-in activity-data [:objects book-name :pages])
-       (map-indexed vector)
-       (reduce (fn [activity-data [page-idx {:keys [action]}]]
-                 (if (some? action)
-                   (let [action-data (->> (keyword action) (get-action activity-data))
-                         text-objects (->> (:data action-data)
-                                           (map get-inner-action)
-                                           (filter text-animation-action?)
-                                           (map :target)
-                                           (distinct))]
-                     (-> (set-dialog-name activity-data action page-idx)
-                         (set-texts-display-names text-objects page-idx)))
-                   activity-data))
-               activity-data)))
+  [activity-data]
+  (let [book-name (flipbook/get-book-object-name activity-data)]
+    (->> (get-in activity-data [:objects book-name :pages])
+         (map-indexed vector)
+         (reduce (fn [activity-data [page-idx {:keys [action]}]]
+                   (if (some? action)
+                     (let [action-data (->> (keyword action) (get-action activity-data))
+                           text-objects (->> (:data action-data)
+                                             (map get-inner-action)
+                                             (filter text-animation-action?)
+                                             (map :target)
+                                             (distinct))]
+                       (-> (set-dialog-name activity-data action page-idx)
+                           (set-texts-display-names text-objects page-idx)))
+                     activity-data))
+                 activity-data))))

@@ -16,8 +16,7 @@
     [webchange.templates.library.flipbook.generic-front :as generic-front]
     [webchange.templates.library.flipbook.remake-covers :refer [remake-covers]]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
-    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
-    [webchange.utils.flipbook :as utils]))
+    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]))
 
 (def book-options [{:key         :cover-layout
                     :label       "Cover layout"
@@ -129,9 +128,7 @@
                                                          :label "Select Image"}]}
                              :remake-covers  {:title         "Remake covers",
                                               :options       book-options
-                                              :default-props :wizard}
-                             :update-names   {:title   "Update names",
-                                              :options []}}})
+                                              :default-props :wizard}}})
 
 (def page-params {:width            960
                   :height           1080
@@ -168,8 +165,7 @@
 
 (defn- update-names
   [activity-data]
-  (let [book-name (utils/get-book-object-name activity-data)]
-    (update-display-names activity-data {:book-name book-name})))
+  (update-display-names activity-data))
 
 (defn update-activity
   [activity-data {action-name :action-name :as props}]
