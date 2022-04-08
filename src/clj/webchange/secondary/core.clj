@@ -1,19 +1,19 @@
 (ns webchange.secondary.core
-  (:require [webchange.db.core :refer [*db*] :as db]
-            [clojure.tools.logging :as log]
-            [java-time :as jt]
-            [webchange.common.date-time :as dt]
-            [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword]]
-            [clj-http.client :as client]
-            [webchange.db.core :as db-core]
-            [webchange.common.files :as f]
-
-            [config.core :refer [env]]
-            [webchange.common.hmac-sha256 :as sign]
-            [clojure.data.json :as json]
-            [webchange.secondary.guid :as guid]
-            [webchange.assets.core :as assets]))
+  (:require
+    [camel-snake-kebab.core :refer [->snake_case_keyword]]
+    [clj-http.client :as client]
+    [clojure.data.json :as json]
+    [clojure.set :as set]
+    [clojure.string :as str]
+    [clojure.tools.logging :as log]
+    [config.core :refer [env]]
+    [java-time :as jt]
+    [webchange.assets.core :as assets]
+    [webchange.common.date-time :as dt]
+    [webchange.common.files :as f]
+    [webchange.common.hmac-sha256 :as sign]
+    [webchange.db.core :as db]
+    [webchange.secondary.guid :as guid]))
 
 (import '(java.util.concurrent Executors))
 
@@ -217,15 +217,13 @@
   (mapv #(let [guid (.toString (:guid %))]
            (-> %
                (assoc :guid guid)))
-        (db/get-classes {:school_id id}))
-  )
+        (db/get-classes {:school_id id})))
 
 (defn get-students-by-school [id]
   (mapv #(let [date-of-birth (dt/date2str (:date-of-birth %))]
            (-> %
                (assoc :date-of-birth date-of-birth)))
-        (db/get-students-by-school {:school_id id})
-        ))
+        (db/get-students-by-school {:school_id id})))
 
 (defn get-course-versions []
   (mapv #(let [created-at (dt/date-time2iso-str (:created-at %))]
@@ -239,17 +237,13 @@
                (assoc :created-at created-at)
                (assoc :guid (.toString (:guid %)))
                ))
-        (db/get-course-events-by-school {:school_id id})
-        )
-  )
+        (db/get-course-events-by-school {:school_id id})))
 
 (defn get-scene-versions []
   (mapv #(let [created-at (dt/date-time2iso-str (:created-at %))]
            (-> %
                (assoc :created-at created-at)))
-        (db/get-scene-versions-by-school)
-        )
-  )
+        (db/get-scene-versions-by-school)))
 
 (defn get-dump-by-school [id]
   (let [id (Integer/parseInt id)
@@ -269,10 +263,8 @@
         lesson-sets (db/get-lesson-sets)
         scenes (db/get-scenes)
         scene-versions (get-scene-versions)
-        activity-stats (db/get-activity-stats-by-school {:school_id id})
-        ]
-    {
-     :school            school
+        activity-stats (db/get-activity-stats-by-school {:school_id id})]
+    {:school            school
      :users             users
      :teachers          teachers
      :scene-skills      scene-skills
@@ -288,24 +280,37 @@
      :lesson-sets       lesson-sets
      :scenes            scenes
      :scene-versions    scene-versions
-     :activity-stats    activity-stats
-     })
-  )
+     :activity-stats    activity-stats}))
 
 (defn get-course-update [id]
   (let [id (Integer/parseInt id)
         school (db/get-school {:id id})
-        courses (db/get-courses)
-        scene-skills (db/get-scene-skills)
-        course-versions (get-course-versions)
-        datasets (db/get-datasets)
-        dataset-items (db/get-dataset-items-by-school)
-        lesson-sets (db/get-lesson-sets)
-        scenes (db/get-scenes)
-        scene-versions (get-scene-versions)
-        ]
-    {
-     :school          school
+        courses (db/get-available-courses)
+        courses (cond-> courses
+                        (some? #(#{"english"} (:slug %))) (conj (db/get-course {:slug "english"}))
+                        (some? #(#{"spanish"} (:slug %))) (conj (db/get-course {:slug "spanish"})))
+
+        course-versions (->> courses
+                             (map #(db/get-latest-course-version {:course_id (:id %)}))
+                             (remove empty?)
+                             (map #(update % :created-at dt/date-time2iso-str)))
+        datasets (->> courses
+                      (mapcat #(db/get-datasets-by-course {:course_id (:id %)})))
+        dataset-items (->> datasets
+                           (mapcat #(db/get-dataset-items {:dataset_id (:id %)})))
+
+        lesson-sets (->> datasets
+                         (mapcat #(db/get-dataset-lessons {:dataset_id (:id %)})))
+        scenes (->> courses
+                    (mapcat #(db/get-scenes-by-course-id {:course_id (:id %)})))
+
+        scene-versions (->> scenes
+                            (map #(db/get-latest-scene-version {:scene_id (:id %)}))
+                            (remove empty?)
+                            (map #(update % :created-at dt/date-time2iso-str)))
+        scene-skills (->> scenes
+                          (mapcat #(db/get-scene-skills-by-scene {:scene_id (:id %)})))]
+    {:school          school
      :courses         courses
      :scene-skills    scene-skills
      :course-versions course-versions
@@ -313,9 +318,7 @@
      :dataset-items   dataset-items
      :lesson-sets     lesson-sets
      :scenes          scenes
-     :scene-versions  scene-versions
-     })
-  )
+     :scene-versions  scene-versions}))
 
 (defn get-stat [id]
   (let [school (db/get-school {:id id})
@@ -484,7 +487,9 @@
 
 (defn delete-course-by-id!
   [{:keys [id]}]
+  (db/delete-collaborators-by-course-id! {:course_id id})
   (db/delete-course-stats-by-course-id! {:course_id id})
+  (db/delete-activity-stats-by-course-id! {:course_id id})
   (db/delete-course-progresses-by-course-id! {:course_id id})
   (db/delete-course-events-by-course-id! {:course_id id})
   (db/delete-course-version-by-course-id! {:course_id id})
@@ -529,18 +534,14 @@
         dataset-items-guid (guid/guids-from-entries (:dataset-items data) guid/guid-is-id)
         lesson-sets-guid (guid/guids-from-entries (:lesson-sets data) guid/guid-is-id)
         scenes-guid (guid/guids-from-entries (:scenes data) guid/guid-is-id)
-        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id) scene-skills-guid (guid/guids-from-entries (:scene-skills data) guid/guid-from-scene-skill)
-        ]
+        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)
+        scene-skills-guid (guid/guids-from-entries (:scene-skills data) guid/guid-from-scene-skill)]
     (delete-not-in-guid-list lesson-sets-guid lesson-sets :id db/delete-lesson-set-by-id!)
     (delete-not-in-guid-list dataset-items-guid dataset-items :id db/delete-dataset-item-by-id!)
     (delete-not-in-guid-list datasets-guid datasets :id db/delete-dataset-by-id!)
     (delete-not-in-guid-list scene-skills-guid scene-skills guid/guid-from-scene-skill db/delete-scene-skills-by-scene-skill!)
-    ;    (delete-not-in-guid-list scene-versions-guid scene-versions :id db/delete-scene-version-by-id!)
     (delete-not-in-guid-list scenes-guid scenes :id delete-scene-by-id!)
-    ;(delete-not-in-guid-list course-versions-guid course-versions :id db/delete-course-version-by-id!)
-    (delete-not-in-guid-list courses-guid courses :id delete-course-by-id!)
-    )
-  )
+    (delete-not-in-guid-list courses-guid courses :id delete-course-by-id!)))
 
 (defn update-course-data! [id]
   (let [url (make-url-absolute (str "api/school/courses-update/" id))
@@ -548,32 +549,71 @@
     (import-primary-data! data)))
 
 (defn to-set [hashes]
-  (set (mapv (fn [item] (str (:path-hash item) "-" (:file-hash item))) hashes))
-  )
+  (->> hashes
+       (map (fn [item] (str (:path-hash item) "-" (:file-hash item))))
+       (set)))
 
-(defn to-vec [hashes]
-  (mapv (fn [item]
-          (let [ids (clojure.string/split item #"-")]
-            {:path-hash (get ids 0) :file-hash (get ids 1)}))
-        hashes))
+(defn to-list [hashes]
+  (map (fn [item]
+         (let [ids (clojure.string/split item #"-")]
+           {:path-hash (get ids 0) :file-hash (get ids 1)}))
+       hashes))
 
 (defn fill-additional-data [update]
-  (mapv (fn [item]
-          (let [file-hash (db/get-asset-hash {:path_hash (:path-hash item)})]
-            file-hash))
-        update))
+  (map (fn [item]
+         (let [file-hash (db/get-asset-hash {:path_hash (:path-hash item)})]
+           file-hash))
+       update))
 
+(defn- published-upload-assets
+  []
+  (let [published-course-ids (->> (db/get-available-courses)
+                                  (map :id)
+                                  (concat [2 4]) ;add english and spanish, even if they are not published yet
+                                  (set))
+        datasets (->> published-course-ids
+                      (mapcat #(db/get-datasets-by-course {:course_id %}))
+                      (map (fn [dataset]
+                             [(:id dataset) (->> dataset
+                                                 :scheme
+                                                 :fields
+                                                 (filter (fn [field] (#{"image" "video"} (:type field))))
+                                                 (map :name)
+                                                 (map keyword))]))
+                      (into {}))
+        dataset-assets (->> published-course-ids
+                            (mapcat #(db/get-datasets-by-course {:course_id %}))
+                            (mapcat #(db/get-dataset-items {:dataset_id (:id %)}))
+                            (mapcat (fn [item]
+                                      (-> item
+                                          :data
+                                          (select-keys (get datasets (:dataset-id item)))
+                                          vals))))
+        scene-assets (->> published-course-ids
+                          (mapcat #(db/get-scenes-by-course-id {:course_id %}))
+                          (map #(db/get-latest-scene-version {:scene_id (:id %)}))
+                          (mapcat #(-> % :data :assets))
+                          (map :url)
+                          (remove nil?))
+        assets (->> (concat dataset-assets scene-assets)
+                    (filter #(str/starts-with? % "/upload/"))
+                    (set))]
+    assets))
 
-(defn calc-asset-update [school-hashes]
-  (let [
-        hashes (map (fn [item] {:path-hash (:path-hash item) :file-hash (:file-hash item)}) (db/get-all-asset-hash))
+(defn calc-asset-update
+  [school-hashes]
+  (let [published-asset-urls (published-upload-assets)
+        raw? (fn [hash] (str/starts-with? (:path hash) "/raw/"))
+        published? (fn [hash] (published-asset-urls (:path hash)))
+        hashes (->> (db/get-all-asset-hash)
+                    (filter #(or (raw? %) (published? %)))
+                    (map #(select-keys % [:path-hash :file-hash])))
         school-hashes-set (to-set school-hashes)
         hashes-set (to-set hashes)
-        to-remove (clojure.set/difference school-hashes-set hashes-set)
-        to-update (clojure.set/difference hashes-set school-hashes-set)
-        remove (to-vec to-remove)
-        update (fill-additional-data (to-vec to-update))
-        ]
+        to-remove (set/difference school-hashes-set hashes-set)
+        to-update (set/difference hashes-set school-hashes-set)
+        remove (to-list to-remove)
+        update (fill-additional-data (to-list to-update))]
     {:remove remove :update update}))
 
 (defn download-files [files]

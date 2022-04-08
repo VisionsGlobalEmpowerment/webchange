@@ -19,7 +19,7 @@
   (str (:user-id activity-stats) "-" (:course-id activity-stats) "-" (:activity-at activity-stats)))
 
 (defn guid-from-scene-skill [scene-skill]
-  (str (:course-id scene-skill) "-" (:skill-id scene-skill)))
+  (str (:scene-id scene-skill) "-" (:skill-id scene-skill)))
 
 (defn guid-from-class [class]
   (:guid class))

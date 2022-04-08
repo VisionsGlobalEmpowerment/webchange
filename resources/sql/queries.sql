@@ -205,3 +205,7 @@ INSERT INTO collaborators (course_id, user_id) VALUES (:course_id, :user_id);
 -- :name is-collaborator? :? :1
 -- :doc check if user is collaborator on given course
 SELECT true as result from collaborators WHERE course_id = :course_id AND user_id = :user_id
+
+-- :name delete-collaborators-by-course-id! :! :n
+-- :doc deletes course collaborators
+DELETE from collaborators where course_id=:course_id;

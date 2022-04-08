@@ -220,6 +220,10 @@ DELETE from activity_stats where user_id=:user_id;
 -- :doc deletes activity stats
 DELETE from activity_stats where id=:id;
 
+-- :name delete-activity-stats-by-course-id! :! :n
+-- :doc deletes activity stats
+DELETE from activity_stats where course_id=:course_id;
+
 -- :name delete-course-events-by-user-id! :! :n
 -- :doc deletes course events
 DELETE from course_events where user_id=:user_id;
