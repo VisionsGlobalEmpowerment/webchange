@@ -5,7 +5,7 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.path :refer [paths]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.utils :as a-svg-utils]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
-    [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]))
+    [webchange.interpreter.renderer.scene.components.svg-path :refer [get-svg-path]]))
 
 (defn wrap
   [type name group-name container state dimensions]

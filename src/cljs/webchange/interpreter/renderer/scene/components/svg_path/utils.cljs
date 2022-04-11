@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.svg-path.utils
   (:require
-    [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]))
+    [webchange.interpreter.renderer.scene.components.svg-path :refer [get-svg-path]]))
 
 (defn set-svg-path
   [texture ctx {:keys [data dash dash-offset fill width height]

@@ -4,7 +4,7 @@
     ["svg-arc-to-cubic-bezier" :as arcToBezier]
     [webchange.common.svg-path.path-splitter :refer [split-path apply-path-to-point]]
     [webchange.common.svg-path.path-element :refer [length]]
-    [webchange.interpreter.renderer.scene.components.svg_path :refer [get-svg-path]]
+    [webchange.interpreter.renderer.scene.components.svg-path :refer [get-svg-path]]
     [webchange.utils.numbers :refer [to-precision]]))
 
 (defn- apply-origin

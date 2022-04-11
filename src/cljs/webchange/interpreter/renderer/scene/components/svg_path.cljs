@@ -1,6 +1,6 @@
-(ns webchange.interpreter.renderer.scene.components.svg_path
+(ns webchange.interpreter.renderer.scene.components.svg-path
   (:require
-   [webchange.renderer.letters-path :refer [alphabet-path alphabet-traceable-path]]))
+    [webchange.renderer.letters-path :refer [alphabet-path alphabet-traceable-path]]))
 
 (defn move-path-left [data]
   (let [svg-node (.createElementNS js/document "http://www.w3.org/2000/svg" "svg")
