@@ -34,21 +34,15 @@ node {
         }
 
         stage('Migrate') {
-	    environment {
-                config='/srv/www/webchange/config.edn'
+	    withEnv(['config=/srv/www/webchange/config.edn']) {
+	        sh 'java -jar /srv/www/webchange/current.jar migrate'
             }
-	    steps {
-                sh 'java -jar /srv/www/webchange/current.jar migrate'
-	    }
         }
 
         stage('Sync') {
-	    environment {
-                config='/srv/www/webchange/config.edn'
-            }
-	    steps {
-                sh 'java -jar /srv/www/webchange/current.jar download-course-data 1'
-            }
+	    withEnv(['config=/srv/www/webchange/config.edn']) {
+	        sh 'java -jar /srv/www/webchange/current.jar download-course-data 1'
+	    }
         }
 
         stage('Restart') {
