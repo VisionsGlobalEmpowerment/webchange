@@ -2,35 +2,110 @@
   (:require
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [print-maps-comparison]]
-    [webchange.progress.finish :refer [get-finished-progress]]))
+    [webchange.progress.finish :refer [activity-finished? course-finished? get-finished-progress]]))
 
 (declare course-data)
 
 (deftest test-get-finished-progress
   (testing "Should return finished progress for not specified data"
-      (let [actual-result (get-finished-progress course-data nil nil nil)
-            expected-result (sorted-map 0 (sorted-map 0 [0 1 2 3]
-                                                      1 [4 5 6]
-                                                      2 [7 8 9 10])
-                                        1 (sorted-map 0 [59 60 61 62]
-                                                      1 [63 64])
-                                        2 (sorted-map 0 [111 112 113 114]
-                                                      1 [115]
-                                                      2 [116 117 118]
-                                                      3 [119]))]
-        (when-not (= actual-result expected-result)
-          (print-maps-comparison actual-result expected-result))
-        (is (= actual-result expected-result))))
+    (let [actual-result (get-finished-progress course-data)
+          expected-result (sorted-map :0 (sorted-map :0 [0 1 2 3]
+                                                     :1 [4 5 6]
+                                                     :2 [7 8 9 10])
+                                      :1 (sorted-map :0 [59 60 61 62]
+                                                     :1 [63 64])
+                                      :2 (sorted-map :0 [111 112 113 114]
+                                                     :1 [115]
+                                                     :2 [116 117 118]
+                                                     :3 [119]))]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result))))
 
   (testing "Should return finished progress for specified data"
-    (let [actual-result (get-finished-progress course-data 1 0 2)
-          expected-result (sorted-map 0 (sorted-map 0 [0 1 2 3]
-                                                    1 [4 5 6]
-                                                    2 [7 8 9 10])
-                                      1 (sorted-map 0 [59 60 61]))]
+    (let [actual-result (get-finished-progress course-data {:level-idx    1
+                                                            :lesson-idx   0
+                                                            :activity-idx 2})
+          expected-result (sorted-map :0 (sorted-map :0 [0 1 2 3]
+                                                     :1 [4 5 6]
+                                                     :2 [7 8 9 10])
+                                      :1 (sorted-map :0 [59 60 61]))]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
+
+(deftest test-activity-finished?
+  (testing "Should return correct value"
+    (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
+                                                      :1 [4 5 6]
+                                                      :2 [7 8 9 10])
+                                       :1 (sorted-map :0 [59 60 61]))]
+      (is (= (activity-finished? current-progress {:level-idx    0
+                                                   :lesson-idx   1
+                                                   :activity-idx 2})
+             true))
+      (is (= (activity-finished? current-progress {:level-idx    :0
+                                                   :lesson-idx   :1
+                                                   :activity-idx 2})
+             true))
+      (is (= (activity-finished? current-progress {:level-idx   0
+                                                   :lesson-idx  1
+                                                   :activity-id 6})
+             true))
+      (is (= (activity-finished? current-progress {:level-idx    0
+                                                   :lesson-idx   1
+                                                   :activity-idx 6})
+             false))
+      (is (= (activity-finished? current-progress {:level-idx    2
+                                                   :lesson-idx   1
+                                                   :activity-idx 1})
+             false))
+      (is (= (activity-finished? current-progress {:level-idx    0
+                                                   :lesson-idx   3
+                                                   :activity-idx 1})
+             false)))))
+
+(deftest test-course-finished?
+  (testing "Should return correct value"
+    (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
+                                                      :1 [4 5 6]
+                                                      :2 [7 8 9 10])
+                                       :1 (sorted-map :0 [59 60 61 62]
+                                                      :1 [63 64])
+                                       :2 (sorted-map :0 [111 112 113 114]
+                                                      :1 [115]
+                                                      :2 [116 117 118]
+                                                      :3 [119]))]
+      (is (= (course-finished? course-data current-progress) true)))
+    (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
+                                                      :1 [4 5 6]
+                                                      :2 [7 8 9 10])
+                                       :1 (sorted-map :0 [59 60 61 62]
+                                                      :1 [63 64])
+                                       :2 (sorted-map :0 [111 112 113 114]
+                                                      :1 [115]
+                                                      :2 [116 117 118]
+                                                      :3 []))]
+      (is (= (course-finished? course-data current-progress) false)))
+    (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
+                                                      :1 [4 5 6]
+                                                      :2 [7 8 9 10])
+                                       :1 (sorted-map :0 [59 60 61 62]
+                                                      :1 [63 64])
+                                       :2 (sorted-map :0 [111 112 113 114]
+                                                      :1 [115]
+                                                      :2 [116 117 118]))]
+      (is (= (course-finished? course-data current-progress) false)))
+    (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
+                                                      :1 [4 5 6]
+                                                      :2 [7 8 9 10])
+                                       :1 (sorted-map :0 [59 60 61 62]
+                                                      :1 [63 64])
+                                       :2 (sorted-map :0 [111 112 113]
+                                                      :1 [115]
+                                                      :2 [116 117 118]
+                                                      :3 [119]))]
+      (is (= (course-finished? course-data current-progress) false)))))
 
 (def course-data {:levels [{:name    "Level 1"
                             :level   1

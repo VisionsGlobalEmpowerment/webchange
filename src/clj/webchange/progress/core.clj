@@ -191,9 +191,9 @@
         {course-id :id} (db/get-course {:slug course-slug})
         course-data (course/get-course-data course-slug)
         levels (get course-data :levels)
-        _ (log/debug "levels" levels)
-        finished (get-finished-progress course-data level lesson activity)
-        _ (log/debug "finished" finished)
+        finished (get-finished-progress course-data {:level-idx    level
+                                                     :lesson-idx   lesson
+                                                     :activity-idx activity})
         current-tags (-> (db/get-progress {:user_id user-id :course_id course-id})
                          :data
                          :current-tags)
@@ -203,4 +203,5 @@
                      (assoc :finished finished)
                      (assoc :next next)
                      (assoc :user-mode (if navigation "game-with-nav")))]
-    (save-progress! user-id course-slug {:progress progress})))
+    (save-progress! user-id course-slug {:progress progress})
+    progress))
