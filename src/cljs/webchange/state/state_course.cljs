@@ -86,6 +86,9 @@
 
 (defn- activity-finished?
   [activity-idx finished-activities]
+  (when-not (some #{activity-idx} finished-activities)
+    (print "finished-activities" finished-activities)
+    (print "activity-idx" activity-idx))
   (some #{activity-idx} finished-activities))
 
 (defn- lesson-finished?
@@ -94,7 +97,10 @@
        (->> (:activities lesson-data)
             (map-indexed vector)
             (every? (fn [[idx _]]
-                      (activity-finished? idx (get finished-lessons lesson-idx)))))))
+                      (let [finished? (activity-finished? idx (get finished-lessons lesson-idx))]
+                        (when-not finished?
+                          (print "lesson-idx" lesson-idx))
+                        finished?))))))
 
 (defn- level-finished?
   [level-idx level-data finished-levels]
@@ -102,7 +108,10 @@
        (->> (:lessons level-data)
             (map-indexed idx-keyword)
             (every? (fn [[idx lesson]]
-                      (lesson-finished? idx lesson (get finished-levels level-idx)))))))
+                      (let [finished? (lesson-finished? idx lesson (get finished-levels level-idx))]
+                        (when-not finished?
+                          (print "level-idx" level-idx))
+                        finished?))))))
 
 (defn course-finished?
   ([db]
@@ -110,6 +119,10 @@
                      (get-progress-data db)))
   ([course-data progress-data]
    (let [{:keys [finished]} progress-data]
+     ;(print "course-data")
+     (print course-data)
+     (print "progress-data")
+     (print progress-data)
      (->> (:levels course-data)
           (map-indexed idx-keyword)
           (every? (fn [[idx level]]

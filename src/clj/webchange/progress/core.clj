@@ -7,6 +7,7 @@
             [webchange.progress.tags :as tags]
             [webchange.class.core :as class]
             [webchange.course.core :as course]
+            [webchange.progress.finish :refer [get-finished-progress]]
             [java-time :as jt]
             [clojure.string :as str]))
 
@@ -42,9 +43,9 @@
         stats (->> (db/get-course-stats {:class_id class-id :course_id course-id})
                    (map class/with-user)
                    (map class/with-student-by-user))]
-    [true {:stats       stats
-           :class-id    class-id
-           :course-name course-slug
+    [true {:stats                    stats
+           :class-id                 class-id
+           :course-name              course-slug
            :course-activities-number activities-count}]))
 
 (defn workflow->grid
@@ -181,36 +182,6 @@
       (update-progress! id progress)
       (create-progress! owner-id course-id progress))))
 
-(defn- filter-last-finished-lessons
-  [lesson-idx finished]
-  (let [[last-level last-lessons] (last finished)
-        filtered-lessons (->> last-lessons
-                              (keep (fn [[idx item]] (when (>= lesson-idx idx) [idx item])))
-                              (into {}))]
-    (-> finished
-        (assoc last-level filtered-lessons))))
-
-(defn- filter-last-finished-activities
-  [activity-idx finished]
-  (let [[last-level last-lessons] (last finished)
-        [last-lesson last-activies] (last last-lessons)
-        filtered-activities (->> last-activies
-                                 (remove (fn [idx] (> idx activity-idx)))
-                                 (into []))]
-    (-> finished
-        (assoc-in [last-level last-lesson] filtered-activities))))
-
-(defn- levels->finished
-  [levels level-idx lesson-idx activity-idx]
-  (let [->lesson (fn [idx lesson] [idx (->> (:activities lesson) (map-indexed (fn [idx _] idx)) (into #{}))])
-        ->level (fn [idx level] [idx (->> (:lessons level) (map-indexed ->lesson) (into (sorted-map)))])
-        prepared (->> levels (map-indexed ->level) (into (sorted-map)))]
-    (cond->> prepared
-             level-idx (keep (fn [[idx item]] (when (>= level-idx idx) [idx item])))
-             :always (into {})
-             lesson-idx (filter-last-finished-lessons lesson-idx)
-             activity-idx (filter-last-finished-activities activity-idx))))
-
 (defn complete-individual-progress!
   [course-slug student-id {lesson-val :lesson level-val :level activity-val :activity navigation :navigation}]
   (let [level (when level-val (dec level-val))
@@ -218,9 +189,11 @@
         activity (when activity-val (dec activity-val))
         {user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:slug course-slug})
-        levels (-> (course/get-course-data course-slug) :levels)
-        finished (-> levels
-                     (levels->finished level lesson activity))
+        course-data (course/get-course-data course-slug)
+        levels (get course-data :levels)
+        _ (log/debug "levels" levels)
+        finished (get-finished-progress course-data level lesson activity)
+        _ (log/debug "finished" finished)
         current-tags (-> (db/get-progress {:user_id user-id :course_id course-id})
                          :data
                          :current-tags)
