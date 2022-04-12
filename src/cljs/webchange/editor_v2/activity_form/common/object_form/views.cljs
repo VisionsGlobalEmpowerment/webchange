@@ -9,25 +9,46 @@
     [webchange.editor-v2.activity-form.common.object-form.image-form.views :as image-form]
     [webchange.editor-v2.activity-form.common.object-form.text-form.views :as text-form]
     [webchange.editor-v2.activity-form.common.object-form.video-form.views :as video-form]
-    [webchange.ui-framework.components.index :refer [button with-confirmation]]
+    [webchange.ui-framework.components.index :refer [button icon-button with-confirmation]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
 
     [webchange.subs :as subs]
     [webchange.utils.scene-data :as utils]))
 
 (def form-components
-  {"animation" animation-form/form
+  {"animation"            animation-form/form
    "text-tracing-pattern" text-tracing-pattern-form/form
-   "text"      text-form/form
-   "image"     image-form/form
-   "video"     video-form/form})
+   "text"                 text-form/form
+   "image"                image-form/form
+   "video"                video-form/form})
 
 (defn available-object-type?
   [object-type]
   (contains? form-components object-type))
 
+(defn- buttons-block
+  [{:keys [id on-remove-click on-save-click]}]
+  (let [save-button-disabled? (if (sequential? id)
+                                false
+                                @(re-frame/subscribe [::state/disabled? id]))
+        removable? (and (fn? on-remove-click)
+                        @(re-frame/subscribe [::state/object-removable? id]))]
+    [:div.buttons-block
+     [button {:variant   "contained"
+              :color     "primary"
+              :size      "big"
+              :disabled? save-button-disabled?
+              :on-click  on-save-click}
+      "Apply"]
+     (when removable?
+       [icon-button {:icon       "remove"
+                     :color      "primary"
+                     :title      "Delete"
+                     :class-name "remove-button"
+                     :on-click   on-remove-click}])]))
+
 (defn- object-form-view
-  [{:keys [class-name objects-data objects-names object-type on-destroy on-save-click ref show-save-button? title hot-update?]
+  [{:keys [class-name objects-data objects-names object-type on-destroy on-save-click on-remove-click ref show-save-button? title hot-update?]
     :or   {on-save-click     #()
            show-save-button? true}}]
   (when (available-object-type? object-type)
@@ -37,8 +58,7 @@
       (let [component (get form-components object-type)
             component-props {:id            id
                              :objects-data  objects-data
-                             :objects-names objects-names}
-            disabled? @(re-frame/subscribe [::state/disabled? id])]
+                             :objects-names objects-names}]
         [:div {:class-name (get-class-name (-> {"activity-object-form" true}
                                                (assoc class-name (some? class-name))))}
          (when (some? title)
@@ -46,13 +66,9 @@
          [:div.object-form-content
           [component component-props]]
          (when show-save-button?
-           [:div.buttons-block
-            [button {:variant   "contained"
-                     :color     "primary"
-                     :size      "big"
-                     :disabled? disabled?
-                     :on-click  #(on-save-click id)}
-             "Apply"]])])
+           [buttons-block {:id              id
+                           :on-save-click   #(on-save-click id)
+                           :on-remove-click #(on-remove-click id)}])])
       (finally
         (on-destroy id)))))
 
@@ -85,15 +101,13 @@
                                    :class-name        "group-form-item"
                                    :show-save-button? false
                                    :ref               handle-child-ref})])
-       [button {:variant  "contained"
-                :color    "primary"
-                :size     "big"
-                :on-click handle-group-save}
-        "Apply"]])))
+       [buttons-block {:id            @children-ids
+                       :on-save-click handle-group-save}]])))
 
 (defn object-form
   [{:keys [scene-data on-save hot-update?]}]
   (r/with-let [handle-save #(re-frame/dispatch [::state/save % {:on-save on-save}])
+               handle-remove #(re-frame/dispatch [::state/remove %])
                handle-reset #(re-frame/dispatch [::state/reset %])
                handle-save-and-reset #(re-frame/dispatch [::state/save % {:reset? true :on-save on-save}])
                handle-destroy (fn [id]
@@ -108,12 +122,13 @@
           type (get data :type)
           component-key (->> (map clojure.core/name names)
                              (clojure.string/join "--"))
-          component-props {:object-type   type
-                           :objects-data  data
-                           :objects-names names
-                           :on-save-click handle-save
-                           :on-destroy    handle-destroy
-                           :hot-update?   hot-update?}]
+          component-props {:object-type     type
+                           :objects-data    data
+                           :objects-names   names
+                           :on-save-click   handle-save
+                           :on-remove-click handle-remove
+                           :on-destroy      handle-destroy
+                           :hot-update?     hot-update?}]
       (when (some? data)
         (if (= type "group")
           ^{:key component-key}

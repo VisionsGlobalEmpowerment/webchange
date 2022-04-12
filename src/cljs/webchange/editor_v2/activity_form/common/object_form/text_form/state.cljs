@@ -9,8 +9,9 @@
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
     (let [text-data (select-keys objects-data [:align :text :chunks :font-family :font-size :fill])]
-      {:dispatch [::state/init id {:data  text-data
-                                   :names objects-names}]})))
+      {:dispatch [::state/init id {:data     text-data
+                                   :names    objects-names
+                                   :metadata (:metadata objects-data)}]})))
 
 ;; Text
 
@@ -83,24 +84,24 @@
 ;; Font Color
 
 (re-frame/reg-sub
- ::current-font-color
- (fn [[_ id]]
-   {:pre [(some? id)]}
-   [(re-frame/subscribe [::state/current-data id])])
- (fn [[current-data]]
-   (get current-data :fill "")))
+  ::current-font-color
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::state/current-data id])])
+  (fn [[current-data]]
+    (get current-data :fill "")))
 
 (re-frame/reg-event-fx
- ::set-current-font-color
- (fn [{:keys [_]} [_ id font-color]]
-   {:dispatch [::state/update-current-data id {:fill font-color}]}))
+  ::set-current-font-color
+  (fn [{:keys [_]} [_ id font-color]]
+    {:dispatch [::state/update-current-data id {:fill font-color}]}))
 
 (re-frame/reg-sub
- ::font-color-options
- (fn []
-   [(re-frame/subscribe [::fonts/font-color-options])])
- (fn [[options]]
-   options))
+  ::font-color-options
+  (fn []
+    [(re-frame/subscribe [::fonts/font-color-options])])
+  (fn [[options]]
+    options))
 
 ;; Text Align
 

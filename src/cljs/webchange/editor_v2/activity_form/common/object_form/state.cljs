@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.logger.index :as logger]
     [webchange.state.state :as state]
+    [webchange.state.state-activity :as state-activity]
     [webchange.state.state-flipbook :as state-flipbook]
     [webchange.utils.deep-merge :refer [deep-merge]]
     [webchange.utils.map :refer [ignore-keys]]))
@@ -36,11 +37,12 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ id {:keys [data names form-params]}]]
+  (fn [{:keys [_]} [_ id {:keys [data names form-params metadata]}]]
     {:dispatch-n [[::set-selected-objects-names id names]
                   [::set-initial-data id data]
                   [::set-current-data id data]
-                  [::set-form-params id form-params]]}))
+                  [::set-form-params id form-params]
+                  [::set-metadata id metadata]]}))
 
 (re-frame/reg-event-fx
   ::init-common-params
@@ -75,6 +77,29 @@
       (cond
         (nil? form-params) true
         :else (get form-params component-key false)))))
+
+;; Metadata
+
+(def metadata-path :metadata)
+
+(re-frame/reg-event-fx
+  ::set-metadata
+  (fn [{:keys [db]} [_ id value]]
+    {:db (assoc-in db (path-to-db id [metadata-path]) value)}))
+
+(re-frame/reg-sub
+  ::metadata
+  (fn [db [_ id]]
+    {:pre [(some? id)]}
+    (get-in db (path-to-db id [metadata-path]))))
+
+(re-frame/reg-sub
+  ::object-removable?
+  (fn [[_ id]]
+    {:pre [(some? id)]}
+    [(re-frame/subscribe [::metadata id])])
+  (fn [[metadata]]
+    (get metadata :removable? false)))
 
 ;; Selected Objects
 
@@ -248,6 +273,24 @@
                                 (concat result)))
                          [[::state-flipbook/generate-stages-screenshots {:only-current-stage? true}]]
                          forms-data)}))
+
+(re-frame/reg-event-fx
+  ::remove
+  (fn [{:keys [db]} [_ id {:keys [reset?] :or {reset? false}}]]
+    (let [object-name (-> (get-selected-objects-names db id)
+                          (first))]
+      {:dispatch-n (cond-> [[::set-loading-status id :loading]
+                            [::state-activity/call-activity-action
+                             {:action "remove-text"
+                              :data   {:object-name object-name}}
+                             {:on-success [::remove-success id]}]])})))
+
+(re-frame/reg-event-fx
+  ::remove-success
+  (fn [{:keys [_]} [_ id]]
+    {:dispatch-n (cond-> [[::set-loading-status id :done]
+                          [::reset id {:reset-stage-object? false}]
+                          [::state-parent/reset-selection]])}))
 
 ;; Reset
 
