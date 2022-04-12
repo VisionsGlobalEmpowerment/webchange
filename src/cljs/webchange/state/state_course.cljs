@@ -1,6 +1,7 @@
 (ns webchange.state.state-course
   (:require
     [re-frame.core :as re-frame]
+    [webchange.progress.finish :as progress-utils]
     [webchange.state.core :as core]
     [webchange.state.warehouse :as warehouse]))
 
@@ -80,40 +81,12 @@
   ::progress-data
   get-progress-data)
 
-(defn- idx-keyword
-  [idx data]
-  [(-> idx str keyword) data])
-
-(defn- activity-finished?
-  [activity-idx finished-activities]
-  (some #{activity-idx} finished-activities))
-
-(defn- lesson-finished?
-  [lesson-idx lesson-data finished-lessons]
-  (and (contains? finished-lessons lesson-idx)
-       (->> (:activities lesson-data)
-            (map-indexed vector)
-            (every? (fn [[idx _]]
-                      (activity-finished? idx (get finished-lessons lesson-idx)))))))
-
-(defn- level-finished?
-  [level-idx level-data finished-levels]
-  (and (contains? finished-levels level-idx)
-       (->> (:lessons level-data)
-            (map-indexed idx-keyword)
-            (every? (fn [[idx lesson]]
-                      (lesson-finished? idx lesson (get finished-levels level-idx)))))))
-
 (defn course-finished?
   ([db]
    (course-finished? (get-course-data db)
                      (get-progress-data db)))
   ([course-data progress-data]
-   (let [{:keys [finished]} progress-data]
-     (->> (:levels course-data)
-          (map-indexed idx-keyword)
-          (every? (fn [[idx level]]
-                    (level-finished? idx level finished)))))))
+   (progress-utils/course-finished? course-data (:finished progress-data))))
 
 (re-frame/reg-sub
   ::course-finished?

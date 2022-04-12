@@ -1,6 +1,7 @@
 (ns webchange.progress.activity
   (:require
-    [webchange.progress.tags :as tags]))
+    [webchange.progress.tags :as tags]
+    [webchange.utils.log :refer [log]]))
 
 (defn activity-data-by-index
   [levels level lesson activity]

@@ -39,8 +39,7 @@
   [student-id course-slug request]
   (let [user-id (current-user request)
         data (-> request :body)]
-    (-> (core/complete-individual-progress! course-slug (Integer/parseInt student-id) data)
-        handle)))
+    (handle [true (core/complete-individual-progress! course-slug (Integer/parseInt student-id) data)])))
 
 (defroutes progress-routes
            (GET "/api/class-profile/:class-id/course/:course-slug" [class-id course-slug :as request]

@@ -4,7 +4,8 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.dashboard.events-utils :refer [when-valid clear-errors]]
-    [webchange.validation.specs.student :as spec]))
+    [webchange.validation.specs.student :as spec]
+    [webchange.state.warehouse :as warehouse]))
 
 (re-frame/reg-event-fx
   ::load-students
@@ -98,18 +99,6 @@
                        [::load-unassigned-students])}))
 
 (re-frame/reg-event-fx
-  ::complete-student-progress
-  (fn [{:keys [db]} [_ student-id course-name data]]
-    {:db (assoc-in db [:loading :complete-student-progress] true)
-     :http-xhrio {:method          :put
-                  :uri             (str "/api/individual-profile/" student-id "/course/" course-name "/complete")
-                  :params          data
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::complete-student-success]
-                  :on-failure      [:api-request-error :complete-student-progress]}}))
-
-(re-frame/reg-event-fx
   ::complete-student-success
   (fn [{:keys [db]} _]
     {:dispatch-n (list [:complete-request :complete-student-progress])}))
@@ -157,10 +146,13 @@
 
 (re-frame/reg-event-fx
   ::confirm-complete
-  (fn [{:keys [db]} [_ student-id data]]
-    (let [current-course (:current-course db)]
-      {:db (assoc-in db [:dashboard :complete-student-modal-state] nil)
-       :dispatch [::complete-student-progress student-id current-course data]})))
+  (fn [{:keys [db]} [_ student-id course-slug data]]
+    {:db       (assoc-in db [:dashboard :complete-student-modal-state] nil)
+     :dispatch [::warehouse/complete-student-progress
+                {:student-id  student-id
+                 :course-name course-slug
+                 :data        data}
+                {:on-success [::complete-student-success]}]}))
 
 (re-frame/reg-event-fx
   ::close-remove-from-class-modal
