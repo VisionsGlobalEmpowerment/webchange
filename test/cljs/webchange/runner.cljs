@@ -53,6 +53,7 @@
             [webchange.common.svg-path.path-to-transitions-test]
             [webchange.common.svg-path.path-splitter-test]
             [webchange.interpreter.lessons.activity-test]
+            [webchange.utils.finish-progress-test]
             [webchange.utils.list-test]
             [webchange.utils.preserve-objects-test]
             [webchange.utils.scene-common-actions-test]
@@ -112,6 +113,7 @@
   'webchange.common.svg-path.path-to-transitions-test
   'webchange.common.svg-path.path-splitter-test
   'webchange.interpreter.lessons.activity-test
+  'webchange.utils.finish-progress-test
   'webchange.utils.list-test
   'webchange.utils.preserve-objects-test
   'webchange.utils.scene-common-actions-test

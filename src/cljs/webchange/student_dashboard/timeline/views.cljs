@@ -57,30 +57,31 @@
        :component-did-mount  (fn [] (scroll-to-end))
        :component-did-update (fn [] (scroll-to-end))
        :reagent-render
-                             (fn []
-                               (let [loading? @(re-frame/subscribe [::state/loading?])
-                                     course-finished? @(re-frame/subscribe [::state/course-finished?])
-                                     finished-activities @(re-frame/subscribe [::state/finished-activities])
-                                     handle-next-click (fn [] (re-frame/dispatch [::state/open-next-activity]))
-                                     handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
-                                 [:div.timeline-wrapper {:ref #(when (some? %)
-                                                                 (reset! container %))}
-                                  (when-not loading?
-                                    (into [:div.timeline
-                                           ^{:key "filler"}
-                                           [:div.filler]]
-                                          (-> (reduce (fn [result {:keys [id] :as item}]
-                                                        (concat result [^{:key (str id "-connector")}
-                                                                        [item-connector]
-                                                                        ^{:key id}
-                                                                        [timeline-item (merge item
-                                                                                              {:on-click handle-activity-click})]]))
-                                                      []
-                                                      finished-activities)
-                                              (concat [(when-not (empty? finished-activities)
-                                                         ^{:key "play-button-connector"}
-                                                         [button-connector])
-                                                       ^{:key "play-button"}
-                                                       (if course-finished?
-                                                         [great-work-button]
-                                                         [play-button {:on-click handle-next-click}])]))))]))})))
+       (fn []
+         (let [loading? @(re-frame/subscribe [::state/loading?])
+               course-finished? @(re-frame/subscribe [::state/course-finished?])
+               finished-activities @(re-frame/subscribe [::state/finished-activities])
+               handle-next-click (fn [] (re-frame/dispatch [::state/open-next-activity]))
+               handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
+           [:div.timeline-wrapper {:ref #(when (some? %)
+                                           (reset! container %))}
+            (print "course-finished?" course-finished?)
+            (when-not loading?
+              (into [:div.timeline
+                     ^{:key "filler"}
+                     [:div.filler]]
+                    (-> (reduce (fn [result {:keys [id] :as item}]
+                                  (concat result [^{:key (str id "-connector")}
+                                                  [item-connector]
+                                                  ^{:key id}
+                                                  [timeline-item (merge item
+                                                                        {:on-click handle-activity-click})]]))
+                                []
+                                finished-activities)
+                        (concat [(when-not (empty? finished-activities)
+                                   ^{:key "play-button-connector"}
+                                   [button-connector])
+                                 ^{:key "play-button"}
+                                 (if course-finished?
+                                   [great-work-button]
+                                   [play-button {:on-click handle-next-click}])]))))]))})))
