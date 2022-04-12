@@ -9,6 +9,16 @@
   [action-data]
   (get action-data :type))
 
+(defn sequence-data-action?
+  [action-data]
+  (-> (get-action-type action-data)
+      (= "sequence-data")))
+
+(defn parallel-action?
+  [action-data]
+  (-> (get-action-type action-data)
+      (= "parallel")))
+
 (defn text-animation-action?
   [action-data]
   (-> (get-action-type action-data)
@@ -33,6 +43,11 @@
   [action-data]
   (or (dialog-inner-action? action-data)
       (dialog-main-action? action-data)))
+
+(defn has-sub-actions?
+  [action-data]
+  (or (sequence-data-action? action-data)
+      (parallel-action? action-data)))
 
 (defn fix-available-effect
   [available-effect]

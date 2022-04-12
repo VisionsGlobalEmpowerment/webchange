@@ -19,6 +19,11 @@
   (or (single-background? object-data)
       (layered-background? object-data)))
 
+(defn group?
+  [object-data]
+  (-> (get-type object-data)
+      (= "group")))
+
 (defn get-editable-data
   [object-data]
   (get object-data :editable?))
@@ -27,3 +32,9 @@
   [object-data]
   (-> (get-editable-data object-data)
       (some?)))
+
+(defn get-children
+  [object-data]
+  (cond
+    (group? object-data) (get object-data :children [])
+    :default nil))

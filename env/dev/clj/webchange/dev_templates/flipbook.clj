@@ -4,7 +4,7 @@
             [webchange.course.core :as core]))
 
 (comment
-  (def test-course-slug "book-title-english-pgbrcrig")
+  (def test-course-slug "sleepy-mr-sloth-english-gouuirga")
   (def scene-slug "book")
 
   (core/get-scene-latest-version test-course-slug scene-slug)

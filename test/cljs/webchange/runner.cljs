@@ -55,6 +55,7 @@
             [webchange.common.svg-path.path-splitter-test]
             [webchange.interpreter.lessons.activity-test]
             [webchange.utils.finish-progress-test]
+            [webchange.utils.flipbook.remove-text-object-test]
             [webchange.utils.list-test]
             [webchange.utils.scene-common-actions-test]))
 (run-all-tests)
