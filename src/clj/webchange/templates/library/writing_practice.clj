@@ -34,7 +34,6 @@
         {:background  {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
          :letter-tutorial-path
          {:type         "animated-svg-path",
-          :x            750,
           :y            -37,
           :width        225,
           :height       300,
@@ -44,12 +43,12 @@
           :path         "",
           :scale-x      4,
           :scale-y      4,
+          :visible      false
           :states       {:hidden {:visible false}, :visible {:visible true}},
           :stroke       "#323232",
           :stroke-width 10},
          :letter-tutorial-trace
          {:type         "svg-path",
-          :x            750,
           :y            -37,
           :width        225,
           :height       300,
@@ -60,6 +59,7 @@
           :rotation     0,
           :scale-x      4,
           :scale-y      4,
+          :visible      false
           :states       {:hidden {:visible false}, :visible {:visible true}},
           :stroke       "#898989",
           :stroke-width 4},
@@ -145,6 +145,45 @@
                                                :attr-name "enable?",
                                                :attr-value true}
                                               {:type "action" :id "timeout-timer"}
+
+                                              {:type       "test-expression"
+                                               :expression ["eq" ["len" ["." "@current-concept" ":letter"]] 1]
+                                               :success    {:type "sequence-data"
+                                                            :data [{:type "set-variable" :var-name "hand-offset" :var-value 610}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-trace"
+                                                                    :attr-name "x"
+                                                                    :attr-value 750}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-trace"
+                                                                    :attr-name "visible"
+                                                                    :attr-value true}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-path"
+                                                                    :attr-name "x"
+                                                                    :attr-value 750}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-path"
+                                                                    :attr-name "visible"
+                                                                    :attr-value true}]}
+                                               :fail       {:type "sequence-data"
+                                                            :data [{:type "set-variable" :var-name "hand-offset" :var-value 410}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-trace"
+                                                                    :attr-name "x"
+                                                                    :attr-value 550}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-trace"
+                                                                    :attr-name "visible"
+                                                                    :attr-value true}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-path"
+                                                                    :attr-name "x"
+                                                                    :attr-value 550}
+                                                                   {:type "set-attribute"
+                                                                    :target "letter-tutorial-path"
+                                                                    :attr-name "visible"
+                                                                    :attr-value true}]}}
                                               {:type "action" :id "show-example"}]},
          :stop-activity               {:type "sequence-data"
                                        :data [{:type "remove-interval" :id "instructions-timeout"}
@@ -169,7 +208,8 @@
                                               {:data [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
                                                       {:to            {:letter-path "", :scale {:x 4, :y 4}, :origin {:x 610, :y -80}, :duration 5},
                                                        :type          "transition",
-                                                       :from-var      [{:var-name "current-concept", :action-property "to.letter-path" :var-property "letter"}],
+                                                       :from-var      [{:var-name "current-concept", :action-property "to.letter-path" :var-property "letter"}
+                                                                       {:var-name "hand-offset", :action-property "to.origin.x"}],
                                                        :transition-id "hand"}],
                                                :type "parallel"}
                                               {:to {:x 1490, :y 180, :loop false, :duration 1.5}, :type "transition", :transition-id "hand"}

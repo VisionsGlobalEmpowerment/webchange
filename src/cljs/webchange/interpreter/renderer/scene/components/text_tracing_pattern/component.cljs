@@ -106,10 +106,20 @@
 
 (defn- draw-pattern!
   [group {:keys [width text repeat-text x-offset spacing dashed]} {letter-scale :letter} topline-y]
-  (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
+  (let [spacings (if (> (count text) 1)
+                   (vec (flatten (repeat repeat-text [20 spacing])))
+                   (vec (repeat repeat-text spacing)))
+        text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
-        widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
-        total (- (last widths) spacing)
+        widths (accumulate
+                 (map-indexed (fn [index letter]
+                                (->> letter
+                                     get-svg-path
+                                     get-path-width
+                                     (+ (nth spacings index))
+                                     (* letter-scale)))
+                              text))
+        total (- (last widths) (* letter-scale (last spacings)))
         to-offset "FfiíU"
         positions (->> (range length)
                        (map (fn [pos]
@@ -146,10 +156,20 @@
 
 (defn- draw-traceable-pattern!
   [group {:keys [width text repeat-text x-offset spacing] :as props} {letter-scale :letter} topline-y state]
-  (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
+  (let [spacings (if (> (count text) 1)
+                   (vec (flatten (repeat repeat-text [20 spacing])))
+                   (vec (repeat repeat-text spacing)))
+        text (if repeat-text (apply str (repeat repeat-text text)) text)
         length (count text)
-        widths (accumulate (map #(* letter-scale (+ spacing (get-path-width (get-svg-path %)))) text))
-        total (- (last widths) spacing)
+        widths (accumulate
+                 (map-indexed (fn [index letter]
+                                (->> letter
+                                     get-svg-path
+                                     get-path-width
+                                     (+ (nth spacings index))
+                                     (* letter-scale)))
+                              text))
+        total (- (last widths) (* letter-scale (last spacings)))
         positions (->> (range length)
                        (map (fn [pos]
                               {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
