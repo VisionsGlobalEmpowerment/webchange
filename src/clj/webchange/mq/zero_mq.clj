@@ -26,11 +26,14 @@
   (zmq/with-new-context
     (let [sink (zmq/socket :pull {:bind (get-in queues [queue-name :sink-url])})]
       (while true
-        (let [result (-> (zmq/receive-msg sink {:stringify true :timeout 30000}) first)]
-          (log/debug "Sink receive...")
-          (when result
-            (log/debug "...receive with result")
-            (on-receive-callback (edn/read-string result))))))))
+        (try
+          (let [result (-> (zmq/receive-msg sink {:stringify true :timeout 30000}) first)]
+            (log/debug "Sink receive...")
+            (when result
+              (log/debug "...receive with result")
+              (on-receive-callback (edn/read-string result))))
+          (catch Exception e
+            (log/error e)))))))
 
 (defn send
   [queue-name message]
