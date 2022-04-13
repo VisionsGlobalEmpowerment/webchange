@@ -28,9 +28,8 @@
       (while true
         (try
           (let [result (-> (zmq/receive-msg sink {:stringify true :timeout 30000}) first)]
-            (log/debug "Sink receive...")
             (when result
-              (log/debug "...receive with result")
+              (log/debug "Sink receive with result")
               (on-receive-callback (edn/read-string result))))
           (catch Exception e
             (log/error e)))))))

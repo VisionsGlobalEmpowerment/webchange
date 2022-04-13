@@ -572,6 +572,10 @@
                                   (map :id)
                                   (concat [2 4]) ;add english and spanish, even if they are not published yet
                                   (set))
+        course-assets (->> published-course-ids
+                           (map #(db/get-course-by-id {:id %}))
+                           (map :image-src)
+                           (remove empty?))
         datasets (->> published-course-ids
                       (mapcat #(db/get-datasets-by-course {:course_id %}))
                       (map (fn [dataset]
@@ -596,7 +600,7 @@
                           (mapcat #(-> % :data :assets))
                           (map :url)
                           (remove nil?))
-        assets (->> (concat dataset-assets scene-assets)
+        assets (->> (concat course-assets dataset-assets scene-assets)
                     (filter #(str/starts-with? % "/upload/"))
                     (set))]
     assets))
