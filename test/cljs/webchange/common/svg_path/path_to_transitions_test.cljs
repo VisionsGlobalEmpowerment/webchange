@@ -98,32 +98,39 @@
              {:x 0 :y 0})
            [1 1 1]))))
 
+(defn- round-duration-to-ms
+  [transition]
+  (let [round #(/ (js/Math.round (* 1000 %)) 1000)]
+    (update transition :duration round)))
+
 (deftest test-path->transitions
-  (let [result (ptt/path->transitions
-                 {:path     "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90"
-                  :origin   {:x 1005 :y 585}
-                  :scale    {:x 2 :y 2}
-                  :duration 5})
-        expected-data [{:x 1165, :y 635, :duration 0.983425}
-                       {:bezier   [{:x 1143.769166, :y 608.482697}
-                                   {:x 1108.106950, :y 598.264562}
-                                   {:x 1076.054722, :y 609.514907}],
-                        :duration 0.578813}
-                       {:bezier   [{:x 1044.002493, :y 620.765252}
-                                   {:x 1022.550020, :y 651.030666}
-                                   {:x 1022.550020, :y 685}],
-                        :duration 0.578812}
-                       {:bezier   [{:x 1022.550020, :y 718.969333}
-                                   {:x 1044.002493, :y 749.234747}
-                                   {:x 1076.054722, :y 760.485092}],
-                        :duration 0.578812}
-                       {:bezier   [{:x 1108.106950, :y 771.735437}
-                                   {:x 1143.769166, :y 761.517302}
-                                   {:x 1165, :y 735}],
-                        :duration 0.578813}
-                       {:x 1165, :y 605, :duration 0.762661}
-                       {:x 1165, :y 765, :duration 0.938660}]]
-    (is (= result expected-data))))
+  (is (= (->> (ptt/path->transitions
+               {:path     "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90"
+                :origin   {:x 1005 :y 585}
+                :scale    {:x 2 :y 2}
+                :duration 5})
+              (map round-duration-to-ms))
+         (->> [{:x 1165, :y 635, :duration 0.983425}
+               {:bezier   [{:x 1143.769166, :y 608.482697}
+                           {:x 1108.106950, :y 598.264562}
+                           {:x 1076.054722, :y 609.514907}],
+                :duration 0.578813}
+               {:bezier   [{:x 1044.002493, :y 620.765252}
+                           {:x 1022.550020, :y 651.030666}
+                           {:x 1022.550020, :y 685}],
+                :duration 0.578812}
+               {:bezier   [{:x 1022.550020, :y 718.969333}
+                           {:x 1044.002493, :y 749.234747}
+                           {:x 1076.054722, :y 760.485092}],
+                :duration 0.578812}
+               {:bezier   [{:x 1108.106950, :y 771.735437}
+                           {:x 1143.769166, :y 761.517302}
+                           {:x 1165, :y 735}],
+                :duration 0.578813}
+               {:x 1165, :y 605, :duration 0.762661}
+               {:x 1165, :y 765, :duration 0.938660}]
+              (map round-duration-to-ms))))
+  )
 
 (deftest test-get-moves-lengths
   (is (= (ptt/get-moves-lengths "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90") [83.81527307120105 65]))

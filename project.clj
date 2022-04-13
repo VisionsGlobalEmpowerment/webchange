@@ -1,10 +1,11 @@
 (defproject webchange "0.1.0-SNAPSHOT"
   :resource-paths ["native/vosk" "resources/"]
-  :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.520"]
+  :dependencies [[org.clojure/clojure "1.10.3"]
+                 [org.clojure/clojurescript "1.10.891"]
                  [org.clojure/java.jdbc "0.7.8"]
                  [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.logging "0.4.1"]
+                 [org.clojure/core.async "1.4.627"]
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [clojure.java-time "0.3.2"]
                  [reagent "0.7.0"]
@@ -12,6 +13,8 @@
                  [compojure "1.6.1"]
                  [metosin/spec-tools "0.10.1"]
                  [metosin/compojure-api "2.0.0-alpha31"]
+                 [metosin/ring-swagger "0.26.2"]
+                 [metosin/scjsv "0.6.2" :exclusions [com.github.java-json-tools/json-schema-validator]]
                  [yogthos/config "0.8"]
                  [ring "1.8.0"]
                  [ring/ring-core "1.8.0"]
@@ -52,10 +55,7 @@
                  [io.djy/ezzmq "0.8.2"]
                  [com.taoensso/tempura "1.2.1"]]
 
-  ;:node-dependencies [[source-map-support "0.2.8"]]
-
-  :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-cooper "1.2.2"]
+  :plugins [[lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]
             [lein-sass "0.5.0"]
             [migratus-lein "0.7.0"]]
@@ -66,17 +66,13 @@
 
   :min-lein-version "2.5.3"
 
-  :source-paths ["src/clj" "src/cljc" "src/cljs"]
+  :source-paths ["src/clj" "src/cljc"]
   :test-paths ["test/clj" "test/cljc"]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
+  :clean-targets ^{:protect false} ["resources/public/js/compiled"
+                                    "target"
+                                    ".shadow-cljs"
                                     "test/js"]
-
-  :figwheel {:css-dirs       ["resources/public/css"]
-             :ring-handler   webchange.handler/dev-handler
-             :server-ip      "0.0.0.0"
-             :server-logfile "log/figwheel.log"}
-
 
   :migratus {:store         :database
              :migration-dir "migrations"
@@ -89,7 +85,7 @@
          :source-maps      false}
 
   :cooper {"styles" ["lein" "sass" "auto"]
-           "cljs"   ["lein" "cljsbuild" "auto" "dev"]
+           "cljs"   ["shadow-cljs" "watch" "app"]
            "clj"    ["lein" "run"]}
 
   :aliases {"dev"       ["cooper"]
@@ -97,109 +93,25 @@
 
   :profiles
   {:dev
-            {:dependencies [[binaryage/devtools "0.9.10"]
-                            [day8.re-frame/tracing "0.5.1"]
-                            [ring/ring-mock "0.3.2"]
-                            [mockery "0.1.4"]
-                            [figwheel-sidecar "0.5.20"]]
-             :plugins      [[lein-doo "0.1.8"]]
-             :main         webchange.server-dev
-             :repl-options {:init-ns webchange.server
-                            :init    (dev)}
-             :source-paths ["env/dev/clj" "env/dev/cljs"]}
-   :prod    {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
+   {:dependencies [[binaryage/devtools "0.9.10"]
+                   [day8.re-frame/tracing "0.5.1"]
+                   [ring/ring-mock "0.3.2"]
+                   [mockery "0.1.4"]
+                   [thheller/shadow-cljs "2.16.6"]
+                   [day8.re-frame/re-frame-10x "0.3.3"]
+                   [day8.re-frame/tracing "0.5.5"]]
+    :main         webchange.server-dev
+    :repl-options {:init-ns webchange.user
+                   :nrepl-middleware
+                   [shadow.cljs.devtools.server.nrepl/middleware]}
+    :source-paths ["env/dev/clj" "src/cljs" "src/libs"]}
+   :prod    {}
    :uberjar {:source-paths       ["env/prod/clj"]
-             :dependencies       [[day8.re-frame/tracing-stubs "0.5.1"]]
-             :omit-source        false
+             :auto-clean         false
+             :omit-source        true
              :main               webchange.server
              :aot                [webchange.server]
              :uberjar-name       "webchange.jar"
              :jar-exclusions     [#"public/raw/.*" #"public/upload/.*"]
              :uberjar-exclusions [#"public/raw/.*" #"public/upload/.*"]
-             :prep-tasks         ["compile" ["sass" "once"]
-                                  "compile" ["cljsbuild" "once" "sw"]
-                                  "compile" ["cljsbuild" "once" "min"]]}}
-
-  :cljsbuild
-  {:builds
-   [{:id           "dev"
-     :source-paths ["src/cljs" "src/cljc"]
-     :figwheel     {:websocket-host :js-client-host
-                    :on-jsload      "webchange.core/mount-root"}
-     :compiler     {:main                 webchange.core
-                    :output-to            "resources/public/js/compiled/app.js"
-                    :output-dir           "resources/public/js/compiled/out"
-                    :asset-path           "/js/compiled/out"
-                    :source-map-timestamp true
-                    :preloads             [devtools.preload]
-                    :closure-defines      {"re_frame.trace.trace_enabled_QMARK_"        true
-                                           "day8.re_frame.tracing.trace_enabled_QMARK_" true}
-                    :external-config      {:devtools/config {:features-to-install :all}}
-                    :npm-deps             {:gsap                    "2.1.2"
-                                           :wavesurfer.js           "5.1.0"
-                                           :svg-arc-to-cubic-bezier "3.2.0"}
-
-                    :foreign-libs         [{:file        "src/libs/pixi-build.js"
-                                            :provides    ["pixi"]
-                                            :module-type :commonjs}
-                                           {:file        "src/libs/audio-script.js"
-                                            :provides    ["audio-script"]
-                                            :module-type :commonjs}]
-                    :install-deps         true
-                    :optimizations        :none
-                    :language-in          :ecmascript6}}
-
-    {:id           "sw"
-     :source-paths ["src/sw"]
-     :compiler     {:main          webchange.service-worker
-                    :output-to     "resources/public/js/compiled/service-worker.js"
-                    :output-dir    "resources/public/js/compiled/out-sw"
-                    :optimizations :advanced
-                    :pretty-print  false}}
-    {:id           "sw-dev"
-     :source-paths ["src/sw"]
-     :compiler     {:main            webchange.service-worker
-                    :output-to       "resources/public/js/compiled/service-worker.js"
-                    :output-dir      "resources/public/js/compiled/out-sw-dev"
-                    :optimizations   :simple
-                    :source-map      "resources/public/js/compiled/service-worker.js.map"
-                    :source-map-path "/js/compiled/out-sw-dev/"
-                    :pretty-print    true}}
-    {:id           "min"
-     :source-paths ["src/cljs"]
-     :jar          true
-     :compiler     {:main            webchange.core
-                    :output-to       "resources/public/js/compiled/app.js"
-                    :optimizations   :simple
-                    :closure-defines {goog.DEBUG false}
-                    :pretty-print    false
-                    :npm-deps        {:gsap                    "2.1.2"
-                                      :wavesurfer.js           "5.1.0"
-                                      :svg-arc-to-cubic-bezier "3.2.0"}
-
-                    :foreign-libs    [{:file        "src/libs/pixi-build.js"
-                                       :provides    ["pixi"]
-                                       :module-type :commonjs}
-                                      {:file        "src/libs/audio-script.js"
-                                       :provides    ["audio-script"]
-                                       :module-type :commonjs}]
-                    :install-deps    true
-                    :language-in     :ecmascript6}}
-
-    {:id           "test"
-     :source-paths ["src/cljs" "src/cljc" "test/cljs" "test/cljc"]
-     :compiler     {:main          webchange.runner
-                    :output-to     "resources/public/js/compiled/test.js"
-                    :output-dir    "resources/public/js/compiled/test/out"
-                    :npm-deps      {:gsap                    "2.1.2"
-                                    :wavesurfer.js           "5.1.0"
-                                    :svg-arc-to-cubic-bezier "3.2.0"}
-
-                    :foreign-libs  [{:file        "src/libs/pixi-build.js"
-                                     :provides    ["pixi"]
-                                     :module-type :commonjs}
-                                    {:file        "src/libs/audio-script.js"
-                                     :provides    ["audio-script"]
-                                     :module-type :commonjs}]
-                    :install-deps  true
-                    :optimizations :none}}]})
+             :prep-tasks         ["compile" ["sass" "once"]]}})

@@ -1,6 +1,6 @@
 (ns webchange.interpreter.pixi
   (:require
-    [pixi]))
+   ["/pixi-build" :as pixi]))
 
 (def PIXI (.. pixi -PIXI))
 

@@ -86,11 +86,11 @@
 (re-frame/reg-event-fx
   ::insert-child-action
   (fn [{:keys [db]} [_ {:keys [child-action parent-path position]}]]
-    "Insert new child action into parent.
-    - child-action - Action data to insert;
-    - position - Position number (:first or :last) in parent's data;
-    - parent-path - Parent action path in scene ':actions' block.
-                    Current dialog action is used if 'parent-path' is not defined" .
+    ;; "Insert new child action into parent.
+    ;; - child-action - Action data to insert;
+    ;; - position - Position number (:first or :last) in parent's data;
+    ;; - parent-path - Parent action path in scene ':actions' block.
+    ;;                 Current dialog action is used if 'parent-path' is not defined" .
     (let [{parent-action-path :path parent-action-data :data} (get-parent-data db parent-path)
           data-patch (-> (au/insert-child-action-at-index parent-action-data child-action position)
                          (select-keys [:data]))]
@@ -99,11 +99,11 @@
 (re-frame/reg-event-fx
   ::replace-child-action
   (fn [{:keys [db]} [_ {:keys [child-action parent-path position]}]]
-    "Replace child action in parent.
-    - child-action - Action data to replace;
-    - position - Position number (:first or :last) in parent's data;
-    - parent-path - Parent action path in scene ':actions' block.
-                    Current dialog action is used if 'parent-path' is not defined"
+    ;; "Replace child action in parent.
+    ;; - child-action - Action data to replace;
+    ;; - position - Position number (:first or :last) in parent's data;
+    ;; - parent-path - Parent action path in scene ':actions' block.
+    ;;                 Current dialog action is used if 'parent-path' is not defined"
     (let [{parent-action-path :path parent-action-data :data} (get-parent-data db parent-path)
           data-patch (-> (au/replace-child-action-at-index parent-action-data child-action position)
                          (select-keys [:data]))]

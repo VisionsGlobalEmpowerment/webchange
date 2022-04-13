@@ -12,7 +12,7 @@
     [webchange.dashboard.students.subs :as students-subs]
     [webchange.dashboard.students.common.map-students :refer [map-students-list]]
     [webchange.dashboard.students.students-list.utils :refer [filter-students-list]]
-    [webchange.dashboard.students.students-list.views_list_filter :refer [students-list-filter]]
+    [webchange.dashboard.students.students-list.views-list-filter :refer [students-list-filter]]
     [webchange.routes :refer [redirect-to]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))

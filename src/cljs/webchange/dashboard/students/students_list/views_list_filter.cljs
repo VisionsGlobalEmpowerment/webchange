@@ -1,10 +1,10 @@
-(ns webchange.dashboard.students.students-list.views_list_filter
+(ns webchange.dashboard.students.students-list.views-list-filter
   (:require
-    [cljsjs.material-ui]
-    [cljs-react-material-ui.reagent :as ui]
-    [cljs-react-material-ui.icons :as ic]
-    [clojure.string :as s]
-    [reagent.core :as r]))
+   [cljsjs.material-ui]
+   [cljs-react-material-ui.reagent :as ui]
+   [cljs-react-material-ui.icons :as ic]
+   [clojure.string :as s]
+   [reagent.core :as r]))
 
 (defn translate
   [path]

@@ -15,12 +15,9 @@ node {
     }
 
     stage('Test cljs') {
-        sh 'lein doo chrome-headless test once'
-    }
-
-    stage('Build') {
-        sh 'lein clean'
-        sh 'lein uberjar'
+        sh 'npm install'
+	sh 'shadow-cljs compile ci'
+        sh 'karma start --single-run'
     }
 
     stage('Cache results') {
@@ -28,6 +25,13 @@ node {
     }
 
     if (env.BRANCH_NAME == 'master') {
+        stage('Build') {
+            sh 'lein clean'
+	    sh 'shadow-cljs release app'
+	    sh 'shadow-cljs release service-worker'
+            sh 'lein uberjar'
+    	}
+    
         stage('Deploy') {
             sh "cp ./target/webchange.jar /srv/www/webchange/releases/${currentBuild.id}-webchange.jar"
             sh "ln -nsf /srv/www/webchange/releases/${currentBuild.id}-webchange.jar /srv/www/webchange/current.jar"

@@ -1,9 +1,9 @@
-(ns webchange.editor-v2.wizard.activity-template.view_delete
+(ns webchange.editor-v2.wizard.activity-template.view-delete
   (:require
-    [cljs-react-material-ui.reagent :as ui]
-    [re-frame.core :as re-frame]
-    [reagent.core :as r]
-    [webchange.interpreter.renderer.state.editor :as editor]))
+   [cljs-react-material-ui.reagent :as ui]
+   [re-frame.core :as re-frame]
+   [reagent.core :as r]
+   [webchange.interpreter.renderer.state.editor :as editor]))
 
 (defn delete-object-option
   [{:keys [key option data validator]}]
