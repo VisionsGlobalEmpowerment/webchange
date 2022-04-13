@@ -11,7 +11,8 @@
             [webchange.voice-recognizer.loader :as voice-recognizer]
             [webchange.mq.zero-mq :as queues]
             [webchange.mq.zero-mq-init :as zmq-init]
-            [webchange.course.loader :as courses])
+            [webchange.course.loader :as courses]
+            [webchange.migrations.core])
   (:gen-class))
 
 (defn -main [& args]
