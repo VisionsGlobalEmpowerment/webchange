@@ -5,8 +5,8 @@
     [webchange.utils.text :as text-utils]))
 
 (def page-template
-  {:type       "group"
-   :children   []})
+  {:type     "group"
+   :children []})
 
 (def page-background-template
   {:type   "rectangle"
@@ -41,9 +41,10 @@
    :width          "---"
    :height         "---"
    :fill           "---"
-   :editable?      {:select true
-                    :drag   true
+   :editable?      {:select     true
+                    :drag       true
                     :restrict-x true}
+   :metadata       {:removable? true}
    :text           "---"})
 
 (defn- generate-page-id
@@ -65,9 +66,9 @@
 (defn- add-background
   [page-data {:keys [width height background-color]} {:keys [next-page-id]}]
   (let [page-background (assoc page-background-template
-                               :width width
-                               :height height
-                               :fill background-color)
+                          :width width
+                          :height height
+                          :fill background-color)
         page-id (generate-page-id next-page-id)
         object-id (generate-background-id next-page-id)]
     (-> page-data

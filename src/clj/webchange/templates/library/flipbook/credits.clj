@@ -34,7 +34,8 @@
                              :text        "---"
                              :editable?   {:select true}
                              :metadata    {:display-name (get-text-display-name :authors "Title")
-                                           :page-idx     2}}})
+                                           :page-idx     2
+                                           :removable?   true}}})
 
 (defn- get-action-data
   [{:keys [action-name texts-data]}]
@@ -67,7 +68,8 @@
                                                                   :editable?   {:select true}
                                                                   :chunks      (text-utils/text->chunks text)
                                                                   :metadata    {:display-name (get-text-display-name :authors (str label " " (inc index)))
-                                                                                :page-idx     2}}))))
+                                                                                :page-idx     2
+                                                                                :removable?   true}}))))
                  {:texts-data [{:name label-name
                                 :text label}]
                   :data       (-> {}
@@ -86,7 +88,8 @@
                                                                :editable?   {:select true}
                                                                :chunks      (text-utils/text->chunks label)
                                                                :metadata    {:display-name (get-text-display-name :authors label)
-                                                                             :page-idx     2}}))}))))
+                                                                             :page-idx     2
+                                                                             :removable?   true}}))}))))
 
 (defn- generate-authors-block
   [{:keys [data]}]

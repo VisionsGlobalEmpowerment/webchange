@@ -51,7 +51,8 @@
                              :text           "---"
                              :metadata       {:display-name (get-text-display-name :cover "Title")
                                               :page-idx     0
-                                              :text-idx     0}}
+                                              :text-idx     0
+                                              :removable?   true}}
    :page-cover-authors      {:type           "text"
                              :x              0
                              :y              85
@@ -64,7 +65,8 @@
                              :text           "---"
                              :metadata       {:display-name (get-text-display-name :cover "Authors")
                                               :page-idx     0
-                                              :text-idx     1}}
+                                              :text-idx     1
+                                              :removable?   true}}
    :page-cover-illustrators {:type           "text"
                              :x              0
                              :y              125
@@ -77,7 +79,8 @@
                              :text           "---"
                              :metadata       {:display-name (get-text-display-name :cover "Illustrators")
                                               :page-idx     0
-                                              :text-idx     2}}
+                                              :text-idx     2
+                                              :removable?   true}}
    })
 
 (defn- apply-page-size
