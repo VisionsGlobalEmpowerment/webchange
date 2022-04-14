@@ -11,7 +11,8 @@
     [webchange.editor-v2.events :as editor-events]
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.state-course :as state-course]
-    [webchange.subs :as subs]))
+    [webchange.subs :as subs]
+    [webchange.utils.flipbook :refer [flipbook-activity?]]))
 
 (defn- get-styles
   []
@@ -26,12 +27,12 @@
      :image-label     {:margin-right "16px"}}))
 
 (defn- image
-  [{:keys [src loading? on-click]}]
+  [{:keys [tooltip src loading? on-click]}]
   (let [styles (get-styles)]
     (if loading?
       [ui/avatar {:style (:image styles)}
        [ui/circular-progress]]
-      [ui/tooltip {:title     "Click to change course image"
+      [ui/tooltip {:title     tooltip
                    :placement "top"}
        [ui/avatar (merge {:on-click on-click
                           :style    (:image-clickable styles)}
@@ -39,7 +40,8 @@
         (when (nil? src) [ic/image])]])))
 
 (defn- course-image
-  [{:keys [data]}]
+  [{:keys [book? data]
+    :or   {book? false}}]
   (r/with-let [uploading (r/atom false)
                file-input (atom nil)
 
@@ -59,10 +61,13 @@
               :style       {:margin-top 16}}
      [ui/typography {:variant "body1"
                      :style   (:image-label styles)}
-      "Course Image"]
+      (if book?
+        "Book Image"
+        "Course Image")]
      [image {:src      (:image-src @data)
              :loading? @uploading
-             :on-click handle-image-click}]
+             :on-click handle-image-click
+             :tooltip  (str "Click to change " (if book? "book" "course") " image")}]
      [:input {:type      "file"
               :ref       #(reset! file-input %)
               :on-change handle-input-change
@@ -226,7 +231,8 @@
       [ui/grid {:item true :xs 4}
        [language-control {:data data}]]
       [ui/grid {:item true :xs 4}
-       [course-image {:data data}]]
+       [course-image {:data  data
+                      :book? (book? @data)}]]
       (when (book? @data)
         [ui/grid {:item true :xs 12}
          [book-info {:data data}]])]
@@ -241,11 +247,15 @@
   []
   (let [open? @(re-frame/subscribe [::info-state/modal-state])
         close #(re-frame/dispatch [::info-state/close])
-        course-info @(re-frame/subscribe [::state-course/course-info])]
+        course-info @(re-frame/subscribe [::state-course/course-info])
+        scene-data @(re-frame/subscribe [::subs/current-scene-data])
+        book? (flipbook-activity? scene-data)]
     (when open?
       [dialog {:open?    open?
                :on-close close
-               :title    "Course Info"}
+               :title    (if book?
+                           "Book Info"
+                           "Course Info")}
        (if (empty? course-info)
          [ui/circular-progress]
          [course-info-modal {:info course-info}])])))
