@@ -7,6 +7,7 @@
     [webchange.interpreter.renderer.state.editor :as editor-state]
     [webchange.interpreter.renderer.scene.components.flipbook.decorations :as decorations]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.state.state-course :as state-course]
     [webchange.utils.list :refer [sort-by-getters]]))
 
 (defn path-to-db
@@ -31,13 +32,15 @@
 (re-frame/reg-event-fx
   ::open
   (fn [{:keys [db]} [_]]
-    {:db         (assoc-in db modal-state-path true)
-     :dispatch-n [[::warehouse/load-book-categories {:on-success [::set-book-categories]}]
-                  [::warehouse/load-book-languages {:on-success [::set-available-languages]}]
-                  [::warehouse/load-book-ages {:on-success [::set-available-ages]}]
-                  [::warehouse/load-book-genres {:on-success [::set-available-genres]}]
-                  [::warehouse/load-book-reading-levels {:on-success [::set-available-reading-levels]}]
-                  [::warehouse/load-book-tags {:on-success [::set-available-tags]}]]}))
+    (let [course-info (state-course/get-course-info db)]
+      {:db         (assoc-in db modal-state-path true)
+       :dispatch-n [[::set-course-info course-info]
+                    [::warehouse/load-book-categories {:on-success [::set-book-categories]}]
+                    [::warehouse/load-book-languages {:on-success [::set-available-languages]}]
+                    [::warehouse/load-book-ages {:on-success [::set-available-ages]}]
+                    [::warehouse/load-book-genres {:on-success [::set-available-genres]}]
+                    [::warehouse/load-book-reading-levels {:on-success [::set-available-reading-levels]}]
+                    [::warehouse/load-book-tags {:on-success [::set-available-tags]}]]})))
 
 (re-frame/reg-event-fx
   ::close
@@ -48,7 +51,56 @@
   []
   (re-frame/dispatch [::open]))
 
-;; Languages
+;; Course Info
+
+(def course-info-path (path-to-db [:course-info]))
+
+(re-frame/reg-sub
+  ::course-info
+  (fn [db]
+    (get-in db course-info-path)))
+
+(re-frame/reg-event-fx
+  ::set-course-info
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db course-info-path value)}))
+
+(re-frame/reg-event-fx
+  ::update-course-info
+  (fn [{:keys [db]} [_ value]]
+    {:db (update-in db course-info-path merge value)}))
+
+;; Name
+
+(def name-key :name)
+
+(re-frame/reg-sub
+  ::name
+  (fn []
+    (re-frame/subscribe [::course-info]))
+  (fn [course-info]
+    (get course-info name-key "")))
+
+(re-frame/reg-event-fx
+  ::set-name
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::update-course-info {name-key value}]}))
+
+;; Language
+
+(def language-key :lang)
+
+(re-frame/reg-sub
+  ::language
+  (fn []
+    (re-frame/subscribe [::course-info]))
+  (fn [course-info]
+    (get course-info language-key "")))
+
+(re-frame/reg-event-fx
+  ::set-language
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::update-course-info {language-key value}]}))
 
 (def available-languages-path (path-to-db [:available-languages]))
 
@@ -63,7 +115,23 @@
     {:db (->> data
               (sort-by-getters [#(get-in % [:metadata :primary?] false) #(get % :name)])
               (map #(select-keys % [:name :value]))
-              (assoc-in db available-languages-path ))}))
+              (assoc-in db available-languages-path))}))
+
+;; Image
+
+(def image-key :image-src)
+
+(re-frame/reg-sub
+  ::image
+  (fn []
+    (re-frame/subscribe [::course-info]))
+  (fn [course-info]
+    (get course-info image-key "")))
+
+(re-frame/reg-event-fx
+  ::set-image
+  (fn [{:keys [_]} [_ value]]
+    {:dispatch [::update-course-info {image-key value}]}))
 
 ;; Book categories
 
@@ -158,3 +226,53 @@
       (utils/set-visibility pages-object false)
       (app/take-object-screenshot cover-object callback)
       {})))
+
+(def upload-status-path (path-to-db [:upload-status]))
+
+(re-frame/reg-sub
+  ::upload-status
+  (fn [db]
+    (get-in db upload-status-path)))
+
+(re-frame/reg-sub
+  ::uploading?
+  (fn []
+    (re-frame/subscribe [::upload-status]))
+  (fn [upload-status]
+    (get upload-status :in-progress? false)))
+
+(re-frame/reg-event-fx
+  ::update-upload-status
+  (fn [{:keys [db]} [_ value]]
+    {:db (update-in db upload-status-path merge value)}))
+
+(re-frame/reg-event-fx
+  ::upload-preview
+  (fn [{:keys [db]} [_ file]]
+    {:dispatch-n [[::update-upload-status {:in-progress? true
+                                           :error        nil}]
+                  [::warehouse/upload-file
+                   {:file        file
+                    :form-params {:type    :image
+                                  :options {:max-width  384
+                                            :max-height 432}}}
+                   {:on-success [::upload-preview-success]
+                    :on-failure [::upload-preview-failure]}]]}))
+
+(re-frame/reg-event-fx
+  ::upload-preview-success
+  (fn [{:keys [db]} [_ {:keys [url] :as response}]]
+    (print "::upload-preview-success")
+    (print response)
+    {:dispatch-n [[::update-upload-status {:in-progress? false}]
+                  [::set-image url]]}))
+
+(re-frame/reg-event-fx
+  ::upload-preview-failure
+  (fn [{:keys [db]} [_ response]]
+    (print "::upload-preview-failure")
+    (print response)
+    {:dispatch-n [[::update-upload-status {:in-progress? false}]]}))
+
+
+

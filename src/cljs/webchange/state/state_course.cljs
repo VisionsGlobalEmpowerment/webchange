@@ -43,10 +43,13 @@
 
 (def course-info-path (path-to-db [:course-info]))
 
+(defn get-course-info
+  [db]
+  (get-in db course-info-path {}))
+
 (re-frame/reg-sub
   ::course-info
-  (fn [db]
-    (get-in db course-info-path {})))
+  get-course-info)
 
 (re-frame/reg-event-fx
   ::load-course-info

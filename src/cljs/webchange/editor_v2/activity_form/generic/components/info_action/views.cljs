@@ -40,38 +40,30 @@
         (when (nil? src) [ic/image])]])))
 
 (defn- course-image
-  [{:keys [book? data]
-    :or   {book? false}}]
-  (r/with-let [uploading (r/atom false)
-               file-input (atom nil)
-
-               handle-image-click #(.click @file-input)
-               handle-finish-upload (fn [result]
-                                      (reset! uploading false)
-                                      (swap! data assoc :image-src (:url result)))
-               handle-start-upload (fn [js-file]
-                                     (reset! uploading true)
-                                     (re-frame/dispatch [::assets-events/upload-asset js-file {:type      :image
-                                                                                               :on-finish handle-finish-upload}]))
-               handle-input-change #(-> % (.. -target -files) (.item 0) handle-start-upload)
+  [{:keys [book?] :or {book? false}}]
+  (r/with-let [file-input (atom nil)
                styles (get-styles)]
-    [ui/grid {:container   true
-              :justify     "flex-start"
-              :align-items "center"
-              :style       {:margin-top 16}}
-     [ui/typography {:variant "body1"
-                     :style   (:image-label styles)}
-      (if book?
-        "Book Image"
-        "Course Image")]
-     [image {:src      (:image-src @data)
-             :loading? @uploading
-             :on-click handle-image-click
-             :tooltip  (str "Click to change " (if book? "book" "course") " image")}]
-     [:input {:type      "file"
-              :ref       #(reset! file-input %)
-              :on-change handle-input-change
-              :style     (:file-input styles)}]]))
+    (let [value @(re-frame/subscribe [::info-state/image])
+          handle-image-click #(.click @file-input)
+          handle-input-change #(re-frame/dispatch [::info-state/upload-preview %])
+          uploading? @(re-frame/subscribe [::info-state/uploading?])]
+      [ui/grid {:container   true
+                :justify     "flex-start"
+                :align-items "center"
+                :style       {:margin-top 16}}
+       [ui/typography {:variant "body1"
+                       :style   (:image-label styles)}
+        (if book?
+          "Book Image"
+          "Course Image")]
+       [image {:src      value
+               :loading? uploading?
+               :on-click handle-image-click
+               :tooltip  (str "Click to change " (if book? "book" "course") " image")}]
+       [:input {:type      "file"
+                :ref       #(reset! file-input %)
+                :on-change #(-> % (.. -target -files) (.item 0) (handle-input-change))
+                :style     (:file-input styles)}]])))
 
 (defn- book?
   [course-info]
@@ -165,12 +157,12 @@
 
 (defn- book-info
   [{:keys [data]}]
-  (let [uploading (atom false)
+  (let [uploading? @(re-frame/subscribe [::info-state/uploading?])
         handle-finish-upload (fn [result]
-                               (reset! uploading false)
+
                                (swap! data assoc :image-src (:url result)))
         handle-start-upload (fn [blob]
-                              (reset! uploading true)
+
                               (re-frame/dispatch [::assets-events/upload-asset blob {:type      :image
                                                                                      :options   {:max-width 384 :max-height 432}
                                                                                      :on-finish handle-finish-upload}]))]
@@ -191,7 +183,7 @@
        [ui/grid {:item true :xs 12}
         [tags-control {:data data}]]
        [ui/grid {:item true :xs 12}
-        (if @uploading
+        (if uploading?
           [ui/circular-progress]
           [ui/button {:color    "secondary"
                       :style    {:margin-left "auto"}
@@ -199,9 +191,9 @@
            "Update book preview"])]])))
 
 (defn- language-control
-  [{:keys [data]}]
-  (let [current-value (get @data :lang "")
-        handle-change #(swap! data assoc :lang %)
+  []
+  (let [current-value @(re-frame/subscribe [::info-state/language])
+        handle-change #(re-frame/dispatch [::info-state/set-language %])
         available-languages @(re-frame/subscribe [::info-state/available-languages])]
     [ui/form-control {:full-width true}
      [ui/input-label "Language"]
@@ -212,36 +204,44 @@
         ^{:key value}
         [ui/menu-item {:value value} name])]]))
 
+(defn- name-control
+  []
+  (let [value @(re-frame/subscribe [::info-state/name])
+        handle-change #(re-frame/dispatch [::info-state/set-name %])]
+    [ui/form-control {:full-width true}
+     [ui/text-field {:label         "Name"
+                     :full-width    true
+                     :default-value value
+                     :variant       "outlined"
+                     :on-change     #(handle-change (-> % .-target .-value))
+                     :style         {:margin-top 16}}]]))
+
 (defn course-info-modal
   [{:keys [info]}]
   (r/with-let [data (r/atom info)]
-    [:div
-     [ui/grid {:container   true
-               :justify     "space-between"
-               :spacing     24
-               :align-items "center"}
-      [ui/grid {:item true :xs 4}
-       [ui/form-control {:full-width true}
-        [ui/text-field {:label         "Name"
-                        :full-width    true
-                        :default-value (:name @data)
-                        :variant       "outlined"
-                        :on-change     #(swap! data assoc :name (-> % .-target .-value))
-                        :style         {:margin-top 16}}]]]
-      [ui/grid {:item true :xs 4}
-       [language-control {:data data}]]
-      [ui/grid {:item true :xs 4}
-       [course-image {:data  data
-                      :book? (book? @data)}]]
-      (when (book? @data)
-        [ui/grid {:item true :xs 12}
-         [book-info {:data data}]])]
-     [ui/card-actions
-      [ui/button {:color    "secondary"
-                  :style    {:margin-left "auto"}
-                  :on-click #(do (re-frame/dispatch [::editor-events/edit-course-info @data])
-                                 (re-frame/dispatch [::info-state/close]))}
-       "Save"]]]))
+    (let [course-info @(re-frame/subscribe [::info-state/course-info])]
+      (print "course-info" course-info)
+      [:div
+       [ui/grid {:container   true
+                 :justify     "space-between"
+                 :spacing     24
+                 :align-items "center"}
+        [ui/grid {:item true :xs 4}
+         [name-control]]
+        [ui/grid {:item true :xs 4}
+         [language-control]]
+        [ui/grid {:item true :xs 4}
+         [course-image {:data  data
+                        :book? (book? @data)}]]
+        (when (book? @data)
+          [ui/grid {:item true :xs 12}
+           [book-info {:data data}]])]
+       [ui/card-actions
+        [ui/button {:color    "secondary"
+                    :style    {:margin-left "auto"}
+                    :on-click #(do (re-frame/dispatch [::editor-events/edit-course-info @data])
+                                   (re-frame/dispatch [::info-state/close]))}
+         "Save"]]])))
 
 (defn info-window
   []

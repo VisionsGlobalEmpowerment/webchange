@@ -426,7 +426,8 @@
 (re-frame/reg-event-fx
   ::upload-file
   (fn [{:keys [db]} [_ {:keys [file form-params]
-                        :or   {form-params []}} handlers]]
+                        :or   {form-params []}}
+                     handlers]]
     (let [form-data (get-form-data (concat [["file" file]] form-params))]
       (create-request {:key    :upload-file
                        :method :post
