@@ -76,16 +76,10 @@
 
 (defn course-finished?
   [course-data current-progress]
-  (let [finished-progress (get-finished-progress course-data)
-        unfinished-activities (->> finished-progress
-                                   (map (fn [[level-idx level]]
-                                          (map (fn [[lesson-idx lesson]]
-                                                 (map (fn [activity-id]
-                                                        {:level-idx   level-idx
-                                                         :lesson-idx  lesson-idx
-                                                         :activity-id activity-id})
-                                                      lesson))
-                                               level)))
-                                   (flatten)
-                                   (filter #(not (activity-finished? current-progress %))))]
-    (empty? unfinished-activities)))
+  (let [course-activities (course-data->progress course-data)
+        [last-level-id lessons] (last course-activities)
+        [last-lesson-id activities] (last lessons)
+        last-activity-idx (-> activities count dec)]
+    (activity-finished? current-progress {:level-idx    last-level-id
+                                          :lesson-idx   last-lesson-id
+                                          :activity-idx last-activity-idx})))

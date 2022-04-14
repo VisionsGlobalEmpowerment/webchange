@@ -65,7 +65,6 @@
                handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
            [:div.timeline-wrapper {:ref #(when (some? %)
                                            (reset! container %))}
-            (print "course-finished?" course-finished?)
             (when-not loading?
               (into [:div.timeline
                      ^{:key "filler"}
