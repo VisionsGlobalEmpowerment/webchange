@@ -131,6 +131,7 @@
                                       (add-stop-play-button "stop-play-button" {:on-click "stop-play-button-click-handler"})
                                       (add-start-record-button "start-record-button" {:on-click "start-record-button-click-handler"})
                                       (add-stop-record-button "stop-record-button" {:on-click "stop-record-button-click-handler"}))
+
                    :scene-objects [["background" "screen" "sound-bar"]
                                    ["timer-group" "video"]
                                    ["thumbnail-1" "thumbnail-2" "thumbnail-3"]
@@ -158,8 +159,19 @@
                                                                  {:type "finish-flows" :tag "show-choices"}]}
 
                                    :show-thumbnails {:type "sequence-data"
-                                                     :data [{:type "set-attribute" :target "thumbnail-1" :attr-name "visible" :attr-value true}
+                                                     :data [{:type "vars-var-provider" :from ["x1" "x2" "x3"] :shuffled true
+                                                             :variables ["thumbnail-1-x" "thumbnail-2-x" "thumbnail-3-x"]}
+
+                                                            {:type "set-attribute" :target "thumbnail-1" :attr-name "x"
+                                                             :from-var [{:var-name "thumbnail-1-x" :action-property "attr-value"}]}
+                                                            {:type "set-attribute" :target "thumbnail-1" :attr-name "visible" :attr-value true}
+
+                                                            {:type "set-attribute" :target "thumbnail-2" :attr-name "x"
+                                                             :from-var [{:var-name "thumbnail-2-x" :action-property "attr-value"}]}
                                                             {:type "set-attribute" :target "thumbnail-2" :attr-name "visible" :attr-value true}
+
+                                                            {:type "set-attribute" :target "thumbnail-3" :attr-name "x"
+                                                             :from-var [{:var-name "thumbnail-3-x" :action-property "attr-value"}]}
                                                             {:type "set-attribute" :target "thumbnail-3" :attr-name "visible" :attr-value true}]}
 
                                    :hide-thumbnails {:type "sequence-data"
@@ -208,22 +220,15 @@
                                                                                         {:id "start-playing" :type "action"}]}
                                                                        :fail {:type "sequence-data"
                                                                               :data [{:id "hide-start-play-button" :type "action"}
-                                                                                     {:id "show-stop-play-button" :type "action"}
                                                                                      {:id "start-playing" :type "action"}]}}
 
-                                   :stop-play-button-click-handler    {:type "test-var-scalar"
-                                                                       :var-name "record"
-                                                                       :value    "true"
-                                                                       :success {:type "sequence-data"
-                                                                                 :data [{:id "hide-stop-play-button" :type "action"}
-                                                                                        {:id "show-start-play-button" :type "action"}
-                                                                                        {:id "show-start-record-button" :type "action"}
-                                                                                        {:id "show-approve-button" :type "action"}
+                                   :stop-play-button-click-handler    {:type "sequence-data"
+                                                                       :data [{:id "hide-stop-play-button" :type "action"}
+                                                                              {:id "show-start-play-button" :type "action"}
+                                                                              {:id "show-start-record-button" :type "action"}
+                                                                              {:id "show-approve-button" :type "action"}
 
-                                                                                        {:id "stop-playing" :type "action"}]}
-                                                                       :fail {:type "sequence-data"
-                                                                              :data [{:id "hide-stop-play-button" :type "action"}
-                                                                                     {:id "stop-playing" :type "action"}]}}
+                                                                              {:id "stop-playing" :type "action"}]}
 
                                    :start-record-button-click-handler {:type "sequence-data"
                                                                        :data [{:id "plug-in-sound-bar" :type "action"}
@@ -443,11 +448,12 @@
                   (add-backward-compatibility-action "show-button-stop" "stop-record-button" "show")))
 
 (defn create [args]
-  (let [[[thumbnail-1 video-1 a]
-         [thumbnail-2 video-2 b]
-         [thumbnail-3 video-3 c]] (shuffle [[(get-in args [:thumbnail-1 :src]) (:video-1 args) 1]
-                                            [(get-in args [:thumbnail-2 :src]) (:video-2 args) 2]
-                                            [(get-in args [:thumbnail-3 :src]) (:video-3 args) 3]])
+  (let [thumbnail-1 (get-in args [:thumbnail-1 :src])
+        video-1 (:video-1 args)
+        thumbnail-2 (get-in args [:thumbnail-2 :src])
+        video-2 (:video-2 args)
+        thumbnail-3 (get-in args [:thumbnail-3 :src])
+        video-3 (:video-3 args)
         main-actions [{:type "start-activity"}
                       {:type "set-attribute" :target "thumbnail-1" :attr-name "src" :attr-value thumbnail-1}
                       {:type "set-variable" :var-name "video-src-1" :var-value video-1}
@@ -455,10 +461,12 @@
                       {:type "set-variable" :var-name "video-src-2" :var-value video-2}
                       {:type "set-attribute" :target "thumbnail-3" :attr-name "src" :attr-value thumbnail-3}
                       {:type "set-variable" :var-name "video-src-3" :var-value video-3}
+                      {:type "set-variable" :var-name "x1" :var-value 470}
+                      {:type "set-variable" :var-name "x2" :var-value 960}
+                      {:type "set-variable" :var-name "x3" :var-value 1450}
                       {:type "action" :id "intro-dialog"}
                       {:type "action" :id "finish"}]]
     (-> template
-        (assoc-in [:metadata :thumbnail-order] [a b c])
         (assoc-in [:metadata :actions] (:actions m))
         (update :assets (fn [assets]
                           (vec (concat [{:url thumbnail-1 :type "image"}
@@ -474,19 +482,11 @@
   (let [{:keys [action-name thumbnail video]} args
         thumbnail (:src thumbnail)
         n (read-string (str (last action-name)))
-        order (get-in activity-data [:metadata :thumbnail-order])
-        n (->> order
-               (map-indexed (fn [a b] [a b]) )
-               (filter #(= (second %) n))
-               first
-               first
-               inc)
         index (* 2 (dec n))]
     (-> activity-data
-        (assoc-in [:assets index]
-                  {:url thumbnail :type "image"})
-        (assoc-in [:assets (inc index)]
-                  {:url video :type "video"})
+        (assoc-in [:assets index] {:url thumbnail :type "image"})
+        (assoc-in [:assets (inc index)] {:url video :type "video"})
+
         (assoc-in [:actions :main :data (+ index 1)]
                   {:type "set-attribute"
                    :target (str "thumbnail-" n)
