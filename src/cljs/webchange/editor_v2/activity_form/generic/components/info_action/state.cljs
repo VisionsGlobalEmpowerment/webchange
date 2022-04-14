@@ -1,13 +1,14 @@
 (ns webchange.editor-v2.activity-form.generic.components.info-action.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.state.warehouse :as warehouse]
+    [webchange.error-message.state :as error]
     [webchange.interpreter.renderer.scene.components.collisions :as collisions]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.interpreter.renderer.state.editor :as editor-state]
     [webchange.interpreter.renderer.scene.components.flipbook.decorations :as decorations]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.state.state-course :as state-course]
+    [webchange.state.warehouse :as warehouse]
     [webchange.utils.list :refer [sort-by-getters]]))
 
 (defn path-to-db
@@ -248,31 +249,25 @@
 
 (re-frame/reg-event-fx
   ::upload-preview
-  (fn [{:keys [db]} [_ file]]
-    {:dispatch-n [[::update-upload-status {:in-progress? true
-                                           :error        nil}]
+  (fn [{:keys [_]} [_ file]]
+    {:dispatch-n [[::update-upload-status {:in-progress? true}]
                   [::warehouse/upload-file
                    {:file        file
                     :form-params {:type    :image
                                   :options {:max-width  384
                                             :max-height 432}}}
-                   {:on-success [::upload-preview-success]
-                    :on-failure [::upload-preview-failure]}]]}))
+                   {:on-success          [::upload-preview-success]
+                    :on-failure          [::upload-preview-failure]
+                    :suppress-api-error? true}]]}))
 
 (re-frame/reg-event-fx
   ::upload-preview-success
-  (fn [{:keys [db]} [_ {:keys [url] :as response}]]
-    (print "::upload-preview-success")
-    (print response)
+  (fn [{:keys [_]} [_ {:keys [url]}]]
     {:dispatch-n [[::update-upload-status {:in-progress? false}]
                   [::set-image url]]}))
 
 (re-frame/reg-event-fx
   ::upload-preview-failure
-  (fn [{:keys [db]} [_ response]]
-    (print "::upload-preview-failure")
-    (print response)
-    {:dispatch-n [[::update-upload-status {:in-progress? false}]]}))
-
-
-
+  (fn [{:keys [_]} [_ {:keys [status-text]}]]
+    {:dispatch-n [[::update-upload-status {:in-progress? false}]
+                  [::error/show "Upload preview image error" status-text]]}))
