@@ -66,7 +66,7 @@
              false)))))
 
 (deftest test-course-finished?
-  (testing "Should return correct value"
+  (testing "should return true when all activities are finished"
     (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
                                                       :1 [4 5 6]
                                                       :2 [7 8 9 10])
@@ -76,7 +76,9 @@
                                                       :1 [115]
                                                       :2 [116 117 118]
                                                       :3 [119]))]
-      (is (= (course-finished? course-data current-progress) true)))
+      (is (= (course-finished? course-data current-progress) true))))
+
+  (testing "should return false when the last activity is not finished"
     (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
                                                       :1 [4 5 6]
                                                       :2 [7 8 9 10])
@@ -86,7 +88,9 @@
                                                       :1 [115]
                                                       :2 [116 117 118]
                                                       :3 []))]
-      (is (= (course-finished? course-data current-progress) false)))
+      (is (= (course-finished? course-data current-progress) false))))
+
+  (testing "should return false when the last lesson is not in progress"
     (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
                                                       :1 [4 5 6]
                                                       :2 [7 8 9 10])
@@ -95,7 +99,9 @@
                                        :2 (sorted-map :0 [111 112 113 114]
                                                       :1 [115]
                                                       :2 [116 117 118]))]
-      (is (= (course-finished? course-data current-progress) false)))
+      (is (= (course-finished? course-data current-progress) false))))
+
+  (testing "should return true when not last activity is not finished"
     (let [current-progress (sorted-map :0 (sorted-map :0 [0 1 2 3]
                                                       :1 [4 5 6]
                                                       :2 [7 8 9 10])
@@ -105,7 +111,7 @@
                                                       :1 [115]
                                                       :2 [116 117 118]
                                                       :3 [119]))]
-      (is (= (course-finished? course-data current-progress) false)))))
+      (is (= (course-finished? course-data current-progress) true)))))
 
 (def course-data {:levels [{:name    "Level 1"
                             :level   1
