@@ -24,13 +24,13 @@
    :width      "---"
    :height     "---"
    :src        "---"
-   :editable?  {:select true
-                :drag true
+   :editable?  {:select    true
+                :drag      true
                 :edit-form {:select-image true
                             :upload-image true
-                            :scale true
-                            :flip true
-                            :visible true}}})
+                            :scale        true
+                            :flip         true
+                            :visible      true}}})
 
 (def page-text-background-template
   {:type   "rectangle"
@@ -54,9 +54,10 @@
    :height         "---"
    :fill           "---"
    :text           "---"
-   :editable?      {:select true
-                    :drag   true
-                    :restrict-x true}})
+   :editable?      {:select     true
+                    :drag       true
+                    :restrict-x true}
+   :metadata       {:removable? true}})
 
 (defn- generate-page-id
   [suffix]

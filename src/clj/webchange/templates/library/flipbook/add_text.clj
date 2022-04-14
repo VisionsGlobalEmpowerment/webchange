@@ -29,7 +29,8 @@
     (merge {:type      "text"
             :editable? {:select true
                         :drag   true
-                        :restrict-x true}}
+                        :restrict-x true}
+            :metadata  {:removable? true}}
            content dimensions align font)))
 
 (defn add-text

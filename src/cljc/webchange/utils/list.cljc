@@ -73,6 +73,10 @@
       (remove-at-position list position)
       list)))
 
+(defn remove-by-value
+  [list value]
+  (remove #(= % value) list))
+
 (defn in-list?
   "Check if item in list."
   [list item]

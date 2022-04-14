@@ -16,7 +16,8 @@
     [webchange.templates.library.flipbook.generic-front :as generic-front]
     [webchange.templates.library.flipbook.remake-covers :refer [remake-covers]]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
-    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]))
+    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
+    [webchange.utils.flipbook :as flipbook-utils]))
 
 (def book-options [{:key         :cover-layout
                     :label       "Cover layout"
@@ -173,6 +174,7 @@
     "add-page" (add-page-handler activity-data props)
     "add-empty-page" (add-empty-page activity-data (merge props {:page-params page-params}))
     "add-text" (add-text activity-data (:page-number props) (merge props {:page-params page-params}))
+    "remove-text" (flipbook-utils/remove-text-object activity-data (:object-name props))
     "add-image" (add-image activity-data (:page-number props) (merge props {:page-params page-params}))
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)

@@ -37,7 +37,8 @@
                                 :text           "---"
                                 :editable?      {:select true}
                                 :placeholder    "Add attributions"
-                                :metadata       {:display-name (get-text-display-name :cover-back "License")}}})
+                                :metadata       {:display-name (get-text-display-name :cover-back "License")
+                                                 :removable?   true}}})
 
 (defn- apply-page-size
   [page-data {:keys [width height padding]}]

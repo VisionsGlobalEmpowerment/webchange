@@ -1,6 +1,6 @@
 (ns webchange.utils.scene-data
   (:require
-    [webchange.utils.scene-action-data :as action-data]))
+    [webchange.utils.scene-action-data :as action-data-utils]))
 
 (defn- gen-uuid []
   #?(:clj  (java.util.UUID/randomUUID)
@@ -122,22 +122,35 @@
 (defn get-dialog-actions
   [scene-data]
   (->> (get-scene-actions scene-data)
-       (filter (fn [[_ action-data]] (action-data/dialog-action? action-data)))
+       (filter (fn [[_ action-data]] (action-data-utils/dialog-action? action-data)))
        (map first)))
 
 (defn- add-action
   [scene-data action-name action-data]
   (assoc-in scene-data [:actions action-name] action-data))
 
-(defn- update-action
+(defn update-action-deep
+  [action-name action-data predicate action-data-patch]
+  (cond-> (if (predicate {:name action-name
+                          :data action-data})
+            (merge action-data action-data-patch)
+            action-data)
+          (action-data-utils/has-sub-actions? action-data)
+          (update :data (fn [sub-actions]
+                          (map-indexed (fn [idx action-data]
+                                         (let [action-name (-> (if (sequential? action-name)
+                                                                 action-name [action-name])
+                                                               (concat [:data idx])
+                                                               (vec))]
+                                           (update-action-deep action-name action-data predicate action-data-patch)))
+                                       sub-actions)))))
+
+(defn update-action
   [scene-data predicate action-data-patch]
   (->> (fn [actions]
          (->> actions
-              (map (fn [[action-name actions-data]]
-                     (if (predicate {:name action-name
-                                     :data actions-data})
-                       [action-name (merge actions-data action-data-patch)]
-                       [action-name actions-data])))
+              (map (fn [[action-name action-data]]
+                     [action-name (update-action-deep action-name action-data predicate action-data-patch)]))
               (into {})))
        (update scene-data :actions)))
 
@@ -316,7 +329,7 @@
   ([scene-data current-action-effects {:keys [add-synonyms?] :or {add-synonyms? false}}]
    (cond-> (->> (get-available-actions scene-data)
                 (concat current-action-effects)
-                (map action-data/fix-available-effect))
+                (map action-data-utils/fix-available-effect))
            add-synonyms? (add-synonyms))))
 
 (defn get-history
