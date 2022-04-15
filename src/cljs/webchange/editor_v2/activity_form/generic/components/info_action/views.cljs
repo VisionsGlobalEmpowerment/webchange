@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.activity-form.generic.components.info-action.views
   (:require
     [clojure.string :as str]
-    [webchange.ui-framework.components.index :refer [dialog]]
     [re-frame.core :as re-frame]
     [webchange.state.state :as state]
     [webchange.editor-v2.activity-form.generic.components.info-action.state :as info-state]
@@ -12,19 +11,18 @@
     [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.state-course :as state-course]
     [webchange.subs :as subs]
+    [webchange.ui-framework.components.index :refer [button dialog]]
     [webchange.utils.flipbook :refer [flipbook-activity?]]))
 
 (defn- get-styles
   []
-  (let [image-size 60
-        image-style {:height       image-size
-                     :margin-right "15px"
-                     :width        image-size}]
+  (let [image-size 100
+        image-style {:height image-size
+                     :width  image-size}]
     {:file-input      {:display "none"}
      :image           image-style
      :image-clickable (merge image-style
-                             {:cursor "pointer"})
-     :image-label     {:margin-right "16px"}}))
+                             {:cursor "pointer"})}))
 
 (defn- image
   [{:keys [tooltip src loading? on-click]}]
@@ -39,6 +37,15 @@
                          (if (some? src) {:src src} {}))
         (when (nil? src) [ic/image])]])))
 
+(defn- update-book-preview-button
+  []
+  (let [uploading? @(re-frame/subscribe [::info-state/uploading?])]
+    (if uploading?
+      [ui/circular-progress]
+      [button {:color    "default"
+               :on-click #(re-frame/dispatch [::info-state/update-book-preview])}
+       "Update"])))
+
 (defn- course-image
   [{:keys [book?] :or {book? false}}]
   (r/with-let [file-input (atom nil)
@@ -50,20 +57,25 @@
       [ui/grid {:container   true
                 :justify     "flex-start"
                 :align-items "center"
-                :style       {:margin-top 16}}
-       [ui/typography {:variant "body1"
-                       :style   (:image-label styles)}
-        (if book?
-          "Book Image"
-          "Course Image")]
-       [image {:src      value
-               :loading? uploading?
-               :on-click handle-image-click
-               :tooltip  (str "Click to change " (if book? "book" "course") " image")}]
-       [:input {:type      "file"
-                :ref       #(reset! file-input %)
-                :on-change #(-> % (.. -target -files) (.item 0) (handle-input-change))
-                :style     (:file-input styles)}]])))
+                :style       {:margin-top 16}
+                :class-name  "course-image"}
+       [ui/grid {:item       true :xs 6
+                 :class-name "title"}
+        [ui/typography {:variant "body1"}
+         (str (if book? "Book" "Course") " Preview:")]
+        (when book?
+          [update-book-preview-button])]
+       [ui/grid {:item       true
+                 :xs         6
+                 :class-name "preview-container"}
+        [image {:src      value
+                :loading? uploading?
+                :on-click handle-image-click
+                :tooltip  (str "Click to change " (if book? "book" "course") " image")}]
+        [:input {:type      "file"
+                 :ref       #(reset! file-input %)
+                 :on-change #(-> % (.. -target -files) (.item 0) (handle-input-change))
+                 :style     (:file-input styles)}]]])))
 
 (defn- book?
   [course-info]
@@ -157,38 +169,23 @@
 
 (defn- book-info
   [{:keys [data]}]
-  (let [uploading? @(re-frame/subscribe [::info-state/uploading?])
-        handle-finish-upload (fn [result]
-
-                               (swap! data assoc :image-src (:url result)))
-        handle-start-upload (fn [blob]
-
-                              (re-frame/dispatch [::assets-events/upload-asset blob {:type      :image
-                                                                                     :options   {:max-width 384 :max-height 432}
-                                                                                     :on-finish handle-finish-upload}]))]
-    (init-book-keywords! data)
-    (fn [{:keys [data]}]
-      [ui/grid {:container   true
-                :justify     "space-between"
-                :spacing     24
-                :align-items "center"}
-       [ui/grid {:item true :xs 6}
-        [age-control {:data data}]]
-       [ui/grid {:item true :xs 6}
-        [genre-control {:data data}]]
-       [ui/grid {:item true :xs 6}
-        [reading-level-control {:data data}]]
-       [ui/grid {:item true :xs 6}
-        [category-control {:data data}]]
-       [ui/grid {:item true :xs 12}
-        [tags-control {:data data}]]
-       [ui/grid {:item true :xs 12}
-        (if uploading?
-          [ui/circular-progress]
-          [ui/button {:color    "secondary"
-                      :style    {:margin-left "auto"}
-                      :on-click #(re-frame/dispatch [::info-state/update-book-preview handle-start-upload])}
-           "Update book preview"])]])))
+  (init-book-keywords! data)
+  (fn [{:keys [data]}]
+    [ui/grid {:container   true
+              :justify     "space-between"
+              :spacing     24
+              :align-items "center"}
+     [ui/grid {:item true :xs 6}
+      [age-control {:data data}]]
+     [ui/grid {:item true :xs 6}
+      [genre-control {:data data}]]
+     [ui/grid {:item true :xs 6}
+      [reading-level-control {:data data}]]
+     [ui/grid {:item true :xs 6}
+      [category-control {:data data}]]
+     [ui/grid {:item true :xs 12}
+      [tags-control {:data data}]]
+     [ui/grid {:item true :xs 12}]]))
 
 (defn- language-control
   []
@@ -221,7 +218,7 @@
   (r/with-let [data (r/atom info)]
     (let [course-info @(re-frame/subscribe [::info-state/course-info])]
       (print "course-info" course-info)
-      [:div
+      [:div.course-info-form
        [ui/grid {:container   true
                  :justify     "space-between"
                  :spacing     24
@@ -235,13 +232,15 @@
                         :book? (book? @data)}]]
         (when (book? @data)
           [ui/grid {:item true :xs 12}
-           [book-info {:data data}]])]
-       [ui/card-actions
-        [ui/button {:color    "secondary"
-                    :style    {:margin-left "auto"}
-                    :on-click #(do (re-frame/dispatch [::editor-events/edit-course-info @data])
-                                   (re-frame/dispatch [::info-state/close]))}
-         "Save"]]])))
+           [book-info {:data data}]])]])))
+
+(defn- save-button
+  [{:keys [data]}]
+  (let [handle-click #(do (re-frame/dispatch [::editor-events/edit-course-info @data])
+                          (re-frame/dispatch [::info-state/close]))]
+    [button {:on-click handle-click
+             :size     "big"}
+     "Save"]))
 
 (defn info-window
   []
@@ -255,7 +254,8 @@
                :on-close close
                :title    (if book?
                            "Book Info"
-                           "Course Info")}
+                           "Course Info")
+               :actions  [[save-button]]}
        (if (empty? course-info)
          [ui/circular-progress]
          [course-info-modal {:info course-info}])])))

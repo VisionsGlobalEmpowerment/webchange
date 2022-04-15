@@ -1,0 +1,11 @@
+.course-info-form {
+    .course-image {
+        .title,
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+    }
+}

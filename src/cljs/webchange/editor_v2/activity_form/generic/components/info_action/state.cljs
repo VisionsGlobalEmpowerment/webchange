@@ -211,22 +211,36 @@
 
 (re-frame/reg-event-fx
   ::update-book-preview
-  (fn [{:keys [db]} [_ callback]]
-    (let [cover-object (-> @collisions/objects (get "page-cover") :object)
-          shadow-object-name (decorations/crease-name 0)
-          shadow-object (-> @collisions/objects (get shadow-object-name) :object)
-          pages-object-name (decorations/right-pages-name 0)
-          pages-object (-> @collisions/objects (get pages-object-name) :object)
-          prepared-callback #(do
-                               (editor-state/show-frames)
-                               (utils/set-visibility shadow-object true)
-                               (utils/set-visibility pages-object true)
-                               (callback %))]
-      (editor-state/hide-frames)
-      (utils/set-visibility shadow-object false)
-      (utils/set-visibility pages-object false)
-      (app/take-object-screenshot cover-object callback)
-      {})))
+  (fn [{:keys [_]} [_]]
+    {:get-book-screenshot {:on-success [::book-preview-ready]
+                           :on-failure [::book-preview-failed]}}))
+
+(re-frame/reg-event-fx
+  ::book-preview-ready
+  (fn [{:keys [_]} [_ img]]
+    {:dispatch [::upload-preview img]}))
+
+(re-frame/reg-event-fx
+  ::book-preview-failed
+  (fn [{:keys [_]} [_ error]]
+    {:dispatch [::error/show "Get book preview error." [(str (.-name error) ": " (.-message error))]]}))
+
+(re-frame/reg-fx
+  :get-book-screenshot
+  (fn [{:keys [on-success on-failure]}]
+    (try
+      (let [cover-object (-> @collisions/objects (get "page-cover") :object)
+            shadow-object-name (decorations/crease-name 0)
+            shadow-object (-> @collisions/objects (get shadow-object-name) :object)
+            pages-object-name (decorations/right-pages-name 0)
+            pages-object (-> @collisions/objects (get pages-object-name) :object)]
+        (editor-state/hide-frames)
+        (utils/set-visibility shadow-object false)
+        (utils/set-visibility pages-object false)
+        (app/take-object-screenshot cover-object #(re-frame/dispatch (conj on-success %))))
+      (catch js/Error e
+        (when (some? on-failure)
+          (re-frame/dispatch (conj on-failure e)))))))
 
 (def upload-status-path (path-to-db [:upload-status]))
 
@@ -270,4 +284,4 @@
   ::upload-preview-failure
   (fn [{:keys [_]} [_ {:keys [status-text]}]]
     {:dispatch-n [[::update-upload-status {:in-progress? false}]
-                  [::error/show "Upload preview image error" status-text]]}))
+                  [::error/show "Upload preview image error." status-text]]}))
