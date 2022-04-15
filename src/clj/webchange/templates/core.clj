@@ -65,9 +65,8 @@
   [{{history :history} :metadata :as scene-data}]
   (let [updated (:updated history)
         corrupted (and
-                    (not (empty? updated))
-                    (-> updated first :action nil?))]
-    ;(log/debug "prepare" corrupted updated)
+                   (seq updated)
+                   (-> updated first :action nil?))]
     (if corrupted
       (assoc-in scene-data [:metadata :history :updated] (try-restore-history updated))
       scene-data)))
@@ -79,7 +78,6 @@
         activity (if common-action?
                    (common-actions/update-activity scene-data action data)
                    (template-update scene-data (assoc data :action-name action)))]
-    ;(log/debug "Update activity" template-id action data)
     (-> activity
         (prepare-history)
         (update-in [:metadata :history :updated] conj update-data))))

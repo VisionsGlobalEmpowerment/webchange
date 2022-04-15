@@ -187,6 +187,8 @@
   (let [scene-slug "book"
         course-slug (codec/url-decode book-course-slug)
         {:keys [assets objects]} (course/get-scene-latest-version course-slug scene-slug)]
+    (when (empty? objects)
+      (throw (ex-info "Book not found for IRA" {:book book-course-slug})))
     (-> activity-data
         (update :assets concat assets)
         (update :objects merge (remove-editable objects))

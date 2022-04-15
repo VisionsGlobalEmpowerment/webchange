@@ -48,6 +48,12 @@ node {
 	        sh 'java -jar /srv/www/webchange/current.jar download-course-data 1'
 	    }
         }
+	
+        stage('Update Templates') {
+	    withEnv(['config=/srv/www/webchange/config.edn']) {
+	        sh 'java -jar /srv/www/webchange/current.jar update-templates'
+	    }
+        }
 
         stage('Restart') {
             sh 'sudo systemctl restart webchange'
