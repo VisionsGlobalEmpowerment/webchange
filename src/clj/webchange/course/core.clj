@@ -291,7 +291,7 @@
 (defn slug
   [text]
   (-> (->kebab-case text)
-      (string/replace #"[_~.<>{}()!№%:,;#$%^&*+='`\"/?'\\@]" "")
+      (string/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@]" "")
       (clojure.string/lower-case)))
 
 (defn course-slug
