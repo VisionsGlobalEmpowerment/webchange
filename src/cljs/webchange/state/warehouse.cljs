@@ -202,6 +202,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::save-course-info
+  (fn [{:keys [_]} [_ {:keys [course-id data]} handlers]]
+    (create-request {:key    :save-course-info
+                     :method :put
+                     :uri    (str "/api/courses/" course-id "/info")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::publish-course
   (fn [{:keys [_]} [_ course-slug handlers]]
     (create-request {:key    :publish-course
@@ -425,8 +434,9 @@
 
 (re-frame/reg-event-fx
   ::upload-file
-  (fn [{:keys [db]} [_ {:keys [file form-params]
-                        :or   {form-params []}} handlers]]
+  (fn [{:keys [_]} [_ {:keys [file form-params]
+                       :or   {form-params []}}
+                    handlers]]
     (let [form-data (get-form-data (concat [["file" file]] form-params))]
       (create-request {:key    :upload-file
                        :method :post

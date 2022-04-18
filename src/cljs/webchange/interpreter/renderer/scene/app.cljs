@@ -125,4 +125,5 @@
       (.toBlob canvas (fn [b]
                         (.addChild current-parent object)
                         (aset object "visible" visible-state)
-                        (callback b)) "image/png"))))
+                        (when (fn? callback) (callback b)))
+               "image/png"))))
