@@ -18,7 +18,8 @@
   (response (core/get-dump-by-school id)))
 
 (defn handle-get-school-update [id request]
-  (response (core/get-course-update id)))
+  (let [requested-courses (-> request :body :requested-courses)]
+    (response (core/get-course-update id requested-courses))))
 
 (defn handle-load-school-update [id request]
   (let [data (-> request :body slurp (json/read-str :key-fn keyword))]
@@ -32,16 +33,19 @@
       (when-not (teacher? request)
         (throw-unauthorized {:role :teacher}))
       (core/upload-stat (:id school))
-      (core/update-course-data! (:id school))
-      (core/update-assets!)
+      (core/update-course-data! (:id school) (env :requested-courses))
+      (core/update-assets! (:id school) (env :requested-courses) true)
       (when (:update-and-restart data)
         (updater/update-local-instance!))
       (response {:result "Ok"}))
     (bad-request "not a secondary school")))
 
-(defn handle-asset-difference [request]
-  (let [school-hashes (-> request :body)]
-    (response (core/calc-asset-update school-hashes))))
+(defn handle-asset-difference
+  [request]
+  (let [school-id (-> request :body :school-id)
+        school-hashes (-> request :body :hashes)
+        requested-courses (-> request :body :course-slugs)]
+    (response (core/calc-asset-update school-id school-hashes requested-courses))))
 
 (defn handle-get-latest-version
   []
@@ -66,6 +70,7 @@
   (GET "/api/school/dump-full/:id" [id :as request] (handle-dump-full id request))
   (PUT "/api/school/update/:id" [id :as request] (handle-load-school-update id request))
   (GET "/api/school/courses-update/:id" [id :as request] (handle-get-school-update id request))
+  (POST "/api/school/courses-update/:id" [id :as request] (handle-get-school-update id request))
   (POST "/api/school/asset/difference/" request (handle-asset-difference request))
   (sign/wrap-api-with-signature
     (GET "/api/software/latest" _ (handle-get-latest-version))))

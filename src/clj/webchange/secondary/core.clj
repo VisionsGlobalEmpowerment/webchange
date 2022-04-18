@@ -283,9 +283,10 @@
      :activity-stats    activity-stats}))
 
 (defn- available-courses
-  [school-id]
+  [school-id requested-courses]
   (let [courses (db/get-available-courses)
         additional-courses (->> (env :additional-course-slugs)
+                                (concat requested-courses)
                                 (map #(db/get-course {:slug %})))]
     (->> (concat courses additional-courses)
          (group-by :slug)
@@ -293,10 +294,11 @@
          (map first)
          (remove empty?))))
 
-(defn get-course-update [id]
+(defn get-course-update
+  [id requested-courses]
   (let [id (Integer/parseInt id)
         school (db/get-school {:id id})
-        courses (available-courses id)
+        courses (available-courses id requested-courses)
 
         course-versions (->> courses
                              (map #(db/get-latest-course-version {:course_id (:id %)}))
@@ -551,9 +553,14 @@
     (delete-not-in-guid-list scenes-guid scenes :id delete-scene-by-id!)
     (delete-not-in-guid-list courses-guid courses :id delete-course-by-id!)))
 
-(defn update-course-data! [id]
+(defn update-course-data!
+  [id requested-courses]
   (let [url (make-url-absolute (str "api/school/courses-update/" id))
-        data (json/read-str (:body (client/get url)) :key-fn keyword)]
+        response (client/post url {:body (json/json-str {:requested-courses requested-courses})
+                                   :body-encoding "UTF-8"
+                                   :content-type "application/json"
+                                   :accept :json})
+        data (json/read-str (:body response) :key-fn keyword)]
     (import-primary-data! data)))
 
 (defn to-set [hashes]
@@ -574,9 +581,9 @@
        update))
 
 (defn- published-upload-assets
-  []
+  [school-id requested-courses]
   (let [default-school 1
-        published-course-ids (->> (available-courses default-school)
+        published-course-ids (->> (available-courses school-id requested-courses)
                                   (map :id))
         course-assets (->> published-course-ids
                            (map #(db/get-course-by-id {:id %}))
@@ -612,8 +619,8 @@
     assets))
 
 (defn calc-asset-update
-  [school-hashes]
-  (let [published-asset-urls (published-upload-assets)
+  [school-id school-hashes requested-courses]
+  (let [published-asset-urls (published-upload-assets school-id requested-courses)
         raw? (fn [hash] (str/starts-with? (:path hash) "/raw/"))
         published? (fn [hash] (published-asset-urls (:path hash)))
         hashes (->> (db/get-all-asset-hash)
@@ -636,30 +643,38 @@
       (map #(.get %) ret))
     ))
 
-(defn get-difference-data []
+(defn get-difference-data
+  [school-id requested-courses]
   (let [asset-hashes (db/get-all-asset-hash)
-        hashes (map (fn [item] {:path-hash (:path-hash item) :file-hash (:file-hash item)}) asset-hashes)
+        hashes (map (fn [item] {:path-hash (:path-hash item)
+                                :file-hash (:file-hash item)}) asset-hashes)
         url (make-url-absolute "api/school/asset/difference/")
-        response (client/post url {:body          (json/json-str hashes)
+        response (client/post url {:body          (json/json-str {:school-id school-id
+                                                                  :hashes hashes
+                                                                  :requested-courses requested-courses})
                                    :body-encoding "UTF-8"
                                    :content-type  "application/json"
                                    :accept        :json})
         update (-> response :body (json/read-str :key-fn keyword))
         remove (fill-additional-data (:remove update))
-        download (:update update)
-        ]
+        download (:update update)]
     {:remove remove :download download}))
 
 (defn update-assets!
   ([] (update-assets! true))
   ([remove-files?]
-   (let [{remove :remove download :download} (get-difference-data)]
+   (let [school-id (env :default-school)
+         requested-courses (env :requested-courses)]
+     (update-assets! school-id requested-courses remove-files?)))
+  ([school-id requested-courses remove-files?]
+   (let [{remove :remove download :download} (get-difference-data school-id requested-courses)]
      (if remove-files? (doseq [item remove]
                          (assets/remove-file-with-hash! item)))
      (download-files download))))
 
-(defn calc-upload-assets []
-  (let [{remove :remove download :download} (get-difference-data)]
+(defn calc-upload-assets
+  [school-id requested-courses]
+  (let [{remove :remove download :download} (get-difference-data school-id requested-courses)]
     remove))
 
 (defn upload-file [path]

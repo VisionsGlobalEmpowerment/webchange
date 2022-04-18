@@ -36,9 +36,9 @@
   (println "Update assets....")
   (core/update-assets!))
 
-(defn download-course-data! [config school-id]
+(defn download-course-data! [config]
   (println "Update course data....")
-  (core/update-course-data! school-id)
+  (core/update-course-data! (env :default-school) (env :requested-courses))
   (update-assets! config)
   (println "Done!"))
 
@@ -54,7 +54,10 @@
     (println "Updating asset hashes....")
     (assets-loader/calc-hashes! config))
   (println "Calculate difference and search files to upload....")
-  (let [to-upload (filter  (fn [file] (clojure.string/starts-with? (:path file) path)) (core/calc-upload-assets))]
+  (let [default-school (env :default-school)
+        requested-courses (env :requested-courses)
+        to-upload (->> (core/calc-upload-assets default-school requested-courses)
+                       (filter  (fn [file] (clojure.string/starts-with? (:path file) path))))]
     (println "About to upload....")
     (doseq [file to-upload]
       (println (:path file)))

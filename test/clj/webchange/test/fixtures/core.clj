@@ -779,7 +779,7 @@
                     (mock/header :content-type "application/json")
                     (mock/header :body-encoding "UTF-8")
                     (mock/header :accept "application/json")
-                    (mock/body (json/write-str data))
+                    (mock/body (json/write-str {:hashes data}))
                     teacher-logged-in)
         response (handler/dev-handler request)]
     (json/read-str (slurp (:body response)) :key-fn keyword)))
