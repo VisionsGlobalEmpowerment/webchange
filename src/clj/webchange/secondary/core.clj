@@ -282,14 +282,21 @@
      :scene-versions    scene-versions
      :activity-stats    activity-stats}))
 
+(defn- available-courses
+  [school-id]
+  (let [courses (db/get-available-courses)
+        additional-courses (->> (env :additional-course-slugs)
+                                (map #(db/get-course {:slug %})))]
+    (->> (concat courses additional-courses)
+         (group-by :slug)
+         (vals)
+         (map first)
+         (remove empty?))))
+
 (defn get-course-update [id]
   (let [id (Integer/parseInt id)
         school (db/get-school {:id id})
-        courses (db/get-available-courses)
-        courses (cond->> courses
-                         (not-any? #(#{"english"} (:slug %)) courses) (concat [(db/get-course {:slug "english"})])
-                         (not-any? #(#{"spanish"} (:slug %)) courses) (concat [(db/get-course {:slug "spanish"})])
-                         :always (remove empty?))
+        courses (available-courses id)
 
         course-versions (->> courses
                              (map #(db/get-latest-course-version {:course_id (:id %)}))
@@ -568,10 +575,9 @@
 
 (defn- published-upload-assets
   []
-  (let [published-course-ids (->> (db/get-available-courses)
-                                  (map :id)
-                                  (concat [2 4]) ;add english and spanish, even if they are not published yet
-                                  (set))
+  (let [default-school 1
+        published-course-ids (->> (available-courses default-school)
+                                  (map :id))
         course-assets (->> published-course-ids
                            (map #(db/get-course-by-id {:id %}))
                            (map :image-src)
