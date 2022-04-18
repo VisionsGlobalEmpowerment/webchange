@@ -1,8 +1,12 @@
 (ns webchange.state.warehouse
   (:require
-    [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.config :as config]))
+    [camel-snake-kebab.core :refer [->Camel_Snake_Case_String]]
+    [clojure.string :as string]
+    [re-frame.core :as re-frame]
+    [webchange.config :as config]
+    [webchange.error-message.state :as error-message]
+    [webchange.logger.index :as logger]))
 
 (defn path-to-db
   [relative-path]
@@ -44,8 +48,8 @@
       (cond-> {:dispatch-n (cond-> [[::finish-request key]]
                                    (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                                    (and (nil? delay)
-                                        (some? success-handler)) (conj handle-success))}
-              (and (some? success-handler)
+                                        (sequential? success-handler)) (conj handle-success))}
+              (and (sequential? success-handler)
                    (some? delay)) (assoc :timeout {:event handle-success
                                                    :time  delay})))))
 
@@ -53,9 +57,20 @@
   ::generic-failure-handler
   (fn [{:keys [_]} [_ {:keys [key request-type]} failure-handler suppress-api-error? response]]
     {:dispatch-n (cond-> [[::finish-request key]]
-                         (not suppress-api-error?) (conj [:api-request-error key response])
+                         (not suppress-api-error?) (conj [::show-request-error key response])
                          (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
-                         (some? failure-handler) (conj (conj failure-handler response)))}))
+                         (sequential? failure-handler) (conj (conj failure-handler response)))}))
+
+(re-frame/reg-event-fx
+  ::show-request-error
+  (fn [{:keys [_]} [_ key response]]
+    (let [title (-> key (clojure.core/name) (->Camel_Snake_Case_String) (string/replace "_" " ") (str " Error"))
+          errors (get-in response [:last-error])]
+      (logger/group-folded title)
+      (logger/trace "key" key)
+      (logger/trace "response" response)
+      (logger/group-end title)
+      {:dispatch [::error-message/show title errors]})))
 
 (re-frame.core/reg-fx
   :timeout

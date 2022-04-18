@@ -73,8 +73,7 @@
        :dispatch [::warehouse/upload-file
                   {:file        js-file-value
                    :form-params (concat [["lang" lang]] form-params)}
-                  {:on-success [::upload-audio-success (merge audio-props asset-data)]
-                   :on-failure :on-failure}]})))
+                  {:on-success [::upload-audio-success (merge audio-props asset-data)]}]})))
 
 (re-frame/reg-event-fx
   ::upload-audio-success
