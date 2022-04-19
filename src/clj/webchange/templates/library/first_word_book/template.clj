@@ -1,4 +1,4 @@
-(ns webchange.templates.library.first-words-book-v2
+(ns webchange.templates.library.first-word-book.template
   (:require
     [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
@@ -431,3 +431,4 @@
 
 (core/register-template
   m f fu)
+
