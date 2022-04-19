@@ -7,7 +7,8 @@
     [webchange.auth.handler :as auth-handler]
     [webchange.common.handler :refer [current-user handle]]
     [webchange.parent.core :as core]
-    [buddy.auth :refer [throw-unauthorized]]))
+    [buddy.auth :refer [throw-unauthorized]]
+    [webchange.course.core :as course]))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str})
 (s/defschema Student {:id    s/Int :name s/Str :first-name s/Str :last-name (s/maybe s/Str) :course-slug s/Str
@@ -19,12 +20,10 @@
 
 (defn- handle-get-courses
   [_]
-  (handle [true [{:id   2
-                  :name "Spanish"
-                  :slug "spanish"}
-                 {:id   4
-                  :name "English"
-                  :slug "english"}]]))
+  (let [courses (->> ["spanish" "english"]
+                     (map #(course/get-course-info %))
+                     (map #(select-keys % [:id :name :slug])))]
+    (handle [true courses])))
 
 (defn- handle-get-students
   [request]
