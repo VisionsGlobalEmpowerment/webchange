@@ -3,6 +3,7 @@
     [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
     [webchange.templates.library.first-word-book.add-spread :refer [add-spread spread-idx->dialog-name]]
+    [webchange.templates.library.first-word-book.remove-last-spread :refer [remove-last-spread]]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.utils.text :as text-utils]))
 
@@ -49,10 +50,11 @@
         :name        "First Words Book V2"
         :tags        ["Vocabulary"]
         :description "Simple book"
-        :actions     {:edit {:title   "Edit"
-                             :options create-options}
-                      :add  {:title   "Add Spread"
-                             :options add-spread-options}}
+        :actions     {:edit        {:title   "Edit"
+                                    :options create-options}
+                      :add         {:title   "Add Spread"
+                                    :options add-spread-options}
+                      :remove-last {:title   "Remove Last Spread"}}
         :options     create-options})
 
 (def t {:assets        [{:url "/raw/img/library/book/background.jpg", :size 10, :type "image"}
@@ -427,7 +429,8 @@
   [old-data {:keys [action-name] :as args}]
   (case action-name
     "add" (add-spread old-data args)
-    "edit" (set-data old-data args)))
+    "edit" (set-data old-data args)
+    "remove-last" (remove-last-spread old-data)))
 
 (core/register-template
   m f fu)

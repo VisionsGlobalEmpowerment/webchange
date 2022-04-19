@@ -21,15 +21,15 @@
     (str "/courses/" course-slug "/editor/" scene-slug))
 
   (-> (core/get-scene-latest-version course-slug scene-slug)
-      (get-in [:objects :spread-3-right-page])
+      (get-in [:actions :set-total-spreads-number :var-value])
       ;(keys)
       )
 
   (update-scene-object course-slug scene-slug
                        (fn [activity-data]
                          (-> activity-data
-                             (update-in  [:objects :spread-2-left-page] dissoc :visible)
-                             (update-in  [:objects :spread-2-right-page] dissoc :visible)
-                             (update-in  [:objects :spread-3-left-page] dissoc :visible)
-                             (update-in  [:objects :spread-3-right-page] dissoc :visible))))
+                             (update-in [:objects :spread-2-left-page] dissoc :visible)
+                             (update-in [:objects :spread-2-right-page] dissoc :visible)
+                             (update-in [:objects :spread-3-left-page] dissoc :visible)
+                             (update-in [:objects :spread-3-right-page] dissoc :visible))))
   )

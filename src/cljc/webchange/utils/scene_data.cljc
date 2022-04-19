@@ -1,6 +1,9 @@
 (ns webchange.utils.scene-data
   (:require
-    [webchange.utils.scene-action-data :as action-data-utils]))
+    [webchange.utils.list :refer [without-item]]
+    [webchange.utils.log :refer [log]]
+    [webchange.utils.scene-action-data :as action-data-utils]
+    [webchange.utils.scene-object-data :as object-data-utils]))
 
 (defn- gen-uuid []
   #?(:clj  (java.util.UUID/randomUUID)
@@ -107,6 +110,32 @@
        (some (fn [[object-name {:keys [type] :as object-data}]]
                (and (some #{type} ["background" "layered-background"])
                     [object-name object-data])))))
+
+(defn remove-object
+  ([scene-data object-name]
+   (remove-object scene-data object-name nil))
+  ([scene-data object-name {:keys [remove-children?]
+                            :or   {remove-children? false}
+                            :as   options}]
+   (let [object-name (if (keyword? object-name) object-name (keyword object-name))
+         object-data (get-scene-object scene-data object-name)
+         children-to-remove (if remove-children?
+                              (object-data-utils/get-children object-data)
+                              [])]
+     (reduce (fn [scene-data object-name]
+               (remove-object scene-data object-name options))
+             (update scene-data :objects dissoc object-name)
+             children-to-remove))))
+
+; Scene objects
+
+(defn remove-scene-object
+  [scene-data object-name]
+  (let [object-name (if (keyword? object-name) (clojure.core/name object-name) object-name)]
+    (->> (get scene-data :scene-objects)
+         (map (fn [layer]
+                (without-item layer object-name)))
+         (assoc scene-data :scene-objects))))
 
 ; Actions
 
@@ -226,6 +255,17 @@
   (find-and-change-action-recursively-core scene-data
                                            predicate
                                            modifier))
+
+(defn remove-action
+  [scene-data action-name]
+  (->> (if (keyword? action-name) action-name (keyword action-name))
+       (update scene-data :actions dissoc)))
+
+(defn remove-actions
+  [scene-data actions-names]
+  (reduce remove-action
+          scene-data
+          actions-names))
 
 ; Triggers
 

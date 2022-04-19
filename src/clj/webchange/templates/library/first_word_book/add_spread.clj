@@ -153,6 +153,13 @@
                             (spread-idx->dialog-name spread-idx :right)]}]
     (assoc-in activity-data [:actions action-name] action-data)))
 
+(defn get-spread-info
+  [spread-idx]
+  {:object  (spread-idx->spread-name spread-idx)
+   :actions [(spread-idx->spread-name spread-idx)
+             (spread-idx->dialog-name spread-idx :left)
+             (spread-idx->dialog-name spread-idx :right)]})
+
 (defn add-spread
   [activity-data args]
   {:pre [(string? (:text-left args))
