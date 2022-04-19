@@ -54,17 +54,6 @@
                              :options add-spread-options}}
         :options     create-options})
 
-(def image-common-params {:type       "image"
-                          :width      400
-                          :height     400
-                          :image-size "contain"})
-(def image-left-params (merge image-common-params
-                              {:x 420
-                               :y 270}))
-(def image-right-params (merge image-common-params
-                               {:x 1050
-                                :y 270}))
-
 (def t {:assets        [{:url "/raw/img/library/book/background.jpg", :size 10, :type "image"}
                         {:url "/raw/img/library/book/background2.jpg", :size 10, :type "image"}
                         {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}],
@@ -199,41 +188,32 @@
                                               {:type "skip"}
                                               {:type "action" :id "stop-timeout"}
                                               {:type "action" :id "turn-next-page"}
-                                              {:type "action" :from-var [{:template "dialog-spread-%", :var-name "current-spread", :action-property "id"}]}
-                                              {:type     "set-variable", :var-value true
-                                               :from-var [{:template "dialog-spread-%-completed", :var-name "current-spread", :action-property "var-name"}]}
+                                              {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
                                               {:type "action" :id "test-completed"}]}
          :prev-page                   {:type "sequence-data"
                                        :data [{:type "remove-flows" :flow-tag "dialog"}
                                               {:type "action" :id "stop-timeout"}
                                               {:type "action" :id "turn-prev-page"}
-                                              {:type "action" :from-var [{:template "dialog-spread-%", :var-name "current-spread", :action-property "id"}]}
-                                              {:type     "set-variable", :var-value true
-                                               :from-var [{:template "dialog-spread-%-completed", :var-name "current-spread", :action-property "var-name"}]}
+                                              {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
                                               {:type "action" :id "test-completed"}]}
          :open-page                   {:type "sequence-data"
                                        :data [{:type "remove-flows" :flow-tag "dialog"}
                                               {:type "skip"}
                                               {:type "action" :id "stop-timeout"}
                                               {:type "action" :id "turn-open-page"}
-                                              {:type "action" :from-var [{:template "dialog-spread-%", :var-name "current-spread", :action-property "id"}]}
-                                              {:type     "set-variable", :var-value true
-                                               :from-var [{:template "dialog-spread-%-completed", :var-name "current-spread", :action-property "var-name"}]}
+                                              {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
                                               {:type "action" :id "test-completed"}]}
          :close-page                  {:type "sequence-data"
                                        :data [{:type "remove-flows" :flow-tag "dialog"}
                                               {:type "skip"}
                                               {:type "action" :id "stop-timeout"}
                                               {:type "action" :id "turn-close-page"}
-                                              {:type "action" :from-var [{:template "dialog-spread-%", :var-name "current-spread", :action-property "id"}]}
-                                              {:type     "set-variable", :var-value true
-                                               :from-var [{:template "dialog-spread-%-completed", :var-name "current-spread", :action-property "var-name"}]}
+                                              {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
                                               {:type "action" :id "test-completed"}]}
-         :test-completed              {:type      "test-var-list",
-                                       :success   {:type "action" :id "finish-activity"},
-                                       :fail      {:type "action" :id "start-timeout"}
-                                       :values    [true true true],
-                                       :var-names ["dialog-spread-2-completed" "dialog-spread-3-completed" "dialog-spread-4-completed"]}
+         :test-completed              {:type       "test-expression"
+                                       :expression ["eq" ["dec" "@total-spreads"] "@current-spread"]
+                                       :success    {:type "action" :id "finish-activity"}
+                                       :fail       {:type "action" :id "start-timeout"}}
          :turn-next-page              {:type "sequence-data"
                                        :data [{:type "action" :id "hide-navigation"}
                                               {:to       {:opacity 0, :duration 0.5}, :type "transition"
@@ -322,28 +302,23 @@
                                               {:type "set-attribute" :attr-name "visible", :attr-value false :target "finish-button"}]}
 
          :show-navigation             {:type "sequence-data"
-                                       :data [{:type     "case",
-                                               :from-var [{:template "spread-%" :var-name "current-spread", :action-property "value"}]
-                                               :options
-                                               {:spread-0 {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"},
-                                                :spread-1 {:type "sequence-data"
-                                                           :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
-                                                                  {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}]}
-                                                ;:spread-2 {:type "sequence-data"
-                                                ;           :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
-                                                ;                  {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}]}
-                                                ;:spread-3 {:type "sequence-data"
-                                                ;           :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
-                                                ;                  {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}]}
-                                                ;:spread-4 {:type "sequence-data"
-                                                ;           :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}]}
-                                                }}]}
+                                       :data [{:type       "test-expression"
+                                               :expression ["eq" "@current-spread" 0]
+                                               :success    {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}
+                                               :fail       {:type       "test-expression"
+                                                            :expression ["eq" ["dec" "@total-spreads"] "@current-spread"]
+                                                            :success    {:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
+                                                            :fail       {:type "sequence-data"
+                                                                         :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
+                                                                                {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}]}}}]}
 
          :start-scene                 {:type "sequence-data",
                                        :data [{:type "start-activity"},
                                               {:type "set-variable", :var-name "current-spread", :var-value 0},
+                                              {:type "action" :id "set-total-spreads-number"},
                                               {:type "action" :id "show-navigation"}
                                               {:type "action" :id "dialog-intro"}]},
+         :set-total-spreads-number    {:type "set-variable", :var-name "total-spreads", :var-value 2}
          :stop-activity               {:type "stop-activity"}
          :start-timeout               {:type      "start-timeout-counter",
                                        :id        "inactive-counter",
@@ -355,9 +330,9 @@
                                        :data [{:type "action" :id "dialog-timeout-instructions"}
                                               {:type "action" :id "start-timeout"}]},
 
-         :dialog-spread-0             (-> (dialog/default "Front page")
+         :spread-0                    (-> (dialog/default "Front page")
                                           (assoc :tags ["dialog"]))
-         :dialog-spread-1             (-> (dialog/default "Title page")
+         :spread-1                    (-> (dialog/default "Title page")
                                           (assoc :tags ["dialog"]))
          :dialog-finish-activity      (dialog/default "Finish activity")
          :dialog-intro                (-> (dialog/default "Intro")
@@ -382,9 +357,9 @@
                                            :nodes [{:type      "dialog"
                                                     :action-id :dialog-intro}
                                                    {:type      "dialog"
-                                                    :action-id :dialog-spread-0}
+                                                    :action-id :spread-0}
                                                    {:type      "dialog"
-                                                    :action-id :dialog-spread-1}
+                                                    :action-id :spread-1}
                                                    {:type      "dialog"
                                                     :action-id :dialog-finish-activity}
                                                    {:type      "dialog"
@@ -412,35 +387,6 @@
           (assoc-in [:objects :spread-1-title-text :text] (:subtitle args))
           (not-empty (:subtitle args))
           (assoc-in [:objects :spread-1-title-text :chunks] (text-utils/text->chunks (:subtitle args)))))
-
-#_[{:data [{:type "empty", :duration 0}
-           {:animation   "color",
-            :fill        45823,
-            :phrase-text "Apple",
-            :start       5.43,
-            :type        "text-animation",
-            :duration    0.4800000000000004,
-            :audio       "/upload/TVBYWNDGVKIEAZDJ.mp3",
-            :target      "spread-2-left-text",
-            :end         5.91,
-            :data        [{:at       5.43,
-                           :end      5.91,
-                           :chunk    0,
-                           :start    5.43,
-                           :duration 0.4800000000000004}]}],
-    :type "sequence-data"}
-   {:data [{:type "empty", :duration "500"}
-           {:animation   "color",
-            :fill        45823,
-            :phrase-text "Alligator",
-            :start       6.48,
-            :type        "text-animation",
-            :duration    0.75,
-            :audio       "/upload/TVBYWNDGVKIEAZDJ.mp3",
-            :target      "spread-2-right-text",
-            :end         7.23,
-            :data        [{:at 6.48, :end 7.23, :chunk 0, :start 6.48, :duration 0.75}]}],
-    :type "sequence-data"}]
 
 ;; Add Spread
 
@@ -578,6 +524,7 @@
   (let [current-spread-idx (-> activity-data (get-in [:metadata :last-spread-idx]) (inc))]
     (-> activity-data
         (assoc-in [:metadata :last-spread-idx] current-spread-idx)
+        (update-in [:actions :set-total-spreads-number :var-value] inc)
         (add-spread-object current-spread-idx)
         (add-spread-action current-spread-idx)
         (add-dialogs current-spread-idx args)
@@ -592,7 +539,6 @@
 
 (defn fu
   [old-data {:keys [action-name] :as args}]
-  (log/debug ">>" action-name)
   (case action-name
     "add" (add-spread old-data args)
     "edit" (set-data old-data args)))

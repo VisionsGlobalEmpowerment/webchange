@@ -18,7 +18,8 @@
       "and" (every? identity right-expression)
       "or" (some identity right-expression)
       "len" (-> right-expression first count)
-      "." (apply get right-expression))))
+      "." (apply get right-expression)
+      "dec" (-> right-expression first dec))))
 
 (defn- expression->value
   [db action expression]
