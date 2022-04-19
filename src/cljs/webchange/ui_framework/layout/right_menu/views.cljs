@@ -91,7 +91,7 @@
            ^{:key text}
            [actions-item props])
          [:div.scene-section
-          [:h3 "Scene Layers"]
+          [:h3 "Scene Objects"]
           [objects-tree-menu]]
          (for [{:keys [text] :as props} (get-default-actions-list {:book-editor? (flipbook-activity? scene-data)})]
            ^{:key text}

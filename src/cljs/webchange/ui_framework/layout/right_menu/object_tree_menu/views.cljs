@@ -3,32 +3,53 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.activity-form.common.objects-tree.state :as state]
     [webchange.interpreter.renderer.state.editor :as editor-state]
+    [webchange.logger.index :as logger]
     [webchange.ui-framework.components.index :refer [icon icon-button]]))
 
-(defn- objects-tree-item
-  [{:keys [alias name type]}]
+(defn- edit-control
+  [{:keys [name]}]
+  (let [handle-click #(re-frame/dispatch [::editor-state/select-object name])]
+    [icon-button {:icon       "settings"
+                  :class-name "object-icon-style"
+                  :on-click   handle-click}]))
+
+(defn- remove-control
+  [{:keys [name]}]
+  (let [handle-click #(re-frame/dispatch [::state/remove-object name])]
+    [icon-button {:icon       "remove"
+                  :on-click   handle-click
+                  :class-name "object-icon-style"}]))
+
+(defn- visibility-control
+  [{:keys [name]}]
   (let [visible? @(re-frame/subscribe [::state/visible? name])
-        show-remove-button? @(re-frame/subscribe [::state/show-remove-button? name])
-        handle-visibility-click #(re-frame/dispatch [::state/set-object-visibility name (not visible?)])
-        handle-select-object #(re-frame/dispatch [::editor-state/select-object name])
-        handle-remove-click #(re-frame/dispatch [::state/remove-object name])]
-    [:li.object-action-item
-     [:div.object-title
-      [icon {:icon       type
-             :class-name "object-type"}]
-      [:span alias]]
-     [:div.object-actions
-      (when show-remove-button?
-        [icon-button {:icon       "remove"
-                      :on-click   handle-remove-click
-                      :class-name "object-icon-style"}])
-      [icon-button {:icon       (if visible? "visibility-on" "visibility-off")
-                    :title      (if visible? "Make invisible" "Make visible")
-                    :on-click   handle-visibility-click
-                    :class-name "object-icon-style"}]
-      [icon-button {:icon       "settings"
-                    :class-name "object-icon-style"
-                    :on-click   handle-select-object}]]]))
+        handle-click #(re-frame/dispatch [::state/set-object-visibility name (not visible?)])]
+    [icon-button {:icon       (if visible? "visibility-on" "visibility-off")
+                  :title      (if visible? "Make invisible" "Make visible")
+                  :on-click   handle-click
+                  :class-name "object-icon-style"}]))
+
+(def actions-map {"edit"       edit-control
+                  "remove"     remove-control
+                  "visibility" visibility-control})
+
+(defn- objects-tree-item-actions
+  [{:keys [actions] :as props}]
+  [:div.object-actions
+   (for [action actions]
+     (if-let [control (get actions-map action)]
+       ^{:key action}
+       [control props]
+       (logger/warn (str "Control for action '" action "' is not defined"))))])
+
+(defn- objects-tree-item
+  [{:keys [alias type] :as props}]
+  [:li.object-action-item
+   [:div.object-title
+    [icon {:icon       type
+           :class-name "object-type"}]
+    [:span alias]]
+   [objects-tree-item-actions props]])
 
 (defn objects-tree-menu
   []

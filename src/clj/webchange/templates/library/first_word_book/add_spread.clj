@@ -13,6 +13,19 @@
   [spread-idx]
   (spread-idx->spread-prefix spread-idx))
 
+(defn- spread-idx->page-name
+  [spread-idx side]
+  (-> (spread-idx->spread-prefix spread-idx side)
+      (str "-page")))
+
+(defn- spread-idx->page-display-name
+  [spread-idx side]
+  (str "Spread " spread-idx
+       " - "
+       (case side
+         :left "Left"
+         :right "Right") " page"))
+
 (defn spread-idx->dialog-name
   [spread-idx side]
   (-> (spread-idx->spread-prefix spread-idx side)
@@ -40,9 +53,7 @@
                       :data        []}
 
         dialog-name (-> (spread-idx->dialog-name spread-idx side) (keyword))
-        dialog-data (-> (str "Spread " spread-idx " - " (case side
-                                                          :left "Left"
-                                                          :right "Right") " page")
+        dialog-data (-> (spread-idx->page-display-name spread-idx side)
                         (dialog/default {:inner-action-data inner-action})
                         (assoc :tags ["dialog"]
                                :unique-tag "page-dialog"))]
@@ -108,17 +119,29 @@
       (add-image spread-idx :left image-left)
       (add-image spread-idx :right image-right)))
 
+(defn- add-page
+  [activity-data spread-idx page-side]
+  (let [page-name (-> (spread-idx->page-name spread-idx page-side) (keyword))
+        page-data {:type     "group"
+                   :children [(spread-idx->text-name spread-idx page-side)
+                              (spread-idx->image-name spread-idx page-side)]
+                   :metadata {:display-name (spread-idx->page-display-name spread-idx page-side)
+                              :objects-tree {:show?      true
+                                             :actions    ["edit"]
+                                             :sort-order (-> spread-idx (* 10) (+ (if (= page-side :left) 0 1)))}}}]
+    (-> activity-data
+        (assoc-in [:objects page-name] page-data))))
+
 (defn- add-spread-object
   [activity-data spread-idx]
   (let [spread-name (spread-idx->spread-name spread-idx)
-        spread-data {:type      "group"
-                     :visible   false
-                     :children  [(spread-idx->text-name spread-idx :left)
-                                 (spread-idx->text-name spread-idx :right)
-                                 (spread-idx->image-name spread-idx :left)
-                                 (spread-idx->image-name spread-idx :right)]
-                     :editable? {:show-in-tree? true}}]     ;; ToDo: change to :metadata
+        spread-data {:type     "group"
+                     :visible  false
+                     :children [(spread-idx->page-name spread-idx :left)
+                                (spread-idx->page-name spread-idx :right)]}]
     (-> activity-data
+        (add-page spread-idx :left)
+        (add-page spread-idx :right)
         (assoc-in [:objects (keyword spread-name)] spread-data)
         (update-in [:scene-objects 1] #(-> (conj % spread-name) (vec))))))
 

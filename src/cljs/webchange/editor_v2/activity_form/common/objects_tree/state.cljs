@@ -2,8 +2,22 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state-renderer]
+    [webchange.logger.index :as logger]
     [webchange.state.state :as state]
     [webchange.state.state-activity :as state-activity]))
+
+(defn- get-object-type
+  [object-data]
+  (cond
+    (get-in object-data [:metadata :uploaded-image?]) :uploaded-image
+    (get-in object-data [:metadata :added-character?]) :added-character
+    (get-in object-data [:metadata :question?]) :question
+    :default (-> object-data :type keyword)))
+
+(defn- remove-available?
+  [object-data]
+  (some #{(get-object-type object-data)}
+        [:added-character :uploaded-image :question :anchor]))
 
 (re-frame/reg-sub
   ::objects
@@ -11,13 +25,23 @@
     [(re-frame/subscribe [::state/objects-data])])
   (fn [[objects-data]]
     (->> objects-data
-         (filter (fn [[_ {:keys [editable?]}]]
-                   (:show-in-tree? editable?)))
-         (map (fn [[object-name {:keys [alias type]}]]
-                (let []
-                  {:alias (or alias object-name)
-                   :name  object-name
-                   :type  type}))))))
+         (filter (fn [[_ {:keys [editable? metadata]}]]
+                   (when (some? editable?)
+                     (logger/warn "Property 'editable?' is deprecated. Use 'metadata instead.'"))
+                   (or (:show-in-tree? editable?)           ;; deprecated
+                       (get-in metadata [:objects-tree :show?]))))
+         (sort-by #(get-in (second %) [:metadata :objects-tree :sort-order]))
+         (map (fn [[object-name {:keys [alias metadata type] :as object-data}]]
+                (let [{:keys [display-name]} metadata
+                      actions (or (get-in metadata [:objects-tree :actions])
+                                  (cond-> ["visibility" "edit"]
+                                          (remove-available? object-data) (conj "remove")))]
+                  (when (some? alias)
+                    (logger/warn "Property 'alias?' is deprecated. Use 'metadata.display-name instead.'"))
+                  {:alias   (or display-name alias object-name)
+                   :name    object-name
+                   :type    type
+                   :actions actions}))))))
 
 (defn get-object-data
   [db object-name]
@@ -37,21 +61,6 @@
     [(re-frame/subscribe [::object-data object-name])])
   (fn [[object-data]]
     (get object-data :visible true)))
-
-(defn- get-object-type
-  [object-data]
-  (cond
-    (get-in object-data [:metadata :uploaded-image?]) :uploaded-image
-    (get-in object-data [:metadata :added-character?]) :added-character
-    (get-in object-data [:metadata :question?]) :question
-    :default (-> object-data :type keyword)))
-
-(re-frame/reg-sub
-  ::show-remove-button?
-  (fn [[_ object-name]]
-    [(re-frame/subscribe [::object-data object-name])])
-  (fn [[object-data]]
-    (some #{(get-object-type object-data)} [:added-character :uploaded-image :question :anchor])))
 
 (re-frame/reg-event-fx
   ::set-object-visibility
