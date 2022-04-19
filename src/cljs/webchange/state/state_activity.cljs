@@ -33,7 +33,7 @@
                    :scene-id  scene-id
                    :data      {:action action
                                :data   data}}
-                  {:on-success [::call-activity-action-success on-success]}]})))
+                  {:on-success [::call-activity-action-success on-success scene-id]}]})))
 
 (re-frame/reg-event-fx
   ::call-activity-common-action
@@ -47,16 +47,16 @@
                    :data      {:common-action? true
                                :action         action
                                :data           data}}
-                  {:on-success [::call-activity-action-success on-success]}]})))
+                  {:on-success [::call-activity-action-success on-success scene-id]}]})))
 
 (re-frame/reg-event-fx
   ::call-activity-action-success
-  (fn [{:keys [_]} [_ on-success {:keys [name data]}]]
-    {:pre [(string? name) (map? data)]}
-    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
+  (fn [{:keys [_]} [_ on-success scene-id {:keys [data]}]]
+    {:pre [(map? data)]}
+    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   scene-id
                                                   :scene-data data}]
-                          [::interpreter.events/set-scene name data]
-                          [::interpreter.events/store-scene name data]
+                          [::interpreter.events/set-scene scene-id data]
+                          [::interpreter.events/store-scene scene-id data]
                           [::state-stage/reset-stage]
                           [::state/update-last-saved]]
                          (some? on-success) (conj on-success))}))
