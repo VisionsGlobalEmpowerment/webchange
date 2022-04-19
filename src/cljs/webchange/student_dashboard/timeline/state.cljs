@@ -39,6 +39,13 @@
                      :letter   letter
                      :preview  preview})))))))
 
+(re-frame/reg-sub
+  ::new-activities
+  (fn [db]
+    (let [scenes (get-in db [:course-data :scene-list])
+          activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
+      (filter #(lessons-activity/new? db % activities) activities))))
+
 (defn get-next-activity
   [db]
   (let [scenes (get-in db [:course-data :scene-list])

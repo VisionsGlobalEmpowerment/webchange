@@ -62,6 +62,14 @@
       false
       (<= activity (apply max finished-indices)))))
 
+(defn new? [finished {:keys [level lesson activity]} activities]
+  (let [finished-unique-ids (get-in finished [(num->keyword level) (num->keyword lesson)])
+        finished-indices (map #(activity-unique-id->index activities %) finished-unique-ids)]
+    (if (empty? finished-indices)
+      false
+      (and (<= activity (apply max finished-indices))
+           (not (boolean (some #{activity} finished-indices)))))))
+
 (defn- flatten-activity
   [level-idx lesson-idx activity-idx activity]
   (let [activity-name (:activity activity)]
@@ -114,5 +122,3 @@
             (excluded-by-tags? tags levels next)) (recur (next-for levels next)
                                                          next)
         :else next))))
-
-
