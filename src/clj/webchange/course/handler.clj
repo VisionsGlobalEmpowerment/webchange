@@ -135,7 +135,7 @@
   [course-slug data request]
   (let [user-id (current-user request)
         scene-data (core/get-scene-latest-version course-slug (:old-name data))
-        metadata (:metadata scene-data)
+        metadata (templates/metadata-from-template (:metadata scene-data))
         skills (:skills scene-data)]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator}))
