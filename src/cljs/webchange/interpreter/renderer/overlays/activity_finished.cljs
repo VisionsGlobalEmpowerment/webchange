@@ -5,7 +5,8 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.student-dashboard.timeline.state :as timeline-state]))
 
 (defn show-overlay?
   [mode]
@@ -59,6 +60,14 @@
      :shadow-angle    1.5
      :shadow-opacity  1}))
 
+(re-frame/reg-sub
+  :continue?
+  (fn [db _]
+    (let [finished-indices (->> @(re-frame/subscribe [::timeline-state/finished-activities])
+                                (map #(get-in % [:activity :activity])))
+          current-activity-index (:activity (:loaded-activity db))]
+      (not (some #{current-activity-index} finished-indices)))))
+
 (defn create
   [{:keys [viewport]}]
   {:type        "group"
@@ -87,14 +96,19 @@
                   :object-name :form-vera
                   :x           828
                   :y           447}
-                 {:type        "image"
-                  :src         "/raw/img/ui/activity_finished/next.png"
-                  :object-name :form-next
-                  :x           872
-                  :y           748
-                  :on-click    #(re-frame/dispatch [::ie/run-next-activity])}
+                 (merge
+                   {:type        "image"
+                    :object-name :form-next
+                    :x           872
+                    :y           748}
+                   (if @(re-frame/subscribe [:continue?])
+                     {:src         "/raw/img/ui/activity_finished/next.png"
+                      :on-click    #(re-frame/dispatch [::ie/run-next-activity])}
+                     {:src         "/raw/img/ui/activity_finished/home_big.png"
+                      :on-click    #(re-frame/dispatch [::ie/open-student-dashboard])}))
                  (get-title)
-                 (get-home-button {:viewport viewport})]})
+                 (when @(re-frame/subscribe [:continue?])
+                   (get-home-button {:viewport viewport}))]})
 
 (defn update-viewport
   [{:keys [viewport]}]

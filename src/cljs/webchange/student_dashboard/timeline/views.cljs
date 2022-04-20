@@ -9,8 +9,6 @@
 
 (defn- timeline-item
   [{:keys [activity title letter on-click preview new?]}]
-  (println preview)
-
   [:div {:title      title
          :on-click   #(on-click activity)
          :class-name (get-class-name {"activity"      true
@@ -52,6 +50,10 @@
             :stroke-linecap   "round"
             :stroke-dasharray "3,10"}]]])
 
+(defn new-activity? [activity]
+  (let [new-unique-ids (map :unique-id @(re-frame/subscribe [::state/new-activities]))]
+    (boolean (some #{(:unique-id activity)} new-unique-ids))))
+
 (defn timeline
   []
   (let [container (atom nil)
@@ -67,9 +69,9 @@
          (let [loading? @(re-frame/subscribe [::state/loading?])
                course-finished? @(re-frame/subscribe [::state/course-finished?])
                finished-activities @(re-frame/subscribe [::state/finished-activities])
-               new-unique-ids (map :unique-id @(re-frame/subscribe [::state/new-activities]))
                handle-next-click (fn [] (re-frame/dispatch [::state/open-next-activity]))
-               handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
+               handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity
+                                                                        (assoc activity :new? (new-activity? activity))]))]
            [:div.timeline-wrapper {:ref #(when (some? %)
                                            (reset! container %))}
             (when-not loading?
@@ -82,7 +84,7 @@
                                                   ^{:key id}
                                                   [timeline-item (merge item
                                                                         {:on-click handle-activity-click
-                                                                         :new? (boolean (some #{(:unique-id activity)} new-unique-ids))})]]))
+                                                                         :new? (new-activity? activity)})]]))
                                 []
                                 finished-activities)
                         (concat [(when-not (empty? finished-activities)

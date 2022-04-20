@@ -1132,7 +1132,6 @@
     {:dispatch-n (list [::overlays/show-goodbye-screen]
                        [::reset-navigation])}))
 
-
 (re-frame/reg-event-fx
   ::execute-finish-activity
   (fn [{:keys [db]} [_ action]]
@@ -1154,12 +1153,15 @@
                            :always (conj [::reset-navigation])
                            :always (conj [::progress-state/reset-current-activity]))
             lesson-activity-tags (get-lesson-activity-tags db action)
-            finished (lessons-activity/get-progress-next db)
+            new? (:new? (:loaded-activity db))
+            finished (if new?
+                       (:loaded-activity db)
+                       (lessons-activity/get-progress-next db))
             db (cond-> db
                        :always lessons-activity/clear-loaded-activity
                        :always (assoc :activity-started false)
                        :always (assoc-in [:progress-data :current-tags] lesson-activity-tags)
-                       (lesson-activity-finished? db action) (lessons-activity/finish finished))]
+                       (or new? (lesson-activity-finished? db action)) (lessons-activity/finish finished))]
         (ce/skip)
         (ce/remove-timers!)
         {:db         db
