@@ -13,8 +13,9 @@
 (defn fix-asset
   [asset]
   (cond
-    (contains? asset :url) asset
     (string? asset) {:url asset}
+    (and (map? asset)
+         (contains? asset :url)) asset
     :default nil))
 
 (defn fix-assets
@@ -24,10 +25,12 @@
        (remove nil?)))
 
 (defn migrate-assets
-  [new-scene origin-scene]
+  [new-scene origin-scene default-page-data]
   (let [new-scene-assets (-> new-scene (get :assets) (fix-assets))
         origin-scene-assets (-> origin-scene (get :assets) (fix-assets))
-        merged-assets (->> (concat origin-scene-assets new-scene-assets)
+        merged-assets (->> (concat [(fix-assets (:image default-page-data))]
+                                   origin-scene-assets
+                                   new-scene-assets)
                            (distinct-by-key :url))]
     (assoc new-scene :assets merged-assets)))
 
@@ -70,7 +73,7 @@
                  new-scene))))
 
 (defn get-template-params
-  [scene-data]
+  [scene-data {default-image :image default-text :text}]
   (let [creation-params (get-in scene-data [:metadata :history :created])
         update-params (get-in scene-data [:metadata :history :updated])
         result-params (->> update-params
@@ -81,12 +84,14 @@
         add-spread-params (->> [1 2 3]
                                (map (fn [idx] [(-> idx (* 2) (- 1)) (-> idx (* 2))]))
                                (map (fn [[idx-left idx-right]]
-                                      {:text-left   (->> idx-left (str "text") (keyword) (get result-params))
-                                       :image-left  (->> idx-left (str "image") (keyword) (get result-params))
-                                       :text-right  (->> idx-right (str "text") (keyword) (get result-params))
-                                       :image-right (->> idx-right (str "image") (keyword) (get result-params))}))
-                               (map remove-empty-fields)
-                               (remove empty?)
+                                      {:text-left   (or (->> idx-left (str "text") (keyword) (get result-params))
+                                                        default-text)
+                                       :image-left  (or (->> idx-left (str "image") (keyword) (get result-params))
+                                                        {:src default-image})
+                                       :text-right  (or (->> idx-right (str "text") (keyword) (get result-params))
+                                                        default-text)
+                                       :image-right (or (->> idx-right (str "image") (keyword) (get result-params))
+                                                        {:src default-image})}))
                                (map (fn [data]
                                       {:action "add"
                                        :data   data})))
@@ -96,8 +101,10 @@
      :update (concat add-spread-params rest-params)}))
 
 (defn migrate-scene!
-  [{:keys [course scene data]} template-id user-id]
-  (let [template-params (get-template-params data)
+  [{:keys [course scene data]} default-page-data template-id user-id]
+  (log/debug "Migrate scene" course scene)
+  (try
+    (let [template-params (get-template-params data default-page-data)
         new-scene-data (-> (:create template-params)
                            (assoc :template-id template-id)
                            (templates/activity-from-template)
@@ -106,10 +113,15 @@
     (let [updated-scene-data (-> (-> (course/update-activity-template! course scene user-id)
                                      (second)
                                      (get :data))
-                                 (migrate-assets data)
+                                 (migrate-assets data default-page-data)
                                  (migrate-common-dialogs data)
                                  (migrate-content-dialogs data))]
-      (course/save-scene! course scene updated-scene-data user-id))))
+      (course/save-scene! course scene updated-scene-data user-id)))
+    (catch Exception e
+      (log/debug "Migrate scene exception:" course scene)
+      (log/debug e)
+      (log/debug "Restore origin data")
+      (course/save-scene! course scene data user-id))))
 
 (defn get-scenes-to-update
   [target-template-id courses]
@@ -140,12 +152,14 @@
 (def user-id 1)
 (def old-template-id 44)
 (def new-template-id 49)
+(def default-page-data {:image "/images/default-course.jpp"
+                        :text  "Enter Text"})
 
 (defn migrate-up
   [_]
   (mount/start)
   (doseq [data (get-scenes-to-update old-template-id courses)]
-    (migrate-scene! data new-template-id user-id)))
+    (migrate-scene! data default-page-data new-template-id user-id)))
 
 (defn migrate-down
   [_]
@@ -161,6 +175,9 @@
                      :data   (course/get-scene-data course scene)}
                     new-template-id
                     user-id))
+
+  (get-template-params (course/get-scene-data "spanish" "first-letters-book-letter-v-2"))
+  (course/get-scene-data "spanish" "first-letters-book-letter-v-2")
 
   (-> (migrate-content-dialogs (course/get-scene-data "english" "first-words-book-letter-a-updated")
                                (course/get-scene-data "english" "first-words-book-letter-a"))
