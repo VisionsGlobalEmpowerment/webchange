@@ -31,7 +31,7 @@
   (-> (spread-idx->spread-prefix spread-idx side)
       (str "-dialog")))
 
-(defn- spread-idx->text-name
+(defn spread-idx->text-name
   [spread-idx side]
   (-> (spread-idx->spread-prefix spread-idx side)
       (str "-text")))

@@ -1,0 +1,3 @@
+{:ns      webchange.migrations.change-first-word-book-template
+ :up-fn   migrate-up
+ :down-fn migrate-down}

@@ -7,9 +7,17 @@
                  (->> keys-to-ignore (some #{field-name}) (not))))
        (into {})))
 
+(defn remove-fields
+  [object predicate]
+  (apply merge (for [[k v] object :when (not (predicate v))] {k v})))
+
 (defn remove-nil-fields
   [object]
-  (apply merge (for [[k v] object :when (not (nil? v))] {k v})))
+  (remove-fields object nil?))
+
+(defn remove-empty-fields
+  [object]
+  (remove-fields object empty?))
 
 (defn map-keys
   [data keys-map]
