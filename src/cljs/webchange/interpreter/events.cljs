@@ -1177,17 +1177,19 @@
 
 (re-frame/reg-event-fx
   :progress-data-changed
-  (fn [{:keys [_]} _]
+  (fn [{:keys []} _]
     {:dispatch [::progress-state/progress-data-changed
                 {:on-failure [::save-progress-failure]}]}))
 
 (re-frame/reg-event-fx
   ::save-progress-failure
   (fn [{:keys [db]} _]
-    (let [current-school (-> db :user :school-id)]
-      (if current-school
-        {:dispatch [::events/redirect "/student-login"]}
-        {:dispatch [::events/location :logout]}))))
+    (let [current-school (-> db :user :school-id)
+          sandbox? (-> db :sandbox :enabled)]
+      (when-not sandbox?
+        (if current-school
+          {:dispatch [::events/redirect "/student-login"]}
+          {:dispatch [::events/location :logout]})))))
 
 (re-frame/reg-event-fx
   ::set-music-volume
@@ -1943,6 +1945,7 @@
     (let [lessons (some-> encoded-lessons js/decodeURIComponent js/atob js/JSON.parse (js->clj :keywordize-keys true))]
       (logger/trace "sandbox started with" lessons)
       {:db         (cond-> db
+                           :always (assoc-in [:sandbox :enabled] true)
                            (seq lessons) (assoc-in [:sandbox :loaded-lessons] lessons))
        :dispatch-n (list [::load-course course-id scene-id {:sandbox? true}])})))
 

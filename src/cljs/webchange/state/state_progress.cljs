@@ -42,17 +42,19 @@
     (let [course-id (core/current-course-id db)
           progress (get-progress-data db)
           events (:pending-events db)
-          loading? (warehouse/request-in-progress? db :save-progress-data)]
-      (cond
-        loading? {:db (assoc db :schedule-save-progress true)}
-        (some? progress) {:db       (dissoc db :pending-events)
-                          :dispatch [::warehouse/save-progress-data
-                                     {:course-slug   course-id
-                                      :progress-data {:progress progress
-                                                      :events   events}}
-                                     (cond-> {:on-success [::save-progress-success]}
-                                             (some? on-failure) (assoc :on-failure on-failure))]}
-        :default {}))))
+          loading? (warehouse/request-in-progress? db :save-progress-data)
+          sandbox? (-> db :sandbox :enabled)]
+      (when-not sandbox?
+        (cond
+          loading? {:db (assoc db :schedule-save-progress true)}
+          (some? progress) {:db       (dissoc db :pending-events)
+                            :dispatch [::warehouse/save-progress-data
+                                       {:course-slug   course-id
+                                        :progress-data {:progress progress
+                                                        :events   events}}
+                                       (cond-> {:on-success [::save-progress-success]}
+                                               (some? on-failure) (assoc :on-failure on-failure))]}
+          :else {})))))
 
 (re-frame/reg-event-fx
   ::save-progress-success
