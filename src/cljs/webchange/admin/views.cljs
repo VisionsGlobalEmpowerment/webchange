@@ -22,13 +22,14 @@
     (pushy/start! history)))
 
 (defn index
-  [props]
+  []
   (r/create-class
     {:display-name "Admin Index"
      :component-did-mount
      (fn [this]
-       (let [{:keys [route]} (r/props this)]
-         (start! (:url route) get-routes dispatch-route)))
+       (let [{:keys [route] :as props} (r/props this)]
+         (print "> props" props)
+         (start! (:path route) get-routes dispatch-route)))
 
      :reagent-render
      (fn []

@@ -2,6 +2,8 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
+    ["react" :as react]
+    [reagent.core :as r]
     [webchange.book-library.views :as book-library]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
@@ -22,7 +24,7 @@
     [webchange.error-message.views :refer [error-message]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.ui-framework.test-page.index :refer [test-ui]]
-    [webchange.views-admin :refer [admin]]))
+    [webchange.utils.get-lazy.util :refer (lazy-component)]))
 
 (defn- str->int-param
   [map key]
@@ -68,60 +70,70 @@
   (merge book-library/views
          student-dashboard/views))
 
+(def modules {:admin (lazy-component webchange.admin.views/index)})
+
+(defn- module-loading
+  []
+  [:div "Loading..."])
+
+(defn- module
+  [{:keys [component url]}]
+  [:> react/Suspense {:fallback (r/as-element [module-loading])}
+   [:> component {:route {:path url}}]])
+
 (defn- panels
   [route-name route-params url]
-  (if-let [view (get overall-views route-name)]
-    [view route-params]
-    (case route-name
-      :home [login-switch]
-      :login [teacher-login :sign-in]
-      :register-user [teacher-login :sign-up]
-      :course [course {:mode ::modes/game}]
-      ;; sandbox
-      :sandbox [course {:mode ::modes/sandbox}]
-      ;; editor
-      :course-editor [editor-panel-v2 (:id route-params)]
-      :course-editor-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
-      :course-editor-v2-concept [editor-panel-v2-concept (:id route-params) (-> route-params :concept-id js/parseInt)]
-      :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
-      :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]
-      :course-editor-v2-add-lesson [editor-panel-v2-add-lesson (:course-id route-params) (-> route-params :level-id js/parseInt)]
-      :course-table [course-table {:course-id (:id route-params)}]
-      :scenes-crossing [scenes-crossing {:course-id (:id route-params)}]
+  (cond
+    (contains? modules route-name) [module {:url       url
+                                            :component (get modules route-name)}]
+    (contains? overall-views route-name) [(get overall-views route-name) route-params]
+    :default (case route-name
+               :home [login-switch]
+               :login [teacher-login :sign-in]
+               :register-user [teacher-login :sign-up]
+               :course [course {:mode ::modes/game}]
+               ;; sandbox
+               :sandbox [course {:mode ::modes/sandbox}]
+               ;; editor
+               :course-editor [editor-panel-v2 (:id route-params)]
+               :course-editor-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
+               :course-editor-v2-concept [editor-panel-v2-concept (:id route-params) (-> route-params :concept-id js/parseInt)]
+               :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
+               :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]
+               :course-editor-v2-add-lesson [editor-panel-v2-add-lesson (:course-id route-params) (-> route-params :level-id js/parseInt)]
+               :course-table [course-table {:course-id (:id route-params)}]
+               :scenes-crossing [scenes-crossing {:course-id (:id route-params)}]
 
-      ;; teacher dashboard
-      :dashboard [dashboard-panel :dashboard route-params]
-      :dashboard-classes [dashboard-panel :classes-list route-params]
-      :dashboard-class-profile [dashboard-panel :class-profile route-params]
-      :dashboard-students [dashboard-panel :students-list route-params]
-      :dashboard-student-profile [dashboard-panel :student-profile route-params]
-      :dashboard-schools [dashboard-panel :schools-list route-params]
+               ;; teacher dashboard
+               :dashboard [dashboard-panel :dashboard route-params]
+               :dashboard-classes [dashboard-panel :classes-list route-params]
+               :dashboard-class-profile [dashboard-panel :class-profile route-params]
+               :dashboard-students [dashboard-panel :students-list route-params]
+               :dashboard-student-profile [dashboard-panel :student-profile route-params]
+               :dashboard-schools [dashboard-panel :schools-list route-params]
 
-      ;; admin dashboard
-      :dashboard-courses [dashboard-panel :courses-list route-params]
+               ;; admin dashboard
+               :dashboard-courses [dashboard-panel :courses-list route-params]
 
-      ;; student dashboard
-      :student-login [student-access-form]
+               ;; student dashboard
+               :student-login [student-access-form]
 
-      ;; parent dashboard
-      :parent-dashboard [parent-dashboard/dashboard]
-      :parent-add-student [parent-dashboard/add-student]
-      :parent-help [parent-dashboard/help]
+               ;; parent dashboard
+               :parent-dashboard [parent-dashboard/dashboard]
+               :parent-add-student [parent-dashboard/add-student]
+               :parent-help [parent-dashboard/help]
 
-      ;;wizard
-      :book-creator [wizard/book-creator-panel]
-      :wizard [wizard/wizard]
-      :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
-      :game-changer [game-changer/index]
+               ;;wizard
+               :book-creator [wizard/book-creator-panel]
+               :wizard [wizard/wizard]
+               :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
+               :game-changer [game-changer/index]
 
-      ;;
-      :admin [admin {:route {:url url}}]
+               ;; technical
+               :test-ui [test-ui]
 
-      ;; technical
-      :test-ui [test-ui]
-
-      nil [:div]
-      [page-404])))
+               nil [:div]
+               [page-404])))
 
 (defn main-panel []
   (let [{:keys [handler url route-params]} @(re-frame/subscribe [::subs/active-route])]
