@@ -20,19 +20,19 @@
                   "book-creator"      :book-creator
                   "s"                 {["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
                                        ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
-                  "courses"           {["/" [#"[\w-%]+" :id]] {[""]                    :course
-                                                               ["/editor"]             {[""]                         :course-editor
-                                                                                        ["/" [#"[\w-%]+" :scene-id]] :course-editor-scene}
-                                                               ["/editor-v2"]          {[""]                         :course-editor-v2 #_redirected
-                                                                                        ["/concepts/" :concept-id]   :course-editor-v2-concept
-                                                                                        ["/add-concept"]             :course-editor-v2-add-concept
-                                                                                        ["/levels/" :level-id]       {["/add-lesson"]          :course-editor-v2-add-lesson
-                                                                                                                      ["/lessons/" :lesson-id] :course-editor-v2-lesson}
-                                                                                        ["/" [#"[\w-%]+" :scene-id]] :course-editor-v2-scene #_redirected}
-                                                               ["/table"]              :course-table
-                                                               ["/scenes-crossing"]    :scenes-crossing
-                                                               ["/dashboard"]          student-dashboard-routes/routes
-                                                               ["/book-library"]       book-library-routes/routes}}
+                  "courses"           {["/" [#"[\w-%]+" :id]] {[""]                 :course
+                                                               ["/editor"]          {[""]                         :course-editor
+                                                                                     ["/" [#"[\w-%]+" :scene-id]] :course-editor-scene}
+                                                               ["/editor-v2"]       {[""]                         :course-editor-v2 #_redirected
+                                                                                     ["/concepts/" :concept-id]   :course-editor-v2-concept
+                                                                                     ["/add-concept"]             :course-editor-v2-add-concept
+                                                                                     ["/levels/" :level-id]       {["/add-lesson"]          :course-editor-v2-add-lesson
+                                                                                                                   ["/lessons/" :lesson-id] :course-editor-v2-lesson}
+                                                                                     ["/" [#"[\w-%]+" :scene-id]] :course-editor-v2-scene #_redirected}
+                                                               ["/table"]           :course-table
+                                                               ["/scenes-crossing"] :scenes-crossing
+                                                               ["/dashboard"]       student-dashboard-routes/routes
+                                                               ["/book-library"]    book-library-routes/routes}}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
                                        ["/schools"]                                     :dashboard-schools
@@ -43,7 +43,8 @@
                   "parents"           {[""]             :parent-dashboard
                                        ["/add-student"] :parent-add-student
                                        ["/help"]        :parent-help}
-                  "test-ui"           :test-ui}])
+                  "test-ui"           :test-ui
+                  "admin"             :admin}])
 
 (def redirects {:course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})

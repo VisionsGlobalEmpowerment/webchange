@@ -21,7 +21,8 @@
     [webchange.editor-v2.wizard.views :as wizard]
     [webchange.error-message.views :refer [error-message]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.ui-framework.test-page.index :refer [test-ui]]))
+    [webchange.ui-framework.test-page.index :refer [test-ui]]
+    [webchange.views-admin :refer [admin]]))
 
 (defn- str->int-param
   [map key]
@@ -112,6 +113,9 @@
       :wizard [wizard/wizard]
       :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
       :game-changer [game-changer/index]
+
+      ;;
+      :admin [admin]
 
       ;; technical
       :test-ui [test-ui]
