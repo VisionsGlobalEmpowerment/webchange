@@ -69,7 +69,7 @@
          student-dashboard/views))
 
 (defn- panels
-  [route-name route-params]
+  [route-name route-params url]
   (if-let [view (get overall-views route-name)]
     [view route-params]
     (case route-name
@@ -115,7 +115,7 @@
       :game-changer [game-changer/index]
 
       ;;
-      :admin [admin]
+      :admin [admin {:route {:url url}}]
 
       ;; technical
       :test-ui [test-ui]
@@ -124,8 +124,8 @@
       [page-404])))
 
 (defn main-panel []
-  (let [{:keys [handler route-params]} @(re-frame/subscribe [::subs/active-route])]
+  (let [{:keys [handler url route-params]} @(re-frame/subscribe [::subs/active-route])]
     [:div
      [ui/css-baseline]
-     [panels handler route-params]
+     [panels handler route-params url]
      [error-message]]))
