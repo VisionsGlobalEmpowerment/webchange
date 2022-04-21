@@ -4,6 +4,7 @@
     [webchange.templates.core :as core]
     [webchange.templates.library.first-word-book.add-spread :refer [add-spread spread-idx->dialog-name]]
     [webchange.templates.library.first-word-book.remove-last-spread :refer [remove-last-spread]]
+    [webchange.templates.library.first-word-book.timeout :as timeout]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.utils.text :as text-utils]))
 
@@ -396,7 +397,9 @@
                                               {:type      "dialog"
                                                :action-id :dialog-finish-activity}
                                               {:type      "dialog"
-                                               :action-id :dialog-timeout-instructions}]}]},})
+                                               :action-id :dialog-timeout-instructions}
+                                              {:type      "dialog"
+                                               :action-id (-> (timeout/get-action-name) (keyword))}]}]},})
 
 (defn- set-data
   [activity-data args]
@@ -425,9 +428,10 @@
   [args]
   (-> template
       (set-data args)
+      (timeout/add-action-data)
       (assoc-in [:metadata :actions] (:actions metadata))))
 
-(defn update
+(defn edit
   [old-data {:keys [action-name] :as args}]
   (case action-name
     "add" (add-spread old-data args)
@@ -435,5 +439,5 @@
     "remove-last" (remove-last-spread old-data)))
 
 (core/register-template
-  metadata create update)
+  metadata create edit)
 

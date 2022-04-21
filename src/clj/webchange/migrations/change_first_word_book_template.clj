@@ -7,7 +7,7 @@
     [webchange.templates.library]
     [webchange.templates.library.first-word-book.add-spread :refer [spread-idx->dialog-name spread-idx->text-name]]
     [webchange.utils.list :refer [distinct-by-key]]
-    [webchange.utils.scene-action-data :refer [update-inner-action]]
+    [webchange.utils.scene-action-data :refer [update-empty-action update-inner-action]]
     [webchange.utils.map :refer [remove-empty-fields]]))
 
 (defn fix-asset
@@ -52,8 +52,9 @@
 (defn migrate-page-data
   [new-scene origin-action-data spread-idx side]
   (let [new-dialog-name (-> (spread-idx->dialog-name spread-idx side) (keyword))
-        fixed-action-data (update-inner-action origin-action-data
-                                               {:target (spread-idx->text-name spread-idx side)})]
+        fixed-action-data (-> origin-action-data
+                              (update-inner-action {:target (spread-idx->text-name spread-idx side)})
+                              (update-empty-action {:duration 0}))]
     (assoc-in new-scene [:actions new-dialog-name :data] [fixed-action-data])))
 
 (defn migrate-spread-data
@@ -105,18 +106,18 @@
   (log/debug "Migrate scene" course scene)
   (try
     (let [template-params (get-template-params data default-page-data)
-        new-scene-data (-> (:create template-params)
-                           (assoc :template-id template-id)
-                           (templates/activity-from-template)
-                           (assoc-in [:metadata :history :updated] (:update template-params)))]
-    (course/save-scene! course scene new-scene-data user-id)
-    (let [updated-scene-data (-> (-> (course/update-activity-template! course scene user-id)
-                                     (second)
-                                     (get :data))
-                                 (migrate-assets data default-page-data)
-                                 (migrate-common-dialogs data)
-                                 (migrate-content-dialogs data))]
-      (course/save-scene! course scene updated-scene-data user-id)))
+          new-scene-data (-> (:create template-params)
+                             (assoc :template-id template-id)
+                             (templates/activity-from-template)
+                             (assoc-in [:metadata :history :updated] (:update template-params)))]
+      (course/save-scene! course scene new-scene-data user-id)
+      (let [updated-scene-data (-> (-> (course/update-activity-template! course scene user-id)
+                                       (second)
+                                       (get :data))
+                                   (migrate-assets data default-page-data)
+                                   (migrate-common-dialogs data)
+                                   (migrate-content-dialogs data))]
+        (course/save-scene! course scene updated-scene-data user-id)))
     (catch Exception e
       (log/debug "Migrate scene exception:" course scene)
       (log/debug e)

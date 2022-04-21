@@ -1,5 +1,6 @@
 (ns webchange.templates.library.first-word-book.add-spread
   (:require
+    [webchange.templates.library.first-word-book.timeout :as timeout]
     [webchange.templates.utils.dialog :as dialog]))
 
 (defn- spread-idx->spread-prefix
@@ -150,6 +151,7 @@
   (let [action-name (-> (spread-idx->spread-name spread-idx) (keyword))
         action-data {:type "sequence"
                      :data [(spread-idx->dialog-name spread-idx :left)
+                            (timeout/get-action-name)
                             (spread-idx->dialog-name spread-idx :right)]}]
     (assoc-in activity-data [:actions action-name] action-data)))
 

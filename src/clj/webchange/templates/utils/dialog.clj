@@ -4,12 +4,13 @@
   ([phrase]
    (default phrase {}))
   ([phrase
-    {:keys [inner-action-data phrase-description]
-     :or   {inner-action-data {}}}]
+    {:keys [empty-duration inner-action-data phrase-description]
+     :or   {empty-duration    0
+            inner-action-data {}}}]
    {:type               "sequence-data",
     :editor-type        "dialog",
     :data               [{:type "sequence-data"
-                          :data [{:type "empty" :duration 0}
+                          :data [{:type "empty" :duration empty-duration}
                                  (merge {:type "animation-sequence" :phrase-text "New action" :audio nil}
                                         inner-action-data)]}],
     :phrase             phrase,
