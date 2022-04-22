@@ -24,7 +24,7 @@
     [webchange.error-message.views :refer [error-message]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.ui-framework.test-page.index :refer [test-ui]]
-    [webchange.utils.get-lazy.util :refer (lazy-component)]))
+    [webchange.utils.lazy-component :refer [lazy-component]]))
 
 (defn- str->int-param
   [map key]
@@ -70,8 +70,8 @@
   (merge book-library/views
          student-dashboard/views))
 
-(def modules {:admin   (lazy-component webchange.admin.views/index)
-              :teacher (lazy-component webchange.teacher.views/index)})
+(def modules {:admin   (-> webchange.admin.views/index (shadow.lazy/loadable) (lazy-component))
+              :teacher (-> webchange.teacher.views/index (shadow.lazy/loadable) (lazy-component))})
 
 (defn- module-route?
   [route-name]

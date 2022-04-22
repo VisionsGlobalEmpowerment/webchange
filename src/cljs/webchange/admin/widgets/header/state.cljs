@@ -1,4 +1,4 @@
-(ns webchange.admin.header.state
+(ns webchange.admin.widgets.header.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.routes :as routes]))
@@ -6,7 +6,7 @@
 (re-frame/reg-event-fx
   ::open-dashboard
   (fn [{:keys [_]} [_]]
-    {:dispatch [::routes/redirect :home]}))
+    {:dispatch [::routes/redirect :dashboard]}))
 
 (re-frame/reg-event-fx
   ::open-schools

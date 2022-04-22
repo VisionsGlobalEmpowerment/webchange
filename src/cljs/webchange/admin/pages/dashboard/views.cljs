@@ -1,10 +1,12 @@
 (ns webchange.admin.pages.dashboard.views
   (:require
+    [webchange.admin.widgets.header.views :refer [header]]
     [webchange.admin.widgets.toolbar.views :refer [toolbar]]))
 
 (defn page
   []
-  [:div "Dashboard"
+  [:div
+   [header]
    [toolbar {:title   "My Dashboard"
              :actions [{:id      :book1
                         :icon    "cancel"

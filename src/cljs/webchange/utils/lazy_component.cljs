@@ -1,11 +1,10 @@
-(ns webchange.utils.get-lazy.util
-  (:require-macros [webchange.utils.get-lazy.util])
+(ns webchange.utils.lazy-component
   (:require
     ["react" :as react]
     [reagent.core :as r]
     [shadow.lazy :as lazy]))
 
-(defn lazy-component* [loadable]
+(defn lazy-component [loadable]
   (react/lazy
     (fn []
       (-> (lazy/load loadable)

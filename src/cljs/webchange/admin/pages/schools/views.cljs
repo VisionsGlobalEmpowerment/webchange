@@ -1,5 +1,9 @@
-(ns webchange.admin.pages.schools.views)
+(ns webchange.admin.pages.schools.views
+  (:require
+    [webchange.admin.widgets.header.views :refer [header]]))
 
 (defn page
   []
-  [:div "Schools"])
+  [:div
+   [header]
+   "Schools"])

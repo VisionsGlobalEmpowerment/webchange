@@ -1,7 +1,7 @@
-(ns webchange.admin.header.views
+(ns webchange.admin.widgets.header.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.header.state :as state]))
+    [webchange.admin.widgets.header.state :as state]))
 
 (defn header
   []

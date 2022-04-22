@@ -2,12 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.header.views :refer [header]]
     [webchange.admin.pages.index :refer [pages]]
     [webchange.admin.routes :as routes]
-    [webchange.admin.state :as state]
-    ;[webchange.admin-dashboard.index :refer [layout]]
-    ))
+    [webchange.admin.state :as state]))
 
 (defn page-not-fount
   []
@@ -26,9 +23,5 @@
      (fn []
        (let [{:keys [handler props]} @(re-frame/subscribe [::state/current-page])
              page-component (get pages handler (:404 pages))]
-         #_[layout {:title  "Admin App"
-                    :header [header]}
-            [page-component props]]
          [:div#tabschool-admin
-          [page-component props]]
-         ))}))
+          [page-component props]]))}))
