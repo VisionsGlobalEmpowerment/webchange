@@ -1,7 +1,6 @@
-(ns webchange.admin-school.views
+(ns webchange.teacher.views
   (:require
     [reagent.core :as r]
-    [webchange.admin-dashboard.index :refer [button]]
     ;[webchange.utils.module-router :as router]
     ))
 
@@ -27,4 +26,4 @@
      (fn []
        [:div
         "Admin School"
-        [button]])}))
+        [:button]])}))

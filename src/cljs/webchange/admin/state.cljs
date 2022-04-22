@@ -1,4 +1,4 @@
-(ns webchange.admin-app.state
+(ns webchange.admin.state
   (:require
     [re-frame.core :as re-frame]))
 

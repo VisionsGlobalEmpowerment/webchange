@@ -44,10 +44,12 @@
                                        ["/add-student"] :parent-add-student
                                        ["/help"]        :parent-help}
                   "test-ui"           :test-ui
-                  "admin"             {[""]        :admin
-                                       ["/" #".*"] :admin}
-                  "admin-school"      {[""]        :admin-school
-                                       ["/" #".*"] :admin-school}}])
+                  ;"admin"             {[""]        :admin
+                  ;                     ["/" #".*"] :admin}
+                  ;"teacher"           {[""]        :teacher
+                  ;                     ["/" #".*"] :teacher}
+
+                  }])
 
 (def redirects {:course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})
@@ -57,6 +59,7 @@
 
 (defn- dispatch-route
   [{:keys [handler route-params] :as params}]
+  (print "dispatch-route" params)
   (if (contains? redirects handler)
     (let [new-handler (get redirects handler)]
       (re-frame/dispatch (vec (concat [::redirect new-handler]

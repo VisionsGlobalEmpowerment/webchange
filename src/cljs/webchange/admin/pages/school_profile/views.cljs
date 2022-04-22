@@ -1,4 +1,4 @@
-(ns webchange.admin-app.school-profile.views)
+(ns webchange.admin.pages.school-profile.views)
 
 (defn page
   [{:keys [school-id]}]

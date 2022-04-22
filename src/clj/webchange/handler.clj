@@ -165,8 +165,8 @@
 
            (GET "/admin" [] (public-route))
            (GET "/admin/*" [] (public-route))
-           (GET "/admin-school" [] (public-route))
-           (GET "/admin-school/*" [] (public-route))
+           (GET "/teacher" [] (public-route))
+           (GET "/teacher/*" [] (public-route))
 
            ;; Technical
            (GET "/test-ui" [] (public-route))

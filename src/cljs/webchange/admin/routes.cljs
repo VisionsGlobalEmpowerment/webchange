@@ -1,11 +1,11 @@
-(ns webchange.admin-app.routes
+(ns webchange.admin.routes
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin-app.state :as state]
+    [webchange.admin.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-(def routes {""                :home
-             "/"               :home
+(def routes {""                :dashboard
+             "/"               :dashboard
              "/schools"        :schools
              "/school-profile" {["/" [#"[\w-%]+" :school-id]] :school-profile}})
 

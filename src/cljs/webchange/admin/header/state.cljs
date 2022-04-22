@@ -1,7 +1,7 @@
-(ns webchange.admin-app.header.state
+(ns webchange.admin.header.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin-app.routes :as routes]))
+    [webchange.admin.routes :as routes]))
 
 (re-frame/reg-event-fx
   ::open-dashboard

@@ -70,8 +70,8 @@
   (merge book-library/views
          student-dashboard/views))
 
-(def modules {:admin        (lazy-component webchange.admin-app.views/index)
-              :admin-school (lazy-component webchange.admin-school.views/index)})
+(def modules {:admin   (lazy-component webchange.admin.views/index)
+              :teacher (lazy-component webchange.teacher.views/index)})
 
 (defn- module-loading
   []
