@@ -1,0 +1,14 @@
+.wc-icon-button {
+    @import "variables";
+
+    &.size-normal {
+        height: $size-normal;
+        min-width: $size-normal;
+        border-radius: $size-normal * 0.5;
+
+        svg {
+            height: $size-normal-svg;
+            width: $size-normal-svg;
+        }
+    }
+}

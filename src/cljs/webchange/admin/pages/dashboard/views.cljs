@@ -6,7 +6,15 @@
   []
   [:div "Dashboard"
    [toolbar {:title   "My Dashboard"
-             :actions [{:id      :book
-                        :icon    "book"
+             :actions [{:id      :book1
+                        :icon    "cancel"
+                        :title   "Books"
+                        :handler #(print "book")}
+                       {:id      :book2
+                        :icon    "cancel"
+                        :title   "Books"
+                        :handler #(print "book")}
+                       {:id      :book3
+                        :icon    "cancel"
                         :title   "Books"
                         :handler #(print "book")}]}]])

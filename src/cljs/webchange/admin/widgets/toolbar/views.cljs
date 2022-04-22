@@ -13,7 +13,7 @@
   [{:keys [title actions]}]
   [:div.toolbar
    [:h1.title title]
-   [:ul.actions
+   [:ul.toolbar-actions-list
     (for [{:keys [id] :as action} actions]
       ^{:key id}
       [toolbar-action action])]])

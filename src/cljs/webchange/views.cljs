@@ -73,6 +73,10 @@
 (def modules {:admin   (lazy-component webchange.admin.views/index)
               :teacher (lazy-component webchange.teacher.views/index)})
 
+(defn- module-route?
+  [route-name]
+  (contains? modules route-name))
+
 (defn- module-loading
   []
   [:div "Loading..."])
@@ -85,8 +89,8 @@
 (defn- panels
   [route-name route-params url]
   (cond
-    (contains? modules route-name) [module {:url       url
-                                            :component (get modules route-name)}]
+    (module-route? route-name) [module {:url       url
+                                        :component (get modules route-name)}]
     (contains? overall-views route-name) [(get overall-views route-name) route-params]
     :default (case route-name
                :home [login-switch]
@@ -138,7 +142,7 @@
 
 (defn main-panel []
   (let [{:keys [handler url route-params]} @(re-frame/subscribe [::subs/active-route])]
-    [:div
+    [:div {:class-name (if-not (module-route? handler) "main-app")}
      [ui/css-baseline]
      [panels handler route-params url]
      [error-message]]))

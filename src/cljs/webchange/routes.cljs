@@ -44,12 +44,10 @@
                                        ["/add-student"] :parent-add-student
                                        ["/help"]        :parent-help}
                   "test-ui"           :test-ui
-                  ;"admin"             {[""]        :admin
-                  ;                     ["/" #".*"] :admin}
-                  ;"teacher"           {[""]        :teacher
-                  ;                     ["/" #".*"] :teacher}
-
-                  }])
+                  "admin"             {[""]        :admin
+                                       ["/" #".*"] :admin}
+                  "teacher"           {[""]        :teacher
+                                       ["/" #".*"] :teacher}}])
 
 (def redirects {:course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})
@@ -65,7 +63,7 @@
       (re-frame/dispatch (vec (concat [::redirect new-handler]
                                       (->> (into [] route-params) (flatten))))))
     (let [current-course @(re-frame/subscribe [::subs/current-course])]
-      (re-frame/dispatch [::events/set-active-route (assoc params :url (bidi/path-for routes handler))])
+      (re-frame/dispatch [::events/set-active-route (assoc params :url (.-pathname js/location))])
       (case handler
         :course (re-frame/dispatch [::ie/start-course (:id route-params)])
         :sandbox (re-frame/dispatch [::ie/start-sandbox (:course-id route-params) (:scene-id route-params) (:encoded-items route-params)])

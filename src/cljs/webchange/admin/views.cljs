@@ -20,7 +20,7 @@
      :component-did-mount
      (fn [this]
        (let [{:keys [route]} (r/props this)]
-         #_(routes/init! (:path route))))
+         (routes/init! (:path route))))
 
      :reagent-render
      (fn []
@@ -29,5 +29,6 @@
          #_[layout {:title  "Admin App"
                     :header [header]}
             [page-component props]]
-         [page-component props]
+         [:div#tabschool-admin
+          [page-component props]]
          ))}))
