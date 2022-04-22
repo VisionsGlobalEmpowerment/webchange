@@ -1,0 +1,13 @@
+.admin-dashboard-layout {
+    display: flex;
+    flex-direction: column;
+
+    & > .header {
+        height: 64px;
+        background-color: #2E3A59;
+    }
+
+    & > .content {
+
+    }
+}

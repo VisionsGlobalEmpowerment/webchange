@@ -37,9 +37,13 @@
    :output-dir       "resources/public/js/compiled"
    :asset-path       "/js/compiled"
    :module-loader    true
-   :modules          {:app   {:entries [webchange.core]}
-                      :admin {:entries    [webchange.admin.views]
-                              :depends-on #{:app}}}
+   :modules          {:app          {:entries [webchange.core]
+                                     :default true}
+                      :admin-app    {:entries    [webchange.admin-app.views]
+                                     :depends-on #{:app}}
+                      :admin-school {:entries    [webchange.admin-school.views]
+                                     :depends-on #{:app}}
+                      }
    :devtools         {:after-load      webchange.core/mount-root
                       :ignore-warnings true
                       :hud             #{:errors :progress}}

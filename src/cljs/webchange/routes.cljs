@@ -45,7 +45,9 @@
                                        ["/help"]        :parent-help}
                   "test-ui"           :test-ui
                   "admin"             {[""]        :admin
-                                       ["/" #".*"] :admin}}])
+                                       ["/" #".*"] :admin}
+                  "admin-school"      {[""]        :admin-school
+                                       ["/" #".*"] :admin-school}}])
 
 (def redirects {:course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})
