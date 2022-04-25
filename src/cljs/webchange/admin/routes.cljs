@@ -4,10 +4,21 @@
     [webchange.admin.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-(def routes {""                :dashboard
-             "/"               :dashboard
-             "/schools"        :schools
-             "/school-profile" {["/" [#"[\w-%]+" :school-id]] :school-profile}})
+(def routes {""         :dashboard
+             "/"        :dashboard
+             "/schools" {""                            :schools
+                         ["/" [#"[\w-%]+" :school-id]] :school-profile}})
+
+(defn get-title
+  [{:keys [handler props]}]
+  (let [root "TabSchool"
+        connector " / "
+        s #(clojure.string/join connector (concat [root] %))]
+    (case handler
+      :dashboard (s [])
+      :schools (s ["Schools"])
+      :school-profile (s ["School Profile" (:school-id props)])
+      (s []))))
 
 (defonce router (atom nil))
 
@@ -20,8 +31,13 @@
   [root-path]
   (reset! router (module-router/init! root-path routes dispatch-route)))
 
+(defn set-title!
+  [page-params]
+  (->> (get-title page-params)
+       (set! (.-title js/document))))
+
 (re-frame/reg-event-fx
   ::redirect
   (fn [{:keys [_]} [_ & args]]
-    {::module-router/redirect {:router @router
+    {::module-router/redirect {:router          @router
                                :redirect-params args}}))
