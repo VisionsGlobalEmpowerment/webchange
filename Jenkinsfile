@@ -45,7 +45,7 @@ node {
 
         stage('Sync') {
 	    withEnv(['config=/srv/www/webchange/config.edn']) {
-	        sh 'java -jar /srv/www/webchange/current.jar download-course-data 1'
+	        sh 'java -jar /srv/www/webchange/current.jar download-course-data'
 	    }
         }
 	
