@@ -1,0 +1,18 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+
+    @import "styles-top-bar";
+
+    & > .content-wrapper {
+        flex: 1 1;
+        background-color: #f7f7fb;
+        padding: 20px;
+
+        & > .content {
+
+        }
+    }
+}

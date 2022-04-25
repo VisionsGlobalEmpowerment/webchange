@@ -4,7 +4,8 @@
     [reagent.core :as r]
     [webchange.admin.pages.index :refer [pages]]
     [webchange.admin.routes :as routes]
-    [webchange.admin.state :as state]))
+    [webchange.admin.state :as state]
+    [webchange.admin.widgets.layout.views :refer [layout]]))
 
 (defn index
   []
@@ -20,4 +21,5 @@
        (let [{:keys [handler props]} @(re-frame/subscribe [::state/current-page])
              page-component (get pages handler (:404 pages))]
          [:div#tabschool-admin
-          [page-component props]]))}))
+          [layout
+           [page-component props]]]))}))
