@@ -1,29 +1,23 @@
 (ns webchange.teacher.views
   (:require
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
-    ;[webchange.utils.module-router :as router]
-    ))
-
-(def routes {"/"  :home
-             "/a" :a
-             "/b" :b})
-
-(defn- dispatch-route
-  [params]
-  (print "--- dispatch school route" params))
+    [webchange.teacher.pages.index :refer [pages]]
+    [webchange.teacher.routes :as routes]
+    [webchange.teacher.state :as state]))
 
 (defn index
   []
   (r/create-class
-    {:display-name "Admin School Index"
+    {:display-name "Teacher App Index"
      :component-did-mount
      (fn [this]
-       (let [{:keys [route] :as props} (r/props this)]
-         ;(router/init! (:path route) routes dispatch-route)
-         ))
+       (let [{:keys [route]} (r/props this)]
+         (routes/init! (:path route))))
 
      :reagent-render
      (fn []
-       [:div
-        "Admin School"
-        [:button]])}))
+       (let [{:keys [handler props]} @(re-frame/subscribe [::state/current-page])
+             page-component (get pages handler (:404 pages))]
+         [:div#tabschool-teacher
+          [page-component props]]))}))

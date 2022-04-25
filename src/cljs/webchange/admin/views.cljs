@@ -6,10 +6,6 @@
     [webchange.admin.routes :as routes]
     [webchange.admin.state :as state]))
 
-(defn page-not-fount
-  []
-  [:div "Page view is not defined"])
-
 (defn index
   []
   (r/create-class
