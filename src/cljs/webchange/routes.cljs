@@ -57,13 +57,13 @@
 
 (defn- dispatch-route
   [{:keys [handler route-params] :as params}]
-  (print "dispatch-route" params)
   (if (contains? redirects handler)
     (let [new-handler (get redirects handler)]
       (re-frame/dispatch (vec (concat [::redirect new-handler]
                                       (->> (into [] route-params) (flatten))))))
-    (let [current-course @(re-frame/subscribe [::subs/current-course])]
-      (re-frame/dispatch [::events/set-active-route (assoc params :url (.-pathname js/location))])
+    (let [current-course @(re-frame/subscribe [::subs/current-course])
+          route (->> route-params (into []) (flatten) (concat [routes handler]) (apply bidi/path-for))]
+      (re-frame/dispatch [::events/set-active-route (assoc params :url route)])
       (case handler
         :course (re-frame/dispatch [::ie/start-course (:id route-params)])
         :sandbox (re-frame/dispatch [::ie/start-sandbox (:course-id route-params) (:scene-id route-params) (:encoded-items route-params)])
