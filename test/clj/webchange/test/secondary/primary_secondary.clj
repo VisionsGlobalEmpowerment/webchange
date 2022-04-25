@@ -20,7 +20,7 @@
         dataset-item-created (f/dataset-item-created  {:dataset-id (:id dataset)})
         lesson-set-created (f/lesson-set-created {:dataset-id (:dataset-id dataset-item-created) :data {:items [{:id (:id dataset-item-created)}]}})
         scene-created (f/scene-created course-created)
-        stat (core/get-course-update (str f/default-school-id))]
+        stat (core/get-course-update (str f/default-school-id) [])]
     (let [school (:school stat)
           course (first (:courses stat))
           course-versions (first (:course-versions stat))
@@ -40,7 +40,7 @@
 
 (deftest can-update-school
   (let  [name "NewName"
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :school {:id f/default-school-id :name name}))]
     (core/import-primary-data! update)
     (let [school (db/get-school {:id f/default-school-id})]
@@ -52,9 +52,9 @@
          course-created (f/course-created)
          course-old (db/get-course {:slug (:slug course-created)})
          course-version-old (db/get-course-version {:id (:version-id course-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :courses [(-> course-old
-                                               (assoc :name name))])
+                                                (assoc :name name))])
                       (assoc stat :course-versions [(-> course-version-old
                                                         (assoc :data data)
                                                         (assoc :created-at (dt/date-time2iso-str (jt/local-date-time)))
@@ -75,7 +75,7 @@
          dataset-item-created (f/dataset-item-created)
          dataset-old (db/get-dataset {:id (:dataset-id dataset-item-created)})
          dataset-item-old (db/get-dataset-item {:id (:id dataset-item-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :datasets [(-> dataset-old
                                                  (assoc :name name))])
                       (assoc stat :dataset-items  [(-> dataset-item-old
@@ -93,7 +93,7 @@
          scene-created (f/scene-created course)
          scene-old (db/get-scene {:course_id (:course-id scene-created) :name (:name scene-created)})
          scene-version-old (db/get-scene-version {:id (:version-id scene-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :scenes [(-> scene-old
                                                (assoc :name name))])
                       (assoc stat :scene-versions  [(-> scene-version-old
@@ -111,9 +111,9 @@
          data {:initial-scene "helloKitty"}
          lesson-set-created (f/lesson-set-created)
          lesson-set-old (db/get-lesson-set-by-name {:dataset_id (:dataset-id lesson-set-created) :name (:name lesson-set-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :lesson-sets [(-> lesson-set-old
-                                               (assoc :name name))])
+                                                    (assoc :name name))])
                       )
          ]
     (core/import-primary-data! update)
@@ -126,7 +126,7 @@
   (let  [course-created (f/course-created)
          course-old (db/get-course {:slug (:slug course-created)})
          course-version-old (db/get-course-version {:id (:version-id course-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :courses [])
                       (assoc stat :course-versions []))
          ]
@@ -140,7 +140,7 @@
   (let  [dataset-item-created (f/dataset-item-created)
          dataset-old (db/get-dataset {:id (:dataset-id dataset-item-created)})
          dataset-item-old (db/get-dataset-item {:id (:id dataset-item-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :datasets [])
                       (assoc stat :dataset-items  [])
                       )
@@ -155,7 +155,7 @@
   (let  [scene-created (f/scene-created)
          scene-old (db/get-scene {:course_id (:course-id scene-created) :name (:name scene-created)})
          scene-version-old (db/get-scene-version {:id (:version-id scene-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :scenes [])
                       (assoc stat :scene-versions  []))
          ]
@@ -168,7 +168,7 @@
 (deftest can-remove-lesson
   (let  [lesson-set-created (f/lesson-set-created)
          lesson-set-old (db/get-lesson-set-by-name {:dataset_id (:dataset-id lesson-set-created) :name (:name lesson-set-created)})
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :lesson-sets []))]
     (core/import-primary-data! update)
     (let [lesson-set-updated (db/get-lesson-set-by-name {:dataset_id (:dataset-id lesson-set-created) :name (:name lesson-set-created)})]
@@ -178,7 +178,7 @@
   (let  [skill-id 1
          course (f/course-created {:status "published"})
          scene-created (f/scene-created course)
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :scene-skills [{:scene-id (:id scene-created) :skill-id skill-id}]))]
     (core/import-primary-data! update)
     (let [[scene-skill] (db/get-scene-skills-by-scene {:scene_id (:id scene-created)})]
@@ -189,7 +189,7 @@
   (let  [skill-id 1
          scene-created (f/scene-created)
          scene-created (f/scene-skills-created (:id scene-created) skill-id)
-         update (as-> (core/get-course-update (str f/default-school-id)) stat
+         update (as-> (core/get-course-update (str f/default-school-id) []) stat
                       (assoc stat :scene-skills []))]
     (core/import-primary-data! update)
     (let [scene-skills (db/get-scene-skills-by-scene {:scene_id (:id scene-created)})]
