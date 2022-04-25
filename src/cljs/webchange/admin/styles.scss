@@ -1,0 +1,9 @@
+#tabschool-admin {
+    width: 100%;
+    height: 100%;
+
+    @import "variables";
+
+    @import "widgets/styles";
+    @import "pages/styles";
+}

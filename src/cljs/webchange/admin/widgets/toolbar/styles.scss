@@ -1,0 +1,30 @@
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+
+    background-color: #2E3A59;
+    border-radius: 6px;
+    padding: 20px;
+
+    .title {
+        color: #fff;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        margin: 0;
+    }
+
+    .toolbar-actions-list {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+
+        margin: 0;
+        padding: 0;
+    }
+}

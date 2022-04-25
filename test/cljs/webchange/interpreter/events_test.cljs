@@ -4,7 +4,6 @@
             [cljs.core.async :refer [<! timeout]]
             [re-frame.core :as re-frame]
             [day8.re-frame.test :refer-macros [run-test-async wait-for]]
-            [webchange.core :as core]
             [webchange.events :as events]
             [webchange.interpreter.core :as ic]
             [webchange.interpreter.events :as ie]

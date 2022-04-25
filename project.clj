@@ -8,7 +8,7 @@
                  [org.clojure/core.async "1.4.627"]
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [clojure.java-time "0.3.2"]
-                 [reagent "0.7.0"]
+                 [reagent "0.8.1"]
                  [re-frame "0.10.5"]
                  [compojure "1.6.1"]
                  [metosin/spec-tools "0.10.1"]
