@@ -1,0 +1,29 @@
+.widget-counter {
+    display: flex;
+    gap: $default-gap;
+
+    & > .counter-item {
+        & > .display {
+            $size: 200px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            width: $size;
+            height: $size;
+            background-color: $color-secondary;
+            border-radius: $panel-border-radius;
+
+            color: #fff;
+            font-weight: 700;
+            font-size: 30px;
+            line-height: 52px;
+
+            & > .value {
+                font-size: 46px;
+            }
+        }
+    }
+}
