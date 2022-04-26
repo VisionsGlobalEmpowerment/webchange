@@ -2,7 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.state :as parent-state]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.validation.specs.class-spec :as class-spec]
+    [webchange.validation.validate :refer [validate]]))
 
 (defn path-to-db
   [relative-path]
@@ -102,6 +104,39 @@
   (fn [{:keys [_]} [_ value]]
     {:dispatch [::update-class-data {name-key value}]}))
 
+(re-frame/reg-sub
+  ::name-validation-error
+  (fn []
+    (re-frame/subscribe [::validation-error name-key]))
+  (fn [error]
+    error))
+
+;; Validation
+
+(def validation-data-path (path-to-db [:validation-data]))
+
+(re-frame/reg-event-fx
+  ::set-validation-errors
+  (fn [{:keys [db]} [_ errors]]
+    {:db (assoc-in db validation-data-path errors)}))
+
+(re-frame/reg-event-fx
+  ::reset-validation-errors
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::set-validation-errors nil]}))
+
+(re-frame/reg-sub
+  ::validation-errors
+  (fn [db]
+    (get-in db validation-data-path)))
+
+(re-frame/reg-sub
+  ::validation-error
+  (fn []
+    (re-frame/subscribe [::validation-errors]))
+  (fn [errors [_ field]]
+    (get errors field)))
+
 ;; Save
 
 (re-frame/reg-sub
@@ -115,10 +150,13 @@
   ::save-class
   (fn [{:keys [db]} [_]]
     (let [{:keys [class-id]} (get-class-id db)
-          class-data (get-class-data db)]
-      {:dispatch [::warehouse/save-class {:class-id class-id
-                                          :data     class-data}
-                  {:on-success [::save-class-success]}]})))
+          class-data (get-class-data db)
+          validation-errors (validate ::class-spec/class class-data)]
+      (if (nil? validation-errors)
+        {:dispatch [::warehouse/save-class {:class-id class-id
+                                            :data     class-data}
+                    {:on-success [::save-class-success]}]}
+        {:dispatch [::set-validation-errors validation-errors]}))))
 
 (re-frame/reg-event-fx
   ::save-class-success

@@ -33,10 +33,12 @@
 (defn- class-info
   []
   (let [name @(re-frame/subscribe [::state/class-name])
+        validation-error @(re-frame/subscribe [::state/name-validation-error])
         handle-change #(re-frame/dispatch [::state/set-class-name %])]
     [profile/block {:title "Class Info"}
      [input {:label     "Class Name"
              :value     name
+             :error     validation-error
              :on-change handle-change}]]))
 
 (defn- footer
