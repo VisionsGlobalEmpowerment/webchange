@@ -65,7 +65,9 @@
 (re-frame/reg-event-fx
   ::set-class-data
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db class-data-path value)}))
+    (let [validation-errors (validate ::class-spec/class value)]
+      {:db       (assoc-in db class-data-path value)
+       :dispatch [::set-validation-errors validation-errors]})))
 
 (re-frame/reg-event-fx
   ::update-class-data
@@ -88,29 +90,6 @@
   (fn [[current-data initial-data]]
     (not= current-data initial-data)))
 
-;; Class Name
-
-(def name-key :name)
-
-(re-frame/reg-sub
-  ::class-name
-  (fn []
-    (re-frame/subscribe [::class-data]))
-  (fn [class-data]
-    (get class-data name-key "")))
-
-(re-frame/reg-event-fx
-  ::set-class-name
-  (fn [{:keys [_]} [_ value]]
-    {:dispatch [::update-class-data {name-key value}]}))
-
-(re-frame/reg-sub
-  ::name-validation-error
-  (fn []
-    (re-frame/subscribe [::validation-error name-key]))
-  (fn [error]
-    error))
-
 ;; Validation
 
 (def validation-data-path (path-to-db [:validation-data]))
@@ -130,21 +109,16 @@
   (fn [db]
     (get-in db validation-data-path)))
 
-(re-frame/reg-sub
-  ::validation-error
-  (fn []
-    (re-frame/subscribe [::validation-errors]))
-  (fn [errors [_ field]]
-    (get errors field)))
-
 ;; Save
 
 (re-frame/reg-sub
   ::save-button-enabled?
   (fn []
-    [(re-frame/subscribe [::has-changes?])])
-  (fn [[has-changes?]]
-    has-changes?))
+    [(re-frame/subscribe [::has-changes?])
+     (re-frame/subscribe [::validation-errors])])
+  (fn [[has-changes? validation-errors]]
+    (and has-changes?
+         (not validation-errors))))
 
 (re-frame/reg-event-fx
   ::save-class
@@ -153,9 +127,10 @@
           class-data (get-class-data db)
           validation-errors (validate ::class-spec/class class-data)]
       (if (nil? validation-errors)
-        {:dispatch [::warehouse/save-class {:class-id class-id
-                                            :data     class-data}
-                    {:on-success [::save-class-success]}]}
+        {:dispatch-n [[::reset-validation-errors]
+                      [::warehouse/save-class {:class-id class-id
+                                               :data     class-data}
+                       {:on-success [::save-class-success]}]]}
         {:dispatch [::set-validation-errors validation-errors]}))))
 
 (re-frame/reg-event-fx

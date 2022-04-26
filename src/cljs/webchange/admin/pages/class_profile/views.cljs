@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.class-profile.state :as state]
+    [webchange.admin.widgets.class-form.views :refer [class-form]]
     [webchange.admin.widgets.counter.views :refer [counter]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.profile.views :as profile]
@@ -32,21 +33,17 @@
 
 (defn- class-info
   []
-  (let [name @(re-frame/subscribe [::state/class-name])
-        validation-error @(re-frame/subscribe [::state/name-validation-error])
-        handle-change #(re-frame/dispatch [::state/set-class-name %])]
+  (let [class-data @(re-frame/subscribe [::state/class-data])]
     [profile/block {:title "Class Info"}
-     [input {:label     "Class Name"
-             :value     name
-             :error     validation-error
-             :on-change handle-change}]]))
+     [class-form {:data      class-data
+                  :on-change [::state/set-class-data]}]]))
 
 (defn- footer
   []
   (let [handle-save-click #(re-frame/dispatch [::state/save-class])
         save-button-enabled? @(re-frame/subscribe [::state/save-button-enabled?])]
     [:<>
-     [button {:on-click  handle-save-click
+     [button {:on-click handle-save-click
               :disabled? (not save-button-enabled?)}
       "Save"]]))
 
