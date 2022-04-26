@@ -6,7 +6,9 @@
     [webchange.admin.pages.not-found.views :as not-found]
     [webchange.admin.pages.school-profile.views :as school-profile]
     [webchange.admin.pages.schools.views :as schools]
-    [webchange.admin.pages.students.views :as students]))
+    [webchange.admin.pages.students.views :as students]
+    [webchange.admin.pages.school-profile.views :as school-profile]
+    [webchange.admin.pages.new-school.views :as new-school]))
 
 (def pages {:class-profile  class-profile/page
             :dashboard      dashboard/page
@@ -14,4 +16,5 @@
             :school-profile school-profile/page
             :schools        schools/page
             :students       students/page
+            :new-school     new-school/page
             :404            not-found/page})
