@@ -598,7 +598,7 @@
 
 (re-frame/reg-event-fx
   ::load-class
-  (fn [{:keys [_]} [_ class-id handlers]]
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
     (create-request {:key    :load-class
                      :method :get
                      :uri    (str "/api/classes/" class-id)}

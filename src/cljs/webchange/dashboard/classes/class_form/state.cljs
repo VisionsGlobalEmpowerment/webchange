@@ -171,7 +171,7 @@
 (re-frame/reg-event-fx
   ::load-class
   (fn [{:keys [_]} [_ class-id]]
-    {:dispatch [::warehouse/load-class class-id {:on-success [::load-class-success]}]}))
+    {:dispatch [::warehouse/load-class {:class-id class-id} {:on-success [::load-class-success]}]}))
 
 (re-frame/reg-event-fx
   ::load-class-success

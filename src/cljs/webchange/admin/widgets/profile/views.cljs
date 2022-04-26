@@ -9,11 +9,14 @@
        (into [:div.widget-profile])))
 
 (defn main-content
-  [{:keys [title]}]
-  (->> (r/current-component)
-       (r/children)
-       (into [:div.widget-profile--main-content
-              [:h1 title]])))
+  [{:keys [footer title]}]
+  [:div.widget-profile--main-content
+   [:h1 title]
+   (->> (r/current-component)
+        (r/children)
+        (into [:div.widget-profile--main-content--content]))
+   [:div.widget-profile--main-content--footer
+    footer]])
 
 (defn side-bar
   []

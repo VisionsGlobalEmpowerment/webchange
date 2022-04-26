@@ -15,6 +15,7 @@
 
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: $default-gap;
 
         & > h1 {
@@ -37,6 +38,21 @@
                 border: solid 2px $color-secondary;
                 border-radius: 50%;
             }
+        }
+
+        & > .widget-profile--main-content--content {
+            flex: 1 1;
+
+            display: flex;
+            flex-direction: column;
+            gap: $default-gap;
+        }
+
+        & > .widget-profile--main-content--footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: $default-gap;
         }
     }
 

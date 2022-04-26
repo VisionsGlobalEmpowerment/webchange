@@ -1,8 +1,11 @@
 (ns webchange.admin.pages.class-profile.views
   (:require
+    [re-frame.core :as re-frame]
+    [webchange.admin.pages.class-profile.state :as state]
     [webchange.admin.widgets.counter.views :refer [counter]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
-    [webchange.admin.widgets.profile.views :as profile]))
+    [webchange.admin.widgets.profile.views :as profile]
+    [webchange.ui-framework.components.index :refer [button input]]))
 
 (defn- class-counter
   []
@@ -22,14 +25,38 @@
                      :action {:title "Events"
                               :icon  "add"}}]}])
 
+(defn- statistics
+  []
+  [profile/block {:title "Statistics"}
+   [no-data]])
+
+(defn- class-info
+  []
+  (let [name @(re-frame/subscribe [::state/class-name])
+        handle-change #(re-frame/dispatch [::state/set-class-name %])]
+    [profile/block {:title "Class Info"}
+     [input {:label     "Class Name"
+             :value     name
+             :on-change handle-change}]]))
+
+(defn- footer
+  []
+  (let [handle-save-click #(re-frame/dispatch [::state/save-class])
+        save-button-enabled? @(re-frame/subscribe [::state/save-button-enabled?])]
+    [:<>
+     [button {:on-click  handle-save-click
+              :disabled? (not save-button-enabled?)}
+      "Save"]]))
+
 (defn page
   [props]
-  [profile/page
-   [profile/main-content {:title "Class Profile"}
-    [class-counter]
-    [profile/block {:title "Statistics"}
-     [no-data]]
-    [profile/block {:title "Class Info"}
-     [no-data]]]
-   [profile/side-bar
-    [no-data]]])
+  (re-frame/dispatch [::state/init props])
+  (fn []
+    [profile/page
+     [profile/main-content {:title  "Class Profile"
+                            :footer [footer]}
+      [class-counter]
+      [statistics]
+      [class-info]]
+     [profile/side-bar
+      [no-data]]]))
