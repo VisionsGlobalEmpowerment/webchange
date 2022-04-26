@@ -2,9 +2,28 @@
   (:require
     [reagent.core :as r]))
 
-(defn profile
+(defn page
   []
-  [:div.widget-profile
-   (->> (r/current-component)
-        (r/children)
-        (into [:div.main-content]))])
+  (->> (r/current-component)
+       (r/children)
+       (into [:div.widget-profile])))
+
+(defn main-content
+  [{:keys [title]}]
+  (->> (r/current-component)
+       (r/children)
+       (into [:div.widget-profile--main-content
+              [:h1 title]])))
+
+(defn side-bar
+  []
+  (->> (r/current-component)
+       (r/children)
+       (into [:div.widget-profile--side-bar])))
+
+(defn block
+  [{:keys [title]}]
+  (->> (r/current-component)
+       (r/children)
+       (into [:div.widget-profile--content-block
+              [:h2 title]])))
