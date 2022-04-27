@@ -1,4 +1,4 @@
-(ns webchange.admin.widgets.profile.views
+(ns webchange.admin.widgets.page.views
   (:require
     [reagent.core :as r]))
 

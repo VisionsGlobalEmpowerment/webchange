@@ -5,7 +5,7 @@
     [webchange.admin.widgets.class-form.views :refer [class-form]]
     [webchange.admin.widgets.counter.views :refer [counter]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
-    [webchange.admin.widgets.profile.views :as profile]
+    [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :refer [button input]]))
 
 (defn- class-counter
@@ -28,13 +28,13 @@
 
 (defn- statistics
   []
-  [profile/block {:title "Statistics"}
+  [page/block {:title "Statistics"}
    [no-data]])
 
 (defn- class-info
   []
   (let [class-data @(re-frame/subscribe [::state/class-data])]
-    [profile/block {:title "Class Info"}
+    [page/block {:title "Class Info"}
      [class-form {:data      class-data
                   :on-change [::state/set-class-data]}]]))
 
@@ -51,11 +51,11 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [profile/page
-     [profile/main-content {:title  "Class Profile"
+    [page/page
+     [page/main-content {:title  "Class Profile"
                             :footer [footer]}
       [class-counter]
       [statistics]
       [class-info]]
-     [profile/side-bar
+     [page/side-bar
       [no-data]]]))
