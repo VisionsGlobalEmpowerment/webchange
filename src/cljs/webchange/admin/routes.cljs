@@ -8,8 +8,18 @@
              "/"        :dashboard
              "/login"   :login
              "/schools" {""                            :schools
-                         ["/" [#"[\w-%]+" :school-id]] {""         :school-profile
-                                                        "/classes" {["/" [#"[\w-%]+" :class-id]] :class-profile}}}})
+                         "add"                         :add-school
+                         ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
+                                                        "/classes"  {""                           :classes
+                                                                     "add"                        :add-class
+                                                                     ["/" [#"[\w-%]+" :class-id]] :class-profile}
+                                                        "/students" {"" :students}
+                                                        "/teachers" {""                           :teachers
+                                                                     "add"                        :add-teacher
+                                                                     ["/" [#"[\w-%]+" :class-id]] :teacher-profile}}}
+             "/courses" {""                              :courses
+                         "/add"                          :add-course
+                         ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}})
 
 (defn get-title
   [{:keys [handler props]}]
@@ -21,7 +31,7 @@
       :schools (s ["Schools"])
       :school-profile (s ["School Profile" (:school-id props)])
       :class-profile (s ["Class Profile" (:class-id props)])
-      (s []))))
+      (s [(-> (or handler :unknown) (clojure.core/name) (clojure.string/capitalize))]))))
 
 (defonce router (atom nil))
 

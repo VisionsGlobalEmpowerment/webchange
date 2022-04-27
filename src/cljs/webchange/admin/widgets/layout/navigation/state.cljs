@@ -33,7 +33,11 @@
                                                           :text  "Class 3"
                                                           :route {:page        :class-profile
                                                                   :page-params {:school-id 1
-                                                                                :class-id  3}}}]}]}]}
+                                                                                :class-id  3}}}]}
+                                             {:id       :students
+                                              :text     "Students"
+                                              :route    {:page        :students
+                                                         :page-params {:school-id 1}}}]}]}
                      {:id    :courses
                       :text  "Courses"
                       :route {:page :courses}}]}
