@@ -1,4 +1,4 @@
-(ns webchange.templates.library.first-words-book
+(ns webchange.templates.library.first-word-book.template-old
   (:require
     [webchange.templates.core :as core]
     [webchange.utils.text :as text-utils]

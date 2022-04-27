@@ -43,8 +43,9 @@
     [webchange.templates.library.writing-1]
     [webchange.templates.library.writing-2]
     [webchange.templates.library.cinema]
-    [webchange.templates.library.first-words-book]
+    [webchange.templates.library.first-word-book.template-old]
     [webchange.templates.library.interactive-read-aloud-import]
     [webchange.templates.library.recording-studio.template]
     [webchange.templates.library.recording-studio.rhyme]
-    [webchange.templates.library.sandbox-digging]))
+    [webchange.templates.library.sandbox-digging]
+    [webchange.templates.library.first-word-book.template]))

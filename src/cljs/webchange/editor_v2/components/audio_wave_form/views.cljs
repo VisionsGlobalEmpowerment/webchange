@@ -75,8 +75,9 @@
   [_]
   (let [data (r/atom {})]
     (fn [{:keys [url on-audio-data-change] :as props}]
-      (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
-        (when (and on-audio-data-change (not (= script-data @data)))
-          (reset! data script-data)
-          (on-audio-data-change))
-        [audio-wave-form-core (merge props {:script script-data})]))))
+      (when (some? url)
+        (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
+          (when (and on-audio-data-change (not (= script-data @data)))
+            (reset! data script-data)
+            (on-audio-data-change))
+          [audio-wave-form-core (merge props {:script script-data})])))))

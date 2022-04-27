@@ -135,6 +135,10 @@
   (if (map? action)
     (get-nth-in action inner-action-path)))
 
+(defn update-empty-action
+  [action data-patch]
+  (update-in action empty-action-path merge data-patch))
+
 (defn update-inner-action
   [action data-patch]
   (update-in action inner-action-path merge data-patch))
