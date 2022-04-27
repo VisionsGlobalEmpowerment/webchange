@@ -1,5 +1,14 @@
 $color-primary: #2E3A59;
 $color-secondary: #D99BFF;
 $color-text-light: #FFF;
+$color-disabled: #e6e6e6;
+
+$button-background-color: $color-secondary;
+$button-background-color-hovered: scale-color($button-background-color, $lightness: +15%);
+$button-background-color-active: scale-color($button-background-color, $lightness: +30%);
+$button-background-color-disabled: $color-disabled;
 
 $button-border-radius: 6px;
+$panel-border-radius: $button-border-radius;
+
+$default-gap: 20px;

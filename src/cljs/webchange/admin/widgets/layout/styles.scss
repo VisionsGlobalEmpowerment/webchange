@@ -9,10 +9,10 @@
     & > .content-wrapper {
         flex: 1 1;
         background-color: #f7f7fb;
-        padding: 20px;
+        padding: $default-gap;
 
         & > .content {
-
+            height: 100%;
         }
     }
 }

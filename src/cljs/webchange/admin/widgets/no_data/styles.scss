@@ -1,0 +1,12 @@
+.widget-no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #00000003;
+    min-height: 200px;
+    border-radius: $panel-border-radius;
+
+    font-weight: 500;
+    font-size: 12px;
+}

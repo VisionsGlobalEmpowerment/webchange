@@ -7,7 +7,8 @@
 (def routes {""         :dashboard
              "/"        :dashboard
              "/schools" {""                            :schools
-                         ["/" [#"[\w-%]+" :school-id]] :school-profile}})
+                         ["/" [#"[\w-%]+" :school-id]] {""         :school-profile
+                                                        "/classes" {["/" [#"[\w-%]+" :class-id]] :class-profile}}}})
 
 (defn get-title
   [{:keys [handler props]}]
@@ -18,6 +19,7 @@
       :dashboard (s [])
       :schools (s ["Schools"])
       :school-profile (s ["School Profile" (:school-id props)])
+      :class-profile (s ["Class Profile" (:class-id props)])
       (s []))))
 
 (defonce router (atom nil))

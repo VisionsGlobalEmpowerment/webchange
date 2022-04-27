@@ -1,0 +1,19 @@
+.wc-button {
+    padding: 10px 26px;
+
+    background: $button-background-color;
+    border: none;
+    border-radius: $button-border-radius;
+
+    &:hover {
+        background: $button-background-color-hovered;
+    }
+
+    &:active {
+        background: $button-background-color-active;
+    }
+
+    &:disabled {
+        background: $button-background-color-disabled;
+    }
+}

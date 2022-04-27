@@ -22,6 +22,7 @@
            error
            id
            value
+           label
            on-blur
            on-click
            on-change
@@ -63,9 +64,16 @@
                                "Enter" (when (fn? on-enter-press) (on-enter-press (.. event -target -value)))
                                "default"))
           handle-blur #(on-blur (.. % -target -value))
-          handle-focus on-focus]
+          handle-focus on-focus
+
+          has-label? (some? label)
+          id (or id (when has-label? (random-uuid)))]
       [:div {:class-name (get-class-name (-> {"wc-input-wrapper" true}
                                              (assoc class-name (some? class-name))))}
+       (when has-label?
+         [:label {:for id
+                  :class-name "wc-input-label"}
+          label])
        [:input (cond-> {:class-name  (get-class-name {"wc-input"       true
                                                       "wc-input-error" (some? error)})
                         :disabled    disabled?
