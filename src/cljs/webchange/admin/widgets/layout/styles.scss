@@ -4,7 +4,12 @@
     justify-content: flex-start;
     height: 100%;
 
-    @import "styles-top-bar";
+    .top-bar {
+        background-color: $color-primary;
+        color: $color-text-light;
+
+        @import "navigation/styles";
+    }
 
     & > .content-wrapper {
         flex: 1 1;

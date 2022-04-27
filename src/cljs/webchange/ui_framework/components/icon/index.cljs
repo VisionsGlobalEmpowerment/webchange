@@ -21,6 +21,10 @@
     [webchange.ui-framework.components.icon.icon-bring-to-top :as bring-to-top]
     [webchange.ui-framework.components.icon.icon-cancel :as cancel]
     [webchange.ui-framework.components.icon.icon-check :as check]
+    [webchange.ui-framework.components.icon.icon-chevron-down :as chevron-down]
+    [webchange.ui-framework.components.icon.icon-chevron-left :as chevron-left]
+    [webchange.ui-framework.components.icon.icon-chevron-right :as chevron-right]
+    [webchange.ui-framework.components.icon.icon-chevron-up :as chevron-up]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
     [webchange.ui-framework.components.icon.icon-create-book :as create-book]
@@ -99,6 +103,10 @@
    "bring-to-top"       bring-to-top/data
    "cancel"             cancel/data
    "check"              check/data
+   "chevron-down"       chevron-down/data
+   "chevron-left"       chevron-left/data
+   "chevron-right"      chevron-right/data
+   "chevron-up"         chevron-up/data
    "clear"              clear/data
    "close"              close/data
    "create-book"        create-book/data
