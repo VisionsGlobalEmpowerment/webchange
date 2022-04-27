@@ -6,6 +6,7 @@
 
 (def routes {""         :dashboard
              "/"        :dashboard
+             "/login"   :login
              "/schools" {""                            :schools
                          ["/" [#"[\w-%]+" :school-id]] {""         :school-profile
                                                         "/classes" {["/" [#"[\w-%]+" :class-id]] :class-profile}}}})
