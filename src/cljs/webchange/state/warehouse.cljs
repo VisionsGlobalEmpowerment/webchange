@@ -632,6 +632,13 @@
                      :uri    "/api/parent/courses"}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::load-schools
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-schools
+                     :method :get
+                     :uri    (str "/api/schools")}
+                    handlers)))
 ;; Classes
 
 (re-frame/reg-event-fx
