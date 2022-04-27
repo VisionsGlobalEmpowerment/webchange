@@ -15,6 +15,11 @@
   (let [finished (get-in db [:progress-data :finished])]
     (activity/finished? finished activity activities)))
 
+(defn new?
+  [db activity activities]
+  (let [finished (get-in db [:progress-data :finished])]
+    (activity/new? finished activity activities)))
+
 (defn next-not-finished-for
   [db activity]
   (let [current-tags (get-in db [:progress-data :current-tags] [])

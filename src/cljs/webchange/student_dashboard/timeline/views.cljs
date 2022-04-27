@@ -8,12 +8,16 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- timeline-item
-  [{:keys [activity title letter on-click preview]}]
+  [{:keys [activity title letter on-click preview new?]}]
   [:div {:title      title
          :on-click   #(on-click activity)
          :class-name (get-class-name {"activity"      true
                                       "timeline-item" true})}
-   [:img {:src preview}]
+   [:img {:src preview
+          :class-name "preview"}]
+   (when new?
+     [:img {:src "/images/student_dashboard/star.svg"
+            :class-name "star"}])
    (when (some? letter)
      [:div.letter-wrapper
       [:div.letter
@@ -46,6 +50,10 @@
             :stroke-linecap   "round"
             :stroke-dasharray "3,10"}]]])
 
+(defn new-activity? [activity]
+  (let [new-unique-ids (map :unique-id @(re-frame/subscribe [::state/new-activities]))]
+    (boolean (some #{(:unique-id activity)} new-unique-ids))))
+
 (defn timeline
   []
   (let [container (atom nil)
@@ -62,19 +70,21 @@
                course-finished? @(re-frame/subscribe [::state/course-finished?])
                finished-activities @(re-frame/subscribe [::state/finished-activities])
                handle-next-click (fn [] (re-frame/dispatch [::state/open-next-activity]))
-               handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
+               handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity
+                                                                        (assoc activity :new? (new-activity? activity))]))]
            [:div.timeline-wrapper {:ref #(when (some? %)
                                            (reset! container %))}
             (when-not loading?
               (into [:div.timeline
                      ^{:key "filler"}
                      [:div.filler]]
-                    (-> (reduce (fn [result {:keys [id] :as item}]
+                    (-> (reduce (fn [result {:keys [id activity] :as item}]
                                   (concat result [^{:key (str id "-connector")}
                                                   [item-connector]
                                                   ^{:key id}
                                                   [timeline-item (merge item
-                                                                        {:on-click handle-activity-click})]]))
+                                                                        {:on-click handle-activity-click
+                                                                         :new? (new-activity? activity)})]]))
                                 []
                                 finished-activities)
                         (concat [(when-not (empty? finished-activities)

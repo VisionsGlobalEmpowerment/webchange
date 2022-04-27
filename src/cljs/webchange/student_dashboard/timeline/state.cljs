@@ -39,6 +39,13 @@
                      :letter   letter
                      :preview  preview})))))))
 
+(re-frame/reg-sub
+  ::new-activities
+  (fn [db]
+    (let [scenes (get-in db [:course-data :scene-list])
+          activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
+      (filter #(lessons-activity/new? db % activities) activities))))
+
 (defn get-next-activity
   [db]
   (let [scenes (get-in db [:course-data :scene-list])
@@ -58,7 +65,7 @@
   ::open-activity
   (fn [{:keys [db]} [_ activity]]
     (let [course (:current-course db)
-          activity (select-keys activity [:level :lesson :activity :activity-name])]
+          activity (select-keys activity [:level :lesson :activity :activity-name :new? :unique-id])]
       {:db         (lessons-activity/add-loaded-activity db activity)
        :dispatch-n (list [::ie/set-current-scene (:activity-name activity)]
                          [::events/redirect (str "/courses/" course)])})))
