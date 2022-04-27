@@ -1,26 +1,28 @@
 (ns webchange.school.handler
-  (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
-            [compojure.route :refer [resources not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
+  (:require [compojure.api.sweet :refer [GET POST PUT DELETE defroutes context]]
+            [compojure.route :refer [not-found]]
+            [ring.util.response :refer [response]]
             [webchange.school.core :as core]
-            [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
-            [webchange.common.handler :refer [handle current-user current-school validation-error]]
-            [webchange.auth.core :as auth]
-            [webchange.validation.validate :refer [validate]]
-            [webchange.validation.specs.student :as student-specs]))
+            [webchange.common.handler :refer [handle current-user]]
+            [schema.core :as s]
+            [webchange.school.statistics]))
 
+(s/defschema Stats {(s/optional-key :teachers) s/Int
+                    (s/optional-key :students) s/Int
+                    (s/optional-key :courses) s/Int
+                    (s/optional-key :classes) s/Int})
+(s/defschema School {:id s/Int :name s/Str :location (s/maybe s/Str) :about (s/maybe s/Str) :stats (s/maybe Stats)})
+(s/defschema CreateSchool {:name s/Str :location s/Str :about s/Str})
+(s/defschema EditSchool {:name s/Str :location s/Str :about s/Str})
 
 (defn handle-current-school [request]
   (-> (core/get-current-school)
       response))
 
 (defn handle-create-school
-  [request]
-  (let [owner-id (current-user request)
-        data (-> request
-                 :body
-                 )]
+  [data request]
+  (let [owner-id (current-user request)]
     (-> (core/create-school! data)
         handle)))
 
@@ -29,29 +31,41 @@
         response))
 
 (defn handle-update-school
-  [id request]
-  (let [owner-id (current-user request)
-        data (-> request :body)]
-    (-> (core/update-school! (Integer/parseInt id) data)
+  [id data request]
+  (let [owner-id (current-user request)]
+    (-> (core/update-school! id data)
         handle)))
 
 (defn handle-delete-school
   [id request]
   (let [owner-id (current-user request)]
-    (-> (core/delete-school! (Integer/parseInt id))
+    (-> (core/delete-school! id)
         handle)))
 
 (defroutes school-routes
-           (GET "/api/schools/current" request (handle-current-school request))
-           (POST "/api/schools" request (handle-create-school request))
-           (GET "/api/schools/:id" [id]
-             (if-let [item (-> id Integer/parseInt core/get-school)]
-               (response {:school item})
-               (not-found "not found")))
-           (GET "/api/schools" request (handle-list-schools request))
-           (PUT "/api/schools/:id" [id :as request]
-             (handle-update-school id request))
-           (DELETE "/api/schools/:id" [id :as request]
-             (handle-delete-school id request))
-
-           )
+  (context "/api/schools" []
+           :tags ["school"]
+           (GET "/current" request
+                :return School
+                (handle-current-school request))
+           (POST "/" request
+                 :return School
+                 :body [data CreateSchool]
+                 (handle-create-school data request))
+           (GET "/:id" request
+                :path-params [id :- s/Int]
+                :return {:school School}
+                (if-let [item (core/get-school id)]
+                  (response {:school item})
+                  (not-found "not found")))
+           (GET "/" request
+                :return {:schools [School]}
+                (handle-list-schools request))
+           (PUT "/:id" request
+                :path-params [id :- s/Int]
+                :return School
+                :body [data EditSchool]
+                (handle-update-school id data request))
+           (DELETE "/:id" request
+                   :path-params [id :- s/Int]
+                   (handle-delete-school id request))))

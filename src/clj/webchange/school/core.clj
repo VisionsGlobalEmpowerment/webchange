@@ -1,9 +1,8 @@
 (ns webchange.school.core
-  (:require [webchange.db.core :refer [*db*] :as db]
+  (:require [webchange.db.core :as db]
+            [webchange.events :as e]
             [clojure.tools.logging :as log]
-            [java-time :as jt]
-            [camel-snake-kebab.core :refer [->snake_case_keyword]]
-            [webchange.auth.core :as auth]))
+            [camel-snake-kebab.core :refer [->snake_case_keyword]]))
 
 (defn get-current-school [] (db/get-first-school))
 
@@ -11,7 +10,10 @@
   [data]
   (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         [{id :id}] (db/create-new-school! prepared-data)]
-    [true {:id id}]))
+    (e/dispatch {:type :schools/created :school-id id})
+    [true (-> data
+              (assoc :id id)
+              (assoc :stats {}))]))
 
 (defn get-school [id]
   (let [school (db/get-school {:id id})]
@@ -25,7 +27,8 @@
   [id data]
   (let [prepared-data (assoc data :id id)]
     (db/update-school! prepared-data)
-    [true {:id id}]))
+    (let [retrieved-school (db/get-school {:id id})]
+      [true retrieved-school])))
 
 (defn delete-school!
   [id]
