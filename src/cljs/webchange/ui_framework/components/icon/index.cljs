@@ -65,6 +65,7 @@
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
+    [webchange.ui-framework.components.icon.icon-school :as school]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-slider :as slider]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
@@ -147,6 +148,7 @@
    "preview"            preview/data
    "remove"             remove/data
    "restart"            restart/data
+   "school"             school/data
    "settings"           settings/data
    "slider"             slider/data
    "stop"               stop/data

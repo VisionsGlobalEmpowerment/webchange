@@ -9,6 +9,13 @@
         fill: $default-color;
     }
 
+    &.icon-school {
+        svg {
+            position: relative;
+            top: -2px;
+        }
+    }
+
     &.icon-undo {
         svg {
             fill: none;

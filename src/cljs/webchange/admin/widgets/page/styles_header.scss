@@ -1,0 +1,30 @@
+@import "styles_mixins";
+
+.widget-profile--header {
+    @include panel;
+
+    display: flex;
+    align-items: center;
+
+    & > .info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        & > .icon {
+            padding: 0;
+
+            svg {
+                $size: 32px;
+                width: $size;
+                height: $size;
+                stroke: $color-secondary;
+            }
+        }
+
+        & > .title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+    }
+}

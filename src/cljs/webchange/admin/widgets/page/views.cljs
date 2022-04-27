@@ -1,6 +1,7 @@
 (ns webchange.admin.widgets.page.views
   (:require
     [reagent.core :as r]
+    [webchange.ui-framework.components.index :as c]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def class-names
@@ -41,11 +42,22 @@
                                                               (with-children-classes @children)))
                            :ref        handle-ref}])))})))
 
+(defn- header-info
+  [{:keys [icon title]}]
+  [:div.info
+   (when (some? icon)
+     [c/icon {:icon       icon
+              :class-name "icon"}])
+   (when (some? title)
+     [:div {:class-name "title"}
+      title])])
+
 (defn header
-  []
+  [props]
   (->> (r/current-component)
        (r/children)
-       (into [:div {:class-name (:header class-names)}])))
+       (into [:div {:class-name (:header class-names)}
+              [header-info props]])))
 
 (defn main-content
   [{:keys [footer title]}]

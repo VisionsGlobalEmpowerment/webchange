@@ -11,6 +11,5 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ {:keys [] :as props}]]
-    (print "::init" :students props)
+  (fn [{:keys [_]} [_ {:keys [school-id]}]]
     {}))

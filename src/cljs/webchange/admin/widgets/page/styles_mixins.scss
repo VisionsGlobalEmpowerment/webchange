@@ -1,0 +1,5 @@
+@mixin panel {
+    background-color: #fff;
+    border-radius: $panel-border-radius;
+    padding: $default-gap;
+}

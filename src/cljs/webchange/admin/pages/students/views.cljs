@@ -5,14 +5,17 @@
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]))
 
+(defn- header
+  [])
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page
-     [page/header
-      "Header"]
-     [page/main-content
-      "Content"]
-     [page/side-bar
-      "Side"]]))
+    (let []
+      [page/page
+       [page/header {:title "School"
+                     :icon  "school"}
+        [header]]
+       [page/main-content
+        "Content"]])))
