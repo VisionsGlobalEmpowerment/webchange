@@ -32,7 +32,13 @@
 (re-frame/reg-event-fx
   ::set-school
   (fn [{:keys [db]} [_ school-id value]]
-    {:db (assoc-in db (path-to-db [(js/parseInt school-id)]) value)}))
+    (if (nil? school-id)
+      (let [new-id (->> (get-in db (path-to-db []))
+                     keys
+                     (apply max)
+                     inc)]
+        {:db (assoc-in db (path-to-db [new-id]) (assoc-in value [:id] new-id))})
+      {:db (assoc-in db (path-to-db [(js/parseInt school-id)]) value)})))
 
 (re-frame/reg-event-fx
   ::save-schools
