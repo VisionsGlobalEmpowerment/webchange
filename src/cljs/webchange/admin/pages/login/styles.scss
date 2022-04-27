@@ -1,0 +1,58 @@
+.page--login {
+    $input-color: #505B76;
+
+    @mixin text-styles {
+        color: #fff;
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    .login-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        gap: 24px;
+
+        width: 50%;
+        height: 50%;
+        max-width: 500px;
+        max-height: 400px;
+
+        padding: 76px;
+        background: $color-primary;
+        border-radius: 20px;
+
+        @include text-styles;
+
+        h1 {
+            @include text-styles;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .wc-input-wrapper {
+            .wc-input-label {
+                @include text-styles;
+            }
+
+            .wc-input {
+                @include text-styles;
+                background-color: $input-color;
+                border: none;
+            }
+        }
+
+        .wc-button {
+            background: $input-color;
+            justify-content: center;
+        }
+    }
+}

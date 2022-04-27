@@ -4,7 +4,18 @@
     justify-content: flex-start;
     height: 100%;
 
-    @import "styles-top-bar";
+    .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 $default-gap;
+        background-color: $color-primary;
+        color: $color-text-light;
+
+        @import "auth/styles";
+        @import "navigation/styles";
+    }
 
     & > .content-wrapper {
         flex: 1 1;

@@ -1,0 +1,106 @@
+.top-bar--navigation {
+    @mixin icon-color($color) {
+        & > .icon {
+            svg {
+                fill: $color;
+            }
+        }
+    }
+
+    @mixin active-item {
+        & > .text {
+            color: $color-secondary;
+        }
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 32px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    .root-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 16px;
+        padding: 18px 22px;
+
+        @include icon-color($color-text-light);
+
+        & > .icon {
+            padding: 0;
+
+            svg {
+                $size: 18px;
+                width: $size;
+                height: $size;
+            }
+        }
+
+        & > .text {}
+
+        .children-list {
+            position: absolute;
+
+            width: 100%;
+            background: $color-primary;
+            display: none;
+
+            &.position-bottom {
+                left: 0;
+                top: 100%;
+            }
+
+            &.position-right {
+                left: 100%;
+                top: 0;
+            }
+        }
+
+        .children-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 18px;
+            cursor: pointer;
+
+            @include icon-color($color-text-light);
+
+            .icon {
+                padding: 0;
+            }
+
+            &:hover {
+                background: #ffffff1f;
+
+                & > .children-list {
+                    display: block;
+                }
+            }
+
+            &.active-item {
+                @include active-item;
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: #{$color-secondary + "38"};
+
+            & > .children-list {
+                display: block;
+            }
+        }
+
+        &.active-item {
+            @include active-item;
+        }
+    }
+}

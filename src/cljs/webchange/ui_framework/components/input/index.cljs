@@ -84,6 +84,7 @@
                        (or (= type "int")
                            (= type "float")) (-> (assoc :type "number")
                                                  (assoc :step step))
+                       (= type "password") (assoc :type "password")
                        (some? id) (assoc :id id)
                        (some? value) (assoc :value value)
                        (some? default-value) (assoc :default-value default-value)

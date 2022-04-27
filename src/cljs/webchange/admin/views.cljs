@@ -22,5 +22,7 @@
              page-component (get pages handler (:404 pages))]
          (routes/set-title! page-params)
          [:div#tabschool-admin
-          [layout
-           [page-component props]]]))}))
+          (if (= handler :login)
+            [page-component props]
+            [layout
+             [page-component props]])]))}))

@@ -18,3 +18,14 @@
        (map (fn [[field-name field-value]]
               [(get keys-map field-name) field-value]))
        (into {})))
+
+(defn map->list
+  [data]
+  (->> data
+       (map vector)
+       (reduce concat)
+       (reduce concat)
+       (vec)))
+
+(comment
+  (map->list {:a 1 :b 2}))

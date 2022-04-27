@@ -25,7 +25,11 @@
     {}))
 
 (defn- create-request
-  [{:keys [key method uri body params request-type] :as props} {:keys [on-success on-failure suppress-api-error?] :or {suppress-api-error? false}}]
+  "Params:
+   - {integer} [delay]: set response delay in ms"
+  [{:keys [key method uri body params request-type] :as props}
+   {:keys [on-success on-failure suppress-api-error?]
+    :or   {suppress-api-error? false}}]
   {:dispatch-n (cond-> [[::start-request key]]
                        (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? true}]))
    :http-xhrio (cond-> {:method          method
@@ -115,6 +119,19 @@
 
 ;;
 
+(defn- create-fake-request
+  "Params:
+   - {integer} [delay]: set response delay in ms"
+  [props
+   {:keys [on-success on-failure]}
+   {:keys [delay result result-data]
+    :or   {result :success}}]
+  {:dispatch (case result
+               :success [::generic-on-success-handler (assoc props :delay delay) on-success result-data]
+               :failure [::generic-failure-handler props on-failure false result-data])})
+
+;;
+
 (def sync-status-path (path-to-db [:sync-status]))
 
 (re-frame/reg-event-fx
@@ -148,6 +165,20 @@
       {:dispatch (:on-failure handlers)}
       {:timeout {:event [::poll-attempt event data handlers (update poll-params :attempts dec)]
                  :time  timeout}})))
+
+;; Auth
+
+(re-frame/reg-event-fx
+  ::admin-login
+  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+    (create-fake-request {:key    :admin-login
+                          :method :post
+                          :params data
+                          :uri    nil}
+                         handlers
+                         {:result      :success
+                          :result-data {:message "Done"}
+                          :delay       1000})))
 
 ;; Templates
 
