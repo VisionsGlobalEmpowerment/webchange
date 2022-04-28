@@ -1,0 +1,24 @@
+.page--students {
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $default-gap;
+        flex: 1 1;
+
+        .students-number {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            .students-icon {}
+
+            .text {
+                font-weight: 700;
+                font-size: 14px;
+            }
+        }
+
+        .add-student {}
+    }
+}
