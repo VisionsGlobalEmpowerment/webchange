@@ -3,6 +3,7 @@
     height: 100%;
 
     @import "variables";
+    @import "mixins";
 
     @import "components/styles";
     @import "widgets/styles";
