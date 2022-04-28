@@ -1,6 +1,7 @@
 (ns webchange.ui-framework.components.index
   (:require
     [webchange.ui-framework.components.audio.index :as audio]
+    [webchange.ui-framework.components.avatar.index :as avatar]
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.card.index :as card]
     [webchange.ui-framework.components.checkbox.index :as checkbox]
@@ -26,6 +27,7 @@
     [webchange.ui-framework.components.tooltip.index :as tooltip]))
 
 (def audio audio/component)
+(def avatar avatar/component)
 (def button button/component)
 (def card card/component)
 (def checkbox checkbox/component)

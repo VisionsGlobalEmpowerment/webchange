@@ -68,10 +68,10 @@
   (fn []
     {:columns [{:id       :lesson-1
                 :name     "Lesson 01"
-                :capacity 18}
+                :capacity 6}
                {:id       :lesson-2
                 :name     "Lesson 02"
-                :capacity 5}
+                :capacity 15}
                {:id       :lesson-3
                 :name     "Lesson 03"
                 :capacity 24}]

@@ -1,12 +1,17 @@
 (ns webchange.admin.widgets.progress.views
   (:require
+    [webchange.ui-framework.components.index :refer [avatar icon-button]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- item-row
   [{:keys [name code]}]
   [:div.item-row
-   [:div name]
-   [:div code]])
+   [avatar]
+   [:div.info
+    [:div.name name]
+    [:dl
+     [:dt "code"]
+     [:dd code]]]])
 
 (defn- items-list
   [{:keys [data]}]
@@ -20,8 +25,10 @@
   [{:keys [id]}]
   (let [handle-click #(print "Edit" id)]
     [:div.action-row
-     [:button {:on-click handle-click}
-      "Edit"]]))
+     [icon-button {:icon       "edit"
+                   :variant    "light"
+                   :class-name "action-button"
+                   :on-click   handle-click}]]))
 
 (defn- actions-list
   [{:keys [data]}]
@@ -34,6 +41,7 @@
 (defn- progress-indicator
   [{:keys [filled?]}]
   [:div {:class-name (get-class-name {"progress-indicator" true
+                                      "empty"              (not filled?)
                                       "filled"             filled?})}])
 
 (defn- progress-item
