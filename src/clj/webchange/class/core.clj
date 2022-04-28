@@ -4,7 +4,8 @@
             [java-time :as jt]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword]]
-            [webchange.auth.core :as auth]))
+            [webchange.auth.core :as auth]
+            [webchange.events :as e]))
 
 (defn get-classes [school-id]
   (let [classes (db/get-classes {:school_id school-id})]
@@ -60,6 +61,7 @@
   [data]
   (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         [{id :id}] (db/create-class! prepared-data)]
+    (e/dispatch {:type :classes/created :school-id (:school-id data)})
     [true {:id id}]))
 
 (defn update-class!
@@ -92,6 +94,7 @@
   [data]
   (let [prepared-data (prepare-student-data data)
         [{id :id}] (db/create-student! prepared-data)]
+    (e/dispatch {:type :students/created :school-id (:school-id data)})
     [true {:id id}]))
 
 (defn update-student!

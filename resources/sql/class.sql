@@ -121,8 +121,8 @@ SELECT true as result from students WHERE school_id = :school_id AND access_code
 -- :name create-new-school! :<!
 -- :doc creates a new school record
 INSERT INTO schools
-(name)
-VALUES (:name) RETURNING id
+(name, location, about)
+VALUES (:name, :location, :about) RETURNING id
 
 -- :name get-school :? :1
 -- :doc retrieve school record
@@ -136,10 +136,24 @@ SELECT * from schools
 -- :name update-school! :! :n
 -- :doc updates an existing school record
 UPDATE schools
-SET name = :name
+SET name = :name, location = :location, about = :about
 WHERE id = :id
 
 -- :name delete-school! :! :n
 -- :doc deletes school
 DELETE from schools
 WHERE id = :id
+
+-- :name update-school-stats! :! :n
+-- :doc updates an existing school stats
+UPDATE schools
+SET stats = :stats
+WHERE id = :id
+
+-- :name calculate-school-stats :? :1
+-- :doc retrieve school record
+SELECT
+(SELECT count(*) FROM teachers WHERE school_id = :id) as teachers,
+(SELECT count(*) FROM students WHERE school_id = :id) as students,
+0 as courses,
+(SELECT count(*) FROM classes WHERE school_id = :id) as classes

@@ -41,7 +41,7 @@
 (deftest can-update-school
   (let  [name "NewName"
          update (as-> (core/get-course-update (str f/default-school-id) []) stat
-                      (assoc stat :school {:id f/default-school-id :name name}))]
+                      (assoc stat :school {:id f/default-school-id :name name :location "test location" :about "test about"}))]
     (core/import-primary-data! update)
     (let [school (db/get-school {:id f/default-school-id})]
       (assert (= name (:name school))))))
