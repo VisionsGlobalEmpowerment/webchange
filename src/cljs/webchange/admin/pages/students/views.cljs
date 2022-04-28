@@ -4,6 +4,7 @@
     [webchange.admin.pages.students.state :as state]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.progress.views :refer [progress]]
     [webchange.ui-framework.components.index :refer [icon icon-button]]))
 
 (defn- header
@@ -25,10 +26,11 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    (let [school-name @(re-frame/subscribe [::state/school-name])]
+    (let [school-name @(re-frame/subscribe [::state/school-name])
+          progress-data @(re-frame/subscribe [::state/progress-data])]
       [page/page {:class-name "page--students"}
        [page/header {:title school-name
                      :icon  "school"}
         [header]]
        [page/main-content
-        "Content"]])))
+        [progress {:data progress-data}]]])))
