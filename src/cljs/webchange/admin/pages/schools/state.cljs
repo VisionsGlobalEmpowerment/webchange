@@ -12,14 +12,9 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [db]} _]
-    ;; (if (nil? (get-in db (path-to-db [])))
-    ;;   {:dispatch [::warehouse/load-schools
-    ;;               {:on-success [::load-schools-success]}]})
-
-    {:dispatch [::load-schools-success {:schools [{:id 1 :name "foo"}
-                                                  {:id 2 :name "bar"}
-                                                  ]}]}
-    ))
+    (if (nil? (get-in db (path-to-db [])))
+      {:dispatch [::warehouse/load-schools
+                  {:on-success [::load-schools-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-schools-success

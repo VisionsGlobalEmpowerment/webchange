@@ -6,25 +6,33 @@
             [webchange.admin.pages.schools.state :as schools-state]))
 
 (defn page []
-  (r/with-let [new-name (r/atom "")]
+  (r/with-let [name (r/atom "")
+               location (r/atom "")
+               about (r/atom "")]
     [ui/card {:class-name  "school-card"}
-     [:h3 "Add School"]
+     [:h3 "Add School !!!"]
 
      [:div
       "School name"
       [ui/input {:placeholder "Type School Name"
-                 :value @new-name
-                 :on-change #(reset! new-name %)}]
+                 :value @name
+                 :on-change #(reset! name %)}]
 
       "Location"
       [ui/input {:placeholder "My Location"
-                 :on-change #()}]
+                 :value @location
+                 :on-change #(reset! location %)}]
       "About"
       [ui/input {:placeholder "About this School"
-                 :on-change #()}]
+                 :value @about
+                 :on-change #(reset! about %)}]
 
       [ui/button {:on-click (fn []
                               (re-frame/dispatch [::schools-state/set-school nil
-                                                  {:name @new-name :presentation 0 :users 0}])
+                                                  {:name @name
+                                                   :location @location
+                                                   :about @about
+                                                   :courses 0
+                                                   :students 0}])
                               (re-frame/dispatch [::routes/redirect "/admin/schools"]))}
        "Save"]]]))

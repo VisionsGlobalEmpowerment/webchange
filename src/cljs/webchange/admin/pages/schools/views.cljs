@@ -5,16 +5,17 @@
             [webchange.admin.routes :as routes]))
 
 (defn school-item [id data]
+  (println data)
   [:div.school-item
    (:name data)
    [:div.school-item-buttons
-    [ui/button {:aria-label "Users"
+    [ui/button {:aria-label "Students"
                 :on-click #()}
-     (or (:users data) 0)
+     (or (:students data) 0)
      [ui/icon {:icon "user"}]]
-    [ui/button {:aria-label "Presentation"
+    [ui/button {:aria-label "Courses"
                 :on-click #()}
-     (or (:presentation data) 0)
+     (or (:courses data) 0)
      [ui/icon {:icon "warning"}]]
 
     [ui/button {:aria-label "Delete"
