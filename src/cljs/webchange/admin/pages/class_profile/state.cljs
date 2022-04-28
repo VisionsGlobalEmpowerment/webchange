@@ -6,10 +6,16 @@
     [webchange.validation.specs.class-spec :as class-spec]
     [webchange.validation.validate :refer [validate]]))
 
+(def path-to-db :class-profile)
+;;on conflict
+;; (def path-to-db :class-profile-page)
+;;on further conflict
+;; (def path-to-db :admin/class-profile-page)
+
 (re-frame/reg-sub
-  ::class-profile
+  path-to-db
   (fn [db]
-    (get-in db [:class-profile])))
+    (get db path-to-db)))
 
 (defn- set-initial-class-data
   [db class-data]
@@ -31,7 +37,7 @@
 
 (re-frame/reg-event-fx
   ::init
-  [(i/path [:class-profile])]
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class-id]}]]
     {:db (assoc db :class-id class-id)
      :dispatch [::warehouse/load-class {:class-id class-id}
@@ -39,7 +45,7 @@
 
 (re-frame/reg-event-fx
   ::load-class-success
-  [(i/path [:class-profile])]
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class]}]]
     (let [class-data (select-keys class [:course-id :name])]
       {:db (reset-class-data db class-data)})))
@@ -48,7 +54,7 @@
 
 (re-frame/reg-event-fx
   ::set-class-data
-  [(i/path [:class-profile])]
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
     (let [validation-errors (validate ::class-spec/class value)]
       {:db       (-> db
@@ -57,21 +63,21 @@
 
 (re-frame/reg-sub
   ::class-data
-  :<- [::class-profile]
+  :<- [path-to-db]
   :class-data)
 
 ;; Save
 
 (re-frame/reg-sub
   ::save-button-enabled?
-  :<- [::class-profile]
+  :<- [path-to-db]
   (fn [{:keys [current-data initial-data validation-errors]}]
     (and (not= current-data initial-data)
          (not validation-errors))))
 
 (re-frame/reg-event-fx
   ::save-class
-  [(i/path [:class-profile])]
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [{:keys [class-id class-data]} db
           validation-errors (validate ::class-spec/class class-data)]
@@ -84,6 +90,6 @@
 
 (re-frame/reg-event-fx
   ::save-class-success
-  [(i/path [:class-profile])]
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [data]}]]
     {:db (reset-class-data db data)}))
