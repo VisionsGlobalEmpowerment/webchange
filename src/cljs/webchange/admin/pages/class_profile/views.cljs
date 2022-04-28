@@ -43,7 +43,7 @@
   (let [handle-save-click #(re-frame/dispatch [::state/save-class])
         save-button-enabled? @(re-frame/subscribe [::state/save-button-enabled?])]
     [:<>
-     [button {:on-click handle-save-click
+     [button {:on-click  handle-save-click
               :disabled? (not save-button-enabled?)}
       "Save"]]))
 
@@ -53,7 +53,7 @@
   (fn []
     [page/page
      [page/main-content {:title  "Class Profile"
-                            :footer [footer]}
+                         :footer [footer]}
       [class-counter]
       [statistics]
       [class-info]]

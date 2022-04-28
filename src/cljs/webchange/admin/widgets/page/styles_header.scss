@@ -5,6 +5,7 @@
 
     display: flex;
     align-items: center;
+    gap: $default-gap * 2;
 
     & > .info {
         display: flex;
@@ -25,6 +26,7 @@
         & > .title {
             font-weight: 700;
             font-size: 16px;
+            text-transform: capitalize;
         }
     }
 }

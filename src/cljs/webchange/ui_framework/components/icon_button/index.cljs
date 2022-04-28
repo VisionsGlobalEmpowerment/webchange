@@ -14,13 +14,13 @@
   (let [this (r/current-component)
         children (r/children this)
         handle-ref (fn [el] (when (some? el) (ref el)))]
-    [:button (cond-> {:class-name (get-class-name (-> {"wc-icon-button" true
-                                                       "with-text"      (some? children)}
+    [:button (cond-> {:class-name (get-class-name (-> {"wc-icon-button"         true
+                                                       "with-text"              (some? children)
+                                                       (str "variant-" variant) (some? variant)}
                                                       (assoc class-name (some? class-name))
                                                       (assoc color true)
                                                       (assoc icon true)
-                                                      (assoc (str "size-" size) true)
-                                                      (assoc variant true)))
+                                                      (assoc (str "size-" size) true)))
                       :disabled   disabled?
                       :on-click   on-click}
                      (fn? ref) (assoc :ref handle-ref)

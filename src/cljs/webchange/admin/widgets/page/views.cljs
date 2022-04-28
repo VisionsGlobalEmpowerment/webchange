@@ -35,10 +35,11 @@
     (r/create-class
       {:display-name "Page Layout"
        :reagent-render
-       (fn []
+       (fn [{:keys [class-name]}]
          (->> (r/current-component)
               (r/children)
-              (into [:div {:class-name (get-class-name (merge {"widget-profile" true}
+              (into [:div {:class-name (get-class-name (merge {"widget-profile" true
+                                                               class-name       (some? class-name)}
                                                               (with-children-classes @children)))
                            :ref        handle-ref}])))})))
 

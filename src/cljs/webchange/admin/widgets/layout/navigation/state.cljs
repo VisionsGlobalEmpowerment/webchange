@@ -37,7 +37,11 @@
                                              {:id       :students
                                               :text     "Students"
                                               :route    {:page        :students
-                                                         :page-params {:school-id 1}}}]}]}
+                                                         :page-params {:school-id 1}}
+                                              :children [{:id    :add
+                                                          :text  "Add Student"
+                                                          :route {:page        :add-student
+                                                                  :page-params {:school-id 1}}}]}]}]}
                      {:id    :courses
                       :text  "Courses"
                       :route {:page :courses}}]}
