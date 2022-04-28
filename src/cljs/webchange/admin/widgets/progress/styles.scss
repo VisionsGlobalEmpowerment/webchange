@@ -1,0 +1,65 @@
+.widget--progress {
+    $row-height: 60px;
+    $row-gap: 16px;
+    $colum-gap: 16px;
+
+    display: grid;
+    grid-template-columns: auto auto 100px;
+    column-gap: $colum-gap;
+
+    .items-header {
+        height: $row-height;
+    }
+
+    .items-list {
+        display: flex;
+        flex-direction: column;
+        gap: $row-gap;
+
+        .item-row {
+            height: $row-height;
+        }
+    }
+
+    .progress-table {
+        display: grid;
+        align-items: center;
+        column-gap: $colum-gap;
+        overflow: auto;
+
+    }
+
+    .header-item {
+        height: $row-height;
+    }
+
+    .progress-item {
+        display: flex;
+        gap: 8px;
+        height: $row-height;
+
+        .progress-indicator {
+            width: 20px;
+            height: 30px;
+            border: solid 1px #333;
+
+            &.filled {
+                background-color: #ccc;
+            }
+        }
+    }
+
+    .actions-header {
+        height: $row-height;
+    }
+
+    .actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: $row-gap;
+
+        .action-row {
+            height: $row-height;
+        }
+    }
+}
