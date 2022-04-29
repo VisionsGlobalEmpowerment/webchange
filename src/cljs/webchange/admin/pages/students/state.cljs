@@ -54,7 +54,7 @@
   (fn []
     (re-frame/subscribe [::school-data]))
   (fn [school-data]
-    (get-in school-data [:students :number] 0)))
+    (get-in school-data [:stats :students] 0)))
 
 (re-frame/reg-event-fx
   ::add-student
