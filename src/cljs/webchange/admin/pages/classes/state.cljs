@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :school-classes)
@@ -10,6 +11,10 @@
   path-to-db
   (fn [db]
     (get db path-to-db)))
+
+(defn- get-school-data
+  [db]
+  (get db :school-data))
 
 (defn- set-school-data
   [db school-data]
@@ -40,7 +45,7 @@
 (re-frame/reg-sub
   ::school-data
   :<- [path-to-db]
-  :school-data)
+  get-school-data)
 
 (re-frame/reg-sub
   ::school-name
@@ -66,14 +71,16 @@
 (re-frame/reg-event-fx
   ::add-class
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_]]
-    (print "::add-class")))
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :add-class :school-id school-id]})))
 
 (re-frame/reg-event-fx
   ::edit-class
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ class-id]]
-    (print "::edit-class" class-id)))
+  (fn [{:keys [db]} [_ class-id]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
 
 (re-frame/reg-event-fx
   ::remove-class
