@@ -647,17 +647,17 @@
     :name    "Class Name 01"
     :stats   {:students 49}
     :img     nil
-    :created nil}
+    :created "16 / 03 / 2022"}
    {:id      2
     :name    "Class Name 02"
     :stats   {:students 34}
     :img     "/images/default-course.jpg"
-    :created nil}
+    :created "16 / 03 / 2022"}
    {:id      3
     :name    "Class Name 03"
     :stats   {:students 12}
     :img     nil
-    :created nil}])
+    :created "16 / 03 / 2022"}])
 
 (re-frame/reg-event-fx
   ::load-school-classes

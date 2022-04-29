@@ -50,18 +50,17 @@
 (re-frame/reg-sub
   ::classes
   :<- [path-to-db]
-  :classes)
+  (fn [data]
+    (get data :classes [])))
 
 (re-frame/reg-sub
   ::classes-list-data
   :<- [::classes]
   (fn [classes]
-    (map (fn [{:keys [id img name stats]}]
-           {:id          id
-            :name        name
-            :description [["Created" "16 / 03 / 2022"]]
-            :img         img
-            :stats       stats})
+    (map (fn [{:keys [created] :as class-data}]
+           (-> class-data
+               (select-keys [:id :name :img :stats])
+               (merge {:description [["Created" created]]})))
          classes)))
 
 (re-frame/reg-event-fx

@@ -9,6 +9,12 @@
   (cond
     (contains? props :img) [c/image-preview {:src img}]))
 
+(defn- description-item
+  [{:keys [t d]}]
+  [:<>
+   [:dt t]
+   [:dd d]])
+
 (defn- item-name
   [{:keys [name description]}]
   [:div.item-name
@@ -17,9 +23,8 @@
      [:dl
       (for [[idx [t d]] (map-indexed vector description)]
         ^{:key idx}
-        [:<>
-         [:dt t]
-         [:dd d]])])])
+        [description-item {:t t
+                           :d d}])])])
 
 (defn- item-actions
   [{:keys [actions]}]
