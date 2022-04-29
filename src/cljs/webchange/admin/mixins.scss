@@ -8,3 +8,9 @@
         border-radius: 50%;
     }
 }
+
+@mixin icon-color($color: $color-primary) {
+    svg {
+        stroke: $color;
+    }
+}
