@@ -24,7 +24,7 @@
 
 (defn get-title
   [{:keys [handler props]}]
-  (let [root "TabSchool"
+  (let [root "Admin"
         connector " / "
         s #(clojure.string/join connector (concat [root] %))]
     (case handler

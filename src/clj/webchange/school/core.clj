@@ -16,10 +16,8 @@
               (assoc :stats {}))]))
 
 (defn get-school [id]
-  (let [school (db/get-school {:id id})
-        students (db/get-school-students {:id id})]
-    (assoc school :students {:number (count students)
-                             :data   students})))
+  (let [school (db/get-school {:id id})]
+    school))
 
 (defn get-schools []
   (let [schools (db/get-schools)]
