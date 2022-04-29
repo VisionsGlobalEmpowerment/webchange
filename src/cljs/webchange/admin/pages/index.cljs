@@ -1,6 +1,7 @@
 (ns webchange.admin.pages.index
   (:require
     [webchange.admin.pages.class-profile.views :as class-profile]
+    [webchange.admin.pages.classes.views :as classes]
     [webchange.admin.pages.dashboard.views :as dashboard]
     [webchange.admin.pages.login.views :as login]
     [webchange.admin.pages.not-found.views :as not-found]
@@ -9,6 +10,7 @@
     [webchange.admin.pages.students.views :as students]))
 
 (def pages {:class-profile  class-profile/page
+            :classes        classes/page
             :dashboard      dashboard/page
             :login          login/page
             :school-profile school-profile/page

@@ -5,12 +5,16 @@
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: $default-gap * 2;
+
+    background-color: $color-primary;
+    color: $color-text-light;
 
     & > .info {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
 
         & > .icon {
             padding: 0;
@@ -28,5 +32,9 @@
             font-size: 16px;
             text-transform: capitalize;
         }
+    }
+
+    & > .content {
+        flex: 1 1;
     }
 }
