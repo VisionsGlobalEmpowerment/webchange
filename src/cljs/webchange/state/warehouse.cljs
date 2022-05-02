@@ -670,6 +670,13 @@
                           :result-data {:classes school-classes}
                           :delay       1000})))
 
+(re-frame/reg-event-fx
+  ::load-schools
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-schools
+                     :method :get
+                     :uri    (str "/api/schools")}
+                    handlers)))
 ;; Classes
 
 (re-frame/reg-event-fx
