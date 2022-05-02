@@ -23,8 +23,11 @@
         url (str host-url (if (.endsWith host-url "/") "" "/") path)]
     url))
 
-(defn update-school! [data]
-  (db/update-school! data))
+(defn update-school!
+  [data]
+  (let [defaults {:location ""
+                  :about ""}]
+    (db/update-school! (merge defaults data))))
 
 (defn prepare-users
   [users]
