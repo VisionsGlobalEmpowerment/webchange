@@ -1,12 +1,29 @@
 .wc-icon-button {
+    flex-direction: row-reverse;
     background: #D99BFF;
-    height: 50px;
-    min-width: 50px;
-    border-radius: 6px;
 
     svg {
-        width: 24px;
-        height: 24px;
         fill: #2E3A59;
+    }
+
+    &:hover {
+        filter: brightness(1.1);
+    }
+
+    &.variant-light {
+        background: $button-background-color-light;
+        color: $color-text;
+
+        &:hover {
+            background: $button-background-color-light-hovered;
+        }
+
+        &:active {
+            background: $button-background-color-light-active;
+        }
+
+        svg {
+            fill: $color-secondary;
+        }
     }
 }

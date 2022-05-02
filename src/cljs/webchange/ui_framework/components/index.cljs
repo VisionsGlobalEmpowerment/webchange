@@ -1,6 +1,7 @@
 (ns webchange.ui-framework.components.index
   (:require
     [webchange.ui-framework.components.audio.index :as audio]
+    [webchange.ui-framework.components.avatar.index :as avatar]
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.card.index :as card]
     [webchange.ui-framework.components.checkbox.index :as checkbox]
@@ -12,6 +13,7 @@
     [webchange.ui-framework.components.file.index :as file]
     [webchange.ui-framework.components.icon.index :as icon]
     [webchange.ui-framework.components.icon-button.index :as icon-button]
+    [webchange.ui-framework.components.image-preview.index :as image-preview]
     [webchange.ui-framework.components.input.index :as input]
     [webchange.ui-framework.components.label.index :as label]
     [webchange.ui-framework.components.range-input.index :as range-input]
@@ -26,6 +28,7 @@
     [webchange.ui-framework.components.tooltip.index :as tooltip]))
 
 (def audio audio/component)
+(def avatar avatar/component)
 (def button button/component)
 (def card card/component)
 (def checkbox checkbox/component)
@@ -36,6 +39,7 @@
 (def file file/component)
 (def icon icon/component)
 (def icon-button icon-button/component)
+(def image-preview image-preview/component)
 (def input input/component)
 (def label label/component)
 (def menu menu/component)

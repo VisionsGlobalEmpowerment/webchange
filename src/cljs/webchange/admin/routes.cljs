@@ -8,14 +8,15 @@
              "/"        :dashboard
              "/login"   :login
              "/schools" {""                            :schools
-                         "add"                         :add-school
+                         "/add"                        :add-school
                          ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
                                                         "/classes"  {""                           :classes
-                                                                     "add"                        :add-class
+                                                                     "/add"                       :add-class
                                                                      ["/" [#"[\w-%]+" :class-id]] :class-profile}
-                                                        "/students" {"" :students}
+                                                        "/students" {""     :students
+                                                                     "/add" :add-student}
                                                         "/teachers" {""                           :teachers
-                                                                     "add"                        :add-teacher
+                                                                     "/add"                       :add-teacher
                                                                      ["/" [#"[\w-%]+" :class-id]] :teacher-profile}}}
              "/courses" {""                              :courses
                          "/add"                          :add-course
@@ -23,7 +24,7 @@
 
 (defn get-title
   [{:keys [handler props]}]
-  (let [root "TabSchool"
+  (let [root "Admin"
         connector " / "
         s #(clojure.string/join connector (concat [root] %))]
     (case handler

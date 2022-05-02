@@ -632,6 +632,44 @@
                      :uri    "/api/parent/courses"}
                     handlers)))
 
+;; Schools
+
+(re-frame/reg-event-fx
+  ::load-school
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :load-school
+                     :method :get
+                     :uri    (str "/api/schools/" school-id)}
+                    handlers)))
+
+(def school-classes
+  [{:id      1
+    :name    "Class Name 01"
+    :stats   {:students 49}
+    :img     nil
+    :created "16 / 03 / 2022"}
+   {:id      2
+    :name    "Class Name 02"
+    :stats   {:students 34}
+    :img     "/images/default-course.jpg"
+    :created "16 / 03 / 2022"}
+   {:id      3
+    :name    "Class Name 03"
+    :stats   {:students 12}
+    :img     nil
+    :created "16 / 03 / 2022"}])
+
+(re-frame/reg-event-fx
+  ::load-school-classes
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-fake-request {:key    :load-school-classes
+                          :method :get
+                          :uri    (str "/api/schools/" school-id "/classes")}
+                         handlers
+                         {:result      :success
+                          :result-data {:classes school-classes}
+                          :delay       1000})))
+
 ;; Classes
 
 (re-frame/reg-event-fx

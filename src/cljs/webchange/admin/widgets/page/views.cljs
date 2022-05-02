@@ -35,10 +35,11 @@
     (r/create-class
       {:display-name "Page Layout"
        :reagent-render
-       (fn []
+       (fn [{:keys [class-name]}]
          (->> (r/current-component)
               (r/children)
-              (into [:div {:class-name (get-class-name (merge {"widget-profile" true}
+              (into [:div {:class-name (get-class-name (merge {"widget-profile" true
+                                                               class-name       (some? class-name)}
                                                               (with-children-classes @children)))
                            :ref        handle-ref}])))})))
 
@@ -52,12 +53,28 @@
      [:div {:class-name "title"}
       title])])
 
+(defn- header-action
+  [{:keys [icon text] :as props}]
+  (cond
+    (some? icon) [c/icon-button props text]
+    :default [c/button props text]))
+
+(defn- header-actions
+  [{:keys [actions]}]
+  (when (some? actions)
+    [:div.actions
+     (for [[idx action] (map-indexed vector actions)]
+       ^{:key idx}
+       [header-action action])]))
+
 (defn header
   [props]
-  (->> (r/current-component)
-       (r/children)
-       (into [:div {:class-name (:header class-names)}
-              [header-info props]])))
+  [:div {:class-name (:header class-names)}
+   [header-info props]
+   (into [:div.content]
+         (->> (r/current-component)
+              (r/children)))
+   [header-actions props]])
 
 (defn main-content
   [{:keys [footer title]}]

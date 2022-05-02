@@ -1,0 +1,56 @@
+.component--list {
+    $padding: 6px;
+
+    display: flex;
+    flex-direction: column;
+    gap: $padding;
+
+    .list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+
+        padding: $padding;
+        border: 1px solid #F7F7FB;
+        border-radius: 4px;
+
+        .item-name {
+            flex: 1 1;
+            .name {
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 22px;
+            }
+
+            dl {
+                margin: 0;
+                font-weight: 400;
+                font-size: 8px;
+                line-height: 9px;
+
+                dt {
+                    display: inline-block;
+                    font-weight: 500;
+                }
+
+                dd {
+                    display: inline-block;
+                    margin: 0;
+                    margin-left: 4px;
+                }
+            }
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: $padding;
+
+            padding-left: $padding;
+            border-left: solid 1px #F7F7FB;
+
+            @include icon-color($color-secondary);
+        }
+    }
+}

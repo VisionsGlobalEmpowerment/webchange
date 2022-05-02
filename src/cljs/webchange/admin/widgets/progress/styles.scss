@@ -1,0 +1,118 @@
+.widget--progress {
+    $row-height: 60px;
+    $row-gap: 16px;
+    $colum-gap: 8px;
+
+    $indicator-color: #85B6FF;
+
+    display: grid;
+    grid-template-columns: auto auto 100px;
+    column-gap: 32px;
+
+    .items-header {
+        height: $row-height;
+    }
+
+    .items-list {
+        display: flex;
+        flex-direction: column;
+        gap: $row-gap;
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            height: $row-height;
+
+            .info {
+                .name {
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+
+                dl {
+                    display: grid;
+                    grid-template-columns: auto auto;
+                    margin: 0;
+                    font-size: 10px;
+                    line-height: 10px;
+
+                    dt {
+                        font-weight: 500;
+
+                        &:after {
+                            content: ":";
+                        }
+                    }
+
+                    dd {
+                        font-weight: 400;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .progress-table {
+        display: grid;
+        align-items: center;
+        align-content: space-between;
+        column-gap: $colum-gap;
+        overflow: auto;
+    }
+
+    .header-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: $row-height;
+
+        color: #505B76;
+        font-weight: 700;
+        font-size: 14px;
+
+        @include with-circle($size: 20px, $color: #85B6FF);
+    }
+
+    .progress-item {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        height: $row-height;
+
+        .progress-indicator {
+            width: 16px;
+            height: 35px;
+            background: $indicator-color;
+
+            &.empty {
+                opacity: 0.2;
+            }
+        }
+    }
+
+    .actions-header {
+        height: $row-height;
+    }
+
+    .actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: $row-gap;
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            height: $row-height;
+
+            .action-button {
+                svg {
+                    stroke: $indicator-color;
+                }
+            }
+        }
+    }
+}

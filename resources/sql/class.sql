@@ -129,6 +129,11 @@ VALUES (:name, :location, :about) RETURNING id
 SELECT * from schools
 WHERE id = :id
 
+-- :name get-school-students :? :*
+-- :doc retrieve school students
+SELECT * from students
+WHERE school_id = :id
+
 -- :name get-schools :? :*
 -- :doc retrieve school records
 SELECT * from schools

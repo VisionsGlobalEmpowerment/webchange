@@ -69,6 +69,7 @@
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-slider :as slider]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
+    [webchange.ui-framework.components.icon.icon-students :as students]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
@@ -152,6 +153,7 @@
    "settings"           settings/data
    "slider"             slider/data
    "stop"               stop/data
+   "students"           students/data
    "swap"               swap/data
    "sync"               sync/data
    "text-animation"     text-animation/data

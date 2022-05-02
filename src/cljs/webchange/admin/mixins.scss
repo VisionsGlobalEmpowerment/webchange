@@ -1,0 +1,16 @@
+@mixin with-circle($size: 12px, $color: $color-primary, $thickness: 2px) {
+    &:before {
+        content: "";
+        display: inline-block;
+        width: $size;
+        height: $size;
+        border: solid $thickness $color;
+        border-radius: 50%;
+    }
+}
+
+@mixin icon-color($color: $color-primary) {
+    svg {
+        stroke: $color;
+    }
+}
