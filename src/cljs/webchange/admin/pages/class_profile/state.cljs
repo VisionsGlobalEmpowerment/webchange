@@ -7,10 +7,6 @@
     [webchange.validation.validate :refer [validate]]))
 
 (def path-to-db :class-profile)
-;;on conflict
-;; (def path-to-db :class-profile-page)
-;;on further conflict
-;; (def path-to-db :admin/class-profile-page)
 
 (re-frame/reg-sub
   path-to-db

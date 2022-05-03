@@ -27,6 +27,7 @@
     [webchange.ui-framework.components.icon.icon-chevron-up :as chevron-up]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
+    [webchange.ui-framework.components.icon.icon-presentation :as presentation]
     [webchange.ui-framework.components.icon.icon-create-book :as create-book]
     [webchange.ui-framework.components.icon.icon-create-game :as create-game]
     [webchange.ui-framework.components.icon.icon-dashboard :as dashboard]
@@ -75,6 +76,7 @@
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
     [webchange.ui-framework.components.icon.icon-text :as text]
     [webchange.ui-framework.components.icon.icon-user :as user]
+    [webchange.ui-framework.components.icon.icon-users :as users]
     [webchange.ui-framework.components.icon.icon-undo :as undo]
     [webchange.ui-framework.components.icon.icon-visibility-off :as visibility-off]
     [webchange.ui-framework.components.icon.icon-visibility-on :as visibility-on]
@@ -111,6 +113,7 @@
    "chevron-up"         chevron-up/data
    "clear"              clear/data
    "close"              close/data
+   "presentation"       presentation/data
    "create-book"        create-book/data
    "create-game"        create-game/data
    "dashboard"          dashboard/data
@@ -160,6 +163,7 @@
    "text"               text/data
    "undo"               undo/data
    "user"               user/data
+   "users"              users/data
    "visibility-off"     visibility-off/data
    "visibility-on"      visibility-on/data
    "volume"             volume/data

@@ -1,14 +1,13 @@
 (ns webchange.class.handler
-  (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
-            [compojure.route :refer [resources not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
+  (:require [compojure.api.sweet :refer [GET POST PUT DELETE defroutes]]
+            [compojure.route :refer [not-found]]
+            [ring.util.response :refer [response]]
             [webchange.class.core :as core]
-            [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
-            [webchange.common.handler :refer [handle current-user current-school validation-error]]
+            [webchange.common.handler :refer [handle current-user current-school]]
             [webchange.auth.core :as auth]
-            [webchange.validation.validate :refer [validate]]
-            [webchange.validation.specs.student :as student-specs]))
+            [webchange.validation.specs.student :as student-specs]
+            [clojure.spec.alpha :as s]))
 
 (defn handle-list-classes [request]
   (let [school-id (current-school request)]
@@ -38,17 +37,11 @@
     (-> (core/delete-class! (Integer/parseInt id))
         handle)))
 
-(defn validate-student
-  [student-data]
-  (validate ::student-specs/student student-data))
-
 (defn handle-create-student
-  [request]
+  [data request]
   (let [owner-id (current-user request)
         school-id (current-school request)
-        data (-> request
-                 :body
-                 (assoc :school-id school-id))
+        data (assoc data :school-id school-id)
         [{user-id :id}] (auth/create-user! data)]
     (auth/activate-user! user-id)
     (-> data
@@ -85,34 +78,34 @@
         handle)))
 
 (defroutes class-routes
-           (GET "/api/classes" request (handle-list-classes request))
-           (GET "/api/classes/:id" [id]
-             (if-let [item (-> id Integer/parseInt core/get-class)]
-               (response {:class item})
-               (not-found "not found")))
-           (POST "/api/classes" request
-             (handle-create-class request))
-           (PUT "/api/classes/:id" [id :as request]
-             (handle-update-class id request))
-           (DELETE "/api/classes/:id" [id :as request]
-             (handle-delete-class id request))
+  (GET "/api/classes" request (handle-list-classes request))
+  (GET "/api/classes/:id" [id]
+       (if-let [item (-> id Integer/parseInt core/get-class)]
+         (response {:class item})
+         (not-found "not found")))
+  (POST "/api/classes" request
+        (handle-create-class request))
+  (PUT "/api/classes/:id" [id :as request]
+       (handle-update-class id request))
+  (DELETE "/api/classes/:id" [id :as request]
+          (handle-delete-class id request))
 
-           (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
-           (GET "/api/unassigned-students" [] (-> (core/get-students-unassigned) response))
-           (GET "/api/students/:id" [id]
-             (if-let [item (-> id Integer/parseInt core/get-student)]
-               (response {:student item})
-               (not-found "not found")))
-           (POST "/api/students" request
-             (if-let [errors (validate-student (:body request))]
-               (validation-error errors)
-               (handle-create-student request)))
-           (PUT "/api/students/:id" [id :as request]
-             (handle-update-student id request))
-           (DELETE "/api/students/:id/class" [id :as request]
-             (handle-unassign-student id request))
-           (DELETE "/api/students/:id" [id :as request]
-             (handle-delete-student id request))
+  (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
+  (GET "/api/unassigned-students" [] (-> (core/get-students-unassigned) response))
+  (GET "/api/students/:id" [id]
+       (if-let [item (-> id Integer/parseInt core/get-student)]
+         (response {:student item})
+         (not-found "not found")))
+  (POST "/api/students" request
+        :coercion :spec
+        :body [student ::student-specs/student]
+        :return (s/keys :req-un [::id])
+        (handle-create-student student request))
+  (PUT "/api/students/:id" [id :as request]
+       (handle-update-student id request))
+  (DELETE "/api/students/:id/class" [id :as request]
+          (handle-unassign-student id request))
+  (DELETE "/api/students/:id" [id :as request]
+          (handle-delete-student id request))
 
-           (POST "/api/next-access-code" request (handle-next-access-code request))
-           )
+  (POST "/api/next-access-code" request (handle-next-access-code request)))

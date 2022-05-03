@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.classes.state :as state]
     [webchange.admin.components.list.views :as l]
-    [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as c]))
 

@@ -57,7 +57,8 @@
             [webchange.utils.finish-progress-test]
             [webchange.utils.flipbook.remove-text-object-test]
             [webchange.utils.list-test]
-            [webchange.utils.scene-common-actions-test]))
+            [webchange.utils.scene-common-actions-test]
+            [webchange.admin.schools.data-test]))
 (run-all-tests)
 #_(run-tests
     'webchange.core-test)

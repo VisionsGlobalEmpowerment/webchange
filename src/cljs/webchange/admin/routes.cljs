@@ -1,5 +1,6 @@
 (ns webchange.admin.routes
   (:require
+    [clojure.string :as str]
     [re-frame.core :as re-frame]
     [webchange.admin.state :as state]
     [webchange.utils.module-router :as module-router]))
@@ -26,13 +27,13 @@
   [{:keys [handler props]}]
   (let [root "Admin"
         connector " / "
-        s #(clojure.string/join connector (concat [root] %))]
+        s #(str/join connector (concat [root] %))]
     (case handler
       :dashboard (s [])
       :schools (s ["Schools"])
       :school-profile (s ["School Profile" (:school-id props)])
       :class-profile (s ["Class Profile" (:class-id props)])
-      (s [(-> (or handler :unknown) (clojure.core/name) (clojure.string/capitalize))]))))
+      (s [(-> (or handler :unknown) (clojure.core/name) (str/capitalize))]))))
 
 (defonce router (atom nil))
 
