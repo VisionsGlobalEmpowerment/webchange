@@ -5,16 +5,9 @@
             [webchange.school.core :as core]
             [clojure.tools.logging :as log]
             [webchange.common.handler :refer [handle current-user]]
-            [schema.core :as s]
-            [webchange.school.statistics]))
-
-(s/defschema Stats {(s/optional-key :teachers) s/Int
-                    (s/optional-key :students) s/Int
-                    (s/optional-key :courses) s/Int
-                    (s/optional-key :classes) s/Int})
-(s/defschema School {:id s/Int :name s/Str :location (s/maybe s/Str) :about (s/maybe s/Str) :stats (s/maybe Stats)})
-(s/defschema CreateSchool {:name s/Str :location s/Str :about s/Str})
-(s/defschema EditSchool {:name s/Str :location s/Str :about s/Str})
+            [webchange.school.statistics]
+            [webchange.validation.specs.school-spec :as school-spec]
+            [clojure.spec.alpha :as s]))
 
 (defn handle-current-school [request]
   (-> (core/get-current-school)
@@ -44,28 +37,29 @@
 
 (defroutes school-routes
   (context "/api/schools" []
+           :coercion :spec
            :tags ["school"]
            (GET "/current" request
-                :return School
+                :return ::school-spec/school
                 (handle-current-school request))
            (POST "/" request
-                 :return School
-                 :body [data CreateSchool]
+                 :return ::school-spec/new-school
+                 :body [data ::school-spec/create-school]
                  (handle-create-school data request))
            (GET "/:id" request
-                :path-params [id :- s/Int]
-                :return {:school School}
+                :path-params [id :- ::school-spec/id]
+                :return (s/keys :req-un [::school-spec/school])
                 (if-let [item (core/get-school id)]
                   (response {:school item})
                   (not-found "not found")))
            (GET "/" request
-                :return {:schools [School]}
+                :return (s/keys :req-un [::school-spec/schools])
                 (handle-list-schools request))
            (PUT "/:id" request
-                :path-params [id :- s/Int]
-                :return School
-                :body [data EditSchool]
+                :path-params [id :- ::school-spec/id]
+                :return ::school-spec/new-school
+                :body [data ::school-spec/edit-school]
                 (handle-update-school id data request))
            (DELETE "/:id" request
-                   :path-params [id :- s/Int]
+                   :path-params [id :- ::school-spec/id]
                    (handle-delete-school id request))))

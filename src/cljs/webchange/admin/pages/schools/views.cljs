@@ -1,43 +1,55 @@
 (ns webchange.admin.pages.schools.views
   (:require [re-frame.core :as re-frame]
+            [webchange.admin.components.list.views :as l]
             [webchange.admin.pages.schools.state :as state]
-            [webchange.ui-framework.components.index :as ui]
-            [webchange.admin.routes :as routes]))
+            [webchange.admin.widgets.page.views :as page]
+            [webchange.ui-framework.components.index :as c]))
 
-(defn school-item [id data]
-  (println data)
-  [:div.school-item
-   (:name data)
-   [:div.school-item-buttons
-    [ui/button {:aria-label "Students"
-                :on-click #()}
-     (or (:students data) 0)
-     [ui/icon {:icon "user"}]]
-    [ui/button {:aria-label "Courses"
-                :on-click #()}
-     (or (:courses data) 0)
-     [ui/icon {:icon "warning"}]]
+(defn- header
+  []
+  (let [handle-add-click #(re-frame/dispatch [::state/add-school])]
+    [page/header {:title   "Schools"
+                  :icon    "school"
+                  :actions [{:text     "New School"
+                             :icon     "add"
+                             :on-click handle-add-click}]}]))
 
-    [ui/button {:aria-label "Delete"
-                :on-click #()}
-     [ui/icon {:icon "remove"}]]
+(defn school-item
+  [{:keys [id stats] :as props}]
+  (let [handle-edit-click #(re-frame/dispatch [::state/edit-school id])
+        handle-remove-click #(re-frame/dispatch [::state/remove-school id])]
+    [l/list-item (merge props
+                        {:actions [:<>
+                                   [c/icon-button {:icon     "remove"
+                                                   :title    "Remove"
+                                                   :variant  "light"
+                                                   :on-click handle-remove-click}]
+                                   [c/icon-button {:icon     "edit"
+                                                   :title    "Edit"
+                                                   :variant  "light"
+                                                   :on-click handle-edit-click}]]})
+     [l/content-right
+      [:div.school-stats
+       [:div.school-stats
+        [c/icon {:icon "users"}]
+        (:students stats 0)]
+       [:div.school-stats
+        [c/icon {:icon "presentation"}]
+        (:courses stats 0)]]]]))
 
-    [ui/button {:aria-label "Edit"
-                :on-click #(re-frame/dispatch [::routes/redirect (str "/admin/schools/" id)])}
-     [ui/icon {:icon "edit"}]]]])
+(defn- content
+  []
+  (let [schools @(re-frame/subscribe [::state/schools-list])]
+    [page/main-content {:title "Schools"}
+     [l/list {:class-name "schools-list"}
+      (for [school schools]
+        ^{:key (:id school)}
+        [school-item school])]]))
 
 (defn page
   []
   (re-frame/dispatch [::state/init])
-  (let [schools @(re-frame/subscribe [::state/schools-list])]
-    [ui/card {:class-name "school-card"}
-     [:h3 "Schools"]
-     [:div
-      [ui/button {:aria-label "New School"
-                  :on-click #(re-frame/dispatch [::routes/redirect "/admin/new-school"])}
-       [:span "New School"]
-       [ui/icon {:icon "add"}]]
-
-      (for [[id school] schools]
-        ^{:key id}
-        [school-item id school])]]))
+  (fn []
+    [page/page {:class-name "page--schools"}
+     [header]
+     [content]]))

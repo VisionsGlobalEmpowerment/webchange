@@ -1,17 +1,12 @@
+.page--schools {
+    .schools-list {
+	.school-stats {
+	    display: flex;
+            align-items: center;
 
-.school-card {
-  margin: 50px;
-}
-
-.school-item {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-}
-
-.school-item-buttons {
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  margin-right: 0;
+            color: #505B76;
+            font-weight: 700;
+            font-size: 16px;
+	}
+    }
 }

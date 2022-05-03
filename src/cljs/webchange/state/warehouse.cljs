@@ -677,6 +677,24 @@
                      :method :get
                      :uri    (str "/api/schools")}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::create-school
+  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+    (create-request {:key    :create-school
+                     :method :post
+                     :uri    (str "/api/schools")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::edit-school
+  (fn [{:keys [_]} [_ {:keys [school-id data]} handlers]]
+    (create-request {:key    :edit-school
+                     :method :put
+                     :uri    (str "/api/schools/" school-id)
+                     :params data}
+                    handlers)))
 ;; Classes
 
 (re-frame/reg-event-fx

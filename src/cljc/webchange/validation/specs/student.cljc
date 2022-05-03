@@ -16,6 +16,6 @@
 (s/def ::student (s/keys :req-un [::class-id
                                   ::first-name
                                   ::access-code]
-                         :opt [::last-name
-                               ::gender
-                               ::date-of-birth]))
+                         :opt-un [::last-name
+                                  ::gender
+                                  ::date-of-birth]))

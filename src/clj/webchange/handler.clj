@@ -1,41 +1,43 @@
 (ns webchange.handler
-  (:require [compojure.api.sweet :refer [api context ANY GET POST PUT DELETE PATCH defroutes routes swagger-routes]]
-            [compojure.route :refer [resources files not-found]]
-            [ring.util.response :refer [resource-response response redirect status header]]
-            [ring.middleware.reload :refer [wrap-reload]]
-            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
-            [ring.middleware.params :refer [wrap-params]]
-            [ring.middleware.multipart-params :refer [wrap-multipart-params]]
-            [ring.middleware.cookies :refer [wrap-cookies]]
-            [webchange.auth.handler :refer [auth-routes]]
-            [webchange.book-library.handler :refer [book-library-api-routes]]
-            [webchange.common.audio-parser :refer [get-talking-animation]]
-            [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes]]
-            [webchange.class.handler :refer [class-routes]]
-            [webchange.school.handler :refer [school-routes]]
-            [webchange.secondary.handler :refer [local-sync-routes global-sync-routes]]
-            [webchange.progress.handler :refer [progress-routes]]
-            [webchange.parent.handler :refer [child-api-routes parent-api-routes]]
-            [webchange.dataset.handler :refer [dataset-routes dataset-api-routes]]
-            [webchange.assets.handler :refer [asset-routes asset-maintainer-routes]]
-            [webchange.resources.handler :refer [resources-routes]]
-            [webchange.templates.handler :refer [templates-api-routes]]
-            [ring.middleware.session :refer [wrap-session]]
-            [buddy.auth :refer [throw-unauthorized authenticated?]]
-            [buddy.auth.backends.session :refer [session-backend]]
-            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization authorization-error]]
-            [clojure.edn :as edn]
-            [webchange.common.hmac-sha256 :as sign]
-            [clojure.tools.logging :as log]
-            [clojure.data.json :as json]
-            [webchange.common.hmac-sha256 :as sign]
-            [ring.middleware.session.memory :as mem]
-            [ring.middleware.session.cookie :refer [cookie-store]]
-            [webchange.common.handler :refer [handle current-user]]
-            [config.core :refer [env]]
-            [webchange.auth.website :as website]
-            [webchange.auth.roles :as roles])
-  )
+  (:require
+    [buddy.auth :refer [authenticated? throw-unauthorized]]
+    [buddy.auth.backends.session :refer [session-backend]]
+    [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+    [clojure.edn :as edn]
+    [clojure.tools.logging :as log]
+    [compojure.api.exception :as ex]
+    [compojure.api.sweet :refer [api defroutes GET POST swagger-routes]]
+    [compojure.route :refer [files not-found resources]]
+    [config.core :refer [env]]
+    [muuntaja.middleware :as middleware]
+    [ring.middleware.cookies :refer [wrap-cookies]]
+    [ring.middleware.params :refer [wrap-params]]
+    [ring.middleware.reload :refer [wrap-reload]]
+    [ring.middleware.session :refer [wrap-session]]
+    [ring.middleware.session.cookie :refer [cookie-store]]
+    [ring.middleware.session.memory :as mem]
+    [ring.util.response :refer [bad-request header redirect resource-response
+                                response status]]
+    [webchange.assets.handler :refer [asset-maintainer-routes asset-routes]]
+    [webchange.auth.handler :refer [auth-routes]]
+    [webchange.auth.roles :as roles]
+    [webchange.auth.website :as website]
+    [webchange.book-library.handler :refer [book-library-api-routes]]
+    [webchange.class.handler :refer [class-routes]]
+    [webchange.common.audio-parser :refer [get-talking-animation]]
+    [webchange.common.handler :refer [current-user handle]]
+    [webchange.common.hmac-sha256 :as sign]
+    [webchange.course.handler :refer [course-pages-routes course-routes
+                                      courses-api-routes editor-api-routes
+                                      website-api-routes]]
+    [webchange.dataset.handler :refer [dataset-api-routes dataset-routes]]
+    [webchange.parent.handler :refer [child-api-routes parent-api-routes]]
+    [webchange.progress.handler :refer [progress-routes]]
+    [webchange.resources.handler :refer [resources-routes]]
+    [webchange.school.handler :refer [school-routes]]
+    [webchange.secondary.handler :refer [global-sync-routes local-sync-routes]]
+    [webchange.templates.handler :refer [templates-api-routes]]
+    [webchange.validation.validate :refer [phrase-problems]]))
 
 (defn api-request? [request] (= "application/json" (:accept request)))
 
@@ -123,56 +125,56 @@
     (resource-response "index.html" {:root "public"})))
 
 (defroutes pages-routes
-           (GET "/" [] (public-route))
-           (GET "/login" [] (public-route))
-           (GET "/student-login" [] (public-student-route))
-           (GET "/register" [] (public-route))
+  (GET "/" [] (public-route))
+  (GET "/login" [] (public-route))
+  (GET "/student-login" [] (public-student-route))
+  (GET "/register" [] (public-route))
 
-           (GET "/s/:course-id/:scene-id" [] (public-route))
-           (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
+  (GET "/s/:course-id/:scene-id" [] (public-route))
+  (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
 
-           ;; admin routes
-           (GET "/dashboard/courses" request (admin-route request))
+  ;; admin routes
+  (GET "/dashboard/courses" request (admin-route request))
 
-           ;; teacher routes
-           (GET "/dashboard" request (teachers-route request))
-           (GET "/dashboard/classes" request (teachers-route request))
-           (GET "/dashboard/schools" request (teachers-route request))
-           (GET "/dashboard/classes/:class-id" request (teachers-route request))
-           (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
-           (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
+  ;; teacher routes
+  (GET "/dashboard" request (teachers-route request))
+  (GET "/dashboard/classes" request (teachers-route request))
+  (GET "/dashboard/schools" request (teachers-route request))
+  (GET "/dashboard/classes/:class-id" request (teachers-route request))
+  (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
+  (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
 
-           ;; student routes
-           (GET "/courses/:id" request (student-route request))
-           (GET "/courses/:id/dashboard" request (student-route request))
-           (GET "/courses/:id/dashboard/finished" request (student-route request))
-           (GET "/courses/:id/book-library" request (student-route request))
-           (GET "/courses/:id/book-library/favorite" request (student-route request))
-           (GET "/courses/:id/book-library/search" request (student-route request))
-           (GET "/courses/:id/book-library/read/:book-id" request (student-route request))
+  ;; student routes
+  (GET "/courses/:id" request (student-route request))
+  (GET "/courses/:id/dashboard" request (student-route request))
+  (GET "/courses/:id/dashboard/finished" request (student-route request))
+  (GET "/courses/:id/book-library" request (student-route request))
+  (GET "/courses/:id/book-library/favorite" request (student-route request))
+  (GET "/courses/:id/book-library/search" request (student-route request))
+  (GET "/courses/:id/book-library/read/:book-id" request (student-route request))
 
-           ;; parent routes
-           (GET "/parents" request (parent-route request))
-           (GET "/parents/add-student" request (parent-route request))
-           (GET "/parents/help" request (parent-route request))
+  ;; parent routes
+  (GET "/parents" request (parent-route request))
+  (GET "/parents/add-student" request (parent-route request))
+  (GET "/parents/help" request (parent-route request))
 
-           ;; Wizard
-           (GET "/game-changer" request (authenticated-route request {:role :educator}))
-           (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))
-           (GET "/book-creator" request (authenticated-route request {:role :educator}))
-           (GET "/wizard" request (authenticated-route request {:role :educator}))
-           (GET "/game-changer-beta" request (authenticated-route request {:role :educator}))
+  ;; Wizard
+  (GET "/game-changer" request (authenticated-route request {:role :educator}))
+  (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))
+  (GET "/book-creator" request (authenticated-route request {:role :educator}))
+  (GET "/wizard" request (authenticated-route request {:role :educator}))
+  (GET "/game-changer-beta" request (authenticated-route request {:role :educator}))
 
-           (GET "/admin" [] (public-route))
-           (GET "/admin/*" [] (public-route))
-           (GET "/teacher" [] (public-route))
-           (GET "/teacher/*" [] (public-route))
+  (GET "/admin" [] (public-route))
+  (GET "/admin/*" [] (public-route))
+  (GET "/teacher" [] (public-route))
+  (GET "/teacher/*" [] (public-route))
 
-           ;; Technical
-           (GET "/test-ui" [] (public-route))
+  ;; Technical
+  (GET "/test-ui" [] (public-route))
 
-           (files "/upload/" {:root (env :upload-dir)})
-           (resources "/"))
+  (files "/upload/" {:root (env :upload-dir)})
+  (resources "/"))
 
 (defroutes animation-routes
            (GET "/api/actions/get-talk-animations" _ (->> handle-parse-audio-animation wrap-params)))
@@ -204,29 +206,29 @@
                      (handler request))]
       response)))
 
-(defn- json-response
-  [{body :body :as response}]
-  (if (or (string? body) (nil? body))
-    response
-    (assoc response :body (slurp body))))
+(defn request-validation-handler
+  [e data req]
+  (let [problems (-> data :problems :clojure.spec.alpha/problems)]
+    (bad-request {:errors (phrase-problems problems)})))
 
 (defroutes app
   (api
-             (swagger-routes {:ui   "/api-docs"
-                              :data {:info {:title "TabSchools API"}
-                                     :tags [{:name "dataset", :description "Dataset APIs"}
-                                            {:name "course", :description "Courses APIs"}]}})
-               website-api-routes
-               editor-api-routes
-               courses-api-routes
-               dataset-api-routes
-               templates-api-routes)
+    :exceptions {:handlers {::ex/request-validation request-validation-handler}}
+    (swagger-routes {:ui   "/api-docs"
+                     :data {:info {:title "TabSchools API"}
+                            :tags [{:name "dataset", :description "Dataset APIs"}
+                                   {:name "course", :description "Courses APIs"}]}})
+    website-api-routes
+    editor-api-routes
+    courses-api-routes
+    dataset-api-routes
+    templates-api-routes
+    class-routes)
   pages-routes
   animation-routes
   auth-routes
   course-pages-routes
   course-routes
-  class-routes
   school-routes
   global-sync-routes
   local-sync-routes
@@ -253,9 +255,9 @@
       (wrap-session {:store store})
       wrap-cookies
       wrap-body-as-string
-      (muuntaja.middleware/wrap-params)
-      (muuntaja.middleware/wrap-format)
-      (muuntaja.middleware/wrap-exception)
+      (middleware/wrap-params)
+      (middleware/wrap-format)
+      (middleware/wrap-exception)
       (sign/wrap-body-as-byte-array)))
 
 (defn wrap-connection-close
@@ -272,7 +274,7 @@
       wrap-cookies
       wrap-body-as-string
       wrap-connection-close
-      (muuntaja.middleware/wrap-params)
-      (muuntaja.middleware/wrap-format)
-      (muuntaja.middleware/wrap-exception)
+      (middleware/wrap-params)
+      (middleware/wrap-format)
+      (middleware/wrap-exception)
       (sign/wrap-body-as-byte-array)))
