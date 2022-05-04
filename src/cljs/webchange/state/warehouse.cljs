@@ -723,10 +723,10 @@
 
 (re-frame/reg-event-fx
   ::create-class
-  (fn [{:keys [_]} [_ {:keys [data]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [school-id data]} handlers]]
     (create-request {:key    :create-class
                      :method :post
-                     :uri    (str "/api/classes")
+                     :uri    (str "/api/schools/" school-id "/classes")
                      :params data}
                     handlers)))
 

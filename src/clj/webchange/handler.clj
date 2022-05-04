@@ -39,7 +39,9 @@
     [webchange.templates.handler :refer [templates-api-routes]]
     [webchange.validation.validate :refer [phrase-problems]]))
 
-(defn api-request? [request] (= "application/json" (:accept request)))
+(defn api-request?
+  [request]
+  (-> request :headers (get "accept") (= "application/json")))
 
 (defn- login-resource
   [{role :role} prev cookies]

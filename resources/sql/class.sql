@@ -162,3 +162,22 @@ SELECT
 (SELECT count(*) FROM students WHERE school_id = :id) as students,
 0 as courses,
 (SELECT count(*) FROM classes WHERE school_id = :id) as classes
+
+-- :name is-school-teacher? :? :1
+-- :doc check if user is a teacher in given school
+SELECT true as result from teachers
+WHERE
+school_id = :school_id AND user_id = :user_id
+
+-- :name assign-school-course! :! :n
+-- :doc creates a new school_course record
+INSERT INTO school_courses
+(school_id, course_id)
+VALUES (:school_id, :course_id)
+
+-- :name get-courses-by-school :? :*
+-- :doc retrieve all courses by school
+SELECT c.*
+FROM courses c
+INNER JOIN school_courses sc ON sc.course_id = c.id
+WHERE sc.school_id = :school_id

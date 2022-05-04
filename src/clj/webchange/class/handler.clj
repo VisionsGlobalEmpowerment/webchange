@@ -7,6 +7,7 @@
             [webchange.common.handler :refer [handle current-user current-school]]
             [webchange.auth.core :as auth]
             [webchange.validation.specs.student :as student-specs]
+            [webchange.validation.specs.class-spec :as class-spec]
             [clojure.spec.alpha :as s]))
 
 (defn handle-list-classes [request]
@@ -15,14 +16,15 @@
         response)))
 
 (defn handle-create-class
-  [request]
-  (let [owner-id (current-user request)
-        school-id (current-school request)
-        data (-> request
-                 :body
-                 (assoc :school-id school-id))]
-    (-> (core/create-class! data)
-        handle)))
+  ([data request]
+   (let [school-id (current-school request)]
+     (handle-create-class school-id data request)))
+  ([school-id data request]
+   (let [owner-id (current-user request)]
+     (-> data
+         (assoc :school-id school-id)
+         (core/create-class!)
+         handle))))
 
 (defn handle-update-class
   [id request]
@@ -84,7 +86,13 @@
          (response {:class item})
          (not-found "not found")))
   (POST "/api/classes" request
-        (handle-create-class request))
+        (handle-create-class (:body request) request))
+  (POST "/api/schools/:school-id/classes" request
+        :coercion :spec
+        :path-params [school-id :- ::class-spec/id]
+        :body [data ::class-spec/create-class]
+        :return (s/keys :req-un [::class-spec/id])
+        (handle-create-class school-id data request))
   (PUT "/api/classes/:id" [id :as request]
        (handle-update-class id request))
   (DELETE "/api/classes/:id" [id :as request]

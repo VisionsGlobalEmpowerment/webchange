@@ -34,3 +34,8 @@
   [id]
   (db/delete-school! {:id id})
   [true {:id id}])
+
+(defn school-teacher?
+  [school-id user-id]
+  (let [{teacher? :result} (db/is-school-teacher? {:school-id school-id :user-id user-id})]
+    teacher?))

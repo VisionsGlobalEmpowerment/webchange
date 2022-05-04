@@ -726,7 +726,6 @@
         (assoc :actions actions)
         (assoc-in [:metadata :lip-not-sync] false))))
 
-
 (defn save-scene-with-processing
   [course-slug scene-name data owner-id]
   (let [scene-data (update-scene-lip-data data)]
@@ -805,3 +804,12 @@
   (let [courses (db/get-courses-by-status-and-type {:type type :status status})]
     [true (map ->website-course courses)]))
 
+(defn get-school-courses
+  "Return list of courses assigned to school"
+  [school-id user-id]
+  (db/get-courses-by-school {:school_id school-id}))
+
+(defn assign-school-course
+  [school-id {:keys [course-id]}]
+  (db/assign-school-course! {:school_id school-id :course_id course-id})
+  {:school-id school-id :course-id course-id})

@@ -449,3 +449,26 @@
     (is (= "archived" (:status saved-value)))
     (is (= "archived" (:status retrieved-value)))))
 
+(deftest schools-available-courses-can-be-retrieved
+  (let [course-name "available course"
+        _ (f/course-created {:name course-name :status "published"})
+        response (f/get-school-available-courses)
+        courses (-> response :body slurp (json/read-str :key-fn keyword))]
+    (is (= 200 (:status response)))
+    (is (= 1 (count courses)))
+    (is (= course-name (-> courses first :name)))))
+
+(deftest schools-courses
+  (with-redefs [webchange.auth.roles/is-admin? (fn [user-id] true)]
+    (let [{course-id :id} (f/course-created {:name "test course" :status "published"})]
+      (testing "course can be assigned to school"
+        (let [response (f/assign-school-course! f/default-school-id {:course-id course-id})
+              school-course (-> response :body slurp (json/read-str :key-fn keyword))]
+          (is (= 200 (:status response)))
+          (is (= course-id (:course-id school-course)))))
+      (testing "school courses can be retrieved"
+        (let [response (f/get-school-courses f/default-school-id)
+              courses (-> response :body slurp (json/read-str :key-fn keyword))]
+          (is (= 200 (:status response)))
+          (is (= 1 (count courses)))
+          (is (= course-id (-> courses first :id))))))))

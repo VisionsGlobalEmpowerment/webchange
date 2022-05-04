@@ -16,7 +16,9 @@
     [webchange.course.core :as core]
     [webchange.course.skills :as skills]
     [webchange.dataset.library :as datasets-library]
-    [webchange.templates.core :as templates]))
+    [webchange.templates.core :as templates]
+    [webchange.school.core :as school]
+    [webchange.validation.specs.course-spec :as course-spec]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
@@ -468,4 +470,26 @@
   (POST "/api/course-versions/:version-id/restore" [version-id :as request]
         (handle-restore-course-version version-id request))
   (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-        (handle-restore-scene-version version-id request)))
+        (handle-restore-scene-version version-id request))
+  
+  (GET "/api/available-courses" request
+       (-> (core/get-available-courses) response))
+  (PUT "/api/schools/:school-id/assign-course" request
+       :coercion :spec
+       :path-params [school-id :- ::course-spec/school-id]
+       :body [data ::course-spec/assign-school-course]
+       :return ::course-spec/school-course
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/assign-school-course school-id data)
+             response)))
+  (GET "/api/schools/:school-id/courses" request
+       :coercion :spec
+       :path-params [school-id :- ::course-spec/school-id]
+       :return ::course-spec/courses
+       (let [user-id (current-user request)]
+         (when-not (or (is-admin? user-id) (school/school-teacher? school-id user-id))
+           (throw-unauthorized {:role :educator}))
+         (-> (core/get-school-courses school-id user-id)
+             response))))

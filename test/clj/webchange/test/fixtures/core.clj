@@ -27,6 +27,7 @@
 
 (defn clear-db []
   (db/clear-table :collaborators)
+  (db/clear-table :school_courses)
   (db/clear-table :children)
   (db/clear-table :activity_stats)
   (db/clear-table :course_stats)
@@ -931,4 +932,30 @@
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn get-school-available-courses
+  []
+  (let [url (str "/api/available-courses")
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn assign-school-course!
+  [school-id data]
+  (let [url (str "/api/schools/" school-id "/assign-course")
+        request (-> (mock/request :put url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (mock/header :accept "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-school-courses
+  [school-id]
+  (let [url (str "/api/schools/" school-id "/courses")
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    (mock/header :accept "application/json")
+                    teacher-logged-in)]
     (handler/dev-handler request)))
