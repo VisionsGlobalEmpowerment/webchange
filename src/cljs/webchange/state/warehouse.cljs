@@ -192,6 +192,14 @@
                      :uri    "/api/users/login"}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::load-current-user
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-current-user
+                     :method :get
+                     :uri    "/api/users/current"}
+                    handlers)))
+
 ;; Templates
 
 (re-frame/reg-event-fx
