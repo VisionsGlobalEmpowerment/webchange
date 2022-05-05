@@ -1,4 +1,66 @@
 .layout {
+    @mixin icon-color($color) {
+        & > .icon {
+            svg {
+                fill: $color;
+            }
+        }
+    }
+
+    @mixin active-item {
+        & > .text {
+            color: $color-secondary;
+        }
+    }
+
+    @mixin navigation-items-list {
+        position: absolute;
+        left: 0;
+        top: 100%;
+
+        width: 100%;
+        background: $color-primary;
+        display: none;
+
+        &.position-bottom {
+            left: 0;
+            top: 100%;
+        }
+
+        &.position-right {
+            left: 100%;
+            top: 0;
+        }
+    }
+
+    @mixin navigation-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+
+        padding: 18px;
+        cursor: pointer;
+
+        @include icon-color($color-text-light);
+
+        .icon {
+            padding: 0;
+        }
+
+        &:hover {
+            background: #ffffff1f;
+
+            & > .children-list {
+                display: block;
+            }
+        }
+
+        &.active-item {
+            @include active-item;
+        }
+    }
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -6,7 +68,7 @@
 
     .top-bar {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         justify-content: space-between;
 
         padding: 0 $default-gap;

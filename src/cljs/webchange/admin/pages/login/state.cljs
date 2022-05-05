@@ -1,46 +1,44 @@
 (ns webchange.admin.pages.login.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.pages.state :as parent-state]
+    [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
-(defn path-to-db
-  [relative-path]
-  (->> relative-path
-       (concat [:login])
-       (parent-state/path-to-db)))
+(def path-to-db :login)
 
-(def form-data-path (path-to-db [:form-data]))
+(re-frame/reg-sub
+  path-to-db
+  (fn [db]
+    (get db path-to-db)))
 
 (defn- get-form-data
   [db]
-  (get-in db form-data-path))
+  (get db :form-data))
+
+(defn- update-form-data
+  [db data-patch]
+  (update db :form-data merge data-patch))
 
 (re-frame/reg-sub
   ::form-data
+  :<- [path-to-db]
   get-form-data)
-
-(re-frame/reg-event-fx
-  ::update-form-data
-  (fn [{:keys [db]} [_ data-patch]]
-    {:db (update-in db form-data-path merge data-patch)}))
 
 ;; Username
 
-(def username-key :username)
+(def username-key :email)
 
 (re-frame/reg-sub
   ::username
-  (fn []
-    (re-frame/subscribe [::form-data]))
-  (fn [form-data]
-    (get form-data username-key "")))
+  :<- [::form-data]
+  #(get % username-key ""))
 
 (re-frame/reg-event-fx
   ::set-username
-  (fn [{:keys [_]} [_ value]]
-    {:dispatch [::update-form-data {username-key value}]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (update-form-data db {username-key value})}))
 
 ;; Password
 
@@ -48,25 +46,46 @@
 
 (re-frame/reg-sub
   ::password
-  (fn []
-    (re-frame/subscribe [::form-data]))
-  (fn [form-data]
-    (get form-data password-key "")))
+  :<- [::form-data]
+  #(get % password-key ""))
 
 (re-frame/reg-event-fx
   ::set-password
-  (fn [{:keys [_]} [_ value]]
-    {:dispatch [::update-form-data {password-key value}]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (update-form-data db {password-key value})}))
 
 ;; Submit
 
+(def loading-key :loading?)
+
+(re-frame/reg-sub
+  ::loading?
+  :<- [path-to-db]
+  #(get % loading-key false))
+
+(defn- set-loading
+  [db value]
+  (assoc db loading-key value))
+
 (re-frame/reg-event-fx
   ::login
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [data (get-form-data db)]
-      {:dispatch [::warehouse/admin-login {:data data} {:on-success [::login-success]}]})))
+      {:db       (set-loading db true)
+       :dispatch [::warehouse/admin-login {:data data} {:on-success [::login-success]
+                                                        :on-failure [::login-failure]}]})))
 
 (re-frame/reg-event-fx
   ::login-success
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::routes/redirect :dashboard]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db       (set-loading db false)
+     :dispatch [::routes/redirect :dashboard]}))
+
+(re-frame/reg-event-fx
+  ::login-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-loading db false)}))

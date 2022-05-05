@@ -1,3 +1,31 @@
 .top-bar--auth {
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    padding: 0 16px;
+
+    .user-data {
+        font-weight: 500;
+        font-size: 16px;
+
+        .name {
+            text-transform: capitalize;
+        }
+    }
+
+    .menu {
+        @include navigation-items-list;
+        right: 0;
+
+        .menu-item {
+            @include navigation-item;
+        }
+    }
+
+    &:hover {
+        .menu {
+            display: block;
+        }
+    }
 }

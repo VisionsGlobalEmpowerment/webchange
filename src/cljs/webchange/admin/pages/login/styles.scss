@@ -17,16 +17,15 @@
     .login-panel {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
         align-items: stretch;
-        gap: 24px;
 
         width: 50%;
         height: 50%;
         max-width: 500px;
         max-height: 400px;
 
-        padding: 76px;
+        padding: 52px 76px;
         background: $color-primary;
         border-radius: 20px;
 
@@ -38,6 +37,18 @@
             font-size: 18px;
         }
 
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .login-button {
+            border-radius: 16px;
+            height: 32px;
+            padding: 0;
+        }
+
         .wc-input-wrapper {
             .wc-input-label {
                 @include text-styles;
@@ -47,6 +58,10 @@
                 @include text-styles;
                 background-color: $input-color;
                 border: none;
+
+                &:disabled {
+                    color: #8b92a6;
+                }
             }
         }
 
