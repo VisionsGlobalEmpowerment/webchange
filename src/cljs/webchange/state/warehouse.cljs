@@ -186,14 +186,11 @@
 (re-frame/reg-event-fx
   ::admin-login
   (fn [{:keys [_]} [_ {:keys [data]} handlers]]
-    (create-fake-request {:key    :admin-login
-                          :method :post
-                          :params data
-                          :uri    nil}
-                         handlers
-                         {:result      :success
-                          :result-data {:message "Done"}
-                          :delay       1000})))
+    (create-request {:key    :admin-login
+                     :method :post
+                     :params {:user data}
+                     :uri    "/api/users/login"}
+                    handlers)))
 
 ;; Templates
 
