@@ -2,16 +2,26 @@ $background-color: #fff;
 $border-radius: 8px;
 
 .wc-text-area {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+
     background-color: $background-color;
     border-radius: $border-radius;
-    padding: 16px;
+
+    color: $default-color;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
 
     textarea {
         background-color: $background-color;
         border: none;
-        font-size: 14px;
         outline: none;
-        padding: 0;
+        padding: 8px;
         resize: none;
         width: 100%;
 
@@ -29,5 +39,9 @@ $border-radius: 8px;
 
     &.variant-outlined {
         border: 1px solid #C4C4C4;
+    }
+
+    .wc-text-area-label {
+        margin-top: 8px;
     }
 }
