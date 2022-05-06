@@ -131,16 +131,36 @@
   :<- [path-to-db]
   get-errors)
 
+;; Callbacks
+
+(def callbacks-key :callbacks)
+
+(defn- set-callbacks
+  [db callbacks]
+  (assoc db callbacks-key callbacks))
+
+(defn- get-callback
+  [db callback-key]
+  (-> (get db callbacks-key)
+      (get callback-key)))
+
+(re-frame/reg-fx
+  ::callback
+  (fn [[callback & params]]
+    (when (fn? callback)
+      (apply callback params))))
+
 ;; Init
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [id]}]]
+  (fn [{:keys [db]} [_ {:keys [id on-save]}]]
     {:db       (-> db
                    (set-school-id id)
                    (reset-form-data)
-                   (reset-errors))
+                   (reset-errors)
+                   (set-callbacks {:on-save on-save}))
      :dispatch [::warehouse/load-school {:school-id id}
                 {:on-success [::load-school-success]}]}))
 
@@ -162,5 +182,14 @@
       (if (nil? validation-errors)
         {:db       (-> db
                        (reset-errors))
-         :dispatch [::warehouse/edit-school {:school-id school-id :data school-data}]}
+         :dispatch [::warehouse/edit-school
+                    {:school-id school-id :data school-data}
+                    {:on-success [::save-success]}]}
         {:db (set-errors db validation-errors)}))))
+
+(re-frame/reg-event-fx
+  ::save-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ school-data]]
+    (let [callback (get-callback db :on-save)]
+      {::callback [callback school-data]})))

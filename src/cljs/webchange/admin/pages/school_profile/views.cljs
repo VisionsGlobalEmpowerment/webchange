@@ -42,13 +42,20 @@
   [page/block {:title "Statistics"}
    [no-data]])
 
+(defn- side-bar
+  [{:keys [school-id]}]
+  (let [handle-data-save #(re-frame/dispatch [::state/set-school-data %])]
+    [page/side-bar {:title "School Info"}
+     [school-form {:id      school-id
+                   :on-save handle-data-save}]]))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [school-id]}]
-    [page/page
-     [page/main-content {:title "School Profile"}
-      [school-counter]
-      [statistics]]
-     [page/side-bar
-      [school-form {:id school-id}]]]))
+    (let [school-name @(re-frame/subscribe [::state/school-name])]
+      [page/page
+       [page/main-content {:title school-name}
+        [school-counter]
+        [statistics]]
+       [side-bar {:school-id school-id}]])))

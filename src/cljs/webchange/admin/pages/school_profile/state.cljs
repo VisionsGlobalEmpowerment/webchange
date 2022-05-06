@@ -33,6 +33,18 @@
   #(get % :school-data))
 
 (re-frame/reg-event-fx
+  ::set-school-data
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :school-data data)}))
+
+(re-frame/reg-sub
+  ::school-name
+  :<- [::school-data]
+  #(-> (get % :name "")
+       (clojure.string/capitalize)))
+
+(re-frame/reg-event-fx
   ::open-teachers
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]

@@ -51,8 +51,9 @@
      "Save"]))
 
 (defn school-form
-  [{:keys [id]}]
-  (re-frame/dispatch [::state/init {:id id}])
+  [{:keys [id on-save]}]
+  (re-frame/dispatch [::state/init {:id      id
+                                    :on-save on-save}])
   (fn []
     [:div.widget--school-form
      [name-control]

@@ -88,10 +88,12 @@
     footer]])
 
 (defn side-bar
-  []
+  [{:keys [title]}]
   (->> (r/current-component)
        (r/children)
-       (into [:div {:class-name (:side-bar class-names)}])))
+       (into [:div {:class-name (:side-bar class-names)}
+              (when (some? title)
+                [:h1 title])])))
 
 (defn block
   [{:keys [title]}]
