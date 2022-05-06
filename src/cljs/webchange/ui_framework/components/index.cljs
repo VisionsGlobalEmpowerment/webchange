@@ -25,7 +25,8 @@
     [webchange.ui-framework.components.switcher.index :as switcher]
     [webchange.ui-framework.components.text-area.index :as text-area]
     [webchange.ui-framework.components.timeline.index :as timeline]
-    [webchange.ui-framework.components.tooltip.index :as tooltip]))
+    [webchange.ui-framework.components.tooltip.index :as tooltip]
+    [webchange.ui-framework.components.utils :as utils]))
 
 (def audio audio/component)
 (def avatar avatar/component)
@@ -53,3 +54,5 @@
 (def tooltip tooltip/component)
 (def with-confirmation confirm/with-confirmation)
 (def with-custom-window confirm/with-custom-window)
+
+(def get-class-name utils/get-class-name)

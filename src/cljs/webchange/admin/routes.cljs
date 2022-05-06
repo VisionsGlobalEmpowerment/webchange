@@ -23,17 +23,28 @@
                          "/add"                          :add-course
                          ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}})
 
+(def sitemap
+  {:dashboard {:schools {:school-profile {:classes  {:add-class     true
+                                                     :class-profile true}
+                                          :students {:add-student true}
+                                          :teachers {:add-teacher     true
+                                                     :teacher-profile true}}}
+               :courses {:add-course     true
+                         :course-profile true}}})
+
 (defn get-title
-  [{:keys [handler props]}]
-  (let [root "Admin"
-        connector " / "
-        s #(str/join connector (concat [root] %))]
-    (case handler
-      :dashboard (s [])
-      :schools (s ["Schools"])
-      :school-profile (s ["School Profile" (:school-id props)])
-      :class-profile (s ["Class Profile" (:class-id props)])
-      (s [(-> (or handler :unknown) (clojure.core/name) (str/capitalize))]))))
+  ([params]
+   (get-title params {}))
+  ([{:keys [handler props]} {:keys [with-root?] :or {with-root? true}}]
+   (let [root "Admin"
+         connector " / "
+         s #(str/join connector (if with-root? (concat [root] %) %))]
+     (case handler
+       :dashboard (s ["Dashboard"])
+       :schools (s ["Schools"])
+       :school-profile (s [(str "School " (:school-id props))])
+       :class-profile (s [(str "Class " (:class-id props))])
+       (s [(-> (or handler :unknown) (clojure.core/name) (str/capitalize))])))))
 
 (defonce router (atom nil))
 
