@@ -65,16 +65,25 @@
                          (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
                          (sequential? failure-handler) (conj (conj failure-handler response)))}))
 
+(defn response->errors
+  [response]
+  (let [errors (get-in response [:response :errors])]
+    (if (some? errors)
+      (let [errors-list (if (sequential? errors) errors [errors])]
+        (->> errors-list
+             (map vals)
+             (flatten)))
+      (-> response (get-in [:last-error])))))
+
 (re-frame/reg-event-fx
   ::show-request-error
   (fn [{:keys [_]} [_ key response]]
-    (let [title (-> key (clojure.core/name) (->Camel_Snake_Case_String) (string/replace "_" " ") (str " Error"))
-          errors (get-in response [:last-error])]
+    (let [title (-> key (clojure.core/name) (->Camel_Snake_Case_String) (string/replace "_" " ") (str " Error"))]
       (logger/group-folded title)
       (logger/trace "key" key)
       (logger/trace "response" response)
       (logger/group-end title)
-      {:dispatch [::error-message/show title errors]})))
+      {:dispatch [::error-message/show title (response->errors response)]})))
 
 (re-frame.core/reg-fx
   :timeout

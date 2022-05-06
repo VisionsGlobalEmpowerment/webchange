@@ -9,23 +9,27 @@
   (let [username @(re-frame/subscribe [::state/username])
         password @(re-frame/subscribe [::state/password])
         loading? @(re-frame/subscribe [::state/loading?])
+
         handle-username-changed #(re-frame/dispatch [::state/set-username %])
         handle-password-changed #(re-frame/dispatch [::state/set-password %])
-        handle-login-click #(re-frame/dispatch [::state/login])]
+
+        submit #(re-frame/dispatch [::state/login])]
     [:div.page--login
      [:div.login-panel
       [:h1 "Log in"]
       [:div.login-form
-       [input {:label     "Username"
-               :value     username
-               :on-change handle-username-changed
-               :disabled? loading?}]
-       [input {:label     "Password"
-               :type      "password"
-               :value     password
-               :on-change handle-password-changed
-               :disabled? loading?}]]
-      [button {:on-click   handle-login-click
+       [input {:label          "Username"
+               :value          username
+               :on-change      handle-username-changed
+               :disabled?      loading?
+               :on-enter-press submit}]
+       [input {:label          "Password"
+               :type           "password"
+               :value          password
+               :on-change      handle-password-changed
+               :disabled?      loading?
+               :on-enter-press submit}]]
+      [button {:on-click   submit
                :class-name "login-button"
                :disabled?  loading?}
        (if-not loading?

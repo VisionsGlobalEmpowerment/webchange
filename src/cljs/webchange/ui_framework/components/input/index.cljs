@@ -31,6 +31,7 @@
            on-focus
            on-key-down
            placeholder
+           ref-atom
            required?
            select-on-focus?
            step
@@ -65,13 +66,16 @@
                                "default"))
           handle-blur #(on-blur (.. % -target -value))
           handle-focus on-focus
+          handle-ref-atom (fn [ref]
+                            (when (some? ref)
+                              (reset! ref-atom ref)))
 
           has-label? (some? label)
           id (or id (when has-label? (random-uuid)))]
       [:div {:class-name (get-class-name (-> {"wc-input-wrapper" true}
                                              (assoc class-name (some? class-name))))}
        (when has-label?
-         [:label {:for id
+         [:label {:for        id
                   :class-name "wc-input-label"}
           label])
        [:input (cond-> {:class-name  (get-class-name {"wc-input"       true
@@ -88,6 +92,7 @@
                        (some? id) (assoc :id id)
                        (some? value) (assoc :value value)
                        (some? default-value) (assoc :default-value default-value)
+                       (some? ref-atom) (assoc :ref handle-ref-atom)
                        (fn? on-enter-press) (assoc :on-key-press handle-key-press)
                        (fn? on-key-down) (assoc :on-key-down handle-key-down)
                        (fn? on-blur) (assoc :on-blur handle-blur)
