@@ -2,6 +2,11 @@
   (:require
     [clojure.string :refer [join]]))
 
+(defn focus
+  [el]
+  (when (fn? (.-focus el))
+    (.focus el)))
+
 (defn get-class-name
   [class-names]
   (->> class-names
