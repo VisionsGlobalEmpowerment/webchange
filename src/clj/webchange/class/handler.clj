@@ -8,7 +8,8 @@
             [webchange.auth.core :as auth]
             [webchange.validation.specs.student :as student-specs]
             [webchange.validation.specs.class-spec :as class-spec]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [webchange.class.statistics]))
 
 (defn handle-list-classes [request]
   (let [school-id (current-school request)]
@@ -87,6 +88,11 @@
          (not-found "not found")))
   (POST "/api/classes" request
         (handle-create-class (:body request) request))
+  (GET "/api/schools/:school-id/classes" request
+       :coercion :spec
+       :path-params [school-id :- ::class-spec/id]
+       (-> (core/get-classes school-id)
+           response))
   (POST "/api/schools/:school-id/classes" request
         :coercion :spec
         :path-params [school-id :- ::class-spec/id]

@@ -62,10 +62,10 @@
   ::classes-list-data
   :<- [::classes]
   (fn [classes]
-    (map (fn [{:keys [created] :as class-data}]
+    (map (fn [{:keys [created-at] :as class-data}]
            (-> class-data
-               (select-keys [:id :name :img :stats])
-               (merge {:description [["Created" created]]})))
+               (select-keys [:id :name :stats])
+               (merge {:description [["Created" created-at]]})))
          classes)))
 
 (re-frame/reg-event-fx

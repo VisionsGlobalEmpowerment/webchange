@@ -156,7 +156,7 @@ SET stats = :stats
 WHERE id = :id
 
 -- :name calculate-school-stats :? :1
--- :doc retrieve school record
+-- :doc retrieve school statistics
 SELECT
 (SELECT count(*) FROM teachers WHERE school_id = :id) as teachers,
 (SELECT count(*) FROM students WHERE school_id = :id) as students,
@@ -181,3 +181,15 @@ SELECT c.*
 FROM courses c
 INNER JOIN school_courses sc ON sc.course_id = c.id
 WHERE sc.school_id = :school_id
+
+-- :name calculate-class-stats :? :1
+-- :doc retrieve class statistics
+SELECT
+0 as teachers,
+(SELECT count(*) FROM students WHERE class_id = :id) as students
+
+-- :name update-class-stats! :! :n
+-- :doc updates an existing class stats
+UPDATE classes
+SET stats = :stats
+WHERE id = :id

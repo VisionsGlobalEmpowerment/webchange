@@ -61,7 +61,7 @@
   [data]
   (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         [{id :id}] (db/create-class! prepared-data)]
-    (e/dispatch {:type :classes/created :school-id (:school-id data)})
+    (e/dispatch {:type :classes/created :school-id (:school-id data) :class-id id})
     [true {:id id}]))
 
 (defn update-class!
@@ -94,7 +94,7 @@
   [data]
   (let [prepared-data (prepare-student-data data)
         [{id :id}] (db/create-student! prepared-data)]
-    (e/dispatch {:type :students/created :school-id (:school-id data)})
+    (e/dispatch {:type :students/created :school-id (:school-id data) :class-id (:class-id data)})
     [true {:id id}]))
 
 (defn update-student!
