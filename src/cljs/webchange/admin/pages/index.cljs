@@ -7,6 +7,7 @@
     [webchange.admin.pages.login.views :as login]
     [webchange.admin.pages.not-found.views :as not-found]
     [webchange.admin.pages.school-profile.views :as school-profile]
+    [webchange.admin.pages.school-courses.views :as school-courses]
     [webchange.admin.pages.schools.views :as schools]
     [webchange.admin.pages.students.views :as students]
     [webchange.admin.pages.add-school.views :as add-school]))
@@ -20,4 +21,5 @@
             :schools        schools/page
             :students       students/page
             :add-school     add-school/page
+            :school-courses school-courses/page
             :404            not-found/page})

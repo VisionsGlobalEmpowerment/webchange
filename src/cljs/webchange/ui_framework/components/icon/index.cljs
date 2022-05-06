@@ -27,7 +27,7 @@
     [webchange.ui-framework.components.icon.icon-chevron-up :as chevron-up]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
-    [webchange.ui-framework.components.icon.icon-presentation :as presentation]
+    [webchange.ui-framework.components.icon.icon-copy :as copy]
     [webchange.ui-framework.components.icon.icon-create-book :as create-book]
     [webchange.ui-framework.components.icon.icon-create-game :as create-game]
     [webchange.ui-framework.components.icon.icon-dashboard :as dashboard]
@@ -63,6 +63,7 @@
     [webchange.ui-framework.components.icon.icon-music :as music]
     [webchange.ui-framework.components.icon.icon-music-off :as music-off]
     [webchange.ui-framework.components.icon.icon-play :as play]
+    [webchange.ui-framework.components.icon.icon-presentation :as presentation]
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
@@ -113,7 +114,7 @@
    "chevron-up"         chevron-up/data
    "clear"              clear/data
    "close"              close/data
-   "presentation"       presentation/data
+   "copy"               copy/data
    "create-book"        create-book/data
    "create-game"        create-game/data
    "dashboard"          dashboard/data
@@ -149,6 +150,7 @@
    "music"              music/data
    "music-off"          music-off/data
    "play"               play/data
+   "presentation"       presentation/data
    "preview"            preview/data
    "remove"             remove/data
    "restart"            restart/data

@@ -302,7 +302,7 @@
   (fn [{:keys [_]} [_ handlers]]
     (create-request {:key    :load-available-courses
                      :method :get
-                     :uri    (str "/api/courses/available")}
+                     :uri    (str "/api/available-courses")}
                     handlers)))
 
 (re-frame/reg-event-fx
@@ -362,6 +362,14 @@
                      :uri    (str "/api/book-library/tags")}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::assign-school-course
+  (fn [{:keys [_]} [_ {:keys [school-id data]} handlers]]
+    (create-request {:key    :assign-school-course
+                     :method :put
+                     :uri    (str "/api/schools/" school-id "/assign-course")
+                     :params data}
+                    handlers)))
 ;;
 
 (re-frame/reg-event-fx
@@ -683,6 +691,14 @@
                          {:result      :success
                           :result-data {:classes school-classes}
                           :delay       1000})))
+
+(re-frame/reg-event-fx
+  ::load-school-courses
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :load-school-courses
+                     :method :get
+                     :uri    (str "/api/schools/" school-id "/courses")}
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::load-schools
