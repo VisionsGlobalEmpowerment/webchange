@@ -14,7 +14,8 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]
             [webchange.course.skills :refer [skills]]
             [ring.util.codec :as codec]
-            [webchange.utils.preserve-objects :refer [update-preserved-objects]]))
+            [webchange.utils.preserve-objects :refer [update-preserved-objects]]
+            [webchange.events :as e]))
 
 (def editor_asset_type_single-background "single-background")
 (def editor_asset_type_background "background")
@@ -812,4 +813,5 @@
 (defn assign-school-course
   [school-id {:keys [course-id]}]
   (db/assign-school-course! {:school_id school-id :course_id course-id})
+  (e/dispatch {:type :courses/assigned-to-school :school-id school-id :course-id course-id})
   {:school-id school-id :course-id course-id})

@@ -27,3 +27,8 @@
  ::recalculate-on-create-class :classes/created
  (fn [{school-id :school-id}]
    (calculate-school-stats school-id)))
+
+(e/reg
+ ::recalculate-on-assign-course :courses/assigned-to-school
+ (fn [{school-id :school-id}]
+   (calculate-school-stats school-id)))

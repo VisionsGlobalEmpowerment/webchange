@@ -7,8 +7,8 @@
             :icon  "add"}}
 
 (defn- counter-item
-  [{:keys [title value]}]
-  [:div.counter-item
+  [{:keys [title value on-click]}]
+  [:div.counter-item {:on-click (when on-click on-click)}
    [:div.display
     [:div.value value]
     [:div.title title]]])

@@ -29,7 +29,8 @@
                                                      :class-profile true}
                                           :students {:add-student true}
                                           :teachers {:add-teacher     true
-                                                     :teacher-profile true}}}
+                                                     :teacher-profile true}
+                                          :school-courses true}}
                :courses {:add-course     true
                          :course-profile true}}})
 
@@ -45,6 +46,7 @@
        :schools (s ["Schools"])
        :school-profile (s [(str "School " (:school-id props))])
        :class-profile (s [(str "Class " (:class-id props))])
+       :school-courses (s ["Courses"])
        (s [(-> (or handler :unknown) (clojure.core/name) (str/capitalize))])))))
 
 (defonce router (atom nil))

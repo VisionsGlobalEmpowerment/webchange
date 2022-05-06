@@ -14,21 +14,25 @@
     [counter {:items [{:id     :teachers
                        :value  (:teachers stats)
                        :title  "Teachers"
+                       :on-click #(re-frame/dispatch [::state/open-teachers])
                        :action {:title "Teachers"
                                 :icon  "add"}}
                       {:id     :students
                        :value  (:students stats)
                        :title  "Students"
+                       :on-click #(re-frame/dispatch [::state/open-students])
                        :action {:title "Students"
                                 :icon  "add"}}
                       {:id     :courses
                        :value  (:courses stats)
                        :title  "Courses"
+                       :on-click #(re-frame/dispatch [::state/open-courses])
                        :action {:title "Courses"
                                 :icon  "add"}}
                       {:id     :classes
                        :value  (:classes stats)
                        :title  "Classes"
+                       :on-click #(re-frame/dispatch [::state/open-classes])
                        :action {:title "Classes"
                                 :icon  "add"}}]}]))
 

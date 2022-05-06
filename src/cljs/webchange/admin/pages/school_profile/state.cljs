@@ -46,7 +46,6 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ school-data]]
     (let [school-id (:school-id db)
-          _ (js/console.log "edit" school-data)
           validation-errors (validate ::school-spec/edit-school school-data)]
       (if (nil? validation-errors)
         {:db (assoc db :errors nil)
@@ -58,3 +57,31 @@
   ::edit-school-success
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :schools]}))
+
+(re-frame/reg-event-fx
+  ::open-teachers
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :teachers :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::open-students
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :students :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::open-classes
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :classes :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::open-courses
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :school-courses :school-id school-id]})))

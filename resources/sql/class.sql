@@ -160,7 +160,7 @@ WHERE id = :id
 SELECT
 (SELECT count(*) FROM teachers WHERE school_id = :id) as teachers,
 (SELECT count(*) FROM students WHERE school_id = :id) as students,
-0 as courses,
+(SELECT count(*) FROM school_courses WHERE school_id = :id) as courses,
 (SELECT count(*) FROM classes WHERE school_id = :id) as classes
 
 -- :name is-school-teacher? :? :1
