@@ -1,9 +1,8 @@
 (ns webchange.admin.pages.school-profile.views
   (:require
-    [reagent.core :as r]
     [re-frame.core :as re-frame]
+    [webchange.admin.components.counter.views :refer [counter]]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.admin.widgets.counter.views :refer [counter]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.school-form.views :refer [school-form]]
     [webchange.admin.pages.school-profile.state :as state]
@@ -16,26 +15,30 @@
                        :value    (:teachers stats)
                        :title    "Teachers"
                        :on-click #(re-frame/dispatch [::state/open-teachers])
-                       :action   {:title "Teachers"
-                                  :icon  "add"}}
+                       :actions  [{:title    "Teachers"
+                                   :icon     "add"
+                                   :on-click #(re-frame/dispatch [::state/open-add-teacher])}]}
                       {:id       :students
                        :value    (:students stats)
                        :title    "Students"
                        :on-click #(re-frame/dispatch [::state/open-students])
-                       :action   {:title "Students"
-                                  :icon  "add"}}
+                       :actions  [{:title    "Students"
+                                   :icon     "add"
+                                   :on-click #(re-frame/dispatch [::state/open-add-student])}]}
                       {:id       :courses
                        :value    (:courses stats)
                        :title    "Courses"
                        :on-click #(re-frame/dispatch [::state/open-courses])
-                       :action   {:title "Courses"
-                                  :icon  "add"}}
+                       :actions  [{:title    "Courses"
+                                   :icon     "add"
+                                   :on-click #(re-frame/dispatch [::state/open-add-course])}]}
                       {:id       :classes
                        :value    (:classes stats)
                        :title    "Classes"
                        :on-click #(re-frame/dispatch [::state/open-classes])
-                       :action   {:title "Classes"
-                                  :icon  "add"}}]}]))
+                       :actions  [{:title    "Classes"
+                                   :icon     "add"
+                                   :on-click #(re-frame/dispatch [::state/open-add-class])}]}]}]))
 
 (defn- statistics
   []

@@ -1,9 +1,9 @@
 (ns webchange.admin.pages.class-profile.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.admin.components.counter.views :refer [counter]]
     [webchange.admin.pages.class-profile.state :as state]
     [webchange.admin.widgets.class-form.views :refer [class-form]]
-    [webchange.admin.widgets.counter.views :refer [counter]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :refer [button input]]))

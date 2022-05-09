@@ -1,12 +1,4 @@
 .layout {
-    @mixin icon-color($color) {
-        & > .icon {
-            svg {
-                fill: $color;
-            }
-        }
-    }
-
     @mixin active-item {
         & > .text {
             color: $color-secondary;
