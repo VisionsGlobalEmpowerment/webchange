@@ -1,25 +1,50 @@
 (ns webchange.admin.widgets.class-form.views
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.admin.widgets.class-form.state :as state]
     [webchange.admin.widgets.utils :refer [get-uid]]
-    [webchange.ui-framework.components.index :refer [button input]]))
+    [webchange.ui-framework.components.index :as c]))
 
-(defn- class-name
-  [{:keys [id]}]
-  (let [name @(re-frame/subscribe [::state/class-name id])
-        validation-error @(re-frame/subscribe [::state/class-name-validation-error id])
-        handle-change #(re-frame/dispatch [::state/set-class-name id %])]
-    [input {:label      "Class Name"
-            :class-name "class-name"
-            :value      name
-            :error      validation-error
-            :on-change  handle-change}]))
+(defn- name-control
+  [{:keys [disabled?]}]
+  (let [id "name"
+        value @(re-frame/subscribe [::state/class-name])
+        error @(re-frame/subscribe [::state/class-name-error])
+        handle-change #(re-frame/dispatch [::state/set-class-name %])]
+    [:<>
+     [c/label {:for id} "Class Name"]
+     [c/input {:id        id
+               :value     value
+               :error     error
+               :disabled? disabled?
+               :on-change handle-change}]]))
+
+(defn- submit
+  [{:keys [disabled?]}]
+  (let [loading? @(re-frame/subscribe [::state/data-saving?])
+        handle-click #(re-frame/dispatch [::state/save])]
+    [c/button {:on-click   handle-click
+               :disabled?  (or disabled? loading?)
+               :class-name "submit"}
+     (if-not loading?
+       "Save"
+       [c/circular-progress])]))
+
+(defn- data-loading-indicator
+  []
+  [:div.data-loading-indicator
+   [c/circular-progress]])
 
 (defn class-form
   [props]
-  (r/with-let [id (get-uid)]
-    (re-frame/dispatch [::state/init id props])
-    [:div.widget--class-form
-     [class-name {:id id}]]))
+  (re-frame/dispatch [::state/init props])
+  (fn [{:keys [editable?]
+        :or   {editable? true}}]
+    (let [loading? @(re-frame/subscribe [::state/data-loading?])]
+      [:div.widget--class-form
+       (if-not loading?
+         [:div.controls
+          [name-control {:disabled? (not editable?)}]]
+         [data-loading-indicator])
+       (when editable?
+         [submit {:disabled? loading?}])])))

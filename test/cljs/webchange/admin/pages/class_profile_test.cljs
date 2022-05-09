@@ -5,6 +5,8 @@
             [webchange.admin.pages.class-profile.state :as state]
             [webchange.common.warehouse :refer [mock-warehouse]]))
 
+;; ToDo: fix test
+
 (deftest class-profile-init
   (rf-test/run-test-async
    (testing "loading class"
