@@ -97,7 +97,7 @@
     (is (= 16 (count chunks)))))
 
 
-(deftest test-get-action-audio-data-region
+(deftest test-get-action-audio-data-region-chunks
   (let [text "This branch looks lovely! It seems perfect for me. What do you think? Do you agree?"
         region (get-start-end-for-text text script-data)
         chunks (get-chunks-for-text text script-data region)]

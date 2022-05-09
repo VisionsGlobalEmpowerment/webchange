@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :school-profile)

@@ -104,31 +104,6 @@
         previous-node :d
         sequence-path [:a :b]]
     (let [actual-result (get-children node-name node-data previous-node sequence-path)
-          expected-result [{:previous :d
-                            :name     "next"
-                            :handler  :g
-                            :sequence :b}]]
-      (when-not (= actual-result expected-result)
-        (print-maps-comparison actual-result expected-result))
-      (is (= actual-result expected-result)))))
-
-(deftest test-get-children--get-handlers-of-last-seq
-  (let [node-name :e
-        node-data {:connections #{{:previous :f
-                                   :name     "next"
-                                   :handler  :d
-                                   :sequence :b}
-                                  {:previous :d
-                                   :name     "next"
-                                   :handler  :c
-                                   :sequence :a}
-                                  {:previous :d
-                                   :name     "next"
-                                   :handler  :g
-                                   :sequence :b}}}
-        previous-node :d
-        sequence-path [:a :b]]
-    (let [actual-result (get-children node-name node-data previous-node sequence-path)
           expected-result #{{:previous :d
                              :name     "next"
                              :handler  :g
