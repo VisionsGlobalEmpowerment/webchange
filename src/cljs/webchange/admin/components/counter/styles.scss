@@ -1,0 +1,63 @@
+.component--counter {
+    display: flex;
+    gap: $default-gap;
+
+    & > .counter-item {
+        & > .display {
+            $size: 200px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            width: $size;
+            height: $size;
+            background-color: $color-secondary;
+            border-radius: $panel-border-radius;
+
+            color: #fff;
+            font-weight: 700;
+            font-size: 30px;
+            line-height: 52px;
+
+            & > .value {
+                font-size: 46px;
+            }
+
+            &.clickable {
+                &:hover {
+                    cursor: pointer;
+                    background: #{$color-secondary + "E0"};
+                }
+            }
+        }
+
+        & > .actions {
+            & > .counter-action {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                border-radius: 6px;
+                margin-top: 8px;
+                padding: 8px 14px;
+
+                .action-name {
+                    font-weight: 500;
+                    font-size: 12px;
+                }
+
+                .action-icon {
+                    padding: 0;
+                    @include icon-color($color-secondary);
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    background: #{$color-secondary + "0F"};
+                }
+            }
+        }
+    }
+}

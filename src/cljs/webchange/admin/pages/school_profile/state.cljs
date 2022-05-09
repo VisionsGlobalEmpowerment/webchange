@@ -79,11 +79,25 @@
       {:dispatch [::routes/redirect :teachers :school-id school-id]})))
 
 (re-frame/reg-event-fx
+  ::open-add-teacher
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :add-teacher :school-id school-id]})))
+
+(re-frame/reg-event-fx
   ::open-students
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [school-id (:school-id db)]
       {:dispatch [::routes/redirect :students :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::open-add-student
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :add-student :school-id school-id]})))
 
 (re-frame/reg-event-fx
   ::open-classes
@@ -93,8 +107,22 @@
       {:dispatch [::routes/redirect :classes :school-id school-id]})))
 
 (re-frame/reg-event-fx
+  ::open-add-class
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :add-class :school-id school-id]})))
+
+(re-frame/reg-event-fx
   ::open-courses
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [school-id (:school-id db)]
       {:dispatch [::routes/redirect :school-courses :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::open-add-course
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :add-course :school-id school-id]})))
