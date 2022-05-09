@@ -1,5 +1,17 @@
 @import "../../styles/colors";
 
+@mixin icon-color($color) {
+    svg {
+        fill: $color;
+        stroke: none;
+
+        &.stroke-colored {
+            fill: none;
+            stroke: $color;
+        }
+    }
+}
+
 .wc-icon {
     display: flex;
     justify-content: center;

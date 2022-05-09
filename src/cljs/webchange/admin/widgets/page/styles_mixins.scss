@@ -3,27 +3,3 @@
     border-radius: $panel-border-radius;
     padding: $default-gap;
 }
-
-@mixin with-h1 {
-    & > h1 {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 0;
-        padding: 0 2px;
-
-        font-weight: 700;
-        font-size: 14px;
-
-        &:before {
-            $size: 12px;
-
-            content: "";
-            display: inline-block;
-            width: $size;
-            height: $size;
-            border: solid 2px $color-secondary;
-            border-radius: 50%;
-        }
-    }
-}

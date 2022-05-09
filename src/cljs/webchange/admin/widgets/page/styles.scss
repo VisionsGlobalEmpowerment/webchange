@@ -46,4 +46,53 @@
     @import "styles_header";
     @import "styles_main_content";
     @import "styles_side_bar";
+
+    .block-title {
+        $gap: 8px;
+        $button-size: 32px;
+
+        @mixin aligned {
+            display: flex;
+            align-items: center;
+            gap: $gap;
+        }
+
+        @include aligned;
+        justify-content: space-between;
+
+        margin: 0;
+        padding: 0 2px;
+
+        .title-text {
+            font-weight: 700;
+            font-size: 14px;
+
+            @include aligned;
+
+            &:before {
+                $size: 12px;
+
+                content: "";
+                display: inline-block;
+                width: $size;
+                height: $size;
+                border: solid 2px $color-secondary;
+                border-radius: 50%;
+            }
+        }
+
+        .title-actions {
+            flex: 1 1;
+            @include aligned;
+            justify-content: flex-end;
+
+            .wc-icon-button {
+                height: $button-size;
+                min-width: $button-size;
+
+                @include icon-color($color-secondary);
+                @include icon-color($color-secondary);
+            }
+        }
+    }
 }

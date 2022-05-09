@@ -16,9 +16,9 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db (-> db
-             (assoc :school-id school-id)
-             (dissoc :school-data))
+    {:db       (-> db
+                   (assoc :school-id school-id)
+                   (dissoc :school-data))
      :dispatch [::warehouse/load-school {:school-id school-id}
                 {:on-success [::load-school-success]}]}))
 
@@ -27,6 +27,28 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school]}]]
     {:db (assoc db :school-data school)}))
+
+
+;; School Form
+
+(def school-form-editable-key :school-form-editable?)
+
+(re-frame/reg-sub
+  ::school-form-editable?
+  :<- [path-to-db]
+  #(get % school-form-editable-key false))
+
+(defn- set-school-form-editable
+  [db value]
+  (assoc db school-form-editable-key value))
+
+(re-frame/reg-event-fx
+  ::set-school-form-editable
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (set-school-form-editable db value)}))
+
+;; School Data
 
 (re-frame/reg-sub
   ::school-data
@@ -37,13 +59,17 @@
   ::set-school-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :school-data data)}))
+    {:db (-> db
+             (assoc :school-data data)
+             (set-school-form-editable false))}))
 
 (re-frame/reg-sub
   ::school-name
   :<- [::school-data]
   #(-> (get % :name "")
        (clojure.string/capitalize)))
+
+;; Redirects
 
 (re-frame/reg-event-fx
   ::open-teachers

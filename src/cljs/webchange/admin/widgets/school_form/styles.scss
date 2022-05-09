@@ -1,7 +1,16 @@
 .widget--school-form {
+    $gap: 8px;
+
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    justify-content: space-between;
+    gap: $gap;
+
+    .controls {
+        display: flex;
+        flex-direction: column;
+        gap: $gap;
+    }
 
     label {
         color: $color-secondary;

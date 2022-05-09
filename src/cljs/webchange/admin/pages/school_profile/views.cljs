@@ -7,35 +7,35 @@
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.school-form.views :refer [school-form]]
     [webchange.admin.pages.school-profile.state :as state]
-    [webchange.ui-framework.components.index :refer [button input circular-progress]]))
+    [webchange.ui-framework.components.index :as c]))
 
 (defn- school-counter
   []
   (let [{:keys [stats]} @(re-frame/subscribe [::state/school-data])]
-    [counter {:items [{:id     :teachers
-                       :value  (:teachers stats)
-                       :title  "Teachers"
+    [counter {:items [{:id       :teachers
+                       :value    (:teachers stats)
+                       :title    "Teachers"
                        :on-click #(re-frame/dispatch [::state/open-teachers])
-                       :action {:title "Teachers"
-                                :icon  "add"}}
-                      {:id     :students
-                       :value  (:students stats)
-                       :title  "Students"
+                       :action   {:title "Teachers"
+                                  :icon  "add"}}
+                      {:id       :students
+                       :value    (:students stats)
+                       :title    "Students"
                        :on-click #(re-frame/dispatch [::state/open-students])
-                       :action {:title "Students"
-                                :icon  "add"}}
-                      {:id     :courses
-                       :value  (:courses stats)
-                       :title  "Courses"
+                       :action   {:title "Students"
+                                  :icon  "add"}}
+                      {:id       :courses
+                       :value    (:courses stats)
+                       :title    "Courses"
                        :on-click #(re-frame/dispatch [::state/open-courses])
-                       :action {:title "Courses"
-                                :icon  "add"}}
-                      {:id     :classes
-                       :value  (:classes stats)
-                       :title  "Classes"
+                       :action   {:title "Courses"
+                                  :icon  "add"}}
+                      {:id       :classes
+                       :value    (:classes stats)
+                       :title    "Classes"
                        :on-click #(re-frame/dispatch [::state/open-classes])
-                       :action {:title "Classes"
-                                :icon  "add"}}]}]))
+                       :action   {:title "Classes"
+                                  :icon  "add"}}]}]))
 
 (defn- statistics
   []
@@ -44,10 +44,17 @@
 
 (defn- side-bar
   [{:keys [school-id]}]
-  (let [handle-data-save #(re-frame/dispatch [::state/set-school-data %])]
-    [page/side-bar {:title "School Info"}
-     [school-form {:id      school-id
-                   :on-save handle-data-save}]]))
+  (let [school-form-editable? @(re-frame/subscribe [::state/school-form-editable?])
+        handle-edit-click #(re-frame/dispatch [::state/set-school-form-editable (not school-form-editable?)])
+        handle-data-save #(re-frame/dispatch [::state/set-school-data %])]
+    [page/side-bar {:title   "School Info"
+                    :actions [:<>
+                              [c/icon-button {:icon     "edit"
+                                              :variant  "light"
+                                              :on-click handle-edit-click}]]}
+     [school-form {:id        school-id
+                   :editable? school-form-editable?
+                   :on-save   handle-data-save}]]))
 
 (defn page
   [props]

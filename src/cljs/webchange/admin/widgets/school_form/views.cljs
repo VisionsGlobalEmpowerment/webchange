@@ -5,7 +5,7 @@
     [webchange.ui-framework.components.index :as c]))
 
 (defn- about-control
-  []
+  [{:keys [disabled?]}]
   (let [id "about"
         value @(re-frame/subscribe [::state/about])
         error @(re-frame/subscribe [::state/about-error])
@@ -15,10 +15,11 @@
      [c/text-area {:id        id
                    :value     value
                    :error     error
+                   :disabled? disabled?
                    :on-change handle-change}]]))
 
 (defn- location-control
-  []
+  [{:keys [disabled?]}]
   (let [id "location"
         value @(re-frame/subscribe [::state/location])
         error @(re-frame/subscribe [::state/location-error])
@@ -28,10 +29,11 @@
      [c/input {:id        id
                :value     value
                :error     error
+               :disabled? disabled?
                :on-change handle-change}]]))
 
 (defn- name-control
-  []
+  [{:keys [disabled?]}]
   (let [id "name"
         value @(re-frame/subscribe [::state/school-name])
         error @(re-frame/subscribe [::state/school-name-error])
@@ -41,6 +43,7 @@
      [c/input {:id        id
                :value     value
                :error     error
+               :disabled? disabled?
                :on-change handle-change}]]))
 
 (defn- submit
@@ -54,9 +57,12 @@
   [{:keys [id on-save]}]
   (re-frame/dispatch [::state/init {:id      id
                                     :on-save on-save}])
-  (fn []
+  (fn [{:keys [editable?]
+        :or   {editable? true}}]
     [:div.widget--school-form
-     [name-control]
-     [location-control]
-     [about-control]
-     [submit]]))
+     [:div.controls
+      [name-control {:disabled? (not editable?)}]
+      [location-control {:disabled? (not editable?)}]
+      [about-control {:disabled? (not editable?)}]]
+     (when editable?
+       [submit])]))

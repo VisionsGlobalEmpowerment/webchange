@@ -4,6 +4,7 @@
 
 (defn component
   [{:keys [class-name
+           disabled?
            error
            id
            label
@@ -12,7 +13,8 @@
            rows
            value
            variant]
-    :or   {placeholder ""
+    :or   {disabled?   false
+           placeholder ""
            on-change   #()
            rows        3}}]
   (let [handle-change #(-> % (.. -target -value) (on-change))
@@ -28,6 +30,7 @@
      [:textarea (cond-> {:value       value
                          :on-change   handle-change
                          :placeholder placeholder
+                         :disabled    disabled?
                          :rows        rows}
                         (some? id) (assoc :id id))]
      (when (some? error)

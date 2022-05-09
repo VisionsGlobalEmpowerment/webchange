@@ -8,8 +8,6 @@
     justify-content: space-between;
     gap: $default-gap;
 
-    @include with-h1;
-
     & > * {
         &:last-child {
             flex: 1 1;

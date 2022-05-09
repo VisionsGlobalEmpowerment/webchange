@@ -76,11 +76,18 @@
               (r/children)))
    [header-actions props]])
 
+(defn- block-title
+  [{:keys [actions title]}]
+  [:h1.block-title
+   (when (some? title)
+     [:div.title-text title])
+   (when (some? actions)
+     [:div.title-actions actions])])
+
 (defn main-content
   [{:keys [footer title]}]
   [:div {:class-name (:main class-names)}
-   (when (some? title)
-     [:h1 title])
+   [block-title {:title title}]
    (->> (r/current-component)
         (r/children)
         (into [:div.widget-profile--main-content--content]))
@@ -88,12 +95,12 @@
     footer]])
 
 (defn side-bar
-  [{:keys [title]}]
+  [{:keys [actions title]}]
   (->> (r/current-component)
        (r/children)
        (into [:div {:class-name (:side-bar class-names)}
-              (when (some? title)
-                [:h1 title])])))
+              [block-title {:title   title
+                            :actions actions}]])))
 
 (defn block
   [{:keys [title]}]
