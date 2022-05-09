@@ -2,6 +2,18 @@
 
 $size: 26px;
 
+@mixin progress-size($size, $thickness: 0.25em) {
+    margin: 0;
+    padding: 0;
+    width: $size;
+    height: $size;
+
+    &.wc-circular-progress:indeterminate::before,
+     .wc-circular-progress:indeterminate::-webkit-progress-value {
+        border-width: $thickness;
+     }
+}
+
 .wc-circular-progress {
     -webkit-appearance: none;
     -moz-appearance: none;

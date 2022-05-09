@@ -150,6 +150,30 @@
     (when (fn? callback)
       (apply callback params))))
 
+;; Indicators
+
+(def data-loading-key :data-loading?)
+
+(defn- set-data-loading
+  [db value]
+  (assoc db data-loading-key value))
+
+(re-frame/reg-sub
+  ::data-loading?
+  :<- [path-to-db]
+  #(get % data-loading-key true))
+
+(def data-saving-key :data-saving?)
+
+(defn- set-data-saving
+  [db value]
+  (assoc db data-saving-key value))
+
+(re-frame/reg-sub
+  ::data-saving?
+  :<- [path-to-db]
+  #(get % data-saving-key false))
+
 ;; Init
 
 (re-frame/reg-event-fx
@@ -160,7 +184,8 @@
                    (set-school-id id)
                    (reset-form-data)
                    (reset-errors)
-                   (set-callbacks {:on-save on-save}))
+                   (set-callbacks {:on-save on-save})
+                   (set-data-loading true))
      :dispatch [::warehouse/load-school {:school-id id}
                 {:on-success [::load-school-success]}]}))
 
@@ -169,7 +194,9 @@
   ::load-school-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school]}]]
-    {:db (set-form-data db school)}))
+    {:db (-> db
+             (set-form-data school)
+             (set-data-loading false))}))
 
 
 (re-frame/reg-event-fx
@@ -181,10 +208,12 @@
           validation-errors (validate ::school-spec/edit-school school-data)]
       (if (nil? validation-errors)
         {:db       (-> db
-                       (reset-errors))
+                       (reset-errors)
+                       (set-data-saving true))
          :dispatch [::warehouse/edit-school
                     {:school-id school-id :data school-data}
-                    {:on-success [::save-success]}]}
+                    {:on-success [::save-success]
+                     :on-failure [::save-failure]}]}
         {:db (set-errors db validation-errors)}))))
 
 (re-frame/reg-event-fx
@@ -192,4 +221,11 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ school-data]]
     (let [callback (get-callback db :on-save)]
-      {::callback [callback school-data]})))
+      {:db        (set-data-saving db false)
+       ::callback [callback school-data]})))
+
+(re-frame/reg-event-fx
+  ::save-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-data-saving db false)}))

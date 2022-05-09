@@ -47,11 +47,20 @@
                :on-change handle-change}]]))
 
 (defn- submit
-  []
-  (let [handle-click #(re-frame/dispatch [::state/save])]
+  [{:keys [disabled?]}]
+  (let [loading? @(re-frame/subscribe [::state/data-saving?])
+        handle-click #(re-frame/dispatch [::state/save])]
     [c/button {:on-click   handle-click
+               :disabled?  (or disabled? loading?)
                :class-name "submit"}
-     "Save"]))
+     (if-not loading?
+       "Save"
+       [c/circular-progress])]))
+
+(defn- data-loading-indicator
+  []
+  [:div.data-loading-indicator
+   [c/circular-progress]])
 
 (defn school-form
   [{:keys [id on-save]}]
@@ -59,10 +68,13 @@
                                     :on-save on-save}])
   (fn [{:keys [editable?]
         :or   {editable? true}}]
-    [:div.widget--school-form
-     [:div.controls
-      [name-control {:disabled? (not editable?)}]
-      [location-control {:disabled? (not editable?)}]
-      [about-control {:disabled? (not editable?)}]]
-     (when editable?
-       [submit])]))
+    (let [loading? @(re-frame/subscribe [::state/data-loading?])]
+      [:div.widget--school-form
+       (if-not loading?
+         [:div.controls
+          [name-control {:disabled? (not editable?)}]
+          [location-control {:disabled? (not editable?)}]
+          [about-control {:disabled? (not editable?)}]]
+         [data-loading-indicator])
+       (when editable?
+         [submit {:disabled? loading?}])])))

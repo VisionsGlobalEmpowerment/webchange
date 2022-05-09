@@ -12,6 +12,13 @@
         gap: $gap;
     }
 
+    .data-loading-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+    }
+
     label {
         color: $color-secondary;
         font-weight: 400;
@@ -20,5 +27,9 @@
 
     .submit {
         margin-top: 16px;
+
+        progress {
+            @include progress-size(12px, 2px);
+        }
     }
 }
