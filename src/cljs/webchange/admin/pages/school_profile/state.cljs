@@ -3,9 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
-    [webchange.state.warehouse :as warehouse]
-    [webchange.validation.specs.school-spec :as school-spec]
-    [webchange.validation.validate :refer [validate]]))
+    [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :school-profile)
 
@@ -14,19 +12,13 @@
   (fn [db]
     (get db path-to-db)))
 
-(re-frame/reg-sub
-  ::errors
-  :<- [path-to-db]
-  (fn [data]
-    (get data :errors)))
-
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db (-> db
-             (assoc :school-id school-id)
-             (dissoc :school-data))
+    {:db       (-> db
+                   (assoc :school-id school-id)
+                   (dissoc :school-data))
      :dispatch [::warehouse/load-school {:school-id school-id}
                 {:on-success [::load-school-success]}]}))
 
@@ -36,27 +28,48 @@
   (fn [{:keys [db]} [_ {:keys [school]}]]
     {:db (assoc db :school-data school)}))
 
+
+;; School Form
+
+(def school-form-editable-key :school-form-editable?)
+
+(re-frame/reg-sub
+  ::school-form-editable?
+  :<- [path-to-db]
+  #(get % school-form-editable-key false))
+
+(defn- set-school-form-editable
+  [db value]
+  (assoc db school-form-editable-key value))
+
+(re-frame/reg-event-fx
+  ::set-school-form-editable
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (set-school-form-editable db value)}))
+
+;; School Data
+
 (re-frame/reg-sub
   ::school-data
   :<- [path-to-db]
   #(get % :school-data))
 
 (re-frame/reg-event-fx
-  ::edit-school
+  ::set-school-data
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ school-data]]
-    (let [school-id (:school-id db)
-          validation-errors (validate ::school-spec/edit-school school-data)]
-      (if (nil? validation-errors)
-        {:db (assoc db :errors nil)
-         :dispatch [::warehouse/edit-school {:school-id school-id :data school-data}
-                    {:on-success [::edit-school-success]}]}
-        {:db (assoc db :errors validation-errors)}))))
+  (fn [{:keys [db]} [_ data]]
+    {:db (-> db
+             (assoc :school-data data)
+             (set-school-form-editable false))}))
 
-(re-frame/reg-event-fx
-  ::edit-school-success
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::routes/redirect :schools]}))
+(re-frame/reg-sub
+  ::school-name
+  :<- [::school-data]
+  #(-> (get % :name "")
+       (clojure.string/capitalize)))
+
+;; Redirects
 
 (re-frame/reg-event-fx
   ::open-teachers

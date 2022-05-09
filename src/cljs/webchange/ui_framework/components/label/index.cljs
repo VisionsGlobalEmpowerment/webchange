@@ -4,8 +4,9 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [class-name]}]
+  [{:keys [class-name for]}]
   (let [this (r/current-component)]
-    (into [:span {:class-name (get-class-name (-> {"wc-label" true}
-                                                  (assoc class-name (some? class-name))))}]
+    (into [:label (cond-> {:class-name (get-class-name {"wc-label" true
+                                                        class-name (some? class-name)})}
+                          (some? for) (assoc :for for))]
           (r/children this))))
