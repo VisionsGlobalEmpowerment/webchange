@@ -23,6 +23,12 @@ UPDATE users
 SET active = true
 WHERE id = :id
 
+-- :name edit-user! :! :n
+-- :doc edit user
+UPDATE users
+SET first_name = :first_name, last_name = :last_name, password = :password
+WHERE id = :id
+
 -- :name get-user :? :1
 -- :doc retrieves a user record given the id
 SELECT * FROM users

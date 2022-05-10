@@ -23,8 +23,8 @@ active=:active, created_at=:created_at, last_login=:last_login WHERE users.guid=
 -- :name create-or-update-teacher! :! :n
 -- :doc creates a new teacher record
 INSERT INTO teachers
-(user_id, school_id)
-VALUES (:user_id, :school_id)
+(user_id, school_id, type, status)
+VALUES (:user_id, :school_id, :type, :status)
 ON CONFLICT ON CONSTRAINT teacher_unique
 DO NOTHING;
 

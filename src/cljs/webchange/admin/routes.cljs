@@ -18,7 +18,7 @@
                                                                      "/add" :add-student}
                                                         "/teachers" {""                           :teachers
                                                                      "/add"                       :add-teacher
-                                                                     ["/" [#"[\w-%]+" :class-id]] :teacher-profile}
+                                                                     ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
                                                         "/courses"  {""     :school-courses}}}
              "/courses" {""                              :courses
                          "/add"                          :add-course

@@ -14,10 +14,11 @@
   (let [
         [{school-id :id}] (db/create-school! {:id (Integer/parseInt school-id) :name "default"})
         [{user-id :id}] (auth-core/create-user-with-credentials! {:email email
-                                                         :password password})
+                                                                  :password password})
         [{teacher-id :id}] (db/create-teacher! {:user_id user-id
-                                              :school_id school-id
-                                              })]
+                                                :school_id school-id
+                                                :type "admin"
+                                                :status "active"})]
     (auth-core/activate-user! user-id)
     (println "School id:" school-id)
     (println "User id:" user-id)

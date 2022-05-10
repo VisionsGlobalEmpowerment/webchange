@@ -252,7 +252,7 @@
   (let [id (Integer/parseInt id)
         school (db/get-school {:id id})
         users (get-users-by-school id)
-        teachers (db/get-teacher-by-school {:school_id id})
+        teachers (db/teachers-by-school {:school_id id})
         students (get-students-by-school id)
         scene-skills (db/get-scene-skills)
         classes (get-classes id)
@@ -336,7 +336,7 @@
 (defn get-stat [id]
   (let [school (db/get-school {:id id})
         users (get-users-by-school id)
-        teachers (db/get-teacher-by-school {:school_id id})
+        teachers (db/teachers-by-school {:school_id id})
         students (get-students-by-school id)
         classes (get-classes id)
         course-stats (db/get-course-stats-by-school {:school_id id})
@@ -473,7 +473,7 @@
           data-processed (prepare-imported-data data-with-users :class-id remote-classes classes-identity)]
       (store-data-localy! data-processed)
       (let [users (db/get-users-by-school {:school_id id})
-            teachers (db/get-teacher-by-school {:school_id id})
+            teachers (db/teachers-by-school {:school_id id})
             students (db/get-students-by-school {:school_id id})
             course-stats (db/get-course-stats-by-school {:school_id id})
             course-progresses (db/get-course-progresses-by-school {:school_id id})

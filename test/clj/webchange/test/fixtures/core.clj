@@ -240,7 +240,9 @@
 (defn teacher-created [options]
   (if-let [teacher (db/get-teacher-by-user {:user_id (:user-id options)})]
     teacher
-    (let [defaults {:school-id default-school-id}
+    (let [defaults {:school-id default-school-id
+                    :type "admin"
+                    :status "active"}
           data (->> options
                     (merge defaults)
                     (db/transform-keys-one-level ->snake_case_keyword))

@@ -141,3 +141,31 @@
       (code-unique? school-id code) [true {:school-id school-id :access-code code}]
       (> i 100) [false {:errors {:form "Unable to create code"}}]
       :else (recur (inc i) (generate-code)))))
+
+(defn teachers-by-school
+  [school-id]
+  (let [teachers (db/teachers-by-school {:school_id school-id})]
+    (map with-user teachers)))
+
+(defn teachers-by-class
+  [class-id]
+  (let [teachers (db/teachers-by-class {:class_id class-id})]
+    (map with-user teachers)))
+
+(defn get-teacher
+  [teacher-id]
+  (-> (db/get-teacher {:id teacher-id})
+      (with-user)))
+
+(defn create-teacher!
+  [data]
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
+        [{id :id}] (db/create-teacher! prepared-data)]
+    (e/dispatch {:type :teachers/created :school-id (:school-id data) :teacher-id id})
+    {:id id}))
+
+(defn edit-teacher!
+  [teacher-id data]
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)]
+    (db/edit-teacher! (assoc prepared-data :id teacher-id))
+    {:id teacher-id}))
