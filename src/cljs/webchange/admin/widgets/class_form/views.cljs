@@ -4,72 +4,30 @@
     [webchange.admin.components.form.views :refer [form]]
     [webchange.admin.widgets.class-form.state :as state]
     [webchange.admin.widgets.utils :refer [get-uid]]
-    [webchange.ui-framework.components.index :as c]))
-
-(defn- name-control
-  [{:keys [disabled?]}]
-  (let [id "name"
-        value @(re-frame/subscribe [::state/class-name])
-        error @(re-frame/subscribe [::state/class-name-error])
-        handle-change #(re-frame/dispatch [::state/set-class-name %])]
-    [:<>
-     [c/label {:for id} "Class Name"]
-     [c/input {:id        id
-               :value     value
-               :error     error
-               :disabled? disabled?
-               :on-change handle-change}]]))
-
-(defn- course-control
-  [{:keys [disabled?]}]
-  (let [id "course"
-        value @(re-frame/subscribe [::state/course])
-        options @(re-frame/subscribe [::state/course-options])
-        error @(re-frame/subscribe [::state/course-error])
-        handle-change #(re-frame/dispatch [::state/set-course %])]
-    [:<>
-     [c/label {:for id} "Assign Course"]
-     [c/select {:id        id
-                :value     value
-                :options   options
-                :error     error
-                :disabled? disabled?
-                :on-change handle-change
-                :type      "int"}]]))
-
-(defn- submit
-  [{:keys [disabled?]}]
-  (let [loading? @(re-frame/subscribe [::state/data-saving?])
-        handle-click #(re-frame/dispatch [::state/save])]
-    [c/button {:on-click   handle-click
-               :disabled?  (or disabled? loading?)
-               :class-name "submit"}
-     (if-not loading?
-       "Save"
-       [c/circular-progress])]))
-
-(defn- data-loading-indicator
-  []
-  [:div.data-loading-indicator
-   [c/circular-progress]])
+    [webchange.validation.specs.class-spec :as class-spec]))
 
 (defn class-form
-  [props]
+  [{:keys [class-id school-id] :as props}]
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [editable?]
         :or   {editable? true}}]
-    (let [loading? @(re-frame/subscribe [::state/data-loading?])]
-      [:<>
-       [:div.widget--class-form
-        (if-not loading?
-          [:div.controls
-           [name-control {:disabled? (not editable?)}]
-           [course-control {:disabled? (not editable?)}]]
-          [data-loading-indicator])
-        (when editable?
-          [submit {:disabled? loading?}])]
-       "----"
-       (let [model {:class-name {:type  :text
-                                 :label "Class Name !"}}]
-         [form {:form-id :class-form
-                :model   model}])])))
+    (let [loading? @(re-frame/subscribe [::state/data-loading?])
+          saving? @(re-frame/subscribe [::state/data-saving?])
+          class-data @(re-frame/subscribe [::state/form-data])
+          course-options @(re-frame/subscribe [::state/course-options])
+          model {:name      {:label "Class Name"
+                             :type  :text}
+                 :course-id {:label        "Assign Course"
+                             :type         :select
+                             :options      course-options
+                             :options-type "int"}}
+          handle-save #(re-frame/dispatch [::state/save %])]
+      [form {:form-id   (-> (str "school-" school-id "-class-" class-id)
+                            (keyword))
+             :data      class-data
+             :model     model
+             :spec      ::class-spec/class
+             :on-save   handle-save
+             :disabled? (not editable?)
+             :loading?  loading?
+             :saving?   saving?}])))
