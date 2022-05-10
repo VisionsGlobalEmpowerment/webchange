@@ -1,6 +1,7 @@
 (ns webchange.admin.widgets.class-form.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.admin.components.form.views :refer [form]]
     [webchange.admin.widgets.class-form.state :as state]
     [webchange.admin.widgets.utils :refer [get-uid]]
     [webchange.ui-framework.components.index :as c]))
@@ -58,11 +59,17 @@
   (fn [{:keys [editable?]
         :or   {editable? true}}]
     (let [loading? @(re-frame/subscribe [::state/data-loading?])]
-      [:div.widget--class-form
-       (if-not loading?
-         [:div.controls
-          [name-control {:disabled? (not editable?)}]
-          [course-control {:disabled? (not editable?)}]]
-         [data-loading-indicator])
-       (when editable?
-         [submit {:disabled? loading?}])])))
+      [:<>
+       [:div.widget--class-form
+        (if-not loading?
+          [:div.controls
+           [name-control {:disabled? (not editable?)}]
+           [course-control {:disabled? (not editable?)}]]
+          [data-loading-indicator])
+        (when editable?
+          [submit {:disabled? loading?}])]
+       "----"
+       (let [model {:class-name {:type  :text
+                                 :label "Class Name !"}}]
+         [form {:form-id :class-form
+                :model   model}])])))
