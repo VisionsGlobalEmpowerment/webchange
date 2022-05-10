@@ -1,0 +1,17 @@
+.wc-select {
+    select {
+        @include input-border;
+        @include input-color;
+        @include input-font;
+
+        option {
+            @include input-color;
+        }
+
+        &:disabled {
+            background-image: none;
+            cursor: default;
+            opacity: 1;
+        }
+    }
+}

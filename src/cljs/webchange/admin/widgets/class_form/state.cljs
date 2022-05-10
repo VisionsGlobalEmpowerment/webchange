@@ -62,6 +62,23 @@
   :<- [path-to-db]
   get-form-data)
 
+;; Form Options
+
+(def from-options-key :form-options)
+
+(defn- get-form-options
+  [db]
+  (get db from-options-key {}))
+
+(defn- update-form-options
+  [db data-patch]
+  (update db from-options-key merge data-patch))
+
+(re-frame/reg-sub
+  ::form-options
+  :<- [path-to-db]
+  get-form-options)
+
 ;; -- name
 
 (def name-key :name)
@@ -81,6 +98,37 @@
   ::class-name-error
   :<- [::errors]
   #(get % name-key))
+
+;; -- course
+
+(def course-key :course-id)
+
+(re-frame/reg-sub
+  ::course
+  :<- [::form-data]
+  #(get % course-key ""))
+
+(re-frame/reg-event-fx
+  ::set-course
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (update-form-data db {course-key value})}))
+
+(re-frame/reg-sub
+  ::course-error
+  :<- [::errors]
+  #(get % course-key))
+
+(def course-options-key :course-options)
+
+(re-frame/reg-sub
+  ::course-options
+  :<- [::form-options]
+  #(get % course-options-key []))
+
+(defn- set-course-options
+  [db options]
+  (update-form-options db {course-options-key options}))
 
 ;; Errors
 
@@ -151,28 +199,36 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id school-id on-save] :as props}]]
-    (print "::init" props)
-    {:db       (-> db
-                   (set-class-id class-id)
-                   (set-school-id school-id)
-                   (reset-form-data)
-                   (reset-errors)
-                   (set-callbacks {:on-save on-save})
-                   (set-data-loading true))
-     :dispatch [::warehouse/load-class {:class-id class-id}
-                {:on-success [::load-class-success]}]}))
-
+  (fn [{:keys [db]} [_ {:keys [class-id school-id on-save]}]]
+    {:db         (-> db
+                     (set-class-id class-id)
+                     (set-school-id school-id)
+                     (reset-form-data)
+                     (reset-errors)
+                     (set-callbacks {:on-save on-save})
+                     (set-data-loading true))
+     :dispatch-n [[::warehouse/load-class {:class-id class-id}
+                   {:on-success [::load-class-success]}]
+                  [::warehouse/load-school-courses {:school-id school-id}
+                   {:on-success [::load-school-courses-success]}]]}))
 
 (re-frame/reg-event-fx
   ::load-class-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class]}]]
-    (print "::load-class-success" class)
     {:db (-> db
              (set-form-data class)
              (set-data-loading false))}))
 
+(re-frame/reg-event-fx
+  ::load-school-courses-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ response]]
+    {:db (->> response
+              (map (fn [{:keys [id name]}]
+                     {:text  name
+                      :value id}))
+              (set-course-options db))}))
 
 (re-frame/reg-event-fx
   ::save
@@ -181,6 +237,9 @@
     (let [class-id (get-class-id db)
           class-data (get-form-data db)
           validation-errors (validate ::class-spec/class class-data)]
+      (print "::save")
+      (print "class-data" class-data)
+      (print "validation-errors" validation-errors)
       (if (nil? validation-errors)
         {:db       (-> db
                        (reset-errors)

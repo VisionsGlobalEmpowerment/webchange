@@ -19,6 +19,23 @@
                :disabled? disabled?
                :on-change handle-change}]]))
 
+(defn- course-control
+  [{:keys [disabled?]}]
+  (let [id "course"
+        value @(re-frame/subscribe [::state/course])
+        options @(re-frame/subscribe [::state/course-options])
+        error @(re-frame/subscribe [::state/course-error])
+        handle-change #(re-frame/dispatch [::state/set-course %])]
+    [:<>
+     [c/label {:for id} "Assign Course"]
+     [c/select {:id        id
+                :value     value
+                :options   options
+                :error     error
+                :disabled? disabled?
+                :on-change handle-change
+                :type      "int"}]]))
+
 (defn- submit
   [{:keys [disabled?]}]
   (let [loading? @(re-frame/subscribe [::state/data-saving?])
@@ -44,7 +61,8 @@
       [:div.widget--class-form
        (if-not loading?
          [:div.controls
-          [name-control {:disabled? (not editable?)}]]
+          [name-control {:disabled? (not editable?)}]
+          [course-control {:disabled? (not editable?)}]]
          [data-loading-indicator])
        (when editable?
          [submit {:disabled? loading?}])])))

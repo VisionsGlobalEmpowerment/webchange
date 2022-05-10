@@ -20,6 +20,7 @@
 
 (defn component
   [{:keys [class-name
+           disabled?
            error
            max-values-number
            multiple?
@@ -35,7 +36,8 @@
            variant
            width
            with-arrow?]
-    :or   {multiple?           false
+    :or   {disabled?           false
+           multiple?           false
            options             []
            on-change           #()
            on-arrow-down-click #()
@@ -71,7 +73,8 @@
                                                (some? variant) (assoc (str "variant-" variant) true)))}
      [:select (cond-> {:value     (or value "")
                        :on-change handle-change}
-                      multiple? (assoc :multiple true))
+                      multiple? (assoc :multiple true)
+                      disabled? (assoc :disabled true))
       (for [{:keys [text value disabled? title]} options]
         ^{:key value}
         [:option (cond-> {:value    value
