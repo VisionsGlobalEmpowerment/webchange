@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.components.form.data :refer [init]]
     [webchange.state.warehouse :as warehouse]
     [webchange.validation.validate :refer [validate]]))
 
@@ -12,71 +13,31 @@
   (fn [db]
     (get db path-to-db)))
 
-;; School ID
-
-(def school-id-key :school-id)
-
-(defn- get-school-id
-  [db]
-  (get db school-id-key))
-
-(defn- set-school-id
-  [db school-id]
-  (assoc db school-id-key school-id))
-
-;; Class ID
-
-(def class-id-key :class-id)
-
-(defn- get-class-id
-  [db]
-  (get db class-id-key))
-
-(defn- set-class-id
-  [db class-id]
-  (assoc db class-id-key class-id))
-
 ;; Form Data
 
-(def from-data-key :form)
-
-(defn- get-form-data
-  [db]
-  (get db from-data-key {}))
-
-(defn- set-form-data
-  [db data]
-  (assoc db from-data-key data))
-
-(defn- reset-form-data
-  [db]
-  (set-form-data db {}))
-
-(defn- update-form-data
-  [db data-patch]
-  (update db from-data-key merge data-patch))
+(def form-data (init :form-data))
+(def get-form-data (:get-data form-data))
+(def set-form-data (:set-data form-data))
+(def reset-form-data (:reset-data form-data))
+(def update-form-data (:update-data form-data))
 
 (re-frame/reg-sub
   ::form-data
   :<- [path-to-db]
-  get-form-data)
+  #(get-form-data %))
 
 ;; Form Options
 
-(def from-options-key :form-options)
-
-(defn- get-form-options
-  [db]
-  (get db from-options-key {}))
-
-(defn- update-form-options
-  [db data-patch]
-  (update db from-options-key merge data-patch))
+(def form-options (init :form-options))
+(def get-form-options (:get-data form-options))
+(def set-form-options (:set-data form-options))
+(def reset-form-options (:reset-data form-options))
+(def update-form-options (:update-data form-options))
 
 (re-frame/reg-sub
   ::form-options
   :<- [path-to-db]
-  get-form-options)
+  #(get-form-options %))
 
 (def course-options-key :course-options)
 
@@ -89,47 +50,39 @@
   [db options]
   (update-form-options db {course-options-key options}))
 
-;; Callbacks
+;; Flags
 
-(def callbacks-key :callbacks)
+(def flags-data (init :flags))
+(def get-flags-data (:get-data flags-data))
+(def set-flags-data (:set-data flags-data))
+(def reset-flags-data (:reset-data flags-data))
+(def update-flags-data (:update-data flags-data))
 
-(defn- set-callbacks
-  [db callbacks]
-  (assoc db callbacks-key callbacks))
-
-(defn- get-callback
-  [db callback-key]
-  (-> (get db callbacks-key)
-      (get callback-key)))
-
-(re-frame/reg-fx
-  ::callback
-  (fn [[callback & params]]
-    (when (fn? callback)
-      (apply callback params))))
-
-;; Indicators
+(re-frame/reg-sub
+  ::flags-data
+  :<- [path-to-db]
+  #(get-flags-data %))
 
 (def data-loading-key :data-loading?)
 
 (defn- set-data-loading
   [db value]
-  (assoc db data-loading-key value))
+  (update-flags-data db {data-loading-key value}))
 
 (re-frame/reg-sub
   ::data-loading?
-  :<- [path-to-db]
+  :<- [::flags-data]
   #(get % data-loading-key true))
 
 (def data-saving-key :data-saving?)
 
 (defn- set-data-saving
   [db value]
-  (assoc db data-saving-key value))
+  (update-flags-data db {data-saving-key value}))
 
 (re-frame/reg-sub
   ::data-saving?
-  :<- [path-to-db]
+  :<- [::flags-data]
   #(get % data-saving-key false))
 
 ;; Init
@@ -137,12 +90,9 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id school-id on-save]}]]
+  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
     {:db         (-> db
-                     (set-class-id class-id)
-                     (set-school-id school-id)
                      (reset-form-data)
-                     (set-callbacks {:on-save on-save})
                      (set-data-loading true))
      :dispatch-n [[::warehouse/load-class {:class-id class-id}
                    {:on-success [::load-class-success]}]
@@ -170,26 +120,32 @@
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ class-data]]
-    (let [class-id (get-class-id db)]
+  (fn [{:keys [db]} [_ class-data {:keys [on-success]}]]
+    (let [class-id (-> (get-form-data db)
+                       (get :id))]
       {:db       (set-data-saving db true)
        :dispatch [::warehouse/save-class
                   {:class-id class-id :data class-data}
-                  {:on-success [::save-success]
+                  {:on-success [::save-success on-success]
                    :on-failure [::save-failure]}]})))
 
 (re-frame/reg-event-fx
   ::save-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [data]}]]
-    (let [callback (get-callback db :on-save)]
-      {:db        (-> db
-                      (set-data-saving false)
-                      (set-form-data data))
-       ::callback [callback data]})))
+  (fn [{:keys [db]} [_ success-handler {:keys [data]}]]
+    {:db        (-> db
+                    (set-data-saving false)
+                    (update-form-data data))
+     ::callback [success-handler data]}))
 
 (re-frame/reg-event-fx
   ::save-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))
+
+(re-frame/reg-fx
+  ::callback
+  (fn [[callback & params]]
+    (when (fn? callback)
+      (apply callback params))))

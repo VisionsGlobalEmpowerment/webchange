@@ -9,7 +9,7 @@
 (defn class-form
   [{:keys [class-id school-id] :as props}]
   (re-frame/dispatch [::state/init props])
-  (fn [{:keys [editable?]
+  (fn [{:keys [editable? on-save]
         :or   {editable? true}}]
     (let [loading? @(re-frame/subscribe [::state/data-loading?])
           saving? @(re-frame/subscribe [::state/data-saving?])
@@ -21,7 +21,7 @@
                              :type         :select
                              :options      course-options
                              :options-type "int"}}
-          handle-save #(re-frame/dispatch [::state/save %])]
+          handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
       [form {:form-id   (-> (str "school-" school-id "-class-" class-id)
                             (keyword))
              :data      class-data
