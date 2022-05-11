@@ -35,10 +35,20 @@
     {:dispatch [::routes/redirect :school-profile :school-id school-id]}))
 
 (re-frame/reg-event-fx
-  ::remove-school
-  [(i/path path-to-db)]
+  ::archive-school
+  (fn [{:keys [db]} [_ school-id]]
+    (print "Archive school:" school-id)
+    {}))
+
+(re-frame/reg-event-fx
+  ::manage-teachers
   (fn [{:keys [_]} [_ school-id]]
-    (print "::remove-school" school-id)))
+    {:dispatch [::routes/redirect :teachers :school-id school-id]}))
+
+(re-frame/reg-event-fx
+  ::manage-students
+  (fn [{:keys [_]} [_ school-id]]
+    {:dispatch [::routes/redirect :students :school-id school-id]}))
 
 (re-frame/reg-sub
   ::schools-list

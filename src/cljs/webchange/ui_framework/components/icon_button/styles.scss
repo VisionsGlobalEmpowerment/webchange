@@ -103,6 +103,10 @@
         }
     }
 
+    &.direction-revert {
+        flex-direction: row-reverse;
+    }
+
     /* Variant */
 
     &.variant-outlined {

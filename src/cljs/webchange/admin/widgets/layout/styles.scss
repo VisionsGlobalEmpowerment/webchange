@@ -63,6 +63,11 @@
         align-items: stretch;
         justify-content: space-between;
 
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        min-height: $header-height;
+
         padding: 0 $default-gap;
         background-color: $color-primary;
         color: $color-text-light;

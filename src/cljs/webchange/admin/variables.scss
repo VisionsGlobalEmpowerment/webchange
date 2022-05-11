@@ -4,6 +4,9 @@ $color-text: #2E3A59;
 $color-text-light: #FFF;
 $color-disabled: #e6e6e6;
 
+$color-secondary-hovered: #{$color-secondary + "0F"};
+$color-secondary-active: #{$color-secondary + "2F"};
+
 $button-background-color: $color-secondary;
 $button-background-color-hovered: scale-color($button-background-color, $lightness: +15%);
 $button-background-color-active: scale-color($button-background-color, $lightness: +30%);
@@ -16,4 +19,5 @@ $button-background-color-light-active: #{$color-secondary + "1F"};
 $button-border-radius: 6px;
 $panel-border-radius: $button-border-radius;
 
+$header-height: 60px;
 $default-gap: 20px;

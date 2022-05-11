@@ -1,8 +1,7 @@
 (ns webchange.admin.components.list.views
   (:require
     [reagent.core :as r]
-    [webchange.ui-framework.components.index :as c]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui-framework.components.index :as c]))
 
 (defn- item-image
   [{:keys [img] :as props}]
@@ -32,14 +31,17 @@
     [:div.item-actions actions]))
 
 (defn content-right
-  []
+  [{:keys [class-name]}]
   (->> (r/current-component)
        (r/children)
-       (into [:div.content-right])))
+       (into [:div {:class-name (c/get-class-name {"content-right" true
+                                                   class-name      (some? class-name)})}])))
 
 (defn list-item
-  [{:keys [] :as props}]
-  (into [:div.list-item]
+  [{:keys [on-click] :as props}]
+  (into [:div (cond-> {:class-name (c/get-class-name {"list-item"  true
+                                                      "with-hover" (fn? on-click)})}
+                      (fn? on-click) (assoc :on-click on-click))]
         (concat [[item-image props]
                  [item-name props]]
                 (->> (r/current-component)
@@ -50,5 +52,5 @@
   [{:keys [class-name]}]
   (->> (r/current-component)
        (r/children)
-       (into [:div {:class-name (get-class-name (merge {"component--list" true
-                                                        class-name        (some? class-name)}))}])))
+       (into [:div {:class-name (c/get-class-name (merge {"component--list" true
+                                                          class-name        (some? class-name)}))}])))

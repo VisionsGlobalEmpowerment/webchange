@@ -13,9 +13,9 @@
         handle-add-click #(re-frame/dispatch [::state/show-assign-course-modal])]
     [page/header {:title   school-name
                   :icon    "school"
-                  :actions [{:text     "Assign Course"
-                             :icon     "add"
-                             :on-click handle-add-click}]}]))
+                  :actions [c/icon-button {:icon     "add"
+                                           :on-click handle-add-click}
+                            "Assign Course"]}]))
 
 (defn- list-item
   [{:keys [id stats] :as props}]
@@ -56,20 +56,20 @@
 
           handle-close #(re-frame/dispatch [::state/close-assign-course-modal])
           handle-save-click #(re-frame/dispatch [::state/assign-course @data])]
-      [c/dialog {:open?    open?
-                 :on-close handle-close
-                 :title    "Assign Course"
+      [c/dialog {:open?              open?
+                 :on-close           handle-close
+                 :title              "Assign Course"
                  :content-class-name "assign-course-modal"}
        [c/select {:placeholder "Select course"
-                  :value      (:course-id @data)
-                  :type       "int"
-                  :options    course-options
-                  :on-change  #(swap! data assoc :course-id %)
-                  :class-name "type-input"
-                  :variant    "outlined"
-                  :error      (when (:course-id errors)
-                                (:course-id errors))}]
-       [c/button {:on-click  handle-save-click}
+                  :value       (:course-id @data)
+                  :type        "int"
+                  :options     course-options
+                  :on-change   #(swap! data assoc :course-id %)
+                  :class-name  "type-input"
+                  :variant     "outlined"
+                  :error       (when (:course-id errors)
+                                 (:course-id errors))}]
+       [c/button {:on-click handle-save-click}
         "Save"]])))
 
 (defn page

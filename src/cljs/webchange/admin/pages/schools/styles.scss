@@ -1,12 +1,23 @@
 .page--schools {
     .schools-list {
-	.school-stats {
-	    display: flex;
-            align-items: center;
+        .school-stats {
+            display: flex;
+        }
 
-            color: #505B76;
-            font-weight: 700;
-            font-size: 16px;
-	}
+        .item-content-right {
+            display: flex;
+            gap: 8px;
+
+            button {
+                font-weight: 700;
+                font-size: 12px;
+
+                @include icon-size(24px);
+            }
+        }
+
+        .item-actions {
+            @include icon-size(24px);
+        }
     }
 }

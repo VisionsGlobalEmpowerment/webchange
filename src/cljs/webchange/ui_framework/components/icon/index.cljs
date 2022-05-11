@@ -9,6 +9,7 @@
     [webchange.ui-framework.components.icon.icon-animation :as animation]
     [webchange.ui-framework.components.icon.icon-animation-add :as animation-add]
     [webchange.ui-framework.components.icon.icon-animation-remove :as animation-remove]
+    [webchange.ui-framework.components.icon.icon-archive :as archive]
     [webchange.ui-framework.components.icon.icon-arrow-first :as arrow-first]
     [webchange.ui-framework.components.icon.icon-arrow-last :as arrow-last]
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
@@ -74,6 +75,7 @@
     [webchange.ui-framework.components.icon.icon-students :as students]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
+    [webchange.ui-framework.components.icon.icon-teachers :as teachers]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
     [webchange.ui-framework.components.icon.icon-text :as text]
     [webchange.ui-framework.components.icon.icon-user :as user]
@@ -96,6 +98,7 @@
    "animation"          animation/data
    "animation-add"      animation-add/data
    "animation-remove"   animation-remove/data
+   "archive"            archive/data
    "arrow-first"        arrow-first/data
    "arrow-last"         arrow-last/data
    "arrow-left"         arrow-left/data
@@ -161,6 +164,7 @@
    "students"           students/data
    "swap"               swap/data
    "sync"               sync/data
+   "teachers"           teachers/data
    "text-animation"     text-animation/data
    "text"               text/data
    "undo"               undo/data

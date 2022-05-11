@@ -53,36 +53,26 @@
      [:div {:class-name "title"}
       title])])
 
-(defn- header-action
-  [{:keys [icon text] :as props}]
-  (cond
-    (some? icon) [c/icon-button props text]
-    :default [c/button props text]))
-
-(defn- header-actions
-  [{:keys [actions]}]
-  (when (some? actions)
-    [:div.actions
-     (for [[idx action] (map-indexed vector actions)]
-       ^{:key idx}
-       [header-action action])]))
-
 (defn header
-  [props]
+  [{:keys [actions] :as props}]
   [:div {:class-name (:header class-names)}
    [header-info props]
    (into [:div.content]
          (->> (r/current-component)
               (r/children)))
-   [header-actions props]])
+   (when (some? actions)
+     [:div.actions
+      actions])])
 
 (defn- block-title
   [{:keys [actions title]}]
-  [:h1.block-title
-   (when (some? title)
-     [:div.title-text title])
-   (when (some? actions)
-     [:div.title-actions actions])])
+  (when (or (some? title)
+            (some? actions))
+    [:h1.block-title
+     (when (some? title)
+       [:div.title-text title])
+     (when (some? actions)
+       [:div.title-actions actions])]))
 
 (defn main-content
   [{:keys [footer title]}]
