@@ -17,6 +17,19 @@
                :disabled? disabled?
                :on-change handle-change}]]))
 
+(defn- text-multiline-control
+  [{:keys [disabled? id form-id label]}]
+  (let [value @(re-frame/subscribe [::state/field-value form-id id])
+        error @(re-frame/subscribe [::state/field-error form-id id])
+        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
+    [:<>
+     [c/label {:for id} label]
+     [c/text-area {:id        id
+                   :value     value
+                   :error     error
+                   :disabled? disabled?
+                   :on-change handle-change}]]))
+
 (defn- select-control
   [{:keys [disabled? id form-id label options options-type]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
@@ -41,6 +54,7 @@
                              options)]
     (case type
       :text [text-control control-props]
+      :text-multiline [text-multiline-control control-props]
       :select [select-control control-props])))
 
 (defn- loading-indicator
