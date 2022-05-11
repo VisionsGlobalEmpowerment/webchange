@@ -32,6 +32,11 @@
 
 ;; Class data
 
+(re-frame/reg-sub
+  ::class-data
+  :<- [path-to-db]
+  :class-data)
+
 (defn- set-class-data
   [db class-data]
   (assoc db :class-data class-data))
