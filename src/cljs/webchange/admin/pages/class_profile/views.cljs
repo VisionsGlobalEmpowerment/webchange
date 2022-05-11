@@ -6,7 +6,7 @@
     [webchange.admin.widgets.class-form.views :refer [class-form]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :refer [button input]]))
+    [webchange.ui-framework.components.index :as c :refer [button input]]))
 
 (defn- class-counter
   []
@@ -31,31 +31,27 @@
   [page/block {:title "Statistics"}
    [no-data]])
 
-(defn- class-info
-  []
-  (let [class-data @(re-frame/subscribe [::state/class-data])]
-    [page/block {:title "Class Info"}
-     [class-form {:data      class-data
-                  :on-change [::state/set-class-data]}]]))
-
-(defn- footer
-  []
-  (let [handle-save-click #(re-frame/dispatch [::state/save-class])
-        save-button-enabled? @(re-frame/subscribe [::state/save-button-enabled?])]
-    [:<>
-     [button {:on-click  handle-save-click
-              :disabled? (not save-button-enabled?)}
-      "Save"]]))
+(defn- side-bar
+  [{:keys [class-id school-id]}]
+  (let [form-editable? @(re-frame/subscribe [::state/form-editable?])
+        handle-edit-click #(re-frame/dispatch [::state/set-form-editable (not form-editable?)])
+        handle-data-save #(re-frame/dispatch [::state/set-class-data %])]
+    [page/side-bar {:title   "Class Info"
+                    :actions [:<>
+                              [c/icon-button {:icon     "edit"
+                                              :variant  "light"
+                                              :on-click handle-edit-click}]]}
+     [class-form {:class-id  class-id
+                  :school-id school-id
+                  :editable? form-editable?
+                  :on-save   handle-data-save}]]))
 
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
     [page/page
-     [page/main-content {:title  "Class Profile"
-                         :footer [footer]}
+     [page/main-content {:title  "Class Profile"}
       [class-counter]
-      [statistics]
-      [class-info]]
-     [page/side-bar
-      [no-data]]]))
+      [statistics]]
+     [side-bar props]]))

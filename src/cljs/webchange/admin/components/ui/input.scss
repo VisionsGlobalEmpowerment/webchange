@@ -1,7 +1,8 @@
 .wc-input-wrapper {
     .wc-input {
-        border: none;
-        border-bottom: 1px solid #F7F7FB;
+        @include input-border;
+        @include input-color;
+        @include input-font;
 
         &:disabled {
             background: transparent;

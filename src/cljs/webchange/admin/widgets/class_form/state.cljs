@@ -1,90 +1,151 @@
 (ns webchange.admin.widgets.class-form.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.widgets.state :as parent-state]
-    [webchange.validation.specs.class-spec :as spec]
+    [re-frame.std-interceptors :as i]
+    [webchange.admin.components.form.data :refer [init]]
+    [webchange.state.warehouse :as warehouse]
     [webchange.validation.validate :refer [validate]]))
 
-(defn path-to-db
-  [id relative-path]
-  {:pre [(some? id) (sequential? relative-path)]}
-  (->> relative-path
-       (concat [:class-form id])
-       (parent-state/path-to-db)))
+(def path-to-db :widget/class-form)
+
+(re-frame/reg-sub
+  path-to-db
+  (fn [db]
+    (get db path-to-db)))
+
+;; Form Data
+
+(def form-data (init :form-data))
+(def get-form-data (:get-data form-data))
+(def set-form-data (:set-data form-data))
+(def reset-form-data (:reset-data form-data))
+(def update-form-data (:update-data form-data))
+
+(re-frame/reg-sub
+  ::form-data
+  :<- [path-to-db]
+  #(get-form-data %))
+
+;; Form Options
+
+(def form-options (init :form-options))
+(def get-form-options (:get-data form-options))
+(def set-form-options (:set-data form-options))
+(def reset-form-options (:reset-data form-options))
+(def update-form-options (:update-data form-options))
+
+(re-frame/reg-sub
+  ::form-options
+  :<- [path-to-db]
+  #(get-form-options %))
+
+(def course-options-key :course-options)
+
+(re-frame/reg-sub
+  ::course-options
+  :<- [::form-options]
+  #(get % course-options-key []))
+
+(defn- set-course-options
+  [db options]
+  (update-form-options db {course-options-key options}))
+
+;; Flags
+
+(def flags-data (init :flags))
+(def get-flags-data (:get-data flags-data))
+(def set-flags-data (:set-data flags-data))
+(def reset-flags-data (:reset-data flags-data))
+(def update-flags-data (:update-data flags-data))
+
+(re-frame/reg-sub
+  ::flags-data
+  :<- [path-to-db]
+  #(get-flags-data %))
+
+(def data-loading-key :data-loading?)
+
+(defn- set-data-loading
+  [db value]
+  (update-flags-data db {data-loading-key value}))
+
+(re-frame/reg-sub
+  ::data-loading?
+  :<- [::flags-data]
+  #(get % data-loading-key true))
+
+(def data-saving-key :data-saving?)
+
+(defn- set-data-saving
+  [db value]
+  (update-flags-data db {data-saving-key value}))
+
+(re-frame/reg-sub
+  ::data-saving?
+  :<- [::flags-data]
+  #(get % data-saving-key false))
+
+;; Init
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ id {:keys [data on-change]}]]
-    {:dispatch-n [[::set-callbacks id {:on-change on-change}]
-                  [::set-current-data id data]]}))
-
-;; Current Data
-
-(def current-data-path [:current-data])
-
-(defn- get-current-data
-  [db id]
-  (->> (path-to-db id current-data-path)
-       (get-in db)))
-
-(re-frame/reg-sub
-  ::current-data
-  (fn [db [_ id]]
-    (get-current-data db id)))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
+    {:db         (-> db
+                     (reset-form-data)
+                     (set-data-loading true))
+     :dispatch-n [[::warehouse/load-class {:class-id class-id}
+                   {:on-success [::load-class-success]}]
+                  [::warehouse/load-school-courses {:school-id school-id}
+                   {:on-success [::load-school-courses-success]}]]}))
 
 (re-frame/reg-event-fx
-  ::set-current-data
-  (fn [{:keys [db]} [_ id value]]
-    {:db (assoc-in db (path-to-db id current-data-path) value)}))
+  ::load-class-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [class]}]]
+    {:db (-> db
+             (set-form-data class)
+             (set-data-loading false))}))
 
 (re-frame/reg-event-fx
-  ::update-current-data
-  (fn [{:keys [db]} [_ id data-patch]]
-    {:db       (update-in db (path-to-db id current-data-path) merge data-patch)
-     :dispatch [::handle-change id]}))
-
-;; Callbacks
-
-(def callbacks-path [:callbacks])
-
-(defn- get-callbacks
-  [db id]
-  (->> (path-to-db id callbacks-path)
-       (get-in db)))
+  ::load-school-courses-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ response]]
+    {:db (->> response
+              (map (fn [{:keys [id name]}]
+                     {:text  name
+                      :value id}))
+              (set-course-options db))}))
 
 (re-frame/reg-event-fx
-  ::set-callbacks
-  (fn [{:keys [db]} [_ id value]]
-    {:db (assoc-in db (path-to-db id callbacks-path) value)}))
+  ::save
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ class-data {:keys [on-success]}]]
+    (let [class-id (-> (get-form-data db)
+                       (get :id))]
+      {:db       (set-data-saving db true)
+       :dispatch [::warehouse/save-class
+                  {:class-id class-id :data class-data}
+                  {:on-success [::save-success on-success]
+                   :on-failure [::save-failure]}]})))
 
 (re-frame/reg-event-fx
-  ::handle-change
-  (fn [{:keys [db]} [_ id]]
-    (let [{:keys [on-change]} (get-callbacks db id)
-          current-data (get-current-data db id)]
-      (cond-> {}
-              (some? on-change) (assoc :dispatch (conj on-change current-data))))))
-
-;; Class Name
-
-(def name-key :name)
-
-(re-frame/reg-sub
-  ::class-name
-  (fn [[_ id]]
-    {:pre [(some? id)]}
-    [(re-frame/subscribe [::current-data id])])
-  (fn [[current-data]]
-    (get current-data name-key "")))
+  ::save-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ success-handler {:keys [data]}]]
+    {:db        (-> db
+                    (set-data-saving false)
+                    (update-form-data data))
+     ::callback [success-handler data]}))
 
 (re-frame/reg-event-fx
-  ::set-class-name
-  (fn [{:keys [_]} [_ id value]]
-    {:dispatch [::update-current-data id {name-key value}]}))
+  ::save-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-data-saving db false)}))
 
-(re-frame/reg-sub
-  ::class-name-validation-error
-  (fn [[_ id]]
-    (re-frame/subscribe [::class-name id]))
-  (fn [class-name]
-    (validate ::spec/name class-name)))
+(re-frame/reg-fx
+  ::callback
+  (fn [[callback & params]]
+    (when (fn? callback)
+      (apply callback params))))

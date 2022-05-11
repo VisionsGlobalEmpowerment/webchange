@@ -28,7 +28,6 @@
   (fn [{:keys [db]} [_ {:keys [school]}]]
     {:db (assoc db :school-data school)}))
 
-
 ;; School Form
 
 (def school-form-editable-key :school-form-editable?)

@@ -19,9 +19,11 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: stretch;
+        gap: 32px;
 
         width: 50%;
         height: 50%;
+        min-height: 340px;
         max-width: 500px;
         max-height: 400px;
 

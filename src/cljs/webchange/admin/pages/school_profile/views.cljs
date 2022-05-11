@@ -55,7 +55,7 @@
                               [c/icon-button {:icon     "edit"
                                               :variant  "light"
                                               :on-click handle-edit-click}]]}
-     [school-form {:id        school-id
+     [school-form {:school-id school-id
                    :editable? school-form-editable?
                    :on-save   handle-data-save}]]))
 

@@ -1,0 +1,16 @@
+@mixin input-border {
+    border: none;
+    border-bottom: 1px solid #F7F7FB;
+}
+
+@mixin input-color {
+    color: $color-text;
+
+    &:disabled {
+        color: $color-text;
+    }
+}
+
+@mixin input-font {
+    font-weight: 400;
+}

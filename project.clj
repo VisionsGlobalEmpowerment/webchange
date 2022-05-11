@@ -9,7 +9,9 @@
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [clojure.java-time "0.3.2"]
                  [reagent "0.8.1"]
-                 [re-frame "0.10.5"]
+                 [re-frame "1.2.0"]
+                 [day8.re-frame/test "0.1.5"]
+                 [day8.re-frame/http-fx "0.1.6"]
                  [compojure "1.6.1"]
                  [metosin/spec-tools "0.10.1"]
                  [metosin/compojure-api "2.0.0-alpha31"]
@@ -27,8 +29,6 @@
                  [cljs-http "0.1.45"]
                  [clj-http "3.10.1"]
                  [tupelo "0.9.185"]
-                 [day8.re-frame/test "0.1.5"]
-                 [day8.re-frame/http-fx "0.1.6"]
                  [environ "1.1.0"]
                  [luminus-migrations "0.6.3"]
                  [org.postgresql/postgresql "42.2.5"]
@@ -94,12 +94,11 @@
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]
-                   [day8.re-frame/tracing "0.5.1"]
                    [ring/ring-mock "0.3.2"]
                    [mockery "0.1.4"]
                    [thheller/shadow-cljs "2.16.6"]
-                   [day8.re-frame/re-frame-10x "0.3.3"]
-                   [day8.re-frame/tracing "0.5.5"]]
+                   [day8.re-frame/tracing "0.6.2"]
+                   [day8.re-frame/re-frame-10x "0.4.3"]]
     :main         webchange.server-dev
     :repl-options {:init-ns webchange.user
                    :nrepl-middleware
