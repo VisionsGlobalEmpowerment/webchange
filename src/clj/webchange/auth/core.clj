@@ -41,8 +41,12 @@
 (defn credentials-valid?
   [user password]
   (and
-    (:active user)
-    (hashers/check password (:password user))))
+   (:active user)
+   (hashers/check password (:password user))))
+
+(defn edit-user!
+  [user-id]
+  (db/activate-user! {:id user-id}))
 
 (defn visible-user [user]
   (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id :website-id]))
@@ -152,3 +156,11 @@
 
 (defn with-updated-identity [request response identity]
   (assoc response :session (merge (:session request) {:identity identity})))
+
+(defn edit-user!
+  [user-id data]
+  (let [hashed-password (hashers/derive (:password data))]
+    (db/edit-user! {:id user-id
+                    :first_name (:fist-name data)
+                    :last_name (:last-name data)
+                    :password hashed-password})))

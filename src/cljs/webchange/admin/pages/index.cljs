@@ -10,7 +10,10 @@
     [webchange.admin.pages.school-courses.views :as school-courses]
     [webchange.admin.pages.schools.views :as schools]
     [webchange.admin.pages.students.views :as students]
-    [webchange.admin.pages.add-school.views :as add-school]))
+    [webchange.admin.pages.add-school.views :as add-school]
+    [webchange.admin.pages.teachers.views :as teachers]
+    [webchange.admin.pages.add-teacher.views :as add-teacher]
+    [webchange.admin.pages.teacher-profile.views :as teacher-profile]))
 
 (def pages {:add-class      add-class/page
             :class-profile  class-profile/page
@@ -22,4 +25,7 @@
             :students       students/page
             :add-school     add-school/page
             :school-courses school-courses/page
+            :teachers       teachers/page
+            :add-teacher    add-teacher/page
+            :teacher-profile teacher-profile/page
             :404            not-found/page})

@@ -39,3 +39,8 @@
   [school-id user-id]
   (let [{teacher? :result} (db/is-school-teacher? {:school-id school-id :user-id user-id})]
     teacher?))
+
+(defn school-admin?
+  [school-id user-id]
+  (let [{admin? :result} (db/is-school-admin? {:school-id school-id :user-id user-id})]
+    admin?))

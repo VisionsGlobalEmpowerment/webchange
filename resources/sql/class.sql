@@ -97,18 +97,35 @@ WHERE school_id = :school_id AND access_code = :access_code
 -- :name create-teacher! :<!
 -- :doc creates a new teacher record
 INSERT INTO teachers
-(user_id, school_id)
-VALUES (:user_id, :school_id) RETURNING id
+(user_id, school_id, type, status)
+VALUES (:user_id, :school_id, :type, :status) RETURNING id
+
+-- :name edit-teacher! :! :n
+-- :doc edit teacher
+UPDATE teachers
+SET type = :type, status = :status
+WHERE id = :id
+
+-- :name get-teacher :? :1
+-- :doc retrieve teacher by id
+SELECT * from teachers
+WHERE id = :id
 
 -- :name get-teacher-by-user :? :1
 -- :doc retrieve teacher by user id
 SELECT * from teachers
 WHERE user_id = :user_id
 
--- :name get-teacher-by-school :? :*
--- :doc retrieve teacher by user id
+-- :name teachers-by-school :? :*
+-- :doc retrieve teachers by school id
 SELECT * from teachers
 WHERE school_id = :school_id
+
+-- :name teachers-by-class :? :*
+-- :doc retrieve teacher by class id
+SELECT * from teachers t
+INNER JOIN class_teachers ct ON ct.teacher.id = t.id
+WHERE class_id = :class_id
 
 -- :name get-first-school :? :1
 -- :doc retrieve first school record
@@ -168,6 +185,12 @@ SELECT
 SELECT true as result from teachers
 WHERE
 school_id = :school_id AND user_id = :user_id
+
+-- :name is-school-admin? :? :1
+-- :doc check if user is an admin teacher in given school
+SELECT true as result from teachers
+WHERE
+school_id = :school_id AND user_id = :user_id AND type = 'admin'
 
 -- :name assign-school-course! :! :n
 -- :doc creates a new school_course record
