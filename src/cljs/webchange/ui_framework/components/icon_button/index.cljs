@@ -5,7 +5,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [class-name color icon disabled? on-click ref size title variant]
+  [{:keys [class-name color icon direction disabled? on-click ref size title variant]
     :or   {disabled? false
            color     "default"
            on-click  #()
@@ -16,7 +16,8 @@
         handle-ref (fn [el] (when (some? el) (ref el)))]
     [:button (cond-> {:class-name (get-class-name (-> {"wc-icon-button"         true
                                                        "with-text"              (some? children)
-                                                       (str "variant-" variant) (some? variant)}
+                                                       (str "variant-" variant) (some? variant)
+                                                       (str "direction-" direction) (some? direction)}
                                                       (assoc class-name (some? class-name))
                                                       (assoc color true)
                                                       (assoc icon true)

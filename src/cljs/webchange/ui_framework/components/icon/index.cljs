@@ -9,6 +9,7 @@
     [webchange.ui-framework.components.icon.icon-animation :as animation]
     [webchange.ui-framework.components.icon.icon-animation-add :as animation-add]
     [webchange.ui-framework.components.icon.icon-animation-remove :as animation-remove]
+    [webchange.ui-framework.components.icon.icon-archive :as archive]
     [webchange.ui-framework.components.icon.icon-arrow-first :as arrow-first]
     [webchange.ui-framework.components.icon.icon-arrow-last :as arrow-last]
     [webchange.ui-framework.components.icon.icon-arrow-left :as arrow-left]
@@ -25,6 +26,7 @@
     [webchange.ui-framework.components.icon.icon-chevron-left :as chevron-left]
     [webchange.ui-framework.components.icon.icon-chevron-right :as chevron-right]
     [webchange.ui-framework.components.icon.icon-chevron-up :as chevron-up]
+    [webchange.ui-framework.components.icon.icon-classes :as classes]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
     [webchange.ui-framework.components.icon.icon-copy :as copy]
@@ -67,6 +69,7 @@
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
+    [webchange.ui-framework.components.icon.icon-restore :as restore]
     [webchange.ui-framework.components.icon.icon-school :as school]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-slider :as slider]
@@ -74,6 +77,7 @@
     [webchange.ui-framework.components.icon.icon-students :as students]
     [webchange.ui-framework.components.icon.icon-swap :as swap]
     [webchange.ui-framework.components.icon.icon-sync :as sync]
+    [webchange.ui-framework.components.icon.icon-teachers :as teachers]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
     [webchange.ui-framework.components.icon.icon-text :as text]
     [webchange.ui-framework.components.icon.icon-user :as user]
@@ -96,6 +100,7 @@
    "animation"          animation/data
    "animation-add"      animation-add/data
    "animation-remove"   animation-remove/data
+   "archive"            archive/data
    "arrow-first"        arrow-first/data
    "arrow-last"         arrow-last/data
    "arrow-left"         arrow-left/data
@@ -112,6 +117,7 @@
    "chevron-left"       chevron-left/data
    "chevron-right"      chevron-right/data
    "chevron-up"         chevron-up/data
+   "classes"            classes/data
    "clear"              clear/data
    "close"              close/data
    "copy"               copy/data
@@ -154,6 +160,7 @@
    "preview"            preview/data
    "remove"             remove/data
    "restart"            restart/data
+   "restore"            restore/data
    "school"             school/data
    "settings"           settings/data
    "slider"             slider/data
@@ -161,6 +168,7 @@
    "students"           students/data
    "swap"               swap/data
    "sync"               sync/data
+   "teachers"           teachers/data
    "text-animation"     text-animation/data
    "text"               text/data
    "undo"               undo/data

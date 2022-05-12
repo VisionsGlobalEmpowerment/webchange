@@ -1,6 +1,7 @@
 (ns webchange.admin.components.form.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.admin.components.form.state :as state]
     [webchange.ui-framework.components.index :as c]))
 
@@ -73,26 +74,42 @@
        [c/circular-progress])]))
 
 (defn form
-  [{:keys [form-id on-save spec] :as props}]
-  (re-frame/dispatch [::state/init props])
-  (fn [{:keys [data disabled? loading? model saving?]
-        :or   {disabled? false
-               loading?  false
-               saving?   false}}]
-    (re-frame/dispatch [::state/set-form-data form-id data model])
-    [:div.component--form
-     (if-not loading?
-       [:div.controls
-        (for [[field-name field-options] model]
-          ^{:key field-name}
-          [form-control {:id        field-name
-                         :form-id   form-id
-                         :options   field-options
-                         :disabled? disabled?}])]
-       [loading-indicator])
-     (when-not disabled?
-       [submit {:form-id    form-id
-                :disabled?  loading?
-                :saving?    saving?
-                :spec       spec
-                :on-success on-save}])]))
+  []
+  (r/create-class
+    {:display-name "Generic Form"
+
+     :component-did-mount
+     (fn [this]
+       (re-frame/dispatch [::state/init (r/props this)]))
+
+     :component-did-update
+     (fn [this [_ prev-props]]
+       (let [{:keys [form-id data model]} (r/props this)]
+         (when (not= data (:data prev-props))
+           (re-frame/dispatch [::state/set-form-data form-id data model]))))
+
+     :component-will-unmount
+     (fn [this]
+       (re-frame/dispatch [::state/reset (r/props this)]))
+
+     :reagent-render
+     (fn [{:keys [disabled? form-id loading? model on-save saving? spec]
+           :or   {disabled? false
+                  loading?  false
+                  saving?   false}}]
+       [:div.component--form
+        (if-not loading?
+          [:div.controls
+           (for [[field-name field-options] model]
+             ^{:key field-name}
+             [form-control {:id        field-name
+                            :form-id   form-id
+                            :options   field-options
+                            :disabled? disabled?}])]
+          [loading-indicator])
+        (when-not disabled?
+          [submit {:form-id    form-id
+                   :disabled?  loading?
+                   :saving?    saving?
+                   :spec       spec
+                   :on-success on-save}])])}))

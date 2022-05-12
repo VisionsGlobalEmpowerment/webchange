@@ -12,6 +12,19 @@
     }
 }
 
+@mixin icon-size($size) {
+    svg {
+        width: $size;
+        height: $size;
+    }
+}
+
+@mixin icon-thickness($thickness) {
+    svg {
+        stroke-width: $thickness;
+    }
+}
+
 .wc-icon {
     display: flex;
     justify-content: center;

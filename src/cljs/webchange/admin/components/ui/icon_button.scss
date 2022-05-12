@@ -1,5 +1,4 @@
 .wc-icon-button {
-    flex-direction: row-reverse;
     background: #D99BFF;
 
     svg {
@@ -20,10 +19,6 @@
 
         &:active {
             background: $button-background-color-light-active;
-        }
-
-        svg {
-            fill: $color-secondary;
         }
     }
 }

@@ -53,46 +53,40 @@
      [:div {:class-name "title"}
       title])])
 
-(defn- header-action
-  [{:keys [icon text] :as props}]
-  (cond
-    (some? icon) [c/icon-button props text]
-    :default [c/button props text]))
-
-(defn- header-actions
-  [{:keys [actions]}]
-  (when (some? actions)
-    [:div.actions
-     (for [[idx action] (map-indexed vector actions)]
-       ^{:key idx}
-       [header-action action])]))
-
 (defn header
-  [props]
-  [:div {:class-name (:header class-names)}
-   [header-info props]
-   (into [:div.content]
-         (->> (r/current-component)
-              (r/children)))
-   [header-actions props]])
+  [{:keys [actions] :as props}]
+  (let [children (->> (r/current-component)
+                      (r/children))]
+    [:div {:class-name (:header class-names)}
+     [header-info props]
+     (when (some? children)
+       (into [:div.content]
+             children))
+     (when (some? actions)
+       [:div.actions
+        actions])]))
 
 (defn- block-title
   [{:keys [actions title]}]
-  [:h1.block-title
-   (when (some? title)
-     [:div.title-text title])
-   (when (some? actions)
-     [:div.title-actions actions])])
+  (when (or (some? title)
+            (some? actions))
+    [:h1.block-title
+     (when (some? title)
+       [:div.title-text title])
+     (when (some? actions)
+       [:div.title-actions actions])]))
 
 (defn main-content
-  [{:keys [footer title]}]
+  [{:keys [class-name footer title]}]
   [:div {:class-name (:main class-names)}
    [block-title {:title title}]
    (->> (r/current-component)
         (r/children)
-        (into [:div.widget-profile--main-content--content]))
-   [:div.widget-profile--main-content--footer
-    footer]])
+        (into [:div {:class-name (get-class-name {"widget-profile--main-content--content" true
+                                                  class-name                              (some? class-name)})}]))
+   (when (some? footer)
+     [:div.widget-profile--main-content--footer
+      footer])])
 
 (defn side-bar
   [{:keys [actions title]}]

@@ -1,5 +1,5 @@
 .component--list {
-    $padding: 6px;
+    $padding: 10px;
 
     display: flex;
     flex-direction: column;
@@ -11,9 +11,16 @@
         justify-content: space-between;
         gap: 18px;
 
-        padding: $padding;
-        border: 1px solid #F7F7FB;
+        padding: 10px 20px;
+        border: 1px solid #DCE3F5;
         border-radius: 4px;
+
+        &.with-hover {
+            &:hover {
+                cursor: pointer;
+                border-color: $color-secondary;
+            }
+        }
 
         .item-name {
             flex: 1 1;

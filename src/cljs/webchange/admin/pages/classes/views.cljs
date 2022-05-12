@@ -12,9 +12,9 @@
         handle-add-click #(re-frame/dispatch [::state/add-class])]
     [page/header {:title   school-name
                   :icon    "school"
-                  :actions [{:text     "New Class"
-                             :icon     "add"
-                             :on-click handle-add-click}]}]))
+                  :actions [c/icon-button {:icon     "add"
+                                           :on-click handle-add-click}
+                            "New Class"]}]))
 
 (defn- list-item
   [{:keys [id stats] :as props}]
