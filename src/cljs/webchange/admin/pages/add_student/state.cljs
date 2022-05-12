@@ -12,20 +12,27 @@
   (fn [db]
     (get db path-to-db)))
 
-(re-frame/reg-sub
-  ::errors
-  :<- [path-to-db]
-  (fn [data]
-    (get data :errors)))
-
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id]}]]
     {:db (-> db
              (assoc :saving false)
-             (assoc :loading false)
-             (assoc :school-id school-id))}))
+             (assoc :loading true)
+             (assoc :school-id school-id))
+     :dispatch [::warehouse/load-school-classes {:school-id school-id}
+                {:on-success [::load-school-classes-success]}]}))
+
+(re-frame/reg-event-fx
+  ::load-school-classes-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [classes]}]]
+    (let [school-id (:school-id db)
+          class-options (->> classes
+                             (map (fn [{:keys [id name]}] {:value id :text name})))]
+      {:db (-> db
+               (assoc :loading false)
+               (assoc :class-options class-options))})))
 
 (re-frame/reg-event-fx
   ::create-student
@@ -50,7 +57,7 @@
   (fn [{:keys [db]} [_ {:keys [on-success]}]]
     (let [school-id (:school-id db)]
       {:db (assoc db :saving true)
-       :dispatch [::warehouse/generate-access-code
+       :dispatch [::warehouse/generate-school-access-code {:school-id school-id}
                   {:on-success [::generate-access-code-success on-success]}]})))
 
 (re-frame/reg-event-fx
@@ -64,17 +71,16 @@
   ::class-options
   :<- [path-to-db]
   (fn [data]
-    [{:value 1 :text "Stab class 1"}
-     {:value 2 :text "Stab class 2"}]))
+    (get data :class-options)))
 
 (re-frame/reg-sub
   ::data-loading?
   :<- [path-to-db]
   (fn [data]
-    false))
+    (get data :loading false)))
 
 (re-frame/reg-sub
   ::data-saving?
   :<- [path-to-db]
   (fn [data]
-    false))
+    (get data :saving)))

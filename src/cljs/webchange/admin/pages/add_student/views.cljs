@@ -13,17 +13,18 @@
 
 (defn- access-code
   [{:keys [id label]} {:keys [value error handle-change]}]
-  (let [handle-generate-click #(re-frame/dispatch [::state/generate-access-code {:on-success handle-change}])]
-    [:<>
-     [c/label {:for id} label]
-     [c/input {:id        id
-               :value     value
-               :error     error
-               :disabled? true
-               :on-change handle-change}]
-     [c/icon-button {:icon "edit"
-                     :variant "light"
-                     :on-click handle-generate-click}]]))
+  (re-frame/dispatch [::state/generate-access-code {:on-success handle-change}])
+  (fn [{:keys [id label]} {:keys [value error handle-change]}]
+    (let [handle-generate-click #(re-frame/dispatch [::state/generate-access-code {:on-success handle-change}])]
+      [:<>
+       [c/label {:for id} label]
+       [c/input {:id        id
+                 :value     value
+                 :error     error
+                 :disabled? true
+                 :on-change handle-change}]
+       [c/button {:on-click handle-generate-click}
+        "Generate Access Code"]])))
 
 (defn- student-form
   []

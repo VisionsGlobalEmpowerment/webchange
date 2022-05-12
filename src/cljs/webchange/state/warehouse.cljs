@@ -868,6 +868,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::generate-school-access-code
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :generate-school-access-code
+                     :method :post
+                     :uri    (str "/api/schools/" school-id "/next-access-code")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::send-system-log
   (fn [{:keys [_]} [_ data handlers]]
     (create-request {:key    :send-system-log
