@@ -45,20 +45,7 @@
 
     & > .actions {
         button {
-            flex-direction: row-reverse;
-            justify-content: space-between;
-
             background: transparent;
-            border: solid 1px $color-secondary;
-            border-radius: 6px;
-
-            padding: 16px 20px;
-            height: auto;
-            min-width: 200px;
-
-            color: #fff;
-            font-weight: 700;
-            font-size: 14px;
 
             @include icon-color($color-secondary);
             @include icon-size(14px);
@@ -69,6 +56,22 @@
 
             &:active {
                 background: $color-secondary-active;
+            }
+
+            &.with-text {
+                flex-direction: row-reverse;
+                justify-content: space-between;
+
+                padding: 16px 20px;
+                height: auto;
+                min-width: 200px;
+
+                border: solid 1px $color-secondary;
+                border-radius: 6px;
+
+                color: #fff;
+                font-weight: 700;
+                font-size: 14px;
             }
         }
     }

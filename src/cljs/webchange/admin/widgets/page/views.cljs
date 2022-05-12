@@ -75,14 +75,16 @@
        [:div.title-actions actions])]))
 
 (defn main-content
-  [{:keys [footer title]}]
+  [{:keys [class-name footer title]}]
   [:div {:class-name (:main class-names)}
    [block-title {:title title}]
    (->> (r/current-component)
         (r/children)
-        (into [:div.widget-profile--main-content--content]))
-   [:div.widget-profile--main-content--footer
-    footer]])
+        (into [:div {:class-name (get-class-name {"widget-profile--main-content--content" true
+                                                  class-name                              (some? class-name)})}]))
+   (when (some? footer)
+     [:div.widget-profile--main-content--footer
+      footer])])
 
 (defn side-bar
   [{:keys [actions title]}]

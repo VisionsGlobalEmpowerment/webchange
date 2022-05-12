@@ -4,7 +4,7 @@
     [webchange.admin.components.counter.views :refer [counter]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
-    [webchange.admin.widgets.school-form.views :refer [school-form]]
+    [webchange.admin.widgets.school-form.views :refer [edit-school-form]]
     [webchange.admin.pages.school-profile.state :as state]
     [webchange.ui-framework.components.index :as c]))
 
@@ -55,9 +55,9 @@
                               [c/icon-button {:icon     "edit"
                                               :variant  "light"
                                               :on-click handle-edit-click}]]}
-     [school-form {:school-id school-id
-                   :editable? school-form-editable?
-                   :on-save   handle-data-save}]]))
+     [edit-school-form {:school-id school-id
+                        :editable? school-form-editable?
+                        :on-save   handle-data-save}]]))
 
 (defn page
   [props]

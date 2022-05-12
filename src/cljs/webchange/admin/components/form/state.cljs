@@ -62,6 +62,12 @@
              (errors/reset-data form-id))}))
 
 (re-frame/reg-event-fx
+  ::reset
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [form-id]}]]
+    {:db (dissoc db form-id)}))
+
+(re-frame/reg-event-fx
   ::set-form-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ form-id form-data model]]

@@ -16,21 +16,22 @@
                                                                      ["/" [#"[\w-%]+" :class-id]] :class-profile}
                                                         "/students" {""     :students
                                                                      "/add" :add-student}
-                                                        "/teachers" {""                           :teachers
-                                                                     "/add"                       :add-teacher
+                                                        "/teachers" {""                             :teachers
+                                                                     "/add"                         :add-teacher
                                                                      ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
-                                                        "/courses"  {""     :school-courses}}}
+                                                        "/courses"  {"" :school-courses}}}
              "/courses" {""                              :courses
                          "/add"                          :add-course
                          ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}})
 
 (def sitemap
-  {:dashboard {:schools {:school-profile {:classes  {:add-class     true
-                                                     :class-profile true}
-                                          :students {:add-student true}
-                                          :teachers {:add-teacher     true
-                                                     :teacher-profile true}
-                                          :school-courses true}}
+  {:dashboard {:schools {:school-profile {:classes        {:add-class     true
+                                                           :class-profile true}
+                                          :students       {:add-student true}
+                                          :teachers       {:add-teacher     true
+                                                           :teacher-profile true}
+                                          :school-courses true}
+                         :add-school      true}
                :courses {:add-course     true
                          :course-profile true}}})
 

@@ -72,6 +72,16 @@
      :dispatch [::warehouse/load-school {:school-id school-id}
                 {:on-success [::load-school-success]}]}))
 
+(re-frame/reg-event-fx
+  ::init-add-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [_]}]]
+    {:db (reset-form-data db)}))
+
+(re-frame/reg-event-fx
+  ::reset-form
+  (fn [{:keys [db]} [_ {:keys [_]}]]
+    {:db (dissoc db path-to-db)}))
 
 (re-frame/reg-event-fx
   ::load-school-success
@@ -92,6 +102,16 @@
                   {:school-id school-id :data school-data}
                   {:on-success [::save-success on-success]
                    :on-failure [::save-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::create-school
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ school-data {:keys [on-success]}]]
+    {:db       (set-data-saving db true)
+     :dispatch [::warehouse/create-school
+                {:data school-data}
+                {:on-success [::save-success on-success]
+                 :on-failure [::save-failure]}]}))
 
 (re-frame/reg-event-fx
   ::save-success
