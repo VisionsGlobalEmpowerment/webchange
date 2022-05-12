@@ -12,7 +12,12 @@
                 font-weight: 700;
                 font-size: 12px;
 
+                @include icon-color($color-secondary);
                 @include icon-size(24px);
+
+                &.manage-students {
+                    @include icon-color(#85B6FF);
+                }
             }
         }
 
