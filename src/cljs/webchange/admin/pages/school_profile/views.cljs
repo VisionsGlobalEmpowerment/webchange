@@ -22,35 +22,40 @@
                                   :icon     "add"
                                   :color    "orange"
                                   :on-click #(re-frame/dispatch [::state/open-add-teacher])}]}
-                      {:id      :students
-                       :value   (:students stats)
-                       :title   "Students"
-                       :icon    "students"
-                       :actions [{:title    "Manage Students"
-                                  :color    "yellow"
-                                  :on-click #(re-frame/dispatch [::state/open-students])}
-                                 {:title    "Add Student"
-                                  :icon     "add"
-                                  :color    "orange"
-                                  :on-click #(re-frame/dispatch [::state/open-add-student])}]}
-                      {:id      :courses
-                       :value   (:courses stats)
-                       :title   "Courses"
-                       :icon    "presentation"
-                       :actions [{:title    "Change Course"
-                                  :icon     "edit"
-                                  :on-click #(print "Change course")}]}
-                      {:id       :classes
-                       :value    (:classes stats)
-                       :title    "Classes"
-                       :icon     "classes"
-                       :actions  [{:title    "Manage Classes"
-                                   :color    "yellow"
-                                   :on-click #(re-frame/dispatch [::state/open-classes])}
-                                  {:title    "Add Class"
-                                   :icon     "add"
-                                   :color    "orange"
-                                   :on-click #(re-frame/dispatch [::state/open-add-class])}]}]}]))
+                      {:id              :students
+                       :value           (:students stats)
+                       :title           "Students"
+                       :icon            "students"
+                       :icon-background "blue"
+                       :color           "blue"
+                       :actions         [{:title    "Manage Students"
+                                          :color    "yellow"
+                                          :on-click #(re-frame/dispatch [::state/open-students])}
+                                         {:title    "Add Student"
+                                          :icon     "add"
+                                          :color    "orange"
+                                          :on-click #(re-frame/dispatch [::state/open-add-student])}]}
+                      {:id              :courses
+                       :value           (:courses stats)
+                       :title           "Courses"
+                       :icon            "presentation"
+                       :icon-background "blue"
+                       :color           "blue"
+                       :actions         [{:title    "Change Course"
+                                          :icon     "edit"
+                                          :on-click #(print "Change course")}]}
+                      {:id              :classes
+                       :value           (:classes stats)
+                       :title           "Classes"
+                       :icon            "classes"
+                       :icon-background "blue"
+                       :actions         [{:title    "Manage Classes"
+                                          :color    "yellow"
+                                          :on-click #(re-frame/dispatch [::state/open-classes])}
+                                         {:title    "Add Class"
+                                          :icon     "add"
+                                          :color    "orange"
+                                          :on-click #(re-frame/dispatch [::state/open-add-class])}]}]}]))
 
 (defn- statistics
   []

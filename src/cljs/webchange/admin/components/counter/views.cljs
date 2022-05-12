@@ -19,9 +19,13 @@
                 :variant    "light"}])]))
 
 (defn- counter-item
-  [{:keys [actions icon title value]}]
-  [:div.counter-item
-   [:div {:class-name (c/get-class-name {"display" true})}
+  [{:keys [actions color icon icon-background title value]
+    :or   {color           "yellow"
+           icon-background "yellow"}}]
+  [:div {:class-name (c/get-class-name {"counter-item"       true
+                                        (str "color-" color) true})}
+   [:div {:class-name (c/get-class-name {"display"                           true
+                                         (str "icon-background-" color) true})}
     (if (some? icon)
       [:div.icon-value
        [c/icon {:icon       icon
