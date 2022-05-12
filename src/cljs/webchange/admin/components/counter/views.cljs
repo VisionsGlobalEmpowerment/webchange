@@ -19,24 +19,21 @@
                 :variant    "light"}])]))
 
 (defn- counter-item
-  [{:keys [actions icon title value on-click]}]
-  (let [handle-click #(when (fn? on-click) (on-click))]
-    [:div.counter-item
-     [:div {:on-click   handle-click
-            :class-name (c/get-class-name {"display"   true
-                                           "clickable" (fn? on-click)})}
-      (if (some? icon)
-        [:div.icon-value
-         [c/icon {:icon       icon
-                  :class-name "icon"}]
-         [:div.value value]]
-        [:div.text-value
-         value])
-      [:div.title title]]
-     [:div.actions
-      (for [[idx action] (map-indexed vector actions)]
-        ^{:key idx}
-        [counter-item-action action])]]))
+  [{:keys [actions icon title value]}]
+  [:div.counter-item
+   [:div {:class-name (c/get-class-name {"display" true})}
+    (if (some? icon)
+      [:div.icon-value
+       [c/icon {:icon       icon
+                :class-name "icon"}]
+       [:div.value value]]
+      [:div.text-value
+       value])
+    [:div.title title]]
+   [:div.actions
+    (for [[idx action] (map-indexed vector actions)]
+      ^{:key idx}
+      [counter-item-action action])]])
 
 (defn counter
   [{:keys [items]}]

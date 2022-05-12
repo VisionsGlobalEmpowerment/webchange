@@ -104,17 +104,9 @@
                 font-weight: 700;
                 font-size: 16px;
                 line-height: 22px;
-                /* or 138% */
 
                 text-align: center;
                 letter-spacing: -0.02em;
-            }
-
-            &.clickable {
-                &:hover {
-                    cursor: pointer;
-                    background: #{$color-secondary + "E0"};
-                }
             }
         }
 

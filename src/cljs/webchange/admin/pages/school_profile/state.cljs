@@ -113,13 +113,6 @@
       {:dispatch [::routes/redirect :add-class :school-id school-id]})))
 
 (re-frame/reg-event-fx
-  ::open-courses
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [school-id (:school-id db)]
-      {:dispatch [::routes/redirect :school-courses :school-id school-id]})))
-
-(re-frame/reg-event-fx
   ::open-add-course
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]

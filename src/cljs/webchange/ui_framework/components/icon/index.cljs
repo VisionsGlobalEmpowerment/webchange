@@ -26,6 +26,7 @@
     [webchange.ui-framework.components.icon.icon-chevron-left :as chevron-left]
     [webchange.ui-framework.components.icon.icon-chevron-right :as chevron-right]
     [webchange.ui-framework.components.icon.icon-chevron-up :as chevron-up]
+    [webchange.ui-framework.components.icon.icon-classes :as classes]
     [webchange.ui-framework.components.icon.icon-clear :as clear]
     [webchange.ui-framework.components.icon.icon-close :as close]
     [webchange.ui-framework.components.icon.icon-copy :as copy]
@@ -116,6 +117,7 @@
    "chevron-left"       chevron-left/data
    "chevron-right"      chevron-right/data
    "chevron-up"         chevron-up/data
+   "classes"            classes/data
    "clear"              clear/data
    "close"              close/data
    "copy"               copy/data
