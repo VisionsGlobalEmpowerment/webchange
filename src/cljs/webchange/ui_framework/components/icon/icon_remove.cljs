@@ -2,7 +2,7 @@
 
 (def data
   [:svg {:width "18" :height "18" :viewBox "0 0 18 18" :fill "none" :xmlns "http://www.w3.org/2000/svg"
-         :stroke "#D99BFF"}
+         :stroke "#D99BFF" :class "stroke-colored"}
    [:path {:d "M15.187 3.9375L2.81201 3.93751" :fill "none" :stroke-width "2" :stroke-linecap "round" :stroke-linejoin "round"}]
    [:path {:d "M7.3125 7.3125V11.8125" :fill "none" :stroke-width "2" :stroke-linecap "round" :stroke-linejoin "round"}]
    [:path {:d "M10.6875 7.3125V11.8125" :fill "none" :stroke-width "2" :stroke-linecap "round" :stroke-linejoin "round"}]

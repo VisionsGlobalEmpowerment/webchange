@@ -19,3 +19,10 @@
                          :opt-un [::last-name
                                   ::gender
                                   ::date-of-birth]))
+
+(s/def ::create-student (s/keys :req-un [::first-name
+                                         ::access-code]
+                                :opt-un [::class-id
+                                         ::last-name
+                                         ::gender
+                                         ::date-of-birth]))

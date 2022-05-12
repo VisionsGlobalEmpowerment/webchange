@@ -2,35 +2,48 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.students.state :as state]
-    [webchange.admin.widgets.no-data.views :refer [no-data]]
+    [webchange.admin.components.list.views :as l]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.admin.widgets.progress.views :refer [progress]]
-    [webchange.ui-framework.components.index :refer [icon icon-button]]))
+    [webchange.ui-framework.components.index :as c]))
 
 (defn- header
   []
-  (let [students-number @(re-frame/subscribe [::state/students-number])
-        handle-add-student #(re-frame/dispatch [::state/add-student])]
-    [:div.header
-     [:div.students-number
-      [icon {:icon       "students"
-             :class-name "students-icon"}]
-      [:div.text (str students-number " Students")]]
-     [icon-button {:icon       "add"
-                   :variant    "light"
-                   :class-name "add-student"
-                   :on-click   handle-add-student}
-      "Add Student"]]))
+  (let [school-name @(re-frame/subscribe [::state/school-name])
+        handle-add-click #(re-frame/dispatch [::state/add-student])]
+    [page/header {:title   school-name
+                  :icon    "school"
+                  :actions [{:text     "New Student Account"
+                             :icon     "add"
+                             :on-click handle-add-click}]}]))
+
+(defn- list-item
+  [{:keys [id] :as props}]
+  (let [handle-edit-click #(re-frame/dispatch [::state/edit-student id])
+        handle-remove-click #(re-frame/dispatch [::state/remove-student id])]
+    [l/list-item (merge props
+                        {:actions [:<>
+                                   [c/icon-button {:icon     "remove"
+                                                   :title    "Remove"
+                                                   :variant  "light"
+                                                   :on-click handle-remove-click}]
+                                   [c/icon-button {:icon     "edit"
+                                                   :title    "Edit"
+                                                   :variant  "light"
+                                                   :on-click handle-edit-click}]]})]))
+
+(defn- content
+  []
+  (let [list-data @(re-frame/subscribe [::state/students])]
+    [page/main-content {:title "Students"}
+     [l/list {:class-name "students-list"}
+      (for [{:keys [id] :as data} list-data]
+        ^{:key id}
+        [list-item data])]]))
 
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    (let [school-name @(re-frame/subscribe [::state/school-name])
-          progress-data @(re-frame/subscribe [::state/progress-data])]
-      [page/page {:class-name "page--students"}
-       [page/header {:title school-name
-                     :icon  "school"}
-        [header]]
-       [page/main-content
-        [progress {:data progress-data}]]])))
+    [page/page {:class-name "page--students"}
+     [header]
+     [content]]))

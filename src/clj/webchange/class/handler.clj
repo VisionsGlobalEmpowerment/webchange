@@ -137,6 +137,11 @@
   (DELETE "/api/classes/:id" [id :as request]
           (handle-delete-class id request))
 
+  (GET "/api/schools/:school-id/students" request
+       :coercion :spec
+       :path-params [school-id :- ::school-spec/id]
+       (-> (core/get-students-by-school school-id)
+           response))
   (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
   (GET "/api/unassigned-students" [] (-> (core/get-students-unassigned) response))
   (GET "/api/students/:id" [id]

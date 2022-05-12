@@ -45,6 +45,11 @@
     {:class-id class-id
      :students students}))
 
+(defn get-students-by-school
+  [school-id]
+  (-> (db/get-students-by-school {:school_id school-id})
+      prepare-students))
+
 (defn get-students-unassigned []
   (let [students (-> (db/get-students-unassigned)
                      prepare-students)]

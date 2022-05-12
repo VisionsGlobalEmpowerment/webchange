@@ -16,9 +16,10 @@
                                                                      "/add"                       :add-class
                                                                      ["/" [#"[\w-%]+" :class-id]] :class-profile}
                                                         "/students" {""     :students
-                                                                     "/add" :add-student}
-                                                        "/teachers" {""                             :teachers
-                                                                     "/add"                         :add-teacher
+                                                                     "/add" :add-student
+                                                                     ["/" [#"[\w-%]+" :student-id]] :edit-student}
+                                                        "/teachers" {""                           :teachers
+                                                                     "/add"                       :add-teacher
                                                                      ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
                                                         "/courses"  {"" :school-courses}}}
              "/courses" {""                              :courses
