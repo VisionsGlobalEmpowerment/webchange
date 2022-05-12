@@ -10,6 +10,7 @@
              "/login"   :login
              "/schools" {""                            :schools
                          "/add"                        :add-school
+                         "/archived"                   :schools-archived
                          ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
                                                         "/classes"  {""                           :classes
                                                                      "/add"                       :add-class
@@ -25,13 +26,14 @@
                          ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}})
 
 (def sitemap
-  {:dashboard {:schools {:school-profile {:classes        {:add-class     true
-                                                           :class-profile true}
-                                          :students       {:add-student true}
-                                          :teachers       {:add-teacher     true
-                                                           :teacher-profile true}
-                                          :school-courses true}
-                         :add-school      true}
+  {:dashboard {:schools {:school-profile   {:classes        {:add-class     true
+                                                             :class-profile true}
+                                            :students       {:add-student true}
+                                            :teachers       {:add-teacher     true
+                                                             :teacher-profile true}
+                                            :school-courses true}
+                         :add-school       true
+                         :schools-archived true}
                :courses {:add-course     true
                          :course-profile true}}})
 

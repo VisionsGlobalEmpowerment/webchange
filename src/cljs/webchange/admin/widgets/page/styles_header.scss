@@ -41,11 +41,19 @@
 
     & > .content {
         flex: 1 1;
+
+        border-left: solid 1px #ffffff3d;
+        padding-left: 16px;
     }
 
+    & > .content,
     & > .actions {
         button {
             background: transparent;
+
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
 
             @include icon-color($color-secondary);
             @include icon-size(14px);
@@ -57,7 +65,17 @@
             &:active {
                 background: $color-secondary-active;
             }
+        }
+    }
 
+    & > .content {
+        button {
+            @include icon-size(24px);
+        }
+    }
+
+    & > .actions {
+        button {
             &.with-text {
                 flex-direction: row-reverse;
                 justify-content: space-between;
@@ -68,10 +86,6 @@
 
                 border: solid 1px $color-secondary;
                 border-radius: 6px;
-
-                color: #fff;
-                font-weight: 700;
-                font-size: 14px;
             }
         }
     }

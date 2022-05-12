@@ -7,14 +7,19 @@
 
 (defn- header
   []
-  (let [handle-add-click #(re-frame/dispatch [::state/add-school])]
+  (let [handle-add-click #(re-frame/dispatch [::state/add-school])
+        handle-archived-click #(re-frame/dispatch [::state/open-archived-schools])]
     [page/header {:title   "Schools"
                   :icon    "school"
                   :actions [c/icon-button {:icon       "add"
                                            :title      "Add School"
                                            :class-name "manage-students"
                                            :on-click   handle-add-click}
-                            "Add School"]}]))
+                            "Add School"]}
+     [c/icon-button {:icon     "restore"
+                     :title    "Archived Schools"
+                     :on-click handle-archived-click}
+      "Archived Schools"]]))
 
 (defn- archive-button
   [{:keys [id]}]

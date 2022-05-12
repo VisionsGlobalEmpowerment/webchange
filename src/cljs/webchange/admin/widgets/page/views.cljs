@@ -55,14 +55,16 @@
 
 (defn header
   [{:keys [actions] :as props}]
-  [:div {:class-name (:header class-names)}
-   [header-info props]
-   (into [:div.content]
-         (->> (r/current-component)
-              (r/children)))
-   (when (some? actions)
-     [:div.actions
-      actions])])
+  (let [children (->> (r/current-component)
+                      (r/children))]
+    [:div {:class-name (:header class-names)}
+     [header-info props]
+     (when (some? children)
+       (into [:div.content]
+             children))
+     (when (some? actions)
+       [:div.actions
+        actions])]))
 
 (defn- block-title
   [{:keys [actions title]}]

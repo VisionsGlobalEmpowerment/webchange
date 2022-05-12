@@ -41,6 +41,11 @@
     {}))
 
 (re-frame/reg-event-fx
+  ::open-archived-schools
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :schools-archived]}))
+
+(re-frame/reg-event-fx
   ::manage-teachers
   (fn [{:keys [_]} [_ school-id]]
     {:dispatch [::routes/redirect :teachers :school-id school-id]}))
