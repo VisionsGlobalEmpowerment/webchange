@@ -11,13 +11,17 @@
 (defn- school-counter
   []
   (let [{:keys [stats]} @(re-frame/subscribe [::state/school-data])]
-    [counter {:items [{:id       :teachers
-                       :value    (:teachers stats)
-                       :title    "Teachers"
-                       :on-click #(re-frame/dispatch [::state/open-teachers])
-                       :actions  [{:title    "Teachers"
-                                   :icon     "add"
-                                   :on-click #(re-frame/dispatch [::state/open-add-teacher])}]}
+    [counter {:items [{:id      :teachers
+                       :value   (:teachers stats)
+                       :title   "Teachers"
+                       :icon    "teachers"
+                       :actions [{:title    "Manage Teachers"
+                                  :color    "yellow"
+                                  :on-click #(re-frame/dispatch [::state/open-teachers])}
+                                 {:title    "Add Teacher"
+                                  :icon     "add"
+                                  :color    "orange"
+                                  :on-click #(re-frame/dispatch [::state/open-add-teacher])}]}
                       {:id       :students
                        :value    (:students stats)
                        :title    "Students"

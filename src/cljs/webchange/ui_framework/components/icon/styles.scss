@@ -19,6 +19,12 @@
     }
 }
 
+@mixin icon-thickness($thickness) {
+    svg {
+        stroke-width: $thickness;
+    }
+}
+
 .wc-icon {
     display: flex;
     justify-content: center;
