@@ -41,9 +41,10 @@
                         :options-type "int"}
                :date-of-birth {:label "Date of Birth"
                                :type :text}
-               :class {:label "Class"
-                       :type :select
-                       :options class-options}
+               :class-id {:label "Class"
+                          :type :select
+                          :options class-options
+                          :options-type "int"}
                :access-code {:label "Access Code"
                              :type :custom
                              :control access-code}}
