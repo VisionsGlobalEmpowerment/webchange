@@ -46,16 +46,18 @@
         handle)))
 
 (defn handle-create-student
-  [data request]
-  (let [owner-id (current-user request)
-        school-id (current-school request)
-        data (assoc data :school-id school-id)
-        [{user-id :id}] (auth/create-user! data)]
-    (auth/activate-user! user-id)
-    (-> data
-        (assoc :user-id user-id)
-        core/create-student!
-        handle)))
+  ([data request]
+   (let [school-id (current-school request)]
+     (handle-create-student school-id data request)))
+  ([school-id data request]
+   (let [owner-id (current-user request)
+         data (assoc data :school-id school-id)
+         [{user-id :id}] (auth/create-user! data)]
+     (auth/activate-user! user-id)
+     (-> data
+         (assoc :user-id user-id)
+         core/create-student!
+         handle))))
 
 (defn handle-update-student
   [id request]
@@ -80,10 +82,13 @@
     (-> (core/delete-student! (Integer/parseInt id))
         handle)))
 
-(defn handle-next-access-code [request]
-  (let [school-id (current-school request)]
-    (-> (core/next-code school-id)
-        handle)))
+(defn handle-next-access-code
+  ([request]
+   (let [school-id (current-school request)]
+     (handle-next-access-code school-id request)))
+  ([school-id request]
+   (-> (core/next-code school-id)
+       handle)))
 
 (defn handle-create-teacher
   [school-id data request]
@@ -137,6 +142,17 @@
   (DELETE "/api/classes/:id" [id :as request]
           (handle-delete-class id request))
 
+  (GET "/api/schools/:school-id/students" request
+       :coercion :spec
+       :path-params [school-id :- ::school-spec/id]
+       (-> (core/get-students-by-school school-id)
+           response))
+  (POST "/api/schools/:school-id/students" request
+        :coercion :spec
+        :path-params [school-id :- ::school-spec/id] 
+        :body [student ::student-specs/create-student]
+        :return (s/keys :req-un [::id])
+        (handle-create-student school-id student request))
   (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
   (GET "/api/unassigned-students" [] (-> (core/get-students-unassigned) response))
   (GET "/api/students/:id" [id]
@@ -155,6 +171,10 @@
   (DELETE "/api/students/:id" [id :as request]
           (handle-delete-student id request))
 
+  (POST "/api/schools/:school-id/next-access-code" request 
+        :coercion :spec
+        :path-params [school-id :- ::school-spec/id]
+        (handle-next-access-code school-id request))
   (POST "/api/next-access-code" request (handle-next-access-code request))
 
   (GET "/api/teachers/:teacher-id" request

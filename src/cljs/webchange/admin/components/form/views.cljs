@@ -46,6 +46,15 @@
                 :on-change handle-change
                 :type      options-type}]]))
 
+(defn- custom-control
+  [{:keys [id form-id control] :as control-props}]
+  (let [value @(re-frame/subscribe [::state/field-value form-id id])
+        error @(re-frame/subscribe [::state/field-error form-id id])
+        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
+    [control control-props {:value value
+                            :error error
+                            :handle-change handle-change}]))
+
 (defn- form-control
   [{:keys [disabled? id form-id options]}]
   (let [{:keys [type]} options
@@ -56,7 +65,8 @@
     (case type
       :text [text-control control-props]
       :text-multiline [text-multiline-control control-props]
-      :select [select-control control-props])))
+      :select [select-control control-props]
+      :custom [custom-control control-props])))
 
 (defn- loading-indicator
   []

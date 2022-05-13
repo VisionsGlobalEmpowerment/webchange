@@ -689,6 +689,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-school-students
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :load-school-students
+                     :method :get
+                     :uri    (str "/api/schools/" school-id "/students")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-schools
   (fn [{:keys [_]} [_ handlers]]
     (create-request {:key    :load-schools
@@ -817,6 +825,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::create-student
+  (fn [{:keys [_]} [_ {:keys [school-id data]} handlers]]
+    (create-request {:key    :create-student
+                     :method :post
+                     :uri    (str "/api/schools/" school-id "/students")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::edit-student
   (fn [{:keys [_]} [_ {:keys [student-id data]} handlers]]
     (create-request {:key    :edit-student
@@ -848,6 +865,14 @@
     (create-request {:key    :generate-access-code
                      :method :post
                      :uri    (str "/api/next-access-code")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::generate-school-access-code
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :generate-school-access-code
+                     :method :post
+                     :uri    (str "/api/schools/" school-id "/next-access-code")}
                     handlers)))
 
 (re-frame/reg-event-fx

@@ -56,9 +56,9 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [data form-id model]}]]
+  (fn [{:keys [db]} [_ {:keys [init-data data form-id model]}]]
     {:db (-> db
-             (set-form-data form-id data model)
+             (set-form-data form-id (or init-data data) model)
              (errors/reset-data form-id))}))
 
 (re-frame/reg-event-fx
