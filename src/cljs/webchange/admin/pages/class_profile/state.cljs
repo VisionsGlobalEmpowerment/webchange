@@ -11,6 +11,31 @@
   (fn [db]
     (get db path-to-db)))
 
+;; Side Bar Content
+
+(def side-bar-key :side-bar)
+
+(defn- set-side-bar
+  [db value]
+  (assoc db side-bar-key value))
+
+(re-frame/reg-sub
+  ::side-bar
+  :<- [path-to-db]
+  #(get % side-bar-key :add-student))
+
+(re-frame/reg-event-fx
+  ::open-add-student-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :add-student)}))
+
+(re-frame/reg-event-fx
+  ::open-class-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :class-form)}))
+
 ;; Class Form
 
 (def form-editable-key :form-editable?)

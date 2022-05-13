@@ -17,4 +17,46 @@
             margin-bottom: 16px;
         }
     }
+
+    display: flex;
+    flex-direction: column;
+
+    .grid-sibling {
+        min-height: 300px;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 200px auto;
+
+        min-height: 0;
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+
+        .header {
+            height: 100px;
+            background: #f00;
+        }
+
+        .content {
+            flex: 1 1;
+            overflow: auto;
+
+            .list-item {
+                height: 100px;
+                background: #00f;
+                border: solid 1px #000;
+            }
+        }
+
+        .footer {
+            height: 100px;
+            background: #0f0;
+        }
+    }
 }

@@ -10,7 +10,8 @@
     grid-template-rows: 90px auto;
     column-gap: $default-gap;
     row-gap: $default-gap;
-    height: 100%;
+    min-height: 0;
+    flex: 1 1;
 
     & > .widget-profile--header {
         grid-column: 1 / 3;

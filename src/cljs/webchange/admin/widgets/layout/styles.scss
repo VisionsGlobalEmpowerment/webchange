@@ -77,12 +77,16 @@
     }
 
     & > .content-wrapper {
+        display: flex;
         flex: 1 1;
         background-color: #f7f7fb;
         padding: $default-gap;
+        min-height: 0;
 
         & > .content {
-            height: 100%;
+            min-height: 0;
+            flex: 1 1;
+            display: flex;
         }
     }
 }

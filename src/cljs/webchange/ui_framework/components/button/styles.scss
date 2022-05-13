@@ -18,6 +18,18 @@ $padding-h: 47px;
     background-color: $color-primary-darkest;
 }
 
+@mixin button-color($color) {
+    background-color: $color;
+
+    &:hover {
+        background-color: #{$color + "C0"};
+    }
+
+    &:active {
+        background-color: #{$color + "85"};
+    }
+}
+
 .wc-button {
     color: #fff;
     cursor: pointer;

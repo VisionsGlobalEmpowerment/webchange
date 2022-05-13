@@ -1,0 +1,33 @@
+.widget--add-class-students {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+
+    height: 100%;
+
+    .students-list {
+        flex: 1 1;
+        overflow: auto;
+    }
+
+    .students-list-item {
+        .check-icon {
+            @include icon-color($color-disabled);
+
+            &.selected {
+                @include icon-color($color-pink);
+            }
+        }
+    }
+
+    .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 16px;
+
+        .cancel-button {
+            @include button-color($color-primary);
+        }
+    }
+}

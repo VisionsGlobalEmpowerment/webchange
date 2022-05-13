@@ -141,3 +141,9 @@
            (map #(sort-by-getters other-getters %))
            (apply concat))
       (sort-by g list))))
+
+(defn toggle-item
+  [list item]
+  (if (in-list? list item)
+    (without-item list item)
+    (conj list item)))
