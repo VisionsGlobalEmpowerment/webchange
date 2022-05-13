@@ -7,6 +7,16 @@
             color: #505B76;
             font-weight: 700;
             font-size: 16px;
+
+            .wc-icon {
+                @include icon-color($color-blue);
+            }
+        }
+
+        .item-actions {
+            button {
+                @include icon-color($color-pink);
+            }
         }
     }
 }
