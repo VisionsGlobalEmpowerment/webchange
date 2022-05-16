@@ -8,6 +8,7 @@
             [webchange.common.handler :refer [handle current-user current-school]]
             [webchange.auth.core :as auth]
             [webchange.auth.roles :refer [is-admin?]]
+            [webchange.events :as e]
             [webchange.validation.specs.student :as student-specs]
             [webchange.validation.specs.school-spec :as school-spec]
             [webchange.validation.specs.class-spec :as class-spec]
@@ -38,6 +39,18 @@
         data (-> request :body)]
     (-> (core/update-class! (Integer/parseInt id) data)
         handle)))
+
+(defn handle-add-students-to-class
+  [class-id request]
+  (let [class-id (Integer/parseInt class-id)
+        data (-> request :body)]
+    (doseq [student-id data]
+      (let [student (-> (core/get-student student-id)
+                        (select-keys [:gender :date-of-birth])
+                        (assoc :class-id class-id))]
+        (core/update-student! student-id student)))
+    (e/dispatch {:type :students/assigned-to-class :class-id class-id})
+    (handle [true data])))
 
 (defn handle-delete-class
   [id request]
@@ -98,9 +111,9 @@
     (let [user-data (select-keys data [:first-name :last-name :email :password])
           [{user-id :id}] (auth/create-user-with-credentials! user-data)
           teacher-data {:school-id school-id
-                        :user-id user-id
-                        :type (:type data)
-                        :status "active"}]
+                        :user-id   user-id
+                        :type      (:type data)
+                        :status    "active"}]
       (auth/activate-user! user-id)
       (-> (core/create-teacher! teacher-data)
           response))))
@@ -112,7 +125,7 @@
     (when-not (or (is-admin? user-id) (school/school-admin? (:school-id teacher) user-id))
       (throw-unauthorized {:role :educator}))
     (let [user-data (select-keys data [:fist-name :last-name :password])
-          teacher-data {:type (:type data)
+          teacher-data {:type   (:type data)
                         :status "active"}]
       (auth/edit-user! (:user-id teacher) user-data)
       (-> (core/edit-teacher! teacher-id teacher-data)
@@ -121,26 +134,26 @@
 (defroutes class-routes
   (GET "/api/classes" request (handle-list-classes request))
   (GET "/api/classes/:id" [id]
-       (if-let [item (-> id Integer/parseInt core/get-class)]
-         (response {:class item})
-         (not-found "not found")))
+    (if-let [item (-> id Integer/parseInt core/get-class)]
+      (response {:class item})
+      (not-found "not found")))
   (POST "/api/classes" request
-        (handle-create-class (:body request) request))
+    (handle-create-class (:body request) request))
   (GET "/api/schools/:school-id/classes" request
-       :coercion :spec
-       :path-params [school-id :- ::school-spec/id]
-       (-> (core/get-classes school-id)
-           response))
+    :coercion :spec
+    :path-params [school-id :- ::school-spec/id]
+    (-> (core/get-classes school-id)
+        response))
   (POST "/api/schools/:school-id/classes" request
-        :coercion :spec
-        :path-params [school-id :- ::school-spec/id]
-        :body [data ::class-spec/create-class]
-        :return (s/keys :req-un [::class-spec/id])
-        (handle-create-class school-id data request))
+    :coercion :spec
+    :path-params [school-id :- ::school-spec/id]
+    :body [data ::class-spec/create-class]
+    :return (s/keys :req-un [::class-spec/id])
+    (handle-create-class school-id data request))
   (PUT "/api/classes/:id" [id :as request]
-       (handle-update-class id request))
+    (handle-update-class id request))
   (DELETE "/api/classes/:id" [id :as request]
-          (handle-delete-class id request))
+    (handle-delete-class id request))
 
   (GET "/api/schools/:school-id/students" request
        :coercion :spec
@@ -154,22 +167,24 @@
         :return (s/keys :req-un [::id])
         (handle-create-student school-id student request))
   (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
+  (PUT "/api/classes/:id/students" [id :as request] (handle-add-students-to-class id request))
+
   (GET "/api/unassigned-students" [] (-> (core/get-students-unassigned) response))
   (GET "/api/students/:id" [id]
-       (if-let [item (-> id Integer/parseInt core/get-student)]
-         (response {:student item})
-         (not-found "not found")))
+    (if-let [item (-> id Integer/parseInt core/get-student)]
+      (response {:student item})
+      (not-found "not found")))
   (POST "/api/students" request
-        :coercion :spec
-        :body [student ::student-specs/student]
-        :return (s/keys :req-un [::id])
-        (handle-create-student student request))
+    :coercion :spec
+    :body [student ::student-specs/student]
+    :return (s/keys :req-un [::id])
+    (handle-create-student student request))
   (PUT "/api/students/:id" [id :as request]
-       (handle-update-student id request))
+    (handle-update-student id request))
   (DELETE "/api/students/:id/class" [id :as request]
-          (handle-unassign-student id request))
+    (handle-unassign-student id request))
   (DELETE "/api/students/:id" [id :as request]
-          (handle-delete-student id request))
+    (handle-delete-student id request))
 
   (POST "/api/schools/:school-id/next-access-code" request 
         :coercion :spec
@@ -178,37 +193,37 @@
   (POST "/api/next-access-code" request (handle-next-access-code request))
 
   (GET "/api/teachers/:teacher-id" request
-       :coercion :spec
-       :path-params [teacher-id :- ::teacher-spec/id]
-       (let [user-id (current-user request)
-             teacher (core/get-teacher teacher-id)]
-         (when-not (or (is-admin? user-id) (school/school-admin? (:school-id teacher) user-id))
-           (throw-unauthorized {:role :educator}))
-         (response {:teacher teacher})))
+    :coercion :spec
+    :path-params [teacher-id :- ::teacher-spec/id]
+    (let [user-id (current-user request)
+          teacher (core/get-teacher teacher-id)]
+      (when-not (or (is-admin? user-id) (school/school-admin? (:school-id teacher) user-id))
+        (throw-unauthorized {:role :educator}))
+      (response {:teacher teacher})))
   (POST "/api/schools/:school-id/teachers" request
-        :coercion :spec
-        :path-params [school-id :- ::school-spec/id]
-        :body [data ::teacher-spec/create-teacher]
-        (handle-create-teacher school-id data request))
+    :coercion :spec
+    :path-params [school-id :- ::school-spec/id]
+    :body [data ::teacher-spec/create-teacher]
+    (handle-create-teacher school-id data request))
   (PUT "/api/teachers/:teacher-id" request
-       :coercion :spec
-       :path-params [teacher-id :- ::teacher-spec/id]
-       :body [data ::teacher-spec/edit-teacher]
-       (handle-edit-teacher teacher-id data request))
+    :coercion :spec
+    :path-params [teacher-id :- ::teacher-spec/id]
+    :body [data ::teacher-spec/edit-teacher]
+    (handle-edit-teacher teacher-id data request))
   (GET "/api/schools/:school-id/teachers" request
-       :coercion :spec
-       :path-params [school-id :- ::school-spec/id]
-       (let [user-id (current-user request)]
-         (when-not (or (is-admin? user-id) (school/school-admin? school-id user-id))
-           (throw-unauthorized {:role :educator}))
-         (-> (core/teachers-by-school school-id)
-             response)))
+    :coercion :spec
+    :path-params [school-id :- ::school-spec/id]
+    (let [user-id (current-user request)]
+      (when-not (or (is-admin? user-id) (school/school-admin? school-id user-id))
+        (throw-unauthorized {:role :educator}))
+      (-> (core/teachers-by-school school-id)
+          response)))
   (GET "/api/classes/:class-id/teachers" request
-       :coercion :spec
-       :path-params [class-id :- ::class-spec/id]
-       (let [user-id (current-user request)
-             class (core/get-class class-id)]
-         (when-not (or (is-admin? user-id) (school/school-admin? (:school-id class) user-id))
-           (throw-unauthorized {:role :educator}))
-         (-> (core/teachers-by-class class-id)
-             response))))
+    :coercion :spec
+    :path-params [class-id :- ::class-spec/id]
+    (let [user-id (current-user request)
+          class (core/get-class class-id)]
+      (when-not (or (is-admin? user-id) (school/school-admin? (:school-id class) user-id))
+        (throw-unauthorized {:role :educator}))
+      (-> (core/teachers-by-class class-id)
+          response))))
