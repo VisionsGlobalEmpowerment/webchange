@@ -6,27 +6,31 @@ $padding-h: 47px;
 
 
 @mixin color-disabled() {
-    background-color: $color-disabled;
+    background: $color-disabled;
     border-color: $color-disabled;
 }
 
 @mixin color-primary-hover() {
-    background-color: $color-primary-dark;
+    background: $color-primary-dark;
 }
 
 @mixin color-primary-active() {
-    background-color: $color-primary-darkest;
+    background: $color-primary-darkest;
 }
 
 @mixin button-color($color) {
-    background-color: $color;
+    background: $color;
 
     &:hover {
-        background-color: #{$color + "C0"};
+        background: #{$color + "C0"};
     }
 
     &:active {
-        background-color: #{$color + "85"};
+        background: #{$color + "85"};
+    }
+
+    &:disabled {
+        background: $color-disabled;
     }
 }
 
@@ -49,6 +53,10 @@ $padding-h: 47px;
 
     .wc-icon {
         margin-right: 8px;
+        padding: 0;
+    }
+
+    &.with-loading {
         padding: 0;
     }
 

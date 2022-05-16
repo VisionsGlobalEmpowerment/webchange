@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.components.form.data :refer [init]]
+    [webchange.admin.widgets.state :as widgets]
     [webchange.state.warehouse :as warehouse]
     [webchange.validation.validate :refer [validate]]))
 
@@ -133,19 +134,13 @@
   ::save-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ success-handler {:keys [data]}]]
-    {:db        (-> db
-                    (set-data-saving false)
-                    (update-form-data data))
-     ::callback [success-handler data]}))
+    {:db                (-> db
+                            (set-data-saving false)
+                            (update-form-data data))
+     ::widgets/callback [success-handler data]}))
 
 (re-frame/reg-event-fx
   ::save-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))
-
-(re-frame/reg-fx
-  ::callback
-  (fn [[callback & params]]
-    (when (fn? callback)
-      (apply callback params))))

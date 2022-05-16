@@ -26,8 +26,10 @@
        [students-list-item student])]))
 
 (defn- actions
-  [{:keys [on-cancel]}]
-  (let [handle-add-click #(print "Add")
+  [{:keys [class-id on-cancel on-save]}]
+  (let [data-loading? @(re-frame/subscribe [::state/data-loading?])
+        data-saving? @(re-frame/subscribe [::state/data-saving?])
+        handle-add-click #(re-frame/dispatch [::state/save class-id on-save])
         handle-cancel-click #(when (fn? on-cancel) (on-cancel))]
     [:div.actions
      [ui/button {:title      "Reset adding"
@@ -36,8 +38,15 @@
       "Cancel"]
      [ui/button {:title      "Add selected students"
                  :class-name "add-button"
+                 :disabled?  (or data-saving? data-loading?)
+                 :loading?   data-saving?
                  :on-click   handle-add-click}
       "Add"]]))
+
+(defn- loading-indicator
+  []
+  [:div.loading-indicator
+   [ui/circular-progress]])
 
 (defn add-class-students
   []
@@ -54,6 +63,9 @@
 
      :reagent-render
      (fn [props]
-       [:div {:class-name "widget--add-class-students"}
-        [students-list props]
-        [actions props]])}))
+       (let [data-loading? @(re-frame/subscribe [::state/data-loading?])]
+         [:div {:class-name "widget--add-class-students"}
+          (if-not data-loading?
+            [students-list props]
+            [loading-indicator])
+          [actions props]]))}))

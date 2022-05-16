@@ -11,14 +11,15 @@
 
 (defn- class-counter
   []
-  (let [handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])]
+  (let [{:keys [students]} @(re-frame/subscribe [::state/class-stats])
+        handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])]
     [counter {:items [#_{:id     :teachers
                          :value  0
                          :title  "Teachers"
                          :action {:title "Teachers"
                                   :icon  "add"}}
                       {:id      :students
-                       :value   0
+                       :value   students
                        :title   "Students"
                        :icon    "students"
                        :color   "blue"
@@ -40,7 +41,7 @@
   [{:keys [class-id school-id]}]
   (let [form-editable? @(re-frame/subscribe [::state/form-editable?])
         handle-edit-click #(re-frame/dispatch [::state/set-form-editable (not form-editable?)])
-        handle-data-save #(re-frame/dispatch [::state/set-class-data %])]
+        handle-data-save #(re-frame/dispatch [::state/update-class-data %])]
     [page/side-bar {:title   "Class Info"
                     :actions [:<>
                               [c/icon-button {:icon     "edit"
@@ -53,11 +54,13 @@
 
 (defn- side-bar-add-student
   [{:keys [class-id school-id]}]
-  (let [handle-cancel-click #(re-frame/dispatch [::state/open-class-form])]
+  (let [handle-cancel #(re-frame/dispatch [::state/open-class-form])
+        handle-save #(re-frame/dispatch [::state/handle-students-added %])]
     [page/side-bar {:title "Add Student"}
      [add-class-students {:class-id  class-id
                           :school-id school-id
-                          :on-cancel handle-cancel-click}]]))
+                          :on-save   handle-save
+                          :on-cancel handle-cancel}]]))
 
 (defn- side-bar
   [props]

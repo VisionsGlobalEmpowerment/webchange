@@ -5,6 +5,10 @@
     border: none;
     border-radius: $button-border-radius;
 
+    &.with-loading {
+        padding: 0;
+    }
+
     &:hover {
         background: $button-background-color-hovered;
     }

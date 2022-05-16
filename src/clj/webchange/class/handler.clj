@@ -50,7 +50,8 @@
                         (assoc :class-id class-id))]
         (core/update-student! student-id student)))
     (e/dispatch {:type :students/assigned-to-class :class-id class-id})
-    (handle [true data])))
+    (let [class (core/get-class class-id)]
+      (handle [true {:class class}]))))
 
 (defn handle-delete-class
   [id request]

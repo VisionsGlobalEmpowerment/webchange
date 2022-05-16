@@ -13,12 +13,6 @@
 
     $icon-size: 80px;
 
-    @mixin button-color($color) {
-        background: $color;
-        &:hover {background: #{$color + "C0"};}
-        &:active {background: #{$color + "85"};}
-    }
-
     display: grid;
     column-gap: $default-gap;
     grid-template-columns: repeat(4, 1fr);
