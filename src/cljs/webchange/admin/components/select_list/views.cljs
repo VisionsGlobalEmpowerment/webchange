@@ -15,6 +15,10 @@
                                                   :class-name (ui/get-class-name {"check-icon" true
                                                                                   "selected"   selected?})}]})]))
 
+(defn- empty-item
+  []
+  [:div.empty-item "No items to select"])
+
 (defn select-list
   [{:keys [data on-change]}]
   (let [handle-change #(when (fn? on-change)
@@ -26,7 +30,9 @@
                                    (->>toggle-item selected-id)
                                    (handle-change)))]
     [list/list {:class-name "component--select-list"}
-     (for [{:keys [id] :as item} data]
-       ^{:key id}
-       [select-list-item {:data      item
-                          :on-click  #(handle-item-clicked data %)}])]))
+     (if-not (empty? data)
+       (for [{:keys [id] :as item} data]
+         ^{:key id}
+         [select-list-item {:data     item
+                            :on-click #(handle-item-clicked data %)}])
+       [empty-item])]))

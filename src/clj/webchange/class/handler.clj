@@ -43,7 +43,10 @@
   [class-id request]
   (let [data (-> request :body)]
     (doseq [teacher-id data]
-      (core/assign-teacher-to-class class-id teacher-id))))
+      (core/assign-teacher-to-class class-id teacher-id))
+    (e/dispatch {:type :teachers/assigned-to-class :class-id class-id})
+    (let [class (core/get-class class-id)]
+      (handle [true {:class class}]))))
 
 (defn handle-delete-class
   [id request]

@@ -22,7 +22,7 @@
 (re-frame/reg-sub
   ::side-bar
   :<- [path-to-db]
-  #(get % side-bar-key :class-form))
+  #(get % side-bar-key :add-teacher))
 
 (re-frame/reg-event-fx
   ::open-add-student-form
