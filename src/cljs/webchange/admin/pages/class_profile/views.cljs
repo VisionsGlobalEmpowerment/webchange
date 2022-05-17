@@ -4,6 +4,7 @@
     [webchange.admin.components.counter.views :refer [counter]]
     [webchange.admin.pages.class-profile.state :as state]
     [webchange.admin.widgets.add-class-students.views :refer [add-class-students]]
+    [webchange.admin.widgets.add-class-teachers.views :refer [add-class-teachers]]
     [webchange.admin.widgets.class-form.views :refer [class-form]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
@@ -11,13 +12,16 @@
 
 (defn- class-counter
   []
-  (let [{:keys [students]} @(re-frame/subscribe [::state/class-stats])
-        handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])]
-    [counter {:items [#_{:id     :teachers
-                         :value  0
-                         :title  "Teachers"
-                         :action {:title "Teachers"
-                                  :icon  "add"}}
+  (let [{:keys [students teachers]} @(re-frame/subscribe [::state/class-stats])
+        handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])
+        handle-add-teacher-click #(re-frame/dispatch [::state/open-add-teacher-form])]
+    [counter {:items [{:id      :teachers
+                       :value   teachers
+                       :title   "Teachers"
+                       :icon    "teachers"
+                       :actions [{:title    "Add Teacher"
+                                  :icon     "add"
+                                  :on-click handle-add-teacher-click}]}
                       {:id      :students
                        :value   students
                        :title   "Students"
@@ -62,12 +66,23 @@
                           :on-save   handle-save
                           :on-cancel handle-cancel}]]))
 
+(defn- side-bar-add-teacher
+  [{:keys [class-id school-id]}]
+  (let [handle-cancel #(re-frame/dispatch [::state/open-class-form])
+        handle-save #(re-frame/dispatch [::state/handle-teachers-added %])]
+    [page/side-bar {:title "Add Teacher"}
+     [add-class-teachers {:class-id  class-id
+                          :school-id school-id
+                          :on-save   handle-save
+                          :on-cancel handle-cancel}]]))
+
 (defn- side-bar
   [props]
   (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
     (case side-bar-content
       :class-form [side-bar-class-form props]
       :add-student [side-bar-add-student props]
+      :add-teacher [side-bar-add-teacher props]
       nil)))
 
 (defn page

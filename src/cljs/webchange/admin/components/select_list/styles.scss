@@ -1,0 +1,13 @@
+.component--select-list {
+    overflow: auto;
+
+    .component--select-list-item {
+        .check-icon {
+            @include icon-color($color-disabled);
+
+            &.selected {
+                @include icon-color($color-pink);
+            }
+        }
+    }
+}

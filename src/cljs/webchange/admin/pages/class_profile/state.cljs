@@ -31,6 +31,12 @@
     {:db (set-side-bar db :add-student)}))
 
 (re-frame/reg-event-fx
+  ::open-add-teacher-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :add-teacher)}))
+
+(re-frame/reg-event-fx
   ::open-class-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
@@ -99,6 +105,14 @@
 
 (re-frame/reg-event-fx
   ::handle-students-added
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [class]}]]
+    {:db (-> db
+             (update-class-data (select-keys class [:stats]))
+             (set-side-bar :class-form))}))
+
+(re-frame/reg-event-fx
+  ::handle-teachers-added
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class]}]]
     {:db (-> db
