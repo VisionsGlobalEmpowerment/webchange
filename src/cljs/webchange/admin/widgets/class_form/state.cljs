@@ -4,8 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.components.form.data :refer [init]]
     [webchange.admin.widgets.state :as widgets]
-    [webchange.state.warehouse :as warehouse]
-    [webchange.validation.validate :refer [validate]]))
+    [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :widget/class-form)
 

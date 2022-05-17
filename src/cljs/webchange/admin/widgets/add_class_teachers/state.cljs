@@ -117,8 +117,6 @@
      (re-frame/subscribe [::class-teachers])
      (re-frame/subscribe [::selected-teachers])])
   (fn [[school-teachers class-teachers selected-teachers]]
-    (print "school-teachers" (map :id school-teachers))
-    (print "class-teachers" (map :id class-teachers))
     (let [class-teachers-ids (->> class-teachers
                                   (map #(vector (:id %) true))
                                   (into {}))]
@@ -138,12 +136,18 @@
     {:db         (-> db
                      (reset-school-teachers)
                      (reset-selected-teachers)
-                     (set-indicator :school-teachers-loading? true)
                      (set-indicator :class-teachers-loading? true))
-     :dispatch-n [[::warehouse/load-school-teachers {:school-id school-id}
-                   {:on-success [::load-school-teachers-success]}]
+     :dispatch-n [[::load-school-teachers school-id]
                   [::warehouse/load-class-teachers {:class-id class-id}
                    {:on-success [::load-class-teachers-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::load-school-teachers
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ school-id]]
+    {:db       (set-indicator db :school-teachers-loading? true)
+     :dispatch [::warehouse/load-school-teachers {:school-id school-id}
+                {:on-success [::load-school-teachers-success]}]}))
 
 (re-frame/reg-event-fx
   ::load-school-teachers-success

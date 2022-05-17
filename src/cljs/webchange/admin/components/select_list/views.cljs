@@ -20,7 +20,7 @@
   [:div.empty-item "No items to select"])
 
 (defn select-list
-  [{:keys [data on-change]}]
+  [{:keys [class-name data on-change]}]
   (let [handle-change #(when (fn? on-change)
                          (on-change %))
         handle-item-clicked (fn [data selected-id]
@@ -29,7 +29,8 @@
                                    (map :id)
                                    (->>toggle-item selected-id)
                                    (handle-change)))]
-    [list/list {:class-name "component--select-list"}
+    [list/list {:class-name (ui/get-class-name {"component--select-list" true
+                                                class-name               (some? class-name)})}
      (if-not (empty? data)
        (for [{:keys [id] :as item} data]
          ^{:key id}
