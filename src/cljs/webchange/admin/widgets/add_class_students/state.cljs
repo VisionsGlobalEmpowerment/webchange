@@ -4,7 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.widgets.state :as widgets]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.list :refer [in-list? toggle-item]]))
+    [webchange.utils.list :refer [in-list?]]))
 
 (def path-to-db :widget/add-class-students)
 
@@ -21,19 +21,19 @@
   [db]
   (get db selected-students-key []))
 
+(defn- set-selected-students
+  [db value]
+  (assoc db selected-students-key value))
+
 (defn- reset-selected-students
   [db]
-  (assoc db selected-students-key []))
-
-(defn- toggle-selected-student
-  [db student-id]
-  (update db selected-students-key toggle-item student-id))
+  (set-selected-students db []))
 
 (re-frame/reg-event-fx
-  ::select-student
+  ::set-selected-students
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ student-id]]
-    {:db (toggle-selected-student db student-id)}))
+  (fn [{:keys [db]} [_ selected-students-ids]]
+    {:db (set-selected-students db selected-students-ids)}))
 
 (re-frame/reg-sub
   ::selected-students

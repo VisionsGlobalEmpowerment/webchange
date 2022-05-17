@@ -1,4 +1,4 @@
-(ns webchange.admin.widgets.utils)
+(ns webchange.admin.utils)
 
 (defn get-uid
   []

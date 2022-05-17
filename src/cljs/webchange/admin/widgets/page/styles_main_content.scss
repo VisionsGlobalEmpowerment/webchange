@@ -7,6 +7,8 @@
     flex-direction: column;
     justify-content: space-between;
     gap: $default-gap;
+    min-height: 0;
+    overflow: auto;
 
     & > .widget-profile--main-content--content {
         flex: 1 1;
