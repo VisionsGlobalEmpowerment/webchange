@@ -88,9 +88,10 @@
                                  (not (empty? (:date-of-birth data))))
                         (jt/local-date "yyyy-MM-dd" (:date-of-birth data)))
         transform #(db/transform-keys-one-level ->snake_case_keyword %)
-        optional-fields (->> [:last-name :gender :date-of-birth]
+        optional-fields (->> [:class-id :last-name :gender :date-of-birth]
                              (map #(vector % nil))
-                             (into {}))]
+                             (into {})
+                             (transform))]
     (->> (assoc data :date-of-birth date-of-birth)
          (transform)
          (merge optional-fields))))

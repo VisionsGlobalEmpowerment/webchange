@@ -16,10 +16,10 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db (-> db
-             (assoc :saving false)
-             (assoc :loading true)
-             (assoc :school-id school-id))
+    {:db       (-> db
+                   (assoc :saving false)
+                   (assoc :loading true)
+                   (assoc :school-id school-id))
      :dispatch [::warehouse/load-school-classes {:school-id school-id}
                 {:on-success [::load-school-classes-success]}]}))
 
@@ -39,24 +39,31 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
     (let [school-id (:school-id db)]
-      {:db (assoc db :saving true)
+      {:db       (assoc db :saving true)
        :dispatch [::warehouse/create-student {:school-id school-id :data data}
-                  {:on-success [::create-student-success]}]})))
+                  {:on-success [::create-student-success]
+                   :on-failure [::create-student-failure]}]})))
 
 (re-frame/reg-event-fx
   ::create-student-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [school-id (:school-id db)]
-      {:db (assoc db :saving false)
+      {:db       (assoc db :saving false)
        :dispatch [::routes/redirect :students :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::create-student-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :saving false)}))
 
 (re-frame/reg-event-fx
   ::generate-access-code
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [on-success]}]]
     (let [school-id (:school-id db)]
-      {:db (assoc db :saving true)
+      {:db       (assoc db :saving true)
        :dispatch [::warehouse/generate-school-access-code {:school-id school-id}
                   {:on-success [::generate-access-code-success on-success]}]})))
 

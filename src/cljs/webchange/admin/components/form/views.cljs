@@ -5,6 +5,19 @@
     [webchange.admin.components.form.state :as state]
     [webchange.ui-framework.components.index :as c]))
 
+(defn- date-control
+  [{:keys [disabled? id form-id label]}]
+  (let [value @(re-frame/subscribe [::state/field-value form-id id])
+        error @(re-frame/subscribe [::state/field-error form-id id])
+        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
+    [:<>
+     [c/label {:for id} label]
+     [c/date {:id        id
+              :value     value
+              :error     error
+              :disabled? disabled?
+              :on-change handle-change}]]))
+
 (defn- text-control
   [{:keys [disabled? id form-id label]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
@@ -51,8 +64,8 @@
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
-    [control control-props {:value value
-                            :error error
+    [control control-props {:value         value
+                            :error         error
                             :handle-change handle-change}]))
 
 (defn- form-control
@@ -63,6 +76,7 @@
                               :disabled? disabled?}
                              options)]
     (case type
+      :date [date-control control-props]
       :text [text-control control-props]
       :text-multiline [text-multiline-control control-props]
       :select [select-control control-props]
