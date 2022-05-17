@@ -1,7 +1,7 @@
 (ns webchange.ui-components.date
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.ui-framework.components.date.utils :refer [apply-mask parse-date]]))
+    [webchange.ui-framework.components.date-str.utils :refer [apply-mask parse-date]]))
 
 (deftest test-apply-mask--usa-date
   (let [mask {:blocks    ["m" "d" "y"]
