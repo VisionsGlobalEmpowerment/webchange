@@ -124,8 +124,14 @@ WHERE school_id = :school_id
 -- :name teachers-by-class :? :*
 -- :doc retrieve teacher by class id
 SELECT * from teachers t
-INNER JOIN class_teachers ct ON ct.teacher.id = t.id
+INNER JOIN class_teachers ct ON ct.teacher_id = t.id
 WHERE class_id = :class_id
+
+-- :name assign_teacher_to_class! :! :n
+-- :doc assign teacher by class id
+INSERT INTO class_teachers
+(class_id, teacher_id)
+VALUES (:class_id, :teacher_id)]
 
 -- :name get-first-school :? :1
 -- :doc retrieve first school record

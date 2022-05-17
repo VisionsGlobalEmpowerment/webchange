@@ -26,16 +26,15 @@
   :<- [path-to-db]
   #(get % indicators-keys {}))
 
-(def data-loading-key :data-loading?)
-
-(defn- set-data-loading
-  [db value]
-  (update-indicators db {data-loading-key value}))
+(defn- set-indicator
+  [db key value]
+  (update-indicators db {key value}))
 
 (re-frame/reg-sub
   ::data-loading?
   :<- [::indicators]
-  #(get % data-loading-key false))
+  #(or (get % :school-teachers-loading? false)
+       (get % :class-teachers-loading? false)))
 
 (def data-saving-key :data-saving?)
 
@@ -77,7 +76,7 @@
 
 ;; School Teachers
 
-(def school-teachers-key :unassigned-teachers)
+(def school-teachers-key :school-teachers)
 
 (defn- reset-school-teachers
   [db]
@@ -92,39 +91,75 @@
   :<- [path-to-db]
   #(get % school-teachers-key []))
 
+;; Class Teachers
+
+(def class-teachers-key :class-teachers)
+
+(defn- reset-class-teachers
+  [db]
+  (assoc db class-teachers-key []))
+
+(defn- set-class-teachers
+  [db data]
+  (assoc db class-teachers-key data))
+
+(re-frame/reg-sub
+  ::class-teachers
+  :<- [path-to-db]
+  #(get % class-teachers-key []))
+
 ;;
 
 (re-frame/reg-sub
   ::teachers
   (fn []
     [(re-frame/subscribe [::school-teachers])
+     (re-frame/subscribe [::class-teachers])
      (re-frame/subscribe [::selected-teachers])])
-  (fn [[school-teachers selected-teachers]]
-    (->> school-teachers
-         (map (fn [{:keys [id user]}]
-                {:id        id
-                 :avatar    nil
-                 :name      (str (:first-name user) " " (:last-name user))
-                 :selected? (in-list? selected-teachers id)})))))
+  (fn [[school-teachers class-teachers selected-teachers]]
+    (print "school-teachers" (map :id school-teachers))
+    (print "class-teachers" (map :id class-teachers))
+    (let [class-teachers-ids (->> class-teachers
+                                  (map #(vector (:id %) true))
+                                  (into {}))]
+      (->> school-teachers
+           (filter (fn [{:keys [id]}]
+                     (->> id (contains? class-teachers-ids) (not))))
+           (map (fn [{:keys [id user]}]
+                  {:id        id
+                   :avatar    nil
+                   :name      (str (:first-name user) " " (:last-name user))
+                   :selected? (in-list? selected-teachers id)}))))))
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db       (-> db
-                   (reset-school-teachers)
-                   (reset-selected-teachers)
-                   (set-data-loading true))
-     :dispatch [::warehouse/load-school-teachers {:school-id school-id}
-                {:on-success [::load-school-teachers-success]}]}))
+  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
+    {:db         (-> db
+                     (reset-school-teachers)
+                     (reset-selected-teachers)
+                     (set-indicator :school-teachers-loading? true)
+                     (set-indicator :class-teachers-loading? true))
+     :dispatch-n [[::warehouse/load-school-teachers {:school-id school-id}
+                   {:on-success [::load-school-teachers-success]}]
+                  [::warehouse/load-class-teachers {:class-id class-id}
+                   {:on-success [::load-class-teachers-success]}]]}))
 
 (re-frame/reg-event-fx
   ::load-school-teachers-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ school-teachers]]
     {:db (-> db
-             (set-data-loading false)
+             (set-indicator :school-teachers-loading? false)
              (set-school-teachers school-teachers))}))
+
+(re-frame/reg-event-fx
+  ::load-class-teachers-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ class-teachers]]
+    {:db (-> db
+             (set-indicator :class-teachers-loading? false)
+             (set-class-teachers class-teachers))}))
 
 (re-frame/reg-event-fx
   ::reset

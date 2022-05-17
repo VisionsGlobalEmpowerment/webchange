@@ -177,6 +177,11 @@
   (let [teachers (db/teachers-by-class {:class_id class-id})]
     (map with-user teachers)))
 
+(defn assign-teacher-to-class
+  [class-id teacher-id]
+  (db/assign_teacher_to_class! {:class_id   class-id
+                                :teacher_id teacher-id}))
+
 (defn get-teacher
   [teacher-id]
   (-> (db/get-teacher {:id teacher-id})

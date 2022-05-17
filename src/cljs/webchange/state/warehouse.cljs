@@ -927,18 +927,14 @@
   (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
     (create-request {:key    :load-school-teachers
                      :method :get
-                     :uri    (str "/api/schools/" school-id "/teachers")
-                     :delay 3000}
+                     :uri    (str "/api/schools/" school-id "/teachers")}
                     handlers)))
 
 (re-frame/reg-event-fx
   ::assign-teachers-to-class
   (fn [{:keys [_]} [_ {:keys [class-id data]} handlers]]
-    (create-fake-request {:key    :load-class-teachers
-                          :method :put
-                          :uri    (str "/api/classes/" class-id "/teachers")
-                          :params data}
-                         handlers
-                         {:result-data {:class {:stats {:teachers 999}}}
-
-                          :delay 3000})))
+    (create-request {:key    :load-class-teachers
+                     :method :put
+                     :uri    (str "/api/classes/" class-id "/teachers")
+                     :params data}
+                    handlers)))
