@@ -31,29 +31,29 @@
   (let [loading? @(re-frame/subscribe [::state/data-loading?])
         saving? @(re-frame/subscribe [::state/data-saving?])
         class-options @(re-frame/subscribe [::state/class-options])
-        model {:first-name {:label "First Name"
-                            :type  :text}
-               :last-name {:label "Last Name"
-                           :type  :text}
-               :gender {:label        "Gender"
-                        :type         :select
-                        :options      gender-options
-                        :options-type "int"}
+        model {:first-name    {:label "First Name"
+                               :type  :text}
+               :last-name     {:label "Last Name"
+                               :type  :text}
+               :gender        {:label        "Gender"
+                               :type         :select
+                               :options      gender-options
+                               :options-type "int"}
                :date-of-birth {:label "Date of Birth"
-                               :type :text}
-               :class-id {:label "Class"
-                          :type :select
-                          :options class-options
-                          :options-type "int"}
-               :access-code {:label "Access Code"
-                             :type :custom
-                             :control access-code}}
+                               :type  :date}
+               :class-id      {:label        "Class"
+                               :type         :select
+                               :options      class-options
+                               :options-type "int"}
+               :access-code   {:label   "Access Code"
+                               :type    :custom
+                               :control access-code}}
         handle-save #(re-frame/dispatch [::state/create-student %])]
-    [form {:model     model
-           :spec      ::student-spec/create-student
-           :on-save   handle-save
-           :loading?  loading?
-           :saving?   saving?}]))
+    [form {:model    model
+           :spec     ::student-spec/create-student
+           :on-save  handle-save
+           :loading? loading?
+           :saving?  saving?}]))
 
 (defn page
   [props]

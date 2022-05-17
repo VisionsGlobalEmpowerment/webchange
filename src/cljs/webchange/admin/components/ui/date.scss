@@ -1,0 +1,11 @@
+.wc-date-wrapper {
+    .wc-date {
+        @include input-border;
+        @include input-color;
+        @include input-font;
+
+        &:disabled {
+            background: transparent;
+        }
+    }
+}
