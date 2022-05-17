@@ -7,10 +7,11 @@
     flex-direction: column;
     justify-content: space-between;
     gap: $default-gap;
+    min-height: 0;
 
-    & > * {
-        &:last-child {
-            flex: 1 1;
-        }
+    .side-bar-content {
+        display: flex;
+        min-height: 0;
+        flex: 1 1;
     }
 }

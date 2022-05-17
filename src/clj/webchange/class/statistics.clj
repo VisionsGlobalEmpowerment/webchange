@@ -19,6 +19,11 @@
    (calculate-class-stats class-id)))
 
 (e/reg
+  ::recalculate-on-assign-student :students/assigned-to-class
+ (fn [{class-id :class-id}]
+   (calculate-class-stats class-id)))
+
+(e/reg
  ::recalculate-on-assign-teacher :teachers/assigned-to-class
  (fn [{class-id :class-id}]
    (calculate-class-stats class-id)))

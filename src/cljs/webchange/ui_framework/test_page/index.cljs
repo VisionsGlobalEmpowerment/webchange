@@ -72,4 +72,24 @@
    ;  [icon-button {:icon    "link"
    ;                :variant "outlined"}
    ;   "Copy Link"]]]
+
+   ;[:div.grid-sibling]
+   ;[:div.grid-container
+   ; [:div]
+   ; [:div]
+   ; [:div]
+   ; [:div.list
+   ;  [:div.header]
+   ;  [:div.content
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]
+   ;   [:div.list-item]]
+   ;  [:div.footer]]]
    ])

@@ -90,11 +90,12 @@
 
 (defn side-bar
   [{:keys [actions title]}]
-  (->> (r/current-component)
-       (r/children)
-       (into [:div {:class-name (:side-bar class-names)}
-              [block-title {:title   title
-                            :actions actions}]])))
+  [:div {:class-name (:side-bar class-names)}
+   [block-title {:title   title
+                 :actions actions}]
+   (into [:div.side-bar-content]
+         (->> (r/current-component)
+              (r/children)))])
 
 (defn block
   [{:keys [title]}]

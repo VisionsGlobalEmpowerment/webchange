@@ -4,8 +4,9 @@
     [webchange.ui-framework.components.index :as c]))
 
 (defn- item-image
-  [{:keys [img] :as props}]
+  [{:keys [avatar img] :as props}]
   (cond
+    (contains? props :avatar) [c/avatar {:src avatar}]
     (contains? props :img) [c/image-preview {:src img}]))
 
 (defn- description-item
@@ -38,9 +39,19 @@
                                                    class-name      (some? class-name)})}])))
 
 (defn list-item
-  [{:keys [on-click] :as props}]
+  [{:keys [on-click class-name] :as props}]
+  "Props:
+   - img
+   - avatar
+   - name
+   - description
+     [key value]
+   - actions
+   - class-name
+   "
   (into [:div (cond-> {:class-name (c/get-class-name {"list-item"  true
-                                                      "with-hover" (fn? on-click)})}
+                                                      "with-hover" (fn? on-click)
+                                                      class-name   (some? class-name)})}
                       (fn? on-click) (assoc :on-click on-click))]
         (concat [[item-image props]
                  [item-name props]]

@@ -3,6 +3,7 @@
     [clojure.spec.alpha :as s]
     [webchange.validation.predicates :as p]))
 
+(s/def ::id number?)
 (s/def ::class-id number?)
 (s/def ::first-name (s/and string? p/not-empty?))
 (s/def ::last-name (s/or :empty p/not-defined?

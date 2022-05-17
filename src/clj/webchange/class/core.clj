@@ -111,6 +111,25 @@
     (db/update-student! prepared-data)
     (db/update-course-stat-class! {:user_id user-id :class_id class-id})))
 
+(defn assign-student-to-class
+  ([student-id class-id]
+   (assign-student-to-class student-id class-id {}))
+  ([student-id class-id {:keys [batched?]
+                         :or   {batched? false}}]
+   (let [student (-> (get-student student-id)
+                     (assoc :class-id class-id))]
+     (update-student! student-id student)
+     (when-not batched?
+       (e/dispatch {:type :students/assigned-to-class :class-id class-id})
+       {:class (get-class class-id)}))))
+
+(defn assign-students-to-class
+  [students-ids class-id]
+  (doseq [student-id students-ids]
+    (assign-student-to-class student-id class-id {:batched? true}))
+  (e/dispatch {:type :students/assigned-to-class :class-id class-id})
+  {:class (get-class class-id)})
+
 (defn update-student-access-code!
   [id data]
   (let [prepared-data (-> (db/transform-keys-one-level ->snake_case_keyword data)

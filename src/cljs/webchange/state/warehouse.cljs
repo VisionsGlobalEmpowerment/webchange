@@ -782,6 +782,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::add-students-to-class
+  (fn [{:keys [_]} [_ {:keys [class-id data]} handlers]]
+    (create-request {:key    :add-students-to-class
+                     :method :put
+                     :uri    (str "/api/classes/" class-id "/students")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::remove-student-from-class
   (fn [{:keys [_]} [_ {:keys [student-id]} handlers]]
     (create-request {:key    :remove-student-from-class
