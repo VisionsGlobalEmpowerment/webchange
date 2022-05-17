@@ -143,7 +143,8 @@
        :dispatch [::warehouse/add-students-to-class
                   {:class-id class-id
                    :data     selected-students}
-                  {:on-success [::save-success on-save]}]})))
+                  {:on-success [::save-success on-save]
+                   :on-failure [::save-failure]}]})))
 
 (re-frame/reg-event-fx
   ::save-success
@@ -152,3 +153,10 @@
     {:db                (-> db
                             (set-data-saving false))
      ::widgets/callback [on-save response]}))
+
+(re-frame/reg-event-fx
+  ::save-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db
+             (set-data-saving false))}))
