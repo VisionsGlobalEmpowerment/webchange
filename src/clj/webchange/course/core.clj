@@ -815,3 +815,13 @@
   (db/assign-school-course! {:school_id school-id :course_id course-id})
   (e/dispatch {:type :courses/assigned-to-school :school-id school-id :course-id course-id})
   {:school-id school-id :course-id course-id})
+
+(defn get-class-course
+  "Return course assigned to given class"
+  [class-id]
+  (let [{course-id :course-id} (db/get-class {:id class-id})
+        {course-name :name} (db/get-course-by-id {:id course-id})
+        latest-version (db/get-latest-course-version {:course_id course-id})]
+    {:id course-id
+     :name course-name
+     :data (:data latest-version)}))

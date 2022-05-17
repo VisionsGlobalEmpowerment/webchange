@@ -492,4 +492,12 @@
          (when-not (or (is-admin? user-id) (school/school-teacher? school-id user-id))
            (throw-unauthorized {:role :educator}))
          (-> (core/get-school-courses school-id user-id)
+             response)))
+  (GET "/api/classes/:class-id/course" request
+       :coercion :spec
+       :path-params [class-id :- ::course-spec/class-id]
+       (let [user-id (current-user request)]
+         (when-not (or (is-admin? user-id) (school/class-teacher? class-id user-id))
+           (throw-unauthorized {:role :educator}))
+         (-> (core/get-class-course class-id)
              response))))
