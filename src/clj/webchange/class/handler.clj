@@ -39,6 +39,12 @@
     (-> (core/update-class! (Integer/parseInt id) data)
         handle)))
 
+(defn handle-add-teachers-to-class
+  [class-id request]
+  (let [data (-> request :body)]
+    (doseq [teacher-id data]
+      (core/assign-teacher-to-class class-id teacher-id))))
+
 (defn handle-delete-class
   [id request]
   (let [owner-id (current-user request)]
