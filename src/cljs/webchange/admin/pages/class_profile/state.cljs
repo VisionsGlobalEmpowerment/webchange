@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/class-profile)
@@ -29,6 +30,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-side-bar db :add-student)}))
+
+(re-frame/reg-event-fx
+  ::open-add-teacher-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :add-teacher)}))
 
 (re-frame/reg-event-fx
   ::open-class-form
@@ -104,3 +111,16 @@
     {:db (-> db
              (update-class-data (select-keys class [:stats]))
              (set-side-bar :class-form))}))
+
+(re-frame/reg-event-fx
+  ::handle-teachers-added
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [class]}]]
+    {:db (-> db
+             (update-class-data (select-keys class [:stats]))
+             (set-side-bar :class-form))}))
+
+(re-frame/reg-event-fx
+  ::open-manage-students-page
+  (fn [{:keys [_]} [_ school-id class-id]]
+    {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]}))

@@ -696,14 +696,6 @@
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::load-school-teachers
-  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
-    (create-request {:key    :load-school-teachers
-                     :method :get
-                     :uri    (str "/api/schools/" school-id "/teachers")}
-                    handlers)))
-
-(re-frame/reg-event-fx
   ::load-school-students
   (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
     (create-request {:key    :load-school-students
@@ -934,5 +926,30 @@
     (create-request {:key    :create-teacher
                      :method :put
                      :uri    (str "/api/teachers/" teacher-id)
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-class-teachers
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    (create-request {:key    :load-class-teachers
+                     :method :get
+                     :uri    (str "/api/classes/" class-id "/teachers")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-school-teachers
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :load-school-teachers
+                     :method :get
+                     :uri    (str "/api/schools/" school-id "/teachers")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::assign-teachers-to-class
+  (fn [{:keys [_]} [_ {:keys [class-id data]} handlers]]
+    (create-request {:key    :load-class-teachers
+                     :method :put
+                     :uri    (str "/api/classes/" class-id "/teachers")
                      :params data}
                     handlers)))

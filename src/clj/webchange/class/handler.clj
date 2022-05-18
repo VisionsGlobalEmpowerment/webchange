@@ -226,4 +226,12 @@
     (if (can-edit-class? class-id request)
       (-> (core/teachers-by-class class-id)
           (response))
+      (throw-unauthorized {:role :educator})))
+  (PUT "/api/classes/:class-id/teachers" request
+    :coercion :spec
+    :path-params [class-id :- ::class-spec/id]
+    :body [teachers-ids (s/coll-of ::teacher-spec/id)]
+    (if (can-edit-class? class-id request)
+      (-> (core/assign-teachers-to-class teachers-ids class-id)
+          (response))
       (throw-unauthorized {:role :educator}))))

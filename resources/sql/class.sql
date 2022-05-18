@@ -124,8 +124,14 @@ WHERE school_id = :school_id
 -- :name teachers-by-class :? :*
 -- :doc retrieve teacher by class id
 SELECT * from teachers t
-INNER JOIN class_teachers ct ON ct.teacher.id = t.id
+INNER JOIN class_teachers ct ON ct.teacher_id = t.id
 WHERE class_id = :class_id
+
+-- :name assign_teacher_to_class! :! :n
+-- :doc assign teacher by class id
+INSERT INTO class_teachers
+(class_id, teacher_id)
+VALUES (:class_id, :teacher_id)
 
 -- :name get-first-school :? :1
 -- :doc retrieve first school record
@@ -215,7 +221,7 @@ WHERE sc.school_id = :school_id
 -- :name calculate-class-stats :? :1
 -- :doc retrieve class statistics
 SELECT
-0 as teachers,
+(SELECT count(*) FROM class_teachers WHERE class_id = :id) as teachers,
 (SELECT count(*) FROM students WHERE class_id = :id) as students
 
 -- :name update-class-stats! :! :n

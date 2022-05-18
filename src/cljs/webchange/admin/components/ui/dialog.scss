@@ -1,0 +1,25 @@
+.wc-dialog-wrapper {
+    background: #{$color-primary + "CC"};
+
+    .dialog {
+        border-radius: 6px;
+        padding: 48px;
+        width: auto;
+        min-width: 416px;
+
+        .header {
+            h1 {
+                font-weight: 700;
+                font-size: 16px;
+            }
+
+            button {
+                background: transparent;
+
+                svg {
+                    fill: $color-secondary;
+                }
+            }
+        }
+    }
+}

@@ -147,3 +147,7 @@
   (if (in-list? list item)
     (without-item list item)
     (conj list item)))
+
+(defn ->>toggle-item
+  [item list]
+  (toggle-item list item))

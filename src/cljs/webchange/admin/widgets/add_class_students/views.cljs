@@ -2,28 +2,16 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.components.list.views :as list]
+    [webchange.admin.components.select-list.views :refer [select-list]]
     [webchange.admin.widgets.add-class-students.state :as state]
     [webchange.ui-framework.components.index :as ui]))
 
-(defn- students-list-item
-  [{:keys [avatar id name selected?]}]
-  (let [handle-click #(re-frame/dispatch [::state/select-student id])]
-    [list/list-item {:avatar     avatar
-                     :name       name
-                     :on-click   handle-click
-                     :class-name "students-list-item"
-                     :actions    [ui/icon {:icon       "check"
-                                           :class-name (ui/get-class-name {"check-icon" true
-                                                                           "selected"   selected?})}]}]))
-
 (defn- students-list
   []
-  (let [students @(re-frame/subscribe [::state/students])]
-    [list/list {:class-name "students-list"}
-     (for [{:keys [id] :as student} students]
-       ^{:key id}
-       [students-list-item student])]))
+  (let [students @(re-frame/subscribe [::state/students])
+        handle-change #(re-frame/dispatch [::state/set-selected-students %])]
+    [select-list {:data      students
+                  :on-change handle-change}]))
 
 (defn- actions
   [{:keys [class-id on-cancel on-save]}]

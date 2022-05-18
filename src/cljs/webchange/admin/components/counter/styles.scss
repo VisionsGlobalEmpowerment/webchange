@@ -17,6 +17,14 @@
     column-gap: $default-gap;
     grid-template-columns: repeat(4, 1fr);
 
+    &.counter-2-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    &.counter-3-columns {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     & > .counter-item {
         display: flex;
         flex-direction: column;

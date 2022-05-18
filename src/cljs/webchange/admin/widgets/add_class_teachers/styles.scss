@@ -1,4 +1,4 @@
-.widget--add-class-students {
+.widget--add-class-teachers {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -7,6 +7,19 @@
     width: 100%;
     height: 100%;
 
+    .new-teacher-button {
+        font-weight: 700;
+        font-size: 12px;
+
+        justify-content: space-between;
+
+        @include icon-color($color-pink);
+    }
+
+    .teachers-list {
+        flex: 1 1;
+    }
+
     .actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -14,17 +27,6 @@
 
         .cancel-button {
             @include button-color($color-primary);
-        }
-    }
-
-    .loading-indicator {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1 1;
-
-        progress {
-            @include progress-size(32px);
         }
     }
 }

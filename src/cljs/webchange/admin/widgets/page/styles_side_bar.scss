@@ -13,5 +13,9 @@
         display: flex;
         min-height: 0;
         flex: 1 1;
+
+        & > * {
+            width: 100%;
+        }
     }
 }
