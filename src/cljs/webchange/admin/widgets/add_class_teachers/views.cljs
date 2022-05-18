@@ -8,19 +8,25 @@
     [webchange.ui-framework.components.index :as ui]))
 
 (defn- add-teacher
-  [{:keys [class-id]}]
-  (r/with-let [dialog-open? (r/atom true)]
-    (let [handle-click #(print "click" class-id)]
-      [:<>
-       [ui/icon-button {:icon       "add"
-                        :variant    "light"
-                        :class-name "new-teacher-button"
-                        :direction  "revert"
-                        :on-click   handle-click}
-        "New Teacher account"]
-       [ui/dialog {:open? @dialog-open?
-                   :title "New Teacher account"}
-        [create-teacher]]])))
+  [{:keys [class-id school-id]}]
+  (r/with-let [dialog-open? (r/atom true)
+               handle-close-click #(reset! dialog-open? false)
+               handle-add-click #(reset! dialog-open? true)
+               handle-save #(do (print "Saved" %)
+                                (reset! dialog-open? false))]
+    [:<>
+     [ui/icon-button {:icon       "add"
+                      :variant    "light"
+                      :class-name "new-teacher-button"
+                      :direction  "revert"
+                      :on-click   handle-add-click}
+      "New Teacher Account"]
+     [ui/dialog {:open?    @dialog-open?
+                 :title    "New Teacher Account"
+                 :on-close handle-close-click}
+      [create-teacher {:class-id  class-id
+                       :school-id school-id
+                       :on-save   handle-save}]]]))
 
 (defn- teachers-list
   []
