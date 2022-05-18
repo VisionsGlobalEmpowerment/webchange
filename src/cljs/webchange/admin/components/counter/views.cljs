@@ -1,6 +1,6 @@
 (ns webchange.admin.components.counter.views
   (:require
-    [webchange.ui-framework.components.index :as c]))
+    [webchange.ui-framework.components.index :as ui]))
 
 (defn- counter-item-action
   [{:keys [color icon title on-click]
@@ -9,12 +9,12 @@
                        (.stopPropagation event)
                        (when (fn? on-click)
                          (on-click)))]
-    [:div {:class-name (c/get-class-name {"counter-action"     true
-                                          (str "color-" color) true})
+    [:div {:class-name (ui/get-class-name {"counter-action"     true
+                                           (str "color-" color) true})
            :on-click   handle-click}
      [:div.action-name title]
      (when (some? icon)
-       [c/icon {:icon       icon
+       [ui/icon {:icon       icon
                 :class-name "action-icon"
                 :variant    "light"}])]))
 
@@ -23,13 +23,13 @@
     :or   {color           "yellow"
            icon-background "yellow"}}]
   (let [value (if (some? value) value "-")]
-    [:div {:class-name (c/get-class-name {"counter-item"       true
-                                          (str "color-" color) true})}
-     [:div {:class-name (c/get-class-name {"display"                      true
-                                           (str "icon-background-" color) true})}
+    [:div {:class-name (ui/get-class-name {"counter-item"       true
+                                           (str "color-" color) true})}
+     [:div {:class-name (ui/get-class-name {"display"                      true
+                                            (str "icon-background-" color) true})}
       (if (some? icon)
         [:div.icon-value
-         [c/icon {:icon       icon
+         [ui/icon {:icon       icon
                   :class-name "icon"}]
          [:div.value value]]
         [:div.text-value
@@ -42,7 +42,8 @@
 
 (defn counter
   [{:keys [items]}]
-  [:div.component--counter
+  [:div {:class-name (ui/get-class-name {"component--counter"           true
+                                         (str "counter-" (max 3 (count items)) "-columns") true})}
    (for [{:keys [id] :as item} items]
      ^{:key id}
      [counter-item item])])

@@ -11,9 +11,10 @@
     [webchange.ui-framework.components.index :as c :refer [button input]]))
 
 (defn- class-counter
-  []
+  [{:keys [school-id class-id]}]
   (let [{:keys [students teachers]} @(re-frame/subscribe [::state/class-stats])
         handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])
+        handle-manage-students-click #(re-frame/dispatch [::state/open-manage-students-page school-id class-id])
         handle-add-teacher-click #(re-frame/dispatch [::state/open-add-teacher-form])]
     [counter {:items [{:id      :teachers
                        :value   teachers
@@ -27,14 +28,12 @@
                        :title   "Students"
                        :icon    "students"
                        :color   "blue"
-                       :actions [{:title    "Add Student"
+                       :actions [{:title    "Manage Students"
+                                  :color    "yellow"
+                                  :on-click handle-manage-students-click}
+                                 {:title    "Add Student"
                                   :icon     "add"
-                                  :on-click handle-add-student-click}]}
-                      #_{:id     :events
-                         :value  0
-                         :title  "Events"
-                         :action {:title "Events"
-                                  :icon  "add"}}]}]))
+                                  :on-click handle-add-student-click}]}]}]))
 
 (defn- statistics
   []
@@ -91,6 +90,6 @@
   (fn [props]
     [page/page
      [page/main-content {:title "Class Profile"}
-      [class-counter]
+      [class-counter props]
       [statistics]]
      [side-bar props]]))
