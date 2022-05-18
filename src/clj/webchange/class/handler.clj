@@ -39,15 +39,6 @@
     (-> (core/update-class! (Integer/parseInt id) data)
         handle)))
 
-(defn handle-add-teachers-to-class
-  [class-id request]
-  (let [data (-> request :body)]
-    (doseq [teacher-id data]
-      (core/assign-teacher-to-class class-id teacher-id))
-    (e/dispatch {:type :teachers/assigned-to-class :class-id class-id})
-    (let [class (core/get-class class-id)]
-      (handle [true {:class class}]))))
-
 (defn handle-delete-class
   [id request]
   (let [owner-id (current-user request)]
@@ -234,5 +225,13 @@
     :path-params [class-id :- ::class-spec/id]
     (if (can-edit-class? class-id request)
       (-> (core/teachers-by-class class-id)
+          (response))
+      (throw-unauthorized {:role :educator})))
+  (PUT "/api/classes/:class-id/teachers" request
+    :coercion :spec
+    :path-params [class-id :- ::class-spec/id]
+    :body [teachers-ids (s/coll-of ::teacher-spec/id)]
+    (if (can-edit-class? class-id request)
+      (-> (core/assign-teachers-to-class teachers-ids class-id)
           (response))
       (throw-unauthorized {:role :educator}))))

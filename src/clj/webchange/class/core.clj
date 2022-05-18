@@ -178,9 +178,22 @@
     (map with-user teachers)))
 
 (defn assign-teacher-to-class
-  [class-id teacher-id]
-  (db/assign_teacher_to_class! {:class_id   class-id
-                                :teacher_id teacher-id}))
+  ([teacher-id class-id]
+   (assign-teacher-to-class teacher-id class-id {}))
+  ([teacher-id class-id {:keys [batched?]
+                         :or   {batched? false}}]
+   (db/assign_teacher_to_class! {:class_id   class-id
+                                 :teacher_id teacher-id})
+   (when-not batched?
+     (e/dispatch {:type :teachers/assigned-to-class :class-id class-id})
+     {:class (get-class class-id)})))
+
+(defn assign-teachers-to-class
+  [teachers-ids class-id]
+  (doseq [teacher-id teachers-ids]
+    (assign-teacher-to-class teacher-id class-id {:batched? true}))
+  (e/dispatch {:type :teachers/assigned-to-class :class-id class-id})
+  {:class (get-class class-id)})
 
 (defn get-teacher
   [teacher-id]
