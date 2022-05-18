@@ -48,6 +48,13 @@
            :course-name              course-slug
            :course-activities-number activities-count}]))
 
+(defn get-class-students-progress
+  [class-id]
+  (let [students (db/get-students-by-class {:class_id class-id})
+        progress (db/get-class-students-progress {:class_id class-id})]
+    {:students (->> students (map class/with-user))
+     :progress progress}))
+
 (defn workflow->grid
   [levels f]
   (let [->lesson (fn [idx lesson level] {:name   (str "L" idx)

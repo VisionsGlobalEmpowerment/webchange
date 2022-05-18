@@ -243,6 +243,13 @@
                      :uri    (str "/api/courses/" course-slug "/current-progress")}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::load-class-students-progress
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    (create-request {:key    :load-class-students-progress
+                     :method :get
+                     :uri    (str "/api/class-students/" class-id "/progress")}
+                    handlers)))
 ;; Courses
 
 (re-frame/reg-event-fx
@@ -251,6 +258,14 @@
     (create-request {:key    :load-course
                      :method :get
                      :uri    (str "/api/courses/" course-slug)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-class-course
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    (create-request {:key    :load-class-course
+                     :method :get
+                     :uri    (str "/api/classes/" class-id "/course")}
                     handlers)))
 
 (re-frame/reg-event-fx

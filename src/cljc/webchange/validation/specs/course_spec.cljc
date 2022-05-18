@@ -5,6 +5,7 @@
 
 (s/def ::id int?)
 (s/def ::course-id int?)
+(s/def ::class-id int?)
 (s/def ::school-id int?)
 
 (s/def ::course (s/keys :req-un [::id ::name ::slug ::lang ::image-src ::status ::type]

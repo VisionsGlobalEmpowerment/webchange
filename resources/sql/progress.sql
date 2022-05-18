@@ -93,8 +93,8 @@ WHERE user_id = :user_id
 -- :name create-activity-stat! :<!
 -- :doc creates a new activity stat record
 INSERT INTO activity_stats
-(user_id, course_id, activity_id, data)
-VALUES (:user_id, :course_id, :activity_id, :data)
+(user_id, course_id, unique_id, activity_id, data)
+VALUES (:user_id, :course_id, :unique_id, :activity_id, :data)
 RETURNING id
 
 -- :name get-user-activity-stats :? :*
@@ -103,9 +103,9 @@ SELECT * FROM activity_stats
 WHERE user_id = :user_id and course_id = :course_id
 
 -- :name get-activity-stat :? :1
--- :doc retrieves activity stat record for given user id, course id and activity id
+-- :doc retrieves activity stat record for given user id, course id and unique activity id
 SELECT * FROM activity_stats
-WHERE user_id = :user_id and course_id = :course_id and activity_id = :activity_id
+WHERE user_id = :user_id and course_id = :course_id and unique_id = :unique_id
 
 -- :name save-activity-stat! :! :n
 -- :doc updates an existing activity stat record
@@ -119,3 +119,10 @@ SELECT ast.* FROM activity_stats ast
 JOIN users u ON (ast.user_id=u.id)
 JOIN students s ON (s.user_id=u.id)
 WHERE s.school_id = :school_id
+
+-- :name get-class-students-progress :? :*
+-- :doc retrieves activity stats records for given school
+SELECT ast.* FROM activity_stats ast
+INNER JOIN users u ON (ast.user_id=u.id)
+INNER JOIN students s ON (s.user_id=u.id)
+WHERE s.class_id = :class_id

@@ -22,9 +22,11 @@
                            :activity-name "volleyball" :activity 1 :lesson 1 :level 1})
 (defn activity-stopped [] {:id            (.toString (java.util.UUID/randomUUID))
                            :created-at    (jt/format (jt/offset-date-time)) :type "activity-stopped"
+                           :unique-id 12
                            :activity-name "volleyball" :activity 1 :lesson 1 :level 1 :time-spent 50})
 (defn activity-finished [] {:id            (.toString (java.util.UUID/randomUUID))
                             :created-at    (jt/format (jt/offset-date-time)) :type "activity-finished"
+                            :unique-id 12
                             :activity-name "volleyball" :activity 1 :lesson 1 :level 1
                             :score         {:correct 10 :mistake 4 :incorrect 2} :time-spent 100})
 (defn activity-progress [] {:id         (.toString (java.util.UUID/randomUUID))

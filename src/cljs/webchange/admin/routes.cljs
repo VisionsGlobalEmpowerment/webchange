@@ -14,7 +14,9 @@
                          ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
                                                         "/classes"  {""                           :classes
                                                                      "/add"                       :add-class
-                                                                     ["/" [#"[\w-%]+" :class-id]] :class-profile}
+                                                                     ["/" [#"[\w-%]+" :class-id]] {"" :class-profile
+                                                                                                   "/students" {"" :class-students
+                                                                                                                ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
                                                         "/students" {""     :students
                                                                      "/add" :add-student
                                                                      ["/" [#"[\w-%]+" :student-id]] :edit-student}

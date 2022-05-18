@@ -842,8 +842,9 @@
         course (course-created)
         [{id :id}] (db/create-activity-stat! {:user_id (:id user)
                                               :course_id (:id course)
+                                              :unique_id 11
                                               :activity_id activity_id
-                                              :data {:hello "world"}})] {:id id :course_id (:id course) :user_id (:id user) :activity_id activity_id}))
+                                              :data {:hello "world"}})] {:id id :course_id (:id course) :user_id (:id user) :unique_id 11 :activity_id activity_id}))
 
 (defn editor-tag-created [name]
   (let [[{id :id}] (db/create-editor-tag! {:name name})]

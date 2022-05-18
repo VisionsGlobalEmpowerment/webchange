@@ -202,11 +202,11 @@ INNER JOIN (
 -- :name create-or-update-activity-stat! :! :n
 -- :doc creates a new activity stat record
 INSERT INTO activity_stats
-(user_id, course_id, activity_id, data)
-VALUES (:user_id, :course_id, :activity_id, :data)
+(user_id, course_id, unique_id, activity_id, data)
+VALUES (:user_id, :course_id, :unique_id, :activity_id, :data)
 ON CONFLICT ON CONSTRAINT activity_stats_unique
 DO UPDATE SET data=:data
-WHERE activity_stats.user_id=:user_id and activity_stats.course_id=:course_id and activity_stats.activity_id=:activity_id;
+WHERE activity_stats.user_id=:user_id and activity_stats.course_id=:course_id and activity_stats.unique_id=:unique_id;
 
 -- :name find-users-by-guid :? :*
 -- :doc Characters with returned columns specified

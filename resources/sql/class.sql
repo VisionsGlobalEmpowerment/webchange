@@ -192,6 +192,13 @@ SELECT true as result from teachers
 WHERE
 school_id = :school_id AND user_id = :user_id AND type = 'admin'
 
+-- :name is-class-teacher? :? :1
+-- :doc check if user is a teacher in given class
+SELECT true as result from teachers t
+INNER JOIN class_teachers ct ON ct.teacher_id = t.id
+WHERE
+ct.class_id = :class_id AND t.user_id = :user_id
+
 -- :name assign-school-course! :! :n
 -- :doc creates a new school_course record
 INSERT INTO school_courses
