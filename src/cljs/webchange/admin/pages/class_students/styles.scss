@@ -1,0 +1,101 @@
+.page--class-students {
+    .main-table {
+        display: grid;
+        column-gap: 10px;
+        row-gap: 16px;
+
+        &.columns-1 {grid-template-columns: repeat(1, 1fr);}
+        &.columns-2 {grid-template-columns: repeat(2, 1fr);}
+        &.columns-3 {grid-template-columns: repeat(3, 1fr);}
+        &.columns-4 {grid-template-columns: repeat(4, 1fr);}
+        &.columns-5 {grid-template-columns: repeat(5, 1fr);}
+        &.columns-6 {grid-template-columns: repeat(6, 1fr);}
+        &.columns-7 {grid-template-columns: repeat(7, 1fr);}
+        &.columns-8 {grid-template-columns: repeat(8, 1fr);}
+        &.columns-9 {grid-template-columns: repeat(9, 1fr);}
+        &.columns-10 {grid-template-columns: repeat(10, 1fr);}
+    }
+
+    .activity-card {
+        .preview {
+            width: 100px;
+            height: 60px;
+
+            border-radius: 6px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .name {
+            font-weight: 700;
+            font-size: 12px;
+        }
+    }
+
+    .progress-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 2px 12px;
+        background-color: #DCE3F5;
+        border-radius: 6px;
+
+        color: #505B76;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+
+        .data {
+            display: flex;
+            flex-direction: column;
+
+            font-size: 11px;
+            line-height: 13px;
+
+            .last-played {
+                font-weight: 400;
+            }
+
+            .total-time {
+                font-weight: 700;
+            }
+        }
+
+        &.completed {
+            color: #FFF;
+            background-color: #4ECB71;
+            @include icon-color(#FFF);
+            @include icon-size(18px);
+        }
+    }
+
+    .user-card {
+        display: flex;
+        gap: 20px;
+
+        .user-data {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 4px;
+
+            font-weight: 500;
+
+            .name {
+                font-size: 12px;
+                line-height: 12px;
+            }
+
+            .code {
+                font-size: 10px;
+                line-height: 10px;
+            }
+        }
+    }
+}
