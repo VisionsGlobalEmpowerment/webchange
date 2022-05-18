@@ -15,8 +15,9 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id]}]]
+  (fn [{:keys [db]} [_ {:keys [school-id class-id]}]]
     {:db (-> db
+             (assoc :school-id school-id)
              (assoc :class-id class-id)
              (assoc :loading-class true)
              (assoc :loading-course true)
@@ -54,8 +55,9 @@
          (into {}))))
 
 (defn- prepare-student
-  [{:keys [access-code user]}]
-  {:name (str (:first-name user) " " (:last-name user))
+  [{:keys [id access-code user]}]
+  {:id id
+   :name (str (:first-name user) " " (:last-name user))
    :code access-code})
 
 (re-frame/reg-event-fx
@@ -178,3 +180,14 @@
           with-progress #(assoc % :activities (user-progress (:user-id %)))]
       (->> students
            (map with-progress)))))
+
+(re-frame/reg-event-fx
+  ::open-student
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    (let [school-id (:school-id db)
+          class-id (:class-id db)]
+      {:dispatch [::routes/redirect :student-profile
+                  :school-id school-id
+                  :class-id class-id
+                  :student-id student-id]})))
