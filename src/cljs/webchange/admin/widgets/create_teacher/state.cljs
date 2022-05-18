@@ -20,9 +20,19 @@
   [db data-patch]
   (update db flags-key merge data-patch))
 
+(re-frame/reg-sub
+  ::flags-data
+  :<- [path-to-db]
+  #(get % flags-key {}))
+
 (defn- set-data-saving
   [db value]
   (update-flags db {:data-saving? value}))
+
+(re-frame/reg-sub
+  ::data-saving?
+  :<- [::flags-data]
+  #(get % :data-saving? false))
 
 ;;
 
@@ -30,8 +40,7 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (assoc :init true))}))
+    {}))
 
 (re-frame/reg-event-fx
   ::reset
@@ -41,19 +50,12 @@
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ school-id class-id data {:keys [on-success]}]]
-    (print "::save")
-    (print "school-id" school-id)
-    (print "class-id" class-id)
-
-    (let [teacher-data (cond-> data
-                               (some? class-id) (assoc :class-id class-id))]
-      (print "teacher-data" teacher-data)
-      {:db       (set-data-saving db true)
-       :dispatch [::warehouse/create-teacher
-                  {:school-id school-id :data teacher-data}
-                  {:on-success [::save-success on-success]
-                   :on-failure [::save-failure]}]})))
+  (fn [{:keys [db]} [_ school-id teacher-data {:keys [on-success]}]]
+    {:db       (set-data-saving db true)
+     :dispatch [::warehouse/create-teacher
+                {:school-id school-id :data teacher-data}
+                {:on-success [::save-success on-success]
+                 :on-failure [::save-failure]}]}))
 
 (re-frame/reg-event-fx
   ::save-success

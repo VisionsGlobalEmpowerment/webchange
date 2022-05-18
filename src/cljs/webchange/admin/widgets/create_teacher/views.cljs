@@ -21,7 +21,7 @@
        (re-frame/dispatch [::state/reset (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [school-id class-id on-save]}]
+     (fn [{:keys [school-id on-save]}]
        (let [model {:first-name {:label "First Name"
                                  :type  :text}
                     :last-name  {:label "Last Name"
@@ -38,17 +38,15 @@
                                             :value "admin"}
                                            {:text  "Teacher"
                                             :value "teacher"}]}}
-             handle-save #(re-frame/dispatch [::state/save school-id class-id % {:on-success on-save}])]
+             saving? @(re-frame/subscribe [::state/data-saving?])
+             handle-save #(re-frame/dispatch [::state/save school-id % {:on-success on-save}])]
          [:div {:class-name "widget--create-teacher"}
           [form {:form-id (-> (str "create-teacher/school-" school-id)
                               (keyword))
                  :model   model
                  :spec    ::teacher-spec/create-teacher
                  :on-save handle-save
-                 ;:disabled? (not editable?)
-                 ;:loading?  loading?
-                 ;:saving?   saving?
-
+                 :saving? saving?
                  :data    {:first-name "first-name-"
                            :last-name  "last-name"
                            :email      "email@email.org"
