@@ -78,7 +78,8 @@
 
 (defn- user-card
   [{:keys [id name code]}]
-  [:div.user-card {:on-click #(re-frame/dispatch [::state/open-student id])}
+  [:div {:class-name "user-card"
+         :on-click   #(re-frame/dispatch [::state/open-student id])}
    [ui/avatar {:class-name "user-avatar"}]
    [:div.user-data
     [:div.name name]
@@ -89,7 +90,7 @@
   (let [students-data @(re-frame/subscribe [::state/students-data])
         {:keys [activities]} @(re-frame/subscribe [::state/lesson-data])
         activities-number (count activities)]
-    [page/main-content {:title "Students"}
+    [page/main-content
      [:div {:class-name (ui/get-class-name {"main-table"                             true
                                             (str "columns-" (inc activities-number)) true})}
       [:div]
