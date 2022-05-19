@@ -47,15 +47,15 @@
                   :actions    [ui/icon-button {:icon     "add"
                                                :on-click handle-add-click}
                                "Add Student to Class"]}
-     [header-group {:class-name "students-stats"}
+     [page/header-content-group {:class-name "students-stats"}
       [ui/icon {:icon "students"}]
       [:span (:students stats) " Students"]]
      [:hr]
-     [header-group {:title "Course Name"} [:span course-name]]
+     [page/header-content-group {:title "Course Name"} [:span course-name]]
      [:hr]
-     [header-group {:title "Lesson"} [lesson-picker]]
+     [page/header-content-group {:title "Lesson"} [lesson-picker]]
      [:hr]
-     [header-group {:title "Level"} [level-picker]]]))
+     [page/header-content-group {:title "Level"} [level-picker]]]))
 
 (defn- activity-card
   [{:keys [name preview]}]

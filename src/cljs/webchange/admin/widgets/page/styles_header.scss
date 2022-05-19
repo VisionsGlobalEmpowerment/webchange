@@ -22,6 +22,39 @@
         border-right: solid 1px #ffffff3d;
     }
 
+    .header-content-group {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 120px;
+        padding: 4px;
+
+        color: #fff;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+
+        label {
+            color: $color-pink;
+            font-size: 10px;
+        }
+
+        span {
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        select {
+            color: #fff;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        @include icon-color($color-pink);
+    }
+
     & > .info {
         display: flex;
         align-items: center;
@@ -43,6 +76,8 @@
 
     & > .content {
         flex: 1 1;
+        display: flex;
+        gap: 16px;
 
         border-left: solid 1px #ffffff3d;
         padding-left: 16px;

@@ -11,21 +11,25 @@
   (let [current-level @(re-frame/subscribe [::state/current-level])
         level-options @(re-frame/subscribe [::state/level-options])
         on-change #(re-frame/dispatch [::state/select-level %])]
-    [c/select {:value      current-level
-               :options    level-options
-               :type "int"
-               :on-change  on-change}]))
+    [c/select {:value     current-level
+               :options   level-options
+               :type      "int"
+               :on-change on-change}]))
 
 (defn- header
   []
   (let [{student-name :name} @(re-frame/subscribe [::state/student])
         {:keys [started-at last-login activity-progress cumulative-time]} @(re-frame/subscribe [::state/course-stats])]
-    [page/header {:title   student-name
-                  :icon    "school"}
-     [:p (str "Program start" started-at)]
-     [:p (str "Latest login at" last-login)]
-     [:p (str "Activities completed" activity-progress)]
-     [:p (str "Total played time" cumulative-time)]]))
+    [page/header {:title      student-name
+                  :avatar     ""
+                  :class-name "student-profile-header"}
+     [page/header-content-group {:title "Program start"} [:span started-at]]
+     [:hr]
+     [page/header-content-group {:title "Latest login at"} [:span last-login]]
+     [:hr]
+     [page/header-content-group {:title "Activities completed"} [:span activity-progress]]
+     [:hr]
+     [page/header-content-group {:title "Total played time"} [:span cumulative-time]]]))
 
 (defn- activities-row
   [activities]

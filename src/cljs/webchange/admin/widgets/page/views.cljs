@@ -44,14 +44,25 @@
                            :ref        handle-ref}])))})))
 
 (defn- header-info
-  [{:keys [icon title]}]
+  [{:keys [avatar icon title]}]
   [:div.info
+   (when (some? avatar)
+     [c/avatar {:src avatar}])
    (when (some? icon)
      [c/icon {:icon       icon
               :class-name "icon"}])
    (when (some? title)
      [:div {:class-name "title"}
       title])])
+
+(defn- header-content-group
+  [{:keys [class-name title]}]
+  (->> (r/current-component)
+       (r/children)
+       (into [:div {:class-name (get-class-name {"header-content-group" true
+                                                 class-name             (some? class-name)})}
+              (when (some? title)
+                [:label title])])))
 
 (defn header
   [{:keys [actions class-name] :as props}]
