@@ -53,8 +53,9 @@
       [:p total-time]])])
 
 (defn- list-item
-  [{:keys [name code activities] :as props}]
-  [l/list-item props
+  [{:keys [id name code activities] :as props}]
+  [l/list-item (merge props {:on-click #(re-frame/dispatch [::state/open-student id])})
+   [:p id]
    [:p code]
    [activities-row activities]])
 

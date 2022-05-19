@@ -832,6 +832,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-class-student-progress
+  (fn [{:keys [_]} [_ {:keys [student-id]} handlers]]
+    (create-request {:key    :load-class-student
+                     :method :get
+                     :uri    (str "/api/class-student/" student-id "/progress")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::add-student
   (fn [{:keys [_]} [_ {:keys [data]} handlers]]
     (create-request {:key    :add-student

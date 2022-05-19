@@ -11,6 +11,7 @@
     [webchange.admin.pages.schools.views :as schools]
     [webchange.admin.pages.schools-archived.views :as schools-archived]
     [webchange.admin.pages.students.views :as students]
+    [webchange.admin.pages.student-profile.views :as student-profile]
     [webchange.admin.pages.add-student.views :as add-student]
     [webchange.admin.pages.add-school.views :as add-school]
     [webchange.admin.pages.teachers.views :as teachers]
@@ -34,4 +35,5 @@
             :add-teacher    add-teacher/page
             :teacher-profile teacher-profile/page
             :class-students class-students/page
+            :student-profile student-profile/page
             :404            not-found/page})
