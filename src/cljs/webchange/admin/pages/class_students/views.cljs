@@ -42,16 +42,14 @@
      [level-picker]]))
 
 (defn- activity-card
-  [{:keys [name preview] :as props}]
-  ;(print "activity-card" props)
+  [{:keys [name preview]}]
   [:div.activity-card
-   [:div.preview
-    [:img {:src preview}]]
+   [ui/image {:src        preview
+              :class-name "preview"}]
    [:div.name name]])
 
 (defn- progress-card
-  [{:keys [completed? last-played total-time] :as props}]
-  ;(print "progress-card" props)
+  [{:keys [completed? last-played total-time]}]
   [:div {:class-name (ui/get-class-name {"progress-card" true
                                          "completed"     completed?})}
    (if completed?
@@ -63,8 +61,7 @@
      [:span "Not Started"])])
 
 (defn- user-card
-  [{:keys [id name code] :as props}]
-  ;(print "user-card" props)
+  [{:keys [id name code]}]
   [:div.user-card {:on-click #(re-frame/dispatch [::state/open-student id])}
    [ui/avatar {:class-name "user-avatar"}]
    [:div.user-data
@@ -90,9 +87,7 @@
          [user-card student-data]
          (for [activity-data activities]
            ^{:key (str "student-progress-" (:id student-data) "-" (:id activity-data))}
-           [progress-card {:completed? true
-                           :last-played "21/04/2022"
-                           :total-time "2m : 23s"} #_activity-data])])]]))
+           [progress-card activity-data])])]]))
 
 (defn page
   [props]

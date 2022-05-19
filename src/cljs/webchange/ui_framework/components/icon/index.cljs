@@ -48,6 +48,7 @@
     [webchange.ui-framework.components.icon.icon-game-library :as game-library]
     [webchange.ui-framework.components.icon.icon-group :as group]
     [webchange.ui-framework.components.icon.icon-image :as image]
+    [webchange.ui-framework.components.icon.icon-image-broken :as image-broken]
     [webchange.ui-framework.components.icon.icon-image-contain :as image-contain]
     [webchange.ui-framework.components.icon.icon-image-cover :as image-cover]
     [webchange.ui-framework.components.icon.icon-image-no-size :as image-no-size]
@@ -139,6 +140,7 @@
    "game-library"       game-library/data
    "group"              group/data
    "image"              image/data
+   "image-broken"       image-broken/data
    "image-contain"      image-contain/data
    "image-cover"        image-cover/data
    "image-no-size"      image-no-size/data
