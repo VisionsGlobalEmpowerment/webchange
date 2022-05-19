@@ -80,6 +80,7 @@
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-teachers :as teachers]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
+    [webchange.ui-framework.components.icon.icon-trophy :as trophy]
     [webchange.ui-framework.components.icon.icon-text :as text]
     [webchange.ui-framework.components.icon.icon-user :as user]
     [webchange.ui-framework.components.icon.icon-users :as users]
@@ -172,6 +173,7 @@
    "sync"               sync/data
    "teachers"           teachers/data
    "text-animation"     text-animation/data
+   "trophy"             trophy/data
    "text"               text/data
    "undo"               undo/data
    "user"               user/data

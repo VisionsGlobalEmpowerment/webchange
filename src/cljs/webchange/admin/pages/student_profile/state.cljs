@@ -16,10 +16,10 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class-id student-id]}]]
-    {:db (-> db
-             (assoc :class-id class-id)
-             (assoc :student-id student-id)
-             (assoc :loading-student true))
+    {:db         (-> db
+                     (assoc :class-id class-id)
+                     (assoc :student-id student-id)
+                     (assoc :loading-student true))
      :dispatch-n [[::warehouse/load-class-student-progress {:student-id student-id} {:on-success [::load-student-success]}]]}))
 
 (defn- prepare-student
@@ -86,7 +86,7 @@
          (count)
          (range)
          (map (fn [idx] {:value idx
-                         :text (str "Level " (inc idx))})))))
+                         :text  (str "Level " (inc idx))})))))
 
 (re-frame/reg-event-fx
   ::select-level
@@ -109,11 +109,11 @@
   [activities {unique-id :unique-id activity-key :activity :as course-activity} stats]
   (let [activity-name (->> activity-key keyword (get activities) :name)
         stat (get stats unique-id)]
-    {:id unique-id
-     :name activity-name
-     :completed? (some? (:score stat))
+    {:id          unique-id
+     :name        activity-name
+     :completed?  (some? (:score stat))
      :last-played (:last-played stat)
-     :total-time (:total-time stat)}))
+     :total-time  (:total-time stat)}))
 
 (defn- ->lesson-stats
   [activities lesson activity-stats]
@@ -127,10 +127,15 @@
   :<- [::current-lessons]
   :<- [::activity-stats]
   (fn [[course current-lessons activity-stats]]
-    (let [activities (-> course :data :scene-list)
-          lessons (->> current-lessons
-                       (map-indexed (fn [idx lesson]
-                                      {:id idx
-                                       :name (str "Lesson " (inc idx))
-                                       :activities (->lesson-stats activities lesson activity-stats)})))]
-      lessons)))
+    (let [activities (-> course :data :scene-list)]
+      (->> current-lessons
+           (map-indexed vector)
+           (reduce (fn [result [idx lesson]]
+                     (let [lesson-activities (->lesson-stats activities lesson activity-stats)]
+                       (-> result
+                           (update :data conj {:id         idx
+                                               :name       (str "Lesson " (inc idx))
+                                               :activities lesson-activities})
+                           (update :max-activities max (count lesson-activities)))))
+                   {:data           []
+                    :max-activities 0})))))
