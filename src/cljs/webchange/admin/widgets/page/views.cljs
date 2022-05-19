@@ -54,13 +54,14 @@
       title])])
 
 (defn header
-  [{:keys [actions] :as props}]
+  [{:keys [actions class-name] :as props}]
   (let [children (->> (r/current-component)
                       (r/children))]
     [:div {:class-name (:header class-names)}
      [header-info props]
      (when (some? children)
-       (into [:div.content]
+       (into [:div {:class-name (get-class-name {"content"  true
+                                                 class-name (some? class-name)})}]
              children))
      (when (some? actions)
        [:div.actions

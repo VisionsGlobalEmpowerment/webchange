@@ -16,6 +16,12 @@
     background-color: $color-primary;
     color: $color-text-light;
 
+    hr {
+        margin: 0;
+        border: none;
+        border-right: solid 1px #ffffff3d;
+    }
+
     & > .info {
         display: flex;
         align-items: center;
@@ -24,12 +30,8 @@
         & > .icon {
             padding: 0;
 
-            svg {
-                $size: 32px;
-                width: $size;
-                height: $size;
-                stroke: $color-secondary;
-            }
+            @include icon-color($color-secondary);
+            @include icon-size(32px);
         }
 
         & > .title {

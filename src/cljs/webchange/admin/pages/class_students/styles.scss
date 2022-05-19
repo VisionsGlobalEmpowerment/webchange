@@ -1,4 +1,45 @@
 .page--class-students {
+    .class-students-header {
+        display: flex;
+        gap: 16px;
+
+        .header-group {
+            display: flex;
+            align-items: stretch;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 120px;
+            padding: 4px;
+
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 14px;
+
+            label {
+                color: $color-pink;
+                font-size: 10px;
+            }
+
+            select {
+                color: #fff;
+                background: transparent;
+                border: none;
+                padding: 0;
+            }
+
+            @include icon-color($color-pink);
+
+            &.students-stats {
+                 display: flex;
+                 flex-direction: row;
+                 align-items: center;
+                 flex: 1 1;
+
+                 @include icon-color($color-blue);
+             }
+        }
+    }
+
     .main-table {
         display: grid;
         column-gap: 10px;
@@ -27,12 +68,13 @@
             width: 100%;
             height: 66px;
 
-            border: solid 1px #ccc;
             border-radius: 6px;
             overflow: hidden;
         }
 
         .name {
+            padding: 8px 0;
+
             font-weight: 700;
             font-size: 12px;
         }
@@ -52,7 +94,7 @@
         font-size: 12px;
         line-height: 14px;
 
-        height: 100px;
+        height: 36px;
 
         .data {
             display: flex;
@@ -80,7 +122,9 @@
 
     .user-card {
         display: flex;
+        align-items: center;
         gap: 20px;
+        margin-right: 16px;
 
         .user-data {
             display: flex;

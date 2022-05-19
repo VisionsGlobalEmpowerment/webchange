@@ -1,5 +1,6 @@
 (ns webchange.ui-framework.components.select.index
   (:require
+    [webchange.ui-framework.components.select.icon-arrow :as icon-arrow]
     [webchange.ui-framework.components.select.icon-down :as icon-down]
     [webchange.ui-framework.components.select.icon-up :as icon-up]
     [webchange.ui-framework.components.select.utils :refer [empty-value? fix-options parse-value]]
@@ -64,11 +65,12 @@
                                 selected-options
                                 (first selected-options))
                               (on-change))))
-        options (fix-options options props)]
+        options (fix-options options props)
+        with-arrow? (and with-arrow? (not multiple?))]
     [:div {:style      (if (some? width) {:width width} {})
            :class-name (get-class-name (cond-> (-> {"wc-select"       true
                                                     "wc-select-error" (some? error)
-                                                    "with-arrow"      (and with-arrow? (not multiple?))}
+                                                    "with-arrow"      with-arrow?}
                                                    (assoc class-name (some? class-name)))
                                                (some? variant) (assoc (str "variant-" variant) true)))}
      [:select (cond-> {:value     (or value "")
@@ -81,6 +83,8 @@
                           :disabled disabled?}
                          (some? title) (assoc :title title))
          text])]
+     (when with-arrow?
+       [:div.expand-icon icon-arrow/data])
      (when show-buttons?
        [:div.controls
         [:button {:on-click on-arrow-up-click}

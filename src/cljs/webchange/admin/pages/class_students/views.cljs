@@ -1,6 +1,7 @@
 (ns webchange.admin.pages.class-students.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.admin.pages.class-students.state :as state]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]))
@@ -26,20 +27,35 @@
                 :type      "int"
                 :on-change on-change}]))
 
+(defn- header-group
+  [{:keys [class-name title]}]
+  (->> (r/current-component)
+       (r/children)
+       (into [:div {:class-name (ui/get-class-name {"header-group" true
+                                                    class-name     (some? class-name)})}
+              (when (some? title)
+                [:label title])])))
+
 (defn- header
   []
   (let [{class-name :name stats :stats} @(re-frame/subscribe [::state/class])
         {course-name :name} @(re-frame/subscribe [::state/course])
         handle-add-click #(re-frame/dispatch [::state/add-student])]
-    [page/header {:title   class-name
-                  :icon    "school"
-                  :actions [ui/icon-button {:icon     "add"
-                                            :on-click handle-add-click}
-                            "Add Student to Class"]}
-     [:p (str (:students stats) " Students")]
-     [:p course-name]
-     [lesson-picker]
-     [level-picker]]))
+    [page/header {:title      class-name
+                  :icon       "classes"
+                  :class-name "class-students-header"
+                  :actions    [ui/icon-button {:icon     "add"
+                                               :on-click handle-add-click}
+                               "Add Student to Class"]}
+     [header-group {:class-name "students-stats"}
+      [ui/icon {:icon "students"}]
+      [:span (:students stats) " Students"]]
+     [:hr]
+     [header-group {:title "Course Name"} [:span course-name]]
+     [:hr]
+     [header-group {:title "Lesson"} [lesson-picker]]
+     [:hr]
+     [header-group {:title "Level"} [level-picker]]]))
 
 (defn- activity-card
   [{:keys [name preview]}]
