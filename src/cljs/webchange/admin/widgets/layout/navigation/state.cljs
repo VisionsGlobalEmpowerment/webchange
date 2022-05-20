@@ -15,40 +15,10 @@
           :text  "Dashboard"
           :icon  "dashboard"
           :route {:page :dashboard}}
-         {:id       :school-management
-          :text     "School Management"
-          :icon     "preview"
-          :children [{:id       :schools
-                      :text     "Schools"
-                      :route    {:page :schools}
-                      :children [{:id       :school-1
-                                  :text     "School 1"
-                                  :route    {:page        :school-profile
-                                             :page-params {:school-id 1}}
-                                  :children [{:id       :classes
-                                              :text     "Classes"
-                                              :route    {:page        :classes
-                                                         :page-params {:school-id 1}}
-                                              :children [{:id    :class-3
-                                                          :text  "Class 3"
-                                                          :route {:page        :class-profile
-                                                                  :page-params {:school-id 1
-                                                                                :class-id  3}}}]}
-                                             {:id       :students
-                                              :text     "Students"
-                                              :route    {:page        :students
-                                                         :page-params {:school-id 1}}
-                                              :children [{:id    :add
-                                                          :text  "Add Student"
-                                                          :route {:page        :add-student
-                                                                  :page-params {:school-id 1}}}]}
-                                             {:id       :courses
-                                              :text     "Courses"
-                                              :route    {:page        :school-courses
-                                                         :page-params {:school-id 1}}}]}]}
-                     {:id    :courses
-                      :text  "Courses"
-                      :route {:page :courses}}]}
+         {:id    :school-management
+          :text  "School Management"
+          :icon  "preview"
+          :route {:page :schools}}
          {:id   :lesson-builder
           :text "Lesson builder"
           :icon "create-game"}
