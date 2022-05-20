@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.admin.pages.student-profile.state :as state]
+    [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.student-form.views :refer [student-form]]
     [webchange.ui-framework.components.index :as ui]))
@@ -113,8 +114,12 @@
 
 (defn- side-bar-complete-class
   []
-  [page/side-bar {:title "Complete Class"}
-   ])
+  (let [handle-close-click #(re-frame/dispatch [::state/open-student-profile])]
+    [page/side-bar {:title   "Complete Class"
+                    :actions [ui/icon-button {:icon     "close"
+                                              :variant  "light"
+                                              :on-click handle-close-click}]}
+     [no-data]]))
 
 (defn- side-bar-student-profile
   [{:keys [school-id student-id]}]
@@ -128,8 +133,8 @@
                                               :on-click handle-edit-click}]}
      [student-form {:student-id student-id
                     :school-id  school-id
-                    :editable? @form-editable?
-                    :on-save   handle-save-click}]]))
+                    :editable?  @form-editable?
+                    :on-save    handle-save-click}]]))
 
 (defn- side-bar
   [props]
