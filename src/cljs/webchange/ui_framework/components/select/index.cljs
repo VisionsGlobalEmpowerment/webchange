@@ -66,7 +66,7 @@
                                 (first selected-options))
                               (on-change))))
         options (fix-options options props)
-        with-arrow? (and with-arrow? (not multiple?))]
+        with-arrow? (and with-arrow? (not multiple?) (not disabled?))]
     [:div {:style      (if (some? width) {:width width} {})
            :class-name (get-class-name (cond-> (-> {"wc-select"       true
                                                     "wc-select-error" (some? error)

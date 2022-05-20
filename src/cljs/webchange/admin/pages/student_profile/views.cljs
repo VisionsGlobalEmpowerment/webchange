@@ -1,8 +1,10 @@
 (ns webchange.admin.pages.student-profile.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.admin.pages.student-profile.state :as state]
     [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.student-form.views :refer [student-form]]
     [webchange.ui-framework.components.index :as ui]))
 
 (defn- level-picker
@@ -62,12 +64,14 @@
 
 (defn- table-actions
   []
-  [:div.table-actions
-   [ui/icon-button {:icon       "trophy"
-                    :variant    "light"
-                    :direction  "revert"
-                    :class-name "complete-button"}
-    "Complete Class"]])
+  (let [handle-complete-click #(re-frame/dispatch [::state/open-complete-class])]
+    [:div.table-actions
+     [ui/icon-button {:icon       "trophy"
+                      :variant    "light"
+                      :direction  "revert"
+                      :class-name "complete-button"
+                      :on-click   handle-complete-click}
+      "Complete Class"]]))
 
 (defn- progress-table
   []
@@ -107,10 +111,39 @@
                                   [view-switcher]]}
      [progress-table]]))
 
+(defn- side-bar-complete-class
+  []
+  [page/side-bar {:title "Complete Class"}
+   ])
+
+(defn- side-bar-student-profile
+  [{:keys [school-id student-id]}]
+  (r/with-let [form-editable? (r/atom false)
+               handle-edit-click #(swap! form-editable? not)
+               handle-save-click #(do (reset! form-editable? false)
+                                      (re-frame/dispatch [::state/update-student-data student-id]))]
+    [page/side-bar {:title   "Student Account"
+                    :actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
+                                              :variant  "light"
+                                              :on-click handle-edit-click}]}
+     [student-form {:student-id student-id
+                    :school-id  school-id
+                    :editable? @form-editable?
+                    :on-save   handle-save-click}]]))
+
+(defn- side-bar
+  [props]
+  (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
+    (case side-bar-content
+      :complete-class [side-bar-complete-class props]
+      :student-profile [side-bar-student-profile props]
+      nil)))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
     [page/page {:class-name "page--student-profile"}
      [header]
-     [content]]))
+     [content]
+     [side-bar props]]))

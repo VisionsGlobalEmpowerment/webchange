@@ -46,6 +46,12 @@
              (assoc :course-stats course-stats)
              (assoc :activity-stats (prepare-progress activity-stats)))}))
 
+(re-frame/reg-event-fx
+  ::update-student-data
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    {:dispatch [::warehouse/load-class-student-progress {:student-id student-id} {:on-success [::load-student-success]}]}))
+
 (re-frame/reg-sub
   ::student
   :<- [path-to-db]
@@ -139,3 +145,28 @@
                            (update :max-activities max (count lesson-activities)))))
                    {:data           []
                     :max-activities 0})))))
+
+;; Side Bar Content
+
+(def side-bar-key :side-bar)
+
+(defn- set-side-bar
+  [db value]
+  (assoc db side-bar-key value))
+
+(re-frame/reg-sub
+  ::side-bar
+  :<- [path-to-db]
+  #(get % side-bar-key :student-profile))
+
+(re-frame/reg-event-fx
+  ::open-student-profile
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :student-profile)}))
+
+(re-frame/reg-event-fx
+  ::open-complete-class
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :complete-class)}))

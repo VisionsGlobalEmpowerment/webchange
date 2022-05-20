@@ -1,6 +1,7 @@
 @mixin input-border {
     border: none;
     border-bottom: 1px solid #F7F7FB;
+    border-radius: 0;
 }
 
 @mixin input-color {
