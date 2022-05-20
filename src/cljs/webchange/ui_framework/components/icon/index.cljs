@@ -48,6 +48,7 @@
     [webchange.ui-framework.components.icon.icon-game-library :as game-library]
     [webchange.ui-framework.components.icon.icon-group :as group]
     [webchange.ui-framework.components.icon.icon-image :as image]
+    [webchange.ui-framework.components.icon.icon-image-broken :as image-broken]
     [webchange.ui-framework.components.icon.icon-image-contain :as image-contain]
     [webchange.ui-framework.components.icon.icon-image-cover :as image-cover]
     [webchange.ui-framework.components.icon.icon-image-no-size :as image-no-size]
@@ -79,6 +80,7 @@
     [webchange.ui-framework.components.icon.icon-sync :as sync]
     [webchange.ui-framework.components.icon.icon-teachers :as teachers]
     [webchange.ui-framework.components.icon.icon-text-animation :as text-animation]
+    [webchange.ui-framework.components.icon.icon-trophy :as trophy]
     [webchange.ui-framework.components.icon.icon-text :as text]
     [webchange.ui-framework.components.icon.icon-user :as user]
     [webchange.ui-framework.components.icon.icon-users :as users]
@@ -139,6 +141,7 @@
    "game-library"       game-library/data
    "group"              group/data
    "image"              image/data
+   "image-broken"       image-broken/data
    "image-contain"      image-contain/data
    "image-cover"        image-cover/data
    "image-no-size"      image-no-size/data
@@ -170,6 +173,7 @@
    "sync"               sync/data
    "teachers"           teachers/data
    "text-animation"     text-animation/data
+   "trophy"             trophy/data
    "text"               text/data
    "undo"               undo/data
    "user"               user/data

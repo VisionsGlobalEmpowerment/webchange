@@ -14,6 +14,7 @@
     [webchange.ui-framework.components.file.index :as file]
     [webchange.ui-framework.components.icon.index :as icon]
     [webchange.ui-framework.components.icon-button.index :as icon-button]
+    [webchange.ui-framework.components.image.index :as image]
     [webchange.ui-framework.components.image-preview.index :as image-preview]
     [webchange.ui-framework.components.input.index :as input]
     [webchange.ui-framework.components.label.index :as label]
@@ -42,6 +43,7 @@
 (def file file/component)
 (def icon icon/component)
 (def icon-button icon-button/component)
+(def image image/component)
 (def image-preview image-preview/component)
 (def input input/component)
 (def label label/component)

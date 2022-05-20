@@ -16,7 +16,8 @@
   (fn? on-esc-press))
 
 (defn component
-  [{:keys [class-name
+  [{:keys [action
+           class-name
            default-value
            disabled?
            error
@@ -98,6 +99,8 @@
                        (fn? on-blur) (assoc :on-blur handle-blur)
                        (fn? on-focus) (assoc :on-focus handle-focus))]
        (when (some? error)
-         [:label.wc-error error])])
+         [:label.wc-error error])
+       (when (some? action)
+         [:div.action-wrapper action])])
     (finally
       (unsubscribe-document handle-document-key-down))))

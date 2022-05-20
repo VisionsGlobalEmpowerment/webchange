@@ -1,16 +1,20 @@
 .wc-tooltip {
-    background-color: rgba(0,0,0,0.65);
-    border-radius: 4px;
-    color: #fff;
+    position: relative;
 
-    font-size: 10px;
-    text-align: center;
+    & > .wc-tooltip-title {
+        background-color: rgba(0,0,0,0.65);
+        border-radius: 4px;
+        color: #fff;
 
-    position: absolute;
-    top: -24px;
-    left: 50%;
+        font-size: 10px;
+        text-align: center;
 
-    margin-left: -20px;
-    padding: 2px 8px;
-    width: 40px;
+        position: absolute;
+        top: -24px;
+        left: 50%;
+
+        margin-left: -20px;
+        padding: 2px 8px;
+        width: 40px;
+    }
 }

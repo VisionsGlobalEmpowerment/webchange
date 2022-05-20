@@ -1,62 +1,148 @@
 (ns webchange.admin.pages.student-profile.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.admin.pages.student-profile.state :as state]
-    [webchange.admin.components.list.views :as l]
+    [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as c]))
+    [webchange.admin.widgets.student-form.views :refer [student-form]]
+    [webchange.ui-framework.components.index :as ui]))
 
 (defn- level-picker
   []
   (let [current-level @(re-frame/subscribe [::state/current-level])
         level-options @(re-frame/subscribe [::state/level-options])
         on-change #(re-frame/dispatch [::state/select-level %])]
-    [c/select {:value      current-level
-               :options    level-options
-               :type "int"
-               :on-change  on-change}]))
+    [:div.level-picker
+     [ui/select {:value     current-level
+                 :options   level-options
+                 :type      "int"
+                 :on-change on-change}]]))
 
 (defn- header
   []
   (let [{student-name :name} @(re-frame/subscribe [::state/student])
         {:keys [started-at last-login activity-progress cumulative-time]} @(re-frame/subscribe [::state/course-stats])]
-    [page/header {:title   student-name
-                  :icon    "school"}
-     [:p (str "Program start" started-at)]
-     [:p (str "Latest login at" last-login)]
-     [:p (str "Activities completed" activity-progress)]
-     [:p (str "Total played time" cumulative-time)]]))
+    [page/header {:title      student-name
+                  :avatar     ""
+                  :class-name "student-profile-header"}
+     [page/header-content-group {:title "Program start"} [:span started-at]]
+     [:hr]
+     [page/header-content-group {:title "Latest login at"} [:span last-login]]
+     [:hr]
+     [page/header-content-group {:title "Activities completed"} [:span activity-progress]]
+     [:hr]
+     [page/header-content-group {:title "Total played time"} [:span cumulative-time]]]))
 
-(defn- activities-row
-  [activities]
-  [:div
-   (for [{:keys [id name completed? last-played total-time]} activities]
-     ^{:key id}
-     [:div
-      [:p (str "Name: " name)]
-      [:p (str "Completed? " completed?)]
-      [:p last-played]
-      [:p total-time]])])
+(defn- progress-card
+  [{:keys [completed? last-played name total-time]}]
+  [:div {:class-name (ui/get-class-name {"progress-card" true
+                                         "completed"     completed?})}
+   (if completed?
+     [:<>
+      [:div.data
+       [:span.name name]
+       [:span.last-played last-played]
+       [:span.total-time total-time]]
+      [ui/icon {:icon "check"}]]
+     [:span.name name])])
+
+(defn- lesson-card
+  [{:keys [name]}]
+  [:div.lesson-card
+   name])
 
 (defn- list-item
-  [{:keys [activities] :as props}]
-  [l/list-item props
-   [activities-row activities]])
+  [{:keys [activities length] :as props}]
+  [:<>
+   [lesson-card props]
+   (for [{:keys [id] :as props} activities]
+     ^{:key id}
+     [progress-card props])
+   (for [idx (range (- length (count activities)))]
+     ^{:key idx}
+     [:div])])
+
+(defn- table-actions
+  []
+  (let [handle-complete-click #(re-frame/dispatch [::state/open-complete-class])]
+    [:div.table-actions
+     [ui/icon-button {:icon       "trophy"
+                      :variant    "light"
+                      :direction  "revert"
+                      :class-name "complete-button"
+                      :on-click   handle-complete-click}
+      "Complete Class"]]))
+
+(defn- progress-table
+  []
+  (let [{:keys [data max-activities]} @(re-frame/subscribe [::state/lessons-data])]
+    [:div {:class-name (ui/get-class-name {"progress-table"                      true
+                                           (str "columns-" (inc max-activities)) true})}
+
+     [level-picker]
+     [table-actions]
+     (for [{:keys [id] :as lesson-data} data]
+       ^{:key id}
+       [list-item (merge lesson-data
+                         {:length max-activities})])]))
+
+(defn- course-name
+  []
+  (let [{:keys [name] :as course} @(re-frame/subscribe [::state/course])]
+    [:div.course-name
+     [ui/icon {:icon "presentation"}]
+     [:span "Course: "]
+     [:span (if (some? course) name "Not Assigned")]]))
+
+(defn- view-switcher
+  []
+  [:div.view-switcher
+   [ui/button {:class-name "active"} "Course View"]
+   [:hr]
+   [ui/button "Student History"]])
 
 (defn- content
   []
-  (let [{class-name :name} @(re-frame/subscribe [::state/class])
-        {course-name :name} @(re-frame/subscribe [::state/course])
-        lessons-data @(re-frame/subscribe [::state/lessons-data])]
-    [page/main-content {:title "Student Profile"}
-     [:div
-      [:p class-name]
-      [:p course-name]
-      [level-picker]]
-     [l/list {:class-name "lessons"}
-      (for [{:keys [id] :as lesson-data} lessons-data]
-        ^{:key id}
-        [list-item lesson-data])]]))
+  (let [{class-name :name} @(re-frame/subscribe [::state/class])]
+    [page/main-content {:title   class-name
+                        :icon    "classes"
+                        :actions [:div.main-content-actions
+                                  [course-name]
+                                  [view-switcher]]}
+     [progress-table]]))
+
+(defn- side-bar-complete-class
+  []
+  (let [handle-close-click #(re-frame/dispatch [::state/open-student-profile])]
+    [page/side-bar {:title   "Complete Class"
+                    :actions [ui/icon-button {:icon     "close"
+                                              :variant  "light"
+                                              :on-click handle-close-click}]}
+     [no-data]]))
+
+(defn- side-bar-student-profile
+  [{:keys [school-id student-id]}]
+  (r/with-let [form-editable? (r/atom false)
+               handle-edit-click #(swap! form-editable? not)
+               handle-save-click #(do (reset! form-editable? false)
+                                      (re-frame/dispatch [::state/update-student-data student-id]))]
+    [page/side-bar {:title   "Student Account"
+                    :actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
+                                              :variant  "light"
+                                              :on-click handle-edit-click}]}
+     [student-form {:student-id student-id
+                    :school-id  school-id
+                    :editable?  @form-editable?
+                    :on-save    handle-save-click}]]))
+
+(defn- side-bar
+  [props]
+  (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
+    (case side-bar-content
+      :complete-class [side-bar-complete-class props]
+      :student-profile [side-bar-student-profile props]
+      nil)))
 
 (defn page
   [props]
@@ -64,4 +150,5 @@
   (fn []
     [page/page {:class-name "page--student-profile"}
      [header]
-     [content]]))
+     [content]
+     [side-bar props]]))

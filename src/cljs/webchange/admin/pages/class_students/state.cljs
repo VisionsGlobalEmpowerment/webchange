@@ -16,12 +16,12 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id class-id]}]]
-    {:db (-> db
-             (assoc :school-id school-id)
-             (assoc :class-id class-id)
-             (assoc :loading-class true)
-             (assoc :loading-course true)
-             (assoc :loading-progress true))
+    {:db         (-> db
+                     (assoc :school-id school-id)
+                     (assoc :class-id class-id)
+                     (assoc :loading-class true)
+                     (assoc :loading-course true)
+                     (assoc :loading-progress true))
      :dispatch-n [[::warehouse/load-class {:class-id class-id} {:on-success [::load-class-success]}]
                   [::warehouse/load-class-course {:class-id class-id} {:on-success [::load-course-success]}]
                   [::warehouse/load-class-students-progress {:class-id class-id} {:on-success [::load-progress-success]}]]}))
@@ -56,7 +56,7 @@
 
 (defn- prepare-student
   [{:keys [id access-code user]}]
-  {:id id
+  {:id   id
    :name (str (:first-name user) " " (:last-name user))
    :code access-code})
 
@@ -99,7 +99,7 @@
          (count)
          (range)
          (map (fn [idx] {:value idx
-                         :text (str "Level " (inc idx))})))))
+                         :text  (str "Level " (inc idx))})))))
 
 (re-frame/reg-sub
   ::lesson-options
@@ -115,7 +115,7 @@
            (count)
            (range)
            (map (fn [idx] {:value idx
-                           :text (str "Lesson " (inc idx))}))))))
+                           :text  (str "Lesson " (inc idx))}))))))
 
 (re-frame/reg-event-fx
   ::select-level
@@ -152,10 +152,10 @@
                           (map (fn [{:keys [activity unique-id]}]
                                  (let [{:keys [name preview]} (-> course :data :scene-list
                                                                   (get (keyword activity)))]
-                                   {:id unique-id
-                                    :name name
+                                   {:id      unique-id
+                                    :name    name
                                     :preview preview}))))]
-      {:name (:name course)
+      {:name       (:name course)
        :activities activities})))
 
 (re-frame/reg-sub
@@ -173,10 +173,10 @@
                           (let [p (get progress user-id)]
                             (map (fn [activity]
                                    (let [stat-data (-> p (get (:unique-id activity)) :data)]
-                                     {:id (:unique-id activity)
-                                      :completed (some? (:score stat-data))
+                                     {:id          (:unique-id activity)
+                                      :completed?  (some? (:score stat-data))
                                       :last-played (:last-played stat-data)
-                                      :total-time (:time-played stat-data)})) activities)))
+                                      :total-time  (:time-played stat-data)})) activities)))
           with-progress #(assoc % :activities (user-progress (:user-id %)))]
       (->> students
            (map with-progress)))))

@@ -30,4 +30,11 @@
     .wc-input-label {
         white-space: nowrap;
     }
+
+    .action-wrapper {
+        position: absolute;
+        right: 0;
+
+        @include icon-size(12px);
+    }
 }

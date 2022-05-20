@@ -4,7 +4,8 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  []
-  [:div {:class-name (get-class-name {"wc-avatar" true})}
+  [{:keys [class-name]}]
+  [:div {:class-name (get-class-name {"wc-avatar" true
+                                      class-name  (some? class-name)})}
    [ic/component {:icon       "user"
                   :class-name "default-icon"}]])

@@ -44,8 +44,10 @@
                            :ref        handle-ref}])))})))
 
 (defn- header-info
-  [{:keys [icon title]}]
+  [{:keys [avatar icon title]}]
   [:div.info
+   (when (some? avatar)
+     [c/avatar {:src avatar}])
    (when (some? icon)
      [c/icon {:icon       icon
               :class-name "icon"}])
@@ -53,33 +55,50 @@
      [:div {:class-name "title"}
       title])])
 
+(defn- header-content-group
+  [{:keys [class-name title]}]
+  (->> (r/current-component)
+       (r/children)
+       (into [:div {:class-name (get-class-name {"header-content-group" true
+                                                 class-name             (some? class-name)})}
+              (when (some? title)
+                [:label title])])))
+
 (defn header
-  [{:keys [actions] :as props}]
+  [{:keys [actions class-name] :as props}]
   (let [children (->> (r/current-component)
                       (r/children))]
     [:div {:class-name (:header class-names)}
      [header-info props]
      (when (some? children)
-       (into [:div.content]
+       (into [:div {:class-name (get-class-name {"content"  true
+                                                 class-name (some? class-name)})}]
              children))
      (when (some? actions)
        [:div.actions
         actions])]))
 
 (defn- block-title
-  [{:keys [actions title]}]
+  [{:keys [actions icon title]}]
   (when (or (some? title)
             (some? actions))
     [:h1.block-title
-     (when (some? title)
-       [:div.title-text title])
+     [:div {:class-name (get-class-name {"title"     true
+                                         "with-icon" (some? icon)})}
+      (when (some? icon)
+        [c/icon {:icon       icon
+                 :class-name "title-icon"}])
+      (when (some? title)
+        [:div.title-text title])]
      (when (some? actions)
        [:div.title-actions actions])]))
 
 (defn main-content
-  [{:keys [class-name footer title]}]
+  [{:keys [actions class-name footer icon title]}]
   [:div {:class-name (:main class-names)}
-   [block-title {:title title}]
+   [block-title {:actions actions
+                 :title   title
+                 :icon    icon}]
    (->> (r/current-component)
         (r/children)
         (into [:div {:class-name (get-class-name {"widget-profile--main-content--content" true
