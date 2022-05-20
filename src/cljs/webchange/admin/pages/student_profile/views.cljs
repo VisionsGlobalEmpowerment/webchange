@@ -82,12 +82,29 @@
        [list-item (merge lesson-data
                          {:length max-activities})])]))
 
+(defn- course-name
+  []
+  (let [{:keys [name] :as course} @(re-frame/subscribe [::state/course])]
+    [:div.course-name
+     [ui/icon {:icon "presentation"}]
+     [:span "Course: "]
+     [:span (if (some? course) name "Not Assigned")]]))
+
+(defn- view-switcher
+  []
+  [:div.view-switcher
+   [ui/button {:class-name "active"} "Course View"]
+   [:hr]
+   [ui/button "Student History"]])
+
 (defn- content
   []
-  (let [{class-name :name} @(re-frame/subscribe [::state/class])
-        {course-name :name} @(re-frame/subscribe [::state/course])]
-    [page/main-content {:title class-name}
-     #_[:p course-name]
+  (let [{class-name :name} @(re-frame/subscribe [::state/class])]
+    [page/main-content {:title   class-name
+                        :icon    "classes"
+                        :actions [:div.main-content-actions
+                                  [course-name]
+                                  [view-switcher]]}
      [progress-table]]))
 
 (defn page

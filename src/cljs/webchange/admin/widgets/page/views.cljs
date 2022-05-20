@@ -79,19 +79,26 @@
         actions])]))
 
 (defn- block-title
-  [{:keys [actions title]}]
+  [{:keys [actions icon title]}]
   (when (or (some? title)
             (some? actions))
     [:h1.block-title
-     (when (some? title)
-       [:div.title-text title])
+     [:div {:class-name (get-class-name {"title"     true
+                                         "with-icon" (some? icon)})}
+      (when (some? icon)
+        [c/icon {:icon       icon
+                 :class-name "title-icon"}])
+      (when (some? title)
+        [:div.title-text title])]
      (when (some? actions)
        [:div.title-actions actions])]))
 
 (defn main-content
-  [{:keys [class-name footer title]}]
+  [{:keys [actions class-name footer icon title]}]
   [:div {:class-name (:main class-names)}
-   [block-title {:title title}]
+   [block-title {:actions actions
+                 :title   title
+                 :icon    icon}]
    (->> (r/current-component)
         (r/children)
         (into [:div {:class-name (get-class-name {"widget-profile--main-content--content" true

@@ -49,8 +49,10 @@
     @import "styles_side_bar";
 
     .block-title {
-        $gap: 8px;
+        $gap: 32px;
         $button-size: 32px;
+
+        min-height: 40px;
 
         @mixin aligned {
             display: flex;
@@ -64,21 +66,36 @@
         margin: 0;
         padding: 0 2px;
 
-        .title-text {
-            font-weight: 700;
-            font-size: 14px;
+        .title {
+            display: flex;
 
-            @include aligned;
+            .title-icon {
+                @include icon-color($color-pink);
+                @include icon-size(24px);
+            }
 
-            &:before {
-                $size: 12px;
+            .title-text {
+                font-weight: 700;
+                font-size: 14px;
 
-                content: "";
-                display: inline-block;
-                width: $size;
-                height: $size;
-                border: solid 2px $color-secondary;
-                border-radius: 50%;
+                @include aligned;
+
+                &:before {
+                    $size: 12px;
+
+                    content: "";
+                    display: inline-block;
+                    width: $size;
+                    height: $size;
+                    border: solid 2px $color-secondary;
+                    border-radius: 50%;
+                }
+            }
+
+            &.with-icon {
+                .title-text:before {
+                    display: none;
+                }
             }
         }
 
