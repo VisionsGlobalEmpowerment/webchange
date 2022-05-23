@@ -1,8 +1,8 @@
 -- :name create-user! :<!
 -- :doc creates a new user record
 INSERT INTO users
-(first_name, last_name, email, password, active, created_at, last_login, website_id)
-VALUES (:first_name, :last_name, :email, :password, :active, :created_at, :last_login, :website_id)
+(first_name, last_name, email, password, active, created_at, last_login, website_id, type)
+VALUES (:first_name, :last_name, :email, :password, :active, :created_at, :last_login, :website_id, :type)
 RETURNING id
 
 -- :name update-student-user! :! :n
@@ -17,16 +17,28 @@ UPDATE users
 SET first_name = :first_name, last_name = :last_name, email = :email
 WHERE website_id = :website_id
 
--- :name activate-user! :! :n
+-- :name set-account-status! :! :n
 -- :doc activates an existing user record
 UPDATE users
-SET active = true
+SET active = :active
 WHERE id = :id
 
--- :name edit-user! :! :n
+-- :name change-password! :! :n
+-- :doc user user password
+UPDATE users
+SET password = :password
+WHERE id = :id
+
+-- :name edit-teacher-user! :! :n
 -- :doc edit user
 UPDATE users
 SET first_name = :first_name, last_name = :last_name, password = :password
+WHERE id = :id
+
+-- :name edit-account! :! :n
+-- :doc edit user
+UPDATE users
+SET first_name = :first_name, last_name = :last_name, type = :type
 WHERE id = :id
 
 -- :name get-user :? :1
@@ -215,3 +227,18 @@ SELECT true as result from collaborators WHERE course_id = :course_id AND user_i
 -- :name delete-collaborators-by-course-id! :! :n
 -- :doc deletes course collaborators
 DELETE from collaborators where course_id=:course_id;
+
+-- :name is-admin? :? :1
+-- :doc check if user is admin
+SELECT true as result from users WHERE id = :id AND type = 'admin';
+
+-- :name accounts-by-type :? :*
+-- :doc retrieves all user record with given type
+SELECT * FROM users
+WHERE type = :type
+LIMIT :limit OFFSET :offset
+
+-- :name count-accounts-by-type :? :1
+-- :doc count records
+SELECT count(*) as result FROM users
+WHERE type = :type

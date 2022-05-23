@@ -1,0 +1,101 @@
+(ns webchange.accounts.core
+  (:require
+    [buddy.hashers :as hashers]
+    [webchange.db.core :as db]
+    [clojure.tools.logging :as log]
+    [java-time :as jt]
+    [camel-snake-kebab.extras :refer [transform-keys]]
+    [camel-snake-kebab.core :refer [->snake_case_keyword]]))
+
+(defn visible-user [user]
+  (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id :website-id]))
+
+(defn visible-account [user]
+  (select-keys user [:id :first-name :last-name :email :active :last-login :created-at :type]))
+
+(defn visible-student [student]
+  (-> (select-keys student [:id :user-id :class-id :school-id :gender :date-of-birth :user :class])
+      (update :date-of-birth str)))
+
+(defn- prepare-register-data
+  [{:keys [last-name first-name email password type]}]
+  {:last_name last-name
+   :first_name first-name
+   :email email
+   :password password
+   :type type})
+
+(defn create-user!
+  [{:keys [active] :as options :or {active true}}]
+  (let [created-at (jt/local-date-time)
+        last-login (jt/local-date-time)]
+    (-> options
+        prepare-register-data
+        (assoc :created_at created-at)
+        (assoc :last_login last-login)
+        (assoc :active active)
+        (assoc :website_id nil)
+        db/create-user!)))
+
+(defn create-user-with-credentials!
+  [options]
+  (let [hashed-password (hashers/derive (:password options))]
+    (-> options
+        (assoc :password hashed-password)
+        create-user!)))
+
+(defn edit-teacher-user!
+  [user-id data]
+  (db/edit-teacher-user! {:id user-id
+                          :first_name (:fist-name data)
+                          :last_name (:last-name data)})
+  (when (some? (:password data))
+    (let [hashed-password (hashers/derive (:password data))]
+      (db/change-password! {:id user-id
+                            :password hashed-password}))))
+
+(defn accounts-by-type
+  [type page]
+  (let [limit 30
+        offset (* limit (dec page))
+        accounts (->> (db/accounts-by-type {:type type :limit limit :offset offset})
+                      (map visible-account))
+        pages (-> (db/count-accounts-by-type {:type type})
+                  :result
+                  (/ limit)
+                  (Math/ceil)
+                  (int))]
+    {:accounts accounts
+     :current-page page
+     :pages pages}))
+
+(defn get-account
+  [id]
+  (-> (db/get-user {:id id})
+      visible-user))
+
+(defn create-account
+  [data]
+  (let [[{id :id}] (create-user-with-credentials! data)]
+    (-> data
+        (assoc :id id))))
+
+(defn edit-account
+  [user-id data]
+  (db/edit-account! {:id user-id
+                     :first_name (:fist-name data)
+                     :last_name (:last-name data)
+                     :type (:type data)}))
+
+(defn change-password
+  [user-id {:keys [password]}]
+  (let [hashed-password (hashers/derive password)]
+    (db/change-password! {:id user-id
+                          :password hashed-password})))
+
+(defn set-account-status
+  [user-id {:keys [active]}]
+  (db/set-account-status! {:id user-id
+                           :active active})
+  {:id user-id
+   :active active})

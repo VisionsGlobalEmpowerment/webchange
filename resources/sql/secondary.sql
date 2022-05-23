@@ -1,8 +1,8 @@
 -- :name create-or-update-user! :! :n
 -- :doc creates a new user record
 INSERT INTO users
-(id, first_name, last_name, email, password, active, created_at, last_login, guid)
-VALUES (:id, :first_name, :last_name, :email, :password, :active, :created_at, :last_login, :guid)
+(id, first_name, last_name, email, password, active, created_at, last_login, guid, type)
+VALUES (:id, :first_name, :last_name, :email, :password, :active, :created_at, :last_login, :guid, :type)
 ON CONFLICT ON CONSTRAINT users_pkey
 DO UPDATE SET first_name=:first_name, last_name=:last_name, email=:email, password=:password,
 active=:active, created_at=:created_at, last_login=:last_login WHERE users.guid=:guid

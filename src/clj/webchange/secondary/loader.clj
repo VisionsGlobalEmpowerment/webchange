@@ -1,7 +1,7 @@
 (ns webchange.secondary.loader
   (:require [webchange.db.core :refer [*db*] :as db]
             [clojure.string :refer [join]]
-            [webchange.auth.core :as auth-core]
+            [webchange.accounts.core :as accounts]
             [webchange.secondary.core :as core]
             [webchange.school.core :as school-core]
             [config.core :refer [env]]
@@ -13,21 +13,19 @@
   [config school-id email password]
   (let [
         [{school-id :id}] (db/create-school! {:id (Integer/parseInt school-id) :name "default"})
-        [{user-id :id}] (auth-core/create-user-with-credentials! {:email email
-                                                                  :password password})
+        [{user-id :id}] (accounts/create-user-with-credentials! {:email email
+                                                                 :password password
+                                                                 :type "teacher"})
         [{teacher-id :id}] (db/create-teacher! {:user_id user-id
                                                 :school_id school-id
                                                 :type "admin"
                                                 :status "active"})]
-    (auth-core/activate-user! user-id)
     (println "School id:" school-id)
     (println "User id:" user-id)
     (println "Teacher id:" teacher-id)
     {:school-id school-id
      :user-id user-id
-     :teacher-id teacher-id
-     })
-  )
+     :teacher-id teacher-id}))
 
 (defn load-secondary-school! []
   (doseq [school (:schools (school-core/get-schools))]

@@ -19,13 +19,15 @@
               :on-change handle-change}]]))
 
 (defn- text-control
-  [{:keys [disabled? id form-id label]}]
+  [{:keys [disabled? id form-id label input-type]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
-        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
+        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])
+        input-type (or input-type "str")]
     [:<>
      [c/label {:for id} label]
      [c/input {:id        id
+               :type      input-type
                :value     value
                :error     error
                :disabled? disabled?

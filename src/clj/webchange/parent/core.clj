@@ -1,9 +1,9 @@
 (ns webchange.parent.core
   (:require
-    [webchange.db.core :refer [*db*] :as db]
-    [webchange.auth.core :as auth]
-    [java-time :as jt]
-    [clojure.tools.logging :as log]))
+    [clojure.tools.logging :as log]
+    [webchange.accounts.core]
+    [webchange.accounts.core :as accounts]
+    [webchange.db.core :as db]))
 
 (def default-course {:id   4
                      :slug "english"})
@@ -60,9 +60,9 @@
 
 (defn create-student
   [{:keys [name course-slug date-of-birth device]} parent-id]
-  (let [[{user-id :id}] (auth/create-user! {:first-name name})]
+  (let [[{user-id :id}] (accounts/create-user! {:first-name name
+                                                :type "child"})]
     (db/create-child! {:parent_id parent-id :child_id user-id :data {:date-of-birth date-of-birth :device device :course-slug course-slug}})
-    (auth/activate-user! user-id)
     [true (->student {:id         user-id
                       :first-name name})]))
 

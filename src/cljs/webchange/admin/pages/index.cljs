@@ -1,5 +1,7 @@
 (ns webchange.admin.pages.index
   (:require
+    [webchange.admin.pages.accounts.views :as accounts]
+    [webchange.admin.pages.add-account.views :as add-account]
     [webchange.admin.pages.add-class.views :as add-class]
     [webchange.admin.pages.class-profile.views :as class-profile]
     [webchange.admin.pages.classes.views :as classes]
@@ -36,4 +38,6 @@
             :teacher-profile teacher-profile/page
             :class-students class-students/page
             :student-profile student-profile/page
+            :accounts       accounts/page
+            :add-account    add-account/page
             :404            not-found/page})

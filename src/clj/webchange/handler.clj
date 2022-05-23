@@ -22,6 +22,7 @@
     [webchange.auth.handler :refer [auth-routes]]
     [webchange.auth.roles :as roles]
     [webchange.auth.website :as website]
+    [webchange.accounts.handler :refer [accounts-routes]]
     [webchange.book-library.handler :refer [book-library-api-routes]]
     [webchange.class.handler :refer [class-routes]]
     [webchange.common.audio-parser :refer [get-talking-animation]]
@@ -225,7 +226,8 @@
     courses-api-routes
     dataset-api-routes
     templates-api-routes
-    class-routes)
+    class-routes
+    accounts-routes)
   pages-routes
   animation-routes
   auth-routes

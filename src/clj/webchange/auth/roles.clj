@@ -1,8 +1,8 @@
 (ns webchange.auth.roles
   (:require
-    [config.core :refer [env]]))
+    [webchange.db.core :as db]))
 
 (defn is-admin?
   [user-id]
-  (let [admins (get-in env [:roles :admin] [])]
-    (some #(= user-id %) admins)))
+  (let [{admin? :result} (db/is-admin? {:id user-id})]
+    admin?))
