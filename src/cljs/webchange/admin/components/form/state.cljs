@@ -13,6 +13,26 @@
   (fn [db]
     (get db path-to-db)))
 
+;; Callbacks
+
+(def callbacks-key :callbacks)
+
+(defn- set-callback
+  [db name value]
+  (assoc-in db [callbacks-key name] value))
+
+(defn- get-callback
+  [db name]
+  (get-in db [callbacks-key name]))
+
+(re-frame/reg-fx
+  ::callback
+  (fn [[callback & params]]
+    (when (fn? callback)
+      (apply callback params))))
+
+;; Form Data
+
 (re-frame/reg-sub
   ::form-data
   :<- [path-to-db]
@@ -30,7 +50,9 @@
   ::set-field-value
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ form-id field-name field-value]]
-    {:db (form/update-data db form-id {field-name field-value})}))
+    (let [on-change (get-callback db :on-change)]
+      {:db        (form/update-data db form-id {field-name field-value})
+       ::callback [on-change {field-name field-value}]})))
 
 (re-frame/reg-sub
   ::errors-data
@@ -56,8 +78,9 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [init-data data form-id model]}]]
+  (fn [{:keys [db]} [_ {:keys [init-data data form-id model on-change]}]]
     {:db (-> db
+             (set-callback :on-change on-change)
              (set-form-data form-id (or init-data data) model)
              (errors/reset-data form-id))}))
 
