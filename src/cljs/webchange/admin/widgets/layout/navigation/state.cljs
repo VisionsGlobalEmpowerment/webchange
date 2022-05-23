@@ -25,9 +25,10 @@
          {:id   :libraries
           :text "Libraries"
           :icon "book-library"}
-         {:id   :accounts
-          :text "Accounts"
-          :icon "user"}]
+         {:id    :accounts
+          :text  "Accounts"
+          :icon  "users"
+          :route {:page :user-accounts}}]
         (set-navigation-items-active {:page (:handler current-page)}))))
 
 (re-frame/reg-event-fx

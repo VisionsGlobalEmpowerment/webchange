@@ -1,0 +1,26 @@
+.wc-switch {
+    input[type="checkbox"] {
+        & + label {
+            color: $color-pink;
+            font-weight: 500;
+            font-size: 10px;
+
+            &::before {
+                background: transparent;
+                border-color: #DCE3F5;
+            }
+
+            &::after {
+                background: #DCE3F5;
+            }
+        }
+
+        &:checked {
+            & + label {
+                &::after {
+                  background: $color-pink;
+                }
+            }
+        }
+    }
+}

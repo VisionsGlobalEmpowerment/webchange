@@ -1,29 +1,5 @@
 @import "../../styles/colors";
-
-@mixin icon-color($color) {
-    svg {
-        fill: $color;
-        stroke: none;
-
-        &.stroke-colored {
-            fill: none;
-            stroke: $color;
-        }
-    }
-}
-
-@mixin icon-size($size) {
-    svg {
-        width: $size;
-        height: $size;
-    }
-}
-
-@mixin icon-thickness($thickness) {
-    svg {
-        stroke-width: $thickness;
-    }
-}
+@import "mixins";
 
 .wc-icon {
     display: flex;

@@ -65,7 +65,7 @@
     (map (fn [{:keys [created-at] :as class-data}]
            (-> class-data
                (select-keys [:id :name :stats])
-               (merge {:description [["Created" created-at]]})))
+               (merge {:name-description [["Created" created-at]]})))
          classes)))
 
 (re-frame/reg-event-fx

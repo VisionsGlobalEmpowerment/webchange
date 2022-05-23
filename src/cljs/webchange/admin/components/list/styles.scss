@@ -49,6 +49,29 @@
             }
         }
 
+        .item-description {
+            margin: 0;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 14px;
+
+            dt {
+                display: inline-block;
+                font-weight: 500;
+            }
+
+            dd {
+                display: inline-block;
+                margin: 0;
+                margin-left: 4px;
+                margin-right: 32px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
         .item-actions {
             display: flex;
             align-items: center;

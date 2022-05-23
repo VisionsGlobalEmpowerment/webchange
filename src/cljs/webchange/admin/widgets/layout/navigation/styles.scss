@@ -21,12 +21,7 @@
 
         & > .icon {
             padding: 0;
-
-            svg {
-                $size: 18px;
-                width: $size;
-                height: $size;
-            }
+            @include icon-size(18px);
         }
 
         & > .text {}

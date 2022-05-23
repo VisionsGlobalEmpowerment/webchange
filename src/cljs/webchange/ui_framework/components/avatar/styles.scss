@@ -1,3 +1,5 @@
+@import "../icon/mixins";
+
 .wc-avatar {
     $size: 36px;
 
@@ -14,5 +16,6 @@
 
     .default-icon {
         padding: 0;
+        @include icon-color(#333);
     }
 }

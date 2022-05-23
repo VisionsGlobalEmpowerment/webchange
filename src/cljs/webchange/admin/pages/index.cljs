@@ -19,15 +19,17 @@
     [webchange.admin.pages.teachers.views :as teachers]
     [webchange.admin.pages.add-teacher.views :as add-teacher]
     [webchange.admin.pages.teacher-profile.views :as teacher-profile]
-    [webchange.admin.pages.class-students.views :as class-students]))
+    [webchange.admin.pages.class-students.views :as class-students]
+    [webchange.admin.pages.user-accounts.views :as user-accounts]
+    [webchange.admin.pages.user-profile.views :as user-profile]))
 
-(def pages {:add-class      add-class/page
-            :class-profile  class-profile/page
-            :classes        classes/page
-            :dashboard      dashboard/page
-            :login          login/page
-            :school-profile school-profile/page
-            :schools        schools/page
+(def pages {:add-class        add-class/page
+            :class-profile    class-profile/page
+            :classes          classes/page
+            :dashboard        dashboard/page
+            :login            login/page
+            :school-profile   school-profile/page
+            :schools          schools/page
             :schools-archived schools-archived/page
             :students       students/page
             :add-student    add-student/page
@@ -40,4 +42,6 @@
             :student-profile student-profile/page
             :accounts       accounts/page
             :add-account    add-account/page
+            :user-accounts    user-accounts/page
+            :user-profile     user-profile/page
             :404            not-found/page})

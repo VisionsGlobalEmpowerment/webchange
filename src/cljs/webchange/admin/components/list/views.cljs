@@ -16,15 +16,24 @@
    [:dd d]])
 
 (defn- item-name
-  [{:keys [name description]}]
+  [{:keys [name name-description]}]
   [:div.item-name
    [:div.name name]
-   (when (some? description)
+   (when (some? name-description)
      [:dl
-      (for [[idx [t d]] (map-indexed vector description)]
+      (for [[idx [t d]] (map-indexed vector name-description)]
         ^{:key idx}
         [description-item {:t t
                            :d d}])])])
+
+(defn item-description
+  [{:keys [description]}]
+  (when (some? description)
+    [:dl.item-description
+     (for [[idx [t d]] (map-indexed vector description)]
+       ^{:key idx}
+       [description-item {:t t
+                          :d d}])]))
 
 (defn- item-actions
   [{:keys [actions]}]
@@ -44,6 +53,8 @@
    - img
    - avatar
    - name
+   - name-description
+     [key value]
    - description
      [key value]
    - actions
@@ -57,6 +68,7 @@
                  [item-name props]]
                 (->> (r/current-component)
                      (r/children))
+                [[item-description props]]
                 [[item-actions props]])))
 
 (defn list
