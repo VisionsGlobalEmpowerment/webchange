@@ -6,6 +6,7 @@
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.student-form.views :refer [student-form]]
+    [webchange.admin.widgets.student-progress-complete.views :refer [student-progress-complete]]
     [webchange.ui-framework.components.index :as ui]))
 
 (defn- level-picker
@@ -113,13 +114,15 @@
      [progress-table]]))
 
 (defn- side-bar-complete-class
-  []
-  (let [handle-close-click #(re-frame/dispatch [::state/open-student-profile])]
+  [{:keys [student-id]}]
+  (let [handle-close-click #(re-frame/dispatch [::state/open-student-profile])
+        handle-save #(re-frame/dispatch [::state/open-student-profile])]
     [page/side-bar {:title   "Complete Class"
                     :actions [ui/icon-button {:icon     "close"
                                               :variant  "light"
                                               :on-click handle-close-click}]}
-     [no-data]]))
+     [student-progress-complete {:student-id student-id
+                                 :on-save    handle-save}]]))
 
 (defn- side-bar-student-profile
   [{:keys [school-id student-id]}]

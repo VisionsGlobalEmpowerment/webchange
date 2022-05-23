@@ -127,6 +127,12 @@
             .total-time {}
         }
 
+        .name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 100%;
+        }
+
         &.completed {
             color: #FFF;
             background-color: #4ECB71;
