@@ -17,19 +17,17 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [total per-page]}]]
+  (fn [{:keys [db]} [_ {:keys [current total]}]]
     {:db (-> db
-             (set-param :total total)
-             (set-param :per-page per-page))}))
+             (set-param :current current)
+             (set-param :total total))}))
 
 (re-frame/reg-sub
   ::buttons
   :<- [path-to-db]
-  (fn [{:keys [total per-page]}]
-    (let [buttons-number (-> (/ total per-page) (Math/ceil))]
-      (print "buttons-number" buttons-number)
-      (->> (range buttons-number)
-           (map (fn [idx]
-                  {:id    idx
-                   :name  (inc idx)
-                   :value [(inc (* idx per-page)) (Math/min (* (inc idx) per-page) total)]}))))))
+  (fn [{:keys [current total]}]
+    (->> (range 1 (inc total))
+         (map (fn [idx]
+                {:value   idx
+                 :title   idx
+                 :active? (= idx current)})))))

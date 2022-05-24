@@ -5,6 +5,16 @@
     [webchange.admin.components.pagination.state :as state]
     [webchange.ui-framework.components.index :as ui]))
 
+(defn- page-item
+  [{:keys [active? on-click title value]}]
+  (let [handle-click #(when (and (not active?)
+                                 (fn? on-click))
+                        (on-click %))]
+    [ui/button {:class-name (ui/get-class-name {"pagination--button" true
+                                                "active"             active?})
+                :on-click   #(handle-click value)}
+     title]))
+
 (defn pagination
   []
   (r/create-class
@@ -15,15 +25,10 @@
        (re-frame/dispatch [::state/init (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [on-change]}]
+     (fn [{:keys [on-click]}]
        (let [buttons @(re-frame/subscribe [::state/buttons])]
          [:div.component--pagination
-          (for [{:keys [id name value]} buttons]
-            ^{:key id}
-            [ui/button {:class-name "pagination--button"
-                        :on-click   #(on-change value)}
-             name])]))}))
-
-#_{:total     100
-   :per-page  30
-   :on-change #(print "Page" %)}
+          (for [{:keys [value] :as button} buttons]
+            ^{:key value}
+            [page-item (assoc button
+                         :on-click on-click)])]))}))

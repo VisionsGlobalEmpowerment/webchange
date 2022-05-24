@@ -28,7 +28,7 @@
          {:id    :accounts
           :text  "Accounts"
           :icon  "users"
-          :route {:page :user-accounts}}]
+          :route {:page :accounts}}]
         (set-navigation-items-active {:page (:handler current-page)}))))
 
 (re-frame/reg-event-fx

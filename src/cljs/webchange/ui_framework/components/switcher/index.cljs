@@ -3,7 +3,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn component
-  [{:keys [checked? class-name id label name on-change value]
+  [{:keys [checked? class-name id indeterminate? label name on-change value]
     :or   {checked?  true
            id        (->> (str (random-uuid))
                           (take 8)
@@ -12,8 +12,9 @@
            label     ""
            on-change #()}}]
   (let [handle-change #(on-change (not checked?) value)]
-    [:div {:class-name (get-class-name (-> {"wc-switch" true}
-                                           (assoc class-name (some? class-name))))}
+    [:div {:class-name (get-class-name {"wc-switch"     true
+                                        "indeterminate" indeterminate?
+                                        class-name      (some? class-name)})}
      [:input {:type      "checkbox"
               :name      name
               :value     value
