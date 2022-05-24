@@ -209,6 +209,34 @@
                      :uri    "/api/users/current"}
                     handlers)))
 
+;; Accounts
+
+(re-frame/reg-event-fx
+  ::create-account
+  (fn [{:keys [_]} [_ data handlers]]
+    (create-request {:key    :create-account
+                     :method :post
+                     :uri    "/api/accounts"
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-accounts-by-type
+  (fn [{:keys [_]} [_ {:keys [type page]} handlers]]
+    (create-request {:key    :load-accounts-by-type
+                     :method :get
+                     :params (when page {:page page})
+                     :uri    (str "/api/accounts-by-type/" type)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::set-account-status
+  (fn [{:keys [_]} [_ {:keys [account-id active]} handlers]]
+    (create-request {:key    :set-account-status
+                     :method :put
+                     :uri    (str "/api/accounts/" account-id "/status")
+                     :params {:active active}}
+                    handlers)))
 ;; Templates
 
 (re-frame/reg-event-fx

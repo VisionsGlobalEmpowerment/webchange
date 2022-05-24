@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [webchange.db.core :refer [*db*] :as db]
             [webchange.auth.core :as auth]
+            [webchange.accounts.core :as accounts]
             [webchange.assets.core :as assets]
             [webchange.handler :as handler]
             [webchange.course.handler :as course-handler]
@@ -83,23 +84,21 @@
 (defn teacher-user-created
   ([] (teacher-user-created {}))
   ([options]
-   (let [defaults {:first-name "Test" :last-name "Test" :email "test@example.com" :password "test"}
+   (let [defaults {:first-name "Test" :last-name "Test" :email "test@example.com" :password "test" :type "teacher"}
          data (merge defaults options)
          email (:email data)
          password (:password data)]
      (if-let [user (db/find-user-by-email {:email email})]
        (assoc user :password password)
-       (let [[{user-id :id}] (auth/create-user-with-credentials! data)]
-         (auth/activate-user! user-id)
+       (let [[{user-id :id}] (accounts/create-user-with-credentials! data)]
          (assoc data :id user-id))))))
 
 (defn student-user-created
   ([] (student-user-created {}))
   ([options]
-   (let [defaults {:first-name "Test" :last-name "Test"}
+   (let [defaults {:first-name "Test" :last-name "Test" :type "student"}
          data (merge defaults options)
-         [{user-id :id}] (auth/create-user! data)]
-     (auth/activate-user! user-id)
+         [{user-id :id}] (accounts/create-user! data)]
      (assoc options :id user-id))))
 
 (defn course-created

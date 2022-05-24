@@ -22,11 +22,10 @@
     (core/process-data dump)
     (let [user-new (db/find-user-by-email {:email (:email user)})
           school-new (db/get-school {:id f/default-school-id})]
-      (assert (not (nil? user-new)))
-      (assert (not (nil? school-new)))
-      (assert (= user-old user-new))
-      (assert (= school-old school-new)))
-    ))
+      (is (not (nil? user-new)))
+      (is (not (nil? school-new)))
+      (is (= user-old user-new))
+      (is (= school-old school-new)))))
 
 (deftest can-import-teacher
   (let [user (f/teacher-user-created)
@@ -37,8 +36,8 @@
     (f/with-default-school #())
     (core/process-data dump)
     (let [teacher-new (dissoc (db/get-teacher-by-user {:user_id (:id user)}) :id)]
-      (assert (not (nil? teacher-old)))
-      (assert (= teacher-old teacher-new)))))
+      (is (not (nil? teacher-old)))
+      (is (= teacher-old teacher-new)))))
 
 (deftest can-import-student-and-class
   (let [student (f/student-created)
@@ -50,11 +49,10 @@
     (core/process-data dump)
     (let [student-new (dissoc (db/get-student-by-user {:user_id (:user-id student)}) :id)
           class-new (dissoc (db/get-class {:id (:class-id student)}) :id :course-id :course-slug)]
-      (assert (= student-old student-new))
-      (assert (= class-old class-new))
-      (assert (not (nil? student-old)))
-      (assert (not (nil? class-old)))
-      )))
+      (is (= student-old student-new))
+      (is (= class-old class-new))
+      (is (not (nil? student-old)))
+      (is (not (nil? class-old))))))
 
 (deftest can-import-course-and-version
   (let [course (f/course-created)
@@ -79,32 +77,30 @@
   (let [course (f/course-created)
         course-stat (f/course-stat-created course)
         course-stats-old (dissoc (db/get-user-course-stat {:user_id (:user-id course-stat)
-                                                   :course_id (:course-id course-stat)}) :id)
+                                                           :course_id (:course-id course-stat)}) :id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data dump)
     (let [course-stats-new (dissoc (db/get-user-course-stat {:user_id (:user-id course-stat)
-                                                     :course_id (:course-id course-stat)}) :id)]
-      (assert (not (nil? course-stats-old)))
-      (assert (= course-stats-old course-stats-new))
-      )))
+                                                             :course_id (:course-id course-stat)}) :id)]
+      (is (not (nil? course-stats-old)))
+      (is (= course-stats-old course-stats-new)))))
 
 (deftest can-import-course-progresses
   (let [user (f/student-created)
         course (f/course-created)
         course-progresses (f/course-progresses-created (assoc user :course-id (:id course)))
         course-progresses-old (dissoc (db/get-progress {:user_id (:user-id course-progresses)
-                                                   :course_id (:course-id course-progresses)}) :id)
+                                                        :course_id (:course-id course-progresses)}) :id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data dump)
     (let [course-progresses-new (dissoc (db/get-progress {:user_id (:user-id course-progresses)
-                                                     :course_id (:course-id course-progresses)}) :id)]
+                                                          :course_id (:course-id course-progresses)}) :id)]
       (assert (not (nil? course-progresses-old)))
-      (assert (= course-progresses-old course-progresses-new))
-      )))
+      (assert (= course-progresses-old course-progresses-new)))))
 
 (deftest can-import-course-events
   (let [user (f/student-created)

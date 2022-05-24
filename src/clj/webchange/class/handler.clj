@@ -8,6 +8,7 @@
             [webchange.common.handler :refer [handle current-user current-school]]
             [webchange.auth.core :as auth]
             [webchange.auth.roles :refer [is-admin?]]
+            [webchange.accounts.core :as accounts]
             [webchange.validation.specs.student :as student-specs]
             [webchange.validation.specs.school-spec :as school-spec]
             [webchange.validation.specs.class-spec :as class-spec]
@@ -51,9 +52,10 @@
      (handle-create-student school-id data request)))
   ([school-id data request]
    (let [owner-id (current-user request)
-         data (assoc data :school-id school-id)
-         [{user-id :id}] (auth/create-user! data)]
-     (auth/activate-user! user-id)
+         data (assoc data
+                :school-id school-id
+                :type "student")
+         [{user-id :id}] (accounts/create-user! data)]
      (-> data
          (assoc :user-id user-id)
          core/create-student!
@@ -96,12 +98,11 @@
     (when-not (or (is-admin? user-id) (school/school-admin? school-id user-id))
       (throw-unauthorized {:role :educator}))
     (let [user-data (select-keys data [:first-name :last-name :email :password])
-          [{user-id :id}] (auth/create-user-with-credentials! user-data)
+          [{user-id :id}] (accounts/create-user-with-credentials! (assoc user-data :type "teacher"))
           teacher-data {:school-id school-id
                         :user-id   user-id
                         :type      (:type data)
                         :status    "active"}]
-      (auth/activate-user! user-id)
       (-> (core/create-teacher! teacher-data)
           response))))
 
@@ -114,7 +115,7 @@
     (let [user-data (select-keys data [:fist-name :last-name :password])
           teacher-data {:type   (:type data)
                         :status "active"}]
-      (auth/edit-user! (:user-id teacher) user-data)
+      (accounts/edit-teacher-user! (:user-id teacher) (assoc user-data :type "teacher"))
       (-> (core/edit-teacher! teacher-id teacher-data)
           response))))
 

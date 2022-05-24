@@ -1,11 +1,11 @@
 (ns webchange.class.core
-  (:require [webchange.db.core :refer [*db*] :as db]
-            [clojure.tools.logging :as log]
-            [java-time :as jt]
-            [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword]]
-            [webchange.auth.core :as auth]
-            [webchange.events :as e]))
+  (:require
+    [camel-snake-kebab.core :refer [->snake_case_keyword]]
+    [clojure.tools.logging :as log]
+    [java-time :as jt]
+    [webchange.accounts.core :as accounts]
+    [webchange.db.core :as db]
+    [webchange.events :as e]))
 
 (defn get-classes [school-id]
   (let [classes (db/get-classes {:school_id school-id})]
@@ -18,13 +18,13 @@
 (defn with-user
   [{user-id :user-id :as item}]
   (let [user (-> (db/get-user {:id user-id})
-                 auth/visible-user)]
+                 accounts/visible-user)]
     (assoc item :user user)))
 
 (defn with-student-by-user
   [{user-id :user-id :as item}]
   (let [student (-> (db/get-student-by-user {:user_id user-id})
-                    auth/visible-student)]
+                    accounts/visible-student)]
     (assoc item :student student)))
 
 (defn with-class
@@ -37,7 +37,7 @@
   (->> students
        (map with-user)
        (map with-class)
-       (map auth/visible-student)))
+       (map accounts/visible-student)))
 
 (defn get-students-by-class [class-id]
   (let [students (-> (db/get-students-by-class {:class_id class-id})
