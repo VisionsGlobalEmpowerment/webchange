@@ -1,0 +1,13 @@
+.component--pagination {
+    display: flex;
+    gap: 8px;
+
+    .pagination--button {
+        $size: 32px;
+
+        width: $size;
+        height: $size;
+
+        padding: 0;
+    }
+}

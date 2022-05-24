@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [webchange.admin.pages.user-accounts.state :as state]
     [webchange.admin.components.list.views :as l]
+    [webchange.admin.components.pagination.views :refer [pagination]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]))
 
@@ -35,12 +36,16 @@
   []
   (let [data @(re-frame/subscribe [::state/users])
         loading? @(re-frame/subscribe [::state/loading?])]
-    [page/main-content
+    [page/main-content {:class-name "users-content"}
      (if-not loading?
-       [l/list {:class-name "users-list"}
-        (for [{:keys [id] :as user} data]
-          ^{:key id}
-          [list-item user])]
+       [:<>
+        [l/list {:class-name "users-list"}
+         (for [{:keys [id] :as user} data]
+           ^{:key id}
+           [list-item user])]
+        [pagination {:total     100
+                     :per-page  30
+                     :on-change #(print "Page" %)}]]
        [loading-indicator])]))
 
 (defn page

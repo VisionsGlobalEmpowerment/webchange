@@ -1,4 +1,8 @@
 .page--user-accounts {
+    .users-content {
+        justify-content: space-between;
+    }
+
     .loading-indicator {
         display: flex;
         align-items: center;
