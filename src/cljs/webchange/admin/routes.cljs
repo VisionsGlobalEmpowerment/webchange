@@ -27,9 +27,9 @@
              "/courses"  {""                              :courses
                           "/add"                          :add-course
                           ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}
-             "/accounts" {"/admin"                       :accounts-admin
-                          ["/add/" [#"[\w-%]+" :type]]   :add-account
-                          ["/" [#"[\w-%]+" :account-id]] :edit-account}})
+             "/accounts" {["/add/" [#"[\w-%]+" :type]]     :add-account
+                          ["/" [#"[\d-%]+" :account-id]]   :edit-account
+                          ["/" [#"[\w-%]+" :account-type]] :accounts}})
 
 (def sitemap
   {:dashboard {:schools {:school-profile   {:classes        {:add-class     true
@@ -61,7 +61,7 @@
 (defonce router (atom nil))
 
 (defn- dispatch-route
-  [{:keys [handler route-params]}]
+  [{:keys [handler route-params] :as props}]
   (re-frame/dispatch [::state/set-current-page {:handler handler
                                                 :props   route-params}]))
 

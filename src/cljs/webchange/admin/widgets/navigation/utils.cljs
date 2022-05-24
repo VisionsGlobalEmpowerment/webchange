@@ -1,4 +1,4 @@
-(ns webchange.admin.widgets.layout.navigation.utils)
+(ns webchange.admin.widgets.navigation.utils)
 
 (defn set-navigation-items-active
   [navigation-tree current-route]
