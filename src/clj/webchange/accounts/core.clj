@@ -69,10 +69,17 @@
      :current-page page
      :pages pages}))
 
+(defn- with-children
+  [{:keys [id] :as account}]
+  (let [children (->> (db/find-users-by-parent {:parent_id id})
+                      (map visible-account))]
+    (assoc account :children children)))
+
 (defn get-account
   [id]
   (-> (db/get-user {:id id})
-      visible-user))
+      (visible-account)
+      (with-children)))
 
 (defn create-account
   [data]
