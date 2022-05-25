@@ -73,3 +73,14 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))
+
+(re-frame/reg-event-fx
+  ::edit-account
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
+    (print "::edit-account" data)
+    {}
+    #_{:db       (set-data-saving db true)
+     :dispatch [::warehouse/create-account data
+                {:on-success [::create-account-success on-success]
+                 :on-failure [::create-account-failure]}]}))

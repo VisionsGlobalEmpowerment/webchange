@@ -28,7 +28,7 @@
                           "/add"                          :add-course
                           ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}
              "/accounts" {["/add/" [#"[\w-%]+" :account-type]] :account-add
-                          ["/" [#"[\d-%]+" :account-id]]       :edit-account
+                          ["/" [#"[\d-%]+" :account-id]]       :account-edit
                           ["/" [#"[\w-%]+" :account-type]]     :accounts}})
 
 (def sitemap

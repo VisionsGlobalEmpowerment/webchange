@@ -152,4 +152,4 @@
   ::edit-account
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ account-id]]
-    {:dispatch [::routes/redirect :edit-account :account-id account-id]}))
+    {:dispatch [::routes/redirect :account-edit :account-id account-id]}))

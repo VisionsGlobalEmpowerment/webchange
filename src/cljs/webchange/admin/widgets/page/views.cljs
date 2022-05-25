@@ -94,15 +94,16 @@
        [:div.title-actions actions])]))
 
 (defn main-content
-  [{:keys [actions class-name footer icon title]}]
+  [{:keys [actions class-name footer icon id title]}]
   [:div {:class-name (:main class-names)}
    [block-title {:actions actions
                  :title   title
                  :icon    icon}]
    (->> (r/current-component)
         (r/children)
-        (into [:div {:class-name (get-class-name {"widget-profile--main-content--content" true
-                                                  class-name                              (some? class-name)})}]))
+        (into [:div (cond-> {:class-name (get-class-name {"widget-profile--main-content--content" true
+                                                          class-name                              (some? class-name)})}
+                            (some? id) (assoc :id id))]))
    (when (some? footer)
      [:div.widget-profile--main-content--footer
       footer])])

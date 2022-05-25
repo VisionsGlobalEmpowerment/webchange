@@ -221,6 +221,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-account
+  (fn [{:keys [_]} [_ {:keys [id]} handlers]]
+    (create-request {:key    :load-account
+                     :method :get
+                     :uri    (str "/api/accounts/" id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-accounts-by-type
   (fn [{:keys [_]} [_ {:keys [type page]} handlers]]
     (create-request {:key    :load-accounts-by-type
