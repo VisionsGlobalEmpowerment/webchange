@@ -28,6 +28,8 @@
   (let [course (get courses (:course_id stat))
         [level lesson activity & activity-name-parts] (str/split (:activity_id stat) #"-")
         activity-name (str/join "-" activity-name-parts)
+        level (if (empty? level) "0" level)
+        lesson (if (empty? lesson) "0" lesson)
         unique-id (->unique-id (get-in course [:levels (Integer/parseInt level)
                                                :lessons (Integer/parseInt lesson)
                                                :activities]) activity-name)]
