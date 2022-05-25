@@ -46,6 +46,12 @@
   (fn [{:keys [db]} [_ {:keys [account-type]}]]
     {:db (-> db (set-account-type account-type))}))
 
+(re-frame/reg-event-fx
+  ::set-account-type
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ account-type]]
+    {:db (-> db (set-account-type account-type))}))
+
 
 (re-frame/reg-sub
   ::add-button
@@ -66,5 +72,7 @@
 
 (re-frame/reg-event-fx
   ::add-account
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::routes/redirect :add-account :type "admin"]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [account-type (get-account-type db)]
+      {:dispatch [::routes/redirect :account-add :account-type account-type]})))

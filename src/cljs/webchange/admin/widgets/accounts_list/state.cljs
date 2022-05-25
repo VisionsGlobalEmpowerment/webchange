@@ -91,6 +91,13 @@
      :dispatch [::load-accounts-page 1]}))
 
 (re-frame/reg-event-fx
+  ::set-account-type
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ account-type]]
+    {:db       (-> db (set-account-type account-type))
+     :dispatch [::load-accounts-page 1]}))
+
+(re-frame/reg-event-fx
   ::load-accounts-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ page]]

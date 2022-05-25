@@ -84,6 +84,7 @@
                         :disabled    disabled?
                         :placeholder (cond-> placeholder
                                              required? (str " *"))
+                        :on-input    handle-change
                         :on-change   handle-change
                         :on-click    handle-click}
                        (or (= type "int")

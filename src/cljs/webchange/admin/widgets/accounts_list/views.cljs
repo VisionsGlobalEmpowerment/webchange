@@ -51,7 +51,8 @@
 (defn accounts-list
   [props]
   (re-frame/dispatch [::state/init props])
-  (fn []
+  (fn [{:keys [account-type]}]
+    (re-frame/dispatch [::state/set-account-type account-type])
     (let [data @(re-frame/subscribe [::state/accounts])
           loading? @(re-frame/subscribe [::state/loading?])]
       [:div.widget--accounts-list

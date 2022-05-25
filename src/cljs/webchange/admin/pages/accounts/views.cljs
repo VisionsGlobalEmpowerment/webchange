@@ -30,7 +30,8 @@
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
-  (fn []
+  (fn [{:keys [account-type]}]
+    (re-frame/dispatch [::state/set-account-type account-type])
     [page/page {:class-name "page--accounts-admins"}
      [header]
      [content]]))

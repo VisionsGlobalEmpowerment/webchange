@@ -1,7 +1,7 @@
 (ns webchange.admin.pages.index
   (:require
     [webchange.admin.pages.accounts.views :as accounts]
-    [webchange.admin.pages.add-account.views :as add-account]
+    [webchange.admin.pages.account-add.views :as account-add]
     [webchange.admin.pages.add-class.views :as add-class]
     [webchange.admin.pages.class-profile.views :as class-profile]
     [webchange.admin.pages.classes.views :as classes]
@@ -22,7 +22,7 @@
     [webchange.admin.pages.class-students.views :as class-students]))
 
 (def pages {:accounts         accounts/page
-            :add-account      add-account/page
+            :account-add      account-add/page
             :add-class        add-class/page
             :add-school       add-school/page
             :add-student      add-student/page

@@ -25,10 +25,17 @@
          {:id   :libraries
           :text "Libraries"
           :icon "book-library"}
-         {:id    :accounts
-          :text  "Accounts"
-          :icon  "users"
-          :route {:page :accounts}}]
+         {:id       :accounts
+          :text     "Accounts"
+          :icon     "users"
+          :children [{:id    :admin
+                      :text  "Admin"
+                      :route {:page        :accounts
+                              :page-params {:account-type "admin"}}}
+                     {:id    :live
+                      :text  "Live Users"
+                      :route {:page        :accounts
+                              :page-params {:account-type "live"}}}]}]
         (set-navigation-items-active {:page (:handler current-page)}))))
 
 (re-frame/reg-event-fx

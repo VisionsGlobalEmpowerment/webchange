@@ -27,9 +27,9 @@
              "/courses"  {""                              :courses
                           "/add"                          :add-course
                           ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}
-             "/accounts" {["/add/" [#"[\w-%]+" :type]]     :add-account
-                          ["/" [#"[\d-%]+" :account-id]]   :edit-account
-                          ["/" [#"[\w-%]+" :account-type]] :accounts}})
+             "/accounts" {["/add/" [#"[\w-%]+" :account-type]] :account-add
+                          ["/" [#"[\d-%]+" :account-id]]       :edit-account
+                          ["/" [#"[\w-%]+" :account-type]]     :accounts}})
 
 (def sitemap
   {:dashboard {:schools {:school-profile   {:classes        {:add-class     true
