@@ -13,7 +13,8 @@
       [page/page {:class-name "page--password-reset"}
        [page/header {:title "Reset Password"
                      :icon  "user"}]
-       [page/main-content
+       [page/main-content {:class-name "page--password-reset--content"}
         [reset-password-form {:account-id account-id
                               :on-save    handle-save
-                              :on-cancel  handle-cancel}]]])))
+                              :on-cancel  handle-cancel
+                              :class-name "password-reset-form"}]]])))

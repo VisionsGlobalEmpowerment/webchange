@@ -46,6 +46,21 @@
                    :disabled? disabled?
                    :on-change handle-change}]]))
 
+(defn- password-control
+  [{:keys [disabled? id form-id label input-type]}]
+  (let [value @(re-frame/subscribe [::state/field-value form-id id])
+        error @(re-frame/subscribe [::state/field-error form-id id])
+        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])
+        input-type (or input-type "str")]
+    [:<>
+     [c/label {:for id} label]
+     [c/password {:id        id
+                  :type      input-type
+                  :value     value
+                  :error     error
+                  :disabled? disabled?
+                  :on-change handle-change}]]))
+
 (defn- select-control
   [{:keys [disabled? id form-id label options options-type]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
@@ -81,6 +96,7 @@
       :date [date-control control-props]
       :text [text-control control-props]
       :text-multiline [text-multiline-control control-props]
+      :password [password-control control-props]
       :select [select-control control-props]
       :custom [custom-control control-props])))
 
@@ -128,7 +144,7 @@
      :reagent-render
      (fn [{:keys [disabled? errors form-id loading? model on-cancel on-save saving? spec]
            :or   {disabled? false
-                  errors {}
+                  errors    {}
                   loading?  false
                   saving?   false}}]
        [:div.component--form

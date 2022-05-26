@@ -7,12 +7,10 @@
     [webchange.validation.specs.account :as account-spec]
     [webchange.ui-framework.components.index :as ui]))
 
-(def model {:password {:label      "Password"
-                       :type       :text
-                       :input-type "password"}
-            :confirm  {:label      "Confirm Password"
-                       :type       :text
-                       :input-type "password"}})
+(def model {:password {:label "Password"
+                       :type  :password}
+            :confirm  {:label "Confirm Password"
+                       :type  :password}})
 
 (defn reset-password-form
   []
