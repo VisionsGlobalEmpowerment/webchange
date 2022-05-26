@@ -39,6 +39,7 @@
   (println "Update course data....")
   (core/update-course-data! (env :default-school) (env :requested-courses))
   (update-assets! config)
+  (core/update-course-previews! (env :requested-courses))
   (println "Done!"))
 
 (defn download-assets! [config]

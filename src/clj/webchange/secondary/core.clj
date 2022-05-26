@@ -9,6 +9,7 @@
     [config.core :refer [env]]
     [java-time :as jt]
     [webchange.assets.core :as assets]
+    [webchange.course.core :as course]
     [webchange.common.date-time :as dt]
     [webchange.common.files :as f]
     [webchange.common.hmac-sha256 :as sign]
@@ -674,6 +675,18 @@
      (if remove-files? (doseq [item remove]
                          (assets/remove-file-with-hash! item)))
      (download-files download))))
+
+(defn update-course-previews!
+  [requested-courses]
+  (doall
+   (for [course-slug requested-courses]
+     (let [course (course/get-course-latest-version course-slug)
+           files (->> course :scene-list
+                      (map second)
+                      (map :preview)
+                      (remove nil?)
+                      (map (fn [path] {:path path})))]
+       (download-files files)))))
 
 (defn calc-upload-assets
   [school-id requested-courses]
