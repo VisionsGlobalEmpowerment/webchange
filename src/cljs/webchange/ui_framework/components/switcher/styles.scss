@@ -65,4 +65,14 @@ $width: 36px;
             }
         }
     }
+
+    &.indeterminate {
+        input[type="checkbox"] {
+            & + label {
+                &::after {
+                  left: ($width - $height) * 0.5 + 1.5;
+                }
+            }
+        }
+    }
 }

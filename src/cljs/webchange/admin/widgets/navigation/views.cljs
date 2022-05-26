@@ -1,7 +1,7 @@
-(ns webchange.admin.widgets.layout.navigation.views
+(ns webchange.admin.widgets.navigation.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.widgets.layout.navigation.state :as state]
+    [webchange.admin.widgets.navigation.state :as state]
     [webchange.ui-framework.components.index :as c]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 

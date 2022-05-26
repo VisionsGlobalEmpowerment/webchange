@@ -1,9 +1,9 @@
-(ns webchange.admin.widgets.layout.navigation.state
+(ns webchange.admin.widgets.navigation.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.routes :as routes]
     [webchange.admin.state :as parent-state]
-    [webchange.admin.widgets.layout.navigation.utils :refer [set-navigation-items-active]]
+    [webchange.admin.widgets.navigation.utils :refer [set-navigation-items-active]]
     [webchange.utils.map :refer [map->list]]))
 
 (re-frame/reg-sub
@@ -25,9 +25,17 @@
          {:id   :libraries
           :text "Libraries"
           :icon "book-library"}
-         {:id   :accounts
-          :text "Accounts"
-          :icon "user"}]
+         {:id       :accounts
+          :text     "Accounts"
+          :icon     "users"
+          :children [{:id    :admin
+                      :text  "Admin"
+                      :route {:page        :accounts
+                              :page-params {:account-type "admin"}}}
+                     {:id    :live
+                      :text  "Live Users"
+                      :route {:page        :accounts
+                              :page-params {:account-type "live"}}}]}]
         (set-navigation-items-active {:page (:handler current-page)}))))
 
 (re-frame/reg-event-fx
