@@ -1,7 +1,7 @@
 (ns webchange.auth.handler
   (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
             [compojure.route :refer [resources not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
+            [ring.util.response :refer [resource-response response redirect status]]
             [webchange.auth.core :as core]
             [webchange.auth.website :as website]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
@@ -47,6 +47,8 @@
                                                 :path "/"
                                                 :http-only true})))
   (GET "/api/users/current" request (handle-current-user request))
+  (POST "/api/users/logout" request
+        (core/logout (status 204)))
   #_(POST "/api/users/register-user" request
           (-> request :body :user core/register-user! handle))
 

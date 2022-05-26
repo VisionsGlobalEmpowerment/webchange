@@ -55,4 +55,9 @@
 (re-frame/reg-event-fx
   ::logout
   (fn [_]
-    {:dispatch [::routes/redirect :location :logout]}))
+    {:dispatch [::warehouse/logout {:on-success [::logout-success]}]}))
+
+(re-frame/reg-event-fx
+  ::logout-success
+  (fn [_]
+    {:dispatch [::routes/redirect :login]}))
