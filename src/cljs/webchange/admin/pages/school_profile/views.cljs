@@ -41,9 +41,9 @@
                        :icon            "presentation"
                        :icon-background "blue"
                        :color           "blue"
-                       :actions         [{:title    "Change Course"
-                                          :icon     "edit"
-                                          :on-click #(print "Change course")}]}
+                       :actions         [{:title    "Manage Courses"
+                                          :color "yellow"
+                                          :on-click #(re-frame/dispatch [::state/open-courses])}]}
                       {:id              :classes
                        :value           (:classes stats)
                        :title           "Classes"
