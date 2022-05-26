@@ -94,8 +94,10 @@
   ::set-account-type
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ account-type]]
-    {:db       (-> db (set-account-type account-type))
-     :dispatch [::load-accounts-page 1]}))
+    (let [current-account-type (get-account-type db)]
+      (when (not= account-type current-account-type)
+        {:db       (-> db (set-account-type account-type))
+         :dispatch [::load-accounts-page 1]}))))
 
 (re-frame/reg-event-fx
   ::load-accounts-page

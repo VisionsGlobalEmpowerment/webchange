@@ -147,12 +147,12 @@
   "Params:
    - {integer} [delay]: set response delay in ms"
   [props
-   {:keys [on-success on-failure]}
+   {:keys [on-success on-failure suppress-api-error?]}
    {:keys [delay result result-data]
     :or   {result :success}}]
   {:dispatch (case result
                :success [::generic-on-success-handler (assoc props :delay delay) on-success result-data]
-               :failure [::generic-failure-handler props on-failure false result-data])})
+               :failure [::generic-failure-handler props on-failure suppress-api-error? result-data])})
 
 ;;
 
@@ -207,7 +207,7 @@
     (create-request {:key    :load-current-user
                      :method :get
                      :uri    "/api/users/current"}
-                    handlers)))
+                    (assoc handlers :suppress-api-error? true))))
 
 (re-frame/reg-event-fx
   ::logout
