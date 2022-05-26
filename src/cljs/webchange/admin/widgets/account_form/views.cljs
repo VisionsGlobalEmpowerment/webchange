@@ -53,3 +53,31 @@
                  :spec    ::account-spec/create-account
                  :on-save handle-save
                  :saving? saving?}]]))}))
+
+(defn edit-account-form
+  []
+  (r/create-class
+    {:display-name "Edit Account Form"
+
+     :component-did-mount
+     (fn [this]
+       (re-frame/dispatch [::state/init-edit-form (r/props this)]))
+
+     :component-will-unmount
+     (fn [this]
+       (re-frame/dispatch [::state/reset-form (r/props this)]))
+
+     :reagent-render
+     (fn [{:keys [account-id class-name on-save]}]
+       (let [saving? @(re-frame/subscribe [::state/data-saving?])
+             data @(re-frame/subscribe [::state/form-data])
+             handle-save #(re-frame/dispatch [::state/edit-account account-id % {:on-success on-save}])]
+         [:div {:class-name (ui/get-class-name {"widget--account-form" true
+                                                class-name             (some? class-name)})}
+          [form {:form-id (-> (str "edit-account")
+                              (keyword))
+                 :model   (dissoc account-model :password)
+                 :data    data
+                 :spec    ::account-spec/edit-account
+                 :on-save handle-save
+                 :saving? saving?}]]))}))

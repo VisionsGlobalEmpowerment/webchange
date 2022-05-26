@@ -46,6 +46,21 @@
                    :disabled? disabled?
                    :on-change handle-change}]]))
 
+(defn- password-control
+  [{:keys [disabled? id form-id label input-type]}]
+  (let [value @(re-frame/subscribe [::state/field-value form-id id])
+        error @(re-frame/subscribe [::state/field-error form-id id])
+        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])
+        input-type (or input-type "str")]
+    [:<>
+     [c/label {:for id} label]
+     [c/password {:id        id
+                  :type      input-type
+                  :value     value
+                  :error     error
+                  :disabled? disabled?
+                  :on-change handle-change}]]))
+
 (defn- select-control
   [{:keys [disabled? id form-id label options options-type]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
@@ -81,6 +96,7 @@
       :date [date-control control-props]
       :text [text-control control-props]
       :text-multiline [text-multiline-control control-props]
+      :password [password-control control-props]
       :select [select-control control-props]
       :custom [custom-control control-props])))
 
@@ -89,15 +105,21 @@
   [:div.data-loading-indicator
    [c/circular-progress]])
 
-(defn- submit
-  [{:keys [form-id disabled? on-success saving? spec]}]
-  (let [handle-click #(re-frame/dispatch [::state/save form-id spec on-success])]
-    [c/button {:on-click   handle-click
-               :disabled?  (or disabled? saving?)
-               :class-name "submit"}
-     (if-not saving?
-       "Save"
-       [c/circular-progress])]))
+(defn- form-actions
+  [{:keys [form-id disabled? on-save on-cancel saving? spec]}]
+  (let [handle-save-click #(re-frame/dispatch [::state/save form-id spec on-save])
+        handle-cancel-click #(when (fn? on-cancel) (on-cancel))]
+    [:div.form-actions
+     (when (some? on-cancel)
+       [c/button {:on-click   handle-cancel-click
+                  :disabled?  (or disabled? saving?)
+                  :class-name "cancel"}
+        "Cancel"])
+     [c/button {:on-click   handle-save-click
+                :disabled?  (or disabled? saving?)
+                :loading?   saving?
+                :class-name "submit"}
+      "Save"]]))
 
 (defn form
   []
@@ -110,7 +132,8 @@
 
      :component-did-update
      (fn [this [_ prev-props]]
-       (let [{:keys [form-id data model]} (r/props this)]
+       (let [{:keys [form-id data model errors]} (r/props this)]
+         (re-frame/dispatch [::state/set-custom-errors form-id errors])
          (when (not= data (:data prev-props))
            (re-frame/dispatch [::state/set-form-data form-id data model]))))
 
@@ -119,8 +142,9 @@
        (re-frame/dispatch [::state/reset (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [disabled? form-id loading? model on-save saving? spec]
+     (fn [{:keys [disabled? errors form-id loading? model on-cancel on-save saving? spec]
            :or   {disabled? false
+                  errors    {}
                   loading?  false
                   saving?   false}}]
        [:div.component--form
@@ -134,8 +158,9 @@
                             :disabled? disabled?}])]
           [loading-indicator])
         (when-not disabled?
-          [submit {:form-id    form-id
-                   :disabled?  loading?
-                   :saving?    saving?
-                   :spec       spec
-                   :on-success on-save}])])}))
+          [form-actions {:form-id   form-id
+                         :disabled? loading?
+                         :saving?   saving?
+                         :spec      spec
+                         :on-save   on-save
+                         :on-cancel on-cancel}])])}))

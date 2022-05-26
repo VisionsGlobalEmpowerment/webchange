@@ -26,11 +26,18 @@
         font-size: 10px;
     }
 
-    .submit {
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
         margin-top: 16px;
 
-        progress {
-            @include progress-size(12px, 2px);
+        & > * {
+            flex: 1 1 50%;
+        }
+
+        .cancel {
+            @include button-color(#2E3A59);
         }
     }
 }

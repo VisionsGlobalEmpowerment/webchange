@@ -229,6 +229,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-account
+  (fn [{:keys [_]} [_ {:keys [id]} handlers]]
+    (create-request {:key    :load-account
+                     :method :get
+                     :uri    (str "/api/accounts/" id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-accounts-by-type
   (fn [{:keys [_]} [_ {:keys [type page]} handlers]]
     (create-request {:key    :load-accounts-by-type
@@ -245,6 +253,33 @@
                      :uri    (str "/api/accounts/" account-id "/status")
                      :params {:active active}}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::save-account
+  (fn [{:keys [_]} [_ {:keys [id data]} handlers]]
+    (create-request {:key    :save-account
+                     :method :put
+                     :uri    (str "/api/accounts/" id)
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::change-account-password
+  (fn [{:keys [_]} [_ {:keys [id data]} handlers]]
+    (create-request {:key    :change-account-password
+                     :method :put
+                     :uri    (str "/api/accounts/" id "/password")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::delete-account
+  (fn [{:keys [_]} [_ {:keys [id]} handlers]]
+    (create-request {:key    :delete-account
+                     :method :delete
+                     :uri    (str "/api/accounts/" id)}
+                    handlers)))
+
 ;; Templates
 
 (re-frame/reg-event-fx

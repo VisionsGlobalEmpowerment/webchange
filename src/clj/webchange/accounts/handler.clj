@@ -26,6 +26,14 @@
            (throw-unauthorized {:role :educator}))
          (-> (core/get-account id)
              response)))
+  (DELETE "/api/accounts/:id" request
+       :coercion :spec
+       :path-params [id :- ::account-spec/id]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/delete-account id)
+             response)))
   (POST "/api/accounts" request
         :coercion :spec
         :body [data ::account-spec/create-account]

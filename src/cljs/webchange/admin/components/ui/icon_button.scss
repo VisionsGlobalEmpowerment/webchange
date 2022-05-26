@@ -1,9 +1,7 @@
 .wc-icon-button {
     background: #D99BFF;
 
-    svg {
-        fill: #2E3A59;
-    }
+    @include icon-color($color-pink);
 
     &:hover {
         filter: brightness(1.1);

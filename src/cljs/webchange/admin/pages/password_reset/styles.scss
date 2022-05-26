@@ -1,0 +1,15 @@
+.page--password-reset {
+    .page--password-reset--content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .password-reset-form {
+        width: 320px;
+
+        .form-actions {
+            margin-top: 64px;
+        }
+    }
+}

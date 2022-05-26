@@ -2,6 +2,7 @@
   (:require
     [buddy.hashers :as hashers]
     [webchange.db.core :as db]
+    [webchange.course.core :refer [get-course-info]]
     [clojure.tools.logging :as log]
     [java-time :as jt]
     [camel-snake-kebab.extras :refer [transform-keys]]
@@ -10,8 +11,10 @@
 (defn visible-user [user]
   (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id :website-id]))
 
-(defn visible-account [user]
-  (select-keys user [:id :first-name :last-name :email :active :last-login :created-at :type]))
+(defn visible-account [user & {:keys [more-fields] :or {more-fields []}}]
+  (->> [:id :first-name :last-name :email :active :last-login :created-at :type]
+       (concat more-fields)
+       (select-keys user)))
 
 (defn visible-student [student]
   (-> (select-keys student [:id :user-id :class-id :school-id :gender :date-of-birth :user :class])
@@ -72,7 +75,9 @@
 (defn- with-children
   [{:keys [id] :as account}]
   (let [children (->> (db/find-users-by-parent {:parent_id id})
-                      (map visible-account))]
+                      (map #(visible-account % :more-fields [:data]))
+                      (map (fn [{:keys [data] :as child}]
+                             (assoc child :course (get-course-info (:course-slug data))))))]
     (assoc account :children children)))
 
 (defn get-account
@@ -80,6 +85,11 @@
   (-> (db/get-user {:id id})
       (visible-account)
       (with-children)))
+
+(defn delete-account
+  [id]
+  (-> (db/get-user {:id id})
+      (visible-account)))
 
 (defn create-account
   [data]
@@ -90,15 +100,17 @@
 (defn edit-account
   [user-id data]
   (db/edit-account! {:id user-id
-                     :first_name (:fist-name data)
+                     :first_name (:first-name data)
                      :last_name (:last-name data)
-                     :type (:type data)}))
+                     :type (:type data)})
+  (get-account user-id))
 
 (defn change-password
   [user-id {:keys [password]}]
   (let [hashed-password (hashers/derive password)]
     (db/change-password! {:id user-id
-                          :password hashed-password})))
+                          :password hashed-password})
+    (get-account user-id)))
 
 (defn set-account-status
   [user-id {:keys [active]}]

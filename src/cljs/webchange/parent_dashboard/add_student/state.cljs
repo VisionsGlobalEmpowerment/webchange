@@ -6,6 +6,7 @@
     [webchange.state.warehouse :as warehouse]
     [webchange.validation.specs.parent-student :as parent-student-specs]
     [webchange.validation.validate :refer [validate]]
+    [webchange.utils.devices :refer [devices-options]]
     [webchange.utils.map :refer [map-keys]]))
 
 (defn path-to-db
@@ -108,22 +109,7 @@
 (re-frame/reg-sub
   ::device-options
   (fn [_]
-    [{:text  "Android Tablet"
-      :value "android-tablet"}
-     {:text  "iPad"
-      :value "ipad"}
-     {:text  "Android Mobile Phone"
-      :value "android-mobile-phone"}
-     {:text  "iPhone"
-      :value "iphone"}
-     {:text  "Desktop Computer: PC"
-      :value "desktop-computer-pc"}
-     {:text  "Desktop Computer: Mac"
-      :value "desktop-computer-mac"}
-     {:text  "Laptop Computer: PC"
-      :value "laptop-computer-pc"}
-     {:text  "Laptop Computer: Mac"
-      :value "laptop-computer-mac"}]))
+    devices-options))
 
 (re-frame/reg-sub
   ::device-validation-error
