@@ -256,6 +256,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::change-account-password
+  (fn [{:keys [_]} [_ {:keys [id data]} handlers]]
+    (create-request {:key    :change-account-password
+                     :method :put
+                     :uri    (str "/api/accounts/" id "/password")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::delete-account
   (fn [{:keys [_]} [_ {:keys [id]} handlers]]
     (create-request {:key    :delete-account

@@ -60,6 +60,29 @@
   (fn [db [_ form-id]]
     (errors/get-data db form-id)))
 
+(def custom-errors-key :custom-errors)
+
+(defn- get-custom-errors
+  [db form-id]
+  (get-in db [form-id custom-errors-key] {}))
+
+(defn- set-custom-errors
+  [db form-id errors]
+  (assoc-in db [form-id custom-errors-key] errors))
+
+(defn- reset-custom-errors
+  [db form-id]
+  (set-custom-errors db form-id {}))
+
+(re-frame/reg-event-fx
+  ::set-custom-errors
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ form-id custom-errors]]
+    (let [current-errors (errors/get-data db form-id)]
+      {:db (-> db
+               (set-custom-errors form-id custom-errors)
+               (errors/set-data form-id (merge current-errors custom-errors)))})))
+
 (re-frame/reg-sub
   ::field-error
   (fn [[_ form-id]]
@@ -78,11 +101,13 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [init-data data form-id model on-change]}]]
-    {:db (-> db
-             (set-callback :on-change on-change)
-             (set-form-data form-id (or init-data data) model)
-             (errors/reset-data form-id))}))
+  (fn [{:keys [db]} [_ {:keys [init-data data form-id model on-change errors]}]]
+    {:db       (-> db
+                   (set-callback :on-change on-change)
+                   (set-form-data form-id (or init-data data) model)
+                   (reset-custom-errors form-id)
+                   (errors/reset-data form-id))
+     :dispatch [::set-custom-errors form-id errors]}))
 
 (re-frame/reg-event-fx
   ::reset
@@ -101,11 +126,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ form-id spec on-success]]
     (let [data (form/get-data db form-id)
+          custom-errors (get-custom-errors db form-id)
           validation-errors (validate spec data)]
       (if (nil? validation-errors)
-        {:db        (errors/reset-data db form-id)
+        {:db        (errors/set-data db form-id custom-errors)
          ::callback [on-success data]}
-        {:db (errors/set-data db form-id validation-errors)}))))
+        {:db (errors/set-data db form-id (merge validation-errors custom-errors))}))))
 
 (re-frame/reg-fx
   ::callback

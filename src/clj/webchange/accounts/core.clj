@@ -109,7 +109,8 @@
   [user-id {:keys [password]}]
   (let [hashed-password (hashers/derive password)]
     (db/change-password! {:id user-id
-                          :password hashed-password})))
+                          :password hashed-password})
+    (get-account user-id)))
 
 (defn set-account-status
   [user-id {:keys [active]}]
