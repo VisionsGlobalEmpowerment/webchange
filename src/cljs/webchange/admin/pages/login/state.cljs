@@ -82,7 +82,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db       (set-loading db false)
-     :dispatch [::routes/redirect :dashboard]}))
+     :dispatch-n [[:admin-core/set-authenticated true]
+                  [::routes/redirect :dashboard]]}))
 
 (re-frame/reg-event-fx
   ::login-failure

@@ -60,7 +60,6 @@
 (re-frame/reg-event-fx
   ::generic-failure-handler
   (fn [{:keys [_]} [_ {:keys [key request-type]} failure-handler suppress-api-error? response]]
-    (print "::generic-failure-handler" failure-handler)
     {:dispatch-n (cond-> [[::finish-request key]]
                          (not suppress-api-error?) (conj [::show-request-error key response])
                          (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? false}])
@@ -151,7 +150,6 @@
    {:keys [on-success on-failure suppress-api-error?]}
    {:keys [delay result result-data]
     :or   {result :success}}]
-  (print "create-fake-request " on-success on-failure)
   {:dispatch (case result
                :success [::generic-on-success-handler (assoc props :delay delay) on-success result-data]
                :failure [::generic-failure-handler props on-failure suppress-api-error? result-data])})

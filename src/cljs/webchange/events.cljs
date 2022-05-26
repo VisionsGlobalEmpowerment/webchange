@@ -70,8 +70,7 @@
                   :uri             "/api/users/current"
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::init-current-user-success]
-                  :on-failure      [:api-request-error :current-user]}}))
+                  :on-success      [::init-current-user-success]}}))
 
 (re-frame/reg-event-fx
   ::init-current-user-success
