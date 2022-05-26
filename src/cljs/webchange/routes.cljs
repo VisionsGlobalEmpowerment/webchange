@@ -9,7 +9,7 @@
             [webchange.interpreter.events :as ie]
             [webchange.dashboard.events :as dashboard-events]))
 
-(def routes ["/" {""                  :home
+(def routes ["/" {""                  :admin-login
                   "login"             :login
                   "student-login"     :student-login
                   "register"          :register-user
@@ -49,7 +49,8 @@
                   "teacher"           {[""]        :teacher
                                        ["/" #".*"] :teacher}}])
 
-(def redirects {:course-editor-v2       :course-editor
+(def redirects {:admin-login            :admin
+                :course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})
 
 (defn- parse-url [url]

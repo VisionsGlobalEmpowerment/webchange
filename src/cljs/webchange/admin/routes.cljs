@@ -62,7 +62,7 @@
 (defonce router (atom nil))
 
 (defn- dispatch-route
-  [{:keys [handler route-params] :as props}]
+  [{:keys [handler route-params]}]
   (re-frame/dispatch [::state/set-current-page {:handler handler
                                                 :props   route-params}]))
 
