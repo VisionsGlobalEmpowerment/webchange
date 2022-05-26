@@ -60,3 +60,9 @@
 (def with-custom-window confirm/with-custom-window)
 
 (def get-class-name utils/get-class-name)
+
+(defn confirm
+  [message handler]
+  (when (js/confirm message)
+    (when (fn? handler)
+      (handler))))

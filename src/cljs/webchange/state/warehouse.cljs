@@ -245,6 +245,24 @@
                      :uri    (str "/api/accounts/" account-id "/status")
                      :params {:active active}}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::save-account
+  (fn [{:keys [_]} [_ {:keys [id data]} handlers]]
+    (create-request {:key    :save-account
+                     :method :put
+                     :uri    (str "/api/accounts/" id)
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::delete-account
+  (fn [{:keys [_]} [_ {:keys [id]} handlers]]
+    (create-request {:key    :delete-account
+                     :method :delete
+                     :uri    (str "/api/accounts/" id)}
+                    handlers)))
+
 ;; Templates
 
 (re-frame/reg-event-fx

@@ -43,19 +43,51 @@
          ^{:key id}
          [child-card child]))]))
 
+(defn- account-info-item
+  [{:keys [key value]}]
+  [:<>
+   [:dt key]
+   [:dd value]])
+
+(defn- account-info
+  []
+  (let [account-info @(re-frame/subscribe [::state/account-info])]
+    [:dl.account-info
+     (for [[key value] account-info]
+       ^{:key key}
+       [account-info-item {:key key :value value}])]))
+
+(defn- account-actions
+  [{:keys [account-id]}]
+  (let [account-removing? @(re-frame/subscribe [::state/account-removing?])
+        handle-delete-account (fn []
+                                (ui/confirm "Delete Account?"
+                                            #(re-frame/dispatch [::state/delete-account account-id])))
+        handle-reset-password #(re-frame/dispatch [::state/reset-password account-id])]
+    [:div.account-actions
+     [ui/icon-button {:icon     "chevron-right"
+                      :variant  "light"
+                      :on-click handle-reset-password}
+      "Reset Password"]
+     [ui/icon-button {:icon     "remove"
+                      :variant  "light"
+                      :loading? account-removing?
+                      :on-click handle-delete-account}
+      "Delete Account"]]))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
-  (fn []
-    (let [
-          ;account-type @(re-frame/subscribe [::state/account-type])
-          ;title @(re-frame/subscribe [::state/title])
-          handle-save #(re-frame/dispatch [::state/open-accounts-list])]
+  (fn [{:keys [account-id] :as props}]
+    (let [handle-save #(re-frame/dispatch [::state/open-accounts-list])]
       [page/page {:class-name "page--account-edit"}
        [page/header {:title "Edit Account"
                      :icon  "user"}]
        [page/main-content {:id "page--account-edit--content"}
-        [edit-account-form {:account-type "admin"
-                            :class-name   "edit-account-form"
-                            :on-save      handle-save}]
+        [:div.left-side-panel
+         [edit-account-form {:account-id account-id
+                             :class-name "edit-account-form"
+                             :on-save    handle-save}]
+         [account-info]
+         [account-actions props]]
         [children-list]]])))

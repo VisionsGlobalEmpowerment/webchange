@@ -9,6 +9,7 @@
     [webchange.admin.pages.dashboard.views :as dashboard]
     [webchange.admin.pages.login.views :as login]
     [webchange.admin.pages.not-found.views :as not-found]
+    [webchange.admin.pages.password-reset.views :as password-reset]
     [webchange.admin.pages.school-profile.views :as school-profile]
     [webchange.admin.pages.school-courses.views :as school-courses]
     [webchange.admin.pages.schools.views :as schools]
@@ -34,6 +35,7 @@
             :classes          classes/page
             :dashboard        dashboard/page
             :login            login/page
+            :password-reset   password-reset/page
             :school-courses   school-courses/page
             :school-profile   school-profile/page
             :schools          schools/page

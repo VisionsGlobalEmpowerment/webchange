@@ -48,6 +48,20 @@
     {:db (reset-form-data db)}))
 
 (re-frame/reg-event-fx
+  ::init-edit-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [account-id]}]]
+    {:db       (reset-form-data db)
+     :dispatch [::warehouse/load-account {:id account-id}
+                {:on-success [::load-account-success]}]}))
+
+(re-frame/reg-event-fx
+  ::load-account-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (-> db (set-form-data data))}))
+
+(re-frame/reg-event-fx
   ::reset-form
   (fn [{:keys [db]} [_ {:keys [_]}]]
     {:db (dissoc db path-to-db)}))
@@ -77,10 +91,23 @@
 (re-frame/reg-event-fx
   ::edit-account
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
-    (print "::edit-account" data)
-    {}
-    #_{:db       (set-data-saving db true)
-     :dispatch [::warehouse/create-account data
-                {:on-success [::create-account-success on-success]
-                 :on-failure [::create-account-failure]}]}))
+  (fn [{:keys [db]} [_ account-id data {:keys [on-success]}]]
+    {:db       (set-data-saving db true)
+     :dispatch [::warehouse/save-account
+                {:id   account-id
+                 :data data}
+                {:on-success [::edit-account-success on-success]
+                 :on-failure [::edit-account-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::edit-account-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ success-handler response]]
+    {:db                (set-data-saving db false)
+     ::widgets/callback [success-handler response]}))
+
+(re-frame/reg-event-fx
+  ::edit-account-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-data-saving db false)}))

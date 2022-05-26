@@ -52,6 +52,15 @@
   :<- [path-to-db]
   #(get-account-data %))
 
+(re-frame/reg-sub
+  ::account-info
+  :<- [::account-data]
+  (fn [{:keys [created-at last-login] :as account-data}]
+    (if (some? account-data)
+      [["Account Created" (date-str->locale-date created-at)]
+       ["Last Login" (date-str->locale-date last-login)]]
+      [])))
+
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
@@ -124,3 +133,47 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ child-id]]
     {:db (-> db (set-child-removing child-id false))}))
+
+(re-frame/reg-event-fx
+  ::reset-password
+  (fn [{:keys [_]} [_ account-id]]
+    {:dispatch [::routes/redirect :password-reset :account-id account-id]}))
+
+(def account-removing-key :account-removing?)
+
+(defn- set-account-removing
+  [db value]
+  (assoc db account-removing-key value))
+
+(re-frame/reg-sub
+  ::account-removing?
+  :<- [path-to-db]
+  #(get % account-removing-key false))
+
+(re-frame/reg-event-fx
+  ::delete-account
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ account-id]]
+    {:db       (set-account-removing db true)
+     :dispatch [::warehouse/delete-account
+                {:id account-id}
+                {:on-success [::delete-account-success]
+                 :on-failure [::delete-account-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::delete-account-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db       (set-account-removing db false)
+     :dispatch [::open-accounts-list]}))
+
+(re-frame/reg-event-fx
+  ::delete-account-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-account-removing db false)}))
+
+(re-frame/reg-event-fx
+  ::open-accounts-list
+  (fn [{:keys []} [_]]
+    {:dispatch [::routes/redirect :accounts :account-type "live"]}))

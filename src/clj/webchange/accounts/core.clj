@@ -86,6 +86,11 @@
       (visible-account)
       (with-children)))
 
+(defn delete-account
+  [id]
+  (-> (db/get-user {:id id})
+      (visible-account)))
+
 (defn create-account
   [data]
   (let [[{id :id}] (create-user-with-credentials! data)]
@@ -95,9 +100,10 @@
 (defn edit-account
   [user-id data]
   (db/edit-account! {:id user-id
-                     :first_name (:fist-name data)
+                     :first_name (:first-name data)
                      :last_name (:last-name data)
-                     :type (:type data)}))
+                     :type (:type data)})
+  (get-account user-id))
 
 (defn change-password
   [user-id {:keys [password]}]
