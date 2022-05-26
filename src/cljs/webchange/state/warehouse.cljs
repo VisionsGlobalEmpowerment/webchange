@@ -209,6 +209,14 @@
                      :uri    "/api/users/current"}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::logout
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :logout
+                     :method :post
+                     :uri    "/api/users/logout"}
+                    handlers)))
+
 ;; Accounts
 
 (re-frame/reg-event-fx

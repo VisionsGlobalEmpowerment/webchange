@@ -116,3 +116,6 @@
 
 (defn with-updated-identity [request response identity]
   (assoc response :session (merge (:session request) {:identity identity})))
+
+(defn logout [response]
+  (assoc response :session {}))
