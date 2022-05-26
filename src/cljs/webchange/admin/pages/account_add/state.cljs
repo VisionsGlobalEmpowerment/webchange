@@ -1,5 +1,6 @@
 (ns webchange.admin.pages.account-add.state
   (:require
+    [clojure.string :as str]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]))
@@ -34,7 +35,10 @@
   ::title
   :<- [::account-type]
   (fn [account-type]
-    (str "New " (clojure.string/capitalize account-type) " Account")))
+    (let [account-type-name (-> account-type
+                                (or "")
+                                str/capitalize)]
+      (str "New " account-type-name " Account"))))
 
 (re-frame/reg-event-fx
   ::init
