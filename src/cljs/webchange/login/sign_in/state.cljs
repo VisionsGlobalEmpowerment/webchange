@@ -4,7 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.state.warehouse :as warehouse]))
 
-(def path-to-db :login)
+(def path-to-db :form/login)
 
 (re-frame/reg-sub
   path-to-db

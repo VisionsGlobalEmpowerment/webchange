@@ -18,18 +18,19 @@
      [:h1 "Log in"]
      [:div.form
       [ui/input {:label          "Username"
-              :value          username
-              :on-change      handle-username-changed
-              :disabled?      loading?
-              :on-enter-press submit}]
-      [ui/input {:label          "Password"
-              :type           "password"
-              :value          password
-              :on-change      handle-password-changed
-              :disabled?      loading?
-              :on-enter-press submit}]]
+                 :value          username
+                 :name           "email"
+                 :on-change      handle-username-changed
+                 :disabled?      loading?
+                 :on-enter-press submit}]
+      [ui/password {:label          "Password"
+                    :value          password
+                    :name           "password"
+                    :on-change      handle-password-changed
+                    :disabled?      loading?
+                    :on-enter-press submit}]]
      [ui/button {:on-click   submit
-              :class-name "login-button"
-              :loading? loading?
-              :disabled?  loading?}
+                 :class-name "login-button"
+                 :loading?   loading?
+                 :disabled?  loading?}
       "Log In"]]))
