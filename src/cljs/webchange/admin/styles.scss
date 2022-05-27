@@ -9,19 +9,6 @@ body {
     height: 100%;
     background-color: #fff;
 
-    & > .loading-indicator {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        width: 100%;
-        height: 100%;
-
-        progress {
-            @include progress-size(48px);
-        }
-    }
-
     @import "mixins";
     @import "components/styles";
     @import "widgets/styles";

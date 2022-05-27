@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
+    [webchange.login.check-current-user :as current-user]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :widget/auth)
@@ -60,4 +61,4 @@
 (re-frame/reg-event-fx
   ::logout-success
   (fn [_]
-    {:dispatch [::routes/redirect :login]}))
+    {::current-user/redirect-to-login true}))
