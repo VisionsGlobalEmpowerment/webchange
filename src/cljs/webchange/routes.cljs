@@ -11,7 +11,6 @@
 
 (def routes ["/" {""                  :login
                   "student-login"     :student-login
-                  ;"register"          :register-user
                   "wizard"            :wizard               ;deprecated
                   "game-changer-beta" :game-changer
                   "game-changer"      {[""]                                                         :game-changer

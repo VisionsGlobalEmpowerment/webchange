@@ -1,5 +1,6 @@
 (ns webchange.views
   (:require
+    [cljs-react-material-ui.reagent :as mui]
     [re-frame.core :as re-frame]
     ["react" :as react]
     [reagent.core :as r]
@@ -11,14 +12,13 @@
     [webchange.editor-v2.scenes-crossing.views :refer [scenes-crossing]]
     [webchange.editor-v2.events :as ee2]
     [webchange.editor-v2.views :refer [course-view scene-view concept-view add-concept-view lesson-view add-lesson-view]]
-    [webchange.auth.views :refer [teacher-login student-access-form]]
+    [webchange.auth.views :refer [student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.game-changer.views :as game-changer]
     [webchange.parent-dashboard.views :as parent-dashboard]
     [webchange.student-dashboard.views :as student-dashboard]
     [webchange.error-pages.page-404 :refer [page-404]]
-    [webchange.views-login-switch :refer [login-switch]]
     [webchange.editor-v2.wizard.views :as wizard]
     [webchange.error-message.views :refer [error-message]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
@@ -137,5 +137,6 @@
 (defn main-panel []
   (let [{:keys [handler url route-params]} @(re-frame/subscribe [::subs/active-route])]
     [:div {:class-name (if-not (module-route? handler) "main-app")}
+     [mui/css-baseline]
      [panels handler route-params url]
      [error-message]]))
