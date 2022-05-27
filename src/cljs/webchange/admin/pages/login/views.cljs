@@ -4,7 +4,7 @@
     [webchange.admin.pages.login.state :as state]
     [webchange.ui-framework.components.index :refer [button circular-progress input]]))
 
-(defn page
+(defn page                                                  ;; ToDo: Remove
   []
   (let [username @(re-frame/subscribe [::state/username])
         password @(re-frame/subscribe [::state/password])

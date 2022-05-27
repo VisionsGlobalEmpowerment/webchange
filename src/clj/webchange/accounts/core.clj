@@ -9,7 +9,7 @@
     [camel-snake-kebab.core :refer [->snake_case_keyword]]))
 
 (defn visible-user [user]
-  (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id :website-id]))
+  (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id :website-id :type]))
 
 (defn visible-account [user & {:keys [more-fields] :or {more-fields []}}]
   (->> [:id :first-name :last-name :email :active :last-login :created-at :type]

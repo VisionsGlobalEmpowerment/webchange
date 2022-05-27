@@ -1,0 +1,66 @@
+.sign-in-form {
+    $input-color: #505B76;
+
+    @mixin text-styles {
+        color: #fff;
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 32px;
+
+    width: 50%;
+    height: 50%;
+    min-height: 340px;
+    max-width: 500px;
+    max-height: 400px;
+
+    padding: 52px 76px;
+    background: $color-primary;
+    border-radius: 20px;
+
+    @include text-styles;
+
+    h1 {
+        @include text-styles;
+        font-weight: 700;
+        font-size: 18px;
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .login-button {
+        border-radius: 16px;
+        height: 32px;
+        padding: 0;
+    }
+
+    .wc-input-wrapper {
+        .wc-input-label {
+            @include text-styles;
+        }
+
+        .wc-input {
+            @include text-styles;
+            background-color: $input-color;
+            border: none;
+
+            &:disabled {
+                color: #8b92a6;
+            }
+        }
+    }
+
+    .wc-button {
+        background: $input-color;
+        justify-content: center;
+    }
+}

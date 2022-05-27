@@ -18,6 +18,7 @@
     [webchange.ui-framework.components.image-preview.index :as image-preview]
     [webchange.ui-framework.components.input.index :as input]
     [webchange.ui-framework.components.label.index :as label]
+    [webchange.ui-framework.components.loading-overlay.index :as loading-overlay]
     [webchange.ui-framework.components.range-input.index :as range-input]
     [webchange.ui-framework.components.menu.index :as menu]
     [webchange.ui-framework.components.message.index :as message]
@@ -48,6 +49,7 @@
 (def image-preview image-preview/component)
 (def input input/component)
 (def label label/component)
+(def loading-overlay loading-overlay/component)
 (def menu menu/component)
 (def message message/component)
 (def password password/component)

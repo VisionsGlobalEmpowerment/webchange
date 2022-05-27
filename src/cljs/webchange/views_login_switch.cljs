@@ -31,7 +31,7 @@
    :footer-row       {:text-align "center"
                       :padding    "10px"}})
 
-(defn login-switch
+(defn login-switch                                          ;; ToDo: Remove
   []
   (r/with-let [current-course (r/atom (:current-course default-db))]
     (let [translation-module-url (str "/courses/" @current-course "/editor-v2")

@@ -55,7 +55,7 @@
    :bckspc-img          {:width          "40px"
                          :height         "40px"}})
 
-(defn teacher-login
+(defn teacher-login                                         ;; ToDo: Remove
   [& args]
   (apply teacher-login/teacher-login-page args))
 

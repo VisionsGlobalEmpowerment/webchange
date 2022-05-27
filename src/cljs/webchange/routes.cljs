@@ -9,10 +9,9 @@
             [webchange.interpreter.events :as ie]
             [webchange.dashboard.events :as dashboard-events]))
 
-(def routes ["/" {""                  :admin-login
-                  "login"             :login
+(def routes ["/" {""                  :login
                   "student-login"     :student-login
-                  "register"          :register-user
+                  ;"register"          :register-user
                   "wizard"            :wizard               ;deprecated
                   "game-changer-beta" :game-changer
                   "game-changer"      {[""]                                                         :game-changer
@@ -49,8 +48,7 @@
                   "teacher"           {[""]        :teacher
                                        ["/" #".*"] :teacher}}])
 
-(def redirects {:admin-login            :admin
-                :course-editor-v2       :course-editor
+(def redirects {:course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})
 
 (defn- parse-url [url]

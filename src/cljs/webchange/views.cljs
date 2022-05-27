@@ -1,6 +1,5 @@
 (ns webchange.views
   (:require
-    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     ["react" :as react]
     [reagent.core :as r]
@@ -23,6 +22,7 @@
     [webchange.editor-v2.wizard.views :as wizard]
     [webchange.error-message.views :refer [error-message]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.ui-framework.components.index :as ui]
     [webchange.ui-framework.test-page.index :refer [test-ui]]
     [webchange.utils.lazy-component :refer [lazy-component]]))
 
@@ -71,19 +71,16 @@
          student-dashboard/views))
 
 (def modules {:admin   (-> webchange.admin.views/index (shadow.lazy/loadable) (lazy-component))
+              :login   (-> webchange.login.views/index (shadow.lazy/loadable) (lazy-component))
               :teacher (-> webchange.teacher.views/index (shadow.lazy/loadable) (lazy-component))})
 
 (defn- module-route?
   [route-name]
   (contains? modules route-name))
 
-(defn- module-loading
-  []
-  [:div "Loading..."])
-
 (defn- module
   [{:keys [component url]}]
-  [:> react/Suspense {:fallback (r/as-element [module-loading])}
+  [:> react/Suspense {:fallback (r/as-element [ui/loading-overlay])}
    [:> component {:route {:path url}}]])
 
 (defn- panels
@@ -93,9 +90,6 @@
                                         :component (get modules route-name)}]
     (contains? overall-views route-name) [(get overall-views route-name) route-params]
     :default (case route-name
-               :home [login-switch]
-               :login [teacher-login :sign-in]
-               :register-user [teacher-login :sign-up]
                :course [course {:mode ::modes/game}]
                ;; sandbox
                :sandbox [course {:mode ::modes/sandbox}]
@@ -143,6 +137,5 @@
 (defn main-panel []
   (let [{:keys [handler url route-params]} @(re-frame/subscribe [::subs/active-route])]
     [:div {:class-name (if-not (module-route? handler) "main-app")}
-     [ui/css-baseline]
      [panels handler route-params url]
      [error-message]]))
