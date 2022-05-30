@@ -3,8 +3,10 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.components.form.data :refer [init]]
+    [webchange.admin.routes :as routes]
     [webchange.admin.widgets.state :as widgets]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.date :refer [date-str->locale-date]]))
 
 (def path-to-db :widget/account-form)
 
@@ -38,6 +40,17 @@
   ::data-saving?
   :<- [path-to-db]
   #(get % data-saving-key false))
+
+;; Account Info
+
+(re-frame/reg-sub
+  ::account-info
+  :<- [::form-data]
+  (fn [{:keys [created-at last-login] :as account-data}]
+    (if (some? account-data)
+      [["Account Created" (date-str->locale-date created-at)]
+       ["Last Login" (date-str->locale-date last-login)]]
+      [])))
 
 ;;
 
@@ -111,3 +124,46 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))
+
+;; Remove Account
+
+(def account-removing-key :account-removing?)
+
+(defn- set-account-removing
+  [db value]
+  (assoc db account-removing-key value))
+
+(re-frame/reg-sub
+  ::account-removing?
+  :<- [path-to-db]
+  #(get % account-removing-key false))
+
+(re-frame/reg-event-fx
+  ::remove-account
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ account-id {:keys [on-success]}]]
+    {:db       (set-account-removing db true)
+     :dispatch [::warehouse/delete-account
+                {:id account-id}
+                {:on-success [::remove-account-success on-success]
+                 :on-failure [::remove-account-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::remove-account-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ on-success response]]
+    {:db                (set-account-removing db false)
+     ::widgets/callback [on-success response]}))
+
+(re-frame/reg-event-fx
+  ::remove-account-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-account-removing db false)}))
+
+;; Reset Password
+
+(re-frame/reg-event-fx
+  ::reset-password
+  (fn [{:keys [_]} [_ account-id]]
+    {:dispatch [::routes/redirect :password-reset :account-id account-id]}))

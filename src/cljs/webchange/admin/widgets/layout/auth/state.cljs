@@ -54,6 +54,11 @@
     {:dispatch [::routes/redirect :login]}))
 
 (re-frame/reg-event-fx
+  ::open-my-account-page
+  (fn [_]
+    {:dispatch [::routes/redirect :account-my]}))
+
+(re-frame/reg-event-fx
   ::logout
   (fn [_]
     {:dispatch [::warehouse/logout {:on-success [::logout-success]}]}))

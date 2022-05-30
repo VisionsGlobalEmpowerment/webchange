@@ -6,11 +6,13 @@
 
 (defn- menu-item
   [{:keys [text icon on-click]}]
-  [:div {:class-name "menu-item"
-         :on-click   on-click}
-   text
-   (when (some? icon)
-     [c/icon {:icon icon}])])
+  (let [handle-click #(do (.stopPropagation %)
+                          (on-click))]
+    [:div {:class-name "menu-item"
+           :on-click   handle-click}
+     text
+     (when (some? icon)
+       [c/icon {:icon icon}])]))
 
 (defn- menu
   []
@@ -23,8 +25,10 @@
   []
   (re-frame/dispatch [::state/init])
   (fn []
-    (let [user-name @(re-frame/subscribe [::state/user-name])]
-      [:div.top-bar--auth
+    (let [user-name @(re-frame/subscribe [::state/user-name])
+          handle-click #(re-frame/dispatch [::state/open-my-account-page])]
+      [:div {:class-name "top-bar--auth"
+             :on-click   handle-click}
        [c/avatar]
        [:div.user-data
         [:div.name user-name]]

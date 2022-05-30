@@ -1,13 +1,6 @@
 (ns webchange.admin.widgets.state
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.admin.state :as parent-state]))
-
-(defn path-to-db
-  [relative-path]
-  (->> relative-path
-       (concat [:widgets])
-       (parent-state/path-to-db)))
+    [re-frame.core :as re-frame]))
 
 (re-frame/reg-fx
   ::callback

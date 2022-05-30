@@ -54,6 +54,38 @@
                  :on-save handle-save
                  :saving? saving?}]]))}))
 
+(defn- account-info-item
+  [{:keys [key value]}]
+  [:<>
+   [:dt key]
+   [:dd value]])
+
+(defn- account-info
+  []
+  (let [account-info @(re-frame/subscribe [::state/account-info])]
+    [:dl.account-info
+     (for [[key value] account-info]
+       ^{:key key}
+       [account-info-item {:key key :value value}])]))
+
+(defn- account-actions
+  [{:keys [account-id on-remove]}]
+  (let [account-removing? @(re-frame/subscribe [::state/account-removing?])
+        handle-delete-account (fn []
+                                (ui/confirm "Delete Account?"
+                                            #(re-frame/dispatch [::state/remove-account account-id {:on-success on-remove}])))
+        handle-reset-password #(re-frame/dispatch [::state/reset-password account-id])]
+    [:div.account-actions
+     [ui/icon-button {:icon     "chevron-right"
+                      :variant  "light"
+                      :on-click handle-reset-password}
+      "Reset Password"]
+     [ui/icon-button {:icon     "remove"
+                      :variant  "light"
+                      :loading? account-removing?
+                      :on-click handle-delete-account}
+      "Delete Account"]]))
+
 (defn edit-account-form
   []
   (r/create-class
@@ -68,7 +100,7 @@
        (re-frame/dispatch [::state/reset-form (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [account-id class-name on-save]}]
+     (fn [{:keys [account-id class-name on-save] :as props}]
        (let [saving? @(re-frame/subscribe [::state/data-saving?])
              data @(re-frame/subscribe [::state/form-data])
              handle-save #(re-frame/dispatch [::state/edit-account account-id % {:on-success on-save}])]
@@ -80,4 +112,6 @@
                  :data    data
                  :spec    ::account-spec/edit-account
                  :on-save handle-save
-                 :saving? saving?}]]))}))
+                 :saving? saving?}]
+          [account-info]
+          [account-actions props]]))}))

@@ -26,7 +26,8 @@
              "/courses"  {""                              :courses
                           "/add"                          :add-course
                           ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}
-             "/accounts" {["/add/" [#"[\w-%]+" :account-type]] :account-add
+             "/accounts" {"/my"                                :account-my
+                          ["/add/" [#"[\w-%]+" :account-type]] :account-add
                           ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
                                                                 "/reset-password" :password-reset}
                           ["/" [#"[\w-%]+" :account-type]]     :accounts}})
