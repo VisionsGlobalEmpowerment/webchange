@@ -1,11 +1,10 @@
-(ns webchange.admin.pages.login.state
+(ns webchange.login.sign-in.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
-(def path-to-db :login)
+(def path-to-db :form/login)
 
 (re-frame/reg-sub
   path-to-db
@@ -80,10 +79,9 @@
 (re-frame/reg-event-fx
   ::login-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db       (set-loading db false)
-     :dispatch-n [[:admin-core/set-authenticated true]
-                  [::routes/redirect :dashboard]]}))
+  (fn [{:keys [db]} [_ {:keys [type]}]]
+    {:db                 (set-loading db false)
+     :redirect-to-module type}))
 
 (re-frame/reg-event-fx
   ::login-failure

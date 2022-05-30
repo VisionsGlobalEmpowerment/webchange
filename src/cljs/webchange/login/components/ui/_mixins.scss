@@ -1,0 +1,31 @@
+@mixin input-border {
+    border: solid 1px transparent;
+    border-radius: 4px;
+
+    &:focus {
+        border: solid 1px $input-border-color;
+    }
+}
+
+@mixin input-color {
+    color: $color-text;
+
+    &:disabled {
+        color: $color-text;
+    }
+}
+
+@mixin input-font {
+    font-weight: 400;
+}
+
+@mixin input-padding {
+    padding: 6px 12px;
+}
+
+@mixin text-styles {
+    color: #fff;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+}

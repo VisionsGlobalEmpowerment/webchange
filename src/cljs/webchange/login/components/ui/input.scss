@@ -1,0 +1,26 @@
+.wc-input-wrapper {
+    .wc-input-label {
+        @include text-styles;
+    }
+
+    .wc-input {
+        @include input-border;
+        @include input-color;
+        @include input-font;
+        @include input-padding;
+        @include text-styles;
+
+        background: $input-background;
+        transition: border-color 0.2s;
+
+        &::selection {
+           color: #fff;
+           background: #2E3A59;
+         }
+
+        &:disabled {
+            color: #8b92a6;
+            background: transparent;
+        }
+    }
+}

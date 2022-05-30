@@ -45,7 +45,8 @@
     [true {:id         user-id
            :school-id  school-id
            :first-name (:first-name user)
-           :last-name  (:last-name user)}]
+           :last-name  (:last-name user)
+           :type       (:type user)}]
     [false error-invalid-credentials]))
 
 #_(defn register-user!

@@ -7,7 +7,6 @@
 
 (def routes {""          :dashboard
              "/"         :dashboard
-             "/login"    :login
              "/schools"  {""                            :schools
                           "/add"                        :add-school
                           "/archived"                   :schools-archived

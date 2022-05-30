@@ -39,6 +39,8 @@
    :module-loader    true
    :modules          {:app     {:entries [webchange.core]
                                 :default true}
+                      :login   {:entries    [webchange.login.views]
+                                :depends-on #{:app}}
                       :admin   {:entries    [webchange.admin.views]
                                 :depends-on #{:app}}
                       :teacher {:entries    [webchange.teacher.views]

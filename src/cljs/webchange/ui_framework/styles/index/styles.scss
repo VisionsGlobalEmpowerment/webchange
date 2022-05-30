@@ -7,18 +7,18 @@
 @import "../../../styles";
 
 #app {
-  align-content: center;
-  align-items: center;
-  display: flex;
-  font-family: Roboto, sans-serif;
-  height: 100vh;
-  justify-content: center;
-  width: 100%;
-  background: #fff;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    font-family: Roboto, sans-serif;
+    height: 100vh;
+    justify-content: center;
+    width: 100%;
+    background: #fff;
 
-  .main-app {
-    @import "../../components/theme";
-  }
+    .main-app {
+        @import "../../components/theme";
+    }
 }
 
 #app > div {

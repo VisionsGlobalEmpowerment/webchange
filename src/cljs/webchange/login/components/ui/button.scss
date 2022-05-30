@@ -1,0 +1,23 @@
+.wc-button {
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+
+    background: $button-background;
+    justify-content: center;
+
+    transition: background-color 0.2s;
+
+    &:hover {
+        background: $button-background-hover;
+    }
+
+    &:active {
+        background: $button-background-active;
+    }
+
+    progress {
+        @include progress-color(#fff);
+        @include progress-size(18px, 1px);
+    }
+}

@@ -24,6 +24,7 @@
            id
            value
            label
+           name
            on-blur
            on-click
            on-change
@@ -92,6 +93,7 @@
                                                  (assoc :step step))
                        (= type "password") (assoc :type "password")
                        (some? id) (assoc :id id)
+                       (some? name) (assoc :name name)
                        (some? value) (assoc :value value)
                        (some? default-value) (assoc :default-value default-value)
                        (some? ref-atom) (assoc :ref handle-ref-atom)

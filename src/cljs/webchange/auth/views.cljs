@@ -3,8 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.auth.events :as auth.events]
-    [webchange.auth.views-teacher-login :as teacher-login]))
+    [webchange.auth.events :as auth.events]))
 
 (defn- get-styles
   []
@@ -54,10 +53,6 @@
                          :cursor         "pointer"}
    :bckspc-img          {:width          "40px"
                          :height         "40px"}})
-
-(defn teacher-login
-  [& args]
-  (apply teacher-login/teacher-login-page args))
 
 (defn animal-form [image on-click]
   [:div {:on-click on-click :style {:width "101px" :height "101px" :background-image "url(/images/auth/form.png)"}}
