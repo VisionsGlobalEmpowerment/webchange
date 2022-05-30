@@ -30,13 +30,16 @@
     }
 
     .activity-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
         position: sticky;
         top: -$default-gap;
 
         background-color: #FFF;
 
         .preview {
-            width: 100%;
             height: 66px;
 
             border-radius: 6px;
