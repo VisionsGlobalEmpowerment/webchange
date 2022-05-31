@@ -42,13 +42,13 @@ node {
 	        sh 'java -jar /srv/www/webchange/current.jar migrate'
             }
         }
-
+/*
         stage('Sync') {
 	    withEnv(['config=/srv/www/webchange/config.edn']) {
 	        sh 'java -jar /srv/www/webchange/current.jar download-course-data'
 	    }
         }
-	
+*/	
         stage('Update Templates') {
 	    withEnv(['config=/srv/www/webchange/config.edn']) {
 	        sh 'java -jar /srv/www/webchange/current.jar update-templates'

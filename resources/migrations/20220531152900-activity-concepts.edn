@@ -1,0 +1,3 @@
+{:ns      webchange.migrations.concepts
+ :up-fn   migrate-up
+ :down-fn migrate-down}

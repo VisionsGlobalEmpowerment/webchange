@@ -10,19 +10,20 @@
         :name        "Running (time limited)"
         :tags        ["Independent Practice"]
         :description "Users move a character around a race track filled with answer images.  Before time runs out, users must steer the character to as many correct answer options as possible while avoiding incorrect answer images."
-        :lesson-sets ["concepts-group" "concepts-single"]
         :props       {:game-changer? true}
-        :fields      [{:name "image-src"
-                       :type "image"}
-                      {:name "concept-name"
-                       :type "string"}
-                      {:name "letter"
-                       :type "string"}]
         :version     2
         :options     {:time {:label       "Time in seconds"
                              :type        "lookup"
                              :description "Time in seconds"
-                             :options     available-times}}
+                             :options     available-times}
+                      :correct-letter {:label "Correct Letter"
+                                       :type  "string"}
+                      :incorrect-letter-1 {:label "Incorrect letter 1"
+                                           :type  "string"}
+                      :incorrect-letter-2 {:label "Incorrect letter 2"
+                                           :type  "string"}
+                      :incorrect-letter-3 {:label "Incorrect letter 3"
+                                           :type  "string"}}
         :actions     {:change-time    {:title    "Change time"
                                        :options  {:time {:type    "lookup"
                                                          :options available-times}}}
@@ -73,7 +74,7 @@
                                                 :x        676
                                                 :y        64
                                                 :children ["letter-background" "letter-target"
-                                                           ;           "box-target-background" "box-target"
+                                        ;           "box-target-background" "box-target"
                                                            "counter-background" "counter"]}
                         :letter-background     {:type          "rectangle"
                                                 :x             40
@@ -332,35 +333,16 @@
                                                   :transition-id "vera-group"}
                         :init-vars               {:type "parallel"
                                                   :data [{:type "set-variable" :var-name "game-finished" :var-value false}
-                                                         {:type "set-variable" :var-name "current-line" :var-value "box2"}
-                                                         {:from        "concepts-group"
-                                                          :type        "lesson-var-provider"
-                                                          :limit       3
-                                                          :repeat      4
-                                                          :shuffled    false
-                                                          :variables   ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"]
-                                                          :provider-id "words-set"}]}
+                                                         {:type "set-variable" :var-name "current-line" :var-value "box2"}]}
 
-                        :init-current-concept    {:type "sequence-data"
-                                                  :data [{:from        "concepts-single"
-                                                          :type        "lesson-var-provider"
-                                                          :limit       1
-                                                          :variables   [concept-var]
-                                                          :provider-id "current-concept-provider"}
-                                                         #_{:type      "set-attribute",
-                                                            :target    "box-target"
-                                                            :from-var  [{:var-name concept-var :var-property "image-src", :action-property "attr-value"}],
-                                                            :attr-name "src"}
-                                                         {:type      "set-attribute"
-                                                          :target    "letter-target"
-                                                          :from-var  [{:var-name concept-var :var-property "letter" :action-property "attr-value"}]
-                                                          :attr-name "text"}]}
+                        :init-concept    {:type "parallel"
+                                          :data []}
 
                         :check-box               {:type     "test-var-scalar"
                                                   :var-name "game-finished"
                                                   :value    false
                                                   :success  {:type        "test-value"
-                                                             :from-var    [{:action-property "value1" :var-name concept-var :var-property "letter"}]
+                                                             :from-var    [{:action-property "value1" :var-name concept-var}]
                                                              :from-params [{:action-property "value2" :param-property "custom-data"}]
                                                              :success     "pick-correct"
                                                              :fail        "pick-wrong"}}
@@ -409,7 +391,6 @@
                                                           :unique    true
                                                           :from-var  [{:var-key         "concept-name"
                                                                        :var-name        concept-var
-                                                                       :var-property    "concept-name"
                                                                        :action-property "exclude-property-values"}]
                                                           :shuffled  true
                                                           :variables ["pair-concept-1" "pair-concept-2"]}
@@ -445,8 +426,8 @@
                                                                                                       :font-family "Lexend Deca"
                                                                                                       :font-size   120
                                                                                                       :text        ""}}
-                                                            :from-var           [{:var-name "box1" :var-property "letter" :action-property "data.target-letter.custom-data"}
-                                                                                 {:var-name "box1" :var-property "letter" :action-property "data.target-letter-text.text"}]}}
+                                                            :from-var           [{:var-name "box1" :action-property "data.target-letter.custom-data"}
+                                                                                 {:var-name "box1" :action-property "data.target-letter-text.text"}]}}
 
                         :emit-object-line-2      {:type    "test-random"
                                                   :chance  0.7
@@ -474,8 +455,8 @@
                                                                                                       :font-family "Lexend Deca"
                                                                                                       :font-size   120
                                                                                                       :text        ""}}
-                                                            :from-var           [{:var-name "box2" :var-property "letter" :action-property "data.target-letter.custom-data"}
-                                                                                 {:var-name "box2" :var-property "letter" :action-property "data.target-letter-text.text"}]}}
+                                                            :from-var           [{:var-name "box2" :action-property "data.target-letter.custom-data"}
+                                                                                 {:var-name "box2" :action-property "data.target-letter-text.text"}]}}
 
                         :emit-object-line-3      {:type    "test-random"
                                                   :chance  0.7
@@ -503,8 +484,8 @@
                                                                                                       :font-family "Lexend Deca"
                                                                                                       :font-size   120
                                                                                                       :text        ""}}
-                                                            :from-var           [{:var-name "box3" :var-property "letter" :action-property "data.target-letter.custom-data"}
-                                                                                 {:var-name "box3" :var-property "letter" :action-property "data.target-letter-text.text"}]}}
+                                                            :from-var           [{:var-name "box3" :action-property "data.target-letter.custom-data"}
+                                                                                 {:var-name "box3" :action-property "data.target-letter-text.text"}]}}
 
                         :move-emitted-letter     {:type        "transition"
                                                   :from-params [{:param-property "transition", :action-property "transition-id"}]
@@ -529,7 +510,8 @@
 
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
-                                                         "init-current-concept"
+                                                         "init-concept"
+                                                         "init-incorrect"
                                                          "welcome"
                                                          "intro"
                                                          "start"
@@ -552,7 +534,9 @@
                         :finish-activity-dialog  (-> (dialog/default "Finish activity dialog")
                                                      (assoc :concept-var concept-var)
                                                      (assoc :available-activities ["highlight-target-letter", "highlight-timer", "highlight-counter"]))
-                        :wait-for-box-animations {:type "empty" :duration 100}}
+                        :wait-for-box-animations {:type "empty" :duration 100}
+                        :init-incorrect          {:type "parallel"
+                                                  :data []}}
         :triggers      {:stop {:on "back" :action "stop-scene"} :start {:on "start" :action "start-scene"}}
         :metadata      {:autostart true}})
 
@@ -575,9 +559,35 @@
                     {:type "set-variable" :var-name "move-letter-to" :var-value {:x -700 :duration (/ 40 s)}}])
         (assoc-in [:metadata :saved-props :change-speed] {:speed speed}))))
 
+(defn- init-correct
+  [t {:keys [correct-letter]}]
+  (assoc-in t [:actions :init-concept :data]
+            [{:type "set-variable"
+              :var-name concept-var
+              :var-value correct-letter}
+             {:type      "set-attribute"
+              :target    "letter-target"
+              :attr-value correct-letter
+              :attr-name "text"}]))
+
+(defn- init-incorrect
+  [t {:keys [incorrect-letter-1 incorrect-letter-2 incorrect-letter-3]}]
+  (let [actions (->> [incorrect-letter-1
+                      incorrect-letter-2
+                      incorrect-letter-3]
+                     (remove empty?)
+                     (repeat 4)
+                     (apply concat)
+                     (take 8)
+                     (map-indexed (fn [idx letter]
+                                    {:type "set-variable" :var-name (str "item-" (inc idx)) :var-value letter})))]
+    (assoc-in t [:actions :init-incorrect :data] actions)))
+
 (defn f
   [args]
   (-> (common/init-metadata m t args)
+      (init-correct args)
+      (init-incorrect args)
       (assoc-in [:objects :timer :time] (:time args))
       (set-speed 5)))
 

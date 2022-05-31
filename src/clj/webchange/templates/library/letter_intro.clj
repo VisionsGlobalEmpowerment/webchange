@@ -1,5 +1,6 @@
 (ns webchange.templates.library.letter-intro
   (:require
+    [clojure.string :as str]
     [webchange.templates.core :as core]
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
@@ -161,8 +162,7 @@
          :start-activity          {:type "start-activity"},
          :stop-activity           {:type "stop-activity"},
 
-         :renew-concept           {:type      "lesson-var-provider", :from "concepts-single", :provider-id "concepts",
-                                   :variables ["current-concept"]},
+         :init-concept           {:type "set-variable" :var-name "current-concept" :var-value nil},
          :init-state              {:type "parallel",
                                    :data
                                    [
@@ -278,7 +278,7 @@
                                           {:id "whole-word-dialog" :type "action"}]}
          :start-scene             {:type        "sequence",
                                    :data        ["start-activity"
-                                                 "renew-concept"
+                                                 "init-concept"
                                                  "init-state"
                                                  "introduce-big-small"
                                                  "writing-task"
@@ -359,9 +359,18 @@
                              ]},
         :variables {:status nil}})
 
+(defn- init-concept
+  [t {:keys [letter image word]}]
+  (-> t
+      (assoc-in [:actions :init-concept :var-value] {:letter letter
+                                                     :letter-big (str/upper-case letter)
+                                                     :image-src (:src image)
+                                                     :concept-name word})
+      (update :assets concat [{:url (:src image) :type "image"}])))
 
 (defn f
   [args]
-  (common/init-metadata m t args))
+  (-> (common/init-metadata m t args)
+      (init-concept args)))
 
 (core/register-template m f)

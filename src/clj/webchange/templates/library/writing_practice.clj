@@ -6,16 +6,7 @@
 (def m {:id          40
         :name        "Writing practice"
         :tags        ["Guided Practice"]
-        :lesson-sets ["concepts-single"]
         :props       {:game-changer? true}
-        :fields      [{:name "image-src",
-                       :type "image"}
-                      {:name "letter-src",
-                       :type "image"}
-                      {:name "letter-path"
-                       :type "string"}
-                      {:name "letter"
-                       :type "string"}]
         :description "An animated character shows how to write a letter. Then users practice writing the same letter. The letter must be traced correctly in order to see it appear on their screen."})
 
 (def t {:assets
@@ -123,21 +114,22 @@
           "next-button"
           "hand"]],
         :actions
-        {:start-scene                 {:type "sequence-data",
+        {:init-concept                {:type "set-variable" :var-name "current-concept" :var-value nil}
+         :start-scene                 {:type "sequence-data",
                                        :data [{:type "start-activity"}
-                                              {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]}
+                                              {:type "action" :id "init-concept"}
                                               {:type "set-variable" :var-name "stage" :var-value "1"}
                                               {:type      "set-attribute",
                                                :target    "letter-tutorial-trace",
-                                               :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
+                                               :from-var  [{:var-name "current-concept", :action-property "attr-value"}],
                                                :attr-name "data"}
                                               {:type      "set-attribute",
                                                :target    "letter-tutorial-path",
-                                               :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
+                                               :from-var  [{:var-name "current-concept", :action-property "attr-value"}],
                                                :attr-name "path"}
                                               {:type      "set-attribute",
                                                :target    "text-tracing-pattern",
-                                               :from-var  [{:var-name "current-concept", :action-property "attr-value" :var-property "letter"}],
+                                               :from-var  [{:var-name "current-concept", :action-property "attr-value"}],
                                                :attr-name "text"}
                                               {:type "action" :id "dialog-instructions"}
                                               {:type      "set-attribute",
@@ -147,7 +139,7 @@
                                               {:type "action" :id "timeout-timer"}
 
                                               {:type       "test-expression"
-                                               :expression ["eq" ["len" ["." "@current-concept" ":letter"]] 1]
+                                               :expression ["eq" ["len" "@current-concept"] 1]
                                                :success    {:type "sequence-data"
                                                             :data [{:type "set-variable" :var-name "hand-offset" :var-value 610}
                                                                    {:type "set-attribute"
@@ -208,7 +200,7 @@
                                               {:data [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
                                                       {:to            {:letter-path "", :scale {:x 4, :y 4}, :origin {:x 610, :y -80}, :duration 5},
                                                        :type          "transition",
-                                                       :from-var      [{:var-name "current-concept", :action-property "to.letter-path" :var-property "letter"}
+                                                       :from-var      [{:var-name "current-concept", :action-property "to.letter-path"}
                                                                        {:var-name "hand-offset", :action-property "to.origin.x"}],
                                                        :transition-id "hand"}],
                                                :type "parallel"}
@@ -351,10 +343,15 @@
                                      {:type      "dialog"
                                       :action-id :dialog-tool-eraser}]}]}})
 
+(defn- init-concept
+  [t {:keys [letter]}]
+  (assoc-in t [:actions :init-concept :var-value] letter))
+
 (defn f
   [t args]
-  t)
+  (-> t
+      (init-concept args)))
 
 (core/register-template
-  m
-  (partial f t))
+ m
+ (partial f t))
