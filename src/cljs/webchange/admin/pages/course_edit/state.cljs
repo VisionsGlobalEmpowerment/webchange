@@ -72,3 +72,24 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ course-data]]
     {:db (-> db (set-course-data course-data))}))
+
+(re-frame/reg-event-fx
+  ::remove-level
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ level-idx]]
+    (print "::remove-level" level-idx)
+    {}))
+
+(re-frame/reg-event-fx
+  ::remove-lesson
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ level-idx lesson-idx]]
+    (print "::remove-lesson" level-idx lesson-idx)
+    {}))
+
+(re-frame/reg-event-fx
+  ::remove-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ level-idx lesson-idx activity-id]]
+    (print "::remove-activity" level-idx lesson-idx activity-id)
+    {}))

@@ -8,9 +8,9 @@
     [webchange.ui-framework.components.index :as ui]))
 
 (defn- activities-list-item
-  [{:keys [name preview] :as activity-data}]
-  (print "activity-data" activity-data)
-  (let [handle-remove-click #(print "Remove activity")]
+  [{:keys [id name preview level-idx lesson-idx]}]
+  (let [handle-remove-click #(do (.stopPropagation %)
+                                 (re-frame/dispatch [::state/remove-activity level-idx lesson-idx id]))]
     [l/list-item {:name       name
                   :img        preview
                   :class-name "activities-list-item"
@@ -22,18 +22,24 @@
 (defn- activities-list
   [{:keys [level-idx lesson-idx]}]
   (let [activities @(re-frame/subscribe [::state/lesson-activities level-idx lesson-idx])]
-    [l/list {:class-name "activities-list"}
+    [l/list {:class-name "sub-list"}
      (for [{:keys [idx] :as activity-data} activities]
        ^{:key idx}
-       [activities-list-item activity-data])]))
+       [activities-list-item (merge activity-data
+                                    {:level-idx  level-idx
+                                     :lesson-idx lesson-idx})])]))
 
 (defn- lessons-list-item
   [{:keys [idx name activities-number level-idx]}]
   (r/with-let [expanded? (r/atom false)
-               handle-remove-click #(print "Remove lesson" idx)]
+               handle-item-click #(swap! expanded? not)
+               handle-remove-click #(do (.stopPropagation %)
+                                        (re-frame/dispatch [::state/remove-lesson level-idx idx]))]
     [:<>
      [l/list-item {:name       name
-                   :class-name "lesson-list-item"
+                   :class-name (ui/get-class-name {"list-item" true
+                                                   "selected"  @expanded?})
+                   :on-click   handle-item-click
                    :actions    [ui/icon-button {:icon     "remove"
                                                 :title    "Remove"
                                                 :variant  "light"
@@ -43,13 +49,14 @@
         activities-number
         [ui/icon {:icon       "activity"
                   :class-name "activity"}]]]]
-     [activities-list {:level-idx  level-idx
-                       :lesson-idx idx}]]))
+     (when @expanded?
+       [activities-list {:level-idx  level-idx
+                         :lesson-idx idx}])]))
 
 (defn- lessons-list
   [{:keys [level-idx]}]
   (let [lessons @(re-frame/subscribe [::state/level-lessons level-idx])]
-    [l/list {:class-name "lessons-list"}
+    [l/list {:class-name "sub-list"}
      (for [{:keys [idx] :as lesson-data} lessons]
        ^{:key idx}
        [lessons-list-item (assoc lesson-data :level-idx level-idx)])]))
@@ -57,10 +64,14 @@
 (defn- levels-list-item
   [{:keys [idx name lessons-number]}]
   (r/with-let [expanded? (r/atom false)
-               handle-remove-click #(print "Remove level" idx)]
+               handle-item-click #(swap! expanded? not)
+               handle-remove-click #(do (.stopPropagation %)
+                                        (re-frame/dispatch [::state/remove-level idx]))]
     [:<>
      [l/list-item {:name       name
-                   :class-name "level-list-item"
+                   :class-name (ui/get-class-name {"list-item" true
+                                                   "selected"  @expanded?})
+                   :on-click   handle-item-click
                    :actions    [ui/icon-button {:icon     "remove"
                                                 :title    "Remove"
                                                 :variant  "light"
@@ -70,7 +81,8 @@
         lessons-number
         [ui/icon {:icon        "lesson"
                   ::class-name "lesson"}]]]]
-     [lessons-list {:level-idx idx}]]))
+     (when @expanded?
+       [lessons-list {:level-idx idx}])]))
 
 (defn- levels-list
   []
