@@ -1,21 +1,24 @@
 (ns webchange.admin.state
   (:require
-    [re-frame.core :as re-frame]))
+    [re-frame.core :as re-frame]
+    [re-frame.std-interceptors :as i]))
 
-(defn path-to-db
-  [relative-path]
-  (->> relative-path
-       (concat [:admin-app])
-       (vec)))
+(def path-to-db :module/admin)
 
-(def current-page-path (path-to-db [:current-page]))
+(re-frame/reg-sub
+  path-to-db
+  (fn [db]
+    (get db path-to-db)))
+
+(def current-page-key :current-page)
 
 (re-frame/reg-sub
   ::current-page
-  (fn [db]
-    (get-in db current-page-path)))
+  :<- [path-to-db]
+  #(get % current-page-key))
 
 (re-frame/reg-event-fx
   ::set-current-page
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db current-page-path value)}))
+    {:db (assoc db current-page-key value)}))
