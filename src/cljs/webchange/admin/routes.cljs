@@ -25,7 +25,8 @@
                                                          "/courses"  {"" :school-courses}}}
              "/courses"  {""                              :courses
                           "/add"                          :add-course
-                          ["/" [#"[\w-%]+" :course-slug]] {"" :course-profile}}
+                          ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
+                                                           "/edit" :course-edit}}
              "/accounts" {"/my"                                :account-my
                           ["/add/" [#"[\w-%]+" :account-type]] :account-add
                           ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
