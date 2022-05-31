@@ -7,11 +7,12 @@
   [{:keys [avatar img] :as props}]
   (cond
     (contains? props :avatar) [c/avatar {:src avatar}]
-    (contains? props :img) [c/image-preview {:src img}]))
+    (contains? props :img) [c/image {:src        img
+                                     :class-name "item-image"}]))
 
 (defn- description-item
   [{:keys [t d]}]
-  [:<>
+  [:<>x
    [:dt t]
    [:dd d]])
 

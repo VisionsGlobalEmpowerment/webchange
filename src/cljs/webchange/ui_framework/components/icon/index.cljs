@@ -1,5 +1,6 @@
 (ns webchange.ui-framework.components.icon.index
   (:require
+    [webchange.ui-framework.components.icon.icon-activity :as activity]
     [webchange.ui-framework.components.icon.icon-add :as add]
     [webchange.ui-framework.components.icon.icon-add-box :as add-box]
     [webchange.ui-framework.components.icon.icon-align-center :as align-center]
@@ -55,6 +56,7 @@
     [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
     [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
+    [webchange.ui-framework.components.icon.icon-lesson :as lesson]
     [webchange.ui-framework.components.icon.icon-link :as link]
     [webchange.ui-framework.components.icon.icon-logout :as logout]
     [webchange.ui-framework.components.icon.icon-match :as match]
@@ -93,7 +95,8 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def icons
-  {"add"                add/data
+  {"activity"           activity/data
+   "add"                add/data
    "add-box"            add-box/data
    "align-center"       align-center/data
    "align-justify"      align-justify/data
@@ -148,6 +151,7 @@
    "insert-after"       insert-after/data
    "insert-before"      insert-before/data
    "insert-parallel"    insert-parallel/data
+   "lesson"             lesson/data
    "link"               link/data
    "logout"             logout/data
    "match"              match/data

@@ -1,0 +1,27 @@
+.page--edit-course {
+    .list-item-stats {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        font-weight: 700;
+        font-size: 14px;
+
+        @include icon-color($color-pink);
+
+        .activity {
+            @include icon-color($color-blue);
+        }
+    }
+
+    .activities-list-item {
+        .item-image {
+            $height: 80px;
+
+            height: $height;
+            width: $height * 1.75;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+    }
+}
