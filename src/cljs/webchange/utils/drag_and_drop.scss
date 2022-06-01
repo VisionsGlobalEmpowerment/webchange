@@ -1,0 +1,13 @@
+.wc-draggable {
+    &.dragged {
+        & > * {
+            opacity: 0.3;
+        }
+    }
+
+    &.drag-over {
+        & > * {
+            border: dashed 1px #000 !important;
+        }
+    }
+}

@@ -14,21 +14,15 @@
         }
     }
 
+    .drag-over {
+        & > * {
+            border-color: $color-pink !important;
+        }
+    }
+
     .list-item {
         &.selected {
             border-color: $color-pink;
-        }
-
-        &.dragged {
-             opacity: 0.3;
-        }
-
-        &.drag-over {
-             border: dashed 1px $color-pink;
-        }
-
-        * {
-            pointer-events: none;
         }
     }
 
