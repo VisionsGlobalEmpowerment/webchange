@@ -51,6 +51,12 @@
   (-> (.-classList el)
       (.remove class-name)))
 
+(defn- get-hover-side
+  [event]
+  (let [offset-y (.-offsetY event)
+        target-height (.-clientHeight (event->target event))]
+    {:vertical (if (->> (/ target-height 2) (< offset-y)) :top :bottom)}))
+
 (defonce dragged-item (atom {}))
 (defonce hover-counter (atom 0))
 
@@ -65,7 +71,14 @@
 (defn- handle-drag-over
   [event]
   (.preventDefault event)
-  (.stopPropagation event))
+  (.stopPropagation event)
+  (let [target (event->target event)
+        {:keys [vertical]} (get-hover-side event)]
+    (case vertical
+      :top (do (remove-class target "drag-over-bottom")
+               (add-class target "drag-over-top"))
+      :bottom (do (remove-class target "drag-over-top")
+                  (add-class target "drag-over-bottom")))))
 
 (defn- handle-drag-enter
   [drop-allowed? event]
@@ -79,17 +92,21 @@
   [event]
   (swap! hover-counter dec)
   (when (= @hover-counter 0)
-    (-> (event->target event)
-        (remove-class "drag-over"))))
+    (let [target (event->target event)]
+      (remove-class target "drag-over-top")
+      (remove-class target "drag-over-bottom")
+      (remove-class target "drag-over"))))
 
 (defn- handle-drag-end
   [event]
   (reset! hover-counter 0)
   (let [target (.-target event)
         all-items (.querySelectorAll js/document "[draggable]")]
-    (.remove (.-classList target) "dragged")
+    (remove-class target "dragged")
     (.forEach all-items (fn [item]
-                          (.remove (.-classList item) "drag-over")))))
+                          (remove-class item "drag-over-top")
+                          (remove-class item "drag-over-bottom")
+                          (remove-class item "drag-over")))))
 
 (defn- handle-drop
   [drop-allowed? on-drop event]
@@ -97,7 +114,8 @@
     (when (and (fn? on-drop)
                (drop-allowed? @dragged-item target-data))
       (on-drop {:dragged @dragged-item
-                :target  (get-data-set event)}))))
+                :target  (get-data-set event)
+                :side    (get-hover-side event)}))))
 
 (defn- init-dnd
   [el handlers]
