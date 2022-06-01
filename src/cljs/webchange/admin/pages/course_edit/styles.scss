@@ -47,4 +47,30 @@
             background-color: #{$color-pink + "0F"};
         }
     }
+
+    .actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        .actions-list-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            border: solid 1px $color-pink;
+            border-radius: 6px;
+            cursor: grab;
+            padding: 4px 8px;
+
+            font-weight: 500;
+            font-size: 14px;
+
+            @include icon-color($color-pink);
+        }
+    }
 }

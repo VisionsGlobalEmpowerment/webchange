@@ -3,6 +3,7 @@
     [webchange.ui-framework.components.icon.icon-activity :as activity]
     [webchange.ui-framework.components.icon.icon-add :as add]
     [webchange.ui-framework.components.icon.icon-add-box :as add-box]
+    [webchange.ui-framework.components.icon.icon-add-item :as add-item]
     [webchange.ui-framework.components.icon.icon-align-center :as align-center]
     [webchange.ui-framework.components.icon.icon-align-justify :as align-justify]
     [webchange.ui-framework.components.icon.icon-align-left :as align-left]
@@ -99,6 +100,7 @@
   {"activity"           activity/data
    "add"                add/data
    "add-box"            add-box/data
+   "add-item"           add-item/data
    "align-center"       align-center/data
    "align-justify"      align-justify/data
    "align-left"         align-left/data

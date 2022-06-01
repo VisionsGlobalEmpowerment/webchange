@@ -117,7 +117,8 @@
        (into {})))
 
 (defn draggable
-  [{:keys [data drop-allowed? on-drop]}]
+  [{:keys [data drop-allowed? on-drop]
+    :or   {drop-allowed? (constantly true)}}]
   (r/with-let [el (atom nil)
                handlers {"dragstart" handle-drag-start
                          "dragover"  handle-drag-over

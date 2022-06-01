@@ -120,6 +120,34 @@
        ^{:key idx}
        [levels-list-item level-data])]))
 
+(defn- actions-list-item
+  [{:keys [icon text data]}]
+  [draggable {:data data}
+   [:li.actions-list-item
+    [ui/icon {:icon icon}]
+    text]])
+
+(defn- actions-list
+  []
+  [:ul.actions-list
+   [actions-list-item {:icon "add-item"
+                       :text "Add Level"
+                       :data {:type  "level"
+                              :level "add"}}]
+   [actions-list-item {:icon "add-item"
+                       :text "Add Lesson"
+                       :data {:type   "lesson"
+                              :lesson "add"}}]
+   [actions-list-item {:icon "activity"
+                       :text "Add Activity"
+                       :data {:type     "activity"
+                              :activity "add"}}]])
+
+(defn- side-bar
+  []
+  [page/side-bar {:title "Course Details"}
+   [actions-list]])
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
@@ -128,4 +156,5 @@
      [page/header {:title "Edit Course"
                    :icon  "presentation"}]
      [page/main-content
-      [levels-list]]]))
+      [levels-list]]
+     [side-bar]]))
