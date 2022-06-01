@@ -71,6 +71,7 @@
     [webchange.ui-framework.components.icon.icon-presentation :as presentation]
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
+    [webchange.ui-framework.components.icon.icon-reorder :as reorder]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
     [webchange.ui-framework.components.icon.icon-restore :as restore]
     [webchange.ui-framework.components.icon.icon-school :as school]
@@ -166,6 +167,7 @@
    "presentation"       presentation/data
    "preview"            preview/data
    "remove"             remove/data
+   "reorder"            reorder/data
    "restart"            restart/data
    "restore"            restore/data
    "school"             school/data
@@ -188,11 +190,12 @@
    "warning"            warning/data})
 
 (defn component
-  [{:keys [icon on-click rotate? title class-name]}]
+  [{:keys [icon on-click rotate? title class-name draggable]}]
   [:div (cond-> {:class-name (get-class-name (cond-> {"wc-icon"          true
                                                       (str "icon-" icon) true}
                                                      (some? rotate?) (assoc "rotating" rotate?)
                                                      (some? class-name) (assoc class-name true)))}
                 (fn? on-click) (assoc :on-click on-click)
-                (some? title) (assoc :title title))
+                (some? title) (assoc :title title)
+                (some? draggable) (assoc :draggable draggable))
    (get icons icon)])

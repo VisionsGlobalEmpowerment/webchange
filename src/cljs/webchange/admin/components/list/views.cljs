@@ -10,6 +10,12 @@
     (contains? props :img) [c/image {:src        img
                                      :class-name "item-image"}]))
 
+(defn- item-prefix
+  [{:keys [pre] :as props}]
+  (when (contains? props :pre)
+    [:div.item-prefix
+     pre]))
+
 (defn- description-item
   [{:keys [t d]}]
   [:<>x
@@ -49,8 +55,8 @@
                                                    class-name      (some? class-name)})}])))
 
 (defn list-item
-  [{:keys [on-click class-name] :as props}]
-  "Props:
+  [{:keys [on-click class-name ref html-attrs] :as props}]
+  "Props:s
    - img
    - avatar
    - name
@@ -64,8 +70,11 @@
   (into [:div (cond-> {:class-name (c/get-class-name {"list-item"  true
                                                       "with-hover" (fn? on-click)
                                                       class-name   (some? class-name)})}
-                      (fn? on-click) (assoc :on-click on-click))]
-        (concat [[item-image props]
+                      (fn? on-click) (assoc :on-click on-click)
+                      (some? html-attrs) (merge html-attrs)
+                      (some? ref) (assoc :ref ref))]
+        (concat [[item-prefix props]
+                 [item-image props]
                  [item-name props]]
                 (->> (r/current-component)
                      (r/children))

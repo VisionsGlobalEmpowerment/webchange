@@ -18,6 +18,18 @@
         &.selected {
             border-color: $color-pink;
         }
+
+        &.dragged {
+             opacity: 0.3;
+        }
+
+        &.drag-over {
+             border: dashed 1px $color-pink;
+        }
+
+        * {
+            pointer-events: none;
+        }
     }
 
     .sub-list {
@@ -32,6 +44,13 @@
             width: $height * 1.75;
             border-radius: 4px;
             overflow: hidden;
+        }
+    }
+
+    .reorder-control {
+        &:hover {
+            cursor: ns-resize;
+            background-color: #{$color-pink + "0F"};
         }
     }
 }
