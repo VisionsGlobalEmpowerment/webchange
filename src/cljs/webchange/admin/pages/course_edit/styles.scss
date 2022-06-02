@@ -91,13 +91,74 @@
 
             border: solid 1px $color-pink;
             border-radius: 6px;
-            cursor: grab;
             padding: 4px 8px;
 
             font-weight: 500;
             font-size: 14px;
 
             @include icon-color($color-pink);
+
+            &.button-item {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #{$color-pink + "0F"};
+                }
+            }
+        }
+    }
+
+    .available-activities {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .back-button {
+        @include icon-color($color-pink);
+    }
+
+    .search {
+        @include icon-color($color-pink);
+    }
+
+    .available-activities-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        overflow: auto;
+        padding-right: 10px;
+
+        @include with-small-scroll-bar();
+    }
+
+    .available-activities-list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+
+        padding: 8px;
+        border: solid 1px #DCE3F5;
+        border-radius: 6px;
+
+        .icon {
+            @include icon-color($color-pink);
+        }
+
+        .name {
+            flex: 1 1;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        .preview {
+            $height: 54px;
+            height: $height;
+            width: $height * 1.77;
+            min-width: $height * 1.77;
         }
     }
 }

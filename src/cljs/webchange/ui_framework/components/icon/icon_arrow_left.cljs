@@ -9,6 +9,7 @@
          :stroke          "#D99BFF"
          :stroke-width    "2"
          :stroke-linecap  "round"
-         :stroke-linejoin "round"}
-   [:path {:fill "none" :d "M15.1875 9H2.8125"}]
-   [:path {:fill "none" :d "M7.875 3.9375L2.8125 9L7.875 14.0625"}]])
+         :stroke-linejoin "round"
+         :class-name      "stroke-colored"}
+   [:path {:d "M15.1875 9H2.8125"}]
+   [:path {:d "M7.875 3.9375L2.8125 9L7.875 14.0625"}]])

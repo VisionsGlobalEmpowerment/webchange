@@ -1,4 +1,6 @@
 .wc-draggable {
+    cursor: grab;
+
     &.dragged {
         & > * {
             opacity: 0.3;

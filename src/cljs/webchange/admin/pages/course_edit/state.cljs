@@ -1,5 +1,6 @@
 (ns webchange.admin.pages.course-edit.state
   (:require
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.state.warehouse :as warehouse]
@@ -57,9 +58,69 @@
     (->> (utils/get-activities-data course-data (dec level-idx) (dec lesson-idx))
          (map-indexed (fn [idx {:keys [activity unique-id]}]
                         (let [activity-index (inc idx)]
-                          (merge {:id   unique-id
-                                  :idx  activity-index}
+                          (merge {:id  unique-id
+                                  :idx activity-index}
                                  (utils/get-activity-info course-data activity))))))))
+
+;; Available Activities
+
+(def available-activities-filter-key :available-activities-filter)
+
+(defn- set-available-activities-filter
+  [db value]
+  (assoc db available-activities-filter-key value))
+
+(re-frame/reg-event-fx
+  ::set-available-activities-filter
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (set-available-activities-filter db value)}))
+
+(re-frame/reg-sub
+  ::available-activities-filter
+  :<- [path-to-db]
+  #(get % available-activities-filter-key))
+
+(re-frame/reg-sub
+  ::available-activities
+  :<- [::course-data]
+  :<- [::available-activities-filter]
+  (fn [[course-data filter-str]]
+    (cond->> (->> (get course-data :scene-list [])
+                  (map (fn [[activity-id activity-data]]
+                         (assoc activity-data :id activity-id))))
+             (-> filter-str empty? not) (filter (fn [{:keys [name]}]
+                                                  (and (string? name)
+                                                       (s/includes? (s/lower-case name)
+                                                                    (s/lower-case filter-str)))))
+             :always (sort-by :name))))
+
+;; Side Bar
+
+(def side-bar-content-key :side-bar-content)
+
+(defn- set-side-bar-content
+  [db value]
+  (assoc db side-bar-content-key value))
+
+(re-frame/reg-event-fx
+  ::open-course-info
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar-content db :course-info)}))
+
+(re-frame/reg-event-fx
+  ::open-available-activities
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar-content db :available-activities)}))
+
+(re-frame/reg-sub
+  ::side-bar-content
+  :<- [path-to-db]
+  #(get % side-bar-content-key :course-info))
+
+;;
 
 (re-frame/reg-event-fx
   ::init

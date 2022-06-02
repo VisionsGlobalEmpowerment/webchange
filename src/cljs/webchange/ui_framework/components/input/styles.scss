@@ -37,4 +37,11 @@
 
         @include icon-size(12px);
     }
+
+    .icon-wrapper {
+        position: absolute;
+        right: 0;
+
+        @include icon-size(18px);
+    }
 }

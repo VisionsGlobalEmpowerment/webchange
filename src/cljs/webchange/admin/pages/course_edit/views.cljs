@@ -27,14 +27,20 @@
   [{:keys [id name preview level-idx lesson-idx]}]
   (let [handle-remove-click #(do (.stopPropagation %)
                                  (re-frame/dispatch [::state/remove-activity level-idx lesson-idx id]))]
-    [l/list-item {:name       name
-                  :img        preview
-                  :class-name "activities-list-item"
-                  :pre        [reorder-control]
-                  :actions    [ui/icon-button {:icon     "remove"
-                                               :title    "Remove"
-                                               :variant  "light"
-                                               :on-click handle-remove-click}]}]))
+    [draggable {:data          {:type     "activity"
+                                :level    level-idx
+                                :lesson   lesson-idx
+                                :activity id}
+                :drop-allowed? drop-allowed?
+                :on-drop       handle-drop}
+     [l/list-item {:name       name
+                   :img        preview
+                   :class-name "activities-list-item"
+                   :pre        [reorder-control]
+                   :actions    [ui/icon-button {:icon     "remove"
+                                                :title    "Remove"
+                                                :variant  "light"
+                                                :on-click handle-remove-click}]}]]))
 
 (defn- activities-list
   [{:keys [level-idx lesson-idx]}]
@@ -120,33 +126,75 @@
        ^{:key idx}
        [levels-list-item level-data])]))
 
+(defn- available-activities-list-item
+  [{:keys [id name preview]}]
+  [draggable {:data {:type     "activity"
+                     :activity id}}
+   [:div.available-activities-list-item
+    [ui/icon {:icon       "add-item"
+              :class-name "icon"}]
+    [:div.name name]
+    [ui/image {:src        preview
+               :class-name "preview"}]]])
+
+(defn- available-activities-list
+  []
+  (let [filter @(re-frame/subscribe [::state/available-activities-filter])
+        handle-filter-change #(re-frame/dispatch [::state/set-available-activities-filter %])
+        handle-back-click #(re-frame/dispatch [::state/open-course-info])
+        available-activities @(re-frame/subscribe [::state/available-activities])]
+    [page/side-bar {:title        "Add Activity"
+                    :title-action [ui/icon-button {:icon       "arrow-left"
+                                                   :variant    "light"
+                                                   :class-name "back-button"
+                                                   :on-click   handle-back-click}]}
+     [:div.available-activities
+      [ui/input {:value       filter
+                 :on-change   handle-filter-change
+                 :placeholder "search activities"
+                 :icon        "search"
+                 :class-name  "search"}]
+      [:div.available-activities-list
+
+       (for [{:keys [id] :as activity} available-activities]
+         ^{:key id}
+         [available-activities-list-item activity])]]]))
+
 (defn- actions-list-item
-  [{:keys [icon text data]}]
-  [draggable {:data data}
-   [:li.actions-list-item
-    [ui/icon {:icon icon}]
-    text]])
+  [{:keys [icon text data on-click]}]
+  (if (some? data)
+    [draggable {:data data}
+     [:li.actions-list-item
+      [ui/icon {:icon icon}]
+      text]]
+    [:li (cond-> {:class-name "actions-list-item button-item"}
+                 (fn? on-click) (assoc :on-click on-click))
+     [ui/icon {:icon icon}]
+     text]))
 
 (defn- actions-list
   []
-  [:ul.actions-list
-   [actions-list-item {:icon "add-item"
-                       :text "Add Level"
-                       :data {:type  "level"
-                              :level "add"}}]
-   [actions-list-item {:icon "add-item"
-                       :text "Add Lesson"
-                       :data {:type   "lesson"
-                              :lesson "add"}}]
-   [actions-list-item {:icon "activity"
-                       :text "Add Activity"
-                       :data {:type     "activity"
-                              :activity "add"}}]])
+  (let [handle-activities-click #(re-frame/dispatch [::state/open-available-activities])]
+    [page/side-bar {:title "Course Details"}
+     [:ul.actions-list
+      [actions-list-item {:icon "add-item"
+                          :text "Add Level"
+                          :data {:type  "level"
+                                 :level "add"}}]
+      [actions-list-item {:icon "add-item"
+                          :text "Add Lesson"
+                          :data {:type   "lesson"
+                                 :lesson "add"}}]
+      [actions-list-item {:icon     "activity"
+                          :text     "Add Activity"
+                          :on-click handle-activities-click}]]]))
 
 (defn- side-bar
   []
-  [page/side-bar {:title "Course Details"}
-   [actions-list]])
+  (let [content @(re-frame/subscribe [::state/side-bar-content])]
+    (case content
+      :available-activities [available-activities-list]
+      [actions-list])))
 
 (defn page
   [props]

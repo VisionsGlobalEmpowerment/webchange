@@ -76,6 +76,7 @@
     [webchange.ui-framework.components.icon.icon-restart :as restart]
     [webchange.ui-framework.components.icon.icon-restore :as restore]
     [webchange.ui-framework.components.icon.icon-school :as school]
+    [webchange.ui-framework.components.icon.icon-search :as search]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-slider :as slider]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
@@ -173,6 +174,7 @@
    "restart"            restart/data
    "restore"            restore/data
    "school"             school/data
+   "search"             search/data
    "settings"           settings/data
    "slider"             slider/data
    "stop"               stop/data

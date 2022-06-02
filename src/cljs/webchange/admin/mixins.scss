@@ -8,3 +8,19 @@
         border-radius: 50%;
     }
 }
+
+@mixin with-scroll-bar($size) {
+    &::-webkit-scrollbar {
+        width: $size;
+        opacity: 1;
+    }
+
+    &::-webkit-scrollbar-track {
+        border-radius: $size * 0.5;
+        opacity: 0;
+    }
+}
+
+@mixin with-small-scroll-bar {
+    @include with-scroll-bar(6px);
+}

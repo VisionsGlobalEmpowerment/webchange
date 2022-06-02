@@ -79,12 +79,16 @@
         actions])]))
 
 (defn- block-title
-  [{:keys [actions icon title]}]
+  [{:keys [actions icon title title-action]}]
   (when (or (some? title)
             (some? actions))
     [:h1.block-title
-     [:div {:class-name (get-class-name {"title"     true
-                                         "with-icon" (some? icon)})}
+     [:div {:class-name (get-class-name {"title"       true
+                                         "with-icon"   (some? icon)
+                                         "with-action" (some? title-action)})}
+      (when (some? title-action)
+        [:div.title-action
+         title-action])
       (when (some? icon)
         [c/icon {:icon       icon
                  :class-name "title-icon"}])
@@ -109,10 +113,11 @@
       footer])])
 
 (defn side-bar
-  [{:keys [actions title]}]
+  [{:keys [actions title title-action]}]
   [:div {:class-name (:side-bar class-names)}
-   [block-title {:title   title
-                 :actions actions}]
+   [block-title {:title        title
+                 :title-action title-action
+                 :actions      actions}]
    (into [:div.side-bar-content]
          (->> (r/current-component)
               (r/children)))])
