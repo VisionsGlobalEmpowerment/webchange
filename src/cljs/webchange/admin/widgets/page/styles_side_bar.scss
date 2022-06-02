@@ -11,8 +11,10 @@
 
     .side-bar-content {
         display: flex;
+        flex-direction: column;
         min-height: 0;
         flex: 1 1;
+        gap: 16px;
 
         & > * {
             width: 100%;

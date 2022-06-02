@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [webchange.admin.components.list.views :as l]
     [webchange.admin.pages.course-edit.state :as state]
+    [webchange.admin.widgets.course-form.view :refer [course-form]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]
     [webchange.utils.drag-and-drop :refer [draggable]]))
@@ -176,6 +177,7 @@
   []
   (let [handle-activities-click #(re-frame/dispatch [::state/open-available-activities])]
     [page/side-bar {:title "Course Details"}
+     [course-form]
      [:ul.actions-list
       [actions-list-item {:icon "add-item"
                           :text "Add Level"

@@ -76,7 +76,7 @@
 
     .reorder-control {
         &:hover {
-            cursor: ns-resize;
+            cursor: grab;
             background-color: #{$color-pink + "0F"};
         }
     }
@@ -114,10 +114,15 @@
         }
     }
 
+    .course-form {
+        flex: 1 1;
+    }
+
     .available-activities {
         display: flex;
         flex-direction: column;
         gap: 16px;
+        min-height: 0;
     }
 
     .back-button {
