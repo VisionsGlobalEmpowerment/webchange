@@ -13,6 +13,19 @@
   (fn [db]
     (get db path-to-db)))
 
+;; Course Info
+
+(def course-info-key :course-info)
+
+(defn- set-course-info
+  [db value]
+  (assoc db course-info-key value))
+
+(re-frame/reg-sub
+  ::course-info
+  :<- [path-to-db]
+  #(get % course-info-key))
+
 ;; Course Data
 
 (def course-data-key :course-data)
@@ -25,6 +38,16 @@
   ::course-data
   :<- [path-to-db]
   #(get % course-data-key))
+
+(re-frame/reg-sub
+  ::course-statistic
+  :<- [::course-data]
+  :<- [::course-info]
+  (fn [[course-data course-info]]
+    {:name       (:name course-info)
+     :levels     (utils/get-levels-count course-data)
+     :lessons    (utils/get-lessons-count course-data)
+     :activities (utils/get-activities-count course-data)}))
 
 (re-frame/reg-sub
   ::course-levels
@@ -126,13 +149,22 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ {:keys [course-slug]}]]
-    {:dispatch [::warehouse/load-course course-slug {:on-success [::load-course-success]}]}))
+    {:dispatch-n [[::warehouse/load-course course-slug
+                   {:on-success [::load-course-success]}]
+                  [::warehouse/load-course-info course-slug
+                   {:on-success [::load-course-info-success]}]]}))
 
 (re-frame/reg-event-fx
   ::load-course-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ course-data]]
     {:db (-> db (set-course-data course-data))}))
+
+(re-frame/reg-event-fx
+  ::load-course-info-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ course-info]]
+    {:db (-> db (set-course-info course-info))}))
 
 (re-frame/reg-event-fx
   ::remove-level

@@ -1,4 +1,10 @@
 .page--edit-course {
+    .page--edit-course--header {
+        .activities {
+            @include icon-color($color-blue);
+        }
+    }
+
     .list-item-stats {
         display: flex;
         align-items: center;

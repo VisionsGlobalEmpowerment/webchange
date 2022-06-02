@@ -32,3 +32,26 @@
   [course-data activity-name]
   (-> (get course-data :scene-list)
       (get (keyword activity-name))))
+
+(defn get-levels-count
+  [course-data]
+  (->> (get-levels-data course-data)
+       (count)))
+
+(defn get-lessons-count
+  [course-data]
+  (->> (get-levels-data course-data)
+       (map get-lessons-data)
+       (map count)
+       (apply +)))
+
+(defn get-activities-count
+  [course-data]
+  (->> (get-levels-data course-data)
+       (map (fn [level-data]
+              (->> (get-lessons-data level-data)
+                   (map (fn [lesson-data]
+                          (->> (get-activities-data lesson-data)
+                               (count))))
+                   (apply +))))
+       (apply +)))

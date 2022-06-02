@@ -196,13 +196,28 @@
       :available-activities [available-activities-list]
       [actions-list])))
 
+(defn- header
+  []
+  (let [{:keys [name levels lessons activities]} @(re-frame/subscribe [::state/course-statistic])]
+    [page/header {:title      name
+                  :icon       "presentation"
+                  :class-name "page--edit-course--header"}
+     [page/header-content-group {:icon "levels"}
+      [:span (str levels " Levels")]]
+     [:hr]
+     [page/header-content-group {:icon "lesson"}
+      [:span (str lessons " Lessons")]]
+     [:hr]
+     [page/header-content-group {:icon       "activity"
+                                 :class-name "activities"}
+      [:span (str activities " Activities")]]]))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
     [page/page {:class-name "page--edit-course"}
-     [page/header {:title "Edit Course"
-                   :icon  "presentation"}]
+     [header]
      [page/main-content
       [levels-list]]
      [side-bar]]))

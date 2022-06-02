@@ -24,9 +24,9 @@
 
     .header-content-group {
         display: flex;
-        align-items: stretch;
-        flex-direction: column;
-        gap: 4px;
+        align-items: center;
+        flex-direction: row;
+        gap: 12px;
         min-width: 120px;
         padding: 4px;
 
@@ -45,6 +45,13 @@
             font-size: 12px;
         }
 
+        .data {
+            display: flex;
+            align-items: stretch;
+            flex-direction: column;
+            gap: 4px;
+        }
+
         select {
             color: #fff;
             background: transparent;
@@ -53,6 +60,7 @@
         }
 
         @include icon-color($color-pink);
+        @include icon-size(24px);
     }
 
     & > .info {

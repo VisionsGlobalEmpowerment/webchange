@@ -56,13 +56,16 @@
       title])])
 
 (defn- header-content-group
-  [{:keys [class-name title]}]
-  (->> (r/current-component)
-       (r/children)
-       (into [:div {:class-name (get-class-name {"header-content-group" true
-                                                 class-name             (some? class-name)})}
-              (when (some? title)
-                [:label title])])))
+  [{:keys [class-name icon title]}]
+  [:div {:class-name (get-class-name {"header-content-group" true
+                                      class-name             (some? class-name)})}
+   (when (some? icon)
+     [c/icon {:icon icon}])
+   (->> (r/current-component)
+        (r/children)
+        (into [:div.data
+               (when (some? title)
+                 [:label title])]))])
 
 (defn header
   [{:keys [actions class-name] :as props}]

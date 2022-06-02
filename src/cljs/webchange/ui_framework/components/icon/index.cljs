@@ -58,6 +58,7 @@
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
     [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
     [webchange.ui-framework.components.icon.icon-lesson :as lesson]
+    [webchange.ui-framework.components.icon.icon-levels :as levels]
     [webchange.ui-framework.components.icon.icon-link :as link]
     [webchange.ui-framework.components.icon.icon-logout :as logout]
     [webchange.ui-framework.components.icon.icon-match :as match]
@@ -156,6 +157,7 @@
    "insert-before"      insert-before/data
    "insert-parallel"    insert-parallel/data
    "lesson"             lesson/data
+   "levels"             levels/data
    "link"               link/data
    "logout"             logout/data
    "match"              match/data
