@@ -61,6 +61,18 @@
                    (apply +))))
        (apply +)))
 
+(defn next-uid
+  [course-data]
+  (->> (get-levels-data course-data)
+       (map get-lessons-data)
+       (flatten)
+       (map get-activities-data)
+       (flatten)
+       (map :unique-id)
+       (sort)
+       (last)
+       (inc)))
+
 (defn- level-idx?
   [value]
   (number? value))
@@ -69,13 +81,14 @@
   [value]
   (number? value))
 
-(defn- activity-id?
+(defn- activity-idx?
   [value]
   (number? value))
 
 (defn- activity-name?
   [value]
-  (string? value))
+  (or (string? value)
+      (nil? value)))
 
 (defn- position?
   [value]
@@ -150,28 +163,50 @@
                 moved-lesson)))
 
 (defn add-activity
-  [course-data {:keys [activity-id target-level target-lesson target-activity position]}]
-  {:pre [(activity-name? activity-id)
-         (level-idx? target-level)
-         (lesson-idx? target-lesson)
-         (activity-id? target-activity)
-         (position? position)]}
-  course-data)
+  ([course-data params]
+   (add-activity course-data params {}))
+  ([course-data {:keys [activity-id target-level target-lesson target-activity position]} activity-data]
+   {:pre [(activity-name? activity-id)
+          (level-idx? target-level)
+          (lesson-idx? target-lesson)
+          (activity-idx? target-activity)
+          (position? position)]}
+   (update course-data :levels l/update-nth (dec target-level)
+           update :lessons l/update-nth (dec target-lesson)
+           update :activities l/insert-at-position
+           (merge {:activity  activity-id
+                   :unique-id (next-uid course-data)}
+                  activity-data)
+           (get-item-index target-activity position))))
 
 (defn remove-activity
   [course-data level-idx lesson-idx activity-idx]
   {:pre [(level-idx? level-idx)
          (lesson-idx? lesson-idx)
-         (activity-id? activity-idx)]}
-  course-data)
+         (activity-idx? activity-idx)]}
+  (update-in course-data
+             [:levels (dec level-idx) :lessons (dec lesson-idx) :activities]
+             l/remove-at-position
+             (dec activity-idx)))
 
 (defn move-activity
   [course-data {:keys [source-level source-lesson source-activity target-level target-lesson target-activity position]}]
   {:pre [(level-idx? source-level)
          (lesson-idx? source-lesson)
-         (activity-id? source-activity)
+         (activity-idx? source-activity)
          (level-idx? target-level)
          (lesson-idx? target-lesson)
-         (activity-id? target-activity)
+         (activity-idx? target-activity)
          (position? position)]}
-  course-data)
+  (let [moved-activity (get-in course-data [:levels (dec source-level) :lessons (dec source-lesson) :activities (dec source-activity)])
+        course-without-activity (remove-activity course-data source-level source-lesson source-activity)
+        activity-position (if (and (= source-level target-level)
+                                   (= source-lesson target-lesson)
+                                   (< source-activity target-activity))
+                            (dec target-activity)
+                            target-activity)]
+    (add-activity course-without-activity {:target-level    target-level
+                                           :target-lesson   target-lesson
+                                           :target-activity activity-position
+                                           :position        position}
+                  moved-activity)))

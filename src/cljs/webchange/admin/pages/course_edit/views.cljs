@@ -68,13 +68,13 @@
             :class-name "reorder-control"}])
 
 (defn- activities-list-item
-  [{:keys [id name preview level-idx lesson-idx]}]
+  [{:keys [idx name preview level-idx lesson-idx]}]
   (let [handle-remove-click #(do (.stopPropagation %)
-                                 (re-frame/dispatch [::state/remove-activity level-idx lesson-idx id]))]
+                                 (re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx]))]
     [draggable {:data          {:type     "activity"
                                 :level    level-idx
                                 :lesson   lesson-idx
-                                :activity id}
+                                :activity idx}
                 :drop-allowed? drop-allowed?
                 :on-drop       handle-drop}
      [l/list-item {:name       name
