@@ -7,7 +7,8 @@
     [webchange.admin.widgets.course-form.view :refer [course-form]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]
-    [webchange.utils.drag-and-drop :refer [draggable]]))
+    [webchange.utils.drag-and-drop :refer [draggable]]
+    [webchange.utils.numbers :refer [try-parse-int]]))
 
 (defn- drop-allowed?
   [dragged-data target-data]
@@ -15,9 +16,51 @@
           (:type dragged-data))
        (not= target-data dragged-data)))
 
+(defn- parse-fields
+  [obj]
+  (->> obj
+       (map (fn [[field value]]
+              [field (try-parse-int value)]))
+       (into {})))
+
 (defn- handle-drop
-  [props]
-  (print ">>> Handle Drop" props))
+  [{:keys [dragged target side]}]
+  (let [target (parse-fields target)
+        dragged (parse-fields dragged)
+        position (case (:vertical side)
+                   :top :before
+                   :bottom :after)]
+    (case (:type dragged)
+      "level" (if (= (:level dragged) "add")
+                (re-frame/dispatch [::state/add-level {:target-level (:level target)
+                                                       :position     position}])
+                (re-frame/dispatch [::state/move-level {:source-level (:level dragged)
+                                                        :target-level (:level target)
+                                                        :position     position}]))
+      "lesson" (if (= (:lesson dragged) "add")
+                 (re-frame/dispatch [::state/add-lesson {:target-level  (:level target)
+                                                         :target-lesson (:lesson target)
+                                                         :position      position}])
+                 (re-frame/dispatch [::state/move-lesson {:source-level  (:level dragged)
+                                                          :source-lesson (:lesson dragged)
+                                                          :target-level  (:level target)
+                                                          :target-lesson (:lesson target)
+                                                          :position      position}]))
+      "activity" (if (and (contains? dragged :level)
+                          (contains? dragged :lesson))
+                   (re-frame/dispatch [::state/move-activity {:source-level    (:level dragged)
+                                                              :source-lesson   (:lesson dragged)
+                                                              :source-activity (:activity dragged)
+                                                              :target-level    (:level target)
+                                                              :target-lesson   (:lesson target)
+                                                              :target-activity (:activity target)
+                                                              :position        position}])
+                   (re-frame/dispatch [::state/add-activity {:target-level    (:level target)
+                                                             :target-lesson   (:lesson target)
+                                                             :target-activity (:activity target)
+                                                             :activity-id     (:activity dragged)
+                                                             :position        position}]))
+      nil)))
 
 (defn- reorder-control
   []

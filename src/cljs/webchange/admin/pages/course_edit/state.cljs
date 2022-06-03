@@ -30,6 +30,10 @@
 
 (def course-data-key :course-data)
 
+(defn- get-course-data
+  [db]
+  (get db course-data-key))
+
 (defn- set-course-data
   [db value]
   (assoc db course-data-key value))
@@ -37,7 +41,7 @@
 (re-frame/reg-sub
   ::course-data
   :<- [path-to-db]
-  #(get % course-data-key))
+  #(get-course-data %))
 
 (re-frame/reg-sub
   ::course-statistic
@@ -167,22 +171,82 @@
     {:db (-> db (set-course-info course-info))}))
 
 (re-frame/reg-event-fx
+  ::add-level
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    (print "::add-level" props)
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/add-level props))]
+      {:db (-> db (set-course-data new-course-data))})))
+
+(re-frame/reg-event-fx
+  ::move-level
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    (print "::move-level" props)
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/move-level props))]
+      {:db (-> db (set-course-data new-course-data))})))
+
+(re-frame/reg-event-fx
   ::remove-level
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ level-idx]]
+  (fn [{:keys [db]} [_ level-idx]]
     (print "::remove-level" level-idx)
-    {}))
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/remove-level level-idx))]
+      {:db (-> db (set-course-data new-course-data))})))
+
+(re-frame/reg-event-fx
+  ::add-lesson
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    (print "::add-lesson" props)
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/add-lesson props))]
+      {:db (-> db (set-course-data new-course-data))})))
+
+(re-frame/reg-event-fx
+  ::move-lesson
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    (print "::move-lesson" props)
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/move-lesson props))]
+      {:db (-> db (set-course-data new-course-data))})))
 
 (re-frame/reg-event-fx
   ::remove-lesson
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ level-idx lesson-idx]]
+  (fn [{:keys [db]} [_ level-idx lesson-idx]]
     (print "::remove-lesson" level-idx lesson-idx)
-    {}))
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/remove-lesson level-idx lesson-idx))]
+      {:db (-> db (set-course-data new-course-data))})))
+
+(re-frame/reg-event-fx
+  ::add-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    (print "::add-activity" props)
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/add-activity props))]
+      {:db (-> db (set-course-data new-course-data))})))
+
+(re-frame/reg-event-fx
+  ::move-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    (print "::move-activity" props)
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/move-activity props))]
+      {:db (-> db (set-course-data new-course-data))})))
 
 (re-frame/reg-event-fx
   ::remove-activity
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ level-idx lesson-idx activity-id]]
-    (print "::remove-activity" level-idx lesson-idx activity-id)
-    {}))
+  (fn [{:keys [db]} [_ level-idx lesson-idx activity-idx]]
+    (print "::remove-activity" level-idx lesson-idx activity-idx)
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/remove-activity level-idx lesson-idx activity-idx))]
+      {:db (-> db (set-course-data new-course-data))})))
