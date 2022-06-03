@@ -24,6 +24,18 @@ node {
         sh 'cp -rf ./node_modules $HOME/build-cache/'
     }
 
+    if (env.BRANCH_NAME == 'backport') {
+        stage('Build') {
+            sh 'lein clean'
+	    sh 'shadow-cljs release app'
+	    sh 'shadow-cljs release service-worker'
+            sh 'lein uberjar'
+    	}
+	stage('Deploy') {
+            sh "cp ./target/webchange.jar /srv/www/webchange/releases/${currentBuild.id}-backport.jar"
+            sh "ln -nsf /srv/www/webchange/releases/${currentBuild.id}-backport.jar /srv/www/webchange/backport.jar"
+        }
+    }
     if (env.BRANCH_NAME == 'master') {
         stage('Build') {
             sh 'lein clean'

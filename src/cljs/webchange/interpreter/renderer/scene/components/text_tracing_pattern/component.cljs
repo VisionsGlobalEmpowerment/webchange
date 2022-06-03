@@ -110,15 +110,16 @@
                    (vec (flatten (repeat repeat-text [20 spacing])))
                    (vec (repeat repeat-text spacing)))
         text (if repeat-text (apply str (repeat repeat-text text)) text)
+        spacings (or (seq spacings) (-> text count (repeat 20) vec))
         length (count text)
         widths (accumulate
-                 (map-indexed (fn [index letter]
-                                (->> letter
-                                     get-svg-path
-                                     get-path-width
-                                     (+ (nth spacings index))
-                                     (* letter-scale)))
-                              text))
+                (map-indexed (fn [index letter]
+                               (->> letter
+                                    get-svg-path
+                                    get-path-width
+                                    (+ (nth spacings index))
+                                    (* letter-scale)))
+                             text))
         total (- (last widths) (* letter-scale (last spacings)))
         to-offset "FfiíU"
         positions (->> (range length)
@@ -132,11 +133,11 @@
                      (map #(path->letter letter-scale % dashed))
                      (map merge positions))]
     (doall
-      (for [letter letters]
-        (let [component (s/create (assoc letter
-                                         :object-name (keyword (str "text-tracing-pattern-" (:index letter)))
-                                         :parent group))]
-          (re-frame/dispatch [::state/register-object component]))))))
+     (for [letter letters]
+       (let [component (s/create (assoc letter
+                                   :object-name (keyword (str "text-tracing-pattern-" (:index letter)))
+                                   :parent group))]
+         (re-frame/dispatch [::state/register-object component]))))))
 
 (defn- activate-next-letter
   ([state]
