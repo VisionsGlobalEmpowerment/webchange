@@ -242,3 +242,19 @@ LIMIT :limit OFFSET :offset
 -- :doc count records
 SELECT count(*) as result FROM users
 WHERE type = :type
+
+-- :name insert-course-scenes :! :n
+-- :doc Batch insert into course scenes
+INSERT INTO course_scenes (course_id, scene_id)
+VALUES :tuple*:course_scenes
+
+-- :name delete-course-scenes :! :n
+-- :doc Delete course scenes
+DELETE FROM course_scenes
+WHERE course_id = :course_id
+AND scene_id IN (:v*:scene_ids)
+
+-- :name course-scenes :? :*
+-- :doc retrieve course scenes by course id
+SELECT * FROM course_scenes
+WHERE course_id = :course_id

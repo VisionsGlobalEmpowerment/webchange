@@ -1,0 +1,3 @@
+{:ns      webchange.migrations.scene-id-in-course-data
+ :up-fn   migrate-up
+ :down-fn migrate-down}

@@ -1,21 +1,24 @@
 (ns webchange.course.core
-  (:require [webchange.db.core :refer [*db*] :as db]
-            [java-time :as jt]
-            [clojure.tools.logging :as log]
-            [webchange.templates.core :as templates]
-            [webchange.assets.core :as assets]
-            [webchange.common.files :as f]
-            [clojure.data.json :as json]
-            [webchange.common.audio-parser :as ap]
-            [webchange.scene :as scene]
-            [config.core :refer [env]]
-            [clojure.string :as string]
-            [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]
-            [webchange.course.skills :refer [skills]]
-            [ring.util.codec :as codec]
-            [webchange.utils.preserve-objects :refer [update-preserved-objects]]
-            [webchange.events :as e]))
+  (:require
+    [camel-snake-kebab.core :refer [->kebab-case ->kebab-case-keyword
+                                    ->snake_case_keyword]]
+    [camel-snake-kebab.extras :refer [transform-keys]]
+    [clojure.data.json :as json]
+    [clojure.set :as cset]
+    [clojure.string :as string]
+    [clojure.tools.logging :as log]
+    [config.core :refer [env]]
+    [java-time :as jt]
+    [ring.util.codec :as codec]
+    [webchange.assets.core :as assets]
+    [webchange.common.audio-parser :as ap]
+    [webchange.common.files :as f]
+    [webchange.course.skills :refer [skills]]
+    [webchange.db.core :as db]
+    [webchange.events :as e]
+    [webchange.scene :as scene]
+    [webchange.templates.core :as templates]
+    [webchange.utils.preserve-objects :refer [update-preserved-objects]]))
 
 (def editor_asset_type_single-background "single-background")
 (def editor_asset_type_background "background")
@@ -197,6 +200,25 @@
     [true {:scene  scene-name
            :skills (get-scene-skills scene-id)}]))
 
+(defn- update-course-scenes!
+  [course-id data]
+  (let [received-scene-ids (->> data :levels
+                                (mapcat :lessons)
+                                (mapcat :activities)
+                                (map :scene-id)
+                                (set))
+        existing-scene-ids (->> (db/course-scenes {:course_id course-id})
+                                (map :scene-id)
+                                (set))
+        new-course-scenes (->> (cset/difference received-scene-ids existing-scene-ids)
+                               (map (fn [id] [course-id id])))
+        obsolete-scene-ids (-> (cset/difference existing-scene-ids received-scene-ids)
+                               (into []))]
+    (when (seq new-course-scenes)
+      (db/insert-course-scenes {:course_scenes new-course-scenes}))
+    (when (seq obsolete-scene-ids)
+      (db/delete-course-scenes {:course_id course-id :scene_ids obsolete-scene-ids}))))
+
 (defn save-course!
   [course-slug data owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
@@ -205,6 +227,7 @@
                       :data       data
                       :owner_id   owner-id
                       :created_at created-at})
+    (update-course-scenes! course-id data)
     [true {:created-at (str created-at)
            :data       data}]))
 
@@ -422,7 +445,7 @@
                       tags)]
       (->> assets
            (map clojure.core/set)
-           (apply clojure.set/intersection)
+           (apply cset/intersection)
            (into [])))
     (db/find-editor-assets {:tag tag :type type})))
 
