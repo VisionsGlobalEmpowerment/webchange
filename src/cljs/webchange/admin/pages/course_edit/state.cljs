@@ -147,13 +147,39 @@
   :<- [path-to-db]
   #(get % side-bar-content-key :course-info))
 
-;;
+;; Course Slug
+
+(def course-slug-key :course-slug)
+
+(defn- get-course-slug
+  [db]
+  (get db course-slug-key))
+
+(defn- set-course-slug
+  [db value]
+  (assoc db course-slug-key value))
+
+;; Course Fetching?
+
+(def course-fetching-key :course-fetching?)
+
+(defn- set-course-fetching
+  [db value]
+  (assoc db course-fetching-key value))
+
+(re-frame/reg-sub
+  ::course-fetching?
+  :<- [path-to-db]
+  #(get % course-fetching-key false))
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ {:keys [course-slug]}]]
-    {:dispatch-n [[::warehouse/load-course course-slug
+  (fn [{:keys [db]} [_ {:keys [course-slug]}]]
+    {:db         (-> db
+                     (set-course-slug course-slug)
+                     (set-course-fetching true))
+     :dispatch-n [[::warehouse/load-course course-slug
                    {:on-success [::load-course-success]}]
                   [::warehouse/load-course-info course-slug
                    {:on-success [::load-course-info-success]}]]}))
@@ -162,7 +188,9 @@
   ::load-course-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ course-data]]
-    {:db (-> db (set-course-data course-data))}))
+    {:db (-> db
+             (set-course-fetching false)
+             (set-course-data course-data))}))
 
 (re-frame/reg-event-fx
   ::load-course-info-success
@@ -174,79 +202,106 @@
   ::add-level
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props]]
-    (print "::add-level" props)
     (let [new-course-data (-> (get-course-data db)
                               (utils/add-level props))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::move-level
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props]]
-    (print "::move-level" props)
     (let [new-course-data (-> (get-course-data db)
                               (utils/move-level props))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::remove-level
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ level-idx]]
-    (print "::remove-level" level-idx)
     (let [new-course-data (-> (get-course-data db)
                               (utils/remove-level level-idx))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::add-lesson
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props]]
-    (print "::add-lesson" props)
     (let [new-course-data (-> (get-course-data db)
                               (utils/add-lesson props))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::move-lesson
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props]]
-    (print "::move-lesson" props)
     (let [new-course-data (-> (get-course-data db)
                               (utils/move-lesson props))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::remove-lesson
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ level-idx lesson-idx]]
-    (print "::remove-lesson" level-idx lesson-idx)
     (let [new-course-data (-> (get-course-data db)
                               (utils/remove-lesson level-idx lesson-idx))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::add-activity
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props]]
-    (print "::add-activity" props)
     (let [new-course-data (-> (get-course-data db)
                               (utils/add-activity props))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::move-activity
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props]]
-    (print "::move-activity" props)
     (let [new-course-data (-> (get-course-data db)
                               (utils/move-activity props))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
 
 (re-frame/reg-event-fx
   ::remove-activity
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ level-idx lesson-idx activity-idx]]
-    (print "::remove-activity" level-idx lesson-idx activity-idx)
     (let [new-course-data (-> (get-course-data db)
                               (utils/remove-activity level-idx lesson-idx activity-idx))]
-      {:db (-> db (set-course-data new-course-data))})))
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
+
+(re-frame/reg-event-fx
+  ::save-course
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [course-slug (get-course-slug db)
+          course-data (get-course-data db)]
+      {:db       (set-course-fetching db true)
+       :dispatch [::warehouse/save-course
+                  {:course-slug course-slug
+                   :course-data course-data}
+                  {:on-success [::save-course-success]
+                   :on-failure [::save-course-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::save-course-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [data]}]]
+    {:db (-> db
+             (set-course-fetching false)
+             (set-course-data data))}))
+
+(re-frame/reg-event-fx
+  ::save-course-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-course-fetching db false)}))

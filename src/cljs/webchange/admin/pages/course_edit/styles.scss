@@ -74,6 +74,24 @@
         }
     }
 
+    .empty-list-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: #fcfcfc;
+        border-radius: 8px;
+        padding: 16px 32px;
+
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+
+        &:after {
+            display: none;
+        }
+    }
+
     .reorder-control {
         &:hover {
             cursor: grab;

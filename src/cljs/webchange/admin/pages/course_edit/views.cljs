@@ -67,6 +67,14 @@
   [ui/icon {:icon       "reorder"
             :class-name "reorder-control"}])
 
+(defn- empty-list-placeholder
+  [{:keys [data]}]
+  [draggable {:data          data
+              :drop-allowed? drop-allowed?
+              :on-drop       handle-drop}
+   [:div.empty-list-placeholder
+    (str "Drop new " (:type data) " here")]])
+
 (defn- activities-list-item
   [{:keys [idx name preview level-idx lesson-idx]}]
   (let [handle-remove-click #(do (.stopPropagation %)
@@ -94,7 +102,12 @@
        ^{:key idx}
        [activities-list-item (merge activity-data
                                     {:level-idx  level-idx
-                                     :lesson-idx lesson-idx})])]))
+                                     :lesson-idx lesson-idx})])
+     (when (empty? activities)
+       [empty-list-placeholder {:data {:type     "activity"
+                                       :level    level-idx
+                                       :lesson   lesson-idx
+                                       :activity 0}}])]))
 
 (defn- lessons-list-item
   [{:keys [idx name activities-number level-idx]}]
@@ -132,7 +145,11 @@
     [l/list {:class-name "sub-list"}
      (for [{:keys [idx] :as lesson-data} lessons]
        ^{:key idx}
-       [lessons-list-item (assoc lesson-data :level-idx level-idx)])]))
+       [lessons-list-item (assoc lesson-data :level-idx level-idx)])
+     (when (empty? lessons)
+       [empty-list-placeholder {:data {:type   "lesson"
+                                       :level  level-idx
+                                       :lesson 0}}])]))
 
 (defn- levels-list-item
   [{:keys [idx name lessons-number]}]
@@ -261,8 +278,11 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page {:class-name "page--edit-course"}
-     [header]
-     [page/main-content
-      [levels-list]]
-     [side-bar]]))
+    (let [course-fetching? @(re-frame/subscribe [::state/course-fetching?])]
+      [page/page {:class-name "page--edit-course"}
+       [header]
+       [page/main-content
+        [levels-list]
+        (when course-fetching?
+          [ui/loading-overlay])]
+       [side-bar]])))
