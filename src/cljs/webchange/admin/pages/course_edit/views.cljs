@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [webchange.admin.components.list.views :as l]
     [webchange.admin.pages.course-edit.state :as state]
-    [webchange.admin.widgets.course-form.view :refer [course-form]]
+    [webchange.admin.widgets.course-info-form.view :refer [course-info-form]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]
     [webchange.utils.drag-and-drop :refer [draggable]]
@@ -236,27 +236,41 @@
 (defn- actions-list
   []
   (let [handle-activities-click #(re-frame/dispatch [::state/open-available-activities])]
-    [page/side-bar {:title "Course Details"}
-     [course-form]
-     [:ul.actions-list
-      [actions-list-item {:icon "add-item"
-                          :text "Add Level"
-                          :data {:type  "level"
-                                 :level "add"}}]
-      [actions-list-item {:icon "add-item"
-                          :text "Add Lesson"
-                          :data {:type   "lesson"
-                                 :lesson "add"}}]
-      [actions-list-item {:icon     "activity"
-                          :text     "Add Activity"
-                          :on-click handle-activities-click}]]]))
+    [:ul.actions-list
+     [actions-list-item {:icon "add-item"
+                         :text "Add Level"
+                         :data {:type  "level"
+                                :level "add"}}]
+     [actions-list-item {:icon "add-item"
+                         :text "Add Lesson"
+                         :data {:type   "lesson"
+                                :lesson "add"}}]
+     [actions-list-item {:icon     "activity"
+                         :text     "Add Activity"
+                         :on-click handle-activities-click}]]))
+
+(defn- main-form
+  [{:keys [course-slug]}]
+  (r/with-let [form-editable? (r/atom false)
+               handle-edit-click #(swap! form-editable? not)
+               handle-form-saved #(do (reset! form-editable? false)
+                                      (re-frame/dispatch [::state/set-course-info %]))]
+    [page/side-bar {:title   "Course Details"
+                    :actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
+                                              :variant  "light"
+                                              :on-click handle-edit-click}]}
+     [course-info-form {:course-slug course-slug
+                        :editable?   @form-editable?
+                        :on-save     handle-form-saved}]
+     (when-not @form-editable?
+       [actions-list])]))
 
 (defn- side-bar
-  []
+  [props]
   (let [content @(re-frame/subscribe [::state/side-bar-content])]
     (case content
       :available-activities [available-activities-list]
-      [actions-list])))
+      [main-form props])))
 
 (defn- header
   []
@@ -285,4 +299,4 @@
         [levels-list]
         (when course-fetching?
           [ui/loading-overlay])]
-       [side-bar]])))
+       [side-bar props]])))

@@ -199,6 +199,12 @@
     {:db (-> db (set-course-info course-info))}))
 
 (re-frame/reg-event-fx
+  ::set-course-info
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ course-info]]
+    {:db (-> db (set-course-info course-info))}))
+
+(re-frame/reg-event-fx
   ::add-level
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props]]

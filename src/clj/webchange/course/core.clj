@@ -275,10 +275,10 @@
    (->website-course course {}))
   ([course {:keys [with-host-name?] :or {with-host-name? true}}]
    (cond-> (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status :updated-at :metadata])
-               (assoc :slug (-> course :slug (codec/url-encode)))
                (assoc :updated-at (-> course :updated-at (str)))
                (with-course-page)
                (with-default-image))
+           (-> course :slug string?) (assoc :slug (-> course :slug (codec/url-encode)))
            with-host-name? (with-host-name :image-src))))
 
 (defn- ->website-scene
@@ -822,6 +822,6 @@
   (let [{course-id :course-id} (db/get-class {:id class-id})
         {course-name :name} (db/get-course-by-id {:id course-id})
         latest-version (db/get-latest-course-version {:course_id course-id})]
-    {:id course-id
+    {:id   course-id
      :name course-name
      :data (:data latest-version)}))
