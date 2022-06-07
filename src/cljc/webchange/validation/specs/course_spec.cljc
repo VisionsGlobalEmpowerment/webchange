@@ -10,6 +10,7 @@
 
 (s/def ::course (s/keys :req-un [::id ::name ::slug ::lang ::image-src ::status ::type]
                         :opt-un [::metadata]))
+
 (s/def ::courses (s/* ::course))
 
 (s/def ::assign-school-course (s/keys :req-un [::course-id]))
