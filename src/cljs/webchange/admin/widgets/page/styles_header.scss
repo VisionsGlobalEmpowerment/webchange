@@ -13,7 +13,12 @@
     padding-top: 0;
     padding-bottom: 0;
 
-    background-color: $color-primary;
+    background-color:  $color-blue;
+    background-image: url("/images/admin/page/header_background.svg");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: auto;
+
     color: $color-text-light;
 
     hr {
