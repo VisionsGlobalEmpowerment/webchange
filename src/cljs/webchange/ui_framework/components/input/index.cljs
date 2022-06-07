@@ -1,6 +1,7 @@
 (ns webchange.ui-framework.components.input.index
   (:require
     [reagent.core :as r]
+    [webchange.ui-framework.components.icon.index :as icon-c]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- subscribe-document
@@ -21,6 +22,7 @@
            default-value
            disabled?
            error
+           icon
            id
            value
            label
@@ -103,6 +105,8 @@
                        (fn? on-focus) (assoc :on-focus handle-focus))]
        (when (some? error)
          [:label.wc-error error])
+       (when (some? icon)
+         [:div.icon-wrapper [icon-c/component {:icon icon}]])
        (when (some? action)
          [:div.action-wrapper action])])
     (finally

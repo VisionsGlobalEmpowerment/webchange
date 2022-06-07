@@ -22,6 +22,11 @@
             }
         }
 
+        .item-prefix {
+            border-right: solid 1px #F7F7FB;
+            padding-right: 10px;
+        }
+
         .item-name {
             flex: 1 1;
             .name {

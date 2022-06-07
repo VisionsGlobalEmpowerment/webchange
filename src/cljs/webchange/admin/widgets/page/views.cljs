@@ -56,13 +56,16 @@
       title])])
 
 (defn- header-content-group
-  [{:keys [class-name title]}]
-  (->> (r/current-component)
-       (r/children)
-       (into [:div {:class-name (get-class-name {"header-content-group" true
-                                                 class-name             (some? class-name)})}
-              (when (some? title)
-                [:label title])])))
+  [{:keys [class-name icon title]}]
+  [:div {:class-name (get-class-name {"header-content-group" true
+                                      class-name             (some? class-name)})}
+   (when (some? icon)
+     [c/icon {:icon icon}])
+   (->> (r/current-component)
+        (r/children)
+        (into [:div.data
+               (when (some? title)
+                 [:label title])]))])
 
 (defn header
   [{:keys [actions class-name] :as props}]
@@ -79,12 +82,16 @@
         actions])]))
 
 (defn- block-title
-  [{:keys [actions icon title]}]
+  [{:keys [actions icon title title-action]}]
   (when (or (some? title)
             (some? actions))
     [:h1.block-title
-     [:div {:class-name (get-class-name {"title"     true
-                                         "with-icon" (some? icon)})}
+     [:div {:class-name (get-class-name {"title"       true
+                                         "with-icon"   (some? icon)
+                                         "with-action" (some? title-action)})}
+      (when (some? title-action)
+        [:div.title-action
+         title-action])
       (when (some? icon)
         [c/icon {:icon       icon
                  :class-name "title-icon"}])
@@ -109,10 +116,11 @@
       footer])])
 
 (defn side-bar
-  [{:keys [actions title]}]
+  [{:keys [actions title title-action]}]
   [:div {:class-name (:side-bar class-names)}
-   [block-title {:title   title
-                 :actions actions}]
+   [block-title {:title        title
+                 :title-action title-action
+                 :actions      actions}]
    (into [:div.side-bar-content]
          (->> (r/current-component)
               (r/children)))])

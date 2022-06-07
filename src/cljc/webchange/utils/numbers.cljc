@@ -7,7 +7,8 @@
 (defn try-parse-int
   [str]
   "Parse string to integer if string contains only digits. Return string otherwise."
-  (if (number-str? str)
+  (if (and (string? str)
+           (number-str? str))
     #?(:clj  (.parseInt Integer str)
        :cljs (.parseInt js/Number str))
     str))

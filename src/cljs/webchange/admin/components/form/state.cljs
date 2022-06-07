@@ -94,9 +94,10 @@
 
 (defn- set-form-data
   [db form-id form-data model]
-  (->> (keys model)
+  #_(->> (keys model)
        (select-keys form-data)
-       (form/set-data db form-id)))
+       (form/set-data db form-id))
+  (form/set-data db form-id form-data))
 
 (re-frame/reg-event-fx
   ::init

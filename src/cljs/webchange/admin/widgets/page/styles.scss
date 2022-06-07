@@ -92,6 +92,14 @@
                 }
             }
 
+            &.with-action {
+                gap: 4px;
+
+                .title-text:before {
+                    display: none;
+                }
+            }
+
             &.with-icon {
                 .title-text:before {
                     display: none;

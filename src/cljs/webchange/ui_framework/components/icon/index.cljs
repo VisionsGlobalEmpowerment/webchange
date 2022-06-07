@@ -1,7 +1,9 @@
 (ns webchange.ui-framework.components.icon.index
   (:require
+    [webchange.ui-framework.components.icon.icon-activity :as activity]
     [webchange.ui-framework.components.icon.icon-add :as add]
     [webchange.ui-framework.components.icon.icon-add-box :as add-box]
+    [webchange.ui-framework.components.icon.icon-add-item :as add-item]
     [webchange.ui-framework.components.icon.icon-align-center :as align-center]
     [webchange.ui-framework.components.icon.icon-align-justify :as align-justify]
     [webchange.ui-framework.components.icon.icon-align-left :as align-left]
@@ -55,6 +57,8 @@
     [webchange.ui-framework.components.icon.icon-insert-after :as insert-after]
     [webchange.ui-framework.components.icon.icon-insert-before :as insert-before]
     [webchange.ui-framework.components.icon.icon-insert-parallel :as insert-parallel]
+    [webchange.ui-framework.components.icon.icon-lesson :as lesson]
+    [webchange.ui-framework.components.icon.icon-levels :as levels]
     [webchange.ui-framework.components.icon.icon-link :as link]
     [webchange.ui-framework.components.icon.icon-logout :as logout]
     [webchange.ui-framework.components.icon.icon-match :as match]
@@ -69,9 +73,11 @@
     [webchange.ui-framework.components.icon.icon-presentation :as presentation]
     [webchange.ui-framework.components.icon.icon-preview :as preview]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
+    [webchange.ui-framework.components.icon.icon-reorder :as reorder]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
     [webchange.ui-framework.components.icon.icon-restore :as restore]
     [webchange.ui-framework.components.icon.icon-school :as school]
+    [webchange.ui-framework.components.icon.icon-search :as search]
     [webchange.ui-framework.components.icon.icon-settings :as settings]
     [webchange.ui-framework.components.icon.icon-slider :as slider]
     [webchange.ui-framework.components.icon.icon-stop :as stop]
@@ -93,8 +99,10 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (def icons
-  {"add"                add/data
+  {"activity"           activity/data
+   "add"                add/data
    "add-box"            add-box/data
+   "add-item"           add-item/data
    "align-center"       align-center/data
    "align-justify"      align-justify/data
    "align-left"         align-left/data
@@ -148,6 +156,8 @@
    "insert-after"       insert-after/data
    "insert-before"      insert-before/data
    "insert-parallel"    insert-parallel/data
+   "lesson"             lesson/data
+   "levels"             levels/data
    "link"               link/data
    "logout"             logout/data
    "match"              match/data
@@ -162,9 +172,11 @@
    "presentation"       presentation/data
    "preview"            preview/data
    "remove"             remove/data
+   "reorder"            reorder/data
    "restart"            restart/data
    "restore"            restore/data
    "school"             school/data
+   "search"             search/data
    "settings"           settings/data
    "slider"             slider/data
    "stop"               stop/data
@@ -184,11 +196,12 @@
    "warning"            warning/data})
 
 (defn component
-  [{:keys [icon on-click rotate? title class-name]}]
+  [{:keys [icon on-click rotate? title class-name draggable]}]
   [:div (cond-> {:class-name (get-class-name (cond-> {"wc-icon"          true
                                                       (str "icon-" icon) true}
                                                      (some? rotate?) (assoc "rotating" rotate?)
                                                      (some? class-name) (assoc class-name true)))}
                 (fn? on-click) (assoc :on-click on-click)
-                (some? title) (assoc :title title))
+                (some? title) (assoc :title title)
+                (some? draggable) (assoc :draggable draggable))
    (get icons icon)])

@@ -1,0 +1,196 @@
+.page--edit-course {
+    .page--edit-course--header {
+        .activities {
+            @include icon-color($color-blue);
+        }
+    }
+
+    .list-item-stats {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        font-weight: 700;
+        font-size: 14px;
+
+        @include icon-color($color-pink);
+
+        .activity {
+            @include icon-color($color-blue);
+        }
+    }
+
+    .drag-over {
+        & > * {
+            border-color: $color-pink !important;
+            position: relative;
+
+            &:after {
+                content: "";
+                display: none;
+                width: 100%;
+                height: 0;
+                border-top: solid 2px $color-pink;
+
+                position: absolute;
+                left: 0;
+            }
+        }
+
+        &.drag-over-top {
+            & > * {
+                &:after {
+                    display: block;
+                    top: -7px;
+                }
+            }
+        }
+
+        &.drag-over-bottom {
+            & > * {
+                &:after {
+                    display: block;
+                    bottom: -7px;
+                }
+            }
+        }
+    }
+
+    .list-item {
+        &.selected {
+            border-color: $color-pink;
+        }
+    }
+
+    .sub-list {
+        padding-left: 20px;
+    }
+
+    .activities-list-item {
+        .item-image {
+            $height: 80px;
+
+            height: $height;
+            width: $height * 1.75;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+    }
+
+    .empty-list-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: #fcfcfc;
+        border-radius: 8px;
+        padding: 16px 32px;
+
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .reorder-control {
+        &:hover {
+            cursor: grab;
+            background-color: #{$color-pink + "0F"};
+        }
+    }
+
+    .actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        .actions-list-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            border: solid 1px $color-pink;
+            border-radius: 6px;
+            padding: 4px 8px;
+
+            font-weight: 500;
+            font-size: 14px;
+
+            @include icon-color($color-pink);
+
+            &.button-item {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #{$color-pink + "0F"};
+                }
+            }
+        }
+    }
+
+    .course-form {
+        flex: 1 1;
+    }
+
+    .available-activities {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-height: 0;
+    }
+
+    .back-button {
+        @include icon-color($color-pink);
+    }
+
+    .search {
+        @include icon-color($color-pink);
+    }
+
+    .available-activities-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        overflow: auto;
+        padding-right: 10px;
+
+        @include with-small-scroll-bar();
+    }
+
+    .available-activities-list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+
+        padding: 8px;
+        border: solid 1px #DCE3F5;
+        border-radius: 6px;
+
+        .icon {
+            @include icon-color($color-pink);
+        }
+
+        .name {
+            flex: 1 1;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        .preview {
+            $height: 54px;
+            height: $height;
+            width: $height * 1.77;
+            min-width: $height * 1.77;
+        }
+    }
+}

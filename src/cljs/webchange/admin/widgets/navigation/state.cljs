@@ -22,9 +22,12 @@
          {:id   :lesson-builder
           :text "Lesson builder"
           :icon "create-game"}
-         {:id   :libraries
-          :text "Libraries"
-          :icon "book-library"}
+         {:id       :library
+          :text     "Library"
+          :icon     "book-library"
+          :children [{:id    :courses
+                      :text  "Courses"
+                      :route {:page :courses}}]}
          {:id       :accounts
           :text     "Accounts"
           :icon     "users"

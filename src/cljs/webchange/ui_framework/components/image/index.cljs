@@ -3,31 +3,50 @@
     [reagent.core :as r]
     [webchange.ui-framework.components.circular-progress.index :as circular-progress]
     [webchange.ui-framework.components.icon.index :as icon]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui-framework.components.image.observer :as observer]
+    [webchange.ui-framework.components.utils :refer [get-class-name get-uid]]))
+
+(defn- load-image
+  [src on-load oe-error]
+  (let [img (js/Image.)]
+    (set! (.-onload img) on-load)
+    (set! (.-onerror img) oe-error)
+    (set! (.-src img) src)))
 
 (defn component
-  []
-  (let [status (r/atom :loading)
+  [{:keys [id]}]
+  (let [id (or id (get-uid))
+        el (atom nil)
+        status (r/atom :loading)
         handle-load (fn []
                       (reset! status :loaded))
         handle-error (fn []
-                       (reset! status :error))]
+                       (reset! status :error))
+        handle-ref (fn [ref]
+                     (when (some? ref)
+                       (reset! el ref)))]
     (r/create-class
       {:display-name "wc-image"
 
        :component-did-mount
        (fn [this]
-         (let [{:keys [src]} (r/props this)
-               img (js/Image.)]
-           (set! (.-onload img) handle-load)
-           (set! (.-onerror img) handle-error)
-           (set! (.-src img) src)))
+         (let [{:keys [src lazy?]} (r/props this)
+               load #(load-image src handle-load handle-error)]
+           (if lazy?
+             (observer/observe @el id load)
+             (load))))
+
+       :component-will-unmount
+       (fn []
+         (observer/un-observe id))
 
        :reagent-render
        (fn [{:keys [class-name src]}]
-         [:div {:class-name (get-class-name {"wc-image" true
+         [:div {:id         id
+                :class-name (get-class-name {"wc-image" true
                                              class-name (some? class-name)})
-                :title      src}
+                :title      src
+                :ref        handle-ref}
           (case @status
             :loading [:div.loading
                       [circular-progress/component]]
