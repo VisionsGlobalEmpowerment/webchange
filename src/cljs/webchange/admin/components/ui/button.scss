@@ -1,23 +1,42 @@
 .wc-button {
-    padding: 10px 26px;
+    &.color-primary {
+        background: $button-background-color;
+        border: solid 1px transparent;
+        border-radius: $button-border-radius;
+        color: #fff;
 
-    background: $button-background-color;
-    border: none;
-    border-radius: $button-border-radius;
+        &:hover {
+            background: $button-background-color-hovered;
+        }
+
+        &:active {
+            background: $button-background-color-active;
+        }
+
+        &:disabled {
+            background: $button-background-color-disabled;
+        }
+
+        &.variant-outlined {
+            background: transparent;
+            border-color: $button-background-color;
+            color: $button-background-color;
+
+            &:hover {
+                background: $button-background-color-hovered-light;
+            }
+
+            &:active {
+                background: $button-background-color-active-light;
+            }
+        }
+    }
+
+    &.size-medium {
+        padding: 10px 26px;
+    }
 
     &.with-loading {
         padding: 0;
-    }
-
-    &:hover {
-        background: $button-background-color-hovered;
-    }
-
-    &:active {
-        background: $button-background-color-active;
-    }
-
-    &:disabled {
-        background: $button-background-color-disabled;
     }
 }

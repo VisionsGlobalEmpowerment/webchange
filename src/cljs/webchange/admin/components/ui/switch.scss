@@ -17,6 +17,11 @@
 
         &:checked {
             & + label {
+                &::before {
+                    background: transparent;
+                    border-color: #DCE3F5;
+                }
+
                 &::after {
                   background: $color-pink;
                 }

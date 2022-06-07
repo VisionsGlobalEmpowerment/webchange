@@ -18,7 +18,7 @@
 
 (defn- description-item
   [{:keys [t d]}]
-  [:<>x
+  [:<>
    [:dt t]
    [:dd d]])
 
