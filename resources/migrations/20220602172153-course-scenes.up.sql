@@ -10,5 +10,5 @@ ALTER TABLE ONLY scenes
     ADD COLUMN lang text,
     ADD COLUMN image_src text,
     ADD COLUMN status text,
-    ADD COLUMN owner_id int REFERENCES users (id);
+    ADD COLUMN owner_id int;
 --;;

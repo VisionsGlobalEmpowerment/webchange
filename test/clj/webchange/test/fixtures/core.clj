@@ -27,6 +27,7 @@
 (def default-school-id 1)
 
 (defn clear-db []
+  (db/clear-table :course_scenes)
   (db/clear-table :collaborators)
   (db/clear-table :school_courses)
   (db/clear-table :children)
@@ -115,12 +116,15 @@
          course-data (->> (merge defaults options)
                           (db/transform-keys-one-level ->snake_case_keyword))
          [{course-id :id}] (db/create-course! course-data)
-         data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
+         data {:initial-scene "test-scene"
+               :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}]
+               :templates {}
+               :scene-list {}}
          [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id (:owner_id course-data) :created_at (jt/local-date-time)})]
      (->> (assoc course-data
-                 :id course-id
-                 :data data
-                 :version-id version-id)
+            :id course-id
+            :data data
+            :version-id version-id)
           (db/transform-keys-one-level ->kebab-case-keyword)))))
 
 (defn scene-created
@@ -133,6 +137,7 @@
          [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
          data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
          [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time) :description "test"})]
+     (db/insert-course-scenes {:course_scenes [[course-id scene-id]]})
      {:id scene-id
       :course-name course-name
       :course-slug course-slug

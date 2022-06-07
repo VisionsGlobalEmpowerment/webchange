@@ -91,13 +91,24 @@
         latest-version (db/get-latest-course-version {:course_id course-id})]
     (:data latest-version)))
 
+(defn- ->scene-list-item
+  [{:keys [id name slug image-src]}]
+  {:id id
+   :name name
+   :slug slug
+   :preview image-src})
+
 (defn get-course-data
   [course-slug]
-  (let [course (if (contains? hardcoded course-slug)
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        course (if (contains? hardcoded course-slug)
                  (scene/get-course course-slug)
                  (get-course-latest-version course-slug))
-        templates (get-course-templates course-slug)]
-    (merge course {:templates templates})))
+        scene-list (->> (db/scene-list {:course_id course-id})
+                        (map ->scene-list-item)
+                        (map (juxt :slug identity))
+                        (into {}))]
+    (merge course {:scene-list scene-list})))
 
 (defn- get-scene-skills
   [scene-id]
@@ -110,7 +121,7 @@
 (defn- scene-slug->id
   [course-slug scene-name]
   (let [{course-id :id} (db/get-course {:slug course-slug})
-        {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]
+        {scene-id :id} (db/get-course-scene {:course_id course-id :slug scene-name})]
     {:course-id course-id :scene-id scene-id}))
 
 (defn get-scene-latest-version
@@ -144,7 +155,7 @@
         (assoc :scene-slug scene-slug))))
 
 (defn get-or-create-scene! [course-id scene-name]
-  (if-let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]
+  (if-let [{scene-id :id} (db/get-course-scene {:course_id course-id :slug scene-name})]
     scene-id
     (let [[{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})]
       scene-id)))
@@ -572,6 +583,7 @@
                      :owner_id    owner-id
                      :created_at  created-at
                      :description "Create"})
+    (db/insert-course-scenes {:course_scenes [[course-id scene-id]]})
     {:scene-id scene-id}))
 
 (defn- name-in-list? [{name :name} names]
@@ -662,6 +674,7 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         scene-slug (scene-slug scene-name)
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
+    (db/insert-course-scenes {:course_scenes [[course-id scene-id]]})
     [true (->website-scene {:id          scene-id
                             :name        scene-name
                             :scene-slug  scene-slug
@@ -697,15 +710,10 @@
 (defn set-activity-preview!
   [course-slug scene-slug {:keys [preview]} owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
-        {scene-id :id} (db/get-scene {:course_id course-id :name scene-slug})
-        {course-data :data} (db/get-latest-course-version {:course_id course-id})
-        created-at (jt/local-date-time)]
-    (db/save-course! {:course_id  course-id
-                      :data       (assoc-in course-data [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword) :preview] preview)
-                      :owner_id   owner-id
-                      :created_at created-at})
+        {scene-id :id scene-name :name} (db/get-course-scene {:course_id course-id :slug scene-slug})]
+    (db/update-scene-image! {:id scene-id :image_src preview})
     [true {:id          scene-id
-           :name        (get-in course-data [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword) :name])
+           :name        scene-name
            :scene-slug  scene-slug
            :course-slug course-slug}]))
 

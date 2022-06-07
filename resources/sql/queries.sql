@@ -32,7 +32,7 @@ WHERE id = :id
 -- :name edit-teacher-user! :! :n
 -- :doc edit user
 UPDATE users
-SET first_name = :first_name, last_name = :last_name, password = :password
+SET first_name = :first_name, last_name = :last_name
 WHERE id = :id
 
 -- :name edit-account! :! :n
@@ -156,7 +156,7 @@ SELECT * from courses where name=:name;
 
 -- :name create-scene! :<!
 -- :doc creates a new scene record
-INSERT INTO scenes (course_id, name) VALUES (:course_id, :name) RETURNING id
+INSERT INTO scenes (course_id, name, slug) VALUES (:course_id, :name, :name) RETURNING id
 
 -- :name save-scene! :<!
 -- :doc creates a new course version record
@@ -170,6 +170,14 @@ SELECT * from scenes
 WHERE course_id = :course_id AND name = :name
 ORDER BY id ASC LIMIT 1;
 
+-- :name get-course-scene :? :1
+-- :doc retrieve a scene record given the course id and the name
+SELECT s.* from scenes s
+INNER JOIN course_scenes cs
+ON s.id = cs.scene_id
+WHERE cs.course_id = :course_id AND s.slug = :slug
+ORDER BY s.id ASC LIMIT 1;
+
 -- :name get-scene-by-id :? :1
 -- :doc retrieve a scene record given the id
 SELECT * from scenes
@@ -181,8 +189,9 @@ SELECT * from scenes;
 
 -- :name get-scenes-by-course-id :? :*
 -- :doc retrieve scenes by course id
-SELECT * from scenes
-WHERE course_id = :course_id;
+SELECT s.* from scenes s
+INNER JOIN course_scenes cs ON s.id = cs.scene_id
+WHERE cs.course_id = :course_id;
 
 -- :name get-scene-version :? :1
 -- :doc retrieve scene version by id
@@ -254,7 +263,24 @@ DELETE FROM course_scenes
 WHERE course_id = :course_id
 AND scene_id IN (:v*:scene_ids)
 
+-- :name delete-course-scenes-by-scene-id! :! :n
+-- :doc Delete course scenes
+DELETE FROM course_scenes
+WHERE scene_id = :scene_id
+
 -- :name course-scenes :? :*
 -- :doc retrieve course scenes by course id
 SELECT * FROM course_scenes
 WHERE course_id = :course_id
+
+-- :name scene-list :? :*
+-- :doc retrieve course scenes by course id
+SELECT s.* FROM scenes s
+INNER JOIN course_scenes cs ON s.id = cs.scene_id
+WHERE cs.course_id = :course_id
+
+-- :name update-scene-image! :! :n
+-- :doc updates an existing course record status
+UPDATE scenes
+SET image_src = :image_src
+WHERE id = :id

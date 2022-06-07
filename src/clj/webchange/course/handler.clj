@@ -392,7 +392,6 @@
     (GET "/:course-slug/scenes-with-skills" []
       :path-params [course-slug :- s/Str]
       :tags ["skill"]
-      :return [ActivityWithSkills]
       :summary "Returns list of skills for each scene inside given course"
       (-> course-slug core/get-course-scene-skills response))
     (PUT "/:course-slug/scenes/:scene-slug/preview" request

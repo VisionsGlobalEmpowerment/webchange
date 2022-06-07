@@ -37,15 +37,15 @@
 
 (defn class-teacher?
   [class-id user-id]
-  (let [{teacher? :result} (db/is-class-teacher? {:class-id class-id :user-id user-id})]
+  (let [{teacher? :result} (db/is-class-teacher? {:class_id class-id :user_id user-id})]
     teacher?))
 
 (defn school-teacher?
   [school-id user-id]
-  (let [{teacher? :result} (db/is-school-teacher? {:school-id school-id :user-id user-id})]
+  (let [{teacher? :result} (db/is-school-teacher? {:school_id school-id :user_id user-id})]
     teacher?))
 
 (defn school-admin?
   [school-id user-id]
-  (let [{admin? :result} (db/is-school-admin? {:school-id school-id :user-id user-id})]
+  (let [{admin? :result} (db/is-school-admin? {:school_id school-id :user_id user-id})]
     admin?))

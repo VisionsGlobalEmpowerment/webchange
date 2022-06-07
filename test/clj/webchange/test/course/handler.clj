@@ -154,10 +154,11 @@
         scene (f/scene-created course)
         edited-value "test-edited"
         _ (f/save-activity-preview! (:course-slug scene) (:name scene) user-id {:preview edited-value})
-        retrieved-value (-> (f/get-course (:course-slug scene))
-                            :body
-                            slurp
-                            (json/read-str :key-fn keyword)
+        retrieved-body (-> (f/get-course (:course-slug scene))
+                           :body
+                           slurp
+                           (json/read-str :key-fn keyword))
+        retrieved-value (-> retrieved-body
                             :scene-list
                             (get (keyword (:name scene)))
                             :preview)]
