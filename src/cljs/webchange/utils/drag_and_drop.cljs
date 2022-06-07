@@ -80,10 +80,19 @@
       :bottom (do (remove-class target "drag-over-top")
                   (add-class target "drag-over-bottom")))))
 
+(defn- clear-drag-over-classes
+  []
+  (-> (.querySelectorAll js/document "[draggable]")
+      (.forEach (fn [item]
+                  (remove-class item "drag-over-top")
+                  (remove-class item "drag-over-bottom")
+                  (remove-class item "drag-over")))))
+
 (defn- handle-drag-enter
   [drop-allowed? event]
   (swap! hover-counter inc)
   (let [target-data (get-data-set event)]
+    (clear-drag-over-classes)
     (when (drop-allowed? @dragged-item target-data)
       (-> (event->target event)
           (add-class "drag-over")))))
