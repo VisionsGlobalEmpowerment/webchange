@@ -202,7 +202,8 @@
               :class-name "icon"}]
     [:div.name name]
     [ui/image {:src        preview
-               :class-name "preview"}]]])
+               :class-name "preview"
+               :lazy?      true}]]])
 
 (defn- available-activities-list
   []
