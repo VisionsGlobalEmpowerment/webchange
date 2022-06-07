@@ -27,6 +27,7 @@
 
             &:after {
                 content: "";
+                display: none;
                 width: 100%;
                 height: 0;
                 border-top: solid 2px $color-pink;
@@ -39,6 +40,7 @@
         &.drag-over-top {
             & > * {
                 &:after {
+                    display: block;
                     top: -7px;
                 }
             }
@@ -47,6 +49,7 @@
         &.drag-over-bottom {
             & > * {
                 &:after {
+                    display: block;
                     bottom: -7px;
                 }
             }
