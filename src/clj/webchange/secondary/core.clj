@@ -511,6 +511,7 @@
 
 (defn delete-scene-by-id!
   [{:keys [id]}]
+  (db/delete-course-scenes-by-scene-id! {:scene_id id})
   (db/delete-scene-version-by-scene-id! {:scene_id id})
   (db/delete-scene-by-id! {:id id}))
 

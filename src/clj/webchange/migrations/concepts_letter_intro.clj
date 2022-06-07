@@ -87,13 +87,15 @@
                           (merge-concept-dialogs concept)
                           (set-created-params (concept->args concept)))
         new-scene-name (str scene-name "-" (:letter concept))
-        course-scene-name (-> course-data :scene-list
-                              (get (keyword scene-name))
+        course-scene (-> course-data :scene-list
+                         (get (keyword scene-name)))
+        course-scene-name (-> course-scene
                               (get :name)
                               (generate-name (:letter concept)))]
     (save-scene! course-id new-scene-name activity-data)
     (save-course! course-id (-> course-data
-                                (assoc-in [:scene-list (keyword new-scene-name)] {:name course-scene-name})
+                                (assoc-in [:scene-list (keyword new-scene-name)] {:name course-scene-name
+                                                                                  :preview (:preview course-scene)})
                                 (assoc-in [:levels level-idx :lessons lesson-idx :activities activity-idx :activity] new-scene-name)))))
 
 (defn- process-course

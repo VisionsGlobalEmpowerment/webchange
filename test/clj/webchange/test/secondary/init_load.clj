@@ -161,11 +161,10 @@
     (core/process-data dump)
     (let [scene-new (db/get-scene {:course_id (:course-id scene-data) :name (:name scene-data)})
           scene-version-new (db/get-latest-scene-version {:scene_id (:id scene-data)})]
-      (assert (not (nil? scene-old)))
-      (assert (not (nil? scene-version-old)))
-      (assert (= scene-old scene-new))
-      (assert (= (dissoc scene-version-old :id :created-at) (dissoc scene-version-new :id :created-at)))
-      )))
+      (is (not (nil? scene-old)))
+      (is (not (nil? scene-version-old)))
+      (is (= scene-old scene-new))
+      (is (= (dissoc scene-version-old :id :created-at) (dissoc scene-version-new :id :created-at))))))
 
 (deftest can-import-activity-stats
   (let [user (f/student-created)
