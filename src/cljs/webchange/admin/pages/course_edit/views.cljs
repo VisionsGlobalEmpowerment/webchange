@@ -77,8 +77,10 @@
 
 (defn- activities-list-item
   [{:keys [idx name preview level-idx lesson-idx]}]
-  (let [handle-remove-click #(do (.stopPropagation %)
-                                 (re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx]))]
+  (let [handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
+        handle-remove-click #(do (.stopPropagation %)
+                                 (ui/with-confirmation {:message    "Remove Activity?"
+                                                        :on-confirm handle-remove-activity}))]
     [draggable {:data          {:type     "activity"
                                 :level    level-idx
                                 :lesson   lesson-idx
@@ -113,8 +115,10 @@
   [{:keys [idx name activities-number level-idx]}]
   (r/with-let [expanded? (r/atom false)
                handle-item-click #(swap! expanded? not)
+               handle-remove-lesson #(re-frame/dispatch [::state/remove-lesson level-idx idx])
                handle-remove-click #(do (.stopPropagation %)
-                                        (re-frame/dispatch [::state/remove-lesson level-idx idx]))]
+                                        (ui/with-confirmation {:message    "Remove Lesson?"
+                                                               :on-confirm handle-remove-lesson}))]
     [:<>
      [draggable {:data          {:type   "lesson"
                                  :level  level-idx
@@ -155,8 +159,10 @@
   [{:keys [idx name lessons-number]}]
   (r/with-let [expanded? (r/atom false)
                handle-item-click #(swap! expanded? not)
+               handle-remove-level #(re-frame/dispatch [::state/remove-level idx])
                handle-remove-click #(do (.stopPropagation %)
-                                        (re-frame/dispatch [::state/remove-level idx]))]
+                                        (ui/with-confirmation {:message    "Remove Level?"
+                                                               :on-confirm handle-remove-level}))]
     [:<>
      [draggable {:data          {:type  "level"
                                  :level idx}

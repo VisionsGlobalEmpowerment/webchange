@@ -9,8 +9,10 @@ body {
     height: 100%;
     background-color: #fff;
 
-    @import "mixins";
-    @import "components/styles";
-    @import "widgets/styles";
-    @import "pages/styles";
+
 }
+
+@import "mixins";
+@import "components/styles";
+@import "widgets/styles";
+@import "pages/styles";
