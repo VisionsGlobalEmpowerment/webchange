@@ -10,7 +10,8 @@
             [webchange.dashboard.events :as dashboard-events]))
 
 (def routes ["/" {""                  :login
-                  "student-login"     :student-login
+                  "student-login"     {[""]             :student-login
+                                       ["/" :school-id] :school-student-login}
                   "wizard"            :wizard               ;deprecated
                   "game-changer-beta" :game-changer
                   "game-changer"      {[""]                                                         :game-changer

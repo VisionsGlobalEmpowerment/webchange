@@ -53,7 +53,7 @@
   (fn [{:keys [db]} [_]]
     (let [current-school (-> db :user :school-id)]
       (if current-school
-        {:dispatch [::events/redirect :student-login]}
+        {:dispatch [::events/redirect :school-student-login :school-id current-school]}
         {:dispatch [::login-as-parent]}))))
 
 (re-frame/reg-event-fx

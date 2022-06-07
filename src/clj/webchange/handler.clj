@@ -131,6 +131,7 @@
   (GET "/" [] (public-route))
   (GET "/login" [] (public-route))
   (GET "/student-login" [] (public-student-route))
+  (GET "/student-login/:school-id" [] (public-student-route))
   (GET "/register" [] (public-route))
 
   (GET "/s/:course-id/:scene-id" [] (public-route))

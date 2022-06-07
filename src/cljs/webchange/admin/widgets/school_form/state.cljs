@@ -133,3 +133,22 @@
   (fn [[callback & params]]
     (when (fn? callback)
       (apply callback params))))
+
+;; Login link
+(re-frame/reg-sub
+  ::login-link
+  :<- [path-to-db]
+  #(let [school-id (-> (get-form-data %)
+                       (get :id))]
+     (str js/location.protocol "//" js/location.host "/student-login/" school-id)))
+
+(re-frame/reg-event-fx
+  ::copy-login-link
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} _]
+    (let [school-id (-> (get-form-data db)
+                        (get :id))
+          clipboard (.-clipboard js/navigator)
+          link (str js/location.protocol "//" js/location.host "/student-login/" school-id)]
+      (.writeText clipboard link))
+    {}))

@@ -15,14 +15,20 @@
                [(keyword k) v]))))
 
 (re-frame/reg-cofx
-  :redirect-param
-  (fn [coeffects _]
-    (assoc coeffects :redirect (:redirect (get-url-params)))))
+ :redirect-param
+ (fn [coeffects _]
+   (assoc coeffects :redirect (:redirect (get-url-params)))))
+
+(re-frame/reg-event-fx
+  ::init-student-login
+  (fn [{:keys [db]} [_ school-id]]
+    (when (seq school-id)
+      {:db (assoc-in db [:current-school] (js/parseInt school-id))})))
 
 (re-frame/reg-event-fx
   ::student-login
   (fn [{:keys [db]} [_ access-code]]
-    (let [current-school (:school-id db)
+    (let [current-school (or (:current-school db) (:school-id db))
           credentials {:school-id current-school :access-code access-code}]
       {:db         (assoc-in db [:loading :student-login] true)
        :http-xhrio {:method          :post

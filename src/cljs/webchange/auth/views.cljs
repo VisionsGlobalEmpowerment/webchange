@@ -97,40 +97,42 @@
     (re-frame/dispatch [::auth.events/student-login @code-ratom])
     (reset! code-ratom "")))
 
-(defn student-access-form []
+(defn student-access-form
+  [school-id]
+  (re-frame/dispatch [::auth.events/init-student-login school-id])
   (r/with-let [code (r/atom "")]
-              (let [loading @(re-frame/subscribe [:loading])
-                    errors @(re-frame/subscribe [:errors])
-                    styles (get-styles)
-                    img-src "/icons/backspace.svg"]
-                (cond
-                  (:init-current-school loading) [ui/circular-progress]
-                  (:student-login loading) [ui/circular-progress]
-                  :else
-                  [:div {:style (:student-access-form styles)}
-                   [:div
-                    [ui/typography {:variant "h2"
-                                    :style   (:title styles)}
-                     "Student Access"]
-                    (when (:student-login errors)
-                      [ui/chip {:color "secondary"
-                                :label (-> errors :student-login :form)}])]
+    (let [loading @(re-frame/subscribe [:loading])
+          errors @(re-frame/subscribe [:errors])
+          styles (get-styles)
+          img-src "/icons/backspace.svg"]
+      (cond
+        (:init-current-school loading) [ui/circular-progress]
+        (:student-login loading) [ui/circular-progress]
+        :else
+        [:div {:style (:student-access-form styles)}
+         [:div
+          [ui/typography {:variant "h2"
+                          :style   (:title styles)}
+           "Student Access"]
+          (when (:student-login errors)
+            [ui/chip {:color "secondary"
+                      :label (-> errors :student-login :form)}])]
 
-                   ;;  Back Button
-                   [:div {:style (:bckspc-div styles)}
-                    [code-form @code]
-                    [:div {:style (:bckspc-btn styles)
-                           :onClick (fn [e]
-                                      (.preventDefault e)
-                                      (reset! code (subs @code 0 (- (count @code) 1))))}
-                     [:img {:style (:bckspc-img styles)
-                            :src img-src}]]]
+         ;;  Back Button
+         [:div {:style (:bckspc-div styles)}
+          [code-form @code]
+          [:div {:style (:bckspc-btn styles)
+                 :onClick (fn [e]
+                            (.preventDefault e)
+                            (reset! code (subs @code 0 (- (count @code) 1))))}
+           [:img {:style (:bckspc-img styles)
+                  :src img-src}]]]
 
-                   [:div {:style (:num-pad styles)}
-                    [ui/grid {:container     true
-                              :align-content "center"
-                              :align-items   "center"}
-                     (for [number ["1" "2" "3" "4" "5" "6" "7" "8" "9"]]
-                       ^{:key number}
-                       [ui/grid {:item true :xs 4 :style (:button-container styles)} [number-form number #(enter-code code number)]])
-                     [ui/grid {:item true :xs 12 :style (:button-container styles)} [number-form "0" #(enter-code code "0")]]]]]))))
+         [:div {:style (:num-pad styles)}
+          [ui/grid {:container     true
+                    :align-content "center"
+                    :align-items   "center"}
+           (for [number ["1" "2" "3" "4" "5" "6" "7" "8" "9"]]
+             ^{:key number}
+             [ui/grid {:item true :xs 4 :style (:button-container styles)} [number-form number #(enter-code code number)]])
+           [ui/grid {:item true :xs 12 :style (:button-container styles)} [number-form "0" #(enter-code code "0")]]]]]))))

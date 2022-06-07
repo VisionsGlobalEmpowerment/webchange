@@ -1190,7 +1190,7 @@
           sandbox? (-> db :sandbox :enabled)]
       (when-not sandbox?
         (if current-school
-          {:dispatch [::events/redirect "/student-login"]}
+          {:dispatch [::events/redirect :school-student-login :school-id current-school]}
           {:dispatch [::events/location :logout]})))))
 
 (re-frame/reg-event-fx

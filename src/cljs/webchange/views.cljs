@@ -116,7 +116,8 @@
 
                ;; student dashboard
                :student-login [student-access-form]
-
+               :school-student-login [student-access-form (:school-id route-params)]
+               
                ;; parent dashboard
                :parent-dashboard [parent-dashboard/dashboard]
                :parent-add-student [parent-dashboard/add-student]
