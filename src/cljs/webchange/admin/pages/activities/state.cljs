@@ -59,3 +59,17 @@
     {:db (-> db
              (set-activities-loading false)
              (set-activities data))}))
+
+(re-frame/reg-event-fx
+  ::open-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ activity-id]]
+    (print "::open-activity")
+    {}))
+
+(re-frame/reg-event-fx
+  ::edit-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ activity-id]]
+    (print "::edit-activity")
+    {}))

@@ -1,0 +1,37 @@
+.page--activities {
+    .activities-list {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        column-gap: 18px;
+        row-gap: 18px;
+    }
+
+    .activities-list-item {
+        border-radius: 6px;
+        overflow: hidden;
+
+        .preview {
+            border-radius: 6px;
+            overflow: hidden;
+            height: 120px
+        }
+
+        .data {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-left: 8px;
+            margin-top: 4px;
+
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 12px;
+        }
+
+        &:hover {
+            cursor: pointer;
+            box-shadow: 0px 0px 9px 0px #3453a140;
+        }
+    }
+}

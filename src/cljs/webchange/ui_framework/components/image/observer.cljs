@@ -29,6 +29,6 @@
 
 (defn un-observe
   [id]
-  (let [{:keys [element]} (get @handlers id)]
-    (.unobserve observer element)
-    (swap! handlers dissoc id)))
+  (if-let [observable (get @handlers id)]
+    (do (.unobserve observer (:element observable))
+        (swap! handlers dissoc id))))

@@ -6,26 +6,32 @@
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]))
 
-#_(defn- courses-list-item
-  [{:keys [name slug]}]
-  (let [handle-edit-click #(re-frame/dispatch [::state/edit-course slug])]
-    [l/list-item {:name    name
-                  :actions [:<>
-                            [ui/icon-button {:icon     "edit"
-                                             :title    "Edit"
-                                             :variant  "light"
-                                             :on-click handle-edit-click}]]}]))
+(defn- activities-list-item
+  [{:keys [id name preview]}]
+  (let [handle-card-click #(re-frame/dispatch [::state/open-activity id])
+        handle-edit-click #(do (.stopPropagation %)
+                               (re-frame/dispatch [::state/edit-activity id]))]
+    [:div {:class-name "activities-list-item"
+           :on-click   handle-card-click}
+     [ui/image {:src        preview
+                :class-name "preview"
+                :lazy?      true}]
+     [:div.data
+      name
+      [ui/icon-button {:icon     "edit"
+                       :variant  "light"
+                       :on-click handle-edit-click}]]]))
 
-#_(defn- courses-list
+(defn- activities-list
   []
-  (let [loading? @(re-frame/subscribe [::state/courses-loading?])
-        courses @(re-frame/subscribe [::state/courses])]
+  (let [loading? @(re-frame/subscribe [::state/activities-loading?])
+        activities @(re-frame/subscribe [::state/activities])]
     (if loading?
       [ui/loading-overlay]
-      [l/list {:class-name "courses-list"}
-       (for [{:keys [id] :as course} courses]
+      [:div {:class-name "activities-list"}
+       (for [{:keys [id] :as activity} activities]
          ^{:key id}
-         [courses-list-item course])])))
+         [activities-list-item activity])])))
 
 (defn page
   [props]
@@ -35,5 +41,4 @@
      [page/header {:title "Activities"
                    :icon  "activity"}]
      [page/main-content
-      ;[courses-list]
-      ]]))
+      [activities-list]]]))
