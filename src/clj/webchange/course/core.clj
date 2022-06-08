@@ -93,9 +93,9 @@
 
 (defn- ->scene-list-item
   [{:keys [id name slug image-src]}]
-  {:id id
-   :name name
-   :slug slug
+  {:id      id
+   :name    name
+   :slug    slug
    :preview image-src})
 
 (defn get-course-data
@@ -388,6 +388,15 @@
        (map (fn [[scene-id scene-data]]
               (->> (select-keys scene-data [:name :preview])
                    (merge {:id scene-id}))))))
+
+(defn get-available-activity
+  [activity-id]
+  (->> (get-available-activities)
+       (some (fn [{:keys [id] :as activity-data}]
+               (and (= id activity-id)
+                    activity-data)))
+       (merge {:created-at "2022-05-25T11:52:12.008679"
+               :last-edit  "2022-05-25T11:52:12.008679"})))
 
 (defn get-courses-by-website-user
   [website-user-id]

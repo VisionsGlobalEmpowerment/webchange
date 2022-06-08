@@ -5,6 +5,7 @@
     [webchange.admin.pages.account-edit.views :as account-edit]
     [webchange.admin.pages.account-my.views :as account-my]
     [webchange.admin.pages.activities.views :as activities]
+    [webchange.admin.pages.activity-edit.views :as activity-edit]
     [webchange.admin.pages.add-class.views :as add-class]
     [webchange.admin.pages.class-profile.views :as class-profile]
     [webchange.admin.pages.classes.views :as classes]
@@ -31,6 +32,7 @@
             :account-edit     account-edit/page
             :account-my       account-my/page
             :activities       activities/page
+            :activity-edit    activity-edit/page
             :add-class        add-class/page
             :add-school       add-school/page
             :add-student      add-student/page

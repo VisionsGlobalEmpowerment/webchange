@@ -42,14 +42,16 @@
 
        :reagent-render
        (fn [{:keys [class-name src]}]
-         [:div {:id         id
-                :class-name (get-class-name {"wc-image" true
-                                             class-name (some? class-name)})
-                :title      src
-                :ref        handle-ref}
-          (case @status
-            :loading [:div.loading
-                      [circular-progress/component]]
-            :loaded [:img {:src src}]
-            :error [:div.not-loaded
-                    [icon/component {:icon "image-broken"}]])])})))
+         (->> (r/current-component)
+              (r/children)
+              (into [:div {:id         id
+                           :class-name (get-class-name {"wc-image" true
+                                                        class-name (some? class-name)})
+                           :title      src
+                           :ref        handle-ref}
+                     (case @status
+                       :loading [:div.loading
+                                 [circular-progress/component]]
+                       :loaded [:img {:src src}]
+                       :error [:div.not-loaded
+                               [icon/component {:icon "image-broken"}]])])))})))

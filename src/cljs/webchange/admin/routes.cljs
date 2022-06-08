@@ -27,7 +27,8 @@
                             "/add"                          :add-course
                             ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
                                                              "/edit" :course-edit}}
-             "/activities" {"" :activities}
+             "/activities" {""                              :activities
+                            ["/" [#"[\w-%]+" :activity-id]] :activity-edit}
              "/accounts"   {"/my"                                :account-my
                             ["/add/" [#"[\w-%]+" :account-type]] :account-add
                             ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
