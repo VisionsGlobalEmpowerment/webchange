@@ -109,17 +109,22 @@
   #(get % available-activities-filter-key))
 
 (re-frame/reg-sub
+  ::activities-library
+  :<- [path-to-db]
+  #(get % :activities-library))
+
+(re-frame/reg-sub
   ::available-activities
-  :<- [::course-data]
+  :<- [::course-info]
+  :<- [::activities-library]
   :<- [::available-activities-filter]
-  (fn [[course-data filter-str]]
-    (cond->> (->> (get course-data :scene-list [])
-                  (map (fn [[activity-id activity-data]]
-                         (assoc activity-data :id activity-id))))
-             (-> filter-str empty? not) (filter (fn [{:keys [name]}]
-                                                  (and (string? name)
-                                                       (s/includes? (s/lower-case name)
-                                                                    (s/lower-case filter-str)))))
+  (fn [[{course-lang :lang} activities-library filter-str]]
+    (cond->> activities-library
+             :always (filter #(= course-lang (:lang %)))
+             (seq filter-str) (filter (fn [{:keys [name]}]
+                                        (and (string? name)
+                                             (s/includes? (s/lower-case name)
+                                                          (s/lower-case filter-str)))))
              :always (sort-by :name))))
 
 ;; Side Bar
@@ -182,7 +187,9 @@
      :dispatch-n [[::warehouse/load-course course-slug
                    {:on-success [::load-course-success]}]
                   [::warehouse/load-course-info course-slug
-                   {:on-success [::load-course-info-success]}]]}))
+                   {:on-success [::load-course-info-success]}]
+                  [::warehouse/load-available-activities
+                   {:on-success [::load-available-activities-success]}]]}))
 
 (re-frame/reg-event-fx
   ::load-course-success
@@ -197,6 +204,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ course-info]]
     {:db (-> db (set-course-info course-info))}))
+
+(re-frame/reg-event-fx
+  ::load-available-activities-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ activities]]
+    {:db (assoc db :activities-library activities)}))
 
 (re-frame/reg-event-fx
   ::set-course-info

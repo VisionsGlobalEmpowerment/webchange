@@ -85,7 +85,7 @@
   [value]
   (number? value))
 
-(defn- activity-name?
+(defn- activity-slug?
   [value]
   (or (string? value)
       (nil? value)))
@@ -165,8 +165,8 @@
 (defn add-activity
   ([course-data params]
    (add-activity course-data params {}))
-  ([course-data {:keys [activity-id target-level target-lesson target-activity position]} activity-data]
-   {:pre [(activity-name? activity-id)
+  ([course-data {:keys [scene-id activity-slug target-level target-lesson target-activity position]} activity-data]
+   {:pre [(activity-slug? activity-slug)
           (level-idx? target-level)
           (lesson-idx? target-lesson)
           (activity-idx? target-activity)
@@ -174,7 +174,8 @@
    (update course-data :levels l/update-nth (dec target-level)
            update :lessons l/update-nth (dec target-lesson)
            update :activities l/insert-at-position
-           (merge {:activity  activity-id
+           (merge {:scene-id  scene-id
+                   :activity  activity-slug
                    :unique-id (next-uid course-data)}
                   activity-data)
            (get-item-index target-activity position))))

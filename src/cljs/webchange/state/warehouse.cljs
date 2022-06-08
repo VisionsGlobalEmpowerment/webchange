@@ -1032,3 +1032,11 @@
                      :uri    (str "/api/classes/" class-id "/teachers")
                      :params data}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::load-available-activities
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-available-activities
+                     :method :get
+                     :uri    (str "/api/available-activities")}
+                    handlers)))

@@ -58,7 +58,8 @@
                    (re-frame/dispatch [::state/add-activity {:target-level    (:level target)
                                                              :target-lesson   (:lesson target)
                                                              :target-activity (:activity target)
-                                                             :activity-id     (:activity dragged)
+                                                             :activity-slug   (:activity dragged)
+                                                             :scene-id        (:id dragged)
                                                              :position        position}]))
       nil)))
 
@@ -194,9 +195,10 @@
        [levels-list-item level-data])]))
 
 (defn- available-activities-list-item
-  [{:keys [id name preview]}]
+  [{:keys [id slug name preview]}]
   [draggable {:data {:type     "activity"
-                     :activity id}}
+                     :activity slug
+                     :id id}}
    [:div.available-activities-list-item
     [ui/icon {:icon       "add-item"
               :class-name "icon"}]
