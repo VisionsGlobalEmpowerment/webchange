@@ -392,6 +392,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-available-activities
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-available-activities
+                     :method :get
+                     :uri    (str "/api/available-activities")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-books
   (fn [{:keys [_]} [_ {:keys [language]} handlers]]
     (create-request {:key    :load-course-books

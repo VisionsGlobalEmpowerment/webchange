@@ -473,6 +473,8 @@
   
   (GET "/api/available-courses" request
        (-> (core/get-available-courses) response))
+  (GET "/api/available-activities" request
+       (-> (core/get-available-activities) response))
   (PUT "/api/schools/:school-id/assign-course" request
        :coercion :spec
        :path-params [school-id :- ::course-spec/school-id]

@@ -5,33 +5,34 @@
     [webchange.admin.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-(def routes {""          :dashboard
-             "/"         :dashboard
-             "/schools"  {""                            :schools
-                          "/add"                        :add-school
-                          "/archived"                   :schools-archived
-                          ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
-                                                         "/classes"  {""                           :classes
-                                                                      "/add"                       :add-class
-                                                                      ["/" [#"[\w-%]+" :class-id]] {""          :class-profile
-                                                                                                    "/students" {""                             :class-students
-                                                                                                                 ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
-                                                         "/students" {""                             :students
-                                                                      "/add"                         :add-student
-                                                                      ["/" [#"[\w-%]+" :student-id]] :edit-student}
-                                                         "/teachers" {""                             :teachers
-                                                                      "/add"                         :add-teacher
-                                                                      ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
-                                                         "/courses"  {"" :school-courses}}}
-             "/courses"  {""                              :courses
-                          "/add"                          :add-course
-                          ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
-                                                           "/edit" :course-edit}}
-             "/accounts" {"/my"                                :account-my
-                          ["/add/" [#"[\w-%]+" :account-type]] :account-add
-                          ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
-                                                                "/reset-password" :password-reset}
-                          ["/" [#"[\w-%]+" :account-type]]     :accounts}})
+(def routes {""            :dashboard
+             "/"           :dashboard
+             "/schools"    {""                            :schools
+                            "/add"                        :add-school
+                            "/archived"                   :schools-archived
+                            ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
+                                                           "/classes"  {""                           :classes
+                                                                        "/add"                       :add-class
+                                                                        ["/" [#"[\w-%]+" :class-id]] {""          :class-profile
+                                                                                                      "/students" {""                             :class-students
+                                                                                                                   ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
+                                                           "/students" {""                             :students
+                                                                        "/add"                         :add-student
+                                                                        ["/" [#"[\w-%]+" :student-id]] :edit-student}
+                                                           "/teachers" {""                             :teachers
+                                                                        "/add"                         :add-teacher
+                                                                        ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
+                                                           "/courses"  {"" :school-courses}}}
+             "/courses"    {""                              :courses
+                            "/add"                          :add-course
+                            ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
+                                                             "/edit" :course-edit}}
+             "/activities" {"" :activities}
+             "/accounts"   {"/my"                                :account-my
+                            ["/add/" [#"[\w-%]+" :account-type]] :account-add
+                            ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
+                                                                  "/reset-password" :password-reset}
+                            ["/" [#"[\w-%]+" :account-type]]     :accounts}})
 
 (def sitemap
   {:dashboard {:schools {:school-profile   {:classes        {:add-class     true

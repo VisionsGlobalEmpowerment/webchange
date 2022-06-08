@@ -381,6 +381,14 @@
   (->> (db/get-courses-by-status-and-type {:type "course" :status "published"})
        (map ->website-course)))
 
+(defn get-available-activities
+  []
+  (->> (get-course-data "english")
+       (:scene-list)
+       (map (fn [[scene-id scene-data]]
+              (->> (select-keys scene-data [:name :preview])
+                   (merge {:id scene-id}))))))
+
 (defn get-courses-by-website-user
   [website-user-id]
   (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "course"})
