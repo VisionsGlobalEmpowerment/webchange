@@ -55,12 +55,13 @@
                                                               :target-lesson   (:lesson target)
                                                               :target-activity (:activity target)
                                                               :position        position}])
-                   (re-frame/dispatch [::state/add-activity {:target-level    (:level target)
-                                                             :target-lesson   (:lesson target)
-                                                             :target-activity (:activity target)
-                                                             :activity-slug   (:activity dragged)
-                                                             :scene-id        (:id dragged)
-                                                             :position        position}]))
+                   (re-frame/dispatch [::state/add-activity
+                                       {:target-level    (:level target)
+                                        :target-lesson   (:lesson target)
+                                        :target-activity (:activity target)
+                                        :activity-slug   (:activity dragged)
+                                        :position        position}
+                                       {:scene-id (:id dragged)}]))
       nil)))
 
 (defn- reorder-control
@@ -198,7 +199,7 @@
   [{:keys [id slug name preview]}]
   [draggable {:data {:type     "activity"
                      :activity slug
-                     :id id}}
+                     :id       id}}
    [:div.available-activities-list-item
     [ui/icon {:icon       "add-item"
               :class-name "icon"}]

@@ -274,9 +274,9 @@
 (re-frame/reg-event-fx
   ::add-activity
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ props]]
+  (fn [{:keys [db]} [_ props activity-data]]
     (let [new-course-data (-> (get-course-data db)
-                              (utils/add-activity props))]
+                              (utils/add-activity props activity-data))]
       {:db       (set-course-data db new-course-data)
        :dispatch [::save-course]})))
 
