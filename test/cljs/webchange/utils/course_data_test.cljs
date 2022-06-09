@@ -238,7 +238,7 @@
 
 (deftest add-course-activity
   (testing "Add activity before the first activity in the first lesson of the first level"
-    (let [actual-result (c/add-activity course-data {:activity-id     "new-activity"
+    (let [actual-result (c/add-activity course-data {:activity-slug   "new-activity"
                                                      :target-level    1
                                                      :target-lesson   1
                                                      :target-activity 1
@@ -256,7 +256,7 @@
         (is (= (:activity new-activity) "new-activity"))
         (is (= (:unique-id new-activity) 333)))))
   (testing "Add activity after the last activity in the last lesson of the last level"
-    (let [actual-result (c/add-activity course-data {:activity-id     "new-activity"
+    (let [actual-result (c/add-activity course-data {:activity-slug   "new-activity"
                                                      :target-level    3
                                                      :target-lesson   3
                                                      :target-activity 2

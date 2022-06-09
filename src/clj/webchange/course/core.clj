@@ -856,3 +856,10 @@
     {:id   course-id
      :name course-name
      :data (:data latest-version)}))
+
+(defn get-available-activities
+  []
+  (let [scenes (db/get-scenes)
+        ->activity (fn [{:keys [id name slug image-src lang]}]
+                     {:id id :name name :slug slug :preview image-src :lang lang})]
+    (map ->activity scenes)))

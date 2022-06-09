@@ -499,4 +499,9 @@
          (when-not (or (is-admin? user-id) (school/class-teacher? class-id user-id))
            (throw-unauthorized {:role :educator}))
          (-> (core/get-class-course class-id)
+             response)))
+  (GET "/api/available-activities" request
+       :coercion :spec
+       (let [user-id (current-user request)]
+         (-> (core/get-available-activities)
              response))))
