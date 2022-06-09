@@ -2,14 +2,17 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.activity-edit.state :as state]
+    [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]))
 
 (defn- activity-form
-  []
+  [{:keys [activity-id]}]
   (let [{:keys [name preview created-at last-edit]} @(re-frame/subscribe [::state/activity])
-        handle-edit-click #(re-frame/dispatch [::state/edit])
+        form-editable? @(re-frame/subscribe [::state/form-editable?])
+        handle-edit-click #(re-frame/dispatch [::state/set-form-editable true])
+        handle-save #(re-frame/dispatch [::state/set-form-editable false])
         handle-play-click #(re-frame/dispatch [::state/play])]
     [:div.activity-form
      [:h1
@@ -29,10 +32,13 @@
                         :on-click handle-edit-click}
         "Edit Activity"]]]
 
-     [:h2 "Activity Details"]]))
+     [:h2 "Activity Details"]
+     [activity-info-form {:activity-id activity-id
+                          :editable?   form-editable?
+                          :on-save     handle-save}]]))
 
 (defn page
-  [props]
+  [{:keys [activity-id] :as props}]
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [loading? @(re-frame/subscribe [::state/activity-loading?])]
@@ -42,4 +48,4 @@
        [page/main-content {:class-name "page--activity-edit--content"}
         (if loading?
           [ui/loading-overlay]
-          [activity-form])]])))
+          [activity-form {:activity-id activity-id}])]])))

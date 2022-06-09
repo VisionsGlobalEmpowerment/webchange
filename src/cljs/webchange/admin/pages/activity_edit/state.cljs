@@ -42,6 +42,23 @@
   :<- [path-to-db]
   #(get-activity %))
 
+;; Form editable
+
+(def form-editable-key :form-editable?)
+
+(re-frame/reg-sub
+  ::form-editable?
+  :<- [path-to-db]
+  #(get % form-editable-key false))
+
+(re-frame/reg-event-fx
+  ::set-form-editable
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db form-editable-key value)}))
+
+;;
+
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
@@ -58,14 +75,6 @@
     {:db (-> db
              (set-activity-loading false)
              (set-activity data))}))
-
-(re-frame/reg-event-fx
-  ::edit
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (get-activity db)]
-      (print "::edit" id)
-      {})))
 
 (re-frame/reg-event-fx
   ::play

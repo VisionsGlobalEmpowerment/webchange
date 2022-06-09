@@ -395,8 +395,10 @@
        (some (fn [{:keys [id] :as activity-data}]
                (and (= id activity-id)
                     activity-data)))
-       (merge {:created-at "2022-05-25T11:52:12.008679"
-               :last-edit  "2022-05-25T11:52:12.008679"})))
+       (merge {:created-at        "2022-05-25T11:52:12.008679"
+               :last-edit         "2022-05-25T11:52:12.008679"
+               :about             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+               :short-description "Lorem ipsum dolor sit amet."})))
 
 (defn get-courses-by-website-user
   [website-user-id]

@@ -146,13 +146,20 @@
 (defn- create-fake-request
   "Params:
    - {integer} [delay]: set response delay in ms"
-  [props
-   {:keys [on-success on-failure suppress-api-error?]}
-   {:keys [delay result result-data]
-    :or   {result :success}}]
-  {:dispatch (case result
-               :success [::generic-on-success-handler (assoc props :delay delay) on-success result-data]
-               :failure [::generic-failure-handler props on-failure suppress-api-error? result-data])})
+  ([props handlers]
+   (create-fake-request props handlers {}))
+  ([{:keys [key params uri] :as props}
+    {:keys [on-success on-failure suppress-api-error?]}
+    {:keys [delay result result-data]
+     :or   {result :success}}]
+   (let [message (str "Fake request " key)]
+     (logger/group-folded message)
+     (logger/log "uri" uri)
+     (logger/log "params" params)
+     (logger/group-end message))
+   {:dispatch (case result
+                :success [::generic-on-success-handler (assoc props :delay delay) on-success result-data]
+                :failure [::generic-failure-handler props on-failure suppress-api-error? result-data])}))
 
 ;;
 
@@ -406,6 +413,15 @@
                      :method :get
                      :uri    (str "/api/available-activities/" activity-id)}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::save-available-activity
+  (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
+    (create-fake-request {:key    :save-available-activity
+                          :method :put
+                          :uri    (str "/api/available-activities/" activity-id)
+                          :params data}
+                         handlers {:delay  3000})))
 
 (re-frame/reg-event-fx
   ::load-books
