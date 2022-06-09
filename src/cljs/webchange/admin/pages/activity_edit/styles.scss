@@ -8,7 +8,7 @@
         flex-direction: column;
         gap: 18px;
 
-        max-width: 670px;
+        width: 670px;
 
         h1 {
             font-weight: 700;
@@ -57,11 +57,21 @@
         }
 
         h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
             font-weight: 700;
             font-size: 14px;
             line-height: 16px;
             letter-spacing: -0.02em;
             margin: 0;
+        }
+
+        .remove-button {
+            @include icon-color($color-pink);
+            @include icon-size(16px);
+            @include icon-thickness(2);
         }
     }
 }

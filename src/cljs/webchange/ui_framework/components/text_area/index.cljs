@@ -22,7 +22,8 @@
         id (or id (when has-label? (random-uuid)))]
     [:div {:class-name (get-class-name (-> {"wc-text-area" true}
                                            (assoc (str "variant-" variant) true)
-                                           (assoc class-name (some? class-name))))}
+                                           (assoc class-name (some? class-name))))
+           :data-wrapper-for id}
      (when has-label?
        [:label {:for        id
                 :class-name "wc-text-area-label"}

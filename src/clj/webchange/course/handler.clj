@@ -18,6 +18,7 @@
     [webchange.dataset.library :as datasets-library]
     [webchange.templates.core :as templates]
     [webchange.school.core :as school]
+    [webchange.validation.specs.activity :as activity-spec]
     [webchange.validation.specs.course-spec :as course-spec]))
 
 (defn handle-save-scene
@@ -475,8 +476,15 @@
        (-> (core/get-available-courses) response))
   (GET "/api/available-activities" request
        (-> (core/get-available-activities) response))
-  (GET "/api/available-activities/:activity-id" [activity-id]
-       (-> activity-id core/get-available-activity response))
+  (GET "/api/available-activities/:activity-id" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/get-available-activity activity-id)
+          response)))
+
   (PUT "/api/schools/:school-id/assign-course" request
        :coercion :spec
        :path-params [school-id :- ::course-spec/school-id]

@@ -381,25 +381,6 @@
   (->> (db/get-courses-by-status-and-type {:type "course" :status "published"})
        (map ->website-course)))
 
-(defn get-available-activities
-  []
-  (->> (get-course-data "english")
-       (:scene-list)
-       (map (fn [[scene-id scene-data]]
-              (->> (select-keys scene-data [:name :preview])
-                   (merge {:id scene-id}))))))
-
-(defn get-available-activity
-  [activity-id]
-  (->> (get-available-activities)
-       (some (fn [{:keys [id] :as activity-data}]
-               (and (= id activity-id)
-                    activity-data)))
-       (merge {:created-at        "2022-05-25T11:52:12.008679"
-               :last-edit         "2022-05-25T11:52:12.008679"
-               :about             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-               :short-description "Lorem ipsum dolor sit amet."})))
-
 (defn get-courses-by-website-user
   [website-user-id]
   (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "course"})
@@ -882,3 +863,14 @@
         ->activity (fn [{:keys [id name slug image-src lang]}]
                      {:id id :name name :slug slug :preview image-src :lang lang})]
     (map ->activity scenes)))
+
+(defn get-available-activity
+  [activity-id]
+  (->> (get-available-activities)
+       (some (fn [{:keys [id] :as activity-data}]
+               (and (= id activity-id)
+                    activity-data)))
+       (merge {:created-at        "2022-05-25T11:52:12.008679"
+               :last-edit         "2022-05-25T11:52:12.008679"
+               :about             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+               :short-description "Lorem ipsum dolor sit amet."})))

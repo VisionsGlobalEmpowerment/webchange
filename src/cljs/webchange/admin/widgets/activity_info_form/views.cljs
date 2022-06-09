@@ -8,7 +8,7 @@
 (defn activity-info-form
   [{:keys [activity-id] :as props}]
   (re-frame/dispatch [::state/init props])
-  (fn [{:keys [editable? on-save]
+  (fn [{:keys [editable? class-name on-save]
         :or   {editable? true}}]
     (let [loading? @(re-frame/subscribe [::state/data-loading?])
           saving? @(re-frame/subscribe [::state/data-saving?])
@@ -20,12 +20,13 @@
                  :short-description {:label "Short Description"
                                      :type  :text}}
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
-      [form {:form-id   (-> (str "activity-" activity-id)
-                            (keyword))
-             :data      data
-             :model     model
-             :spec      ::spec/activity-info
-             :on-save   handle-save
-             :disabled? (not editable?)
-             :loading?  loading?
-             :saving?   saving?}])))
+      [form {:form-id    (-> (str "activity-" activity-id)
+                             (keyword))
+             :data       data
+             :model      model
+             :spec       ::spec/activity-info
+             :on-save    handle-save
+             :disabled?  (not editable?)
+             :loading?   loading?
+             :saving?    saving?
+             :class-name class-name}])))

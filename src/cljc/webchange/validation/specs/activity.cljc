@@ -3,6 +3,7 @@
     [clojure.spec.alpha :as s]
     [webchange.validation.predicates :as p]))
 
+(s/def ::id int?)
 (s/def ::about string?)
 
 (s/def ::activity-info (s/keys :req-un [::about]))

@@ -421,7 +421,15 @@
                           :method :put
                           :uri    (str "/api/available-activities/" activity-id)
                           :params data}
-                         handlers {:delay  3000})))
+                         handlers {:delay 3000})))
+
+(re-frame/reg-event-fx
+  ::remove-available-activity
+  (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
+    (create-fake-request {:key    :remove-available-activity
+                          :method :delete
+                          :uri    (str "/api/available-activities/" activity-id)}
+                         handlers {:delay 3000})))
 
 (re-frame/reg-event-fx
   ::load-books

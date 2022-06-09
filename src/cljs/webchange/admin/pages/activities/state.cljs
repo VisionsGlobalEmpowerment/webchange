@@ -48,7 +48,6 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (print "1")
     {:db       (set-activities-loading db true)
      :dispatch [::warehouse/load-available-activities
                 {:on-success [::load-activities-success]}]}))

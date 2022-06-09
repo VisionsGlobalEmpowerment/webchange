@@ -10,10 +10,16 @@
 (defn- activity-form
   [{:keys [activity-id]}]
   (let [{:keys [name preview created-at last-edit]} @(re-frame/subscribe [::state/activity])
+        handle-edit-click #(re-frame/dispatch [::state/edit])
+        handle-play-click #(re-frame/dispatch [::state/play])
+
         form-editable? @(re-frame/subscribe [::state/form-editable?])
-        handle-edit-click #(re-frame/dispatch [::state/set-form-editable true])
+        removing? @(re-frame/subscribe [::state/removing?])
+        handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
-        handle-play-click #(re-frame/dispatch [::state/play])]
+        handle-remove-activity #(re-frame/dispatch [::state/remove])
+        handle-remove-click #(ui/with-confirmation {:message    "Remove Activity?"
+                                                    :on-confirm handle-remove-activity})]
     [:div.activity-form
      [:h1
       name
@@ -32,10 +38,22 @@
                         :on-click handle-edit-click}
         "Edit Activity"]]]
 
-     [:h2 "Activity Details"]
+     [:h2
+      "Activity Details"
+      [ui/icon-button {:icon     (if form-editable? "close" "edit")
+                       :on-click handle-edit-info-click
+                       :variant  "light"}]]
      [activity-info-form {:activity-id activity-id
                           :editable?   form-editable?
-                          :on-save     handle-save}]]))
+                          :on-save     handle-save
+                          :class-name  "info-form"}]
+     (when-not form-editable?
+       [ui/icon-button {:icon       "remove"
+                        :variant    "light"
+                        :class-name "remove-button"
+                        :loading?   removing?
+                        :on-click   handle-remove-click}
+        "Delete Activity"])]))
 
 (defn page
   [{:keys [activity-id] :as props}]
