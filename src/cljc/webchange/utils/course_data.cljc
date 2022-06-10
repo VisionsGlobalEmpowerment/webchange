@@ -33,11 +33,6 @@
   ([lesson-data]
    (get lesson-data :activities [])))
 
-(defn get-activity-info
-  [course-data activity-name]
-  (-> (get course-data :scene-list)
-      (get (keyword activity-name))))
-
 (defn get-levels-count
   [course-data]
   (->> (get-levels-data course-data)

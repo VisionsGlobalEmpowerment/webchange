@@ -81,13 +81,18 @@
 (re-frame/reg-sub
   ::lesson-activities
   :<- [::course-data]
-  (fn [course-data [_ level-idx lesson-idx]]
-    (->> (utils/get-activities-data course-data (dec level-idx) (dec lesson-idx))
-         (map-indexed (fn [idx {:keys [activity unique-id]}]
-                        (let [activity-index (inc idx)]
-                          (merge {:id  unique-id
-                                  :idx activity-index}
-                                 (utils/get-activity-info course-data activity))))))))
+  :<- [::activities-library]
+  (fn [[course-data activities-library] [_ level-idx lesson-idx]]
+    (let [activities-library (->> activities-library
+                                  (map (fn [{:keys [slug] :as activity}]
+                                         [slug activity]))
+                                  (into {}))]
+      (->> (utils/get-activities-data course-data (dec level-idx) (dec lesson-idx))
+           (map-indexed (fn [idx {:keys [activity unique-id]}]
+                          (let [activity-index (inc idx)]
+                            (->> (get activities-library activity)
+                                 (merge {:id  unique-id
+                                         :idx activity-index})))))))))
 
 ;; Available Activities
 
