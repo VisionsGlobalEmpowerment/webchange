@@ -54,12 +54,15 @@
                           (set! (.-scrollLeft @container) (.-scrollWidth @container))))]
     (r/create-class
       {:display-name         "timeline"
-       :component-did-mount  (fn [] (scroll-to-end))
+       :component-did-mount  (fn []
+                               (re-frame/dispatch [::state/init])
+                               (scroll-to-end))
        :component-did-update (fn [] (scroll-to-end))
        :reagent-render
        (fn []
          (let [loading? @(re-frame/subscribe [::state/loading?])
                course-finished? @(re-frame/subscribe [::state/course-finished?])
+               course-lang @(re-frame/subscribe [::state/course-language])
                finished-activities @(re-frame/subscribe [::state/finished-activities])
                handle-next-click (fn [] (re-frame/dispatch [::state/open-next-activity]))
                handle-activity-click (fn [activity] (re-frame/dispatch [::state/open-activity activity]))]
@@ -82,5 +85,5 @@
                                    [button-connector])
                                  ^{:key "play-button"}
                                  (if course-finished?
-                                   [great-work-button]
+                                   [great-work-button {:lang course-lang}]
                                    [play-button {:on-click handle-next-click}])]))))]))})))

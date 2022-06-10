@@ -2,8 +2,12 @@
     width: $play-button-size;
     height: $play-button-size;
 
-    background: url("/images/student_dashboard/good_work.png");
+    background-image: url("/images/student_dashboard/good_work_eng.png");
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+
+    &.lang-spanish {
+        background-image: url("/images/student_dashboard/good_work_spa.png");
+    }
 }
