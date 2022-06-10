@@ -1,6 +1,6 @@
 node {
     checkout scm
-
+/*
     stage('Prepare') {
         sh 'cp -rf $HOME/build-cache/node_modules ./'
         sh 'cp -rf $HOME/build-cache/profiles.clj ./'
@@ -9,7 +9,7 @@ node {
     stage('Migrate test') {
         sh 'lein with-profile test migratus migrate'
     }
-
+    
     stage('Test clj') {
         sh 'lein test'
     }
@@ -23,7 +23,7 @@ node {
     stage('Cache results') {
         sh 'cp -rf ./node_modules $HOME/build-cache/'
     }
-
+*/
     if (env.BRANCH_NAME == 'backport') {
         stage('Build') {
             sh 'lein clean'
