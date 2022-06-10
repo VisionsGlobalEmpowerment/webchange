@@ -1,4 +1,4 @@
-(ns webchange.ui-framework.components.image.observer)
+(ns webchange.utils.observer)
 
 (defonce handlers (atom {}))
 
@@ -10,6 +10,14 @@
         (on-init))
       (swap! handlers update id merge {:initialised? true}))))
 
+(defn- destroy-observable
+  [id]
+  (let [{:keys [on-destroy initialised?]} (get @handlers id)]
+    (when initialised?
+      (when (fn? on-destroy)
+        (on-destroy))
+      (swap! handlers update id merge {:initialised? false}))))
+
 (defonce observer (js/IntersectionObserver.
                     (fn [entries]
                       (.forEach entries
@@ -17,15 +25,19 @@
                                   (let [intersection-ratio (.. entry -intersectionRatio)
                                         target-id (.. entry -target -id)
                                         visible? (> intersection-ratio 0)]
-                                    (when visible?
-                                      (init-observable target-id))))))))
+                                    (if visible?
+                                      (init-observable target-id)
+                                      (destroy-observable target-id))))))))
 
 (defn observe
-  [element id init-handler]
-  (swap! handlers assoc id {:element      element
-                            :on-init      init-handler
-                            :initialised? false})
-  (.observe observer element))
+  ([element id init-handler]
+   (observe element id init-handler nil))
+  ([element id init-handler destroy-handler]
+   (swap! handlers assoc id {:element      element
+                             :on-init      init-handler
+                             :on-destroy   destroy-handler
+                             :initialised? false})
+   (.observe observer element)))
 
 (defn un-observe
   [id]
