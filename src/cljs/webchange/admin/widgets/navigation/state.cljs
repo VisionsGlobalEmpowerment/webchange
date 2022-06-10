@@ -30,7 +30,10 @@
                       :route {:page :courses}}
                      {:id    :activities
                       :text  "Activities"
-                      :route {:page :activities}}]}
+                      :route {:page :activities}}
+                     {:id    :books
+                      :text  "Books"
+                      :route {:page :books}}]}
          {:id       :accounts
           :text     "Accounts"
           :icon     "users"

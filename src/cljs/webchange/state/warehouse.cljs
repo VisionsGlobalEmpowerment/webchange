@@ -432,6 +432,14 @@
                          handlers {:delay 3000})))
 
 (re-frame/reg-event-fx
+  ::load-available-books
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-available-books
+                     :method :get
+                     :uri    (str "/api/available-books")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-books
   (fn [{:keys [_]} [_ {:keys [language]} handlers]]
     (create-request {:key    :load-course-books
@@ -1071,12 +1079,4 @@
                      :method :put
                      :uri    (str "/api/classes/" class-id "/teachers")
                      :params data}
-                    handlers)))
-
-(re-frame/reg-event-fx
-  ::load-available-activities
-  (fn [{:keys [_]} [_ handlers]]
-    (create-request {:key    :load-available-activities
-                     :method :get
-                     :uri    (str "/api/available-activities")}
                     handlers)))

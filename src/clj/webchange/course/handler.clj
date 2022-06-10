@@ -5,7 +5,7 @@
     [clojure.tools.logging :as log]
     [compojure.api.sweet :refer [GET POST PUT api context defroutes swagger-routes]]
     [ring.util.response :refer [redirect resource-response response]]
-    [ring.util.codec :refer [url-encode]] 
+    [ring.util.codec :refer [url-encode]]
     [schema.core :as s]
     [webchange.assets.core :as assets]
     [webchange.auth.core :as auth]
@@ -431,7 +431,7 @@
   (GET "/courses/:course-slug/editor/add-concept" request (collaborator-route request))
   (GET "/courses/:course-slug/editor/levels/:level-id/lessons/:lesson-id" request (collaborator-route request))
   (GET "/courses/:course-slug/editor/levels/:level-id/add-lesson" request (collaborator-route request))
-  
+
   (GET "/courses/:course-slug/editor-v2" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2/:scene-id" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2/concepts/:concept-id" request (collaborator-route request))
@@ -471,19 +471,9 @@
         (handle-restore-course-version version-id request))
   (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
         (handle-restore-scene-version version-id request))
-  
+
   (GET "/api/available-courses" request
        (-> (core/get-available-courses) response))
-  (GET "/api/available-activities" request
-       (-> (core/get-available-activities) response))
-  (GET "/api/available-activities/:activity-id" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/get-available-activity activity-id)
-          response)))
 
   (PUT "/api/schools/:school-id/assign-course" request
        :coercion :spec
@@ -514,6 +504,20 @@
              response)))
   (GET "/api/available-activities" request
        :coercion :spec
+       :return ::activity-spec/activities-info
        (let [user-id (current-user request)]
          (-> (core/get-available-activities)
-             response))))
+             response)))
+  (GET "/api/available-activities/:activity-id" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :return ::activity-spec/activity-info
+    (let [user-id (current-user request)]
+      (-> (core/get-available-activity activity-id)
+          response)))
+  (GET "/api/available-books" request
+    :coercion :spec
+    :return ::activity-spec/activities-info
+    (let [user-id (current-user request)]
+      (-> (core/get-available-books)
+          response))))
