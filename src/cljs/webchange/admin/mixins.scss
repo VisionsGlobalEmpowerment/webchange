@@ -24,3 +24,12 @@
 @mixin with-small-scroll-bar {
     @include with-scroll-bar(6px);
 }
+
+@mixin with-small-form {
+    align-items: center;
+
+    & > * {
+        width: 460px;
+        flex: 0;
+    }
+}

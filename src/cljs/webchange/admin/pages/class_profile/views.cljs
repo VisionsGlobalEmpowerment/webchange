@@ -5,7 +5,7 @@
     [webchange.admin.pages.class-profile.state :as state]
     [webchange.admin.widgets.add-class-students.views :refer [add-class-students]]
     [webchange.admin.widgets.add-class-teachers.views :refer [add-class-teachers]]
-    [webchange.admin.widgets.class-form.views :refer [class-form]]
+    [webchange.admin.widgets.class-form.views :refer [class-edit-form]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as c :refer [button input]]))
@@ -50,10 +50,10 @@
                               [c/icon-button {:icon     "edit"
                                               :variant  "light"
                                               :on-click handle-edit-click}]]}
-     [class-form {:class-id  class-id
-                  :school-id school-id
-                  :editable? form-editable?
-                  :on-save   handle-data-save}]]))
+     [class-edit-form {:class-id  class-id
+                       :school-id school-id
+                       :editable? form-editable?
+                       :on-save   handle-data-save}]]))
 
 (defn- side-bar-add-student
   [{:keys [class-id school-id]}]

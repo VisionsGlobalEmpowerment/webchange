@@ -88,7 +88,17 @@
 ;; Init
 
 (re-frame/reg-event-fx
-  ::init
+  ::init-add-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [school-id]}]]
+    {:db       (-> db
+                   (assoc :school-id school-id)
+                   (reset-form-data)
+                   (set-data-loading true))
+     :dispatch [::warehouse/load-school-courses {:school-id school-id}
+                {:on-success [::load-school-courses-success]}]}))
+(re-frame/reg-event-fx
+  ::init-edit-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
     {:db         (-> db
@@ -111,11 +121,26 @@
   ::load-school-courses-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ response]]
-    {:db (->> response
-              (map (fn [{:keys [id name]}]
-                     {:text  name
-                      :value id}))
-              (set-course-options db))}))
+    (let [course-options (->> response
+                              (map (fn [{:keys [id name]}]
+                                     {:text  name
+                                      :value id}))
+                              (concat [{:text  "Select Course"
+                                        :value ""}]))]
+      {:db (-> db
+               (set-course-options course-options)
+               (set-data-loading false))})))
+
+(re-frame/reg-event-fx
+  ::create
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ class-data {:keys [on-success]}]]
+    (let [school-id (:school-id db)]
+      {:db       (set-data-saving db true)
+       :dispatch [::warehouse/create-class
+                  {:school-id school-id :data class-data}
+                  {:on-success [::save-success on-success]
+                   :on-failure [::save-failure]}]})))
 
 (re-frame/reg-event-fx
   ::save
