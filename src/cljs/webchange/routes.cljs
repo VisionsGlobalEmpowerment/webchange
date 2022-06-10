@@ -17,7 +17,8 @@
                   "game-changer"      {[""]                                                         :game-changer
                                        ["/" [#"[\w-%]+" :course-slug] "/" [#"[\w-%]+" :scene-slug]] :wizard-configured}
                   "book-creator"      :book-creator
-                  "s"                 {["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
+                  "s"                 {["/" [#"[\w-%]+" :scene-id]] :activity-sandbox
+                                       ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
                                        ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
                   "courses"           {["/" [#"[\w-%]+" :id]] {[""]                 :course
                                                                ["/editor"]          {[""]                         :course-editor

@@ -4,6 +4,7 @@
     [webchange.validation.predicates :as p]))
 
 (s/def ::id int?)
+
 (s/def ::name p/not-empty-string?)
 (s/def ::preview (s/or :string string?
                        :nil nil?))
@@ -16,3 +17,9 @@
 
 (s/def ::activity-info (s/keys :req-un [::id ::name ::preview ::about ::short-description ::created-at ::updated-at]))
 (s/def ::activities-info (s/* ::activity-info))
+
+(s/def ::metadata (s/keys :opt-un [::about]))
+
+(s/def ::edit-activity (s/keys :req-un [::name ::lang]
+                               :opt-un [::metadata]))
+

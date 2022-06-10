@@ -604,6 +604,14 @@
                      :uri    (str "/api/courses/" course-slug "/scenes/" scene-slug "/preview")
                      :params {:preview preview}} handlers)))
 
+(re-frame/reg-event-fx
+  ::load-scene-by-id
+  (fn [{:keys [_]} [_ {:keys [scene-id]} handlers]]
+    (create-request {:key    :load-scene-by-id
+                     :method :get
+                     :uri    (str "/api/scenes/" scene-id)}
+                    handlers)))
+
 ;; Lesson sets
 
 (re-frame/reg-event-fx

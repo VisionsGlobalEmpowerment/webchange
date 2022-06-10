@@ -866,7 +866,7 @@
                                       :short-description "Lorem ipsum dolor sit amet."}
                                      activity-info))]
     (-> (assoc scene-data :preview image-src)
-        (select-keys [:id :name :preview :about :short-description :created-at :updated-at])
+        (select-keys [:id :name :preview :about :short-description :created-at :updated-at :slug :lang])
         (with-default-values))))
 
 (defn get-available-activities
@@ -893,4 +893,18 @@
                (and (= id book-id)
                     book-data)))))
 
+(defn get-activity-current-version
+  [activity-id]
+  (-> (db/get-latest-scene-version {:scene_id activity-id})
+      :data))
+
+(defn get-activity
+  [activity-id]
+  (db/get-scene {:id activity-id}))
+
+(defn edit-activity
+  [activity-id data]
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)]
+    (db/edit-scene! (assoc prepared-data :id activity-id))
+    {:id activity-id}))
 

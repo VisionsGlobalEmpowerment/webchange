@@ -527,4 +527,24 @@
     :return ::activity-spec/activity-info
     (let [user-id (current-user request)]
       (-> (core/get-available-book book-id)
-          response))))
+          response)))
+  (GET "/api/activities/:activity-id/current-version" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       (-> (core/get-activity-current-version activity-id)
+           response))
+  (GET "/api/activities/:activity-id" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       (-> (core/get-activity activity-id)
+           response))
+  (PUT "/api/activities/:activity-id" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/edit-activity]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/edit-activity activity-id data)
+             response))))
+
