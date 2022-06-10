@@ -146,13 +146,20 @@
 (defn- create-fake-request
   "Params:
    - {integer} [delay]: set response delay in ms"
-  [props
-   {:keys [on-success on-failure suppress-api-error?]}
-   {:keys [delay result result-data]
-    :or   {result :success}}]
-  {:dispatch (case result
-               :success [::generic-on-success-handler (assoc props :delay delay) on-success result-data]
-               :failure [::generic-failure-handler props on-failure suppress-api-error? result-data])})
+  ([props handlers]
+   (create-fake-request props handlers {}))
+  ([{:keys [key params uri] :as props}
+    {:keys [on-success on-failure suppress-api-error?]}
+    {:keys [delay result result-data]
+     :or   {result :success}}]
+   (let [message (str "Fake request " key)]
+     (logger/group-folded message)
+     (logger/log "uri" uri)
+     (logger/log "params" params)
+     (logger/group-end message))
+   {:dispatch (case result
+                :success [::generic-on-success-handler (assoc props :delay delay) on-success result-data]
+                :failure [::generic-failure-handler props on-failure suppress-api-error? result-data])}))
 
 ;;
 
@@ -390,6 +397,72 @@
                      :method :get
                      :uri    (str "/api/available-courses")}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::load-available-activities
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-available-activities
+                     :method :get
+                     :uri    (str "/api/available-activities")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-available-activity
+  (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
+    (create-request {:key    :load-available-activity
+                     :method :get
+                     :uri    (str "/api/available-activities/" activity-id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::save-available-activity
+  (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
+    (create-fake-request {:key    :save-available-activity
+                          :method :put
+                          :uri    (str "/api/available-activities/" activity-id)
+                          :params data}
+                         handlers {:delay 3000})))
+
+(re-frame/reg-event-fx
+  ::remove-available-activity
+  (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
+    (create-fake-request {:key    :remove-available-activity
+                          :method :delete
+                          :uri    (str "/api/available-activities/" activity-id)}
+                         handlers {:delay 3000})))
+
+(re-frame/reg-event-fx
+  ::load-available-books
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-available-books
+                     :method :get
+                     :uri    (str "/api/available-books")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-available-book
+  (fn [{:keys [_]} [_ {:keys [book-id]} handlers]]
+    (create-request {:key    :load-available-book
+                     :method :get
+                     :uri    (str "/api/available-books/" book-id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::save-available-book
+  (fn [{:keys [_]} [_ {:keys [book-id data]} handlers]]
+    (create-fake-request {:key    :save-available-book
+                          :method :put
+                          :uri    (str "/api/available-books/" book-id)
+                          :params data}
+                         handlers {:delay 3000})))
+
+(re-frame/reg-event-fx
+  ::remove-available-book
+  (fn [{:keys [_]} [_ {:keys [book-id]} handlers]]
+    (create-fake-request {:key    :remove-available-book
+                          :method :delete
+                          :uri    (str "/api/available-books/" book-id)}
+                         handlers {:delay 3000})))
 
 (re-frame/reg-event-fx
   ::load-books
@@ -1031,12 +1104,4 @@
                      :method :put
                      :uri    (str "/api/classes/" class-id "/teachers")
                      :params data}
-                    handlers)))
-
-(re-frame/reg-event-fx
-  ::load-available-activities
-  (fn [{:keys [_]} [_ handlers]]
-    (create-request {:key    :load-available-activities
-                     :method :get
-                     :uri    (str "/api/available-activities")}
                     handlers)))

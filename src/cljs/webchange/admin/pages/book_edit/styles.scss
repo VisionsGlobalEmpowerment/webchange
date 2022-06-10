@@ -1,0 +1,77 @@
+.page--book-edit {
+    .page--book-edit--content {
+        align-items: center;
+    }
+
+    .book-form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+
+        width: 670px;
+
+        h1 {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 16px;
+            letter-spacing: -0.02em;
+
+            color: #636A7C;
+
+            dl {
+                display: flex;
+                gap: 4px;
+                margin: 12px 0;
+
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 12px;
+
+                dt {
+                    &:after {
+                        content: ":";
+                    }
+                }
+
+                dd {
+                    margin: 0 32px 0 0;
+                }
+            }
+        }
+
+        .preview {
+            border: 1px solid $color-pink;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+
+            .actions {
+                display: flex;
+                gap: 12px;
+                position: absolute;
+                bottom: 18px;
+                left: 24px;
+                width: auto;
+                height: auto;
+            }
+        }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 16px;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .remove-button {
+            @include icon-color($color-pink);
+            @include icon-size(16px);
+            @include icon-thickness(2);
+        }
+    }
+}

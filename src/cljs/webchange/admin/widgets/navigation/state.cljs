@@ -27,7 +27,13 @@
           :icon     "book-library"
           :children [{:id    :courses
                       :text  "Courses"
-                      :route {:page :courses}}]}
+                      :route {:page :courses}}
+                     {:id    :activities
+                      :text  "Activities"
+                      :route {:page :activities}}
+                     {:id    :books
+                      :text  "Books"
+                      :route {:page :books}}]}
          {:id       :accounts
           :text     "Accounts"
           :icon     "users"

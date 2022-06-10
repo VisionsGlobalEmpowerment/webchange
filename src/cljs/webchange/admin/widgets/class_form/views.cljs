@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.components.form.views :refer [form]]
-    [webchange.admin.utils :refer [get-uid]]
     [webchange.admin.widgets.class-form.state :as state]
     [webchange.validation.specs.class-spec :as class-spec]))
 

@@ -93,9 +93,9 @@
 
 (defn- ->scene-list-item
   [{:keys [id name slug image-src]}]
-  {:id id
-   :name name
-   :slug slug
+  {:id      id
+   :name    name
+   :slug    slug
    :preview image-src})
 
 (defn get-course-data
@@ -857,9 +857,40 @@
      :name course-name
      :data (:data latest-version)}))
 
+(defn- ->activity-info
+  [{:keys [image-src] :as scene-data}]
+  (let [with-default-values (fn [activity-info]
+                              (merge {:created-at        "2022-05-25T11:52:12.008679"
+                                      :updated-at        "2022-05-25T11:52:12.008679"
+                                      :about             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+                                      :short-description "Lorem ipsum dolor sit amet."}
+                                     activity-info))]
+    (-> (assoc scene-data :preview image-src)
+        (select-keys [:id :name :preview :about :short-description :created-at :updated-at])
+        (with-default-values))))
+
 (defn get-available-activities
   []
-  (let [scenes (db/get-scenes)
-        ->activity (fn [{:keys [id name slug image-src lang]}]
-                     {:id id :name name :slug slug :preview image-src :lang lang})]
-    (map ->activity scenes)))
+  (->> (db/get-scenes)
+       (map ->activity-info)))
+
+(defn get-available-books
+  []
+  (->> (get-book-library {:with-host-name? false})
+       (map ->activity-info)))
+
+(defn get-available-activity
+  [activity-id]
+  (->> (get-available-activities)
+       (some (fn [{:keys [id] :as activity-data}]
+               (and (= id activity-id)
+                    activity-data)))))
+
+(defn get-available-book
+  [book-id]
+  (->> (get-available-books)
+       (some (fn [{:keys [id] :as book-data}]
+               (and (= id book-id)
+                    book-data)))))
+
+

@@ -1,6 +1,7 @@
 (ns webchange.admin.widgets.navigation.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.admin.widgets.navigation.logo :refer [logo]]
     [webchange.admin.widgets.navigation.state :as state]
     [webchange.ui-framework.components.index :as c]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
@@ -54,6 +55,7 @@
   []
   (let [items @(re-frame/subscribe [::state/navigation-items])]
     [:div.top-bar--navigation
+     [logo]
      (for [{:keys [id] :as item} items]
        ^{:key id}
        [root-item item])]))

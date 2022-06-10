@@ -9,6 +9,7 @@
     gap: $default-gap;
     min-height: 0;
     overflow: auto;
+    padding-right: $default-gap * 0.5;
 
     & > .widget-profile--main-content--content {
         flex: 1 1;
@@ -19,6 +20,9 @@
 
         min-height: 0;
         position: relative;
+        padding: 5px $default-gap * 0.5 5px 5px;
+        overflow: auto;
+        @include with-scroll-bar(6px);
     }
 
     & > .widget-profile--main-content--footer {

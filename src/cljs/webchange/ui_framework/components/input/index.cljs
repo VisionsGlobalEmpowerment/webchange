@@ -76,8 +76,9 @@
 
           has-label? (some? label)
           id (or id (when has-label? (random-uuid)))]
-      [:div {:class-name (get-class-name (-> {"wc-input-wrapper" true}
-                                             (assoc class-name (some? class-name))))}
+      [:div {:class-name       (get-class-name (-> {"wc-input-wrapper" true}
+                                                   (assoc class-name (some? class-name))))
+             :data-wrapper-for id}
        (when has-label?
          [:label {:for        id
                   :class-name "wc-input-label"}

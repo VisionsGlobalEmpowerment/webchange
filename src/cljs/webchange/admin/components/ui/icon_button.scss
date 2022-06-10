@@ -1,10 +1,26 @@
 .wc-icon-button {
     background: #D99BFF;
 
+    &:hover {
+        background: $button-background-color-hovered;
+    }
+
+    &:active {
+        background: $button-background-color-active;
+    }
+
     @include icon-color($color-pink);
 
     &:hover {
         filter: brightness(1.1);
+    }
+
+    &.with-text {
+        border-radius: 6px;
+        flex-direction: row-reverse;
+        @include icon-color(#1D1D1F);
+        @include icon-size(12px);
+        @include icon-thickness(1px);
     }
 
     &.variant-light {

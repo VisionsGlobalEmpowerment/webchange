@@ -31,7 +31,11 @@
                           ["/add/" [#"[\w-%]+" :account-type]] :account-add
                           ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
                                                                 "/reset-password" :password-reset}
-                          ["/" [#"[\w-%]+" :account-type]]     :accounts}})
+                          ["/" [#"[\w-%]+" :account-type]]     :accounts}
+             "/library"  {"/activities" {""                              :activities
+                                         ["/" [#"[\w-%]+" :activity-id]] :activity-edit}
+                          "/books"      {""                          :books
+                                         ["/" [#"[\w-%]+" :book-id]] :book-edit}}})
 
 (def sitemap
   {:dashboard {:schools {:school-profile   {:classes        {:add-class     true

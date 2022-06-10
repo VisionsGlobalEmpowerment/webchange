@@ -72,6 +72,7 @@
     [webchange.ui-framework.components.icon.icon-play :as play]
     [webchange.ui-framework.components.icon.icon-presentation :as presentation]
     [webchange.ui-framework.components.icon.icon-preview :as preview]
+    [webchange.ui-framework.components.icon.icon-read :as read]
     [webchange.ui-framework.components.icon.icon-remove :as remove]
     [webchange.ui-framework.components.icon.icon-reorder :as reorder]
     [webchange.ui-framework.components.icon.icon-restart :as restart]
@@ -171,6 +172,7 @@
    "play"               play/data
    "presentation"       presentation/data
    "preview"            preview/data
+   "read"               read/data
    "remove"             remove/data
    "reorder"            reorder/data
    "restart"            restart/data

@@ -142,12 +142,13 @@
        (re-frame/dispatch [::state/reset (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [disabled? errors form-id loading? model on-cancel on-save saving? spec]
+     (fn [{:keys [class-name disabled? errors form-id loading? model on-cancel on-save saving? spec]
            :or   {disabled? false
                   errors    {}
                   loading?  false
                   saving?   false}}]
-       [:div.component--form
+       [:div {:class-name (c/get-class-name {"component--form" true
+                                             class-name        (some? class-name)})}
         (if-not loading?
           [:div.controls
            (for [[field-name field-options] model]
