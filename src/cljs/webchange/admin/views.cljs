@@ -24,7 +24,6 @@
        (let [authenticating? @(re-frame/subscribe [::current-user/in-progress?])
              {:keys [handler props] :as page-params} @(re-frame/subscribe [::state/current-page])
              page-component (get pages handler (:404 pages))]
-         (print "handler" handler props)
          (routes/set-title! page-params)
          [:div#tabschool-admin
           (if (= handler :login)

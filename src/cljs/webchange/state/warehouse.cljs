@@ -448,6 +448,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::save-available-book
+  (fn [{:keys [_]} [_ {:keys [book-id data]} handlers]]
+    (create-fake-request {:key    :save-available-book
+                          :method :put
+                          :uri    (str "/api/available-books/" book-id)
+                          :params data}
+                         handlers {:delay 3000})))
+
+(re-frame/reg-event-fx
   ::remove-available-book
   (fn [{:keys [_]} [_ {:keys [book-id]} handlers]]
     (create-fake-request {:key    :remove-available-book

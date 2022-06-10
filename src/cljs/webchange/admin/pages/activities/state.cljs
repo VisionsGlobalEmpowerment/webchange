@@ -64,12 +64,10 @@
   ::open-activity
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ activity-id]]
-    (print "::open-activity")
-    {}))
+    {:dispatch [::routes/redirect :activity-edit :activity-id activity-id]}))
 
 (re-frame/reg-event-fx
   ::edit-activity
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ activity-id]]
-    (print "::edit-activity" activity-id)
-    {:dispatch [::routes/redirect :activity-edit :activity-id activity-id]}))
+    {}))

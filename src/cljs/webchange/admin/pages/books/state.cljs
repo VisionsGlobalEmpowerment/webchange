@@ -64,11 +64,10 @@
   ::open-book
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ book-id]]
-    (print "::open-book")
-    {}))
+    {:dispatch [::routes/redirect :book-edit :book-id book-id]}))
 
 (re-frame/reg-event-fx
   ::edit-book
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ book-id]]
-    {:dispatch [::routes/redirect :book-edit :book-id book-id]}))
+    {}))
