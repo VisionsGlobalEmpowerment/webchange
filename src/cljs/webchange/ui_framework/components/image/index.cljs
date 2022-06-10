@@ -3,8 +3,9 @@
     [reagent.core :as r]
     [webchange.ui-framework.components.circular-progress.index :as circular-progress]
     [webchange.ui-framework.components.icon.index :as icon]
-    [webchange.ui-framework.components.image.observer :as observer]
-    [webchange.ui-framework.components.utils :refer [get-class-name get-uid]]))
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.utils.observer :as observer]
+    [webchange.utils.uid :refer [get-uid]]))
 
 (defn- load-image
   [src on-load oe-error]

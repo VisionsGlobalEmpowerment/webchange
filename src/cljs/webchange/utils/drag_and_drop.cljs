@@ -1,6 +1,8 @@
 (ns webchange.utils.drag-and-drop
   (:require
-    [reagent.core :as r]))
+    [reagent.core :as r]
+    [webchange.utils.observer :as observer]
+    [webchange.utils.uid :refer [get-uid]]))
 
 (defn- event->target
   [event]
@@ -146,21 +148,26 @@
 (defn draggable
   [{:keys [data drop-allowed? on-drop]
     :or   {drop-allowed? (constantly true)}}]
-  (r/with-let [el (atom nil)
+  (r/with-let [id (get-uid)
+               el (atom nil)
                handlers {"dragstart" handle-drag-start
                          "dragover"  handle-drag-over
                          "dragenter" (partial handle-drag-enter drop-allowed?)
                          "dragleave" handle-drag-leave
                          "dragend"   handle-drag-end
                          "drop"      (partial handle-drop drop-allowed? on-drop)}
+               init #(init-dnd @el handlers)
+               reset #(reset-dnd @el handlers)
                handle-ref #(when (some? %)
                              (reset! el %)
-                             (init-dnd @el handlers))]
+                             (observer/observe @el id init reset))]
     (->> (r/current-component)
          (r/children)
-         (into [:div (merge {:draggable  true
+         (into [:div (merge {:id         id
+                             :draggable  true
                              :ref        handle-ref
                              :class-name "wc-draggable"}
                             (get-data-attrs data))]))
     (finally
-      (reset-dnd @el handlers))))
+      (reset-dnd @el handlers)
+      (observer/un-observe id))))

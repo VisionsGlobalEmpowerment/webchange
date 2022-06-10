@@ -22,7 +22,3 @@
      :y      (.-y bounding-rect)
      :width  (.-width bounding-rect)
      :height (.-height bounding-rect)}))
-
-(defn get-uid
-  []
-  (->> (random-uuid) (str) (take 8) (clojure.string/join "")))
