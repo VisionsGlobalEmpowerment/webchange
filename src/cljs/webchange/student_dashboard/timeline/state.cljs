@@ -5,7 +5,14 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.progress.activity :as common-activity]
-    [webchange.state.state-course :as state-course]))
+    [webchange.state.state-course :as state-course]
+    [webchange.subs :as subs]))
+
+(re-frame/reg-event-fx
+  ::init
+  (fn [{:keys [db]} [_]]
+    (let [course-slug (subs/current-course db)]
+      {:dispatch [::state-course/load-course-info course-slug]})))
 
 (defn- scene-name->scene [scene-name scenes]
   (let [{:keys [name preview type]} (get scenes (keyword scene-name))]
@@ -82,3 +89,10 @@
     (re-frame/subscribe [::state-course/course-finished?]))
   (fn [course-finished?]
     course-finished?))
+
+(re-frame/reg-sub
+  ::course-language
+  (fn []
+    (re-frame/subscribe [::state-course/course-info]))
+  (fn [course-info]
+    (get course-info :lang "english")))
