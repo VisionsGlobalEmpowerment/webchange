@@ -440,6 +440,22 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-available-book
+  (fn [{:keys [_]} [_ {:keys [book-id]} handlers]]
+    (create-request {:key    :load-available-book
+                     :method :get
+                     :uri    (str "/api/available-books/" book-id)}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::remove-available-book
+  (fn [{:keys [_]} [_ {:keys [book-id]} handlers]]
+    (create-fake-request {:key    :remove-available-book
+                          :method :delete
+                          :uri    (str "/api/available-books/" book-id)}
+                         handlers {:delay 3000})))
+
+(re-frame/reg-event-fx
   ::load-books
   (fn [{:keys [_]} [_ {:keys [language]} handlers]]
     (create-request {:key    :load-course-books

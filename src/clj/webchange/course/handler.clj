@@ -520,4 +520,11 @@
     :return ::activity-spec/activities-info
     (let [user-id (current-user request)]
       (-> (core/get-available-books)
+          response)))
+  (GET "/api/available-books/:book-id" request
+    :coercion :spec
+    :path-params [book-id :- ::activity-spec/id]
+    :return ::activity-spec/activity-info
+    (let [user-id (current-user request)]
+      (-> (core/get-available-book book-id)
           response))))

@@ -20,7 +20,7 @@
 
         min-height: 0;
         position: relative;
-        padding-right: $default-gap * 0.5;
+        padding: 5px $default-gap * 0.5 5px 5px;
         overflow: auto;
         @include with-scroll-bar(6px);
     }
