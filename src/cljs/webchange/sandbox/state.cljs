@@ -15,7 +15,7 @@
              (assoc :enabled true)
              (assoc :scene-id scene-id))
      :dispatch-n [[::state-core/set-current-scene-id scene-id]
-                  [::warehouse/load-scene-by-id {:scene-id scene-id}
+                  [::warehouse/load-activity-current-version {:activity-id scene-id}
                    {:on-success [::load-scene-success]}]]}))
 
 (re-frame/reg-event-fx

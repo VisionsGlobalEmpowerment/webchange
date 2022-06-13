@@ -187,6 +187,11 @@ WHERE id = :id;
 -- :doc retrieve all scene records
 SELECT * from scenes;
 
+-- :name get-scenes-by-type :? :*
+-- :doc retrieve all scene records
+SELECT * from scenes
+WHERE type = :type;
+
 -- :name get-scenes-by-course-id :? :*
 -- :doc retrieve scenes by course id
 SELECT s.* from scenes s

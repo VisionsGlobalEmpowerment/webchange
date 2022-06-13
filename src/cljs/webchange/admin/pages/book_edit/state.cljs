@@ -70,8 +70,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [book-id]}]]
     {:db       (set-book-loading db true)
-     :dispatch [::warehouse/load-available-book
-                {:book-id book-id}
+     :dispatch [::warehouse/load-activity
+                {:activity-id book-id}
                 {:on-success [::load-book-success]
                  :on-failure [::load-book-failure]}]}))
 
@@ -140,6 +140,6 @@
   ::play
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (get-book db)]
-      (print "::play" id)
-      {})))
+    (let [{:keys [id]} (get-book db)
+          href (str "/s/" id)] ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
+      (set! js/document.location href))))
