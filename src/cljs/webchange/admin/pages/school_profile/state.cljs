@@ -82,7 +82,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [school-id (:school-id db)]
-      {:dispatch [::routes/redirect :add-teacher :school-id school-id]})))
+      {:dispatch [::routes/redirect :teacher-add :school-id school-id]})))
 
 (re-frame/reg-event-fx
   ::open-students

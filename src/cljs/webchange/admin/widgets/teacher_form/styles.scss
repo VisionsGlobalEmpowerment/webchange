@@ -1,0 +1,24 @@
+.widget--teacher-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    overflow: auto;
+
+    .teacher-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        button {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row-reverse;
+            width: 100%;
+            font-weight: 600;
+
+            @include icon-color($color-pink);
+            @include icon-size(16px);
+            @include icon-thickness(2px);
+        }
+    }
+}

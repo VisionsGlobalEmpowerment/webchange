@@ -112,7 +112,7 @@
         teacher (core/get-teacher teacher-id)]
     (when-not (or (is-admin? user-id) (school/school-admin? (:school-id teacher) user-id))
       (throw-unauthorized {:role :educator}))
-    (let [user-data (select-keys data [:fist-name :last-name :password])
+    (let [user-data (select-keys data [:first-name :last-name :password])
           teacher-data {:type   (:type data)
                         :status "active"}]
       (accounts/edit-teacher-user! (:user-id teacher) (assoc user-data :type "teacher"))

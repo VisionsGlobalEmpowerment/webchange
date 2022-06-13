@@ -50,7 +50,7 @@
 (defn edit-teacher-user!
   [user-id data]
   (db/edit-teacher-user! {:id user-id
-                          :first_name (:fist-name data)
+                          :first_name (:first-name data)
                           :last_name (:last-name data)})
   (when (some? (:password data))
     (let [hashed-password (hashers/derive (:password data))]
