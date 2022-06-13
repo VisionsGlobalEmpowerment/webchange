@@ -580,6 +580,12 @@
            file-hash))
        update))
 
+(defn- asset->url
+  [asset]
+  (if (map? asset)
+    (:url asset)
+    asset))
+
 (defn- published-upload-assets
   [school-id requested-courses]
   (let [default-school 1
@@ -611,7 +617,7 @@
                           (mapcat #(db/get-scenes-by-course-id {:course_id %}))
                           (map #(db/get-latest-scene-version {:scene_id (:id %)}))
                           (mapcat #(-> % :data :assets))
-                          (map :url)
+                          (map asset->url)
                           (remove nil?))
         assets (->> (concat course-assets dataset-assets scene-assets)
                     (filter #(str/starts-with? % "/upload/"))
