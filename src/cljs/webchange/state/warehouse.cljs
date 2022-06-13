@@ -1082,6 +1082,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::remove-teacher
+  (fn [{:keys [_]} [_ {:keys [teacher-id]} handlers]]
+    (create-fake-request {:key    :remove-teacher
+                          :method :delete
+                          :uri    (str "/api/teachers/" teacher-id)}
+                         handlers
+                         {:delay 3000})))
+
+(re-frame/reg-event-fx
   ::load-class-teachers
   (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
     (create-request {:key    :load-class-teachers

@@ -211,4 +211,5 @@
   [teacher-id data]
   (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)]
     (db/edit-teacher! (assoc prepared-data :id teacher-id))
-    {:id teacher-id}))
+    {:id   teacher-id
+     :data (get-teacher teacher-id)}))

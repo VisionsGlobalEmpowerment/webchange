@@ -25,7 +25,7 @@
     [webchange.admin.pages.add-student.views :as add-student]
     [webchange.admin.pages.add-school.views :as add-school]
     [webchange.admin.pages.teachers.views :as teachers]
-    [webchange.admin.pages.add-teacher.views :as add-teacher]
+    [webchange.admin.pages.teacher-add.views :as teacher-add]
     [webchange.admin.pages.teacher-profile.views :as teacher-profile]
     [webchange.admin.pages.class-students.views :as class-students]))
 
@@ -38,7 +38,6 @@
             :add-class        add-class/page
             :add-school       add-school/page
             :add-student      add-student/page
-            :add-teacher      add-teacher/page
             :books            books/page
             :book-edit        book-edit/page
             :class-profile    class-profile/page
@@ -54,6 +53,7 @@
             :schools-archived schools-archived/page
             :student-profile  student-profile/page
             :students         students/page
+            :teacher-add      teacher-add/page
             :teacher-profile  teacher-profile/page
             :teachers         teachers/page
             :404              not-found/page})

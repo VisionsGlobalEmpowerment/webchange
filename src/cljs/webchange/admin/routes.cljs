@@ -20,7 +20,7 @@
                                                                       "/add"                         :add-student
                                                                       ["/" [#"[\w-%]+" :student-id]] :edit-student}
                                                          "/teachers" {""                             :teachers
-                                                                      "/add"                         :add-teacher
+                                                                      "/add"                         :teacher-add
                                                                       ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
                                                          "/courses"  {"" :school-courses}}}
              "/courses"  {""                              :courses
@@ -41,7 +41,7 @@
   {:dashboard {:schools {:school-profile   {:classes        {:add-class     true
                                                              :class-profile true}
                                             :students       {:add-student true}
-                                            :teachers       {:add-teacher     true
+                                            :teachers       {:teacher-add     true
                                                              :teacher-profile true}
                                             :school-courses true}
                          :add-school       true

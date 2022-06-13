@@ -95,14 +95,14 @@
 (defn- set-form-data
   [db form-id form-data model]
   #_(->> (keys model)
-       (select-keys form-data)
-       (form/set-data db form-id))
+         (select-keys form-data)
+         (form/set-data db form-id))
   (form/set-data db form-id form-data))
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [init-data data form-id model on-change errors]}]]
+  (fn [{:keys [db]} [_ {:keys [init-data data form-id model on-change errors] :or {data {}}}]]
     {:db       (-> db
                    (set-callback :on-change on-change)
                    (set-form-data form-id (or init-data data) model)

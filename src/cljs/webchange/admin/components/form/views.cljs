@@ -132,7 +132,7 @@
 
      :component-did-update
      (fn [this [_ prev-props]]
-       (let [{:keys [form-id data model errors]} (r/props this)]
+       (let [{:keys [form-id data model errors] :or {data {}}} (r/props this)]
          (re-frame/dispatch [::state/set-custom-errors form-id errors])
          (when (not= data (:data prev-props))
            (re-frame/dispatch [::state/set-form-data form-id data model]))))

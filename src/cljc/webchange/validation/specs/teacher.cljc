@@ -17,5 +17,5 @@
 
 (s/def ::create-teacher (s/keys :req-un [::first-name ::last-name ::email ::password ::type]
                                 :opt-un []))
-(s/def ::edit-teacher (s/keys :req-un [::first-name ::last-name ::password ::type]
-                              :opt-un []))
+(s/def ::edit-teacher (s/keys :req-un [::first-name ::last-name ::type]
+                              :opt-un [::password]))
