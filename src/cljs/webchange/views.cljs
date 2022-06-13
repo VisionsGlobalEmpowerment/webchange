@@ -24,7 +24,8 @@
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.ui-framework.components.index :as ui]
     [webchange.ui-framework.test-page.index :refer [test-ui]]
-    [webchange.utils.lazy-component :refer [lazy-component]]))
+    [webchange.utils.lazy-component :refer [lazy-component]]
+    [webchange.sandbox.views :as sandbox]))
 
 (defn- str->int-param
   [map key]
@@ -93,6 +94,7 @@
                :course [course {:mode ::modes/game}]
                ;; sandbox
                :sandbox [course {:mode ::modes/sandbox}]
+               :activity-sandbox [sandbox/activity {:scene-id (:scene-id route-params)}]
                ;; editor
                :course-editor [editor-panel-v2 (:id route-params)]
                :course-editor-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]

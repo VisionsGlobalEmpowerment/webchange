@@ -187,6 +187,11 @@ WHERE id = :id;
 -- :doc retrieve all scene records
 SELECT * from scenes;
 
+-- :name get-scenes-by-type :? :*
+-- :doc retrieve all scene records
+SELECT * from scenes
+WHERE type = :type;
+
 -- :name get-scenes-by-course-id :? :*
 -- :doc retrieve scenes by course id
 SELECT s.* from scenes s
@@ -280,7 +285,13 @@ INNER JOIN course_scenes cs ON s.id = cs.scene_id
 WHERE cs.course_id = :course_id
 
 -- :name update-scene-image! :! :n
--- :doc updates an existing course record status
+-- :doc updates an existing scene record image
 UPDATE scenes
 SET image_src = :image_src
+WHERE id = :id
+
+-- :name edit-scene! :! :n
+-- :doc updates an existing scene record
+UPDATE scenes
+SET name = :name, lang = :lang, metadata = :metadata
 WHERE id = :id

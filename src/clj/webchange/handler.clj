@@ -134,6 +134,7 @@
   (GET "/student-login/:school-id" [] (public-student-route))
   (GET "/register" [] (public-route))
 
+  (GET "/s/:scene-id" [] (public-route))
   (GET "/s/:course-id/:scene-id" [] (public-route))
   (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
 

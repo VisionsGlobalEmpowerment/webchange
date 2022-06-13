@@ -10,6 +10,16 @@
     course-id)
 
   (let [course-slug "english"
+        data (course/get-course-latest-version course-slug)]
+    (-> data
+        :levels))
+
+  (let [course-slug "english"
+        data (course/get-course-data course-slug)]
+    (-> data
+        :scene-list))
+
+  (let [course-slug "english"
         scene-slug "first-words-book"
         latest-version (course/get-scene-latest-version course-slug scene-slug)]
     (-> latest-version

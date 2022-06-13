@@ -859,38 +859,36 @@
 
 (defn- ->activity-info
   [{:keys [image-src] :as scene-data}]
-  (let [with-default-values (fn [activity-info]
-                              (merge {:created-at        "2022-05-25T11:52:12.008679"
-                                      :updated-at        "2022-05-25T11:52:12.008679"
-                                      :about             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-                                      :short-description "Lorem ipsum dolor sit amet."}
-                                     activity-info))]
-    (-> (assoc scene-data :preview image-src)
-        (select-keys [:id :name :preview :about :short-description :created-at :updated-at])
-        (with-default-values))))
+  (-> scene-data
+      (assoc :preview image-src)
+      (dissoc :image-src)))
 
 (defn get-available-activities
   []
-  (->> (db/get-scenes)
+  (->> (db/get-scenes-by-type {:type "activity"})
        (map ->activity-info)))
 
 (defn get-available-books
   []
-  (->> (get-book-library {:with-host-name? false})
+  (->> (db/get-scenes-by-type {:type "book"})
        (map ->activity-info)))
 
-(defn get-available-activity
+(defn get-activity-current-version
   [activity-id]
-  (->> (get-available-activities)
-       (some (fn [{:keys [id] :as activity-data}]
-               (and (= id activity-id)
-                    activity-data)))))
+  (-> (db/get-latest-scene-version {:scene_id activity-id})
+      :data))
 
-(defn get-available-book
-  [book-id]
-  (->> (get-available-books)
-       (some (fn [{:keys [id] :as book-data}]
-               (and (= id book-id)
-                    book-data)))))
+(defn get-activity
+  [activity-id]
+  (-> (db/get-scene-by-id {:id activity-id})
+      ->activity-info))
 
+(defn edit-activity
+  [activity-id data]
+  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
+        updated-at (jt/local-date-time)]
+    (db/edit-scene! (assoc prepared-data
+                      :id activity-id
+                      :updated_at updated-at))
+    {:id activity-id}))
 

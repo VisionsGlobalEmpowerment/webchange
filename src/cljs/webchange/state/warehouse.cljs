@@ -407,21 +407,21 @@
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::load-available-activity
+  ::load-activity
   (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
-    (create-request {:key    :load-available-activity
+    (create-request {:key    :load-activity
                      :method :get
-                     :uri    (str "/api/available-activities/" activity-id)}
+                     :uri    (str "/api/activities/" activity-id)}
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::save-available-activity
+  ::save-activity
   (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
-    (create-fake-request {:key    :save-available-activity
-                          :method :put
-                          :uri    (str "/api/available-activities/" activity-id)
-                          :params data}
-                         handlers {:delay 3000})))
+    (create-request {:key    :save-activity
+                     :method :put
+                     :uri    (str "/api/activities/" activity-id)
+                     :params data}
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::remove-available-activity
@@ -603,6 +603,14 @@
                      :method :put
                      :uri    (str "/api/courses/" course-slug "/scenes/" scene-slug "/preview")
                      :params {:preview preview}} handlers)))
+
+(re-frame/reg-event-fx
+  ::load-activity-current-version
+  (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
+    (create-request {:key    :load-activity-current-version
+                     :method :get
+                     :uri    (str "/api/activities/" activity-id "/current-version")}
+                    handlers)))
 
 ;; Lesson sets
 

@@ -9,7 +9,7 @@
 
 (defn- book-form
   [{:keys [book-id]}]
-  (let [{:keys [name preview created-at last-edit]} @(re-frame/subscribe [::state/book])
+  (let [{:keys [name preview created-at updated-at]} @(re-frame/subscribe [::state/book])
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
 
@@ -27,7 +27,7 @@
        [:dt "Created"]
        [:dd (date-str->locale-date created-at)]
        [:dt "Last Edited"]
-       [:dd (date-str->locale-date last-edit)]]]
+       [:dd (date-str->locale-date updated-at)]]]
      [ui/image {:src        preview
                 :class-name "preview"}
       [:div.actions
@@ -44,9 +44,9 @@
                        :on-click handle-edit-info-click
                        :variant  "light"}]]
      [book-info-form {:book-id book-id
-                          :editable?   form-editable?
-                          :on-save     handle-save
-                          :class-name  "info-form"}]
+                      :editable?   form-editable?
+                      :on-save     handle-save
+                      :class-name  "info-form"}]
      (when-not form-editable?
        [ui/icon-button {:icon       "remove"
                         :variant    "light"

@@ -9,7 +9,7 @@
 
 (defn- activity-form
   [{:keys [activity-id]}]
-  (let [{:keys [name preview created-at last-edit]} @(re-frame/subscribe [::state/activity])
+  (let [{:keys [name preview created-at updated-at]} @(re-frame/subscribe [::state/activity])
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
 
@@ -27,7 +27,7 @@
        [:dt "Created"]
        [:dd (date-str->locale-date created-at)]
        [:dt "Last Edited"]
-       [:dd (date-str->locale-date last-edit)]]]
+       [:dd (date-str->locale-date updated-at)]]]
      [ui/image {:src        preview
                 :class-name "preview"}
       [:div.actions

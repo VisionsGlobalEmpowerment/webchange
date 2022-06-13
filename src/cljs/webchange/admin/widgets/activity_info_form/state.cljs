@@ -70,7 +70,7 @@
     {:db         (-> db
                      (reset-form-data)
                      (set-data-loading true))
-     :dispatch-n [[::warehouse/load-available-activity
+     :dispatch-n [[::warehouse/load-activity
                    {:activity-id activity-id}
                    {:on-success [::load-activity-success]}]]}))
 
@@ -78,19 +78,26 @@
   ::load-activity-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
-    {:db (-> db
-             (set-data-loading false)
-             (set-form-data data))}))
+    (let [prepared-data (-> data
+                            (merge (:metadata data))
+                            (dissoc :metadata))]
+      {:db (-> db
+               (set-data-loading false)
+               (set-form-data prepared-data))})))
 
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ class-data {:keys [on-success]}]]
-    (let [class-id (-> (get-form-data db)
-                       (get :id))]
+  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
+    (let [activity-id (-> (get-form-data db)
+                          (get :id))
+          prepared-data {:name (:name data)
+                         :lang (:lang data)
+                         :metadata {:about (:about data)
+                                    :short-description (:short-description data)}}]
       {:db       (set-data-saving db true)
-       :dispatch [::warehouse/save-available-activity
-                  {:class-id class-id :data class-data}
+       :dispatch [::warehouse/save-activity
+                  {:activity-id activity-id :data prepared-data}
                   {:on-success [::save-success on-success]
                    :on-failure [::save-failure]}]})))
 
