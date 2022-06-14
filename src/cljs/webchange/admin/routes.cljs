@@ -17,8 +17,8 @@
                                                                                                     "/students" {""                             :class-students
                                                                                                                  ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
                                                          "/students" {""                             :students
-                                                                      "/add"                         :add-student
-                                                                      ["/" [#"[\w-%]+" :student-id]] :edit-student}
+                                                                      "/add"                         :student-add
+                                                                      ["/" [#"[\w-%]+" :student-id]] :student-edit}
                                                          "/teachers" {""                             :teachers
                                                                       "/add"                         :teacher-add
                                                                       ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
@@ -40,7 +40,7 @@
 (def sitemap
   {:dashboard {:schools {:school-profile   {:classes        {:add-class     true
                                                              :class-profile true}
-                                            :students       {:add-student true}
+                                            :students       {:student-add true}
                                             :teachers       {:teacher-add     true
                                                              :teacher-profile true}
                                             :school-courses true}
