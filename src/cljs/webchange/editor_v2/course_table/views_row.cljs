@@ -11,7 +11,7 @@
 
     [webchange.editor-v2.course-table.state.selection :as selection-state]
     [webchange.editor-v2.course-table.utils.cell-data :refer [activity->cell-data cell-data->cell-attributes]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- index
   [{:keys [data]}]

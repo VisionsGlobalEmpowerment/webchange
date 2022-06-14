@@ -3,7 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.ui.theme :refer [w-colors]]
+    [webchange.ui-deprecated.theme :refer [w-colors]]
     [webchange.dashboard.students.events :as students-events]
     [webchange.dashboard.students.subs :as students-subs]
     [webchange.utils.map :refer [remove-nil-fields]]))

@@ -6,7 +6,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.question.question-form.state.actions :as question-form.actions]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- label-with-warning
   [{:keys [label show-warning?]}]

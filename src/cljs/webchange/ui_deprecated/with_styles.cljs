@@ -1,4 +1,4 @@
-(ns webchange.ui.with-styles
+(ns webchange.ui-deprecated.with-styles
   (:require
     [reagent.core :as r]
     ["@material-ui/core/styles" :as mui-styles]))

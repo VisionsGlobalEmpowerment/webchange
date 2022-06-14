@@ -6,7 +6,7 @@
     [reagent.core :as r]
     [webchange.error-message.state :as state]
     [webchange.error-message.utils :refer [get-error-title get-error-messages]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- get-styles
   []

@@ -8,7 +8,7 @@
     [webchange.editor-v2.question.question-form.views-form-description :refer [text-block]]
     [webchange.editor-v2.question.question-form.views-form-diagram :refer [diagram-block]]
     [webchange.editor-v2.question.text.views-text-animation-editor :refer [text-chunks-modal]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn question-form
   []

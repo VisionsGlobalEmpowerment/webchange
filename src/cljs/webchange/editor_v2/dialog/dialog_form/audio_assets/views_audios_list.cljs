@@ -11,7 +11,7 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- get-styles
   []

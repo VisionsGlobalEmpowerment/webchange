@@ -6,7 +6,7 @@
     [webchange.editor-v2.components.logo.views :refer [logo]]
     [webchange.editor-v2.components.toolbar.avatar :refer [avatar-panel]]
     [webchange.routes :refer [redirect-to]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (def link (r/adapt-react-class (aget js/MaterialUI "Link")))
 

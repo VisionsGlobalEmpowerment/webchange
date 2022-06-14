@@ -8,7 +8,7 @@
     [webchange.editor-v2.components.card.views :refer [list-card] :as card]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
-    [webchange.ui.theme :refer [get-in-theme]]
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]
     [webchange.editor-v2.course-dashboard.state :as state]
     [webchange.ui-framework.components.index :refer [input]]))
 

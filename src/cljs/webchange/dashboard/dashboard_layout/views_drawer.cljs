@@ -2,8 +2,8 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
-    [webchange.ui.theme :refer [get-in-theme w-colors]]
-    [webchange.ui.with-styles :refer [with-styles use-class]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme w-colors]]
+    [webchange.ui-deprecated.with-styles :refer [with-styles use-class]]))
 
 (def styles {:drawer        {:width       300
                              :flex-shrink 0}

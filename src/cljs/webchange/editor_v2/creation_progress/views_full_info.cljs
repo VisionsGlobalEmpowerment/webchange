@@ -4,7 +4,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.ui.theme :refer [get-in-theme]]
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]
     [webchange.editor-v2.creation-progress.state :as state]
     [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]))
 

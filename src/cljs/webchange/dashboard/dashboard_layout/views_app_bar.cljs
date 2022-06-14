@@ -4,7 +4,7 @@
     [cljs-react-material-ui.icons :as ic]
     [webchange.dashboard.dashboard-layout.views-breadcrumbs :refer [breadcrumbs]]
     [webchange.dashboard.dashboard-layout.utils :refer [get-shift-styles]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn app-bar
   [{:keys [on-open-menu drawer-open? drawer-width]}]

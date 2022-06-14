@@ -8,7 +8,7 @@
     [webchange.dashboard.students.subs :as students-subs]
     [webchange.dashboard.students.common.map-students :refer [map-student]]
     [webchange.routes :refer [redirect-to]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- translate
   [path]
