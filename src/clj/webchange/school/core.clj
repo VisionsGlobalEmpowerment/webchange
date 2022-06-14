@@ -49,3 +49,12 @@
   [school-id user-id]
   (let [{admin? :result} (db/is-school-admin? {:school_id school-id :user_id user-id})]
     admin?))
+
+(defn archive-school!
+  [id]
+  (db/archive-school! {:id id})
+  (db/archive-classes-by-school! {:school_id id})
+  (db/archive-teachers-by-school! {:school_id id})
+  (db/archive-students-by-school! {:school_id id})
+  (e/dispatch {:type :schools/archived :school-id id})
+  (db/get-school {:id id}))

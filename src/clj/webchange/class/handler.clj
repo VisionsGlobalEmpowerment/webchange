@@ -235,4 +235,31 @@
     (if (can-edit-class? class-id request)
       (-> (core/assign-teachers-to-class teachers-ids class-id)
           (response))
-      (throw-unauthorized {:role :educator}))))
+      (throw-unauthorized {:role :educator})))
+  (PUT "/api/classes/:class-id/archive" request
+       :coercion :spec
+       :path-params [class-id :- ::class-spec/id]
+       (let [user-id (current-user request)
+             {school-id :schoo-id} (core/get-class class-id)]
+         (when-not (or (is-admin? user-id) (school/school-admin? school-id user-id))
+           (throw-unauthorized {:role :educator}))
+         (-> (core/archive-class! class-id)
+             response)))
+  (PUT "/api/teachers/:teacher-id/archive" request
+       :coercion :spec
+       :path-params [teacher-id :- ::teacher-spec/id]
+       (let [user-id (current-user request)
+             {school-id :school-id} (core/get-teacher teacher-id)]
+         (when-not (or (is-admin? user-id) (school/school-admin? school-id user-id))
+           (throw-unauthorized {:role :educator}))
+         (-> (core/archive-teacher! teacher-id)
+             response)))
+  (PUT "/api/students/:student-id/archive" request
+       :coercion :spec
+       :path-params [student-id :- ::student-specs/id]
+       (let [user-id (current-user request)
+             {school-id :school-id} (core/get-student student-id)]
+         (when-not (or (is-admin? user-id) (school/school-admin? school-id user-id))
+           (throw-unauthorized {:role :educator}))
+         (-> (core/archive-student! student-id)
+             response))))

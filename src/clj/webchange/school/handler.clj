@@ -1,13 +1,16 @@
 (ns webchange.school.handler
-  (:require [compojure.api.sweet :refer [GET POST PUT DELETE defroutes context]]
-            [compojure.route :refer [not-found]]
-            [ring.util.response :refer [response]]
-            [webchange.school.core :as core]
-            [clojure.tools.logging :as log]
-            [webchange.common.handler :refer [handle current-user]]
-            [webchange.school.statistics]
-            [webchange.validation.specs.school-spec :as school-spec]
-            [clojure.spec.alpha :as s]))
+  (:require
+    [buddy.auth :refer [throw-unauthorized]]
+    [compojure.api.sweet :refer [GET POST PUT DELETE defroutes context]]
+    [compojure.route :refer [not-found]]
+    [ring.util.response :refer [response]]
+    [webchange.school.core :as core]
+    [clojure.tools.logging :as log]
+    [webchange.common.handler :refer [handle current-user]]
+    [webchange.school.statistics :as stats]
+    [webchange.validation.specs.school-spec :as school-spec]
+    [webchange.auth.roles :refer [is-admin?]]
+    [clojure.spec.alpha :as s]))
 
 (defn handle-current-school [request]
   (-> (core/get-current-school)
@@ -15,7 +18,9 @@
 
 (defn handle-create-school
   [data request]
-  (let [owner-id (current-user request)]
+  (let [user-id (current-user request)]
+    (when-not (is-admin? user-id)
+      (throw-unauthorized {:role :educator}))
     (-> (core/create-school! data)
         handle)))
 
@@ -25,14 +30,26 @@
 
 (defn handle-update-school
   [id data request]
-  (let [owner-id (current-user request)]
+  (let [user-id (current-user request)]
+    (when-not (is-admin? user-id)
+      (throw-unauthorized {:role :educator}))
     (-> (core/update-school! id data)
         handle)))
 
 (defn handle-delete-school
   [id request]
-  (let [owner-id (current-user request)]
+  (let [user-id (current-user request)]
+    (when-not (is-admin? user-id)
+      (throw-unauthorized {:role :educator}))
     (-> (core/delete-school! id)
+        handle)))
+
+(defn handle-archive-school
+  [id request]
+  (let [user-id (current-user request)]
+    (when-not (is-admin? user-id)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/archive-school! id)
         handle)))
 
 (defroutes school-routes
@@ -62,4 +79,10 @@
                 (handle-update-school id data request))
            (DELETE "/:id" request
                    :path-params [id :- ::school-spec/id]
-                   (handle-delete-school id request))))
+                   (handle-delete-school id request))
+           (PUT "/:id/archive" request
+                :path-params [id :- ::school-spec/id]
+                (handle-archive-school id request)))
+  (GET "/api/overall-statistics" request
+       (-> (stats/get-overall-statistics)
+           response)))

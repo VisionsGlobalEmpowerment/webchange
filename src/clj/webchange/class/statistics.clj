@@ -27,3 +27,13 @@
  ::recalculate-on-assign-teacher :teachers/assigned-to-class
  (fn [{class-id :class-id}]
    (calculate-class-stats class-id)))
+
+(e/reg
+ ::recalculate-on-remove-student :students/removed-from-class
+ (fn [{class-id :class-id}]
+   (calculate-class-stats class-id)))
+
+(e/reg
+ ::recalculate-on-remove-teacher :teachers/removed-from-class
+ (fn [{class-id :class-id}]
+   (calculate-class-stats class-id)))
