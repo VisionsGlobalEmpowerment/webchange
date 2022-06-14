@@ -98,12 +98,25 @@
   ::class-options
   :<- [path-to-db]
   (fn [data]
-    (get data class-options-key [])))
+    (->> (get data class-options-key [])
+         (concat [{:text  "Select Class"
+                   :value ""}]))))
 
 ;;
 
 (re-frame/reg-event-fx
-  ::init
+  ::init-add-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [school-id]}]]
+    {:db       (-> db
+                   (assoc :school-id school-id)
+                   (reset-form-data)
+                   (set-classes-loading true))
+     :dispatch [::warehouse/load-school-classes {:school-id school-id}
+                {:on-success [::load-school-classes-success]}]}))
+
+(re-frame/reg-event-fx
+  ::init-edit-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id student-id]}]]
     {:db       (-> db
@@ -173,6 +186,29 @@
 
 (re-frame/reg-event-fx
   ::save-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-student-saving db false)}))
+
+(re-frame/reg-event-fx
+  ::create
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
+    (let [school-id (:school-id db)]
+      {:db       (set-student-saving db true)
+       :dispatch [::warehouse/create-student {:school-id school-id :data data}
+                  {:on-success [::create-success on-success data]
+                   :on-failure [::create-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::create-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ on-success student-data]]
+    {:db                (set-student-saving db false)
+     ::widgets/callback [on-success student-data]}))
+
+(re-frame/reg-event-fx
+  ::create-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-student-saving db false)}))

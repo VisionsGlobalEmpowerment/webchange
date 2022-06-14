@@ -5,7 +5,7 @@
     [webchange.admin.pages.student-profile.state :as state]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.admin.widgets.student-form.views :refer [student-form]]
+    [webchange.admin.widgets.student-form.views :refer [edit-student-form]]
     [webchange.admin.widgets.student-progress-complete.views :refer [student-progress-complete]]
     [webchange.ui-framework.components.index :as ui]))
 
@@ -134,10 +134,10 @@
                     :actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
                                               :variant  "light"
                                               :on-click handle-edit-click}]}
-     [student-form {:student-id student-id
-                    :school-id  school-id
-                    :editable?  @form-editable?
-                    :on-save    handle-save-click}]]))
+     [edit-student-form {:student-id student-id
+                         :school-id  school-id
+                         :editable?  @form-editable?
+                         :on-save    handle-save-click}]]))
 
 (defn- side-bar
   [props]
