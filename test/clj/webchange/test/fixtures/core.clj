@@ -94,6 +94,18 @@
        (let [[{user-id :id}] (accounts/create-user-with-credentials! data)]
          (assoc data :id user-id))))))
 
+(defn admin-user-created
+  ([] (admin-user-created {}))
+  ([options]
+   (let [defaults {:first-name "Test" :last-name "Test" :email "admin@example.com" :password "test" :type "admin"}
+         data (merge defaults options)
+         email (:email data)
+         password (:password data)]
+     (if-let [user (db/find-user-by-email {:email email})]
+       (assoc user :password password)
+       (let [[{user-id :id}] (accounts/create-user-with-credentials! data)]
+         (assoc data :id user-id))))))
+
 (defn student-user-created
   ([] (student-user-created {}))
   ([options]
@@ -262,6 +274,15 @@
   ([request user-id]
    (let [teacher (db/get-teacher-by-user {:user_id user-id})
          session {:identity {:id user-id :school-id (:school-id teacher)}}
+         session-key (store/write-session handler/dev-store nil session)]
+     (assoc request :cookies {"ring-session" {:value session-key}}))))
+
+(defn admin-logged-in
+  ([request]
+   (let [{user-id :id} (admin-user-created)]
+     (admin-logged-in request user-id)))
+  ([request user-id]
+   (let [session {:identity {:id user-id}}
          session-key (store/write-session handler/dev-store nil session)]
      (assoc request :cookies {"ring-session" {:value session-key}}))))
 
@@ -694,7 +715,7 @@
   (let [url (str "/api/schools")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    admin-logged-in)]
     (-> (handler/dev-handler request)
         :body
         slurp
@@ -712,14 +733,14 @@
   (let [url (str "/api/schools/" id)
         request (-> (mock/request :put url (json/write-str data))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    admin-logged-in)]
     (handler/dev-handler request)))
 
 (defn delete-school!
   [id]
   (let [url (str "/api/schools/" id)
         request (-> (mock/request :delete url)
-                    teacher-logged-in)]
+                    admin-logged-in)]
     (handler/dev-handler request)))
 
 (defn asset-hash-created [options]

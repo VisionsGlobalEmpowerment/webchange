@@ -7,7 +7,7 @@
 
 (defn- reset-statistics!
   []
-  (reset! @overall-statistics nil))
+  (reset! overall-statistics nil))
 
 (defn get-overall-statistics
   []
