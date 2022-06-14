@@ -17,14 +17,14 @@
           :route {:page :dashboard}}
          {:id    :school-management
           :text  "School Management"
-          :icon  "preview"
+          :icon  "school"
           :route {:page :schools}}
          {:id   :lesson-builder
-          :text "Lesson builder"
-          :icon "create-game"}
+          :text "Create"
+          :icon "create"}
          {:id       :library
           :text     "Library"
-          :icon     "book-library"
+          :icon     "library"
           :children [{:id    :courses
                       :text  "Courses"
                       :route {:page :courses}}
@@ -36,7 +36,7 @@
                       :route {:page :books}}]}
          {:id       :accounts
           :text     "Accounts"
-          :icon     "users"
+          :icon     "accounts"
           :children [{:id    :admin
                       :text  "Admin"
                       :route {:page        :accounts

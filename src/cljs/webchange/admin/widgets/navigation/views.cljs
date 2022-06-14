@@ -1,8 +1,8 @@
 (ns webchange.admin.widgets.navigation.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.widgets.navigation.logo :refer [logo]]
     [webchange.admin.widgets.navigation.state :as state]
+    [webchange.ui.index :as ui]
     [webchange.ui-framework.components.index :as c]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -41,8 +41,8 @@
     [:div {:class-name (get-class-name {"root-item"   true
                                         "active-item" active?})
            :on-click   handle-click}
-     [c/icon {:icon       icon
-              :class-name "icon"}]
+     [ui/navigation-icon {:icon       icon
+                          :class-name "icon"}]
      [:div.text text]
      (when-not (empty? children)
        [:<>
@@ -55,7 +55,7 @@
   []
   (let [items @(re-frame/subscribe [::state/navigation-items])]
     [:div.top-bar--navigation
-     [logo]
+     [ui/logo-with-name]
      (for [{:keys [id] :as item} items]
        ^{:key id}
        [root-item item])]))

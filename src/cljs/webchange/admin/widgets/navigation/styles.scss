@@ -78,7 +78,9 @@
             @include icon-size(18px);
         }
 
-        & > .text {}
+        & > .text {
+            white-space: nowrap;
+        }
 
         .children-list {
             @include navigation-items-list;

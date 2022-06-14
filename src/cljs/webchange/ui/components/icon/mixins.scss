@@ -1,0 +1,6 @@
+@mixin bbs--icon-color($color) {
+    svg {
+        fill: $color;
+        stroke: none;
+    }
+}
