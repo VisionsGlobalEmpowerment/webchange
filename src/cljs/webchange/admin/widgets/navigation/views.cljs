@@ -38,16 +38,17 @@
 (defn- root-item
   [{:keys [active? children icon route text]}]
   (let [handle-click #(handle-item-click % route)]
-    [:div {:class-name (get-class-name {"root-item"   true
-                                        "active-item" active?})
+    [:div {:class-name (get-class-name {"root-item"       true
+                                        "navigation-item" true
+                                        "active-item"     active?})
            :on-click   handle-click}
      [ui/navigation-icon {:icon       icon
-                          :class-name "icon"}]
+                          :class-name "root-icon"}]
      [:div.text text]
      (when-not (empty? children)
        [:<>
-        [c/icon {:icon       "chevron-down"
-                 :class-name "icon"}]
+        [ui/icon {:icon       "caret-down"
+                  :class-name "expand-icon"}]
         [children-list {:items    children
                         :position "bottom"}]])]))
 
@@ -55,7 +56,7 @@
   []
   (let [items @(re-frame/subscribe [::state/navigation-items])]
     [:div.top-bar--navigation
-     [ui/logo-with-name]
+     [ui/logo-with-name {:class-name "logo"}]
      (for [{:keys [id] :as item} items]
        ^{:key id}
        [root-item item])]))

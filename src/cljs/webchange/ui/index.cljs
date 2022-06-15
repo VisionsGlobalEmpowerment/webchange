@@ -6,6 +6,6 @@
 
 (def logo-with-name logo/logo-with-name)
 (def navigation-icon icon/navigation-icon)
-(def system-icon icon/system-icon)
+(def icon icon/system-icon)
 
 (def get-class-name gcn/get-class-name)

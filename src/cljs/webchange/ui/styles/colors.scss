@@ -1,0 +1,50 @@
+$color-blue-1: #3453A1;
+$color-blue-1-dark: #283F79;
+$color-blue-1-light: #80BFE5;
+
+$color-blue-2: #80BFE5;
+$color-blue-2-dark: #3453A1;
+$color-blue-2-light: #C0E3F8;
+
+$color-green-1: #3E6C5F;
+$color-green-1-dark: #33584E;
+$color-green-1-light: #84C9BD;
+
+$color-green-2: #84C9BD;
+$color-green-2-dark: #3E6C5F;
+$color-green-2-light: #8BFFEB;
+
+$color-yellow-1: #F5A36C;
+$color-yellow-1-dark: #D97532;
+$color-yellow-1-light: #F0D97F;
+
+$color-yellow-2: #F0D97F;
+$color-yellow-2-dark: #F5A36C;
+$color-yellow-2-light: #FFF4CB;
+
+$color-grey-0: #000000;
+$color-grey-1: #3D465B;
+$color-grey-2: #636A7C;
+$color-grey-3: #C7D1EB;
+$color-grey-4: #DCE3F5;
+$color-grey-5: #E9F5FF;
+
+@function bss--color($color) {
+    @if $color == white {
+        @return #fff;
+    } @else if $color == blue-1 {
+        @return $color-blue-1;
+    } @else if $color == blue-2 {
+        @return $color-blue-2;
+    } @else if $color == green-1 {
+        @return $color-green-1;
+    } @else if $color == green-2 {
+        @return $color-green-2;
+    } @else if $color == yellow-1 {
+        @return $color-yellow-1;
+    } @else if $color == yellow-2 {
+        @return $color-yellow-2;
+    }
+
+    @return $color;
+}

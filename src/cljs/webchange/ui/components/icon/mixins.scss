@@ -9,3 +9,10 @@
         }
     }
 }
+
+@mixin bbs--icon-size($size) {
+    svg {
+        width: $size;
+        height: $size;
+    }
+}
