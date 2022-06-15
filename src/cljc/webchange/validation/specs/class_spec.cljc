@@ -13,4 +13,4 @@
 
 (s/def ::class (s/keys :req-un [::name
                                 ::course-id]
-                       :opt-un []))
+                       :opt-un [::archived]))

@@ -141,7 +141,7 @@
 (defn unassign-student!
   [id]
   (let [{user-id :user-id} (db/get-student {:id id})]
-    (db/unassign-student! {:user_id user-id})
+    (db/unassign-student! {:id id})
     (db/unassign-course-stat! {:user_id user-id}))
   [true {:id id}])
 
@@ -213,3 +213,31 @@
     (db/edit-teacher! (assoc prepared-data :id teacher-id))
     {:id   teacher-id
      :data (get-teacher teacher-id)}))
+
+(defn archive-class!
+  [class-id]
+  (db/archive-class! {:id class-id})
+  (db/remove-teachers-from-class! {:class-id class-id})
+  (db/remove-students-from-class! {:class-id class-id})
+  (e/dispatch {:type :classes/archived :class-id class-id})
+  (db/get-class {:id class-id}))
+
+(defn archive-teacher!
+  [teacher-id]
+  (let [classes (db/classes-by-teacher {:teacher_id teacher-id})]
+    (db/remove-teacher-from-classes! {:teacher_id teacher-id})
+    (doseq [{class-id :id} classes]
+      (e/dispatch {:type :teachers/removed-from-class :teacher-id teacher-id :class-id class-id})))
+  (db/archive-teacher! {:id teacher-id})
+  (e/dispatch {:type :teachers/archived :teacher-id teacher-id})
+  (db/get-teacher {:id teacher-id}))
+
+(defn archive-student!
+  [student-id]
+  (let [{class-id :class-id} (db/get-student {:id student-id})]
+    (db/unassign-student! {:id student-id})
+    (when class-id
+      (e/dispatch {:type :students/removed-from-class :student-id student-id :class-id class-id})))
+  (db/archive-student! {:id student-id})
+  (e/dispatch {:type :students/archived :student-id student-id})
+  (db/get-student {:id student-id}))

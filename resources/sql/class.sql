@@ -43,7 +43,7 @@ WHERE id = :id
 -- :doc unassigns student
 UPDATE students
 SET class_id = null
-WHERE user_id = :user_id
+WHERE id = :id
 
 -- :name delete-student! :! :n
 -- :doc deletes student
@@ -52,10 +52,9 @@ WHERE user_id = :user_id
 
 -- :name get-classes :? :*
 -- :doc retrieve all classes by school
-SELECT cl.*, cr.slug as course_slug
-FROM classes cl
-LEFT JOIN courses cr ON cl.course_id = cr.id
+SELECT * from classes
 WHERE school_id = :school_id
+AND archived = false
 
 -- :name get-class :? :1
 -- :doc retrieve class record
@@ -68,11 +67,13 @@ WHERE cl.id = :id;
 -- :doc retrieve students given class id
 SELECT * from students
 WHERE class_id = :class_id
+AND archived = false
 
 -- :name get-students-by-school :? :*
 -- :doc retrieve students given class id
 SELECT * from students
 WHERE school_id = :school_id
+AND archived = false
 
 -- :name get-students-unassigned :? :*
 -- :doc retrieve students without a class
@@ -120,12 +121,19 @@ WHERE user_id = :user_id
 -- :doc retrieve teachers by school id
 SELECT * from teachers
 WHERE school_id = :school_id
+AND archived = false
 
 -- :name teachers-by-class :? :*
 -- :doc retrieve teacher by class id
 SELECT * from teachers t
 INNER JOIN class_teachers ct ON ct.teacher_id = t.id
 WHERE class_id = :class_id
+
+-- :name classes-by-teacher :? :*
+-- :doc retrieve classes by teacher id
+SELECT * from classes c
+INNER JOIN class_teachers ct ON ct.class_id = c.id
+WHERE ct.teacher_id = :teacher_id
 
 -- :name assign_teacher_to_class! :! :n
 -- :doc assign teacher by class id
@@ -160,6 +168,7 @@ WHERE school_id = :id
 -- :name get-schools :? :*
 -- :doc retrieve school records
 SELECT * from schools
+WHERE archived = false
 
 -- :name update-school! :! :n
 -- :doc updates an existing school record
@@ -181,10 +190,22 @@ WHERE id = :id
 -- :name calculate-school-stats :? :1
 -- :doc retrieve school statistics
 SELECT
-(SELECT count(*) FROM teachers WHERE school_id = :id) as teachers,
-(SELECT count(*) FROM students WHERE school_id = :id) as students,
+(SELECT count(*) FROM teachers WHERE school_id = :id AND archived = false) as teachers,
+(SELECT count(*) FROM students WHERE school_id = :id AND archived = false) as students,
 (SELECT count(*) FROM school_courses WHERE school_id = :id) as courses,
-(SELECT count(*) FROM classes WHERE school_id = :id) as classes
+(SELECT count(*) FROM classes WHERE school_id = :id AND archived = false) as classes
+
+-- :name calculate-overall-statistics :?
+-- :doc retrieve statistics for dashboard
+SELECT
+(SELECT count(*) FROM schools WHERE archived = false) as schools,
+(SELECT count(*) FROM scenes WHERE type = 'activity') as activities,
+(SELECT count(*) FROM scenes WHERE type = 'book') as books,
+(SELECT count(*) FROM users WHERE type = 'live') as accounts,
+(SELECT count(*) FROM teachers WHERE archived = false) as teachers,
+(SELECT count(*) FROM students WHERE archived = false) as students,
+(SELECT count(*) FROM courses WHERE status = 'published') as courses,
+(SELECT count(*) FROM classes WHERE archived = false) as classes
 
 -- :name is-school-teacher? :? :1
 -- :doc check if user is a teacher in given school
@@ -229,3 +250,61 @@ SELECT
 UPDATE classes
 SET stats = :stats
 WHERE id = :id
+
+-- :name archive-school! :! :n
+-- :doc mark school record as archived
+UPDATE schools
+SET archived = true
+WHERE id = :id
+
+-- :name archive-class! :! :n
+-- :doc mark class record as archived
+UPDATE classes
+SET archived = true
+WHERE id = :id
+
+-- :name archive-teacher! :! :n
+-- :doc mark teacher record as archived
+UPDATE teachers
+SET archived = true
+WHERE id = :id
+
+-- :name archive-student! :! :n
+-- :doc mark student record as archived
+UPDATE student
+SET archived = true
+WHERE id = :id
+
+-- :name archive-classes-by-school! :! :n
+-- :doc mark class records as archived given school id
+UPDATE classes
+SET archived = true
+WHERE school_id = :school_id
+
+-- :name archive-teachers-by-school! :! :n
+-- :doc mark teacher records as archived given school id
+UPDATE teachers
+SET archived = true
+WHERE school_id = :school_id
+
+-- :name archive-students-by-school! :! :n
+-- :doc mark student records as archived given school id
+UPDATE students
+SET archived = true
+WHERE school_id = :school_id
+
+-- :name remove-teachers-from-class! :! :n
+-- :doc remove all teachers from given class
+DELETE FROM class_teachers
+WHERE class_id = :class_id
+
+-- :name remove-teacher-from-classes! :! :n
+-- :doc remove all classes for given teacher
+DELETE FROM class_teachers
+WHERE teacher_id = :teacher_id
+
+-- :name remove-students-from-class! :! :n
+-- :doc remove all students from given class
+UPDATE students
+SET class_id = null
+WHERE class_id = :class_id
