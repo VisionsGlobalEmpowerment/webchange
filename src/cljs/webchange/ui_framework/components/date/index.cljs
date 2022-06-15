@@ -16,7 +16,7 @@
      [:input (cond-> {:type       "date"
                       :class-name (get-class-name {"wc-date"       true
                                                    "wc-date-error" (some? error)})
-                      :value      value
+                      :default-value value
                       :disabled   disabled?
                       :on-change  handle-change}
                      (some? id) (assoc :id id)
