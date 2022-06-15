@@ -2,5 +2,10 @@
     svg {
         fill: $color;
         stroke: none;
+
+        &.stroke-colored {
+            fill: none;
+            stroke: $color;
+        }
     }
 }
