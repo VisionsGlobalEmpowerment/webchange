@@ -112,8 +112,16 @@
                    (assoc :school-id school-id)
                    (reset-form-data)
                    (set-classes-loading true))
-     :dispatch [::warehouse/load-school-classes {:school-id school-id}
-                {:on-success [::load-school-classes-success]}]}))
+     :dispatch-n [[::warehouse/load-school-classes {:school-id school-id}
+                   {:on-success [::load-school-classes-success]}]
+                  [::warehouse/generate-school-access-code {:school-id school-id}
+                   {:on-success [::init-access-code-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::init-access-code-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [access-code]}]]
+    {:db (update-form-data db {:access-code access-code})}))
 
 (re-frame/reg-event-fx
   ::init-edit-form

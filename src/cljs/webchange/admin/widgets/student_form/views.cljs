@@ -12,22 +12,19 @@
    {:value 2 :text "Female"}])
 
 (defn- access-code
-  [{:keys [id label]} {:keys [value error handle-change]}]
-  (when-not (some? value)
-    (re-frame/dispatch [::state/generate-access-code {:on-success handle-change}]))
-  (fn [{:keys [disabled? id label] :as a} {:keys [value error handle-change] :as b}]
-    (let [handle-generate-click #(re-frame/dispatch [::state/generate-access-code {:on-success handle-change}])]
-      [:<>
-       [ui/label {:for id} label]
-       [ui/input {:id        id
-                  :value     value
-                  :error     error
-                  :disabled? true
-                  :on-change handle-change
-                  :action    (when-not disabled?
-                               [ui/icon-button {:icon     "sync"
-                                                :variant  "light"
-                                                :on-click handle-generate-click}])}]])))
+  [{:keys [disabled? id label]} {:keys [value error handle-change]}]
+  (let [handle-generate-click #(re-frame/dispatch [::state/generate-access-code {:on-success handle-change}])]
+    [:<>
+     [ui/label {:for id} label]
+     [ui/input {:id        id
+                :value     value
+                :error     error
+                :disabled? true
+                :on-change handle-change
+                :action    (when-not disabled?
+                             [ui/icon-button {:icon     "sync"
+                                              :variant  "light"
+                                              :on-click handle-generate-click}])}]]))
 
 (def student-model {:first-name    {:label "First Name"
                                     :type  :text}
@@ -55,9 +52,11 @@
     (let [loading? @(re-frame/subscribe [::state/data-loading?])
           saving? @(re-frame/subscribe [::state/student-saving?])
           class-options @(re-frame/subscribe [::state/class-options])
+          student-data @(re-frame/subscribe [::state/form-data])
           handle-save #(re-frame/dispatch [::state/create % {:on-success on-save}])]
       [form {:form-id   (-> (str "student-" student-id)
                             (keyword))
+             :data      student-data
              :model     (assoc-in student-model [:class-id :options] class-options)
              :spec      ::student-spec/create-student
              :on-save   handle-save
