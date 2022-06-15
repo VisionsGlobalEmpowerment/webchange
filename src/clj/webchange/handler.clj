@@ -213,8 +213,9 @@
 
 (defn request-validation-handler
   [e data req]
-  (let [problems (-> data :problems :clojure.spec.alpha/problems)]
-    (bad-request {:errors (phrase-problems problems)})))
+  (if-let [problems (-> data :problems :clojure.spec.alpha/problems)]
+    (bad-request {:errors (phrase-problems problems)})
+    (bad-request {:errors (:errors data)})))
 
 (defroutes app
   (api

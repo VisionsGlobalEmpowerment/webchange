@@ -5,6 +5,7 @@
     [webchange.course.core :refer [get-course-info]]
     [clojure.tools.logging :as log]
     [java-time :as jt]
+    [compojure.api.exception :as ex]
     [camel-snake-kebab.extras :refer [transform-keys]]
     [camel-snake-kebab.core :refer [->snake_case_keyword]]))
 
@@ -29,7 +30,11 @@
    :type type})
 
 (defn create-user!
-  [{:keys [active] :as options :or {active true}}]
+  [{:keys [active email] :as options :or {active true}}]
+  (when (db/find-user-by-email {:email email})
+    (throw (ex-info "Email already in use"
+                    {:type ::ex/request-validation
+                     :errors {:email "Email already in use"}})))
   (let [created-at (jt/local-date-time)
         last-login (jt/local-date-time)]
     (-> options
