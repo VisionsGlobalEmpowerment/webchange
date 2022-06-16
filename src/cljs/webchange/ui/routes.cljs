@@ -2,13 +2,24 @@
   (:require
     [clojure.string :as str]
     [re-frame.core :as re-frame]
+    [webchange.ui.pages.index :refer [pages]]
     [webchange.ui.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-(def routes {""        :dashboard
-             "/"       :dashboard
-             "/colors" :colors
-             "/icons"  :icons})
+
+
+#_(def routes {""        :dashboard
+               "/"       :dashboard
+               "/colors" :colors
+               "/icons"  :icons})
+
+(def routes (->> (dissoc pages :404)
+                 (map first)
+                 (map (fn [page-key]
+                        [(str "/" (name page-key)) page-key]))
+                 (into {})
+                 (merge {""  :dashboard
+                         "/" :dashboard})))
 
 (defn get-title
   ([params]
@@ -37,7 +48,7 @@
        (set! (.-title js/document))))
 
 (re-frame/reg-event-fx
-  ::redirect
+  :ui-redirect
   (fn [{:keys [_]} [_ & args]]
     {::module-router/redirect {:router          @router
                                :redirect-params args}}))

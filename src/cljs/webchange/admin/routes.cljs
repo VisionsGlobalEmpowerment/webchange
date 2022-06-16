@@ -35,6 +35,7 @@
              "/library"  {"/activities" {""                              :activities
                                          ["/" [#"[\w-%]+" :activity-id]] :activity-edit}
                           "/books"      {""                          :books
+                                         "create"                    :book-create
                                          ["/" [#"[\w-%]+" :book-id]] :book-edit}}})
 
 (def sitemap

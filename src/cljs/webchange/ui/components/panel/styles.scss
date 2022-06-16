@@ -1,4 +1,6 @@
 .bbs--panel {
+    display: flex;
+    flex-direction: column;
     background-color: bbs--color(white);
     border-radius: 6px;
 
@@ -14,6 +16,15 @@
     }
 
     .bbs--panel--content {
+        flex: 1 1;
         padding: 18px;
+    }
+
+    &.bbs--panel--color-blue-1 {
+        background-color: bbs--color(blue-1);
+
+        .bbs--panel--title {
+            color: bbs--color(white);
+        }
     }
 }

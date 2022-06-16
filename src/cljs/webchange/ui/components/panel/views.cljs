@@ -5,11 +5,12 @@
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn panel
-  [{:keys [class-name title icon]}]
+  [{:keys [class-name class-name-content color title icon]}]
   (let [show-title? (or (some? title)
                         (some? icon))]
-    [:div {:class-name (get-class-name {"bbs--panel" true
-                                        class-name   (some? class-name)})}
+    [:div {:class-name (get-class-name {"bbs--panel"                     true
+                                        (str "bbs--panel--color-" color) (some? color)
+                                        class-name                       (some? class-name)})}
      (when show-title?
        [:h3.bbs--panel--title
         (when (some? icon)
@@ -18,4 +19,5 @@
         title])
      (->> (r/current-component)
           (r/children)
-          (into [:div {:class-name "bbs--panel--content"}]))]))
+          (into [:div {:class-name (get-class-name {"bbs--panel--content" true
+                                                    class-name-content    (some? class-name-content)})}]))]))

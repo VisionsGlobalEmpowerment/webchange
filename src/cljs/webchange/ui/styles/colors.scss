@@ -29,34 +29,44 @@ $color-grey-3: #C7D1EB;
 $color-grey-4: #DCE3F5;
 $color-grey-5: #E9F5FF;
 
-@function bbs--color($color) {
+@function bbs--color($color, $opacity: 1) {
+    $result: $color;
+
     @if $color == white {
-        @return #fff;
+        $result: #ffffff;
     } @else if $color == grey-0 {
-        @return $color-grey-0;
+        $result: $color-grey-0;
     } @else if $color == grey-1 {
-        @return $color-grey-1;
+        $result: $color-grey-1;
     } @else if $color == grey-2 {
-        @return $color-grey-2;
+        $result: $color-grey-2;
     } @else if $color == grey-3 {
-        @return $color-grey-3;
+        $result: $color-grey-3;
     } @else if $color == grey-4 {
-        @return $color-grey-4;
+        $result: $color-grey-4;
     } @else if $color == grey-5 {
-        @return $color-grey-5;
+        $result: $color-grey-5;
     } @else if $color == blue-1 {
-        @return $color-blue-1;
+        $result: $color-blue-1;
     } @else if $color == blue-2 {
-        @return $color-blue-2;
+        $result: $color-blue-2;
     } @else if $color == green-1 {
-        @return $color-green-1;
+        $result: $color-green-1;
     } @else if $color == green-2 {
-        @return $color-green-2;
+        $result: $color-green-2;
+    } @else if $color == green-2 {
+        $result: $color-green-2;
     } @else if $color == yellow-1 {
-        @return $color-yellow-1;
+        $result: $color-yellow-1;
     } @else if $color == yellow-2 {
-        @return $color-yellow-2;
+        $result: $color-yellow-2;
+    }
+    
+    @if $opacity == 0.2 {
+        $result: #{$result + "33"};
+    } @else if $opacity == 0.3 {
+        $result: #{$result + "4d"};
     }
 
-    @return $color;
+    @return $result;
 }

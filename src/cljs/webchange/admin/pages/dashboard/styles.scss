@@ -29,6 +29,21 @@
         grid-row-end: 3;
     }
 
+    .countries-panel-content {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .quick-links-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
     .component--world-map {
         .component--world-map--map-wrapper {
             padding: 16px;
@@ -52,7 +67,7 @@
         }
 
         .countries-list-item {
-            @include bbs--text--small-detail-bold;
+            @include bbs--noto-12-b;
 
             display: flex;
             gap: 8px;

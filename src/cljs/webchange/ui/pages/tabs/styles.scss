@@ -1,0 +1,10 @@
+#page--tabs {
+    .tabs-panel {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        justify-items: stretch;
+        align-items: center;
+        column-gap: 32px;
+        row-gap: 32px;
+    }
+}

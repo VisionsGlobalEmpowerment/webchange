@@ -9,6 +9,7 @@
     @import "colors/styles";
     @import "dashboard/styles";
     @import "icons/styles";
+    @import "tabs/styles";
 
     #bbs--ui-pages--layout {
         display: flex;
@@ -46,6 +47,13 @@
             margin: 32px 0;
         }
 
+        .bbs--ui-pages--panel {
+            padding: 32px;
+            border-radius: 16px;
 
+            &.bbs--ui-pages--panel--color-blue-1 {
+                background-color: bbs--color(blue-1);
+            }
+        }
     }
 }

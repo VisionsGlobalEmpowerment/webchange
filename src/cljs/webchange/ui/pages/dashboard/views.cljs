@@ -2,12 +2,11 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.ui.pages.index :refer [pages]]
-    [webchange.ui.pages.layout :refer [layout]]
-    [webchange.ui.routes :as routes]))
+    [webchange.ui.pages.layout :refer [layout]]))
 
 (defn- page-button
   [{:keys [route title]}]
-  (let [handle-click #(re-frame/dispatch [::routes/redirect route])]
+  (let [handle-click #(re-frame/dispatch [:ui-redirect route])]
     [:button {:on-click handle-click}
      title]))
 
