@@ -1,86 +1,65 @@
 (ns webchange.book-library.pages.read.state
   (:require
     [re-frame.core :as re-frame]
+    [re-frame.std-interceptors :as i]
     [webchange.book-library.state :as parent-state]
     [webchange.interpreter.events :as interpreter]
     [webchange.state.state :as state]
     [webchange.state.warehouse :as warehouse]))
 
-(defn path-to-db
-  [relative-path]
-  (->> relative-path
-       (concat [:read])
-       (parent-state/path-to-db)))
+(def path-to-db :book-library-read-book)
+
+(re-frame/reg-sub
+  path-to-db
+  (fn [db]
+    (get db path-to-db)))
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ {:keys [book-id course-id]}]]
-    {:dispatch-n [[::parent-state/init {:course-id course-id}]
-                  [::set-page-state {:show-menu?           false
-                                     :book-loaded?         false
-                                     :stage-ready?         false
-                                     :reading-in-progress? false
-                                     :error                nil}]
-                  [::load-book book-id]
-                  [::interpreter/load-lessons book-id]]}))
-
-(re-frame/reg-event-fx
-  ::load-book
-  (fn [{:keys [_]} [_ book-id]]
-    {:dispatch-n [[::warehouse/load-first-scene
-                   {:course-slug book-id}
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [book-id course-id]}]]
+    {:db (-> db
+             (assoc :book-id book-id)
+             (assoc :course-id course-id)
+             (assoc :page-state {:show-menu?           false
+                                 :book-loaded?         false
+                                 :stage-ready?         false
+                                 :reading-in-progress? false
+                                 :error                nil}))
+     :dispatch-n [[::parent-state/init {:course-id course-id}]
+                  [::state/set-current-scene-id book-id]
+                  [::warehouse/load-activity-current-version
+                   {:activity-id book-id}
                    {:on-success [::init-scene-data]
                     :on-failure [::load-book-failed]}]]}))
 
 (re-frame/reg-event-fx
   ::init-scene-data
-  (fn [{:keys [_]} [_ book-data]]
-    (let [scene-slug (:scene-slug book-data)]
-      {:dispatch-n [[::state/set-scene-data scene-slug book-data]
-                    [::state/set-current-scene-id scene-slug]
-                    [::set-book-loaded true]]})))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ book-data]]
+    (let [scene-id (:book-id db)]
+      {:db (-> db
+               (assoc-in [:page-state :book-loaded?] true))
+       :dispatch [::state/set-scene-data scene-id book-data]})))
 
 (re-frame/reg-event-fx
   ::load-book-failed
   (fn [{:keys [_]} [_ _]]
     {:dispatch [::set-error {:message "Book loading failed"}]}))
 
-;; Book
-
-(def book-path (path-to-db [:book]))
-
-(defn get-book
-  [db]
-  (get-in db book-path))
-
-(re-frame/reg-sub
-  ::book
-  get-book)
-
-(re-frame/reg-event-fx
-  ::set-book
-  (fn [{:keys [db]} [_ book-id book-data]]
-    {:db (assoc-in db book-path {:id   book-id
-                                 :data book-data})}))
-
 ;; Page state
-
-(def page-state-path (path-to-db [:page-state]))
 
 (re-frame/reg-sub
   ::page-state
+  :<- [path-to-db]
   (fn [db]
-    (get-in db page-state-path)))
-
-(re-frame/reg-event-fx
-  ::set-page-state
-  (fn [{:keys [db]} [_ data]]
-    {:db (assoc-in db page-state-path data)}))
+    (get db :page-state)))
 
 (re-frame/reg-event-fx
   ::update-page-state
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data-patch]]
-    {:db (update-in db page-state-path merge data-patch)}))
+    {:db (update db :page-state merge data-patch)}))
 
 ; book-loaded?
 
@@ -90,11 +69,6 @@
     (re-frame/subscribe [::page-state]))
   (fn [menu-state]
     (get menu-state :book-loaded?)))
-
-(re-frame/reg-event-fx
-  ::set-book-loaded
-  (fn [{:keys [_]} [_ value]]
-    {:dispatch [::update-page-state {:book-loaded? value}]}))
 
 ;; error
 

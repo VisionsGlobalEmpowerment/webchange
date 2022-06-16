@@ -193,7 +193,7 @@
                    {:on-success [::load-course-success]}]
                   [::warehouse/load-course-info course-slug
                    {:on-success [::load-course-info-success]}]
-                  [::warehouse/load-available-activities
+                  [::warehouse/load-visible-activities
                    {:on-success [::load-available-activities-success]}]]}))
 
 (re-frame/reg-event-fx

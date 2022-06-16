@@ -108,8 +108,8 @@
   (fn [{:keys [db]} [_]]
     (let [{:keys [id]} (get-book db)]
       {:db       (-> db (set-removing true))
-       :dispatch [::warehouse/remove-available-book
-                  {:book-id id}
+       :dispatch [::warehouse/archive-activity
+                  {:activity-id id}
                   {:on-success [::remove-success]
                    :on-failure [::remove-failure]}]})))
 

@@ -27,3 +27,5 @@
 (s/def ::edit-activity (s/keys :req-un [::name ::lang]
                                :opt-un [::metadata]))
 
+(s/def ::archive-activity (s/keys :req-un [::archive]))
+(s/def ::toggle-visibility (s/keys :req-un [::visible]))

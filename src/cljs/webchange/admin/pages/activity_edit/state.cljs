@@ -108,7 +108,7 @@
   (fn [{:keys [db]} [_]]
     (let [{:keys [id]} (get-activity db)]
       {:db       (-> db (set-removing true))
-       :dispatch [::warehouse/remove-available-activity
+       :dispatch [::warehouse/archive-activity
                   {:activity-id id}
                   {:on-success [::remove-success]
                    :on-failure [::remove-failure]}]})))

@@ -25,7 +25,7 @@
   ([request]
    (handle-get-books request nil))
   ([_ language]
-   (let [books (cond->> (core/get-book-library {:with-host-name? false})
+   (let [books (cond->> (core/get-visible-books)
                         (some? language) (filter #(= (:lang %) language)))]
      (handle [true books]))))
 
@@ -38,7 +38,6 @@
   (context "/api/book-library" []
     :tags ["book-library"]
     (GET "/all" request
-      :return [Course]
       :summary "Returns all published books"
       (handle-get-books request))
     (GET "/categories" request
@@ -67,6 +66,5 @@
       (handle [true tags]))
     (GET "/:language" request
       :path-params [language :- s/Str]
-      :return [Course]
       :summary "Returns published books for specified language"
       (handle-get-books request language))))

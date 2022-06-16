@@ -38,10 +38,9 @@
                      (map (fn [book]
                             (-> (map-keys book
                                           {:id        :id
-                                           :image-src :cover
+                                           :preview   :cover
                                            :lang      :lang
-                                           :name      :title
-                                           :slug      :book-id})
+                                           :name      :title})
                                 (assoc :categories (get-in book [:metadata :categories] []))
                                 (assoc :keywords (get-in book [:metadata :keywords] []))
                                 (dissoc :metadata)))))]

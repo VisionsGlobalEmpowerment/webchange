@@ -190,7 +190,12 @@ SELECT * from scenes;
 -- :name get-scenes-by-type :? :*
 -- :doc retrieve all scene records
 SELECT * from scenes
-WHERE type = :type;
+WHERE type = :type AND status != 'archived';
+
+-- :name get-scenes-by-type-and-status :? :*
+-- :doc retrieve all scene records
+SELECT * from scenes
+WHERE type = :type AND status = :status;
 
 -- :name get-scenes-by-course-id :? :*
 -- :doc retrieve scenes by course id
@@ -294,4 +299,10 @@ WHERE id = :id
 -- :doc updates an existing scene record
 UPDATE scenes
 SET name = :name, lang = :lang, metadata = :metadata
+WHERE id = :id
+
+-- :name update-scene-status! :! :n
+-- :doc updates an existing scene record status
+UPDATE scenes
+SET status = :status
 WHERE id = :id

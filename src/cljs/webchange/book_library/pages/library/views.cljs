@@ -8,8 +8,8 @@
     [webchange.i18n.translate :as i18n]))
 
 (defn- book-list-item
-  [{:keys [book-id cover title]}]
-  (let [handle-click #(re-frame/dispatch [::state/open-book book-id])]
+  [{:keys [id cover title]}]
+  (let [handle-click #(re-frame/dispatch [::state/open-book id])]
     [:li.book-list-item {:title    title
                          :on-click handle-click}
      [:img.book-title {:src cover}]]))
