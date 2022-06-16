@@ -1,0 +1,15 @@
+@mixin bbs--progress-size($size, $thickness: 0.25em) {
+    margin: 0;
+    padding: 0;
+    width: $size;
+    height: $size;
+
+    &.bbs--circular-progress:indeterminate::before,
+     .bbs--circular-progress:indeterminate::-webkit-progress-value {
+        border-width: $thickness;
+     }
+}
+
+@mixin bbs--progress-color($color) {
+    color: $color;
+}
