@@ -5,3 +5,19 @@ html, body {
     font-size: 16px;
     line-height: 26px;
 }
+
+$bss--text-weight--bold: 700;
+
+@mixin bbs--text--small-detail-bold {
+    font-weight: $bss--text-weight--bold;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+h3 {
+    font-weight: $bss--text-weight--bold;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+

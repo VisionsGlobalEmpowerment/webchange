@@ -29,9 +29,21 @@ $color-grey-3: #C7D1EB;
 $color-grey-4: #DCE3F5;
 $color-grey-5: #E9F5FF;
 
-@function bss--color($color) {
+@function bbs--color($color) {
     @if $color == white {
         @return #fff;
+    } @else if $color == grey-0 {
+        @return $color-grey-0;
+    } @else if $color == grey-1 {
+        @return $color-grey-1;
+    } @else if $color == grey-2 {
+        @return $color-grey-2;
+    } @else if $color == grey-3 {
+        @return $color-grey-3;
+    } @else if $color == grey-4 {
+        @return $color-grey-4;
+    } @else if $color == grey-5 {
+        @return $color-grey-5;
     } @else if $color == blue-1 {
         @return $color-blue-1;
     } @else if $color == blue-2 {

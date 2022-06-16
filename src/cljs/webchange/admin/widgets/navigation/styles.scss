@@ -1,5 +1,5 @@
 @mixin active-item {
-    color: bss--color(yellow-1);
+    color: bbs--color(yellow-1);
 }
 
 @mixin navigation-items-list {
@@ -99,19 +99,19 @@
             }
 
             .root-icon {
-                @include bbs--icon-color(bss--color(yellow-1));
+                @include bbs--icon-color(bbs--color(yellow-1));
             }
         }
 
         &.active-item {
             .root-icon {
-                @include bbs--icon-color(bss--color(yellow-1));
+                @include bbs--icon-color(bbs--color(yellow-1));
             }
         }
     }
 
     .root-icon {
-        @include bbs--icon-color(bss--color(blue-2));
+        @include bbs--icon-color(bbs--color(blue-2));
         @include bbs--icon-size(22px);
 
         border-radius: 1px;
@@ -119,7 +119,7 @@
     }
 
     .expand-icon {
-        @include bbs--icon-color(bss--color(white));
+        @include bbs--icon-color(bbs--color(white));
         @include bbs--icon-size(22px);
     }
 }
