@@ -1,14 +1,30 @@
+@import "../icon/mixins";
 @import "../progress/mixins";
 
 .bbs--button {
+    $default-size: 30px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     border: none;
     padding: 6px 12px;
     color: bbs--color(white);
-    min-height: 30px;
+    min-height: $default-size;
+
+    .bbs--button--icon {
+        $size: 20px;
+
+        @include bbs--icon-color(bbs--color(white));
+        @include bbs--icon-size($size);
+
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        margin-top: -$size * 0.5;
+    }
 
     &.bbs--button--shape-rectangle {
         border-radius: 4px;
@@ -49,6 +65,38 @@
             &:not([disabled]):active,
             &:not([disabled]).bbs--button--state-active {
                 background-color: bbs--color($color, $variant: dark);
+            }
+        }
+    }
+
+    &.bbs--button--icon-button {
+        width: $default-size;
+        height: $default-size;
+        padding: 0;
+        background-color: bbs--color(transparent);
+        border-radius: 9999px;
+
+        .bbs--button--icon {
+            @include bbs--icon-size(75%);
+
+            width: 100%;
+            height: 100%;
+
+            position: relative;
+            right: unset;
+            top: unset;
+            margin-top: unset;
+        }
+
+        @each $color in $bbs--base-colors {
+            &.bbs--button--color-#{$color} {
+                .bbs--button--icon {
+                    @include bbs--icon-color(bbs--color(#{$color}));
+                }
+
+                progress {
+                    @include bbs--progress-color(bbs--color(#{$color}));
+                }
             }
         }
     }

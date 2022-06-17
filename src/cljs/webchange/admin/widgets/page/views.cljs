@@ -1,6 +1,7 @@
 (ns webchange.admin.widgets.page.views
   (:require
     [reagent.core :as r]
+    [webchange.admin.widgets.page.header.views :as header-views]
     [webchange.ui-framework.components.index :as c]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
@@ -67,7 +68,7 @@
                (when (some? title)
                  [:label title])]))])
 
-(defn header
+(defn _header
   [{:keys [actions class-name] :as props}]
   (let [children (->> (r/current-component)
                       (r/children))]
@@ -80,6 +81,8 @@
      (when (some? actions)
        [:div.actions
         actions])]))
+
+(def header header-views/header)
 
 (defn- block-title
   [{:keys [actions icon title title-action]}]

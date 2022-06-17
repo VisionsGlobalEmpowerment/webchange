@@ -13,7 +13,7 @@
           title @(re-frame/subscribe [::state/title])
           handle-save #(re-frame/dispatch [::state/open-accounts-list])]
       [page/page {:class-name "page--account-add"}
-       [page/header {:title title
+       [page/_header {:title title
                      :icon  "user"}]
        [page/main-content
         [add-account-form {:account-type account-type

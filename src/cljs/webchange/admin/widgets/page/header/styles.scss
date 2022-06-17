@@ -1,0 +1,37 @@
+.widget--page--header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 24px 30px;
+    border-radius: 6px;
+
+    color: bbs--color(white);
+
+    background-color: bbs--color(blue-1);
+    background-image: url("/images/admin/page/header_background.svg");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: auto;
+
+    z-index: 1;
+
+    .widget--page--header--navigation-icon {
+        @include bbs--icon-color(bbs--color(yellow-2));
+        @include bbs--icon-size(36px);
+    }
+
+    .widget--page--header--title {
+        @include bbs--noto-16-b;
+    }
+
+    .widget--page--header--filler {
+        flex: 1 1;
+    }
+
+    .widget--page--header--close-button {
+        $size: 36px;
+        width: $size;
+        height: $size;
+    }
+}

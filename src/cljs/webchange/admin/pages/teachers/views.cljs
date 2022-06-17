@@ -10,7 +10,7 @@
   []
   (let [school-name @(re-frame/subscribe [::state/school-name])
         handle-add-click #(re-frame/dispatch [::state/add-teacher])]
-    [page/header {:title   school-name
+    [page/_header {:title   school-name
                   :icon    "school"
                   :actions [ui/icon-button {:icon     "add"
                                             :on-click handle-add-click}

@@ -9,7 +9,7 @@
   []
   (let [handle-add-click #(re-frame/dispatch [::state/add-school])
         handle-archived-click #(re-frame/dispatch [::state/open-archived-schools])]
-    [page/header {:title   "Schools"
+    [page/_header {:title   "Schools"
                   :icon    "school"
                   :actions [c/icon-button {:icon       "add"
                                            :title      "Add School"

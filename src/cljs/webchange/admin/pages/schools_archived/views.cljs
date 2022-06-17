@@ -26,7 +26,7 @@
   (fn []
     (let [schools @(re-frame/subscribe [::state/schools-list])]
       [page/page {:class-name "page--schools-archived"}
-       [page/header {:title "Archived Schools"
+       [page/_header {:title "Archived Schools"
                      :icon  "archive"}]
        [page/main-content
         [l/list {:class-name "schools-list"}

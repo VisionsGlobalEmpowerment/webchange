@@ -61,7 +61,7 @@
   (fn []
     (let [loading? @(re-frame/subscribe [::state/activity-loading?])]
       [page/page {:class-name "page--activity-edit"}
-       [page/header {:title "Activity"
+       [page/_header {:title "Activity"
                      :icon  "activity"}]
        [page/main-content {:class-name "page--activity-edit--content"}
         (if loading?

@@ -8,11 +8,9 @@
 (defn- header
   []
   (let [handle-close-click #(re-frame/dispatch [::state/open-school-list])]
-    [page/header {:title   "New School"
-                  :icon    "school"
-                  :actions [ui/icon-button {:icon     "close"
-                                            :title    "Cancel"
-                                            :on-click handle-close-click}]}]))
+    [page/header {:title    "Add School"
+                  :icon     "school"
+                  :on-close handle-close-click}]))
 
 (defn page
   []

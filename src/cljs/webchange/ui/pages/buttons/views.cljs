@@ -9,23 +9,33 @@
              {:loading? true}
              {:disabled? true}])
 
-(def variants [{}
-               {:chip "plus"}
-               {:icon "restore"}
-               {:color     "yellow-2"
-                :icon      "dnd"
-                :icon-side "left"}
-               {:color      "blue-2"
-                :chip       "plus"
-                :chip-color "green-2"
-                :shape      "rounded"}])
+(def variants-1 [{}
+                 {:chip "plus"}
+                 {:icon "restore"}
+                 {:color     "yellow-2"
+                  :icon      "dnd"
+                  :icon-side "left"}
+                 {:color      "blue-2"
+                  :chip       "plus"
+                  :chip-color "green-2"
+                  :shape      "rounded"}])
 
-(defn- component
+(def variants-2 [{:icon "restore"}
+                 {:color "yellow-2"
+                  :icon  "dnd"}
+                 {:color "green-2"
+                  :icon  "close"}])
+
+(defn- component-1
   [props]
   [ui/button (assoc props :title (js/JSON.stringify (clj->js props))) "Name"])
 
+(defn- component-2
+  [props]
+  [ui/button (assoc props :title (js/JSON.stringify (clj->js props)))])
+
 (defn- variant-states
-  [{:keys [variant variant-idx]}]
+  [{:keys [component variant variant-idx]}]
   [:<>
    (for [[idx state] (map-indexed vector states)]
      ^{:key (str "variant-" variant-idx "--" "state-" idx)}
@@ -35,8 +45,17 @@
   []
   [:div#page--buttons
    [layout {:title "Buttons"}
+    [:h2 "Text Buttons"]
     [panel {:class-name "buttons-panel"}
-     (for [[idx variant] (map-indexed vector variants)]
+     (for [[idx variant] (map-indexed vector variants-1)]
        ^{:key (str "variant-" idx)}
        [variant-states {:variant     variant
-                        :variant-idx idx}])]]])
+                        :variant-idx idx
+                        :component   component-1}])]
+    [:h2 "Icon Buttons"]
+    [panel {:class-name "buttons-panel"}
+     (for [[idx variant] (map-indexed vector variants-2)]
+       ^{:key (str "variant-" idx)}
+       [variant-states {:variant     variant
+                        :variant-idx idx
+                        :component   component-2}])]]])

@@ -61,7 +61,7 @@
   (fn []
     (let [loading? @(re-frame/subscribe [::state/book-loading?])]
       [page/page {:class-name "page--book-edit"}
-       [page/header {:title "book"
+       [page/_header {:title "book"
                      :icon  "book"}]
        [page/main-content {:class-name "page--book-edit--content"}
         (if loading?

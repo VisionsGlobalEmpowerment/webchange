@@ -32,7 +32,7 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     [page/page {:class-name "page--courses"}
-     [page/header {:title "Courses"
+     [page/_header {:title "Courses"
                    :icon  "presentation"}]
      [page/main-content
       [courses-list]]]))

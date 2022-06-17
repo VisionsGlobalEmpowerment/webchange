@@ -14,7 +14,7 @@
           account-loading? @(re-frame/subscribe [::state/account-loading?])
           handle-save #(re-frame/dispatch [::state/open-accounts-list])]
       [page/page {:class-name "page--my-account"}
-       [page/header {:title "My Account"
+       [page/_header {:title "My Account"
                      :icon  "user"}]
        [page/main-content {:id "page--my-account--content"}
         (cond

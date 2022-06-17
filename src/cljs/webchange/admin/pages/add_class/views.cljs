@@ -11,7 +11,7 @@
   (fn [{:keys [school-id]}]
     (let [handle-save #(re-frame/dispatch [::state/create-class-success])]
       [page/page {:class-name "page--class-add"}
-       [page/header {:title "Add New Class"
+       [page/_header {:title "Add New Class"
                      :icon  "classes"}]
        [page/main-content {:class-name "page--class-add--content"}
         [class-add-form {:school-id school-id

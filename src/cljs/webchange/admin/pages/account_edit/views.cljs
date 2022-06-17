@@ -49,7 +49,7 @@
   (fn [{:keys [account-id]}]
     (let [open-accounts-list #(re-frame/dispatch [::state/open-accounts-list])]
       [page/page {:class-name "page--account-edit"}
-       [page/header {:title "Edit Account"
+       [page/_header {:title "Edit Account"
                      :icon  "user"}]
        [page/main-content {:id "page--account-edit--content"}
         [:div.left-side-panel
