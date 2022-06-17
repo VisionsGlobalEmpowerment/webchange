@@ -1,0 +1,55 @@
+@import "../progress/mixins";
+
+.bbs--button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    padding: 6px 12px;
+    color: bbs--color(white);
+    min-height: 30px;
+
+    &.bbs--button--shape-rectangle {
+        border-radius: 4px;
+    }
+
+    &.bbs--button--shape-rounded {
+        border-radius: 9999px;
+    }
+
+    &:not([disabled]):hover,
+    &:not([disabled]).bbs--button--state-hover {
+        cursor: pointer;
+    }
+
+    &:not([disabled]):active,
+    &:not([disabled]).bbs--button--state-active {
+
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    progress {
+        @include bbs--progress-color(bbs--color(white));
+        @include bbs--progress-size(16px, 2px);
+    }
+
+    @each $color in $bbs--base-colors {
+        &.bbs--button--color-#{$color} {
+            background-color: bbs--color(#{$color});
+
+            &:not([disabled]):hover,
+            &:not([disabled]).bbs--button--state-hover {
+                background-color: bbs--color($color, $variant: light);
+            }
+
+            &:not([disabled]):active,
+            &:not([disabled]).bbs--button--state-active {
+                background-color: bbs--color($color, $variant: dark);
+            }
+        }
+    }
+}

@@ -1,0 +1,68 @@
+$bss--font-weight--regular: 400;
+$bss--font-weight--bold: 700;
+
+@mixin bbs--text-size--12 {
+    font-size: 12px;
+    line-height: 14px;
+}
+
+@mixin bbs--text-size--14 {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+@mixin bbs--text-size--16 {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+@mixin bbs--text-size--24 {
+    font-size: 24px;
+    line-height: 32px;
+}
+
+@mixin bbs--noto-12-r {
+    @include bbs--text-size--12;
+    font-weight: $bss--font-weight--regular;
+}
+
+@mixin bbs--noto-12-b {
+    @include bbs--text-size--12;
+    font-weight: $bss--font-weight--bold;
+}
+
+@mixin bbs--noto-14-b {
+    @include bbs--text-size--14;
+    font-weight: $bss--font-weight--bold;
+}
+
+@mixin bbs--noto-16-b {
+    @include bbs--text-size--16;
+    font-weight: $bss--font-weight--bold;
+}
+
+@mixin bbs--noto-24-b {
+    @include bbs--text-size--24;
+    font-weight: $bss--font-weight--bold;
+}
+
+// ---
+
+html, body {
+    @include primary-font;
+    color: $color-grey-1;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 26px;
+}
+
+h3 {
+    font-weight: $bss--font-weight--bold;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+button {
+    @include primary-font;
+    @include bbs--noto-14-b;
+}

@@ -1,0 +1,83 @@
+#page--colors {
+    $item-size: 150px;
+    $item-size-diff: 15px;
+
+    @mixin with-border {
+        border-radius: 16px;
+    }
+
+    @mixin with-colors($dark, $normal, $light) {
+        &:before { background-color: $dark; }
+        .content { background-color: $normal; }
+        &:after { background-color: $light; }
+    }
+
+    width: 100%;
+    height: 100%;
+
+    .colors-list {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        grid-row-gap: 32px;
+        grid-column-gap: 32px;
+
+        justify-items: center;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .colors-list-item {
+        position: relative;
+
+        width: $item-size;
+        height: $item-size;
+
+        &:before {
+            content: "";
+            width: $item-size;
+            height: $item-size;
+
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            @include with-border;
+        }
+
+        .content {
+            width: $item-size - $item-size-diff * 2;
+            height: $item-size - $item-size-diff * 2;
+
+            position: absolute;
+            left: $item-size-diff;
+            top: $item-size-diff;
+
+            @include with-border;
+        }
+
+        &:after {
+            content: "";
+            width: $item-size - $item-size-diff * 4;
+            height: $item-size - $item-size-diff * 4;
+
+            position: absolute;
+            left: $item-size-diff * 2;
+            top: $item-size-diff * 2;
+
+            @include with-border;
+        }
+
+        &.color-blue-1 {@include with-colors($color-blue-1-dark, $color-blue-1, $color-blue-1-light)}
+        &.color-blue-2 {@include with-colors($color-blue-2-dark, $color-blue-2, $color-blue-2-light)}
+        &.color-green-1 {@include with-colors($color-green-1-dark, $color-green-1, $color-green-1-light)}
+        &.color-green-2 {@include with-colors($color-green-2-dark, $color-green-2, $color-green-2-light)}
+        &.color-yellow-1 {@include with-colors($color-yellow-1-dark, $color-yellow-1, $color-yellow-1-light)}
+        &.color-yellow-2 {@include with-colors($color-yellow-2-dark, $color-yellow-2, $color-yellow-2-light)}
+    }
+}

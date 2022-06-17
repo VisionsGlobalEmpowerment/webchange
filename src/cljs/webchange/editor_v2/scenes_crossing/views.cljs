@@ -9,7 +9,7 @@
     [webchange.editor-v2.scenes-crossing.state-locations :as state-locations]
     [webchange.editor-v2.scenes-crossing.views-locations :refer [location-settings]]
     [webchange.routes :refer [redirect-to]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- scenes-list
   []

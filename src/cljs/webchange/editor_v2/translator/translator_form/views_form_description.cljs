@@ -4,7 +4,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn description-block
   []

@@ -1,4 +1,4 @@
-(ns webchange.ui.theme
+(ns webchange.ui-deprecated.theme
   (:require
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]

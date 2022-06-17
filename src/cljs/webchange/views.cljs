@@ -73,7 +73,8 @@
 
 (def modules {:admin   (-> webchange.admin.views/index (shadow.lazy/loadable) (lazy-component))
               :login   (-> webchange.login.views/index (shadow.lazy/loadable) (lazy-component))
-              :teacher (-> webchange.teacher.views/index (shadow.lazy/loadable) (lazy-component))})
+              :teacher (-> webchange.teacher.views/index (shadow.lazy/loadable) (lazy-component))
+              :ui      (-> webchange.ui.views/index (shadow.lazy/loadable) (lazy-component))})
 
 (defn- module-route?
   [route-name]
@@ -119,7 +120,7 @@
                ;; student dashboard
                :student-login [student-access-form]
                :school-student-login [student-access-form (:school-id route-params)]
-               
+
                ;; parent dashboard
                :parent-dashboard [parent-dashboard/dashboard]
                :parent-add-student [parent-dashboard/add-student]

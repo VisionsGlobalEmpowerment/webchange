@@ -75,7 +75,8 @@
                   (int))]
     {:accounts accounts
      :current-page page
-     :pages pages}))
+     :pages pages
+     :total 34}))                                            ;; ToDo: Get total accounts number
 
 (defn- with-children
   [{:keys [id] :as account}]

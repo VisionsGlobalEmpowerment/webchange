@@ -8,7 +8,7 @@
     [webchange.editor-v2.text-animation-editor.views-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as au]
-    [webchange.ui.components.message :refer [message]]))
+    [webchange.ui-deprecated.components.message :refer [message]]))
 
 (def modal-state-path [:editor-v2 :question :text :chunks-modal-state])
 (def selected-chunk-path [:editor-v2 :question :text :chunks :selected])

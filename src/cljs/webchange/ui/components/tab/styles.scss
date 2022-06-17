@@ -1,0 +1,64 @@
+.bbs--tab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 12px 18px;
+    min-height: 50px;
+    background-color: transparent;
+    border: solid 1px bbs--color(blue-2);
+    border-radius: 6px;
+
+    text-align: left;
+
+    --color: #{bbs--color(white)};
+    color: bbs--color(var(--color));
+    @include bbs--icon-color(var(--color));
+
+    .bbs--tab--icon {
+        @include bbs--icon-size(24px);
+        @include bbs--icon-color(bbs--color(blue-2));
+    }
+
+    .bbs--tab--content {
+        flex: 1 1;
+    }
+
+    .bbs--tab--counter {}
+
+    &.bbs--tab--align-center {
+        .bbs--tab--content {text-align: center};
+    }
+
+    @mixin hover {
+        cursor: pointer;
+        background-color: bbs--color(green-2, 0.2);
+    }
+
+    @mixin active {
+        --color: #{bbs--color(blue-1)};
+        cursor: pointer;
+        background-color: bbs--color(blue-2);
+
+        .bbs--tab--icon {
+            @include bbs--icon-color(bbs--color(blue-1));
+        }
+    }
+
+    @mixin disabled {
+        --color: #{bbs--color(white, 0.2)};
+        cursor: not-allowed;
+        border-color: bbs--color(white, 0.2);
+
+        .bbs--tab--icon {
+            @include bbs--icon-color(bbs--color(white, 0.2));
+        }
+    }
+
+    &:not([disabled]):hover {@include hover}
+    &:not([disabled]).bbs--tab--state-hover {@include hover}
+    &:not([disabled]):active {@include active}
+    &:not([disabled]).bbs--tab--state-active {@include active}
+    &:disabled {@include disabled}
+}

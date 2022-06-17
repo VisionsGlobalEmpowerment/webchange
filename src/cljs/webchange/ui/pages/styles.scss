@@ -1,0 +1,61 @@
+#tabschool-ui {
+    width: 100%;
+    height: 100%;
+
+    & > * {
+        height: 100%;
+    }
+
+    @import "buttons/styles";
+    @import "cards/styles";
+    @import "colors/styles";
+    @import "dashboard/styles";
+    @import "icons/styles";
+    @import "tabs/styles";
+
+    #bbs--ui-pages--layout {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        & > .header {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            padding: 32px;
+
+            h1 {
+                margin: 0;
+            }
+
+            .back-button {
+                background: #fff;
+                padding: 16px;
+                font-size: 18px;
+                font-weight: 700;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+        }
+
+        .content {
+            flex: 1 1;
+            min-height: 0;
+            overflow: auto;
+            padding: 32px;
+        }
+
+        h2 {
+            margin: 32px 0;
+        }
+
+        .bbs--ui-pages--panel {
+            padding: 32px;
+            border-radius: 16px;
+
+            &.bbs--ui-pages--panel--color-blue-1 {
+                background-color: bbs--color(blue-1);
+            }
+        }
+    }
+}

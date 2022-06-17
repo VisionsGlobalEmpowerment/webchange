@@ -5,7 +5,7 @@
    ["/audio-script" :as AudioScriptPlugin]
    [wavesurfer.js :as WaveSurfer]
    [webchange.editor-v2.components.audio-wave-form.audio-loader :as loader]
-   [webchange.ui.theme :refer [get-in-theme]]))
+   [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (def audio-color "rgba(0, 0, 0, 0.1)")
 (def edgeScrollWidth 50)

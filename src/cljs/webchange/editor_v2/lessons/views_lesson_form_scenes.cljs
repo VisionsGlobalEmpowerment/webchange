@@ -4,7 +4,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
     [webchange.editor-v2.lessons.views-lesson-form-scene-form :refer [edit-scene-modal]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- get-styles
   []

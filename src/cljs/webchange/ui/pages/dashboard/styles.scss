@@ -1,0 +1,18 @@
+#page--dashboard {
+    .pages-list {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        width: 400px;
+
+        button {
+            background: #fff;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: capitalize;
+        }
+    }
+}

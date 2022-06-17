@@ -23,18 +23,19 @@
   ::breadcrumbs
   :<- [::state/current-page]
   (fn [{:keys [handler props]}]
-    (let [path (get-path handler routes/sitemap)
-          path-length (count path)]
-      (->> path
-           (map (fn [step]
-                  {:id    step
-                   :route {:page  step
-                           :props props}
-                   :title (routes/get-title {:handler step
-                                             :props   props}
-                                            {:with-root? false})}))
-           (map-indexed (fn [idx step]
-                          (assoc step :last-item? (= idx (dec path-length)))))))))
+    (when-not (= handler :dashboard)
+      (let [path (get-path handler routes/sitemap)
+            path-length (count path)]
+        (->> path
+             (map (fn [step]
+                    {:id    step
+                     :route {:page  step
+                             :props props}
+                     :title (routes/get-title {:handler step
+                                               :props   props}
+                                              {:with-root? false})}))
+             (map-indexed (fn [idx step]
+                            (assoc step :last-item? (= idx (dec path-length))))))))))
 
 (re-frame/reg-event-fx
   ::go-to-route

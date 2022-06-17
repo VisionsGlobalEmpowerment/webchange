@@ -1,7 +1,5 @@
 @mixin active-item {
-    & > .text {
-        color: $color-secondary;
-    }
+    color: bbs--color(yellow-1);
 }
 
 @mixin navigation-items-list {
@@ -57,10 +55,17 @@
     align-items: center;
     justify-content: flex-start;
 
-    gap: 32px;
+    gap: 8px;
 
-    font-size: 12px;
+    color: #fff;
+    font-size: 14px;
     font-weight: 700;
+    line-height: 18px;
+    white-space: nowrap;
+
+    .logo {
+        margin-right: 32px;
+    }
 
     .root-item {
         position: relative;
@@ -68,17 +73,13 @@
         align-items: center;
         justify-content: center;
 
-        gap: 16px;
+        gap: 20px;
         padding: 18px 22px;
-
-        @include icon-color($color-text-light);
 
         & > .icon {
             padding: 0;
             @include icon-size(18px);
         }
-
-        & > .text {}
 
         .children-list {
             @include navigation-items-list;
@@ -87,18 +88,38 @@
         .children-item {
             @include navigation-item;
         }
+    }
 
+    .navigation-item {
         &:hover {
             cursor: pointer;
-            background-color: #{$color-secondary + "38"};
 
             & > .children-list {
                 display: block;
             }
+
+            .root-icon {
+                @include bbs--icon-color(bbs--color(yellow-1));
+            }
         }
 
         &.active-item {
-            @include active-item;
+            .root-icon {
+                @include bbs--icon-color(bbs--color(yellow-1));
+            }
         }
+    }
+
+    .root-icon {
+        @include bbs--icon-color(bbs--color(blue-2));
+        @include bbs--icon-size(22px);
+
+        border-radius: 1px;
+        overflow: hidden;
+    }
+
+    .expand-icon {
+        @include bbs--icon-color(bbs--color(white));
+        @include bbs--icon-size(22px);
     }
 }

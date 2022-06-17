@@ -1,8 +1,8 @@
-(ns webchange.ui.components.message
+(ns webchange.ui-deprecated.components.message
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- get-styles
   [type]

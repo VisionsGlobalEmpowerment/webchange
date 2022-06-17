@@ -8,6 +8,13 @@
     padding: 0 16px;
     cursor: pointer;
 
+    .logout {
+       white-space: nowrap;
+       font-weight: 400;
+       font-size: 14px;
+       margin-right: 16px;
+    }
+
     .user-data {
         font-weight: 500;
         font-size: 16px;
@@ -18,7 +25,6 @@
     }
 
     .menu {
-        @include navigation-items-list;
         right: 0;
 
         .menu-item {

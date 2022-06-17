@@ -1,0 +1,11 @@
+@import "mixins";
+
+.bbs--icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.bbs--icon--color-white {
+        @include bbs--icon-color(#fff);
+    }
+}

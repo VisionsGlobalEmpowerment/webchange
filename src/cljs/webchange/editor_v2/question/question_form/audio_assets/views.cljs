@@ -9,7 +9,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.question.question-form.audio-assets.views-audios-list :refer [audios-list]]
     [webchange.editor-v2.question.question-form.state.audios :as question-form.audios]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn- filter-audios
   [filter-params audios-list]

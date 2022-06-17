@@ -1,0 +1,84 @@
+@import "../icon/mixins";
+
+.bbs--card {
+    $icon-wrapper-size: 88px;
+
+    .bbs--card--content {
+        display: grid;
+        grid-template-columns: $icon-wrapper-size auto;
+        grid-template-rows: auto auto;
+        column-gap: 26px;
+        row-gap: 26px;
+
+        padding: 28px 24px;
+
+        grid-template-areas:
+            "icon data"
+            "actions actions";
+
+        &.bbs--card--content--no-actions {
+            grid-template-rows: auto;
+            grid-template-areas: "icon data";
+        }
+    }
+
+    .bbs--card--icon {
+        grid-area: icon;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: $icon-wrapper-size;
+        height: $icon-wrapper-size;
+
+        background-color: bbs--color(blue-2);
+        border-radius: 9999px;
+
+        .bbs--card--icon-data {
+            @include bbs--icon-color(bbs--color(blue-1));
+            @include bbs--icon-size(40px);
+        }
+
+        @each $color in $bbs--base-colors {
+            &.bbs--card--icon--background-#{$color} {
+                background-color: bbs--color(#{$color});
+            }
+        }
+    }
+
+    .bbs--card--data {
+        grid-area: data;
+
+        align-self: center;
+        justify-self: stretch;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        color: bbs--color(white);
+
+        .bbs--card--counter {
+            @include bbs--noto-24-b;
+        }
+
+        .bbs--card--text {
+            @include bbs--noto-16-b;
+        }
+    }
+
+    &.bbs--card--background-transparent {
+        .bbs--card--data {
+            color: bbs--color(blue-1);
+        }
+    }
+
+    .bbs--card--actions {
+        grid-area: actions;
+
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+}

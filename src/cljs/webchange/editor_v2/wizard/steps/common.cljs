@@ -2,7 +2,7 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]))
 
 (defn get-styles
   []

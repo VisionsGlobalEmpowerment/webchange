@@ -2,7 +2,7 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
-    [webchange.ui.theme :refer [w-colors]]
+    [webchange.ui-deprecated.theme :refer [w-colors]]
     [webchange.validation.validate :refer [validate]]))
 
 (defn validation-message

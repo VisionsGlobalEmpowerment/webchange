@@ -3,7 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [reagent.core :as r]
-    [webchange.ui.theme :refer [get-in-theme]]
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]
     [webchange.utils.deep-merge :refer [deep-merge]]))
 
 (defn get-styles

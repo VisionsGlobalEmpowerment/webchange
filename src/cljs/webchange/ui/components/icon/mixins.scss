@@ -1,0 +1,18 @@
+@mixin bbs--icon-color($color) {
+    svg {
+        fill: $color;
+        stroke: none;
+
+        &.stroke-colored {
+            fill: none;
+            stroke: $color;
+        }
+    }
+}
+
+@mixin bbs--icon-size($size) {
+    svg {
+        width: $size;
+        height: $size;
+    }
+}

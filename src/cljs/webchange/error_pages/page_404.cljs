@@ -1,6 +1,6 @@
 (ns webchange.error-pages.page-404
   (:require
-    [webchange.ui.theme :refer [w-colors]]))
+    [webchange.ui-deprecated.theme :refer [w-colors]]))
 
 (defn page-404
   []

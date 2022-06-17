@@ -17,7 +17,7 @@
                   "game-changer"      {[""]                                                         :game-changer
                                        ["/" [#"[\w-%]+" :course-slug] "/" [#"[\w-%]+" :scene-slug]] :wizard-configured}
                   "book-creator"      :book-creator
-                  "s"                 {["/" [#"[\w-%]+" :scene-id]] :activity-sandbox
+                  "s"                 {["/" [#"[\w-%]+" :scene-id]]                                                        :activity-sandbox
                                        ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
                                        ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
                   "courses"           {["/" [#"[\w-%]+" :id]] {[""]                 :course
@@ -47,7 +47,9 @@
                   "admin"             {[""]        :admin
                                        ["/" #".*"] :admin}
                   "teacher"           {[""]        :teacher
-                                       ["/" #".*"] :teacher}}])
+                                       ["/" #".*"] :teacher}
+                  "ui"                {[""]        :ui
+                                       ["/" #".*"] :ui}}])
 
 (def redirects {:course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})

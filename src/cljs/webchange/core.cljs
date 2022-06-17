@@ -9,7 +9,7 @@
     [webchange.config :as config]
     [webchange.routes :as routes]
     [webchange.sw-utils.register :as sw]
-    [webchange.ui.theme :refer [with-mui-theme]]
+    [webchange.ui-deprecated.theme :refer [with-mui-theme]]
     [webchange.utils.browser-history :as history]
     [webchange.state.warehouse :as warehouse]))
 

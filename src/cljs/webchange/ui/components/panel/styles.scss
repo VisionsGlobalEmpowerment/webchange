@@ -1,0 +1,34 @@
+.bbs--panel {
+    display: flex;
+    flex-direction: column;
+    background-color: bbs--color(white);
+    border-radius: 6px;
+
+    .bbs--panel--title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .bbs--panel--title-icon {
+        @include bbs--icon-size(32px);
+    }
+
+    .bbs--panel--content {
+        flex: 1 1;
+        padding: 18px;
+    }
+
+    &.bbs--panel--color-blue-1 {
+        .bbs--panel--title {
+            color: bbs--color(white);
+        }
+    }
+
+    @each $color in $bbs--base-colors {
+        &.bbs--panel--color-#{$color} {
+            background-color: bbs--color(#{$color});
+        }
+    }
+}

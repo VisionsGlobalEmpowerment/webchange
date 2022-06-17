@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.text-animation-editor.views-chunks
   (:require
-    [webchange.ui.theme :refer [get-in-theme]]
+    [webchange.ui-deprecated.theme :refer [get-in-theme]]
     [webchange.ui-framework.components.index :refer [chip]]))
 
 (defn- get-styles
