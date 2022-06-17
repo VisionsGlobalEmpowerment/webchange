@@ -6,7 +6,7 @@
 
 (defn get-styles
   []
-  {:background             {:background-image    "url(/raw/img/bg.png)"
+  {:background             {:background-image    "url(/raw/img/ui/loading_screen.png)"
                             :width               "100%"
                             :height              "100%"
                             :position            "absolute"
@@ -20,25 +20,28 @@
                             :height          "100%"
                             :align-items     "center"
                             :justify-content "center"}
-   :centered-content       {:display        "flex"
+   :left-content           {:display        "flex"
+                            :flex "3"
                             :flex-direction "column"
                             :align-items    "center"
                             :height         "520px"}
-   :logo                   {:position      "relative"
-                            :width         "627px"
-                            :height        "123px"
-                            :margin-bottom "60px"}
+   :right-content          {:display        "flex"
+                            :flex "4"
+                            :flex-direction "column"
+                            :align-items    "center"
+                            :height         "520px"
+                            :margin-top     "250px"}
    :progress-bar-container {:display         "flex"
                             :width           "100%"
                             :height          "100%"
                             :align-items     "center"
                             :justify-content "center"}
-   :progress-bar           {:background-color "#ffffff"
+   :progress-bar           {:background-color "#80BFE5"
                             :border-radius    "25px"
-                            :width            "460px"
-                            :height           "24px"
+                            :width            "824px"
+                            :height           "27px"
                             :overflow         "hidden"}
-   :progress-bar-value     {:background-color "#00C3FF"
+   :progress-bar-value     {:background-color "#3453A1"
                             :height           "100%"
                             :transition       "width 1s"
                             :width            "1%"}
@@ -50,11 +53,11 @@
    :button                 {:background-color "#ff9000"
                             :border-radius    "48px"
                             :border-width     "0px"
-                            :padding          "23px 68px"
-                            :height           "96px"
+                            :padding          "32px 68px"
+                            :height           "72px"
                             :cursor           "pointer"
                             :color            "#ffffff"
-                            :font-size        "68px"
+                            :font-size        "48px"
                             :font-family      "Luckiest Guy"
                             :font-weight      "normal"
                             :text-align       "center"
@@ -65,14 +68,9 @@
   (let [styles (get-styles)
         this (r/current-component)]
     [:div {:style (:centered-container styles)}
-     (into [:div {:style (:centered-content styles)}]
+     [:div {:style (:left-content styles)}]
+     (into [:div {:style (:right-content styles)}]
            (r/children this))]))
-
-(defn- logo
-  []
-  (let [styles (get-styles)]
-    [:img {:src   "/raw/img/ui/logo.png"
-           :style (:logo styles)}]))
 
 (defn- start-button
   [{:keys [on-click]}]
@@ -96,7 +94,6 @@
   (let [styles (get-styles)]
     [:div {:style (:background styles)}
      [centered
-      [logo]
       (if (:done loading)
         [start-button {:on-click on-start-click}]
         [progress-bar {:value (:progress loading)}])]]))

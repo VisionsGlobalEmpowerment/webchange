@@ -28,7 +28,7 @@
                           :vertical   "top"
                           :horizontal "left"
                           :object     {:width 96 :height 96}
-                          :padding    {:x 86 :y 86}}))
+                          :padding    {:x 88 :y 88}}))
 
 (defn- get-home-button
   [{:keys [viewport]}]
@@ -90,22 +90,24 @@
                   :src         "/raw/img/ui/activity_finished/form.png"
                   :object-name :form-bg
                   :x           612
-                  :y           147}
+                  :y           146}
                  {:type        "image"
-                  :src         "/raw/img/ui/activity_finished/vera.png"
+                  :src         "/raw/img/ui/activity_finished/student.png"
                   :object-name :form-vera
-                  :x           828
-                  :y           447}
+                  :x           784
+                  :y           418}
                  (merge
-                   {:type        "image"
-                    :object-name :form-next
-                    :x           872
-                    :y           748}
-                   (if @(re-frame/subscribe [:continue?])
-                     {:src         "/raw/img/ui/activity_finished/next.png"
-                      :on-click    #(re-frame/dispatch [::ie/run-next-activity])}
-                     {:src         "/raw/img/ui/activity_finished/home_big.png"
-                      :on-click    #(re-frame/dispatch [::ie/open-student-dashboard])}))
+                  {:type        "image"
+                   :object-name :form-next}
+                  (if @(re-frame/subscribe [:continue?])
+                    {:src         "/raw/img/ui/activity_finished/next_big.png"
+                     :x 872
+                     :y 748
+                     :on-click    #(re-frame/dispatch [::ie/run-next-activity])}
+                    {:src         "/raw/img/ui/activity_finished/home_big.png"
+                     :x 866
+                     :y 744
+                     :on-click    #(re-frame/dispatch [::ie/open-student-dashboard])}))
                  (get-title)
                  (when @(re-frame/subscribe [:continue?])
                    (get-home-button {:viewport viewport}))]})
