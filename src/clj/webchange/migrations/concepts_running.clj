@@ -59,11 +59,11 @@
 
 (defn create-scene!
   [course-id scene-name]
-  (jdbc/execute! *db* ["INSERT INTO scenes (course_id, name) VALUES (?, ?) RETURNING id" course-id scene-name]))
+  (jdbc/execute! *db* ["INSERT INTO scenes (course_id, name) VALUES (?, ?) RETURNING id" course-id scene-name] {:return-keys true}))
 
 (defn save-scene!
   [course-id scene-name scene-data]
-  (let [[{scene-id :id}] (create-scene! course-id scene-name)
+  (let [{scene-id :id} (create-scene! course-id scene-name)
         created-at (jt/local-date-time)]
     (db/save-scene! {:scene_id    scene-id
                      :data        scene-data
