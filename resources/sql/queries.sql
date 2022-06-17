@@ -149,7 +149,6 @@ WHERE course_id = :course_id ORDER BY created_at DESC LIMIT 30;
 -- :doc retrieve a course record given the name
 SELECT * from courses;
 
-
 -- :name find-courses-by-name :? :*
 -- :doc retrieve a course record given the name
 SELECT * from courses where name=:name;
@@ -157,6 +156,10 @@ SELECT * from courses where name=:name;
 -- :name create-scene! :<!
 -- :doc creates a new scene record
 INSERT INTO scenes (course_id, name, slug) VALUES (:course_id, :name, :name) RETURNING id
+
+-- :name create-book! :<!
+-- :doc creates a new book
+INSERT INTO scenes (name, lang, metadata, status, type, created_at, updated_at) VALUES (:name, :lang, :metadata, 'invisible', 'book', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING id
 
 -- :name save-scene! :<!
 -- :doc creates a new course version record
