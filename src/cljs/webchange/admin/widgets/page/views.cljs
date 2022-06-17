@@ -2,8 +2,12 @@
   (:require
     [reagent.core :as r]
     [webchange.admin.widgets.page.header.views :as header-views]
+    [webchange.admin.widgets.page.single-page.views :as single-page-views]
     [webchange.ui-framework.components.index :as c]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
+
+(def header header-views/header)
+(def single-page single-page-views/single-page)
 
 (def class-names
   {:header   "widget-profile--header"
@@ -39,7 +43,8 @@
        (fn [{:keys [class-name]}]
          (->> (r/current-component)
               (r/children)
-              (into [:div {:class-name (get-class-name (merge {"widget-profile" true
+              (into [:div {:class-name (get-class-name (merge {"widget--page"   true
+                                                               "widget-profile" true
                                                                class-name       (some? class-name)}
                                                               (with-children-classes @children)))
                            :ref        handle-ref}])))})))
@@ -81,8 +86,6 @@
      (when (some? actions)
        [:div.actions
         actions])]))
-
-(def header header-views/header)
 
 (defn- block-title
   [{:keys [actions icon title title-action]}]

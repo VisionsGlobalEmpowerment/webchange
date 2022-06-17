@@ -1,6 +1,7 @@
-.widget-profile {
-    @import "header/styles";
+@import "header/styles";
+@import "single_page/styles";
 
+.widget--page {
     @mixin panel {
         background-color: #fff;
         border-radius: $panel-border-radius;

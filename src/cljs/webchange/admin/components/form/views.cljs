@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.admin.components.form.state :as state]
+    [webchange.ui.index :as ui]
     [webchange.ui-framework.components.index :as c]))
 
 (defn- date-control
@@ -111,14 +112,14 @@
         handle-cancel-click #(when (fn? on-cancel) (on-cancel))]
     [:div.form-actions
      (when (some? on-cancel)
-       [c/button {:on-click   handle-cancel-click
-                  :disabled?  (or disabled? saving?)
-                  :class-name "cancel"}
+       [ui/button {:on-click   handle-cancel-click
+                   :disabled?  (or disabled? saving?)
+                   :class-name "cancel"}
         "Cancel"])
-     [c/button {:on-click   handle-save-click
-                :disabled?  (or disabled? saving?)
-                :loading?   saving?
-                :class-name "submit"}
+     [ui/button {:on-click   handle-save-click
+                 :disabled?  (or disabled? saving?)
+                 :loading?   saving?
+                 :class-name "submit"}
       "Save"]]))
 
 (defn form
