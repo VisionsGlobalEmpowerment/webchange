@@ -82,12 +82,14 @@
        (when has-label?
          [:label {:for        id
                   :class-name "wc-input-label"}
-          label])
+          (cond-> label
+                  required? (str " *"))])
        [:input (cond-> {:class-name  (get-class-name {"wc-input"       true
                                                       "wc-input-error" (some? error)})
                         :disabled    disabled?
                         :placeholder (cond-> placeholder
-                                             required? (str " *"))
+                                             (and required?
+                                                  (-> placeholder empty? not)) (str " *"))
                         :on-input    handle-change
                         :on-change   handle-change
                         :on-click    handle-click}
