@@ -158,6 +158,22 @@
       :course-id course-id
       :version-id version-id})))
 
+(defn book-created
+  ([]
+   (book-created {}))
+  ([options]
+   (let [defaults {:name "test-book" :lang "english" :metadata {}}
+         book-info (merge defaults options)
+         scene-name (:name book-info)
+         [{scene-id :id}] (db/create-book! book-info)
+         data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
+         [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time) :description "test"})]
+     (db/update-scene-status! {:id scene-id :status "visible"})
+     {:id scene-id
+      :name scene-name
+      :data data
+      :version-id version-id})))
+
 (defn scene-skills-created
   [scene-id skill-id]
   (db/create-scene-skill! {:scene_id scene-id :skill_id skill-id})
@@ -375,10 +391,9 @@
 
 (defn get-book-library
   []
-  (let [url (str "/api/books/library")
+  (let [url (str "/api/book-library/all")
         request (-> (mock/request :get url)
-                    (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    (mock/header :content-type "application/json"))]
     (handler/dev-handler request)))
 
 (defn get-courses-admin-list

@@ -249,29 +249,29 @@
             my-courses (-> (f/get-courses-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
         (is (= 1 (count my-courses)))))))
 
-(deftest localized-book-is-still-a-book
-  (let [course (f/course-created {:type "book"})
-        new-language "new-language"]
+#_(deftest localized-book-is-still-a-book
+    (let [course (f/course-created {:type "book"})
+          new-language "new-language"]
+      (with-global-fake-routes-in-isolation
+        {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
+        (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
+              my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))
+              first-book-info (-> my-books first :slug (f/get-course-info) :body slurp (json/read-str :key-fn keyword))]
+          (is (= 1 (count my-books)))
+          (is (= "book" (:type first-book-info)))))))
+
+#_(deftest books-by-website-user
+    (f/course-created {:type "book" :status "archived" :name "Archived book" :website-user-id website-user-id})
+    (f/course-created {:type "book" :status "draft" :name "Draft book" :website-user-id website-user-id})
+    (f/course-created {:type "book" :status "in-review" :name "In review book" :website-user-id website-user-id})
+    (f/course-created {:type "book" :status "declined" :name "Declined book" :website-user-id website-user-id})
+    (f/course-created {:type "book" :status "published" :name "Published book" :website-user-id website-user-id})
+    (f/course-created {:type "course" :status "published" :name "Published course" :website-user-id website-user-id})
     (with-global-fake-routes-in-isolation
       {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
-      (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
-            my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))
-            first-book-info (-> my-books first :slug (f/get-course-info) :body slurp (json/read-str :key-fn keyword))]
-        (is (= 1 (count my-books)))
-        (is (= "book" (:type first-book-info)))))))
-
-(deftest books-by-website-user
-  (f/course-created {:type "book" :status "archived" :name "Archived book" :website-user-id website-user-id})
-  (f/course-created {:type "book" :status "draft" :name "Draft book" :website-user-id website-user-id})
-  (f/course-created {:type "book" :status "in-review" :name "In review book" :website-user-id website-user-id})
-  (f/course-created {:type "book" :status "declined" :name "Declined book" :website-user-id website-user-id})
-  (f/course-created {:type "book" :status "published" :name "Published book" :website-user-id website-user-id})
-  (f/course-created {:type "course" :status "published" :name "Published course" :website-user-id website-user-id})
-  (with-global-fake-routes-in-isolation
-    {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
-    (let [my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
-      (testing "Archived books and published courses are not returned"
-        (is (= 4 (count my-books)))))))
+      (let [my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
+        (testing "Archived books and published courses are not returned"
+          (is (= 4 (count my-books)))))))
 
 (deftest available-courses-can-be-retrieved
   (let [course-name "available course"
@@ -283,13 +283,13 @@
     (is (= course-name (-> courses first :name)))))
 
 (deftest book-library-can-be-retrieved
-  (let [course-name "published book"
-        _ (f/course-created {:name course-name :status "published" :type "book"})
+  (let [book-name "published book"
+        _ (f/book-created {:name book-name})
         response (f/get-book-library)
-        courses (-> response :body slurp (json/read-str :key-fn keyword))]
+        books (-> response :body slurp (json/read-str :key-fn keyword))]
     (is (= 200 (:status response)))
-    (is (= 1 (count courses)))
-    (is (= course-name (-> courses first :name)))))
+    (is (= 1 (count books)))
+    (is (= book-name (-> books first :name)))))
 
 (deftest book-in-review-can-be-retrieved
   (let [{user-id :id} (f/website-user-created)

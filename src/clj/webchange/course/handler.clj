@@ -332,20 +332,7 @@
       :path-params [type :- s/Str status :- s/Str]
       :return CoursesOrError
       :summary "Retuns a list of courses on review"
-      (handle-get-on-review-courses type status request)))
-  (context "/api/books" []
-    :tags ["book"]
-    (GET "/library" []
-      :return CoursesOrError
-      :summary "Returns all published books"
-      (-> (fn [request] (-> (core/get-book-library) response))
-          sign/wrap-api-with-signature))
-    (GET "/by-website-user/:website-user-id" request
-      :path-params [website-user-id :- s/Int]
-      :return [Course]
-      :summary "Returns books by website user id"
-      (-> (fn [request] (-> (core/get-books-by-website-user website-user-id) response))
-          sign/wrap-api-with-signature))))
+      (handle-get-on-review-courses type status request))))
 
 (defroutes courses-api-routes
   (context "/api/courses" []
@@ -507,6 +494,11 @@
        (let [user-id (current-user request)]
          (-> (core/get-available-activities)
              response)))
+  (GET "/api/visible-activities" request
+       :coercion :spec
+       (let [user-id (current-user request)]
+         (-> (core/get-visible-activities)
+             response)))
   (GET "/api/available-books" request
        :coercion :spec
        (let [user-id (current-user request)]
@@ -530,5 +522,23 @@
          (when-not (is-admin? user-id)
            (throw-unauthorized {:role :educator}))
          (-> (core/edit-activity activity-id data)
+             response)))
+  (PUT "/api/activities/:activity-id/archive" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/archive-activity]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/archive-activity activity-id data)
+             response)))
+  (PUT "/api/activities/:activity-id/toggle-visibility" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/toggle-visibility]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/toggle-activity-visibility activity-id data)
              response))))
 

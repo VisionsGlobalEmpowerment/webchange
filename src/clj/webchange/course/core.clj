@@ -386,14 +386,6 @@
   (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "course"})
        (map ->website-course)))
 
-(defn get-book-library
-  ([]
-   (get-book-library {}))
-  ([{:keys [with-host-name?]
-     :or   {with-host-name? true}}]
-   (->> (db/get-courses-by-status-and-type {:type "book" :status "published"})
-        (map #(->website-course % {:with-host-name? with-host-name?})))))
-
 (defn get-books-by-website-user
   [website-user-id]
   (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "book"})
@@ -873,6 +865,16 @@
   (->> (db/get-scenes-by-type {:type "book"})
        (map ->activity-info)))
 
+(defn get-visible-activities
+  []
+  (->> (db/get-scenes-by-type-and-status {:type "activity" :status "visible"})
+       (map ->activity-info)))
+
+(defn get-visible-books
+  []
+  (->> (db/get-scenes-by-type-and-status {:type "book" :status "visible"})
+       (map ->activity-info)))
+
 (defn get-activity-current-version
   [activity-id]
   (-> (db/get-latest-scene-version {:scene_id activity-id})
@@ -892,3 +894,17 @@
                       :updated_at updated-at))
     {:id activity-id}))
 
+(defn archive-activity
+  [activity-id _]
+  (db/update-scene-status! {:id activity-id
+                            :status "archived"})
+  {:id activity-id
+   :status "archived"})
+
+(defn toggle-activity-visibility
+  [activity-id {:keys [visible]}]
+  (let [status (if visible "visible" "invisible")]
+    (db/update-scene-status! {:id activity-id
+                              :status status})
+    {:id activity-id
+     :status status}))

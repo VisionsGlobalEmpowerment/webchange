@@ -407,6 +407,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-visible-activities
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-visible-activities
+                     :method :get
+                     :uri    (str "/api/visible-activities")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-activity
   (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
     (create-request {:key    :load-activity
@@ -424,12 +432,13 @@
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::remove-available-activity
+  ::archive-activity
   (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
-    (create-fake-request {:key    :remove-available-activity
-                          :method :delete
-                          :uri    (str "/api/available-activities/" activity-id)}
-                         handlers {:delay 3000})))
+    (create-request {:key    :archive-activity
+                     :method :put
+                     :params {:archive true}
+                     :uri    (str "/api/activities/" activity-id "/archive")}
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::load-available-books
@@ -438,31 +447,6 @@
                      :method :get
                      :uri    (str "/api/available-books")}
                     handlers)))
-
-(re-frame/reg-event-fx
-  ::load-available-book
-  (fn [{:keys [_]} [_ {:keys [book-id]} handlers]]
-    (create-request {:key    :load-available-book
-                     :method :get
-                     :uri    (str "/api/available-books/" book-id)}
-                    handlers)))
-
-(re-frame/reg-event-fx
-  ::save-available-book
-  (fn [{:keys [_]} [_ {:keys [book-id data]} handlers]]
-    (create-fake-request {:key    :save-available-book
-                          :method :put
-                          :uri    (str "/api/available-books/" book-id)
-                          :params data}
-                         handlers {:delay 3000})))
-
-(re-frame/reg-event-fx
-  ::remove-available-book
-  (fn [{:keys [_]} [_ {:keys [book-id]} handlers]]
-    (create-fake-request {:key    :remove-available-book
-                          :method :delete
-                          :uri    (str "/api/available-books/" book-id)}
-                         handlers {:delay 3000})))
 
 (re-frame/reg-event-fx
   ::load-books

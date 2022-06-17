@@ -44,7 +44,8 @@
 
 (defn download-assets! [config]
   (println "Update assets....")
-  (core/update-assets! false))
+  (core/update-assets! false)
+  (core/update-course-previews! (env :requested-courses)))
 
 (defn upload-local-files!
   [config path]
