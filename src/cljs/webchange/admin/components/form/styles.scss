@@ -23,9 +23,8 @@
     }
 
     label {
-        color: $color-secondary;
-        font-weight: 400;
-        font-size: 10px;
+        @include bbs--noto-14-sb;
+        color: bbs--color(blue-1);
     }
 
     .form-actions {

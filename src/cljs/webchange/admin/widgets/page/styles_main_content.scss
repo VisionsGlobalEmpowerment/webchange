@@ -9,7 +9,7 @@
     gap: $default-gap;
     min-height: 0;
     overflow: auto;
-    padding-right: $default-gap * 0.5;
+    padding: 0;
 
     & > .widget-profile--main-content--content {
         flex: 1 1;

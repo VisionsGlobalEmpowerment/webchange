@@ -1,17 +1,37 @@
 (ns webchange.admin.components.form.views
   (:require
+    [clojure.spec.alpha :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.admin.components.form.state :as state]
+    [webchange.ui.index :as ui]
     [webchange.ui-framework.components.index :as c]))
 
+(defn- ->spec-data
+  [spec]
+  (->> (s/form spec)
+       (rest)
+       (partition 2)
+       (map (fn [[a b]]
+              [(keyword a)
+               (map #(-> % name keyword) b)]))
+       (into {})))
+
+(defn- required-field?
+  [spec field]
+  (let [{:keys [req-un]} (->spec-data spec)]
+    (-> #{field}
+        (some req-un)
+        (boolean))))
+
 (defn- date-control
-  [{:keys [disabled? id form-id label]}]
+  [{:keys [disabled? id form-id label required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
     [:<>
-     [c/label {:for id} label]
+     [c/label {:for       id
+               :required? required?} label]
      [c/date {:id        id
               :value     value
               :error     error
@@ -19,13 +39,14 @@
               :on-change handle-change}]]))
 
 (defn- text-control
-  [{:keys [disabled? id form-id label input-type]}]
+  [{:keys [disabled? id form-id label input-type required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])
         input-type (or input-type "str")]
     [:<>
-     [c/label {:for id} label]
+     [c/label {:for       id
+               :required? required?} label]
      [c/input {:id        id
                :type      input-type
                :value     value
@@ -34,12 +55,13 @@
                :on-change handle-change}]]))
 
 (defn- text-multiline-control
-  [{:keys [disabled? id form-id label]}]
+  [{:keys [disabled? id form-id label required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
     [:<>
-     [c/label {:for id} label]
+     [c/label {:for       id
+               :required? required?} label]
      [c/text-area {:id        id
                    :value     value
                    :error     error
@@ -47,13 +69,14 @@
                    :on-change handle-change}]]))
 
 (defn- password-control
-  [{:keys [disabled? id form-id label input-type]}]
+  [{:keys [disabled? id form-id label input-type required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])
         input-type (or input-type "str")]
     [:<>
-     [c/label {:for id} label]
+     [c/label {:for       id
+               :required? required?} label]
      [c/password {:id        id
                   :type      input-type
                   :value     value
@@ -62,12 +85,13 @@
                   :on-change handle-change}]]))
 
 (defn- select-control
-  [{:keys [disabled? id form-id label options options-type]}]
+  [{:keys [disabled? id form-id label options options-type required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
     [:<>
-     [c/label {:for id} label]
+     [c/label {:for       id
+               :required? required?} label]
      [c/select {:id        id
                 :value     value
                 :options   options
@@ -86,11 +110,12 @@
                             :handle-change handle-change}]))
 
 (defn- form-control
-  [{:keys [disabled? id form-id options]}]
+  [{:keys [disabled? id form-id options spec]}]
   (let [{:keys [type]} options
         control-props (merge {:id        id
                               :form-id   form-id
-                              :disabled? disabled?}
+                              :disabled? disabled?
+                              :required? (required-field? spec id)}
                              options)]
     (case type
       :date [date-control control-props]
@@ -111,14 +136,14 @@
         handle-cancel-click #(when (fn? on-cancel) (on-cancel))]
     [:div.form-actions
      (when (some? on-cancel)
-       [c/button {:on-click   handle-cancel-click
-                  :disabled?  (or disabled? saving?)
-                  :class-name "cancel"}
+       [ui/button {:on-click   handle-cancel-click
+                   :disabled?  (or disabled? saving?)
+                   :class-name "cancel"}
         "Cancel"])
-     [c/button {:on-click   handle-save-click
-                :disabled?  (or disabled? saving?)
-                :loading?   saving?
-                :class-name "submit"}
+     [ui/button {:on-click   handle-save-click
+                 :disabled?  (or disabled? saving?)
+                 :loading?   saving?
+                 :class-name "submit"}
       "Save"]]))
 
 (defn form
@@ -147,6 +172,7 @@
                   errors    {}
                   loading?  false
                   saving?   false}}]
+       (print (required-field? spec :about))
        [:div {:class-name (c/get-class-name {"component--form" true
                                              class-name        (some? class-name)})}
         (if-not loading?
@@ -156,7 +182,8 @@
              [form-control {:id        field-name
                             :form-id   form-id
                             :options   field-options
-                            :disabled? disabled?}])]
+                            :disabled? disabled?
+                            :spec      spec}])]
           [loading-indicator])
         (when-not disabled?
           [form-actions {:form-id   form-id

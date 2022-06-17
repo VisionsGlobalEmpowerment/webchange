@@ -1,4 +1,4 @@
-(ns webchange.admin.pages.add-school.state
+(ns webchange.admin.pages.school-add.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.routes :as routes]))

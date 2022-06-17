@@ -76,7 +76,7 @@
         & > .icon {
             padding: 0;
 
-            @include icon-color($color-secondary);
+            @include bbs--icon-color(bbs--color(yellow-2));
             @include icon-size(32px);
         }
 

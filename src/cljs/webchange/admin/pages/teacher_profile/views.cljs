@@ -11,7 +11,7 @@
   (fn [{:keys [teacher-id]}]
     (let [open-teachers-list #(re-frame/dispatch [::state/open-teachers-list])]
       [page/page
-       [page/header {:title "Edit Teacher Account"
+       [page/_header {:title "Edit Teacher Account"
                      :icon  "teachers"}]
        [page/main-content
         [edit-teacher-form {:teacher-id teacher-id

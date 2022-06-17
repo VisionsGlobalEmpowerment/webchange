@@ -27,7 +27,7 @@
 (re-frame/reg-event-fx
   ::add-school
   (fn [{:keys [db]} [_]]
-    {:dispatch [::routes/redirect :add-school]}))
+    {:dispatch [::routes/redirect :school-add]}))
 
 (re-frame/reg-event-fx
   ::edit-school

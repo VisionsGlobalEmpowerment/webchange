@@ -15,7 +15,7 @@
           handle-card-click #(re-frame/dispatch [::state/open-book %])
           handle-edit-click #(re-frame/dispatch [::state/edit-book %])]
       [page/page {:class-name "page--books"}
-     [page/header {:title "Books"
+     [page/_header {:title "Books"
                    :icon  "book"}]
      [page/main-content
       [activities-list {:data                   books

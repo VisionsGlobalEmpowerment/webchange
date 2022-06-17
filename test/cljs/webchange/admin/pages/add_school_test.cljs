@@ -2,7 +2,7 @@
   (:require [cljs.test :refer-macros [deftest testing is use-fixtures]]
             [re-frame.core :as re-frame]
             [day8.re-frame.test :as rf-test]
-            [webchange.admin.pages.add-school.state :as state]
+            [webchange.admin.pages.school-add.state :as state]
             [webchange.admin.routes :as routes]
             [webchange.common.warehouse :refer [mock-warehouse]]))
 

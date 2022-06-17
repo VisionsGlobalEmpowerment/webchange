@@ -11,7 +11,7 @@
     (let [handle-save #(re-frame/dispatch [::state/open-accounts-list :save])
           handle-cancel #(re-frame/dispatch [::state/open-accounts-list :cancel])]
       [page/page {:class-name "page--password-reset"}
-       [page/header {:title "Reset Password"
+       [page/_header {:title "Reset Password"
                      :icon  "user"}]
        [page/main-content {:class-name "page--password-reset--content"}
         [reset-password-form {:account-id account-id

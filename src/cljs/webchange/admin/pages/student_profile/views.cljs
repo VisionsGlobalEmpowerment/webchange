@@ -24,16 +24,16 @@
   []
   (let [{student-name :name} @(re-frame/subscribe [::state/student])
         {:keys [started-at last-login activity-progress cumulative-time]} @(re-frame/subscribe [::state/course-stats])]
-    [page/header {:title      student-name
+    [page/_header {:title      student-name
                   :avatar     ""
                   :class-name "student-profile-header"}
-     [page/header-content-group {:title "Program start"} [:span started-at]]
+     [page/_header-content-group {:title "Program start"} [:span started-at]]
      [:hr]
-     [page/header-content-group {:title "Latest login at"} [:span last-login]]
+     [page/_header-content-group {:title "Latest login at"} [:span last-login]]
      [:hr]
-     [page/header-content-group {:title "Activities completed"} [:span activity-progress]]
+     [page/_header-content-group {:title "Activities completed"} [:span activity-progress]]
      [:hr]
-     [page/header-content-group {:title "Total played time"} [:span cumulative-time]]]))
+     [page/_header-content-group {:title "Total played time"} [:span cumulative-time]]]))
 
 (defn- progress-card
   [{:keys [completed? last-played name total-time]}]

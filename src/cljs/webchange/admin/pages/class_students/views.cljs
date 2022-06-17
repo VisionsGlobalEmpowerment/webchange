@@ -41,21 +41,21 @@
   (let [{class-name :name stats :stats} @(re-frame/subscribe [::state/class])
         {course-name :name} @(re-frame/subscribe [::state/course])
         handle-add-click #(re-frame/dispatch [::state/add-student])]
-    [page/header {:title      class-name
+    [page/_header {:title      class-name
                   :icon       "classes"
                   :class-name "class-students-header"
                   :actions    [ui/icon-button {:icon     "add"
                                                :on-click handle-add-click}
                                "Add Student to Class"]}
-     [page/header-content-group {:class-name "students-stats"}
+     [page/_header-content-group {:class-name "students-stats"}
       [ui/icon {:icon "students"}]
       [:span (:students stats) " Students"]]
      [:hr]
-     [page/header-content-group {:title "Course Name"} [:span course-name]]
+     [page/_header-content-group {:title "Course Name"} [:span course-name]]
      [:hr]
-     [page/header-content-group {:title "Lesson"} [lesson-picker]]
+     [page/_header-content-group {:title "Lesson"} [lesson-picker]]
      [:hr]
-     [page/header-content-group {:title "Level"} [level-picker]]]))
+     [page/_header-content-group {:title "Level"} [level-picker]]]))
 
 (defn- activity-card
   [{:keys [name preview]}]

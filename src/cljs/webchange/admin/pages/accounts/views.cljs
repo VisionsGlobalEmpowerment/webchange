@@ -11,7 +11,7 @@
   (let [header @(re-frame/subscribe [::state/header])
         {:keys [title] :as add-button} @(re-frame/subscribe [::state/add-button])
         handle-add-click #(re-frame/dispatch [::state/add-account])]
-    [page/header (cond-> {:title header
+    [page/_header (cond-> {:title header
                           :icon  "user"}
                          (some? add-button)
                          (assoc :actions [ui/icon-button {:icon     "add"

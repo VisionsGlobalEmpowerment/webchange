@@ -24,7 +24,7 @@
     [webchange.admin.pages.student-edit.views :as student-edit]
     [webchange.admin.pages.student-profile.views :as student-profile]
     [webchange.admin.pages.students.views :as students]
-    [webchange.admin.pages.add-school.views :as add-school]
+    [webchange.admin.pages.school-add.views :as school-add]
     [webchange.admin.pages.teachers.views :as teachers]
     [webchange.admin.pages.teacher-add.views :as teacher-add]
     [webchange.admin.pages.teacher-profile.views :as teacher-profile]
@@ -37,7 +37,6 @@
             :activities       activities/page
             :activity-edit    activity-edit/page
             :add-class        add-class/page
-            :add-school       add-school/page
             :books            books/page
             :book-edit        book-edit/page
             :class-profile    class-profile/page
@@ -47,6 +46,7 @@
             :courses          courses/page
             :dashboard        dashboard/page
             :password-reset   password-reset/page
+            :school-add       school-add/page
             :school-courses   school-courses/page
             :school-profile   school-profile/page
             :schools          schools/page

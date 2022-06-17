@@ -1,4 +1,5 @@
 $bss--font-weight--regular: 400;
+$bss--font-weight--semi-bold: 500;
 $bss--font-weight--bold: 700;
 
 @mixin bbs--text-size--12 {
@@ -29,6 +30,11 @@ $bss--font-weight--bold: 700;
 @mixin bbs--noto-12-b {
     @include bbs--text-size--12;
     font-weight: $bss--font-weight--bold;
+}
+
+@mixin bbs--noto-14-sb {
+    @include bbs--text-size--14;
+    font-weight: $bss--font-weight--semi-bold;
 }
 
 @mixin bbs--noto-14-b {

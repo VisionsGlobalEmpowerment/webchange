@@ -14,7 +14,7 @@
           handle-card-click #(re-frame/dispatch [::state/open-activity %])
           handle-edit-click #(re-frame/dispatch [::state/edit-activity %])]
       [page/page {:class-name "page--activities"}
-       [page/header {:title "Activities"
+       [page/_header {:title "Activities"
                      :icon  "activity"}]
        [page/main-content
         [activities-list {:data                   activities

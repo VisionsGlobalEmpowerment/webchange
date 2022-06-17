@@ -8,7 +8,7 @@
 (def routes {""          :dashboard
              "/"         :dashboard
              "/schools"  {""                            :schools
-                          "/add"                        :add-school
+                          "/add"                        :school-add
                           "/archived"                   :schools-archived
                           ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
                                                          "/classes"  {""                           :classes
@@ -45,7 +45,7 @@
                                             :teachers       {:teacher-add     true
                                                              :teacher-profile true}
                                             :school-courses true}
-                         :add-school       true
+                         :school-add       true
                          :schools-archived true}
                :courses {:add-course     true
                          :course-profile true}}})
