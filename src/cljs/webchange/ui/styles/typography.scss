@@ -11,6 +11,21 @@ $bss--font-weight--bold: 700;
     line-height: 18px;
 }
 
+@mixin bbs--text-size--16 {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+@mixin bbs--text-size--24 {
+    font-size: 24px;
+    line-height: 32px;
+}
+
+@mixin bbs--noto-12-r {
+    @include bbs--text-size--12;
+    font-weight: $bss--font-weight--regular;
+}
+
 @mixin bbs--noto-12-b {
     @include bbs--text-size--12;
     font-weight: $bss--font-weight--bold;
@@ -18,6 +33,16 @@ $bss--font-weight--bold: 700;
 
 @mixin bbs--noto-14-b {
     @include bbs--text-size--14;
+    font-weight: $bss--font-weight--bold;
+}
+
+@mixin bbs--noto-16-b {
+    @include bbs--text-size--16;
+    font-weight: $bss--font-weight--bold;
+}
+
+@mixin bbs--noto-24-b {
+    @include bbs--text-size--24;
     font-weight: $bss--font-weight--bold;
 }
 

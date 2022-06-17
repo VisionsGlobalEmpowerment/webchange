@@ -1,0 +1,9 @@
+#page--cards {
+    .cards-panel {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        align-items: start;
+        column-gap: 20px;
+        row-gap: 15px;
+    }
+}

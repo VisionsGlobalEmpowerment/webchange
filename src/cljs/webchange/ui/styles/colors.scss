@@ -29,12 +29,13 @@ $color-grey-3: #C7D1EB;
 $color-grey-4: #DCE3F5;
 $color-grey-5: #E9F5FF;
 
-$bbs--base-colors: blue-1, blue-2, green-1, green-2, yellow-1, yellow-2, grey-0, grey-1, grey-2, grey-3, grey-4, grey-5, white;
+$bbs--base-colors: blue-1, blue-2, green-1, green-2, yellow-1, yellow-2, grey-0, grey-1, grey-2, grey-3, grey-4, grey-5, white, transparent;
 
 @function bbs--color($color, $opacity: 1, $variant: normal) {
     $result: $color;
 
     @if $color == white {$result: #ffffff;}
+    @if $color == transparent {$result: #ffffff00;}
     @else if $color == grey-0 {$result: $color-grey-0;}
     @else if $color == grey-1 {$result: $color-grey-1;}
     @else if $color == grey-2 {$result: $color-grey-2;} 

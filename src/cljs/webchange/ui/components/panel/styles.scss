@@ -21,10 +21,14 @@
     }
 
     &.bbs--panel--color-blue-1 {
-        background-color: bbs--color(blue-1);
-
         .bbs--panel--title {
             color: bbs--color(white);
+        }
+    }
+
+    @each $color in $bbs--base-colors {
+        &.bbs--panel--color-#{$color} {
+            background-color: bbs--color(#{$color});
         }
     }
 }

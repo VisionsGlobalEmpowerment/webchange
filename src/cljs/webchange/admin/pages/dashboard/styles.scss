@@ -29,6 +29,21 @@
         grid-row-end: 3;
     }
 
+    .statistics-panel-content {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 20px;
+    }
+
+    .overview-panel-content {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, auto);
+        align-items: start;
+        column-gap: 20px;
+        row-gap: 15px;
+    }
+
     .countries-panel-content {
         display: flex;
         flex-direction: column;
@@ -72,6 +87,44 @@
             display: flex;
             gap: 8px;
             align-items: center;
+        }
+    }
+
+    .chart {
+        @include bbs--noto-12-r;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            &:before {
+               content: "";
+               display: inline-block;
+               $size: 7px;
+               width: $size;
+               height: $size;
+               border-radius: 50%;
+               background-color: #000;
+             }
+
+             @each $color in $bbs--base-colors {
+                 &.color-#{$color} {
+                     &:before {
+                        background-color: bbs--color(#{$color});
+                      }
+                 }
+             }
         }
     }
 }

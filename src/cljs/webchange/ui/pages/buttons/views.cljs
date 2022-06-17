@@ -9,14 +9,6 @@
              {:loading? true}
              {:disabled? true}])
 
-#_{:pre [(or (nil? chip) (some #{chip} available-values/icon-system))
-         (or (nil? chip-color) (some #{chip-color} available-values/color))
-         (some #{color} available-values/color)
-         (or (nil? icon) (some #{icon} available-values/icon-system))
-         (some #{icon-side} ["left" "right"])
-         (some #{shape} ["rectangle" "rounded"])
-         (some #{text-align} ["left" "center" "right"])]}
-
 (def variants [{}
                {:chip "plus"}
                {:icon "restore"}
