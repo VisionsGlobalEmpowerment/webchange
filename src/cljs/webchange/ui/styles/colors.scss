@@ -87,3 +87,15 @@ $bbs--base-colors: blue-1, blue-2, green-1, green-2, yellow-1, yellow-2, grey-0,
 
     @return $result;
 }
+
+@function bbs--button-color($color, $variant: regular) {
+    @if $variant == regular { @return bbs--color(#{$color}); }
+    @if $variant == hover { @return bbs--color(#{$color}, $variant: light); }
+    @if $variant == active { @return bbs--color(#{$color}, $variant: dark); }
+}
+
+@mixin bbs--color-clickable($color) {
+    color: bbs--button-color($color);
+    &:hover {color: bbs--button-color($color, hover)}
+    &:active {color: bbs--button-color($color, active)}
+}

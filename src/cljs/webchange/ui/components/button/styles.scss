@@ -60,12 +60,12 @@
 
             &:not([disabled]):hover,
             &:not([disabled]).bbs--button--state-hover {
-                background-color: bbs--color($color, $variant: light);
+                background-color: bbs--button-color($color, hover);
             }
 
             &:not([disabled]):active,
             &:not([disabled]).bbs--button--state-active {
-                background-color: bbs--color($color, $variant: dark);
+                background-color: bbs--button-color($color, active);
             }
         }
     }

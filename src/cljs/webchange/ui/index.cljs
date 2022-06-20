@@ -1,5 +1,6 @@
 (ns webchange.ui.index
   (:require
+    [webchange.ui.components.breadcrumbs.views :as breadcrumbs]
     [webchange.ui.components.button.views :as button]
     [webchange.ui.components.card.views :as card]
     [webchange.ui.components.icon.views :as icon]
@@ -8,6 +9,7 @@
     [webchange.ui.components.tab.views :as tab]
     [webchange.ui.utils.get-class-name :as gcn]))
 
+(def breadcrumbs breadcrumbs/breadcrumbs)
 (def button button/button)
 (def card card/card)
 (def flag icon/flag-icon)
