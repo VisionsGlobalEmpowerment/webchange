@@ -12,7 +12,7 @@
 (defn get-overall-statistics
   []
   (when-not @overall-statistics
-    (reset! overall-statistics (db/calculate-overall-statistics)))
+    (reset! overall-statistics (first (db/calculate-overall-statistics))))
   @overall-statistics)
 
 (defn- calculate-school-stats

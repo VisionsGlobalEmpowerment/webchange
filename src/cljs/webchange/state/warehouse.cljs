@@ -1106,3 +1106,11 @@
                      :uri    (str "/api/classes/" class-id "/teachers")
                      :params data}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::load-overall-statistics
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-overall-statistics
+                     :method :get
+                     :uri    "/api/overall-statistics"}
+                    handlers)))

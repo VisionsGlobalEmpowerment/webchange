@@ -27,7 +27,7 @@
 (defn- card-data
   [{:keys [counter text]}]
   [:div {:class-name "bbs--card--data"}
-   [:div.bbs--card--counter counter]
+   [:div.bbs--card--counter (if (number? counter) counter "-")]
    [:div.bbs--card--text text]])
 
 (defn- card-action
@@ -63,7 +63,7 @@
   {:pre [(some #{icon} available-values/icon-navigation)
          (or (nil? icon-background) (some #{icon-background} available-values/color))
          (or (nil? background) (some #{background} available-values/color))
-         (number? counter)
+         (or (nil? counter) (number? counter))
          (string? text)
          (some #{type} ["horizontal" "vertical"])
          (or (nil? actions) (every? #(and (string? (:text %))
