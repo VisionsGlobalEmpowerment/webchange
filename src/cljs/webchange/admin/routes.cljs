@@ -24,7 +24,7 @@
                                                                       ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
                                                          "/courses"  {"" :school-courses}}}
              "/courses"  {""                              :courses
-                          "/add"                          :add-course
+                          "/add"                          :course-add
                           ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
                                                            "/edit" :course-edit}}
              "/accounts" {"/my"                                :account-my

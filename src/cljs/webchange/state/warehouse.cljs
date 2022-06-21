@@ -372,6 +372,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::archive-course
+  (fn [{:keys [_]} [_ course-slug handlers]]
+    (create-request {:key    :archive-course
+                     :method :post
+                     :uri    (str "/api/courses/" course-slug "/archive")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::save-course
   (fn [{:keys [_]} [_ {:keys [course-slug course-data]} handlers]]
     (create-request {:key    :save-course

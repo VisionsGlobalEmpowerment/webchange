@@ -124,10 +124,3 @@
 (deftest dataset-library-can-be-retrieved
   (let [retrieved (-> (f/get-dataset-library) :body slurp (json/read-str :key-fn keyword))]
     (is (= 2 (count retrieved)))))
-
-(deftest dataset-created-from-library-on-course-creation
-  (let [course-data {:name "test course" :lang "english" :concept-list-id 1}
-        {course-slug :slug} (-> (f/create-course! course-data) :body slurp (json/read-str :key-fn keyword))
-        retrieved (-> course-slug f/get-course-lessons :body slurp (json/read-str :key-fn keyword))]
-    (is (= 31 (count (:items retrieved))))
-    (is (not (nil? (-> retrieved :datasets first :scheme :fields))))))

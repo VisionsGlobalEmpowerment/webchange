@@ -15,3 +15,5 @@
 
 (s/def ::assign-school-course (s/keys :req-un [::course-id]))
 (s/def ::school-course (s/keys :req-un [::school-id ::course-id]))
+(s/def ::create-course (s/keys :req-un [::name ::lang]))
+(s/def ::edit-course (s/keys :req-un [::name ::lang]))

@@ -11,7 +11,9 @@
     [webchange.admin.pages.book-edit.views :as book-edit]
     [webchange.admin.pages.class-profile.views :as class-profile]
     [webchange.admin.pages.classes.views :as classes]
+    [webchange.admin.pages.course-add.views :as course-add]
     [webchange.admin.pages.course-edit.views :as course-edit]
+    [webchange.admin.pages.course-view.views :as course-view]
     [webchange.admin.pages.courses.views :as courses]
     [webchange.admin.pages.dashboard.views :as dashboard]
     [webchange.admin.pages.not-found.views :as not-found]
@@ -42,7 +44,9 @@
             :class-profile    class-profile/page
             :class-students   class-students/page
             :classes          classes/page
+            :course-add       course-add/page
             :course-edit      course-edit/page
+            :course-profile   course-view/page
             :courses          courses/page
             :dashboard        dashboard/page
             :password-reset   password-reset/page

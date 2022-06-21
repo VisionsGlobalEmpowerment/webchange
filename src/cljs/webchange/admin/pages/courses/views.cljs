@@ -7,14 +7,21 @@
     [webchange.ui-framework.components.index :as ui]))
 
 (defn- courses-list-item
-  [{:keys [name slug]}]
-  (let [handle-edit-click #(re-frame/dispatch [::state/edit-course slug])]
+  [{:keys [name slug lang]}]
+  (let [handle-edit-click #(re-frame/dispatch [::state/edit-course slug])
+        handle-view-click #(re-frame/dispatch [::state/view-course slug])]
     [l/list-item {:name    name
                   :actions [:<>
+                            [ui/icon-button {:icon     "copy"
+                                             :title    "View"
+                                             :variant  "light"
+                                             :on-click handle-edit-click}]
                             [ui/icon-button {:icon     "edit"
                                              :title    "Edit"
                                              :variant  "light"
-                                             :on-click handle-edit-click}]]}]))
+                                             :on-click handle-view-click}]]}
+     [l/content-right {:class-name "item-content-right"}
+      [:p [:strong "Language: "] lang]]]))
 
 (defn- courses-list
   []
@@ -31,8 +38,13 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page {:class-name "page--courses"}
-     [page/_header {:title "Courses"
-                   :icon  "presentation"}]
-     [page/main-content
-      [courses-list]]]))
+    (let [handle-add-click #(re-frame/dispatch [::state/add-course])]
+      [page/page {:class-name "page--courses"}
+       [page/_header {:title "Courses"
+                      :icon  "presentation"
+                      :actions [ui/icon-button {:icon       "add"
+                                                :title      "Add Course"
+                                                :on-click   handle-add-click}
+                                "Add Course"]}]
+       [page/main-content
+        [courses-list]]])))

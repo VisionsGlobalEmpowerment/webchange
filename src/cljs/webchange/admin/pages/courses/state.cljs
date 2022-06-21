@@ -65,3 +65,14 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ course-slug]]
     {:dispatch [::routes/redirect :course-edit :course-slug course-slug]}))
+
+(re-frame/reg-event-fx
+  ::view-course
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ slug]]
+    {:dispatch [::routes/redirect :course-profile :course-slug slug]}))
+
+(re-frame/reg-event-fx
+  ::add-course
+  (fn [{:keys [db]} [_]]
+    {:dispatch [::routes/redirect :course-add]}))

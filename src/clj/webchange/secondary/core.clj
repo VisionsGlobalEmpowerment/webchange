@@ -288,7 +288,7 @@
 
 (defn- available-courses
   [school-id requested-courses]
-  (let [courses (db/get-available-courses)
+  (let [courses (db/get-sync-courses)
         additional-courses (->> (env :additional-course-slugs)
                                 (concat requested-courses)
                                 (map #(db/get-course {:slug %})))]

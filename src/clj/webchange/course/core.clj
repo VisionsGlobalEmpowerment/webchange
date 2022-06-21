@@ -308,7 +308,7 @@
   ([course]
    (->website-course course {}))
   ([course {:keys [with-host-name?] :or {with-host-name? true}}]
-   (cond-> (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject :status :updated-at :metadata])
+   (cond-> (-> (select-keys course [:id :name :slug :lang :image-src :status :metadata])
                (assoc :updated-at (-> course :updated-at (str)))
                (with-course-page)
                (with-default-image))
@@ -378,7 +378,7 @@
 
 (defn get-available-courses
   []
-  (->> (db/get-courses-by-status-and-type {:type "course" :status "published"})
+  (->> (db/get-available-courses)
        (map ->website-course)))
 
 (defn get-courses-by-website-user
@@ -537,15 +537,9 @@
                                 :website_user_id website-id
                                 :status          "draft"})
         [{new-course-id :id}] (db/create-course! new-course-data)
-        course-data {:initial-scene    nil
-                     :navigation-mode  :activity
-                     :scene-list       {}
+        course-data {:navigation-mode  :activity
                      :default-progress {}
-                     :levels           [{:level   1 :name "Level 1" :scheme {:lesson {:name "Lesson" :lesson-sets []}}
-                                         :lessons [{:lesson     1
-                                                    :name       "Lesson 1"
-                                                    :type       :lesson
-                                                    :activities []}]}]}]
+                     :levels           [{:lessons [{:activities []}]}]}]
     (db/save-course! {:course_id  new-course-id
                       :data       course-data
                       :owner_id   owner-id

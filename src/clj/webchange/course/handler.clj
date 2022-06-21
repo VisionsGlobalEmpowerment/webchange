@@ -74,7 +74,7 @@
   (let [course-id (Integer/parseInt course-id)
         user-id (current-user request)
         save (fn [data] (core/save-course-info! course-id data))]
-    (when-not (core/collaborator-by-course-id? user-id course-id)
+    (when-not (or (is-admin? user-id) (core/collaborator-by-course-id? user-id course-id))
       (throw-unauthorized {:role :educator}))
     (-> request
         :body
@@ -120,8 +120,6 @@
                  (not-empty image-src) (assoc :image-src
                                               (assets/make-thumbnail image-src :course))
                  :always (core/create-course owner-id))]
-    (when concept-list-id
-      (datasets-library/create-dataset! (-> course second :slug) concept-list-id))
     (handle course)))
 
 (defn handle-create-activity
@@ -199,7 +197,7 @@
   [course-slug request]
   (let [user-id (current-user request)
         {owner-id :owner-id course-id :id} (core/get-course-info course-slug)]
-    (when-not (= user-id owner-id)
+    (when-not (or (is-admin? user-id) (= user-id owner-id))
       (throw-unauthorized {:role :educator}))
     (-> (core/archive-course! course-slug course-id)
         handle)))

@@ -25,6 +25,7 @@
   [{:keys [counter type]}]
   [:div {:class-name (get-class-name {"bbs--card--counter"                   true
                                       (str "bbs--card--counter--type-" type) true})}
+   
    (if (number? counter) counter "-")])
 
 (defn- card-icon
@@ -68,7 +69,7 @@
   [props]
   [:<>
    [card-icon props]
-   [card-data props]
+   [card-data (assoc props :type "horizontal")]
    [card-actions props]])
 
 (defn- card-vertical

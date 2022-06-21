@@ -61,7 +61,7 @@
      [:div {:class-name "title"}
       title])])
 
-(defn- header-content-group
+(defn _header-content-group
   [{:keys [class-name icon title]}]
   [:div {:class-name (get-class-name {"header-content-group" true
                                       class-name             (some? class-name)})}
