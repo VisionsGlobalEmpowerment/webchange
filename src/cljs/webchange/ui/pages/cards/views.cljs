@@ -21,6 +21,26 @@
                                 :counter         13}]
                               (map #(assoc % :type "horizontal"))))
 
+(def vertical-variants (->> [{:text            "Classes"
+                              :icon            "classes"
+                              :icon-background "blue-1"
+                              :counter         20
+                              :background      "yellow-2"
+                              :actions         [{:text     "Manage Classes"
+                                                 :on-click #(print "Manage Classes")}
+                                                {:text     "Add Class"
+                                                 :chip     "plus"
+                                                 :color    "blue-1"
+                                                 :on-click #(print "Add Class")}]}
+                             {:text            "Courses"
+                              :icon            "courses"
+                              :icon-background "blue-1"
+                              :counter         20
+                              :background      "green-2"
+                              :actions         [{:text     "Manage Courses"
+                                                 :on-click #(print "Manage Courses")}]}]
+                            (map #(assoc % :type "vertical"))))
+
 (defn- component
   [props]
   [ui/card (assoc props :title (js/JSON.stringify (clj->js props)))])
@@ -32,5 +52,10 @@
     [:h2 "Horizontal cards"]
     [panel {:class-name "cards-panel"}
      (for [[idx props] (map-indexed vector horizontal-variants)]
+       ^{:key (str "variant-" idx)}
+       [component props])]
+    [:h2 "Vertical cards"]
+    [panel {:class-name "cards-panel stretch"}
+     (for [[idx props] (map-indexed vector vertical-variants)]
        ^{:key (str "variant-" idx)}
        [component props])]]])

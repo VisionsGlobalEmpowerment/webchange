@@ -1,60 +1,60 @@
 (ns webchange.admin.pages.school-profile.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.components.counter.views :refer [counter]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
+    [webchange.admin.widgets.page.counter.views :refer [counter]]
     [webchange.admin.widgets.page.side-bar-page.views :as page]
     [webchange.admin.widgets.school-form.views :refer [edit-school-form]]
     [webchange.admin.pages.school-profile.state :as state]))
 
+#_{:text            "Classes"
+   :icon            "classes"
+   :icon-background "blue-1"
+   :counter         20
+   :background      "yellow-2"
+   :actions         [{:text     "Manage Classes"
+                      :on-click #(print "Manage Classes")}
+                     {:text     "Add Class"
+                      :chip     "plus"
+                      :color    "blue-1"
+                      :on-click #(print "Add Class")}]}
+
 (defn- school-counter
   []
-  (let [{:keys [stats]} @(re-frame/subscribe [::state/school-data])]
-    [counter {:items [{:id      :teachers
-                       :value   (:teachers stats)
-                       :title   "Teachers"
-                       :icon    "teachers"
-                       :actions [{:title    "Manage Teachers"
-                                  :color    "yellow"
-                                  :on-click #(re-frame/dispatch [::state/open-teachers])}
-                                 {:title    "Add Teacher"
-                                  :icon     "add"
-                                  :color    "orange"
-                                  :on-click #(re-frame/dispatch [::state/open-add-teacher])}]}
-                      {:id              :students
-                       :value           (:students stats)
-                       :title           "Students"
-                       :icon            "students"
-                       :icon-background "blue"
-                       :color           "blue"
-                       :actions         [{:title    "Manage Students"
-                                          :color    "yellow"
-                                          :on-click #(re-frame/dispatch [::state/open-students])}
-                                         {:title    "Add Student"
-                                          :icon     "add"
-                                          :color    "orange"
-                                          :on-click #(re-frame/dispatch [::state/open-add-student])}]}
-                      {:id              :courses
-                       :value           (:courses stats)
-                       :title           "Courses"
-                       :icon            "presentation"
-                       :icon-background "blue"
-                       :color           "blue"
-                       :actions         [{:title    "Manage Courses"
-                                          :color    "yellow"
-                                          :on-click #(re-frame/dispatch [::state/open-courses])}]}
-                      {:id              :classes
-                       :value           (:classes stats)
-                       :title           "Classes"
-                       :icon            "classes"
-                       :icon-background "blue"
-                       :actions         [{:title    "Manage Classes"
-                                          :color    "yellow"
-                                          :on-click #(re-frame/dispatch [::state/open-classes])}
-                                         {:title    "Add Class"
-                                          :icon     "add"
-                                          :color    "orange"
-                                          :on-click #(re-frame/dispatch [::state/open-add-class])}]}]}]))
+  (let [{:keys [stats]} @(re-frame/subscribe [::state/school-data])
+        add-button-props {:color      "blue-1"
+                          :chip       "plus"
+                          :chip-color "yellow-1"}]
+    [counter {:data [{:text    "Classes"
+                      :icon    "classes"
+                      :counter (:classes stats)
+                      :actions [{:text     "Manage Classes"
+                                 :on-click #(re-frame/dispatch [::state/open-classes])}
+                                (merge add-button-props
+                                       {:text     "Add Class"
+                                        :on-click #(re-frame/dispatch [::state/open-add-class])})]}
+                     {:text    "Teachers"
+                      :icon    "teachers"
+                      :counter (:teachers stats)
+                      :actions [{:text     "Manage Teachers"
+                                 :on-click #(re-frame/dispatch [::state/open-teachers])}
+                                (merge add-button-props
+                                       {:text     "Add Teacher"
+                                        :on-click #(re-frame/dispatch [::state/open-add-teacher])})]}
+                     {:text    "Students"
+                      :icon    "students"
+                      :counter (:students stats)
+                      :actions [{:text     "Manage Students"
+                                 :on-click #(re-frame/dispatch [::state/open-students])}
+                                (merge add-button-props
+                                       {:text     "Add Student"
+                                        :on-click #(re-frame/dispatch [::state/open-add-student])})]}
+                     {:text       "Courses"
+                      :icon       "courses"
+                      :counter    (:courses stats)
+                      :background "green-2"
+                      :actions    [{:text     "Manage Courses"
+                                    :on-click #(re-frame/dispatch [::state/open-courses])}]}]}]))
 
 (defn- statistics
   []

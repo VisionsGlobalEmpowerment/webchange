@@ -10,7 +10,6 @@
              {:disabled? true}])
 
 (def variants-1 [{}
-                 {:chip "plus"}
                  {:icon "restore"}
                  {:color     "yellow-2"
                   :icon      "dnd"

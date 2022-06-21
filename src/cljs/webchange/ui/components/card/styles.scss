@@ -5,20 +5,55 @@
 
     .bbs--card--content {
         display: grid;
+        justify-items: center;
         grid-template-columns: $icon-wrapper-size auto;
         grid-template-rows: auto auto;
-        column-gap: 26px;
-        row-gap: 26px;
-
-        padding: 28px 24px;
-
         grid-template-areas:
             "icon data"
             "actions actions";
+        column-gap: 26px;
+        row-gap: 26px;
+        padding: 28px 24px;
+        position: relative;
 
         &.bbs--card--content--no-actions {
             grid-template-rows: auto;
             grid-template-areas: "icon data";
+        }
+
+        & > * {
+            z-index: 2;
+        }
+
+        svg.bbs--card--background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1;
+            border-radius: 6px;
+        }
+
+        @each $color in $bbs--base-colors {
+            &.bbs--card--content--background-#{$color} {
+                svg.bbs--card--background {
+                    fill: bbs--color(#{$color}, $variant: dark);
+                }
+            }
+        }
+    }
+
+    &.bbs--card--vertical {
+        border-radius: 16px;
+
+        svg.bbs--card--background {
+            border-radius: 16px;
+        }
+
+        .bbs--card--content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
     }
 
@@ -28,6 +63,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
 
         width: $icon-wrapper-size;
         height: $icon-wrapper-size;
@@ -45,6 +81,10 @@
                 background-color: bbs--color(#{$color});
             }
         }
+
+        &.bbs--card--icon--background-blue-1 {
+            @include bbs--icon-color(bbs--color(white));
+        }
     }
 
     .bbs--card--data {
@@ -53,11 +93,14 @@
         align-self: center;
         justify-self: stretch;
 
+        flex: 1 1;
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        color: bbs--color(white);
+        &.bbs--card--data--background-blue-1 {
+            color: bbs--color(white);
+        }
 
         .bbs--card--counter {
             @include bbs--noto-24-b;
@@ -80,5 +123,18 @@
         display: flex;
         flex-direction: column;
         gap: 12px;
+        width: 100%;
+    }
+
+    .bbs--card--counter {
+        &.bbs--card--counter--type-vertical {
+            @include bbs--noto-18-b;
+            background-color: bbs--color(grey-5);
+            position: absolute;
+            top: 0;
+            right: -5px;
+            padding: 1px 6px;
+            border-radius: 9999px;
+        }
     }
 }

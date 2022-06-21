@@ -3,6 +3,7 @@
     [reagent.core :as r]
     [webchange.ui.components.available-values :as available-values]
     [webchange.ui.components.button.views :refer [button]]
+    [webchange.ui.components.card.background :as background]
     [webchange.ui.components.icon.views :refer [navigation-icon]]
     [webchange.ui.components.panel.views :refer [panel]]
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
@@ -13,28 +14,46 @@
   (->> (r/current-component)
        (r/children)
        (into [panel {:class-name         class-name
-                     :class-name-content (get-class-name {"bbs--card--content"             true
-                                                          "bbs--card--content--no-actions" (empty? actions)})
-                     :color              background}])))
+                     :class-name-content (get-class-name {"bbs--card--content"                               true
+                                                          (str "bbs--card--content--background-" background) true
+                                                          "bbs--card--content--no-actions"                   (empty? actions)})
+                     :color              background}
+              (when-not (= background "transparent")
+                background/data)])))
+
+(defn- card-counter
+  [{:keys [counter type]}]
+  [:div {:class-name (get-class-name {"bbs--card--counter"                   true
+                                      (str "bbs--card--counter--type-" type) true})}
+   (if (number? counter) counter "-")])
 
 (defn- card-icon
-  [{:keys [icon icon-background]}]
+  [{:keys [counter icon icon-background type] :as props}]
   [:div {:class-name (get-class-name {"bbs--card--icon"                                    true
                                       (str "bbs--card--icon--background-" icon-background) (some? icon-background)})}
    [navigation-icon {:icon       icon
-                     :class-name "bbs--card--icon-data"}]])
+                     :class-name "bbs--card--icon-data"}]
+   (when (and (some? counter)
+              (= type "vertical"))
+     [card-counter props])])
 
 (defn- card-data
-  [{:keys [counter text]}]
-  [:div {:class-name "bbs--card--data"}
-   [:div.bbs--card--counter (if (number? counter) counter "-")]
+  [{:keys [background text type] :as props
+    :or   {background "blue-1"}}]
+  [:div {:class-name (get-class-name {"bbs--card--data"                               true
+                                      (str "bbs--card--data--background-" background) true})}
+   (when (= type "horizontal")
+     [card-counter props])
    [:div.bbs--card--text text]])
 
 (defn- card-action
-  [{:keys [on-click text]}]
-  (let [handle-click #(when (fn? on-click) (on-click))]
-    [button {:on-click handle-click
-             :shape    "rounded"}
+  [{:keys [on-click text] :as props}]
+  (let [handle-click #(when (fn? on-click) (on-click))
+        button-props (-> props
+                         (dissoc :text)
+                         (assoc :on-click handle-click
+                                :shape "rounded"))]
+    [button button-props
      text]))
 
 (defn- card-actions
@@ -53,8 +72,11 @@
    [card-actions props]])
 
 (defn- card-vertical
-  [{:keys []}]
-  [:<>])
+  [props]
+  [:<>
+   [card-icon props]
+   [card-data props]
+   [card-actions props]])
 
 (defn card
   [{:keys [actions background counter icon icon-background text type]

@@ -67,6 +67,31 @@
             &:not([disabled]).bbs--button--state-active {
                 background-color: bbs--button-color($color, active);
             }
+
+            .bbs--button--chip {
+                background-color: bbs--color(#{$color});
+            }
+        }
+    }
+
+    .bbs--button--chip {
+        $size: 16px;
+
+        @include bbs--icon-color(bbs--color(white));
+        @include bbs--icon-size($size);
+
+        width: $size;
+        height: $size;
+        border-radius: $size;
+
+        position: absolute;
+        right: -$size * 0.3;
+        top: 0;
+
+        @each $color in $bbs--base-colors {
+            &.bbs--button--chip--color-#{$color} {
+                background-color: bbs--color(#{$color});
+            }
         }
     }
 
