@@ -5,8 +5,9 @@
 
 (defn counter
   [{:keys [class-name data]}]
-  [:div {:class-name (get-class-name {"widget--counter" true
-                                      class-name        (some? class-name)})}
+  [:div {:class-name (get-class-name {"widget--counter"                              true
+                                      (str "widget--counter--columns-" (count data)) true
+                                      class-name                                     (some? class-name)})}
    (for [[idx card-data] (map-indexed vector data)]
      ^{:key idx}
      [ui/card (merge {:type            "vertical"

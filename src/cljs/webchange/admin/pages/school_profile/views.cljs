@@ -1,23 +1,12 @@
 (ns webchange.admin.pages.school-profile.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.counter.views :refer [counter]]
     [webchange.admin.widgets.page.side-bar-page.views :as page]
     [webchange.admin.widgets.school-form.views :refer [edit-school-form]]
     [webchange.admin.pages.school-profile.state :as state]))
-
-#_{:text            "Classes"
-   :icon            "classes"
-   :icon-background "blue-1"
-   :counter         20
-   :background      "yellow-2"
-   :actions         [{:text     "Manage Classes"
-                      :on-click #(print "Manage Classes")}
-                     {:text     "Add Class"
-                      :chip     "plus"
-                      :color    "blue-1"
-                      :on-click #(print "Add Class")}]}
 
 (defn- school-counter
   []
@@ -79,10 +68,13 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [school-id]}]
-    (let [school-name @(re-frame/subscribe [::state/school-name])]
-      [page/side-bar-page
-       [page/main-content {:title school-name
-                           :icon  "school"}
-        [school-counter]
-        [statistics]]
-       [side-bar {:school-id school-id}]])))
+    (r/with-let []
+      (let [school-name @(re-frame/subscribe [::state/school-name])]
+        [page/side-bar-page
+         [page/main-content {:title school-name
+                             :icon  "school"}
+          [school-counter]
+          [statistics]]
+         [side-bar {:school-id school-id}]])
+      (finally
+        (re-frame/dispatch [::state/reset props])))))

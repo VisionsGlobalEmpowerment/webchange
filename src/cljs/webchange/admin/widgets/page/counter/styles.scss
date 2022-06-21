@@ -1,5 +1,10 @@
 .widget--counter {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
+    display: grid;
+    column-gap: 20px;
+
+    @each $columns in 1, 2, 3, 4 {
+        &.widget--counter--columns-#{$columns} {
+            grid-template-columns: repeat($columns, auto);
+        }
+    }
 }
