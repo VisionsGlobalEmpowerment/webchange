@@ -24,7 +24,9 @@
                  {:color "yellow-2"
                   :icon  "dnd"}
                  {:color "green-2"
-                  :icon  "close"}])
+                  :icon  "close"}
+                 {:color "grey-3"
+                  :icon  "edit"}])
 
 (defn- component-1
   [props]

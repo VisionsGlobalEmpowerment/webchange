@@ -34,3 +34,10 @@
 (defn system-icon
   [props]
   [icon-component (assoc props :type "system")])
+
+(defn general-icon
+  [{:keys [icon] :as props}]
+  (let [type (cond
+               (contains? navigation-icons/data icon) "navigation"
+               (contains? system-icons/data icon) "system")]
+    [icon-component (assoc props :type type)]))

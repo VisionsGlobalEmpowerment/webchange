@@ -1,6 +1,7 @@
 (ns webchange.admin.components.list.views
   (:require
     [reagent.core :as r]
+    [webchange.ui.index :as ui]
     [webchange.ui-framework.components.index :as c]))
 
 (defn- item-image
@@ -42,10 +43,22 @@
        [description-item {:t t
                           :d d}])]))
 
+(defn- item-action
+  [{:keys [] :as props}]
+  [ui/button (merge {:color "grey-3"}
+                    props)])
+
 (defn- item-actions
   [{:keys [actions]}]
   (when (some? actions)
-    [:div.item-actions actions]))
+    (let [actions-data? (-> actions first map?)]
+      [:div.item-actions
+       (if actions-data?
+         [:<>
+          (for [[idx action] (map-indexed vector actions)]
+            ^{:key idx}
+            [item-action action])]
+         actions)])))
 
 (defn content-right
   [{:keys [class-name]}]

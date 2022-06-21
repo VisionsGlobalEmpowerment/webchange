@@ -3,66 +3,64 @@
             [webchange.admin.components.list.views :as l]
             [webchange.admin.pages.schools.state :as state]
             [webchange.admin.widgets.page.views :as page]
+            [webchange.ui.index :as ui]
             [webchange.ui-framework.components.index :as c]))
 
-(defn- header
-  []
-  (let [handle-add-click #(re-frame/dispatch [::state/add-school])
-        handle-archived-click #(re-frame/dispatch [::state/open-archived-schools])]
-    [page/_header {:title   "Schools"
-                  :icon    "school"
-                  :actions [c/icon-button {:icon       "add"
-                                           :title      "Add School"
-                                           :class-name "manage-students"
-                                           :on-click   handle-add-click}
-                            "Add School"]}
-     [c/icon-button {:icon     "restore"
-                     :title    "Archived Schools"
-                     :on-click handle-archived-click}
-      "Archived Schools"]]))
+(defn- classes
+  [{:keys [id stats]}]
+  (let [{:keys [classes]} stats
+        handle-click #(do (.stopPropagation %)
+                          (re-frame/dispatch [::state/manage-classes id]))]
+    [ui/chip {:counter  classes
+              :icon     "classes"
+              :on-click handle-click}
+     "Classes"]))
 
-(defn- archive-button
-  [{:keys [id]}]
-  (let [handle-click #(do (.stopPropagation %)
-                          (re-frame/dispatch [::state/archive-school id]))]
-    [c/icon-button {:icon     "archive"
-                    :title    "Archive"
-                    :variant  "light"
-                    :on-click handle-click}]))
+(defn- courses
+  [{:keys [id stats]}]
+  (let [{:keys [courses]} stats
+        handle-click #(do (.stopPropagation %)
+                          (re-frame/dispatch [::state/manage-courses id]))]
+    [ui/chip {:counter  courses
+              :icon     "courses"
+              :on-click handle-click}
+     "Courses"]))
 
-(defn- manage-teachers-button
-  [{:keys [id]}]
-  (let [handle-click #(do (.stopPropagation %)
-                          (re-frame/dispatch [::state/manage-teachers id]))]
-    [c/icon-button {:icon       "teachers"
-                    :title      "Manage Teachers"
-                    :variant    "light"
-                    :class-name "manage-teachers"
-                    :on-click   handle-click}
-     "Manage Teachers"]))
 
-(defn- manage-students-button
-  [{:keys [id]}]
-  (let [handle-click #(do (.stopPropagation %)
+(defn- students
+  [{:keys [id stats]}]
+  (let [{:keys [students]} stats
+        handle-click #(do (.stopPropagation %)
                           (re-frame/dispatch [::state/manage-students id]))]
-    [c/icon-button {:icon       "students"
-                    :title      "Manage Students"
-                    :variant    "light"
-                    :class-name "manage-students"
-                    :on-click   handle-click}
-     "Manage Students"]))
+    [ui/chip {:counter  students
+              :icon     "students"
+              :on-click handle-click}
+     "Students"]))
+
+(defn- teachers
+  [{:keys [id stats]}]
+  (let [{:keys [teachers]} stats
+        handle-click #(do (.stopPropagation %)
+                          (re-frame/dispatch [::state/manage-teachers id]))]
+    [ui/chip {:counter  teachers
+              :icon     "teachers"
+              :on-click handle-click}
+     "Teachers"]))
 
 (defn school-item
   [{:keys [id] :as props}]
-  (let [handle-item-click #(re-frame/dispatch [::state/edit-school id])]
+  (let [handle-edit-click #(re-frame/dispatch [::state/edit-school id])]
     [l/list-item (merge props
-                        {:actions  [archive-button {:id id}]
-                         :on-click handle-item-click})
+                        {:actions [{:icon     "edit"
+                                    :title    "Edit school"
+                                    :on-click handle-edit-click}]})
      [l/content-right {:class-name "item-content-right"}
-      [manage-teachers-button {:id id}]
-      [manage-students-button {:id id}]]]))
+      [students props]
+      [teachers props]
+      [classes props]
+      [courses props]]]))
 
-(defn- content
+(defn- schools-list
   []
   (let [schools @(re-frame/subscribe [::state/schools-list])]
     [page/main-content
@@ -75,6 +73,11 @@
   []
   (re-frame/dispatch [::state/init])
   (fn []
-    [page/page {:class-name "page--schools"}
-     [header]
-     [content]]))
+    (let [handle-add-click #(re-frame/dispatch [::state/add-school])]
+      [page/single-page {:class-name "page--schools"
+                         :header     {:title   "Schools"
+                                      :icon    "school"
+                                      :actions [{:text     "Add School"
+                                                 :icon     "plus"
+                                                 :on-click handle-add-click}]}}
+       [schools-list]])))

@@ -29,6 +29,18 @@
         flex: 1 1;
     }
 
+    .widget--page--header-actions {
+        flex: 1 1;
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+
+        .widget--page--header-action {
+            max-width: 260px;
+            min-width: 180px;
+        }
+    }
+
     .widget--page--header--close-button {
         $size: 36px;
         width: $size;
