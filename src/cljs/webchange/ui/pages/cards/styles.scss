@@ -5,5 +5,9 @@
         align-items: start;
         column-gap: 20px;
         row-gap: 15px;
+
+        &.stretch {
+            align-items: stretch;
+        }
     }
 }

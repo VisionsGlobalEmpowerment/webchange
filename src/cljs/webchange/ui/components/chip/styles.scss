@@ -1,0 +1,51 @@
+.bbs--chip {
+    $color: bbs--color(grey-4);
+
+    @include bbs--noto-14-b;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: fit-content;
+    padding: 5px;
+    padding-left: 12px;
+
+    border: solid 1px $color;
+    border-radius: 9999px;
+
+    &:not(.bbs--chip--with-counter) {
+        padding-right: 12px;
+    }
+
+    &.bbs--chip--clickable {
+        cursor: pointer;
+
+        &.bbs--chip--state-hover,
+        &:hover {
+            background-color: bbs--button-color(grey-3, hover);
+        }
+
+        &.bbs--chip--state-active,
+        &:active {
+            background-color: bbs--button-color(grey-3, active);
+        }
+
+        &.bbs--chip--state-disabled {
+            background-color: bbs--button-color(grey-4);
+            cursor: not-allowed;
+        }
+    }
+
+    .bbs--chip--icon {
+        @include bbs--icon-size(18px);
+    }
+
+    .bbs--chip--counter {
+        background-color: $color;
+        border-radius: 9999px;
+        padding: 2px 6px;
+        text-align: center;
+        min-width: 29px;
+    }
+}

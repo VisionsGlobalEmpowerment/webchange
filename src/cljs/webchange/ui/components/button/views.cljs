@@ -2,7 +2,7 @@
   (:require
     [reagent.core :as r]
     [webchange.ui.components.available-values :as available-values]
-    [webchange.ui.components.icon.views :refer [system-icon]]
+    [webchange.ui.components.icon.views :refer [general-icon]]
     [webchange.ui.components.progress.views :refer [circular-progress]]
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
@@ -43,8 +43,12 @@
                            (some? title) (assoc :title title))
            (when (and (some? icon)
                       (not loading?))
-             [system-icon {:icon       icon
-                           :class-name "bbs--button--icon"}])]
+             [general-icon {:icon       icon
+                            :class-name "bbs--button--icon"}])
+           (when (some? chip)
+             [general-icon {:icon       chip
+                            :class-name (get-class-name {"bbs--button--chip"                          true
+                                                         (str "bbs--button--chip--color-" chip-color) (some? chip-color)})}])]
           (if loading?
             [[circular-progress]]
             children))))

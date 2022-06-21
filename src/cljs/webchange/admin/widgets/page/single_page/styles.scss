@@ -1,14 +1,12 @@
 .widget--single-page {
+    @include bbs--page--panel;
+
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: $bbs--page--margin;
 
     width: 100%;
     height: 100%;
-
-    padding: 10px;
-    border-radius: 6px;
-    background-color: bbs--color(white);
 
     &.widget--single-page--with-background-image {
         background-image: url("/images/admin/page/page_content_background.svg");
@@ -30,6 +28,6 @@
     .widget--single-page--content {
         flex: 1 1;
         min-height: 0;
-
+        padding: $bbs--page--margin;
     }
 }

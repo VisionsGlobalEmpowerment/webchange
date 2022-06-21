@@ -2,7 +2,9 @@
   (:require
     [webchange.ui.pages.buttons.views :as buttons]
     [webchange.ui.pages.cards.views :as cards]
+    [webchange.ui.pages.chips.views :as chips]
     [webchange.ui.pages.colors.views :as colors]
+    [webchange.ui.pages.headers.views :as headers]
     [webchange.ui.pages.icons.views :as icons]
     [webchange.ui.pages.tabs.views :as tabs]))
 
@@ -12,7 +14,9 @@
 
 (def pages {:buttons buttons/page
             :cards   cards/page
+            :chips   chips/page
             :colors  colors/page
+            :headers headers/page
             :icons   icons/page
             :tabs    tabs/page
             :404     page-404})

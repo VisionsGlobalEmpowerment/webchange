@@ -1,4 +1,8 @@
+@import "variables";
+@import "mixins";
+@import "counter/styles";
 @import "header/styles";
+@import "side_bar_page/styles";
 @import "single_page/styles";
 
 .widget--page {
@@ -18,7 +22,6 @@
 
     padding: 10px;
     border-radius: 6px;
-    background-color: bbs--color(white);
 
     & > .widget-profile--header,
     & > .widget--page--header {

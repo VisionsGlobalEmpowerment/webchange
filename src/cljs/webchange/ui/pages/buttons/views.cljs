@@ -10,7 +10,6 @@
              {:disabled? true}])
 
 (def variants-1 [{}
-                 {:chip "plus"}
                  {:icon "restore"}
                  {:color     "yellow-2"
                   :icon      "dnd"
@@ -24,7 +23,9 @@
                  {:color "yellow-2"
                   :icon  "dnd"}
                  {:color "green-2"
-                  :icon  "close"}])
+                  :icon  "close"}
+                 {:color "grey-3"
+                  :icon  "edit"}])
 
 (defn- component-1
   [props]

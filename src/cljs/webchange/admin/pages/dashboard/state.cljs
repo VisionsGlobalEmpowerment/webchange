@@ -14,10 +14,6 @@
 
 ;; statistic
 
-(def default-statistics (->> [:accounts]
-                             (map #(vector % "-"))
-                             (into {})))
-
 (def statistics-key :statistics)
 
 (defn- update-statistics
@@ -27,34 +23,32 @@
 (re-frame/reg-sub
   ::statistics
   :<- [path-to-db]
-  #(get % statistics-key default-statistics))
+  #(get % statistics-key {}))
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:dispatch-n [[::warehouse/load-accounts-by-type {:type "live"}
-                   {:on-success [::load-accounts-success]}]
-                  [::warehouse/load-available-books
-                   {:on-success [::load-books-success]}]]}))
+  (fn [{:keys []} [_]]
+    {:dispatch-n [[::warehouse/load-overall-statistics
+                   {:on-success [::load-overall-statistics-success]}]]}))
 
 (re-frame/reg-event-fx
-  ::load-accounts-success
+  ::load-overall-statistics-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [total]}]]
-    {:db (update-statistics db {:accounts total})}))
-
-(re-frame/reg-event-fx
-  ::load-books-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ books]]
-    {:db (update-statistics db {:books (count books)})}))
+  (fn [{:keys [db]} [_ statistics]]
+    {:db (update-statistics db statistics)}))
 
 (re-frame/reg-event-fx
   ::open-accounts-page
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :accounts :account-type "live"]}))
+
+(re-frame/reg-event-fx
+  ::open-activities-page
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :activities]}))
 
 (re-frame/reg-event-fx
   ::open-books-page
@@ -67,3 +61,15 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :book-create]}))
+
+(re-frame/reg-event-fx
+  ::open-courses-page
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :courses]}))
+
+(re-frame/reg-event-fx
+  ::open-schools-page
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :schools]}))

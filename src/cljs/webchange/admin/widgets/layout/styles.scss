@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: flex-start;
     height: 100%;
+    background-color: bbs--color(grey-5);
 
     .top-bar {
         display: flex;
@@ -24,7 +25,6 @@
     & > .content-wrapper {
         display: flex;
         flex: 1 1;
-        background-color: bbs--color(grey-5);
         padding: $default-gap;
         min-height: 0;
 

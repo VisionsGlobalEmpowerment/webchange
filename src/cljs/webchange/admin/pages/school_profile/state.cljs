@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.admin.widgets.breadcrumbs.state :as breadcrumbs]))
 
 (def path-to-db :school-profile)
 
@@ -23,10 +24,16 @@
                 {:on-success [::load-school-success]}]}))
 
 (re-frame/reg-event-fx
+  ::reset
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::breadcrumbs/reset-current-node]}))
+
+(re-frame/reg-event-fx
   ::load-school-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school]}]]
-    {:db (assoc db :school-data school)}))
+  (fn [{:keys [_]} [_ {:keys [school]}]]
+    {:dispatch [::set-school-data school]}))
 
 ;; School Form
 
@@ -58,9 +65,10 @@
   ::set-school-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
-    {:db (-> db
-             (assoc :school-data data)
-             (set-school-form-editable false))}))
+    {:db       (-> db
+                   (assoc :school-data data)
+                   (set-school-form-editable false))
+     :dispatch [::breadcrumbs/set-current-node {:text (get data :name "")}]}))
 
 (re-frame/reg-sub
   ::school-name

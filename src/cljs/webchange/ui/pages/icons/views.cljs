@@ -40,10 +40,10 @@
                   :class-name "icons-list-colored"}]]
     [:h2 "System Icons"]
     [icons-list {:data      system-icons/data
-                 :component ui/icon}]
+                 :component ui/system-icon}]
     [:h2 "System Icons (Colored)"]
     [:div
      [icons-list {:data       system-icons/data
-                  :component  ui/icon
+                  :component  ui/system-icon
                   :color      "white"
                   :class-name "icons-list-colored"}]]]])

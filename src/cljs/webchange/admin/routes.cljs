@@ -59,6 +59,7 @@
          s #(str/join connector (if with-root? (concat [root] %) %))]
      (case handler
        :dashboard (s ["Dashboard"])
+       :school-add (s ["New School"])
        :schools (s ["Schools"])
        :school-profile (s [(str "School " (:school-id props))])
        :class-profile (s [(str "Class " (:class-id props))])

@@ -8,19 +8,12 @@
     [webchange.admin.pages.dashboard.schools-chart :as schools-chart-svg]
     [webchange.ui.index :as ui]))
 
-;; ToDo: Use real statistics
 (defn- overview
   []
-  (let [{:keys [activities classes courses schools students teachers]
-         :or   {activities 645
-                classes    68
-                courses    8
-                schools    25
-                students   324
-                teachers   98}} @(re-frame/subscribe [::state/statistics])
-        handle-activities-click #(print "View activities")
-        handle-courses-click #(print "View courses")
-        handle-schools-click #(print "View schools")]
+  (let [{:keys [activities classes courses schools students teachers]} @(re-frame/subscribe [::state/statistics])
+        handle-activities-click #(re-frame/dispatch [::state/open-activities-page])
+        handle-courses-click #(re-frame/dispatch [::state/open-courses-page])
+        handle-schools-click #(re-frame/dispatch [::state/open-schools-page])]
     [ui/panel {:title              "Blue Brick School Overview"
                :icon               "info"
                :class-name         "overview-panel"

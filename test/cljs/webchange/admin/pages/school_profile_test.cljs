@@ -17,6 +17,6 @@
        (mock-warehouse {(str "/api/schools/" school-id) {:school default-school-data}})
        
        (re-frame/dispatch [::state/init {:school-id school-id}])
-       (rf-test/wait-for [::state/load-school-success]
+       (rf-test/wait-for [::state/set-school-data]
                          (let [data @(re-frame/subscribe [::state/school-data])]
                            (is (= default-school-data data))))))))

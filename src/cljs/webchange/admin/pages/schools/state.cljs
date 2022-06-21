@@ -35,15 +35,19 @@
     {:dispatch [::routes/redirect :school-profile :school-id school-id]}))
 
 (re-frame/reg-event-fx
-  ::archive-school
-  (fn [{:keys [db]} [_ school-id]]
-    (print "Archive school:" school-id)
-    {}))
-
-(re-frame/reg-event-fx
   ::open-archived-schools
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :schools-archived]}))
+
+(re-frame/reg-event-fx
+  ::manage-classes
+  (fn [{:keys [_]} [_ school-id]]
+    {:dispatch [::routes/redirect :classes :school-id school-id]}))
+
+(re-frame/reg-event-fx
+  ::manage-courses
+  (fn [{:keys [_]} [_ school-id]]
+    {:dispatch [::routes/redirect :school-courses :school-id school-id]}))
 
 (re-frame/reg-event-fx
   ::manage-teachers
