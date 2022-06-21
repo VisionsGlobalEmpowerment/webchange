@@ -1,0 +1,5 @@
+@mixin bbs--page--panel {
+    padding: $bbs--page--margin;
+    border-radius: 6px;
+    background-color: bbs--color(white);
+}

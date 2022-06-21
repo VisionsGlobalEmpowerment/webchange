@@ -2,11 +2,10 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.components.counter.views :refer [counter]]
-    [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
+    [webchange.admin.widgets.page.side-bar-page.views :as page]
     [webchange.admin.widgets.school-form.views :refer [edit-school-form]]
-    [webchange.admin.pages.school-profile.state :as state]
-    [webchange.ui-framework.components.index :as c]))
+    [webchange.admin.pages.school-profile.state :as state]))
 
 (defn- school-counter
   []
@@ -42,7 +41,7 @@
                        :icon-background "blue"
                        :color           "blue"
                        :actions         [{:title    "Manage Courses"
-                                          :color "yellow"
+                                          :color    "yellow"
                                           :on-click #(re-frame/dispatch [::state/open-courses])}]}
                       {:id              :classes
                        :value           (:classes stats)
@@ -59,7 +58,8 @@
 
 (defn- statistics
   []
-  [page/block {:title "Statistics"}
+  [page/block {:title "Statistics"
+               :icon  "statistics"}
    [no-data]])
 
 (defn- side-bar
@@ -68,10 +68,9 @@
         handle-edit-click #(re-frame/dispatch [::state/set-school-form-editable (not school-form-editable?)])
         handle-data-save #(re-frame/dispatch [::state/set-school-data %])]
     [page/side-bar {:title   "School Info"
-                    :actions [:<>
-                              [c/icon-button {:icon     "edit"
-                                              :variant  "light"
-                                              :on-click handle-edit-click}]]}
+                    :icon    "info"
+                    :actions [{:icon     "edit"
+                               :on-click handle-edit-click}]}
      [edit-school-form {:school-id school-id
                         :editable? school-form-editable?
                         :on-save   handle-data-save}]]))
@@ -81,8 +80,9 @@
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [school-id]}]
     (let [school-name @(re-frame/subscribe [::state/school-name])]
-      [page/page
-       [page/main-content {:title school-name}
+      [page/side-bar-page
+       [page/main-content {:title school-name
+                           :icon  "school"}
         [school-counter]
         [statistics]]
        [side-bar {:school-id school-id}]])))

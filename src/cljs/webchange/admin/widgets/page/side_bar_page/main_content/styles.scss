@@ -1,0 +1,9 @@
+.widget--side-bar-page--main-content {
+    @include bbs--page--panel;
+
+    .widget--side-bar-page--main-content--content {
+        display: flex;
+        flex-direction: column;
+        gap: $bbs--page--margin * 2;
+    }
+}

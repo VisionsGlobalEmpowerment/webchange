@@ -5,6 +5,7 @@
     justify-content: flex-start;
     gap: 8px;
     padding: 12px 20px;
+    padding-bottom: 0;
 
     .back-button {
         @include bbs--color-clickable(blue-1);

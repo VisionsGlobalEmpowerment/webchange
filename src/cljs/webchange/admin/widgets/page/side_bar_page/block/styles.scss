@@ -1,0 +1,19 @@
+.widget--side-bar-page--block {
+    .block--header {
+        @include bbs--noto-16-b;
+        @include bbs--icon-size(24px);
+
+        display: flex;
+        align-items: center;
+        gap: $bbs--page--margin;
+        margin-bottom: $bbs--page--margin;
+
+        .title-text {
+            flex: 1 1;
+        }
+    }
+
+    .block--content {
+        padding: $bbs--page--margin;
+    }
+}

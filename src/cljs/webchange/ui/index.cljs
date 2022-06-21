@@ -15,10 +15,11 @@
 (def card card/card)
 (def chip chip/chip)
 (def flag icon/flag-icon)
-(def icon icon/system-icon)
+(def icon icon/general-icon)
 (def logo-with-name logo/logo-with-name)
 (def navigation-icon icon/navigation-icon)
 (def panel panel/panel)
+(def system-icon icon/system-icon)
 (def tab tab/tab)
 
 (def get-class-name gcn/get-class-name)
