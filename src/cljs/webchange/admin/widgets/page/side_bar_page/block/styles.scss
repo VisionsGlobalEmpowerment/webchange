@@ -1,4 +1,12 @@
 .widget--side-bar-page--block {
+    display: flex;
+    flex-direction: column;
+    gap: $bbs--page--margin;
+
+    &.widget--side-bar-page--block--focused {
+        z-index: $bbs--z-index-overlay + 1;
+    }
+
     .block--header {
         @include bbs--noto-16-b;
         @include bbs--icon-size(24px);
@@ -6,7 +14,7 @@
         display: flex;
         align-items: center;
         gap: $bbs--page--margin;
-        margin-bottom: $bbs--page--margin;
+        min-height: 36px;
 
         .title-text {
             flex: 1 1;
@@ -14,6 +22,9 @@
     }
 
     .block--content {
+        flex: 1 1;
+        display: flex;
+        flex-direction: column;
         padding: $bbs--page--margin;
     }
 }

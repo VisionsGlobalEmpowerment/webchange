@@ -138,6 +138,7 @@
      (when (some? on-cancel)
        [ui/button {:on-click   handle-cancel-click
                    :disabled?  (or disabled? saving?)
+                   :color      "blue-1"
                    :class-name "cancel"}
         "Cancel"])
      [ui/button {:on-click   handle-save-click
@@ -172,7 +173,6 @@
                   errors    {}
                   loading?  false
                   saving?   false}}]
-       (print (required-field? spec :about))
        [:div {:class-name (c/get-class-name {"component--form" true
                                              class-name        (some? class-name)})}
         (if-not loading?

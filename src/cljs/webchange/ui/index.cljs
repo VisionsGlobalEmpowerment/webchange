@@ -6,6 +6,7 @@
     [webchange.ui.components.chip.views :as chip]
     [webchange.ui.components.icon.views :as icon]
     [webchange.ui.components.logo.views :as logo]
+    [webchange.ui.components.overlay.views :as overlay]
     [webchange.ui.components.panel.views :as panel]
     [webchange.ui.components.tab.views :as tab]
     [webchange.ui.utils.get-class-name :as gcn]))
@@ -18,6 +19,7 @@
 (def icon icon/general-icon)
 (def logo-with-name logo/logo-with-name)
 (def navigation-icon icon/navigation-icon)
+(def focus-overlay overlay/focus-overlay)
 (def panel panel/panel)
 (def system-icon icon/system-icon)
 (def tab tab/tab)

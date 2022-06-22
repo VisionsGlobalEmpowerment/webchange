@@ -30,15 +30,11 @@
     .form-actions {
         display: flex;
         justify-content: space-between;
-        gap: 16px;
+        gap: 10px;
         margin-top: 32px;
 
         & > * {
             flex: 1 1 50%;
-        }
-
-        .cancel {
-            @include button-color(#2E3A59);
         }
     }
 }
