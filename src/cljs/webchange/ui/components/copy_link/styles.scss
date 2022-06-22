@@ -1,0 +1,11 @@
+.bbs--copy-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .bbs--copy-link--button {
+        padding-top: 3px;
+        padding-bottom: 3px;
+        min-height: unset;
+    }
+}

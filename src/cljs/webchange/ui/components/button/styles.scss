@@ -38,6 +38,10 @@
     &:not([disabled]):hover,
     &:not([disabled]).bbs--button--state-hover {
         cursor: pointer;
+
+        * {
+            cursor: pointer;
+        }
     }
 
     &:not([disabled]):active,
@@ -92,6 +96,19 @@
             &.bbs--button--chip--color-#{$color} {
                 background-color: bbs--color(#{$color});
             }
+        }
+    }
+
+    &.bbs--button--color-transparent {
+        .bbs--button--icon {
+            @include bbs--icon-color(bbs--color(blue-1));
+        }
+    }
+
+    &.bbs--button--text-align-left {
+        .bbs--input-label {
+            flex: 1 1;
+            text-align: left;
         }
     }
 

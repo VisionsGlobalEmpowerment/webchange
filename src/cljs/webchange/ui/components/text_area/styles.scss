@@ -1,0 +1,50 @@
+.bbs--text-area {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    @include bbs--input;
+
+    .bbs--text-area-wrapper--header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    textarea {
+        @include bbs--input-font;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        padding: 8px;
+        padding-left: 0;
+        resize: none;
+        width: 100%;
+
+        &::-webkit-scrollbar-thumb {
+           background-color: bbs--color(grey-4);
+         }
+
+        &::-webkit-scrollbar {
+            -webkit-appearance: none;
+
+            width: 4px;
+            height: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: bbs--color(transparent);
+            border-radius: 9999px;
+        }
+    }
+
+    &.variant-outlined {
+        border: 1px solid #C4C4C4;
+    }
+
+    .bbs--text-area-label {
+        margin-top: 8px;
+    }
+}

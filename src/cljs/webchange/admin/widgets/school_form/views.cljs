@@ -2,10 +2,10 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.components.form.views :refer [form]]
     [webchange.admin.widgets.school-form.state :as state]
     [webchange.validation.specs.school-spec :as school-spec]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui-framework.components.index :as c]
+    [webchange.ui.index :as ui]))
 
 (defn- login-link
   [{:keys [id label]} _]
@@ -13,13 +13,13 @@
     (let [handle-copy-click #(re-frame/dispatch [::state/copy-login-link])
           value @(re-frame/subscribe [::state/login-link])]
       [:<>
-       [ui/label {:for id} label]
-       [ui/input {:id        id
-                  :value     value
-                  :disabled? true
-                  :action    [ui/icon-button {:icon     "copy"
-                                              :variant  "light"
-                                              :on-click handle-copy-click}]}]])))
+       [c/label {:for id} label]
+       [c/input {:id        id
+                 :value     value
+                 :disabled? true
+                 :action    [c/icon-button {:icon     "copy"
+                                            :variant  "light"
+                                            :on-click handle-copy-click}]}]])))
 
 (def edit-school-model {:name       {:label "School Name"
                                      :type  :text}
@@ -52,24 +52,24 @@
        (re-frame/dispatch [::state/reset-form (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [editable? on-cancel on-save school-id]}]
+     (fn [{:keys [class-name editable? on-cancel on-save school-id]}]
        (let [loading? @(re-frame/subscribe [::state/data-loading?])
              saving? @(re-frame/subscribe [::state/data-saving?])
              school-data @(re-frame/subscribe [::state/form-data])
              model edit-school-model
              handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
-         [form {:form-id    (-> (str "school-" school-id)
-                                (keyword))
-                :data       school-data
-                :model      model
-                :spec       ::school-spec/edit-school
-                :on-save    handle-save
-                :on-cancel  on-cancel
-                :disabled?  (not editable?)
-                :loading?   loading?
-                :saving?    saving?
-                :class-name (ui/get-class-name {"widget--school-form" true
-                                                class-name            (some? class-name)})}]))}))
+         [ui/form {:form-id    (-> (str "school-" school-id)
+                                   (keyword))
+                   :data       school-data
+                   :model      model
+                   :spec       ::school-spec/edit-school
+                   :on-save    handle-save
+                   :on-cancel  on-cancel
+                   :disabled?  (not editable?)
+                   :loading?   loading?
+                   :saving?    saving?
+                   :class-name (c/get-class-name {"widget--school-form" true
+                                                  class-name            (some? class-name)})}]))}))
 
 (defn add-school-form
   []
@@ -90,12 +90,12 @@
              school-data @(re-frame/subscribe [::state/form-data])
              model add-school-model
              handle-save #(re-frame/dispatch [::state/create-school % {:on-success on-save}])]
-         [form {:form-id    (-> (str "add-school")
-                                (keyword))
-                :data       school-data
-                :model      model
-                :spec       ::school-spec/create-school
-                :on-save    handle-save
-                :saving?    saving?
-                :class-name (ui/get-class-name {"widget--school-form" true
-                                                class-name            (some? class-name)})}]))}))
+         [ui/form {:form-id    (-> (str "add-school")
+                                   (keyword))
+                   :data       school-data
+                   :model      model
+                   :spec       ::school-spec/create-school
+                   :on-save    handle-save
+                   :saving?    saving?
+                   :class-name (c/get-class-name {"widget--school-form" true
+                                                  class-name            (some? class-name)})}]))}))

@@ -31,13 +31,14 @@
                        (if (some? href)
                          (js/window.open href target)
                          (on-click)))]
-    (into [:button (cond-> {:class-name (get-class-name {"bbs--button"                     true
-                                                         "bbs--button--icon-button"        icon-button?
-                                                         "bbs--button--with-loading"       loading?
-                                                         (str "bbs--button--color-" color) (some? color)
-                                                         (str "bbs--button--shape-" shape) (some? shape)
-                                                         (str "bbs--button--state-" state) (some? state)
-                                                         class-name                        (some? class-name)})
+    (into [:button (cond-> {:class-name (get-class-name {"bbs--button"                              true
+                                                         "bbs--button--icon-button"                 icon-button?
+                                                         "bbs--button--with-loading"                loading?
+                                                         (str "bbs--button--color-" color)          (some? color)
+                                                         (str "bbs--button--shape-" shape)          (some? shape)
+                                                         (str "bbs--button--state-" state)          (some? state)
+                                                         (str "bbs--button--text-align-" text-align) (some? text-align)
+                                                         class-name                                 (some? class-name)})
                             :disabled   disabled?
                             :on-click   handle-click}
                            (some? title) (assoc :title title))

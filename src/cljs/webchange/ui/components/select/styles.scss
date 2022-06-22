@@ -1,0 +1,42 @@
+.bbs--select {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .bbs--select-wrapper--header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    select {
+        @include bbs--input;
+
+        cursor: pointer;
+
+        display: flex;
+        flex-grow: 1;
+        flex-shrink: 1;
+
+        min-width: 60px;
+
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .expand-icon {
+        @include bbs--icon-color(bbs--color(grey-4));
+        position: absolute;
+        right: 3px;
+        top: 50%;
+        margin-top: 4px;
+    }
+
+    &:hover {
+        .expand-icon {
+            @include bbs--icon-color(bbs--color(blue-1));
+        }
+    }
+}

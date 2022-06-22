@@ -1,5 +1,6 @@
 .component--form {
     $gap: 8px;
+    $padding: 20px;
 
     display: flex;
     flex-direction: column;
@@ -11,8 +12,9 @@
         display: flex;
         flex: 1 1;
         flex-direction: column;
-        gap: $gap;
+        gap: 12px;
         overflow: auto;
+        padding: $padding;
     }
 
     .data-loading-indicator {
@@ -22,16 +24,12 @@
         padding: 24px;
     }
 
-    label {
-        @include bbs--noto-14-sb;
-        color: bbs--color(blue-1);
-    }
-
     .form-actions {
         display: flex;
         justify-content: space-between;
         gap: 10px;
         margin-top: 32px;
+        padding: $padding;
 
         & > * {
             flex: 1 1 50%;

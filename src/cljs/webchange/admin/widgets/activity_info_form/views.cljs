@@ -1,9 +1,9 @@
 (ns webchange.admin.widgets.activity-info-form.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.components.form.views :refer [form]]
     [webchange.admin.widgets.activity-info-form.state :as state]
-    [webchange.validation.specs.activity :as spec]))
+    [webchange.validation.specs.activity :as spec]
+    [webchange.ui.index :as ui]))
 
 (defn activity-info-form
   [{:keys [activity-id] :as props}]
@@ -20,13 +20,13 @@
                  :short-description {:label "Short Description"
                                      :type  :text}}
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
-      [form {:form-id    (-> (str "activity-" activity-id)
-                             (keyword))
-             :data       data
-             :model      model
-             :spec       ::spec/activity-info
-             :on-save    handle-save
-             :disabled?  (not editable?)
-             :loading?   loading?
-             :saving?    saving?
-             :class-name class-name}])))
+      [ui/form {:form-id    (-> (str "activity-" activity-id)
+                                (keyword))
+                :data       data
+                :model      model
+                :spec       ::spec/activity-info
+                :on-save    handle-save
+                :disabled?  (not editable?)
+                :loading?   loading?
+                :saving?    saving?
+                :class-name class-name}])))

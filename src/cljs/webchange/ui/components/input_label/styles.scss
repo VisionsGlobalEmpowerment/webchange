@@ -1,0 +1,10 @@
+.bbs--input-label {
+    @include bbs--noto-14-sb;
+    color: bbs--color(blue-1);
+
+    &.bbs--input-label--required {
+        &:after {
+            content: "*";
+        }
+    }
+}

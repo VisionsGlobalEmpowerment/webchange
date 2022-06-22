@@ -1,9 +1,9 @@
-(ns webchange.admin.components.form.state
+(ns webchange.ui.components.form.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.admin.components.form.errors-data :as errors]
-    [webchange.admin.components.form.form-data :as form]
+    [webchange.ui.components.form.errors-data :as errors]
+    [webchange.ui.components.form.form-data :as form]
     [webchange.validation.validate :refer [validate]]))
 
 (def path-to-db :component/form)
@@ -128,7 +128,7 @@
   (fn [{:keys [db]} [_ form-id spec on-success]]
     (let [data (form/get-data db form-id)
           custom-errors (get-custom-errors db form-id)
-          validation-errors (validate spec data)]
+          validation-errors (when (some? spec) (validate spec data))]
       (if (nil? validation-errors)
         {:db        (errors/set-data db form-id custom-errors)
          ::callback [on-success data]}

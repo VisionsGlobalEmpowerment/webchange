@@ -4,6 +4,7 @@
     [webchange.ui.pages.cards.views :as cards]
     [webchange.ui.pages.chips.views :as chips]
     [webchange.ui.pages.colors.views :as colors]
+    [webchange.ui.pages.forms.views :as forms]
     [webchange.ui.pages.headers.views :as headers]
     [webchange.ui.pages.icons.views :as icons]
     [webchange.ui.pages.tabs.views :as tabs]))
@@ -16,6 +17,7 @@
             :cards   cards/page
             :chips   chips/page
             :colors  colors/page
+            :forms   forms/page
             :headers headers/page
             :icons   icons/page
             :tabs    tabs/page

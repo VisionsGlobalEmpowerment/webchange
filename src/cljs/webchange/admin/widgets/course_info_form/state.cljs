@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.admin.components.form.data :refer [init]]
+    [webchange.ui.components.form.data :refer [init]]
     [webchange.admin.widgets.state :as widgets]
     [webchange.state.warehouse :as warehouse]))
 

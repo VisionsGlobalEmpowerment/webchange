@@ -1,0 +1,31 @@
+.bbs--input-wrapper {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .bbs--input-wrapper--header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .bbs--input {
+        @include bbs--input;
+    }
+
+    .action-wrapper {
+        position: absolute;
+        right: 0;
+
+        @include bbs--icon-size(12px);
+    }
+
+    .icon-wrapper {
+        position: absolute;
+        right: 0;
+
+        @include bbs--icon-size(18px);
+    }
+}

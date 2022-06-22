@@ -1,8 +1,8 @@
 (ns webchange.admin.widgets.student-progress-complete.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.components.form.views :refer [form]]
     [webchange.admin.widgets.student-progress-complete.state :as state]
+    [webchange.ui.index :as ui]
     [webchange.validation.specs.student-progress :as progress-spec]))
 
 (defn student-progress-complete
@@ -31,13 +31,13 @@
                             :options      activity-options
                             :options-type "int"}}
           handle-save #(re-frame/dispatch [::state/save {:on-success on-save}])]
-      [form {:form-id   (-> (str "student--complete-progress" student-id)
-                            (keyword))
-             :data      data
-             :model     model
-             :spec      ::progress-spec/complete-student-progress
-             :on-change #(re-frame/dispatch [::state/update-form-data %])
-             :on-save   handle-save
-             :disabled? (not editable?)
-             :loading?  loading?
-             :saving?   saving?}])))
+      [ui/form {:form-id   (-> (str "student--complete-progress" student-id)
+                               (keyword))
+                :data      data
+                :model     model
+                :spec      ::progress-spec/complete-student-progress
+                :on-change #(re-frame/dispatch [::state/update-form-data %])
+                :on-save   handle-save
+                :disabled? (not editable?)
+                :loading?  loading?
+                :saving?   saving?}])))
