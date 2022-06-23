@@ -67,11 +67,15 @@ $bss--font-weight--bold: 700;
     font-weight: $bss--font-weight--bold;
 }
 
+@mixin bbs--text-color-default {
+    color: $color-grey-1;
+}
+
 // ---
 
 html, body {
     @include primary-font;
-    color: $color-grey-1;
+    @include bbs--text-color-default;
     font-weight: 400;
     font-size: 16px;
     line-height: 26px;

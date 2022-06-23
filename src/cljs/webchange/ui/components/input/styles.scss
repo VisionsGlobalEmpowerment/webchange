@@ -13,6 +13,11 @@
 
     .bbs--input {
         @include bbs--input;
+
+        &:disabled {
+            background-color: transparent;
+            cursor: text;
+        }
     }
 
     .action-wrapper {

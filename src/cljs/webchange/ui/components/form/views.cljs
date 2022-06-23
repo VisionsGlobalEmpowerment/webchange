@@ -34,9 +34,10 @@
     false))
 
 (defn- action-control
-  [{:keys [form-id id] :as props}]
-  (let [value @(re-frame/subscribe [::state/field-value form-id id])]
-    [form-action (assoc props :value value)]))
+  [{:keys [form-id id disabled?] :as props}]
+  (when-not disabled?
+    (let [value @(re-frame/subscribe [::state/field-value form-id id])]
+      [form-action (assoc props :value value)])))
 
 (defn- date-control
   [{:keys [disabled? id form-id label required?]}]

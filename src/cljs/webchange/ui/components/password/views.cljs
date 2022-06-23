@@ -6,7 +6,7 @@
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn password
-  [{:keys [class-name] :as props}]
+  [{:keys [class-name disabled?] :as props}]
   (r/with-let [text-visible? (r/atom false)
                toggle-visibility #(swap! text-visible? not)]
     [:div {:class-name (get-class-name (-> {"bbs--password-wrapper" true}
@@ -14,7 +14,8 @@
      [input (-> props
                 (assoc :type (if @text-visible? "text" "password"))
                 (dissoc :class-name))]
-     [button {:icon       (if @text-visible? "visibility-on" "visibility-off")
-              :class-name "visibility-button"
-              :color      (if @text-visible? "blue-2" "grey-4")
-              :on-click   toggle-visibility}]]))
+     (when-not disabled?
+       [button {:icon       (if @text-visible? "visibility-on" "visibility-off")
+                :class-name "visibility-button"
+                :color      (if @text-visible? "blue-2" "grey-4")
+                :on-click   toggle-visibility}])]))

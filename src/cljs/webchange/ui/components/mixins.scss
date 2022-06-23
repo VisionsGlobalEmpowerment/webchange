@@ -4,6 +4,7 @@
 }
 
 @mixin bbs--input {
+    @include bbs--text-color-default;
     @include bbs--input-font;
     border-color: bbs--color(grey-4);
     border-style: solid;
