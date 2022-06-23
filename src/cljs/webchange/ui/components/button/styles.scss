@@ -60,16 +60,16 @@
 
     @each $color in $bbs--base-colors {
         &.bbs--button--color-#{$color} {
-            background-color: bbs--color(#{$color});
+            background-color: bbs--button-color($color, $state: regular, $variant: opaque);
 
             &:not([disabled]):hover,
             &:not([disabled]).bbs--button--state-hover {
-                background-color: bbs--button-color($color, hover);
+                background-color: bbs--button-color($color, $state: hover, $variant: opaque);
             }
 
             &:not([disabled]):active,
             &:not([disabled]).bbs--button--state-active {
-                background-color: bbs--button-color($color, active);
+                background-color: bbs--button-color($color, $state: active, $variant: opaque);
             }
 
             .bbs--button--chip {
@@ -135,6 +135,18 @@
             &.bbs--button--color-#{$color} {
                 .bbs--button--icon {
                     @include bbs--icon-color(bbs--color(#{$color}));
+                }
+
+                background-color: bbs--button-color($color, $state: regular, $variant: transparent);
+
+                &:not([disabled]):hover,
+                &:not([disabled]).bbs--button--state-hover {
+                    background-color: bbs--button-color($color, $state: hover, $variant: transparent);
+                }
+
+                &:not([disabled]):active,
+                &:not([disabled]).bbs--button--state-active {
+                    background-color: bbs--button-color($color, $state: active, $variant: transparent);
                 }
 
                 progress {

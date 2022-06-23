@@ -91,19 +91,29 @@ $bbs--base-colors: blue-1, blue-2, green-1, green-2, yellow-1, yellow-2, grey-0,
         @if $variant == dark { $result: $color-yellow-2-dark; }
     }
     
-    @if $opacity == 0.2 {
+    @if $opacity == 0.1 {
+        $result: #{$result + "1a"};
+    } @else if $opacity == 0.2 {
         $result: #{$result + "33"};
     } @else if $opacity == 0.3 {
         $result: #{$result + "4d"};
+    } @else if $opacity == 0.4 {
+        $result: #{$result + "66"};
     }
 
     @return $result;
 }
 
-@function bbs--button-color($color, $variant: regular) {
-    @if $variant == regular { @return bbs--color(#{$color}); }
-    @if $variant == hover { @return bbs--color(#{$color}, $variant: light); }
-    @if $variant == active { @return bbs--color(#{$color}, $variant: dark); }
+@function bbs--button-color($color, $state: regular, $variant: opaque) {
+    @if $variant == transparent {
+        @if $state == regular { @return bbs--color(transparent); }
+        @if $state == hover { @return bbs--color($color, $opacity: 0.2); }
+        @if $state == active { @return bbs--color($color, $opacity: 0.4); }
+    } @else {
+        @if $state == regular { @return bbs--color(#{$color}); }
+        @if $state == hover { @return bbs--color(#{$color}, $variant: light); }
+        @if $state == active { @return bbs--color(#{$color}, $variant: dark); }
+    }
 }
 
 @mixin bbs--color-clickable($color) {

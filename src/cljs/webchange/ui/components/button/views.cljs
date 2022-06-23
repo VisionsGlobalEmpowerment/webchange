@@ -27,6 +27,7 @@
   (let [children (->> (r/current-component)
                       (r/children))
         icon-button? (empty? children)
+        shape (if icon-button? "rounded" shape)
         handle-click (fn []
                        (if (some? href)
                          (js/window.open href target)
