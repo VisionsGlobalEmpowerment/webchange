@@ -147,11 +147,40 @@
     (when (fn? callback)
       (apply callback params))))
 
+;; Archive
+
+(def archive-window-state-key :archive-window-state)
+
+(def archive-window-default-state {:open?        false
+                                   :in-progress? false
+                                   :done?        false})
+
+(defn- update-archive-window-state
+  [db data-patch]
+  (update db archive-window-state-key merge data-patch))
+
+(re-frame/reg-sub
+  ::archive-window-state
+  :<- [path-to-db]
+  #(get % archive-window-state-key archive-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-archive-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-archive-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-archive-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-archive-window-state db archive-window-default-state)}))
+
 (re-frame/reg-event-fx
   ::archive-school
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ school-id]]
-    {:db       (set-data-loading db true)
+    {:db       (update-archive-window-state db {:in-progress? true})
      :dispatch [::warehouse/archive-school
                 {:school-id school-id}
                 {:on-success [::archive-school-success]
@@ -161,15 +190,22 @@
   ::archive-school-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [success-handler (get-callback db :on-archive)]
-      {:db        (-> db (set-data-loading false))
-       ::callback [success-handler]})))
+    {:db (update-archive-window-state db {:in-progress? false
+                                          :done?        true})}))
 
 (re-frame/reg-event-fx
   ::archive-school-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (set-data-loading db false)}))
+    {:db (update-archive-window-state db {:in-progress? false})}))
+
+(re-frame/reg-event-fx
+  ::handle-archived
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (get-callback db :on-archive)]
+      {:dispatch  [::close-archive-window]
+       ::callback [success-handler]})))
 
 ;; Login link
 

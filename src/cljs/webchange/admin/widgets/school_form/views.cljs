@@ -9,9 +9,9 @@
 
 (def locations (concat [{:text "Select Location" :value ""}] location-options))
 
-(defn- archive-school
-  [school-id]
-  (re-frame/dispatch [::state/archive-school school-id]))
+(defn- show-archive-window
+  []
+  (re-frame/dispatch [::state/open-archive-window]))
 
 (def edit-school-model {:name       {:label "School Name"
                                      :type  :text}
@@ -26,7 +26,7 @@
                         :archive    {:label    "Archive School"
                                      :type     :action
                                      :icon     "archive"
-                                     :on-click archive-school}})
+                                     :on-click show-archive-window}})
 
 (def add-school-model {:name     {:label "School Name"
                                   :type  :text}
@@ -35,6 +35,21 @@
                                   :options locations}
                        :about    {:label "About"
                                   :type  :text-multiline}})
+
+(defn- archive-window
+  [{:keys [school-id]}]
+  (let [{:keys [done? open? in-progress?]} @(re-frame/subscribe [::state/archive-window-state])
+        archive #(re-frame/dispatch [::state/archive-school school-id])
+        close-window #(re-frame/dispatch [::state/close-archive-window])
+        confirm-archived #(re-frame/dispatch [::state/handle-archived])]
+    [ui/confirm {:open?      open?
+                 :loading?   in-progress?
+                 :confirm-text (if done? "Ok" "Yes")
+                 :on-confirm (if done? confirm-archived archive)
+                 :on-cancel  (when-not done? close-window)}
+     (if done?
+       "School successfully sent to archive!"
+       "Are you sure you want to archive school?")]))
 
 (defn edit-school-form
   []
@@ -57,20 +72,22 @@
              login-link @(re-frame/subscribe [::state/login-link])
              model edit-school-model
              handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
-         [ui/form {:form-id    (-> (str "school-" school-id)
-                                   (keyword))
-                   :data       (assoc school-data
-                                 :archive school-id
-                                 :login-link login-link)
-                   :model      model
-                   :spec       ::school-spec/edit-school
-                   :on-save    handle-save
-                   :on-cancel  on-cancel
-                   :disabled?  (not editable?)
-                   :loading?   loading?
-                   :saving?    saving?
-                   :class-name (get-class-name {"widget--school-form" true
-                                                class-name            (some? class-name)})}]))}))
+         [:<>
+          [ui/form {:form-id    (-> (str "school-" school-id)
+                                    (keyword))
+                    :data       (assoc school-data
+                                  :archive school-id
+                                  :login-link login-link)
+                    :model      model
+                    :spec       ::school-spec/edit-school
+                    :on-save    handle-save
+                    :on-cancel  on-cancel
+                    :disabled?  (not editable?)
+                    :loading?   loading?
+                    :saving?    saving?
+                    :class-name (get-class-name {"widget--school-form" true
+                                                 class-name            (some? class-name)})}]
+          [archive-window {:school-id school-id}]]))}))
 
 (defn add-school-form
   []

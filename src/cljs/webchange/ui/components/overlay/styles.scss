@@ -6,6 +6,10 @@
     height: 100%;
     z-index: $bbs--z-index-overlay;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     background-color: #1f273cc4;
 }
 

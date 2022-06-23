@@ -5,6 +5,7 @@
     [webchange.ui.components.card.views :as card]
     [webchange.ui.components.chip.views :as chip]
     [webchange.ui.components.copy-link.views :as copy-link]
+    [webchange.ui.components.dialog.views :as dialog]
     [webchange.ui.components.form.views :as form]
     [webchange.ui.components.icon.views :as icon]
     [webchange.ui.components.input.views :as input]
@@ -21,6 +22,7 @@
 (def button button/button)
 (def card card/card)
 (def chip chip/chip)
+(def confirm dialog/confirm)
 (def copy-link copy-link/copy-link)
 (def flag icon/flag-icon)
 (def form form/form)
