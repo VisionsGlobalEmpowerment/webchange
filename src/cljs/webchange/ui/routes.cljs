@@ -6,13 +6,6 @@
     [webchange.ui.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-
-
-#_(def routes {""        :dashboard
-               "/"       :dashboard
-               "/colors" :colors
-               "/icons"  :icons})
-
 (def routes (->> (dissoc pages :404)
                  (map first)
                  (map (fn [page-key]

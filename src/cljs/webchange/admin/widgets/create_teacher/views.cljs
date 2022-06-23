@@ -2,9 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.components.form.views :refer [form]]
     [webchange.admin.widgets.create-teacher.state :as state]
-    [webchange.validation.specs.teacher :as teacher-spec]))
+    [webchange.validation.specs.teacher :as teacher-spec]
+    [webchange.ui.index :as ui]))
 
 (defn create-teacher
   []
@@ -40,9 +40,9 @@
              saving? @(re-frame/subscribe [::state/data-saving?])
              handle-save #(re-frame/dispatch [::state/save school-id % {:on-success on-save}])]
          [:div {:class-name "widget--create-teacher"}
-          [form {:form-id (-> (str "create-teacher/school-" school-id)
-                              (keyword))
-                 :model   model
-                 :spec    ::teacher-spec/create-teacher
-                 :on-save handle-save
-                 :saving? saving?}]]))}))
+          [ui/form {:form-id (-> (str "create-teacher/school-" school-id)
+                                 (keyword))
+                    :model   model
+                    :spec    ::teacher-spec/create-teacher
+                    :on-save handle-save
+                    :saving? saving?}]]))}))

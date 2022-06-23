@@ -1,4 +1,4 @@
-(ns webchange.admin.components.form.data)
+(ns webchange.ui.components.form.data)
 
 (defn- get-data
   ([data-key db]

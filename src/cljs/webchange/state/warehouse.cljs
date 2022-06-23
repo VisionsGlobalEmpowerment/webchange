@@ -872,6 +872,15 @@
                      :uri    (str "/api/schools/" school-id)
                      :params data}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::archive-school
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :archive-school
+                     :method :put
+                     :uri    (str "/api/schools/" school-id "/archive")}
+                    handlers)))
+
 ;; Classes
 
 (re-frame/reg-event-fx

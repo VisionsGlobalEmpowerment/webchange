@@ -55,14 +55,20 @@
   [{:keys [school-id]}]
   (let [school-form-editable? @(re-frame/subscribe [::state/school-form-editable?])
         handle-edit-click #(re-frame/dispatch [::state/set-school-form-editable (not school-form-editable?)])
-        handle-data-save #(re-frame/dispatch [::state/set-school-data %])]
-    [page/side-bar {:title   "School Info"
-                    :icon    "info"
-                    :actions [{:icon     "edit"
-                               :on-click handle-edit-click}]}
+        handle-data-save #(re-frame/dispatch [::state/set-school-data %])
+        handle-archive #(re-frame/dispatch [::state/open-schools-list])
+        handle-cancel-click #(re-frame/dispatch [::state/set-school-form-editable (not school-form-editable?)])]
+    [page/side-bar {:title    "School Info"
+                    :icon     "info"
+                    :focused? school-form-editable?
+                    :actions  (cond-> []
+                                      (not school-form-editable?) (conj {:icon     "edit"
+                                                                         :on-click handle-edit-click}))}
      [edit-school-form {:school-id school-id
                         :editable? school-form-editable?
-                        :on-save   handle-data-save}]]))
+                        :on-save   handle-data-save
+                        :on-archive handle-archive
+                        :on-cancel handle-cancel-click}]]))
 
 (defn page
   [props]

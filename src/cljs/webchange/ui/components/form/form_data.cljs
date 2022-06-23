@@ -1,8 +1,8 @@
-(ns webchange.admin.components.form.errors-data
+(ns webchange.ui.components.form.form-data
   (:require
-    [webchange.admin.components.form.data :refer [init]]))
+    [webchange.ui.components.form.data :refer [init]]))
 
-(def data (init :errors))
+(def data (init :data))
 (def get-data (:get-data data))
 (def set-data (:set-data data))
 (def reset-data (:reset-data data))

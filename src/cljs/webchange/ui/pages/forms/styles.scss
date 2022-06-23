@@ -1,0 +1,19 @@
+#page--forms {
+    h3 {
+        margin-bottom: 16px;
+    }
+
+    .forms-panel {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+    }
+
+    .form-wrapper {
+        display: flex;
+        width: 320px;
+        height: 700px;
+        border: dashed 1px bbs--color(blue-2);
+        border-radius: 6px;
+    }
+}

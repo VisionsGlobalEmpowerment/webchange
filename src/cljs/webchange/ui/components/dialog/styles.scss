@@ -1,0 +1,68 @@
+.bbs--dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    min-width: 350px;
+    min-height: 240px;
+    padding: 25px 30px;
+    overflow: hidden;
+
+    background: #FFFFFF;
+    border-radius: 6px;
+    box-shadow: 0px 8px 28px rgba(140, 140, 140, 0.4);
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h1 {
+            display: inline-block;
+            flex: 1;
+            margin: 0;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 22px;
+            line-height: 26px;
+            text-align: left;
+        }
+    }
+
+    .bbs--dialog--content {
+        flex: 1 1;
+        overflow: auto;
+    }
+
+    .bbs--dialog--actions {
+        display: flex;
+    }
+}
+
+.bbs--confirm-window {
+    .bbs--dialog--content {
+        @include bbs--noto-14-b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bbs--dialog--actions {
+        display: grid;
+
+        justify-content: center;
+        justify-items: stretch;
+        column-gap: 20px;
+
+        &.bbs--dialog--actions--1 {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        &.bbs--dialog--actions--2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}

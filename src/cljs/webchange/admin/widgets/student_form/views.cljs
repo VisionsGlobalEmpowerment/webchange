@@ -1,10 +1,10 @@
 (ns webchange.admin.widgets.student-form.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.components.form.views :refer [form]]
     [webchange.admin.utils :refer [get-uid]]
     [webchange.admin.widgets.student-form.state :as state]
-    [webchange.ui-framework.components.index :as ui]
+    [webchange.ui-framework.components.index :as c]
+    [webchange.ui.index :as ui]
     [webchange.validation.specs.student :as student-spec]))
 
 (def gender-options
@@ -15,16 +15,16 @@
   [{:keys [disabled? id label]} {:keys [value error handle-change]}]
   (let [handle-generate-click #(re-frame/dispatch [::state/generate-access-code {:on-success handle-change}])]
     [:<>
-     [ui/label {:for id} label]
-     [ui/input {:id        id
-                :value     value
-                :error     error
-                :disabled? true
-                :on-change handle-change
-                :action    (when-not disabled?
-                             [ui/icon-button {:icon     "sync"
-                                              :variant  "light"
-                                              :on-click handle-generate-click}])}]]))
+     [c/label {:for id} label]
+     [c/input {:id        id
+               :value     value
+               :error     error
+               :disabled? true
+               :on-change handle-change
+               :action    (when-not disabled?
+                            [c/icon-button {:icon     "sync"
+                                            :variant  "light"
+                                            :on-click handle-generate-click}])}]]))
 
 (def student-model {:first-name    {:label "First Name"
                                     :type  :text}
@@ -54,15 +54,15 @@
           class-options @(re-frame/subscribe [::state/class-options])
           student-data @(re-frame/subscribe [::state/form-data])
           handle-save #(re-frame/dispatch [::state/create % {:on-success on-save}])]
-      [form {:form-id   (-> (str "student-" student-id)
-                            (keyword))
-             :data      student-data
-             :model     (assoc-in student-model [:class-id :options] class-options)
-             :spec      ::student-spec/create-student
-             :on-save   handle-save
-             :disabled? (not editable?)
-             :loading?  loading?
-             :saving?   saving?}])))
+      [ui/form {:form-id   (-> (str "student-" student-id)
+                               (keyword))
+                :data      student-data
+                :model     (assoc-in student-model [:class-id :options] class-options)
+                :spec      ::student-spec/create-student
+                :on-save   handle-save
+                :disabled? (not editable?)
+                :loading?  loading?
+                :saving?   saving?}])))
 
 (defn edit-student-form
   [{:keys [student-id] :as props}]
@@ -74,12 +74,12 @@
           class-options @(re-frame/subscribe [::state/class-options])
           student-data @(re-frame/subscribe [::state/form-data])
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
-      [form {:form-id   (-> (str "student-" student-id)
-                            (keyword))
-             :data      student-data
-             :model     (assoc-in student-model [:class-id :options] class-options)
-             :spec      ::student-spec/student
-             :on-save   handle-save
-             :disabled? (not editable?)
-             :loading?  loading?
-             :saving?   saving?}])))
+      [ui/form {:form-id   (-> (str "student-" student-id)
+                               (keyword))
+                :data      student-data
+                :model     (assoc-in student-model [:class-id :options] class-options)
+                :spec      ::student-spec/student
+                :on-save   handle-save
+                :disabled? (not editable?)
+                :loading?  loading?
+                :saving?   saving?}])))

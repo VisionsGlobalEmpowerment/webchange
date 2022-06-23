@@ -1,5 +1,19 @@
 (ns webchange.utils.languages)
 
+(def locations [{:name "Guatemala"
+                 :iso  "gt"}
+                {:name "India"
+                 :iso  "in"}
+                {:name "Nicaragua"
+                 :iso  "ni"}
+                {:name "USA"
+                 :iso  "us"}])
+
+(def location-options (->> locations
+                           (map (fn [{:keys [name iso]}]
+                                  {:text  name
+                                   :value iso}))))
+
 (def languages (-> (map #(assoc % :metadata {:primary? true})
                         [{:name "English" :value "english"}
                          {:name "Spanish" :value "spanish"}])

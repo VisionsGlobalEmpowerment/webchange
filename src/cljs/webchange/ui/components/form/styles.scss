@@ -1,44 +1,34 @@
 .component--form {
     $gap: 8px;
+    $form-padding: 10px;
+
+    @import "form_action/styles";
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex: 1 1;
     gap: $gap;
+    position: relative;
 
     .controls {
         display: flex;
         flex: 1 1;
         flex-direction: column;
-        gap: $gap;
+        gap: 16px;
         overflow: auto;
-    }
-
-    .data-loading-indicator {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-    }
-
-    label {
-        @include bbs--noto-14-sb;
-        color: bbs--color(blue-1);
+        padding: $form-padding;
     }
 
     .form-actions {
         display: flex;
         justify-content: space-between;
-        gap: 16px;
+        gap: 10px;
         margin-top: 32px;
+        padding: $form-padding;
 
         & > * {
             flex: 1 1 50%;
-        }
-
-        .cancel {
-            @include button-color(#2E3A59);
         }
     }
 }

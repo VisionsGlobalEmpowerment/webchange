@@ -1,10 +1,17 @@
-(ns webchange.admin.components.form.views
+(ns webchange.ui.components.form.views
   (:require
     [clojure.spec.alpha :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.components.form.state :as state]
-    [webchange.ui.index :as ui]
+    [webchange.ui.components.button.views :refer [button]]
+    [webchange.ui.components.copy-link.views :refer [copy-link]]
+    [webchange.ui.components.form.form-action.views :refer [form-action]]
+    [webchange.ui.components.input.views :refer [input]]
+    [webchange.ui.components.form.state :as state]
+    [webchange.ui.components.overlay.views :refer [loading-overlay]]
+    [webchange.ui.components.password.views :refer [password]]
+    [webchange.ui.components.select.views :refer [select]]
+    [webchange.ui.components.text-area.views :refer [text-area]]
     [webchange.ui-framework.components.index :as c]))
 
 (defn- ->spec-data
@@ -19,10 +26,18 @@
 
 (defn- required-field?
   [spec field]
-  (let [{:keys [req-un]} (->spec-data spec)]
-    (-> #{field}
-        (some req-un)
-        (boolean))))
+  (if (some? spec)
+    (let [{:keys [req-un]} (->spec-data spec)]
+      (-> #{field}
+          (some req-un)
+          (boolean)))
+    false))
+
+(defn- action-control
+  [{:keys [form-id id disabled?] :as props}]
+  (when disabled?
+    (let [value @(re-frame/subscribe [::state/field-value form-id id])]
+      [form-action (assoc props :value value)])))
 
 (defn- date-control
   [{:keys [disabled? id form-id label required?]}]
@@ -38,35 +53,38 @@
               :disabled? disabled?
               :on-change handle-change}]]))
 
+(defn- link-control
+  [{:keys [form-id id] :as props}]
+  (let [value @(re-frame/subscribe [::state/field-value form-id id])]
+    [copy-link (assoc props :value value)]))
+
 (defn- text-control
   [{:keys [disabled? id form-id label input-type required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])
         input-type (or input-type "str")]
-    [:<>
-     [c/label {:for       id
-               :required? required?} label]
-     [c/input {:id        id
-               :type      input-type
-               :value     value
-               :error     error
-               :disabled? disabled?
-               :on-change handle-change}]]))
+    [input {:id        id
+            :type      input-type
+            :value     value
+            :label     label
+            :error     error
+            :disabled? disabled?
+            :required? required?
+            :on-change handle-change}]))
 
 (defn- text-multiline-control
   [{:keys [disabled? id form-id label required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
-    [:<>
-     [c/label {:for       id
-               :required? required?} label]
-     [c/text-area {:id        id
-                   :value     value
-                   :error     error
-                   :disabled? disabled?
-                   :on-change handle-change}]]))
+    [text-area {:id        id
+                :value     value
+                :error     error
+                :label     label
+                :disabled? disabled?
+                :required? required?
+                :on-change handle-change}]))
 
 (defn- password-control
   [{:keys [disabled? id form-id label input-type required?]}]
@@ -74,31 +92,29 @@
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])
         input-type (or input-type "str")]
-    [:<>
-     [c/label {:for       id
-               :required? required?} label]
-     [c/password {:id        id
-                  :type      input-type
-                  :value     value
-                  :error     error
-                  :disabled? disabled?
-                  :on-change handle-change}]]))
+    [password {:id        id
+               :type      input-type
+               :value     value
+               :error     error
+               :label     label
+               :disabled? disabled?
+               :required? required?
+               :on-change handle-change}]))
 
 (defn- select-control
   [{:keys [disabled? id form-id label options options-type required?]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
-    [:<>
-     [c/label {:for       id
-               :required? required?} label]
-     [c/select {:id        id
-                :value     value
-                :options   options
-                :error     error
-                :disabled? disabled?
-                :on-change handle-change
-                :type      options-type}]]))
+    [select {:id        id
+             :value     value
+             :options   options
+             :error     error
+             :label     label
+             :disabled? disabled?
+             :required? required?
+             :on-change handle-change
+             :type      options-type}]))
 
 (defn- custom-control
   [{:keys [id form-id control] :as control-props}]
@@ -118,17 +134,14 @@
                               :required? (required-field? spec id)}
                              options)]
     (case type
+      :action [action-control control-props]
       :date [date-control control-props]
+      :link [link-control control-props]
       :text [text-control control-props]
       :text-multiline [text-multiline-control control-props]
       :password [password-control control-props]
       :select [select-control control-props]
       :custom [custom-control control-props])))
-
-(defn- loading-indicator
-  []
-  [:div.data-loading-indicator
-   [c/circular-progress]])
 
 (defn- form-actions
   [{:keys [form-id disabled? on-save on-cancel saving? spec]}]
@@ -136,14 +149,15 @@
         handle-cancel-click #(when (fn? on-cancel) (on-cancel))]
     [:div.form-actions
      (when (some? on-cancel)
-       [ui/button {:on-click   handle-cancel-click
-                   :disabled?  (or disabled? saving?)
-                   :class-name "cancel"}
+       [button {:on-click   handle-cancel-click
+                :disabled?  (or disabled? saving?)
+                :color      "blue-1"
+                :class-name "cancel"}
         "Cancel"])
-     [ui/button {:on-click   handle-save-click
-                 :disabled?  (or disabled? saving?)
-                 :loading?   saving?
-                 :class-name "submit"}
+     [button {:on-click   handle-save-click
+              :disabled?  (or disabled? saving?)
+              :loading?   saving?
+              :class-name "submit"}
       "Save"]]))
 
 (defn form
@@ -172,23 +186,22 @@
                   errors    {}
                   loading?  false
                   saving?   false}}]
-       (print (required-field? spec :about))
        [:div {:class-name (c/get-class-name {"component--form" true
                                              class-name        (some? class-name)})}
-        (if-not loading?
-          [:div.controls
-           (for [[field-name field-options] model]
-             ^{:key field-name}
-             [form-control {:id        field-name
-                            :form-id   form-id
-                            :options   field-options
-                            :disabled? disabled?
-                            :spec      spec}])]
-          [loading-indicator])
+        [:div.controls
+         (for [[field-name field-options] model]
+           ^{:key field-name}
+           [form-control {:id        field-name
+                          :form-id   form-id
+                          :options   field-options
+                          :disabled? disabled?
+                          :spec      spec}])]
         (when-not disabled?
           [form-actions {:form-id   form-id
                          :disabled? loading?
                          :saving?   saving?
                          :spec      spec
                          :on-save   on-save
-                         :on-cancel on-cancel}])])}))
+                         :on-cancel on-cancel}])
+        (when loading?
+          [loading-overlay])])}))

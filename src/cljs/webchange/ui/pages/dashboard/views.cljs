@@ -14,6 +14,7 @@
   []
   (let [pages (->> (dissoc pages :404)
                    (map first)
+                   (sort)
                    (map (fn [page-key]
                           {:title page-key
                            :route page-key})))]

@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.admin.components.form.data :refer [init]]
+    [webchange.ui.components.form.data :refer [init]]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :widget/school-form)
@@ -60,13 +60,26 @@
   :<- [::flags-data]
   #(get % data-saving-key false))
 
+;; Callbacks
+
+(def callbacks-key :callbacks)
+
+(defn- set-callbacks
+  [db data]
+  (assoc db callbacks-key data))
+
+(defn- get-callback
+  [db callback-name]
+  (get-in db [callbacks-key callback-name] #()))
+
 ;; Init
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id]}]]
+  (fn [{:keys [db]} [_ {:keys [school-id] :as props}]]
     {:db       (-> db
+                   (set-callbacks (select-keys props [:on-archive]))
                    (reset-form-data)
                    (set-data-loading true))
      :dispatch [::warehouse/load-school {:school-id school-id}
@@ -134,21 +147,71 @@
     (when (fn? callback)
       (apply callback params))))
 
+;; Archive
+
+(def archive-window-state-key :archive-window-state)
+
+(def archive-window-default-state {:open?        false
+                                   :in-progress? false
+                                   :done?        false})
+
+(defn- update-archive-window-state
+  [db data-patch]
+  (update db archive-window-state-key merge data-patch))
+
+(re-frame/reg-sub
+  ::archive-window-state
+  :<- [path-to-db]
+  #(get % archive-window-state-key archive-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-archive-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-archive-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-archive-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-archive-window-state db archive-window-default-state)}))
+
+(re-frame/reg-event-fx
+  ::archive-school
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ school-id]]
+    {:db       (update-archive-window-state db {:in-progress? true})
+     :dispatch [::warehouse/archive-school
+                {:school-id school-id}
+                {:on-success [::archive-school-success]
+                 :on-failure [::archive-school-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::archive-school-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-archive-window-state db {:in-progress? false
+                                          :done?        true})}))
+
+(re-frame/reg-event-fx
+  ::archive-school-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-archive-window-state db {:in-progress? false})}))
+
+(re-frame/reg-event-fx
+  ::handle-archived
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (get-callback db :on-archive)]
+      {:dispatch  [::close-archive-window]
+       ::callback [success-handler]})))
+
 ;; Login link
+
 (re-frame/reg-sub
   ::login-link
   :<- [path-to-db]
   #(let [school-id (-> (get-form-data %)
                        (get :id))]
      (str js/location.protocol "//" js/location.host "/student-login/" school-id)))
-
-(re-frame/reg-event-fx
-  ::copy-login-link
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} _]
-    (let [school-id (-> (get-form-data db)
-                        (get :id))
-          clipboard (.-clipboard js/navigator)
-          link (str js/location.protocol "//" js/location.host "/student-login/" school-id)]
-      (.writeText clipboard link))
-    {}))
