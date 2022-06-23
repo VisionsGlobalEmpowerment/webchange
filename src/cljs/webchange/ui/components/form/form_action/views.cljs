@@ -1,4 +1,4 @@
-(ns webchange.ui.components.form-action.views
+(ns webchange.ui.components.form.form-action.views
   (:require
     [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.input-label.views :refer [input-label]]))

@@ -5,7 +5,7 @@
     [reagent.core :as r]
     [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.copy-link.views :refer [copy-link]]
-    [webchange.ui.components.form-action.views :refer [form-action]]
+    [webchange.ui.components.form.form-action.views :refer [form-action]]
     [webchange.ui.components.input.views :refer [input]]
     [webchange.ui.components.form.state :as state]
     [webchange.ui.components.overlay.views :refer [loading-overlay]]
