@@ -26,15 +26,16 @@
   [db value]
   (assoc db teachers-key (vec value)))
 
-(defn- remove-teacher
-  [db teacher-id]
-  (update db teachers-key remove-by-predicate #(= (:id %) teacher-id)))
-
 (re-frame/reg-sub
   ::teachers
   :<- [path-to-db]
   #(->> (get % teachers-key [])
         (sort-by :name)))
+
+(re-frame/reg-sub
+  ::teachers-number
+  :<- [::teachers]
+  #(count %))
 
 ;;
 
@@ -66,7 +67,7 @@
 (re-frame/reg-sub
   ::school-name
   :<- [::school-data]
-  :name)
+  #(get % :name))
 
 (re-frame/reg-event-fx
   ::add-teacher
@@ -81,39 +82,3 @@
   (fn [{:keys [db]} [_ teacher-id]]
     (let [school-id (:id (get-school-data db))]
       {:dispatch [::routes/redirect :teacher-profile :school-id school-id :teacher-id teacher-id]})))
-
-;; remove teacher
-
-(def teacher-removing-key :teacher-removing?)
-
-(defn- set-teacher-removing
-  [db teacher-id value]
-  (assoc-in db [teacher-removing-key teacher-id] value))
-
-(re-frame/reg-sub
-  ::teacher-removing?
-  :<- [path-to-db]
-  (fn [db [_ teacher-id]]
-    (get-in db [teacher-removing-key teacher-id] false)))
-
-(re-frame/reg-event-fx
-  ::remove-teacher
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ teacher-id]]
-    {:db       (set-teacher-removing db teacher-id true)
-     :dispatch [::warehouse/remove-teacher {:teacher-id teacher-id} {:on-success [::remove-teacher-success teacher-id]
-                                                                     :on-failure [::remove-teacher-failure teacher-id]}]}))
-
-(re-frame/reg-event-fx
-  ::remove-teacher-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ teacher-id]]
-    {:db (-> db
-             (set-teacher-removing teacher-id false)
-             (remove-teacher teacher-id))}))
-
-(re-frame/reg-event-fx
-  ::remove-teacher-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ teacher-id]]
-    {:db (-> db (set-teacher-removing teacher-id false))}))

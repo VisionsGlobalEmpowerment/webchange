@@ -25,6 +25,25 @@
         @include bbs--noto-16-b;
     }
 
+    .widget--page--header--stats {
+        @include bbs--noto-14-b;
+        @include bbs--icon-color(bbs--color(yellow-2));
+        @include bbs--icon-size(32px);
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .widget--page--header--stats-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 8px 20px;
+            border-left: 1px solid #ffffff1a;
+        }
+    }
+
     .widget--page--header--filler {
         flex: 1 1;
     }
