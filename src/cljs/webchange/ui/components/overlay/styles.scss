@@ -8,3 +8,23 @@
 
     background-color: #1f273cc4;
 }
+
+.bbs--loading-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #ffffffdb;
+
+    .bbs--loading-overlay--progress {
+        @include bbs--progress-color(bbs--color(blue-1));
+        @include bbs--progress-size(64px);
+    }
+}

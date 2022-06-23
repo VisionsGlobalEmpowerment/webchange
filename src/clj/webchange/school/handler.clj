@@ -49,8 +49,9 @@
   (let [user-id (current-user request)]
     (when-not (is-admin? user-id)
       (throw-unauthorized {:role :educator}))
-    (-> (core/archive-school! id)
-        handle)))
+    (->> (core/archive-school! id)
+         (vector true)
+         handle)))
 
 (defroutes school-routes
   (context "/api/schools" []

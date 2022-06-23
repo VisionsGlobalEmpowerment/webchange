@@ -60,13 +60,26 @@
   :<- [::flags-data]
   #(get % data-saving-key false))
 
+;; Callbacks
+
+(def callbacks-key :callbacks)
+
+(defn- set-callbacks
+  [db data]
+  (assoc db callbacks-key data))
+
+(defn- get-callback
+  [db callback-name]
+  (get-in db [callbacks-key callback-name] #()))
+
 ;; Init
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id]}]]
+  (fn [{:keys [db]} [_ {:keys [school-id] :as props}]]
     {:db       (-> db
+                   (set-callbacks (select-keys props [:on-archive]))
                    (reset-form-data)
                    (set-data-loading true))
      :dispatch [::warehouse/load-school {:school-id school-id}
@@ -134,21 +147,35 @@
     (when (fn? callback)
       (apply callback params))))
 
+(re-frame/reg-event-fx
+  ::archive-school
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ school-id]]
+    {:db       (set-data-loading db true)
+     :dispatch [::warehouse/archive-school
+                {:school-id school-id}
+                {:on-success [::archive-school-success]
+                 :on-failure [::archive-school-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::archive-school-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (get-callback db :on-archive)]
+      {:db        (-> db (set-data-loading false))
+       ::callback [success-handler]})))
+
+(re-frame/reg-event-fx
+  ::archive-school-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-data-loading db false)}))
+
 ;; Login link
+
 (re-frame/reg-sub
   ::login-link
   :<- [path-to-db]
   #(let [school-id (-> (get-form-data %)
                        (get :id))]
      (str js/location.protocol "//" js/location.host "/student-login/" school-id)))
-
-(re-frame/reg-event-fx
-  ::copy-login-link
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} _]
-    (let [school-id (-> (get-form-data db)
-                        (get :id))
-          clipboard (.-clipboard js/navigator)
-          link (str js/location.protocol "//" js/location.host "/student-login/" school-id)]
-      (.writeText clipboard link))
-    {}))

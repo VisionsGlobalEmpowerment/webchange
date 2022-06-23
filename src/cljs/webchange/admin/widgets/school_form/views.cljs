@@ -4,37 +4,35 @@
     [reagent.core :as r]
     [webchange.admin.widgets.school-form.state :as state]
     [webchange.validation.specs.school-spec :as school-spec]
-    [webchange.ui-framework.components.index :as c]
-    [webchange.ui.index :as ui]))
+    [webchange.ui.index :refer [get-class-name] :as ui]
+    [webchange.utils.languages :refer [location-options]]))
 
-(defn- login-link
-  [{:keys [id label]} _]
-  (fn [{:keys [disabled? id label] :as a} {:keys [value error handle-change] :as b}]
-    (let [handle-copy-click #(re-frame/dispatch [::state/copy-login-link])
-          value @(re-frame/subscribe [::state/login-link])]
-      [:<>
-       [c/label {:for id} label]
-       [c/input {:id        id
-                 :value     value
-                 :disabled? true
-                 :action    [c/icon-button {:icon     "copy"
-                                            :variant  "light"
-                                            :on-click handle-copy-click}]}]])))
+(def locations (concat [{:text "Select Location" :value ""}] location-options))
+
+(defn- archive-school
+  [school-id]
+  (re-frame/dispatch [::state/archive-school school-id]))
 
 (def edit-school-model {:name       {:label "School Name"
                                      :type  :text}
-                        :location   {:label "Location"
-                                     :type  :text}
-                        :login-link {:label   "Login link"
-                                     :type    :custom
-                                     :control login-link}
+                        :location   {:label   "Location"
+                                     :type    :select
+                                     :options locations}
+                        :login-link {:label "Student Login Link"
+                                     :type  :link
+                                     :text  "Copy Link"}
                         :about      {:label "About"
-                                     :type  :text-multiline}})
+                                     :type  :text-multiline}
+                        :archive    {:label    "Archive School"
+                                     :type     :action
+                                     :icon     "archive"
+                                     :on-click archive-school}})
 
 (def add-school-model {:name     {:label "School Name"
                                   :type  :text}
-                       :location {:label "Location"
-                                  :type  :text}
+                       :location {:label   "Location"
+                                  :type    :select
+                                  :options locations}
                        :about    {:label "About"
                                   :type  :text-multiline}})
 
@@ -56,11 +54,14 @@
        (let [loading? @(re-frame/subscribe [::state/data-loading?])
              saving? @(re-frame/subscribe [::state/data-saving?])
              school-data @(re-frame/subscribe [::state/form-data])
+             login-link @(re-frame/subscribe [::state/login-link])
              model edit-school-model
              handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
          [ui/form {:form-id    (-> (str "school-" school-id)
                                    (keyword))
-                   :data       school-data
+                   :data       (assoc school-data
+                                 :archive school-id
+                                 :login-link login-link)
                    :model      model
                    :spec       ::school-spec/edit-school
                    :on-save    handle-save
@@ -68,8 +69,8 @@
                    :disabled?  (not editable?)
                    :loading?   loading?
                    :saving?    saving?
-                   :class-name (c/get-class-name {"widget--school-form" true
-                                                  class-name            (some? class-name)})}]))}))
+                   :class-name (get-class-name {"widget--school-form" true
+                                                class-name            (some? class-name)})}]))}))
 
 (defn add-school-form
   []
@@ -97,5 +98,5 @@
                    :spec       ::school-spec/create-school
                    :on-save    handle-save
                    :saving?    saving?
-                   :class-name (c/get-class-name {"widget--school-form" true
-                                                  class-name            (some? class-name)})}]))}))
+                   :class-name (get-class-name {"widget--school-form" true
+                                                class-name            (some? class-name)})}]))}))

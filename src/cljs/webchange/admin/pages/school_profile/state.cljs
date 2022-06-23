@@ -126,3 +126,9 @@
   (fn [{:keys [db]} [_]]
     (let [school-id (:school-id db)]
       {:dispatch [::routes/redirect :school-courses :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::open-schools-list
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :schools]}))

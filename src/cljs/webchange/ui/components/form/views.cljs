@@ -8,6 +8,7 @@
     [webchange.ui.components.form-action.views :refer [form-action]]
     [webchange.ui.components.input.views :refer [input]]
     [webchange.ui.components.form.state :as state]
+    [webchange.ui.components.overlay.views :refer [loading-overlay]]
     [webchange.ui.components.password.views :refer [password]]
     [webchange.ui.components.select.views :refer [select]]
     [webchange.ui.components.text-area.views :refer [text-area]]
@@ -141,11 +142,6 @@
       :select [select-control control-props]
       :custom [custom-control control-props])))
 
-(defn- loading-indicator
-  []
-  [:div.data-loading-indicator
-   [c/circular-progress]])
-
 (defn- form-actions
   [{:keys [form-id disabled? on-save on-cancel saving? spec]}]
   (let [handle-save-click #(re-frame/dispatch [::state/save form-id spec on-save])
@@ -191,20 +187,20 @@
                   saving?   false}}]
        [:div {:class-name (c/get-class-name {"component--form" true
                                              class-name        (some? class-name)})}
-        (if-not loading?
-          [:div.controls
-           (for [[field-name field-options] model]
-             ^{:key field-name}
-             [form-control {:id        field-name
-                            :form-id   form-id
-                            :options   field-options
-                            :disabled? disabled?
-                            :spec      spec}])]
-          [loading-indicator])
+        [:div.controls
+         (for [[field-name field-options] model]
+           ^{:key field-name}
+           [form-control {:id        field-name
+                          :form-id   form-id
+                          :options   field-options
+                          :disabled? disabled?
+                          :spec      spec}])]
         (when-not disabled?
           [form-actions {:form-id   form-id
                          :disabled? loading?
                          :saving?   saving?
                          :spec      spec
                          :on-save   on-save
-                         :on-cancel on-cancel}])])}))
+                         :on-cancel on-cancel}])
+        (when loading?
+          [loading-overlay])])}))
