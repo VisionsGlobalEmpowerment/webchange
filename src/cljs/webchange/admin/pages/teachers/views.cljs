@@ -2,22 +2,40 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.teachers.state :as state]
-    [webchange.admin.components.list.views :as l]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]))
 
 (defn- list-item
-  [{:keys [id] :as props}]
-  (let [handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])]
-    [l/list-item (merge props
-                        {:actions [{:icon     "edit"
-                                    :title    "Edit teacher"
-                                    :on-click handle-edit-click}]})]))
+  [{:keys [active? email id last-login name]}]
+  (let [handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])
+        handle-active-click #(re-frame/dispatch [::state/set-teacher-status id (not active?)])
+        determinate? (boolean? active?)
+        loading? (= active? :loading)]
+    [ui/list-item {:avatar   nil
+                   :name     name
+                   :info     [{:key   "Email"
+                               :value email}
+                              {:key   "Last Login"
+                               :value last-login}]
+                   :controls [ui/switch {:label          (cond
+                                                           loading? "Saving.."
+                                                           (not determinate?) "..."
+                                                           active? "Active"
+                                                           :default "Inactive")
+
+                                         :checked?       active?
+                                         :indeterminate? (not determinate?)
+                                         :disabled?      loading?
+                                         :on-change      handle-active-click
+                                         :class-name     "active-switch"}]
+                   :actions  [{:icon     "edit"
+                               :title    "Edit teacher"
+                               :on-click handle-edit-click}]}]))
 
 (defn- teacher-list
   []
   (let [teachers @(re-frame/subscribe [::state/teachers])]
-    [l/list {:class-name "teachers-list"}
+    [ui/list {:class-name "teachers-list"}
      (for [{:keys [id] :as teacher-data} teachers]
        ^{:key id}
        [list-item teacher-data])]))
@@ -29,7 +47,7 @@
     (let [school-name @(re-frame/subscribe [::state/school-name])
           teachers-number @(re-frame/subscribe [::state/teachers-number])
           handle-add-click #(re-frame/dispatch [::state/add-teacher])]
-      [page/single-page {:class-name "page--schools"
+      [page/single-page {:class-name "page--teachers"
                          :header     {:title   school-name
                                       :icon    "school"
                                       :stats   [{:icon    "teachers"

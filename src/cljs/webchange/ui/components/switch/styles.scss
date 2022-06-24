@@ -92,7 +92,7 @@
             input[type="checkbox"] {
                 & + label {
                     &::after {
-                      right: ($width - $height) * 0.5;
+                      right: $width * 0.5 - $cap-size * 0.5;
                     }
                 }
             }
@@ -132,7 +132,7 @@
             input[type="checkbox"] {
                 & + label {
                     &::after {
-                      left: ($width - $height) * 0.5 + 1.5;
+                      left: $width * 0.5 - $cap-size * 0.5;
                     }
                 }
             }
