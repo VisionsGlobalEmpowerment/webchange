@@ -1,5 +1,6 @@
 (ns webchange.ui.index
   (:require
+    [webchange.ui.components.avatar.views :as avatar-views]
     [webchange.ui.components.breadcrumbs.views :as breadcrumbs-views]
     [webchange.ui.components.button.views :as button-views]
     [webchange.ui.components.card.views :as card-views]
@@ -20,6 +21,7 @@
     [webchange.ui.components.text-area.views :as text-area-views]
     [webchange.ui.utils.get-class-name :as gcn]))
 
+(def avatar avatar-views/avatar)
 (def breadcrumbs breadcrumbs-views/breadcrumbs)
 (def button button-views/button)
 (def card card-views/card)

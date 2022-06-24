@@ -40,4 +40,7 @@
                                    :value "user@email.com"}]
                        :controls [ui/switch {:label     (if @checked? "Active" "Inactive")
                                              :checked?  @checked?
-                                             :on-change handle-change}]}])]]]])
+                                             :on-change handle-change}]
+                       :actions  [{:icon     "edit"
+                                   :title    "Edit school"
+                                   :on-click #(print "Handle Edit click")}]}])]]]])

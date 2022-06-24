@@ -12,7 +12,9 @@
 (def variants [{:checked? true
                 :label    "Active"}
                {:checked? false
-                :label    "Inactive"}])
+                :label    "Inactive"}
+               {:label      "Inactive"
+                :label-side "right"}])
 
 (defn- variant-states
   [{:keys [component variant variant-idx]}]
@@ -42,4 +44,10 @@
                   handle-change #(swap! checked? not)]
        [ui/switch {:label     (if @checked? "Active" "Inactive")
                    :checked?  @checked?
-                   :on-change handle-change}])]]])
+                   :on-change handle-change}])
+     (r/with-let [checked? (r/atom true)
+                  handle-change #(swap! checked? not)]
+       [ui/switch {:label     (if @checked? "Active" "Inactive")
+                   :checked?  @checked?
+                   :on-change handle-change
+                   :label-side "right"}])]]])
