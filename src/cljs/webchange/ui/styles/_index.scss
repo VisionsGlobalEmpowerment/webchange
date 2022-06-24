@@ -3,3 +3,21 @@
 @import "fonts";
 @import "colors";
 @import "typography";
+
+@mixin bbs--with-scrollbar {
+    &::-webkit-scrollbar-thumb {
+       background-color: bbs--color(grey-4);
+     }
+
+    &::-webkit-scrollbar {
+        -webkit-appearance: none;
+
+        width: 4px;
+        height: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: bbs--color(transparent);
+        border-radius: 9999px;
+    }
+}

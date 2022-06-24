@@ -102,6 +102,12 @@
   (->> (concat [list idx] args)
        (apply update)))
 
+(defn update-by-predicate
+  [list predicate & args]
+  (let [idx (find-item-position list predicate)]
+    (->> (concat [list idx] args)
+         (apply update-nth))))
+
 (defn update-first
   [list & args]
   (->> (concat [list 0] args)

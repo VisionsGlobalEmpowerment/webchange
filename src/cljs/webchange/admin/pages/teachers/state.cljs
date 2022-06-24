@@ -4,7 +4,8 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.list :refer [remove-by-predicate]]))
+    [webchange.utils.date :refer [date-str->locale-date]]
+    [webchange.utils.list :refer [remove-by-predicate update-by-predicate]]))
 
 (def path-to-db :page/school-teachers)
 
@@ -26,15 +27,20 @@
   [db value]
   (assoc db teachers-key (vec value)))
 
-(defn- remove-teacher
-  [db teacher-id]
-  (update db teachers-key remove-by-predicate #(= (:id %) teacher-id)))
+(defn- update-teacher
+  [db id data-patch]
+  (update db teachers-key update-by-predicate #(= (:id %) id) merge data-patch))
 
 (re-frame/reg-sub
   ::teachers
   :<- [path-to-db]
   #(->> (get % teachers-key [])
         (sort-by :name)))
+
+(re-frame/reg-sub
+  ::teachers-number
+  :<- [::teachers]
+  #(count %))
 
 ;;
 
@@ -50,13 +56,19 @@
   (fn [{:keys [db]} [_ {:keys [school]}]]
     {:db (assoc db :school-data school)}))
 
+(defn- ->teachers-list-item
+  [{:keys [id status user]}]
+  {:id         id
+   :name       (str (:first-name user) " " (:last-name user))
+   :email      (:email user)
+   :active?    (when (some? status) (= status "active"))
+   :last-login (date-str->locale-date "2022-05-18T11:33:36.316428")})
+
 (re-frame/reg-event-fx
   ::load-school-teachers-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ teachers]]
-    (let [->list-item #(assoc % :name (str (-> % :user :first-name) " " (-> % :user :last-name)))
-          teachers-list (map ->list-item teachers)]
-      {:db (set-teachers db teachers-list)})))
+    {:db (set-teachers db (map ->teachers-list-item teachers))}))
 
 (re-frame/reg-sub
   ::school-data
@@ -66,7 +78,7 @@
 (re-frame/reg-sub
   ::school-name
   :<- [::school-data]
-  :name)
+  #(get % :name))
 
 (re-frame/reg-event-fx
   ::add-teacher
@@ -82,38 +94,25 @@
     (let [school-id (:id (get-school-data db))]
       {:dispatch [::routes/redirect :teacher-profile :school-id school-id :teacher-id teacher-id]})))
 
-;; remove teacher
-
-(def teacher-removing-key :teacher-removing?)
-
-(defn- set-teacher-removing
-  [db teacher-id value]
-  (assoc-in db [teacher-removing-key teacher-id] value))
-
-(re-frame/reg-sub
-  ::teacher-removing?
-  :<- [path-to-db]
-  (fn [db [_ teacher-id]]
-    (get-in db [teacher-removing-key teacher-id] false)))
+(re-frame/reg-event-fx
+  ::set-teacher-status
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ teacher-id active?]]
+    {:db       (update-teacher db teacher-id {:active? :loading})
+     :dispatch [::warehouse/set-teacher-status
+                {:teacher-id teacher-id
+                 :active     active?}
+                {:on-success [::set-teacher-status-success teacher-id active?]
+                 :on-failure [::set-teacher-status-failure teacher-id (not active?)]}]}))
 
 (re-frame/reg-event-fx
-  ::remove-teacher
+  ::set-teacher-status-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ teacher-id]]
-    {:db       (set-teacher-removing db teacher-id true)
-     :dispatch [::warehouse/remove-teacher {:teacher-id teacher-id} {:on-success [::remove-teacher-success teacher-id]
-                                                                     :on-failure [::remove-teacher-failure teacher-id]}]}))
+  (fn [{:keys [db]} [_ teacher-id active?]]
+    {:db (update-teacher db teacher-id {:active? active?})}))
 
 (re-frame/reg-event-fx
-  ::remove-teacher-success
+  ::set-teacher-status-failure
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ teacher-id]]
-    {:db (-> db
-             (set-teacher-removing teacher-id false)
-             (remove-teacher teacher-id))}))
-
-(re-frame/reg-event-fx
-  ::remove-teacher-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ teacher-id]]
-    {:db (-> db (set-teacher-removing teacher-id false))}))
+  (fn [{:keys [db]} [_ teacher-id active?]]
+    {:db (update-teacher db teacher-id {:active? active?})}))

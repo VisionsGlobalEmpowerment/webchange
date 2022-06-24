@@ -1,0 +1,146 @@
+.bbs--switch {
+    $height: 24px;
+    $width: 44px;
+    $border-width: 2px;
+    $cap-size: 18px;
+
+    $cap-color: bbs--color(grey-5);
+    $cap-color-checked: bbs--color(blue-1);
+    $border-color: bbs--color(grey-4);
+    $border-color-hover: bbs--color(blue-2);
+
+    input[type="checkbox"] {
+        display: none;
+
+        & + label {
+            display: inline-block;
+            height: $height;
+            line-height: $height;
+
+            cursor: pointer;
+            font-size: 14px;
+
+            &::before,
+            &::after {
+                -webkit-transition: all .2s ease-out;
+                transition: all .2s ease-out;
+            }
+
+            &::before {
+                content: "";
+                display: inline-block;
+
+                height: $height;
+                width: $width;
+
+                border: $border-width solid $border-color;
+                border-radius: 12px;
+                background-color: bbs--color(white);
+            }
+
+            &::after {
+                content: "";
+                display: block;
+                width: $cap-size;
+                height: $cap-size;
+                border-radius: 9999px;
+                background-color: $cap-color;
+            }
+        }
+    }
+
+    &:not(.bbs--switch--indeterminate) {
+        input[type="checkbox"]:checked + label {
+            &::after {
+                background-color: $cap-color-checked;
+            }
+        }
+    }
+
+    &.bbs--switch--label-side-left {
+        input[type="checkbox"] {
+            & + label {
+                padding-right: $width + 8;
+                position: relative;
+
+                &::before {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
+
+                &::after {
+                    $gap: ($height - $cap-size) * 0.5;
+                    position: absolute;
+                    top: $gap;
+                    right: $gap;
+                }
+            }
+
+            &:checked {
+                & + label {
+                    &::after {
+                        right: $width - $height + $border-width;
+                    }
+                }
+            }
+        }
+
+        &.bbs--switch--indeterminate {
+            input[type="checkbox"] {
+                & + label {
+                    &::after {
+                      right: $width * 0.5 - $cap-size * 0.5;
+                    }
+                }
+            }
+        }
+    }
+
+    &.bbs--switch--label-side-right {
+        input[type="checkbox"] {
+            & + label {
+                padding-left: $width + 8;
+                position: relative;
+
+                &::before {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+
+                &::after {
+                    $gap: ($height - $cap-size) * 0.5;
+                    position: absolute;
+                    top: $gap;
+                    left: $gap;
+                }
+            }
+
+            &:checked {
+                & + label {
+                    &::after {
+                        left: $width - $height + $border-width;
+                    }
+                }
+            }
+        }
+
+        &.bbs--switch--indeterminate {
+            input[type="checkbox"] {
+                & + label {
+                    &::after {
+                      left: $width * 0.5 - $cap-size * 0.5;
+                    }
+                }
+            }
+        }
+    }
+
+    &.bbs--switch--state-hover input[type="checkbox"] + label,
+    input[type="checkbox"] + label:hover {
+        &::before {
+            border-color: $border-color-hover;
+        }
+    }
+}

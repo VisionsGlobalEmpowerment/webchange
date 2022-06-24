@@ -2,52 +2,58 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.teachers.state :as state]
-    [webchange.admin.components.list.views :as l]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as ui]))
-
-(defn- header
-  []
-  (let [school-name @(re-frame/subscribe [::state/school-name])
-        handle-add-click #(re-frame/dispatch [::state/add-teacher])]
-    [page/_header {:title   school-name
-                  :icon    "school"
-                  :actions [ui/icon-button {:icon     "add"
-                                            :on-click handle-add-click}
-                            "New Teacher Account"]}]))
+    [webchange.ui.index :as ui]))
 
 (defn- list-item
-  [{:keys [id] :as props}]
+  [{:keys [active? email id last-login name]}]
   (let [handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])
-        remove-teacher #(re-frame/dispatch [::state/remove-teacher id])
-        handle-remove-click #(ui/with-confirmation {:message    "Remove Teacher?"
-                                                    :on-confirm remove-teacher})
-        teacher-removing? @(re-frame/subscribe [::state/teacher-removing? id])]
-    [l/list-item (merge props
-                        {:actions [:<>
-                                   [ui/icon-button {:icon     "remove"
-                                                    :title    "Remove"
-                                                    :variant  "light"
-                                                    :loading? teacher-removing?
-                                                    :on-click handle-remove-click}]
-                                   [ui/icon-button {:icon     "edit"
-                                                    :title    "Edit"
-                                                    :variant  "light"
-                                                    :on-click handle-edit-click}]]})]))
+        handle-active-click #(re-frame/dispatch [::state/set-teacher-status id (not active?)])
+        determinate? (boolean? active?)
+        loading? (= active? :loading)]
+    [ui/list-item {:avatar   nil
+                   :name     name
+                   :info     [{:key   "Email"
+                               :value email}
+                              {:key   "Last Login"
+                               :value last-login}]
+                   :controls [ui/switch {:label          (cond
+                                                           loading? "Saving.."
+                                                           (not determinate?) "..."
+                                                           active? "Active"
+                                                           :default "Inactive")
 
-(defn- content
+                                         :checked?       active?
+                                         :indeterminate? (not determinate?)
+                                         :disabled?      loading?
+                                         :on-change      handle-active-click
+                                         :class-name     "active-switch"}]
+                   :actions  [{:icon     "edit"
+                               :title    "Edit teacher"
+                               :on-click handle-edit-click}]}]))
+
+(defn- teacher-list
   []
-  (let [list-data @(re-frame/subscribe [::state/teachers])]
-    [page/main-content {:title "Teachers"}
-     [l/list {:class-name "teachers-list"}
-      (for [{:keys [id] :as teacher-data} list-data]
-        ^{:key id}
-        [list-item teacher-data])]]))
+  (let [teachers @(re-frame/subscribe [::state/teachers])]
+    [ui/list {:class-name "teachers-list"}
+     (for [{:keys [id] :as teacher-data} teachers]
+       ^{:key id}
+       [list-item teacher-data])]))
 
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page {:class-name "page--teachers"}
-     [header]
-     [content]]))
+    (let [school-name @(re-frame/subscribe [::state/school-name])
+          teachers-number @(re-frame/subscribe [::state/teachers-number])
+          handle-add-click #(re-frame/dispatch [::state/add-teacher])]
+      [page/single-page {:class-name "page--teachers"
+                         :header     {:title   school-name
+                                      :icon    "school"
+                                      :stats   [{:icon    "teachers"
+                                                 :counter teachers-number
+                                                 :label   "Teachers"}]
+                                      :actions [{:text     "Add Teacher to School"
+                                                 :icon     "plus"
+                                                 :on-click handle-add-click}]}}
+       [teacher-list]])))

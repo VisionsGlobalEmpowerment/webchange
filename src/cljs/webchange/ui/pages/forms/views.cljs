@@ -1,6 +1,5 @@
 (ns webchange.ui.pages.forms.views
   (:require
-    [clojure.spec.alpha :as s]
     [reagent.core :as r]
     [webchange.ui.index :as ui]
     [webchange.ui.pages.layout :refer [layout panel]]))
@@ -38,10 +37,6 @@
 (def default-errors (->> (keys model)
                          (map #(vector % "Required Field"))
                          (into {})))
-
-;(s/def ::name (constantly false))
-;(s/def ::spec (s/keys :req-un [::name]
-;                             :opt-un []))
 
 (defn- form-wrapper
   [{:keys [title]}]

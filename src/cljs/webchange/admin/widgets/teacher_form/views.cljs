@@ -5,38 +5,37 @@
     [webchange.admin.widgets.teacher-form.state :as state]
     [webchange.validation.specs.teacher :as teacher-spec]
     [webchange.ui-framework.components.index :as c]
-    [webchange.ui.index :as ui]))
+    [webchange.ui.index :refer [get-class-name] :as ui]))
 
-(def teacher-model {:first-name {:label "First Name"
-                                 :type  :text}
-                    :last-name  {:label "Last Name"
-                                 :type  :text}
-                    :email      {:label "Email"
-                                 :type  :text}
-                    :password   {:label      "Password"
-                                 :type       :password
-                                 :input-type "password"}
-                    :type       {:label   "Teacher Type"
-                                 :type    :select
-                                 :options [{:text  "Select Teacher Type"
-                                            :value ""}
-                                           {:text  "Admin"
-                                            :value "admin"}
-                                           {:text  "Teacher"
-                                            :value "teacher"}]}})
+(def add-teacher-model {:first-name       {:label "First Name"
+                                           :type  :text}
+                        :last-name        {:label "Last Name"
+                                           :type  :text}
+                        :email            {:label "Email"
+                                           :type  :text}
+                        :password         {:label "Password"
+                                           :type  :password}
+                        :password-confirm {:label "Confirm password"
+                                           :type  :password}
+                        :type             {:label   "Teacher Type"
+                                           :type    :select
+                                           :options [{:text  "Select Teacher Type"
+                                                      :value ""}
+                                                     {:text  "Admin"
+                                                      :value "admin"}
+                                                     {:text  "Teacher"
+                                                      :value "teacher"}]}})
 
-(defn- teacher-actions
-  [{:keys [teacher-id on-remove]}]
-  (let [teacher-removing? @(re-frame/subscribe [::state/teacher-removing?])
-        remove-teacher #(re-frame/dispatch [::state/remove-teacher teacher-id {:on-success on-remove}])
-        handle-delete-teacher #(c/with-confirmation {:message    "Remove Teacher?"
-                                                     :on-confirm remove-teacher})]
-    [:div.teacher-actions
-     [c/icon-button {:icon     "remove"
-                     :variant  "light"
-                     :loading? teacher-removing?
-                     :on-click handle-delete-teacher}
-      "Delete Teacher Account"]]))
+(defn- show-remove-window
+  []
+  (re-frame/dispatch [::state/open-remove-window]))
+
+
+(def edit-teacher-model (merge add-teacher-model
+                               {:remove {:label    "Delete account"
+                                         :type     :action
+                                         :icon     "trash"
+                                         :on-click show-remove-window}}))
 
 (defn add-teacher-form
   []
@@ -54,15 +53,32 @@
      :reagent-render
      (fn [{:keys [class-name on-save]}]
        (let [saving? @(re-frame/subscribe [::state/data-saving?])
+             errors @(re-frame/subscribe [::state/custom-errors])
              handle-save #(re-frame/dispatch [::state/create-teacher % {:on-success on-save}])]
          [:div {:class-name (c/get-class-name {"widget--teacher-form" true
                                                class-name             (some? class-name)})}
           [ui/form {:form-id (-> (str "add-teacher")
                                  (keyword))
-                    :model   teacher-model
+                    :model   add-teacher-model
+                    :errors  errors
                     :spec    ::teacher-spec/create-teacher
                     :on-save handle-save
                     :saving? saving?}]]))}))
+
+(defn- remove-window
+  [{:keys [teacher-id]}]
+  (let [{:keys [done? open? in-progress?]} @(re-frame/subscribe [::state/remove-window-state])
+        remove #(re-frame/dispatch [::state/remove-teacher teacher-id])
+        close-window #(re-frame/dispatch [::state/close-remove-window])
+        confirm-removed #(re-frame/dispatch [::state/handle-removed])]
+    [ui/confirm {:open?      open?
+                 :loading?   in-progress?
+                 :confirm-text (if done? "Ok" "Yes")
+                 :on-confirm (if done? confirm-removed remove)
+                 :on-cancel  (when-not done? close-window)}
+     (if done?
+       "Teacher account successfully deleted"
+       "Are you sure you want to delete teacher account?")]))
 
 (defn edit-teacher-form
   []
@@ -78,17 +94,18 @@
        (re-frame/dispatch [::state/reset-form (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [teacher-id class-name on-save] :as props}]
+     (fn [{:keys [teacher-id class-name on-save]}]
        (let [saving? @(re-frame/subscribe [::state/data-saving?])
              data @(re-frame/subscribe [::state/form-data])
              handle-save #(re-frame/dispatch [::state/edit-teacher teacher-id % {:on-success on-save}])]
-         [:div {:class-name (c/get-class-name {"widget--teacher-form" true
-                                               class-name             (some? class-name)})}
-          [ui/form {:form-id (-> (str "edit-teacher")
-                                 (keyword))
-                    :model   teacher-model
-                    :data    data
-                    :spec    ::teacher-spec/edit-teacher
-                    :on-save handle-save
-                    :saving? saving?}]
-          [teacher-actions props]]))}))
+         [:<>
+          [ui/form {:form-id    (-> (str "edit-teacher")
+                                    (keyword))
+                    :model      edit-teacher-model
+                    :data       data
+                    :spec       ::teacher-spec/edit-teacher
+                    :on-save    handle-save
+                    :saving?    saving?
+                    :class-name (get-class-name {"widget--teacher-form" true
+                                                 class-name             (some? class-name)})}]
+          [remove-window {:teacher-id teacher-id}]]))}))
