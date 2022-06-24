@@ -47,14 +47,12 @@
                 background-color: $cap-color;
             }
         }
+    }
 
-        &:checked {
-            & + label {
-                &::before {}
-
-                &::after {
-                    background-color: $cap-color-checked;
-                }
+    &:not(.bbs--switch--indeterminate) {
+        input[type="checkbox"]:checked + label {
+            &::after {
+                background-color: $cap-color-checked;
             }
         }
     }

@@ -26,6 +26,18 @@
   :<- [path-to-db]
   #(get-form-data %))
 
+;; Callbacks
+
+(def callbacks-key :callbacks)
+
+(defn- set-callbacks
+  [db data]
+  (assoc db callbacks-key data))
+
+(defn- get-callback
+  [db callback-name]
+  (get-in db [callbacks-key callback-name] #()))
+
 ;; Data Saving?
 
 (def data-saving-key :data-saving?)
@@ -65,8 +77,10 @@
 (re-frame/reg-event-fx
   ::init-edit-form
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [teacher-id]}]]
-    {:db       (-> db (set-custom-errors nil))
+  (fn [{:keys [db]} [_ {:keys [teacher-id] :as props}]]
+    {:db       (-> db
+                   (set-custom-errors nil)
+                   (set-callbacks (select-keys props [:on-remove])))
      :dispatch [::warehouse/load-teacher {:teacher-id teacher-id}
                 {:on-success [::load-teacher-success]}]}))
 
@@ -138,38 +152,68 @@
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))
 
-;; Remove teacher
+;; Remove
 
-(def teacher-removing-key :teacher-removing?)
+(def remove-window-state-key :remove-window-state)
 
-(defn- set-teacher-removing
-  [db value]
-  (assoc db teacher-removing-key value))
+(def remove-window-default-state {:open?        false
+                                  :in-progress? false
+                                  :done?        false})
+
+(defn- update-remove-window-state
+  [db data-patch]
+  (update db remove-window-state-key merge data-patch))
 
 (re-frame/reg-sub
-  ::teacher-removing?
+  ::remove-window-state
   :<- [path-to-db]
-  #(get % teacher-removing-key false))
+  #(get % remove-window-state-key remove-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db remove-window-default-state)}))
 
 (re-frame/reg-event-fx
   ::remove-teacher
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ teacher-id {:keys [on-success]}]]
-    {:db       (set-teacher-removing db true)
+  (fn [{:keys [db]} [_ teacher-id]]
+    {:db       (update-remove-window-state db {:in-progress? true})
      :dispatch [::warehouse/remove-teacher
                 {:teacher-id teacher-id}
-                {:on-success [::remove-teacher-success on-success]
+                {:on-success [::remove-teacher-success]
                  :on-failure [::remove-teacher-failure]}]}))
 
 (re-frame/reg-event-fx
   ::remove-teacher-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ on-success response]]
-    {:db                (set-teacher-removing db false)
-     ::widgets/callback [on-success response]}))
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:in-progress? false
+                                         :done?        true})}))
 
 (re-frame/reg-event-fx
   ::remove-teacher-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (set-teacher-removing db false)}))
+    {:db (update-remove-window-state db {:in-progress? false})}))
+
+(re-frame/reg-event-fx
+  ::handle-removed
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (get-callback db :on-remove)]
+      {:dispatch  [::close-remove-window]
+       ::callback [success-handler]})))
+
+(re-frame/reg-fx
+  ::callback
+  (fn [[callback & params]]
+    (when (fn? callback)
+      (apply callback params))))
