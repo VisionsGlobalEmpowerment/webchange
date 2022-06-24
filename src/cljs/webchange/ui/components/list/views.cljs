@@ -18,6 +18,12 @@
        ^{:key idx}
        [chip stat-props text])]))
 
+(defn- item-controls
+  [{:keys [controls]}]
+  (when-not (empty? controls)
+    [:div {:class-name "bbs--list-item--controls"}
+     controls]))
+
 (defn- item-actions
   [{:keys [actions]}]
   (when-not (empty? actions)
@@ -39,6 +45,7 @@
                 (->> (r/current-component)
                      (r/children))
                 [[item-stats props]]
+                [[item-controls props]]
                 [[item-actions props]]
                 )))
 

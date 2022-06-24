@@ -15,6 +15,7 @@
     [webchange.ui.components.panel.views :as panel-views]
     [webchange.ui.components.password.views :as password-views]
     [webchange.ui.components.select.views :as select-views]
+    [webchange.ui.components.switch.views :as switch-views]
     [webchange.ui.components.tab.views :as tab-views]
     [webchange.ui.components.text-area.views :as text-area-views]
     [webchange.ui.utils.get-class-name :as gcn]))
@@ -39,6 +40,7 @@
 (def select select-views/select)
 (def system-icon icon-views/system-icon)
 (def tab tab-views/tab)
+(def switch switch-views/switch)
 (def text-area text-area-views/text-area)
 
 (def get-class-name gcn/get-class-name)

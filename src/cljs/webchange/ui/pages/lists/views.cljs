@@ -30,4 +30,14 @@
                      :actions [{:icon     "edit"
                                 :title    "Edit school"
                                 :on-click #(print "Handle Edit click")}]}]
-      [ui/list-item {:name "Teacher Name"}]]]]])
+      (r/with-let [checked? (r/atom true)
+                   handle-change #(swap! checked? not)]
+        [ui/list-item {:avatar   nil
+                       :name     "Teacher Name"
+                       :info     [{:key   "Email"
+                                   :value "user@email.com"}
+                                  {:key   "Last Login"
+                                   :value "user@email.com"}]
+                       :controls [ui/switch {:label     (if @checked? "Active" "Inactive")
+                                             :checked?  @checked?
+                                             :on-change handle-change}]}])]]]])

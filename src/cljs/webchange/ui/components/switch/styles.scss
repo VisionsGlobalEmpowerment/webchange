@@ -1,0 +1,89 @@
+.bbs--switch {
+    $checked-color: $color-primary;
+    $checked-border-color: $color-primary;
+
+    $height: 24px;
+    $width: 44px;
+    $border-width: 2px;
+    $cap-size: 18px;
+
+    $cap-color: bbs--color(grey-5);
+    $cap-color-checked: bbs--color(blue-1);
+    $border-color: bbs--color(grey-4);
+    $border-color-hover: bbs--color(blue-2);
+
+    input[type="checkbox"] {
+        display: none;
+
+        & + label {
+            cursor: pointer;
+            padding-left: $width + 8;
+            position: relative;
+            font-size: 14px;
+            line-height: 40px;
+
+            &::before,
+            &::after {
+                -webkit-transition: all .2s ease-out;
+                transition: all .2s ease-out;
+            }
+
+            &::before {
+                content: "";
+                display: inline-block;
+
+                height: $height;
+                width: $width;
+
+                position: absolute;
+                top: -2px;
+                left: 0;
+
+                border: $border-width solid $border-color;
+                border-radius: 12px;
+                background-color: bbs--color(white);
+            }
+
+            &::after {
+                $gap: ($height - $cap-size) * 0.5;
+                content: "";
+                display: block;
+                position: absolute;
+                top: $gap - $border-width;
+                left: $gap;
+                width: $cap-size;
+                height: $cap-size;
+                border-radius: 9999px;
+                background-color: $cap-color;
+            }
+        }
+
+        &:checked {
+            & + label {
+                &::before {}
+
+                &::after {
+                    background-color: $cap-color-checked;
+                    left: $width - $height + $border-width;
+                }
+            }
+        }
+    }
+
+    &.bbs--switch--state-hover input[type="checkbox"] + label,
+    input[type="checkbox"] + label:hover {
+        &::before {
+            border-color: $border-color-hover;
+        }
+    }
+
+    &.bbs--switch--indeterminate {
+        input[type="checkbox"] {
+            & + label {
+                &::after {
+                  left: ($width - $height) * 0.5 + 1.5;
+                }
+            }
+        }
+    }
+}
