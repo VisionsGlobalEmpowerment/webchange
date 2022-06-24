@@ -17,6 +17,7 @@
 
     &.widget--single-page--form-container {
         .widget--single-page--content {
+
             padding: 32px 64px;
 
             .component--form {
@@ -26,8 +27,15 @@
     }
 
     .widget--single-page--content {
+        @include bbs--with-scrollbar;
+
         flex: 1 1;
         min-height: 0;
+
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
         padding: $bbs--page--margin;
     }
 }

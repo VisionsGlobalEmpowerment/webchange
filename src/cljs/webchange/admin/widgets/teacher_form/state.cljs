@@ -39,19 +39,35 @@
   :<- [path-to-db]
   #(get % data-saving-key false))
 
+;; Custom Error
+
+(def custom-errors-key :custom-errors)
+
+(defn- set-custom-errors
+  [db errors]
+  (assoc db custom-errors-key errors))
+
+(re-frame/reg-sub
+  ::custom-errors
+  :<- [path-to-db]
+  #(get % custom-errors-key {}))
+
 ;;
 
 (re-frame/reg-event-fx
   ::init-add-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db (assoc db :school-id school-id)}))
+    {:db (-> db
+             (assoc :school-id school-id)
+             (set-custom-errors nil))}))
 
 (re-frame/reg-event-fx
   ::init-edit-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [teacher-id]}]]
-    {:dispatch [::warehouse/load-teacher {:teacher-id teacher-id}
+    {:db       (-> db (set-custom-errors nil))
+     :dispatch [::warehouse/load-teacher {:teacher-id teacher-id}
                 {:on-success [::load-teacher-success]}]}))
 
 (re-frame/reg-event-fx
@@ -72,12 +88,16 @@
 (re-frame/reg-event-fx
   ::create-teacher
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
-    (let [school-id (:school-id db)]
-      {:db       (set-data-saving db true)
-       :dispatch [::warehouse/create-teacher {:school-id school-id :data data}
-                  {:on-success [::create-teacher-success on-success]
-                   :on-failure [::create-teacher-failure]}]})))
+  (fn [{:keys [db]} [_ {:keys [password password-confirm] :as data} {:keys [on-success]}]]
+    (if (not= password password-confirm)
+      {:db (set-custom-errors db {:password-confirm "Passwords not equal"})}
+      (let [school-id (:school-id db)]
+        {:db       (-> db
+                       (set-data-saving true)
+                       (set-custom-errors nil))
+         :dispatch [::warehouse/create-teacher {:school-id school-id :data data}
+                    {:on-success [::create-teacher-success on-success]
+                     :on-failure [::create-teacher-failure]}]}))))
 
 (re-frame/reg-event-fx
   ::create-teacher-success

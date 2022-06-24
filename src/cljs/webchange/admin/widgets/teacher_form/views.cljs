@@ -7,23 +7,24 @@
     [webchange.ui-framework.components.index :as c]
     [webchange.ui.index :as ui]))
 
-(def teacher-model {:first-name {:label "First Name"
-                                 :type  :text}
-                    :last-name  {:label "Last Name"
-                                 :type  :text}
-                    :email      {:label "Email"
-                                 :type  :text}
-                    :password   {:label      "Password"
-                                 :type       :password
-                                 :input-type "password"}
-                    :type       {:label   "Teacher Type"
-                                 :type    :select
-                                 :options [{:text  "Select Teacher Type"
-                                            :value ""}
-                                           {:text  "Admin"
-                                            :value "admin"}
-                                           {:text  "Teacher"
-                                            :value "teacher"}]}})
+(def teacher-model {:first-name       {:label "First Name"
+                                       :type  :text}
+                    :last-name        {:label "Last Name"
+                                       :type  :text}
+                    :email            {:label "Email"
+                                       :type  :text}
+                    :password         {:label "Password"
+                                       :type  :password}
+                    :password-confirm {:label "Confirm password"
+                                       :type  :password}
+                    :type             {:label   "Teacher Type"
+                                       :type    :select
+                                       :options [{:text  "Select Teacher Type"
+                                                  :value ""}
+                                                 {:text  "Admin"
+                                                  :value "admin"}
+                                                 {:text  "Teacher"
+                                                  :value "teacher"}]}})
 
 (defn- teacher-actions
   [{:keys [teacher-id on-remove]}]
@@ -54,12 +55,14 @@
      :reagent-render
      (fn [{:keys [class-name on-save]}]
        (let [saving? @(re-frame/subscribe [::state/data-saving?])
+             errors @(re-frame/subscribe [::state/custom-errors])
              handle-save #(re-frame/dispatch [::state/create-teacher % {:on-success on-save}])]
          [:div {:class-name (c/get-class-name {"widget--teacher-form" true
                                                class-name             (some? class-name)})}
           [ui/form {:form-id (-> (str "add-teacher")
                                  (keyword))
                     :model   teacher-model
+                    :errors  errors
                     :spec    ::teacher-spec/create-teacher
                     :on-save handle-save
                     :saving? saving?}]]))}))
