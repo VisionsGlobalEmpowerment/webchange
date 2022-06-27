@@ -6,6 +6,7 @@
     [webchange.ui.components.card.views :as card-views]
     [webchange.ui.components.chip.views :as chip-views]
     [webchange.ui.components.copy-link.views :as copy-link-views]
+    [webchange.ui.components.date.views :as date-views]
     [webchange.ui.components.dialog.views :as dialog-views]
     [webchange.ui.components.form.views :as form-views]
     [webchange.ui.components.icon.views :as icon-views]
@@ -28,6 +29,7 @@
 (def chip chip-views/chip)
 (def confirm dialog-views/confirm)
 (def copy-link copy-link-views/copy-link)
+(def date date-views/date)
 (def flag icon-views/flag-icon)
 (def form form-views/form)
 (def icon icon-views/general-icon)

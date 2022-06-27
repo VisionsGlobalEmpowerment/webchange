@@ -1,0 +1,19 @@
+.bbs--date-wrapper {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .bbs--date-wrapper--header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .bbs--date {
+        input::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    }
+}

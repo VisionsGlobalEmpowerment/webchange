@@ -1,6 +1,7 @@
 (ns webchange.ui.components.input.views
   (:require
     [reagent.core :as r]
+    [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.icon.views :refer [general-icon]]
     [webchange.ui.components.input-error.views :refer [input-error]]
     [webchange.ui.components.input-label.views :refer [input-label]]
@@ -99,7 +100,7 @@
                        (or (= type "int")
                            (= type "float")) (-> (assoc :type "number")
                                                  (assoc :step step))
-                       (= type "password") (assoc :type "password")
+                       (some? type) (assoc :type type)
                        (some? id) (assoc :id id)
                        (some? name) (assoc :name name)
                        (some? value) (assoc :value value)
@@ -113,6 +114,14 @@
        (when (some? icon)
          [:div.icon-wrapper [general-icon {:icon icon}]])
        (when (some? action)
-         [:div.action-wrapper action])])
+         (print "action" action)
+         (let [with-text? (some? (:text action))
+               button-props (merge {:shape "rounded"
+                                    :color (if with-text? "yellow-1" "grey-3")}
+                                   action)]
+           [:div.action-wrapper
+            (if with-text?
+              [button button-props (:text action)]
+              [button button-props])]))])
     (finally
       (unsubscribe-document handle-document-key-down))))

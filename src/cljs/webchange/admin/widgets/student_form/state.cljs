@@ -86,6 +86,16 @@
   (fn [[student-loading? classes-loading?]]
     (or student-loading? classes-loading?)))
 
+(def callbacks-key :callbacks)
+
+(defn- set-callbacks
+  [db data]
+  (assoc db callbacks-key data))
+
+(defn- get-callback
+  [db callback-name]
+  (get-in db [callbacks-key callback-name] #()))
+
 ;; Class options
 
 (def class-options-key :class-options)
@@ -108,10 +118,10 @@
   ::init-add-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db       (-> db
-                   (assoc :school-id school-id)
-                   (reset-form-data)
-                   (set-classes-loading true))
+    {:db         (-> db
+                     (assoc :school-id school-id)
+                     (reset-form-data)
+                     (set-classes-loading true))
      :dispatch-n [[::warehouse/load-school-classes {:school-id school-id}
                    {:on-success [::load-school-classes-success]}]
                   [::warehouse/generate-school-access-code {:school-id school-id}
@@ -126,10 +136,11 @@
 (re-frame/reg-event-fx
   ::init-edit-form
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id student-id]}]]
+  (fn [{:keys [db]} [_ {:keys [school-id student-id] :as props}]]
     {:db       (-> db
                    (assoc :school-id school-id)
                    (assoc :student-id student-id)
+                   (set-callbacks (select-keys props [:on-remove]))
                    (reset-form-data)
                    (set-student-loading true))
      :dispatch [::warehouse/load-student {:student-id student-id}
@@ -159,21 +170,6 @@
       {:db (-> db
                (set-classes-loading false)
                (set-class-options class-options))})))
-
-(re-frame/reg-event-fx
-  ::generate-access-code
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [on-success]}]]
-    (let [school-id (:school-id db)]
-      {:dispatch [::warehouse/generate-school-access-code {:school-id school-id}
-                  {:on-success [::generate-access-code-success on-success]}]})))
-
-(re-frame/reg-event-fx
-  ::generate-access-code-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ on-success {:keys [access-code]}]]
-    (on-success access-code)
-    {}))
 
 (re-frame/reg-event-fx
   ::save
@@ -220,3 +216,74 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-student-saving db false)}))
+
+(re-frame/reg-event-fx
+  ::reset-form
+  (fn [{:keys [db]} [_ {:keys [_]}]]
+    {:db (dissoc db path-to-db)}))
+
+;; Remove
+
+(def remove-window-state-key :remove-window-state)
+
+(def remove-window-default-state {:open?        false
+                                  :in-progress? false
+                                  :done?        false})
+
+(defn- update-remove-window-state
+  [db data-patch]
+  (update db remove-window-state-key merge data-patch))
+
+(re-frame/reg-sub
+  ::remove-window-state
+  :<- [path-to-db]
+  #(get % remove-window-state-key remove-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db remove-window-default-state)}))
+
+(re-frame/reg-event-fx
+  ::remove-student
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    {:db       (update-remove-window-state db {:in-progress? true})
+     :dispatch [::warehouse/delete-student
+                {:student-id student-id}
+                {:on-success [::remove-student-success]
+                 :on-failure [::remove-student-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::remove-student-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:in-progress? false
+                                         :done?        true})}))
+
+(re-frame/reg-event-fx
+  ::remove-student-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:in-progress? false})}))
+
+(re-frame/reg-event-fx
+  ::handle-removed
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (get-callback db :on-remove)]
+      {:dispatch  [::close-remove-window]
+       ::callback [success-handler]})))
+
+(re-frame/reg-fx
+  ::callback
+  (fn [[callback & params]]
+    (when (fn? callback)
+      (apply callback params))))

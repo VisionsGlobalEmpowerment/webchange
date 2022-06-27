@@ -5,7 +5,7 @@
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.date :refer [date-str->locale-date]]
-    [webchange.utils.list :refer [remove-by-predicate update-by-predicate]]))
+    [webchange.utils.list :refer [update-by-predicate]]))
 
 (def path-to-db :page/school-teachers)
 

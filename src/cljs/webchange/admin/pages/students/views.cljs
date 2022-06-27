@@ -2,22 +2,12 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.students.state :as state]
-    [webchange.admin.components.list.views :as l]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
-(defn- header
-  []
-  (let [school-name @(re-frame/subscribe [::state/school-name])
-        handle-add-click #(re-frame/dispatch [::state/add-student])]
-    [page/_header {:title   school-name
-                  :icon    "school"
-                  :actions [ui/icon-button {:icon     "add"
-                                            :title    "New Student Account"
-                                            :on-click handle-add-click}
-                            "New Student Account"]}]))
 
-(defn- list-item
+
+#_(defn- list-item
   [{:keys [id] :as props}]
   (let [handle-edit-click #(re-frame/dispatch [::state/edit-student id])
         remove-student #(re-frame/dispatch [::state/remove-student id])
@@ -36,19 +26,55 @@
                                                     :variant  "light"
                                                     :on-click handle-edit-click}]]})]))
 
-(defn- content
+(defn- list-item
+  [{:keys [active? email id last-login name]}]
+  (let [handle-edit-click #(re-frame/dispatch [::state/edit-student id])
+        handle-active-click #(re-frame/dispatch [::state/set-student-status id (not active?)])
+        determinate? (boolean? active?)
+        loading? (= active? :loading)]
+    [ui/list-item {:avatar   nil
+                   :name     name
+                   :info     [{:key   "Email"
+                               :value email}
+                              {:key   "Last Login"
+                               :value last-login}]
+                   :controls [ui/switch {:label          (cond
+                                                           loading? "Saving.."
+                                                           (not determinate?) "..."
+                                                           active? "Active"
+                                                           :default "Inactive")
+
+                                         :checked?       active?
+                                         :indeterminate? (not determinate?)
+                                         :disabled?      loading?
+                                         :on-change      handle-active-click
+                                         :class-name     "active-switch"}]
+                   :actions  [{:icon     "edit"
+                               :title    "Edit teacher"
+                               :on-click handle-edit-click}]}]))
+
+(defn- students-list
   []
-  (let [list-data @(re-frame/subscribe [::state/students])]
-    [page/main-content
-     [l/list {:class-name "students-list"}
-      (for [{:keys [id] :as data} list-data]
-        ^{:key id}
-        [list-item data])]]))
+  (let [students @(re-frame/subscribe [::state/students])]
+    [ui/list {:class-name "students-list"}
+     (for [{:keys [id] :as student} students]
+       ^{:key id}
+       [list-item student])]))
 
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page {:class-name "page--students"}
-     [header]
-     [content]]))
+    (let [school-name @(re-frame/subscribe [::state/school-name])
+          students-number @(re-frame/subscribe [::state/students-number])
+          handle-add-click #(re-frame/dispatch [::state/add-student])]
+      [page/single-page {:class-name "page--students"
+                         :header     {:title   school-name
+                                      :icon    "school"
+                                      :stats   [{:icon    "students"
+                                                 :counter students-number
+                                                 :label   "Students"}]
+                                      :actions [{:text     "Add Student to School"
+                                                 :icon     "plus"
+                                                 :on-click handle-add-click}]}}
+       [students-list]])))

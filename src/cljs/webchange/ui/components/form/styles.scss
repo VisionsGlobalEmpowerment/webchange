@@ -12,6 +12,7 @@
     position: relative;
 
     .controls {
+        @include bbs--with-scrollbar;
         display: flex;
         flex: 1 1;
         flex-direction: column;
