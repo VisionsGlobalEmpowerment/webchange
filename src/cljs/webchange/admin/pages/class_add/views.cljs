@@ -1,7 +1,7 @@
-(ns webchange.admin.pages.add-class.views
+(ns webchange.admin.pages.class-add.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.pages.add-class.state :as state]
+    [webchange.admin.pages.class-add.state :as state]
     [webchange.admin.widgets.class-form.views :refer [class-add-form]]
     [webchange.admin.widgets.page.views :as page]))
 
@@ -12,7 +12,7 @@
     (let [handle-save #(re-frame/dispatch [::state/create-class-success])]
       [page/page {:class-name "page--class-add"}
        [page/_header {:title "Add New Class"
-                     :icon  "classes"}]
+                      :icon  "classes"}]
        [page/main-content {:class-name "page--class-add--content"}
         [class-add-form {:school-id school-id
                          :on-save   handle-save}]]])))

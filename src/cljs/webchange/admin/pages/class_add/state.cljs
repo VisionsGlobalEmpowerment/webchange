@@ -1,4 +1,4 @@
-(ns webchange.admin.pages.add-class.state
+(ns webchange.admin.pages.class-add.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
