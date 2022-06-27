@@ -801,6 +801,16 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::set-student-status
+  (fn [{:keys [_]} [_ {:keys [student-id active]} handlers]]
+    (create-fake-request {:key    :set-student-status
+                          :method :put
+                          :uri    (str "/api/students/" student-id "/status")
+                          :params {:active active}}
+                         handlers
+                         {:delay  2000})))
+
+(re-frame/reg-event-fx
   ::retry-audio-recognition
   (fn [{:keys [_]} [_ data handlers]]
     (create-request {:key    :retry-audio-recognition
