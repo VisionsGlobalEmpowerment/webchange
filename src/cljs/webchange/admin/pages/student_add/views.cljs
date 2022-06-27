@@ -10,10 +10,12 @@
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [school-id]}]
     (let [open-students-list #(re-frame/dispatch [::state/open-students-list])]
-      [page/page
-       [page/header {:title "Create Student Account"
-                     :icon  "students"}]
-       [page/main-content
-        [add-student-form {:school-id school-id
-                           :on-save   open-students-list
-                           :on-remove open-students-list}]]])))
+      [page/single-page {:class-name        "page--add-teacher"
+                         :header            {:title    "Add Student to School"
+                                             :icon     "students"
+                                             :on-close open-students-list}
+                         :background-image? true
+                         :form-container?   true}
+       [add-student-form {:school-id school-id
+                          :on-save   open-students-list
+                          :on-remove open-students-list}]])))

@@ -1,38 +1,50 @@
 (ns webchange.ui.pages.forms.views
   (:require
     [reagent.core :as r]
+    [webchange.admin.widgets.access-code.views :refer [access-code]]
     [webchange.ui.index :as ui]
     [webchange.ui.pages.layout :refer [layout panel]]))
 
-(def model {:name     {:label     "Name"
-                       :type      :text
-                       :required? true}
-            :password {:label "Password"
-                       :type  :password}
-            :type     {:label   "Selection"
-                       :type    :select
-                       :options [{:text  "Choose"
-                                  :value ""}
-                                 {:text  "Value 1"
-                                  :value "value-1"}
-                                 {:text  "Value 2"
-                                  :value "value-2"}]}
-            :about    {:label "About"
-                       :type  :text-multiline}
-            :link     {:label "Student Login Link"
-                       :type  :link
-                       :text  "Copy Link"}
-            :archive  {:label    "Archive School"
-                       :type     :action
-                       :icon     "archive"
-                       :on-click #(print "Form Action clicked:" %)}})
+(defn custom-control
+  [props]
+  [access-code (merge props
+                      {:school-id 1})])
 
-(def data {:name     "Custom User"
-           :password "admin123456"
-           :type     "value-2"
-           :about    "And who are you? The proud lord said\nThat I must bow so low?\nOnly a cat of a different coat\nThat's all the truth I know\nIn a coat of gold or a coat of red\nA lion still has claws\nMine are long and sharp my lord\nAs long and sharp as yours"
-           :link     "localhost:3000/"
-           :archive  :data-to-archive})
+(def model {:name          {:label     "Name"
+                            :type      :text
+                            :required? true}
+            :password      {:label "Password"
+                            :type  :password}
+            :type          {:label   "Selection"
+                            :type    :select
+                            :options [{:text  "Choose"
+                                       :value ""}
+                                      {:text  "Value 1"
+                                       :value "value-1"}
+                                      {:text  "Value 2"
+                                       :value "value-2"}]}
+            :about         {:label "About"
+                            :type  :text-multiline}
+            :date-of-birth {:label "Date of Birth"
+                            :type  :date}
+            :access-code   {:label   "Access Code"
+                            :type    :custom
+                            :control custom-control}
+            :link          {:label "Student Login Link"
+                            :type  :link
+                            :text  "Copy Link"}
+            :archive       {:label    "Archive School"
+                            :type     :action
+                            :icon     "archive"
+                            :on-click #(print "Form Action clicked:" %)}})
+
+(def data {:name        "Custom User"
+           :password    "admin123456"
+           :type        "value-2"
+           :about       "And who are you? The proud lord said\nThat I must bow so low?\nOnly a cat of a different coat\nThat's all the truth I know\nIn a coat of gold or a coat of red\nA lion still has claws\nMine are long and sharp my lord\nAs long and sharp as yours"
+           :link        "localhost:3000/"
+           :access-code "7777"
+           :archive     :data-to-archive})
 
 (def default-errors (->> (keys model)
                          (map #(vector % "Required Field"))
@@ -43,8 +55,8 @@
   [:div
    [:h3 title]
    (->> (r/current-component)
-       (r/children)
-       (into [:div {:class-name "form-wrapper"}]))])
+        (r/children)
+        (into [:div {:class-name "form-wrapper"}]))])
 
 (defn form-default
   []

@@ -116,13 +116,14 @@
              :type      options-type}]))
 
 (defn- custom-control
-  [{:keys [id form-id control] :as control-props}]
+  [{:keys [id form-id control] :as props}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
-    [control control-props {:value         value
-                            :error         error
-                            :handle-change handle-change}]))
+    [control (merge props
+                    {:value     value
+                     :error     error
+                     :on-change handle-change})]))
 
 (defn- form-control
   [{:keys [disabled? id form-id options spec]}]

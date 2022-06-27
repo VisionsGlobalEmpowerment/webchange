@@ -161,21 +161,6 @@
                (set-class-options class-options))})))
 
 (re-frame/reg-event-fx
-  ::generate-access-code
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [on-success]}]]
-    (let [school-id (:school-id db)]
-      {:dispatch [::warehouse/generate-school-access-code {:school-id school-id}
-                  {:on-success [::generate-access-code-success on-success]}]})))
-
-(re-frame/reg-event-fx
-  ::generate-access-code-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ on-success {:keys [access-code]}]]
-    (on-success access-code)
-    {}))
-
-(re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data {:keys [on-success]}]]
