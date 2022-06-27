@@ -10,7 +10,7 @@
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [school-id]}]
     (let [open-students-list #(re-frame/dispatch [::state/open-students-list])]
-      [page/single-page {:class-name        "page--add-teacher"
+      [page/single-page {:class-name        "page--add-student"
                          :header            {:title    "Add Student to School"
                                              :icon     "students"
                                              :on-close open-students-list}
