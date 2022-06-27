@@ -5,6 +5,7 @@
     [reagent.core :as r]
     [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.copy-link.views :refer [copy-link]]
+    [webchange.ui.components.date.views :refer [date]]
     [webchange.ui.components.form.form-action.views :refer [form-action]]
     [webchange.ui.components.input.views :refer [input]]
     [webchange.ui.components.form.state :as state]
@@ -43,14 +44,13 @@
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
-    [:<>
-     [c/label {:for       id
-               :required? required?} label]
-     [c/date {:id        id
-              :value     value
-              :error     error
-              :disabled? disabled?
-              :on-change handle-change}]]))
+    [date {:id        id
+           :value     value
+           :label     label
+           :error     error
+           :disabled? disabled?
+           :required? required?
+           :on-change handle-change}]))
 
 (defn- link-control
   [{:keys [form-id id] :as props}]

@@ -11,11 +11,8 @@
                toggle-visibility #(swap! text-visible? not)]
     [:div {:class-name (get-class-name (-> {"bbs--password-wrapper" true}
                                            (assoc class-name (some? class-name))))}
-     [input (-> props
-                (assoc :type (if @text-visible? "text" "password"))
-                (dissoc :class-name))]
-     (when-not disabled?
-       [button {:icon       (if @text-visible? "visibility-on" "visibility-off")
-                :class-name "visibility-button"
-                :color      (if @text-visible? "blue-2" "grey-4")
-                :on-click   toggle-visibility}])]))
+     [input (cond-> props
+                    :always (assoc :type (if @text-visible? "text" "password"))
+                    :always (dissoc :class-name)
+                    (not disabled?) (assoc :action {:icon     (if @text-visible? "visibility-on" "visibility-off")
+                                                    :on-click toggle-visibility}))]]))

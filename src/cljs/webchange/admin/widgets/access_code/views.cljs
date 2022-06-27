@@ -13,7 +13,6 @@
                       :class-name (get-class-name {"widget--access-code" true
                                                    class-name            (some? class-name)})
                       :action     (when-not disabled?
-                                    [ui/button {:shape      "rounded"
-                                                :class-name "widget--access-code--generate-button "
-                                                :on-click   handle-generate-click}
-                                     "Generate Code"])})]))
+                                    {:text       "Generate Code"
+                                     :class-name "widget--access-code--generate-button "
+                                     :on-click   handle-generate-click})})]))

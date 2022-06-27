@@ -22,6 +22,7 @@
 
     .action-wrapper {
         position: absolute;
+        bottom: 2px;
         right: 0;
 
         @include bbs--icon-size(12px);
