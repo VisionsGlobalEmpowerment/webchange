@@ -9,10 +9,12 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [school-id]}]
-    (let [handle-save #(re-frame/dispatch [::state/create-class-success])]
-      [page/page {:class-name "page--class-add"}
-       [page/_header {:title "Add New Class"
-                      :icon  "classes"}]
-       [page/main-content {:class-name "page--class-add--content"}
-        [class-add-form {:school-id school-id
-                         :on-save   handle-save}]]])))
+    (let [open-classes-list #(re-frame/dispatch [::state/open-classes-list])]
+      [page/single-page {:class-name        "page--class-add"
+                         :header            {:title    "Add New Class"
+                                             :icon     "classes"
+                                             :on-close open-classes-list}
+                         :background-image? true
+                         :form-container?   true}
+       [class-add-form {:school-id school-id
+                        :on-save   open-classes-list}]])))
