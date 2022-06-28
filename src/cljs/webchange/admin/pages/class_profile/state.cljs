@@ -29,7 +29,7 @@
   ::open-add-student-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (set-side-bar db :add-student)}))
+    {:db (set-side-bar db :students-add)}))
 
 (re-frame/reg-event-fx
   ::open-students-list

@@ -115,7 +115,14 @@
   (fn [{:keys [db]} [_]]
     {:db       (-> db
                    (reset-available-students)
-                   (reset-selected-students)
+                   (reset-selected-students))
+     :dispatch [::load-students]}))
+
+(re-frame/reg-event-fx
+  ::load-students
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db       (-> db
                    (set-data-loading true))
      :dispatch [::warehouse/load-unassigned-students
                 {:on-success [::load-students-success]}]}))

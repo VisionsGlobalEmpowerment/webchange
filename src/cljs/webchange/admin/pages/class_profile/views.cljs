@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.class-profile.state :as state]
+    [webchange.admin.pages.class-profile.students-add.views :refer [class-students-add]]
     [webchange.admin.pages.class-profile.students-list.views :refer [class-students-list]]
     [webchange.admin.pages.class-profile.teachers-add.views :refer [class-teachers-add]]
     [webchange.admin.pages.class-profile.teachers-list.views :refer [class-teachers-list]]
@@ -71,16 +72,6 @@
                        :on-save   handle-data-save
                        :on-cancel handle-cancel-click}]]))
 
-(defn- side-bar-add-student
-  [{:keys [class-id school-id]}]
-  (let [handle-cancel #(re-frame/dispatch [::state/open-class-form])
-        handle-save #(re-frame/dispatch [::state/handle-students-added %])]
-    [page/side-bar {:title "Add Student"}
-     [add-class-students {:class-id  class-id
-                          :school-id school-id
-                          :on-save   handle-save
-                          :on-cancel handle-cancel}]]))
-
 (defn- side-bar-assign-course
   [{:keys [class-id school-id]}]
   (let [handle-cancel #(re-frame/dispatch [::state/open-class-form])]
@@ -92,10 +83,10 @@
   (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
     (case side-bar-content
       :class-form [side-bar-class-form props]
+      :students-add [class-students-add props]
       :students-list [class-students-list props]
       :teachers-add [class-teachers-add props]
       :teachers-list [class-teachers-list props]
-      :add-student [side-bar-add-student props]
       :assign-course [side-bar-assign-course props]
       nil)))
 
