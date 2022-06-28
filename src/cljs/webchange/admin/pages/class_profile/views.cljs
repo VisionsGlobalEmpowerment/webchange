@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.class-profile.state :as state]
+    [webchange.admin.pages.class-profile.students-list.views :refer [class-students-list]]
     [webchange.admin.pages.class-profile.teachers-add.views :refer [class-teachers-add]]
     [webchange.admin.pages.class-profile.teachers-list.views :refer [class-teachers-list]]
     [webchange.admin.widgets.add-class-students.views :refer [add-class-students]]
@@ -11,12 +12,12 @@
     [webchange.admin.widgets.page.side-bar-page.views :as page]))
 
 (defn- class-counter
-  [{:keys [school-id class-id]}]
+  []
   (let [{:keys [students teachers]} @(re-frame/subscribe [::state/class-stats])
         courses @(re-frame/subscribe [::state/school-courses-number])
         class-course @(re-frame/subscribe [::state/class-course])
         handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])
-        handle-manage-students-click #(re-frame/dispatch [::state/open-manage-students-page school-id class-id])
+        handle-manage-students-click #(re-frame/dispatch [::state/open-students-list])
         handle-add-teacher-click #(re-frame/dispatch [::state/open-add-teacher-form])
         handle-manage-teachers-click #(re-frame/dispatch [::state/open-teachers-list])
         handle-manage-courses-click #(re-frame/dispatch [::state/open-assign-course-form])
@@ -91,6 +92,7 @@
   (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
     (case side-bar-content
       :class-form [side-bar-class-form props]
+      :students-list [class-students-list props]
       :teachers-add [class-teachers-add props]
       :teachers-list [class-teachers-list props]
       :add-student [side-bar-add-student props]
@@ -101,9 +103,10 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [props]
+    (print "props" props)
     [page/side-bar-page
      [page/main-content {:title "Class Profile"
                          :icon  "classes"}
-      [class-counter props]
+      [class-counter]
       [statistics]]
      [side-bar props]]))

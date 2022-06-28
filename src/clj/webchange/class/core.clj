@@ -139,12 +139,13 @@
                           (assoc :id id))]
     (db/update-student-access-code! prepared-data)))
 
-
 (defn unassign-student!
   [id]
-  (let [{user-id :user-id} (db/get-student {:id id})]
+  (let [{:keys [class-id user-id]} (db/get-student {:id id})]
     (db/unassign-student! {:id id})
-    (db/unassign-course-stat! {:user_id user-id}))
+    (db/unassign-course-stat! {:user_id user-id})
+    (when class-id
+      (e/dispatch {:type :students/removed-from-class :student-id id :class-id class-id})))
   [true {:id id}])
 
 (defn delete-student!
