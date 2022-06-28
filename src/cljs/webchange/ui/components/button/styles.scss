@@ -100,13 +100,15 @@
     }
 
     &.bbs--button--color-transparent {
+        color: bbs--color(blue-1);
+
         .bbs--button--icon {
             @include bbs--icon-color(bbs--color(blue-1));
         }
     }
 
     &.bbs--button--text-align-left {
-        .bbs--input-label {
+        .bbs--button--text {
             flex: 1 1;
             text-align: left;
         }

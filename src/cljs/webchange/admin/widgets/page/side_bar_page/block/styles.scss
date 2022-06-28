@@ -24,12 +24,11 @@
 
     .block--content {
         @include bbs--with-scrollbar;
+        @include bbs--with-scrollbar-margin;
         flex: 1 1;
         display: flex;
         flex-direction: column;
         overflow: auto;
         position: relative;
-        padding-right: 5px;
-        margin-right: -5px;
     }
 }

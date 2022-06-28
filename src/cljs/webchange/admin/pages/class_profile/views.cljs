@@ -2,9 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.class-profile.state :as state]
+    [webchange.admin.pages.class-profile.teachers-add.views :refer [class-teachers-add]]
     [webchange.admin.pages.class-profile.teachers-list.views :refer [class-teachers-list]]
     [webchange.admin.widgets.add-class-students.views :refer [add-class-students]]
-    [webchange.admin.widgets.add-class-teachers.views :refer [add-class-teachers]]
     [webchange.admin.widgets.class-form.views :refer [class-edit-form]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.counter.views :refer [counter]]
@@ -80,16 +80,6 @@
                           :on-save   handle-save
                           :on-cancel handle-cancel}]]))
 
-(defn- side-bar-add-teacher
-  [{:keys [class-id school-id]}]
-  (let [handle-cancel #(re-frame/dispatch [::state/open-class-form])
-        handle-save #(re-frame/dispatch [::state/handle-teachers-added %])]
-    [page/side-bar {:title "Add Teacher"}
-     [add-class-teachers {:class-id  class-id
-                          :school-id school-id
-                          :on-save   handle-save
-                          :on-cancel handle-cancel}]]))
-
 (defn- side-bar-assign-course
   [{:keys [class-id school-id]}]
   (let [handle-cancel #(re-frame/dispatch [::state/open-class-form])]
@@ -101,9 +91,9 @@
   (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
     (case side-bar-content
       :class-form [side-bar-class-form props]
+      :teachers-add [class-teachers-add props]
       :teachers-list [class-teachers-list props]
       :add-student [side-bar-add-student props]
-      :add-teacher [side-bar-add-teacher props]
       :assign-course [side-bar-assign-course props]
       nil)))
 

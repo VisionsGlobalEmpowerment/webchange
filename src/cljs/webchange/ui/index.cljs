@@ -30,6 +30,7 @@
 (def confirm dialog-views/confirm)
 (def copy-link copy-link-views/copy-link)
 (def date date-views/date)
+(def dialog dialog-views/dialog)
 (def flag icon-views/flag-icon)
 (def form form-views/form)
 (def icon icon-views/general-icon)

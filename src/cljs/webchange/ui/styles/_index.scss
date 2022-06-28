@@ -21,3 +21,8 @@
         border-radius: 9999px;
     }
 }
+
+@mixin bbs--with-scrollbar-margin {
+    padding-right: 5px;
+    margin-right: -5px;
+}

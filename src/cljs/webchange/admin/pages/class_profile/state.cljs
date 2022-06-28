@@ -35,7 +35,7 @@
   ::open-add-teacher-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (set-side-bar db :add-teacher)}))
+    {:db (set-side-bar db :teachers-add)}))
 
 (re-frame/reg-event-fx
   ::open-teachers-list
@@ -122,10 +122,17 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
     {:db         (assoc db :class-id class-id)
-     :dispatch-n [[::warehouse/load-class {:class-id class-id}
-                   {:on-success [::load-class-success]}]
+     :dispatch-n [[::load-class]
                   [::warehouse/load-school-courses {:school-id school-id}
                    {:on-success [::load-school-courses-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::load-class
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [class-id (:class-id db)]
+      {:dispatch [::warehouse/load-class {:class-id class-id}
+                  {:on-success [::load-class-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-class-success

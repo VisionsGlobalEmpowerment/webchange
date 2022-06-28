@@ -53,4 +53,4 @@
                                                          (str "bbs--button--chip--color-" chip-color) (some? chip-color)})}])]
           (if loading?
             [[circular-progress]]
-            children))))
+            [(into [:div.bbs--button--text] children)]))))
