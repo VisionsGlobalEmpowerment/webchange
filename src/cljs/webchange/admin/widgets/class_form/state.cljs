@@ -100,14 +100,12 @@
 (re-frame/reg-event-fx
   ::init-edit-form
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
-    {:db         (-> db
-                     (reset-form-data)
-                     (set-data-loading true))
-     :dispatch-n [[::warehouse/load-class {:class-id class-id}
-                   {:on-success [::load-class-success]}]
-                  [::warehouse/load-school-courses {:school-id school-id}
-                   {:on-success [::load-school-courses-success]}]]}))
+  (fn [{:keys [db]} [_ {:keys [class-id]}]]
+    {:db       (-> db
+                   (reset-form-data)
+                   (set-data-loading true))
+     :dispatch [::warehouse/load-class {:class-id class-id}
+                {:on-success [::load-class-success]}]}))
 
 (re-frame/reg-event-fx
   ::load-class-success

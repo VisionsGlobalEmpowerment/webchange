@@ -54,16 +54,20 @@
 (defn- side-bar-class-form
   [{:keys [class-id school-id]}]
   (let [form-editable? @(re-frame/subscribe [::state/form-editable?])
-        handle-edit-click #(re-frame/dispatch [::state/set-form-editable (not form-editable?)])
+        handle-edit-click #(re-frame/dispatch [::state/set-form-editable true])
+        handle-cancel-click #(re-frame/dispatch [::state/set-form-editable false])
         handle-data-save #(re-frame/dispatch [::state/update-class-data %])]
-    [page/side-bar {:title   "Class Info"
-                    :actions [{:icon     "edit"
-                               :variant  "light"
-                               :on-click handle-edit-click}]}
+    [page/side-bar {:title    "Class Info"
+                    :icon     "info"
+                    :focused? form-editable?
+                    :actions  (cond-> []
+                                      (not form-editable?) (conj {:icon     "edit"
+                                                                  :on-click handle-edit-click}))}
      [class-edit-form {:class-id  class-id
                        :school-id school-id
                        :editable? form-editable?
-                       :on-save   handle-data-save}]]))
+                       :on-save   handle-data-save
+                       :on-cancel handle-cancel-click}]]))
 
 (defn- side-bar-add-student
   [{:keys [class-id school-id]}]
