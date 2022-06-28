@@ -4,6 +4,7 @@
     [clojure.tools.logging :as log]
     [java-time :as jt]
     [webchange.accounts.core :as accounts]
+    [webchange.course.core :as courses]
     [webchange.db.core :as db]
     [webchange.events :as e]))
 
@@ -12,8 +13,9 @@
     {:classes classes}))
 
 (defn get-class [id]
-  (let [class (db/get-class {:id id})]
-    class))
+  (let [{:keys [course-slug] :as class} (db/get-class {:id id})
+        course-info (courses/get-course-info course-slug)]
+    (assoc class :course-info course-info)))
 
 (defn with-user
   [{user-id :user-id :as item}]
