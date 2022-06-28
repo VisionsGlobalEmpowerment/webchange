@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.class-profile.state :as state]
+    [webchange.admin.pages.class-profile.teachers-list.views :refer [class-teachers-list]]
     [webchange.admin.widgets.add-class-students.views :refer [add-class-students]]
     [webchange.admin.widgets.add-class-teachers.views :refer [add-class-teachers]]
     [webchange.admin.widgets.class-form.views :refer [class-edit-form]]
@@ -17,7 +18,7 @@
         handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])
         handle-manage-students-click #(re-frame/dispatch [::state/open-manage-students-page school-id class-id])
         handle-add-teacher-click #(re-frame/dispatch [::state/open-add-teacher-form])
-        handle-manage-teachers-click #(re-frame/dispatch [::state/open-manage-teachers-page school-id class-id])
+        handle-manage-teachers-click #(re-frame/dispatch [::state/open-teachers-list])
         handle-manage-courses-click #(re-frame/dispatch [::state/open-assign-course-form])
         add-button-props {:color      "blue-1"
                           :chip       "plus"
@@ -100,6 +101,7 @@
   (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
     (case side-bar-content
       :class-form [side-bar-class-form props]
+      :teachers-list [class-teachers-list props]
       :add-student [side-bar-add-student props]
       :add-teacher [side-bar-add-teacher props]
       :assign-course [side-bar-assign-course props]

@@ -37,6 +37,7 @@
 (def logo-with-name logo-views/logo-with-name)
 (def list list-views/list)
 (def list-item list-views/list-item)
+(def loading-overlay overlay-views/loading-overlay)
 (def navigation-icon icon-views/navigation-icon)
 (def focus-overlay overlay-views/focus-overlay)
 (def panel panel-views/panel)

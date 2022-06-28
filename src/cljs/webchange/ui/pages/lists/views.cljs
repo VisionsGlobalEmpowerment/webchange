@@ -43,4 +43,13 @@
                                              :on-change handle-change}]
                        :actions  [{:icon     "edit"
                                    :title    "Edit school"
-                                   :on-click #(print "Handle Edit click")}]}])]]]])
+                                   :on-click #(print "Handle Edit click")}]}])
+      [ui/list-item {:avatar  nil
+                     :name    "Teacher Name Dense"
+                     :dense?  true
+                     :actions [{:icon     "trash"
+                                :title    "Remove from class"
+                                :on-click #(print "Handle Remove click")}
+                               {:icon     "edit"
+                                :title    "Edit"
+                                :on-click #(print "Handle Edit click")}]}]]]]])

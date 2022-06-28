@@ -50,9 +50,10 @@
                       action)])]))
 
 (defn list-item
-  [{:keys [class-name] :as props}]
-  (into [:div {:class-name (get-class-name {"bbs--list-item" true
-                                            class-name       (some? class-name)})}]
+  [{:keys [class-name dense?] :as props}]
+  (into [:div {:class-name (get-class-name {"bbs--list-item"        true
+                                            "bbs--list-item--dense" dense?
+                                            class-name              (some? class-name)})}]
         (concat [[item-avatar props]
                  [item-name props]]
                 (->> (r/current-component)

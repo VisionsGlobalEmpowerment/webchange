@@ -8,7 +8,7 @@
     [webchange.game-changer.steps.select-character.views-available-list :refer [available-characters-list]]
     [webchange.game-changer.steps.select-character.views-selected-list :refer [selected-characters-list]]
     [webchange.ui-framework.components.utils :refer [get-class-name]]
-    [webchange.utils.list :refer [remove-at-position remove-by-predicate replace-at-position]]))
+    [webchange.utils.list :refer [remove-at-position replace-at-position]]))
 
 (defn- add-character
   [list {:keys [name skeleton skin] :as data}]

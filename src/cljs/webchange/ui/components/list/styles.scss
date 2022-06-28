@@ -38,6 +38,7 @@
         flex: 1 1;
         display: flex;
         align-items: center;
+        overflow: hidden;
     }
 
     .bbs--list-item--stats {
@@ -85,6 +86,16 @@
             .bbs--list-item--info-item--value {
                 @include bbs--noto-14-r;
             }
+        }
+    }
+
+    &.bbs--list-item--dense {
+        gap: 16px;
+        padding: 10px;
+
+        .bbs--list-item--actions {
+            gap: 9px;
+            padding-left: 9px;
         }
     }
 }

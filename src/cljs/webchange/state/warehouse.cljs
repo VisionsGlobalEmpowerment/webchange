@@ -808,7 +808,7 @@
                           :uri    (str "/api/students/" student-id "/status")
                           :params {:active active}}
                          handlers
-                         {:delay  2000})))
+                         {:delay 2000})))
 
 (re-frame/reg-event-fx
   ::retry-audio-recognition
@@ -1114,6 +1114,15 @@
                          {:delay 3000})))
 
 (re-frame/reg-event-fx
+  ::remove-teacher-from-class
+  (fn [{:keys [_]} [_ {:keys [class-id teacher-id]} handlers]]
+    (create-fake-request {:key    :remove-teacher-from-class
+                          :method :delete
+                          :uri    (str "/api/teachers/" teacher-id "/class/" class-id)}
+                         handlers
+                         {:delay 2000})))
+
+(re-frame/reg-event-fx
   ::load-class-teachers
   (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
     (create-request {:key    :load-class-teachers
@@ -1146,7 +1155,7 @@
                           :uri    (str "/api/teachers/" teacher-id "/status")
                           :params {:active active}}
                          handlers
-                         {:delay  2000})))
+                         {:delay 2000})))
 
 (re-frame/reg-event-fx
   ::load-overall-statistics

@@ -40,7 +40,7 @@
                                                          (str "bbs--button--state-" state)          (some? state)
                                                          (str "bbs--button--text-align-" text-align) (some? text-align)
                                                          class-name                                 (some? class-name)})
-                            :disabled   disabled?
+                            :disabled   (or disabled? loading?)
                             :on-click   handle-click}
                            (some? title) (assoc :title title))
            (when (and (some? icon)
