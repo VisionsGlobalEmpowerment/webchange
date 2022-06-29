@@ -7,7 +7,7 @@
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn button
-  [{:keys [class-name chip chip-color color disabled? href icon icon-side loading? on-click shape state target text-align title variant]
+  [{:keys [class-name chip chip-color color disabled? href icon icon-side loading? on-click shape state target text text-align title variant]
     :or   {color      "yellow-1"
            shape      "rectangle"
            disabled?  false
@@ -26,7 +26,7 @@
          (some #{text-align} ["left" "center" "right"])]}
   (let [children (->> (r/current-component)
                       (r/children))
-        icon-button? (empty? children)
+        icon-button? (and (nil? text) (empty? children))
         shape (if icon-button? "rounded" shape)
         handle-click (fn []
                        (if (some? href)
@@ -53,4 +53,4 @@
                                                          (str "bbs--button--chip--color-" chip-color) (some? chip-color)})}])]
           (if loading?
             [[circular-progress]]
-            [(into [:div.bbs--button--text] children)]))))
+            [(into [:div.bbs--button--text] (or text children))]))))

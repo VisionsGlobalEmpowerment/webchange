@@ -31,4 +31,15 @@
         overflow: auto;
         position: relative;
     }
+
+    .block--footer {
+        display: grid;
+        column-gap: 16px;
+
+        @each $columns in 1, 2, 3, 4 {
+            &.block--footer--columns-#{$columns} {
+                grid-template-columns: repeat($columns, 1fr);
+            }
+        }
+    }
 }

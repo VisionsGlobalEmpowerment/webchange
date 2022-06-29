@@ -4,7 +4,7 @@
     [webchange.ui.index :refer [get-class-name] :as ui]))
 
 (defn block
-  [{:keys [actions class-name class-name-content focused? icon title]}]
+  [{:keys [actions class-name class-name-content focused? footer icon title]}]
   [:<>
    (when focused?
      [ui/focus-overlay])
@@ -24,4 +24,10 @@
     (->> (r/current-component)
          (r/children)
          (into [:div {:class-name (get-class-name {"block--content"   true
-                                                   class-name-content (some? class-name-content)})}]))]])
+                                                   class-name-content (some? class-name-content)})}]))
+    (when-not (empty? footer)
+      [:div {:class-name (get-class-name {"block--footer"                                true
+                                          (str "block--footer--columns-" (count footer)) true})}
+       (for [[idx action] (map-indexed vector footer)]
+         ^{:key idx}
+         [ui/button action])])]])
