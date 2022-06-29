@@ -15,7 +15,8 @@
 (defn get-class [id]
   (let [{:keys [course-slug] :as class} (db/get-class {:id id})
         course-info (courses/get-course-info course-slug)]
-    (assoc class :course-info course-info)))
+    (when (some? class)
+      (assoc class :course-info course-info))))
 
 (defn with-user
   [{user-id :user-id :as item}]
