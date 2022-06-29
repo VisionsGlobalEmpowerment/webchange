@@ -38,6 +38,20 @@
              :class-name "widget--page--header-action"}
      text]))
 
+(defn- header-info
+  [{:keys [info]}]
+  [:div.widget--page--header-info
+   (for [{:keys [key value]} info]
+     ^{:key key}
+     [:div.widget--page--header-info-block
+      [:div.widget--page--header-info-block--key key]
+      [:div.widget--page--header-info-block--value value]])])
+
+(defn- header-controls
+  [{:keys [controls]}]
+  (into [:div {:class-name (get-class-name {"widget--page--header-controls" true})}]
+        controls))
+
 (defn- header-actions
   [{:keys [actions]}]
   [:div {:class-name (get-class-name {"widget--page--header-actions" true})}
@@ -62,6 +76,8 @@
    (when-not (empty? stats)
      [header-stats props])
    [:div.widget--page--header--filler]
+   [header-info props]
+   [header-controls props]
    [header-actions props]
    (when (fn? on-close)
      [ui/button {:icon       "close"

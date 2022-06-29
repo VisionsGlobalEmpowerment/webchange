@@ -1,3 +1,5 @@
+@import "mixins";
+
 .bbs--select {
     position: relative;
 
@@ -22,6 +24,7 @@
 
         min-width: 60px;
 
+        background: transparent;
         -moz-appearance: none;
         -webkit-appearance: none;
 

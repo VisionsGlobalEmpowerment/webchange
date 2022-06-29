@@ -1,8 +1,9 @@
 .widget--page--header {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 28px;
 
+    height: 90px;
     padding: 24px 30px;
     border-radius: 6px;
 
@@ -46,6 +47,49 @@
 
     .widget--page--header--filler {
         flex: 1 1;
+        display: none;
+    }
+
+    .widget--page--header-info {
+        flex: 1 1;
+
+        .widget--page--header-info-block {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .widget--page--header-info-block--key {
+                @include bbs--noto-14-sb;
+            }
+
+            .widget--page--header-info-block--value {
+                @include bbs--noto-14-r;
+            }
+        }
+    }
+
+    .widget--page--header-controls {
+        @include bbs--select-border-color(bbs--color(white));
+        @include bbs--select-text-color(bbs--color(white));
+
+        flex: 1 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 32px;
+
+        & > * {
+            flex: 1 1;
+        }
+
+        .bbs--input-wrapper {
+            gap: 0
+        }
+
+        label {
+            @include bbs--noto-14-sb;
+            color: bbs--color(white);
+        }
     }
 
     .widget--page--header-actions {
