@@ -5,6 +5,7 @@
     [webchange.ui.components.button.views :as button-views]
     [webchange.ui.components.card.views :as card-views]
     [webchange.ui.components.chip.views :as chip-views]
+    [webchange.ui.components.complete-progress.views :as complete-progress-views]
     [webchange.ui.components.copy-link.views :as copy-link-views]
     [webchange.ui.components.date.views :as date-views]
     [webchange.ui.components.dialog.views :as dialog-views]
@@ -28,6 +29,7 @@
 (def card card-views/card)
 (def chip chip-views/chip)
 (def confirm dialog-views/confirm)
+(def complete-progress complete-progress-views/complete-progress)
 (def copy-link copy-link-views/copy-link)
 (def date date-views/date)
 (def dialog dialog-views/dialog)

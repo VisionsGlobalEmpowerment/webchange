@@ -1,0 +1,11 @@
+#page--complete-progresses {
+    .progresses-panel {
+        border: dashed 1px bbs--color(grey-3);
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 32px;
+        width: 320px;
+        margin: auto;
+    }
+}
