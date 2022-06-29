@@ -29,19 +29,37 @@
   ::open-add-student-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (set-side-bar db :add-student)}))
+    {:db (set-side-bar db :students-add)}))
+
+(re-frame/reg-event-fx
+  ::open-students-list
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :students-list)}))
 
 (re-frame/reg-event-fx
   ::open-add-teacher-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (set-side-bar db :add-teacher)}))
+    {:db (set-side-bar db :teachers-add)}))
+
+(re-frame/reg-event-fx
+  ::open-teachers-list
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :teachers-list)}))
 
 (re-frame/reg-event-fx
   ::open-class-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-side-bar db :class-form)}))
+
+(re-frame/reg-event-fx
+  ::open-assign-course-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar db :assign-course)}))
 
 ;; Class Form
 
@@ -85,13 +103,42 @@
              (update-class-data data)
              (set-form-editable false))}))
 
+;; school courses
+
+(def school-courses-key :school-courses)
+
+(defn- set-school-courses
+  [db data]
+  (assoc db school-courses-key data))
+
+(re-frame/reg-sub
+  ::school-courses
+  :<- [path-to-db]
+  #(get % school-courses-key []))
+
+(re-frame/reg-sub
+  ::school-courses-number
+  :<- [::school-courses]
+  #(count %))
+
+;;
+
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id]}]]
-    {:db       (assoc db :class-id class-id)
-     :dispatch [::warehouse/load-class {:class-id class-id}
-                {:on-success [::load-class-success]}]}))
+  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
+    {:db         (assoc db :class-id class-id)
+     :dispatch-n [[::load-class]
+                  [::warehouse/load-school-courses {:school-id school-id}
+                   {:on-success [::load-school-courses-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::load-class
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [class-id (:class-id db)]
+      {:dispatch [::warehouse/load-class {:class-id class-id}
+                  {:on-success [::load-class-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-class-success
@@ -99,10 +146,21 @@
   (fn [{:keys [db]} [_ {:keys [class]}]]
     {:db (set-class-data db class)}))
 
+(re-frame/reg-event-fx
+  ::load-school-courses-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ courses]]
+    {:db (set-school-courses db courses)}))
+
 (re-frame/reg-sub
   ::class-stats
   :<- [::class-data]
-  :stats)
+  #(get % :stats {}))
+
+(re-frame/reg-sub
+  ::class-course
+  :<- [::class-data]
+  #(get % :course-info))
 
 (re-frame/reg-event-fx
   ::handle-students-added
@@ -119,8 +177,3 @@
     {:db (-> db
              (update-class-data (select-keys class [:stats]))
              (set-side-bar :class-form))}))
-
-(re-frame/reg-event-fx
-  ::open-manage-students-page
-  (fn [{:keys [_]} [_ school-id class-id]]
-    {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]}))

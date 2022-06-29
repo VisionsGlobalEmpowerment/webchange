@@ -4,7 +4,7 @@
 
     @each $columns in 1, 2, 3, 4 {
         &.widget--counter--columns-#{$columns} {
-            grid-template-columns: repeat($columns, auto);
+            grid-template-columns: repeat($columns, 1fr);
         }
     }
 }

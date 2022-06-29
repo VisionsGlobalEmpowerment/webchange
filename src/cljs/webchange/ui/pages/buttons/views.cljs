@@ -17,7 +17,11 @@
                  {:color      "blue-2"
                   :chip       "plus"
                   :chip-color "green-2"
-                  :shape      "rounded"}])
+                  :shape      "rounded"}
+                 {:color      "transparent"
+                  :icon       "plus"
+                  :shape      "rounded"
+                  :text-align "left"}])
 
 (def variants-2 [{:icon "restore"}
                  {:color "yellow-2"

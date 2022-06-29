@@ -4,6 +4,7 @@
     [clojure.tools.logging :as log]
     [java-time :as jt]
     [webchange.accounts.core :as accounts]
+    [webchange.course.core :as courses]
     [webchange.db.core :as db]
     [webchange.events :as e]))
 
@@ -12,8 +13,10 @@
     {:classes classes}))
 
 (defn get-class [id]
-  (let [class (db/get-class {:id id})]
-    class))
+  (let [{:keys [course-slug] :as class} (db/get-class {:id id})
+        course-info (courses/get-course-info course-slug)]
+    (when (some? class)
+      (assoc class :course-info course-info))))
 
 (defn with-user
   [{user-id :user-id :as item}]
@@ -71,8 +74,10 @@
 
 (defn update-class!
   [id data]
-  (let [prepared-data (-> (db/transform-keys-one-level ->snake_case_keyword data)
-                          (assoc :id id))]
+  (let [current-data (get-class id)
+        prepared-data (merge current-data
+                             (-> (db/transform-keys-one-level ->snake_case_keyword data)
+                                 (assoc :id id)))]
     (db/update-class! prepared-data)
     [true {:id   id
            :data data}]))
@@ -137,12 +142,13 @@
                           (assoc :id id))]
     (db/update-student-access-code! prepared-data)))
 
-
 (defn unassign-student!
   [id]
-  (let [{user-id :user-id} (db/get-student {:id id})]
+  (let [{:keys [class-id user-id]} (db/get-student {:id id})]
     (db/unassign-student! {:id id})
-    (db/unassign-course-stat! {:user_id user-id}))
+    (db/unassign-course-stat! {:user_id user-id})
+    (when class-id
+      (e/dispatch {:type :students/removed-from-class :student-id id :class-id class-id})))
   [true {:id id}])
 
 (defn delete-student!

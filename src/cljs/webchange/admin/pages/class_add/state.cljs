@@ -1,4 +1,4 @@
-(ns webchange.admin.pages.add-class.state
+(ns webchange.admin.pages.class-add.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
@@ -19,7 +19,7 @@
              (assoc :school-id school-id))}))
 
 (re-frame/reg-event-fx
-  ::create-class-success
+  ::open-classes-list
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [school-id (:school-id db)]

@@ -4,14 +4,36 @@
     [reagent.core :as r]
     [webchange.admin.components.select-list.views :refer [select-list]]
     [webchange.admin.widgets.add-class-students.state :as state]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.admin.widgets.student-form.views :refer [add-student-form]]
+    [webchange.ui.index :as ui]))
+
+(defn- add-student
+  [{:keys [school-id]}]
+  (r/with-let [dialog-open? (r/atom false)
+               handle-close-click #(reset! dialog-open? false)
+               handle-add-click #(reset! dialog-open? true)
+               handle-save #(do (re-frame/dispatch [::state/load-students])
+                                (reset! dialog-open? false))]
+    [:<>
+     [ui/button {:icon       "plus"
+                 :color      "transparent"
+                 :shape      "rounded"
+                 :text-align "left"
+                 :on-click   handle-add-click}
+      "New Student Account"]
+     (when @dialog-open?
+       [ui/dialog {:title    "New Student Account"
+                   :on-close handle-close-click}
+        [add-student-form {:school-id school-id
+                           :on-save   handle-save}]])]))
 
 (defn- students-list
   []
   (let [students @(re-frame/subscribe [::state/students])
         handle-change #(re-frame/dispatch [::state/set-selected-students %])]
-    [select-list {:data      students
-                  :on-change handle-change}]))
+    [select-list {:data       students
+                  :on-change  handle-change
+                  :class-name "students-list"}]))
 
 (defn- actions
   [{:keys [class-id on-cancel on-save]}]
@@ -22,6 +44,7 @@
     [:div.actions
      [ui/button {:title      "Reset adding"
                  :class-name "cancel-button"
+                 :color      "blue-1"
                  :on-click   handle-cancel-click}
       "Cancel"]
      [ui/button {:title      "Add selected students"
@@ -30,11 +53,6 @@
                  :loading?   data-saving?
                  :on-click   handle-add-click}
       "Add"]]))
-
-(defn- loading-indicator
-  []
-  [:div.loading-indicator
-   [ui/circular-progress]])
 
 (defn add-class-students
   []
@@ -54,6 +72,8 @@
        (let [data-loading? @(re-frame/subscribe [::state/data-loading?])]
          [:div {:class-name "widget--add-class-students"}
           (if-not data-loading?
-            [students-list props]
-            [loading-indicator])
-          [actions props]]))}))
+            [:<>
+             [add-student props]
+             [students-list props]
+             [actions props]]
+            [ui/loading-overlay])]))}))

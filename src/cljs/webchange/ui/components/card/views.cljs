@@ -87,7 +87,7 @@
          (or (nil? icon-background) (some #{icon-background} available-values/color))
          (or (nil? background) (some #{background} available-values/color))
          (or (nil? counter) (number? counter))
-         (string? text)
+         (or (nil? text) (string? text))
          (some #{type} ["horizontal" "vertical"])
          (or (nil? actions) (every? #(and (string? (:text %))
                                           (fn? (:on-click %)))

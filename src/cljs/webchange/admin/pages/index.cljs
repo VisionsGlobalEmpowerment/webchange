@@ -6,9 +6,9 @@
     [webchange.admin.pages.account-my.views :as account-my]
     [webchange.admin.pages.activities.views :as activities]
     [webchange.admin.pages.activity-edit.views :as activity-edit]
-    [webchange.admin.pages.add-class.views :as add-class]
     [webchange.admin.pages.books.views :as books]
     [webchange.admin.pages.book-edit.views :as book-edit]
+    [webchange.admin.pages.class-add.views :as class-add]
     [webchange.admin.pages.class-profile.views :as class-profile]
     [webchange.admin.pages.classes.views :as classes]
     [webchange.admin.pages.course-add.views :as course-add]
@@ -38,9 +38,9 @@
             :account-my       account-my/page
             :activities       activities/page
             :activity-edit    activity-edit/page
-            :add-class        add-class/page
             :books            books/page
             :book-edit        book-edit/page
+            :class-add        class-add/page
             :class-profile    class-profile/page
             :class-students   class-students/page
             :classes          classes/page

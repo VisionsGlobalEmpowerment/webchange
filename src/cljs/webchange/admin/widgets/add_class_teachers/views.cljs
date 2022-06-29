@@ -5,7 +5,7 @@
     [webchange.admin.components.select-list.views :refer [select-list]]
     [webchange.admin.widgets.add-class-teachers.state :as state]
     [webchange.admin.widgets.create-teacher.views :refer [create-teacher]]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (defn- add-teacher
   [{:keys [school-id]}]
@@ -15,17 +15,18 @@
                handle-save #(do (re-frame/dispatch [::state/load-school-teachers school-id])
                                 (reset! dialog-open? false))]
     [:<>
-     [ui/icon-button {:icon       "add"
-                      :variant    "light"
-                      :class-name "new-teacher-button"
-                      :direction  "revert"
-                      :on-click   handle-add-click}
+     [ui/button {:icon       "plus"
+                 :class-name "new-teacher-button"
+                 :color      "transparent"
+                 :shape      "rounded"
+                 :text-align "left"
+                 :on-click   handle-add-click}
       "New Teacher Account"]
-     [ui/dialog {:open?    @dialog-open?
-                 :title    "New Teacher Account"
-                 :on-close handle-close-click}
-      [create-teacher {:school-id school-id
-                       :on-save   handle-save}]]]))
+     (when @dialog-open?
+       [ui/dialog {:title    "New Teacher Account"
+                   :on-close handle-close-click}
+        [create-teacher {:school-id school-id
+                         :on-save   handle-save}]])]))
 
 (defn- teachers-list
   []
@@ -45,6 +46,7 @@
     [:div.actions
      [ui/button {:title      "Reset adding"
                  :class-name "cancel-button"
+                 :color      "blue-1"
                  :on-click   handle-cancel-click}
       "Cancel"]
      [ui/button {:title      "Add selected teachers"
@@ -53,11 +55,6 @@
                  :loading?   data-saving?
                  :on-click   handle-add-click}
       "Add"]]))
-
-(defn- loading-indicator
-  []
-  [:div.loading-indicator
-   [ui/circular-progress]])
 
 (defn add-class-teachers
   []
@@ -76,8 +73,9 @@
      (fn [props]
        (let [data-loading? @(re-frame/subscribe [::state/data-loading?])]
          [:div {:class-name "widget--add-class-teachers"}
-          [add-teacher props]
           (if-not data-loading?
-            [teachers-list props]
-            [loading-indicator])
-          [actions props]]))}))
+            [:<>
+             [add-teacher props]
+             [teachers-list props]
+             [actions props]]
+            [ui/loading-overlay])]))}))

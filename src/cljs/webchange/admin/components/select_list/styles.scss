@@ -1,18 +1,14 @@
 .component--select-list {
+    @include bbs--with-scrollbar;
+    @include bbs--with-scrollbar-margin;
     overflow: auto;
 
     .empty-item {
-        color: $disabled-color;
-        font-size: 14px;
-    }
-
-    .component--select-list-item {
-        .check-icon {
-            @include icon-color($color-disabled);
-
-            &.selected {
-                @include icon-color($color-pink);
-            }
-        }
+        @include bbs--noto-14-sb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1 1;
+        color: bbs--color(grey-3);
     }
 }

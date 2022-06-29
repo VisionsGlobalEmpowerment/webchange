@@ -2,52 +2,50 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.classes.state :as state]
-    [webchange.admin.components.list.views :as l]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as c]))
-
-(defn- header
-  []
-  (let [school-name @(re-frame/subscribe [::state/school-name])
-        handle-add-click #(re-frame/dispatch [::state/add-class])]
-    [page/_header {:title   school-name
-                  :icon    "school"
-                  :actions [c/icon-button {:icon     "add"
-                                           :on-click handle-add-click}
-                            "New Class"]}]))
+    [webchange.ui.index :as ui]))
 
 (defn- list-item
-  [{:keys [id stats] :as props}]
-  (let [handle-edit-click #(re-frame/dispatch [::state/edit-class id])
-        handle-remove-click #(re-frame/dispatch [::state/remove-class id])]
-    [l/list-item (merge props
-                        {:actions [:<>
-                                   [c/icon-button {:icon     "remove"
-                                                   :title    "Remove"
-                                                   :variant  "light"
-                                                   :on-click handle-remove-click}]
-                                   [c/icon-button {:icon     "edit"
-                                                   :title    "Edit"
-                                                   :variant  "light"
-                                                   :on-click handle-edit-click}]]})
-     [l/content-right
-      [:div.class-stats
-       [c/icon {:icon "students"}]
-       (:students stats)]]]))
+  [{:keys [id name stats]}]
+  (let [{:keys [students teachers]} stats
+        handle-edit-click #(re-frame/dispatch [::state/edit-class id])
+        handle-students-click #(re-frame/dispatch [::state/open-class-students id])
+        handle-teachers-click #(re-frame/dispatch [::state/open-class-teachers id])]
+    [ui/list-item {:name    name
+                   :stats   [{:counter  students
+                              :icon     "students"
+                              :text     "Students"
+                              :on-click handle-students-click}
+                             {:counter  teachers
+                              :icon     "teachers"
+                              :text     "Teachers"
+                              :on-click handle-teachers-click}]
+                   :actions [{:icon     "edit"
+                              :title    "Edit teacher"
+                              :on-click handle-edit-click}]}]))
 
-(defn- content
+(defn- classes-list
   []
-  (let [classes-data @(re-frame/subscribe [::state/classes-list-data])]
-    [page/main-content {:title "Classes"}
-     [l/list {:class-name "classes-list"}
-      (for [{:keys [id] :as class-data} classes-data]
-        ^{:key id}
-        [list-item class-data])]]))
+  (let [classes @(re-frame/subscribe [::state/classes-list-data])]
+    [ui/list {:class-name "classes-list"}
+     (for [{:keys [id] :as class-data} classes]
+       ^{:key id}
+       [list-item class-data])]))
 
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page {:class-name "page--classes"}
-     [header]
-     [content]]))
+    (let [school-name @(re-frame/subscribe [::state/school-name])
+          classes-number @(re-frame/subscribe [::state/classes-number])
+          handle-add-click #(re-frame/dispatch [::state/add-class])]
+      [page/single-page {:class-name "page--classes"
+                         :header     {:title   school-name
+                                      :icon    "school"
+                                      :stats   [{:icon    "classes"
+                                                 :counter classes-number
+                                                 :label   "Classes"}]
+                                      :actions [{:text     "Add New Class"
+                                                 :icon     "plus"
+                                                 :on-click handle-add-click}]}}
+       [classes-list]])))

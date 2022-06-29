@@ -6,13 +6,17 @@
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn dialog
-  [{:keys [actions class-name class-name-actions content-class-name title]}]
+  [{:keys [actions class-name class-name-actions content-class-name on-close title]}]
   [focus-overlay
    [:div {:class-name (get-class-name {"bbs--dialog" true
                                        class-name    (some? class-name)})}
     (when (some? title)
       [:div.header
-       [:h1 title]])
+       [:h1 title]
+       (when (fn? on-close)
+         [button {:icon     "close"
+                  :color    "blue-1"
+                  :on-click on-close}])])
     (->> (r/current-component)
          (r/children)
          (into [:div {:class-name (get-class-name {"bbs--dialog--content" true

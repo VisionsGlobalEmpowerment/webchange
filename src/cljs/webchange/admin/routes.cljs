@@ -12,7 +12,7 @@
                           "/archived"                   :schools-archived
                           ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
                                                          "/classes"  {""                           :classes
-                                                                      "/add"                       :add-class
+                                                                      "/add"                       :class-add
                                                                       ["/" [#"[\w-%]+" :class-id]] {""          :class-profile
                                                                                                     "/students" {""                             :class-students
                                                                                                                  ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
@@ -39,7 +39,7 @@
                                          ["/" [#"[\w-%]+" :book-id]] :book-edit}}})
 
 (def sitemap
-  {:dashboard {:schools {:school-profile   {:classes        {:add-class     true
+  {:dashboard {:schools {:school-profile   {:classes        {:class-add     true
                                                              :class-profile true}
                                             :students       {:student-add true}
                                             :teachers       {:teacher-add     true

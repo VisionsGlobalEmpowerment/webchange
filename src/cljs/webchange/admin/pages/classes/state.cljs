@@ -50,7 +50,7 @@
 (re-frame/reg-sub
   ::school-name
   :<- [::school-data]
-  :name)
+  #(get % :name ""))
 
 (re-frame/reg-sub
   ::classes
@@ -59,12 +59,18 @@
     (get data :classes [])))
 
 (re-frame/reg-sub
+  ::classes-number
+  :<- [::classes]
+  #(count %))
+
+(re-frame/reg-sub
   ::classes-list-data
   :<- [::classes]
   (fn [classes]
     (map (fn [{:keys [created-at] :as class-data}]
            (-> class-data
                (select-keys [:id :name :stats])
+               (update :stats #(merge {:students 0 :teachers 0} %))
                (merge {:name-description [["Created" created-at]]})))
          classes)))
 
@@ -73,7 +79,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [school-id (:id (get-school-data db))]
-      {:dispatch [::routes/redirect :add-class :school-id school-id]})))
+      {:dispatch [::routes/redirect :class-add :school-id school-id]})))
 
 (re-frame/reg-event-fx
   ::edit-class
@@ -83,7 +89,15 @@
       {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
 
 (re-frame/reg-event-fx
-  ::remove-class
+  ::open-class-students
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ class-id]]
-    (print "::remove-class" class-id)))
+  (fn [{:keys [db]} [_ class-id]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+
+(re-frame/reg-event-fx
+  ::open-class-teachers
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ class-id]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
