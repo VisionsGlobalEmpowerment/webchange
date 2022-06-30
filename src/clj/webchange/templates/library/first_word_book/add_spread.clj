@@ -162,6 +162,21 @@
              (spread-idx->dialog-name spread-idx :left)
              (spread-idx->dialog-name spread-idx :right)]})
 
+(defn create-spread
+  [activity-data {id :id :as args}]
+  (-> activity-data
+      (add-spread-object id)
+      (add-spread-action id)
+      (add-dialogs id args)
+      (add-texts id args)
+      (add-images id args)))
+
+(defn edit-spread
+  [activity-data {id :id :as args}]
+  (-> activity-data
+      (add-texts id args)
+      (add-images id args)))
+
 (defn add-spread
   [activity-data args]
   {:pre [(string? (:text-left args))
@@ -172,8 +187,4 @@
     (-> activity-data
         (assoc-in [:metadata :last-spread-idx] current-spread-idx)
         (update-in [:actions :set-total-spreads-number :var-value] inc)
-        (add-spread-object current-spread-idx)
-        (add-spread-action current-spread-idx)
-        (add-dialogs current-spread-idx args)
-        (add-texts current-spread-idx args)
-        (add-images current-spread-idx args))))
+        (create-spread (assoc args :id current-spread-idx)))))

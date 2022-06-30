@@ -360,17 +360,23 @@
         :variables {:status nil}})
 
 (defn- init-concept
-  [t {:keys [letter image word]}]
+  [t {:keys [letter image word] :as template-options}]
   (-> t
       (assoc-in [:actions :init-concept :var-value] {:letter letter
                                                      :letter-big (str/upper-case letter)
                                                      :image-src (:src image)
                                                      :concept-name word})
-      (update :assets concat [{:url (:src image) :type "image"}])))
+      (update :assets concat [{:url (:src image) :type "image"}])
+      (assoc-in [:metadata :saved-props :template-options] template-options)))
 
 (defn f
   [args]
   (-> (common/init-metadata m t args)
       (init-concept args)))
 
-(core/register-template m f)
+(defn- update-template
+  [activity-data {action-name :action-name :as args}]
+  (case (keyword action-name)
+    :template-options (init-concept activity-data args)))
+
+(core/register-template m f update-template)

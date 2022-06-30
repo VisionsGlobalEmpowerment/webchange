@@ -2,8 +2,8 @@
   (:require
     [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
-    [webchange.templates.library.first-word-book.add-spread :refer [add-spread spread-idx->dialog-name]]
-    [webchange.templates.library.first-word-book.remove-last-spread :refer [remove-last-spread]]
+    [webchange.templates.library.first-word-book.add-spread :refer [create-spread edit-spread add-spread spread-idx->dialog-name]]
+    [webchange.templates.library.first-word-book.remove-last-spread :refer [remove-spread remove-last-spread]]
     [webchange.templates.library.first-word-book.timeout :as timeout]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.utils.text :as text-utils]))
@@ -424,19 +424,77 @@
           (not-empty (:subtitle args))
           (assoc-in [:objects :spread-1-title-text :chunks] (text-utils/text->chunks (:subtitle args)))))
 
+(defn- delete-spreads
+  [activity-data spreads-idx]
+  (reduce remove-spread activity-data spreads-idx))
+
+(defn- edit-spreads
+  [activity-data spreads]
+  (reduce edit-spread activity-data spreads))
+
+(defn- add-spreads
+  [activity-data spreads]
+  (reduce create-spread activity-data spreads))
+
+(defn- process-spreads
+  [activity-data {:keys [spreads delete-last-spread]}]
+  (let [prev-spreads-number (-> activity-data
+                                (get-in [:metadata :saved-props :template-options :spreads])
+                                (count))
+        new-spreads-number (count spreads)
+        title-spreads-number 2
+        spreads-to-delete (concat (if delete-last-spread
+                                    [prev-spreads-number]
+                                    [])
+                                  (range new-spreads-number prev-spreads-number))
+        spreads-to-edit (->> spreads
+                             (take prev-spreads-number)
+                             (drop-last (if delete-last-spread 1 0)))
+        spreads-to-add (->> spreads
+                            (drop (count spreads-to-edit)))]
+    (-> activity-data
+        (delete-spreads spreads-to-delete)
+        (edit-spreads spreads-to-edit)
+        (add-spreads spreads-to-add)
+        (assoc-in [:actions :set-total-spreads-number :var-value] (+ title-spreads-number new-spreads-number)))))
+
+(defn- template-options
+  [activity-data {:keys [spreads delete-last] :as args}]
+  (-> activity-data
+      (set-data args)
+      (process-spreads args)
+      (assoc-in [:metadata :saved-props :template-options] args)))
+
+(defn- add-spread-to-saved-props
+  [activity-data spread]
+  (let [current-spread-idx (get-in activity-data [:metadata :last-spread-idx])]
+    (update-in activity-data [:metadata :saved-props :template-options :spreads] concat [(assoc spread :id current-spread-idx)])))
+
+(defn- remove-spread-from-saved-props
+  [template-options spread]
+  (update template-options :spreads drop-last))
+
 (defn create
   [args]
   (-> template
       (set-data args)
       (timeout/add-action-data)
-      (assoc-in [:metadata :actions] (:actions metadata))))
+      (assoc-in [:metadata :actions] (:actions metadata))
+      (assoc-in [:metadata :saved-props :template-options] (assoc args :spreads []))))
 
 (defn edit
   [old-data {:keys [action-name] :as args}]
   (case action-name
-    "add" (add-spread old-data args)
-    "edit" (set-data old-data args)
-    "remove-last" (remove-last-spread old-data)))
+    "add" (-> old-data
+              (add-spread args)
+              (add-spread-to-saved-props args))
+    "edit" (-> old-data
+               (set-data args)
+               (update-in [:metadata :saved-props :template-options] merge args))
+    "remove-last" (-> old-data
+                      (remove-last-spread)
+                      (update-in [:metadata :saved-props :template-options] remove-spread-from-saved-props))
+    "template-options" (template-options old-data args)))
 
 (core/register-template
   metadata create edit)

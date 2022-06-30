@@ -1,6 +1,5 @@
 (ns webchange.templates.library.recording-studio.rhyme
   (:require
-    [webchange.templates.common-actions :refer [update-activity]]
     [webchange.templates.library.recording-studio.generate-actions :refer [add-control-actions
                                                                            add-backward-compatibility-action]]
     [webchange.templates.library.recording-studio.generate-buttons :refer [add-start-play-button
@@ -476,12 +475,17 @@
                                         {:url thumbnail-3 :type "image"}
                                         {:url video-3 :type "video"}]
                                        assets))))
-        (assoc-in [:actions :main :data] main-actions))))
+        (assoc-in [:actions :main :data] main-actions)
+        (assoc-in [:metadata :saved-props :template-options] {:song-1 {:thumbnail {:src thumbnail-1}
+                                                                       :video video-1}
+                                                              :song-2 {:thumbnail {:src thumbnail-2}
+                                                                       :video video-2}
+                                                              :song-3 {:thumbnail {:src thumbnail-3}
+                                                                       :video video-3}}))))
 
-(defn update-template [activity-data args]
-  (let [{:keys [action-name thumbnail video]} args
+(defn- change-song [activity-data args n]
+  (let [{:keys [thumbnail video]} args
         thumbnail (:src thumbnail)
-        n (read-string (str (last action-name)))
         index (* 2 (dec n))]
     (-> activity-data
         (assoc-in [:assets index] {:url thumbnail :type "image"})
@@ -497,7 +501,26 @@
                    :var-name (str "video-src-" n)
                    :var-value video}))))
 
+(defn- template-options
+  [activity-data args]
+  (-> activity-data
+      (change-song (:song-1 args) 1)
+      (change-song (:song-2 args) 2)
+      (change-song (:song-3 args) 3)
+      (assoc-in [:metadata :saved-props :template-options] args)))
+
+(defn- update-activity
+  [old-data {:keys [action-name] :as args}]
+  (case (keyword action-name)
+    :change-song-1 (-> (change-song old-data args 1)
+                       (assoc-in [:metadata :saved-props :template-options :song-1] args))
+    :change-song-2 (-> (change-song old-data args 2)
+                       (assoc-in [:metadata :saved-props :template-options :song-2] args))
+    :change-song-3 (-> (change-song old-data args 3)
+                       (assoc-in [:metadata :saved-props :template-options :song-3] args))
+    :template-options (template-options old-data args)))
+
 (core/register-template
-  m
-  create
-  update-template)
+ m
+ create
+ update-activity)

@@ -589,18 +589,30 @@
       (init-correct args)
       (init-incorrect args)
       (assoc-in [:objects :timer :time] (:time args))
-      (set-speed 5)))
+      (set-speed 5)
+      (assoc-in [:metadata :saved-props :template-options] (assoc args :speed 5))))
 
 (defn change-speed [data speed]
   (-> data
       (update-in [:actions :init-vars :data] #(vec (drop-last 4 %)))
-      (set-speed speed)))
+      (set-speed speed)
+      (assoc-in [:metadata :saved-props :template-options :speed] speed)))
+
+(defn- template-options
+  [activity-data args]
+  (-> activity-data
+      (init-correct args)
+      (init-incorrect args)
+      (assoc-in [:objects :timer :time] (:time args))
+      (set-speed (:speed args))
+      (assoc-in [:metadata :saved-props :template-options] args)))
 
 (defn fu
   [old-data {:keys [action-name] :as args}]
-  (case action-name
-    "change-time" (assoc-in old-data [:objects :timer :time] (:time args))
-    "change-speed" (change-speed old-data (:speed args))))
+  (case (keyword action-name)
+    :change-time (assoc-in old-data [:objects :timer :time] (:time args))
+    :change-speed (change-speed old-data (:speed args))
+    :template-options (template-options old-data args)))
 
 (core/register-template
   m f fu)

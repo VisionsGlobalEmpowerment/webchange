@@ -1,5 +1,6 @@
 (ns webchange.templates.library.sandbox-digging
   (:require
+    [clojure.set :as cset]
     [webchange.templates.core :as core]
     [webchange.templates.utils.dialog :as dialog]))
 
@@ -598,26 +599,48 @@
 
 (defn add-images
   [activity-data args]
-  (-> activity-data
-      (assoc-in [:actions :set-image1-1 :image] (get-in args [:image1-1 :src]))
-      (assoc-in [:actions :set-image1-2 :image] (get-in args [:image1-2 :src]))
-      (assoc-in [:actions :set-image1-3 :image] (get-in args [:image1-3 :src]))
-      (assoc-in [:actions :set-image2-1 :image] (get-in args [:image2-1 :src]))
-      (assoc-in [:actions :set-image2-2 :image] (get-in args [:image2-2 :src]))
-      (assoc-in [:actions :set-image2-3 :image] (get-in args [:image2-3 :src]))
+  (let [new-images #{(get-in args [:image1-1 :src])
+                     (get-in args [:image1-2 :src])
+                     (get-in args [:image1-3 :src])
+                     (get-in args [:image2-1 :src])
+                     (get-in args [:image2-2 :src])
+                     (get-in args [:image2-3 :src])}
+        existing-assets (->> activity-data
+                             :assets
+                             (filter #(= "image" (:type %)))
+                             (map :url)
+                             (into #{}))
+        new-assets (->> (cset/difference new-images existing-assets)
+                        (map (fn [url]
+                               {:url url :size 1 :type "image"})))]
+    (-> activity-data
+        (assoc-in [:actions :set-image1-1 :image] (get-in args [:image1-1 :src]))
+        (assoc-in [:actions :set-image1-2 :image] (get-in args [:image1-2 :src]))
+        (assoc-in [:actions :set-image1-3 :image] (get-in args [:image1-3 :src]))
+        (assoc-in [:actions :set-image2-1 :image] (get-in args [:image2-1 :src]))
+        (assoc-in [:actions :set-image2-2 :image] (get-in args [:image2-2 :src]))
+        (assoc-in [:actions :set-image2-3 :image] (get-in args [:image2-3 :src]))
 
-      (update :assets concat [{:url (get-in args [:image1-1 :src]), :size 1, :type "image"}
-                              {:url (get-in args [:image1-2 :src]), :size 1, :type "image"}
-                              {:url (get-in args [:image1-3 :src]), :size 1, :type "image"}
-                              {:url (get-in args [:image2-1 :src]), :size 1, :type "image"}
-                              {:url (get-in args [:image2-2 :src]), :size 1, :type "image"}
-                              {:url (get-in args [:image2-3 :src]), :size 1, :type "image"}])))
+        (update :assets concat new-assets))))
 
 (defn create
   [args]
   (-> t
-      (add-images args)))
+      (add-images args)
+      (assoc-in [:metadata :saved-props :template-options] args)))
+
+(defn- template-options
+  [activity-data args]
+  (-> activity-data
+      (add-images args)
+      (assoc-in [:metadata :saved-props :template-options] args)))
+
+(defn- update-activity
+  [old-data {:keys [action-name] :as args}]
+  (case (keyword action-name)
+    :template-options (template-options old-data args)))
 
 (core/register-template
-  m
-  create)
+ m
+ create
+ update-activity)

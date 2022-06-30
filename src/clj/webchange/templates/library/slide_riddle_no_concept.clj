@@ -371,10 +371,11 @@
 
 (defn- create-round
   [activity-data args]
-  (let [next-round (-> activity-data
-                       (get-in [:metadata :next-round-id])
-                       (or 0)
-                       (inc))
+  (let [next-round (or (:which args)
+                       (-> activity-data
+                           (get-in [:metadata :next-round-id])
+                           (or 0)
+                           (inc)))
         round-action-name (str "round-" next-round)
         riddle-name (str "round-" next-round "-riddle")
         tap-name (str "round-" next-round "-tap")
@@ -461,30 +462,30 @@
     (:id (nth (filter #(.startsWith (:title %) "Round") tracks) index))))
 
 (defn- remove-round
-  [activity-data args]
+  [activity-data round-id]
   (let [tracks (get-in activity-data [:metadata :tracks])
-        round-name (find-round-name (:which args) tracks)
+        round-name (find-round-name round-id tracks)
         main-track (-> tracks
-                     first
-                     (update :nodes (fn [nodes]
-                                      (vec (filter #(not= (:track-id %) round-name) nodes)))))
+                       first
+                       (update :nodes (fn [nodes]
+                                        (vec (filter #(not= (:track-id %) round-name) nodes)))))
         new-tracks (->> tracks
-                     (filter #(not= (:id %) round-name))
-                     (drop 1)
-                     (concat [main-track])
-                     (vec))
+                        (filter #(not= (:id %) round-name))
+                        (drop 1)
+                        (concat [main-track])
+                        (vec))
         actions (:actions activity-data)
         new-actions (->  actions
-                      (select-keys (filter #(not (.startsWith (name %) round-name)) (keys actions)))
-                      (update-in [:script :data]
-                        (fn [data]
-                          (filter #(not (= (:id %) round-name)) data))))]
+                         (select-keys (filter #(not (.startsWith (name %) round-name)) (keys actions)))
+                         (update-in [:script :data]
+                                    (fn [data]
+                                      (filter #(not (= (:id %) round-name)) data))))]
     (-> activity-data
-      (update-in [:metadata :num-rounds] dec)
-      recreate-drop-downs
-      (assoc-in [:metadata :tracks] new-tracks)
-      (assoc-in [:actions] new-actions)
-      rename-rounds)))
+        (update-in [:metadata :num-rounds] dec)
+        recreate-drop-downs
+        (assoc-in [:metadata :tracks] new-tracks)
+        (assoc-in [:actions] new-actions)
+        rename-rounds)))
 
 (defn- edit-round
   [activity-data args]
@@ -505,7 +506,8 @@
 (defn create-activity
   [args]
   (-> (common/init-metadata m t args)
-    (assoc-in [:metadata :num-rounds] 0)))
+      (assoc-in [:metadata :num-rounds] 0)
+      (assoc-in [:metadata :saved-props :template-options :rounds] [])))
 
 (defn- get-round-data [activity-data round-id]
   (let [tracks (get-in activity-data [:metadata :tracks])
@@ -532,12 +534,73 @@
                   (create-paired-changes activity-data)))
     activity-data))
 
+(defn- delete-rounds
+  [activity-data rounds]
+  (reduce remove-round activity-data rounds))
+
+(defn- edit-rounds
+  [activity-data rounds]
+  (reduce edit-round activity-data rounds))
+
+(defn- add-rounds
+  [activity-data rounds]
+  (reduce create-round activity-data rounds))
+
+(defn- template-options
+  [activity-data {:keys [rounds delete-last-round]}]
+  (let [prev-rounds-number (-> activity-data
+                               (get-in [:metadata :saved-props :template-options :rounds])
+                               (count))
+        new-rounds-number (count rounds)
+        rounds-to-delete (concat (if delete-last-round
+                                   [prev-rounds-number]
+                                   [])
+                                 (range new-rounds-number prev-rounds-number))
+        rounds-to-edit (->> rounds
+                            (take prev-rounds-number)
+                            (drop-last (if delete-last-round 1 0)))
+        rounds-to-add (->> rounds
+                           (drop (count rounds-to-edit)))]
+    (-> activity-data
+        (delete-rounds rounds-to-delete)
+        (edit-rounds rounds-to-edit)
+        (add-rounds rounds-to-add)
+        (assoc-in [:metadata :saved-props :template-options] {:rounds rounds}))))
+
+(defn- add-round-to-saved-props
+  [activity-data round]
+  (let [current-round (-> (get-in activity-data [:metadata :next-round-id])
+                          (dec))]
+    (update-in activity-data [:metadata :saved-props :template-options :rounds] concat
+               [(assoc round :which current-round)])))
+
+(defn- remove-round-from-saved-props
+  [activity-data round-id]
+  (update-in activity-data [:metadata :saved-props :template-options :rounds]
+             (fn [rounds]
+               (remove #(= round-id (:which %)) rounds))))
+
+(defn- edit-round-in-saved-props
+  [activity-data {:keys [which] :as round}]
+  (update-in activity-data [:metadata :saved-props :template-options :rounds]
+             (fn [rounds]
+               (map #(if (= which (:which %))
+                       round
+                       %)))))
+
 (defn update-activity
   [old-data args]
   (create-saved-props
-    (case (:action-name args)
-      "add-round" (create-round old-data args)
-      "remove-round" (remove-round old-data args)
-      "edit-round" (edit-round old-data args))))
+   (case (:action-name args)
+     "add-round" (-> old-data
+                     (create-round args)
+                     (add-round-to-saved-props args))
+     "remove-round" (-> old-data
+                        (remove-round (:which args))
+                        (remove-round-from-saved-props (:which args)))
+     "edit-round" (-> old-data
+                      (edit-round args)
+                      (edit-round-in-saved-props args))
+     "template-options" (template-options old-data args))))
 
 (core/register-template m create-activity update-activity)

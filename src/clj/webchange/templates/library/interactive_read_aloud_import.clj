@@ -183,12 +183,10 @@
        (into {})))
 
 (defn- import-book
-  [activity-data book-course-slug]
-  (let [scene-slug "book"
-        course-slug (codec/url-decode book-course-slug)
-        {:keys [assets objects]} (course/get-scene-latest-version course-slug scene-slug)]
+  [activity-data book-id]
+  (let [{:keys [assets objects]} (course/get-activity-current-version book-id)]
     (when (empty? objects)
-      (throw (ex-info "Book not found for IRA" {:book book-course-slug})))
+      (throw (ex-info "Book not found for IRA" {:book book-id})))
     (-> activity-data
         (update :assets concat assets)
         (update :objects merge (remove-editable objects))
@@ -198,20 +196,120 @@
 
 (defn- create-template
   [props]
-  (-> template
-      (characters/add-characters (:characters props))
-      (import-book (:book props))
-      (update :scene-objects concat [["book-background"] ["book" "page-numbers"]])
-      (apply-page-size page-params)
-      (assoc-in [:metadata :actions] (:actions metadata))
-      (assoc-in [:metadata :saved-props :wizard] props)))
+  (let [scene-slug "book"
+        course-slug (codec/url-decode (:book props))
+        {book-id :scene-id} (course/scene-slug->id course-slug scene-slug)]
+    (-> template
+        (characters/add-characters (:characters props))
+        (import-book book-id)
+        (update :scene-objects concat [["book-background"] ["book" "page-numbers"]])
+        (apply-page-size page-params)
+        (assoc-in [:metadata :actions] (:actions metadata))
+        (assoc-in [:metadata :saved-props :wizard] props)
+        (assoc-in [:metadata :saved-props :template-options :book-id] book-id))))
+
+(defn- remove-old-book
+  [activity-data book-id]
+  (let [{:keys [objects]} (course/get-activity-current-version book-id)]
+    (when (empty? objects)
+      (throw (ex-info "Old book not found for IRA" {:book book-id})))
+    (-> activity-data
+        (update :objects #(apply dissoc % (keys objects))))))
+
+(defn- remove-effects
+  [action]
+  (let [filter? (fn [action]
+                  (and (= "sequence-data" (:type action))
+                       (= "action" (-> action :data second :type))))]
+    (cond
+      (filter? action) nil
+      (= "sequence-data" (:type action)) (update action :data #(->> %
+                                                                    (map remove-effects)
+                                                                    (remove nil?)))
+      (= "parallel" (:type action)) (update action :data #(->> %
+                                                               (map remove-effects)
+                                                               (remove nil?)))
+      :else action)))
+
+(defn- remove-text-animations
+  [action]
+  (let [filter? (fn [action]
+                  (and (= "sequence-data" (:type action))
+                       (= "text-animation" (-> action :data second :type))))]
+    (cond
+      (filter? action) nil
+      (= "sequence-data" (:type action)) (update action :data #(->> %
+                                                                    (map remove-text-animations)
+                                                                    (remove nil?)))
+      (= "parallel" (:type action)) (update action :data #(->> %
+                                                               (map remove-text-animations)
+                                                               (remove nil?)))
+      :else action)))
+
+(defn- remove-empty-parallel
+  [action]
+  (let [filter? (fn [action]
+                  (and (= "parallel" (:type action))
+                       (empty? (-> action :data))))]
+    (cond
+      (filter? action) nil
+      (= "sequence-data" (:type action)) (update action :data #(->> %
+                                                                    (map remove-empty-parallel)
+                                                                    (remove nil?)))
+      (= "parallel" (:type action)) (update action :data #(->> %
+                                                               (map remove-empty-parallel)
+                                                               (remove nil?)))
+      :else action)))
+
+(defn- rebuild-dialog
+  [activity-data book-id]
+  (let [{:keys [objects actions]} (course/get-activity-current-version book-id)
+        show-book-effect {:data
+                          [{:type "empty", :duration 0}
+                           {:type "action" :id "show-book"}],
+                          :type "sequence-data"}
+        turn-page-effect {:data
+                          [{:type "empty", :duration 0}
+                           {:type "action" :id "next-page"}],
+                          :type "sequence-data"}
+        pages (-> objects :book :pages)
+        phrases (->> pages
+                     (map (fn [{:keys [action]}]
+                            (when action
+                              (get actions (keyword action)))))
+                     (map :data))
+        with-effects (-> (reduce (fn [{:keys [acc right?]} phrase]
+                                   (if right?
+                                     {:acc (concat acc phrase [turn-page-effect])
+                                      :right? false}
+                                     {:acc (concat acc phrase)
+                                      :right? true}))
+                                 {:acc [show-book-effect]
+                                  :right? true}
+                                 phrases)
+                         :acc)]
+    (-> activity-data
+        (update-in [:actions :dialog-main] remove-effects)
+        (update-in [:actions :dialog-main] remove-text-animations)
+        (update-in [:actions :dialog-main] remove-empty-parallel)
+        (update-in [:actions :dialog-main :data] concat with-effects))))
+
+(defn- template-options
+  [activity-data {book-id :book-id}]
+  (let [current-book-id (get-in activity-data [:metadata :saved-props :template-options :book-id])]
+    (-> activity-data
+        (remove-old-book current-book-id)
+        (import-book book-id)
+        (rebuild-dialog book-id)
+        (assoc-in [:metadata :saved-props :template-options :book-id] book-id))))
 
 (defn- update-template
   [activity-data {action-name :action-name :as args}]
   (case (keyword action-name)
     :add-dialog (add-dialog activity-data args)
     :add-question (add-question activity-data args)
-    :add-question-object (add-question-object activity-data args)))
+    :add-question-object (add-question-object activity-data args)
+    :template-options (template-options activity-data args)))
 
 (core/register-template
   metadata

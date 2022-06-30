@@ -347,11 +347,16 @@
   [t {:keys [letter]}]
   (assoc-in t [:actions :init-concept :var-value] letter))
 
-(defn f
-  [t args]
+(defn create-activity
+  [args]
   (-> t
-      (init-concept args)))
+      (init-concept args)
+      (assoc-in [:metadata :saved-props :template-options] args)))
 
-(core/register-template
- m
- (partial f t))
+(defn- update-activity
+  [old-data args]
+  (-> old-data
+      (init-concept args)
+      (assoc-in [:metadata :saved-props :template-options] args)))
+
+(core/register-template m create-activity update-activity)

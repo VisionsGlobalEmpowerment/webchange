@@ -377,143 +377,150 @@
         :metadata      {:autostart true}})
 
 (defn add-cloud
-  [scene args]
-  [{(common/make-name-unique scene "cloud-left-dialog")     {:type               "sequence-data",
-                                                             :editor-type        "dialog",
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type "animation-sequence", :phrase-text (:left-text args), :audio nil}]}],
-                                                             :phrase             "cloud-left-dialog",
-                                                             :phrase-description "Cloud left dialog"}
-    (common/make-name-unique scene "cloud-right-dialog")    {:type               "sequence-data",
-                                                             :editor-type        "dialog",
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type "animation-sequence", :phrase-text (:right-text args), :audio nil}]}],
-                                                             :phrase             "cloud-right-dialog",
-                                                             :phrase-description "Cloud right dialog"}
-    (common/make-name-unique scene "cloud-center-dialog")   {:type               "sequence-data",
-                                                             :editor-type        "dialog",
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type "animation-sequence", :phrase-text (:whole-text args), :audio nil}]}],
-                                                             :phrase             "cloud-center-dialog",
-                                                             :phrase-description "Cloud center dialog"}
-    (common/make-name-unique scene "correct-answer-dialog") {:type               "sequence-data",
-                                                             :editor-type        "dialog",
-                                                             :data               [{:type "sequence-data"
-                                                                                   :data [{:type "empty" :duration 0}
-                                                                                          {:type        "animation-sequence",
-                                                                                           :phrase-text "New action",
-                                                                                           :audio       nil}]}],
-                                                             :phrase             "correct-answer",
-                                                             :phrase-description "Correct answer"}}
+  [suffix args]
+  [{(common/make-name-unique-by-suffix "cloud-left-dialog" suffix)     {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text (:left-text args), :audio nil}]}],
+                                                                        :phrase             "cloud-left-dialog",
+                                                                        :phrase-description "Cloud left dialog"}
+    (common/make-name-unique-by-suffix "cloud-right-dialog" suffix)    {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text (:right-text args), :audio nil}]}],
+                                                                        :phrase             "cloud-right-dialog",
+                                                                        :phrase-description "Cloud right dialog"}
+    (common/make-name-unique-by-suffix "cloud-center-dialog" suffix)   {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text (:whole-text args), :audio nil}]}],
+                                                                        :phrase             "cloud-center-dialog",
+                                                                        :phrase-description "Cloud center dialog"}
+    (common/make-name-unique-by-suffix "correct-answer-dialog" suffix) {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type        "animation-sequence",
+                                                                                                      :phrase-text "New action",
+                                                                                                      :audio       nil}]}],
+                                                                        :phrase             "correct-answer",
+                                                                        :phrase-description "Correct answer"}}
 
-   {(common/make-name-unique scene "cloud-left-img")        {:type   "image"
-                                                             :src    "/raw/img/onset-and-rime/cloud.png"
-                                                             :x      0
-                                                             :states cloud-states,
-                                                             :y      0}
-    (common/make-name-unique scene "cloud-left-text")       {:type           "text"
-                                                             :text           (:left-text args)
-                                                             :x              320
-                                                             :y              220
-                                                             :align          "center"
-                                                             :vertical-align "bottom"
-                                                             :font-family    "Lexend Deca"
-                                                             :font-size      110
-                                                             :fill           "black"}
-    (common/make-name-unique scene "cloud-left")            {:type       "group"
-                                                             :x          25
-                                                             :y          176
-                                                             :transition (common/make-name-unique scene "cloud-left")
-                                                             :children   [(common/make-name-unique scene "cloud-left-img")
-                                                                          (common/make-name-unique scene "cloud-left-text")]
-                                                             :states     {:disable {:interactive false}
-                                                                          :enable  {:interactive true}}
-                                                             :actions    {:click {:type   "action"
-                                                                                  :id     "cloud-left-click-check"
-                                                                                  :on     "click"
-                                                                                  :params {:target     (common/make-name-unique scene "cloud-left")
-                                                                                           :target-img (common/make-name-unique scene "cloud-left-img")}}}},
-    (common/make-name-unique scene "cloud-right-img")       {:type       "image"
-                                                             :src        "/raw/img/onset-and-rime/cloud.png"
-                                                             :transition (common/make-name-unique scene "cloud-right-img")
-                                                             :states     cloud-states
-                                                             :x          0
-                                                             :y          0}
-    (common/make-name-unique scene "cloud-right-text")      {:type           "text"
-                                                             :text           (:right-text args)
-                                                             :x              320
-                                                             :y              220
-                                                             :align          "center"
-                                                             :vertical-align "bottom"
-                                                             :font-family    "Lexend Deca"
-                                                             :font-size      110
-                                                             :fill           "black"}
-    (common/make-name-unique scene "cloud-right")           {:type       "group"
-                                                             :x          1214
-                                                             :y          176
-                                                             :transition (common/make-name-unique scene "cloud-right")
-                                                             :children   [(common/make-name-unique scene "cloud-right-img")
-                                                                          (common/make-name-unique scene "cloud-right-text")]
-                                                             :states     {:disable {:interactive false}
-                                                                          :enable  {:interactive true}}
-                                                             :actions    {:click {:type   "action"
-                                                                                  :id     "cloud-right-clicked"
-                                                                                  :on     "click"
-                                                                                  :params {:target     (common/make-name-unique scene "cloud-right")
-                                                                                           :target-img (common/make-name-unique scene "cloud-right-img")}}}}
-    (common/make-name-unique scene "moving-clouds")         {:type       "group"
-                                                             :visible    false
-                                                             :transition (common/make-name-unique scene "moving-clouds")
-                                                             :children   [(common/make-name-unique scene "cloud-right")
-                                                                          (common/make-name-unique scene "cloud-left")]
-                                                             :states     {:hide {:visible false} :show {:visible true}}}
+   {(common/make-name-unique-by-suffix "cloud-left-img" suffix)        {:type   "image"
+                                                                        :src    "/raw/img/onset-and-rime/cloud.png"
+                                                                        :x      0
+                                                                        :states cloud-states,
+                                                                        :y      0}
+    (common/make-name-unique-by-suffix "cloud-left-text" suffix)       {:type           "text"
+                                                                        :text           (:left-text args)
+                                                                        :x              320
+                                                                        :y              220
+                                                                        :align          "center"
+                                                                        :vertical-align "bottom"
+                                                                        :font-family    "Lexend Deca"
+                                                                        :font-size      110
+                                                                        :fill           "black"}
+    (common/make-name-unique-by-suffix "cloud-left" suffix)            {:type       "group"
+                                                                        :x          25
+                                                                        :y          176
+                                                                        :transition (common/make-name-unique-by-suffix "cloud-left" suffix)
+                                                                        :children   [(common/make-name-unique-by-suffix "cloud-left-img" suffix)
+                                                                                     (common/make-name-unique-by-suffix "cloud-left-text" suffix)]
+                                                                        :states     {:disable {:interactive false}
+                                                                                     :enable  {:interactive true}}
+                                                                        :actions    {:click {:type   "action"
+                                                                                             :id     "cloud-left-click-check"
+                                                                                             :on     "click"
+                                                                                             :params {:target     (common/make-name-unique-by-suffix "cloud-left" suffix)
+                                                                                                      :target-img (common/make-name-unique-by-suffix "cloud-left-img" suffix)}}}},
+    (common/make-name-unique-by-suffix "cloud-right-img" suffix)       {:type       "image"
+                                                                        :src        "/raw/img/onset-and-rime/cloud.png"
+                                                                        :transition (common/make-name-unique-by-suffix "cloud-right-img" suffix)
+                                                                        :states     cloud-states
+                                                                        :x          0
+                                                                        :y          0}
+    (common/make-name-unique-by-suffix "cloud-right-text" suffix)      {:type           "text"
+                                                                        :text           (:right-text args)
+                                                                        :x              320
+                                                                        :y              220
+                                                                        :align          "center"
+                                                                        :vertical-align "bottom"
+                                                                        :font-family    "Lexend Deca"
+                                                                        :font-size      110
+                                                                        :fill           "black"}
+    (common/make-name-unique-by-suffix "cloud-right" suffix)           {:type       "group"
+                                                                        :x          1214
+                                                                        :y          176
+                                                                        :transition (common/make-name-unique-by-suffix "cloud-right" suffix)
+                                                                        :children   [(common/make-name-unique-by-suffix "cloud-right-img" suffix)
+                                                                                     (common/make-name-unique-by-suffix "cloud-right-text" suffix)]
+                                                                        :states     {:disable {:interactive false}
+                                                                                     :enable  {:interactive true}}
+                                                                        :actions    {:click {:type   "action"
+                                                                                             :id     "cloud-right-clicked"
+                                                                                             :on     "click"
+                                                                                             :params {:target     (common/make-name-unique-by-suffix "cloud-right" suffix)
+                                                                                                      :target-img (common/make-name-unique-by-suffix "cloud-right-img" suffix)}}}}
+    (common/make-name-unique-by-suffix "moving-clouds" suffix)         {:type       "group"
+                                                                        :visible    false
+                                                                        :transition (common/make-name-unique-by-suffix "moving-clouds" suffix)
+                                                                        :children   [(common/make-name-unique-by-suffix "cloud-right" suffix)
+                                                                                     (common/make-name-unique-by-suffix "cloud-left" suffix)]
+                                                                        :states     {:hide {:visible false} :show {:visible true}}}
 
-    (common/make-name-unique scene "cloud-center-img")      {:type       "image"
-                                                             :src        "/raw/img/onset-and-rime/cloud.png"
-                                                             :transition (common/make-name-unique scene "cloud-center-img")
-                                                             :x          0
-                                                             :y          0}
-    (common/make-name-unique scene "cloud-center-text-img") {:type       "image"
-                                                             :src        (get-in args [:image :src])
-                                                             :transition (common/make-name-unique scene "cloud-center-text-img")
-                                                             :x          400
-                                                             :y          120}
-    (common/make-name-unique scene "cloud-center-text")     {:type           "text"
-                                                             :text           (:whole-text args)
-                                                             :x              250
-                                                             :y              220
-                                                             :align          "center"
-                                                             :vertical-align "bottom"
-                                                             :font-family    "Lexend Deca"
-                                                             :font-size      110
-                                                             :fill           "black"}
-    (common/make-name-unique scene "cloud-center")          {:type       "group"
-                                                             :x          600
-                                                             :y          176
-                                                             :transition (common/make-name-unique scene "cloud-center")
-                                                             :visible    false
-                                                             :opacity    0
-                                                             :children   [(common/make-name-unique scene "cloud-center-img")
-                                                                          (common/make-name-unique scene "cloud-center-text")
-                                                                          (common/make-name-unique scene "cloud-center-text-img")]
-                                                             :states     {:hide {:visible false} :show {:visible true}}}}
+    (common/make-name-unique-by-suffix "cloud-center-img" suffix)      {:type       "image"
+                                                                        :src        "/raw/img/onset-and-rime/cloud.png"
+                                                                        :transition (common/make-name-unique-by-suffix "cloud-center-img" suffix)
+                                                                        :x          0
+                                                                        :y          0}
+    (common/make-name-unique-by-suffix "cloud-center-text-img" suffix) {:type       "image"
+                                                                        :src        (get-in args [:image :src])
+                                                                        :transition (common/make-name-unique-by-suffix "cloud-center-text-img" suffix)
+                                                                        :x          400
+                                                                        :y          120}
+    (common/make-name-unique-by-suffix "cloud-center-text" suffix)     {:type           "text"
+                                                                        :text           (:whole-text args)
+                                                                        :x              250
+                                                                        :y              220
+                                                                        :align          "center"
+                                                                        :vertical-align "bottom"
+                                                                        :font-family    "Lexend Deca"
+                                                                        :font-size      110
+                                                                        :fill           "black"}
+    (common/make-name-unique-by-suffix "cloud-center" suffix)          {:type       "group"
+                                                                        :x          600
+                                                                        :y          176
+                                                                        :transition (common/make-name-unique-by-suffix "cloud-center" suffix)
+                                                                        :visible    false
+                                                                        :opacity    0
+                                                                        :children   [(common/make-name-unique-by-suffix "cloud-center-img" suffix)
+                                                                                     (common/make-name-unique-by-suffix "cloud-center-text" suffix)
+                                                                                     (common/make-name-unique-by-suffix "cloud-center-text-img" suffix)]
+                                                                        :states     {:hide {:visible false} :show {:visible true}}}}
 
-   [(common/make-name-unique scene "cloud-center") (common/make-name-unique scene "moving-clouds")]])
+   [(common/make-name-unique-by-suffix "cloud-center" suffix) (common/make-name-unique-by-suffix "moving-clouds" suffix)]])
 
-(defn f
-  [args]
-  (-> (common/init-metadata m t args)
+(defn- set-data
+  [activity-data args]
+  (-> activity-data
       (assoc-in [:objects :cloud-left-text--1 :text] (:left-text args))
       (assoc-in [:objects :cloud-right-text--1 :text] (:right-text args))
       (assoc-in [:objects :cloud-center-text--1 :text] (:whole-text args))
       (assoc-in [:objects :cloud-center-text-img--1 :src] (get-in args [:image :src]))))
 
-(defn fu
+(defn create-activity
+  [args]
+  (-> (common/init-metadata m t args)
+      (set-data args)
+      (assoc-in [:metadata :saved-props :template-options] (select-keys args [:left-text :right-text :whole-text :image]))))
+
+(defn- add-word
   [scene args]
-  (let [[actions objects scene-objects] (add-cloud scene args)]
+  (let [suffix (common/get-unique-suffix scene)
+        [actions objects scene-objects] (add-cloud suffix args)]
     (-> scene
         (update-in [:objects] merge objects)
         (update-in [:actions] merge actions)
@@ -522,5 +529,80 @@
         (common/add-track-actions (vec (map name (keys actions))) "dialog" (str "Word " (inc (common/get-unique-suffix scene))))
         (common/update-unique-suffix))))
 
+(defn- add-word-action
+  [scene args]
+  (let [suffix (common/get-unique-suffix scene)]
+    (-> scene
+        (add-word args)
+        (update-in [:metadata :saved-props :template-options :rounds] concat [(assoc args
+                                                                                :id suffix)]))))
+(defn- delete-round
+  [activity-data round-id]
+  (let [[actions objects scene-objects] (add-cloud round-id {})
+        action-names (keys actions)
+        object-names (keys objects)]
+    (-> activity-data
+        (common/remove-objects object-names)
+        (common/remove-actions action-names))))
+
+(defn- delete-rounds
+  [activity-data rounds]
+  (reduce delete-round activity-data rounds))
+
+(defn- edit-round
+  [activity-data {:keys [id left-text right-text whole-text image] :as round}]
+  (let [left-text-name (common/make-name-unique-by-suffix "cloud-left-text" id)
+        right-text-name (common/make-name-unique-by-suffix "cloud-right-text" id)
+        center-img-name (common/make-name-unique-by-suffix "cloud-center-text-img" id)
+        center-text-name (common/make-name-unique-by-suffix "cloud-center-text" id)]
+    (-> activity-data
+        (assoc-in [:objects left-text-name :text] left-text)
+        (assoc-in [:objects right-text-name :text] right-text)
+        (assoc-in [:objects center-text-name :text] whole-text)
+        (assoc-in [:objects center-img-name :src] (:src image)))))
+
+(defn- edit-rounds
+  [activity-data rounds]
+  (reduce edit-round activity-data rounds))
+
+(defn- add-rounds
+  [activity-data rounds]
+  (reduce add-word activity-data rounds))
+
+(defn- process-rounds
+  [activity-data {:keys [rounds delete-last-round] :as args}]
+  (let [prev-rounds-number (-> activity-data
+                               (get-in [:metadata :saved-props :template-options :rounds])
+                               (count))
+        new-rounds-number (count rounds)
+        rounds-to-delete (concat (if delete-last-round
+                                   [prev-rounds-number]
+                                   [])
+                                 (range new-rounds-number prev-rounds-number))
+        rounds-to-edit (->> rounds
+                            (take prev-rounds-number)
+                            (drop-last (if delete-last-round 1 0)))
+        rounds-to-add (->> rounds
+                           (drop (count rounds-to-edit)))]
+    (-> activity-data
+        (delete-rounds rounds-to-delete)
+        (edit-rounds rounds-to-edit)
+        (add-rounds rounds-to-add)
+        (assoc-in [:actions :check-scene-finished :value] new-rounds-number)
+        (assoc-in [:metadata :unique-suffix] new-rounds-number)
+        (assoc-in [:metadata :saved-props :template-options :rounds] rounds))))
+
+(defn- template-options
+  [activity-data args]
+  (-> activity-data
+      (set-data args)
+      (process-rounds args)))
+
+(defn- update-activity
+  [old-data {:keys [action-name] :as args}]
+  (case (keyword action-name)
+    :add-ball (add-word-action old-data args)
+    :template-options (template-options old-data args)))
+
 (core/register-template
-  m f fu)
+ m create-activity update-activity)

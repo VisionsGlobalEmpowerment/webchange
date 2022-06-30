@@ -29,4 +29,31 @@
         activity (templates/update-activity-from-template scene-data data)]
     (-> (core/save-scene! test-course-slug scene-slug activity t/user-id)
         first))
+
+  (let [course-slug "english"
+        scene-slug "riddle-colors-3"]
+    (core/get-scene-latest-version course-slug scene-slug))
+
+  (let [user-id 1
+        course-slug "english"
+        scene-slug "riddle-colors-3"
+        template-options {:action "template-options"
+                          :data {:rounds
+                                 [{:which 0,
+                                   :action-name "add-round",
+                                   :image-correct {:src "/upload/OYHUBMXUATSNCTGD.png"},
+                                   :image-wrong-1 {:src "/upload/NXGVZOMZXVFHSRIC.png"},
+                                   :image-wrong-2 {:src "/upload/PTWXRHEDWPWNKOVT.png"}}
+                                  {:which 1,
+                                   :action-name "add-round",
+                                   :image-correct {:src "/upload/HCHUCMAQSWCKBDCZ.png"},
+                                   :image-wrong-1 {:src "/upload/LLQCAVADHZDSKNXB.png"},
+                                   :image-wrong-2 {:src "/upload/WGBWVSUNEEZSFPHD.png"}}
+                                  {:which 2,
+                                   :action-name "add-round",
+                                   :image-correct {:src "/upload/TSAZAVBHLCMQXJMF.png"},
+                                   :image-wrong-1 {:src "/upload/GGCMGJQRQBNAWFRX.png"},
+                                   :image-wrong-2 {:src "/upload/ZPCKISROSHZRQFRB.png"}}]}}]
+    (core/update-activity! course-slug scene-slug template-options user-id))
+
   )

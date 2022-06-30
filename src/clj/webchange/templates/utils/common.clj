@@ -76,22 +76,34 @@
       (assoc :objects (dissoc (:objects scene-data) object-name))
       (remove-scene-object (name object-name))))
 
+(defn remove-objects
+  [scene-data object-names]
+  (reduce remove-object scene-data object-names))
+
 (defn remove-asset
   [scene-data src]
   (-> scene-data
-      (assoc :assets (vec (remove nil? (map (fn [asset] (if (not (= (:url asset) src)) asset)) (:assets scene-data)))))
-      )
-  )
+      (assoc :assets (vec (remove nil? (map (fn [asset] (if (not (= (:url asset) src)) asset)) (:assets scene-data)))))))
 
 (defn remove-action-from-tracks
   [scene-data scene-action-name]
   (assoc-in scene-data [:metadata :tracks] (reduce (fn [result track]
                                                      (let [current-track
                                                            (assoc track :nodes
-                                                                        (remove-actions-by-key-value (:nodes track) :action-id (name scene-action-name))
-                                                                        )]
+                                                                  (remove-actions-by-key-value (:nodes track) :action-id (name scene-action-name))
+                                                                  )]
                                                        (conj result current-track)
                                                        )) [] (get-in scene-data [:metadata :tracks]))))
+
+(defn remove-action
+  [scene-data action-name]
+  (-> scene-data
+      (update :actions dissoc action-name)
+      (remove-action-from-tracks action-name)))
+
+(defn remove-actions
+  [scene-data action-names]
+  (reduce remove-action scene-data action-names))
 
 (defn add-scene-object
   [scene-data scene-objects]
