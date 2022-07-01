@@ -36,10 +36,10 @@
                   :class-name "students-list"}]))
 
 (defn- actions
-  [{:keys [class-id on-cancel on-save]}]
+  [{:keys [on-cancel]}]
   (let [data-loading? @(re-frame/subscribe [::state/data-loading?])
         data-saving? @(re-frame/subscribe [::state/data-saving?])
-        handle-add-click #(re-frame/dispatch [::state/save class-id on-save])
+        handle-add-click #(re-frame/dispatch [::state/save])
         handle-cancel-click #(when (fn? on-cancel) (on-cancel))]
     [:div.actions
      [ui/button {:title      "Reset adding"
@@ -68,12 +68,17 @@
        (re-frame/dispatch [::state/reset (r/props this)]))
 
      :reagent-render
-     (fn [props]
+     (fn [{:keys [show-actions? show-new-button?]
+           :or   {show-actions?    true
+                  show-new-button? true}
+           :as   props}]
        (let [data-loading? @(re-frame/subscribe [::state/data-loading?])]
          [:div {:class-name "widget--add-class-students"}
           (if-not data-loading?
             [:<>
-             [add-student props]
+             (when show-new-button?
+               [add-student props])
              [students-list props]
-             [actions props]]
+             (when show-actions?
+               [actions props])]
             [ui/loading-overlay])]))}))

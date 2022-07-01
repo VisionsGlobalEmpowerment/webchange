@@ -207,3 +207,11 @@
                   :school-id school-id
                   :class-id class-id
                   :student-id student-id]})))
+
+(re-frame/reg-event-fx
+  ::open-add-students-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:school-id db)
+          class-id (:class-id db)]
+      {:dispatch [::routes/redirect :class-students-add :school-id school-id :class-id class-id]})))

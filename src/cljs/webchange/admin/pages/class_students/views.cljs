@@ -76,7 +76,7 @@
   (fn []
     (let [{class-name :name stats :stats} @(re-frame/subscribe [::state/class])
           {course-name :name} @(re-frame/subscribe [::state/course-data])
-          handle-add-click #(re-frame/dispatch [::state/add-student])]
+          handle-add-click #(re-frame/dispatch [::state/open-add-students-page])]
       [page/single-page {:class-name "page--class-students"
                          :header     {:title    class-name
                                       :icon     "classes"

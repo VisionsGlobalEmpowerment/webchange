@@ -13,6 +13,18 @@
   (fn [db]
     (get db path-to-db)))
 
+;; callbacks
+
+(def callbacks-key :callbacks)
+
+(defn- get-callback
+  [db callback-key]
+  (get-in db [callbacks-key callback-key] #()))
+
+(defn- set-callbacks
+  [db value]
+  (assoc db callbacks-key value))
+
 ;; Selected Students
 
 (def selected-students-key :selected-students)
@@ -33,7 +45,9 @@
   ::set-selected-students
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ selected-students-ids]]
-    {:db (set-selected-students db selected-students-ids)}))
+    (let [handle-change (get-callback db :on-change)]
+      {:db                (set-selected-students db selected-students-ids)
+       ::widgets/callback [handle-change selected-students-ids]})))
 
 (re-frame/reg-sub
   ::selected-students
@@ -112,8 +126,10 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ {:keys [class-id] :as props}]]
     {:db       (-> db
+                   (assoc :class-id class-id)
+                   (set-callbacks (select-keys props [:on-change :on-save]))
                    (reset-available-students)
                    (reset-selected-students))
      :dispatch [::load-students]}))
@@ -143,23 +159,24 @@
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ class-id on-save]]
-    (let [selected-students (get-selected-students db)]
+  (fn [{:keys [db]} [_]]
+    (let [class-id (:class-id db)
+          selected-students (get-selected-students db)]
       {:db       (-> db
                      (set-data-saving true))
        :dispatch [::warehouse/add-students-to-class
                   {:class-id class-id
                    :data     selected-students}
-                  {:on-success [::save-success on-save]
+                  {:on-success [::save-success]
                    :on-failure [::save-failure]}]})))
 
 (re-frame/reg-event-fx
   ::save-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ on-save response]]
-    {:db                (-> db
-                            (set-data-saving false))
-     ::widgets/callback [on-save response]}))
+  (fn [{:keys [db]} [_ response]]
+    (let [on-save (get-callback db :on-save)]
+      {:db                (-> db (set-data-saving false))
+       ::widgets/callback [on-save response]})))
 
 (re-frame/reg-event-fx
   ::save-failure
