@@ -7,14 +7,23 @@
 
 (defn page
   []
-  (fn [{:keys [account-id]}]
-    (let [handle-save #(re-frame/dispatch [::state/open-accounts-list :save])
-          handle-cancel #(re-frame/dispatch [::state/open-accounts-list :cancel])]
-      [page/page {:class-name "page--password-reset"}
-       [page/_header {:title "Reset Password"
-                     :icon  "user"}]
-       [page/main-content {:class-name "page--password-reset--content"}
-        [reset-password-form {:account-id account-id
-                              :on-save    handle-save
-                              :on-cancel  handle-cancel
-                              :class-name "password-reset-form"}]]])))
+  (fn [props]
+    (re-frame/dispatch [::state/init props])
+    (fn [{:keys [account-id]}]
+      (let [account @(re-frame/subscribe [::state/account-info])
+            handle-save #(re-frame/dispatch [::state/open-accounts-list :save])
+            handle-cancel #(re-frame/dispatch [::state/open-accounts-list :cancel])]
+        [page/single-page {:class-name "page--password-reset"
+                           :header            {:title    (:name account)
+                                               :icon     "accounts"
+                                               :on-close handle-cancel
+                                               :info     [{:key   "Account Created"
+                                                           :value (:account-created account)}
+                                                          {:key   "Last Login"
+                                                           :value (:last-login account)}]}
+                           :form-container?   true}
+         [page/main-content {:class-name "page--password-reset--content"}
+          [reset-password-form {:account-id account-id
+                                :on-save    handle-save
+                                :on-cancel  handle-cancel
+                                :class-name "password-reset-form"}]]]))))

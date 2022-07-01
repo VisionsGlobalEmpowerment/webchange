@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.date :refer [date-str->locale-date]]))
 
 (def path-to-db :page/my-account)
 
@@ -41,6 +42,15 @@
   ::account-data
   :<- [path-to-db]
   #(get-account-data %))
+
+(re-frame/reg-sub
+  ::account-info
+  :<- [::account-data]
+  (fn [{:keys [id first-name last-name created-at last-login]}]
+    {:id id
+     :name (str first-name " " last-name)
+     :account-created (date-str->locale-date created-at)
+     :last-login (date-str->locale-date last-login)}))
 
 (re-frame/reg-event-fx
   ::init

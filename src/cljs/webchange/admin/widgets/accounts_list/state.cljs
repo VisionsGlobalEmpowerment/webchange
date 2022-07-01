@@ -38,6 +38,11 @@
   [db value]
   (assoc db account-type-key value))
 
+(re-frame/reg-sub
+  ::account-type
+  :<- [path-to-db]
+  #(get % account-type-key))
+
 ;; Accounts
 
 (def accounts-key :accounts)

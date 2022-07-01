@@ -41,11 +41,13 @@
 
 (defn get-current-user
   [user-id school-id]
-  (if-let [user (-> (db/get-user {:id user-id}) accounts/visible-user)]
+  (if-let [user (db/get-user {:id user-id})]
     [true {:id         user-id
            :school-id  school-id
            :first-name (:first-name user)
            :last-name  (:last-name user)
+           :last-login (:last-login user)
+           :created-at (:created-at user)
            :type       (:type user)}]
     [false error-invalid-credentials]))
 

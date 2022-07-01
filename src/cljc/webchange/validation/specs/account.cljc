@@ -4,7 +4,7 @@
     [webchange.validation.predicates :as p]))
 
 (def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$")
-(def type? #{"admin", "live", "teacher", "student"})
+(def type? #{"admin", "live", "teacher"})
 
 (s/def ::first-name p/not-empty-string?)
 (s/def ::last-name p/not-empty-string?)

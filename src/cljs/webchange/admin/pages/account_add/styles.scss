@@ -1,4 +1,8 @@
 .page--account-add {
+    .widget--page--header--navigation-icon {	    
+	@include icon-color($color-green2a);
+    }
+
     .add-account-form {
         max-width: 300px;
     }

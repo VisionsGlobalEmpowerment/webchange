@@ -4,7 +4,7 @@
     [webchange.admin.pages.account-edit.state :as state]
     [webchange.admin.widgets.account-form.views :refer [edit-account-form]]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (defn- child-card
   [{:keys [id name created-at device course-name]}]
@@ -12,16 +12,14 @@
         handle-remove-click #(re-frame/dispatch [::state/remove-child id])]
     [:article.child-card
      [:h1 name]
-     [ui/icon-button {:icon       "remove"
-                      :variant    "light"
-                      :title      "Delete Child"
-                      :class-name "remove-button"
-                      :loading?   removing?
-                      :disabled?  removing?
-                      :on-click   handle-remove-click}]
+     [ui/button {:icon       "trash"
+                 :color      "blue-1"
+                 :title      "Delete Child"
+                 :class-name "remove-button"
+                 :on-click   handle-remove-click}]
+     [:p (str "Account Created: " created-at)]
+
      [:dl
-      [:dt "Account Created"]
-      [:dd created-at]
       [:dt "Course"]
       [:dd course-name]
       [:dt "Device"]
@@ -29,14 +27,15 @@
 
 (defn- loading-indicator
   []
-  [:div.loading-indicator
-   [ui/circular-progress]])
+  [:div.loading-indicator])
 
 (defn- children-list
   []
   (let [children @(re-frame/subscribe [::state/children])
         loading? @(re-frame/subscribe [::state/account-loading?])]
     [:div.children-list
+     [:h3.students-header "Students"]
+     [:div.students-filler]
      (if loading?
        [loading-indicator]
        (for [{:keys [id] :as child} children]
@@ -47,10 +46,17 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [account-id]}]
-    (let [open-accounts-list #(re-frame/dispatch [::state/open-accounts-list])]
-      [page/page {:class-name "page--account-edit"}
-       [page/_header {:title "Edit Account"
-                     :icon  "user"}]
+    (let [account @(re-frame/subscribe [::state/account-info]) 
+          open-accounts-list #(re-frame/dispatch [::state/open-accounts-list])]
+      [page/single-page {:class-name "page--account-edit"
+                         :header            {:title    (:name account)
+                                             :icon     "accounts"
+                                             :on-close open-accounts-list
+                                             :info     [{:key   "Account Created"
+                                                         :value (:account-created account)}
+                                                        {:key   "Last Login"
+                                                         :value (:last-login account)}]}
+                         :form-container?   true}
        [page/main-content {:id "page--account-edit--content"}
         [:div.left-side-panel
          [edit-account-form {:account-id account-id

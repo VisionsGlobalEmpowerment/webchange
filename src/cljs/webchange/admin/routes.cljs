@@ -50,7 +50,11 @@
                          :school-add       true
                          :schools-archived true}
                :courses {:add-course     true
-                         :course-profile true}}})
+                         :course-profile true}
+               :accounts {:account-add true
+                          :account-edit true
+                          :password-reset true}
+               :account-my true}})
 
 (defn get-title
   ([params]
@@ -68,6 +72,7 @@
        :class-students "Students"
        :class-students-add "Add Students"
        :school-courses (s ["Courses"])
+       :account-my "My Account"
        (s [(-> (or handler :unknown) (clojure.core/name) (clojure.string/replace "-" " ") (str/capitalize))])))))
 
 (defonce router (atom nil))

@@ -10,16 +10,21 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    (let [{:keys [id]} @(re-frame/subscribe [::state/account-data])
+    (let [account @(re-frame/subscribe [::state/account-info])
           account-loading? @(re-frame/subscribe [::state/account-loading?])
           handle-save #(re-frame/dispatch [::state/open-accounts-list])]
-      [page/page {:class-name "page--my-account"}
-       [page/_header {:title "My Account"
-                     :icon  "user"}]
+      [page/single-page {:class-name "page--my-account"
+                         :header {:title    (:name account)
+                                  :icon     "accounts"
+                                  :info     [{:key   "Account Created"
+                                              :value (:account-created account)}
+                                             {:key   "Last Login"
+                                              :value (:last-login account)}]}
+                         :form-container? true}
        [page/main-content {:id "page--my-account--content"}
         (cond
           account-loading? [ui/loading-overlay]
-          (some? id) [edit-account-form {:account-id id
-                                         :class-name "my-account-form"
-                                         :on-save    handle-save}]
-          :default nil)]])))
+          (some? (:id account)) [edit-account-form {:account-id (:id account)
+                                                    :class-name "my-account-form"
+                                                    :on-save    handle-save}]
+          :else nil)]])))

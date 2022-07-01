@@ -26,18 +26,6 @@
   :<- [path-to-db]
   #(get-form-data %))
 
-;; Callbacks
-
-(def callbacks-key :callbacks)
-
-(defn- set-callbacks
-  [db data]
-  (assoc db callbacks-key data))
-
-(defn- get-callback
-  [db callback-name]
-  (get-in db [callbacks-key callback-name] #()))
-
 ;; Data Saving?
 
 (def data-saving-key :data-saving?)
@@ -80,7 +68,7 @@
   (fn [{:keys [db]} [_ {:keys [teacher-id] :as props}]]
     {:db       (-> db
                    (set-custom-errors nil)
-                   (set-callbacks (select-keys props [:on-remove])))
+                   (widgets/set-callbacks (select-keys props [:on-remove])))
      :dispatch [::warehouse/load-teacher {:teacher-id teacher-id}
                 {:on-success [::load-teacher-success]}]}))
 
@@ -208,12 +196,6 @@
   ::handle-removed
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [success-handler (get-callback db :on-remove)]
+    (let [success-handler (widgets/get-callback db :on-remove)]
       {:dispatch  [::close-remove-window]
-       ::callback [success-handler]})))
-
-(re-frame/reg-fx
-  ::callback
-  (fn [[callback & params]]
-    (when (fn? callback)
-      (apply callback params))))
+       ::widgets/callback [success-handler]})))

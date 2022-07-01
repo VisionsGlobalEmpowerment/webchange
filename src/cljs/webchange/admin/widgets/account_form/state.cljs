@@ -5,8 +5,7 @@
     [webchange.ui.components.form.data :refer [init]]
     [webchange.admin.routes :as routes]
     [webchange.admin.widgets.state :as widgets]
-    [webchange.state.warehouse :as warehouse]
-    [webchange.utils.date :refer [date-str->locale-date]]))
+    [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :widget/account-form)
 
@@ -41,16 +40,18 @@
   :<- [path-to-db]
   #(get % data-saving-key false))
 
-;; Account Info
+;; Custom Error
+
+(def custom-errors-key :custom-errors)
+
+(defn- set-custom-errors
+  [db errors]
+  (assoc db custom-errors-key errors))
 
 (re-frame/reg-sub
-  ::account-info
-  :<- [::form-data]
-  (fn [{:keys [created-at last-login] :as account-data}]
-    (if (some? account-data)
-      [["Account Created" (date-str->locale-date created-at)]
-       ["Last Login" (date-str->locale-date last-login)]]
-      [])))
+  ::custom-errors
+  :<- [path-to-db]
+  #(get % custom-errors-key {}))
 
 ;;
 
@@ -63,8 +64,11 @@
 (re-frame/reg-event-fx
   ::init-edit-form
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [account-id]}]]
-    {:db       (reset-form-data db)
+  (fn [{:keys [db]} [_ {:keys [account-id] :as props}]]
+    {:db       (-> db
+                   (reset-form-data)
+                   (widgets/set-callbacks (select-keys props [:on-remove]))
+                   (assoc :account-id account-id))
      :dispatch [::warehouse/load-account {:id account-id}
                 {:on-success [::load-account-success]}]}))
 
@@ -82,11 +86,15 @@
 (re-frame/reg-event-fx
   ::create-account
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
-    {:db       (set-data-saving db true)
-     :dispatch [::warehouse/create-account data
-                {:on-success [::create-account-success on-success]
-                 :on-failure [::create-account-failure]}]}))
+  (fn [{:keys [db]} [_ {:keys [password password-confirm] :as data} {:keys [on-success]}]]
+    (if (not= password password-confirm)
+      {:db (set-custom-errors db {:password-confirm "Passwords not equal"})}
+      {:db       (-> db
+                     (set-data-saving true)
+                     (set-custom-errors nil))
+       :dispatch [::warehouse/create-account data
+                  {:on-success [::create-account-success on-success]
+                   :on-failure [::create-account-failure]}]})))
 
 (re-frame/reg-event-fx
   ::create-account-success
@@ -161,9 +169,48 @@
   (fn [{:keys [db]} [_]]
     {:db (set-account-removing db false)}))
 
+;; Remove
+
+(def remove-window-state-key :remove-window-state)
+
+(def remove-window-default-state {:open?        false
+                                  :in-progress? false
+                                  :done?        false})
+
+(defn- update-remove-window-state
+  [db data-patch]
+  (update db remove-window-state-key merge data-patch))
+
+(re-frame/reg-sub
+  ::remove-window-state
+  :<- [path-to-db]
+  #(get % remove-window-state-key remove-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db remove-window-default-state)}))
+
+(re-frame/reg-event-fx
+  ::handle-removed
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (widgets/get-callback db :on-remove)]
+      {:dispatch  [::close-remove-window]
+       ::widgets/callback [success-handler]})))
+
 ;; Reset Password
 
 (re-frame/reg-event-fx
   ::reset-password
-  (fn [{:keys [_]} [_ account-id]]
-    {:dispatch [::routes/redirect :password-reset :account-id account-id]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [account-id (:account-id db)]
+      {:dispatch [::routes/redirect :password-reset :account-id account-id]})))
