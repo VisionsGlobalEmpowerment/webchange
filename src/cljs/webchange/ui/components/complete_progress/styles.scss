@@ -1,0 +1,82 @@
+.bbs--complete-progress {
+    position: relative;
+    overflow: hidden;
+    height: 46px;
+
+    background-color: bbs--color(grey-5);
+    border-radius: 6px;
+
+    .bbs--complete-progress--data {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+    }
+
+    .bbs--complete-progress--progress {
+        @include bbs--noto-14-b;
+        color: bbs--color(white);
+        padding-left: 10px;
+
+        &:after {
+            content: "%";
+        }
+    }
+
+    .bbs--complete-progress--value {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+    }
+
+    .bbs--complete-progress--text-block {
+        @include bbs--noto-12-b;
+        color: bbs--color(white);
+
+        .bbs--complete-progress--caption {
+            @include bbs--noto-11-r;
+        }
+    }
+
+    .bbs--complete-progress--not-started {
+        @include bbs--noto-12-r;
+        color: bbs--color(grey-2);
+    }
+
+    .bbs--complete-progress--complete-icon {
+        @include bbs--icon-color(bbs--color(white));
+    }
+
+    &.bbs--complete-progress--value-complete .bbs--complete-progress--value {
+        background-color: bbs--color(green-1);
+    }
+
+    &.bbs--complete-progress--value-high .bbs--complete-progress--value {
+        background-color: bbs--color(green-2);
+    }
+
+    &.bbs--complete-progress--value-mid .bbs--complete-progress--value {
+        background-color: bbs--color(yellow-2);
+    }
+
+    &.bbs--complete-progress--value-low  {
+        .bbs--complete-progress--value {
+            background-color: bbs--color(yellow-1);
+        }
+
+        .bbs--complete-progress--progress {
+            text-shadow: 0 0 4px bbs--color(yellow-1);
+        }
+    }
+
+    &.bbs--complete-progress--value-empty .bbs--complete-progress--value {
+        display: none;
+    }
+}

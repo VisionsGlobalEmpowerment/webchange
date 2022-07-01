@@ -4,17 +4,24 @@
     [webchange.ui.components.avatar.views :refer [avatar]]
     [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.chip.views :refer [chip]]
+    [webchange.ui.components.complete-progress.views :refer [complete-progress]]
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- item-avatar
   [props]
   (when (contains? props :avatar)
-    [avatar]))
+    [:div {:class-name "bbs--list-item--avatar"}
+     [avatar]]))
 
 (defn- item-name
-  [{:keys [name]}]
+  [{:keys [class-name--name description name]}]
   [:div {:class-name "bbs--list-item--name"}
-   name])
+   [:div {:class-name (get-class-name {"bbs--list-item--name--value" true
+                                       class-name--name              (some? class-name--name)})
+          :title      name}
+    name]
+   (when (some? description)
+     [:div.bbs--list-item--name--description description])])
 
 (defn- item-info
   [{:keys [info]}]
@@ -34,6 +41,23 @@
        ^{:key idx}
        [chip stat-props text])]))
 
+(defn- get-children-count
+  [children]
+  (let [props (-> children last last)]
+    (if (map? props)
+      (count children)
+      (if-let [first-child (first children)]
+        (get-children-count first-child)
+        0))))
+
+(defn- item-children
+  [{:keys [children]}]
+  (when (some? children)
+    (let [children-number (get-children-count children)]
+      (into [:div {:class-name (get-class-name {"bbs--list-item--children"                                 true
+                                                (str "bbs--list-item--children--columns-" children-number) true})}]
+            children))))
+
 (defn- item-controls
   [{:keys [controls]}]
   (when-not (empty? controls)
@@ -49,19 +73,26 @@
        [button (merge {:color "grey-3"}
                       action)])]))
 
+(defn- item-filler
+  [{:keys [children]}]
+  (when (empty? children)
+    [:div.bbs--list-item--filler]))
+
 (defn list-item
   [{:keys [class-name dense?] :as props}]
-  (into [:div {:class-name (get-class-name {"bbs--list-item"        true
-                                            "bbs--list-item--dense" dense?
-                                            class-name              (some? class-name)})}]
-        (concat [[item-avatar props]
-                 [item-name props]]
-                (->> (r/current-component)
-                     (r/children))
-                [[item-info props]]
-                [[item-stats props]]
-                [[item-controls props]]
-                [[item-actions props]])))
+  (let [props (assoc props :children (->> (r/current-component)
+                                          (r/children)))]
+    [:div {:class-name (get-class-name {"bbs--list-item"        true
+                                        "bbs--list-item--dense" dense?
+                                        class-name              (some? class-name)})}
+     [item-avatar props]
+     [item-name props]
+     [item-filler props]
+     [item-info props]
+     [item-stats props]
+     [item-children props]
+     [item-controls props]
+     [item-actions props]]))
 
 (defn list
   [{:keys [class-name]}]

@@ -1,3 +1,5 @@
+@import "mixins";
+
 .bbs--select {
     position: relative;
 
@@ -22,6 +24,7 @@
 
         min-width: 60px;
 
+        background: transparent;
         -moz-appearance: none;
         -webkit-appearance: none;
 
@@ -36,7 +39,6 @@
         position: absolute;
         right: 3px;
         top: 50%;
-        margin-top: 4px;
     }
 
     &:hover {

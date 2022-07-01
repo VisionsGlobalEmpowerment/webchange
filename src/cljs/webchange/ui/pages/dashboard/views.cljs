@@ -16,7 +16,9 @@
                    (map first)
                    (sort)
                    (map (fn [page-key]
-                          {:title page-key
+                          {:title (-> page-key
+                                      (clojure.core/name)
+                                      (clojure.string/replace "-" " "))
                            :route page-key})))]
     [:div#page--dashboard
      [layout {:title      "UI"

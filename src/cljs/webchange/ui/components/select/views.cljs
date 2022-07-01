@@ -70,8 +70,9 @@
         has-label? (some? label)
         id (or id (when has-label? (random-uuid)))]
     [:div {:style      (if (some? width) {:width width} {})
-           :class-name (get-class-name (cond-> (-> {"bbs--select"       true
-                                                    "with-arrow"        with-arrow?}
+           :class-name (get-class-name (cond-> (-> {"bbs--select"        true
+                                                    "bbs--input-wrapper" true
+                                                    "with-arrow"         with-arrow?}
                                                    (assoc class-name (some? class-name)))
                                                (some? variant) (assoc (str "variant-" variant) true)))}
      [:div {:class-name "bbs--select-wrapper--header"}

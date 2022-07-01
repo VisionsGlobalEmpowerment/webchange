@@ -1,0 +1,15 @@
+@mixin bbs--select-text-color($color) {
+    select {
+        color: $color;
+    }
+}
+
+@mixin bbs--select-border-color($color) {
+    select {
+        border-color: $color;
+    }
+
+    .expand-icon {
+        @include bbs--icon-color($color);
+    }
+}

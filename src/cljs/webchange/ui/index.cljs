@@ -5,11 +5,13 @@
     [webchange.ui.components.button.views :as button-views]
     [webchange.ui.components.card.views :as card-views]
     [webchange.ui.components.chip.views :as chip-views]
+    [webchange.ui.components.complete-progress.views :as complete-progress-views]
     [webchange.ui.components.copy-link.views :as copy-link-views]
     [webchange.ui.components.date.views :as date-views]
     [webchange.ui.components.dialog.views :as dialog-views]
     [webchange.ui.components.form.views :as form-views]
     [webchange.ui.components.icon.views :as icon-views]
+    [webchange.ui.components.image.views :as image-views]
     [webchange.ui.components.input.views :as input-views]
     [webchange.ui.components.list.views :as list-views]
     [webchange.ui.components.logo.views :as logo-views]
@@ -28,12 +30,14 @@
 (def card card-views/card)
 (def chip chip-views/chip)
 (def confirm dialog-views/confirm)
+(def complete-progress complete-progress-views/complete-progress)
 (def copy-link copy-link-views/copy-link)
 (def date date-views/date)
 (def dialog dialog-views/dialog)
 (def flag icon-views/flag-icon)
 (def form form-views/form)
 (def icon icon-views/general-icon)
+(def image image-views/image)
 (def input input-views/input)
 (def logo-with-name logo-views/logo-with-name)
 (def list list-views/list)

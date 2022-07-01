@@ -52,4 +52,23 @@
                                 :on-click #(print "Handle Remove click")}
                                {:icon     "edit"
                                 :title    "Edit"
-                                :on-click #(print "Handle Edit click")}]}]]]]])
+                                :on-click #(print "Handle Edit click")}]}]
+      [ui/list-item {:avatar           nil
+                     :name             "John "
+                     :description      "code: 2354"
+                     :class-name--name "list-item-name"}
+       [ui/complete-progress {:value   100
+                              :caption "21/04/2022"
+                              :text    "IRA1 : Sleepy Mr. Sloth"}]
+       [ui/complete-progress {:value 0}]]
+      [ui/list-item {:avatar           nil
+                     :name             "Dhoni"
+                     :description      "code: 8735"
+                     :class-name--name "list-item-name"}
+       [ui/complete-progress {:value   100
+                              :caption "21/04/2022"
+                              :text    "2m : 23s"}]
+       [ui/complete-progress {:value   100
+                              :caption "25/04/2022"
+                              :text    "17m : 48s"}]
+       [ui/complete-progress {:value 36}]]]]]])
