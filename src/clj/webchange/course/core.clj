@@ -118,7 +118,7 @@
                       (and (= (:id skill) skill-id) skill))
                     skills)))))
 
-(defn- scene-slug->id
+(defn scene-slug->id
   [course-slug scene-name]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-id :id} (db/get-course-scene {:course_id course-id :slug scene-name})]
@@ -277,8 +277,7 @@
 
 (defn get-scene-versions
   [course-slug scene-name]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
-        {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
+  (let [{course-id :course-id scene-id :scene-id} (scene-slug->id course-slug scene-name)
         versions (db/get-scene-versions {:scene_id scene-id})]
     {:versions (->> versions
                     (map #(dissoc % :data))

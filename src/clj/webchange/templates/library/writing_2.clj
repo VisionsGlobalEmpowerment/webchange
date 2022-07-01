@@ -194,19 +194,22 @@
       (update-in [:metadata :available-actions] remove-letter-highlights)
       (create-letter-effects word)
       (create-word-effect word)
-      (assoc-in [:objects :text-tracing-pattern :text] word)))
+      (assoc-in [:objects :text-tracing-pattern :text] word)
+      (assoc-in [:metadata :saved-props :template-options] {:text word})))
 
 (defn update-activity
   [old-data args]
   (case (:action-name args)
-    "change-word" (change-word old-data (:word args))))
+    "change-word" (change-word old-data (:word args))
+    "template-options" (change-word old-data (:text args))))
 
-(defn f
+(defn create-activity
   [args]
   (-> (common/init-metadata m t args)
       (common/add-highlight "next-button" "Highlight next button")
       (common/add-highlight "painting-toolset" "Highlight tools")
       (common/add-highlight "colors-palette" "Highlight colors")
-      (change-word (:text args))))
+      (change-word (:text args))
+      (assoc-in [:metadata :saved-props :template-options] args)))
 
-(core/register-template m f update-activity)
+(core/register-template m create-activity update-activity)

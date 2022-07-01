@@ -1,8 +1,9 @@
 (ns webchange.templates.library.rhyming
   (:require
-    [webchange.templates.utils.common :as common]
-    [webchange.templates.core :as core]
     [clojure.string :as str]
+    [clojure.tools.logging :as log]
+    [webchange.templates.core :as core]
+    [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
 (def m {:id          27
@@ -444,21 +445,28 @@
      {ball-dialog-name (dialog/default text)}
      [{:url (:src img), :size 10, :type "image"}]
      ball-dialog-name
-     ball-name]))
+     ball-name
+     ball-group-name
+     ball-img-name
+     ball-text-name]))
 
-(defn f
+(defn- create-activity
   [args]
   (-> (common/init-metadata m t args)
       (assoc-in [:metadata :balls :left] 0)
       (assoc-in [:metadata :balls :right] 0)
-      (assoc-in [:objects :left-gate-text :text] (:left args))
       (common/add-blink "left-gate-plate" "Highligh left gate")
       (common/add-blink "right-gate-plate" "Highligh right gate")
-      (assoc-in [:objects :right-gate-text :text] (:right args))))
+      (assoc-in [:objects :left-gate-text :text] (:left args))
+      (assoc-in [:objects :right-gate-text :text] (:right args))
+      (assoc-in [:metadata :saved-props :template-options] {:left (:left args)
+                                                            :right (:right args)
+                                                            :balls []})))
 
 (defn add-ball-action
   [old-data {:keys [side] :as args}]
-  (let [[scene-objects objects actions assets ball-dialog-name ball-name] (add-ball old-data args)]
+  (let [[scene-objects objects actions assets ball-dialog-name
+         ball-name ball-group-name ball-img-name ball-text-name] (add-ball old-data args)]
     (-> old-data
         (update-in [:objects] merge objects)
         (update-in [:assets] concat assets)
@@ -469,11 +477,15 @@
                            {:type "state" :target ball-name :id "not-highlighted"}])
         (common/add-track-action {:track-name (str "Track " side)
                                   :type       "dialog"
-                                  :action-id  (keyword ball-dialog-name)})
+                                  :action-id  (name ball-dialog-name)})
         (update-in [:metadata :balls (keyword side)] inc)
         (common/add-scene-object scene-objects)
         (common/update-unique-suffix)
-        (update-in [:actions :init-total-balls-number :var-value] inc))))
+        (update-in [:actions :init-total-balls-number :var-value] inc)
+        (update-in [:metadata :saved-props :template-options :balls] concat [(assoc args
+                                                                               :object ball-group-name
+                                                                               :object-img-name ball-img-name
+                                                                               :object-text-name ball-text-name)]))))
 
 (defn- move-side-balls-to-remove-gaps
   [old-data side]
@@ -482,7 +494,6 @@
                        (filter (fn [action]
                                  (= (:type action) "action")) dt)
                        (map (fn [action]
-                              (println (:id action))
                               (last (str/split (:id action) #"-"))) dt))
         objects (into {} (map-indexed (fn [idx suffix]
                                         (let [ball-group-name (ball-group suffix)]
@@ -493,7 +504,15 @@
                                         ) suffixes))]
     (update-in old-data [:objects] merge objects)))
 
-(defn remove-ball-action
+(defn- mark-ball-deleted
+  [balls ball-to-mark-object]
+  (map (fn [{:keys [object] :as ball}]
+         (if (= object ball-to-mark-object)
+           (assoc ball :deleted true)
+           ball))
+       balls))
+
+(defn- remove-ball-action
   [old-data {:keys [object] :as args}]
   (let [[_ _ suffix] (str/split object #"-")
 
@@ -503,31 +522,68 @@
         ball-img-name (ball-img suffix)
         ball-text-name (ball-text suffix)
         side (get-in old-data [:objects ball-group-name :actions :drag-end :params :side])]
-    (-> old-data
-        (common/remove-asset (get-in old-data [:objects ball-img-name :src]))
-        (common/remove-object ball-group-name)
-        (common/remove-object ball-text-name)
-        (common/remove-object ball-img-name)
-        (common/remove-object ball-name)
-        (update-in [:actions] dissoc ball-dialog-name)
-        (update-in [:actions (keyword (str "read-all-word-" side)) :data]
-                   common/remove-actions-by-key-value
-                   :target
-                   (name ball-name))
-        (update-in [:actions (keyword (str "read-all-word-" side)) :data]
-                   common/remove-actions-by-key-value
-                   :id
-                   (name ball-dialog-name))
-        (update-in [:metadata :balls (keyword side)] dec)
-        (update-in [:actions :init-total-balls-number :var-value] dec)
-        (move-side-balls-to-remove-gaps side)
-        (common/remove-action-from-tracks ball-dialog-name))))
+    (if (get-in old-data [:objects ball-group-name])
+      (-> old-data
+          (common/remove-asset (get-in old-data [:objects ball-img-name :src]))
+          (common/remove-object ball-group-name)
+          (common/remove-object ball-text-name)
+          (common/remove-object ball-img-name)
+          (common/remove-object ball-name)
+          (update-in [:actions] dissoc ball-dialog-name)
+          (update-in [:actions (keyword (str "read-all-word-" side)) :data]
+                     common/remove-actions-by-key-value
+                     :target
+                     (name ball-name))
+          (update-in [:actions (keyword (str "read-all-word-" side)) :data]
+                     common/remove-actions-by-key-value
+                     :id
+                     (name ball-dialog-name))
+          (update-in [:metadata :balls (keyword side)] dec)
+          (update-in [:actions :init-total-balls-number :var-value] dec)
+          (move-side-balls-to-remove-gaps side)
+          (common/remove-action-from-tracks ball-dialog-name)
+          (update-in [:metadata :saved-props :template-options :balls] mark-ball-deleted (name ball-group-name)))
+      (-> old-data
+          (update-in [:metadata :saved-props :template-options :balls] mark-ball-deleted (name ball-group-name))))))
 
-(defn fu
+(defn- edit-ball-action
+  [activity-data {:keys [object side img text]}]
+  (let [[_ _ suffix] (str/split object #"-")
+
+        ball-dialog-name (ball-dialog suffix)
+        ball-name (ball suffix)
+        ball-group-name (ball-group suffix)
+        ball-img-name (ball-img suffix)
+        ball-text-name (ball-text suffix)
+        side (get-in activity-data [:objects ball-group-name :actions :drag-end :params :side])]
+    (-> activity-data
+        (assoc-in [:objects ball-img-name :src] (:src img))
+        (assoc-in [:objects ball-text-name :text] text))))
+
+(defn- process-balls
+  [activity-data {:keys [balls]}]
+  (reduce (fn [data {:keys [deleted object] :as args}]
+            (cond
+              deleted (remove-ball-action data args)
+              object (edit-ball-action data args)
+              :else (add-ball-action data args)))
+          activity-data
+          balls))
+
+(defn- template-options
+  [activity-data args]
+  (-> activity-data
+      (assoc-in [:objects :left-gate-text :text] (:left args))
+      (assoc-in [:objects :right-gate-text :text] (:right args))
+      (process-balls args)
+      (update-in [:metadata :saved-props :template-options] merge (select-keys args [:left :right]))))
+
+(defn- update-activity
   [old-data {:keys [action-name] :as args}]
-  (case action-name
-    "add-ball" (add-ball-action old-data args)
-    "remove-ball" (remove-ball-action old-data args)))
+  (case (keyword action-name)
+    :add-ball (add-ball-action old-data args)
+    :remove-ball (remove-ball-action old-data args)
+    :template-options (template-options old-data args)))
 
 (core/register-template
-  m f fu)
+ m create-activity update-activity)

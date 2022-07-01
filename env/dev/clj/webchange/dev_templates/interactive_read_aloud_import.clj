@@ -84,5 +84,15 @@
 
   (-> (core/get-scene-latest-version ira-course-slug-copied ira-scene-slug)
       (get-in [:objects :book]))
-
+;; sleepy mr sloth
+  (-> (core/get-activity-current-version 825))
+  ;; ira 1: sleepy mr sloth
+  (-> (core/get-activity-current-version 834))
+  
+  (let [user-id 1
+        course-slug "english"
+        scene-slug "interactive-read-aloud-newest"
+        template-options {:action "template-options"
+                          :data {:book-id 825}}]
+    (core/update-activity! course-slug scene-slug template-options user-id))
   )

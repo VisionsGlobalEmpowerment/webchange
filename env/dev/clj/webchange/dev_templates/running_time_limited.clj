@@ -30,4 +30,22 @@
         inspect-object :mari]
     (cond
       (some? inspect-object) (get-in update-result [:data :objects inspect-object])
-      :else update-result)))
+      :else update-result))
+  
+  (let [course-slug "english"
+        scene-slug "running-with-letters-a"]
+    (core/get-scene-latest-version course-slug scene-slug))
+
+  (let [user-id 1
+        course-slug "english"
+        scene-slug "running-with-letters-a"
+        template-options {:action "template-options"
+                          :data {:time 30,
+                                 :speed "4",
+                                 :template-id 34,
+                                 :correct-letter "a",
+                                 :incorrect-letter-1 "o",
+                                 :incorrect-letter-2 "s",
+                                 :incorrect-letter-3 "m"}}]
+    (core/update-activity! course-slug scene-slug template-options user-id))
+  )
