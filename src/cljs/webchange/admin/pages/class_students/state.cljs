@@ -128,33 +128,10 @@
                                                     activities-list))))
                         students-list)})))
 
-(defn- prepare-progress
-  "Prepare progress for quick access. Expects a list of activity-stats.
-  Returns nested map:
-  outer - grouped by user id
-  inner - uses activity unique-id as a key"
-  [progress]
-  (let [grouped (group-by :user-id progress)
-        ->by-unique-id #(->> % (map (juxt :unique-id identity)) (into {}))]
-    (->> grouped
-         (map ->by-unique-id)
-         (into {}))))
-
-(defn- prepare-student
-  [{:keys [id access-code user]}]
-  {:id   id
-   :name (str (:first-name user) " " (:last-name user))
-   :code access-code})
-
 (re-frame/reg-sub
   ::class
   :<- [path-to-db]
   #(get % :class))
-
-(re-frame/reg-sub
-  ::course
-  :<- [path-to-db]
-  #(get % :course))
 
 (re-frame/reg-sub
   ::current-level
@@ -219,38 +196,6 @@
         :lessons
         (get current-lesson)
         :activities)))
-
-(re-frame/reg-sub
-  ::lesson-data
-  :<- [::course-data]
-  :<- [::current-activities]
-  (fn [[course current-activities]]
-    (let [activities (->> current-activities
-                          (map (fn [{:keys [activity unique-id]}]
-                                 (let [{:keys [name preview]} (-> course :data :scene-list
-                                                                  (get (keyword activity)))]
-                                   {:id      unique-id
-                                    :name    name
-                                    :preview preview}))))]
-      {:name       (:name course)
-       :activities activities})))
-
-(re-frame/reg-sub
-  ::students-data
-  :<- [::current-activities]
-  :<- [::students-progress]
-  (fn [[activities {:keys [students progress]}]]
-    (let [user-progress (fn [user-id]
-                          (let [p (get progress user-id)]
-                            (map (fn [activity]
-                                   (let [stat-data (-> p (get (:unique-id activity)) :data)]
-                                     {:id          (:unique-id activity)
-                                      :completed?  (some? (:score stat-data))
-                                      :last-played (:last-played stat-data)
-                                      :total-time  (:time-played stat-data)})) activities)))
-          with-progress #(assoc % :activities (user-progress (:user-id %)))]
-      (->> students
-           (map with-progress)))))
 
 (re-frame/reg-event-fx
   ::open-student

@@ -75,7 +75,6 @@
 
 (defn- item-filler
   [{:keys [children]}]
-  (print "children" children)
   (when (empty? children)
     [:div.bbs--list-item--filler]))
 
