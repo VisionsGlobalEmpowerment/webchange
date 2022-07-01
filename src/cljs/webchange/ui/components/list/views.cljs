@@ -52,10 +52,11 @@
 
 (defn- item-children
   [{:keys [children]}]
-  (let [children-number (get-children-count children)]
-    (into [:div {:class-name (get-class-name {"bbs--list-item--children"                                 true
-                                              (str "bbs--list-item--children--columns-" children-number) true})}]
-          children)))
+  (when (some? children)
+    (let [children-number (get-children-count children)]
+      (into [:div {:class-name (get-class-name {"bbs--list-item--children"                                 true
+                                                (str "bbs--list-item--children--columns-" children-number) true})}]
+            children))))
 
 (defn- item-controls
   [{:keys [controls]}]
@@ -74,6 +75,7 @@
 
 (defn- item-filler
   [{:keys [children]}]
+  (print "children" children)
   (when (empty? children)
     [:div.bbs--list-item--filler]))
 

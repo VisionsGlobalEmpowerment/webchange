@@ -39,8 +39,8 @@
                                          ["/" [#"[\w-%]+" :book-id]] :book-edit}}})
 
 (def sitemap
-  {:dashboard {:schools {:school-profile   {:classes        {:class-add     true
-                                                             :class-profile true}
+  {:dashboard {:schools {:school-profile   {:classes        {:class-add       true
+                                                             :class-profile   {:class-students true}}
                                             :students       {:student-add true}
                                             :teachers       {:teacher-add     true
                                                              :teacher-profile true}
@@ -63,8 +63,9 @@
        :schools (s ["Schools"])
        :school-profile (s [(str "School " (:school-id props))])
        :class-profile (s [(str "Class " (:class-id props))])
+       :class-students "Students"
        :school-courses (s ["Courses"])
-       (s [(-> (or handler :unknown) (clojure.core/name) (str/capitalize))])))))
+       (s [(-> (or handler :unknown) (clojure.core/name) (clojure.string/replace "-" " ") (str/capitalize))])))))
 
 (defonce router (atom nil))
 

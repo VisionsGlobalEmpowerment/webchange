@@ -59,6 +59,7 @@
       (let [path (get-path handler routes/sitemap)
             path-length (count path)]
         (->> path
+             (take-last 2)
              (map (fn [step]
                     {:route {:page  step
                              :props props}
