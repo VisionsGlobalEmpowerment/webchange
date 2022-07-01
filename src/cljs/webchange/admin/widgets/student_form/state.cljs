@@ -117,10 +117,10 @@
 (re-frame/reg-event-fx
   ::init-add-form
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id]}]]
+  (fn [{:keys [db]} [_ {:keys [init-data school-id] :or {init-data {}}}]]
     {:db         (-> db
                      (assoc :school-id school-id)
-                     (reset-form-data)
+                     (set-form-data init-data)
                      (set-classes-loading true))
      :dispatch-n [[::warehouse/load-school-classes {:school-id school-id}
                    {:on-success [::load-school-classes-success]}]

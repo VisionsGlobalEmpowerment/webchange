@@ -26,10 +26,14 @@
              selected-students-number @(re-frame/subscribe [::state/selected-students-number])
              handle-students-selected #(re-frame/dispatch [::state/set-selected-students %])
              handle-add-click #(re-frame/dispatch [::state/save])
+             handle-new-student-click #(re-frame/dispatch [::state/open-add-student])
              handle-open-class-students #(re-frame/dispatch [::state/open-class-students])]
          [page/single-page {:class-name "page--class-students-add"
                             :header     {:title    class-name
                                          :icon     "classes"
+                                         :actions  [{:text     "Add New Student Account"
+                                                     :icon     "plus"
+                                                     :on-click handle-new-student-click}]
                                          :on-close handle-open-class-students}
                             :footer     (when (> selected-students-number 0)
                                           [:<>

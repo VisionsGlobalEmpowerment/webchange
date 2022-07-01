@@ -73,9 +73,10 @@
 (defonce router (atom nil))
 
 (defn- dispatch-route
-  [{:keys [handler route-params]}]
+  [{:keys [handler route-params url-params]}]
   (re-frame/dispatch [::state/set-current-page {:handler handler
-                                                :props   route-params}]))
+                                                :props   (cond-> route-params
+                                                                 (some? url-params) (assoc :url-params url-params))}]))
 
 (defn init!
   [root-path]

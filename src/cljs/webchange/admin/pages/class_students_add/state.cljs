@@ -58,7 +58,7 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
-    {:db (assoc db :school-id school-id :class-id class-id)
+    {:db       (assoc db :school-id school-id :class-id class-id)
      :dispatch [::warehouse/load-class {:class-id class-id} {:on-success [::load-class-success]}]}))
 
 (re-frame/reg-event-fx
@@ -83,4 +83,11 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [{:keys [school-id class-id]} db]
-      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id ]})))
+      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+
+(re-frame/reg-event-fx
+  ::open-add-student
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [school-id class-id]} db]
+      {:dispatch [::routes/redirect :student-add :school-id school-id :url-params {:class-id class-id}]})))

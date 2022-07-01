@@ -8,7 +8,8 @@
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
-  (fn [{:keys [school-id]}]
+  (fn [{:keys [school-id url-params]
+        :or   {url-params {}}}]
     (let [open-students-list #(re-frame/dispatch [::state/open-students-list])]
       [page/single-page {:class-name        "page--add-student"
                          :header            {:title    "Add Student to School"
@@ -17,5 +18,6 @@
                          :background-image? true
                          :form-container?   true}
        [add-student-form {:school-id school-id
+                          :init-data url-params
                           :on-save   open-students-list
                           :on-remove open-students-list}]])))
