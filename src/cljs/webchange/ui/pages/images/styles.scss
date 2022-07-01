@@ -1,0 +1,15 @@
+#page--images {
+    .images-panel {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-items: center;
+    }
+
+    .image-example {
+        width: 150px;
+        height: 85px;
+        border: dashed 1px bbs--color(grey-4);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+}

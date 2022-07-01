@@ -26,9 +26,9 @@
      [:div {:class-name "bbs--complete-progress--data"}
       (when completed?
         [:div.bbs--complete-progress--text-block
-         (when-not (empty? caption)
+         (when (some? caption)
            [:div.bbs--complete-progress--caption caption])
-         (when-not (empty? text)
+         (when (some? text)
            [:div.bbs--complete-progress--text text])])
       (when (and started? (not completed?))
         [:div {:class-name "bbs--complete-progress--progress"}

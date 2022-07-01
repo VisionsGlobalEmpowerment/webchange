@@ -8,6 +8,7 @@
     [webchange.ui.pages.forms.views :as forms]
     [webchange.ui.pages.headers.views :as headers]
     [webchange.ui.pages.icons.views :as icons]
+    [webchange.ui.pages.images.views :as images]
     [webchange.ui.pages.lists.views :as lists]
     [webchange.ui.pages.switches.views :as switches]
     [webchange.ui.pages.tabs.views :as tabs]))
@@ -24,6 +25,7 @@
             :forms               forms/page
             :headers             headers/page
             :icons               icons/page
+            :images              images/page
             :lists               lists/page
             :switches            switches/page
             :tabs                tabs/page

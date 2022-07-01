@@ -11,6 +11,7 @@
     [webchange.ui.components.dialog.views :as dialog-views]
     [webchange.ui.components.form.views :as form-views]
     [webchange.ui.components.icon.views :as icon-views]
+    [webchange.ui.components.image.views :as image-views]
     [webchange.ui.components.input.views :as input-views]
     [webchange.ui.components.list.views :as list-views]
     [webchange.ui.components.logo.views :as logo-views]
@@ -36,6 +37,7 @@
 (def flag icon-views/flag-icon)
 (def form form-views/form)
 (def icon icon-views/general-icon)
+(def image image-views/image)
 (def input input-views/input)
 (def logo-with-name logo-views/logo-with-name)
 (def list list-views/list)

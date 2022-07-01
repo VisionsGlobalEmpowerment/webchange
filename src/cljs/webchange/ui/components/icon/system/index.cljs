@@ -22,6 +22,7 @@
     [webchange.ui.components.icon.system.icon-duplicate :as duplicate]
     [webchange.ui.components.icon.system.icon-edit :as edit]
     [webchange.ui.components.icon.system.icon-edit-boxed :as edit-boxed]
+    [webchange.ui.components.icon.system.icon-image-broken :as image-broken]
     [webchange.ui.components.icon.system.icon-info :as info]
     [webchange.ui.components.icon.system.icon-play :as play]
     [webchange.ui.components.icon.system.icon-plus :as plus]
@@ -55,6 +56,7 @@
            "duplicate"       duplicate/data
            "edit"            edit/data
            "edit-boxed"      edit-boxed/data
+           "image-broken"    image-broken/data
            "info"            info/data
            "play"            play/data
            "plus"            plus/data

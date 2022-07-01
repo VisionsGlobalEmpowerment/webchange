@@ -8,7 +8,7 @@
     $delimiter-color: #F7F7FB;
 
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: space-between;
     gap: 24px;
 
@@ -17,6 +17,28 @@
     border-radius: 4px;
 
     min-height: 60px;
+
+    .bbs--list-item--avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bbs--list-item--filler {
+        flex: 1 1;
+    }
+
+    .bbs--list-item--children {
+        flex: 1 1;
+        display: grid;
+        column-gap: 15px;
+
+        @each $columns in 1, 2, 3, 4, 5, 6, 7, 8, 9 {
+            &.bbs--list-item--children--columns-#{$columns} {
+                grid-template-columns: repeat($columns, 1fr);
+            }
+        }
+    }
 
     .bbs--list-item--controls {
         display: flex;
@@ -34,11 +56,23 @@
     }
 
     .bbs--list-item--name {
-        @include bbs--noto-14-b;
-        flex: 1 1;
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 2px;
         overflow: hidden;
+
+        .bbs--list-item--name--value {
+            @include bbs--noto-14-b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bbs--list-item--name--description {
+            @include bbs--noto-14-r;
+        }
     }
 
     .bbs--list-item--stats {
