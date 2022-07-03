@@ -26,6 +26,12 @@
         }
     }
 
+    &.widget--single-page--with-footer {
+        .widget--single-page--content {
+            padding-bottom: $footer-height - $default-gap;
+        }
+    }
+
     .widget--single-page--content {
         @include bbs--with-scrollbar;
 

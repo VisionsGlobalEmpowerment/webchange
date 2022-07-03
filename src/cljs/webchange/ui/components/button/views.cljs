@@ -27,24 +27,26 @@
   (let [children (->> (r/current-component)
                       (r/children))
         icon-button? (and (nil? text) (empty? children))
+        show-icon? (and (some? icon)
+                        (not loading?))
         shape (if icon-button? "rounded" shape)
         handle-click (fn []
                        (if (some? href)
                          (js/window.open href target)
                          (on-click)))]
-    (into [:button (cond-> {:class-name (get-class-name {"bbs--button"                              true
-                                                         "bbs--button--icon-button"                 icon-button?
-                                                         "bbs--button--with-loading"                loading?
-                                                         (str "bbs--button--color-" color)          (some? color)
-                                                         (str "bbs--button--shape-" shape)          (some? shape)
-                                                         (str "bbs--button--state-" state)          (some? state)
+    (into [:button (cond-> {:class-name (get-class-name {"bbs--button"                               true
+                                                         "bbs--button--icon-button"                  icon-button?
+                                                         "bbs--button--text-icon-button"             (and show-icon? (not icon-button?))
+                                                         "bbs--button--with-loading"                 loading?
+                                                         (str "bbs--button--color-" color)           (some? color)
+                                                         (str "bbs--button--shape-" shape)           (some? shape)
+                                                         (str "bbs--button--state-" state)           (some? state)
                                                          (str "bbs--button--text-align-" text-align) (some? text-align)
-                                                         class-name                                 (some? class-name)})
+                                                         class-name                                  (some? class-name)})
                             :disabled   (or disabled? loading?)
                             :on-click   handle-click}
                            (some? title) (assoc :title title))
-           (when (and (some? icon)
-                      (not loading?))
+           (when show-icon?
              [general-icon {:icon       icon
                             :class-name "bbs--button--icon"}])
            (when (some? chip)

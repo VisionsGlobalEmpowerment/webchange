@@ -1,0 +1,21 @@
+.widget--page--footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 32px;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: $footer-height;
+    width: 100%;
+
+    padding: 16px $default-gap;
+
+    background-color: bbs--color(blue-1);
+    @include bbs--noto-14-r;
+    color: bbs--color(white);
+
+    z-index: 1;
+}

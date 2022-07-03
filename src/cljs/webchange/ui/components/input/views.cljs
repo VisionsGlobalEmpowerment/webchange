@@ -114,7 +114,6 @@
        (when (some? icon)
          [:div.icon-wrapper [general-icon {:icon icon}]])
        (when (some? action)
-         (print "action" action)
          (let [with-text? (some? (:text action))
                button-props (merge {:shape "rounded"
                                     :color (if with-text? "yellow-1" "grey-3")}

@@ -30,36 +30,38 @@
     [webchange.admin.pages.teachers.views :as teachers]
     [webchange.admin.pages.teacher-add.views :as teacher-add]
     [webchange.admin.pages.teacher-profile.views :as teacher-profile]
-    [webchange.admin.pages.class-students.views :as class-students]))
+    [webchange.admin.pages.class-students.views :as class-students]
+    [webchange.admin.pages.class-students-add.views :as class-students-add]))
 
-(def pages {:accounts         accounts/page
-            :account-add      account-add/page
-            :account-edit     account-edit/page
-            :account-my       account-my/page
-            :activities       activities/page
-            :activity-edit    activity-edit/page
-            :books            books/page
-            :book-edit        book-edit/page
-            :class-add        class-add/page
-            :class-profile    class-profile/page
-            :class-students   class-students/page
-            :classes          classes/page
-            :course-add       course-add/page
-            :course-edit      course-edit/page
-            :course-profile   course-view/page
-            :courses          courses/page
-            :dashboard        dashboard/page
-            :password-reset   password-reset/page
-            :school-add       school-add/page
-            :school-courses   school-courses/page
-            :school-profile   school-profile/page
-            :schools          schools/page
-            :schools-archived schools-archived/page
-            :student-add      student-add/page
-            :student-edit     student-edit/page
-            :student-profile  student-profile/page
-            :students         students/page
-            :teacher-add      teacher-add/page
-            :teacher-profile  teacher-profile/page
-            :teachers         teachers/page
-            :404              not-found/page})
+(def pages {:accounts           accounts/page
+            :account-add        account-add/page
+            :account-edit       account-edit/page
+            :account-my         account-my/page
+            :activities         activities/page
+            :activity-edit      activity-edit/page
+            :books              books/page
+            :book-edit          book-edit/page
+            :class-add          class-add/page
+            :class-profile      class-profile/page
+            :class-students     class-students/page
+            :class-students-add class-students-add/page
+            :classes            classes/page
+            :course-add         course-add/page
+            :course-edit        course-edit/page
+            :course-profile     course-view/page
+            :courses            courses/page
+            :dashboard          dashboard/page
+            :password-reset     password-reset/page
+            :school-add         school-add/page
+            :school-courses     school-courses/page
+            :school-profile     school-profile/page
+            :schools            schools/page
+            :schools-archived   schools-archived/page
+            :student-add        student-add/page
+            :student-edit       student-edit/page
+            :student-profile    student-profile/page
+            :students           students/page
+            :teacher-add        teacher-add/page
+            :teacher-profile    teacher-profile/page
+            :teachers           teachers/page
+            :404                not-found/page})

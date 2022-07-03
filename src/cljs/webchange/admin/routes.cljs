@@ -15,6 +15,7 @@
                                                                       "/add"                       :class-add
                                                                       ["/" [#"[\w-%]+" :class-id]] {""          :class-profile
                                                                                                     "/students" {""                             :class-students
+                                                                                                                 "/add"                         :class-students-add
                                                                                                                  ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
                                                          "/students" {""                             :students
                                                                       "/add"                         :student-add
@@ -39,8 +40,9 @@
                                          ["/" [#"[\w-%]+" :book-id]] :book-edit}}})
 
 (def sitemap
-  {:dashboard {:schools {:school-profile   {:classes        {:class-add       true
-                                                             :class-profile   {:class-students true}}
+  {:dashboard {:schools {:school-profile   {:classes        {:class-add     true
+                                                             :class-profile {:class-students     true
+                                                                             :class-students-add true}}
                                             :students       {:student-add true}
                                             :teachers       {:teacher-add     true
                                                              :teacher-profile true}
@@ -64,15 +66,17 @@
        :school-profile (s [(str "School " (:school-id props))])
        :class-profile (s [(str "Class " (:class-id props))])
        :class-students "Students"
+       :class-students-add "Add Students"
        :school-courses (s ["Courses"])
        (s [(-> (or handler :unknown) (clojure.core/name) (clojure.string/replace "-" " ") (str/capitalize))])))))
 
 (defonce router (atom nil))
 
 (defn- dispatch-route
-  [{:keys [handler route-params]}]
+  [{:keys [handler route-params url-params]}]
   (re-frame/dispatch [::state/set-current-page {:handler handler
-                                                :props   route-params}]))
+                                                :props   (cond-> route-params
+                                                                 (some? url-params) (assoc :url-params url-params))}]))
 
 (defn init!
   [root-path]

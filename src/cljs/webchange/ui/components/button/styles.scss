@@ -3,6 +3,8 @@
 
 .bbs--button {
     $default-size: 30px;
+    $icon-size: 20px;
+    $padding-h: 12px;
 
     display: flex;
     align-items: center;
@@ -10,12 +12,12 @@
     position: relative;
 
     border: none;
-    padding: 6px 12px;
+    padding: 6px $padding-h;
     color: bbs--color(white);
     min-height: $default-size;
 
     .bbs--button--icon {
-        $size: 20px;
+        $size: $icon-size;
 
         @include bbs--icon-color(bbs--color(white));
         @include bbs--icon-size($size);
@@ -24,6 +26,10 @@
         right: 8px;
         top: 50%;
         margin-top: -$size * 0.5;
+    }
+
+    &.bbs--button--text-icon-button {
+        padding-right: $icon-size + $padding-h;
     }
 
     &.bbs--button--shape-rectangle {
