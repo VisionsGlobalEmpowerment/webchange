@@ -199,6 +199,11 @@ SELECT * from scenes;
 SELECT * from scenes
 WHERE type = :type AND status != 'archived';
 
+-- :name get-scenes-by-type-and-lang :? :*
+-- :doc retrieve all scene records
+SELECT * from scenes
+WHERE type = :type AND lang = :lang AND status != 'archived';
+
 -- :name get-scenes-by-type-and-status :? :*
 -- :doc retrieve all scene records
 SELECT * from scenes

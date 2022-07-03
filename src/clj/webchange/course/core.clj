@@ -849,9 +849,12 @@
       (dissoc :image-src)))
 
 (defn get-available-activities
-  []
-  (->> (db/get-scenes-by-type {:type "activity"})
-       (map ->activity-info)))
+  [lang]
+  (let [activities (if lang
+                     (db/get-scenes-by-type-and-lang {:type "activity" :lang lang})
+                     (db/get-scenes-by-type {:type "activity"}))]
+    (->> activities
+         (map ->activity-info))))
 
 (defn get-available-books
   []

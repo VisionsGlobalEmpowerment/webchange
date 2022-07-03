@@ -489,8 +489,9 @@
              response)))
   (GET "/api/available-activities" request
        :coercion :spec
+       :query-params [{lang :- string? nil}]
        (let [user-id (current-user request)]
-         (-> (core/get-available-activities)
+         (-> (core/get-available-activities lang)
              response)))
   (GET "/api/visible-activities" request
        :coercion :spec

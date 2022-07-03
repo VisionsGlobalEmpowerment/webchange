@@ -2,18 +2,22 @@
     .activities-list {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        column-gap: 18px;
-        row-gap: 18px;
+        column-gap: 28px;
+        row-gap: 20px;
     }
 
     .activities-list-item {
         border-radius: 6px;
         overflow: hidden;
+	width: 215px;
 
         .preview {
             border-radius: 6px;
             overflow: hidden;
-            height: 120px
+	    width: 215px;
+            height: 120px;
+
+	    border: 1px solid $color-blue2a;
         }
 
         .data {
@@ -21,12 +25,16 @@
             align-items: center;
             justify-content: space-between;
 
-            padding-left: 8px;
+            padding-left: 7px;
             margin-top: 4px;
 
-            font-weight: 500;
+            font-weight: 700;
             font-size: 14px;
-            line-height: 16px;
+            line-height: 18px;
+
+	    .bbs--button--icon {
+		@include bbs--icon-color(bbs--color(blue-1));
+	    }
         }
 
         &:hover {

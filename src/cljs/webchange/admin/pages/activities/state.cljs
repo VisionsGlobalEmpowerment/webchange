@@ -43,13 +43,22 @@
   #(get-activities %))
 
 ;;
+(def default-language "english")
+
+(re-frame/reg-sub
+  ::current-language
+  :<- [path-to-db]
+  #(get % :current-language))
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (set-activities-loading db true)
+    {:db       (-> db
+                   (set-activities-loading true)
+                   (assoc :current-language default-language))
      :dispatch [::warehouse/load-available-activities
+                {:lang default-language}
                 {:on-success [::load-activities-success]}]}))
 
 (re-frame/reg-event-fx
@@ -59,6 +68,17 @@
     {:db (-> db
              (set-activities-loading false)
              (set-activities data))}))
+
+(re-frame/reg-event-fx
+  ::select-language
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ language]]
+    {:db (-> db
+             (set-activities-loading true)
+             (assoc :current-language language))
+     :dispatch  [::warehouse/load-available-activities
+                 {:lang language}
+                 {:on-success [::load-activities-success]}]}))
 
 (re-frame/reg-event-fx
   ::open-activity

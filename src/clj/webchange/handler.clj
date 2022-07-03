@@ -232,12 +232,13 @@
     dataset-api-routes
     templates-api-routes
     class-routes
-    accounts-routes)
+    accounts-routes
+    course-routes)
   pages-routes
   animation-routes
   auth-routes
   course-pages-routes
-  course-routes
+  
   school-routes
   global-sync-routes
   local-sync-routes
