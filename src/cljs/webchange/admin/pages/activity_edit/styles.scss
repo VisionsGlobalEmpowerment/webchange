@@ -148,12 +148,6 @@
 		    width: 50%;
 		}
 	    }
-
-            .remove-button {
-		@include icon-color($color-pink);
-		@include icon-size(16px);
-		@include icon-thickness(2);
-            }
 	}
     }
 }

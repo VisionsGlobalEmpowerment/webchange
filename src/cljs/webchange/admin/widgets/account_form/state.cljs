@@ -133,42 +133,6 @@
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))
 
-;; Remove Account
-
-(def account-removing-key :account-removing?)
-
-(defn- set-account-removing
-  [db value]
-  (assoc db account-removing-key value))
-
-(re-frame/reg-sub
-  ::account-removing?
-  :<- [path-to-db]
-  #(get % account-removing-key false))
-
-(re-frame/reg-event-fx
-  ::remove-account
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ account-id {:keys [on-success]}]]
-    {:db       (set-account-removing db true)
-     :dispatch [::warehouse/delete-account
-                {:id account-id}
-                {:on-success [::remove-account-success on-success]
-                 :on-failure [::remove-account-failure]}]}))
-
-(re-frame/reg-event-fx
-  ::remove-account-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ on-success response]]
-    {:db                (set-account-removing db false)
-     ::widgets/callback [on-success response]}))
-
-(re-frame/reg-event-fx
-  ::remove-account-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (set-account-removing db false)}))
-
 ;; Remove
 
 (def remove-window-state-key :remove-window-state)
@@ -205,6 +169,44 @@
     (let [success-handler (widgets/get-callback db :on-remove)]
       {:dispatch  [::close-remove-window]
        ::widgets/callback [success-handler]})))
+
+;; Remove Account
+
+(def account-removing-key :account-removing?)
+
+(defn- set-account-removing
+  [db value]
+  (assoc db account-removing-key value))
+
+(re-frame/reg-sub
+  ::account-removing?
+  :<- [path-to-db]
+  #(get % account-removing-key false))
+
+(re-frame/reg-event-fx
+  ::remove-account
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ account-id]]
+    {:db       (set-account-removing db true)
+     :dispatch [::warehouse/delete-account
+                {:id account-id}
+                {:on-success [::remove-account-success]
+                 :on-failure [::remove-account-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::remove-account-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ response]]
+    {:db                (-> db
+                            (set-account-removing false)
+                            (update-remove-window-state {:done? true}))}))
+
+(re-frame/reg-event-fx
+  ::remove-account-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-account-removing db false)}))
+
 
 ;; Reset Password
 

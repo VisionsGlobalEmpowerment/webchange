@@ -17,7 +17,7 @@
         removing? @(re-frame/subscribe [::state/removing?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
-        handle-remove-activity #(re-frame/dispatch [::state/remove])]
+        handle-remove #(re-frame/dispatch [::state/open-activities-page])]
     [:div.activity-form
      [:div.header
       [:div.info
@@ -52,7 +52,7 @@
                            :editable?   form-editable?
                            :on-save     handle-save
                            :on-cancel   handle-save
-                           :on-remove   handle-remove-activity
+                           :on-remove   handle-remove
                            :class-name  "info-form"}]]]))
 
 (defn page

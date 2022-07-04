@@ -43,13 +43,22 @@
   #(get-books %))
 
 ;;
+(def default-language "english")
+
+(re-frame/reg-sub
+  ::current-language
+  :<- [path-to-db]
+  #(get % :current-language))
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (set-books-loading db true)
+    {:db       (-> db
+                   (set-books-loading true)
+                   (assoc :current-language default-language))
      :dispatch [::warehouse/load-available-books
+                {:lang default-language}
                 {:on-success [::load-books-success]}]}))
 
 (re-frame/reg-event-fx
@@ -71,3 +80,14 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ book-id]]
     {}))
+
+(re-frame/reg-event-fx
+  ::select-language
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ language]]
+    {:db (-> db
+             (set-books-loading true)
+             (assoc :current-language language))
+     :dispatch  [::warehouse/load-available-books
+                 {:lang language}
+                 {:on-success [::load-books-success]}]}))
