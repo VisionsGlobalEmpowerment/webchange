@@ -28,16 +28,18 @@
                 :on-change on-change}]))
 
 (defn- progress-list-item
-  [{:keys [access-code name progress]}]
-  [ui/list-item {:avatar           nil
-                 :name             name
-                 :description      access-code
-                 :class-name--name "student-name"}
-   (for [{:keys [last-played score time-spent unique-id]} progress]
-     ^{:key unique-id}
-     [ui/complete-progress {:value   score
-                            :caption last-played
-                            :text    time-spent}])])
+  [{:keys [id access-code name progress]}]
+  (let [handle-click #(re-frame/dispatch [::state/open-student-profile-page id])]
+    [ui/list-item {:avatar           nil
+                   :name             name
+                   :description      access-code
+                   :on-click         handle-click
+                   :class-name--name "student-name"}
+     (for [{:keys [last-played score time-spent unique-id]} progress]
+       ^{:key unique-id}
+       [ui/complete-progress {:value   score
+                              :caption last-played
+                              :text    time-spent}])]))
 
 (defn- progress-list
   []
@@ -84,7 +86,7 @@
                                                   :counter (:students stats)
                                                   :label   "Students"}]
                                       :info     [{:key   "Course Name"
-                                                  :value course-name}]
+                                                  :value (or course-name "")}]
                                       :controls [[level-picker]
                                                  [lesson-picker]]
                                       :actions  [{:text     "Add Student"

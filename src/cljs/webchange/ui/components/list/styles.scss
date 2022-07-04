@@ -123,6 +123,18 @@
         }
     }
 
+    &.bbs--list-item--clickable {
+        cursor: pointer;
+
+        &:hover {
+            border-color: bbs--color(grey-3);
+        }
+
+        &:active {
+            border-color: bbs--color(blue-1);
+        }
+    }
+
     &.bbs--list-item--dense {
         gap: 16px;
         padding: 10px;
