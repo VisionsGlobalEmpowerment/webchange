@@ -3,7 +3,9 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.activities.state :as state]
     [webchange.admin.widgets.activities-list.views :refer [activities-list]]
-    [webchange.admin.widgets.page.views :as page]))
+    [webchange.admin.widgets.page.views :as page]
+    [webchange.ui.index :as ui]
+    [webchange.utils.languages :refer [language-options]]))
 
 (defn page
   [props]
@@ -12,10 +14,17 @@
     (let [activities @(re-frame/subscribe [::state/activities])
           loading? @(re-frame/subscribe [::state/activities-loading?])
           handle-card-click #(re-frame/dispatch [::state/open-activity %])
-          handle-edit-click #(re-frame/dispatch [::state/edit-activity %])]
-      [page/page {:class-name "page--activities"}
-       [page/_header {:title "Activities"
-                     :icon  "activity"}]
+          handle-edit-click #(re-frame/dispatch [::state/edit-activity %])
+          current-language @(re-frame/subscribe [::state/current-language])
+          handle-select-language #(re-frame/dispatch [::state/select-language %])]
+      [page/single-page {:class-name "page--activities"
+                         :header     {:title      "Activities"
+                                      :icon       "games"
+                                      :icon-color "blue-2"
+                                      :controls   [[ui/select {:label     "Language"
+                                                               :value     current-language
+                                                               :options   language-options
+                                                               :on-change handle-select-language}]]}}
        [page/main-content
         [activities-list {:data                   activities
                           :loading?               loading?

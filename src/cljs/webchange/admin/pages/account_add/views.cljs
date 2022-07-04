@@ -10,12 +10,14 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [account-type @(re-frame/subscribe [::state/account-type])
-          title @(re-frame/subscribe [::state/title])
-          handle-save #(re-frame/dispatch [::state/open-accounts-list])]
-      [page/page {:class-name "page--account-add"}
-       [page/_header {:title title
-                     :icon  "user"}]
-       [page/main-content
-        [add-account-form {:account-type account-type
-                           :class-name   "add-account-form"
-                           :on-save      handle-save}]]])))
+          open-accounts-list #(re-frame/dispatch [::state/open-accounts-list])]
+      [page/single-page {:class-name      "page--account-add"
+                         :header          {:title      "Add New Account"
+                                           :icon       "accounts"
+                                           :icon-color "green-2"
+                                           :on-close   open-accounts-list}
+                         :form-container? true}
+       [add-account-form {:account-type account-type
+                          :class-name   "add-account-form"
+                          :on-save      open-accounts-list
+                          :on-remove    open-accounts-list}]])))

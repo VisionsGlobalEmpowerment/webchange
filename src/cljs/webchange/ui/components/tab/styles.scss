@@ -13,8 +13,9 @@
     text-align: left;
 
     --color: #{bbs--color(white)};
+    --icon-color: #{bbs--color(blue-2)};
     color: bbs--color(var(--color));
-    @include bbs--icon-color(var(--color));
+    @include bbs--icon-color(var(--icon-color));
 
     .bbs--tab--icon {
         @include bbs--icon-size(24px);
@@ -42,9 +43,7 @@
         cursor: pointer;
         background-color: bbs--color(blue-2);
 
-        .bbs--tab--icon {
-            @include bbs--icon-color(bbs--color(blue-1));
-        }
+        @include bbs--icon-color(bbs--color(blue-1));
     }
 
     @mixin disabled {

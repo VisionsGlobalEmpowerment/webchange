@@ -6,19 +6,6 @@
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui-framework.components.index :as ui]))
 
-(defn- header
-  []
-  (let [header @(re-frame/subscribe [::state/header])
-        {:keys [title] :as add-button} @(re-frame/subscribe [::state/add-button])
-        handle-add-click #(re-frame/dispatch [::state/add-account])]
-    [page/_header (cond-> {:title header
-                          :icon  "user"}
-                         (some? add-button)
-                         (assoc :actions [ui/icon-button {:icon     "add"
-                                                          :title    title
-                                                          :on-click handle-add-click}
-                                          title]))]))
-
 (defn- content
   []
   (let [account-type @(re-frame/subscribe [::state/account-type])
@@ -32,6 +19,14 @@
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [account-type]}]
     (re-frame/dispatch [::state/set-account-type account-type])
-    [page/page {:class-name "page--accounts-admins"}
-     [header]
-     [content]]))
+    (let [header @(re-frame/subscribe [::state/header])
+          handle-add-click #(re-frame/dispatch [::state/add-account])]
+      [page/single-page {:class-name "page--accounts-admins"
+                         :header     {:title      header
+                                      :icon       "accounts"
+                                      :icon-color "green-2"
+                                      :actions    (when (= "admin" account-type)
+                                                    [{:text     "Add New Admin"
+                                                      :icon     "account-add"
+                                                      :on-click handle-add-click}])}}
+       [content]])))

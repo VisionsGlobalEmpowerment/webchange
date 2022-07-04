@@ -32,6 +32,7 @@ $color-grey-5: #E9F5FF;
 $color-red: #fa5050;
 
 $bbs--base-colors: blue-1, blue-2, green-1, green-2, yellow-1, yellow-2, grey-0, grey-1, grey-2, grey-3, grey-4, grey-5, white, "transparent";
+$bbs--brand-colors: blue-1, blue-2, green-1, green-2, yellow-1, yellow-2;
 
 @function bbs--color($color, $opacity: 1, $variant: normal) {
     $result: $color;

@@ -59,6 +59,7 @@
            "image-broken"    image-broken/data
            "info"            info/data
            "play"            play/data
+           "system-play"     play/data
            "plus"            plus/data
            "restore"         restore/data
            "search"          search/data

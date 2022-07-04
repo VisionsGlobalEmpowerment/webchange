@@ -1,36 +1,16 @@
 .page--account-edit {
-    #page--account-edit--content {
+    .page--account-edit--content {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        gap: 128px;
-
-        & > * {
-            flex: 1 1;
-        }
-    }
-
-    .left-side-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 32px;
-        overflow: auto;
-        padding-right: $default-gap;
-
-        & > * {
-            overflow: unset;
-        }
-    }
-
-    .loading-indicator {
-        flex: 1 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        gap: 34px;
     }
 
     .children-list {
+        @include bbs--with-scrollbar;
+        @include bbs--with-scrollbar-margin;
         display: flex;
+        flex: 1 1;
         flex-direction: column;
         gap: 16px;
         overflow: auto;
@@ -39,46 +19,47 @@
     .child-card {
         position: relative;
         padding: 24px;
-        border: solid 1px #DCE3F5;
+        border: solid 1px #E9F6FF;
         border-radius: 4px;
 
         font-weight: 400;
-        font-size: 12px;
-        line-height: 14px;
+        font-size: 14px;
+        line-height: 18px;
         letter-spacing: -0.02em;
 
         h1 {
             font-weight: 700;
             font-size: 14px;
-            line-height: 16px;
-            margin-bottom: 24px;
+            line-height: 18px;
+        }
+
+        p {
+            margin-top: 12px;
         }
 
         .remove-button {
+            @include bbs--icon-size(24px);
+            @include bbs--icon-thickness(1.5px);
             position: absolute;
             top: 14px;
             right: 14px;
         }
 
         dl {
+            @include bbs--noto-14-r;
             display: grid;
             grid-template-columns: auto 1fr;
             column-gap: 14px;
             row-gap: 12px;
-
-            margin: 0;
+            margin-top: 36px;
         }
 
         dt {
-            font-weight: 700;
+            @include bbs--noto-14-b;
 
             &:after {
                 content: ":";
             }
-        }
-
-        dd {
-            margin: 0;
         }
     }
 }

@@ -66,8 +66,8 @@
   :<- [::account-type]
   (fn [account-type]
     (case account-type
-      "admin" "Admin"
-      "live" "Live Users"
+      "admin" "Admins"
+      "live" "Users"
       "Accounts")))
 
 (re-frame/reg-event-fx

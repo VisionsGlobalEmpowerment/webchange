@@ -4,7 +4,7 @@
     [webchange.admin.pages.activity-edit.state :as state]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as ui]
+    [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]))
 
 (defn- activity-form
@@ -17,43 +17,43 @@
         removing? @(re-frame/subscribe [::state/removing?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
-        handle-remove-activity #(re-frame/dispatch [::state/remove])
-        handle-remove-click #(ui/with-confirmation {:message    "Remove Activity?"
-                                                    :on-confirm handle-remove-activity})]
+        handle-remove-activity #(re-frame/dispatch [::state/remove])]
     [:div.activity-form
-     [:h1
-      name
-      [:dl
-       [:dt "Created"]
-       [:dd (date-str->locale-date created-at)]
-       [:dt "Last Edited"]
-       [:dd (date-str->locale-date updated-at)]]]
-     [ui/image {:src        preview
-                :class-name "preview"}
+     [:div.header
+      [:div.info
+       name
+       [:dl
+        [:dt "Created"]
+        [:dd (date-str->locale-date created-at)]
+        [:dt "Last Edited"]
+        [:dd (date-str->locale-date updated-at)]]]
       [:div.actions
-       [ui/icon-button {:icon     "play"
-                        :on-click handle-play-click}
+       [ui/button {:icon       "system-play"
+                   :class-name "play-button"
+                   :on-click   handle-play-click}
         "Play"]
-       [ui/icon-button {:icon     "edit"
-                        :on-click handle-edit-click}
+       [ui/button {:icon       "edit"
+                   :class-name "edit-button"
+                   :on-click   handle-edit-click}
         "Edit Activity"]]]
+     
+     [ui/image {:src        preview
+                :class-name "preview"}]
 
-     [:h2
-      "Activity Details"
-      [ui/icon-button {:icon     (if form-editable? "close" "edit")
-                       :on-click handle-edit-info-click
-                       :variant  "light"}]]
-     [activity-info-form {:activity-id activity-id
-                          :editable?   form-editable?
-                          :on-save     handle-save
-                          :class-name  "info-form"}]
-     (when-not form-editable?
-       [ui/icon-button {:icon       "remove"
-                        :variant    "light"
-                        :class-name "remove-button"
-                        :loading?   removing?
-                        :on-click   handle-remove-click}
-        "Delete Activity"])]))
+     [:div.activity-details
+      [:h2
+       "Activity Details"
+       [:div.actions 
+        [ui/button {:icon     "duplicate"
+                    :on-click handle-edit-info-click}]
+        [ui/button {:icon     (if form-editable? "close" "edit")
+                    :on-click handle-edit-info-click}]]]
+      [activity-info-form {:activity-id activity-id
+                           :editable?   form-editable?
+                           :on-save     handle-save
+                           :on-cancel   handle-save
+                           :on-remove   handle-remove-activity
+                           :class-name  "info-form"}]]]))
 
 (defn page
   [{:keys [activity-id] :as props}]
@@ -61,8 +61,6 @@
   (fn []
     (let [loading? @(re-frame/subscribe [::state/activity-loading?])]
       [page/page {:class-name "page--activity-edit"}
-       [page/_header {:title "Activity"
-                     :icon  "activity"}]
        [page/main-content {:class-name "page--activity-edit--content"}
         (if loading?
           [ui/loading-overlay]

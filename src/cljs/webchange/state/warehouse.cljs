@@ -412,10 +412,11 @@
 
 (re-frame/reg-event-fx
   ::load-available-activities
-  (fn [{:keys [_]} [_ handlers]]
+  (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
     (create-request {:key    :load-available-activities
                      :method :get
-                     :uri    (str "/api/available-activities")}
+                     :uri    (str "/api/available-activities")
+                     :params {:lang lang}}
                     handlers)))
 
 (re-frame/reg-event-fx
@@ -450,6 +451,15 @@
                      :method :put
                      :params {:archive true}
                      :uri    (str "/api/activities/" activity-id "/archive")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::toggle-activity-visibility
+  (fn [{:keys [_]} [_ {:keys [activity-id visible]} handlers]]
+    (create-request {:key    :toggle-activity-visibility
+                     :method :put
+                     :params {:visible visible}
+                     :uri    (str "/api/activities/" activity-id "/toggle-visibility")}
                     handlers)))
 
 (re-frame/reg-event-fx

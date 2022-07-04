@@ -5,14 +5,14 @@
             [webchange.ui.index :as ui]))
 
 (defn school-item
-  [{:keys [id stats]}]
+  [{:keys [id name stats]}]
   (let [{:keys [classes courses students teachers]} stats
         handle-edit-click #(re-frame/dispatch [::state/edit-school id])
         handle-classes-click #(re-frame/dispatch [::state/manage-classes id])
         handle-courses-click #(re-frame/dispatch [::state/manage-courses id])
         handle-students-click #(re-frame/dispatch [::state/manage-students id])
         handle-teachers-click #(re-frame/dispatch [::state/manage-teachers id])]
-    [ui/list-item {:name    "School Name"
+    [ui/list-item {:name    name
                    :stats   [{:counter  students
                               :icon     "students"
                               :text     "Students"

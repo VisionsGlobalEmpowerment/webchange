@@ -2,41 +2,38 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.components.list.views :as l]
     [webchange.admin.components.pagination.views :as p]
     [webchange.admin.widgets.accounts-list.state :as state]
-    [webchange.ui-framework.components.index :as ui]))
-
-(defn- active-switcher
-  [{:keys [active? id loading?]
-    :or   {active? true}}]
-  (let [handle-switch-click #(re-frame/dispatch [::state/toggle-active id (not active?)])]
-    [:div {:class-name (ui/get-class-name {"active-switcher" true
-                                           "active"          active?})}
-     [:span (if active? "Active" "Inactive")]
-     [ui/switcher {:checked?       active?
-                   :indeterminate? loading?
-                   :on-change      handle-switch-click}]]))
+    [webchange.ui.index :as ui]))
 
 (defn- list-item
-  [{:keys [created-at email id last-login name] :as props}]
-  (let [handle-edit-click #(re-frame/dispatch [::state/edit-account id])]
-    [l/list-item {:avatar      nil
-                  :name        name
-                  :description [["Email" email]
-                                ["Account Created" created-at]
-                                ["Last Login" last-login]]
-                  :actions     [:<>
-                                [active-switcher props]
-                                [ui/icon-button {:icon     "edit"
-                                                 :title    "Edit"
-                                                 :variant  "light"
-                                                 :on-click handle-edit-click}]]}]))
+  [{:keys [active? email id last-login name loading?] :as props}]
+  (let [account-type @(re-frame/subscribe [::state/account-type])
+        handle-edit-click #(re-frame/dispatch [::state/edit-account id])
+        handle-active-click #(re-frame/dispatch [::state/toggle-active id (not active?)])
+        determinate? (boolean? active?)]
+    [ui/list-item {:avatar      nil
+                   :name        name
+                   :info     [{:key   "Email"
+                               :value email}
+                              {:key   "Last Login"
+                               :value last-login}]
+                   :controls (when (= "admin" account-type)
+                               [ui/switch {:label          (cond
+                                                             loading? "Saving.."
+                                                             (not determinate?) "..."
+                                                             active? "Active"
+                                                             :else "Inactive")
 
-(defn- loading-indicator
-  []
-  [:div.loading-indicator
-   [ui/circular-progress]])
+                                           :checked?       active?
+                                           :indeterminate? (not determinate?)
+                                           :disabled?      loading?
+                                           :on-change      handle-active-click
+                                           :class-name     "active-switch"}])
+                   :actions  [{:icon     "edit"
+                               :title    "Edit account"
+                               :on-click handle-edit-click}]}]))
+
 
 (defn- pagination
   []
@@ -56,11 +53,9 @@
     (let [data @(re-frame/subscribe [::state/accounts])
           loading? @(re-frame/subscribe [::state/loading?])]
       [:div.widget--accounts-list
-       (if-not loading?
-         [:<>
-          [l/list {:class-name "accounts-list"}
-           (for [{:keys [id] :as account} data]
-             ^{:key id}
-             [list-item account])]
-          [pagination]]
-         [loading-indicator])])))
+       [:<>
+        [ui/list {:class-name "accounts-list"}
+         (for [{:keys [id] :as account} data]
+           ^{:key id}
+           [list-item account])]
+        [pagination]]])))

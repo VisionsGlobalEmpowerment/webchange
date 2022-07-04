@@ -124,6 +124,19 @@
                     {:value     value
                      :error     error
                      :on-change handle-change})]))
+(declare form-control)
+
+(defn- group-control
+  [{:keys [id form-id disabled? spec class-name fields] :as props}]
+  [:div {:class-name (c/get-class-name {"form--group-control" true
+                                        class-name        (some? class-name)})}
+   (for [[field-name field-options] fields]
+     ^{:key field-name}
+     [form-control {:id        field-name
+                    :form-id   form-id
+                    :options   field-options
+                    :disabled? disabled?
+                    :spec      spec}])]  )
 
 (defn- form-control
   [{:keys [disabled? id form-id options spec]}]
@@ -141,7 +154,8 @@
       :text-multiline [text-multiline-control control-props]
       :password [password-control control-props]
       :select [select-control control-props]
-      :custom [custom-control control-props])))
+      :custom [custom-control control-props]
+      :group [group-control control-props])))
 
 (defn- form-actions
   [{:keys [form-id disabled? on-save on-cancel saving? spec]}]

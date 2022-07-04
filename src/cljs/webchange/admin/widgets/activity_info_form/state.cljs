@@ -66,10 +66,12 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [activity-id]}]]
+  (fn [{:keys [db]} [_ {:keys [activity-id] :as props}]]
     {:db         (-> db
                      (reset-form-data)
-                     (set-data-loading true))
+                     (set-data-loading true)
+                     (widgets/set-callbacks (select-keys props [:on-remove]))
+                     (assoc :activity-id activity-id))
      :dispatch-n [[::warehouse/load-activity
                    {:activity-id activity-id}
                    {:on-success [::load-activity-success]}]]}))
@@ -115,3 +117,58 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))
+
+;; Archive
+
+(def remove-window-state-key :remove-window-state)
+
+(def remove-window-default-state {:open?        false
+                                  :in-progress? false
+                                  :done?        false})
+
+(defn- update-remove-window-state
+  [db data-patch]
+  (update db remove-window-state-key merge data-patch))
+
+(re-frame/reg-sub
+  ::remove-window-state
+  :<- [path-to-db]
+  #(get % remove-window-state-key remove-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db remove-window-default-state)}))
+
+(re-frame/reg-event-fx
+  ::handle-removed
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (widgets/get-callback db :on-remove)]
+      {:dispatch  [::close-remove-window]
+       ::widgets/callback [success-handler]})))
+
+(re-frame/reg-event-fx
+  ::toggle-visibility
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [activity-id (:activity-id db)
+          visible (-> db get-form-data :status (= "visible") not)]
+      {:dispatch [::warehouse/toggle-activity-visibility
+                  {:activity-id activity-id
+                   :visible visible}
+                  {:on-success [::toggle-visibility-success]}]})))
+
+(re-frame/reg-event-fx
+  ::toggle-visibility-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (update-form-data db data)}))
+

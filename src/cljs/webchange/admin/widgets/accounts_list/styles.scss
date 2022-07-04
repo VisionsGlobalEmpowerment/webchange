@@ -1,49 +1,15 @@
 .widget--accounts-list {
-    display: flex;
-    flex: 1 1;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 0;
-
     .accounts-list {
-        overflow: auto;
-        min-height: 0;
-    }
-
-    .users-content {
-        justify-content: space-between;
-    }
-
-    .active-switcher {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        span {
-            position: relative;
-            top: 2px;
-            width: 36px;
-
-            font-weight: 500;
-            font-size: 10px;
-        }
-
-        &.active {
-            span {
-                color: $color-pink;
+	.active-switch {
+            label {
+                width: 105px;
             }
         }
-    }
 
-    .loading-indicator {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1 1;
-
-        progress {
-            @include progress-size(24px);
-        }
+	.bbs--list-item {
+	    .bbs--list-item--actions {
+		@include icon-size(32px);
+	    }
+	}
     }
 }

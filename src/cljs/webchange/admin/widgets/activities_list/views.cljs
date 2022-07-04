@@ -1,6 +1,6 @@
 (ns webchange.admin.widgets.activities-list.views
   (:require
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (defn- activities-list-item
   [{:keys [id name preview on-click on-edit-click]}]
@@ -14,9 +14,8 @@
                 :lazy?      true}]
      [:div.data
       name
-      [ui/icon-button {:icon     "edit"
-                       :variant  "light"
-                       :on-click handle-edit-click}]]]))
+      [ui/button {:icon     "edit"
+                  :on-click handle-edit-click}]]]))
 
 (defn activities-list
   [{:keys [data loading? on-activity-click on-edit-activity-click]}]
