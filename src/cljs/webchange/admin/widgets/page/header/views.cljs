@@ -68,6 +68,8 @@
        ^{:key idx}
        [header-action action])]))
 
+(def component-class-name "widget--page--header")
+
 (defn header
   [{:keys [actions icon icon-color info on-close stats title] :as props}]
   {:pre [(s/valid? ::header-actions actions)
@@ -77,7 +79,7 @@
          (s/valid? ::header-on-close on-close)
          (s/valid? ::header-stats stats)
          (s/valid? ::header-title title)]}
-  [:div.widget--page--header
+  [:div {:class-name component-class-name}
    (when (some? icon)
      [ui/navigation-icon {:icon       icon
                           :class-name (get-class-name {"widget--page--header--navigation-icon"                          true

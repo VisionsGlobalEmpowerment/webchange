@@ -1,4 +1,4 @@
-(ns webchange.admin.widgets.page.side-bar-page.block.views
+(ns webchange.admin.widgets.page.block.views
   (:require
     [reagent.core :as r]
     [webchange.ui.index :refer [get-class-name] :as ui]))

@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.courses.state :as state]
     [webchange.admin.components.list.views :as l]
-    [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.page.views-dep :as page]
     [webchange.ui-framework.components.index :as ui]))
 
 (defn- courses-list-item

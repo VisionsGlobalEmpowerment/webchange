@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.components.list.views :as l]
     [webchange.admin.pages.schools-archived.state :as state]
-    [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.page.views-dep :as page]
     [webchange.ui-framework.components.index :as c]))
 
 (defn- restore-button

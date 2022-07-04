@@ -3,16 +3,14 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.accounts.state :as state]
     [webchange.admin.widgets.accounts-list.views :refer [accounts-list]]
-    [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.admin.widgets.page.views :as page]))
 
 (defn- content
   []
   (let [account-type @(re-frame/subscribe [::state/account-type])
         valid-type? @(re-frame/subscribe [::state/valid-account-type?])]
-    [page/main-content
-     (when valid-type?
-       [accounts-list {:account-type account-type}])]))
+    (when valid-type?
+      [accounts-list {:account-type account-type}])))
 
 (defn page
   [props]

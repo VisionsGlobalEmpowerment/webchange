@@ -1,0 +1,31 @@
+.bbs--page {
+    $header-class-name: "widget--page--header";
+
+    $gap: 20px;
+    $side-bar-width: 320px;
+
+    &.bbs--page--with-content.bbs--page--with-side-bar {
+        flex: 1 1;
+
+        display: grid;
+        grid-template-columns: auto $side-bar-width;
+        grid-template-rows: auto;
+        column-gap: $gap;
+        row-gap: $gap;
+    }
+
+    &.bbs--page--with-content.bbs--page--with-header.bbs--page--with-side-bar {
+        flex: 1 1;
+
+        display: grid;
+        grid-template-columns: auto $side-bar-width;
+        grid-template-rows: min-content auto;
+        column-gap: $gap;
+        row-gap: $gap;
+
+        .#{$header-class-name} {
+            grid-column-start: 1;
+            grid-column-end: 3
+        }
+    }
+}

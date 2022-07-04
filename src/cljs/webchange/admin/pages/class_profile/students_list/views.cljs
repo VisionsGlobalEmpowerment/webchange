@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.admin.pages.class-profile.students-list.state :as state]
-    [webchange.admin.widgets.page.side-bar-page.views :as page]
+    [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]))
 
 (defn- list-item

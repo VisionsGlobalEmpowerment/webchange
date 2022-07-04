@@ -3,8 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.books.state :as state]
     [webchange.admin.widgets.activities-list.views :refer [activities-list]]
-    [webchange.admin.widgets.page.views :as page]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.admin.widgets.page.views-dep :as page]))
 
 (defn page
   [props]

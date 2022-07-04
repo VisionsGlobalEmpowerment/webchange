@@ -10,7 +10,7 @@
     [webchange.admin.widgets.class-form.views :refer [class-edit-form]]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.counter.views :refer [counter]]
-    [webchange.admin.widgets.page.side-bar-page.views :as page]))
+    [webchange.admin.widgets.page.views :as page]))
 
 (defn- class-counter
   []
@@ -88,9 +88,9 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [props]
-    [page/side-bar-page
-     [page/main-content {:title "Class Profile"
-                         :icon  "classes"}
+    [page/page
+     [page/content {:title "Class Profile"
+                    :icon  "classes"}
       [class-counter]
       [statistics]]
      [side-bar props]]))

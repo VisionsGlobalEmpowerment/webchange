@@ -1,8 +1,4 @@
 .widget--side-bar-page {
-    @import "block/styles";
-    @import "main_content/styles";
-    @import "side_bar/styles";
-
     display: grid;
     grid-template-columns: auto 320px;
     column-gap: $bbs--page--margin * 2;

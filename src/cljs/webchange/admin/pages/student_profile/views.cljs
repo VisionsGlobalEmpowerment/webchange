@@ -24,16 +24,18 @@
   []
   (let [{student-name :name} @(re-frame/subscribe [::state/student])
         {:keys [started-at last-login activity-progress cumulative-time]} @(re-frame/subscribe [::state/course-stats])]
-    [page/_header {:title      student-name
+    [page/header {:title      student-name
                   :avatar     ""
                   :class-name "student-profile-header"}
-     [page/_header-content-group {:title "Program start"} [:span started-at]]
-     [:hr]
-     [page/_header-content-group {:title "Latest login at"} [:span last-login]]
-     [:hr]
-     [page/_header-content-group {:title "Activities completed"} [:span activity-progress]]
-     [:hr]
-     [page/_header-content-group {:title "Total played time"} [:span cumulative-time]]]))
+     ;[page/_header-content-group {:title "Program start"} [:span started-at]]
+     ;[:hr]
+     ;[page/_header-content-group {:title "Latest login at"} [:span last-login]]
+     ;[:hr]
+     ;[page/_header-content-group {:title "Activities completed"} [:span activity-progress]]
+     ;[:hr]
+     ;[page/_header-content-group {:title "Total played time"} [:span cumulative-time]]
+     ]
+    ))
 
 (defn- progress-card
   [{:keys [completed? last-played name total-time]}]
@@ -106,11 +108,12 @@
 (defn- content
   []
   (let [{class-name :name} @(re-frame/subscribe [::state/class])]
-    [page/main-content {:title   class-name
-                        :icon    "classes"
-                        :actions [:div.main-content-actions
-                                  [course-name]
-                                  [view-switcher]]}
+    [page/content {:title class-name
+                   :icon  "classes"
+                   ;:actions [:div.main-content-actions
+                   ;          [course-name]
+                   ;          [view-switcher]]
+                   }
      [progress-table]]))
 
 (defn- side-bar-complete-class
@@ -130,10 +133,11 @@
                handle-edit-click #(swap! form-editable? not)
                handle-save-click #(do (reset! form-editable? false)
                                       (re-frame/dispatch [::state/update-student-data student-id]))]
-    [page/side-bar {:title   "Student Account"
-                    :actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
-                                              :variant  "light"
-                                              :on-click handle-edit-click}]}
+    [page/side-bar {:title "Student Account"
+                    ;:actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
+                    ;                          :variant  "light"
+                    ;                          :on-click handle-edit-click}]
+                    }
      [edit-student-form {:student-id student-id
                          :school-id  school-id
                          :editable?  @form-editable?
@@ -143,7 +147,7 @@
   [props]
   (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
     (case side-bar-content
-      :complete-class [side-bar-complete-class props]
+      ;:complete-class [side-bar-complete-class props]
       :student-profile [side-bar-student-profile props]
       nil)))
 
@@ -151,7 +155,11 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page {:class-name "page--student-profile"}
+    ;[page/page {:class-name "page--student-profile"}
+    ; [header]
+    ;
+    ; [side-bar props]]
+    [page/page
      [header]
      [content]
      [side-bar props]]))
