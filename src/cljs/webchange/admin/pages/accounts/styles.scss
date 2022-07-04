@@ -1,11 +1,2 @@
 .page--accounts-admins {
-    .widget--page--header--navigation-icon {	    
-	@include icon-color($color-green2a);
-    }
-
-    .widget--page--header-actions {
-	.bbs--icon {
-	    @include icon-color($color-blue2a);
-	}
-    }
 }

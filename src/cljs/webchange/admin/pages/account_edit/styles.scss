@@ -1,59 +1,16 @@
 .page--account-edit {
-    .widget--page--header--navigation-icon {	    
-	@include icon-color($color-green2a);
-    }
-    .widget--page--header-info {
-	border-left: 1px solid #ffffff1a;
-
-
-	.widget--page--header-info-block {
-	    flex-direction: column-reverse;
-	    min-width: 235px;
-	    align-items: center;
-	    border-right: 1px solid #ffffff1a;
-	    gap: 0px;
-
-	    .widget--page--header-info-block--key {
-                @include bbs--noto-12-r;
-            }
-
-            .widget--page--header-info-block--value {
-                @include bbs--noto-14-sb;
-            }
-	}
-    }
-
-    #page--account-edit--content {
+    .page--account-edit--content {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        gap: 128px;
-
-    }
-
-    .left-side-panel {
-        display: flex;
-	flex: 1 1;
-        flex-direction: column;
-        gap: 32px;
-        overflow: auto;
-        padding-right: $default-gap;
-
-        & > * {
-            overflow: unset;
-        }
-    }
-
-    .loading-indicator {
-        flex: 1 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        gap: 34px;
     }
 
     .children-list {
+        @include bbs--with-scrollbar;
+        @include bbs--with-scrollbar-margin;
         display: flex;
-	flex: 3 1;
+        flex: 1 1;
         flex-direction: column;
         gap: 16px;
         overflow: auto;
@@ -76,35 +33,33 @@
             line-height: 18px;
         }
 
-	p {
-	    margin-top: 12px;
-	}
+        p {
+            margin-top: 12px;
+        }
 
         .remove-button {
-	    @include bbs--icon-size(32px);
+            @include bbs--icon-size(24px);
+            @include bbs--icon-thickness(1.5px);
             position: absolute;
             top: 14px;
             right: 14px;
         }
 
         dl {
+            @include bbs--noto-14-r;
             display: grid;
             grid-template-columns: auto 1fr;
             column-gap: 14px;
             row-gap: 12px;
-	    margin-top: 36px;
+            margin-top: 36px;
         }
 
         dt {
-            font-weight: 700;
+            @include bbs--noto-14-b;
 
             &:after {
                 content: ":";
             }
-        }
-
-        dd {
-            margin: 0;
         }
     }
 }

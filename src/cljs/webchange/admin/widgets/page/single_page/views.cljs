@@ -6,11 +6,12 @@
     [webchange.ui.index :refer [get-class-name]]))
 
 (defn single-page
-  [{:keys [background-image? class-name class-name-content footer form-container? header]}]
+  [{:keys [align-center? background-image? class-name class-name-content footer form-container? header]}]
   [:div {:class-name (get-class-name {"widget--single-page"                        true
                                       "widget--single-page--with-background-image" background-image?
                                       "widget--single-page--with-footer"           (some? footer)
                                       "widget--single-page--form-container"        form-container?
+                                      "widget--single-page--align-center"          align-center?
                                       class-name                                   (some? class-name)})}
    (when (some? header)
      [header-views/header header])

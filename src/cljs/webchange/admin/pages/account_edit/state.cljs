@@ -90,7 +90,8 @@
   ::children
   :<- [::account-data]
   #(->> (get % :children [])
-        (map prepare-child)))
+        (map prepare-child)
+        (repeat) (take 10) (flatten)))
 
 ;; Child removing
 

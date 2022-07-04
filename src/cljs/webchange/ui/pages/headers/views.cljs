@@ -57,4 +57,12 @@
                                                            :value (str "lesson-0" i)})))}]]
               :actions  [{:text     "Add Student"
                           :icon     "plus"
-                          :on-click #(print "Add")}]}]]]])
+                          :on-click #(print "Add")}]}]
+     [header {:title      "User Name"
+              :icon       "accounts"
+              :icon-color "green-2"
+              :on-close   #(print "Close")
+              :info       [{:key   "Account Created"
+                            :value "04/12/2022"}
+                           {:key   "Last Login"
+                            :value "04/27/2022"}]}]]]])

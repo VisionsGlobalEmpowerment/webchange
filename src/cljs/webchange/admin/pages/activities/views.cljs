@@ -18,12 +18,13 @@
           current-language @(re-frame/subscribe [::state/current-language])
           handle-select-language #(re-frame/dispatch [::state/select-language %])]
       [page/single-page {:class-name "page--activities"
-                         :header     {:title   "Activities"
-                                      :icon    "games"
-                                      :controls [[ui/select {:label     "Language"
-                                                             :value     current-language
-                                                             :options   language-options
-                                                             :on-change handle-select-language}]]}}
+                         :header     {:title      "Activities"
+                                      :icon       "games"
+                                      :icon-color "blue-2"
+                                      :controls   [[ui/select {:label     "Language"
+                                                               :value     current-language
+                                                               :options   language-options
+                                                               :on-change handle-select-language}]]}}
        [page/main-content
         [activities-list {:data                   activities
                           :loading?               loading?

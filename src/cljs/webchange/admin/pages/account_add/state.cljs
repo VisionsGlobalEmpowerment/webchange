@@ -31,15 +31,6 @@
 
 ;;
 
-(re-frame/reg-sub
-  ::title
-  :<- [::account-type]
-  (fn [account-type]
-    (let [account-type-name (-> account-type
-                                (or "")
-                                str/capitalize)]
-      (str "New " account-type-name " Account"))))
-
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]

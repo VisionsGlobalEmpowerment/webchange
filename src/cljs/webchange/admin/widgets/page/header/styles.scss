@@ -1,4 +1,6 @@
 .widget--page--header {
+    $block-border-color: #ffffff1a;
+
     display: flex;
     align-items: center;
     gap: 28px;
@@ -20,10 +22,17 @@
     .widget--page--header--navigation-icon {
         @include bbs--icon-color(bbs--color(yellow-2));
         @include bbs--icon-size(36px);
+
+        @each $color in $bbs--brand-colors {
+            &.widget--page--header--navigation-icon--color-#{$color} {
+                @include bbs--icon-color(bbs--color($color));
+            }
+        }
     }
 
     .widget--page--header--title {
         @include bbs--noto-16-b;
+        margin-right: 32px;
     }
 
     .widget--page--header--stats {
@@ -41,28 +50,43 @@
             gap: 10px;
 
             padding: 8px 20px;
-            border-left: 1px solid #ffffff1a;
+            border-left: 1px solid $block-border-color;
         }
     }
 
     .widget--page--header--filler {
         flex: 1 1;
-        display: none;
     }
 
     .widget--page--header-info {
-	
+        $gap: 64px;
+
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $gap;
 
         .widget--page--header-info-block {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            position: relative;
+
+            &:before {
+                content: "";
+
+                position: absolute;
+                left: -$gap * 0.5;
+
+                height: 100%;
+                border-left: solid 1px $block-border-color;
+            }
+
+            &:first-child:before {
+                display: none;
+            }
 
             .widget--page--header-info-block--key {
-                @include bbs--noto-14-sb;
+                @include bbs--noto-14-b;
             }
 
             .widget--page--header-info-block--value {
@@ -92,6 +116,10 @@
         label {
             @include bbs--noto-14-sb;
             color: bbs--color(white);
+        }
+
+        .bbs--select {
+            max-width: 180px;
         }
     }
 

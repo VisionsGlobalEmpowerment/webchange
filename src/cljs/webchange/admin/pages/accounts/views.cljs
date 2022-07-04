@@ -22,10 +22,11 @@
     (let [header @(re-frame/subscribe [::state/header])
           handle-add-click #(re-frame/dispatch [::state/add-account])]
       [page/single-page {:class-name "page--accounts-admins"
-                         :header     {:title   header
-                                      :icon    "accounts"
-                                      :actions (when (= "admin" account-type)
-                                                 [{:text     "Add New Admin"
-                                                   :icon     "account-add"
-                                                   :on-click handle-add-click}])}}
+                         :header     {:title      header
+                                      :icon       "accounts"
+                                      :icon-color "green-2"
+                                      :actions    (when (= "admin" account-type)
+                                                    [{:text     "Add New Admin"
+                                                      :icon     "account-add"
+                                                      :on-click handle-add-click}])}}
        [content]])))

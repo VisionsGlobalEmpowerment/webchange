@@ -68,7 +68,7 @@
                                               class-name             (some? class-name)})}
          [:h3.account-details-header "Account Details"]
          [ui/form {:form-id (-> (str "add-account")
-                                p                      (keyword))
+                                (keyword))
                    :data    {:type account-type}
                    :model   add-account-model
                    :errors  errors

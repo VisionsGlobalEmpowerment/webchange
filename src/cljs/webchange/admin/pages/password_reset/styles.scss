@@ -1,34 +1,4 @@
 .page--password-reset {
-    .widget--page--header--navigation-icon {	    
-	@include icon-color($color-green2a);
-    }
-    .widget--page--header-info {
-	border-left: 1px solid #ffffff1a;
-
-
-	.widget--page--header-info-block {
-	    flex-direction: column-reverse;
-	    min-width: 235px;
-	    align-items: center;
-	    border-right: 1px solid #ffffff1a;
-	    gap: 0px;
-
-	    .widget--page--header-info-block--key {
-                @include bbs--noto-12-r;
-            }
-
-            .widget--page--header-info-block--value {
-                @include bbs--noto-14-sb;
-            }
-	}
-    }
-
-    .widget--single-page--content {
-	display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
     .password-reset-form {
         width: 320px;
 

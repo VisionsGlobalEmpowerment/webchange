@@ -17,12 +17,18 @@
 
     &.widget--single-page--form-container {
         .widget--single-page--content {
-
             padding: 32px 64px;
 
             .component--form {
                 width: 280px;
             }
+        }
+    }
+
+    &.widget--single-page--align-center {
+        .widget--single-page--content {
+            align-items: center;
+            justify-content: center;
         }
     }
 

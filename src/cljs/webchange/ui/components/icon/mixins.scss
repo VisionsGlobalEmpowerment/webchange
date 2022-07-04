@@ -16,3 +16,9 @@
         height: $size;
     }
 }
+
+@mixin bbs--icon-thickness($thickness) {
+    svg {
+        stroke-width: $thickness;
+    }
+}

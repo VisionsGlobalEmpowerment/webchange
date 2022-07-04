@@ -16,18 +16,14 @@
                  :color      "blue-1"
                  :title      "Delete Child"
                  :class-name "remove-button"
+                 :loading?   removing?
                  :on-click   handle-remove-click}]
      [:p (str "Account Created: " created-at)]
-
      [:dl
       [:dt "Course"]
       [:dd course-name]
       [:dt "Device"]
       [:dd device]]]))
-
-(defn- loading-indicator
-  []
-  [:div.loading-indicator])
 
 (defn- children-list
   []
@@ -37,7 +33,7 @@
      [:h3.students-header "Students"]
      [:div.students-filler]
      (if loading?
-       [loading-indicator]
+       [ui/loading-overlay]
        (for [{:keys [id] :as child} children]
          ^{:key id}
          [child-card child]))]))
@@ -46,21 +42,22 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [account-id]}]
-    (let [account @(re-frame/subscribe [::state/account-info]) 
+    (let [account @(re-frame/subscribe [::state/account-info])
           open-accounts-list #(re-frame/dispatch [::state/open-accounts-list])]
-      [page/single-page {:class-name "page--account-edit"
-                         :header            {:title    (:name account)
-                                             :icon     "accounts"
-                                             :on-close open-accounts-list
-                                             :info     [{:key   "Account Created"
-                                                         :value (:account-created account)}
-                                                        {:key   "Last Login"
-                                                         :value (:last-login account)}]}
-                         :form-container?   true}
-       [page/main-content {:id "page--account-edit--content"}
-        [:div.left-side-panel
-         [edit-account-form {:account-id account-id
-                             :class-name "edit-account-form"
-                             :on-save    open-accounts-list
-                             :on-remove  open-accounts-list}]]
-        [children-list]]])))
+      [page/single-page {:class-name         "page--account-edit"
+                         :class-name-content "page--account-edit--content"
+                         :header             {:title      (:name account)
+                                              :icon       "accounts"
+                                              :icon-color "green-2"
+                                              :on-close   open-accounts-list
+                                              :info       [{:key   "Account Created"
+                                                            :value (:account-created account)}
+                                                           {:key   "Last Login"
+                                                            :value (:last-login account)}]}
+                         :form-container?    true}
+       [:div.left-side-panel
+        [edit-account-form {:account-id account-id
+                            :class-name "edit-account-form"
+                            :on-save    open-accounts-list
+                            :on-remove  open-accounts-list}]]
+       [children-list]])))

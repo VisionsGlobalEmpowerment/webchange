@@ -9,15 +9,15 @@
     .activities-list-item {
         border-radius: 6px;
         overflow: hidden;
-	width: 215px;
+        width: 215px;
 
         .preview {
             border-radius: 6px;
             overflow: hidden;
-	    width: 215px;
+            width: 215px;
             height: 120px;
 
-	    border: 1px solid $color-blue2a;
+            border: 1px solid bbs--color(blue-2);
         }
 
         .data {
@@ -32,9 +32,9 @@
             font-size: 14px;
             line-height: 18px;
 
-	    .bbs--button--icon {
-		@include bbs--icon-color(bbs--color(blue-1));
-	    }
+            .bbs--button--icon {
+                @include bbs--icon-color(bbs--color(blue-1));
+            }
         }
 
         &:hover {
