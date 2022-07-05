@@ -20,6 +20,7 @@
                   "s"                 {["/" [#"[\w-%]+" :scene-id]]                                                        :activity-sandbox
                                        ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]]                            :sandbox
                                        ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
+                  "lesson-builder"    {["/" [#"[\w-%]+" :scene-id]] :lesson-builder}
                   "courses"           {["/" [#"[\w-%]+" :id]] {[""]                 :course
                                                                ["/editor"]          {[""]                         :course-editor
                                                                                      ["/" [#"[\w-%]+" :scene-id]] :course-editor-scene}

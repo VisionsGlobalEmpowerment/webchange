@@ -8,6 +8,7 @@
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.events :as ee]
+    [webchange.editor.views :refer [lesson-builder]]
     [webchange.editor-v2.course-table.views :refer [course-table]]
     [webchange.editor-v2.scenes-crossing.views :refer [scenes-crossing]]
     [webchange.editor-v2.events :as ee2]
@@ -97,6 +98,7 @@
                :sandbox [course {:mode ::modes/sandbox}]
                :activity-sandbox [sandbox/activity {:scene-id (:scene-id route-params)}]
                ;; editor
+               :lesson-builder [lesson-builder {:scene-id (:scene-id route-params)}]
                :course-editor [editor-panel-v2 (:id route-params)]
                :course-editor-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
                :course-editor-v2-concept [editor-panel-v2-concept (:id route-params) (-> route-params :concept-id js/parseInt)]

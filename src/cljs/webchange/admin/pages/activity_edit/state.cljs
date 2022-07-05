@@ -132,9 +132,9 @@
   ::edit
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (get-activity db)]
-      (print "::edit" id)
-      {})))
+    (let [{:keys [id]} (get-activity db)
+          href (str "/lesson-builder/" id)] ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
+      (set! js/document.location href))))
 
 (re-frame/reg-event-fx
   ::play

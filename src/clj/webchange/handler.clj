@@ -167,6 +167,7 @@
   (GET "/game-changer" request (authenticated-route request {:role :educator}))
   (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))
   (GET "/book-creator" request (authenticated-route request {:role :educator}))
+  (GET "/lesson-builder/:scene-id" request (authenticated-route request {:role :educator}))
   (GET "/wizard" request (authenticated-route request {:role :educator}))
   (GET "/game-changer-beta" request (authenticated-route request {:role :educator}))
 
