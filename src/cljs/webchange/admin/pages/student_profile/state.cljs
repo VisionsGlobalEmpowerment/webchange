@@ -3,79 +3,131 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.date :refer [date-str->locale-date ms->time]]))
 
-(def path-to-db :student-profile)
+(def path-to-db :page/student-profile)
 
 (re-frame/reg-sub
   path-to-db
   (fn [db]
     (get db path-to-db)))
 
+;; student progress
+
+(def student-progress-key :student-progress)
+
+(defn- set-student-progress
+  [db value]
+  (assoc db student-progress-key value))
+
+(re-frame/reg-sub
+  ::student-progress
+  :<- [path-to-db]
+  #(get % student-progress-key))
+
+;;
+
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id student-id]}]]
-    {:db         (-> db
-                     (assoc :class-id class-id)
-                     (assoc :student-id student-id)
-                     (assoc :loading-student true))
-     :dispatch-n [[::warehouse/load-class-student-progress {:student-id student-id} {:on-success [::load-student-success]}]]}))
+  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id]}]]
+    {:db       (-> db
+                   (assoc :class-id class-id)
+                   (assoc :school-id school-id)
+                   (assoc :student-id student-id)
+                   (assoc :loading-student true))
+     :dispatch [::load-student-progress]}))
 
-(defn- prepare-student
-  [{:keys [user]}]
-  {:name (str (:first-name user) " " (:last-name user))})
-
-(defn- prepare-progress
-  "Prepare progress for quick access. Expects a list of activity-stats.
-  uses activity unique-id as a key"
-  [progress]
-  (->> progress
-       (map (juxt :unique-id identity))
-       (into {})))
+(re-frame/reg-event-fx
+  ::load-student-progress
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [student-id]} db]
+      {:dispatch [::warehouse/load-class-student-progress
+                  {:student-id student-id}
+                  {:on-success [::load-student-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-student-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [student class course course-stats activity-stats]}]]
-    {:db (-> db
-             (assoc :loading-student false)
-             (assoc :student (prepare-student student))
-             (assoc :class class)
-             (assoc :course course)
-             (assoc :course-stats course-stats)
-             (assoc :activity-stats (prepare-progress activity-stats)))}))
+  (fn [{:keys [db]} [_ data]]
+    {:db (set-student-progress db data)}))
+
+(re-frame/reg-sub
+  ::course-statistics
+  :<- [::student-progress]
+  (fn [{:keys [course-stats]}]
+    (let [{:keys [activity-progress cumulative-time started-at last-login]} (:data course-stats)]
+      {:started-at        (date-str->locale-date started-at)
+       :last-login        (date-str->locale-date last-login)
+       :activity-progress activity-progress
+       :cumulative-time   (ms->time cumulative-time)})))
+
+(re-frame/reg-sub
+  ::student-data
+  :<- [::student-progress]
+  (fn [{:keys [student]}]
+    (let [{:keys [first-name last-name]} (:user student)]
+      {:name (str first-name " " last-name)})))
+
+(re-frame/reg-sub
+  ::class-data
+  :<- [::student-progress]
+  (fn [{:keys [class]}]
+    (let [{:keys [name]} class]
+      {:name name})))
+
+(re-frame/reg-sub
+  ::course-data
+  :<- [::student-progress]
+  (fn [{:keys [course]}]
+    (let [{:keys [name]} course]
+      {:name name})))
+
+(re-frame/reg-event-fx
+  ::open-class-profile-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [school-id class-id]} db]
+      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+
+;; progress data
+
+(defn- ->progress-data
+  [activity-data activity-progress course]
+  (let [{:keys [activity unique-id]} activity-data
+        {:keys [name]} (get-in course [:data :scene-list (keyword activity)])]
+    (merge (get activity-progress unique-id {:score 0})
+           {:name      name
+            :unique-id unique-id})))
+
+(re-frame/reg-sub
+  ::progress-data
+  :<- [::student-progress]
+  :<- [::current-level]
+  (fn [[{:keys [activity-stats course]} current-level-idx]]
+    (let [activity-progress (reduce (fn [result {:keys [unique-id]}]
+                                      (assoc result unique-id {:score 100}))
+                                    {}
+                                    activity-stats)
+
+          current-level-data (-> (get-in course [:data :levels]) (nth current-level-idx nil))
+          lessons (get current-level-data :lessons [])
+          lessons-data (->> lessons
+                            (map-indexed (fn [idx {:keys [activities]}]
+                                           [idx {:name     (str "Lesson " (when (< idx 9) "0") (inc idx))
+                                                 :progress (map #(->progress-data % activity-progress course) activities)}]))
+                            (into {}))]
+      {:lessons (->> (count lessons)
+                     (range)
+                     (map #(get lessons-data %)))})))
 
 (re-frame/reg-event-fx
   ::update-student-data
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ student-id]]
+  (fn [{:keys [_]} [_ student-id]]
     {:dispatch [::warehouse/load-class-student-progress {:student-id student-id} {:on-success [::load-student-success]}]}))
-
-(re-frame/reg-sub
-  ::student
-  :<- [path-to-db]
-  #(get % :student))
-
-(re-frame/reg-sub
-  ::course-stats
-  :<- [path-to-db]
-  #(get % :course-stats))
-
-(re-frame/reg-sub
-  ::activity-stats
-  :<- [path-to-db]
-  #(get % :activity-stats))
-
-(re-frame/reg-sub
-  ::class
-  :<- [path-to-db]
-  #(get % :class))
-
-(re-frame/reg-sub
-  ::course
-  :<- [path-to-db]
-  #(get % :course))
 
 (re-frame/reg-sub
   ::current-level
@@ -84,67 +136,18 @@
 
 (re-frame/reg-sub
   ::level-options
-  :<- [::course]
-  (fn [course]
-    (->> course
-         :data
-         :levels
-         (count)
-         (range)
-         (map (fn [idx] {:value idx
-                         :text  (str "Level " (inc idx))})))))
+  :<- [::student-progress]
+  (fn [{:keys [course]}]
+    (->> (get-in course [:data :levels])
+         (map-indexed (fn [idx]
+                        {:value idx
+                         :text  (str "Level " (when (< idx 9) "0") (inc idx))})))))
 
 (re-frame/reg-event-fx
   ::select-level
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ idx]]
     {:db (assoc db :current-level idx)}))
-
-(re-frame/reg-sub
-  ::current-lessons
-  :<- [::course]
-  :<- [::current-level]
-  (fn [[course current-level]]
-    (-> course
-        :data
-        :levels
-        (get current-level)
-        :lessons)))
-
-(defn- ->activity-stats
-  [activities {unique-id :unique-id activity-key :activity :as course-activity} stats]
-  (let [activity-name (->> activity-key keyword (get activities) :name)
-        stat (get stats unique-id)]
-    {:id          unique-id
-     :name        activity-name
-     :completed?  (some? (:score stat))
-     :last-played (:last-played stat)
-     :total-time  (:total-time stat)}))
-
-(defn- ->lesson-stats
-  [activities lesson activity-stats]
-  (->> lesson
-       :activities
-       (map #(->activity-stats activities % activity-stats))))
-
-(re-frame/reg-sub
-  ::lessons-data
-  :<- [::course]
-  :<- [::current-lessons]
-  :<- [::activity-stats]
-  (fn [[course current-lessons activity-stats]]
-    (let [activities (-> course :data :scene-list)]
-      (->> current-lessons
-           (map-indexed vector)
-           (reduce (fn [result [idx lesson]]
-                     (let [lesson-activities (->lesson-stats activities lesson activity-stats)]
-                       (-> result
-                           (update :data conj {:id         idx
-                                               :name       (str "Lesson " (inc idx))
-                                               :activities lesson-activities})
-                           (update :max-activities max (count lesson-activities)))))
-                   {:data           []
-                    :max-activities 0})))))
 
 ;; Side Bar Content
 

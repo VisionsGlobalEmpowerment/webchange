@@ -5,7 +5,7 @@
     [webchange.admin.components.list.views :as l]
     [webchange.admin.pages.course-edit.state :as state]
     [webchange.admin.widgets.course-info-form.view :refer [course-info-form]]
-    [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.page.views-dep :as page]
     [webchange.ui-framework.components.index :as ui]
     [webchange.utils.drag-and-drop :refer [draggable]]
     [webchange.utils.numbers :refer [try-parse-int]]))

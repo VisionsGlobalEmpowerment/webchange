@@ -102,8 +102,9 @@
                                (into {}))
           activities-list (map :unique-id activities)
           students-data (->> students
-                             (map (fn [{:keys [access-code user user-id]}]
-                                    [user-id {:access-code access-code
+                             (map (fn [{:keys [id access-code user user-id]}]
+                                    [user-id {:id          id
+                                              :access-code access-code
                                               :name        (user->user-name user)
                                               :progress    (->> activities-list
                                                                 (map (fn [unique-id]
@@ -215,3 +216,11 @@
     (let [school-id (:school-id db)
           class-id (:class-id db)]
       {:dispatch [::routes/redirect :class-students-add :school-id school-id :class-id class-id]})))
+
+(re-frame/reg-event-fx
+  ::open-student-profile-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    (let [school-id (:school-id db)
+          class-id (:class-id db)]
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :class-id class-id :student-id student-id]})))

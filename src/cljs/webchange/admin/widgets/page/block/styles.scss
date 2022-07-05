@@ -9,16 +9,54 @@
     }
 
     .block--header {
-        @include bbs--noto-16-b;
         @include bbs--icon-size(24px);
 
         display: flex;
         align-items: center;
-        gap: $bbs--page--margin;
+        gap: 16px;
         min-height: 36px;
 
         .title-text {
+            @include bbs--noto-16-b;
+        }
+
+        .subtitle-text {
+            @include bbs--noto-12-r;
+            line-height: 20px;
+        }
+
+        .block--header--content {
             flex: 1 1;
+        }
+    }
+
+    .block--tabs {
+        $gap: 16px;
+
+        display: flex;
+        align-items: center;
+        gap: $gap;
+
+        .block--tabs--button {
+            color: bbs--color(grey-3);
+
+            &.block--tabs--button--active {
+                color: bbs--color(blue-1);
+            }
+
+            &:after {
+                content: "";
+
+                position: absolute;
+                right: - $gap * 0.5;
+
+                height: 100%;
+                border-left: solid 1px bbs--color(grey-4);
+            }
+
+            &:last-child:after {
+                display: none;
+            }
         }
     }
 

@@ -1,8 +1,9 @@
 (ns webchange.admin.pages.schools.views
-  (:require [re-frame.core :as re-frame]
-            [webchange.admin.pages.schools.state :as state]
-            [webchange.admin.widgets.page.views :as page]
-            [webchange.ui.index :as ui]))
+  (:require
+    [re-frame.core :as re-frame]
+    [webchange.admin.pages.schools.state :as state]
+    [webchange.admin.widgets.page.views :as page]
+    [webchange.ui.index :as ui]))
 
 (defn school-item
   [{:keys [id name stats]}]
@@ -36,11 +37,10 @@
 (defn- schools-list
   []
   (let [schools @(re-frame/subscribe [::state/schools-list])]
-    [page/main-content
-     [ui/list {:class-name "schools-list"}
-      (for [school schools]
-        ^{:key (:id school)}
-        [school-item school])]]))
+    [ui/list {:class-name "schools-list"}
+     (for [school schools]
+       ^{:key (:id school)}
+       [school-item school])]))
 
 (defn page
   []

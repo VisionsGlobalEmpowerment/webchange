@@ -1,139 +1,55 @@
 (ns webchange.admin.widgets.page.views
   (:require
     [reagent.core :as r]
+    [webchange.admin.widgets.page.block.views :as block-views]
+    [webchange.admin.widgets.page.content.views :as content-views]
+    [webchange.admin.widgets.page.footer.views :as footer-views]
     [webchange.admin.widgets.page.header.views :as header-views]
-    [webchange.admin.widgets.page.single-page.views :as single-page-views]
-    [webchange.ui-framework.components.index :as c]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.admin.widgets.page.side-bar.views :as side-bar-views]
+    [webchange.admin.widgets.page.utils :refer [has-child?]]
+    [webchange.ui.index :refer [get-class-name]]))
 
+(def block block-views/block)
+(def content content-views/content)
+(def side-bar side-bar-views/side-bar)
 (def header header-views/header)
-(def single-page single-page-views/single-page)
 
-(def class-names
-  {:header   "widget-profile--header"
-   :main     "widget-profile--main-content"
-   :side-bar "widget-profile--side-bar"})
+(defn single-page
+  [{:keys [align-center? background-image? class-name class-name-content footer form-container? header]}]
+  [:div {:class-name (get-class-name {"widget--single-page"                        true
+                                      "widget--single-page--with-background-image" background-image?
+                                      "widget--single-page--with-footer"           (some? footer)
+                                      "widget--single-page--form-container"        form-container?
+                                      "widget--single-page--align-center"          align-center?
+                                      class-name                                   (some? class-name)})}
+   (when (some? header)
+     [header-views/header header])
+   (->> (r/current-component)
+        (r/children)
+        (into [:div {:class-name (get-class-name {"widget--single-page--content" true
+                                                  class-name-content             (some? class-name-content)})}
+               (when (some? footer)
+                 [footer-views/footer footer])]))])
 
-(defn- has-child?
-  [el child-class-name]
-  (-> el
-      (.querySelector (str "." child-class-name))
-      (some?)))
-
-(defn- with-children-classes
-  [children]
-  (->> children
-       (map (fn [[name present]]
-              [(->> name (clojure.core/name) (str "with-"))
-               present]))
-       (into {})))
+(def child-components {header-views/component-class-name   "bbs--page--with-header"
+                       content-views/component-class-name  "bbs--page--with-content"
+                       side-bar-views/component-class-name "bbs--page--with-side-bar"})
 
 (defn page
-  []
-  (let [children (r/atom nil)
-        handle-ref (fn [ref]
-                     (when (some? ref)
-                       (reset! children (->> class-names
-                                             (map (fn [[name class-name]]
-                                                    [name (has-child? ref class-name)]))
-                                             (into {})))))]
-    (r/create-class
-      {:display-name "Page Layout"
-       :reagent-render
-       (fn [{:keys [class-name]}]
-         (->> (r/current-component)
-              (r/children)
-              (into [:div {:class-name (get-class-name (merge {"widget--page"   true
-                                                               "widget-profile" true
-                                                               class-name       (some? class-name)}
-                                                              (with-children-classes @children)))
-                           :ref        handle-ref}])))})))
-
-(defn- header-info
-  [{:keys [avatar icon title]}]
-  [:div.info
-   (when (some? avatar)
-     [c/avatar {:src avatar}])
-   (when (some? icon)
-     [c/icon {:icon       icon
-              :class-name "icon"}])
-   (when (some? title)
-     [:div {:class-name "title"}
-      title])])
-
-(defn _header-content-group
-  [{:keys [class-name icon title]}]
-  [:div {:class-name (get-class-name {"header-content-group" true
-                                      class-name             (some? class-name)})}
-   (when (some? icon)
-     [c/icon {:icon icon}])
-   (->> (r/current-component)
-        (r/children)
-        (into [:div.data
-               (when (some? title)
-                 [:label title])]))])
-
-(defn _header
-  [{:keys [actions class-name] :as props}]
-  (let [children (->> (r/current-component)
-                      (r/children))]
-    [:div {:class-name (:header class-names)}
-     [header-info props]
-     (when (some? children)
-       (into [:div {:class-name (get-class-name {"content"  true
-                                                 class-name (some? class-name)})}]
-             children))
-     (when (some? actions)
-       [:div.actions
-        actions])]))
-
-(defn- block-title
-  [{:keys [actions icon title title-action]}]
-  (when (or (some? title)
-            (some? actions))
-    [:h1.block-title
-     [:div {:class-name (get-class-name {"title"       true
-                                         "with-icon"   (some? icon)
-                                         "with-action" (some? title-action)})}
-      (when (some? title-action)
-        [:div.title-action
-         title-action])
-      (when (some? icon)
-        [c/icon {:icon       icon
-                 :class-name "title-icon"}])
-      (when (some? title)
-        [:div.title-text title])]
-     (when (some? actions)
-       [:div.title-actions actions])]))
-
-(defn main-content
-  [{:keys [actions class-name footer icon id title]}]
-  [:div {:class-name (:main class-names)}
-   [block-title {:actions actions
-                 :title   title
-                 :icon    icon}]
-   (->> (r/current-component)
-        (r/children)
-        (into [:div (cond-> {:class-name (get-class-name {"widget-profile--main-content--content" true
-                                                          class-name                              (some? class-name)})}
-                            (some? id) (assoc :id id))]))
-   (when (some? footer)
-     [:div.widget-profile--main-content--footer
-      footer])])
-
-(defn side-bar
-  [{:keys [actions title title-action]}]
-  [:div {:class-name (:side-bar class-names)}
-   [block-title {:title        title
-                 :title-action title-action
-                 :actions      actions}]
-   (into [:div.side-bar-content]
-         (->> (r/current-component)
-              (r/children)))])
-
-(defn block
-  [{:keys [title]}]
-  (->> (r/current-component)
-       (r/children)
-       (into [:div.widget-profile--content-block
-              [:h2 title]])))
+  [{:keys [class-name]}]
+  (r/with-let [children-class-names (r/atom (->> (vals child-components)
+                                                 (map #(vector % false))
+                                                 (into {})))
+               handle-ref (fn [el]
+                            (when (some? el)
+                              (->> child-components
+                                   (reduce (fn [result [child-class-name parent-class-name]]
+                                             (assoc result parent-class-name (has-child? el child-class-name)))
+                                           {})
+                                   (reset! children-class-names))))]
+    (->> (r/current-component)
+         (r/children)
+         (into [:div {:class-name (get-class-name (merge {"bbs--page" true
+                                                          class-name  (some? class-name)}
+                                                         @children-class-names))
+                      :ref        handle-ref}]))))

@@ -3,141 +3,46 @@
         justify-content: flex-end;
     }
 
-    .main-content-actions {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex: 1 1;
-    }
-
     .course-name {
+        @include bbs--icon-size(24px);
+        @include bbs--noto-16-r;
+
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 10px;
 
-        font-weight: 500;
-        font-size: 10px;
-        line-height: 12px;
+        padding: 0 32px;
 
-        @include icon-color($color-pink);
-        @include icon-size(24px);
-    }
-
-    .view-switcher {
-        display: flex;
-        gap: 8px;
-
-        hr {
-            border: none;
-            border-left: solid 1px #DCE3F5;
-            display: block;
-            padding: 12px 0;
-        }
-
-        button {
-            background-color: transparent;
-            color: #333;
-
-            &.active {
-                color: $color-pink;
-            }
+        & > .prefix {
+            @include bbs--noto-16-b;
         }
     }
 
     .progress-table {
-        display: grid;
-        align-items: center;
-        column-gap: 10px;
-        row-gap: 16px;
-        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        min-height: 0;
 
-        &.columns-1 {grid-template-columns: auto;}
-        &.columns-2 {grid-template-columns: auto repeat(1, 1fr);}
-        &.columns-3 {grid-template-columns: auto repeat(2, 1fr);}
-        &.columns-4 {grid-template-columns: auto repeat(3, 1fr);}
-        &.columns-5 {grid-template-columns: auto repeat(4, 1fr);}
-        &.columns-6 {grid-template-columns: auto repeat(5, 1fr);}
-        &.columns-7 {grid-template-columns: auto repeat(6, 1fr);}
-        &.columns-8 {grid-template-columns: auto repeat(7, 1fr);}
-        &.columns-9 {grid-template-columns: auto repeat(8, 1fr);}
-        &.columns-10 {grid-template-columns: auto repeat(9, 1fr);}
+        .progress-table--header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            .title {
+                @include bbs--noto-14-b;
+                flex: 1 1;
+            }
+        }
+
+        .progress-table--list {
+            @include bbs--with-scrollbar;
+            @include bbs--with-scrollbar-margin;
+            overflow: auto;
+        }
     }
 
     .level-picker {
-        min-width: 160px;
-        padding: 16px 8px;
-        @include icon-color($color-pink);
-    }
-
-    .table-actions {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-
-        grid-column-start: 2;
-        grid-column-end: end;
-
-        .complete-button {
-            font-weight: 700;
-            font-size: 10px;
-
-            @include icon-color(#DCE3F5);
-            @include icon-size(24px);
-        }
-    }
-
-    .lesson-card {
-        grid-column-start: 1;
-        padding: 8px 16px;
-        font-weight: 700;
-        font-size: 10px;
-    }
-
-    .progress-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        padding: 2px 12px;
-        background-color: #DCE3F5;
-        border-radius: 6px;
-
-        color: #505B76;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 14px;
-
-        height: 50px;
-
-        .data {
-            display: flex;
-            flex-direction: column;
-
-            font-size: 11px;
-            font-weight: 700;
-
-            .name {
-                font-size: 12px;
-            }
-
-            .last-played {
-                font-weight: 400;
-            }
-
-            .total-time {}
-        }
-
-        .name {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-height: 100%;
-        }
-
-        &.completed {
-            color: #FFF;
-            background-color: #4ECB71;
-            @include icon-color(#FFF);
-            @include icon-size(18px);
-        }
+        min-width: 100px;
     }
 }

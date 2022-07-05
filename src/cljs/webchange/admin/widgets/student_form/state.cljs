@@ -140,7 +140,7 @@
     {:db       (-> db
                    (assoc :school-id school-id)
                    (assoc :student-id student-id)
-                   (set-callbacks (select-keys props [:on-remove]))
+                   (set-callbacks (select-keys props [:on-remove :on-remove-from-class]))
                    (reset-form-data)
                    (set-student-loading true))
      :dispatch [::warehouse/load-student {:student-id student-id}
@@ -281,6 +281,68 @@
     (let [success-handler (get-callback db :on-remove)]
       {:dispatch  [::close-remove-window]
        ::callback [success-handler]})))
+
+;; remove from class
+
+(def remove-from-class-window-state-key :remove-from-class-window-state)
+
+(def remove-from-class-window-default-state {:open?        false
+                                             :in-progress? false
+                                             :done?        false})
+
+(defn- update-remove-from-class-window-state
+  [db data-patch]
+  (update db remove-from-class-window-state-key merge data-patch))
+
+(re-frame/reg-sub
+  ::remove-from-class-window-state
+  :<- [path-to-db]
+  #(get % remove-from-class-window-state-key remove-from-class-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-remove-from-class-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-from-class-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-remove-from-class-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-from-class-window-state db remove-from-class-window-default-state)}))
+
+(re-frame/reg-event-fx
+  ::remove-from-class-student
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    {:db       (update-remove-from-class-window-state db {:in-progress? true})
+     :dispatch [::warehouse/remove-student-from-class
+                {:student-id student-id}
+                {:on-success [::remove-from-class-student-success]
+                 :on-failure [::remove-from-class-student-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::remove-from-class-student-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-from-class-window-state db {:in-progress? false
+                                                    :done?        true})}))
+
+(re-frame/reg-event-fx
+  ::remove-from-class-student-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-from-class-window-state db {:in-progress? false})}))
+
+(re-frame/reg-event-fx
+  ::handle-removed-from-class
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [success-handler (get-callback db :on-remove-from-class)]
+      {:dispatch  [::close-remove-from-class-window]
+       ::callback [success-handler]})))
+
+;;
 
 (re-frame/reg-fx
   ::callback

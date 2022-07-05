@@ -8,7 +8,7 @@
 (defn student-progress-complete
   [{:keys [student-id] :as props}]
   (re-frame/dispatch [::state/init props])
-  (fn [{:keys [editable? on-save]
+  (fn [{:keys [editable? on-cancel on-save]
         :or   {editable? true}}]
     (let [loading? @(re-frame/subscribe [::state/data-loading?])
           saving? @(re-frame/subscribe [::state/saving?])
@@ -38,6 +38,7 @@
                 :spec      ::progress-spec/complete-student-progress
                 :on-change #(re-frame/dispatch [::state/update-form-data %])
                 :on-save   handle-save
+                :on-cancel on-cancel
                 :disabled? (not editable?)
                 :loading?  loading?
                 :saving?   saving?}])))

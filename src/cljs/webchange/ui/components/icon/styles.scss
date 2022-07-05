@@ -8,4 +8,10 @@
     &.bbs--icon--color-white {
         @include bbs--icon-color(#fff);
     }
+
+    @each $color in $bbs--brand-colors {
+        &.bbs--icon--color-#{$color} {
+            @include bbs--icon-color(bbs--color($color));
+        }
+    }
 }

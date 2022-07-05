@@ -25,8 +25,7 @@
                                                                :value     current-language
                                                                :options   language-options
                                                                :on-change handle-select-language}]]}}
-       [page/main-content
-        [activities-list {:data                   activities
-                          :loading?               loading?
-                          :on-activity-click      handle-card-click
-                          :on-edit-activity-click handle-edit-click}]]])))
+       [activities-list {:data                   activities
+                         :loading?               loading?
+                         :on-activity-click      handle-card-click
+                         :on-edit-activity-click handle-edit-click}]])))

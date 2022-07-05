@@ -79,12 +79,14 @@
     [:div.bbs--list-item--filler]))
 
 (defn list-item
-  [{:keys [class-name dense?] :as props}]
+  [{:keys [class-name dense? on-click] :as props}]
   (let [props (assoc props :children (->> (r/current-component)
                                           (r/children)))]
-    [:div {:class-name (get-class-name {"bbs--list-item"        true
-                                        "bbs--list-item--dense" dense?
-                                        class-name              (some? class-name)})}
+    [:div (cond-> {:class-name (get-class-name {"bbs--list-item"            true
+                                                "bbs--list-item--dense"     dense?
+                                                "bbs--list-item--clickable" (fn? on-click)
+                                                class-name                  (some? class-name)})}
+                  (fn? on-click) (assoc :on-click on-click))
      [item-avatar props]
      [item-name props]
      [item-filler props]

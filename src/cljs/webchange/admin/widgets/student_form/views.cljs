@@ -30,16 +30,24 @@
                                         :type    :custom
                                         :control nil}})
 
-(defn- show-remove-window
+(defn- show-remove-account-window
   []
   (re-frame/dispatch [::state/open-remove-window]))
 
+(defn- show-remove-from-class-window
+  []
+  (re-frame/dispatch [::state/open-remove-from-class-window]))
+
 
 (def edit-student-model (merge add-student-model
-                               {:remove {:label    "Delete account"
-                                         :type     :action
-                                         :icon     "trash"
-                                         :on-click show-remove-window}}))
+                               {:remove-account    {:label    "Delete account"
+                                                    :type     :action
+                                                    :icon     "trash"
+                                                    :on-click show-remove-account-window}
+                                :remove-from-class {:label    "Remove From Class"
+                                                    :type     :action
+                                                    :icon     "account-remove"
+                                                    :on-click show-remove-from-class-window}}))
 
 
 (defn add-student-form
@@ -78,7 +86,7 @@
                    :loading?  loading?
                    :saving?   saving?}]))}))
 
-(defn- remove-window
+(defn- remove-account-window
   [{:keys [student-id]}]
   (let [{:keys [done? open? in-progress?]} @(re-frame/subscribe [::state/remove-window-state])
         remove #(re-frame/dispatch [::state/remove-student student-id])
@@ -92,6 +100,29 @@
      (if done?
        "Student account successfully deleted"
        "Are you sure you want to delete student account?")]))
+
+(defn- remove-from-class-window
+  [{:keys [student-id]}]
+  (let [{:keys [done? open? in-progress?]} @(re-frame/subscribe [::state/remove-from-class-window-state])
+        remove-from-class #(re-frame/dispatch [::state/remove-from-class-student student-id])
+        close-window #(re-frame/dispatch [::state/close-remove-from-class-window])
+        confirm-removed-from-class #(re-frame/dispatch [::state/handle-removed-from-class])]
+    [ui/confirm {:open?        open?
+                 :loading?     in-progress?
+                 :confirm-text (if done? "Ok" "Yes")
+                 :on-confirm   (if done? confirm-removed-from-class remove-from-class)
+                 :on-cancel    (when-not done? close-window)}
+     (if done?
+       "Student account successfully remove from class"
+       "Are you sure you want to remove student from class?")]))
+
+(defn- filter-actions
+  [model actions]
+  (reduce (fn [model [action available?]]
+            (cond-> model
+                    (not available?) (dissoc action)))
+          model
+          actions))
 
 (defn edit-student-form
   []
@@ -107,8 +138,10 @@
        (re-frame/dispatch [::state/reset-form (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [editable? on-save student-id]
-           :or   {editable? true}}]
+     (fn [{:keys [actions editable? on-cancel on-save student-id]
+           :or   {actions   {:remove-account    true
+                             :remove-from-class false}
+                  editable? true}}]
        (let [loading? @(re-frame/subscribe [::state/data-loading?])
              saving? @(re-frame/subscribe [::state/student-saving?])
              class-options @(re-frame/subscribe [::state/class-options])
@@ -123,10 +156,13 @@
                     :data      student-data
                     :model     (-> edit-student-model
                                    (assoc-in [:class-id :options] class-options)
-                                   (assoc-in [:access-code :control] access-code-control))
+                                   (assoc-in [:access-code :control] access-code-control)
+                                   (filter-actions actions))
                     :spec      ::student-spec/student
                     :on-save   handle-save
+                    :on-cancel on-cancel
                     :disabled? (not editable?)
                     :loading?  loading?
                     :saving?   saving?}]
-          [remove-window {:student-id student-id}]]))}))
+          [remove-account-window {:student-id student-id}]
+          [remove-from-class-window {:student-id student-id}]]))}))

@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.book-edit.state :as state]
     [webchange.admin.widgets.book-info-form.views :refer [book-info-form]]
-    [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.page.views-dep :as page]
     [webchange.ui-framework.components.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]))
 

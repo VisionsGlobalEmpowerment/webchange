@@ -65,4 +65,21 @@
               :info       [{:key   "Account Created"
                             :value "04/12/2022"}
                            {:key   "Last Login"
-                            :value "04/27/2022"}]}]]]])
+                            :value "04/27/2022"}]}]
+
+     [header {:avatar ""
+              :title  "Account Holder"
+              :info   [{:key   "Program Start Date"
+                        :value "02/23/2022"
+                        :icon  "school"}
+                       {:key   "Last Login Date"
+                        :value "02/27/2022"
+                        :icon  "students"}
+                       {:key        "Activities Completed"
+                        :value      "5"
+                        :icon       "games"
+                        :icon-color "blue-2"}
+                       {:key        "Total Played Time"
+                        :value      "1h 23m 34s"
+                        :icon       "play"
+                        :icon-color "blue-2"}]}]]]])

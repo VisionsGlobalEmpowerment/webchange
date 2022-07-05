@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.activity-edit.state :as state]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
-    [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.page.views-dep :as page]
     [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]))
 

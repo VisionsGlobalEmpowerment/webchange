@@ -41,7 +41,7 @@
 
 (def sitemap
   {:dashboard {:schools {:school-profile   {:classes        {:class-add     true
-                                                             :class-profile {:class-students     true
+                                                             :class-profile {:class-students     {:student-profile true}
                                                                              :class-students-add true}}
                                             :students       {:student-add true}
                                             :teachers       {:teacher-add     true

@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.class-profile.teachers-add.state :as state]
     [webchange.admin.widgets.add-class-teachers.views :refer [add-class-teachers]]
-    [webchange.admin.widgets.page.side-bar-page.views :as page]))
+    [webchange.admin.widgets.page.views :as page]))
 
 (defn class-teachers-add
   [{:keys [class-id school-id]}]

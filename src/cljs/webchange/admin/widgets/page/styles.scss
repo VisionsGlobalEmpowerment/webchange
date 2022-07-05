@@ -1,10 +1,18 @@
 @import "variables";
 @import "mixins";
 @import "counter/styles";
+
+@import "block/styles";
+@import "content/styles";
+@import "side_bar/styles";
+
 @import "footer/styles";
 @import "header/styles";
-@import "side_bar_page/styles";
-@import "single_page/styles";
+
+@import "styles_side_bar_page";
+@import "styles_single_page";
+
+@import "styles_page";
 
 .widget--page {
     @mixin panel {

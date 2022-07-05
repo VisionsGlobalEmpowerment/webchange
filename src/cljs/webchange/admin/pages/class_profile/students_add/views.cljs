@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.class-profile.students-add.state :as state]
     [webchange.admin.widgets.add-class-students.views :refer [add-class-students]]
-    [webchange.admin.widgets.page.side-bar-page.views :as page]))
+    [webchange.admin.widgets.page.views :as page]))
 
 (defn class-students-add
   [{:keys [class-id school-id]}]

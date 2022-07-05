@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [webchange.admin.components.select-list.views :refer [select-list]]
     [webchange.admin.pages.class-profile.course-assign.state :as state]
-    [webchange.admin.widgets.page.side-bar-page.views :as page]
+    [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]))
 
 (defn- courses-list

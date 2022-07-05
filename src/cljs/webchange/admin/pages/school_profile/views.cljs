@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.counter.views :refer [counter]]
-    [webchange.admin.widgets.page.side-bar-page.views :as page]
+    [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.school-form.views :refer [edit-school-form]]
     [webchange.admin.pages.school-profile.state :as state]))
 
@@ -64,11 +64,11 @@
                     :actions  (cond-> []
                                       (not school-form-editable?) (conj {:icon     "edit"
                                                                          :on-click handle-edit-click}))}
-     [edit-school-form {:school-id school-id
-                        :editable? school-form-editable?
-                        :on-save   handle-data-save
+     [edit-school-form {:school-id  school-id
+                        :editable?  school-form-editable?
+                        :on-save    handle-data-save
                         :on-archive handle-archive
-                        :on-cancel handle-cancel-click}]]))
+                        :on-cancel  handle-cancel-click}]]))
 
 (defn page
   [props]
@@ -76,9 +76,9 @@
   (fn [{:keys [school-id]}]
     (r/with-let []
       (let [school-name @(re-frame/subscribe [::state/school-name])]
-        [page/side-bar-page
-         [page/main-content {:title school-name
-                             :icon  "school"}
+        [page/page
+         [page/content {:title school-name
+                        :icon  "school"}
           [school-counter]
           [statistics]]
          [side-bar {:school-id school-id}]])
