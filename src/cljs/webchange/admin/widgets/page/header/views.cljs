@@ -5,7 +5,7 @@
     [webchange.ui.index :refer [get-class-name] :as ui]
     [webchange.ui.spec :as ui-spec]))
 
-
+(s/def ::header-avatar (s/or :empty nil? :defined string?))
 (s/def ::header-icon (s/or :empty nil? :defined ::icon-spec/navigation-icon))
 (s/def ::header-icon-color (s/or :empty nil? :defined ::ui-spec/brand-color))
 (s/def ::header-on-close (s/or :empty nil? :defined fn?))
@@ -18,8 +18,11 @@
 (s/def ::header-actions (s/or :empty empty? :defined (s/coll-of :header-actions/item)))
 
 (s/def :header-info/key string?)
-(s/def :header-info/value string?)
-(s/def :header-info/item (s/keys :req-un [:header-info/key :header-info/value]))
+(s/def :header-info/value #(or (number? %) (string? %)))
+(s/def :header-info/icon ::icon-spec/navigation-icon)
+(s/def :header-info/icon-color ::ui-spec/brand-color)
+(s/def :header-info/item (s/keys :req-un [:header-info/key :header-info/value]
+                                 :opt-un [:header-info/icon :header-info/icon-color]))
 (s/def ::header-info (s/or :empty empty? :defined (s/coll-of :header-info/item)))
 
 (s/def :header-stat/icon ::icon-spec/navigation-icon)
@@ -48,9 +51,14 @@
 (defn- header-info
   [{:keys [info]}]
   [:div.widget--page--header-info
-   (for [{:keys [key value]} info]
+   (for [{:keys [icon icon-color key value] :or {icon-color "yellow-2"}} info]
      ^{:key key}
-     [:div.widget--page--header-info-block
+     [:div {:class-name (get-class-name {"widget--page--header-info-block"            true
+                                         "widget--page--header-info-block--with-icon" (some? icon)})}
+      (when (some? icon)
+        [ui/navigation-icon {:icon       icon
+                             :color      icon-color
+                             :class-name "widget--page--header-info-block--icon"}])
       [:div.widget--page--header-info-block--key key]
       [:div.widget--page--header-info-block--value value]])])
 
@@ -71,8 +79,9 @@
 (def component-class-name "widget--page--header")
 
 (defn header
-  [{:keys [actions icon icon-color info on-close stats title] :as props}]
+  [{:keys [actions avatar icon icon-color info on-close stats title] :as props}]
   {:pre [(s/valid? ::header-actions actions)
+         (s/valid? ::header-avatar avatar)
          (s/valid? ::header-icon icon)
          (s/valid? ::header-icon-color icon-color)
          (s/valid? ::header-info info)
@@ -80,6 +89,8 @@
          (s/valid? ::header-stats stats)
          (s/valid? ::header-title title)]}
   [:div {:class-name component-class-name}
+   (when (some? avatar)
+     [ui/avatar {:class-name "widget--page--header--avatar"}])
    (when (some? icon)
      [ui/navigation-icon {:icon       icon
                           :class-name (get-class-name {"widget--page--header--navigation-icon"                          true

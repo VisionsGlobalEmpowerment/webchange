@@ -3,48 +3,67 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.date :refer [date-str->locale-date ms->time]]))
 
-(def path-to-db :student-profile)
+(def path-to-db :page/student-profile)
 
 (re-frame/reg-sub
   path-to-db
   (fn [db]
     (get db path-to-db)))
 
+;; student progress
+
+(def student-progress-key :student-progress)
+
+(defn- set-student-progress
+  [db value]
+  (assoc db student-progress-key value))
+
+(re-frame/reg-sub
+  ::student-progress
+  :<- [path-to-db]
+  #(get % student-progress-key))
+
+;;
+
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [class-id student-id]}]]
-    {:db         (-> db
-                     (assoc :class-id class-id)
-                     (assoc :student-id student-id)
-                     (assoc :loading-student true))
-     :dispatch-n [[::warehouse/load-class-student-progress {:student-id student-id} {:on-success [::load-student-success]}]]}))
-
-(defn- prepare-student
-  [{:keys [user]}]
-  {:name (str (:first-name user) " " (:last-name user))})
-
-(defn- prepare-progress
-  "Prepare progress for quick access. Expects a list of activity-stats.
-  uses activity unique-id as a key"
-  [progress]
-  (->> progress
-       (map (juxt :unique-id identity))
-       (into {})))
+    {:db       (-> db
+                   (assoc :class-id class-id)
+                   (assoc :student-id student-id)
+                   (assoc :loading-student true))
+     :dispatch [::warehouse/load-class-student-progress
+                {:student-id student-id}
+                {:on-success [::load-student-success]}]}))
 
 (re-frame/reg-event-fx
   ::load-student-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [student class course course-stats activity-stats]}]]
-    {:db (-> db
-             (assoc :loading-student false)
-             (assoc :student (prepare-student student))
-             (assoc :class class)
-             (assoc :course course)
-             (assoc :course-stats course-stats)
-             (assoc :activity-stats (prepare-progress activity-stats)))}))
+  (fn [{:keys [db]} [_ data]]
+    {:db (set-student-progress db data)}))
+
+(re-frame/reg-sub
+  ::course-statistics
+  :<- [::student-progress]
+  (fn [{:keys [course-stats]}]
+    (let [{:keys [activity-progress cumulative-time started-at last-login]} (:data course-stats)]
+      {:started-at        (date-str->locale-date started-at)
+       :last-login        (date-str->locale-date last-login)
+       :activity-progress activity-progress
+       :cumulative-time   (ms->time cumulative-time)})))
+
+(re-frame/reg-sub
+  ::student-data
+  :<- [::student-progress]
+  (fn [{:keys [student]}]
+    (let [{:keys [first-name last-name]} (:user student)]
+      {:name (str first-name " " last-name)})))
+
+;; ---------------------------
 
 (re-frame/reg-event-fx
   ::update-student-data

@@ -22,10 +22,16 @@
   [date]
   (.getMinutes date))
 
+(defn get-hours
+  [date]
+  (.getHours date))
+
 (defn ms->time
   [ms]
   (let [date (new-date ms)
         m (get-minutes date)
-        s (get-seconds date)]
+        s (get-seconds date)
+        h (get-hours date)]
     (cond->> (str s "s")
-             (> m 0) (str m "m : "))))
+             (> m 0) (str m "m ")
+             (> h 0) (str h "h "))))
