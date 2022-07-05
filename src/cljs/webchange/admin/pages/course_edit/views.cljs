@@ -2,11 +2,10 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.components.list.views :as l]
     [webchange.admin.pages.course-edit.state :as state]
     [webchange.admin.widgets.course-info-form.view :refer [course-info-form]]
-    [webchange.admin.widgets.page.views-dep :as page]
-    [webchange.ui-framework.components.index :as ui]
+    [webchange.admin.widgets.page.views :as page]
+    [webchange.ui.index :as ui]
     [webchange.utils.drag-and-drop :refer [draggable]]
     [webchange.utils.numbers :refer [try-parse-int]]))
 
@@ -64,11 +63,6 @@
                                        {:scene-id (:id dragged)}]))
       nil)))
 
-(defn- reorder-control
-  []
-  [ui/icon {:icon       "reorder"
-            :class-name "reorder-control"}])
-
 (defn- empty-list-placeholder
   [{:keys [data]}]
   [draggable {:data          data
@@ -81,27 +75,25 @@
   [{:keys [idx name preview level-idx lesson-idx]}]
   (let [handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
         handle-remove-click #(do (.stopPropagation %)
-                                 (ui/with-confirmation {:message    "Remove Activity?"
-                                                        :on-confirm handle-remove-activity}))]
+                                 (handle-remove-activity))]
     [draggable {:data          {:type     "activity"
                                 :level    level-idx
                                 :lesson   lesson-idx
                                 :activity idx}
                 :drop-allowed? drop-allowed?
                 :on-drop       handle-drop}
-     [l/list-item {:name       name
-                   :img        preview
-                   :class-name "activities-list-item"
-                   :pre        [reorder-control]
-                   :actions    [ui/icon-button {:icon     "remove"
-                                                :title    "Remove"
-                                                :variant  "light"
-                                                :on-click handle-remove-click}]}]]))
+     [ui/list-item {:name       name
+                    :pre        [ui/image {:src preview
+                                           :class-name "item-image"}]
+                    :class-name "activities-list-item"
+                    :actions    [{:icon     "trash"
+                                  :title    "Remove"
+                                  :on-click handle-remove-click}]}]]))
 
 (defn- activities-list
   [{:keys [level-idx lesson-idx]}]
   (let [activities @(re-frame/subscribe [::state/lesson-activities level-idx lesson-idx])]
-    [l/list {:class-name "sub-list"}
+    [ui/list {:class-name "sub-list"}
      (for [{:keys [idx] :as activity-data} activities]
        ^{:key idx}
        [activities-list-item (merge activity-data
@@ -119,28 +111,26 @@
                handle-item-click #(swap! expanded? not)
                handle-remove-lesson #(re-frame/dispatch [::state/remove-lesson level-idx idx])
                handle-remove-click #(do (.stopPropagation %)
-                                        (ui/with-confirmation {:message    "Remove Lesson?"
-                                                               :on-confirm handle-remove-lesson}))]
+                                        (handle-remove-lesson))]
     [:<>
      [draggable {:data          {:type   "lesson"
                                  :level  level-idx
                                  :lesson idx}
                  :drop-allowed? drop-allowed?
                  :on-drop       handle-drop}
-      [l/list-item {:name       name
-                    :class-name (ui/get-class-name {"list-item" true
-                                                    "selected"  @expanded?})
-                    :on-click   handle-item-click
-                    :pre        [reorder-control]
-                    :actions    [ui/icon-button {:icon     "remove"
-                                                 :title    "Remove"
-                                                 :variant  "light"
-                                                 :on-click handle-remove-click}]}
-       [l/content-right
-        [:div.list-item-stats
-         activities-number
-         [ui/icon {:icon       "activity"
-                   :class-name "activity"}]]]]]
+      [ui/list-item {:name       name
+                     :class-name (ui/get-class-name {"list-item" true
+                                                     "selected"  @expanded?})
+                     :on-click   handle-item-click
+                     :pre        [:div.lesson-dnd
+                                  [ui/icon {:icon       "change-position"}]]
+                     :controls   [:div.list-item-stats
+                                  activities-number
+                                  [ui/icon {:icon       "games"
+                                            :class-name "activity"}]]
+                     :actions    [{:icon     "trash"
+                                   :title    "Remove"
+                                   :on-click handle-remove-click}]}]]
      (when @expanded?
        [activities-list {:level-idx  level-idx
                          :lesson-idx idx}])]))
@@ -148,7 +138,7 @@
 (defn- lessons-list
   [{:keys [level-idx]}]
   (let [lessons @(re-frame/subscribe [::state/level-lessons level-idx])]
-    [l/list {:class-name "sub-list"}
+    [ui/list {:class-name "sub-list"}
      (for [{:keys [idx] :as lesson-data} lessons]
        ^{:key idx}
        [lessons-list-item (assoc lesson-data :level-idx level-idx)])
@@ -163,34 +153,30 @@
                handle-item-click #(swap! expanded? not)
                handle-remove-level #(re-frame/dispatch [::state/remove-level idx])
                handle-remove-click #(do (.stopPropagation %)
-                                        (ui/with-confirmation {:message    "Remove Level?"
-                                                               :on-confirm handle-remove-level}))]
+                                        (handle-remove-level))]
     [:<>
      [draggable {:data          {:type  "level"
                                  :level idx}
                  :drop-allowed? drop-allowed?
                  :on-drop       handle-drop}
-      [l/list-item {:name       name
-                    :class-name (ui/get-class-name {"list-item" true
-                                                    "selected"  @expanded?})
-                    :on-click   handle-item-click
-                    :pre        [reorder-control]
-                    :actions    [ui/icon-button {:icon     "remove"
-                                                 :title    "Remove"
-                                                 :variant  "light"
-                                                 :on-click handle-remove-click}]}
-       [l/content-right
-        [:div.list-item-stats
-         lessons-number
-         [ui/icon {:icon        "lesson"
-                   ::class-name "lesson"}]]]]]
+      [ui/list-item {:name       name
+                     :class-name (ui/get-class-name {"list-item" true
+                                                     "selected"  @expanded?})
+                     :on-click   handle-item-click
+                     :controls [:div.list-item-stats
+                                lessons-number
+                                [ui/icon {:icon        "games"
+                                          ::class-name "lesson"}]]
+                     :actions    [{:icon     "trash"
+                                   :title    "Remove"
+                                   :on-click handle-remove-click}]}]]
      (when @expanded?
        [lessons-list {:level-idx idx}])]))
 
 (defn- levels-list
   []
   (let [levels @(re-frame/subscribe [::state/course-levels])]
-    [l/list {:class-name "levels-list"}
+    [ui/list {:class-name "levels-list"}
      (for [{:keys [idx] :as level-data} levels]
        ^{:key idx}
        [levels-list-item level-data])]))
@@ -201,8 +187,6 @@
                      :activity slug
                      :id       id}}
    [:div.available-activities-list-item
-    [ui/icon {:icon       "add-item"
-              :class-name "icon"}]
     [:div.name name]
     [ui/image {:src        preview
                :class-name "preview"
@@ -215,18 +199,16 @@
         handle-back-click #(re-frame/dispatch [::state/open-course-info])
         available-activities @(re-frame/subscribe [::state/available-activities])]
     [page/side-bar {:title        "Add Activity"
-                    :title-action [ui/icon-button {:icon       "arrow-left"
-                                                   :variant    "light"
-                                                   :class-name "back-button"
-                                                   :on-click   handle-back-click}]}
+                    :icon         "arrow-left"
+                    :icon-color   "blue-1"
+                    :on-icon-click handle-back-click}
      [:div.available-activities
       [ui/input {:value       filter
                  :on-change   handle-filter-change
-                 :placeholder "search activities"
+                 :placeholder "search"
                  :icon        "search"
                  :class-name  "search"}]
       [:div.available-activities-list
-
        (for [{:keys [id] :as activity} available-activities]
          ^{:key id}
          [available-activities-list-item activity])]]]))
@@ -246,18 +228,22 @@
 (defn- actions-list
   []
   (let [handle-activities-click #(re-frame/dispatch [::state/open-available-activities])]
-    [:ul.actions-list
-     [actions-list-item {:icon "add-item"
-                         :text "Add Level"
-                         :data {:type  "level"
-                                :level "add"}}]
-     [actions-list-item {:icon "add-item"
-                         :text "Add Lesson"
-                         :data {:type   "lesson"
-                                :lesson "add"}}]
-     [actions-list-item {:icon     "activity"
-                         :text     "Add Activity"
-                         :on-click handle-activities-click}]]))
+    [:div.actions
+     [:div.info
+      [ui/icon {:icon "info"}]
+      [:p "Drag over a level, lesson or activity to the left in the spot where you'd like to add."]]
+     [:ul.actions-list
+      [actions-list-item {:icon "dnd"
+                          :text "Add Level"
+                          :data {:type  "level"
+                                 :level "add"}}]
+      [actions-list-item {:icon "dnd"
+                          :text "Add Lesson"
+                          :data {:type   "lesson"
+                                 :lesson "add"}}]
+      [actions-list-item {:icon     "games"
+                          :text     "Add Activity"
+                          :on-click handle-activities-click}]]]))
 
 (defn- main-form
   [{:keys [course-slug]}]
@@ -266,9 +252,10 @@
                handle-form-saved #(do (reset! form-editable? false)
                                       (re-frame/dispatch [::state/set-course-info %]))]
     [page/side-bar {:title   "Course Details"
-                    :actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
-                                              :variant  "light"
-                                              :on-click handle-edit-click}]}
+                    :icon    "info"
+                    :focused? @form-editable?
+                    :actions [{:icon     (if @form-editable? "close" "edit")
+                               :on-click handle-edit-click}]}
      [course-info-form {:course-slug course-slug
                         :editable?   @form-editable?
                         :on-save     handle-form-saved}]
@@ -285,27 +272,32 @@
 (defn- header
   []
   (let [{:keys [name levels lessons activities]} @(re-frame/subscribe [::state/course-statistic])]
-    [page/_header {:title      name
-                  :icon       "presentation"
-                  :class-name "page--edit-course--header"}
-     [page/_header-content-group {:icon "levels"}
-      [:span (str levels " Levels")]]
-     [:hr]
-     [page/_header-content-group {:icon "lesson"}
-      [:span (str lessons " Lessons")]]
-     [:hr]
-     [page/_header-content-group {:icon       "activity"
-                                 :class-name "activities"}
-      [:span (str activities " Activities")]]]))
+    [page/header {:title      name
+                  :icon       "courses"
+                  :icon-color "blue-2"
+                  :class-name "page--edit-course--header"
+                  :stats [{:icon "levels"
+                           :icon-color "blue-2"
+                           :counter levels
+                           :label "Levels"}
+                          {:icon "lesson"
+                           :icon-color "blue-2"
+                           :counter lessons
+                           :label "Lessons"}
+                          {:icon "games"
+                           :icon-color "blue-2"
+                           :counter activities
+                           :label "Activities"}]}]))
 
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [course-fetching? @(re-frame/subscribe [::state/course-fetching?])]
-      [page/page {:class-name "page--edit-course"}
+      [page/page {:class-name "page--edit-course with-header"}
        [header]
-       [page/main-content
+       [page/content {:title "Course Table"
+                      :icon "edit"}
         [levels-list]
         (when course-fetching?
           [ui/loading-overlay])]

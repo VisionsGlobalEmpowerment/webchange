@@ -34,10 +34,12 @@
 (defn- header-stats
   [{:keys [stats]}]
   [:div.widget--page--header--stats
-   (for [[idx {:keys [counter icon label]}] (map-indexed vector stats)]
+   (for [[idx {:keys [counter icon icon-color label]}] (map-indexed vector stats)]
      ^{:key idx}
      [:div.widget--page--header--stats-item
-      [ui/navigation-icon {:icon icon}]
+      [ui/navigation-icon {:icon icon
+                           :class-name (get-class-name {"widget--page--header--navigation-icon"                          true
+                                                        (str "widget--page--header--navigation-icon--color-" icon-color) true})}]
       [:span counter] label])])
 
 (defn- header-action
