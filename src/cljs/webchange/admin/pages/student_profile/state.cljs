@@ -37,9 +37,16 @@
                    (assoc :school-id school-id)
                    (assoc :student-id student-id)
                    (assoc :loading-student true))
-     :dispatch [::warehouse/load-class-student-progress
-                {:student-id student-id}
-                {:on-success [::load-student-success]}]}))
+     :dispatch [::load-student-progress]}))
+
+(re-frame/reg-event-fx
+  ::load-student-progress
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [student-id]} db]
+      {:dispatch [::warehouse/load-class-student-progress
+                  {:student-id student-id}
+                  {:on-success [::load-student-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-student-success
@@ -119,7 +126,7 @@
 (re-frame/reg-event-fx
   ::update-student-data
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ student-id]]
+  (fn [{:keys [_]} [_ student-id]]
     {:dispatch [::warehouse/load-class-student-progress {:student-id student-id} {:on-success [::load-student-success]}]}))
 
 (re-frame/reg-sub

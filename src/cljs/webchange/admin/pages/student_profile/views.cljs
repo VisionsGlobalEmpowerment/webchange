@@ -97,14 +97,15 @@
 
 (defn- side-bar-complete-class
   [{:keys [student-id]}]
-  (let [handle-close-click #(re-frame/dispatch [::state/open-student-profile])
-        handle-save #(re-frame/dispatch [::state/open-student-profile])]
-    [page/side-bar {:title   "Complete Class"
-                    :actions [c/icon-button {:icon     "close"
-                                             :variant  "light"
-                                             :on-click handle-close-click}]}
+  (let [handle-cancel #(re-frame/dispatch [::state/open-student-profile])
+        handle-save #(do (re-frame/dispatch [::state/load-student-progress])
+                         (re-frame/dispatch [::state/open-student-profile]))]
+    [page/side-bar {:title    "Complete Class"
+                    :icon     "teachers"
+                    :focused? true}
      [student-progress-complete {:student-id student-id
-                                 :on-save    handle-save}]]))
+                                 :on-save    handle-save
+                                 :on-cancel  handle-cancel}]]))
 
 (defn- side-bar-student-profile
   [{:keys [school-id student-id]}]
@@ -134,7 +135,7 @@
   [props]
   (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
     (case side-bar-content
-      ;:complete-class [side-bar-complete-class props]
+      :complete-class [side-bar-complete-class props]
       :student-profile [side-bar-student-profile props]
       nil)))
 
@@ -142,10 +143,6 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    ;[page/page {:class-name "page--student-profile"}
-    ; [header]
-    ;
-    ; [side-bar props]]
     [page/page {:class-name "page--student-profile"}
      [header]
      [content]
