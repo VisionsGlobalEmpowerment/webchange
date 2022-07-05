@@ -62,6 +62,11 @@ $bss--font-weight--bold: 700;
     font-weight: $bss--font-weight--bold;
 }
 
+@mixin bbs--noto-16-r {
+    @include bbs--text-size--16;
+    font-weight: $bss--font-weight--regular;
+}
+
 @mixin bbs--noto-16-b {
     @include bbs--text-size--16;
     font-weight: $bss--font-weight--bold;

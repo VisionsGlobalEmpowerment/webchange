@@ -7,7 +7,8 @@
     [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.student-form.views :refer [edit-student-form]]
     [webchange.admin.widgets.student-progress-complete.views :refer [student-progress-complete]]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]
+    [webchange.ui-framework.components.index :as c]))
 
 (defn- level-picker
   []
@@ -15,10 +16,10 @@
         level-options @(re-frame/subscribe [::state/level-options])
         on-change #(re-frame/dispatch [::state/select-level %])]
     [:div.level-picker
-     [ui/select {:value     current-level
-                 :options   level-options
-                 :type      "int"
-                 :on-change on-change}]]))
+     [c/select {:value     current-level
+                :options   level-options
+                :type      "int"
+                :on-change on-change}]]))
 
 (defn- header
   []
@@ -43,15 +44,15 @@
 
 (defn- progress-card
   [{:keys [completed? last-played name total-time]}]
-  [:div {:class-name (ui/get-class-name {"progress-card" true
-                                         "completed"     completed?})}
+  [:div {:class-name (c/get-class-name {"progress-card" true
+                                        "completed"     completed?})}
    (if completed?
      [:<>
       [:div.data
        [:span.name name]
        [:span.last-played last-played]
        [:span.total-time total-time]]
-      [ui/icon {:icon "check"}]]
+      [c/icon {:icon "check"}]]
      [:span.name name])])
 
 (defn- lesson-card
@@ -74,18 +75,18 @@
   []
   (let [handle-complete-click #(re-frame/dispatch [::state/open-complete-class])]
     [:div.table-actions
-     [ui/icon-button {:icon       "trophy"
-                      :variant    "light"
-                      :direction  "revert"
-                      :class-name "complete-button"
-                      :on-click   handle-complete-click}
+     [c/icon-button {:icon       "trophy"
+                     :variant    "light"
+                     :direction  "revert"
+                     :class-name "complete-button"
+                     :on-click   handle-complete-click}
       "Complete Class"]]))
 
 (defn- progress-table
   []
   (let [{:keys [data max-activities]} @(re-frame/subscribe [::state/lessons-data])]
-    [:div {:class-name (ui/get-class-name {"progress-table"                      true
-                                           (str "columns-" (inc max-activities)) true})}
+    [:div {:class-name (c/get-class-name {"progress-table"                      true
+                                          (str "columns-" (inc max-activities)) true})}
 
      [level-picker]
      [table-actions]
@@ -94,40 +95,30 @@
        [list-item (merge lesson-data
                          {:length max-activities})])]))
 
-(defn- course-name
-  []
-  (let [{:keys [name] :as course} @(re-frame/subscribe [::state/course])]
-    [:div.course-name
-     [ui/icon {:icon "presentation"}]
-     [:span "Course: "]
-     [:span (if (some? course) name "Not Assigned")]]))
-
-(defn- view-switcher
-  []
-  [:div.view-switcher
-   [ui/button {:class-name "active"} "Course View"]
-   [:hr]
-   [ui/button "Student History"]])
-
 (defn- content
   []
-  (let [{class-name :name} @(re-frame/subscribe [::state/class])]
-    [page/content {:title class-name
-                   :icon  "classes"
-                   ;:actions [:div.main-content-actions
-                   ;          [course-name]
-                   ;          [view-switcher]]
-                   }
-     [progress-table]]))
+  (let [{class-name :name} @(re-frame/subscribe [::state/class-data])
+        {course-name :name} @(re-frame/subscribe [::state/course-data])]
+    [page/content {:title    class-name
+                   :subtitle "Started one day"
+                   :icon     "classes"
+                   :header   [:div.course-name
+                              [ui/navigation-icon {:icon "courses"}]
+                              [:span.prefix "Course: "]
+                              [:span (or course-name "Not Assigned")]]
+                   :tabs     [{:title     "Course View"
+                               :component [progress-table]}
+                              {:title     "Student History"
+                               :component [:div "Student History"]}]}]))
 
 (defn- side-bar-complete-class
   [{:keys [student-id]}]
   (let [handle-close-click #(re-frame/dispatch [::state/open-student-profile])
         handle-save #(re-frame/dispatch [::state/open-student-profile])]
     [page/side-bar {:title   "Complete Class"
-                    :actions [ui/icon-button {:icon     "close"
-                                              :variant  "light"
-                                              :on-click handle-close-click}]}
+                    :actions [c/icon-button {:icon     "close"
+                                             :variant  "light"
+                                             :on-click handle-close-click}]}
      [student-progress-complete {:student-id student-id
                                  :on-save    handle-save}]]))
 
@@ -171,7 +162,7 @@
     ; [header]
     ;
     ; [side-bar props]]
-    [page/page
+    [page/page {:class-name "page--student-profile"}
      [header]
      [content]
      [side-bar props]]))

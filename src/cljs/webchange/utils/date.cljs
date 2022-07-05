@@ -32,6 +32,7 @@
         m (get-minutes date)
         s (get-seconds date)
         h (get-hours date)]
-    (cond->> (str s "s")
+    (cond->> ""
+             (> s 0) (str s "s")
              (> m 0) (str m "m ")
              (> h 0) (str h "h "))))

@@ -64,6 +64,20 @@
     (let [{:keys [first-name last-name]} (:user student)]
       {:name (str first-name " " last-name)})))
 
+(re-frame/reg-sub
+  ::class-data
+  :<- [::student-progress]
+  (fn [{:keys [class]}]
+    (let [{:keys [name]} class]
+      {:name name})))
+
+(re-frame/reg-sub
+  ::course-data
+  :<- [::student-progress]
+  (fn [{:keys [course]}]
+    (let [{:keys [name]} course]
+      {:name name})))
+
 (re-frame/reg-event-fx
   ::open-class-profile-page
   [(i/path path-to-db)]

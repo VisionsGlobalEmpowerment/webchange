@@ -3,44 +3,18 @@
         justify-content: flex-end;
     }
 
-    .main-content-actions {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex: 1 1;
-    }
-
     .course-name {
+        @include bbs--icon-size(24px);
+        @include bbs--noto-16-r;
+
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 10px;
 
-        font-weight: 500;
-        font-size: 10px;
-        line-height: 12px;
+        padding: 0 32px;
 
-        @include icon-color($color-pink);
-        @include icon-size(24px);
-    }
-
-    .view-switcher {
-        display: flex;
-        gap: 8px;
-
-        hr {
-            border: none;
-            border-left: solid 1px #DCE3F5;
-            display: block;
-            padding: 12px 0;
-        }
-
-        button {
-            background-color: transparent;
-            color: #333;
-
-            &.active {
-                color: $color-pink;
-            }
+        & > .prefix {
+            @include bbs--noto-16-b;
         }
     }
 
