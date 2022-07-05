@@ -134,18 +134,26 @@
 (defn- side-bar-student-profile
   [{:keys [school-id student-id]}]
   (r/with-let [form-editable? (r/atom false)
-               handle-edit-click #(swap! form-editable? not)
+               handle-edit-click #(reset! form-editable? true)
+               handle-cancel-click #(reset! form-editable? false)
+               handle-remove-from-class #(re-frame/dispatch [::state/open-class-profile-page])
                handle-save-click #(do (reset! form-editable? false)
                                       (re-frame/dispatch [::state/update-student-data student-id]))]
-    [page/side-bar {:title "Student Account"
-                    ;:actions [ui/icon-button {:icon     (if @form-editable? "close" "edit")
-                    ;                          :variant  "light"
-                    ;                          :on-click handle-edit-click}]
-                    }
-     [edit-student-form {:student-id student-id
-                         :school-id  school-id
-                         :editable?  @form-editable?
-                         :on-save    handle-save-click}]]))
+    [page/side-bar {:title    "Student Account"
+                    :icon     "teachers"
+                    :focused? @form-editable?
+                    :actions  (cond-> []
+                                      (not @form-editable?) (conj {:icon     "edit"
+                                                                   :variant  "light"
+                                                                   :on-click handle-edit-click}))}
+     [edit-student-form {:student-id           student-id
+                         :school-id            school-id
+                         :editable?            @form-editable?
+                         :on-save              handle-save-click
+                         :on-cancel            handle-cancel-click
+                         :on-remove-from-class handle-remove-from-class
+                         :actions              {:remove-account    false
+                                                :remove-from-class true}}]]))
 
 (defn- side-bar
   [props]

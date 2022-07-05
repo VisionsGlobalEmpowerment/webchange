@@ -31,9 +31,10 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id student-id]}]]
+  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id]}]]
     {:db       (-> db
                    (assoc :class-id class-id)
+                   (assoc :school-id school-id)
                    (assoc :student-id student-id)
                    (assoc :loading-student true))
      :dispatch [::warehouse/load-class-student-progress
@@ -63,6 +64,13 @@
     (let [{:keys [first-name last-name]} (:user student)]
       {:name (str first-name " " last-name)})))
 
+(re-frame/reg-event-fx
+  ::open-class-profile-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [school-id class-id]} db]
+      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+
 ;; ---------------------------
 
 (re-frame/reg-event-fx
@@ -70,6 +78,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
     {:dispatch [::warehouse/load-class-student-progress {:student-id student-id} {:on-success [::load-student-success]}]}))
+
+
 
 (re-frame/reg-sub
   ::student
