@@ -10,17 +10,6 @@
     [webchange.ui.index :as ui]
     [webchange.ui-framework.components.index :as c]))
 
-(defn- level-picker
-  []
-  (let [current-level @(re-frame/subscribe [::state/current-level])
-        level-options @(re-frame/subscribe [::state/level-options])
-        on-change #(re-frame/dispatch [::state/select-level %])]
-    [:div.level-picker
-     [c/select {:value     current-level
-                :options   level-options
-                :type      "int"
-                :on-change on-change}]]))
-
 (defn- header
   []
   (let [{student-name :name} @(re-frame/subscribe [::state/student-data])
@@ -42,35 +31,6 @@
                             :icon       "play"
                             :icon-color "blue-2"}]}]))
 
-(defn- progress-card
-  [{:keys [completed? last-played name total-time]}]
-  [:div {:class-name (c/get-class-name {"progress-card" true
-                                        "completed"     completed?})}
-   (if completed?
-     [:<>
-      [:div.data
-       [:span.name name]
-       [:span.last-played last-played]
-       [:span.total-time total-time]]
-      [c/icon {:icon "check"}]]
-     [:span.name name])])
-
-(defn- lesson-card
-  [{:keys [name]}]
-  [:div.lesson-card
-   name])
-
-(defn- list-item
-  [{:keys [activities length] :as props}]
-  [:<>
-   [lesson-card props]
-   (for [{:keys [id] :as props} activities]
-     ^{:key id}
-     [progress-card props])
-   (for [idx (range (- length (count activities)))]
-     ^{:key idx}
-     [:div])])
-
 (defn- table-actions
   []
   (let [handle-complete-click #(re-frame/dispatch [::state/open-complete-class])]
@@ -82,18 +42,42 @@
                      :on-click   handle-complete-click}
       "Complete Class"]]))
 
+(defn- progress-list-item
+  [{:keys [name progress]}]
+  [ui/list-item {:name name}
+   (for [{:keys [name score unique-id]} progress]
+     ^{:key unique-id}
+     [ui/complete-progress {:value   score
+                            :caption name}])])
+
+(defn- progress-list
+  [{:keys [class-name]}]
+  (let [{:keys [lessons]} @(re-frame/subscribe [::state/progress-data])]
+    [ui/list {:class-name class-name}
+     (for [{:keys [user-id] :as lesson-data} lessons]
+       ^{:key user-id}
+       [progress-list-item lesson-data])]))
+
 (defn- progress-table
   []
-  (let [{:keys [data max-activities]} @(re-frame/subscribe [::state/lessons-data])]
-    [:div {:class-name (c/get-class-name {"progress-table"                      true
-                                          (str "columns-" (inc max-activities)) true})}
-
-     [level-picker]
-     [table-actions]
-     (for [{:keys [id] :as lesson-data} data]
-       ^{:key id}
-       [list-item (merge lesson-data
-                         {:length max-activities})])]))
+  (let [current-level @(re-frame/subscribe [::state/current-level])
+        level-options @(re-frame/subscribe [::state/level-options])
+        on-change #(re-frame/dispatch [::state/select-level %])
+        handle-complete-click #(re-frame/dispatch [::state/open-complete-class])]
+    [:div.progress-table
+     [:div.progress-table--header
+      [ui/select {:value      current-level
+                  :options    level-options
+                  :type       "int"
+                  :on-change  on-change
+                  :class-name "level-picker"}]
+      [:div.title "Activities"]
+      [ui/button {:icon     "cup"
+                  :shape    "rounded"
+                  :color    "transparent"
+                  :on-click handle-complete-click}
+       "Complete Class"]]
+     [progress-list {:class-name "progress-table--list"}]]))
 
 (defn- content
   []

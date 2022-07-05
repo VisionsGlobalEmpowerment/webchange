@@ -16,15 +16,15 @@
 
 (defn get-seconds
   [date]
-  (.getSeconds date))
+  (.getUTCSeconds date))
 
 (defn get-minutes
   [date]
-  (.getMinutes date))
+  (.getUTCMinutes date))
 
 (defn get-hours
   [date]
-  (.getHours date))
+  (.getUTCHours date))
 
 (defn ms->time
   [ms]
