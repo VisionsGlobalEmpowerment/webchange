@@ -500,8 +500,9 @@
              response)))
   (GET "/api/available-books" request
        :coercion :spec
+       :query-params [{lang :- string? nil}]
        (let [user-id (current-user request)]
-         (-> (core/get-available-books)
+         (-> (core/get-available-books lang)
              response)))
   (GET "/api/activities/:activity-id/current-version" request
        :coercion :spec

@@ -1,77 +1,163 @@
 .page--book-edit {
-    .page--book-edit--content {
-        align-items: center;
-    }
-
     .book-form {
         display: flex;
         flex-direction: column;
         gap: 18px;
 
-        width: 670px;
+        width: 672px;
 
-        h1 {
-            font-weight: 700;
-            font-size: 16px;
-            line-height: 16px;
-            letter-spacing: -0.02em;
+        .header {
+            background-color: #ffffff;
+            border-radius: 7px;
 
-            color: #636A7C;
+            display: flex;
 
-            dl {
+            .info {
+                flex: 1 1;
+                margin-top: 13px;
+                margin-left: 25px;
+
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 18px;
+
+                dl {
+                    display: flex;
+                    gap: 0px;
+                    margin: 0 0 11px 0;
+
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 18px;
+
+                    dt {
+                        &:after {
+                            content: ":";
+                        }
+                    }
+
+                    dd {
+                        margin: 0 32px 0 0;
+                    }
+                }
+            }
+
+            .actions {
+                flex: 1 1;
                 display: flex;
-                gap: 4px;
-                margin: 12px 0;
+                justify-content: flex-end;
+                margin-right: 15px;
 
-                font-weight: 400;
-                font-size: 12px;
-                line-height: 12px;
+                gap: 9px;
 
-                dt {
-                    &:after {
-                        content: ":";
+                button {
+                    min-height: 32px;
+                    border-radius: 20px;
+                    margin: 14px 0 14px 0;
+
+                    padding-left: 20px;
+                    padding-right: 40px;
+
+                    @include bbs--icon-size(24px);
+
+                    .bbs--button--icon {
+                        margin-top: -12px;
                     }
                 }
 
-                dd {
-                    margin: 0 32px 0 0;
+                .play-button {
+                    background: $color-blue-1;
+
+                    &:hover {
+                        background: $color-blue-1-light;
+                    }
                 }
             }
         }
 
-        .preview {
-            border: 1px solid $color-pink;
-            border-radius: 6px;
+        .book-preview-area {
+            border: 1px solid $color-blue-2;
+            border-radius: 8px;
+            background: #F7F7FB;
             overflow: hidden;
             position: relative;
 
-            .actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 378px;
+
+            .book {
                 display: flex;
-                gap: 12px;
-                position: absolute;
-                bottom: 18px;
-                left: 24px;
-                width: auto;
-                height: auto;
+
+                .preview {
+                    width: 272px;
+                    height: 305px;
+                }
             }
         }
 
-        h2 {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .book-details {
+            background: #ffffff;
+            border-radius: 6px;
+            padding-bottom: 20px;
 
-            font-weight: 700;
-            font-size: 14px;
-            line-height: 16px;
-            letter-spacing: -0.02em;
-            margin: 0;
-        }
+            h2 {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
 
-        .remove-button {
-            @include icon-color($color-pink);
-            @include icon-size(16px);
-            @include icon-thickness(2);
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 18px;
+                margin: 20px;
+
+                .actions {
+                    display: flex;
+                    justify-content: flex-end;
+
+                    .bbs--button {
+                        @include bbs--icon-size(32px);
+                        @include bbs--icon-color(bbs--color(blue-1));
+                    }
+                }
+            }
+
+            .info-form {
+                .controls {
+                    flex-direction: row;
+                    padding: 0;
+
+                    .group-left {
+                        flex: 2 1;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 14px;
+                        padding: 0 0 0 20px;
+                    }
+
+                    .group-filler {
+                        flex: 0 1;
+                        margin: 0 0 40px 0;
+                        border-right: 1px solid $color-grey-4;
+                    }
+
+                    .group-right {
+                        flex: 1 1;
+                        padding: 14px 32px 0 0;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 14px;
+                    }
+                }
+
+                .form-actions {
+                    margin: 0 0 0 320px;
+                    justify-content: flex-end;
+                    width: 50%;
+                }
+            }
         }
     }
 }

@@ -40,21 +40,23 @@
                                          ["/" [#"[\w-%]+" :book-id]] :book-edit}}})
 
 (def sitemap
-  {:dashboard {:schools {:school-profile   {:classes        {:class-add     true
-                                                             :class-profile {:class-students     {:student-profile true}
-                                                                             :class-students-add true}}
-                                            :students       {:student-add true}
-                                            :teachers       {:teacher-add     true
-                                                             :teacher-profile true}
-                                            :school-courses true}
-                         :school-add       true
-                         :schools-archived true}
-               :courses {:add-course     true
-                         :course-profile true}
-               :accounts {:account-add true
-                          :account-edit true
-                          :password-reset true}
-               :account-my true}})
+  {:dashboard {:schools    {:school-profile   {:classes        {:class-add     true
+                                                                :class-profile {:class-students     {:student-profile true}
+                                                                                :class-students-add true}}
+                                               :students       {:student-add true}
+                                               :teachers       {:teacher-add     true
+                                                                :teacher-profile true}
+                                               :school-courses true}
+                            :school-add       true
+                            :schools-archived true}
+               :courses    {:add-course     true
+                            :course-profile true}
+               :accounts   {:account-add    true
+                            :account-edit   true
+                            :password-reset true}
+               :account-my true
+               :library    {:activities {:activity-edit true}
+                            :books      {:book-edit true}}}})
 
 (defn get-title
   ([params]

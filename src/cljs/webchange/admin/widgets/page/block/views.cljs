@@ -26,19 +26,26 @@
         title])]))
 
 (defn- header-component
-  [{:keys [header icon subtitle title] :as props}]
-  [:div {:class-name (get-class-name {"block--header" true})}
-   (when (some? icon)
-     [ui/icon {:icon icon}])
-   [:div.title-text
-    title
-    (when (some? subtitle)
-      [:div.subtitle-text subtitle])]
-   [:div.block--header--content
-    (when (some? header)
-      header)]
-   [header-tabs-component props]
-   [header-actions-component props]])
+  [{:keys [actions header icon subtitle tabs title] :as props}]
+  (let [show-header? (or (some? icon)
+                         (some? title)
+                         (some? subtitle)
+                         (some? header)
+                         (some? tabs)
+                         (some? actions))]
+    (when show-header?
+      [:div {:class-name (get-class-name {"block--header" true})}
+       (when (some? icon)
+         [ui/icon {:icon icon}])
+       [:div.title-text
+        title
+        (when (some? subtitle)
+          [:div.subtitle-text subtitle])]
+       [:div.block--header--content
+        (when (some? header)
+          header)]
+       [header-tabs-component props]
+       [header-actions-component props]])))
 
 (defn- footer-component
   [{:keys [footer]}]

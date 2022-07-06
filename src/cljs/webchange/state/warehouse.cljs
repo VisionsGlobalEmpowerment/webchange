@@ -464,10 +464,11 @@
 
 (re-frame/reg-event-fx
   ::load-available-books
-  (fn [{:keys [_]} [_ handlers]]
+  (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
     (create-request {:key    :load-available-books
                      :method :get
-                     :uri    (str "/api/available-books")}
+                     :uri    (str "/api/available-books")
+                     :params {:lang lang}}
                     handlers)))
 
 (re-frame/reg-event-fx

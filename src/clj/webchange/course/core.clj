@@ -857,9 +857,12 @@
          (map ->activity-info))))
 
 (defn get-available-books
-  []
-  (->> (db/get-scenes-by-type {:type "book"})
-       (map ->activity-info)))
+  [lang]
+  (let [books (if lang
+                (db/get-scenes-by-type-and-lang {:type "book" :lang lang})
+                (db/get-scenes-by-type {:type "book"}))]
+    (->> books
+         (map ->activity-info))))
 
 (defn get-visible-activities
   []

@@ -41,6 +41,7 @@
            "arrow-left"      arrow-left/data
            "arrow-right"     arrow-right/data
            "book"            book/data
+           "system-book"     book/data
            "calendar"        calendar/data
            "caret-down"      caret-down/data
            "caret-left"      caret-left/data

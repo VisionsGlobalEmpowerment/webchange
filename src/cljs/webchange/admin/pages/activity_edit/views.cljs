@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.activity-edit.state :as state]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
-    [webchange.admin.widgets.page.views-dep :as page]
+    [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]))
 
@@ -17,7 +17,7 @@
         removing? @(re-frame/subscribe [::state/removing?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
-        handle-remove-activity #(re-frame/dispatch [::state/remove])]
+        handle-remove #(re-frame/dispatch [::state/open-activities-page])]
     [:div.activity-form
      [:div.header
       [:div.info
@@ -36,14 +36,14 @@
                    :class-name "edit-button"
                    :on-click   handle-edit-click}
         "Edit Activity"]]]
-     
+
      [ui/image {:src        preview
                 :class-name "preview"}]
 
      [:div.activity-details
       [:h2
        "Activity Details"
-       [:div.actions 
+       [:div.actions
         [ui/button {:icon     "duplicate"
                     :on-click handle-edit-info-click}]
         [ui/button {:icon     (if form-editable? "close" "edit")
@@ -52,7 +52,7 @@
                            :editable?   form-editable?
                            :on-save     handle-save
                            :on-cancel   handle-save
-                           :on-remove   handle-remove-activity
+                           :on-remove   handle-remove
                            :class-name  "info-form"}]]]))
 
 (defn page
@@ -60,8 +60,10 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [loading? @(re-frame/subscribe [::state/activity-loading?])]
-      [page/page {:class-name "page--activity-edit"}
-       [page/main-content {:class-name "page--activity-edit--content"}
+      [page/page {:class-name    "page--activity-edit"
+                  :align-content "center"}
+       [page/content {:class-name   "page--activity-edit--content"
+                      :transparent? true}
         (if loading?
           [ui/loading-overlay]
           [activity-form {:activity-id activity-id}])]])))

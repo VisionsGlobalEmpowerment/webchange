@@ -172,3 +172,28 @@
   (fn [{:keys [db]} [_ data]]
     {:db (update-form-data db data)}))
 
+(re-frame/reg-event-fx
+  ::remove-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [activity-id (:activity-id db)]
+      {:db       (assoc db :activity-removing true)
+       :dispatch [::warehouse/archive-activity
+                  {:activity-id activity-id}
+                  {:on-success [::remove-success]
+                   :on-failure [::remove-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::remove-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ response]]
+    {:db (-> db
+             (assoc :activity-removing false)
+             (update-remove-window-state {:done? true}))}))
+
+(re-frame/reg-event-fx
+  ::remove-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :activity-removing false)}))
+

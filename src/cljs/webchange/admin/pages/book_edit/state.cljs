@@ -143,3 +143,9 @@
     (let [{:keys [id]} (get-book db)
           href (str "/s/" id)] ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
       (set! js/document.location href))))
+
+(re-frame/reg-event-fx
+  ::open-books-page
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :books]}))
