@@ -1,0 +1,24 @@
+.parent--layout--header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 96px;
+    padding: 0 40px;
+
+    .header--logo {
+        @include bbs--icon-color(bbs--color(blue-1));
+        height: 62px;
+
+    }
+
+    .header--navigation {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .header--navigation-item {
+        @include bbs--noto-18-sb;
+    }
+}

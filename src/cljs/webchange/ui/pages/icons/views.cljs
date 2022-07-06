@@ -1,6 +1,7 @@
 (ns webchange.ui.pages.icons.views
   (:require
     [webchange.ui.components.icon.navigation.index :as navigation-icons]
+    [webchange.ui.components.icon.social.index :as social-icons]
     [webchange.ui.components.icon.system.index :as system-icons]
     [webchange.ui.index :as ui]
     [webchange.ui.pages.layout :refer [layout]]))
@@ -46,4 +47,8 @@
      [icons-list {:data       system-icons/data
                   :component  ui/system-icon
                   :color      "white"
-                  :class-name "icons-list-colored"}]]]])
+                  :class-name "icons-list-colored"}]]
+
+    [:h2 "Social Icons"]
+    [icons-list {:data      social-icons/data
+                 :component ui/social-icon}]]])

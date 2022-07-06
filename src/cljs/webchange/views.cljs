@@ -73,6 +73,7 @@
 
 (def modules {:admin   (-> webchange.admin.views/index (shadow.lazy/loadable) (lazy-component))
               :login   (-> webchange.login.views/index (shadow.lazy/loadable) (lazy-component))
+              :parent  (-> webchange.parent.views/index (shadow.lazy/loadable) (lazy-component))
               :teacher (-> webchange.teacher.views/index (shadow.lazy/loadable) (lazy-component))
               :ui      (-> webchange.ui.views/index (shadow.lazy/loadable) (lazy-component))})
 

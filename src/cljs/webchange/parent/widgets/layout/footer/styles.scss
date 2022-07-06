@@ -1,0 +1,47 @@
+.parent--layout--footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+
+    height: 120px;
+    margin: 0 $padding-horizontal;
+    border-top: solid 2px bbs--color(blue-1);
+
+    @include bbs--noto-16-r;
+    color: bbs--color(blue-1);
+
+    .footer-copyright {}
+
+    .footer-links {
+        $gap: 16px;
+
+        flex: 1 1;
+        display: flex;
+        align-items: center;
+        gap: $gap;
+
+        .footer-link {
+            position: relative;
+
+            &:after {
+                content: "";
+                position: absolute;
+                right: - $gap * 0.5;
+
+                height: 100%;
+                border-right: solid 1px bbs--color(blue-1);
+            }
+
+            &:last-child:after {
+                display: none;
+            }
+        }
+    }
+
+    .footer-socials {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+}

@@ -43,6 +43,8 @@
                   "parents"           {[""]             :parent-dashboard
                                        ["/add-student"] :parent-add-student
                                        ["/help"]        :parent-help}
+                  "parent"            {[""]        :parent
+                                       ["/" #".*"] :parent}
                   "test-ui"           :test-ui
                   "admin"             {[""]        :admin
                                        ["/" #".*"] :admin}

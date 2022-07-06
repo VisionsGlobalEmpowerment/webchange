@@ -163,6 +163,9 @@
   (GET "/parents/add-student" request (parent-route request))
   (GET "/parents/help" request (parent-route request))
 
+  (GET "/parent" [] (public-route))
+  (GET "/parent/*" [] (public-route))
+
   ;; Wizard
   (GET "/game-changer" request (authenticated-route request {:role :educator}))
   (GET "/game-changer/:course-slug/:scene-slug" request (authenticated-route request {:role :educator}))

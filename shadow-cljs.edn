@@ -43,10 +43,12 @@
                                 :depends-on #{:app}}
                       :admin   {:entries    [webchange.admin.views]
                                 :depends-on #{:app}}
+                      :parent  {:entries    [webchange.parent.views]
+                                :depends-on #{:app}}
                       :teacher {:entries    [webchange.teacher.views]
                                 :depends-on #{:app}}
                       :ui      {:entries    [webchange.ui.views]
-                                :depends-on #{:admin}}}
+                                :depends-on #{:admin :parent}}}
    :devtools         {:preloads        [day8.re-frame-10x.preload]
                       :after-load      webchange.core/mount-root
                       :ignore-warnings true

@@ -1,5 +1,14 @@
 @import "font-noto-sans";
+@import "font-ranille";
 
 @mixin primary-font {
     font-family: 'Noto Sans', sans-serif;
+}
+
+@mixin bbs--noto {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+@mixin bbs--ranille {
+    font-family: 'Ranille', sans-serif;
 }
