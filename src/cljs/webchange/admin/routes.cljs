@@ -50,7 +50,8 @@
                             :school-add       true
                             :schools-archived true}
                :courses    {:add-course     true
-                            :course-profile true}
+                            :course-profile true
+                            :course-edit true}
                :accounts   {:account-add    true
                             :account-edit   true
                             :password-reset true}

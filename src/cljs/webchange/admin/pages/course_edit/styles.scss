@@ -1,25 +1,20 @@
 .page--edit-course {
     .widget--page--header {
-	.widget--page--header--stats {
-	    @include bbs--icon-size(30px);
+        .widget--page--header--stats {
+            @include bbs--icon-size(30px);
 
-	    .widget--page--header--stats-item {
-		font-weight: 400;
-		font-size: 14px;
-		line-height: 18px;
-		
-		span {
-		    font-weight: 700;
-		    font-size: 14px;
-		    line-height: 16px;    
-		}
-	    }
-	}
+            .widget--page--header--stats-item {
+                @include bbs--noto-14-r;
 
+                span {
+                    @include bbs--noto-14-b;
+                }
+            }
+        }
     }
 
     .levels-list {
-	padding: 20px;
+        padding: 20px;
     }
 
     .list-item-stats {
@@ -30,32 +25,33 @@
         font-weight: 700;
         font-size: 14px;
 
-	@include bbs--icon-size(24px);
-        @include icon-color($color-blue);
-	.bbs--icon {
-	    padding-left: 18px;
-	}
+        @include bbs--icon-size(24px);
+        @include bbs--icon-color(bbs--color(blue-1));
+
+        .bbs--icon {
+            padding-left: 18px;
+        }
     }
 
     .bbs--list-item--actions {
-	.bbs--icon {
-	    @include bbs--icon-size(32px);
-	}
+        .bbs--icon {
+            @include bbs--icon-size(32px);
+        }
     }
 
     .lesson-dnd {
-	padding-right: 11px;
-	border-right: 1px solid $color-grey-3;
-	
-	.bbs--icon {
-	    @include icon-color($color-grey-3);
-	    @include bbs--icon-size(32px);
-	}
+        padding-right: 11px;
+        border-right: 1px solid bbs--color(grey-3);
+
+        .bbs--icon {
+            @include bbs--icon-color(bbs--color(grey-3));
+            @include bbs--icon-size(32px);
+        }
     }
 
     .drag-over {
         & > * {
-            border-color: $color-blue-1-light !important;
+            border-color: bbs--color(blue-2) !important;
             position: relative;
 
             &:after {
@@ -63,7 +59,7 @@
                 display: none;
                 width: 100%;
                 height: 0;
-                border-top: solid 2px $color-blue-1-light;
+                border-top: solid 2px bbs--color(blue-2);
 
                 position: absolute;
                 left: 0;
@@ -91,7 +87,7 @@
 
     .list-item {
         &.selected {
-            border-color: $color-blue-1-light;
+            border-color: bbs--color(blue-2);
         }
     }
 
@@ -100,7 +96,8 @@
     }
 
     .activities-list-item {
-	padding: 5px 20px 5px 5px; 
+        padding: 5px 20px 5px 5px;
+
         .item-image {
             $height: 80px;
 
@@ -108,7 +105,7 @@
             width: $height * 1.75;
             border-radius: 4px;
             overflow: hidden;
-	    margin-right: 35px;
+            margin-right: 35px;
         }
     }
 
@@ -138,19 +135,19 @@
     }
 
     .actions {
-	.info {
-	    display:flex;
-	    gap: 11px;
-	    padding-bottom: 40px;
+        .info {
+            display: flex;
+            gap: 11px;
+            padding-bottom: 40px;
 
-	    p {
-		color: $color-blue-2;
-		padding-top: 14px;
-		font-weight: 400;
-		font-size: 12px;
-		line-height: 16px;    
-	    }
-	}
+            p {
+                color: bbs--color(blue-2);
+                padding-top: 14px;
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 16px;
+            }
+        }
     }
 
     .actions-list {
@@ -173,16 +170,16 @@
 
             font-weight: 700;
             font-size: 14px;
-	    line-height: 18px;
+            line-height: 18px;
 
             @include icon-color($color-blue-1);
-	    @include bbs--icon-size(24px);
+            @include bbs--icon-size(24px);
 
             &.button-item {
                 cursor: pointer;
 
                 &:hover {
-                    background-color: #{$color-blue-1-light};
+                    background-color: bbs--color(blue-2);
                 }
             }
         }
@@ -197,25 +194,27 @@
         flex-direction: column;
         gap: 16px;
         min-height: 0;
-	padding-left: 10px;
+        padding-left: 10px;
     }
 
     .search {
-	margin-right: 10px;
-	flex-direction: row;
-	@include icon-color($color-blue-1);
-	@include bbs--icon-size(24px);
+        margin-right: 10px;
+        flex-direction: row;
+        @include icon-color($color-blue-1);
+        @include bbs--icon-size(24px);
 
-	.bbs--input-wrapper--header {
-	    border-left: solid 1px $color-grey-4;
-	    padding-right: 7px
-	}
-	.bbs--input {
-	    border: 0;
-	}
-	.icon-wrapper {
-	    flex: 0 1;
-	}
+        .bbs--input-wrapper--header {
+            border-left: solid 1px $color-grey-4;
+            padding-right: 7px
+        }
+
+        .bbs--input {
+            border: 0;
+        }
+
+        .icon-wrapper {
+            flex: 0 1;
+        }
 
     }
 
@@ -240,7 +239,7 @@
         border-radius: 6px;
 
         .name {
-	    margin: 8px 17px;
+            margin: 8px 17px;
 
             flex: 1 1;
             font-weight: 700;
@@ -249,9 +248,9 @@
         }
 
         .preview {
-	    margin: 6px 5px;
-	    border-radius: 3px;
-	    overflow: hidden;
+            margin: 6px 5px;
+            border-radius: 3px;
+            overflow: hidden;
             $height: 58px;
             height: $height;
             width: $height * 1.77;

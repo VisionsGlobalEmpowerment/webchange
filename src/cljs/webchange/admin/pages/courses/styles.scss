@@ -1,9 +1,9 @@
 .page--courses {
     .courses-list {
-	.bbs--list-item {
-	    .bbs--list-item--actions {
-		@include icon-size(32px);
-	    }
-	}
+        .bbs--list-item {
+            .bbs--list-item--actions {
+                @include bbs--icon-size(32px);
+            }
+        }
     }
 }
