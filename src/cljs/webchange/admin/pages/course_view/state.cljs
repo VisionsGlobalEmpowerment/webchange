@@ -85,6 +85,43 @@
   (fn [{:keys [db]} [_]]
     {:db (dissoc db :course-data)}))
 
+;; Remove
+
+(def remove-window-state-key :remove-window-state)
+
+(def remove-window-default-state {:open?        false
+                                  :in-progress? false
+                                  :done?        false})
+
+(defn- update-remove-window-state
+  [db data-patch]
+  (update db remove-window-state-key merge data-patch))
+
+(re-frame/reg-sub
+  ::remove-window-state
+  :<- [path-to-db]
+  #(get % remove-window-state-key remove-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-remove-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update-remove-window-state db remove-window-default-state)}))
+
+(re-frame/reg-event-fx
+  ::handle-removed
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:dispatch [::routes/redirect :courses]}))
+
+;; Archive
+
 (re-frame/reg-event-fx
   ::archive-course
   [(i/path path-to-db)]
@@ -100,25 +137,11 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db
-             (assoc :saving false))
-     :dispatch [::routes/redirect :courses]}))
+             (assoc :saving false)
+             (update-remove-window-state {:done? true}))}))
 
 (re-frame/reg-event-fx
   ::archive-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (assoc :saving false))}))
-
-(re-frame/reg-event-fx
-  ::upload-start
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (assoc :saving true))}))
-
-(re-frame/reg-event-fx
-  ::upload-finish
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db

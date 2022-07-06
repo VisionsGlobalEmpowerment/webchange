@@ -58,6 +58,12 @@
                                                 (str "bbs--list-item--children--columns-" children-number) true})}]
             children))))
 
+(defn- item-pre
+  [{:keys [pre]}]
+  (when-not (empty? pre)
+    [:div {:class-name "bbs--list-item--pre"}
+     pre]))
+
 (defn- item-controls
   [{:keys [controls]}]
   (when-not (empty? controls)
@@ -87,6 +93,7 @@
                                                 "bbs--list-item--clickable" (fn? on-click)
                                                 class-name                  (some? class-name)})}
                   (fn? on-click) (assoc :on-click on-click))
+     [item-pre props]
      [item-avatar props]
      [item-name props]
      [item-filler props]
