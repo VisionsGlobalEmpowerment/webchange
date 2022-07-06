@@ -35,8 +35,9 @@
                        :disabled?     disabled?
                        :on-change     handle-change
                        :ref-atom      el
-                       :action        {:icon     "calendar"
-                                       :on-click handle-picker-click}}
+                       :action        {:icon      "calendar"
+                                       :disabled? disabled?
+                                       :on-click  handle-picker-click}}
                       (some? id) (assoc :id id)
                       (some? max) (assoc :max max)
                       (some? min) (assoc :min min))]])))

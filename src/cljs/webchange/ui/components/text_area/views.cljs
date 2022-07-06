@@ -23,9 +23,10 @@
   (let [handle-change #(-> % (.. -target -value) (on-change))
         has-label? (some? label)
         id (or id (when has-label? (random-uuid)))]
-    [:div {:class-name       (get-class-name (-> {"bbs--text-area" true}
-                                                 (assoc (str "variant-" variant) true)
-                                                 (assoc class-name (some? class-name))))
+    [:div {:class-name       (get-class-name {"bbs--text-area"         true
+                                              "bbs--disabled"          disabled?
+                                              (str "variant-" variant) (some? variant)
+                                              class-name               (some? class-name)})
            :data-wrapper-for id}
      [:div {:class-name "bbs--text-area-wrapper--header"}
       (when has-label?

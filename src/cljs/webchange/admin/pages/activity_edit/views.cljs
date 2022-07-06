@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.activity-edit.state :as state]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
-    [webchange.admin.widgets.page.views-dep :as page]
+    [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]))
 
@@ -36,14 +36,14 @@
                    :class-name "edit-button"
                    :on-click   handle-edit-click}
         "Edit Activity"]]]
-     
+
      [ui/image {:src        preview
                 :class-name "preview"}]
 
      [:div.activity-details
       [:h2
        "Activity Details"
-       [:div.actions 
+       [:div.actions
         [ui/button {:icon     "duplicate"
                     :on-click handle-edit-info-click}]
         [ui/button {:icon     (if form-editable? "close" "edit")
@@ -60,8 +60,10 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [loading? @(re-frame/subscribe [::state/activity-loading?])]
-      [page/page {:class-name "page--activity-edit"}
-       [page/main-content {:class-name "page--activity-edit--content"}
+      [page/page {:class-name    "page--activity-edit"
+                  :align-content "center"}
+       [page/content {:class-name   "page--activity-edit--content"
+                      :transparent? true}
         (if loading?
           [ui/loading-overlay]
           [activity-form {:activity-id activity-id}])]])))

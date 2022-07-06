@@ -36,7 +36,7 @@
                        side-bar-views/component-class-name "bbs--page--with-side-bar"})
 
 (defn page
-  [{:keys [class-name]}]
+  [{:keys [align-content class-name]}]
   (r/with-let [children-class-names (r/atom (->> (vals child-components)
                                                  (map #(vector % false))
                                                  (into {})))
@@ -50,6 +50,7 @@
     (->> (r/current-component)
          (r/children)
          (into [:div {:class-name (get-class-name (merge {"bbs--page" true
+                                                          (str "bbs--page--align-content--" align-content) (some? align-content)
                                                           class-name  (some? class-name)}
                                                          @children-class-names))
                       :ref        handle-ref}]))))

@@ -4,6 +4,20 @@
     $gap: 20px;
     $side-bar-width: 320px;
 
+    &.bbs--page--align-content--center {
+        justify-content: center;
+    }
+
+    &.bbs--page--with-content {
+        flex: 1 1;
+
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        column-gap: $gap;
+        row-gap: $gap;
+    }
+
     &.bbs--page--with-content.bbs--page--with-side-bar {
         flex: 1 1;
 

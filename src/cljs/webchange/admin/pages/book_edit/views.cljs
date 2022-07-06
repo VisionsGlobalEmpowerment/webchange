@@ -52,20 +52,22 @@
                     :on-click handle-edit-info-click}]
         [ui/button {:icon     (if form-editable? "close" "edit")
                     :on-click handle-edit-info-click}]]]
-      [book-info-form {:book-id     book-id
-                       :editable?   form-editable?
-                       :on-save     handle-save
-                       :on-cancel   handle-save
-                       :on-remove   handle-remove
-                       :class-name  "info-form"}]]]))
+      [book-info-form {:book-id    book-id
+                       :editable?  form-editable?
+                       :on-save    handle-save
+                       :on-cancel  handle-save
+                       :on-remove  handle-remove
+                       :class-name "info-form"}]]]))
 
 (defn page
   [{:keys [book-id] :as props}]
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [loading? @(re-frame/subscribe [::state/book-loading?])]
-      [page/page {:class-name "page--book-edit"}
-       [page/content {:class-name "page--book-edit--content"}
+      [page/page {:class-name    "page--book-edit"
+                  :align-content "center"}
+       [page/content {:class-name   "page--book-edit--content"
+                      :transparent? true}
         (if loading?
           [ui/loading-overlay]
           [book-form {:book-id book-id}])]])))

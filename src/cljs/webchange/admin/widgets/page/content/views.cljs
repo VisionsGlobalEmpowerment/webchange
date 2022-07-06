@@ -7,11 +7,12 @@
 (def component-class-name "widget--side-bar-page--main-content")
 
 (defn content
-  [{:keys [class-name] :as props}]
+  [{:keys [class-name transparent?] :as props}]
   (->> (r/current-component)
        (r/children)
        (into [block (merge props
                            {:class-name         (get-class-name {component-class-name true
+                                                                 (str component-class-name "--transparent") transparent?
                                                                  class-name           (some? class-name)})
 
                             :class-name-content "widget--side-bar-page--main-content--content"})])))
