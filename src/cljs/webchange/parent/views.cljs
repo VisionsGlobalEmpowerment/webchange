@@ -18,9 +18,9 @@
 
      :reagent-render
      (fn []
-       (let [{:keys [handler props] :as p} @(re-frame/subscribe [::state/current-page])
+       (let [{:keys [handler props] :as page-params} @(re-frame/subscribe [::state/current-page])
              page-component (get pages handler (:404 pages))]
-         (print "p" p)
+         (routes/set-title! page-params)
          [:div#tabschool-parent
           [layout
            [page-component props]]]))}))

@@ -15,11 +15,13 @@
   ([params]
    (get-title params {}))
   ([{:keys [handler props]} {:keys [with-root?] :or {with-root? true}}]
-   (let [root "Admin"
+   (let [root "BBS"
          connector " / "
          s #(str/join connector (if with-root? (concat [root] %) %))]
      (case handler
-       :dashboard (s ["Dashboard"])
+       :faq (s ["Help"])
+       :students (s ["Home"])
+       :student-add (s ["Add Student"])
        (s [(-> (or handler :unknown) (clojure.core/name) (clojure.string/replace "-" " ") (str/capitalize))])))))
 
 (defonce router (atom nil))
