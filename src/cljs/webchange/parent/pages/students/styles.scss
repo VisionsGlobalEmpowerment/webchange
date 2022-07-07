@@ -23,8 +23,9 @@
 
     .students-card--top-side {
         display: flex;
-        align-items: flex-end;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
 
         position: relative;
         width: 100%;
@@ -47,6 +48,10 @@
         flex-direction: column;
         gap: 8px;
         padding: 24px;
+    }
+
+    .students-card--image {
+        height: 100%;
     }
 
     .students-card--name {

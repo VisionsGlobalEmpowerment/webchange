@@ -1,6 +1,7 @@
 (ns webchange.parent.pages.students.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.parent.components.header-button.views :refer [header-button]]
     [webchange.parent.pages.students.state :as state]
     [webchange.ui.index :as ui]))
 
@@ -32,7 +33,8 @@
         handle-remove-click #(re-frame/dispatch [::state/open-remove-window id])]
     [:div.students-card
      [:div.students-card--top-side
-      [:img {:src img}]
+      [ui/image {:src        img
+                 :class-name "students-card--image"}]
       [ui/button {:title      "Delete student"
                   :class-name "students-card--remove-button"
                   :icon       "trash"
@@ -66,7 +68,10 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [:div#page--students
-     [:h1 "Current Students"]
-     [students-list]
-     [remove-student-window]]))
+    (let [handle-add-click #(re-frame/dispatch [::state/open-add-student-page])]
+      [:div#page--students
+       [:h1 "Current Students" [header-button {:chip     "plus"
+                                               :on-click handle-add-click}
+                                "Add Student"]]
+       [students-list]
+       [remove-student-window]])))

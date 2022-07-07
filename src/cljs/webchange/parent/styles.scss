@@ -7,6 +7,10 @@
         @include bbs--ranille-36-r;
         color: bbs--color(blue-1);
         margin-bottom: 48px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     p {
@@ -14,9 +18,10 @@
     }
 
     .bbs--loading-overlay {
-        background-color: transparent;
+         background-color: bbs--color(grey-5, $opacity: 0.8);
     }
 
+    @import "components/styles";
     @import "widgets/styles";
     @import "pages/styles";
 }

@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.interpreter.events :as interpreter]
+    [webchange.parent.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/students)
@@ -155,3 +156,11 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (update-remove-window-state db {:in-progress? false})}))
+
+;; add student
+
+(re-frame/reg-event-fx
+  ::open-add-student-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:dispatch [::routes/redirect :student-add]}))

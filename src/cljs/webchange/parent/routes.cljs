@@ -5,8 +5,9 @@
     [webchange.parent.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-(def routes {""          :students
-             "/"         :students})
+(def routes {""             :students
+             "/"            :students
+             "/add-student" :student-add})
 
 
 (defn get-title
