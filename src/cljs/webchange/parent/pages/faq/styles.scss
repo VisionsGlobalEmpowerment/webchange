@@ -1,0 +1,30 @@
+#page--faq {
+    h2 {
+        @include bbs--noto-16-sb;
+        text-transform: uppercase;
+        text-decoration: underline;
+        margin-bottom: 32px;
+    }
+
+    dl {
+        $line-height: 32px;
+
+        dt {
+            @include bbs--noto-16-sb;
+            line-height: $line-height;
+
+            &:before {
+                content: "Q: ";
+            }
+        }
+
+        dd {
+            line-height: $line-height;
+            margin-bottom: 32px;
+
+            &:before {
+                content: "A: ";
+            }
+        }
+    }
+}

@@ -7,7 +7,8 @@
 
 (def routes {""             :students
              "/"            :students
-             "/add-student" :student-add})
+             "/add-student" :student-add
+             "/faq"         :faq})
 
 
 (defn get-title
@@ -31,7 +32,6 @@
 
 (defn init!
   [root-path]
-  (print "init!" root-path)
   (reset! router (module-router/init! root-path routes dispatch-route)))
 
 (defn set-title!

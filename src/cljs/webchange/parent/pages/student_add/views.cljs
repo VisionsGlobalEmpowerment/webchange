@@ -40,8 +40,8 @@
    [:p "Also, we recommend playing Blue Brick School activities on Android Tablets. Could you select what device the student will use?"]])
 
 (defn page
-  [props]
-  (re-frame/dispatch [::state/init props])
+  []
+  (re-frame/dispatch [::state/init])
   (fn []
     (let [handle-back-click #(re-frame/dispatch [::state/open-students-list-page])]
       [:div#page--student-add

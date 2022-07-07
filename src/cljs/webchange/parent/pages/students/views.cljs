@@ -65,8 +65,8 @@
        [ui/loading-overlay])]))
 
 (defn page
-  [props]
-  (re-frame/dispatch [::state/init props])
+  []
+  (re-frame/dispatch [::state/init])
   (fn []
     (let [handle-add-click #(re-frame/dispatch [::state/open-add-student-page])]
       [:div#page--students
