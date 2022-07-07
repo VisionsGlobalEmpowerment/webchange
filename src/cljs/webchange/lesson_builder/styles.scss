@@ -1,0 +1,12 @@
+body {
+    background-color: $color-primary !important;
+}
+
+#lesson-builder {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+@import "widgets/styles";
+@import "pages/styles";

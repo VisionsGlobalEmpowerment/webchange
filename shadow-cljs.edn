@@ -45,6 +45,8 @@
                                 :depends-on #{:app}}
                       :teacher {:entries    [webchange.teacher.views]
                                 :depends-on #{:app}}
+                      :lesson-builder {:entries    [webchange.lesson-builder.views]
+                                       :depends-on #{:admin}}
                       :ui      {:entries    [webchange.ui.views]
                                 :depends-on #{:admin}}}
    :devtools         {:preloads        [day8.re-frame-10x.preload]

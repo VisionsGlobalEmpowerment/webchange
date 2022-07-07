@@ -7,7 +7,7 @@
     [webchange.admin.state :as state]
     [webchange.admin.widgets.layout.views :refer [layout]]
     [webchange.login.check-current-user :as current-user]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (defn index
   []

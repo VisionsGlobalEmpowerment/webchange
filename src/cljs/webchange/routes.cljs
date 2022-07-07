@@ -49,7 +49,9 @@
                   "teacher"           {[""]        :teacher
                                        ["/" #".*"] :teacher}
                   "ui"                {[""]        :ui
-                                       ["/" #".*"] :ui}}])
+                                       ["/" #".*"] :ui}
+                  "lesson-builder"    {[""]        :lesson-builder
+                                       ["/" #".*"] :lesson-builder}}])
 
 (def redirects {:course-editor-v2       :course-editor
                 :course-editor-v2-scene :course-editor-scene})
