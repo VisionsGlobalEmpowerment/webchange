@@ -19,6 +19,7 @@
     [webchange.admin.pages.create-activity.views :as create-activity]
     [webchange.admin.pages.create-book.views :as create-book]
     [webchange.admin.pages.dashboard.views :as dashboard]
+    [webchange.admin.pages.lesson-builder.views :as lesson-builder]
     [webchange.admin.pages.not-found.views :as not-found]
     [webchange.admin.pages.password-reset.views :as password-reset]
     [webchange.admin.pages.school-profile.views :as school-profile]
@@ -57,6 +58,7 @@
             :create-activity    create-activity/page
             :create-book        create-book/page
             :dashboard          dashboard/page
+            :lesson-builder     lesson-builder/page
             :password-reset     password-reset/page
             :school-add         school-add/page
             :school-courses     school-courses/page

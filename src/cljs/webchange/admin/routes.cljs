@@ -5,42 +5,43 @@
     [webchange.admin.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-(def routes {""          :dashboard
-             "/"         :dashboard
-             "/schools"  {""                            :schools
-                          "/add"                        :school-add
-                          "/archived"                   :schools-archived
-                          ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
-                                                         "/classes"  {""                           :classes
-                                                                      "/add"                       :class-add
-                                                                      ["/" [#"[\w-%]+" :class-id]] {""          :class-profile
-                                                                                                    "/students" {""                             :class-students
-                                                                                                                 "/add"                         :class-students-add
-                                                                                                                 ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
-                                                         "/students" {""                             :students
-                                                                      "/add"                         :student-add
-                                                                      ["/" [#"[\w-%]+" :student-id]] :student-edit}
-                                                         "/teachers" {""                             :teachers
-                                                                      "/add"                         :teacher-add
-                                                                      ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
-                                                         "/courses"  {"" :school-courses}}}
-             "/courses"  {""                              :courses
-                          "/add"                          :course-add
-                          ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
-                                                           "/edit" :course-edit}}
-             "/accounts" {"/my"                                :account-my
-                          ["/add/" [#"[\w-%]+" :account-type]] :account-add
-                          ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
-                                                                "/reset-password" :password-reset}
-                          ["/" [#"[\w-%]+" :account-type]]     :accounts}
-             "/library"  {"/activities" {""                              :activities
-                                         ["/" [#"[\w-%]+" :activity-id]] :activity-edit}
-                          "/books"      {""                          :books
-                                         "create"                    :book-create
-                                         ["/" [#"[\w-%]+" :book-id]] :book-edit}}
-             "/create"   {""          :create
-                          "/activity" :create-activity
-                          "/book"     :create-book}})
+(def routes {""                :dashboard
+             "/"               :dashboard
+             "/schools"        {""                            :schools
+                                "/add"                        :school-add
+                                "/archived"                   :schools-archived
+                                ["/" [#"[\w-%]+" :school-id]] {""          :school-profile
+                                                               "/classes"  {""                           :classes
+                                                                            "/add"                       :class-add
+                                                                            ["/" [#"[\w-%]+" :class-id]] {""          :class-profile
+                                                                                                          "/students" {""                             :class-students
+                                                                                                                       "/add"                         :class-students-add
+                                                                                                                       ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
+                                                               "/students" {""                             :students
+                                                                            "/add"                         :student-add
+                                                                            ["/" [#"[\w-%]+" :student-id]] :student-edit}
+                                                               "/teachers" {""                             :teachers
+                                                                            "/add"                         :teacher-add
+                                                                            ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
+                                                               "/courses"  {"" :school-courses}}}
+             "/courses"        {""                              :courses
+                                "/add"                          :course-add
+                                ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
+                                                                 "/edit" :course-edit}}
+             "/accounts"       {"/my"                                :account-my
+                                ["/add/" [#"[\w-%]+" :account-type]] :account-add
+                                ["/" [#"[\d-%]+" :account-id]]       {""                :account-edit
+                                                                      "/reset-password" :password-reset}
+                                ["/" [#"[\w-%]+" :account-type]]     :accounts}
+             "/library"        {"/activities" {""                              :activities
+                                               ["/" [#"[\w-%]+" :activity-id]] :activity-edit}
+                                "/books"      {""                          :books
+                                               "create"                    :book-create
+                                               ["/" [#"[\w-%]+" :book-id]] :book-edit}}
+             "/create"         {""          :create
+                                "/activity" :create-activity
+                                "/book"     :create-book}
+             "/lesson-builder" :lesson-builder})
 
 (def sitemap
   {:dashboard {:schools    {:school-profile   {:classes        {:class-add     true
@@ -54,7 +55,7 @@
                             :schools-archived true}
                :courses    {:add-course     true
                             :course-profile true
-                            :course-edit true}
+                            :course-edit    true}
                :accounts   {:account-add    true
                             :account-edit   true
                             :password-reset true}
@@ -62,7 +63,7 @@
                :library    {:activities {:activity-edit true}
                             :books      {:book-edit true}}
                :create     {:create-activity true
-                            :create-book true}}})
+                            :create-book     true}}})
 
 (defn get-title
   ([params]
