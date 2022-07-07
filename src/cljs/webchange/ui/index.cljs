@@ -19,6 +19,7 @@
     [webchange.ui.components.overlay.views :as overlay-views]
     [webchange.ui.components.panel.views :as panel-views]
     [webchange.ui.components.password.views :as password-views]
+    [webchange.ui.components.progress.views :as progress-views]
     [webchange.ui.components.select.views :as select-views]
     [webchange.ui.components.switch.views :as switch-views]
     [webchange.ui.components.tab.views :as tab-views]
@@ -30,6 +31,7 @@
 (def button button-views/button)
 (def card card-views/card)
 (def chip chip-views/chip)
+(def circular-progress progress-views/circular-progress)
 (def confirm dialog-views/confirm)
 (def complete-progress complete-progress-views/complete-progress)
 (def copy-link copy-link-views/copy-link)

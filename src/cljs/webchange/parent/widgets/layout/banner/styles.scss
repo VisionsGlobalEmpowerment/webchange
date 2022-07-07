@@ -19,6 +19,11 @@
         width: 60%;
         max-width: 680px;
 
+        h1 {
+            color: bbs--color(white);
+            margin: 0;
+        }
+
         p {
             line-height: 24px;
         }

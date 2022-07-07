@@ -46,8 +46,10 @@
     .bbs--dialog--content {
         @include bbs--noto-14-b;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 4px;
     }
 
     .bbs--dialog--actions {
