@@ -16,7 +16,6 @@
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.game-changer.views :as game-changer]
-    [webchange.parent-dashboard.views :as parent-dashboard]
     [webchange.student-dashboard.views :as student-dashboard]
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.editor-v2.wizard.views :as wizard]
@@ -121,11 +120,6 @@
                ;; student dashboard
                :student-login [student-access-form]
                :school-student-login [student-access-form (:school-id route-params)]
-
-               ;; parent dashboard
-               :parent-dashboard [parent-dashboard/dashboard]
-               :parent-add-student [parent-dashboard/add-student]
-               :parent-help [parent-dashboard/help]
 
                ;;wizard
                :book-creator [wizard/book-creator-panel]

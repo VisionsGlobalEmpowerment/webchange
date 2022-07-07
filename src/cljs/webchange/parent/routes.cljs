@@ -8,7 +8,7 @@
 (def routes {""             :students
              "/"            :students
              "/add-student" :student-add
-             "/faq"         :faq})
+             "/help"        :faq})
 
 
 (defn get-title
