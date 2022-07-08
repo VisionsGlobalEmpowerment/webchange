@@ -1,0 +1,30 @@
+.widget--activity-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0 10px;
+
+    .activity-title--name {
+        @include bbs--noto-18-b;
+        flex: 1 1;
+    }
+
+    .activity-title--last-save {
+        @include bbs--noto-12-r;
+        position: relative;
+        min-width: 110px;
+
+        .activity-title--last-save--date {
+            display: flex;
+            gap: 10px;
+        }
+    }
+
+    .activity-title--action-button {
+        width: 120px;
+    }
+}

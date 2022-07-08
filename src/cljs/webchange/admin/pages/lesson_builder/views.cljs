@@ -10,5 +10,6 @@
   (let [lesson-builder (-> webchange.lesson-builder.views/index
                            (shadow.lazy/loadable)
                            (lazy-component))]
-    [:> react/Suspense {:fallback (r/as-element [ui/loading-overlay])}
-     [:> lesson-builder {:activity-id 558}]]))
+    [:div.page--lesson-builder
+     [:> react/Suspense {:fallback (r/as-element [ui/loading-overlay])}
+      [:> lesson-builder {:activity-id 558}]]]))

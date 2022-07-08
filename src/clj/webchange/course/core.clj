@@ -881,8 +881,10 @@
 
 (defn get-activity
   [activity-id]
-  (-> (db/get-scene-by-id {:id activity-id})
-      ->activity-info))
+  (let [{:keys [course-id] :as activity-info} (-> (db/get-scene-by-id {:id activity-id})
+                                                  ->activity-info)
+        {course-slug :slug} (db/get-course-by-id {:id course-id})]
+    (assoc activity-info :course-slug course-slug)))
 
 (defn edit-activity
   [activity-id data]
@@ -895,17 +897,17 @@
 
 (defn archive-activity
   [activity-id _]
-  (db/update-scene-status! {:id activity-id
+  (db/update-scene-status! {:id     activity-id
                             :status "archived"})
-  {:id activity-id
+  {:id     activity-id
    :status "archived"})
 
 (defn toggle-activity-visibility
   [activity-id {:keys [visible]}]
   (let [status (if visible "visible" "invisible")]
-    (db/update-scene-status! {:id activity-id
+    (db/update-scene-status! {:id     activity-id
                               :status status})
-    {:id activity-id
+    {:id     activity-id
      :status status}))
 
 (defn duplicate-activity

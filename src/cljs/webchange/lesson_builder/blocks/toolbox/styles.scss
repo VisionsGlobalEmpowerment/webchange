@@ -1,0 +1,7 @@
+#block--toolbox {
+    $gap: $default-gap * 0.5;
+
+    background-color: bbs--color(white);
+    border-radius: $border-radius;
+    padding: $gap;
+}

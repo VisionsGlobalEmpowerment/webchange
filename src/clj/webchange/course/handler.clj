@@ -37,7 +37,8 @@
   [course-slug scene-name request]
   (let [user-id (current-user request)
         save (fn [data] (core/update-scene! course-slug scene-name data user-id))]
-    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+    (when-not (or (is-admin? user-id)
+                  (core/collaborator-by-course-slug? user-id course-slug))
       (throw-unauthorized {:role :educator}))
     (-> request
         :body
@@ -107,8 +108,8 @@
                          website/get-user-by-id
                          auth/get-user-id-by-website!)]
     (if owner-id
-      (-> (core/localize course-id {:lang language
-                                    :owner-id owner-id
+      (-> (core/localize course-id {:lang            language
+                                    :owner-id        owner-id
                                     :website-user-id website-user-id})
           handle)
       (handle [false {:message "User not found"}]))))
@@ -117,9 +118,9 @@
   [{:keys [image-src concept-list-id] :as data} request]
   (let [owner-id (current-user request)
         course (cond-> data
-                 (not-empty image-src) (assoc :image-src
-                                              (assets/make-thumbnail image-src :course))
-                 :always (core/create-course owner-id))]
+                       (not-empty image-src) (assoc :image-src
+                                                    (assets/make-thumbnail image-src :course))
+                       :always (core/create-course owner-id))]
     (handle course)))
 
 (defn handle-create-activity
@@ -218,13 +219,13 @@
     (-> (core/get-on-review-courses type status)
         handle)))
 
-(s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
-                     :url s/Str :lang (s/maybe s/Str)
-                     (s/optional-key :metadata) (s/maybe s/Any)
+(s/defschema Course {:id                          s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
+                     :url                         s/Str :lang (s/maybe s/Str)
+                     (s/optional-key :metadata)   (s/maybe s/Any)
                      (s/optional-key :updated-at) s/Str
-                     (s/optional-key :level) s/Str
-                     (s/optional-key :subject) s/Str
-                     (s/optional-key :status) s/Str})
+                     (s/optional-key :level)      s/Str
+                     (s/optional-key :subject)    s/Str
+                     (s/optional-key :status)     s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int (s/optional-key :type) s/Str (s/optional-key :image-src) s/Str})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
@@ -292,7 +293,7 @@
 (defroutes website-api-routes
   (context "/api/courses" []
     :tags ["course"]
-                                        ;should go before general "/api/courses/:course-slug" to be accessible
+    ;should go before general "/api/courses/:course-slug" to be accessible
     (GET "/available" []
       :return CoursesOrError
       :summary "Returns all available courses"
@@ -431,107 +432,107 @@
 
   ;; Scenes
   (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name]
-       (-> (core/get-scene-data course-slug scene-name) response))
+    (-> (core/get-scene-data course-slug scene-name) response))
   (GET "/api/courses/:course-slug/first-scene" [course-slug]
-       (-> (core/get-first-scene-data course-slug) response))
+    (-> (core/get-first-scene-data course-slug) response))
   (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
-        (handle-save-scene course-slug scene-name request))
+    (handle-save-scene course-slug scene-name request))
   (PUT "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
-       (handle-update-scene course-slug scene-name request))
+    (handle-update-scene course-slug scene-name request))
   (POST "/api/courses/:course-slug/scenes/:scene-name/skills" [course-slug scene-name :as request]
-        (handle-update-scene-skills course-slug scene-name request))
+    (handle-update-scene-skills course-slug scene-name request))
 
   (POST "/api/courses/:course-slug" [course-slug :as request]
-        (handle-save-course course-slug request))
+    (handle-save-course course-slug request))
 
   (GET "/api/courses/:course-slug/info" [course-slug]
-       (-> course-slug core/get-course-info response))
+    (-> course-slug core/get-course-info response))
   (PUT "/api/courses/:course-id/info" [course-id :as request]
-       (handle-save-course-info course-id request))
+    (handle-save-course-info course-id request))
 
   (GET "/api/courses/:course-slug/versions" [course-slug] (-> course-slug core/get-course-versions response))
   (GET "/api/courses/:course-slug/scenes/:scene-name/versions" [course-slug scene-name]
-       (-> (core/get-scene-versions course-slug scene-name) response))
+    (-> (core/get-scene-versions course-slug scene-name) response))
   (POST "/api/course-versions/:version-id/restore" [version-id :as request]
-        (handle-restore-course-version version-id request))
+    (handle-restore-course-version version-id request))
   (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-        (handle-restore-scene-version version-id request))
+    (handle-restore-scene-version version-id request))
 
   (GET "/api/available-courses" request
-       (-> (core/get-available-courses) response))
+    (-> (core/get-available-courses) response))
 
   (PUT "/api/schools/:school-id/assign-course" request
-       :coercion :spec
-       :path-params [school-id :- ::course-spec/school-id]
-       :body [data ::course-spec/assign-school-course]
-       :return ::course-spec/school-course
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/assign-school-course school-id data)
-             response)))
+    :coercion :spec
+    :path-params [school-id :- ::course-spec/school-id]
+    :body [data ::course-spec/assign-school-course]
+    :return ::course-spec/school-course
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/assign-school-course school-id data)
+          response)))
   (GET "/api/schools/:school-id/courses" request
-       :coercion :spec
-       :path-params [school-id :- ::course-spec/school-id]
-       :return ::course-spec/courses
-       (let [user-id (current-user request)]
-         (when-not (or (is-admin? user-id) (school/school-teacher? school-id user-id))
-           (throw-unauthorized {:role :educator}))
-         (-> (core/get-school-courses school-id user-id)
-             response)))
+    :coercion :spec
+    :path-params [school-id :- ::course-spec/school-id]
+    :return ::course-spec/courses
+    (let [user-id (current-user request)]
+      (when-not (or (is-admin? user-id) (school/school-teacher? school-id user-id))
+        (throw-unauthorized {:role :educator}))
+      (-> (core/get-school-courses school-id user-id)
+          response)))
   (GET "/api/classes/:class-id/course" request
-       :coercion :spec
-       :path-params [class-id :- ::course-spec/class-id]
-       (let [user-id (current-user request)]
-         (when-not (or (is-admin? user-id) (school/class-teacher? class-id user-id))
-           (throw-unauthorized {:role :educator}))
-         (-> (core/get-class-course class-id)
-             response)))
+    :coercion :spec
+    :path-params [class-id :- ::course-spec/class-id]
+    (let [user-id (current-user request)]
+      (when-not (or (is-admin? user-id) (school/class-teacher? class-id user-id))
+        (throw-unauthorized {:role :educator}))
+      (-> (core/get-class-course class-id)
+          response)))
   (GET "/api/available-activities" request
-       :coercion :spec
-       :query-params [{lang :- string? nil}]
-       (let [user-id (current-user request)]
-         (-> (core/get-available-activities lang)
-             response)))
+    :coercion :spec
+    :query-params [{lang :- string? nil}]
+    (let [user-id (current-user request)]
+      (-> (core/get-available-activities lang)
+          response)))
   (GET "/api/visible-activities" request
-       :coercion :spec
-       (let [user-id (current-user request)]
-         (-> (core/get-visible-activities)
-             response)))
+    :coercion :spec
+    (let [user-id (current-user request)]
+      (-> (core/get-visible-activities)
+          response)))
   (GET "/api/available-books" request
-       :coercion :spec
-       :query-params [{lang :- string? nil}]
-       (let [user-id (current-user request)]
-         (-> (core/get-available-books lang)
-             response)))
+    :coercion :spec
+    :query-params [{lang :- string? nil}]
+    (let [user-id (current-user request)]
+      (-> (core/get-available-books lang)
+          response)))
   (GET "/api/activities/:activity-id/current-version" request
-       :coercion :spec
-       :path-params [activity-id :- ::activity-spec/id]
-       (-> (core/get-activity-current-version activity-id)
-           response))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    (-> (core/get-activity-current-version activity-id)
+        response))
   (GET "/api/activities/:activity-id" request
-       :coercion :spec
-       :path-params [activity-id :- ::activity-spec/id]
-       (-> (core/get-activity activity-id)
-           response))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    (-> (core/get-activity activity-id)
+        response))
   (PUT "/api/activities/:activity-id" request
-       :coercion :spec
-       :path-params [activity-id :- ::activity-spec/id]
-       :body [data ::activity-spec/edit-activity]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/edit-activity activity-id data)
-             response)))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/edit-activity]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/edit-activity activity-id data)
+          response)))
   (PUT "/api/activities/:activity-id/archive" request
-       :coercion :spec
-       :path-params [activity-id :- ::activity-spec/id]
-       :body [data ::activity-spec/archive-activity]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/archive-activity activity-id data)
-             response)))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/archive-activity]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/archive-activity activity-id data)
+          response)))
   (PUT "/api/activities/:activity-id/toggle-visibility" request
        :coercion :spec
        :path-params [activity-id :- ::activity-spec/id]

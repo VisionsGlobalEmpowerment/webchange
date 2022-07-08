@@ -5,7 +5,7 @@
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
     [webchange.admin.widgets.add-class-students.state :as widget-state]
-    [webchange.utils.date :refer [date-str->locale-date ms->time]]))
+    [webchange.utils.date :refer [date-str->locale-date]]))
 
 (def path-to-db :page/class-students-add)
 

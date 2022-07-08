@@ -4,7 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.date :refer [date-str->locale-date ms->time]]))
+    [webchange.utils.date :refer [date-str->locale-date ms->duration]]))
 
 (def path-to-db :page/student-profile)
 
@@ -62,7 +62,7 @@
       {:started-at        (date-str->locale-date started-at)
        :last-login        (date-str->locale-date last-login)
        :activity-progress activity-progress
-       :cumulative-time   (ms->time cumulative-time)})))
+       :cumulative-time   (ms->duration cumulative-time)})))
 
 (re-frame/reg-sub
   ::student-data

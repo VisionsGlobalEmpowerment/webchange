@@ -4,7 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.date :refer [date-str->locale-date ms->time]]))
+    [webchange.utils.date :refer [date-str->locale-date ms->duration]]))
 
 (def path-to-db :page/class-students)
 
@@ -85,7 +85,7 @@
   (let [{:keys [last-played time-spent]} data]
     {:last-played (date-str->locale-date last-played)
      :score       100
-     :time-spent  (ms->time time-spent)
+     :time-spent  (ms->duration time-spent)
      :unique-id   unique-id}))
 
 (re-frame/reg-sub
