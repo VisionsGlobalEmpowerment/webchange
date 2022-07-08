@@ -1,2 +1,51 @@
 #block--menu {
+    $padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    .menu--tabs {
+        display: flex;
+    }
+
+    .menu--tab {
+        @include bbs--noto-16-sb;
+
+        padding: 8px 20px;
+        $border-radius: 6px;
+        border-radius: $border-radius $border-radius 0 0;
+        cursor: pointer;
+
+        &:hover {
+            color: bbs--color(yellow-1);
+        }
+
+        &.menu--tab--active {
+            background-color: bbs--color(white);
+            color: bbs--color(yellow-1);
+        }
+    }
+
+    .menu--body {
+        flex: 1 1;
+        display: flex;
+        flex-direction: column;
+
+        background-color: bbs--color(white);
+    }
+
+    .menu--header {
+        display: flex;
+        align-items: center;
+
+        height: 40px;
+        padding: 0 $padding;
+
+        border-bottom: solid 1px bbs--color(grey-4);
+    }
+
+    .menu--content {
+        flex: 1 1;
+        padding: $padding $padding * 2;
+    }
 }
