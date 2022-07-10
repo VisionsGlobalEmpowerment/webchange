@@ -463,6 +463,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::duplicate-activity
+  (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
+    (create-request {:key    :duplicate-activity
+                     :method :post
+                     :params data
+                     :uri    (str "/api/activities/" activity-id "/duplicate")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-available-books
   (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
     (create-request {:key    :load-available-books
@@ -665,7 +674,7 @@
                      :params data} handlers)))
 
 (re-frame/reg-event-fx
-  ::duplicate-activity
+  ::duplicate-course-activity
   (fn [_ [_ {:keys [course-id data]} handlers]]
     (create-request {:key    :duplicate-activity
                      :method :post

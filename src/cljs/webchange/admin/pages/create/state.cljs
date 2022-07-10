@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.pages.wizard.state
+(ns webchange.admin.pages.create.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.routes :as routes]))

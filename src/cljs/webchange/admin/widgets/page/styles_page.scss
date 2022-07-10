@@ -42,4 +42,10 @@
             grid-column-end: 3
         }
     }
+
+    &.bbs--page--with-footer {
+	.widget--side-bar-page--block {
+	    padding-bottom: $footer-height - $default-gap;
+	}
+    }
 }

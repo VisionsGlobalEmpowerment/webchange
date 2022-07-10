@@ -33,7 +33,7 @@
 (re-frame/reg-event-fx
   ::duplicate-activity
   (fn [{:keys [db]} [_ old-name new-name course-id]]
-    {:dispatch [::warehouse/duplicate-activity
+    {:dispatch [::warehouse/duplicate-course-activity
                 {:course-id course-id
                  :data {:old-name old-name
                         :new-name new-name}}

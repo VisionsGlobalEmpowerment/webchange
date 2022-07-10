@@ -13,6 +13,7 @@
 (def content content-views/content)
 (def side-bar side-bar-views/side-bar)
 (def header header-views/header)
+(def footer footer-views/footer)
 
 (defn single-page
   [{:keys [align-center? background-image? class-name class-name-content footer form-container? header]}]
@@ -33,7 +34,8 @@
 
 (def child-components {header-views/component-class-name   "bbs--page--with-header"
                        content-views/component-class-name  "bbs--page--with-content"
-                       side-bar-views/component-class-name "bbs--page--with-side-bar"})
+                       side-bar-views/component-class-name "bbs--page--with-side-bar"
+                       footer-views/component-class-name   "bbs--page--with-footer"})
 
 (defn page
   [{:keys [align-content class-name]}]

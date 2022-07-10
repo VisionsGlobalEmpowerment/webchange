@@ -1,8 +1,8 @@
-(ns webchange.lesson-builder.pages.wizard.views
+(ns webchange.admin.pages.create.views
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.lesson-builder.pages.wizard.state :as state]
+    [webchange.admin.pages.create.state :as state]
     [webchange.ui.index :as ui]))
 
 (defn- create-activity-card
@@ -30,7 +30,7 @@
 
 (defn page
   []
-  [page/single-page {:class-name        "page--wizard"
+  [page/single-page {:class-name        "page--create-index"
                      :header            {:title    "Create"
                                          :icon     "create"
                                          :icon-color "blue-2"

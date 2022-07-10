@@ -2,8 +2,10 @@
   (:require
     [reagent.core :as r]))
 
+(def component-class-name "widget--page--footer")
+
 (defn footer
   []
   (->> (r/current-component)
        (r/children)
-       (into [:div.widget--page--footer])))
+       (into [:div {:class-name component-class-name}])))

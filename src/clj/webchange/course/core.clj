@@ -907,3 +907,24 @@
                               :status status})
     {:id activity-id
      :status status}))
+
+(defn duplicate-activity
+  [activity-id {:keys [name lang]} owner-id]
+  (let [created-at (jt/local-date-time)
+        updated-at (jt/local-date-time)
+        source (db/get-scene-by-id {:id activity-id})
+        [{scene-id :id}] (db/create-activity! {:name name
+                                               :lang lang
+                                               :image_src (:image-src source)
+                                               :status "invisible"
+                                               :owner_id owner-id
+                                               :created_at created-at
+                                               :updated_at updated-at
+                                               :type (:type source)})
+        source-data (get-activity-current-version activity-id)]
+    (db/save-scene! {:scene_id    scene-id
+                     :data        source-data
+                     :owner_id    owner-id
+                     :created_at  created-at
+                     :description "Create"})
+    {:id scene-id}))
