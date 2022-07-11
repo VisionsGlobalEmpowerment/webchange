@@ -2,20 +2,6 @@
   (:require
     [webchange.ui.index :as ui]))
 
-;{:items    [{:id   :image-add
-;                                :text "Add Image"
-;                                :icon "plus"}
-;                               {:id   :character-add
-;                                :text "Add Character"
-;                                :icon "plus"}
-;                               {:id   :background
-;                                :text "Background"
-;                                :icon "plus"}
-;                               {:id   :background-music
-;                                :text "Background Music"
-;                                :icon "plus"}]
-;                    :on-click handle-click}
-
 (defn- options-list-item
   [{:keys [id icon text on-click]}]
   (let [handle-click #(when (fn? on-click)
@@ -32,4 +18,5 @@
   [:div.component--options-list
    (for [{:keys [id] :as item-data} items]
      ^{:key id}
-     [options-list-item (assoc item-data :on-click on-click)])])
+     [options-list-item (cond-> item-data
+                                (-> item-data (contains? :on-click) not) (assoc :on-click on-click))])])

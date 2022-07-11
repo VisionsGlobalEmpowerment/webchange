@@ -60,7 +60,8 @@
       [:div {:id         "block--menu"
              :class-name class-name}
        [menu-tabs]
-       [:div {:class-name "menu--body"}
+       [:div {:class-name "menu--body-wrapper"}
+        [:div {:class-name "menu--body"}
         [menu-header]
         [:div {:class-name "menu--content"}
-         [body-component]]]])))
+         [body-component]]]]])))
