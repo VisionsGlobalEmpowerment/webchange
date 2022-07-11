@@ -2,6 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.blocks.menu.state :as state]
+    [webchange.lesson-builder.widgets.background-image.views :refer [background-image]]
+    [webchange.lesson-builder.widgets.background-music.views :refer [background-music]]
     [webchange.lesson-builder.widgets.character-add.views :refer [character-add]]
     [webchange.lesson-builder.widgets.design-actions.views :refer [design-actions]]
     [webchange.lesson-builder.widgets.image-add.views :refer [image-add]]
@@ -11,7 +13,9 @@
     [webchange.lesson-builder.widgets.voice-translate.views :refer [voice-translate]]
     [webchange.ui.index :as ui]))
 
-(def menu-items {:character-add    character-add
+(def menu-items {:background-image background-image
+                 :background-music background-music
+                 :character-add    character-add
                  :design-actions   design-actions
                  :image-add        image-add
                  :scene-layers     scene-layers

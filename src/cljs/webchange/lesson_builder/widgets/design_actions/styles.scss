@@ -11,8 +11,6 @@
 
         border-bottom: solid 1px bbs--color(grey-4);
         padding: $padding;
-
-        @include bbs--icon-color(bbs--color(grey-1));
     }
 
     .design-action--header {
@@ -25,8 +23,15 @@
             cursor: pointer;
             color: bbs--color(blue-1);
 
-            @include bbs--icon-color(bbs--color(blue-1));
+            .design-action--icon,
+            .design-action--expand {
+                @include bbs--icon-color(bbs--color(blue-1));
+            }
         }
+    }
+
+    .design-action--icon {
+        @include bbs--icon-color(bbs--color(grey-1));
     }
 
     .design-action--name {
@@ -36,5 +41,9 @@
 
     .design-action--expand {
         @include bbs--icon-color(bbs--color(grey-3));
+    }
+
+    .design-action--content {
+//         padding: 0 $padding;
     }
 }

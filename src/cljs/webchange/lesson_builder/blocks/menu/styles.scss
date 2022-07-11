@@ -37,6 +37,10 @@
             @include bbs--noto-18-b;
             margin-bottom: 15px;
         }
+
+        span {
+            @include bbs--noto-14-sb;
+        }
     }
 
     .menu--header {

@@ -21,14 +21,16 @@
      [:div {:class-name (ui/get-class-name {"design-action--header"         true
                                             "design-action--header--active" active?})
             :on-click   handle-click}
-      [ui/icon {:icon icon}]
+      [ui/icon {:icon       icon
+                :class-name "design-action--icon"}]
       [:div.design-action--name
        text]
       [ui/icon {:icon       (if active? "caret-down" "caret-right")
                 :class-name "design-action--expand"}]]
      (if-let [child-component (get content-components content)]
        (when active?
-         [child-component]))]))
+         [:div.design-action--content
+          [child-component]]))]))
 
 (defn design-actions
   []
