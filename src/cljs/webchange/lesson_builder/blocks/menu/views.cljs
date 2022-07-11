@@ -8,6 +8,7 @@
     [webchange.lesson-builder.widgets.scene-layers.views :refer [scene-layers]]
     [webchange.lesson-builder.widgets.settings.views :refer [settings]]
     [webchange.lesson-builder.widgets.template-options.views :refer [template-options]]
+    [webchange.lesson-builder.widgets.voice-translate.views :refer [voice-translate]]
     [webchange.ui.index :as ui]))
 
 (def menu-items {:character-add    character-add
@@ -15,7 +16,8 @@
                  :image-add        image-add
                  :scene-layers     scene-layers
                  :settings         settings
-                 :template-options template-options})
+                 :template-options template-options
+                 :voice-translate  voice-translate})
 
 (defn- menu-tabs-item
   [{:keys [active? id title]}]

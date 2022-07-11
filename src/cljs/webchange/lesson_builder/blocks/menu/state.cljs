@@ -72,7 +72,7 @@
   :<- [path-to-db]
   #(-> (get-history %)
        (count)
-       (> 1)))
+       (> 0)))
 
 ;; tabs
 

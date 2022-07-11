@@ -32,6 +32,11 @@
         flex-direction: column;
 
         background-color: bbs--color(white);
+
+        h1 {
+            @include bbs--noto-18-b;
+            margin-bottom: 15px;
+        }
     }
 
     .menu--header {
@@ -39,13 +44,13 @@
         align-items: center;
 
         height: 40px;
-        padding: 0 $padding;
+        padding: 0 $menu-padding-v;
 
         border-bottom: solid 1px bbs--color(grey-4);
     }
 
     .menu--content {
         flex: 1 1;
-        padding: $padding $padding * 2;
+        padding: $menu-padding-v $menu-padding-h;
     }
 }
