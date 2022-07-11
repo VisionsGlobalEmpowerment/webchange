@@ -60,7 +60,9 @@
                             :password-reset true}
                :account-my true
                :library    {:activities {:activity-edit true}
-                            :books      {:book-edit true}}}})
+                            :books      {:book-edit true}}
+               :create     {:create-activity true
+                            :create-book true}}})
 
 (defn get-title
   ([params]

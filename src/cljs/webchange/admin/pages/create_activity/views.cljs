@@ -32,16 +32,16 @@
        (for [template templates]
          [:div.template-wrapper
           [:div {:class-name (ui/get-class-name {"template" true})
-                 :on-click #(re-frame/dispatch [::state/select-template (:activity-id template)])}
+                 :on-click #(re-frame/dispatch [::state/select-template (:name template)])}
            [:div {:class-name (ui/get-class-name {"preview-wrapper" true
-                                                  "selected" (= (:activity-id template) (:activity-id selected))})}
+                                                  "selected" (= (:name template) (:name selected))})}
             [ui/image {:class-name (ui/get-class-name {"preview" true})
                        :src (or (:preview template) "/images/admin/create_activity/preview_placeholder.png")}]]
            [:div.template-name
             (:name template)]
            [:div.template-description
             (:description template)]]
-          (when (= (:activity-id template) (:activity-id selected))
+          (when (= (:name template) (:name selected))
             [ui/icon {:class-name "selected-icon"
                       :icon "check"}])])])))
 

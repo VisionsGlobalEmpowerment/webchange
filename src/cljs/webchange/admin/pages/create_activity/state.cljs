@@ -26,56 +26,90 @@
 
 (def templates
   {1 [{:name "Early Reader Book"
+       :preview "/upload/XBRPIXIQTLVVHVHA.png"
        :description "Create a simple book with images. Learners turn pages on their own!"
-       :activity-id 691}]
+       :activity-ids {:english 691
+                      :spanish 909}}]
    2 [{:name "Character Conversations"
+       :preview "/upload/JMDFVYWWESOPPVRD.png"
        :description "Model a conversation. Add questions to check for comprehension."
-       :activity-id 574}
+       :activity-ids {:english 574
+                      :spanish 1473}}
       {:name "Interactive Read Aloud "
        :description "Show a read aloud book. Add 'Teacher Talk' to support learners and questions to check for comprehension."
-       :activity-id 834}
+       :preview "/upload/YGYOFJOSCVQIVFLY.png"
+       :activity-ids {:english 834
+                      :spanish 913}}
       {:name "Letter Introduction"
        :description "Introduce the alphabet, one letter at a time."
-       :activity-id 2654}] ;concept
+       :preview "/upload/JCUMLEIECSBEOQSL.png"
+       :activity-ids {:english 2654
+                      :spanish 2654}}] ;concept
    3 [{:name "Learn and Slide"
        :description "Present a question. Learners tap an answer that 'slides' down if correct!"
-       :activity-id 769}
+       :preview "/upload/ISHGXNYTLBKDFPRB.png"
+       :activity-ids {:english 769
+                      :spanish 850}}
       {:name "Uncovering Concepts"
        :description "Learners 'dig' with their fingers to uncover new words and ideas."
-       :activity-id 756}
+       :preview "/upload/MNGPWFSJFLFDYSNP.png"
+       :activity-ids {:english 756
+                      :spanish 849}}
       {:name "I Spy 1 - Town with main street scene"
        :description "Learners find specific items in a scene and tap on them."
-       :activity-id 541}
+       :preview "/upload/FIYTVIKRLHLSWSSW.png"
+       :activity-ids {:english 541
+                      :spanish 848}}
       {:name "I Spy 2 - Town with bus stop"
        :description "Learners find specific items in a scene and tap on them."
-       :activity-id 542}
+       :preview "/upload/IWUPLROCXKKNGXTJ.png"
+       :activity-ids {:english 542
+                      :spanish 1469}}
       {:name "I Spy 3 - Town with park"
        :description "Learners find specific items in a scene and tap on them."
-       :activity-id 543}
+       :preview "/upload/ZAASEKRUPBACKUQV.png"
+       :activity-ids {:english 543
+                      :spanish 1293}}
       {:name "Run and Find"
        :description "Learners help a 'running' character collect correct answers before time runs out!"
-       :activity-id 2759} ;concept
+       :preview "/upload/PGFOBUACXCCRNFIW.png"
+       :activity-ids {:english 2759
+                      :spanish 2759}} ;concept
       {:name "Sorting"
        :description "Drag and drop items into their correct category!"
-       :activity-id 814}
+       :preview "/upload/KCSNJZJUQLPOCVOP.png"
+       :activity-ids {:english 814
+                      :spanish 1384}}
       {:name "Bring Together"
        :description "Tap alternating objects to bring them together."
-       :activity-id 590}]
+       :preview "/upload/CWEYFHHOYBZGGUGP.png"
+       :activity-ids {:english 590
+                      :spanish 1291}}]
    4 [{:name "Sing-Along!"
        :description "Record learners singing along to a music video."
-       :activity-id 13} ;no source
+       :activity-ids {:english 13
+                      :spanish 13}} ;no source
       {:name "Recording Studio"
        :description "Get learners talking with a prompt, image, or video!"
-       :activity-id 14}] ;no source
+       :activity-ids {:english 14
+                      :spanish 14}}] ;no source
    5 [{:name "Video Viewer"
        :description "Play a short video."
-       :activity-id 2706}] ;concept
+       :preview "/upload/PYTRJJHHASSZMQKH.png"
+       :activity-ids {:english 2706
+                      :spanish 2706}}] ;concept
    6 [{:name "Letter Tracing"
-       :activity-id 2680} ;concept
+       :preview "/upload/YSOKFHVULRWQLTYK.png"
+       :activity-ids {:english 2680
+                      :spanish 2680}} ;concept
       {:name "Word Tracing"
-       :activity-id 579}
+       :preview "/upload/DKAZCOSCVSHTKPEB.png"
+       :activity-ids {:english 579
+                      :spanish 1366}}
       {:name "Name Writing"
-       :activity-id 1727}]})
+       :preview "/upload/PHLVUZMQBPAASPTT.png"
+       :activity-ids {:english 1727
+                      :spansih 1326}}]})
 
 (def path-to-db :page/create-activity)
 
@@ -130,10 +164,10 @@
 (re-frame/reg-event-fx
   ::select-template
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ activity-id]]
+  (fn [{:keys [db]} [_ template-name]]
     (let [category (get db :selected-category)
           template (->> (get templates (:id category))
-                        (filter #(= activity-id (:activity-id %)))
+                        (filter #(= template-name (:name %)))
                         first)]
       {:db (assoc db :selected-template template)})))
 
@@ -165,7 +199,6 @@
   (fn [{:keys [db]} [_]]
     {:db (dissoc db :selection-confirmed)}))
 
-
 ;; Form
 
 (re-frame/reg-sub
@@ -196,8 +229,9 @@
   ::build
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [activity-id (get-in db [:selected-template :activity-id])
-          defaults {:lang "english"}
+    (let [lang (or (get-in db [:form :lang]) "english")
+          activity-id (get-in db [:selected-template :activity-ids (keyword lang)])
+          defaults {:lang lang}
           data (merge defaults
                       (get db :form))]
       {:db (assoc db :saving true)

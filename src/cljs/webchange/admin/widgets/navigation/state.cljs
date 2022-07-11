@@ -21,7 +21,8 @@
           :route {:page :schools}}
          {:id   :lesson-builder
           :text "Create"
-          :icon "create"}
+          :icon "create"
+          :route {:page :create}}
          {:id       :library
           :text     "Library"
           :icon     "library"
