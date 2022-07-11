@@ -1,0 +1,17 @@
+#page--student-add {
+    .content {
+        display: grid;
+        grid-template-columns: 400px auto;
+        column-gap: 120px;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        p {
+            line-height: 32px;
+        }
+    }
+}

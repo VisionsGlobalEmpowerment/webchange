@@ -1,0 +1,27 @@
+#tabschool-parent {
+    width: 100%;
+    min-height: 100%;
+    background-color: bbs--color(grey-5);
+
+    h1 {
+        @include bbs--ranille-36-r;
+        color: bbs--color(blue-1);
+        margin-bottom: 48px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    p {
+        @include bbs--noto-16-r;
+    }
+
+    .bbs--loading-overlay {
+         background-color: bbs--color(grey-5, $opacity: 0.8);
+    }
+
+    @import "components/styles";
+    @import "widgets/styles";
+    @import "pages/styles";
+}

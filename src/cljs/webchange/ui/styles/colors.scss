@@ -100,6 +100,8 @@ $bbs--brand-colors: blue-1, blue-2, green-1, green-2, yellow-1, yellow-2;
         $result: #{$result + "4d"};
     } @else if $opacity == 0.4 {
         $result: #{$result + "66"};
+    } @else if $opacity == 0.8 {
+        $result: #{$result + "cc"};
     }
 
     @return $result;

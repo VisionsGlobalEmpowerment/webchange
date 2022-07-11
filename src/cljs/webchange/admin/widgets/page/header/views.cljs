@@ -1,31 +1,30 @@
 (ns webchange.admin.widgets.page.header.views
   (:require
     [clojure.spec.alpha :as s]
-    [webchange.ui.components.icon.spec :as icon-spec]
     [webchange.ui.index :refer [get-class-name] :as ui]
     [webchange.ui.spec :as ui-spec]))
 
 (s/def ::header-avatar (s/or :empty nil? :defined string?))
-(s/def ::header-icon (s/or :empty nil? :defined ::icon-spec/navigation-icon))
+(s/def ::header-icon (s/or :empty nil? :defined ::ui-spec/navigation-icon))
 (s/def ::header-icon-color (s/or :empty nil? :defined ::ui-spec/brand-color))
 (s/def ::header-on-close (s/or :empty nil? :defined fn?))
 (s/def ::header-title (s/or :empty nil? :defined string?))
 
 (s/def :header-actions/text string?)
-(s/def :header-actions/icon ::icon-spec/system-icon)
+(s/def :header-actions/icon ::ui-spec/system-icon)
 (s/def :header-actions/on-click fn?)
 (s/def :header-actions/item (s/keys :req-un [:header-actions/text :header-actions/icon :header-actions/on-click]))
 (s/def ::header-actions (s/or :empty empty? :defined (s/coll-of :header-actions/item)))
 
 (s/def :header-info/key string?)
 (s/def :header-info/value #(or (number? %) (string? %)))
-(s/def :header-info/icon ::icon-spec/navigation-icon)
+(s/def :header-info/icon ::ui-spec/navigation-icon)
 (s/def :header-info/icon-color ::ui-spec/brand-color)
 (s/def :header-info/item (s/keys :req-un [:header-info/key :header-info/value]
                                  :opt-un [:header-info/icon :header-info/icon-color]))
 (s/def ::header-info (s/or :empty empty? :defined (s/coll-of :header-info/item)))
 
-(s/def :header-stat/icon ::icon-spec/navigation-icon)
+(s/def :header-stat/icon ::ui-spec/navigation-icon)
 (s/def :header-stat/counter (s/or :empty nil? :defined number?))
 (s/def :header-stat/label string?)
 (s/def :header-stat/item (s/keys :req-un [:header-stat/icon :header-stat/counter :header-stat/label]))

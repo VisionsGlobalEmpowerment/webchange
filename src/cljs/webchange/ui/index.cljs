@@ -13,11 +13,13 @@
     [webchange.ui.components.icon.views :as icon-views]
     [webchange.ui.components.image.views :as image-views]
     [webchange.ui.components.input.views :as input-views]
+    [webchange.ui.components.link.views :as link-views]
     [webchange.ui.components.list.views :as list-views]
     [webchange.ui.components.logo.views :as logo-views]
     [webchange.ui.components.overlay.views :as overlay-views]
     [webchange.ui.components.panel.views :as panel-views]
     [webchange.ui.components.password.views :as password-views]
+    [webchange.ui.components.progress.views :as progress-views]
     [webchange.ui.components.select.views :as select-views]
     [webchange.ui.components.switch.views :as switch-views]
     [webchange.ui.components.tab.views :as tab-views]
@@ -29,6 +31,7 @@
 (def button button-views/button)
 (def card card-views/card)
 (def chip chip-views/chip)
+(def circular-progress progress-views/circular-progress)
 (def confirm dialog-views/confirm)
 (def complete-progress complete-progress-views/complete-progress)
 (def copy-link copy-link-views/copy-link)
@@ -40,6 +43,7 @@
 (def image image-views/image)
 (def input input-views/input)
 (def logo-with-name logo-views/logo-with-name)
+(def link link-views/link)
 (def list list-views/list)
 (def list-item list-views/list-item)
 (def loading-overlay overlay-views/loading-overlay)
@@ -48,6 +52,7 @@
 (def panel panel-views/panel)
 (def password password-views/password)
 (def select select-views/select)
+(def social-icon icon-views/social-icon)
 (def system-icon icon-views/system-icon)
 (def tab tab-views/tab)
 (def switch switch-views/switch)

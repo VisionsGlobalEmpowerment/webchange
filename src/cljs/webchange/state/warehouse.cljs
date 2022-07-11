@@ -780,7 +780,7 @@
 (re-frame/reg-event-fx
   ::add-parent-student
   (fn [{:keys [_]} [_ {:keys [data]} handlers]]
-    (create-request {:key    :add-parent-studnet
+    (create-request {:key    :add-parent-student
                      :method :post
                      :uri    (str "/api/parent/students")
                      :params data}

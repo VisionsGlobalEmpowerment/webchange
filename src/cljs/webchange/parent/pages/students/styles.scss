@@ -1,0 +1,97 @@
+#page--students {
+    .students-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 48px;
+
+        position: relative;
+        min-height: 128px;
+    }
+
+    .students-card {
+        display: flex;
+        flex-direction: column;
+
+        width: 270px;
+        border-radius: 8px;
+        overflow: hidden;
+
+        background-color: bbs--color(white);
+        box-shadow: 0px 12px 28px rgba(175, 175, 175, 0.25);
+    }
+
+    .students-card--top-side {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+
+        position: relative;
+        width: 100%;
+        min-height: 142px;
+        max-height: 142px;
+        background-color: bbs--color(blue-2);
+    }
+
+    .students-card--remove-button {
+        $margin: 8px;
+
+        @include bbs--icon-color(bbs--color(white));
+        position: absolute;
+        top: $margin;
+        right: $margin;
+    }
+
+    .students-card--bottom-side {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 24px;
+    }
+
+    .students-card--image {
+        height: 100%;
+    }
+
+    .students-card--name {
+        @include bbs--noto-24-b;
+    }
+
+    .students-card--progress {
+        @include bbs--noto-14-r;
+    }
+
+    .students-card--play-button {
+        position: relative;
+        height: 64px;
+        margin-top: 32px;
+
+        border-radius: 999px;
+
+        font-family: 'Luckiest Guy';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 36px;
+        letter-spacing: 0.365034px;
+
+        background-color: #FFA300;
+
+        &:hover {
+            filter: brightness(0.95);
+        }
+
+        &:active {
+            filter: brightness(0.9);
+        }
+
+        span {
+            position: relative;
+            top: 5px;margin-top: 16px;
+        }
+
+        progress {
+            @include bbs--progress-size(28px);
+        }
+    }
+}

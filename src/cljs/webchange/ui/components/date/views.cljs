@@ -13,10 +13,9 @@
   (r/with-let [el (r/atom nil)]
     (let [max (if (contains? props max) max (-> (utils/now) (utils/yyyy-mm-dd)))
           min (if (contains? props min) min "1960-01-01")
-          handle-change (fn [event]
+          handle-change (fn [value]
                           (when (fn? on-change)
-                            (-> (.. event -target -value)
-                                (on-change))))
+                            (on-change value)))
           handle-picker-click #(when (some? @el)
                                  (.showPicker @el))
           has-label? (some? label)]

@@ -1,0 +1,38 @@
+.parent--layout--banner {
+    height: 320px;
+    padding: $padding-vertical $padding-horizontal;
+
+    color: bbs--color(white);
+
+    background-color: #4790c5;
+    background-image: url("/images/parent_dashboard/greeting.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .banner--message {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+
+        width: 60%;
+        max-width: 680px;
+
+        h1 {
+            color: bbs--color(white);
+            margin: 0;
+        }
+
+        p {
+            line-height: 24px;
+        }
+
+        .feedback {
+            border-radius: 999px;
+            padding: 12px 24px;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+    }
+}

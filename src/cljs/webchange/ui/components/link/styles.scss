@@ -1,0 +1,7 @@
+.bbs--link {
+    color: bbs--color(blue-1);
+
+    &:hover {
+        color: bbs--color(blue-2);
+    }
+}
