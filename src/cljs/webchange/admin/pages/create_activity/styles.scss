@@ -1,199 +1,205 @@
 .page--create-activity {
-    grid-template-columns: 320px auto !important; 
+    grid-template-columns: 320px auto !important;
 
     .page--create-activity--content {
-	grid-column: 2;
+        grid-column: 2;
 
-	.empty-list {
-	    height: 100%;
-	    display: flex;
-	    justify-content: center;
-	    align-items: center;
-	
-	    font-weight: 700;
-	    font-size: 14px;
-	    line-height: 18px;
-	}
+        .empty-list {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-	.template-list {
-	    display: grid;
-	    grid-template-columns: repeat(3, 1fr);
-	    column-gap: 49px;
-	    row-gap: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 18px;
+        }
 
-	    padding: 40px;
-	    
-	    .template-wrapper {
-		width: 224px;
-		position: relative;
-		.selected-icon {
-		    @include bbs--icon-size(28px);
-		    position: absolute;
-		    top: -10px;
-		    right: -3px;
-		    background-color: #F5A36C;
-		    border-radius: 9999px;
-		}
-	    }
-	    
-	    .template {
-	
-		.preview-wrapper {
-		    width: 217px;
-		    height: 122px;
-		    border: 2px solid #F5A36C00; //$color-orange;
-		    border-radius: 10px;
-		    overflow: hidden;
-	
+        .template-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 49px;
+            row-gap: 20px;
 
-		    .preview {
-			width: 215px;
-			height: 120px;
-			
-			border: 1px solid $color-blue-2;
-			border-radius: 8px;
-			overflow: hidden;
-		    }
+            padding: 40px;
 
-		}
-		
-		.selected {
-		    border: 2px solid #F5A36C; //$color-orange;
+            .template-wrapper {
+                width: 224px;
+                position: relative;
 
-		    .preview {
-			border: 1px solid #F5A36C;
-		    }
-		}
-		.template-name {
-		    font-weight: 700;
-		    font-size: 14px;
-		    line-height: 18px;
-		    padding: 11px 7px;
-		}
-		.template-description {
-		    font-weight: 400;
-		    font-size: 14px;
-		    line-height: 18px;
+                .selected-icon {
+                    @include bbs--icon-size(28px);
+                    position: absolute;
+                    top: -10px;
+                    right: -3px;
+                    background-color: #F5A36C;
+                    border-radius: 9999px;
+                }
+            }
 
-		    color: $color-grey-2;
+            .template {
 
-		    padding: 15px 7px;
-		}
+                .preview-wrapper {
+                    width: 217px;
+                    height: 122px;
+                    border: 2px solid #F5A36C00; //$color-orange;
+                    border-radius: 10px;
+                    overflow: hidden;
 
-		&:hover {
-		    cursor: pointer;
-		}
 
-	    }
-	}
+                    .preview {
+                        width: 215px;
+                        height: 120px;
+
+                        border: 1px solid $color-blue-2;
+                        border-radius: 8px;
+                        overflow: hidden;
+                    }
+
+                }
+
+                .selected {
+                    border: 2px solid #F5A36C; //$color-orange;
+
+                    .preview {
+                        border: 1px solid #F5A36C;
+                    }
+                }
+
+                .template-name {
+                    font-weight: 700;
+                    font-size: 14px;
+                    line-height: 18px;
+                    padding: 11px 7px;
+                }
+
+                .template-description {
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 18px;
+
+                    color: $color-grey-2;
+
+                    padding: 15px 7px;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+            }
+        }
     }
 
     .page--create-activity--side-bar {
-	grid-row: 2;
+        grid-row: 2;
 
-	.activity-categories {
-	    .activity-category {
-		padding: 13px 22px 12px 28px;
-		.activity-category-header {
-		    display: flex;
-		    justify-content: space-between;
-		    align-items: center;
-		    
-		    font-weight: 700;
-		    font-size: 14px;
-		    line-height: 18px;
+        .activity-categories {
+            .activity-category {
+                padding: 13px 22px 12px 28px;
 
-		    @include bbs--icon-size(18px);
-		    @include bbs--icon-color(bbs--color(grey-3));
-		}
-		.activity-category-description {
-		    color: $color-grey-2;
+                .activity-category-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
 
-		    font-weight: 400;
-		    font-size: 14px;
-		    line-height: 18px;
+                    font-weight: 700;
+                    font-size: 14px;
+                    line-height: 18px;
 
-		    margin-top: 9px;
-		}
-		
-		&:hover {
-		    cursor: pointer;
-		    background-color: $color-grey-4;
-		}
-	    }
-	    
-	    .selected {
-		background-color: $color-grey-4;
-	    }
-	}
+                    @include bbs--icon-size(18px);
+                    @include bbs--icon-color(bbs--color(grey-3));
+                }
+
+                .activity-category-description {
+                    color: $color-grey-2;
+
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 18px;
+
+                    margin-top: 9px;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: $color-grey-4;
+                }
+            }
+
+            .selected {
+                background-color: $color-grey-4;
+            }
+        }
     }
 
     .template-info {
-	.preview {
-	    width: 280px;
-	    
-	    border: 1px solid $color-blue-2;
-	    border-radius: 8px;
-	    overflow: hidden;
-	}
+        .preview {
+            width: 280px;
 
-	.template-name {
-	    font-weight: 700;
-	    font-size: 14px;
-	    line-height: 18px;
-	    padding: 11px 17px;
-	}
-	.template-description {
-	    font-weight: 400;
-	    font-size: 14px;
-	    line-height: 18px;
+            border: 1px solid $color-blue-2;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-	    color: $color-grey-2;
+        .template-name {
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 18px;
+            padding: 11px 17px;
+        }
 
-	    padding: 15px 17px;
-	}
+        .template-description {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 18px;
+
+            color: $color-grey-2;
+
+            padding: 15px 17px;
+        }
     }
 
     .activity-form {
-	width: 280px;
-	margin: 46px;
+        width: 280px;
+        margin: 46px;
 
-	.note {
-	    display: flex;
-	    align-items: flex-start;
-	    gap: 4px;
-	    padding: 9px;
-	    margin: 30px 0;
-	    color: $color-blue-1;
+        .note {
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 9px;
+            margin: 30px 0;
+            color: $color-blue-1;
 
-	    font-weight: 400;
-	    font-size: 12px;
-	    line-height: 16px;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 16px;
 
-	    @include bbs--icon-size(24px);
+            @include bbs--icon-size(24px);
 
-	    background-color: #E9F6FF;
-	    border: 1px solid $color-grey-4;
-	    border-radius: 6px;
-	    overflow: hidden;
-	    
-	}
+            background-color: #E9F6FF;
+            border: 1px solid $color-grey-4;
+            border-radius: 6px;
+            overflow: hidden;
+
+        }
     }
-    
+
     .footer-text {
-	strong {
-	    padding-right: 10px;
-	}
+        strong {
+            padding-right: 10px;
+        }
     }
 
     .footer-button-confirm {
-	min-width: 222px;
+        min-width: 222px;
     }
 
     .footer-button-back {
-	min-width: 222px;
-	border: 1px solid $color-blue-2;
+        min-width: 222px;
+        border: 1px solid $color-blue-2;
     }
 
-    
+
 }

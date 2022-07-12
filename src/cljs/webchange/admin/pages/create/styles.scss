@@ -7,48 +7,50 @@
     }
 
     .widget--page--header-info {
-	flex: 0 1;
+        flex: 0 1;
     }
+
     .widget--page--header--filler {
-	flex: 0 1;
+        flex: 0 1;
     }
+
     .header-text {
-	height: 48px;
-	padding-left: 18px;
-	border-left: 1px solid #FFFFFF0F;
-	font-weight: 700;
+        height: 48px;
+        padding-left: 18px;
+        border-left: 1px solid #FFFFFF0F;
+        font-weight: 700;
         font-size: 16px;
         line-height: 26px;
 
-	display: flex;
-	align-items: center;
-	
+        display: flex;
+        align-items: center;
     }
+
     .wizard-cards {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	padding-top: 105px;
-	gap: 61px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding-top: 105px;
+        gap: 61px;
 
-	.bbs--panel {
-	    width: 270px;
-	    height: 281px;
+        .bbs--panel {
+            width: 270px;
+            height: 281px;
 
-	    .bbs--panel--content {
-		padding-top: 69px;
-	    }
+            .bbs--panel--content {
+                padding-top: 69px;
+            }
 
-	    .bbs--card--actions {
-		padding-bottom: 39px;
-	    }
-	}
-	
-	.create-activity-card {
-	}
+            .bbs--card--actions {
+                padding-bottom: 39px;
+            }
+        }
 
-	.create-book-card {
-	}
+        .create-activity-card {
+        }
+
+        .create-book-card {
+        }
     }
 }
