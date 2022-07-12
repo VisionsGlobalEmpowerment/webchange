@@ -1,7 +1,14 @@
-(ns webchange.lesson-builder.blocks.stage.views)
+(ns webchange.lesson-builder.blocks.stage.views
+  (:require
+    [re-frame.core :as re-frame]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.interpreter.renderer.stage :refer [stage]]
+    [webchange.lesson-builder.blocks.stage.state :as state]))
 
 (defn block-stage
   [{:keys [class-name]}]
-  [:div {:id         "block--stage"
-         :class-name class-name}
-   "stage"])
+  (let [scene-data @(re-frame/subscribe [::state/scene-data])]
+    [:div {:id         "block--stage"
+           :class-name class-name}
+     [stage {:mode       ::modes/editor
+             :scene-data scene-data}]]))

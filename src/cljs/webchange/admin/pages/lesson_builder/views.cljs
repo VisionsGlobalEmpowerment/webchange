@@ -13,4 +13,4 @@
     [:div.page--lesson-builder
      (if (some? activity-id)
        [:> react/Suspense {:fallback (r/as-element [ui/loading-overlay])}
-        [:> lesson-builder {:activity-id 558}]])]))
+        [:> lesson-builder {:activity-id activity-id}]])]))

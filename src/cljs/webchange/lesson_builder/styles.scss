@@ -10,8 +10,8 @@
     width: 100%;
 
     display: grid;
-    grid-template-columns: 740px auto 320px;
-    grid-template-rows: 50px 420px auto;
+    grid-template-columns: 720px auto 320px;
+    grid-template-rows: 50px 405px auto; // 405 = 1080 / (1920 / 720)
     grid-template-areas:
         "title script menu"
         "stage script menu"
