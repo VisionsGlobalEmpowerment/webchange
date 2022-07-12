@@ -41,7 +41,7 @@
              "/create"         {""          :create
                                 "/activity" :create-activity
                                 "/book"     :create-book}
-             "/lesson-builder" :lesson-builder})
+             "/lesson-builder" {["/" [#"[\d-%]+" :activity-id]] :lesson-builder}})
 
 (def sitemap
   {:dashboard {:schools    {:school-profile   {:classes        {:class-add     true

@@ -6,10 +6,11 @@
     [webchange.utils.lazy-component :refer [lazy-component]]))
 
 (defn page
-  []
+  [{:keys [activity-id]}]
   (let [lesson-builder (-> webchange.lesson-builder.views/index
                            (shadow.lazy/loadable)
                            (lazy-component))]
     [:div.page--lesson-builder
-     [:> react/Suspense {:fallback (r/as-element [ui/loading-overlay])}
-      [:> lesson-builder {:activity-id 558}]]]))
+     (if (some? activity-id)
+       [:> react/Suspense {:fallback (r/as-element [ui/loading-overlay])}
+        [:> lesson-builder {:activity-id 558}]])]))
