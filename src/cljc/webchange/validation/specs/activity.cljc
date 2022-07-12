@@ -29,3 +29,4 @@
 
 (s/def ::archive-activity (s/keys :req-un [::archive]))
 (s/def ::toggle-visibility (s/keys :req-un [::visible]))
+(s/def ::duplicate (s/keys :req-un [::name ::lang]))

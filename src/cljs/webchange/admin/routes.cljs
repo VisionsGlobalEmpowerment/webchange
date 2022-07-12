@@ -37,7 +37,10 @@
                                          ["/" [#"[\w-%]+" :activity-id]] :activity-edit}
                           "/books"      {""                          :books
                                          "create"                    :book-create
-                                         ["/" [#"[\w-%]+" :book-id]] :book-edit}}})
+                                         ["/" [#"[\w-%]+" :book-id]] :book-edit}}
+             "/create"   {""          :create
+                          "/activity" :create-activity
+                          "/book"     :create-book}})
 
 (def sitemap
   {:dashboard {:schools    {:school-profile   {:classes        {:class-add     true
@@ -57,7 +60,9 @@
                             :password-reset true}
                :account-my true
                :library    {:activities {:activity-edit true}
-                            :books      {:book-edit true}}}})
+                            :books      {:book-edit true}}
+               :create     {:create-activity true
+                            :create-book true}}})
 
 (defn get-title
   ([params]

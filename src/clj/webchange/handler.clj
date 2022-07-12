@@ -176,7 +176,7 @@
   (GET "/teacher/*" [] (public-route))
   (GET "/ui" [] (public-route))
   (GET "/ui/*" [] (public-route))
-
+  
   ;; Technical
   (GET "/test-ui" [] (public-route))
 

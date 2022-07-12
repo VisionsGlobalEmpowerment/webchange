@@ -132,7 +132,7 @@
     (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) user-id)
         handle)))
 
-(defn handle-duplicate-activity
+(defn handle-duplicate-course-activity
   [course-slug data request]
   (let [user-id (current-user request)
         scene-data (core/get-scene-latest-version course-slug (:old-name data))
@@ -334,63 +334,63 @@
 
 (defroutes courses-api-routes
   (context "/api/courses" []
-    :tags ["course"]
-    (POST "/" request
-      :return Course
-      :body [course-data CreateCourse]
-      :summary "Creates a new course"
-      (handle-create-course course-data request))
-    (POST "/:course-slug/create-activity" request
-      :path-params [course-slug :- s/Str]
-      :return Activity
-      :body [activity-data CreateActivity]
-      :summary "Creates a new activity from template"
-      (handle-create-activity course-slug activity-data request))
-    (POST "/:course-slug/create-activity-placeholder" request
-      :path-params [course-slug :- s/Str]
-      :return Activity
-      :body [activity-data CreateActivityPlaceholder]
-      :summary "Creates a new activity placeholder"
-      (handle-create-activity-placeholder course-slug activity-data request))
-    (POST "/:course-slug/duplicate-activity" request
-      :path-params [course-slug :- s/Str]
-      :return Activity
-      :body [data DuplicateActivity]
-      :summary "Creates a new activity as a copy of an existing one"
-      (handle-duplicate-activity course-slug data request))
-    (POST "/:course-slug/scenes/:scene-slug/versions" request
-      :path-params [course-slug :- s/Str scene-slug :- s/Str]
-      :return Activity
-      :body [data CreateActivityVersion]
-      :summary "Creates a new activity version from template"
-      (handle-create-activity-version course-slug scene-slug data request))
-    (POST "/:course-slug/update-activity/:scene-slug" request
-      :path-params [course-slug :- s/Str scene-slug :- s/Str]
-      :return s/Any
-      :body [activity-data s/Any]
-      :summary "Updates activity using template"
-      (handle-update-activity course-slug scene-slug activity-data request))
-    (POST "/:course-slug/update-template/:scene-slug" request
-      :path-params [course-slug :- s/Str scene-slug :- s/Str]
-      :return s/Any
-      :summary "Updates activity template to latest version"
-      (handle-update-template course-slug scene-slug request))
-    (GET "/:course-slug/scenes-with-skills" []
-      :path-params [course-slug :- s/Str]
-      :tags ["skill"]
-      :summary "Returns list of skills for each scene inside given course"
-      (-> course-slug core/get-course-scene-skills response))
-    (PUT "/:course-slug/scenes/:scene-slug/preview" request
-      :path-params [course-slug :- s/Str scene-slug :- s/Str]
-      :return Activity
-      :body [data SetActivityPreview]
-      :summary "Sets activity preview image url"
-      (handle-set-activity-preview course-slug scene-slug data request)))
+           :tags ["course"]
+           (POST "/" request
+                 :return Course
+                 :body [course-data CreateCourse]
+                 :summary "Creates a new course"
+                 (handle-create-course course-data request))
+           (POST "/:course-slug/create-activity" request
+                 :path-params [course-slug :- s/Str]
+                 :return Activity
+                 :body [activity-data CreateActivity]
+                 :summary "Creates a new activity from template"
+                 (handle-create-activity course-slug activity-data request))
+           (POST "/:course-slug/create-activity-placeholder" request
+                 :path-params [course-slug :- s/Str]
+                 :return Activity
+                 :body [activity-data CreateActivityPlaceholder]
+                 :summary "Creates a new activity placeholder"
+                 (handle-create-activity-placeholder course-slug activity-data request))
+           (POST "/:course-slug/duplicate-activity" request
+                 :path-params [course-slug :- s/Str]
+                 :return Activity
+                 :body [data DuplicateActivity]
+                 :summary "Creates a new activity as a copy of an existing one"
+                 (handle-duplicate-course-activity course-slug data request))
+           (POST "/:course-slug/scenes/:scene-slug/versions" request
+                 :path-params [course-slug :- s/Str scene-slug :- s/Str]
+                 :return Activity
+                 :body [data CreateActivityVersion]
+                 :summary "Creates a new activity version from template"
+                 (handle-create-activity-version course-slug scene-slug data request))
+           (POST "/:course-slug/update-activity/:scene-slug" request
+                 :path-params [course-slug :- s/Str scene-slug :- s/Str]
+                 :return s/Any
+                 :body [activity-data s/Any]
+                 :summary "Updates activity using template"
+                 (handle-update-activity course-slug scene-slug activity-data request))
+           (POST "/:course-slug/update-template/:scene-slug" request
+                 :path-params [course-slug :- s/Str scene-slug :- s/Str]
+                 :return s/Any
+                 :summary "Updates activity template to latest version"
+                 (handle-update-template course-slug scene-slug request))
+           (GET "/:course-slug/scenes-with-skills" []
+                :path-params [course-slug :- s/Str]
+                :tags ["skill"]
+                :summary "Returns list of skills for each scene inside given course"
+                (-> course-slug core/get-course-scene-skills response))
+           (PUT "/:course-slug/scenes/:scene-slug/preview" request
+                :path-params [course-slug :- s/Str scene-slug :- s/Str]
+                :return Activity
+                :body [data SetActivityPreview]
+                :summary "Sets activity preview image url"
+                (handle-set-activity-preview course-slug scene-slug data request)))
   (GET "/api/skills" []
-    :tags ["skill"]
-    :return Skills
-    :summary "Returns list of skills with strands and topics"
-    (-> (skills/get-skills) response)))
+       :tags ["skill"]
+       :return Skills
+       :summary "Returns list of skills with strands and topics"
+       (-> (skills/get-skills) response)))
 
 (defn collaborator-route
   [{{course-slug :course-slug} :route-params :as request}]
@@ -540,5 +540,14 @@
          (when-not (is-admin? user-id)
            (throw-unauthorized {:role :educator}))
          (-> (core/toggle-activity-visibility activity-id data)
-             response))))
+             response)))
+  (POST "/api/activities/:activity-id/duplicate" request
+        :coercion :spec
+        :path-params [activity-id :- ::activity-spec/id]
+        :body [data ::activity-spec/duplicate]
+        (let [user-id (current-user request)]
+          (when-not (is-admin? user-id)
+            (throw-unauthorized {:role :educator}))
+          (-> (core/duplicate-activity activity-id data user-id)
+              response))))
 
