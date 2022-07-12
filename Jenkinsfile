@@ -29,6 +29,7 @@ node {
             sh 'lein clean'
 	    sh 'shadow-cljs release app'
 	    sh 'shadow-cljs release service-worker'
+	    sh 'sass ./src/cljs/webchange/ui_framework/styles/index/:./resources/public/css/'
             sh 'lein uberjar'
     	}
     
