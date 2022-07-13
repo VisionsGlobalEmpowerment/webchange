@@ -1,2 +1,8 @@
+@use "sass:math";
+
+$bbs--display-width: 1920px;
+$bbs--display-height: 1080px;
+$bbs--display-ratio: math.div($bbs--display-height, $bbs--display-width);
+
 $bbs--default-gap: 10px;
 $bbs--z-index-overlay: 10;

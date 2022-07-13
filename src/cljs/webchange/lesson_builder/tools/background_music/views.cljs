@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.widgets.background-music.views
+(ns webchange.lesson-builder.tools.background-music.views
   (:require
     [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]))
 

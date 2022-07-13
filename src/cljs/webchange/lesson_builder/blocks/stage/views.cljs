@@ -10,5 +10,7 @@
   (let [scene-data @(re-frame/subscribe [::state/scene-data])]
     [:div {:id         "block--stage"
            :class-name class-name}
+     ;; ToDo: get rid of hard update
+     ^{:key (rand)}
      [stage {:mode       ::modes/editor
              :scene-data scene-data}]]))

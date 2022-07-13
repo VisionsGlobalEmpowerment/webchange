@@ -1,9 +1,8 @@
-(ns webchange.lesson-builder.widgets.image-add.views
+(ns webchange.lesson-builder.tools.settings.views
   (:require
     [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]))
 
-(defn image-add
+(defn settings
   []
-  [:div.widget--image-add
-   [:h1 "Add Image"]
+  [:div.widget--settings
    [not-implemented]])

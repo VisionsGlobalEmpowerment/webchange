@@ -26,9 +26,11 @@
 
 (def activity-data-key :activity-data)
 
-(defn- get-activity-data
-  [db]
-  (get db activity-data-key))
+(defn get-activity-data
+  ([db]
+   (get db activity-data-key))
+  ([db path-to-db]
+   (get-in db [path-to-db activity-data-key])))
 
 (defn- set-activity-data
   [db value]
@@ -38,6 +40,20 @@
   ::activity-data
   :<- [path-to-db]
   #(get-activity-data %))
+
+(re-frame/reg-cofx
+  :activity-data
+  (fn [{:keys [db] :as co-effects}]
+    (->> (get-activity-data db path-to-db)
+         (assoc co-effects :activity-data))))
+
+(re-frame/reg-event-fx
+  ::update-activity-object-data
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [object-name object-data]}]]
+    (let [activity-data (-> (get-activity-data db)
+                            (update-in [:objects object-name] merge object-data))]
+      {:db (-> db (set-activity-data activity-data))})))
 
 ;; activity info
 

@@ -32,7 +32,12 @@
         margin-right: -$default-gap;
     }
 
+    .bbs-lesson-builder--focused-block {
+        z-index: 11;
+    }
+
     @import "blocks/styles";
     @import "components/styles";
     @import "widgets/styles";
+    @import "tools/styles";
 }

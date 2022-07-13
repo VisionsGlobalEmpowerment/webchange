@@ -1,0 +1,27 @@
+.widget--image-library {
+    @include bbs--with-scrollbar;
+
+    overflow: auto;
+    padding-right: 4px;
+    flex: 1 1;
+
+    .widget--image-library--list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 10px;
+        row-gap: 10px;
+        width: 100%;
+    }
+
+
+    .widget--image-library--list-item {
+        border: solid 1px bbs--color(grey-5);
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:hover {
+            @include bbs--focus-shadow;
+        }
+    }
+}

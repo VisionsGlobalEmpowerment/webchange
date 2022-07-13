@@ -282,7 +282,7 @@
         :return [EditorAsset]
         (editor-assets tag tags type))
       (GET "/editor/tags" []
-        :summary "Return list of available assets"
+        :summary "Return list of available tags"
         :return [EditorTag]
         (find-all-tags))
       (GET "/editor/character-skin" []

@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.widgets.voice-translate.views
+(ns webchange.lesson-builder.tools.voice-translate.views
   (:require
     [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]))
 

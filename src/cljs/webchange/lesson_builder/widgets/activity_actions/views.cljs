@@ -8,20 +8,10 @@
 
 (defn activity-actions
   []
-  (let [handle-click #(re-frame/dispatch [::state/handle-item-click %])]
+  (let [menu-items @(re-frame/subscribe [::state/menu-items])
+        handle-click #(re-frame/dispatch [::state/handle-item-click %])]
     [:div.widget--activity-actions
-     [options-list {:items    [{:id   :image-add
-                                :text "Add Image"
-                                :icon "plus"}
-                               {:id   :character-add
-                                :text "Add Character"
-                                :icon "plus"}
-                               {:id   :background-image
-                                :text "Background"
-                                :icon "plus"}
-                               {:id   :background-music
-                                :text "Background Music"
-                                :icon "plus"}]
+     [options-list {:items    menu-items
                     :on-click handle-click}]
      [draggable-list
       [draggable {:text "Add Character Dialogue"}]

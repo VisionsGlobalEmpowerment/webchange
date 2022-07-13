@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.widgets.template-options.views
+(ns webchange.lesson-builder.tools.template-options.views
   (:require
     [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]))
 

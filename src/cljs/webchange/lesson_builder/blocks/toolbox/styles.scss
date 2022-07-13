@@ -1,7 +1,50 @@
 #block--toolbox {
     $gap: $default-gap * 0.5;
 
+    display: flex;
+    flex-direction: column;
+    gap: $gap;
+    min-height: 0;
+
     background-color: bbs--color(white);
     border-radius: $border-radius;
     padding: $gap;
+
+    .toolbox--header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+
+        padding: 0 24px;
+        min-height: 60px;
+
+        border-radius: 6px;
+        @include bbs--noto-18-b;
+        color: bbs--color(white);
+
+        background-color: bbs--color(blue-1);
+        background-image: url("/images/lesson_builder/toolbox/header_background.svg");
+        background-repeat: no-repeat;
+        background-position: bottom;
+        background-size: auto;
+    }
+
+    .toolbox--header--icon {
+        @include bbs--icon-color(bbs--color(blue-2));
+        @include bbs--icon-size(24px);
+    }
+
+    .toolbox--header--name {
+        flex: 1 1;
+    }
+
+    .toolbox--content {
+        flex: 1 1;
+        min-height: 0;
+
+        & > * {
+            height: 100%;
+            width: 100%;
+        }
+    }
 }
