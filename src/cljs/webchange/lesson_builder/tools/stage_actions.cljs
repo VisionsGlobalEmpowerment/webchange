@@ -12,11 +12,8 @@
 (re-frame/reg-event-fx
   ::change-background
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [db activity-data]} [_ background-data]]
+  (fn [{:keys [activity-data]} [_ background-data]]
     (let [[name] (utils/get-scene-background activity-data)]
-      (print "::change-background")
-      (print "name" name)
-      (print "background-data" background-data)
       ;; ToDo: update stage state: background
       ;; {:dispatch [::state-renderer/set-scene-object-state name background-data]}
       {:dispatch [::state/update-activity-object-data {:object-name name
