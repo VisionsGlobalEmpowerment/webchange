@@ -9,7 +9,7 @@
         @include bbs--icon-color(#fff);
     }
 
-    @each $color in $bbs--brand-colors {
+    @each $color in $bbs--base-colors {
         &.bbs--icon--color-#{$color} {
             @include bbs--icon-color(bbs--color($color));
         }

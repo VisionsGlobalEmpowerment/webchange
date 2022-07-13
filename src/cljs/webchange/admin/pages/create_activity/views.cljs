@@ -1,7 +1,6 @@
 (ns webchange.admin.pages.create-activity.views
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
     [webchange.admin.pages.create-activity.state :as state]

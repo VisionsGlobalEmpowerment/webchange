@@ -928,3 +928,23 @@
                      :created_at  created-at
                      :description "Create"})
     {:id scene-id}))
+
+(defn create-book
+  [data owner-id]
+  (let [created-at (jt/local-date-time)
+        updated-at (jt/local-date-time)
+        [{scene-id :id}] (db/create-activity! {:name (:cover-title data)
+                                               :lang (:lang data)
+                                               :image_src nil
+                                               :status "invisible"
+                                               :owner_id owner-id
+                                               :created_at created-at
+                                               :updated_at updated-at
+                                               :type "book"})
+        activity-data (templates/activity-from-template (assoc data :template-id 24))]
+    (db/save-scene! {:scene_id    scene-id
+                     :data        activity-data
+                     :owner_id    owner-id
+                     :created_at  created-at
+                     :description "Create"})
+    {:id scene-id}))
