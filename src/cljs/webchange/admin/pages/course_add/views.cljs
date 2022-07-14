@@ -19,6 +19,7 @@
                          :lang {:label   "Language"
                                 :type    :select
                                 :options language-options}}
+               :data {:lang (-> language-options first :value)}    
                :spec    ::course-spec/create-course
                :on-save handle-save
                :saving? saving?}]]))

@@ -42,10 +42,10 @@
 (re-frame/reg-event-fx
   ::save-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {id :id}]]
+  (fn [{:keys [db]} [_ {slug :slug}]]
     {:db        (-> db
                     (assoc :saving false))
-     :dispatch [::routes/redirect :course-view :course-id id]}))
+     :dispatch [::routes/redirect :course-edit :course-slug slug]}))
 
 (re-frame/reg-event-fx
   ::save-failure
