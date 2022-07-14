@@ -145,8 +145,9 @@
 
 (defn get-action
   [scene-data action-name]
-  (-> (get-scene-actions scene-data)
-      (get action-name)))
+  (let [action-path (if-not (sequential? action-name) [action-name] action-name)]
+    (-> (get-scene-actions scene-data)
+        (get-in action-path))))
 
 (defn get-dialog-actions
   [scene-data]

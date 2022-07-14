@@ -31,9 +31,11 @@
 (defn- create-request
   "Params:
    - {integer} [delay]: set response delay in ms"
-  [{:keys [key method uri body params request-type] :as props}
+  [{:keys [key method uri body params request-type deprecated?] :as props}
    {:keys [on-success on-failure suppress-api-error?]
     :or   {suppress-api-error? false}}]
+  (when (some? deprecated?)
+    (logger/warn "Deprecated event" key ": " deprecated?))
   {:dispatch-n (cond-> [[::start-request key]]
                        (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? true}]))
    :http-xhrio (cond-> {:method          method
@@ -596,21 +598,30 @@
 (re-frame/reg-event-fx
   ::save-scene
   (fn [{:keys [_]} [_ {:keys [course-slug scene-slug scene-data]} handlers]]
-    (create-request {:key          :save-scene
-                     :method       :put
-                     :uri          (str "/api/courses/" course-slug "/scenes/" scene-slug)
-                     :params       {:scene scene-data}
-                     :request-type :update-activity}
+    (create-request {:key         :save-scene
+                     :method      :put
+                     :uri         (str "/api/courses/" course-slug "/scenes/" scene-slug)
+                     :params      {:scene scene-data}
+                     :deprecated? "Use 'save-activity-version' event instead"}
                     handlers)))
 
 (re-frame/reg-event-fx
   ::save-scene-post
   (fn [{:keys [_]} [_ {:keys [course-id scene-id scene-data]} handlers]]
-    (create-request {:key          :save-scene
-                     :method       :post
-                     :uri          (str "/api/courses/" course-id "/scenes/" scene-id)
-                     :params       {:scene scene-data}
-                     :request-type :update-activity}
+    (create-request {:key         :save-scene-post
+                     :method      :post
+                     :uri         (str "/api/courses/" course-id "/scenes/" scene-id)
+                     :params      {:scene scene-data}
+                     :deprecated? "Use 'save-activity-version' event instead"}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::save-activity-version
+  (fn [{:keys [_]} [_ {:keys [activity-id activity-data]} handlers]]
+    (create-request {:key    :save-activity
+                     :method :post
+                     :uri    (str "/api/activities/" activity-id "/version")
+                     :params activity-data}
                     handlers)))
 
 (re-frame/reg-event-fx

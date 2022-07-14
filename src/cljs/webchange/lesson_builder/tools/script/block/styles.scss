@@ -1,0 +1,14 @@
+.component--block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    background-color: bbs--color(white);
+    border-radius: 6px;
+    padding: 10px;
+
+    .component--header {
+        @include bbs--noto-16-b;
+        text-transform: capitalize;
+    }
+}

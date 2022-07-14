@@ -25,7 +25,8 @@
   [course-slug scene-name request]
   (let [user-id (current-user request)
         save (fn [data] (core/save-scene-with-processing course-slug scene-name data user-id))]
-    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+    (when-not (or (is-admin? user-id)
+                  (core/collaborator-by-course-slug? user-id course-slug))
       (throw-unauthorized {:role :educator}))
     (-> request
         :body
@@ -551,12 +552,20 @@
             (throw-unauthorized {:role :educator}))
           (-> (core/duplicate-activity activity-id data user-id)
               response)))
+  (POST "/api/activities/:activity-id/version" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/activity-data]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/save-activity-version activity-id data user-id)
+          response)))
   (POST "/api/books" request
-        :coercion :spec
-        :body [data ::book-spec/create-book]
-        (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
-            (throw-unauthorized {:role :educator}))
-          (-> (core/create-book data user-id)
-              response))))
-
+    :coercion :spec
+    :body [data ::book-spec/create-book]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/create-book data user-id)
+          response))))
