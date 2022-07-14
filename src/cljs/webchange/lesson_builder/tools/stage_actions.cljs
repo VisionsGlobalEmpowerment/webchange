@@ -16,5 +16,6 @@
     (let [[name] (utils/get-scene-background activity-data)]
       ;; ToDo: update stage state: background
       ;; {:dispatch [::state-renderer/set-scene-object-state name background-data]}
+      (print ">" background-data)
       {:dispatch [::state/update-activity-object-data {:object-name name
                                                        :object-data background-data}]})))

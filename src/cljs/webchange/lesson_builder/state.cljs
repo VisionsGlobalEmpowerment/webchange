@@ -51,6 +51,7 @@
   ::update-activity-object-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [object-name object-data]}]]
+    (print "::update-activity-object-data" object-name object-data)
     (let [activity-data (-> (get-activity-data db)
                             (update-in [:objects object-name] merge object-data))]
       {:db (-> db (set-activity-data activity-data))})))

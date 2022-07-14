@@ -91,9 +91,10 @@
   ::set-background-type
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ type]]
-    {:db (-> db
-             (update-current-background-type type)
-             (set-form-content {:component type}))}))
+    {:db       (-> db
+                   (update-current-background-type type)
+                   (set-form-content {:component type}))
+     :dispatch [::update-background]}))
 
 ;; events
 
@@ -114,37 +115,51 @@
                (set-current-background background-data)
                (set-form-content {:component type}))})))
 
+(defn- ->background-object-data
+  [current-background]
+  (let [{:keys [type data]} current-background]
+    (case type
+      "background" (let [{:keys [single-background]} data]
+                     (cond-> {:type "background"}
+                             (some? single-background) (assoc :src single-background)))
+      "layered-background" (let [{:keys [background surface decoration]} data]
+                             (cond-> {:type "layered-background"}
+                                     (some? background) (assoc-in [:background :src] background)
+                                     (some? surface) (assoc-in [:surface :src] surface)
+                                     (some? decoration) (assoc-in [:decoration :src] decoration))))))
+
 (re-frame/reg-event-fx
   ::select-background-image
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [type image]}]]
-    (let [{current-background-type :type} (get-current-background db)]
-      {:db (-> db
-               (update-current-background-image (keyword type) (:path image))
-               (set-form-content {:component current-background-type}))})))
+    (let [current-background (get-current-background db)]
+      {:db       (-> db
+                     (update-current-background-image (keyword type) (:path image))
+                     (set-form-content {:component (:type current-background)}))
+       :dispatch [::update-background]})))
+
+(re-frame/reg-event-fx
+  ::update-background
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [current-background (get-current-background db)
+          background-object-data (->background-object-data current-background)]
+      {:dispatch-n [[::stage/change-background background-object-data]]})))
 
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [type data]} (get-current-background db)
-          background-object-data (case type
-                                   "background" (let [{:keys [single-background]} data]
-                                                  (cond-> {:type "background"}
-                                                          (some? single-background) (assoc :src single-background)))
-                                   "layered-background" (let [{:keys [background surface decoration]} data]
-                                                          (cond-> {:type "layered-background"}
-                                                                  (some? background) (assoc-in [:background :src] background)
-                                                                  (some? surface) (assoc-in [:surface :src] surface)
-                                                                  (some? decoration) (assoc-in [:decoration :src] decoration))))]
-      {:dispatch-n [[::stage/change-background background-object-data]
-                    [::layout-state/reset-state]]})))
+    {:dispatch [::layout-state/reset-state]}))
 
 (re-frame/reg-event-fx
   ::cancel
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::layout-state/reset-state]}))
+  (fn [{:keys [db]} [_]]
+    (let [initial-background (get-initial-background db)
+          background-object-data (->background-object-data initial-background)]
+      {:dispatch-n [[::layout-state/reset-state]
+                    [::stage/change-background background-object-data]]})))
 
 (re-frame/reg-event-fx
   ::reset
