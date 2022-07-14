@@ -1,0 +1,39 @@
+.component--draggable {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    border: solid 1px bbs--color(grey-3);
+    border-radius: 6px;
+
+    padding: 0 10px;
+    min-height: 40px;
+
+    cursor: grab;
+
+    .draggable--name {
+        flex: 1 1;
+    }
+
+    .draggable--icon {
+        @include bbs--icon-color(bbs--color(grey-3));
+        @include bbs--icon-size(16px);
+    }
+
+    .draggable--actions {
+        display: flex;
+        align-items: center;
+    }
+
+    .draggable--action {
+        @include bbs--icon-size(22px);
+        @include bbs--icon-thickness(1.5px);
+    }
+}
+
+.component--draggable-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}

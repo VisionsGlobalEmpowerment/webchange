@@ -15,21 +15,23 @@
     [webchange.ui.components.icon.navigation.icon-scene :as scene]
     [webchange.ui.components.icon.navigation.icon-school :as school]
     [webchange.ui.components.icon.navigation.icon-students :as students]
-    [webchange.ui.components.icon.navigation.icon-teachers :as teachers]))
+    [webchange.ui.components.icon.navigation.icon-teachers :as teachers]
+    [webchange.ui.components.icon.utils :refer [with-prefix]]))
 
-(def data {"accounts"     accounts/data
-           "achievements" achievements/data
-           "book"         book/data
-           "classes"      classes/data
-           "courses"      courses/data
-           "create"       create/data
-           "dashboard"    dashboard/data
-           "games"        games/data
-           "lesson"       lesson/data
-           "levels"       levels/data
-           "library"      library/data
-           "play"         play/data
-           "scene"        scene/data
-           "school"       school/data
-           "students"     students/data
-           "teachers"     teachers/data})
+(def data (with-prefix "navigation"
+                       {"accounts"     accounts/data
+                        "achievements" achievements/data
+                        "book"         book/data
+                        "classes"      classes/data
+                        "courses"      courses/data
+                        "create"       create/data
+                        "dashboard"    dashboard/data
+                        "games"        games/data
+                        "lesson"       lesson/data
+                        "levels"       levels/data
+                        "library"      library/data
+                        "play"         play/data
+                        "scene"        scene/data
+                        "school"       school/data
+                        "students"     students/data
+                        "teachers"     teachers/data}))

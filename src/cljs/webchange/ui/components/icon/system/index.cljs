@@ -7,6 +7,7 @@
     [webchange.ui.components.icon.system.icon-arrow-left :as arrow-left]
     [webchange.ui.components.icon.system.icon-arrow-right :as arrow-right]
     [webchange.ui.components.icon.system.icon-book :as book]
+    [webchange.ui.components.icon.system.icon-build :as build]
     [webchange.ui.components.icon.system.icon-calendar :as calendar]
     [webchange.ui.components.icon.system.icon-caret-down :as caret-down]
     [webchange.ui.components.icon.system.icon-caret-left :as caret-left]
@@ -22,50 +23,60 @@
     [webchange.ui.components.icon.system.icon-duplicate :as duplicate]
     [webchange.ui.components.icon.system.icon-edit :as edit]
     [webchange.ui.components.icon.system.icon-edit-boxed :as edit-boxed]
+    [webchange.ui.components.icon.system.icon-effects :as effects]
     [webchange.ui.components.icon.system.icon-image-broken :as image-broken]
     [webchange.ui.components.icon.system.icon-info :as info]
     [webchange.ui.components.icon.system.icon-play :as play]
     [webchange.ui.components.icon.system.icon-plus :as plus]
+    [webchange.ui.components.icon.system.icon-question :as question]
     [webchange.ui.components.icon.system.icon-restore :as restore]
     [webchange.ui.components.icon.system.icon-search :as search]
     [webchange.ui.components.icon.system.icon-statistics :as statistics]
+    [webchange.ui.components.icon.system.icon-template :as template]
+    [webchange.ui.components.icon.system.icon-translate :as translate]
     [webchange.ui.components.icon.system.icon-trash :as trash]
     [webchange.ui.components.icon.system.icon-upload :as upload]
     [webchange.ui.components.icon.system.icon-visibility-off :as visibility-off]
-    [webchange.ui.components.icon.system.icon-visibility-on :as visibility-on]))
+    [webchange.ui.components.icon.system.icon-visibility-on :as visibility-on]
+    [webchange.ui.components.icon.utils :refer [with-prefix]]))
 
-(def data {"account"         account/data
-           "account-add"     account-add/data
-           "account-remove"  account-remove/data
-           "archive"         archive/data
-           "arrow-left"      arrow-left/data
-           "arrow-right"     arrow-right/data
-           "book"            book/data
-           "system-book"     book/data
-           "calendar"        calendar/data
-           "caret-down"      caret-down/data
-           "caret-left"      caret-left/data
-           "caret-right"     caret-right/data
-           "caret-up"        caret-up/data
-           "change-position" change-position/data
-           "check"           check/data
-           "close"           close/data
-           "cup"             cup/data
-           "dnd"             dnd/data
-           "download"        download/data
-           "drop"            drop/data
-           "duplicate"       duplicate/data
-           "edit"            edit/data
-           "edit-boxed"      edit-boxed/data
-           "image-broken"    image-broken/data
-           "info"            info/data
-           "play"            play/data
-           "system-play"     play/data
-           "plus"            plus/data
-           "restore"         restore/data
-           "search"          search/data
-           "statistics"      statistics/data
-           "trash"           trash/data
-           "upload"          upload/data
-           "visibility-off"  visibility-off/data
-           "visibility-on"   visibility-on/data})
+(def data (with-prefix "system"
+                       {"account"         account/data
+                        "account-add"     account-add/data
+                        "account-remove"  account-remove/data
+                        "archive"         archive/data
+                        "arrow-left"      arrow-left/data
+                        "arrow-right"     arrow-right/data
+                        "book"            book/data
+                        "build"           build/data
+                        "system-book"     book/data
+                        "calendar"        calendar/data
+                        "caret-down"      caret-down/data
+                        "caret-left"      caret-left/data
+                        "caret-right"     caret-right/data
+                        "caret-up"        caret-up/data
+                        "change-position" change-position/data
+                        "check"           check/data
+                        "close"           close/data
+                        "cup"             cup/data
+                        "dnd"             dnd/data
+                        "download"        download/data
+                        "drop"            drop/data
+                        "duplicate"       duplicate/data
+                        "edit"            edit/data
+                        "edit-boxed"      edit-boxed/data
+                        "effects"         effects/data
+                        "image-broken"    image-broken/data
+                        "info"            info/data
+                        "play"            play/data
+                        "plus"            plus/data
+                        "question"        question/data
+                        "restore"         restore/data
+                        "search"          search/data
+                        "statistics"      statistics/data
+                        "template"        template/data
+                        "translate"       translate/data
+                        "trash"           trash/data
+                        "upload"          upload/data
+                        "visibility-off"  visibility-off/data
+                        "visibility-on"   visibility-on/data}))

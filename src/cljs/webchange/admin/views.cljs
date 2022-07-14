@@ -30,5 +30,5 @@
             [page-component props]
             (if authenticating?
               [ui/loading-overlay]
-              [layout
+              [layout {:no-padding? (= handler :lesson-builder)}
                [page-component props]]))]))}))

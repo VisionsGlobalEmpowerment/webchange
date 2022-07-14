@@ -57,11 +57,15 @@
 
 (defn- parse-concept-resources
   [scene-id]
-  (logger/group-folded (str "get concept resources: " scene-id))
-  (->> @(re-frame/subscribe [::subs/current-lesson-sets-data])
-       (parse-lesson-sets-data scene-id)
-       (logger/with-trace-list)
-       (logger/->>with-group-end (str "get concept resources: " scene-id))))
+  (let [logger-group-title (str "get concept resources: " scene-id)
+        concept-resources (if (some? scene-id)
+                            (->> @(re-frame/subscribe [::subs/current-lesson-sets-data])
+                                 (parse-lesson-sets-data scene-id))
+                            [])]
+    (logger/group-folded logger-group-title)
+    (logger/trace-list concept-resources)
+    (logger/group-end logger-group-title)
+    concept-resources))
 
 (defn- parse-lesson-sets-resources
   [scene-id lesson-sets]
@@ -189,15 +193,17 @@
    ["guide" "/raw/anim/guide/skeleton.json"]])
 
 (defn get-activity-resources
-  [scene-id scene-data]
-  (logger/group-folded (str "get activity resources: " scene-id))
-  (->> (concat (parse-concept-resources scene-id)
-               (get-scene-resources scene-data)
-               (parse-default-assets)
-               (parse-next-activity-preview)
-               (parse-additional-resources))
-       (cleanup-resources)
-       (logger/->>with-group-end (str "get activity resources: " scene-id))))
+  ([scene-data]
+   (get-activity-resources nil scene-data))
+  ([scene-id scene-data]
+   (logger/group-folded (str "get activity resources: " scene-id))
+   (->> (concat (parse-concept-resources scene-id)
+                (get-scene-resources scene-data)
+                (parse-default-assets)
+                (parse-next-activity-preview)
+                (parse-additional-resources))
+        (cleanup-resources)
+        (logger/->>with-group-end (str "get activity resources: " scene-id)))))
 
 (defn get-lesson-resources
   [lesson scenes-data]

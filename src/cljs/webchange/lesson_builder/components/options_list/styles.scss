@@ -1,0 +1,28 @@
+.component--options-list {
+    .options-list-item {
+        display: flex;
+        align-items: center;
+
+        padding: 10px;
+
+        &:hover {
+            cursor: pointer;
+
+            .options-list-item--name {
+                color: bbs--color(blue-1);
+            }
+
+            .options-list-item--icon {
+                @include bbs--icon-color(bbs--color(blue-1));
+            }
+        }
+    }
+
+    .options-list-item--name {
+        flex: 1 1;
+    }
+
+    .options-list-item--icon {
+        @include bbs--icon-color(bbs--color(grey-3));
+    }
+}

@@ -1,0 +1,29 @@
+.component--fold {
+    border: solid 1px bbs--color(grey-3);
+    border-radius: 6px;
+    padding: 5px 10px;
+
+    .fold--header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        &:hover {
+            cursor: pointer;
+
+            .fold--icon {
+                @include bbs--icon-color(bbs--color(blue-1));
+            }
+        }
+    }
+
+    .fold--icon {
+        @include bbs--icon-color(bbs--color(grey-3));
+    }
+
+    .fold--content {
+        max-height: 160px;
+        overflow: auto;
+        @include bbs--with-scrollbar;
+    }
+}

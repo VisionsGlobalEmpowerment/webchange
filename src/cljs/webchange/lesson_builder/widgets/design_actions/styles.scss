@@ -1,0 +1,49 @@
+.widget--design-actions {
+    $padding: $menu-padding-v;
+
+    margin-left: -$menu-padding-h;
+    margin-right: -$menu-padding-h;
+
+    .design-action {
+        display: flex;
+        flex-direction: column;
+        gap: $padding;
+
+        border-bottom: solid 1px bbs--color(grey-4);
+        padding: $padding;
+    }
+
+    .design-action--header {
+        display: flex;
+        align-items: center;
+        gap: $padding;
+
+        &.design-action--header--active,
+        &:hover {
+            cursor: pointer;
+            color: bbs--color(blue-1);
+
+            .design-action--icon,
+            .design-action--expand {
+                @include bbs--icon-color(bbs--color(blue-1));
+            }
+        }
+    }
+
+    .design-action--icon {
+        @include bbs--icon-color(bbs--color(grey-1));
+    }
+
+    .design-action--name {
+        flex: 1 1;
+        @include bbs--noto-16-b;
+    }
+
+    .design-action--expand {
+        @include bbs--icon-color(bbs--color(grey-3));
+    }
+
+    .design-action--content {
+//         padding: 0 $padding;
+    }
+}

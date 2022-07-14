@@ -1,0 +1,50 @@
+.widget--welcome {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 10px;
+
+    .widget--welcome-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+
+        padding: 20px 13px;
+        background-color: bbs--color(grey-5);
+        border: 1px solid bbs--color(grey-3);
+        border-radius: 6px;
+
+        background-image: url("/images/lesson_builder/toolbox/welcome_clouds.svg"),
+                          url("/images/lesson_builder/toolbox/welcome_ground.svg");
+        background-repeat: no-repeat;
+        background-position: top, bottom;
+        background-size: auto;
+
+        &.welcome-card--background-v1 {background-position-x: 0;}
+        &.welcome-card--background-v2 {background-position-x: 33%;}
+        &.welcome-card--background-v3 {background-position-x: 66%;}
+        &.welcome-card--background-v4 {background-position-x: 100%;}
+    }
+
+    .welcome-card--icon {
+        $size: 48px;
+        width: $size;
+        height: $size;
+
+        @include bbs--icon-size(22px);
+
+        background-color: bbs--color(white);
+        border-radius: 999px;
+    }
+
+    .welcome-card--text {
+        @include bbs--noto-14-r;
+        color: bbs--color(blue-1);
+        text-align: center;
+    }
+
+    .welcome-card--button {
+        padding: 6px 24px;
+    }
+}

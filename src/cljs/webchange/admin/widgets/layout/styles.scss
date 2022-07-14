@@ -28,6 +28,10 @@
         padding: $default-gap;
         min-height: 0;
 
+        &.content-wrapper--no-padding {
+            padding: 0;
+        }
+
         & > .content {
             min-height: 0;
             flex: 1 1;

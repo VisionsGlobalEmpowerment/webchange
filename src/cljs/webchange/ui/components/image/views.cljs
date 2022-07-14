@@ -45,14 +45,15 @@
          (observer/un-observe id))
 
        :reagent-render
-       (fn [{:keys [class-name src title]}]
+       (fn [{:keys [class-name on-click src title]}]
          (->> (r/current-component)
               (r/children)
               (into [:div (cond-> {:id         id
                                    :class-name (get-class-name {"bbs--image" true
                                                                 class-name   (some? class-name)})
                                    :title      src
-                                   :ref        handle-ref}
+                                   :ref        handle-ref
+                                   :on-click   on-click}
                                   (some? title) (assoc :title title))
                      (case @status
                        :loading [:div.loading

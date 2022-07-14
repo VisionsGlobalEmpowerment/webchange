@@ -1,0 +1,17 @@
+.widget--not-implemented {
+    @include bbs--noto-12-r;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    background-color: bbs--color(yellow-2, $variant: light);
+    border: solid 1px bbs--color(yellow-2);
+    border-radius: 6px;
+    color: bbs--color(yellow-1);
+    padding: 14px 18px;
+
+    .not-implemented--icon {
+        @include bbs--icon-color(bbs--color(yellow-1));
+    }
+}

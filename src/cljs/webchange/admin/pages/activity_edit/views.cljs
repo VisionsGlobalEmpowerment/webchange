@@ -28,7 +28,7 @@
         [:dt "Last Edited"]
         [:dd (date-str->locale-date updated-at)]]]
       [:div.actions
-       [ui/button {:icon       "system-play"
+       [ui/button {:icon       "system/play"
                    :class-name "play-button"
                    :on-click   handle-play-click}
         "Play"]
