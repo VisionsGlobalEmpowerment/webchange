@@ -154,10 +154,10 @@
                    {:activity-id activity-id}
                    {:on-success [::load-activity-success]
                     :on-failure [::load-activity-failure]}]
-                  #_[::warehouse/load-activity
-                     {:activity-id activity-id}
-                     {:on-success [::load-activity-info-success]
-                      :on-failure [::load-activity-info-failure]}]]}))
+                  [::warehouse/load-activity
+                   {:activity-id activity-id}
+                   {:on-success [::load-activity-info-success]
+                    :on-failure [::load-activity-info-failure]}]]}))
 
 (re-frame/reg-event-fx
   ::load-activity-success
