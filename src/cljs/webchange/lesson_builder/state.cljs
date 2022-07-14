@@ -48,13 +48,18 @@
          (assoc co-effects :activity-data))))
 
 (re-frame/reg-event-fx
+  ::set-activity-data
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ activity-data]]
+    {:db (-> db (set-activity-data activity-data))}))
+
+(re-frame/reg-event-fx
   ::update-activity-object-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [object-name object-data]}]]
-    (print "::update-activity-object-data" object-name object-data)
     (let [activity-data (-> (get-activity-data db)
                             (update-in [:objects object-name] merge object-data))]
-      {:db (-> db (set-activity-data activity-data))})))
+      {:dispatch [::set-activity-data activity-data]})))
 
 ;; activity info
 
@@ -149,10 +154,10 @@
                    {:activity-id activity-id}
                    {:on-success [::load-activity-success]
                     :on-failure [::load-activity-failure]}]
-                  [::warehouse/load-activity
-                   {:activity-id activity-id}
-                   {:on-success [::load-activity-info-success]
-                    :on-failure [::load-activity-info-failure]}]]}))
+                  #_[::warehouse/load-activity
+                     {:activity-id activity-id}
+                     {:on-success [::load-activity-info-success]
+                      :on-failure [::load-activity-info-failure]}]]}))
 
 (re-frame/reg-event-fx
   ::load-activity-success
