@@ -47,6 +47,28 @@
     :optional?   true
     :description "Right page image"}])
 
+(def template-options
+  [{:type "note"
+    :text "A book will be shown with title and pages inside the book for this activty. Below specify the type of book you want to build along with adding pages with text and an image."}
+   {:type "group"
+    :label "Book Title Cover Page"
+    :children [{:key         :title
+                :label       "Title (i.e Letter)"
+                :type        "string"
+                :placeholder "Title"}
+               {:key         :letters
+                :label       "Letters (i.e Aa)"
+                :type        "string"
+                :placeholder "Letters"}]}
+   {:type "group"
+    :label "Inside Cover Page"
+    :children [{:key         :subtitle
+                :label       "Subtitle (The letter a is for...)"
+                :type        "string"
+                :placeholder "Subtitle"}]}
+   {:type "first-words-book-spreads"
+    :key "spreads"}])
+
 (def metadata
   {:id          49
    :name        "First Words Book V2"
@@ -56,7 +78,9 @@
                                :options create-options}
                  :add         {:title   "Add Spread"
                                :options add-spread-options}
-                 :remove-last {:title "Remove Last Spread"}}
+                 :remove-last {:title "Remove Last Spread"}
+                 :template-options {:title "Template Options"
+                                    :options template-options}}
    :options     create-options})
 
 (def template
