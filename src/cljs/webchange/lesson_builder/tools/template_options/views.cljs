@@ -51,5 +51,6 @@
     [:div.widget--template-options
      [:h1 "Template Options"]
      [options-panel]
-     [ui/button {:on-click #(re-frame/dispatch [::state/apply])}
+     [ui/button {:class-name "template-options-apply"
+                 :on-click #(re-frame/dispatch [::state/apply])}
       "Apply"]]))

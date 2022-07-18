@@ -1,3 +1,33 @@
 .select-image {
-    
+    padding: 10px;
+
+    h3 {
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 18px;
+    }
+
+    .options {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 250px;
+	gap: 26px;
+	
+	padding: 36px 8px;
+	.bbs--image {
+	    width: 133px;
+	    border-radius: 6px;
+	    overflow: hidden;
+	}
+
+	.bbs--button {
+	    border-radius: 30px;
+	}
+	
+	input[type="file"] {
+	    display: none;
+	}
+    }
 }
