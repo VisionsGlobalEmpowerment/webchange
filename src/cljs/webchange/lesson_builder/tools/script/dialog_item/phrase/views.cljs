@@ -11,7 +11,7 @@
         target @(re-frame/subscribe [::state/target action-path])
         handle-phrase-text-change #(re-frame/dispatch [::state/set-phrase-text action-path %])
         handle-target-change #(re-frame/dispatch [::state/set-target action-path %])]
-    [:div.dialog-item--phrase
+    [:div {:class-name "dialog-item dialog-item--phrase"}
      [target-selector {:value     target
                        :on-change handle-target-change}]
      [text-editor {:value     phrase-text

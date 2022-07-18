@@ -83,10 +83,13 @@
               value)]))})))
 
 (defn text-editor
-  [{:keys [actions class-name on-change value]}]
+  [{:keys [actions class-name on-change type value]
+    :or   {type :character}}]
   [:div {:class-name (ui/get-class-name {"component--text-editor" true
                                          class-name               (some? class-name)})}
-   [ui/icon {:icon       "character"
+   [ui/icon {:icon       (case type
+                           :character "character"
+                           :text-animation "dialogue")
              :class-name "text-editor--icon"}]
    [text-control {:value       value
                   :on-change   on-change

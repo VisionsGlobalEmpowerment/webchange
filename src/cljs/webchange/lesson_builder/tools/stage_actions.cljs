@@ -33,8 +33,18 @@
   ::set-action-phrase-text
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [action-path phrase-text]}]]
-    ;{:pre [(s/valid? ::spec/action-path action-path)
-    ;       (s/valid? ::spec/action-target phrase-text)]}
+    {:pre [(s/valid? ::spec/action-path action-path)
+           (s/valid? ::spec/action-target phrase-text)]}
     (let [update-path (concat [:actions] action-path action-utils/inner-action-path [:phrase-text])
           updated-activity-data (assoc-in activity-data update-path phrase-text)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
+  ::set-object-text
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [object-name text]}]]
+    {:pre [(s/valid? ::spec/object-name object-name)
+           (s/valid? ::spec/text text)]}
+    (let [update-path [:objects (keyword object-name) :text]
+          updated-activity-data (assoc-in activity-data update-path text)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))

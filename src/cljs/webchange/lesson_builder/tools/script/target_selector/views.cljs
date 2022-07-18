@@ -13,11 +13,12 @@
      text]))
 
 (defn target-selector
-  [{:keys [class-name value on-change]}]
+  [{:keys [class-name value on-change type]
+    :or   {type :character}}]
   (r/with-let [expanded? (r/atom false)
                toggle-expanded #(swap! expanded? not)]
-    (let [current-value @(re-frame/subscribe [::state/current-value value])
-          target-options @(re-frame/subscribe [::state/target-options value])
+    (let [current-value-data @(re-frame/subscribe [::state/current-value-data type value])
+          target-options @(re-frame/subscribe [::state/target-options type value])
           handle-option-click #(when (fn? on-change)
                                  (toggle-expanded)
                                  (on-change %))]
@@ -29,7 +30,7 @@
         [ui/icon {:icon       "caret-down"
                   :class-name (ui/get-class-name {"target-selector--expand-icon"         true
                                                   "target-selector--expand-icon--active" @expanded?})}]
-        (:text current-value)]
+        (:text current-value-data)]
        (when @expanded?
          [:div {:class-name (ui/get-class-name {"target-selector--options" true})}
           (for [{:keys [value] :as option} target-options]

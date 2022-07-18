@@ -5,18 +5,21 @@
 (s/def ::action-path sequential?)
 (s/def ::action-target string?)
 
-(s/def :single-background-data/type #(= "background"))
-(s/def :single-background-data/src string?)
-(s/def ::single-background-data (s/keys :req-un [:single-background-data/type :single-background-data/src]))
-(s/def :layered-background-layer/src string?)
-(s/def ::layered-background-layer (s/keys :req-un [:layered-background-layer/src]))
-(s/def :layered-background-data/background (s/or :empty nil? :defined ::layered-background-layer))
-(s/def :layered-background-data/surface (s/or :empty nil? :defined ::layered-background-layer))
-(s/def :layered-background-data/decoration (s/or :empty nil? :defined ::layered-background-layer))
-(s/def :layered-background-data/type #(= "layered-background"))
-(s/def ::layered-background-data (s/keys :req-un [:layered-background-data/type
-                                                  :layered-background-data/background
-                                                  :layered-background-data/surface
-                                                  :layered-background-data/decoration]))
-(s/def ::background-data (s/or :single ::single-background-data
-                               :layered ::layered-background-data))
+(s/def :background-single-data/type #(= "background"))
+(s/def :background-single-data/src string?)
+(s/def ::background-single-data (s/keys :req-un [:background-single-data/type :background-single-data/src]))
+(s/def :background-layered-layer/src string?)
+(s/def ::background-layered-layer (s/keys :req-un [:background-layered-layer/src]))
+(s/def :background-layered-data/background (s/or :empty nil? :defined ::background-layered-layer))
+(s/def :background-layered-data/surface (s/or :empty nil? :defined ::background-layered-layer))
+(s/def :background-layered-data/decoration (s/or :empty nil? :defined ::background-layered-layer))
+(s/def :background-layered-data/type #(= "layered-background"))
+(s/def ::background-layered-data (s/keys :req-un [:background-layered-data/type
+                                                  :background-layered-data/background
+                                                  :background-layered-data/surface
+                                                  :background-layered-data/decoration]))
+(s/def ::background-data (s/or :single ::background-single-data
+                               :layered ::background-layered-data))
+
+(s/def ::object-name (s/or :string string? :keyword keyword?))
+(s/def ::text string?)

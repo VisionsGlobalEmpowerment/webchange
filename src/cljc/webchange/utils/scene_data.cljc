@@ -97,7 +97,7 @@
 (defn get-scene-object
   [scene-data object-name]
   (-> (get-scene-objects scene-data)
-      (get object-name)))
+      (get (keyword object-name))))
 
 (defn get-scene-object-by-path
   [scene-data object-path]

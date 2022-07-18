@@ -1,1 +1,9 @@
+.dialog-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 @import "phrase/styles";
+@import "text_animation/styles";
+
