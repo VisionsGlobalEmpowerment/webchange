@@ -14,9 +14,11 @@
     [webchange.ui.components.icon.system.icon-caret-right :as caret-right]
     [webchange.ui.components.icon.system.icon-caret-up :as caret-up]
     [webchange.ui.components.icon.system.icon-change-position :as change-position]
+    [webchange.ui.components.icon.system.icon-character :as character]
     [webchange.ui.components.icon.system.icon-check :as check]
     [webchange.ui.components.icon.system.icon-close :as close]
     [webchange.ui.components.icon.system.icon-cup :as cup]
+    [webchange.ui.components.icon.system.icon-dialogue :as dialogue]
     [webchange.ui.components.icon.system.icon-dnd :as dnd]
     [webchange.ui.components.icon.system.icon-download :as download]
     [webchange.ui.components.icon.system.icon-drop :as drop]
@@ -56,9 +58,11 @@
                         "caret-right"     caret-right/data
                         "caret-up"        caret-up/data
                         "change-position" change-position/data
+                        "character"       character/data
                         "check"           check/data
                         "close"           close/data
                         "cup"             cup/data
+                        "dialogue"        dialogue/data
                         "dnd"             dnd/data
                         "download"        download/data
                         "drop"            drop/data

@@ -15,11 +15,12 @@
    [:div.name icon]])
 
 (defn- icons-list
-  [{:keys [class-name color component data]}]
+  [{:keys [class-name color component data filter-name]}]
   [:div {:class-name (ui/get-class-name {"icons-list" true
                                          class-name   (some? class-name)})}
    (for [icon (->> data
                    (map first)
+                   (filter #(-> % (clojure.string/starts-with? filter-name) not))
                    (sort))]
      ^{:key icon}
      [icons-list-item {:icon      icon
@@ -31,23 +32,27 @@
   [:div#page--icons
    [layout {:title "Icons"}
     [:h2 "Navigation Icons"]
-    [icons-list {:data      navigation-icons/data
-                 :component ui/navigation-icon}]
+    [icons-list {:data        navigation-icons/data
+                 :component   ui/navigation-icon
+                 :filter-name "navigation/"}]
     [:h2 "Navigation Icons (Colored)"]
     [:div
-     [icons-list {:data       navigation-icons/data
-                  :component  ui/navigation-icon
-                  :color      "white"
-                  :class-name "icons-list-colored"}]]
+     [icons-list {:data        navigation-icons/data
+                  :component   ui/navigation-icon
+                  :filter-name "navigation/"
+                  :color       "white"
+                  :class-name  "icons-list-colored"}]]
     [:h2 "System Icons"]
-    [icons-list {:data      system-icons/data
-                 :component ui/system-icon}]
+    [icons-list {:data        system-icons/data
+                 :component   ui/system-icon
+                 :filter-name "system/"}]
     [:h2 "System Icons (Colored)"]
     [:div
-     [icons-list {:data       system-icons/data
-                  :component  ui/system-icon
-                  :color      "white"
-                  :class-name "icons-list-colored"}]]
+     [icons-list {:data        system-icons/data
+                  :component   ui/system-icon
+                  :filter-name "system/"
+                  :color       "white"
+                  :class-name  "icons-list-colored"}]]
 
     [:h2 "Social Icons"]
     [icons-list {:data      social-icons/data

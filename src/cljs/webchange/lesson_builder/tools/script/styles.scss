@@ -1,5 +1,9 @@
 .widget--script {
     @import "block/styles";
+    @import "dialog/styles";
+    @import "dialog_item/styles";
+    @import "target_selector/styles";
+    @import "text_editor/styles";
     @import "track_selector/styles";
 
     display: flex;

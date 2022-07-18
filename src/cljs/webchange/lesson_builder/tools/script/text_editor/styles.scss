@@ -1,0 +1,34 @@
+.component--text-editor {
+    @include bbs--noto-14-r;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+
+    .text-editor--icon {
+        @include bbs--icon-size(18px);
+    }
+
+    .text-editor--value {
+        flex: 1 1;
+        cursor: text;
+        outline: none;
+
+        &.text-disabled {
+            cursor: default;
+        }
+
+        &.placeholder {
+            color: #a6a6a6;
+        }
+    }
+
+    .text-editor--action {
+        $size: 22px;
+        width: $size;
+        height: $size;
+        min-height: 0;
+        @include bbs--icon-color(bbs--color(grey-3));
+        @include bbs--icon-size(18px);
+    }
+}

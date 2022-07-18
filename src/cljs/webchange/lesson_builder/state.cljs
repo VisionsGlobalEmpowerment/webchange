@@ -53,14 +53,6 @@
   (fn [{:keys [db]} [_ activity-data]]
     {:db (-> db (set-activity-data activity-data))}))
 
-(re-frame/reg-event-fx
-  ::update-activity-object-data
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [object-name object-data]}]]
-    (let [activity-data (-> (get-activity-data db)
-                            (update-in [:objects object-name] merge object-data))]
-      {:dispatch [::set-activity-data activity-data]})))
-
 ;; activity info
 
 (def activity-info-loading-key :activity-info-loading?)

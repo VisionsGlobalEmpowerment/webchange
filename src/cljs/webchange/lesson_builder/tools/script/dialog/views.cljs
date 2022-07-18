@@ -9,7 +9,8 @@
   [{:keys [action-path]}]
   (let [dialog-name @(re-frame/subscribe [::state/dialog-name action-path])
         dialog-items @(re-frame/subscribe [::state/dialog-items action-path])]
-    [block {:title dialog-name}
+    [block {:title               dialog-name
+            :class-name--content "component--dialog"}
      (for [{:keys [id] :as dialog-item-data} dialog-items]
        ^{:key id}
        [dialog-item dialog-item-data])]))

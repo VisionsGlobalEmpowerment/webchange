@@ -4,6 +4,11 @@
            :objects       {:background {:type "background"
                                         :src  "/raw/img/park/slide/background2.jpg"}}
            :scene-objects [["background"]]
-           :actions       {}
+           :actions       {:intro {:type "sequence-data"
+                                   :data [{:type "sequence-data"
+                                           :data [{:type     "empty"
+                                                   :duration 1000}
+                                                  {:type   "animation-sequence"
+                                                   :target "guide"}]}]}}
            :triggers      {}
            :metadata      {}})
