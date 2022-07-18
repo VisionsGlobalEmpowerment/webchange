@@ -535,23 +535,23 @@
       (-> (core/archive-activity activity-id data)
           response)))
   (PUT "/api/activities/:activity-id/toggle-visibility" request
-       :coercion :spec
-       :path-params [activity-id :- ::activity-spec/id]
-       :body [data ::activity-spec/toggle-visibility]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/toggle-activity-visibility activity-id data)
-             response)))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/toggle-visibility]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/toggle-activity-visibility activity-id data)
+          response)))
   (POST "/api/activities/:activity-id/duplicate" request
-        :coercion :spec
-        :path-params [activity-id :- ::activity-spec/id]
-        :body [data ::activity-spec/duplicate]
-        (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
-            (throw-unauthorized {:role :educator}))
-          (-> (core/duplicate-activity activity-id data user-id)
-              response)))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/duplicate]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/duplicate-activity activity-id data user-id)
+          response)))
   (POST "/api/activities/:activity-id/version" request
     :coercion :spec
     :path-params [activity-id :- ::activity-spec/id]
@@ -568,4 +568,13 @@
       (when-not (is-admin? user-id)
         (throw-unauthorized {:role :educator}))
       (-> (core/create-book data user-id)
+          response)))
+  (PUT "/api/activities/:activity-id/template-options" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/template-options]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/apply-template-options activity-id data user-id)
           response))))

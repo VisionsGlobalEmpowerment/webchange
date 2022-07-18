@@ -35,7 +35,13 @@
 
   (let [course-slug "english"
         scene-slug "first-words-book-letter-a"]
-    (core/get-scene-latest-version course-slug scene-slug))
+    (-> (core/get-scene-latest-version course-slug scene-slug)
+        :metadata)
+    )
+
+  (let [course-slug "english"
+        scene-slug "first-words-book-letter-a"]
+    (core/update-activity-template! course-slug scene-slug t/user-id))
 
   (let [user-id 1
         course-slug "english"
@@ -48,17 +54,20 @@
                                    :image-left {:src "/upload/SKFEIACYRWGYILJE.png"},
                                    :text-right "alligator",
                                    :action-name "add",
-                                   :image-right {:src "/upload/WLYBCHFKLQRFJJUB.png"}}
+                                   :image-right {:src "/upload/WLYBCHFKLQRFJJUB.png"}
+                                   :id 2}
                                   {:text-left "astronaut",
                                    :image-left {:src "/upload/ITYCSSNXJNBKOYLQ.png"},
                                    :text-right "arrow",
                                    :action-name "add",
-                                   :image-right {:src "/upload/PILXQYLMBHGLWNMZ.png"}}
+                                   :image-right {:src "/upload/PILXQYLMBHGLWNMZ.png"}
+                                   :id 3}
                                   {:text-left "ant",
                                    :image-left {:src "/upload/HUSMVTTZEUZQEBTS.png"},
                                    :text-right "axe",
                                    :action-name "add",
-                                   :image-right {:src "/upload/CBXWJZPUTPSAFQZZ.png"}}],
+                                   :image-right {:src "/upload/CBXWJZPUTPSAFQZZ.png"}
+                                   :id 4}],
                                  :subtitle "The letter a is for...",
                                  :template-id 49}}]
     (core/update-activity! course-slug scene-slug template-options user-id))

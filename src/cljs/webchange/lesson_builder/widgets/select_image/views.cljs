@@ -1,0 +1,38 @@
+(ns webchange.lesson-builder.widgets.select-image.views
+  (:require
+    [reagent.core :as r]
+    [re-frame.core :as re-frame]
+    [webchange.lesson-builder.widgets.select-image.state :as state]
+    [webchange.ui.index :as ui]))
+
+(def last-key (atom 1))
+
+(defn- change-event->file
+  [event]
+  (-> event
+      (.. -target -files)
+      (.item 0)))
+
+(defn select-image
+  [{:keys [label value key] :as props}]
+  (r/with-let [key (or key (swap! last-key inc))
+               _ (re-frame/dispatch [::state/init key props])
+               file-input (atom nil)]
+    (let [handle-upload #(re-frame/dispatch [::state/upload key %])
+          uploading? @(re-frame/subscribe [::state/uploading? key])]
+      [:div.select-image
+       (when label
+         [:h3.select-image-header
+          label])
+       [:div.options
+        ^{:key value}
+        [ui/image {:src value}]
+        [:input {:type      "file"
+                 :accept    ["gif" "jpg" "jpeg" "png"]
+                 :on-change #(-> % change-event->file handle-upload)
+                 :ref       #(reset! file-input %)}]
+        [ui/button {:on-click #(.click @file-input)}
+         (if uploading? "Uploading..." "Upload New")]]]
+      #_(when (:cover-image errors)
+          [ui/input-error (:cover-image errors)]))))
+

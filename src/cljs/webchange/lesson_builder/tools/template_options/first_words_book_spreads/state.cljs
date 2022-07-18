@@ -6,20 +6,27 @@
 
 (re-frame/reg-event-fx
   ::init
-  [(re-frame/inject-cofx :activity-data)
-   (i/path path-to-db)]
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [spreads-saved-value (get-in db [:form :spreads])
           spreads-number (count spreads-saved-value)]
       {:db (-> db
-               (assoc :spreads-number spreads-number))})))
-
+               (assoc :original-spreads-number spreads-number)
+               (assoc :spreads-number spreads-number)
+               (update :form dissoc :delete-last-spread))})))
 
 (re-frame/reg-sub
   ::spreads-number
   :<- [path-to-db]
   (fn [db]
     (get db :spreads-number)))
+
+(re-frame/reg-sub
+  ::last-spread?
+  :<- [path-to-db]
+  (fn [db [_ idx]]
+    (let [number (get db :spreads-number)]
+      (= idx (dec number)))))
 
 (re-frame/reg-event-fx
   ::add-spread
@@ -42,3 +49,14 @@
   (fn [{:keys [db]} [_ spread-idx key value]]
     {:db (-> db
              (assoc-in [:form :spreads spread-idx key] value))}))
+
+(re-frame/reg-event-fx
+  ::delete-last-spread
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [original-spreads-number (:original-spreads-number db)
+          current-spreads-number (:spreads-number db)]
+      {:db (cond-> db
+                   :always (update :spreads-number dec)
+                   :always (update-in [:form :spreads] drop-last)
+                   (= original-spreads-number current-spreads-number) (assoc-in [:form :delete-last-spread] true))})))

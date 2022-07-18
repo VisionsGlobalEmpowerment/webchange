@@ -8,6 +8,7 @@
 (defn- note-field
   [{:keys [text]}]
   [:div.note
+   [ui/icon {:icon "info"}]
    text])
 
 (declare option-field)
@@ -49,4 +50,6 @@
   (fn []
     [:div.widget--template-options
      [:h1 "Template Options"]
-     [options-panel]]))
+     [options-panel]
+     [ui/button {:on-click #(re-frame/dispatch [::state/apply])}
+      "Apply"]]))

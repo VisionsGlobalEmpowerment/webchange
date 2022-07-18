@@ -483,6 +483,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::apply-activity-template-options
+  (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
+    (create-request {:key    :apply-activity-template-options
+                     :method :put
+                     :params data
+                     :uri    (str "/api/activities/" activity-id "/template-options")}
+                    handlers)))
+    
+(re-frame/reg-event-fx
   ::load-available-books
   (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
     (create-request {:key    :load-available-books
