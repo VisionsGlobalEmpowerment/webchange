@@ -22,8 +22,12 @@
 	    overflow: hidden;
 	}
 
-	.bbs--button {
-	    border-radius: 30px;
+	.actions {
+	    display: flex;
+	    gap: 5px;
+	    .bbs--button {
+		border-radius: 30px;
+	    }
 	}
 	
 	input[type="file"] {

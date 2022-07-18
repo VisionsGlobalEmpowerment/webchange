@@ -13,7 +13,8 @@
       {:db (-> db
                (assoc :original-spreads-number spreads-number)
                (assoc :spreads-number spreads-number)
-               (update :form dissoc :delete-last-spread))})))
+               (update :form dissoc :delete-last-spread)
+               (assoc :spread-state (into [] (repeat spreads-number {:left false :right false}))))})))
 
 (re-frame/reg-sub
   ::spreads-number
@@ -34,7 +35,9 @@
   (fn [{:keys [db]} [_]]
     {:db (-> db
              (update :spreads-number inc)
-             (update-in [:form :spreads] concat [{}]))}))
+             (update-in [:form :spreads] concat [{}])
+             (update :spread-state concat [{:left true
+                                            :right true}]))}))
 
 (re-frame/reg-sub
   ::spread-data
@@ -59,4 +62,17 @@
       {:db (cond-> db
                    :always (update :spreads-number dec)
                    :always (update-in [:form :spreads] drop-last)
+                   :always (update :spread-state drop-last)
                    (= original-spreads-number current-spreads-number) (assoc-in [:form :delete-last-spread] true))})))
+
+(re-frame/reg-sub
+  ::spread-state
+  :<- [path-to-db]
+  (fn [db [_ idx]]
+    (get-in db [:spread-state idx])))
+
+(re-frame/reg-event-fx
+  ::toggle-spread-state
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ idx key]]
+    {:db (update-in db [:spread-state idx key] not)}))

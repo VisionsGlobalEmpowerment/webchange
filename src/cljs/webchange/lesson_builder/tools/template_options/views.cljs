@@ -3,6 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.template-options.state :as state]
     [webchange.lesson-builder.tools.template-options.first-words-book-spreads.views :as first-words-book-spreads]
+    [webchange.lesson-builder.widgets.select-image.views :refer [choose-image-overlay]]
+    [webchange.lesson-builder.widgets.select-image.state :as choose-image-state]
     [webchange.ui.index :as ui]))
 
 (defn- note-field
@@ -48,9 +50,14 @@
   []
   (re-frame/dispatch [::state/init])
   (fn []
-    [:div.widget--template-options
-     [:h1 "Template Options"]
-     [options-panel]
-     [ui/button {:class-name "template-options-apply"
-                 :on-click #(re-frame/dispatch [::state/apply])}
-      "Apply"]]))
+    (let [overlay @(re-frame/subscribe [::choose-image-state/show-choose-image?])]
+      (if overlay
+        [:div.widget--template-options
+         [:h1 "Choose Image"]
+         [choose-image-overlay]]
+        [:div.widget--template-options
+         [:h1 "Template Options"]
+         [options-panel]
+         [ui/button {:class-name "template-options-apply"
+                     :on-click #(re-frame/dispatch [::state/apply])}
+          "Apply"]]))))

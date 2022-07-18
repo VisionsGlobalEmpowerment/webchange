@@ -8,47 +8,46 @@
 
 (defn- spread-panel
   [spread-idx]
-  (r/with-let [state (r/atom {:left false
-                              :right false})]
-    (let [spread-data @(re-frame/subscribe [::state/spread-data spread-idx])
-          last-spread? @(re-frame/subscribe [::state/last-spread? spread-idx])]
-      [:div.spread
-       [:div.page
-        [:h3.page-header
-         [:div.page-header-label {:on-click #(swap! state update :left not)}
-          [ui/icon {:icon (if (:left @state) "caret-down" "caret-up")
-                    :color "grey-3"}]
-          "Left Page"]]
-        (when (:left @state)
-          [:<>
-           [ui/input {:label "Text"
-                      :placeholder "Add Text"
-                      :value (:text-left spread-data)
-                      :required? true
-                      :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :text-left %])}]
-           [select-image {:label "Image"
-                          :value (get-in spread-data [:image-left :src])
-                          :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :image-left {:src (:url %)}])}]])]
-       [:div.page
-        [:h3.page-header
-         [:div.page-header-label {:on-click #(swap! state update :right not)}
-          [ui/icon {:icon (if (:right @state) "caret-down" "caret-up")
-                    :color "grey-3"}]
-          "Right Page"]
-         (when last-spread?
-           [ui/icon {:icon "trash"
-                     :color "grey-3"
-                     :on-click #(re-frame/dispatch [::state/delete-last-spread])}])]
-        (when (:right @state)
-          [:<>
-           [ui/input {:label "Text"
-                      :placeholder "Add Text"
-                      :value (:text-right spread-data)
-                      :required? true
-                      :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :text-right %])}]
-           [select-image {:label "Image"
-                          :value (get-in spread-data [:image-right :src])
-                          :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :image-right {:src (:url %)}])}]])]])))
+  (let [spread-data @(re-frame/subscribe [::state/spread-data spread-idx])
+        state @(re-frame/subscribe [::state/spread-state spread-idx])
+        last-spread? @(re-frame/subscribe [::state/last-spread? spread-idx])]
+    [:div.spread
+     [:div.page
+      [:h3.page-header
+       [:div.page-header-label {:on-click #(re-frame/dispatch [::state/toggle-spread-state spread-idx :left])}
+        [ui/icon {:icon (if (:left state) "caret-down" "caret-up")
+                  :color "grey-3"}]
+        "Left Page"]]
+      (when (:left state)
+        [:<>
+         [ui/input {:label "Text"
+                    :placeholder "Add Text"
+                    :value (:text-left spread-data)
+                    :required? true
+                    :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :text-left %])}]
+         [select-image {:label "Image"
+                        :value (get-in spread-data [:image-left :src])
+                        :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :image-left {:src (:url %)}])}]])]
+     [:div.page
+      [:h3.page-header
+       [:div.page-header-label {:on-click #(re-frame/dispatch [::state/toggle-spread-state spread-idx :right])}
+        [ui/icon {:icon (if (:right state) "caret-down" "caret-up")
+                  :color "grey-3"}]
+        "Right Page"]
+       (when last-spread?
+         [ui/icon {:icon "trash"
+                   :color "grey-3"
+                   :on-click #(re-frame/dispatch [::state/delete-last-spread])}])]
+      (when (:right state)
+        [:<>
+         [ui/input {:label "Text"
+                    :placeholder "Add Text"
+                    :value (:text-right spread-data)
+                    :required? true
+                    :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :text-right %])}]
+         [select-image {:label "Image"
+                        :value (get-in spread-data [:image-right :src])
+                        :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :image-right {:src (:url %)}])}]])]]))
 
 (defn field
   [props]

@@ -3,6 +3,7 @@
     [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.widgets.select-image.state :as state]
+    [webchange.lesson-builder.widgets.image-library.views :refer [image-library]]
     [webchange.ui.index :as ui]))
 
 (def last-key (atom 1))
@@ -31,8 +32,16 @@
                  :accept    ["gif" "jpg" "jpeg" "png"]
                  :on-change #(-> % change-event->file handle-upload)
                  :ref       #(reset! file-input %)}]
-        [ui/button {:on-click #(.click @file-input)}
-         (if uploading? "Uploading..." "Upload New")]]]
+        [:div.actions
+         [ui/button {:on-click #(re-frame/dispatch [::state/show-choose-image key])
+                     :color "blue-1"}
+          "Open Library"]
+         [ui/button {:on-click #(.click @file-input)}
+          (if uploading? "Uploading..." "Upload New")]]]]
       #_(when (:cover-image errors)
           [ui/input-error (:cover-image errors)]))))
 
+(defn choose-image-overlay
+  []
+  (let [handle-click #(re-frame/dispatch [::state/select-image {:image %}])]
+    [image-library {:on-click handle-click}]))

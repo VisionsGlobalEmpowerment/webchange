@@ -20,7 +20,7 @@
 (re-frame/reg-sub
   ::uploading?
   :<- [path-to-db]
-  (fn [db]
+  (fn [db [_ key]]
     (get-in db [key :uploading])))
 
 (re-frame/reg-event-fx
@@ -48,3 +48,26 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ key result]]
     {:db (assoc-in db [key :uploading] false)}))
+
+(re-frame/reg-sub
+  ::show-choose-image?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :show-choose-image?)))
+
+(re-frame/reg-event-fx
+  ::show-choose-image
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ key]]
+    {:db (-> db
+             (assoc :current-key key)
+             (assoc :show-choose-image? true))}))
+
+(re-frame/reg-event-fx
+  ::select-image
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [image]}]]
+    (let [current-key (get db :current-key)
+          on-change (get-in db [current-key :on-change] #())]
+      (on-change {:url (:path image)})
+      {:db (assoc db :show-choose-image? false)})))
