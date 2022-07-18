@@ -15,10 +15,10 @@
     [webchange.common.hmac-sha256 :as sign]
     [webchange.course.core :as core]
     [webchange.course.skills :as skills]
-    [webchange.dataset.library :as datasets-library]
     [webchange.templates.core :as templates]
     [webchange.school.core :as school]
     [webchange.validation.specs.activity :as activity-spec]
+    [webchange.validation.specs.book :as book-spec]
     [webchange.validation.specs.course-spec :as course-spec]))
 
 (defn handle-save-scene
@@ -123,7 +123,7 @@
                        :always (core/create-course owner-id))]
     (handle course)))
 
-(defn handle-create-activity
+(defn handle-create-course-activity
   [course-slug data request]
   (let [user-id (current-user request)
         activity (templates/activity-from-template data)
@@ -346,7 +346,7 @@
                  :return Activity
                  :body [activity-data CreateActivity]
                  :summary "Creates a new activity from template"
-                 (handle-create-activity course-slug activity-data request))
+                 (handle-create-course-activity course-slug activity-data request))
            (POST "/:course-slug/create-activity-placeholder" request
                  :path-params [course-slug :- s/Str]
                  :return Activity
@@ -550,5 +550,13 @@
           (when-not (is-admin? user-id)
             (throw-unauthorized {:role :educator}))
           (-> (core/duplicate-activity activity-id data user-id)
+              response)))
+  (POST "/api/books" request
+        :coercion :spec
+        :body [data ::book-spec/create-book]
+        (let [user-id (current-user request)]
+          (when-not (is-admin? user-id)
+            (throw-unauthorized {:role :educator}))
+          (-> (core/create-book data user-id)
               response))))
 

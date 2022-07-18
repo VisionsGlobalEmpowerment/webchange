@@ -13,6 +13,8 @@
     [webchange.ui.components.icon.views :as icon-views]
     [webchange.ui.components.image.views :as image-views]
     [webchange.ui.components.input.views :as input-views]
+    [webchange.ui.components.input-error.views :as input-error-views]
+    [webchange.ui.components.input-label.views :as input-label-views]
     [webchange.ui.components.link.views :as link-views]
     [webchange.ui.components.list.views :as list-views]
     [webchange.ui.components.logo.views :as logo-views]
@@ -42,6 +44,8 @@
 (def icon icon-views/general-icon)
 (def image image-views/image)
 (def input input-views/input)
+(def input-error input-error-views/input-error)
+(def input-label input-label-views/input-label)
 (def logo-with-name logo-views/logo-with-name)
 (def link link-views/link)
 (def list list-views/list)
