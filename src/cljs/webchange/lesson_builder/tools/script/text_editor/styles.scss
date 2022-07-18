@@ -22,13 +22,4 @@
             color: bbs--color(grey-3);
         }
     }
-
-    .text-editor--action {
-        $size: 22px;
-        width: $size;
-        height: $size;
-        min-height: 0;
-        @include bbs--icon-color(bbs--color(grey-3));
-        @include bbs--icon-size(18px);
-    }
 }

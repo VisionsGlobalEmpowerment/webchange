@@ -7,20 +7,28 @@
     border-radius: 6px;
     padding: 4px;
 
-    .item-wrapper--move-icon {
-        visibility: hidden;
+    &.component--item-wrapper--parallel {
+        padding: 0;
+        border-width: 0 0 0 1px;
     }
+}
 
-    .item-wrapper--content {
-        flex: 1 1;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
+.component--item-wrapper--content {
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
-    &:hover {
-        .item-wrapper--move-icon {
-            visibility: visible;
-        }
-    }
+.component--item-wrapper--actions {
+    align-self: flex-end;
+}
+
+.component--item-wrapper--action {
+    $size: 22px;
+    width: $size;
+    height: $size;
+    min-height: 0;
+    @include bbs--icon-color(bbs--color(grey-3));
+    @include bbs--icon-size(18px);
 }

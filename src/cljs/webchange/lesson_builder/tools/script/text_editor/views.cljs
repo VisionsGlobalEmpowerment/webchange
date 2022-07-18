@@ -83,7 +83,7 @@
               value)]))})))
 
 (defn text-editor
-  [{:keys [actions class-name on-change type value]
+  [{:keys [class-name on-change type value]
     :or   {type :character}}]
   [:div {:class-name (ui/get-class-name {"component--text-editor" true
                                          class-name               (some? class-name)})}
@@ -94,10 +94,4 @@
    [text-control {:value       value
                   :on-change   on-change
                   :placeholder "Enter phrase text"
-                  :class-name  "text-editor--value"}]
-   (when-not (empty? actions)
-     [:div.text-editor--actions
-      (for [[idx action] (map-indexed vector actions)]
-        ^{:key idx}
-        [ui/button (merge {:class-name "text-editor--action"}
-                          action)])])])
+                  :class-name  "text-editor--value"}]])

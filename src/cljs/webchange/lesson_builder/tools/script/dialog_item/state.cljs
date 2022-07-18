@@ -36,16 +36,7 @@
         (some? phrase-text)
         :phrase
 
-        (some #{type} ["start-skip-region" "end-skip-region"])
-        :skip
-
-        (some #{type} ["mute-background-music" "unmute-background-music"])
-        :background-music
-
-        (some #{type} ["show-guide" "hide-guide" "highlight-guide"])
-        :guide
-
-        :else :unknown))))
+        :else :effect-general))))
 
 (re-frame/reg-sub
   ::sequence-items
