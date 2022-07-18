@@ -4,3 +4,16 @@
     align-items: stretch;
     gap: 4px;
 }
+
+.component--dialog--footer {
+    .component--dialog--block {
+        @include bbs--switch-size(20px);
+
+        justify-content: flex-end;
+
+        label {
+            @include bbs--noto-12-r;
+            color: bbs--color(grey-2);
+        }
+    }
+}

@@ -12,6 +12,7 @@
                                                    :duration 1000}
                                                   {:type        "animation-sequence"
                                                    :target      "guide"
-                                                   :phrase-text "Initial phrase text"}]}]}}
+                                                   :phrase-text "Initial phrase text"}]}]
+                                   :tags ["tag-1"]}}
            :triggers      {}
            :metadata      {}})

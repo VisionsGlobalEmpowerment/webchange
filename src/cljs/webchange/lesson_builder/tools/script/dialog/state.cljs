@@ -2,6 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.tools.stage-actions :as stage-actions]
+    [webchange.utils.scene-action-data :as action-data-utils]
     [webchange.utils.scene-data :as utils]))
 
 (re-frame/reg-sub
@@ -20,3 +22,18 @@
          (map-indexed (fn [idx]
                         {:id          idx
                          :action-path (-> (concat dialog-action-path [:data idx]))})))))
+
+(re-frame/reg-sub
+  ::user-interactions-blocked?
+  :<- [::state/activity-data]
+  (fn [activity-data [_ dialog-action-path]]
+    (->> (utils/get-action activity-data dialog-action-path)
+         (:tags)
+         (some #{(:user-interactions-blocked action-data-utils/action-tags)})
+         (boolean))))
+
+(re-frame/reg-event-fx
+  ::toggle-user-interactions-block
+  (fn [_ [_ dialog-action-path]]
+    {:dispatch [::stage-actions/toggle-action-tag {:action-path dialog-action-path
+                                                   :tag        (:user-interactions-blocked action-data-utils/action-tags)}]}))

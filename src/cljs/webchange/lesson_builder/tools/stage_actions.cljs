@@ -40,6 +40,21 @@
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
+  ::toggle-action-tag
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path tag ]}]]
+    {:pre [(s/valid? ::spec/action-path action-path)
+           (s/valid? ::spec/action-tag tag)]}
+    (let [action-data (utils/get-action activity-data action-path)
+          action-tags (get action-data :tags [])
+          new-tags (if (some #{tag} action-tags)
+                     (->> action-tags (remove #(= % tag)) (vec))
+                     (-> action-tags (conj tag) (distinct) (vec)))
+          update-path (concat [:actions] action-path [:tags])
+          updated-activity-data (assoc-in activity-data update-path new-tags)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
   ::set-object-text
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [object-name text]}]]

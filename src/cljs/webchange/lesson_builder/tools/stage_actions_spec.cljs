@@ -3,6 +3,7 @@
     [clojure.spec.alpha :as s]))
 
 (s/def ::action-path sequential?)
+(s/def ::action-tag string?)
 (s/def ::action-target string?)
 
 (s/def :background-single-data/type #(= "background"))
