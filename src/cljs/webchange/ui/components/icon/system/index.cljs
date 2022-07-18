@@ -28,6 +28,7 @@
     [webchange.ui.components.icon.system.icon-effects :as effects]
     [webchange.ui.components.icon.system.icon-image-broken :as image-broken]
     [webchange.ui.components.icon.system.icon-info :as info]
+    [webchange.ui.components.icon.system.icon-move :as move]
     [webchange.ui.components.icon.system.icon-play :as play]
     [webchange.ui.components.icon.system.icon-plus :as plus]
     [webchange.ui.components.icon.system.icon-question :as question]
@@ -72,6 +73,7 @@
                         "effects"         effects/data
                         "image-broken"    image-broken/data
                         "info"            info/data
+                        "move"            move/data
                         "play"            play/data
                         "plus"            plus/data
                         "question"        question/data

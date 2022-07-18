@@ -18,6 +18,9 @@
   (fn [action-data]
     (let [{:keys [id type phrase-text]} (action-utils/get-inner-action action-data)]
       (cond
+        (= (:type action-data) "parallel")
+        :parallel
+
         ;(some #{id} available-effects-ids)
         ;:effect
 
@@ -43,3 +46,13 @@
         :guide
 
         :else :unknown))))
+
+(re-frame/reg-sub
+  ::sequence-items
+  :<- [::state/activity-data]
+  (fn [activity-data [_ dialog-action-path]]
+    (->> (utils/get-action activity-data dialog-action-path)
+         (:data)
+         (map-indexed (fn [idx]
+                        {:id          idx
+                         :action-path (-> (concat dialog-action-path [:data idx]))})))))
