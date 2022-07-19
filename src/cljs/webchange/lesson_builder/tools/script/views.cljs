@@ -14,11 +14,18 @@
 
 (defn script
   []
-  (let [dialogs @(re-frame/subscribe [::state/track-dialogs])]
+  (let [dialogs @(re-frame/subscribe [::state/track-dialogs])
+        {:keys [open? text]} @(re-frame/subscribe [::state/confirm-window])
+        handle-confirm #(re-frame/dispatch [::state/handle-confirm-window])
+        handle-cancel #(re-frame/dispatch [::state/close-confirm-window])]
     [:div.widget--script
      [header]
      [track-selector]
      [:div.widget--script--content
       (for [{:keys [id] :as dialog-data} dialogs]
         ^{:key id}
-        [dialog dialog-data])]]))
+        [dialog dialog-data])]
+     [ui/confirm {:open?      open?
+                  :on-confirm handle-confirm
+                  :on-cancel  handle-cancel}
+      text]]))

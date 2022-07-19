@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.tools.stage-actions-spec :as spec]
+    [webchange.utils.list :as list-utils]
     [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as utils]))
 
@@ -17,6 +18,31 @@
           updated-activity-data (update-in activity-data [:objects name] merge background-data)]
       ;; ToDo: update stage: change background
       ;; {:dispatch [::state-renderer/set-scene-object-state name background-data]}
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
+  ::remove-action
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path]}]]
+    {:pre [(s/valid? ::spec/action-path action-path)]}
+    (let [parent-path (concat [:actions] (butlast action-path))
+          removed-action-idx (last action-path)
+          updated-activity-data (cond
+                                  (number? removed-action-idx) (update-in activity-data parent-path list-utils/remove-at-position removed-action-idx)
+                                  (keyword? removed-action-idx) (update-in activity-data parent-path dissoc removed-action-idx))
+
+          ;; try to simplify parent action
+          container-action-path (butlast parent-path)
+          container-action-data (get-in updated-activity-data container-action-path)
+          last-action-in-parallel? (and (= "parallel" (:type container-action-data)) (> 2 (-> container-action-data :data count)))
+          updated-activity-data (if last-action-in-parallel?
+                                  (let [child-action (-> container-action-data :data last)
+                                        container-parent-path (butlast container-action-path)
+                                        container-idx (last container-action-path)]
+                                    (if (some? child-action)
+                                      (update-in activity-data container-parent-path list-utils/replace-at-position child-action container-idx)
+                                      (update-in activity-data container-parent-path list-utils/remove-at-position container-idx)))
+                                  updated-activity-data)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
@@ -42,7 +68,7 @@
 (re-frame/reg-event-fx
   ::toggle-action-tag
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-path tag ]}]]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path tag]}]]
     {:pre [(s/valid? ::spec/action-path action-path)
            (s/valid? ::spec/action-tag tag)]}
     (let [action-data (utils/get-action activity-data action-path)

@@ -11,11 +11,12 @@
   (let [target @(re-frame/subscribe [::state/target action-path])
         text @(re-frame/subscribe [::state/text action-path])
         handle-phrase-text-change #(re-frame/dispatch [::state/set-text action-path %])
-        handle-target-change #(re-frame/dispatch [::state/set-target action-path %])]
+        handle-target-change #(re-frame/dispatch [::state/set-target action-path %])
+        handle-remove-click #(re-frame/dispatch [::state/remove action-path])]
     [item-wrapper {:class-name "dialog-item dialog-item--text-animation"
                    :actions    [{:icon     "trash"
                                  :title    "Delete phrase"
-                                 :on-click #(print "Delete" action-path)}]}
+                                 :on-click handle-remove-click}]}
      [target-selector {:value     target
                        :type      :text-animation
                        :on-change handle-target-change}]

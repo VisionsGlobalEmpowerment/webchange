@@ -47,3 +47,38 @@
                  {:type        "dialog"
                   :action-path [(keyword action-name)]})
                untracked-actions)))))
+
+;; confirm window
+
+(def confirm-window-key :confirm-window)
+
+(defn- get-confirm-window
+  [db]
+  (get db confirm-window-key))
+
+(re-frame/reg-sub
+  ::confirm-window
+  :<- [path-to-db]
+  #(get-confirm-window %))
+
+(re-frame/reg-event-fx
+  ::show-confirm-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [text on-confirm]}]]
+    {:db (assoc db confirm-window-key {:open?      true
+                                       :text       text
+                                       :on-confirm on-confirm})}))
+
+(re-frame/reg-event-fx
+  ::handle-confirm-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-confirm]} (get-confirm-window db)]
+      (cond-> {:db (assoc db confirm-window-key {:open? false})}
+              (some? on-confirm) (assoc :dispatch on-confirm)))))
+
+(re-frame/reg-event-fx
+  ::close-confirm-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db confirm-window-key {:open? false})}))

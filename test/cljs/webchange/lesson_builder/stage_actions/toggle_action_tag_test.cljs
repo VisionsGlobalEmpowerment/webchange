@@ -38,7 +38,6 @@
                           (rf-test/wait-for [::state/set-activity-data]
                                             (let [data @(re-frame/subscribe [::state/activity-data])
                                                   diff (clojure.data/diff activity-mock/data data)]
-                                              (print (take 2 diff))
                                               (is (= (take 2 diff) [{:actions {:intro {:tags ["tag-1"]}}}
                                                                     {:actions {:intro {:tags nil}}}])))))))))
 

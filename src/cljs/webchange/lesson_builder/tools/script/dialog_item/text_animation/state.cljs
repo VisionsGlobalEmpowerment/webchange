@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.state :as lesson-builder]
     [webchange.lesson-builder.tools.script.dialog-item.state :as state]
+    [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.lesson-builder.tools.stage-actions :as stage-actions]
     [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as activity-utils]))
@@ -43,3 +44,11 @@
                                (action-utils/get-inner-action))]
       {:dispatch [::stage-actions/set-object-text {:object-name target
                                                    :text        text}]})))
+
+;; remove
+
+(re-frame/reg-event-fx
+  ::remove
+  (fn [_ [_ action-path]]
+    {:dispatch [::script-state/show-confirm-window {:text       "Are you sure you want to delete this text animation action?"
+                                                    :on-confirm [::stage-actions/remove-action {:action-path action-path}]}]}))

@@ -7,11 +7,12 @@
 
 (defn effect-general
   [{:keys [action-path]}]
-  (let [name @(re-frame/subscribe [::state/name action-path])]
+  (let [name @(re-frame/subscribe [::state/name action-path])
+        handle-remove-click #(re-frame/dispatch [::state/remove action-path])]
     [item-wrapper {:class-name "dialog-item--effect-general"
                    :actions    [{:icon     "trash"
                                  :title    "Delete phrase"
-                                 :on-click #(print "Delete" action-path)}]}
+                                 :on-click handle-remove-click}]}
      [ui/icon {:icon       "effects"
                :class-name "effect-general--icon"}]
      name]))
