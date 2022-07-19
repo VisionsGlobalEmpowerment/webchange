@@ -29,13 +29,27 @@
 
 ;; dialogs
 
+(defn collect-untracked-actions
+  [activity-data]
+  (let [all-actions (->> (utils/get-dialog-actions activity-data)
+                         (map clojure.core/name))
+        tracked-actions (->> (utils/get-tracks activity-data)
+                             (map :nodes)
+                             (flatten)
+                             (filter #(= (:type %) "dialog"))
+                             (map :action-id))]
+    (->> (clojure.set/difference (set all-actions)
+                                 (set tracked-actions))
+         (vec))))
+
 (re-frame/reg-sub
   ::track-dialogs
   (fn []
     [(re-frame/subscribe [::current-track])
      (re-frame/subscribe [::state/activity-data])])
-  (fn [[current-track-idx activity-data untracked-actions]]
-    (let [current-track (utils/get-track-by-index activity-data current-track-idx)]
+  (fn [[current-track-idx activity-data]]
+    (let [current-track (utils/get-track-by-index activity-data current-track-idx)
+          untracked-actions (collect-untracked-actions activity-data)]
       (if (some? current-track)
         (->> (:nodes current-track)
              (filter (fn [{:keys [type]}]
@@ -43,10 +57,10 @@
              (map (fn [{:keys [action-id]}]
                     {:id          action-id
                      :action-path [(keyword action-id)]})))
-        #_(map (fn [action-name]
-                 {:type        "dialog"
-                  :action-path [(keyword action-name)]})
-               untracked-actions)))))
+        (map (fn [action-name]
+               {:id          action-name
+                :action-path [(keyword action-name)]})
+             untracked-actions)))))
 
 ;; confirm window
 

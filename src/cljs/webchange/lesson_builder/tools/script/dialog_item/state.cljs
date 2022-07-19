@@ -16,13 +16,10 @@
   (fn [[_ action-path]]
     (re-frame/subscribe [::action-data action-path]))
   (fn [action-data]
-    (let [{:keys [id type phrase-text]} (action-utils/get-inner-action action-data)]
+    (let [{:keys [type phrase-text]} (action-utils/get-inner-action action-data)]
       (cond
         (= (:type action-data) "parallel")
         :parallel
-
-        ;(some #{id} available-effects-ids)
-        ;:effect
 
         (= type "text-animation")
         :text-animation

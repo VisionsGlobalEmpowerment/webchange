@@ -6,19 +6,6 @@
     [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.utils.scene-data :as utils]))
 
-(defn collect-untracked-actions
-  [activity-data]
-  (let [all-actions (->> (utils/get-dialog-actions activity-data)
-                         (map clojure.core/name))
-        tracked-actions (->> (utils/get-tracks activity-data)
-                             (map :nodes)
-                             (flatten)
-                             (filter #(= (:type %) "dialog"))
-                             (map :action-id))]
-    (->> (difference (set all-actions)
-                     (set tracked-actions))
-         (vec))))
-
 (re-frame/reg-sub
   ::current-track
   :<- [::script-state/current-track]
@@ -33,9 +20,10 @@
   ::available-tracks
   :<- [::state/activity-data]
   (fn [activity-data]
-    (let [untracked-actions (collect-untracked-actions activity-data)]
+    (let [untracked-actions (script-state/collect-untracked-actions activity-data)]
       (->> (cond-> (utils/get-tracks activity-data)
-                   (not (empty? untracked-actions)) (conj {:title "Untracked"}))
+                   (not (empty? untracked-actions)) (conj {:title "Untracked"
+                                                           :value nil}))
            (map-indexed (fn [idx {:keys [title]}]
                           {:text  title
                            :value idx}))))))
