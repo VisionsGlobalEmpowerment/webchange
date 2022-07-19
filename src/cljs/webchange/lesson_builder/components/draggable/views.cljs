@@ -1,12 +1,13 @@
 (ns webchange.lesson-builder.components.draggable.views
   (:require
     [reagent.core :as r]
+    [webchange.utils.drag-and-drop :as drag-and-drop]
     [webchange.ui.index :as ui]))
 
 (defn draggable
-  [{:keys [actions text]}]
-  [:div {:class-name "component--draggable"
-         :draggable  true}
+  [{:keys [action actions text]}]
+  [drag-and-drop/draggable {:class-name "component--draggable"
+                            :data       {:action action}}
    [ui/icon {:icon       "dnd"
              :class-name "draggable--icon"}]
    [:span.draggable--name text]

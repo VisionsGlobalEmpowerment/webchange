@@ -2,6 +2,14 @@
   (:require
     [clojure.string :as string]))
 
+(def empty-phrase-action {:type "sequence-data"
+                          :data [{:type     "empty"
+                                  :duration 0}
+                                 {:type               "animation-sequence"
+                                  ;:phrase-text        default-phrase-text
+                                  :phrase-placeholder "Enter phrase text"
+                                  :audio              nil}]})
+
 (def action-tags {:user-interactions-blocked "user-interactions-blocked"
                   :fx                        "fx"})
 
@@ -71,7 +79,6 @@
    :hands   2
    :emotion 1
    :default 5})
-
 
 (defn create-add-animation-action
   [{:keys [animation loop? target track] :or {loop? true}}]

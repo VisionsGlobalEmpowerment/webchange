@@ -2,7 +2,8 @@
   (:require
     [reagent.core :as r]
     [webchange.utils.observer :as observer]
-    [webchange.utils.uid :refer [get-uid]]))
+    [webchange.utils.uid :refer [get-uid]]
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- event->target
   [event]
@@ -146,7 +147,7 @@
        (into {})))
 
 (defn draggable
-  [{:keys [data drop-allowed? on-drop]
+  [{:keys [class-name data drop-allowed? on-drop]
     :or   {drop-allowed? (constantly true)}}]
   (r/with-let [id (get-uid)
                el (atom nil)
@@ -166,7 +167,8 @@
          (into [:div (merge {:id         id
                              :draggable  true
                              :ref        handle-ref
-                             :class-name "wc-draggable"}
+                             :class-name (get-class-name {"wc-draggable" true
+                                                          class-name     (some? class-name)})}
                             (get-data-attrs data))]))
     (finally
       (reset-dnd @el handlers)

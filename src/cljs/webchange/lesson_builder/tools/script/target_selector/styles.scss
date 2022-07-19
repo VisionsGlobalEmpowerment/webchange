@@ -26,13 +26,16 @@
         }
     }
 
-    .target-selector--options {}
+    .target-selector--options {
+        border-left: dashed 0.5px bbs--color(grey-3);
+        margin-left: 8px;
+    }
 
     .target-selector--option {
         @include bbs--noto-14-r;
         padding: 4px;
         cursor: pointer;
-        padding-left: 24px;
+        padding-left: 15px;
         border-radius: 2px;
 
         &:hover {

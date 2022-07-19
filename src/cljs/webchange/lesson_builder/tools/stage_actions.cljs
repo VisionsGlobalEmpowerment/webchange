@@ -81,6 +81,16 @@
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
+  ::insert-action
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-data parent-data-path position]}]]
+    ;{:pre [(s/valid? ::spec/action-path action-path)
+    ;       (s/valid? ::spec/action-tag tag)]}
+    (let [update-path (concat [:actions] parent-data-path)
+          updated-activity-data (update-in activity-data update-path list-utils/insert-at-position action-data position)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
   ::set-object-text
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [object-name text]}]]

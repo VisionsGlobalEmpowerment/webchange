@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    position: relative;
 
     border: solid 1px bbs--color(grey-4);
     border-radius: 6px;
@@ -10,6 +11,51 @@
     &.component--item-wrapper--parallel {
         padding: 0;
         border-width: 0 0 0 1px;
+    }
+
+    &.drag-over {
+        $placeholder-gap: 4px;
+        $placeholder-height: 65px;
+        $placeholder-border: 1px;
+
+        $margin: $placeholder-height + $placeholder-gap + $placeholder-border * 2;
+
+        &:before,
+        &:after {
+            width: 100%;
+            height: $placeholder-height;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: absolute;
+            left: 0;
+
+            color: bbs--color(grey-4);
+            font-size: 24px;
+
+            border: solid $placeholder-border bbs--color(grey-4);
+            border-radius: 6px;
+        }
+
+        &.drag-over-top {
+            margin-top: $margin;
+
+            &:before {
+                content: "+";
+                top: -$margin;
+            }
+        }
+
+        &.drag-over-bottom {
+            margin-bottom: $margin;
+
+            &:after {
+                content: "+";
+                bottom: -$margin;
+            }
+        }
     }
 }
 
