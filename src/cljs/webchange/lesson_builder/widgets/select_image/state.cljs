@@ -61,7 +61,16 @@
   (fn [{:keys [db]} [_ key]]
     {:db (-> db
              (assoc :current-key key)
-             (assoc :show-choose-image? true))}))
+             (assoc :show-choose-image? true))
+     :dispatch [:lesson-builder-menu/on-back [::close-choose-image]]}))
+
+(re-frame/reg-event-fx
+  ::close-choose-image
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db
+             (dissoc :current-key)
+             (assoc :show-choose-image? false))}))
 
 (re-frame/reg-event-fx
   ::select-image
@@ -70,4 +79,5 @@
     (let [current-key (get db :current-key)
           on-change (get-in db [current-key :on-change] #())]
       (on-change {:url (:path image)})
-      {:db (assoc db :show-choose-image? false)})))
+      {:db (assoc db :show-choose-image? false)
+       :dispatch [:lesson-builder-menu/on-back nil]})))

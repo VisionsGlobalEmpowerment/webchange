@@ -62,10 +62,14 @@
   ::history-back
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [last-item (get-history-last db)]
-      {:db (-> db
-               (update-current-state last-item)
-               (pop-history))})))
+    (let [on-back (get db :on-back)
+          last-item (get-history-last db)]
+      (if on-back
+        {:db (dissoc db :on-back)
+         :dispatch on-back}
+        {:db (-> db
+                 (update-current-state last-item)
+                 (pop-history))}))))
 
 (re-frame/reg-sub
   ::show-history-back?
@@ -73,6 +77,12 @@
   #(-> (get-history %)
        (count)
        (> 0)))
+
+(re-frame/reg-event-fx
+  :lesson-builder-menu/on-back
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ callback]]
+    {:db (assoc db :on-back callback)}))
 
 ;; tabs
 

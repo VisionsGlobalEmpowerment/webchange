@@ -61,7 +61,7 @@
   (fn [{:keys [db]} [_]]
     (let [filter (get-filter db)]
       {:db       (-> db (set-assets-loading true))
-       :dispatch [::warehouse/load-assets filter
+       :dispatch [::warehouse/search-assets filter
                   {:on-success [::load-assets-success]
                    :on-failure [::load-assets-failure]}]})))
 

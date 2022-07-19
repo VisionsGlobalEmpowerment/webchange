@@ -441,7 +441,7 @@
       (db/create-character-skins! {:name (:name skin) :data skin}))))
 
 (defn editor-assets [tag tags type]
-  (if (not (empty? tags))
+  (if (seq tags)
     (let [assets (map (fn [tag]
                         (db/find-editor-assets {:tag tag :type type}))
                       tags)]
@@ -451,8 +451,30 @@
            (into [])))
     (db/find-editor-assets {:tag tag :type type})))
 
+(defn editor-assets-search
+  [query tag type]
+  (let [tags (db/find-editor-tags-by-query {:query (str query "%")})]
+    (if (seq tags)
+      (let [assets-idx (->> (db/find-editor-assets-by-tags {:tags (map :id tags) :tag tag :type type})
+                            (map (juxt :id identity))
+                            (into {}))
+            assets-tags (->> (db/find-editor-tags-by-assets {:assets (map first assets-idx)})
+                             (group-by :editor-asset-id))]
+        (->> assets-tags
+             (map (fn [[asset-id tags]]
+                    (let [asset (get assets-idx asset-id)
+                          tags (mapv #(dissoc % :editor-asset-id) tags)]
+                      (assoc asset :tags tags))))))
+      [])))
+
 (defn find-all-tags []
   (db/find-all-tags))
+
+(defn find-tags-by-name
+  [tags]
+  (->> tags
+       (map #(db/find-editor-tag-by-name {:name %}))
+       (remove nil?)))
 
 (defn store-tag! [tag]
   (db/create-asset-tags! {:name tag})
@@ -472,14 +494,14 @@
 (defn- get-asset-data
   [file-name]
   (if (re-matches #"([^-]+)--(([^-]+-?))+--([^-]+)" file-name)
-    (let [[type tags _] (clojure.string/split file-name #"--")
+    (let [[type tags tag-name] (clojure.string/split file-name #"--")
           type (clojure.string/replace type "_" "-")
           tags (->> (clojure.string/split tags #"-")
                     (map (fn [tag]
                            (-> tag
                                (clojure.string/replace "_" " ")
                                (clojure.string/trim)))))]
-      {:tags tags
+      {:tags (conj tags tag-name)
        :type type})
     (let [parts (clojure.string/split file-name #"_")
           type (last parts)

@@ -44,4 +44,6 @@
 (defn choose-image-overlay
   []
   (let [handle-click #(re-frame/dispatch [::state/select-image {:image %}])]
-    [image-library {:on-click handle-click}]))
+    [image-library {:type "etc"
+                    :show-search true
+                    :on-click handle-click}]))

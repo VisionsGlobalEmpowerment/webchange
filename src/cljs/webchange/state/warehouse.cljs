@@ -759,9 +759,23 @@
     (create-request {:key    :load-assets
                      :method :get
                      :uri    (cond-> (str "/api/courses/editor/assets")
+
                                      (some? tag) (str "?tag=" tag)
                                      (some? type) (str "?type=" type)
                                      (not (empty? tags)) (str "?tags=" (clojure.string/join "," tags)))}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::search-assets
+  (fn [{:keys [_]} [_ {:keys [tag query type]} handlers]]
+    (create-request {:key    :search-assets
+                     :method :get
+                     :uri    "/api/courses/editor/assets-search"
+                     :params (->> {:tag tag
+                                   :q query
+                                   :type type}
+                                  (filter second)
+                                  (into {}))}
                     handlers)))
 
 (re-frame/reg-event-fx
@@ -780,6 +794,14 @@
                      :uri    (str "/api/courses/editor/character-skin")}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::load-assets-tags-by-names
+  (fn [{:keys [_]} [_ {:keys [tags]} handlers]]
+    (create-request {:key    :load-tags-by-names
+                     :method :get
+                     :uri    (str "/api/courses/editor/tags-by-name")
+                     :params {:tags tags}}
+                    handlers)))
 ;; Scene History
 
 (re-frame/reg-event-fx
