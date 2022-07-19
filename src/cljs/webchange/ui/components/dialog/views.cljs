@@ -50,4 +50,4 @@
           (if-not loading?
             (->> (r/current-component)
                  (r/children))
-            [[loading-overlay]]))))
+            [[focus-overlay]]))))

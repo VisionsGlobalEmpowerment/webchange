@@ -950,3 +950,13 @@
                      :created_at  created-at
                      :description "Create"})
     {:id scene-id}))
+
+(defn save-activity-version
+  [activity-id activity-data owner-id]
+  (let [created-at (jt/local-date-time)]
+    (db/save-scene! {:scene_id    activity-id
+                     :data        activity-data
+                     :owner_id    owner-id
+                     :created_at  created-at
+                     :description (str "Version " created-at)})
+    {:id activity-id}))

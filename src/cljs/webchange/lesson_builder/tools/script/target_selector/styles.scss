@@ -1,0 +1,42 @@
+.component--target-selector {
+    .target-selector--expand-icon {
+        @include bbs--icon-size(10px);
+        @include bbs--icon-color(bbs--color(grey-3));
+        margin-right: 8px;
+
+        &.target-selector--expand-icon--active {
+             @include bbs--icon-color(bbs--color(blue-1));
+        }
+    }
+
+    .target-selector--current-value {
+        @include bbs--noto-14-sb;
+
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        cursor: pointer;
+
+        &:after {
+            content: ":";
+        }
+
+        &:hover {
+            @include bbs--icon-color(bbs--color(blue-1));
+        }
+    }
+
+    .target-selector--options {}
+
+    .target-selector--option {
+        @include bbs--noto-14-r;
+        padding: 4px;
+        cursor: pointer;
+        padding-left: 24px;
+        border-radius: 2px;
+
+        &:hover {
+            background-color: bbs--color(grey-4);
+        }
+    }
+}

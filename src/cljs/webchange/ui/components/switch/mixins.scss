@@ -1,0 +1,31 @@
+@mixin bbs--switch-size($size) {
+    $height: $size;
+    $width: $size * 1.7;
+    $cap-size: $size - 6px;
+    $border-width: 2px;
+
+    input[type="checkbox"] {
+        & + label {
+            height: $height;
+            line-height: $height;
+
+            &::before {
+                height: $height;
+                width: $width;
+            }
+
+            &::after {
+                width: $cap-size;
+                height: $cap-size;
+            }
+        }
+
+        &:checked {
+            & + label {
+                &::after {
+                    right: $width - $height + $border-width;
+                }
+            }
+        }
+    }
+}

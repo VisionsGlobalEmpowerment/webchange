@@ -1,3 +1,5 @@
+@import "mixins";
+
 .bbs--switch {
     $height: 24px;
     $width: 44px;
@@ -13,7 +15,10 @@
         display: none;
 
         & + label {
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+
             height: $height;
             line-height: $height;
 
@@ -62,6 +67,8 @@
             & + label {
                 padding-right: $width + 8;
                 position: relative;
+
+                justify-content: flex-end;
 
                 &::before {
                     position: absolute;

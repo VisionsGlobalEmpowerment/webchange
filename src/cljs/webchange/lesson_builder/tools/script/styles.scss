@@ -1,0 +1,39 @@
+.widget--script {
+    @import "block/styles";
+    @import "dialog/styles";
+    @import "dialog_item/styles";
+    @import "target_selector/styles";
+    @import "text_editor/styles";
+    @import "track_selector/styles";
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1 1;
+
+    .script--header {
+        $color: bbs--color(grey-1);
+
+        @include bbs--noto-18-b;
+        @include bbs--icon-color($color);
+
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: $color;
+
+        margin-bottom: 10px;
+    }
+
+    .widget--script--content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        @include bbs--with-scrollbar;
+        @include bbs--with-scrollbar-color(bbs--color(blue-2));
+        padding-right: 6px;
+        margin-right: -10px;
+        overflow-y: scroll;
+    }
+}

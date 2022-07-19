@@ -94,10 +94,9 @@
   [db course-id scene-id scene-data]
   (let [data (dissoc scene-data :animations)]
     {:db       (update-in db [:scenes scene-id] merge data)
-     :dispatch [::warehouse/save-scene-post
-                {:course-id  course-id
-                 :scene-id   scene-id
-                 :scene-data data}
+     :dispatch [::warehouse/save-activity-version
+                {:activity-id   scene-id
+                 :activity-data scene-data}
                 {:on-success [::save-scene-success]}]}))
 
 (re-frame/reg-event-fx

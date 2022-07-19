@@ -1,0 +1,13 @@
+.dialog-item--effect-general {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+
+    @include bbs--noto-14-r;
+    color: bbs--color(grey-3);
+
+    .effect-general--icon {
+        @include script-action-icon;
+        @include bbs--icon-size(14px);
+    }
+}
