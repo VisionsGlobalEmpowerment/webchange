@@ -84,8 +84,9 @@
   ::insert-action
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [action-data parent-data-path position]}]]
-    ;{:pre [(s/valid? ::spec/action-path action-path)
-    ;       (s/valid? ::spec/action-tag tag)]}
+    {:pre [(s/valid? ::spec/action-data action-data)
+           (s/valid? ::spec/action-path parent-data-path)
+           (s/valid? ::spec/position position)]}
     (let [update-path (concat [:actions] parent-data-path)
           updated-activity-data (update-in activity-data update-path list-utils/insert-at-position action-data position)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))

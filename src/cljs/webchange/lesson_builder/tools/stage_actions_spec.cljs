@@ -2,6 +2,7 @@
   (:require
     [clojure.spec.alpha :as s]))
 
+(s/def ::action-data map?)
 (s/def ::action-path sequential?)
 (s/def ::action-tag string?)
 (s/def ::action-target string?)
@@ -23,4 +24,5 @@
                                :layered ::background-layered-data))
 
 (s/def ::object-name (s/or :string string? :keyword keyword?))
+(s/def ::position number?)
 (s/def ::text string?)
