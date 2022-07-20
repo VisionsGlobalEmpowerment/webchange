@@ -4,7 +4,7 @@
     [webchange.lesson-builder.tools.stage-actions :as stage-actions]
     [webchange.logger.index :as logger]
     [webchange.utils.numbers :refer [try-parse-int]]
-    [webchange.utils.scene-action-data :refer [empty-phrase-action]]))
+    [webchange.utils.scene-action-data :refer [get-new-phrase-action]]))
 
 (defn- parse-action-path
   [path-str]
@@ -26,7 +26,7 @@
             parent-data-path (butlast path)
             position (cond-> (last path)
                              (= relative-position :after) (inc))]
-        {:dispatch [::stage-actions/insert-action {:action-data      empty-phrase-action
+        {:dispatch [::stage-actions/insert-action {:action-data      (get-new-phrase-action)
                                                    :parent-data-path parent-data-path
                                                    :position         position}]})
       (logger/warn "Drop target is empty"))))

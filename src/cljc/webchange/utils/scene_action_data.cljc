@@ -1,6 +1,7 @@
 (ns webchange.utils.scene-action-data
   (:require
-    [clojure.string :as string]))
+    [clojure.string :as string]
+    [webchange.utils.uid :refer [get-uid]]))
 
 (def empty-phrase-action {:type "sequence-data"
                           :data [{:type     "empty"
@@ -9,6 +10,10 @@
                                   ;:phrase-text        default-phrase-text
                                   :phrase-placeholder "Enter phrase text"
                                   :audio              nil}]})
+
+(defn get-new-phrase-action
+  []
+  (assoc empty-phrase-action :uid (get-uid)))
 
 (def action-tags {:user-interactions-blocked "user-interactions-blocked"
                   :fx                        "fx"})

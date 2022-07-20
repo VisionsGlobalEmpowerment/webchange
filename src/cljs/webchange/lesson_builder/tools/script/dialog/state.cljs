@@ -19,8 +19,8 @@
   (fn [activity-data [_ dialog-action-path]]
     (->> (utils/get-action activity-data dialog-action-path)
          (:data)
-         (map-indexed (fn [idx]
-                        {:id          idx
+         (map-indexed (fn [idx {:keys [uid]}]
+                        {:id          uid
                          :action-path (-> (concat dialog-action-path [:data idx]))})))))
 
 (re-frame/reg-sub
