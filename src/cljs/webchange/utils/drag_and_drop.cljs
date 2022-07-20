@@ -1,6 +1,7 @@
 (ns webchange.utils.drag-and-drop
   (:require
     [reagent.core :as r]
+    [webchange.utils.element :as utils]
     [webchange.utils.observer :as observer]
     [webchange.utils.uid :refer [get-uid]]
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
@@ -44,16 +45,6 @@
   [event]
   (.. event -target -firstChild))
 
-(defn- add-class
-  [el class-name]
-  (-> (.-classList el)
-      (.add class-name)))
-
-(defn- remove-class
-  [el class-name]
-  (-> (.-classList el)
-      (.remove class-name)))
-
 (defn- get-hover-side
   [event]
   (let [offset-y (.-offsetY event)
@@ -69,7 +60,7 @@
   (set! (.. event -dataTransfer -effectAllowed) "move")
   (set! (.. event -dataTransfer -dropEffect) "move")
   (-> (event->target event)
-      (add-class "dragged")))
+      (utils/add-class "dragged")))
 
 (defn- handle-drag-over
   [event]
@@ -78,47 +69,56 @@
   (let [target (event->target event)
         {:keys [vertical]} (get-hover-side event)]
     (case vertical
-      :top (do (remove-class target "drag-over-bottom")
-               (add-class target "drag-over-top"))
-      :bottom (do (remove-class target "drag-over-top")
-                  (add-class target "drag-over-bottom")))))
+      :top (do (utils/remove-class target "drag-over-bottom")
+               (utils/add-class target "drag-over-top"))
+      :bottom (do (utils/remove-class target "drag-over-top")
+                  (utils/add-class target "drag-over-bottom")))))
 
 (defn- clear-drag-over-classes
-  []
-  (-> (.querySelectorAll js/document "[draggable]")
-      (.forEach (fn [item]
-                  (remove-class item "drag-over-top")
-                  (remove-class item "drag-over-bottom")
-                  (remove-class item "drag-over")))))
+  ([]
+   (clear-drag-over-classes {}))
+  ([{:keys [except only]}]
+   (let [remove-drag-over-classes #(do (utils/remove-class % "drag-over-top")
+                                       (utils/remove-class % "drag-over-bottom")
+                                       (utils/remove-class % "drag-over"))]
+     (if (some? only)
+       (remove-drag-over-classes only)
+       (-> (.querySelectorAll js/document "[draggable]")
+           (.forEach (fn [item]
+                       (when (or (nil? except)
+                                 (not= except item))
+                         (remove-drag-over-classes item)))))))))
 
 (defn- handle-drag-enter
   [drop-allowed? event]
   (swap! hover-counter inc)
-  (let [target-data (get-data-set event)]
-    (clear-drag-over-classes)
-    (when (drop-allowed? @dragged-item target-data)
+  (let [target (event->target event)
+        target-data (get-data-set event)]
+    (clear-drag-over-classes {:except target})
+    (if (drop-allowed? @dragged-item target-data)
       (-> (event->target event)
-          (add-class "drag-over")))))
+          (utils/add-class "drag-over"))
+      (clear-drag-over-classes {:only target}))))
 
 (defn- handle-drag-leave
   [event]
   (swap! hover-counter dec)
   (when (= @hover-counter 0)
     (let [target (event->target event)]
-      (remove-class target "drag-over-top")
-      (remove-class target "drag-over-bottom")
-      (remove-class target "drag-over"))))
+      (utils/remove-class target "drag-over-top")
+      (utils/remove-class target "drag-over-bottom")
+      (utils/remove-class target "drag-over"))))
 
 (defn- handle-drag-end
   [event]
   (reset! hover-counter 0)
   (let [target (.-target event)
         all-items (.querySelectorAll js/document "[draggable]")]
-    (remove-class target "dragged")
+    (utils/remove-class target "dragged")
     (.forEach all-items (fn [item]
-                          (remove-class item "drag-over-top")
-                          (remove-class item "drag-over-bottom")
-                          (remove-class item "drag-over")))))
+                          (utils/remove-class item "drag-over-top")
+                          (utils/remove-class item "drag-over-bottom")
+                          (utils/remove-class item "drag-over")))))
 
 (defn- handle-drop
   [drop-allowed? on-drop event]

@@ -25,12 +25,13 @@
       [:div {:class-name (ui/get-class-name {"component--target-selector" true
                                              class-name                   (some? class-name)})}
 
-       [:div {:class-name "target-selector--current-value"
+       [:div {:class-name (ui/get-class-name {"target-selector--current-value"        true
+                                              "target-selector--current-value--empty" (nil? current-value-data)})
               :on-click   toggle-expanded}
         [ui/icon {:icon       "caret-down"
                   :class-name (ui/get-class-name {"target-selector--expand-icon"         true
                                                   "target-selector--expand-icon--active" @expanded?})}]
-        (:text current-value-data)]
+        (get current-value-data :text "Select target")]
        (when @expanded?
          [:div {:class-name (ui/get-class-name {"target-selector--options" true})}
           (for [{:keys [value] :as option} target-options]

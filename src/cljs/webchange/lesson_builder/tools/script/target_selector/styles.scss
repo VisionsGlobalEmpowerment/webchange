@@ -24,6 +24,10 @@
         &:hover {
             @include bbs--icon-color(bbs--color(blue-1));
         }
+
+        &.target-selector--current-value--empty {
+            color: bbs--color(grey-3);
+        }
     }
 
     .target-selector--options {

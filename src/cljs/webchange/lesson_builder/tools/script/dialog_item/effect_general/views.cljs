@@ -12,7 +12,8 @@
     [item-wrapper {:class-name "dialog-item--effect-general"
                    :actions    [{:icon     "trash"
                                  :title    "Delete phrase"
-                                 :on-click handle-remove-click}]}
+                                 :on-click handle-remove-click}]
+                   :data       {:path action-path}}
      [ui/icon {:icon       "effects"
                :class-name "effect-general--icon"}]
      name]))

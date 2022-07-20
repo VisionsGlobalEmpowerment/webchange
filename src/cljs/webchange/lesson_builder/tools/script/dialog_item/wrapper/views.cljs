@@ -12,8 +12,9 @@
   [{:keys [actions class-name data parallel?]
     :or   {parallel? false}}]
   (let [drop-allowed? (fn [{:keys [action]}]
-                        (->> (keys drop-actions)
-                             (some #{action})))
+                        (and (some? data)
+                             (->> (keys drop-actions)
+                                  (some #{action}))))
         handle-drop (fn [{:keys [dragged] :as props}]
                       (let [handler (->> (get dragged :action)
                                          (get drop-actions))]

@@ -16,7 +16,8 @@
     [item-wrapper {:class-name "dialog-item dialog-item--text-animation"
                    :actions    [{:icon     "trash"
                                  :title    "Delete phrase"
-                                 :on-click handle-remove-click}]}
+                                 :on-click handle-remove-click}]
+                   :data       {:path action-path}}
      [target-selector {:value     target
                        :type      :text-animation
                        :on-change handle-target-change}]
