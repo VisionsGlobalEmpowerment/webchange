@@ -20,6 +20,8 @@
     (->> (utils/get-action activity-data dialog-action-path)
          (:data)
          (map-indexed (fn [idx {:keys [uid]}]
+                        (when (nil? uid)
+                          (print "Empty uid !!!"))
                         {:id          uid
                          :action-path (-> (concat dialog-action-path [:data idx]))})))))
 

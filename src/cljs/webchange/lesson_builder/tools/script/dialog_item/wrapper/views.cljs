@@ -6,7 +6,8 @@
     [webchange.utils.drag-and-drop :as drag-and-drop]
     [webchange.ui.index :as ui]))
 
-(def drop-actions {"add-character-dialogue" #(re-frame/dispatch [::state/insert-new-phrase-action %])})
+(def drop-actions {"add-character-dialogue" #(re-frame/dispatch [::state/insert-new-phrase-action %])
+                   "add-text-animation"     #(re-frame/dispatch [::state/insert-new-text-animation-action %])})
 
 (defn item-wrapper
   [{:keys [actions class-name data parallel?]

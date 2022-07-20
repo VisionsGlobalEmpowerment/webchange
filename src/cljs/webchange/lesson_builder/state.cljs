@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.utils.scene-action-data :refer [dialog-sequence-action?]]
     [webchange.utils.scene-data :refer [update-action]]
     [webchange.utils.uid :refer [get-uid]]
     [webchange.state.warehouse :as warehouse]))
@@ -156,9 +157,10 @@
 (defn- set-actions-uid
   [activity-data]
   (update-action activity-data
-                 #(-> % :data :uid nil?)
-                 (fn []
-                   {:uid (get-uid)})))
+                 (fn [{:keys [data]}]
+                   (dialog-sequence-action? data))
+                 (fn [action-data]
+                   (assoc action-data :uid (get-uid)))))
 
 (re-frame/reg-event-fx
   ::load-activity-success

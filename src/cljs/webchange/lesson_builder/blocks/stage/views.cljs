@@ -8,7 +8,6 @@
 (defn block-stage
   [{:keys [class-name]}]
   (let [scene-data @(re-frame/subscribe [::state/scene-data])]
-    (print "scene-data changed")
     [:div {:id         "block--stage"
            :class-name class-name}
      ;; ToDo: get rid of hard update

@@ -3,20 +3,43 @@
     [clojure.string :as string]
     [webchange.utils.uid :refer [get-uid]]))
 
-(def empty-phrase-action {:type "sequence-data"
-                          :data [{:type     "empty"
-                                  :duration 0}
-                                 {:type               "animation-sequence"
-                                  ;:phrase-text        default-phrase-text
-                                  :phrase-placeholder "Enter phrase text"
-                                  :audio              nil}]})
-
-(defn get-new-phrase-action
-  []
-  (assoc empty-phrase-action :uid (get-uid)))
-
 (def action-tags {:user-interactions-blocked "user-interactions-blocked"
                   :fx                        "fx"})
+
+(def action-templates
+  {"animation-sequence" {:type               "animation-sequence"
+                         :phrase-placeholder "Enter phrase text"
+                         :audio              nil}
+   "text-animation"     {:type        "text-animation"
+                         :animation   "color"
+                         :fill        0x00B2FF
+                         :phrase-text "Text animation"
+                         :audio       nil}})
+
+(defn- wrap-to-dialog-sequence-action
+  [action-data]
+  {:type "sequence-data"
+   :data [{:type     "empty"
+           :duration 0}
+          action-data]
+   :uid  (get-uid)})
+
+(defn- dialog-sequence-action?
+  [{:keys [type data]}]
+  (or (= type "parallel")
+      (and (= type "sequence-data")
+           (sequential? data)
+           (= (count data) 2)
+           (= (-> data first :type) "empty"))))
+
+(defn- create-dialog-action
+  [action-type]
+  (->> action-type
+       (get action-templates)
+       (wrap-to-dialog-sequence-action)))
+
+(def create-dialog-animation-sequence-action #(create-dialog-action "animation-sequence"))
+(def create-dialog-text-animation-action #(create-dialog-action "text-animation"))
 
 (defn get-action-type
   [action-data]

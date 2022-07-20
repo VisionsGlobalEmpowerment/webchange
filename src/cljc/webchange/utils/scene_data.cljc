@@ -163,10 +163,9 @@
   [action-name action-data predicate action-data-patch]
   (cond-> (if (predicate {:name action-name
                           :data action-data})
-            (->> (if (fn? action-data-patch)
-                   (action-data-patch)
-                   action-data-patch)
-                 (merge action-data))
+            (if (fn? action-data-patch)
+              (action-data-patch action-data)
+              (merge action-data action-data-patch))
             action-data)
           (action-data-utils/has-sub-actions? action-data)
           (update :data (fn [sub-actions]
