@@ -20,8 +20,6 @@
     (->> (utils/get-action activity-data dialog-action-path)
          (:data)
          (map-indexed (fn [idx {:keys [uid]}]
-                        (when (nil? uid)
-                          (print "Empty uid !!!"))
                         {:id          uid
                          :action-path (-> (concat dialog-action-path [:data idx]))})))))
 
@@ -38,4 +36,4 @@
   ::toggle-user-interactions-block
   (fn [_ [_ dialog-action-path]]
     {:dispatch [::stage-actions/toggle-action-tag {:action-path dialog-action-path
-                                                   :tag        (:user-interactions-blocked action-data-utils/action-tags)}]}))
+                                                   :tag         (:user-interactions-blocked action-data-utils/action-tags)}]}))

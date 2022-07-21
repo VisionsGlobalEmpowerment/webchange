@@ -12,7 +12,7 @@
                              :text     "Add Question"
                              :icon     "plus"
                              :on-click handle-add-question-click}]}]
-     [draggable-list
+     [draggable-list {}
       [draggable {:text    "Question 1"
                   :actions [{:icon     "edit"
                              :on-click #(print "edit")}

@@ -20,7 +20,8 @@
                           action-data)])])])
 
 (defn draggable-list
-  []
+  [{:keys [class-name]}]
   (->> (r/current-component)
        (r/children)
-       (into [:div.component--draggable-list])))
+       (into [:div {:class-name (ui/get-class-name {"component--draggable-list" true
+                                                    class-name                  (some? class-name)})}])))

@@ -27,8 +27,11 @@
     }
 
     .fold--content {
-        max-height: 160px;
         overflow: auto;
         @include bbs--with-scrollbar;
+
+        &.height-restricted {
+            max-height: 160px;
+        }
     }
 }

@@ -1,9 +1,6 @@
-@mixin script-action-icon {
-    @include bbs--icon-color(bbs--color(grey-3));
-    @include bbs--icon-size(18px);
-}
-
+@import "mixins";
 @import "wrapper/styles";
+@import "character_animation/styles";
 @import "effect_general/styles";
 @import "phrase/styles";
 @import "text_animation/styles";

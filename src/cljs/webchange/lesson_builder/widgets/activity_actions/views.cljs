@@ -13,7 +13,7 @@
     [:div.widget--activity-actions
      [options-list {:items    menu-items
                     :on-click handle-click}]
-     [draggable-list
+     [draggable-list {}
       [draggable {:text   "Add Character Dialogue"
                   :action "add-character-dialogue"}]
       [draggable {:text   "Add Text Dialogue"

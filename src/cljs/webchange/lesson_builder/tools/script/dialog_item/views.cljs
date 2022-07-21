@@ -1,6 +1,7 @@
 (ns webchange.lesson-builder.tools.script.dialog-item.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.lesson-builder.tools.script.dialog-item.character-animation.views :refer [character-animation]]
     [webchange.lesson-builder.tools.script.dialog-item.effect-general.views :refer [effect-general]]
     [webchange.lesson-builder.tools.script.dialog-item.phrase.views :refer [phrase]]
     [webchange.lesson-builder.tools.script.dialog-item.text-animation.views :refer [text-animation]]
@@ -17,10 +18,11 @@
        ^{:key id}
        [dialog-item dialog-item-data])]))
 
-(def available-items {:effect-general effect-general
-                      :parallel       actions-sequence
-                      :phrase         phrase
-                      :text-animation text-animation})
+(def available-items {:character-animation character-animation
+                      :effect-general      effect-general
+                      :parallel            actions-sequence
+                      :phrase              phrase
+                      :text-animation      text-animation})
 
 (defn dialog-item
   [{:keys [action-path] :as props}]

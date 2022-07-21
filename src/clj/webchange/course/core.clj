@@ -390,6 +390,15 @@
   (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "book"})
        (map ->website-course)))
 
+(defn- group-character-animations
+  [animations]
+  (let [movement-animation ["idle walk"]]
+    {:emotions  (->> animations
+                     (filter #(clojure.string/starts-with? % "emotion_")))
+     :movements (->> animations
+                     (filter #(or (some #{%} movement-animation)
+                                  (clojure.string/ends-with? % "_item"))))}))
+
 (defn read-character-data [character-dir public-dir]
   (let [character-name (-> character-dir .getName)
         character-skeleton (str character-dir "/skeleton.json")
@@ -397,7 +406,8 @@
         atlas-data (-> character-dir (str "/skeleton.atlas") (slurp))
         preview-path (-> (str "/images/characters/" character-name "/character_preview.png")
                          (string/replace " " "_"))
-        preview-file-path (f/relative->absolute-path preview-path public-dir)]
+        preview-file-path (f/relative->absolute-path preview-path public-dir)
+        animations (vec (map #(name (get % 0)) (vec (:animations data))))]
     (as-> {} character-data
           (assoc character-data :name (last (string/split (str character-dir) #"/")))
           (assoc character-data :width (get-in data [:skeleton :width]))
@@ -415,7 +425,8 @@
                                                 (cond-> {:name skin}
                                                         (->> preview-file-path clojure.java.io/file .isFile) (assoc :preview preview-path))))
                                             (:skins character-data)))
-          (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data)))))
+          (assoc character-data :animations animations)
+          (assoc character-data :animation-groups (group-character-animations animations))
           (assoc character-data :resources (concat ["skeleton.json"
                                                     "skeleton.atlas"]
                                                    (->> (re-seq #"\n(skeleton\d*.png)" atlas-data) (map second)))))))
@@ -915,14 +926,14 @@
   (let [created-at (jt/local-date-time)
         updated-at (jt/local-date-time)
         source (db/get-scene-by-id {:id activity-id})
-        [{scene-id :id}] (db/create-activity! {:name name
-                                               :lang lang
-                                               :image_src (:image-src source)
-                                               :status "invisible"
-                                               :owner_id owner-id
+        [{scene-id :id}] (db/create-activity! {:name       name
+                                               :lang       lang
+                                               :image_src  (:image-src source)
+                                               :status     "invisible"
+                                               :owner_id   owner-id
                                                :created_at created-at
                                                :updated_at updated-at
-                                               :type (:type source)})
+                                               :type       (:type source)})
         source-data (get-activity-current-version activity-id)]
     (db/save-scene! {:scene_id    scene-id
                      :data        source-data
@@ -935,14 +946,14 @@
   [data owner-id]
   (let [created-at (jt/local-date-time)
         updated-at (jt/local-date-time)
-        [{scene-id :id}] (db/create-activity! {:name (:cover-title data)
-                                               :lang (:lang data)
-                                               :image_src nil
-                                               :status "invisible"
-                                               :owner_id owner-id
+        [{scene-id :id}] (db/create-activity! {:name       (:cover-title data)
+                                               :lang       (:lang data)
+                                               :image_src  nil
+                                               :status     "invisible"
+                                               :owner_id   owner-id
                                                :created_at created-at
                                                :updated_at updated-at
-                                               :type "book"})
+                                               :type       "book"})
         activity-data (templates/activity-from-template (assoc data :template-id 24))]
     (db/save-scene! {:scene_id    scene-id
                      :data        activity-data

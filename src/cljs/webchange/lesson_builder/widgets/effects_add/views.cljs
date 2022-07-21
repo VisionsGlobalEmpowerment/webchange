@@ -3,8 +3,12 @@
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.components.draggable.views :refer [draggable draggable-list]]
     [webchange.lesson-builder.components.fold.views :refer [fold]]
+    [webchange.lesson-builder.widgets.effects-add.character-emotions.views :refer [character-emotions]]
     [webchange.lesson-builder.widgets.effects-add.state :as state]
-    [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]))
+    [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]
+    [webchange.ui.index :as ui]))
+
+(def effect-components {"character-emotions" character-emotions})
 
 (defn- effects-list-item
   [{:keys [action-type text]}]
@@ -14,7 +18,7 @@
 
 (defn- effects-list
   [{:keys [effects]}]
-  [draggable-list
+  [draggable-list {}
    (for [{:keys [action-type] :as effect-data} effects]
      ^{:key action-type}
      [effects-list-item effect-data])])
@@ -22,14 +26,21 @@
 (defn- effects-group
   [{:keys [component title effects]}]
   [fold {:title     title
-         :expanded? true}
+         :expanded? false
+         :height-restricted? false}
    (cond
-     (some? effects) [effects-list {:effects effects}])])
+     (some? effects) [effects-list {:effects effects}]
+     (some? component) [(get effect-components component)])])
 
 (defn effects-add
   []
-  (let [available-effects @(re-frame/subscribe [::state/available-effects])]
-    [:div.widget--effects-add
-     (for [{:keys [text] :as effects-group-data} available-effects]
-       ^{:key text}
-       [effects-group effects-group-data])]))
+  (re-frame/dispatch [::state/init])
+  (fn []
+    (let [available-effects @(re-frame/subscribe [::state/available-effects])
+          animations-loading? @(re-frame/subscribe [::state/animations-loading?])]
+      [:div.widget--effects-add
+       (when animations-loading?
+         [ui/loading-overlay])
+       (for [{:keys [text] :as effects-group-data} available-effects]
+         ^{:key text}
+         [effects-group effects-group-data])])))

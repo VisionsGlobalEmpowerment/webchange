@@ -174,7 +174,8 @@
 (defn handle-update-activity
   [course-slug scene-slug data request]
   (let [user-id (current-user request)]
-    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+    (when-not (or (is-admin? user-id)
+                  (core/collaborator-by-course-slug? user-id course-slug))
       (throw-unauthorized {:role :educator}))
     (-> (core/update-activity! course-slug scene-slug data user-id)
         handle)))
@@ -238,7 +239,9 @@
                             :skins                    [{:name                     s/Str
                                                         (s/optional-key :preview) s/Str}]
                             :resources                [s/Str]
-                            :animations               [s/Str]})
+                            :animations               [s/Str]
+                            :animation-groups         {:emotions  [s/Str]
+                                                       :movements [s/Str]}})
 
 (s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})
 (s/defschema CreateActivityVersion {:template-id s/Int s/Keyword s/Any})
