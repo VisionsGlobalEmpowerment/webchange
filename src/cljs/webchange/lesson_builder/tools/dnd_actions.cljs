@@ -1,10 +1,14 @@
-(ns webchange.lesson-builder.tools.script.dialog-item.wrapper.state
+(ns webchange.lesson-builder.tools.dnd-actions
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.stage-actions :as stage-actions]
     [webchange.logger.index :as logger]
     [webchange.utils.numbers :refer [try-parse-int]]
     [webchange.utils.scene-action-data :as action-utils]))
+
+(def drop-actions {"add-character-dialogue" #(re-frame/dispatch [::insert-new-phrase-action %])
+                   "add-effect"             #(re-frame/dispatch [::insert-new-effect-action %])
+                   "add-text-animation"     #(re-frame/dispatch [::insert-new-text-animation-action %])})
 
 (defn- parse-action-path
   [path-str]
@@ -26,6 +30,17 @@
                          (= relative-position :after) (inc))]
     {:parent-data-path parent-data-path
      :position         position}))
+
+(re-frame/reg-event-fx
+  ::insert-new-effect-action
+  (fn [_ [_ {:keys [dragged target] :as props}]]
+    (if-not (empty? target)
+      (let [{:keys [parent-data-path position]} (props->position props)
+            {:keys [action-type]} dragged]
+        {:dispatch [::stage-actions/insert-action {:action-data      (action-utils/create-dialog-effect-action {:type action-type})
+                                                   :parent-data-path parent-data-path
+                                                   :position         position}]})
+      (logger/warn "Drop target is empty"))))
 
 (re-frame/reg-event-fx
   ::insert-new-phrase-action

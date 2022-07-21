@@ -10,6 +10,7 @@
   {"animation-sequence" {:type               "animation-sequence"
                          :phrase-placeholder "Enter phrase text"
                          :audio              nil}
+   "effect"             {:type "__effect-name__"}
    "text-animation"     {:type        "text-animation"
                          :animation   "color"
                          :fill        0x00B2FF
@@ -33,12 +34,15 @@
            (= (-> data first :type) "empty"))))
 
 (defn- create-dialog-action
-  [action-type]
-  (->> action-type
-       (get action-templates)
-       (wrap-to-dialog-sequence-action)))
+  ([action-type]
+   (create-dialog-action action-type {}))
+  ([action-type action-data]
+   (-> (get action-templates action-type)
+       (merge action-data)
+       (wrap-to-dialog-sequence-action))))
 
 (def create-dialog-animation-sequence-action #(create-dialog-action "animation-sequence"))
+(def create-dialog-effect-action #(create-dialog-action "effect" %))
 (def create-dialog-text-animation-action #(create-dialog-action "text-animation"))
 
 (defn get-action-type

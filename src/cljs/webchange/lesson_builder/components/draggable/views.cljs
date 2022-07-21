@@ -5,9 +5,9 @@
     [webchange.ui.index :as ui]))
 
 (defn draggable
-  [{:keys [action actions text]}]
+  [{:keys [action actions data text]}]
   [drag-and-drop/draggable {:class-name "component--draggable"
-                            :data       {:action action}}
+                            :data       (assoc data :action action)}
    [ui/icon {:icon       "dnd"
              :class-name "draggable--icon"}]
    [:span.draggable--name text]

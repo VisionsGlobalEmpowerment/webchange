@@ -1,4 +1,8 @@
 .component--fold {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
     border: solid 1px bbs--color(grey-3);
     border-radius: 6px;
     padding: 5px 10px;
@@ -7,6 +11,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        text-transform: capitalize;
 
         &:hover {
             cursor: pointer;

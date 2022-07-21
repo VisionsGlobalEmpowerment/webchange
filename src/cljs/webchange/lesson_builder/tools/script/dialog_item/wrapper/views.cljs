@@ -1,13 +1,11 @@
 (ns webchange.lesson-builder.tools.script.dialog-item.wrapper.views
   (:require
-    [re-frame.core :as re-frame]
+    [camel-snake-kebab.extras :refer [transform-keys]]
+    [camel-snake-kebab.core :refer [->kebab-case-keyword]]
     [reagent.core :as r]
-    [webchange.lesson-builder.tools.script.dialog-item.wrapper.state :as state]
+    [webchange.lesson-builder.tools.dnd-actions :refer [drop-actions]]
     [webchange.utils.drag-and-drop :as drag-and-drop]
     [webchange.ui.index :as ui]))
-
-(def drop-actions {"add-character-dialogue" #(re-frame/dispatch [::state/insert-new-phrase-action %])
-                   "add-text-animation"     #(re-frame/dispatch [::state/insert-new-text-animation-action %])})
 
 (defn item-wrapper
   [{:keys [actions class-name data parallel?]
@@ -19,7 +17,9 @@
         handle-drop (fn [{:keys [dragged] :as props}]
                       (let [handler (->> (get dragged :action)
                                          (get drop-actions))]
-                        (handler props)))]
+                        (->> props
+                             (transform-keys ->kebab-case-keyword)
+                             (handler))))]
     [drag-and-drop/draggable {:class-name    (ui/get-class-name {"component--item-wrapper"           true
                                                                  "component--item-wrapper--parallel" parallel?})
                               :data          data
