@@ -33,11 +33,12 @@
   ::add-spread
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (update :spreads-number inc)
-             (update-in [:form :spreads] concat [{}])
-             (update :spread-state concat [{:left true
-                                            :right true}]))}))
+    (let [current-id (-> db (get :spreads-number) (+ 2))]
+      {:db (-> db
+               (update :spreads-number inc)
+               (update-in [:form :spreads] concat [{:id current-id}])
+               (update :spread-state concat [{:left true
+                                              :right true}]))})))
 
 (re-frame/reg-sub
   ::spread-data

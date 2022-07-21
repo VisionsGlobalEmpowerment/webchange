@@ -795,7 +795,7 @@
                                    [key (merge action created-action)])))
          (into {}))))
 
-(defn update-activity-template!
+(defn update-course-activity-template!
   [course-slug scene-slug user-id]
   (let [scene-data (get-scene-latest-version course-slug scene-slug)
         {:keys [created updated]} (-> scene-data templates/prepare-history (get-in [:metadata :history]))
@@ -995,3 +995,27 @@
                      :created_at  created-at
                      :description "Apply Template Options"})
     {:data scene-data}))
+
+(defn update-activity-template!
+  [activity-id user-id]
+  (let [scene-data (get-activity-current-version activity-id)
+        {:keys [created updated]} (get-in scene-data [:metadata :history])
+        created-activity (as-> (templates/activity-from-template created) a
+                               (reduce #(templates/update-activity-from-template %1 %2) a updated))
+        original-assets (:assets scene-data)
+        preserved-actions (preserve-actions scene-data created-activity)
+        activity (-> created-activity
+                     (update :actions merge preserved-actions)
+                     (update-preserved-objects scene-data)
+                     (update :assets #(->> (concat original-assets %)
+                                           (flatten)
+                                           (distinct))))
+        created-at (jt/local-date-time)]
+    (db/save-scene! {:scene_id    activity-id
+                     :data        activity
+                     :owner_id    user-id
+                     :created_at  created-at
+                     :description "Update Template"})
+    {:activity-id activity-id
+     :data activity}))
+

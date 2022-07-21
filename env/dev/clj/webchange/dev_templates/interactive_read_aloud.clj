@@ -11,7 +11,7 @@
   (t/update-activity test-course-slug scene-slug)
   (t/update-activity test-course-slug scene-slug :actions [:dialog-intro :page-cover-action])
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Book"
               :template-id   32

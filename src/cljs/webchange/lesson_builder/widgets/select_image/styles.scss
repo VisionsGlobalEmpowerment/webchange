@@ -12,10 +12,9 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 250px;
+	width: 230px;
 	gap: 26px;
 	
-	padding: 36px 8px;
 	.bbs--image {
 	    width: 133px;
 	    border-radius: 6px;
@@ -26,6 +25,7 @@
 	    display: flex;
 	    gap: 5px;
 	    .bbs--button {
+		width: 120px;
 		border-radius: 30px;
 	    }
 	}

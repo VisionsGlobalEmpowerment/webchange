@@ -7,7 +7,7 @@
   (def test-course-slug (-> (t/create-test-course) :slug))
   (def scene-slug "test-activity")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "IRA"
               :template-id   45
@@ -95,4 +95,9 @@
         template-options {:action "template-options"
                           :data {:book-id 825}}]
     (core/update-activity! course-slug scene-slug template-options user-id))
+
+  (let [user-id 1
+        course-slug "english"
+        scene-slug "interactive-read-aloud-newest"]
+    (core/update-course-activity-template! course-slug scene-slug user-id))
   )

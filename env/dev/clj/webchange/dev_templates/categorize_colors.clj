@@ -25,7 +25,7 @@
 
   (def test-course-slug "test-course-english-lgenzzlu")
   (def scene-slug "categorize-colors-2")
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (core/get-scene-latest-version test-course-slug scene-slug)
 

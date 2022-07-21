@@ -490,6 +490,15 @@
                      :params data
                      :uri    (str "/api/activities/" activity-id "/template-options")}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::update-template
+  (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
+    (create-request {:key    :update-template
+                     :method :put
+                     :params {:update true}
+                     :uri    (str "/api/activities/" activity-id "/update-template")}
+                    handlers)))
     
 (re-frame/reg-event-fx
   ::load-available-books

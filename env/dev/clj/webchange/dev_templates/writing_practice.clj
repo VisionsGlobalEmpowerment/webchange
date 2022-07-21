@@ -10,7 +10,7 @@
 
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
   (t/update-activity-metadata test-course-slug scene-slug)
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Writing Practice"
               :template-id   40

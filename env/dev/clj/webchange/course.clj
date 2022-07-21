@@ -24,4 +24,10 @@
         latest-version (course/get-scene-latest-version course-slug scene-slug)]
     (-> latest-version
         :actions
-        :open-page)))
+        :open-page))
+
+  (let [activity-id 586]
+    (course/update-activity-template! activity-id 1))
+  
+  (let [activity-id 555]
+    (course/get-activity-current-version activity-id)))

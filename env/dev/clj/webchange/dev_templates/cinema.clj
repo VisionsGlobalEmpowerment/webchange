@@ -11,11 +11,11 @@
   (def scene-slug "test-activity")
 
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (def course-slug "english")
   (def scene-slug "alphabet-letter-video")
-  (core/update-activity-template! course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Cinema"
               :template-id   43

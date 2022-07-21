@@ -1,0 +1,66 @@
+.rhyming-sides {
+    .rhyming-sides-header {
+    }
+
+    .rhyming-sides-list {
+	margin-top: 20px;
+	
+	.rhyming-sides-list-item {
+	    cursor: pointer;
+	    
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+
+	    padding: 10px;
+	    font-weight: 700;
+            font-size: 14px;
+            line-height: 18px;
+
+	    border-bottom: 1px solid $color-grey-4;
+	}
+    }
+   
+}
+
+.rhyming-sides-overlay {
+    .rhyming-sides-answers {
+	margin-top: 40px;
+
+	.rhyming-sides-answers-header {
+	    display: flex;
+	    justify-content: space-between;
+
+	    .icon-wrapper {
+		background-color: $color-blue-1;
+		border-radius: 20px;
+		overflow: hidden;
+	    }
+	}
+
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	.rhyming-sides-answer {
+	    	padding: 7px 15px;
+		border: 1px solid $color-grey-4;
+		border-radius: 4px;
+
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+	    .rhyming-sides-answer-header {
+		display: flex;
+		justify-content: space-between;
+
+		color: $color-blue-1;
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 18px;
+
+	    }
+	}
+    }
+}

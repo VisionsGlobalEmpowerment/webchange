@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.lesson-builder.blocks.menu.state :as menu-state]))
 
 (def path-to-db :widgets/select-image)
 
@@ -62,7 +63,7 @@
     {:db (-> db
              (assoc :current-key key)
              (assoc :show-choose-image? true))
-     :dispatch [:lesson-builder-menu/on-back [::close-choose-image]]}))
+     :dispatch [::menu-state/on-back [::close-choose-image]]}))
 
 (re-frame/reg-event-fx
   ::close-choose-image
@@ -79,5 +80,4 @@
     (let [current-key (get db :current-key)
           on-change (get-in db [current-key :on-change] #())]
       (on-change {:url (:path image)})
-      {:db (assoc db :show-choose-image? false)
-       :dispatch [:lesson-builder-menu/on-back nil]})))
+      {:dispatch [::menu-state/history-back]})))

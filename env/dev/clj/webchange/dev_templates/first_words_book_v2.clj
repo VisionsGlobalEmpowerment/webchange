@@ -8,7 +8,7 @@
   (def course-slug "english")
   (def scene-slug "qqq-2")
   (core/get-scene-latest-version course-slug scene-slug)
-  (core/update-activity-template! course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! course-slug scene-slug t/user-id)
   (core/save-scene! course-slug scene-slug {} t/user-id)
 
   (let [data {:title       "Letter"
@@ -41,7 +41,7 @@
 
   (let [course-slug "english"
         scene-slug "first-words-book-letter-a"]
-    (core/update-activity-template! course-slug scene-slug t/user-id))
+    (core/update-course-activity-template! course-slug scene-slug t/user-id))
 
   (let [user-id 1
         course-slug "english"

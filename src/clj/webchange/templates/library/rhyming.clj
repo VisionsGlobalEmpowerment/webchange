@@ -6,6 +6,11 @@
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
+(def template-options
+  [{:type "note"
+    :text "In this activity you will have a right and left goal word area which you’ll match with correct words you specify. You need to choose a word and an image that will be used as the goal on each side. Then you choose images to be used for the correct words that rhyme with the main word for that goal."}
+   {:type "rhyming-sides"}])
+
 (def m {:id          27
         :name        "Rhyming"
         :tags        ["Independent Practice"]
@@ -39,7 +44,9 @@
                                                                 :min-width  20}}}}
                       :remove-ball {:title   "Remove ball"
                                     :options {:remove-ball {:label "Remove ball"
-                                                            :type  "remove-editable-object"}}}}})
+                                                            :type  "remove-editable-object"}}}
+                      :template-options {:title "Tempalte Options"
+                                         :options template-options}}})
 
 (def t {:assets        [{:url "/raw/img/rhyming/background.png", :size 10 :type "image"}
                         {:url "/raw/img/rhyming/surface.png", :size 10 :type "image"}

@@ -8,7 +8,7 @@
   (def test-course-slug "test-course-english-hkgwpieh")
   (def scene-slug "test-activity")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Slide Riddle No Concapt"
               :template-id   38
@@ -34,6 +34,12 @@
         scene-slug "riddle-colors-3"]
     (core/get-scene-latest-version course-slug scene-slug))
 
+  (let [activity-id 607]
+    (core/get-activity-current-version activity-id))
+
+  (let [activity-id 607]
+    (core/update-activity-template! activity-id t/user-id))
+  
   (let [user-id 1
         course-slug "english"
         scene-slug "riddle-colors-3"

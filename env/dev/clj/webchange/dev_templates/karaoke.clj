@@ -11,7 +11,7 @@
   (def test-course-slug "english")
   (def scene-slug "rhyme-karaoke-twinkle")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Karaoke"
               :template-id   36

@@ -3,7 +3,9 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as lesson-builder-state]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]))
+    [webchange.lesson-builder.blocks.menu.state :as menu-state]
+    [webchange.lesson-builder.widgets.select-image.state :as select-image-state]
+    [webchange.utils.alphabets :as alphabets]))
 
 (def path-to-db :lesson-builder/template-options)
 
@@ -30,14 +32,17 @@
 (re-frame/reg-event-fx
   ::init
   [(re-frame/inject-cofx :activity-data)
+   (re-frame/inject-cofx :activity-info)
    (i/path path-to-db)]
-  (fn [{:keys [db activity-data]} [_]]
+  (fn [{:keys [db activity-data activity-info]} [_]]
     (let [options (get-template-options activity-data)
           saved-props (get-saved-props activity-data)]
       {:db (-> db
+               (assoc :lang (:lang activity-info))
                (assoc :options options)
                (assoc :saved-props saved-props)
-               (assoc :form saved-props))})))
+               (assoc :form saved-props)
+               (assoc :overlays []))})))
 
 (re-frame/reg-sub
   ::options
@@ -83,4 +88,55 @@
   (fn [{:keys [db]} [_]]
     (let [template-options (get-in db [:form])]
       {:dispatch-n [[::lesson-builder-state/apply-template-options template-options]
-                    [::menu-state/set-current-component :design-actions]]})))
+                    [::menu-state/history-back]]})))
+
+(re-frame/reg-event-fx
+  ::update-template
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:dispatch-n [[::lesson-builder-state/update-template]
+                  [::menu-state/history-back]]}))
+
+(re-frame/reg-sub
+  ::letter-options
+  :<- [path-to-db]
+  (fn [db [_]]
+    (let [lang (:lang db)]
+      (alphabets/options-for lang))))
+
+(defn- show-last-overlay-only
+  [overlays]
+  (if (seq overlays)
+    (let [last-index (-> (count overlays) dec)]
+      (as-> overlays o
+            (map #(assoc % :hidden true) o)
+            (into [] o)
+            (update o last-index assoc :hidden false)))
+    overlays))
+
+(re-frame/reg-sub
+  ::opened-overlays
+  :<- [path-to-db]
+  :<- [::select-image-state/show-choose-image?]
+  (fn [[db show-choose-image?] [_]]
+    (let [overlays (get db :overlays)]
+      (->> (concat overlays [(when show-choose-image? {:key :choose-image
+                                                       :label "Choose Image"})])
+           (remove nil?)
+           (show-last-overlay-only)))))
+
+(re-frame/reg-event-fx
+  ::show-overlay
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ label key]]
+    {:db (-> db
+             (update :overlays concat [{:key key
+                                        :label label}]))
+     :dispatch [::menu-state/on-back [::close-overlay]]}))
+
+(re-frame/reg-event-fx
+  ::close-overlay
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db
+             (update :overlays drop-last))}))

@@ -83,6 +83,12 @@
   :<- [path-to-db]
   #(get-activity-info %))
 
+(re-frame/reg-cofx
+ :activity-info
+ (fn [{:keys [db] :as co-effects}]
+   (->> (get-activity-info db path-to-db)
+        (assoc co-effects :activity-info))))
+
 ;; activity versions
 
 (def activity-versions-loading-key :activity-versions-loading?)
@@ -253,6 +259,32 @@
 
 (re-frame/reg-event-fx
   ::save-activity-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-activity-saving false))}))
+
+;; Update Template
+(re-frame/reg-event-fx
+  ::update-template
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [id]} (get-activity-info db)]
+      {:db       (-> db (set-activity-saving true))
+       :dispatch [::warehouse/update-template
+                  {:activity-id id}
+                  {:on-success [::update-template-success]
+                   :on-failure [::update-template-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::update-template-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [data]}]]
+    {:db       (-> db
+                   (set-activity-saving false)
+                   (set-activity-data data))}))
+
+(re-frame/reg-event-fx
+  ::update-template-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-saving false))}))

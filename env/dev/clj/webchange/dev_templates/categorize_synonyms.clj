@@ -20,7 +20,7 @@
   (def test-course-slug "test-course-english-asrenawi")
   (def scene-slug "categorize-synonyms")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
 
 

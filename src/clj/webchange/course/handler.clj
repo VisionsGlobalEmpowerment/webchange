@@ -184,7 +184,7 @@
   (let [user-id (current-user request)]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator}))
-    (-> (core/update-activity-template! course-slug scene-slug user-id)
+    (-> (core/update-course-activity-template! course-slug scene-slug user-id)
         handle)))
 
 (defn handle-publish-course
@@ -598,4 +598,13 @@
       (when-not (is-admin? user-id)
         (throw-unauthorized {:role :educator}))
       (-> (core/apply-template-options activity-id data user-id)
+          response)))
+  (PUT "/api/activities/:activity-id/update-template" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/update-template]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/update-activity-template! activity-id user-id)
           response))))

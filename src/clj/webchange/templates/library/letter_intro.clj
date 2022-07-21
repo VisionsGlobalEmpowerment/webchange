@@ -5,13 +5,30 @@
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
+(def template-options
+  [{:type "note"
+    :text "You will be introducing a letter to show a student in this activity. Below you choose the letter and a sample word and word image to use. These will show on an easel. You will specify the dialog within the builder next."}
+   {:type "letter-lookup"
+    :key :letter
+    :label "Choose Letter"
+    :placeholder "Choose"}
+   {:key         :word
+    :label       "Word"
+    :type        "string"
+    :placeholder "Ex. baby"}
+   {:key         :image
+    :label       "Word Image"
+    :type        "image"}])
+
 (def m {:id          39
         :name        "Letter intro"
         :tags        ["listening comprehension"]
         :description "letter introduction"
         :lesson-sets ["concepts-single"]
         :fields      [{:name "image-src",
-                       :type "image"}]})
+                       :type "image"}]
+        :actions {:template-options {:title "Template Options"
+                                     :options template-options}}})
 
 (def t {:assets
         [{:url "/raw/img/casa/background.jpg", :size 10, :type "image"}

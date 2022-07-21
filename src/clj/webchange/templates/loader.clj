@@ -18,7 +18,7 @@
            (let [version (db/get-latest-scene-version {:scene_id (:id scene)})]
              (if (get-in version [:data :metadata :history :created :template-id])
                (try
-                 (core/update-activity-template! (:slug course) (:name scene) user-id)
+                 (core/update-course-activity-template! (:slug course) (:name scene) user-id)
                  (print ".")
                  (catch Exception e (str "caught exception: " (.getMessage e))))
                (print "x"))

@@ -1,12 +1,16 @@
-@import "first_words_book_spreads/styles";
-
 .widget--template-options {
+    @import "first_words_book_spreads/styles";
+    @import "select_book/styles";
+    @import "slide_riddle_rounds/styles";
+    @import "sandbox_digging_rounds/styles";
+    @import "rhyming_sides/styles";
+    
     display: flex;
     flex-direction: column;
     gap: 10px;
 
     height: 100%;
-    
+    max-width: 280px;
     .note {
         display: flex;
         align-items: flex-start;
@@ -40,5 +44,13 @@
     .template-options-apply {
 	border-radius: 30px;
     }
+
+    .update-template {
+	margin: 20px;
+	border-radius: 30px;
+    }
 }
 
+.widget--template-options-hidden {
+    display: none;
+}
