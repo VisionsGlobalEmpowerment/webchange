@@ -13,10 +13,13 @@
                         "character-movements" character-movements})
 
 (defn- effects-list-item
-  [{:keys [action-type text]}]
-  [draggable {:text   text
-              :action "add-effect"
-              :data   {:action-type action-type}}])
+  [{:keys [action-id action-type text]}]
+  [draggable (merge {:text text}
+                    (cond
+                      (some? action-type) {:action "add-effect"
+                                           :data   {:action-type action-type}}
+                      (some? action-id) {:action "add-action"
+                                         :data   {:action-id action-id}}))])
 
 (defn- effects-list
   [{:keys [effects]}]

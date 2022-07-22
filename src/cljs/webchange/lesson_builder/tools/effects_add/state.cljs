@@ -105,24 +105,32 @@
          (filter (fn [{:keys [animations]}]
                    (-> animations empty? not))))))
 
-;(def available-effects
-;  [{:title     "Template effects"
-;    :component "template-effects"}
-;   {:title     "Image effects"
-;    :component "image-effects"}
-;   ])
+(re-frame/reg-sub
+  ::activity-effects
+  :<- [::state/activity-data]
+  (fn [activity-data]
+    (utils/get-available-effects activity-data)))
 
 (re-frame/reg-sub
   ::available-effects
   :<- [::state/activity-data]
   :<- [::activity-characters]
   :<- [::animations]
+  :<- [::activity-effects]
   :<- [::characters-with-animation-group :emotions]
-  (fn [[activity-data characters animations characters-with-emotions]]
+  (fn [[activity-data characters animations activity-effects characters-with-emotions]]
     (let [characters-with-movements (get-characters-with-movements {:activity-data activity-data
                                                                     :characters    characters
                                                                     :animations    animations})]
+      ;; ToDo: add selected action effects: webchange/editor_v2/activity_dialogs/menu/state.cljs:57
       (cond-> []
+              (-> activity-effects empty? not)
+              (conj {:title   "Template effect"
+                     :effects (map (fn [{:keys [action name]}]
+                                     {:text      name
+                                      :action-id action})
+                                   activity-effects)})
+
               (-> characters-with-emotions empty? not)
               (conj {:title     "Character emotions"
                      :component "character-emotions"})

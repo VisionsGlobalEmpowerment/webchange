@@ -16,7 +16,9 @@
    :default 5})
 
 (def action-templates
-  {"add-animation"      {:type   "add-animation"
+  {"activity-action"    {:type "action"
+                         :id   "__tid__"}
+   "add-animation"      {:type   "add-animation"
                          :id     "idle"
                          :loop   true
                          :target "__target__"
@@ -70,6 +72,7 @@
     (string? track) (->> track (keyword) (get animation-tracks))
     :else (:default animation-tracks)))
 
+(def create-dialog-activity-action #(create-dialog-action "activity-action" %))
 (def create-dialog-animation-sequence-action #(create-dialog-action "animation-sequence"))
 (def create-dialog-effect-action #(create-dialog-action "effect" %))
 (def create-dialog-text-animation-action #(create-dialog-action "text-animation"))

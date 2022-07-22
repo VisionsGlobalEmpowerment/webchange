@@ -6,7 +6,8 @@
     [webchange.utils.numbers :refer [try-parse-int]]
     [webchange.utils.scene-action-data :as action-utils]))
 
-(def drop-actions {"add-emotion"            #(re-frame/dispatch [::insert-new-animation-action % :emotion])
+(def drop-actions {"add-action"            #(re-frame/dispatch [::insert-new-activity-action %])
+                   "add-emotion"            #(re-frame/dispatch [::insert-new-animation-action % :emotion])
                    "add-movement"            #(re-frame/dispatch [::insert-new-movement-action %])
                    "remove-emotion"         #(re-frame/dispatch [::insert-remove-animation-action % :emotion])
                    "add-character-dialogue" #(re-frame/dispatch [::insert-new-phrase-action %])
@@ -35,6 +36,17 @@
      :position         position}))
 
 (re-frame/reg-event-fx
+  ::insert-new-activity-action
+  (fn [_ [_ {:keys [dragged target] :as props}]]
+    (if-not (empty? target)
+      (let [{:keys [parent-data-path position]} (props->position props)
+            {:keys [action-id]} dragged]
+        {:dispatch [::stage-actions/insert-action {:action-data      (action-utils/create-dialog-activity-action {:id action-id})
+                                                   :parent-data-path parent-data-path
+                                                   :position         position}]})
+      (logger/warn "Drop target is empty"))))
+
+(re-frame/reg-event-fx
   ::insert-new-animation-action
   (fn [_ [_ {:keys [dragged target] :as props} track]]
     (if-not (empty? target)
@@ -57,8 +69,6 @@
             action-data (action-utils/create-dialog-char-movement-action {:action        movement
                                                                           :transition-id character
                                                                           :target        target})]
-        (print "dragged" dragged)
-        (print "action-data" action-data)
         {:dispatch [::stage-actions/insert-action {:action-data      action-data
                                                    :parent-data-path parent-data-path
                                                    :position         position}]})
