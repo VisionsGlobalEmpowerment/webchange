@@ -27,6 +27,10 @@
    "animation-sequence" {:type               "animation-sequence"
                          :phrase-placeholder "Enter phrase text"
                          :audio              nil}
+   "char-movement"      {:type          "char-movement"
+                         :action        "__action__"
+                         :transition-id "__character__"
+                         :target        "__target__"}
    "effect"             {:type "__type__"}
    "text-animation"     {:type        "text-animation"
                          :animation   "color"
@@ -75,6 +79,7 @@
                                          :loop?  loop?
                                          :target target
                                          :track  (get-track-number track)}))
+(def create-dialog-char-movement-action #(create-dialog-action "char-movement" %))
 (defn create-dialog-remove-animation-action
   [{:keys [target track]}]
   (create-dialog-action "remove-animation" {:target target

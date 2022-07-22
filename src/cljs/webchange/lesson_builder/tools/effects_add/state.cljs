@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.tools.effects-add.character-movements.utils :refer [get-characters-with-movements]]
     [webchange.utils.scene-data :as utils]
     [webchange.state.warehouse :as warehouse]))
 
@@ -109,34 +110,42 @@
 ;    :component "template-effects"}
 ;   {:title     "Image effects"
 ;    :component "image-effects"}
-;   {:title     "Character movements"
-;    :component "character-movements"}
 ;   ])
 
 (re-frame/reg-sub
   ::available-effects
+  :<- [::state/activity-data]
+  :<- [::activity-characters]
+  :<- [::animations]
   :<- [::characters-with-animation-group :emotions]
-  (fn [characters-with-emotions]
-    (cond-> []
-            (-> characters-with-emotions empty? not)
-            (conj {:title     "Character emotions"
-                   :component "character-emotions"})
+  (fn [[activity-data characters animations characters-with-emotions]]
+    (let [characters-with-movements (get-characters-with-movements {:activity-data activity-data
+                                                                    :characters    characters
+                                                                    :animations    animations})]
+      (cond-> []
+              (-> characters-with-emotions empty? not)
+              (conj {:title     "Character emotions"
+                     :component "character-emotions"})
 
-            :always
-            (concat [{:title   "Guide effect"
-                      :effects [{:text        "Hide guide"
-                                 :action-type "hide-guide"}
-                                {:text        "Show guide"
-                                 :action-type "show-guide"}
-                                {:text        "Highlight guide"
-                                 :action-type "highlight-guide"}]}
-                     {:title   "Skip activity"
-                      :effects [{:text        "Start skip"
-                                 :action-type "start-skip-region"}
-                                {:text        "End skip"
-                                 :action-type "end-skip-region"}]}
-                     {:title   "Sound effect"
-                      :effects [{:text        "Mute background music"
-                                 :action-type "mute-background-music"}
-                                {:text        "Unute background music"
-                                 :action-type "unmute-background-music"}]}]))))
+              (-> characters-with-movements empty? not)
+              (conj {:title     "Character movements"
+                     :component "character-movements"})
+
+              :always
+              (concat [{:title   "Guide effect"
+                        :effects [{:text        "Hide guide"
+                                   :action-type "hide-guide"}
+                                  {:text        "Show guide"
+                                   :action-type "show-guide"}
+                                  {:text        "Highlight guide"
+                                   :action-type "highlight-guide"}]}
+                       {:title   "Skip activity"
+                        :effects [{:text        "Start skip"
+                                   :action-type "start-skip-region"}
+                                  {:text        "End skip"
+                                   :action-type "end-skip-region"}]}
+                       {:title   "Sound effect"
+                        :effects [{:text        "Mute background music"
+                                   :action-type "mute-background-music"}
+                                  {:text        "Unute background music"
+                                   :action-type "unmute-background-music"}]}])))))

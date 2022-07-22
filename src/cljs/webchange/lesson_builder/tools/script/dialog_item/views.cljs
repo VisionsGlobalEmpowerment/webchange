@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.script.dialog-item.character-animation.views :refer [character-animation]]
+    [webchange.lesson-builder.tools.script.dialog-item.character-movement.views :refer [character-movement]]
     [webchange.lesson-builder.tools.script.dialog-item.effect-general.views :refer [effect-general]]
     [webchange.lesson-builder.tools.script.dialog-item.phrase.views :refer [phrase]]
     [webchange.lesson-builder.tools.script.dialog-item.text-animation.views :refer [text-animation]]
@@ -19,6 +20,7 @@
        [dialog-item dialog-item-data])]))
 
 (def available-items {:character-animation character-animation
+                      :character-movement  character-movement
                       :effect-general      effect-general
                       :parallel            actions-sequence
                       :phrase              phrase

@@ -7,6 +7,7 @@
     [webchange.utils.scene-action-data :as action-utils]))
 
 (def drop-actions {"add-emotion"            #(re-frame/dispatch [::insert-new-animation-action % :emotion])
+                   "add-movement"            #(re-frame/dispatch [::insert-new-movement-action %])
                    "remove-emotion"         #(re-frame/dispatch [::insert-remove-animation-action % :emotion])
                    "add-character-dialogue" #(re-frame/dispatch [::insert-new-phrase-action %])
                    "add-effect"             #(re-frame/dispatch [::insert-new-effect-action %])
@@ -42,6 +43,22 @@
             action-data (action-utils/create-dialog-add-animation-action {:animation animation
                                                                           :target    target
                                                                           :track     track})]
+        {:dispatch [::stage-actions/insert-action {:action-data      action-data
+                                                   :parent-data-path parent-data-path
+                                                   :position         position}]})
+      (logger/warn "Drop target is empty"))))
+
+(re-frame/reg-event-fx
+  ::insert-new-movement-action
+  (fn [_ [_ {:keys [dragged target] :as props}]]
+    (if-not (empty? target)
+      (let [{:keys [parent-data-path position]} (props->position props)
+            {:keys [character movement target]} dragged
+            action-data (action-utils/create-dialog-char-movement-action {:action        movement
+                                                                          :transition-id character
+                                                                          :target        target})]
+        (print "dragged" dragged)
+        (print "action-data" action-data)
         {:dispatch [::stage-actions/insert-action {:action-data      action-data
                                                    :parent-data-path parent-data-path
                                                    :position         position}]})

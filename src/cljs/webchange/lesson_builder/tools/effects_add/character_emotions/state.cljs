@@ -28,9 +28,7 @@
                               (clojure.string/replace "-" " ")
                               (clojure.string/capitalize))
                    :value object})))
-         (sort-by :text)
-         (concat [{:text  "Select Character"
-                   :value ""}]))))
+         (sort-by :text))))
 
 (def current-character-key :current-character)
 
