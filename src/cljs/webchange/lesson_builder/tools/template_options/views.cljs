@@ -7,9 +7,9 @@
     [webchange.lesson-builder.tools.template-options.sandbox-digging-rounds.views :as sandbox-digging-rounds]
     [webchange.lesson-builder.tools.template-options.onset-rime-rounds.views :as onset-rime-rounds]
     [webchange.lesson-builder.tools.template-options.select-book.views :as select-book]
+    [webchange.lesson-builder.tools.template-options.select-video.views :as select-video]
     [webchange.lesson-builder.tools.template-options.rhyming-sides.views :as rhyming-sides]
     [webchange.lesson-builder.widgets.select-image.views :refer [select-image choose-image-overlay]]
-    [webchange.lesson-builder.widgets.select-image.state :as choose-image-state]
     [webchange.ui.index :as ui]))
 
 (defn- note-field
@@ -82,6 +82,7 @@
     :image [image-field props]
     :lookup [lookup-field props]
     :select-book [select-book/field props]
+    :select-video [select-video/field props]
     :first-words-book-spreads [first-words-book-spreads/field props]
     :slide-riddle-rounds [slide-riddle-rounds/field props]
     :sandbox-digging-rounds [sandbox-digging-rounds/field props]
