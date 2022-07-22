@@ -1,10 +1,10 @@
-(ns webchange.lesson-builder.widgets.effects-add.views
+(ns webchange.lesson-builder.tools.effects-add.views
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.components.draggable.views :refer [draggable draggable-list]]
     [webchange.lesson-builder.components.fold.views :refer [fold]]
-    [webchange.lesson-builder.widgets.effects-add.character-emotions.views :refer [character-emotions]]
-    [webchange.lesson-builder.widgets.effects-add.state :as state]
+    [webchange.lesson-builder.tools.effects-add.character-emotions.views :refer [character-emotions]]
+    [webchange.lesson-builder.tools.effects-add.state :as state]
     [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]
     [webchange.ui.index :as ui]))
 

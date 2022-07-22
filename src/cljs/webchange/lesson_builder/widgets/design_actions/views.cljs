@@ -4,8 +4,8 @@
     [webchange.lesson-builder.widgets.design-actions.state :as state]
     [webchange.ui.index :as ui]
 
+    [webchange.lesson-builder.tools.effects-add.views :as effects-add-views]
     [webchange.lesson-builder.widgets.activity-actions.views :as activity-actions-views]
-    [webchange.lesson-builder.widgets.effects-add.views :as effects-add-views]
     [webchange.lesson-builder.widgets.question-options.views :as question-options-views]))
 
 (def content-components {:activity-actions activity-actions-views/activity-actions

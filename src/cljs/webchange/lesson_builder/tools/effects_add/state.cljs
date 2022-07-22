@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.widgets.effects-add.state
+(ns webchange.lesson-builder.tools.effects-add.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]

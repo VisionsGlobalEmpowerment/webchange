@@ -1,9 +1,9 @@
-(ns webchange.lesson-builder.widgets.effects-add.character-emotions.state
+(ns webchange.lesson-builder.tools.effects-add.character-emotions.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.widgets.effects-add.state :as effects-state]
+    [webchange.lesson-builder.tools.effects-add.state :as effects-state]
     [webchange.utils.scene-data :as utils]
     [webchange.utils.scene-action-data :as action-utils]))
 

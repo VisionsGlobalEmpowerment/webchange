@@ -1,8 +1,8 @@
-(ns webchange.lesson-builder.widgets.effects-add.character-emotions.views
+(ns webchange.lesson-builder.tools.effects-add.character-emotions.views
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.components.draggable.views :refer [draggable draggable-list]]
-    [webchange.lesson-builder.widgets.effects-add.character-emotions.state :as state]
+    [webchange.lesson-builder.tools.effects-add.character-emotions.state :as state]
     [webchange.ui.index :as ui]))
 
 (defn character-emotions
