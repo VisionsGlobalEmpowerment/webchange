@@ -40,3 +40,4 @@
 (s/def ::duplicate (s/keys :req-un [::name ::lang]))
 (s/def ::template-options map?)
 (s/def ::update-template (s/keys :req-un [::update]))
+(s/def ::template-action (s/keys :req-un [::common-action? ::action ::data]))

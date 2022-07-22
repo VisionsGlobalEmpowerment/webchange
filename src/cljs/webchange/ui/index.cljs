@@ -18,6 +18,7 @@
     [webchange.ui.components.link.views :as link-views]
     [webchange.ui.components.list.views :as list-views]
     [webchange.ui.components.logo.views :as logo-views]
+    [webchange.ui.components.note.views :as note-views]
     [webchange.ui.components.overlay.views :as overlay-views]
     [webchange.ui.components.panel.views :as panel-views]
     [webchange.ui.components.password.views :as password-views]
@@ -52,6 +53,7 @@
 (def list-item list-views/list-item)
 (def loading-overlay overlay-views/loading-overlay)
 (def navigation-icon icon-views/navigation-icon)
+(def note note-views/note)
 (def focus-overlay overlay-views/focus-overlay)
 (def panel panel-views/panel)
 (def password password-views/password)

@@ -61,17 +61,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ key]]
     {:db (-> db
-             (assoc :current-key key)
-             (assoc :show-choose-image? true))
-     :dispatch [::menu-state/on-back [::close-choose-image]]}))
-
-(re-frame/reg-event-fx
-  ::close-choose-image
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (dissoc :current-key)
-             (assoc :show-choose-image? false))}))
+             (assoc :current-key key))
+     :dispatch [::menu-state/set-current-component :choose-image]}))
 
 (re-frame/reg-event-fx
   ::select-image

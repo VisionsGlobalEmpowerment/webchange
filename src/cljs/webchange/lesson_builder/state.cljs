@@ -288,3 +288,31 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-saving false))}))
+
+;; Add Image
+(re-frame/reg-event-fx
+  ::add-image
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    (let [{:keys [id]} (get-activity-info db)]
+      {:db       (-> db (set-activity-saving true))
+       :dispatch [::warehouse/activity-template-action
+                  {:activity-id id
+                   :action "add-image"
+                   :data data}
+                  {:on-success [::add-image-success]
+                   :on-failure [::add-image-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::add-image-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [data]}]]
+    {:db       (-> db
+                   (set-activity-saving false)
+                   (set-activity-data data))}))
+
+(re-frame/reg-event-fx
+  ::add-image-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-activity-saving false))}))

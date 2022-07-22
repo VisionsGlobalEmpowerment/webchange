@@ -607,4 +607,13 @@
       (when-not (is-admin? user-id)
         (throw-unauthorized {:role :educator}))
       (-> (core/update-activity-template! activity-id user-id)
+          response)))
+  (POST "/api/activities/:activity-id/template-actions" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/template-action]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/apply-template-action activity-id data user-id)
           response))))

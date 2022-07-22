@@ -983,6 +983,18 @@
                      :description (str "Version " created-at)})
     {:id activity-id}))
 
+(defn apply-template-action
+  [activity-id {:keys [action] :as data} owner-id]
+  (let [created-at (jt/local-date-time)
+        scene-data (-> (get-activity-current-version activity-id)
+                       (templates/update-activity-from-template data))]
+    (db/save-scene! {:scene_id    activity-id
+                     :data        scene-data
+                     :owner_id    owner-id
+                     :created_at  created-at
+                     :description (str "Template Action (" action ")")})
+    {:data scene-data}))
+
 (defn apply-template-options
   [activity-id data owner-id]
   (let [created-at (jt/local-date-time)

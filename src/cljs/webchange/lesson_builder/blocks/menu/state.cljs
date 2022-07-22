@@ -16,9 +16,9 @@
 
 (defn- get-current-state
   [db]
-  (get db current-state-key {:current-tab       nil
-                             :current-component nil
-                             :title             ""}))
+  (get db current-state-key {:current-tab nil
+                             :components  nil
+                             :title       ""}))
 
 (re-frame/reg-sub
   ::current-state
@@ -34,8 +34,12 @@
   (update-current-state db {:current-tab tab-key}))
 
 (defn- set-current-component
-  [db tab-key]
-  (update-current-state db {:current-component tab-key}))
+  [db component-key]
+  (update-current-state db {:components [component-key]}))
+
+(defn- push-current-component
+  [db component-key]
+  (update-in db [current-state-key :components] concat [component-key]))
 
 ;; history
 
@@ -56,7 +60,7 @@
 
 (defn- push-history
   [db item]
-  (update db history-key conj item))
+  (update db history-key concat [item]))
 
 (re-frame/reg-event-fx
   ::history-back
@@ -118,7 +122,7 @@
     (let [current-state (get-current-state db)]
       {:db (-> db
                (push-history current-state)
-               (set-current-component component-key))})))
+               (push-current-component component-key))})))
 
 ;; events
 
@@ -129,4 +133,5 @@
     {:db (-> db
              (set-current-tab tab)
              (set-current-component component)
-             (assoc :on-back []))}))
+             (assoc :on-back [])
+             (assoc history-key []))}))

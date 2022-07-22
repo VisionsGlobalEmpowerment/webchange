@@ -4,7 +4,6 @@
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as lesson-builder-state]
     [webchange.lesson-builder.blocks.menu.state :as menu-state]
-    [webchange.lesson-builder.widgets.select-image.state :as select-image-state]
     [webchange.utils.alphabets :as alphabets]))
 
 (def path-to-db :lesson-builder/template-options)
@@ -117,11 +116,9 @@
 (re-frame/reg-sub
   ::opened-overlays
   :<- [path-to-db]
-  :<- [::select-image-state/show-choose-image?]
-  (fn [[db show-choose-image?] [_]]
+  (fn [db]
     (let [overlays (get db :overlays)]
-      (->> (concat overlays [(when show-choose-image? {:key :choose-image
-                                                       :label "Choose Image"})])
+      (->> overlays
            (remove nil?)
            (show-last-overlay-only)))))
 

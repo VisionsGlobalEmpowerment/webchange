@@ -492,6 +492,17 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::activity-template-action
+  (fn [{:keys [_]} [_ {:keys [activity-id action data]} handlers]]
+    (create-request {:key    :apply-activity-template-action
+                     :method :post
+                     :params {:common-action? true
+                              :action         action
+                              :data           data}
+                     :uri    (str "/api/activities/" activity-id "/template-actions")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::update-template
   (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
     (create-request {:key    :update-template

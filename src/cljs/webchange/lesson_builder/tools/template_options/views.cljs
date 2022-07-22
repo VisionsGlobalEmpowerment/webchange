@@ -9,14 +9,12 @@
     [webchange.lesson-builder.tools.template-options.select-book.views :as select-book]
     [webchange.lesson-builder.tools.template-options.select-video.views :as select-video]
     [webchange.lesson-builder.tools.template-options.rhyming-sides.views :as rhyming-sides]
-    [webchange.lesson-builder.widgets.select-image.views :refer [select-image choose-image-overlay]]
+    [webchange.lesson-builder.widgets.select-image.views :refer [select-image]]
     [webchange.ui.index :as ui]))
 
 (defn- note-field
   [{:keys [text]}]
-  [:div.note
-   [ui/icon {:icon "info"}]
-   text])
+  [ui/note {:text text}])
 
 (declare option-field)
 
@@ -96,8 +94,7 @@
      (for [option options]
        [option-field option])]))
 
-(def overlay-components {:choose-image choose-image-overlay
-                         :rhyming-side rhyming-sides/overlay})
+(def overlay-components {:rhyming-side rhyming-sides/overlay})
 
 (defn- overlays-widget
   []
