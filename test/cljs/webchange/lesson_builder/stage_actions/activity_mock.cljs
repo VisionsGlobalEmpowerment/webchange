@@ -11,77 +11,115 @@
                            :text-object {:text        "Letter"
                                          :font-family "Tabschool"}}
            :scene-objects [["background"]]
-           :actions       {:intro         {:type "sequence-data"
-                                           :data [{:type "sequence-data"
-                                                   :data [{:type     "empty"
-                                                           :duration 1000}
-                                                          {:type        "animation-sequence"
-                                                           :target      "guide"
-                                                           :phrase-text "Initial phrase text"}]}]
-                                           :tags ["tag-1"]}
-                           :dialog-1      {:type "sequence-data"
-                                           :data [{:type "sequence-data"
-                                                   :data [{:type     "empty"
-                                                           :duration 1000}
-                                                          {:type        "animation-sequence"
-                                                           :target      "guide"
-                                                           :phrase-text "Phrase 1"}]}
-                                                  {:type "sequence-data"
-                                                   :data [{:type     "empty"
-                                                           :duration 1000}
-                                                          {:type        "animation-sequence"
-                                                           :target      "guide"
-                                                           :phrase-text "Phrase 2"}]}]}
-                           :dialog-2      {:type "sequence-data"
-                                           :data [{:type "parallel"
-                                                   :data [{:type "sequence-data"
-                                                           :data [{:type     "empty"
-                                                                   :duration 1000}
-                                                                  {:type        "animation-sequence"
-                                                                   :target      "guide"
-                                                                   :phrase-text "Phrase 1"}]}
-                                                          {:type "sequence-data"
-                                                           :data [{:type     "empty"
-                                                                   :duration 1000}
-                                                                  {:type        "animation-sequence"
-                                                                   :target      "guide"
-                                                                   :phrase-text "Phrase 2"}]}
-                                                          {:type "sequence-data"
-                                                           :data [{:type     "empty"
-                                                                   :duration 1000}
-                                                                  {:type        "animation-sequence"
-                                                                   :target      "guide"
-                                                                   :phrase-text "Phrase 3"}]}]}]}
-                           :dialog-3      {:type "sequence-data"
-                                           :data [{:type "parallel"
-                                                   :data [{:type "sequence-data"
-                                                           :data [{:type     "empty"
-                                                                   :duration 1000}
-                                                                  {:type        "animation-sequence"
-                                                                   :target      "guide"
-                                                                   :phrase-text "Phrase 1"}]}
-                                                          {:type "sequence-data"
-                                                           :data [{:type     "empty"
-                                                                   :duration 1000}
-                                                                  {:type        "animation-sequence"
-                                                                   :target      "guide"
-                                                                   :phrase-text "Phrase 2"}]}]}]}
-                           :simple-action {:type        "animation-sequence"
-                                           :target      "guide"
-                                           :phrase-text "Phrase 1"}
-                           :insert-action {:type "sequence-data"
-                                           :data [{:type "sequence-data"
-                                                   :data [{:type     "empty"
-                                                           :duration 1000}
-                                                          {:type        "animation-sequence"
-                                                           :target      "guide"
-                                                           :phrase-text "Phrase 1"}]}
-                                                  {:type "sequence-data"
-                                                   :data [{:type     "empty"
-                                                           :duration 1000}
-                                                          {:type        "animation-sequence"
-                                                           :target      "guide"
-                                                           :phrase-text "Phrase 2"}]}]}}
+           :actions       {:intro            {:type "sequence-data"
+                                              :data [{:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Initial phrase text"}]}]
+                                              :tags ["tag-1"]}
+                           :dialog-1         {:type "sequence-data"
+                                              :data [{:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 1"}]}
+                                                     {:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 2"}]}]}
+                           :dialog-2         {:type "sequence-data"
+                                              :data [{:type "parallel"
+                                                      :data [{:type "sequence-data"
+                                                              :data [{:type     "empty"
+                                                                      :duration 1000}
+                                                                     {:type        "animation-sequence"
+                                                                      :target      "guide"
+                                                                      :phrase-text "Phrase 1"}]}
+                                                             {:type "sequence-data"
+                                                              :data [{:type     "empty"
+                                                                      :duration 1000}
+                                                                     {:type        "animation-sequence"
+                                                                      :target      "guide"
+                                                                      :phrase-text "Phrase 2"}]}
+                                                             {:type "sequence-data"
+                                                              :data [{:type     "empty"
+                                                                      :duration 1000}
+                                                                     {:type        "animation-sequence"
+                                                                      :target      "guide"
+                                                                      :phrase-text "Phrase 3"}]}]}]}
+                           :dialog-3         {:type "sequence-data"
+                                              :data [{:type "parallel"
+                                                      :data [{:type "sequence-data"
+                                                              :data [{:type     "empty"
+                                                                      :duration 1000}
+                                                                     {:type        "animation-sequence"
+                                                                      :target      "guide"
+                                                                      :phrase-text "Phrase 1"}]}
+                                                             {:type "sequence-data"
+                                                              :data [{:type     "empty"
+                                                                      :duration 1000}
+                                                                     {:type        "animation-sequence"
+                                                                      :target      "guide"
+                                                                      :phrase-text "Phrase 2"}]}]}]}
+                           :simple-action    {:type        "animation-sequence"
+                                              :target      "guide"
+                                              :phrase-text "Phrase 1"}
+                           :insert-action    {:type "sequence-data"
+                                              :data [{:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 1"}]}
+                                                     {:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 2"}]}]}
+                           :reorder-action-1 {:type "sequence-data"
+                                              :data [{:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 1"}]}
+                                                     {:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 2"}]}
+                                                     {:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 3"}]}]}
+                           :reorder-action-2 {:type "sequence-data"
+                                              :data [{:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 1"}]}
+                                                     {:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 2"}]}
+                                                     {:type "sequence-data"
+                                                      :data [{:type     "empty"
+                                                              :duration 1000}
+                                                             {:type        "animation-sequence"
+                                                              :target      "guide"
+                                                              :phrase-text "Phrase 3"}]}]}}
            :triggers      {}
            :metadata      {}})
 
@@ -101,6 +139,6 @@
                     (rf-test/wait-for [::state/set-activity-data]
                                       (let [current-data @(re-frame/subscribe [::state/activity-data])
                                             diff (clojure.data/diff data current-data)]
-                                        ;(when-not (= (take 2 diff) expected-result)
-                                        ;  (print ">>" (take 2 diff)))
+                                        (when-not (= (take 2 diff) expected-result)
+                                          (print ">>" (take 2 diff)))
                                         (is (= (take 2 diff) expected-result))))))

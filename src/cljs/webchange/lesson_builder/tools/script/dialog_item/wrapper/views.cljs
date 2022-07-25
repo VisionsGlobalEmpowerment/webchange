@@ -22,8 +22,9 @@
                              (handler))))]
     [drag-and-drop/draggable {:class-name    (ui/get-class-name {"component--item-wrapper"           true
                                                                  "component--item-wrapper--parallel" parallel?})
-                              :data          data
+                              :data          (assoc data :action "move-dialog-action")
                               :on-drop       handle-drop
+                              :drag-control  ".component--item-wrapper--move-icon"
                               :drop-allowed? drop-allowed?}
      [ui/icon {:icon       "move"
                :class-name "component--item-wrapper--move-icon"}]

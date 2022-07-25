@@ -20,29 +20,34 @@
       ;; {:dispatch [::state-renderer/set-scene-object-state name background-data]}
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
+(defn- remove-action
+  [activity-data {:keys [action-path]}]
+  (let [parent-path (concat [:actions] (butlast action-path))
+        removed-action-idx (last action-path)
+        updated-activity-data (cond
+                                (number? removed-action-idx) (update-in activity-data parent-path list-utils/remove-at-position removed-action-idx)
+                                (keyword? removed-action-idx) (update-in activity-data parent-path dissoc removed-action-idx))
+
+        ;; try to simplify parent action
+        container-action-path (butlast parent-path)
+        container-action-data (get-in updated-activity-data container-action-path)
+        last-action-in-parallel? (and (= "parallel" (:type container-action-data)) (> 2 (-> container-action-data :data count)))
+        updated-activity-data (if last-action-in-parallel?
+                                (let [child-action (-> container-action-data :data last)
+                                      container-parent-path (butlast container-action-path)
+                                      container-idx (last container-action-path)]
+                                  (if (some? child-action)
+                                    (update-in activity-data container-parent-path list-utils/replace-at-position child-action container-idx)
+                                    (update-in activity-data container-parent-path list-utils/remove-at-position container-idx)))
+                                updated-activity-data)]
+    updated-activity-data))
+
 (re-frame/reg-event-fx
   ::remove-action
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-path]}]]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path] :as props}]]
     {:pre [(s/valid? ::spec/action-path action-path)]}
-    (let [parent-path (concat [:actions] (butlast action-path))
-          removed-action-idx (last action-path)
-          updated-activity-data (cond
-                                  (number? removed-action-idx) (update-in activity-data parent-path list-utils/remove-at-position removed-action-idx)
-                                  (keyword? removed-action-idx) (update-in activity-data parent-path dissoc removed-action-idx))
-
-          ;; try to simplify parent action
-          container-action-path (butlast parent-path)
-          container-action-data (get-in updated-activity-data container-action-path)
-          last-action-in-parallel? (and (= "parallel" (:type container-action-data)) (> 2 (-> container-action-data :data count)))
-          updated-activity-data (if last-action-in-parallel?
-                                  (let [child-action (-> container-action-data :data last)
-                                        container-parent-path (butlast container-action-path)
-                                        container-idx (last container-action-path)]
-                                    (if (some? child-action)
-                                      (update-in activity-data container-parent-path list-utils/replace-at-position child-action container-idx)
-                                      (update-in activity-data container-parent-path list-utils/remove-at-position container-idx)))
-                                  updated-activity-data)]
+    (let [updated-activity-data (remove-action activity-data props)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
@@ -80,15 +85,51 @@
           updated-activity-data (assoc-in activity-data update-path new-tags)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
+(defn- insert-action
+  [activity-data {:keys [action-data parent-data-path position]}]
+  (let [update-path (concat [:actions] parent-data-path)
+        updated-activity-data (update-in activity-data update-path list-utils/insert-at-position action-data position)]
+    updated-activity-data))
+
 (re-frame/reg-event-fx
   ::insert-action
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-data parent-data-path position]}]]
+  (fn [{:keys [activity-data]} [_ {:keys [action-data parent-data-path position] :as props}]]
     {:pre [(s/valid? ::spec/action-data action-data)
            (s/valid? ::spec/action-path parent-data-path)
            (s/valid? ::spec/position position)]}
-    (let [update-path (concat [:actions] parent-data-path)
-          updated-activity-data (update-in activity-data update-path list-utils/insert-at-position action-data position)]
+    {:dispatch [::state/set-activity-data (insert-action activity-data props)]}))
+
+(defn- split-position
+  [path]
+  (let [path (vec path)
+        position (last path)
+        path (butlast path)]
+    [path position]))
+
+(defn- conj-position
+  [path position]
+  (-> (vec path)
+      (conj position)))
+
+(re-frame/reg-event-fx
+  ::move-action
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [source-action-path target-action-path]}]]
+    {:pre [(s/valid? ::spec/action-path source-action-path)
+           (s/valid? ::spec/action-path target-action-path)]}
+    (let [source-action-data (utils/get-action activity-data source-action-path)
+          [target-action-path target-action-position] (split-position target-action-path)
+          [source-action-path source-action-position] (split-position source-action-path)
+          source-action-position (if (and (= target-action-path source-action-path)
+                                          (< target-action-position source-action-position))
+                                   (inc source-action-position)
+                                   source-action-position)
+          updated-activity-data (-> activity-data
+                                    (insert-action {:action-data      source-action-data
+                                                    :parent-data-path target-action-path
+                                                    :position         target-action-position})
+                                    (remove-action {:action-path (conj-position source-action-path source-action-position)}))]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx

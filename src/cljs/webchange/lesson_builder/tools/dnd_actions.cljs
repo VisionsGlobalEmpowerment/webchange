@@ -6,13 +6,14 @@
     [webchange.utils.numbers :refer [try-parse-int]]
     [webchange.utils.scene-action-data :as action-utils]))
 
-(def drop-actions {"add-action"            #(re-frame/dispatch [::insert-new-activity-action %])
+(def drop-actions {"add-action"             #(re-frame/dispatch [::insert-new-activity-action %])
                    "add-emotion"            #(re-frame/dispatch [::insert-new-animation-action % :emotion])
-                   "add-movement"            #(re-frame/dispatch [::insert-new-movement-action %])
+                   "add-movement"           #(re-frame/dispatch [::insert-new-movement-action %])
                    "remove-emotion"         #(re-frame/dispatch [::insert-remove-animation-action % :emotion])
                    "add-character-dialogue" #(re-frame/dispatch [::insert-new-phrase-action %])
                    "add-effect"             #(re-frame/dispatch [::insert-new-effect-action %])
-                   "add-text-animation"     #(re-frame/dispatch [::insert-new-text-animation-action %])})
+                   "add-text-animation"     #(re-frame/dispatch [::insert-new-text-animation-action %])
+                   "move-dialog-action"     #(re-frame/dispatch [::move-dialog-action %])})
 
 (defn- parse-action-path
   [path-str]
@@ -34,6 +35,12 @@
                          (= relative-position :after) (inc))]
     {:parent-data-path parent-data-path
      :position         position}))
+
+(defn- parse-target-position
+  [props]
+  (let [{:keys [parent-data-path position]} (props->position props)]
+    (-> (vec parent-data-path)
+        (conj position))))
 
 (re-frame/reg-event-fx
   ::insert-new-activity-action
@@ -117,3 +124,17 @@
                                                    :parent-data-path parent-data-path
                                                    :position         position}]})
       (logger/warn "Drop target is empty"))))
+
+(re-frame/reg-event-fx
+  ::move-dialog-action
+  (fn [_ [_ {:keys [dragged target] :as props}]]
+    (if-not (empty? target)
+      (let [target-action-path (parse-target-position props)
+            source-action-path (parse-action-path (:path dragged))]
+        {:dispatch [::stage-actions/move-action {:source-action-path source-action-path
+                                                 :target-action-path target-action-path}]})
+      (logger/warn "Drop target is empty"))))
+
+{:dragged {:path "dialog-intro,data,2", :action "move-dialog-action"},
+ :target  {:path "dialog-intro,data,1", :action "move-dialog-action"},
+ :side    {:vertical :top}}

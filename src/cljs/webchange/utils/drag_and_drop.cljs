@@ -55,12 +55,15 @@
 (defonce hover-counter (atom 0))
 
 (defn- handle-drag-start
-  [event]
-  (reset! dragged-item (get-data-set event))
-  (set! (.. event -dataTransfer -effectAllowed) "move")
-  (set! (.. event -dataTransfer -dropEffect) "move")
-  (-> (event->target event)
-      (utils/add-class "dragged")))
+  [drag-allowed? event]
+  (print "@drag-allowed?" @drag-allowed?)
+  (if @drag-allowed?
+    (do (reset! dragged-item (get-data-set event))
+        (set! (.. event -dataTransfer -effectAllowed) "move")
+        (set! (.. event -dataTransfer -dropEffect) "move")
+        (-> (event->target event)
+            (utils/add-class "dragged")))
+    (.preventDefault event)))
 
 (defn- handle-drag-over
   [event]
@@ -129,6 +132,12 @@
                 :target  (get-data-set event)
                 :side    (get-hover-side event)}))))
 
+(defn- handle-mouse-over
+  [drag-allowed? drag-control event]
+  (reset! drag-allowed? (-> (.-target event)
+                            (utils/closest drag-control)
+                            (some?))))
+
 (defn- init-dnd
   [el handlers]
   (doseq [[event handler] handlers]
@@ -147,16 +156,18 @@
        (into {})))
 
 (defn draggable
-  [{:keys [class-name data drop-allowed? on-drop]
+  [{:keys [class-name data drag-control drop-allowed? on-drop]
     :or   {drop-allowed? (constantly true)}}]
   (r/with-let [id (get-uid)
                el (atom nil)
-               handlers {"dragstart" handle-drag-start
-                         "dragover"  handle-drag-over
-                         "dragenter" (partial handle-drag-enter drop-allowed?)
-                         "dragleave" handle-drag-leave
-                         "dragend"   handle-drag-end
-                         "drop"      (partial handle-drop drop-allowed? on-drop)}
+               drag-allowed? (atom (-> drag-control some? not))
+               handlers (cond-> {"dragstart" (partial handle-drag-start drag-allowed?)
+                                 "dragover"  handle-drag-over
+                                 "dragenter" (partial handle-drag-enter drop-allowed?)
+                                 "dragleave" handle-drag-leave
+                                 "dragend"   handle-drag-end
+                                 "drop"      (partial handle-drop drop-allowed? on-drop)}
+                                (some? drag-control) (assoc "mouseover" (partial handle-mouse-over drag-allowed? drag-control)))
                init #(init-dnd @el handlers)
                reset #(reset-dnd @el handlers)
                handle-ref #(when (some? %)

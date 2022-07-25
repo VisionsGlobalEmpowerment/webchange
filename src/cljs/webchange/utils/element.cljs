@@ -24,3 +24,7 @@
    (cond-> (-> (get-style el)
                (aget prop-name))
            parse? (try-parse-number true))))
+
+(defn closest
+  [el selector]
+  (.closest el selector))
