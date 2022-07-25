@@ -16,7 +16,7 @@
   (fn [[_ action-path]]
     (re-frame/subscribe [::action-data action-path]))
   (fn [action-data]
-    (let [{:keys [type phrase-text phrase-placeholder]} (action-utils/get-inner-action action-data)]
+    (let [{:keys [type phrase-text phrase-placeholder] :as inner-action} (action-utils/get-inner-action action-data)]
       (cond
         (= (:type action-data) "parallel")
         :parallel
@@ -29,6 +29,9 @@
 
         (some #{type} ["char-movement"])
         :character-movement
+
+        (action-utils/call-question-action? inner-action)
+        :question
 
         (or (some? phrase-text)
             (some? phrase-placeholder))

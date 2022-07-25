@@ -109,7 +109,9 @@
   ::activity-effects
   :<- [::state/activity-data]
   (fn [activity-data]
-    (utils/get-available-effects activity-data)))
+    (->> (utils/get-available-effects activity-data)
+         (filter (fn [{:keys [type]}]
+                   (not= type "question"))))))
 
 (re-frame/reg-sub
   ::available-effects

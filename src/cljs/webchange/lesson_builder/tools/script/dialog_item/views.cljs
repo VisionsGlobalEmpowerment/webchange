@@ -5,6 +5,7 @@
     [webchange.lesson-builder.tools.script.dialog-item.character-movement.views :refer [character-movement]]
     [webchange.lesson-builder.tools.script.dialog-item.effect-general.views :refer [effect-general]]
     [webchange.lesson-builder.tools.script.dialog-item.phrase.views :refer [phrase]]
+    [webchange.lesson-builder.tools.script.dialog-item.question.views :refer [question]]
     [webchange.lesson-builder.tools.script.dialog-item.text-animation.views :refer [text-animation]]
     [webchange.lesson-builder.tools.script.dialog-item.state :as state]
     [webchange.lesson-builder.tools.script.dialog-item.wrapper.views :refer [item-wrapper]]))
@@ -24,7 +25,8 @@
                       :effect-general      effect-general
                       :parallel            actions-sequence
                       :phrase              phrase
-                      :text-animation      text-animation})
+                      :text-animation      text-animation
+                      :question            question})
 
 (defn dialog-item
   [{:keys [action-path] :as props}]

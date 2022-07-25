@@ -236,3 +236,8 @@
     (= effect-name "remove-animation") "Remove"
     :default (-> (or effect-name "")
                  (clojure.string/replace "emotion_" ""))))
+
+(defn call-question-action?
+  [{:keys [id type]}]
+  (and (= type "action")
+       (clojure.string/starts-with? id "question-")))
