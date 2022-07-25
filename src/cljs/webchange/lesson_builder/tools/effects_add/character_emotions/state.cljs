@@ -3,9 +3,8 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.tools.effects-add.state :as effects-state]
-    [webchange.utils.scene-data :as utils]
-    [webchange.utils.scene-action-data :as action-utils]))
+    [webchange.lesson-builder.tools.effects-add.character-emotions.utils :as utils]
+    [webchange.lesson-builder.tools.effects-add.state :as effects-state]))
 
 (def path-to-db :lesson-builder/effects-emotions)
 
@@ -19,16 +18,12 @@
 (re-frame/reg-sub
   ::character-options
   :<- [::state/activity-data]
-  :<- [::effects-state/characters-with-animation-group :emotions]
-  (fn [[activity-data characters]]
-    (->> characters
-         (map (fn [{:keys [object]}]
-                (let [{:keys [scene-name]} (utils/get-scene-object activity-data object)]
-                  {:text  (-> (or scene-name object)
-                              (clojure.string/replace "-" " ")
-                              (clojure.string/capitalize))
-                   :value object})))
-         (sort-by :text))))
+  :<- [::effects-state/activity-characters]
+  :<- [::effects-state/animations]
+  (fn [[activity-data characters animations]]
+    (utils/get-characters-with-emotions {:activity-data activity-data
+                                         :characters    characters
+                                         :animations    animations})))
 
 (def current-character-key :current-character)
 
@@ -52,14 +47,11 @@
 (re-frame/reg-sub
   ::emotion-options
   :<- [::current-character]
-  :<- [::effects-state/characters-with-animation-group :emotions]
-  (fn [[current-character characters]]
+  :<- [::effects-state/activity-characters]
+  :<- [::effects-state/animations]
+  (fn [[current-character characters animations]]
     (if (some? current-character)
-      (->> characters
-           (some (fn [{:keys [object animations]}]
-                   (and (= object current-character) animations)))
-           (map (fn [emotion]
-                  {:text  (action-utils/animation->display-name emotion)
-                   :value emotion}))
-           (sort-by :text))
+      (utils/get-character-emotions {:character  current-character
+                                     :characters characters
+                                     :animations animations})
       [])))

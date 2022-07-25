@@ -239,9 +239,7 @@
                             :skins                    [{:name                     s/Str
                                                         (s/optional-key :preview) s/Str}]
                             :resources                [s/Str]
-                            :animations               [s/Str]
-                            :animation-groups         {:emotions  [s/Str]
-                                                       :movements [s/Str]}})
+                            :animations               [s/Str]})
 
 (s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})
 (s/defschema CreateActivityVersion {:template-id s/Int s/Keyword s/Any})

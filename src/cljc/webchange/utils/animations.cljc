@@ -34,3 +34,7 @@
          "->")
        " "
        (object->display-name activity-data target)))
+
+(defn emotion-animation?
+  [animation-name]
+  (clojure.string/starts-with? animation-name "emotion_"))

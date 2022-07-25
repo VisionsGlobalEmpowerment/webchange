@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.tools.effects-add.character-emotions.utils :refer [get-characters-with-emotions]]
     [webchange.lesson-builder.tools.effects-add.character-movements.utils :refer [get-characters-with-movements]]
     [webchange.utils.scene-data :as utils]
     [webchange.state.warehouse :as warehouse]))
@@ -85,26 +86,6 @@
          (filter (fn [[_ {:keys [type]}]]
                    (= type "animation"))))))
 
-(defn- get-character-animations-group
-  [character-name animations animations-group]
-  (let [character-animations (some (fn [{:keys [name animation-groups]}]
-                                     (and (= name character-name) animation-groups))
-                                   animations)]
-    (get character-animations animations-group [])))
-
-(re-frame/reg-sub
-  ::characters-with-animation-group
-  :<- [::activity-characters]
-  :<- [::animations]
-  (fn [[activity-characters animations] [_ animations-group]]
-    (->> activity-characters
-         (map (fn [[object-name {:keys [name]}]]
-                {:object     (clojure.core/name object-name)
-                 :character  name
-                 :animations (get-character-animations-group name animations animations-group)}))
-         (filter (fn [{:keys [animations]}]
-                   (-> animations empty? not))))))
-
 (re-frame/reg-sub
   ::activity-effects
   :<- [::state/activity-data]
@@ -119,9 +100,11 @@
   :<- [::activity-characters]
   :<- [::animations]
   :<- [::activity-effects]
-  :<- [::characters-with-animation-group :emotions]
-  (fn [[activity-data characters animations activity-effects characters-with-emotions]]
-    (let [characters-with-movements (get-characters-with-movements {:activity-data activity-data
+  (fn [[activity-data characters animations activity-effects]]
+    (let [characters-with-emotions (get-characters-with-emotions {:activity-data activity-data
+                                                                  :characters    characters
+                                                                  :animations    animations})
+          characters-with-movements (get-characters-with-movements {:activity-data activity-data
                                                                     :characters    characters
                                                                     :animations    animations})]
       ;; ToDo: add selected action effects: webchange/editor_v2/activity_dialogs/menu/state.cljs:57
