@@ -56,7 +56,6 @@
 
 (defn- handle-drag-start
   [drag-allowed? event]
-  (print "@drag-allowed?" @drag-allowed?)
   (if @drag-allowed?
     (do (reset! dragged-item (get-data-set event))
         (set! (.. event -dataTransfer -effectAllowed) "move")
