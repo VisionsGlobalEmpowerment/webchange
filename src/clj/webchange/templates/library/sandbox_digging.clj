@@ -2,7 +2,13 @@
   (:require
     [clojure.set :as cset]
     [webchange.templates.core :as core]
+    [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
+
+(def template-options
+  [{:type "note"
+    :text "Objects are in a sandbox to uncover. As a student digs them out, it will reveal an image with a description of that image. You will specify the dialog within the builder."}
+   {:type "sandbox-digging-rounds"}])
 
 (def m {:id          47
         :name        "Sandbox digging"
@@ -43,7 +49,9 @@
                                  :options {:max-width  150
                                            :max-height 150
                                            :min-height 50
-                                           :min-width  50}}}})
+                                           :min-width  50}}}
+        :actions {:template-options {:title "Template Options"
+                                     :options template-options}}})
 
 (def piles-counter {:state-1 3
                     :state-2 7
@@ -625,7 +633,7 @@
 
 (defn create
   [args]
-  (-> t
+  (-> (common/init-metadata m t args)
       (add-images args)
       (assoc-in [:metadata :saved-props :template-options] args)))
 

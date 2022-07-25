@@ -4,6 +4,14 @@
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
+(def template-options
+  [{:type "note"
+    :text "You will be introducing a letter to show a student in this activity. Below you choose the letter and a sample word and word image to use. These will show on an easel. You will specify the dialog within the builder next."}
+   {:key         :text
+    :label       "Enter a Word to Trace"
+    :type        "string"
+    :placeholder "Type any word (max 10 characters)"}])
+
 (def m {:id          42
         :name        "Writing 2"
         :tags        ["letter formation" "sight words"]
@@ -14,7 +22,9 @@
                                     :options  {:word {:label   "Select Round"
                                                       :type    "string"
                                                       :placeholder "Place your word here"}
-                                               }}}})
+                                               }}
+                      :template-options {:title "Template Options"
+                                         :options template-options}}})
 
 (def t {:assets        [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
                         {:url "/raw/img/ui/checkmark.png", :type "image"}

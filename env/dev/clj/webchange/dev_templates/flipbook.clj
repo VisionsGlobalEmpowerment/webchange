@@ -13,7 +13,7 @@
   (-> (core/get-scene-latest-version test-course-slug scene-slug)
       (get-in [:metadata]))
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (core/save-scene! test-course-slug scene-slug stored-data t/user-id)
 

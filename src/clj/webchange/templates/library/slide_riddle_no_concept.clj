@@ -4,6 +4,12 @@
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
+(def template-options
+  [{:type "note"
+    :text "A riddle will be given and there will be a correct answer and two incorrect answers. You can have as many rounds of riddles as you’d like.Here, you will specify the image options that will be shown related to the riddle. Within the builder you will enter the dialog for the riddle."}
+   {:type "slide-riddle-rounds"
+    :key "rounds"}])
+
 (def m {:id          38
         :name        "Slide riddle (no concept)"
         :tags        ["listening comprehension" "rhyming"]
@@ -62,7 +68,9 @@
                                                               :options {:max-width  100
                                                                         :max-height 100
                                                                         :min-height 50
-                                                                        :min-width  50}}}}}})
+                                                                        :min-width  50}}}}
+                      :template-options {:title "Template Options"
+                                         :options template-options}}})
 
 (def t {:assets
         [{:url "/raw/img/park/slide/background2.jpg", :type "image"}

@@ -483,6 +483,35 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::apply-activity-template-options
+  (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
+    (create-request {:key    :apply-activity-template-options
+                     :method :put
+                     :params data
+                     :uri    (str "/api/activities/" activity-id "/template-options")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::activity-template-action
+  (fn [{:keys [_]} [_ {:keys [activity-id action data]} handlers]]
+    (create-request {:key    :apply-activity-template-action
+                     :method :post
+                     :params {:common-action? true
+                              :action         action
+                              :data           data}
+                     :uri    (str "/api/activities/" activity-id "/template-actions")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::update-template
+  (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
+    (create-request {:key    :update-template
+                     :method :put
+                     :params {:update true}
+                     :uri    (str "/api/activities/" activity-id "/update-template")}
+                    handlers)))
+    
+(re-frame/reg-event-fx
   ::load-available-books
   (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
     (create-request {:key    :load-available-books
@@ -750,9 +779,23 @@
     (create-request {:key    :load-assets
                      :method :get
                      :uri    (cond-> (str "/api/courses/editor/assets")
+
                                      (some? tag) (str "?tag=" tag)
                                      (some? type) (str "?type=" type)
                                      (not (empty? tags)) (str "?tags=" (clojure.string/join "," tags)))}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::search-assets
+  (fn [{:keys [_]} [_ {:keys [tag query type]} handlers]]
+    (create-request {:key    :search-assets
+                     :method :get
+                     :uri    "/api/courses/editor/assets-search"
+                     :params (->> {:tag tag
+                                   :q query
+                                   :type type}
+                                  (filter second)
+                                  (into {}))}
                     handlers)))
 
 (re-frame/reg-event-fx
@@ -771,6 +814,14 @@
                      :uri    (str "/api/courses/editor/character-skin")}
                     handlers)))
 
+(re-frame/reg-event-fx
+  ::load-assets-tags-by-names
+  (fn [{:keys [_]} [_ {:keys [tags]} handlers]]
+    (create-request {:key    :load-tags-by-names
+                     :method :get
+                     :uri    (str "/api/courses/editor/tags-by-name")
+                     :params {:tags tags}}
+                    handlers)))
 ;; Scene History
 
 (re-frame/reg-event-fx

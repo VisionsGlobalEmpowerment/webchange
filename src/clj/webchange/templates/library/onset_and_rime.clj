@@ -3,6 +3,11 @@
     [webchange.templates.core :as core]
     [webchange.templates.utils.common :as common]))
 
+(def template-options
+  [{:type "note"
+    :text "Bring together onset and rime to form a word. Choose the words and writing used below along with an image for the word. Create as many rounds as you’d like."}
+   {:type "onset-rime-rounds"}])
+
 (def m {:id          25
         :name        "Onset and rime"
         :tags        ["Guided Practice" "onset and rime" "blending"]
@@ -37,7 +42,9 @@
                                                         :options {:max-width  100
                                                                   :max-height 100
                                                                   :min-height 50
-                                                                  :min-width  50}}}}}})
+                                                                  :min-width  50}}}}
+                      :template-options {:title "Template Options"
+                                         :options template-options}}})
 
 (def glow-color 0x2a76ff)
 (def glow-strength 2)

@@ -1,6 +1,9 @@
 .widget--image-library {
     @include bbs--with-scrollbar;
 
+    position: relative;
+    height: 100%;
+    
     overflow: auto;
     padding-right: 4px;
     flex: 1 1;
@@ -22,6 +25,27 @@
 
         &:hover {
             @include bbs--focus-shadow;
+        }
+    }
+
+    .search {
+        margin-right: 10px;
+	margin-bottom: 10px;
+        flex-direction: row;
+        @include icon-color($color-blue-1);
+        @include bbs--icon-size(24px);
+
+        .bbs--input-wrapper--header {
+            border-left: solid 1px $color-grey-4;
+            padding-right: 7px
+        }
+
+        .bbs--input {
+            border: 0;
+        }
+
+        .icon-wrapper {
+            flex: 0 1;
         }
     }
 }

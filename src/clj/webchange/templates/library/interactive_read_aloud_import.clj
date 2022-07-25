@@ -7,8 +7,19 @@
     [webchange.templates.core :as core]
     [webchange.templates.utils.characters :as characters]
     [webchange.course.core :as course]
-    [webchange.question.create :as question-object]
     [ring.util.codec :as codec]))
+
+(def template-options
+  [{:type "note"
+    :text "Interactive Read Aloud allows you to teach reading step by step with a book. Below, choose the book you’d like to use within the activity. You will specify the dialog and questions within the builder."}
+   {:type "select-book"
+    :key "book-id"
+    :label "Select a Book"
+    :placeholder "Choose"}
+   {:type "note"
+    :text "If you have made changes to the book that is selected, you must click update template to reflect those changes in the activity. Note: when updated, some script edits may be changed."}
+   {:type "update-template"
+    :label "Update Template"}])
 
 (def metadata {:id          45
                :name        "Interactive Read Aloud (Import)"
@@ -30,7 +41,9 @@
                                                    :options {:question-page-object {:label         "Question"
                                                                                     :type          "question-object"
                                                                                     :answers-label "Answers"
-                                                                                    :max-answers   4}}}}})
+                                                                                    :max-answers   4}}}
+                             :template-options {:title "Template Options"
+                                                :options template-options}}})
 
 (def empty-audio {:audio "" :start 0 :duration 0 :animation "color" :fill 0x00B2FF :data []})
 (def template {:assets        [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
@@ -65,17 +78,17 @@
                                                           {:type "action" :id "dialog-main"}]
                                                  :on-end "finish"}
                                :finish
-                                                {:type "finish-activity"}
+                               {:type "finish-activity"}
                                :show-book
-                                                {:type "parallel"
-                                                 :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "book-background"}
-                                                        {:type "set-attribute" :attr-name "visible", :attr-value true :target "book"}
-                                                        {:type "set-attribute" :attr-name "visible", :attr-value true :target "page-numbers"}]}
+                               {:type "parallel"
+                                :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "book-background"}
+                                       {:type "set-attribute" :attr-name "visible", :attr-value true :target "book"}
+                                       {:type "set-attribute" :attr-name "visible", :attr-value true :target "page-numbers"}]}
                                :hide-book
-                                                {:type "parallel"
-                                                 :data [{:type "set-attribute" :attr-name "visible", :attr-value false :target "book-background"}
-                                                        {:type "set-attribute" :attr-name "visible", :attr-value false :target "book"}
-                                                        {:type "set-attribute" :attr-name "visible", :attr-value false :target "page-numbers"}]}
+                               {:type "parallel"
+                                :data [{:type "set-attribute" :attr-name "visible", :attr-value false :target "book-background"}
+                                       {:type "set-attribute" :attr-name "visible", :attr-value false :target "book"}
+                                       {:type "set-attribute" :attr-name "visible", :attr-value false :target "page-numbers"}]}
 
                                :next-page       {:type   "flipbook-flip-forward"
                                                  :target "book"
@@ -90,7 +103,7 @@
 
                                :dialog-main (dialog/default "Main")}
                :triggers
-                              {:start {:on "start", :action "script"}}
+               {:start {:on "start", :action "script"}}
                :metadata      {:tracks            [{:title "Sequence"
                                                     :nodes [{:type      "dialog"
                                                              :action-id "dialog-main"}]}]

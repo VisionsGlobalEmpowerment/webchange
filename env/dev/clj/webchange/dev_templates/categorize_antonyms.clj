@@ -19,13 +19,13 @@
   (def test-course-slug "english")
   (def scene-slug "categorize-antonyms")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
   (t/update-activity test-course-slug scene-slug :keep-dialogs true)
 
   (copy-activity "english" "categorize-antonyms")
   (def test-course-slug "test-course-english-vdxeeryx")
   (def scene-slug "categorize-antonyms")
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (-> (core/get-scene-latest-version test-course-slug scene-slug)
       (get-in [:actions])

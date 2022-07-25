@@ -1,0 +1,18 @@
+.bbs--note {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 9px;
+    color: $color-blue-1;
+
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+
+    @include bbs--icon-size(24px);
+
+    background-color: #E9F6FF;
+    border: 1px solid $color-grey-4;
+    border-radius: 6px;
+    overflow: hidden;
+}

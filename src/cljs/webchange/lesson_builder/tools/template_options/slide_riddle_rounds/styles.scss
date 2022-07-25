@@ -1,0 +1,39 @@
+.slide-riddle-rounds {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    margin: 20px 0;
+    
+    .slide-riddle-rounds-header {
+	display: flex;
+	justify-content: space-between;
+
+	.icon-wrapper {
+	    background-color: $color-blue-1;
+	    border-radius: 20px;
+	    overflow: hidden;
+	}
+    }
+
+    .round {
+	padding: 7px 15px;
+	border: 1px solid $color-grey-4;
+	border-radius: 4px;
+
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	.round-header {
+	    display: flex;
+	    justify-content: space-between;
+
+	    .round-header-label {
+		display: flex;
+		gap: 10px;
+		cursor: pointer;
+	    }
+	}
+    }
+}

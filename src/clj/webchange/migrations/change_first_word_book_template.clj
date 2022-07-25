@@ -111,7 +111,7 @@
                              (templates/activity-from-template)
                              (assoc-in [:metadata :history :updated] (:update template-params)))]
       (course/save-scene! course scene new-scene-data user-id)
-      (let [updated-scene-data (-> (-> (course/update-activity-template! course scene user-id)
+      (let [updated-scene-data (-> (-> (course/update-course-activity-template! course scene user-id)
                                        (second)
                                        (get :data))
                                    (migrate-assets data default-page-data)

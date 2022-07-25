@@ -1,0 +1,44 @@
+.first-words-book-spreads {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    
+    .first-words-book-spreads-header {
+	display: flex;
+	justify-content: space-between;
+
+	.icon-wrapper {
+	    background-color: $color-blue-1;
+	    border-radius: 20px;
+	    overflow: hidden;
+	}
+    }
+
+    .spread {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	.page {
+	    padding: 7px 15px;
+	    border: 1px solid $color-grey-4;
+	    border-radius: 4px;
+
+	    display: flex;
+	    flex-direction: column;
+	    gap: 10px;
+
+	    .page-header {
+		display: flex;
+		justify-content: space-between;
+
+		.page-header-label {
+		    display: flex;
+		    gap: 10px;
+		    cursor: pointer;
+		}
+	    }
+	}
+    }
+}

@@ -22,7 +22,7 @@
      [images-list-item (assoc image-data :on-click on-click)])])
 
 (defn image-library
-  [{:keys [open?] :or {open? true}}]
+  [{:keys [open? show-search] :or {open? true show-search false}}]
   (r/create-class
     {:display-name "section-block"
 
@@ -42,6 +42,11 @@
              loading? @(re-frame/subscribe [::state/assets-loading?])]
          [:div {:class-name (ui/get-class-name {"widget--image-library" true
                                                 class-name              (some? class-name)})}
+          (when show-search
+            [ui/input {:placeholder "search"
+                       :icon        "search"
+                       :class-name  "search"
+                       :on-change #(re-frame/dispatch [::state/update-filter {:query %}])}])
           (if-not loading?
             [images-list {:data     assets
                           :on-click on-click}]

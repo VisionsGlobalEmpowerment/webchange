@@ -184,7 +184,7 @@
   (let [user-id (current-user request)]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator}))
-    (-> (core/update-activity-template! course-slug scene-slug user-id)
+    (-> (core/update-course-activity-template! course-slug scene-slug user-id)
         handle)))
 
 (defn handle-publish-course
@@ -231,6 +231,7 @@
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration" "etc")})
+(s/defschema EditorAssetWithTags {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration" "etc") :tags [EditorTag]})
 (s/defschema CharacterSkin {:name                     s/Str
                             :width                    s/Num
                             :height                   s/Num
@@ -263,8 +264,17 @@
                   (map #(Integer/parseInt %)))]
     (response (core/editor-assets tag tags type))))
 
+(defn editor-assets-search
+  [query tag type]
+  (-> (core/editor-assets-search query tag type)
+      (response)))
+
 (defn find-all-tags []
   (response (core/find-all-tags)))
+
+(defn find-tag-by-name
+  [tags]
+  (response (core/find-tags-by-name tags)))
 
 (s/defschema Error403 {:errors [{:message s/Str}]})
 
@@ -275,17 +285,28 @@
     (swagger-routes {:ui   "/api-docs"
                      :data {:info {:title "TabSchools API"}
                             :tags [{:name "course", :description "Course APIs"}]}})
-    (context "/api/courses" []
+    (context
+        "/api/courses" []
       :tags ["editor-assets"]
       (GET "/editor/assets" []
         :summary "Return list of available assets"
         :query-params [{type :- s/Str nil}, {tag :- s/Int nil}, {tags :- s/Str ""}]
         :return [EditorAsset]
         (editor-assets tag tags type))
+      (GET "/editor/assets-search" []
+        :summary "Return list of available assets"
+        :query-params [{type :- s/Str nil}, {q :- s/Str ""} {tag :- s/Int nil}]
+        :return [EditorAssetWithTags]
+        (editor-assets-search q tag type))             
       (GET "/editor/tags" []
         :summary "Return list of available tags"
         :return [EditorTag]
         (find-all-tags))
+      (GET "/editor/tags-by-name" []
+        :summary "Return tag by name"
+        :query-params [{tags :- [s/Str] []}]
+        :return [EditorTag]
+        (find-tag-by-name tags))
       (GET "/editor/character-skin" []
         :summary "Return skins available for objects"
         :return [CharacterSkin]
@@ -535,23 +556,23 @@
       (-> (core/archive-activity activity-id data)
           response)))
   (PUT "/api/activities/:activity-id/toggle-visibility" request
-       :coercion :spec
-       :path-params [activity-id :- ::activity-spec/id]
-       :body [data ::activity-spec/toggle-visibility]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/toggle-activity-visibility activity-id data)
-             response)))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/toggle-visibility]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/toggle-activity-visibility activity-id data)
+          response)))
   (POST "/api/activities/:activity-id/duplicate" request
-        :coercion :spec
-        :path-params [activity-id :- ::activity-spec/id]
-        :body [data ::activity-spec/duplicate]
-        (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
-            (throw-unauthorized {:role :educator}))
-          (-> (core/duplicate-activity activity-id data user-id)
-              response)))
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/duplicate]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/duplicate-activity activity-id data user-id)
+          response)))
   (POST "/api/activities/:activity-id/version" request
     :coercion :spec
     :path-params [activity-id :- ::activity-spec/id]
@@ -568,4 +589,31 @@
       (when-not (is-admin? user-id)
         (throw-unauthorized {:role :educator}))
       (-> (core/create-book data user-id)
+          response)))
+  (PUT "/api/activities/:activity-id/template-options" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/template-options]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/apply-template-options activity-id data user-id)
+          response)))
+  (PUT "/api/activities/:activity-id/update-template" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/update-template]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/update-activity-template! activity-id user-id)
+          response)))
+  (POST "/api/activities/:activity-id/template-actions" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    :body [data ::activity-spec/template-action]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/apply-template-action activity-id data user-id)
           response))))

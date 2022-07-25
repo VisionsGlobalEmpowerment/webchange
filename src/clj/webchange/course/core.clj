@@ -441,7 +441,7 @@
       (db/create-character-skins! {:name (:name skin) :data skin}))))
 
 (defn editor-assets [tag tags type]
-  (if (not (empty? tags))
+  (if (seq tags)
     (let [assets (map (fn [tag]
                         (db/find-editor-assets {:tag tag :type type}))
                       tags)]
@@ -451,8 +451,30 @@
            (into [])))
     (db/find-editor-assets {:tag tag :type type})))
 
+(defn editor-assets-search
+  [query tag type]
+  (let [tags (db/find-editor-tags-by-query {:query (str query "%")})]
+    (if (seq tags)
+      (let [assets-idx (->> (db/find-editor-assets-by-tags {:tags (map :id tags) :tag tag :type type})
+                            (map (juxt :id identity))
+                            (into {}))
+            assets-tags (->> (db/find-editor-tags-by-assets {:assets (map first assets-idx)})
+                             (group-by :editor-asset-id))]
+        (->> assets-tags
+             (map (fn [[asset-id tags]]
+                    (let [asset (get assets-idx asset-id)
+                          tags (mapv #(dissoc % :editor-asset-id) tags)]
+                      (assoc asset :tags tags))))))
+      [])))
+
 (defn find-all-tags []
   (db/find-all-tags))
+
+(defn find-tags-by-name
+  [tags]
+  (->> tags
+       (map #(db/find-editor-tag-by-name {:name %}))
+       (remove nil?)))
 
 (defn store-tag! [tag]
   (db/create-asset-tags! {:name tag})
@@ -472,14 +494,14 @@
 (defn- get-asset-data
   [file-name]
   (if (re-matches #"([^-]+)--(([^-]+-?))+--([^-]+)" file-name)
-    (let [[type tags _] (clojure.string/split file-name #"--")
+    (let [[type tags tag-name] (clojure.string/split file-name #"--")
           type (clojure.string/replace type "_" "-")
           tags (->> (clojure.string/split tags #"-")
                     (map (fn [tag]
                            (-> tag
                                (clojure.string/replace "_" " ")
                                (clojure.string/trim)))))]
-      {:tags tags
+      {:tags (conj tags tag-name)
        :type type})
     (let [parts (clojure.string/split file-name #"_")
           type (last parts)
@@ -773,7 +795,7 @@
                                    [key (merge action created-action)])))
          (into {}))))
 
-(defn update-activity-template!
+(defn update-course-activity-template!
   [course-slug scene-slug user-id]
   (let [scene-data (get-scene-latest-version course-slug scene-slug)
         {:keys [created updated]} (-> scene-data templates/prepare-history (get-in [:metadata :history]))
@@ -960,3 +982,52 @@
                      :created_at  created-at
                      :description (str "Version " created-at)})
     {:id activity-id}))
+
+(defn apply-template-action
+  [activity-id {:keys [action] :as data} owner-id]
+  (let [created-at (jt/local-date-time)
+        scene-data (-> (get-activity-current-version activity-id)
+                       (templates/update-activity-from-template data))]
+    (db/save-scene! {:scene_id    activity-id
+                     :data        scene-data
+                     :owner_id    owner-id
+                     :created_at  created-at
+                     :description (str "Template Action (" action ")")})
+    {:data scene-data}))
+
+(defn apply-template-options
+  [activity-id data owner-id]
+  (let [created-at (jt/local-date-time)
+        scene-data (-> (get-activity-current-version activity-id)
+                       (templates/update-activity-from-template {:action "template-options"
+                                                                 :data data}))]
+    (db/save-scene! {:scene_id    activity-id
+                     :data        scene-data
+                     :owner_id    owner-id
+                     :created_at  created-at
+                     :description "Apply Template Options"})
+    {:data scene-data}))
+
+(defn update-activity-template!
+  [activity-id user-id]
+  (let [scene-data (get-activity-current-version activity-id)
+        {:keys [created updated]} (get-in scene-data [:metadata :history])
+        created-activity (as-> (templates/activity-from-template created) a
+                               (reduce #(templates/update-activity-from-template %1 %2) a updated))
+        original-assets (:assets scene-data)
+        preserved-actions (preserve-actions scene-data created-activity)
+        activity (-> created-activity
+                     (update :actions merge preserved-actions)
+                     (update-preserved-objects scene-data)
+                     (update :assets #(->> (concat original-assets %)
+                                           (flatten)
+                                           (distinct))))
+        created-at (jt/local-date-time)]
+    (db/save-scene! {:scene_id    activity-id
+                     :data        activity
+                     :owner_id    user-id
+                     :created_at  created-at
+                     :description "Update Template"})
+    {:activity-id activity-id
+     :data activity}))
+

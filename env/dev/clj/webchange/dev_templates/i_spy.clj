@@ -7,7 +7,7 @@
   (def test-course-slug "english")
   (def scene-slug "i-spy-1")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
   (core/get-scene-latest-version test-course-slug scene-slug)
 
   (t/update-activity course-slug scene-slug))

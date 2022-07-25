@@ -4,7 +4,46 @@
     [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
 
-(def available-times (mapv (fn [v] {:name (str v) :value v}) (range 30 70 10)))
+(def available-times (mapv (fn [v] {:text (str v " sec") :value v}) (range 30 70 10)))
+(def available-speed
+  [{:text "Fast" :value 11}
+   {:text "Medium" :value 5}
+   {:text "Slow" :value 1}])
+
+(def template-options
+  [{:type "note"
+    :text "Character will run into boxes filled with letters. They must run through the correct letter to count as a correct answer."}
+   {:type "group"
+    :label "Add a Correct Response"
+    :children [{:type "letter-lookup"
+                :key :correct-letter
+                :label "Correct Letter"
+                :placeholder "Choose"}]}
+   {:type "group"
+    :label "Add Incorrect Responses"
+    :children [{:type "letter-lookup"
+                :key :incorrect-letter-1
+                :label "Incorrect Letter"
+                :placeholder "Choose"}
+               {:type "letter-lookup"
+                :key :incorrect-letter-2
+                :label "Incorrect Letter"
+                :placeholder "Choose"}
+               {:type "letter-lookup"
+                :key :incorrect-letter-3
+                :label "Incorrect Letter"
+                :placeholder "Choose"}]}
+   {:type "group"
+    :label "Game Settings"
+    :children [{:type "lookup"
+                :key :time
+                :label "Game Duration"
+                :options available-times}
+               {:type "lookup"
+                :key :speed
+                :label "Character Speed"
+                :placeholder "Choose"
+                :options available-speed}]}])
 
 (def m {:id          34
         :name        "Running (time limited)"
@@ -30,7 +69,9 @@
                       :change-speed    {:title    "Change speed"
                                         :default-props "change-speed"
                                         :options  {:speed {:type    "lookup"
-                                                           :options (mapv (fn [v] {:name (str v) :value v}) (range 1 11))}}}}})
+                                                           :options (mapv (fn [v] {:name (str v) :value v}) (range 1 11))}}}
+                      :template-options {:title "Template Options"
+                                         :options template-options}}})
 
 (def concept-var "current-concept")
 

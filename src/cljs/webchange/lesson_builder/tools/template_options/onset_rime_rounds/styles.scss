@@ -1,0 +1,54 @@
+.onset-rime-rounds {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    margin: 20px 0;
+    
+    .onset-rime-rounds-header {
+	display: flex;
+	justify-content: space-between;
+
+	.icon-wrapper {
+	    background-color: $color-blue-1;
+	    border-radius: 20px;
+	    overflow: hidden;
+	}
+    }
+
+    .round {
+	padding: 7px 15px;
+	border: 1px solid $color-grey-4;
+	border-radius: 4px;
+
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	.round-header {
+	    display: flex;
+	    justify-content: space-between;
+
+	    .round-header-label {
+		display: flex;
+		gap: 10px;
+		cursor: pointer;
+	    }
+	}
+
+	.image-description {
+	    margin: 10px 0;
+	    
+	    font-weight: 600;
+            font-size: 14px;
+            line-height: 18px;
+
+	    .description-note {
+		font-weight: 400;
+		font-size: 12px;
+		line-height: 16px;
+		color: $color-blue-1;
+	    }
+	}
+    }
+}

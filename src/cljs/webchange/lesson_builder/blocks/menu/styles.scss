@@ -71,4 +71,8 @@
         flex: 1 1;
         padding: $menu-padding-v $menu-padding-h;
     }
+
+    .menu--content-hidden {
+	display: none;
+    }
 }

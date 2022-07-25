@@ -1,13 +1,24 @@
 (ns webchange.templates.library.writing-practice
   (:require
     [webchange.templates.core :as core]
+    [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
+
+(def template-options
+  [{:type "note"
+    :text "Choose a letter to show on screen for a student to practice tracing."}
+   {:type "letter-lookup"
+    :key :letter
+    :label "Select a Letter To Trace"
+    :placeholder "Choose"}])
 
 (def m {:id          40
         :name        "Writing practice"
         :tags        ["Guided Practice"]
         :props       {:game-changer? true}
-        :description "An animated character shows how to write a letter. Then users practice writing the same letter. The letter must be traced correctly in order to see it appear on their screen."})
+        :description "An animated character shows how to write a letter. Then users practice writing the same letter. The letter must be traced correctly in order to see it appear on their screen."
+        :actions {:template-options {:title "Template Options"
+                                     :options template-options}}})
 
 (def t {:assets
         [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
@@ -349,7 +360,7 @@
 
 (defn create-activity
   [args]
-  (-> t
+  (-> (common/init-metadata m t args)
       (init-concept args)
       (assoc-in [:metadata :saved-props :template-options] args)))
 

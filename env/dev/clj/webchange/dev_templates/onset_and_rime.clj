@@ -9,7 +9,7 @@
   (def test-course-slug "english")
   (def scene-slug "onset--rime--an")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [course-slug "english"
         scene-slug "onset--rime--an"]

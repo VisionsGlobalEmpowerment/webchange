@@ -8,7 +8,7 @@
   (def test-course-slug "test-course-english-zbvgvgzf")
   (def scene-slug "test-activity")
 
-  (core/update-activity-template! test-course-slug scene-slug t/user-id)
+  (core/update-course-activity-template! test-course-slug scene-slug t/user-id)
 
   (let [data {:activity-name "Conversation"
               :template-id   26

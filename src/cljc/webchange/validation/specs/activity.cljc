@@ -38,3 +38,6 @@
 (s/def ::archive-activity (s/keys :req-un [::archive]))
 (s/def ::toggle-visibility (s/keys :req-un [::visible]))
 (s/def ::duplicate (s/keys :req-un [::name ::lang]))
+(s/def ::template-options map?)
+(s/def ::update-template (s/keys :req-un [::update]))
+(s/def ::template-action (s/keys :req-un [::common-action? ::action ::data]))

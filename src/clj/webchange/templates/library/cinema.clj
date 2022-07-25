@@ -1,14 +1,25 @@
 (ns webchange.templates.library.cinema
   (:require
     [webchange.templates.core :as core]
+    [webchange.templates.utils.common :as common]
     [webchange.templates.utils.dialog :as dialog]))
+
+(def template-options
+  [{:type "note"
+    :text "Introduce and show a letter introduction video on a screen for students to learn a new letter."}
+   {:type "select-video"
+    :key "video-src"
+    :label "Choose Letter for Video"
+    :placeholder "Choose"}])
 
 (def m {:id          43
         :name        "cinema"
         :tags        ["Direct Instruction - Educational Video"]
         :description "Simple video"
         :options     {:chanting-video-src {:label "Video"
-                                           :type  "string"}}})
+                                           :type  "string"}}
+        :actions {:template-options {:title "Template Options"
+                                     :options template-options}}})
 
 (def t {:assets        [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
                         {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
@@ -96,7 +107,7 @@
 
 (defn create-activity
   [args]
-  (-> t
+  (-> (common/init-metadata m t args)
       (set-video (:video-src args))
       (assoc-in [:metadata :saved-props :template-options] args)))
 
