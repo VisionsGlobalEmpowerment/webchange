@@ -2,14 +2,70 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    position: relative;
 
     border: solid 1px bbs--color(grey-4);
     border-radius: 6px;
     padding: 4px;
 
+    .component--item-wrapper--actions { visibility: hidden; }
+    &:hover > .component--item-wrapper--actions { visibility: visible; }
+
+    .component--item-wrapper--move-icon { visibility: hidden; }
+    &:hover > .component--item-wrapper--move-icon { visibility: visible; }
+
     &.component--item-wrapper--parallel {
         padding: 0;
         border-width: 0 0 0 1px;
+    }
+
+    &.dragged {
+        opacity: 0.3;
+    }
+
+    &.drag-over {
+        $placeholder-gap: 4px;
+        $placeholder-height: 65px;
+        $placeholder-border: 1px;
+
+        $margin: $placeholder-height + $placeholder-gap + $placeholder-border * 2;
+
+        &:before,
+        &:after {
+            width: 100%;
+            height: $placeholder-height;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: absolute;
+            left: 0;
+
+            color: bbs--color(grey-4);
+            font-size: 24px;
+
+            border: solid $placeholder-border bbs--color(grey-4);
+            border-radius: 6px;
+        }
+
+        &.drag-over-top {
+            margin-top: $margin;
+
+            &:before {
+                content: "+";
+                top: -$margin;
+            }
+        }
+
+        &.drag-over-bottom {
+            margin-bottom: $margin;
+
+            &:after {
+                content: "+";
+                bottom: -$margin;
+            }
+        }
     }
 }
 
@@ -22,6 +78,16 @@
 
 .component--item-wrapper--actions {
     align-self: flex-end;
+}
+
+.component--item-wrapper--move-icon {
+    $size: 18px;
+    width: $size;
+    height: $size;
+    min-height: 0;
+    cursor: grab;
+    @include bbs--icon-color(bbs--color(grey-3));
+    @include bbs--icon-size(18px);
 }
 
 .component--item-wrapper--action {

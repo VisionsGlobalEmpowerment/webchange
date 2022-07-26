@@ -174,7 +174,8 @@
 (defn handle-update-activity
   [course-slug scene-slug data request]
   (let [user-id (current-user request)]
-    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+    (when-not (or (is-admin? user-id)
+                  (core/collaborator-by-course-slug? user-id course-slug))
       (throw-unauthorized {:role :educator}))
     (-> (core/update-activity! course-slug scene-slug data user-id)
         handle)))

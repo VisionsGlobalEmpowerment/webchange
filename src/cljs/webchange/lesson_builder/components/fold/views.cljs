@@ -4,16 +4,24 @@
     [webchange.ui.index :as ui]))
 
 (defn fold
-  [{:keys [title]}]
-  (r/with-let [expanded? (r/atom true)
+  [{:keys [title expanded? height-restricted?]
+    :or   {expanded?          true
+           height-restricted? true}}]
+  (r/with-let [expanded? (r/atom expanded?)
                toggle-expanded #(swap! expanded? not)]
-    [:div.component--fold
-     [:div {:class-name "fold--header"
-            :on-click   toggle-expanded}
-      [ui/icon {:icon       (if @expanded? "caret-up" "caret-down")
-                :class-name "fold--icon"}]
-      [:span title]]
-     (when @expanded?
-       (->> (r/current-component)
-            (r/children)
-            (into [:div.fold--content])))]))
+    (let [children (->> (r/current-component)
+                        (r/children))
+          children-empty? (->> children
+                               (remove nil?)
+                               empty?)]
+      [:div.component--fold
+       [:div {:class-name "fold--header"
+              :on-click   toggle-expanded}
+        [ui/icon {:icon       (if @expanded? "caret-up" "caret-down")
+                  :class-name "fold--icon"}]
+        [:span title]]
+       (when (and @expanded?
+                  (not children-empty?))
+         (into [:div {:class-name (ui/get-class-name {"fold--content"     true
+                                                      "height-restricted" height-restricted?})}]
+               children))])))

@@ -49,6 +49,12 @@
         }
     }
 
+    .dragged {
+        & > * {
+            opacity: 0.3;
+        }
+    }
+
     .drag-over {
         & > * {
             border-color: bbs--color(blue-2) !important;

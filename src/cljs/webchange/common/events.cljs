@@ -11,7 +11,7 @@
     [webchange.interpreter.sound :as sound]
     [webchange.logger.index :as logger]
     [webchange.question.common.params :as question-params]
-    [webchange.utils.numbers :refer [number-str? try-parse-int]]
+    [webchange.utils.numbers :refer [integer-str? try-parse-int]]
     [webchange.utils.scene-data :as utils]
     [webchange.utils.scene-action-data :as action-data-utils]))
 
@@ -247,7 +247,7 @@
   [action action-property-str value]
   (let [action-property-path (->> (clojure.string/split action-property-str ".")
                                   (map (fn [path-step]
-                                         (if (number-str? path-step)
+                                         (if (integer-str? path-step)
                                            (try-parse-int path-step)
                                            (keyword path-step)))))]
     (assoc-in action action-property-path value)))

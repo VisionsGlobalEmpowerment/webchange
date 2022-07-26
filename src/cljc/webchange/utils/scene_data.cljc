@@ -163,17 +163,20 @@
   [action-name action-data predicate action-data-patch]
   (cond-> (if (predicate {:name action-name
                           :data action-data})
-            (merge action-data action-data-patch)
+            (if (fn? action-data-patch)
+              (action-data-patch action-data)
+              (merge action-data action-data-patch))
             action-data)
           (action-data-utils/has-sub-actions? action-data)
           (update :data (fn [sub-actions]
-                          (map-indexed (fn [idx action-data]
-                                         (let [action-name (-> (if (sequential? action-name)
-                                                                 action-name [action-name])
-                                                               (concat [:data idx])
-                                                               (vec))]
-                                           (update-action-deep action-name action-data predicate action-data-patch)))
-                                       sub-actions)))))
+                          (->> sub-actions
+                               (map-indexed (fn [idx action-data]
+                                              (let [action-name (-> (if (sequential? action-name)
+                                                                      action-name [action-name])
+                                                                    (concat [:data idx])
+                                                                    (vec))]
+                                                (update-action-deep action-name action-data predicate action-data-patch))))
+                               (vec))))))
 
 (defn update-action
   [scene-data predicate action-data-patch]

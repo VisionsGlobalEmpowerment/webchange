@@ -26,9 +26,11 @@
     [webchange.ui.components.icon.system.icon-edit :as edit]
     [webchange.ui.components.icon.system.icon-edit-boxed :as edit-boxed]
     [webchange.ui.components.icon.system.icon-effects :as effects]
+    [webchange.ui.components.icon.system.icon-emotion :as emotion]
     [webchange.ui.components.icon.system.icon-image-broken :as image-broken]
     [webchange.ui.components.icon.system.icon-info :as info]
     [webchange.ui.components.icon.system.icon-move :as move]
+    [webchange.ui.components.icon.system.icon-movement :as movement]
     [webchange.ui.components.icon.system.icon-play :as play]
     [webchange.ui.components.icon.system.icon-plus :as plus]
     [webchange.ui.components.icon.system.icon-question :as question]
@@ -71,9 +73,11 @@
                         "edit"            edit/data
                         "edit-boxed"      edit-boxed/data
                         "effects"         effects/data
+                        "emotion"         emotion/data
                         "image-broken"    image-broken/data
                         "info"            info/data
                         "move"            move/data
+                        "movement"        movement/data
                         "play"            play/data
                         "plus"            plus/data
                         "question"        question/data

@@ -937,14 +937,14 @@
   (let [created-at (jt/local-date-time)
         updated-at (jt/local-date-time)
         source (db/get-scene-by-id {:id activity-id})
-        [{scene-id :id}] (db/create-activity! {:name name
-                                               :lang lang
-                                               :image_src (:image-src source)
-                                               :status "invisible"
-                                               :owner_id owner-id
+        [{scene-id :id}] (db/create-activity! {:name       name
+                                               :lang       lang
+                                               :image_src  (:image-src source)
+                                               :status     "invisible"
+                                               :owner_id   owner-id
                                                :created_at created-at
                                                :updated_at updated-at
-                                               :type (:type source)})
+                                               :type       (:type source)})
         source-data (get-activity-current-version activity-id)]
     (db/save-scene! {:scene_id    scene-id
                      :data        source-data
@@ -957,14 +957,14 @@
   [data owner-id]
   (let [created-at (jt/local-date-time)
         updated-at (jt/local-date-time)
-        [{scene-id :id}] (db/create-activity! {:name (:cover-title data)
-                                               :lang (:lang data)
-                                               :image_src nil
-                                               :status "invisible"
-                                               :owner_id owner-id
+        [{scene-id :id}] (db/create-activity! {:name       (:cover-title data)
+                                               :lang       (:lang data)
+                                               :image_src  nil
+                                               :status     "invisible"
+                                               :owner_id   owner-id
                                                :created_at created-at
                                                :updated_at updated-at
-                                               :type "book"})
+                                               :type       "book"})
         activity-data (templates/activity-from-template (assoc data :template-id 24))]
     (db/save-scene! {:scene_id    scene-id
                      :data        activity-data

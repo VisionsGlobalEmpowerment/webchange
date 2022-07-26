@@ -55,6 +55,10 @@
         span {
             @include bbs--noto-14-sb;
         }
+
+        label {
+            color: bbs--color(grey-1);
+        }
     }
 
     .menu--header {

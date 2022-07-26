@@ -13,7 +13,8 @@
   (fn [action-data]
     (let [inner-action (action-utils/get-inner-action action-data)]
       (-> (or (get inner-action :id)
-              (get inner-action :type))
+              (get inner-action :type)
+              "Undefined")
           (clojure.string/replace "-" " ")
           (clojure.string/capitalize)))))
 

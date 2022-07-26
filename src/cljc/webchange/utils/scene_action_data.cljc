@@ -1,9 +1,92 @@
 (ns webchange.utils.scene-action-data
   (:require
-    [clojure.string :as string]))
+    [clojure.string :as string]
+    [webchange.utils.uid :refer [get-uid]]))
 
 (def action-tags {:user-interactions-blocked "user-interactions-blocked"
                   :fx                        "fx"})
+
+(def animation-tracks
+  {:main    5
+   :idle    0
+   :eyes    4
+   :mouth   3
+   :hands   2
+   :emotion 1
+   :default 5})
+
+(def action-templates
+  {"activity-action"    {:type "action"
+                         :id   "__tid__"}
+   "add-animation"      {:type   "add-animation"
+                         :id     "idle"
+                         :loop   true
+                         :target "__target__"
+                         :track  0}
+   "remove-animation"   {:type   "remove-animation"
+                         :target "__target__"
+                         :track  0}
+   "animation-sequence" {:type               "animation-sequence"
+                         :phrase-placeholder "Enter phrase text"
+                         :audio              nil}
+   "char-movement"      {:type          "char-movement"
+                         :action        "__action__"
+                         :transition-id "__character__"
+                         :target        "__target__"}
+   "effect"             {:type "__type__"}
+   "text-animation"     {:type        "text-animation"
+                         :animation   "color"
+                         :fill        0x00B2FF
+                         :phrase-text "Text animation"
+                         :audio       nil}})
+
+(defn- wrap-to-dialog-sequence-action
+  [action-data]
+  {:type "sequence-data"
+   :data [{:type     "empty"
+           :duration 0}
+          action-data]
+   :uid  (get-uid)})
+
+(defn- dialog-sequence-action?
+  [{:keys [type data]}]
+  (or (= type "parallel")
+      (and (= type "sequence-data")
+           (sequential? data)
+           (= (count data) 2)
+           (= (-> data first :type) "empty"))))
+
+(defn- create-dialog-action
+  ([action-type]
+   (create-dialog-action action-type {}))
+  ([action-type action-data]
+   (-> (get action-templates action-type)
+       (merge action-data)
+       (wrap-to-dialog-sequence-action))))
+
+(defn get-track-number
+  [track]
+  (cond
+    (number? track) track
+    (keyword? track) (get animation-tracks track)
+    (string? track) (->> track (keyword) (get animation-tracks))
+    :else (:default animation-tracks)))
+
+(def create-dialog-activity-action #(create-dialog-action "activity-action" %))
+(def create-dialog-animation-sequence-action #(create-dialog-action "animation-sequence"))
+(def create-dialog-effect-action #(create-dialog-action "effect" %))
+(def create-dialog-text-animation-action #(create-dialog-action "text-animation"))
+(defn create-dialog-add-animation-action
+  [{:keys [animation loop? target track] :or {loop? true}}]
+  (create-dialog-action "add-animation" {:id     animation
+                                         :loop?  loop?
+                                         :target target
+                                         :track  (get-track-number track)}))
+(def create-dialog-char-movement-action #(create-dialog-action "char-movement" %))
+(defn create-dialog-remove-animation-action
+  [{:keys [target track]}]
+  (create-dialog-action "remove-animation" {:target target
+                                            :track  (get-track-number track)}))
 
 (defn get-action-type
   [action-data]
@@ -62,16 +145,6 @@
        (map fix-available-effect)))
 
 ;; Animation
-
-(def animation-tracks
-  {:main    5
-   :idle    0
-   :eyes    4
-   :mouth   3
-   :hands   2
-   :emotion 1
-   :default 5})
-
 
 (defn create-add-animation-action
   [{:keys [animation loop? target track] :or {loop? true}}]
@@ -156,3 +229,15 @@
   [{:keys [inner-action] :or {inner-action {}}}]
   (-> text-animation-action
       (update-inner-action inner-action)))
+
+(defn animation->display-name
+  [effect-name]
+  (cond
+    (= effect-name "remove-animation") "Remove"
+    :default (-> (or effect-name "")
+                 (clojure.string/replace "emotion_" ""))))
+
+(defn call-question-action?
+  [{:keys [id type]}]
+  (and (= type "action")
+       (clojure.string/starts-with? id "question-")))

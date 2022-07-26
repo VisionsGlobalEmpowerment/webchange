@@ -2,6 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.utils.scene-action-data :refer [dialog-sequence-action?]]
+    [webchange.utils.scene-data :refer [update-action]]
+    [webchange.utils.uid :refer [get-uid]]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :lesson-builder/index)
@@ -157,13 +160,21 @@
                    {:on-success [::load-activity-info-success]
                     :on-failure [::load-activity-info-failure]}]]}))
 
+(defn- set-actions-uid
+  [activity-data]
+  (update-action activity-data
+                 (fn [{:keys [data]}]
+                   (dialog-sequence-action? data))
+                 (fn [action-data]
+                   (assoc action-data :uid (get-uid)))))
+
 (re-frame/reg-event-fx
   ::load-activity-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ activity-data]]
     {:db (-> db
              (set-activity-loading false)
-             (set-activity-data activity-data))}))
+             (set-activity-data (set-actions-uid activity-data)))}))
 
 (re-frame/reg-event-fx
   ::load-activity-failure
