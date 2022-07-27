@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.blocks.state :as layout-state]
-    [webchange.lesson-builder.tools.stage-actions :as stage]
+    [webchange.lesson-builder.stage-actions :as stage]
     [webchange.utils.scene-data :refer [get-scene-background]]))
 
 (def path-to-db :lesson-builder/background-image)

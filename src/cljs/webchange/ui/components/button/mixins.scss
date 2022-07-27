@@ -1,0 +1,7 @@
+@mixin bbs--button-size($size) {
+    &.bbs--button {
+        width: $size;
+        height: $size;
+        min-height: $size;
+    }
+}

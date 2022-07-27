@@ -1,7 +1,7 @@
 (ns webchange.lesson-builder.tools.dnd-actions
   (:require
     [re-frame.core :as re-frame]
-    [webchange.lesson-builder.tools.stage-actions :as stage-actions]
+    [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.logger.index :as logger]
     [webchange.utils.numbers :refer [try-parse-int]]
     [webchange.utils.scene-action-data :as action-utils]))

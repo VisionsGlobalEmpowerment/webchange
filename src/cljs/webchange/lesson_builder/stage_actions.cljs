@@ -1,10 +1,10 @@
-(ns webchange.lesson-builder.tools.stage-actions
+(ns webchange.lesson-builder.stage-actions
   (:require
     [clojure.spec.alpha :as s]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.tools.stage-actions-spec :as spec]
+    [webchange.lesson-builder.stage-actions-spec :as spec]
     [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.utils.list :as list-utils]
     [webchange.utils.scene-action-data :as action-utils]
@@ -143,4 +143,13 @@
            (s/valid? ::spec/text text)]}
     (let [update-path [:objects (keyword object-name) :text]
           updated-activity-data (assoc-in activity-data update-path text)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
+  ::update-asset
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [asset-url data-patch]}]]
+    {:pre [(s/valid? ::spec/url asset-url)
+           (s/valid? ::spec/data data-patch)]}
+    (let [updated-activity-data (update activity-data :assets list-utils/update-by-predicate #(= (:url %) asset-url) merge data-patch)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))

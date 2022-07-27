@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.script.dialog-item.state :as state]
     [webchange.lesson-builder.tools.script.state :as script-state]
-    [webchange.lesson-builder.tools.stage-actions :as stage-actions]
+    [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.utils.scene-action-data :as action-utils]))
 
 ;; target
