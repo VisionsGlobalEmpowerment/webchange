@@ -11,8 +11,9 @@
 
 (defn audio-manager
   []
-  (let [selected-audio @(re-frame/subscribe [::state/selected-audio])
-        handle-audio-changed #(re-frame/dispatch [::state/set-selected-audio %])]
+  (let [action-path @(re-frame/subscribe [::state/selected-action])
+        selected-audio @(re-frame/subscribe [::state/selected-audio])
+        handle-audio-changed #(re-frame/dispatch [::state/set-selected-audio action-path %])]
     [:div.tool--voice-translate--audio-manager
      [:h1.audio-manager--header
       "Voice & Translate 2"]
@@ -25,13 +26,13 @@
 
 (defn audio-editor
   []
-  (let [show-audio-editor? @(re-frame/subscribe [::state/show-audio-editor?])]
+  (let [show-audio-editor? @(re-frame/subscribe [::state/show-audio-editor?])
+        selected-action @(re-frame/subscribe [::state/selected-action])]
     [toolbox {:title "Voice & Translate Steps:"
               :icon  "translate"}
      "audio-editor"]
     (if show-audio-editor?
       [toolbox {:title "Audio Editor"
                 :icon  "translate"}
-       [action-audio-editor]]
-
+       [action-audio-editor {:action-path selected-action}]]
       [welcome-translate])))

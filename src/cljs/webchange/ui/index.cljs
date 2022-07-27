@@ -1,5 +1,6 @@
 (ns webchange.ui.index
   (:require
+    [webchange.ui.components.audio-wave.views :as audio-wave-views]
     [webchange.ui.components.avatar.views :as avatar-views]
     [webchange.ui.components.breadcrumbs.views :as breadcrumbs-views]
     [webchange.ui.components.button.views :as button-views]
@@ -29,6 +30,7 @@
     [webchange.ui.components.text-area.views :as text-area-views]
     [webchange.ui.utils.get-class-name :as gcn]))
 
+(def audio-wave audio-wave-views/audio-wave)
 (def avatar avatar-views/avatar)
 (def breadcrumbs breadcrumbs-views/breadcrumbs)
 (def button button-views/button)

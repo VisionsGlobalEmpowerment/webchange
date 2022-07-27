@@ -2,7 +2,11 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.tools.script.state :as script-state]))
+    [webchange.lesson-builder.stage-actions :as stage-actions]
+    [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.tools.script.state :as script-state]
+    [webchange.utils.scene-action-data :as action-utils]
+    [webchange.utils.scene-data :as activity-utils]))
 
 (def path-to-db :lesson-builder/voice-translate)
 
@@ -11,23 +15,32 @@
   (fn [db]
     (get db path-to-db)))
 
-(def selected-audio-key :selected-audio)
+(re-frame/reg-sub
+  ::action-data
+  :<- [::state/activity-data]
+  :<- [::script-state/selected-action]
+  (fn [[activity-data action-path]]
+    (activity-utils/get-action activity-data action-path)))
 
 (re-frame/reg-sub
   ::selected-audio
-  :<- [path-to-db]
-  #(get % selected-audio-key))
+  :<- [::action-data]
+  (fn [action-data]
+    (-> (action-utils/get-inner-action action-data)
+        (get :audio))))
 
 (re-frame/reg-event-fx
   ::set-selected-audio
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ value]]
-    {:db (assoc db selected-audio-key value)}))
+  (fn [{:keys [db]} [_ action-path value]]
+    {:dispatch [::stage-actions/set-action-phrase-audio {:action-path action-path
+                                                         :audio-url value}]}))
+
+(re-frame/reg-sub
+  ::selected-action
+  :<- [::script-state/selected-action]
+  identity)
 
 (re-frame/reg-sub
   ::show-audio-editor?
-  :<- [::script-state/selected-action]
   :<- [::selected-audio]
-  (fn [[selected-action selected-audio]]
-    (and (some? selected-action)
-         (some? selected-audio))))
+  #(some? %))

@@ -73,6 +73,16 @@
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
+  ::set-action-phrase-audio
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path audio-url]}]]
+    {:pre [(s/valid? ::spec/action-path action-path)
+           (s/valid? ::spec/url audio-url)]}
+    (let [update-path (concat [:actions] action-path action-utils/inner-action-path [:audio])
+          updated-activity-data (assoc-in activity-data update-path audio-url)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
   ::toggle-action-tag
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [action-path tag]}]]
