@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.lesson-builder.blocks.menu.state :as menu-state]
     [webchange.lesson-builder.blocks.toolbox.state :as toolbox-state]))
 
 (def path-to-db :lesson-builder/layout)
@@ -28,9 +29,13 @@
 
 (def states
   {:default                 {:toolbox :welcome
+                             :menu    :default
                              :focus   #{}}
    :change-background-image {:toolbox :background-image
-                             :focus   #{:toolbox :stage}}})
+                             :focus   #{:toolbox :stage}}
+   :voice-and-translate     {:toolbox :welcome-translate
+                             :menu    :audio-manager
+                             :focus   #{:menu :script :toolbox}}})
 
 (re-frame/reg-event-fx
   ::set-state
@@ -40,6 +45,8 @@
       {:db         (cond-> db
                            (contains? state :focus) (set-focused-blocks (:focus state)))
        :dispatch-n (cond-> []
+                           (contains? state :menu) (concat [[::menu-state/set-current-component (:menu state)]
+                                                            [::menu-state/on-back [::reset-state]]])
                            (contains? state :toolbox) (conj [::toolbox-state/set-current-widget (:toolbox state)]))})))
 
 (re-frame/reg-event-fx

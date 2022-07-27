@@ -27,6 +27,21 @@
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db current-track-key value)}))
 
+;; selected action
+
+(def selected-action-key :selected-action)
+
+(re-frame/reg-sub
+  ::selected-action
+  :<- [path-to-db]
+  #(get % selected-action-key))
+
+(re-frame/reg-event-fx
+  ::set-selected-action
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db selected-action-key value)}))
+
 ;; dialogs
 
 (defn collect-untracked-actions

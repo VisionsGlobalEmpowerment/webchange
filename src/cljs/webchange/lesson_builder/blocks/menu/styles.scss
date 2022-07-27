@@ -1,4 +1,4 @@
-#block--menu {
+.block--menu {
     $padding: 10px;
 
     display: flex;
@@ -46,19 +46,23 @@
         padding: 0 4px;
 
         background-color: bbs--color(white);
+    }
 
-        h1 {
-            @include bbs--noto-18-b;
-            margin-bottom: 15px;
-        }
+    h1 {
+        @include bbs--noto-18-b;
+        margin-bottom: 15px;
+    }
 
-        span {
-            @include bbs--noto-14-sb;
-        }
+    h2 {
+        @include bbs--noto-14-sb;
+    }
 
-        label {
-            color: bbs--color(grey-1);
-        }
+    span {
+        @include bbs--noto-14-sb;
+    }
+
+    label {
+        color: bbs--color(grey-1);
     }
 
     .menu--header {

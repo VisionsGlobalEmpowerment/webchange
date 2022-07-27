@@ -1,0 +1,9 @@
+.widget--audio-manager {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .widget--audio-manager--header {
+        margin-bottom: 0;
+    }
+}

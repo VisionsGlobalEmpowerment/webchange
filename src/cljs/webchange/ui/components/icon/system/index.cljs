@@ -34,6 +34,7 @@
     [webchange.ui.components.icon.system.icon-play :as play]
     [webchange.ui.components.icon.system.icon-plus :as plus]
     [webchange.ui.components.icon.system.icon-question :as question]
+    [webchange.ui.components.icon.system.icon-record :as record]
     [webchange.ui.components.icon.system.icon-restore :as restore]
     [webchange.ui.components.icon.system.icon-search :as search]
     [webchange.ui.components.icon.system.icon-statistics :as statistics]
@@ -81,6 +82,7 @@
                         "play"            play/data
                         "plus"            plus/data
                         "question"        question/data
+                        "record"          record/data
                         "restore"         restore/data
                         "search"          search/data
                         "statistics"      statistics/data

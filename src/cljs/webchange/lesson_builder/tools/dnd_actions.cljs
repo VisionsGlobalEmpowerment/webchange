@@ -134,7 +134,3 @@
         {:dispatch [::stage-actions/move-action {:source-action-path source-action-path
                                                  :target-action-path target-action-path}]})
       (logger/warn "Drop target is empty"))))
-
-{:dragged {:path "dialog-intro,data,2", :action "move-dialog-action"},
- :target  {:path "dialog-intro,data,1", :action "move-dialog-action"},
- :side    {:vertical :top}}

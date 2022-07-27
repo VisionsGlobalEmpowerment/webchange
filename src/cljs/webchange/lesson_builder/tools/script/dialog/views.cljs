@@ -4,6 +4,7 @@
     [webchange.lesson-builder.tools.script.block.views :refer [block]]
     [webchange.lesson-builder.tools.script.dialog-item.views :refer [dialog-item]]
     [webchange.lesson-builder.tools.script.dialog.state :as state]
+    [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.ui.index :as ui]))
 
 (defn- dialog-footer
@@ -19,10 +20,12 @@
 (defn dialog
   [{:keys [action-path] :as props}]
   (let [dialog-name @(re-frame/subscribe [::state/dialog-name action-path])
-        dialog-items @(re-frame/subscribe [::state/dialog-items action-path])]
+        dialog-items @(re-frame/subscribe [::state/dialog-items action-path])
+        handle-click #(re-frame/dispatch [::script-state/set-selected-action nil])]
     [block {:title               dialog-name
             :class-name--content "component--dialog"
-            :footer              [dialog-footer props]}
+            :footer              [dialog-footer props]
+            :on-click            handle-click}
      (for [{:keys [id] :as dialog-item-data} dialog-items]
        ^{:key id}
        [dialog-item dialog-item-data])]))

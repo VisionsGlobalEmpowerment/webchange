@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
     [webchange.lesson-builder.tools.background-image.state :as state]
     [webchange.lesson-builder.widgets.image-library.views :refer [image-library]]
     [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]
@@ -66,31 +67,7 @@
      [ui/button {:on-click handle-save-click}
       "Save"]]))
 
-(defn background-image
-  []
-  (r/create-class
-    {:display-name "Change Background Image"
-
-     :component-did-mount
-     (fn [this]
-       (re-frame/dispatch [::state/init (r/props this)]))
-
-     :component-will-unmount
-     (fn [] (re-frame/dispatch [::state/reset]))
-
-     :reagent-render
-     (fn []
-       (let [{:keys [component]} @(re-frame/subscribe [::state/form-content])]
-         [:div.widget--background-image
-          [:div.background-image--content
-           (case component
-             "layered-background" [layered-background-form {:class-name "background-image--content"}]
-             "background" [single-background-form {:class-name "background-image--content"}]
-             "image-library" [images-collection {:type "background"}]
-             [ui/loading-overlay])]
-          [actions]]))}))
-
-(defn background-type-switcher
+(defn- background-type-switcher
   []
   (let [current-type @(re-frame/subscribe [::state/current-background-type])
         handle-single-click #(re-frame/dispatch [::state/set-background-type "background"])
@@ -106,3 +83,32 @@
                                                  "switcher-button--active" (= current-type "layered-background")})
                  :on-click   handle-layered-click}
       "Layered Background"]]))
+
+(defn background-image
+  []
+  (r/create-class
+    {:display-name "Change Background Image"
+
+     :component-did-mount
+     (fn [this]
+       (re-frame/dispatch [::state/init (r/props this)]))
+
+     :component-will-unmount
+     (fn [] (re-frame/dispatch [::state/reset]))
+
+     :reagent-render
+     (fn []
+       (let [{:keys [component]} @(re-frame/subscribe [::state/form-content])]
+         [toolbox {:title   "Change Background"
+                   :icon    "create"
+                   :actions background-type-switcher}
+          [:div.widget--background-image
+           [:div.background-image--content
+            (case component
+              "layered-background" [layered-background-form {:class-name "background-image--content"}]
+              "background" [single-background-form {:class-name "background-image--content"}]
+              "image-library" [images-collection {:type "background"}]
+              [ui/loading-overlay])]
+           [actions]]]))}))
+
+

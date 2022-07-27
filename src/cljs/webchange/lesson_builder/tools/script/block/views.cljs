@@ -4,9 +4,10 @@
     [webchange.ui.index :as ui]))
 
 (defn block
-  [{:keys [class-name class-name--content footer title]}]
-  [:div {:class-name (ui/get-class-name {"component--block" true
-                                         class-name         (some? class-name)})}
+  [{:keys [class-name class-name--content footer on-click title]}]
+  [:div (cond-> {:class-name (ui/get-class-name {"component--block" true
+                                                 class-name         (some? class-name)})}
+                (fn? on-click) (assoc :on-click on-click))
    [:div.component--header title]
    (->> (r/current-component)
         (r/children)

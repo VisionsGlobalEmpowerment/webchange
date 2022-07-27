@@ -155,7 +155,7 @@
        (into {})))
 
 (defn draggable
-  [{:keys [class-name data drag-control drop-allowed? on-drop]
+  [{:keys [class-name data drag-control drop-allowed? on-click on-drop]
     :or   {drop-allowed? (constantly true)}}]
   (r/with-let [id (get-uid)
                el (atom nil)
@@ -174,11 +174,12 @@
                              (observer/observe @el id init reset))]
     (->> (r/current-component)
          (r/children)
-         (into [:div (merge {:id         id
-                             :draggable  true
-                             :ref        handle-ref
-                             :class-name (get-class-name {"wc-draggable" true
-                                                          class-name     (some? class-name)})}
+         (into [:div (merge (cond-> {:id         id
+                                     :draggable  true
+                                     :ref        handle-ref
+                                     :class-name (get-class-name {"wc-draggable" true
+                                                                  class-name     (some? class-name)})}
+                                    (fn? on-click) (assoc :on-click on-click))
                             (get-data-attrs data))]))
     (finally
       (reset-dnd @el handlers)

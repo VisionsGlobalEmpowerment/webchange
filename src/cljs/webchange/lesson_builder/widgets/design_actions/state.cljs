@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.menu.state :as menu]))
+    [webchange.lesson-builder.blocks.menu.state :as menu]
+    [webchange.lesson-builder.blocks.state :as layout-state]))
 
 (def path-to-db :lesson-builder/design-actions)
 
@@ -65,6 +66,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [content menu-item]}]]
     (cond
+      (= menu-item :voice-translate) {:dispatch [::layout-state/set-state :voice-and-translate]}
       (some? menu-item) {:dispatch [::menu/set-current-component menu-item]}
       (some? content) {:db (toggle-active-menu-item db content)}
       :default {})))

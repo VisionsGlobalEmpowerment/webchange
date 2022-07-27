@@ -8,6 +8,12 @@
     border-radius: 6px;
     padding: 4px;
 
+    &.component--item-wrapper--selected {
+        background-color: bbs--color(blue-1);
+        border-color: bbs--color(blue-1);
+        color: bbs--color(white);
+    }
+
     .component--item-wrapper--actions { visibility: hidden; }
     &:hover > .component--item-wrapper--actions { visibility: visible; }
 

@@ -5,6 +5,7 @@
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.tools.stage-actions-spec :as spec]
+    [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.utils.list :as list-utils]
     [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as utils]))
@@ -48,7 +49,8 @@
   (fn [{:keys [activity-data]} [_ {:keys [action-path] :as props}]]
     {:pre [(s/valid? ::spec/action-path action-path)]}
     (let [updated-activity-data (remove-action activity-data props)]
-      {:dispatch [::state/set-activity-data updated-activity-data]})))
+      {:dispatch-n [[::state/set-activity-data updated-activity-data]
+                    [::script-state/set-selected-action nil]]})))
 
 (re-frame/reg-event-fx
   ::set-action-target
@@ -130,7 +132,8 @@
                                                     :parent-data-path target-action-path
                                                     :position         target-action-position})
                                     (remove-action {:action-path (conj-position source-action-path source-action-position)}))]
-      {:dispatch [::state/set-activity-data updated-activity-data]})))
+      {:dispatch-n [[::state/set-activity-data updated-activity-data]
+                    [::script-state/set-selected-action nil]]})))
 
 (re-frame/reg-event-fx
   ::set-object-text

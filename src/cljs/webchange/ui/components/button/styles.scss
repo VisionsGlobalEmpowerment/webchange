@@ -32,6 +32,18 @@
         padding-right: $icon-size + $padding-h;
     }
 
+    &.bbs--button--icon-side-left {
+        &.bbs--button--text-icon-button {
+            padding-left: $icon-size + $padding-h;
+            padding-right: $padding-h;
+        }
+
+        .bbs--button--icon {
+            left: 8px;
+            right: unset;
+        }
+    }
+
     &.bbs--button--shape-rectangle {
         border-radius: 4px;
         min-height: 36px;
