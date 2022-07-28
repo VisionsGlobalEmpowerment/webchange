@@ -1,0 +1,9 @@
+.tool--voice-translate--audio-manager {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .audio-manager--header {
+        margin-bottom: 0;
+    }
+}

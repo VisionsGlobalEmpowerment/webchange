@@ -6,6 +6,7 @@
     [webchange.ui.components.icon.system.icon-archive :as archive]
     [webchange.ui.components.icon.system.icon-arrow-left :as arrow-left]
     [webchange.ui.components.icon.system.icon-arrow-right :as arrow-right]
+    [webchange.ui.components.icon.system.icon-arrow-up :as arrow-up]
     [webchange.ui.components.icon.system.icon-book :as book]
     [webchange.ui.components.icon.system.icon-build :as build]
     [webchange.ui.components.icon.system.icon-calendar :as calendar]
@@ -34,8 +35,10 @@
     [webchange.ui.components.icon.system.icon-play :as play]
     [webchange.ui.components.icon.system.icon-plus :as plus]
     [webchange.ui.components.icon.system.icon-question :as question]
+    [webchange.ui.components.icon.system.icon-record :as record]
     [webchange.ui.components.icon.system.icon-restore :as restore]
     [webchange.ui.components.icon.system.icon-search :as search]
+    [webchange.ui.components.icon.system.icon-select :as select]
     [webchange.ui.components.icon.system.icon-statistics :as statistics]
     [webchange.ui.components.icon.system.icon-template :as template]
     [webchange.ui.components.icon.system.icon-translate :as translate]
@@ -52,6 +55,7 @@
                         "archive"         archive/data
                         "arrow-left"      arrow-left/data
                         "arrow-right"     arrow-right/data
+                        "arrow-up"        arrow-up/data
                         "book"            book/data
                         "build"           build/data
                         "system-book"     book/data
@@ -81,8 +85,10 @@
                         "play"            play/data
                         "plus"            plus/data
                         "question"        question/data
+                        "record"          record/data
                         "restore"         restore/data
                         "search"          search/data
+                        "select"          select/data
                         "statistics"      statistics/data
                         "template"        template/data
                         "translate"       translate/data

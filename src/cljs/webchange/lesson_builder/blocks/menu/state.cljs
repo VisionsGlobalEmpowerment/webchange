@@ -20,6 +20,17 @@
                              :components  nil
                              :title       ""}))
 
+(defn- get-current-component
+  [db]
+  (-> (get-current-state db)
+      (get :components [])
+      (last)))
+
+(defn- get-current-tab
+  [db]
+  (-> (get-current-state db)
+      (get :current-tab)))
+
 (re-frame/reg-sub
   ::current-state
   :<- [path-to-db]
@@ -70,7 +81,7 @@
           last-item (get-history-last db)]
       (if (seq on-back)
         (let [callback (last on-back)]
-          {:db (update db :on-back drop-last)
+          {:db       (update db :on-back drop-last)
            :dispatch callback})
         {:db (-> db
                  (update-current-state last-item)
@@ -130,8 +141,10 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [tab component]}]]
-    {:db (-> db
-             (set-current-tab tab)
-             (set-current-component component)
-             (assoc :on-back [])
-             (assoc history-key []))}))
+    (let [current-component (get-current-component db)
+          current-tab (get-current-tab db)]
+      {:db (cond-> (-> db
+                       (assoc :on-back [])
+                       (assoc history-key []))
+                   (nil? current-component) (set-current-component component)
+                   (nil? current-tab) (set-current-tab tab))})))

@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.utils.scene-data :as utils]
     [webchange.utils.scene-action-data :as action-utils]))
 
@@ -10,6 +11,12 @@
   :<- [::state/activity-data]
   (fn [activity-data [_ action-path]]
     (utils/get-action activity-data action-path)))
+
+(re-frame/reg-sub
+  ::action-selected?
+  :<- [::script-state/selected-action]
+  (fn [selected-action [_ action-path]]
+    (= selected-action action-path)))
 
 (re-frame/reg-sub
   ::action-type

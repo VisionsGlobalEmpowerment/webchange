@@ -1,0 +1,29 @@
+.component--block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    border: solid 1px bbs--color(grey-3);
+    border-radius: 6px;
+    padding: 5px 10px;
+
+    &.component--block--border-none {
+        border-color: transparent;
+    }
+
+    .component--block--header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-transform: capitalize;
+    }
+
+    .component--block--content {
+        overflow: auto;
+        @include bbs--with-scrollbar;
+
+        &.height-restricted {
+            max-height: 160px;
+        }
+    }
+}

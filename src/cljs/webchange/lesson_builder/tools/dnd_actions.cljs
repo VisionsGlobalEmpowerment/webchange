@@ -1,7 +1,7 @@
 (ns webchange.lesson-builder.tools.dnd-actions
   (:require
     [re-frame.core :as re-frame]
-    [webchange.lesson-builder.tools.stage-actions :as stage-actions]
+    [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.logger.index :as logger]
     [webchange.utils.numbers :refer [try-parse-int]]
     [webchange.utils.scene-action-data :as action-utils]))
@@ -134,7 +134,3 @@
         {:dispatch [::stage-actions/move-action {:source-action-path source-action-path
                                                  :target-action-path target-action-path}]})
       (logger/warn "Drop target is empty"))))
-
-{:dragged {:path "dialog-intro,data,2", :action "move-dialog-action"},
- :target  {:path "dialog-intro,data,1", :action "move-dialog-action"},
- :side    {:vertical :top}}

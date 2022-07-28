@@ -60,6 +60,10 @@
 
 ; Assets
 
+(defn- get-assets
+  [activity-data]
+  (get activity-data :assets []))
+
 (defn- add-asset
   [scene-data asset-data]
   (->> (fn [assets]

@@ -1,0 +1,22 @@
+.component--info {
+    @include bbs--noto-14-r;
+    @include bbs--icon-size(26px);
+
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+
+    color: bbs--color(blue-1);
+    background-color: bbs--color(grey-5);
+    border: solid 1px bbs--color(grey-3);
+    border-radius: 6px;
+
+    $margin: 4px;
+
+    padding: 8px + $margin;
+
+    .info-icon {
+        margin-left: -$margin;
+        margin-top: -$margin;
+    }
+}

@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.tools.stage-actions :as stage-actions]
+    [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.utils.scene-action-data :as action-data-utils]
     [webchange.utils.scene-data :as utils]))
 

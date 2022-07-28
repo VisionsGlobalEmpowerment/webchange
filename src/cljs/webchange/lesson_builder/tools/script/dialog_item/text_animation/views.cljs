@@ -13,11 +13,11 @@
         handle-phrase-text-change #(re-frame/dispatch [::state/set-text action-path %])
         handle-target-change #(re-frame/dispatch [::state/set-target action-path %])
         handle-remove-click #(re-frame/dispatch [::state/remove action-path])]
-    [item-wrapper {:class-name "dialog-item dialog-item--text-animation"
-                   :actions    [{:icon     "trash"
-                                 :title    "Delete phrase"
-                                 :on-click handle-remove-click}]
-                   :data       {:path action-path}}
+    [item-wrapper {:class-name  "dialog-item dialog-item--text-animation"
+                   :actions     [{:icon     "trash"
+                                  :title    "Delete phrase"
+                                  :on-click handle-remove-click}]
+                   :action-path action-path}
      [target-selector {:value     target
                        :type      :text-animation
                        :on-change handle-target-change}]

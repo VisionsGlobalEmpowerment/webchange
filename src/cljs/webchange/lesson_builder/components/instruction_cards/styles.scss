@@ -1,0 +1,103 @@
+@use "sass:math";
+
+.component--instruction-cards {
+    $icon-size: 48px;
+
+    display: grid;
+    column-gap: 10px;
+
+    @for $i from 4 through 5 {
+        &.component--instruction-cards--columns-#{$i} {
+            grid-template-columns: repeat($i, 1fr);
+        }
+    }
+
+    @for $i from 1 through 2 {
+        &.component--instruction-cards--background-variant-#{$i} {
+            .instruction-cards--card {
+                background-image: url("/images/lesson_builder/toolbox/cards_details_#{$i}.svg"),
+                                  url("/images/lesson_builder/toolbox/cards_background_#{$i}.svg");
+            }
+        }
+    }
+
+    .instruction-cards--card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+        position: relative;
+        overflow: hidden;
+
+        padding: 20px 13px;
+        background-color: bbs--color(grey-5);
+        border: 1px solid bbs--color(grey-3);
+        border-radius: 6px;
+
+        background-repeat: no-repeat;
+        background-position: top, bottom;
+        background-size: auto;
+
+        @for $i from 4 through 5 {
+            @for $j from 1 through $i {
+                &.card--background-#{$i}-#{$j} {
+                    $k: math.div(($j - 1), ($i - 1));
+                    $value: 100% * $k - ($j - 1);
+                    background-position-x: $value;
+                }
+            }
+        }
+    }
+
+    &.component--instruction-cards--background-variant-2 {
+        .instruction-cards--card {
+            background-position-y: -25px, bottom;
+        }
+    }
+
+    .card--idx {
+        $size: 48px;
+
+        position: absolute;
+        top: -6px;
+        left: -6px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: $size;
+        height: $size;
+        border-radius: $size;
+
+        @include bbs--noto-24-b;
+        color: bbs--color(blue-1);
+        background-color: bbs--color(white);
+    }
+
+    .card--icon-container {
+        width: $icon-size;
+        height: $icon-size;
+    }
+
+    .card--icon {
+        width: $icon-size;
+        height: $icon-size;
+
+        @include bbs--icon-size(22px);
+
+        background-color: bbs--color(white);
+        border-radius: 999px;
+    }
+
+    .card--text {
+        @include bbs--noto-14-r;
+        color: bbs--color(blue-1);
+        text-align: center;
+    }
+
+    .card--button {
+        padding: 6px 24px;
+    }
+}

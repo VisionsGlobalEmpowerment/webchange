@@ -1,0 +1,57 @@
+.widget--audio-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 0;
+
+    .audio-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+
+        cursor: pointer;
+
+        &:first-child {
+            .audio-item--bring-top-button {
+                visibility: hidden;
+            }
+        }
+
+        &.audio-item--selected {
+            .audio-item--name {
+                @include bbs--noto-14-b;
+                color: bbs--color(blue-1);
+            }
+
+            .audio-item--check-icon {
+                @include bbs--icon-color(bbs--color(blue-1));
+            }
+        }
+    }
+
+    .audio-item--name {
+        @include bbs--noto-14-r;
+        text-transform: capitalize;
+        flex: 1 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .audio-item--actions {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .audio-item--icon {
+        @include bbs--icon-size(18px);
+        @include bbs--icon-thickness(1px);
+    }
+
+    .audio-item--button {
+        @extend .audio-item--icon;
+        @include bbs--button-size(20px);
+    }
+}

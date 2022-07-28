@@ -15,8 +15,8 @@
 (defn actions-sequence
   [{:keys [action-path]}]
   (let [dialog-items @(re-frame/subscribe [::state/sequence-items action-path])]
-    [item-wrapper {:parallel? true
-                   :data      {:path action-path}}
+    [item-wrapper {:parallel?   true
+                   :action-path action-path}
      (for [{:keys [id] :as dialog-item-data} dialog-items]
        ^{:key id}
        [dialog-item dialog-item-data])]))

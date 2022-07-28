@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.tools.stage-actions-spec
+(ns webchange.lesson-builder.stage-actions-spec
   (:require
     [clojure.spec.alpha :as s]))
 
@@ -23,6 +23,8 @@
 (s/def ::background-data (s/or :single ::background-single-data
                                :layered ::background-layered-data))
 
+(s/def ::data map?)
 (s/def ::object-name (s/or :string string? :keyword keyword?))
 (s/def ::position number?)
 (s/def ::text string?)
+(s/def ::url string?)

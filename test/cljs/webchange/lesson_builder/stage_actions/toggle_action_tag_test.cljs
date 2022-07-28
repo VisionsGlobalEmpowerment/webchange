@@ -2,7 +2,7 @@
   (:require [cljs.test :refer-macros [deftest testing is]]
             [day8.re-frame.test :as rf-test]
             [webchange.lesson-builder.stage-actions.activity-mock :refer [dispatch-and-compare]]
-            [webchange.lesson-builder.tools.stage-actions :as stage-actions]))
+            [webchange.lesson-builder.stage-actions :as stage-actions]))
 
 (deftest toggle-action-tag
   (rf-test/run-test-async

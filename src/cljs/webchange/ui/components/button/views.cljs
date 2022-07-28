@@ -43,6 +43,7 @@
                                                          "bbs--button--text-icon-button"             (and show-icon? (not icon-button?))
                                                          "bbs--button--with-loading"                 loading?
                                                          (str "bbs--button--color-" color)           (some? color)
+                                                         (str "bbs--button--icon-side-" icon-side)   (some? icon-side)
                                                          (str "bbs--button--shape-" shape)           (some? shape)
                                                          (str "bbs--button--state-" state)           (some? state)
                                                          (str "bbs--button--text-align-" text-align) (some? text-align)
