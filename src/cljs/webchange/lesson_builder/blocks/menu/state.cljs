@@ -49,7 +49,7 @@
   (update-current-state db {:components [component-key]}))
 
 (defn- push-current-component
-  [db component-key]
+  [db component-key tab-key]
   (update-in db [current-state-key :components] concat [component-key]))
 
 ;; history
@@ -123,6 +123,7 @@
     (let [tab-component (-> (get menu-tabs tab-key)
                             (get :component))]
       {:db (-> db
+               (assoc history-key [])
                (set-current-tab tab-key)
                (set-current-component tab-component))})))
 

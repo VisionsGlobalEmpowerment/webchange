@@ -6,6 +6,7 @@
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.stage-actions-spec :as spec]
     [webchange.lesson-builder.tools.script.state :as script-state]
+    [webchange.lesson-builder.blocks.stage.state :as stage-state]
     [webchange.utils.list :as list-utils]
     [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as utils]))
@@ -19,7 +20,8 @@
           updated-activity-data (update-in activity-data [:objects name] merge background-data)]
       ;; ToDo: update stage: change background
       ;; {:dispatch [::state-renderer/set-scene-object-state name background-data]}
-      {:dispatch [::state/set-activity-data updated-activity-data]})))
+      {:dispatch-n [[::state/set-activity-data updated-activity-data]
+                    [::stage-state/reset]]})))
 
 (defn- remove-action
   [activity-data {:keys [action-path]}]
@@ -169,6 +171,12 @@
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [asset-url]}]]
     {:pre [(s/valid? ::spec/url asset-url)]}
-    (print ">> ::remove-asset" asset-url)
     (let [updated-activity-data (update activity-data :assets list-utils/remove-by-predicate #(= (:url %) asset-url) merge)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
+  ::update-objects
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [objects]}]]
+    (let [updated-activity-data (update activity-data :objects merge objects)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))

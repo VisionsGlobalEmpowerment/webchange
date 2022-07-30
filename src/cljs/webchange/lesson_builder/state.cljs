@@ -327,3 +327,31 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-saving false))}))
+
+;; Add Character
+(re-frame/reg-event-fx
+  ::add-character
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    (let [{:keys [id]} (get-activity-info db)]
+      {:db       (-> db (set-activity-saving true))
+       :dispatch [::warehouse/activity-template-action
+                  {:activity-id id
+                   :action "add-character"
+                   :data data}
+                  {:on-success [::add-character-success]
+                   :on-failure [::add-character-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::add-character-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [data]}]]
+    {:db       (-> db
+                   (set-activity-saving false)
+                   (set-activity-data data))}))
+
+(re-frame/reg-event-fx
+  ::add-character-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-activity-saving false))}))

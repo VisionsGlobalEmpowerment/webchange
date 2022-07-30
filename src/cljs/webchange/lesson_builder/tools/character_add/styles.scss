@@ -1,0 +1,13 @@
+.widget--character-add {
+    max-width: 320px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    justify-content: center;
+
+    .apply-button {
+	border-radius: 30px;
+    }
+}
