@@ -26,7 +26,22 @@
 
             .audio-item--check-icon {
                 @include bbs--icon-color(bbs--color(blue-1));
+                @include bbs--icon-thickness(2px);
+                visibility: visible;
             }
+        }
+
+        &:hover {
+            .audio-item--icon,
+            .audio-item--button {
+                visibility: visible;
+            }
+
+            &:first-child {
+                        .audio-item--bring-top-button {
+                            visibility: hidden;
+                        }
+                    }
         }
     }
 
@@ -50,15 +65,21 @@
     .audio-item--icon {
         @include bbs--icon-size(18px);
         @include bbs--icon-thickness(1px);
+
+        visibility: hidden;
     }
 
     .audio-item--button {
         @extend .audio-item--icon;
         @include bbs--button-size(20px);
 
+        visibility: hidden;
+
         &.audio-item--button--active {
             @include bbs--icon-color(bbs--color(blue-1));
             @include bbs--icon-thickness(2px);
+
+            visibility: visible;
         }
     }
 }

@@ -44,13 +44,12 @@
                   :color      "grey-3"
                   :class-name (ui/get-class-name {"audio-item--button"         true
                                                   "audio-item--button--active" (= mode "edit")})
+                  :title      "Edit file name"
                   :on-click   handle-edit-click}]
-      [ui/button {:icon       "select"
-                  :color      "grey-3"
-                  :class-name "audio-item--button"}]
       [ui/button {:icon       "trash"
                   :color      "grey-3"
                   :class-name "audio-item--button"
+                  :title      "Delete file"
                   :on-click   handle-remove-click}]]]))
 
 (defn audio-list
