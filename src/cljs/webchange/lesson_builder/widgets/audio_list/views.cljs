@@ -2,14 +2,22 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.components.info.views :refer [info]]
+    [webchange.lesson-builder.widgets.audio-list.item-edit.views :refer [item-edit]]
     [webchange.lesson-builder.widgets.audio-list.state :as state]
-    [webchange.lesson-builder.widgets.not-implemented.views :refer [not-implemented]]
     [webchange.ui.index :as ui]))
 
 (defn- audio-item
-  [{:keys [name on-click selected? url]}]
-  (let [handle-click #(on-click url)
-        handle-bring-to-top #(re-frame/dispatch [::state/bring-to-top url])]
+  [{:keys [name on-click selected? url] :as props}]
+  (let [mode @(re-frame/subscribe [::state/item-mode url])
+
+        handle-click #(on-click url)
+        handle-bring-to-top #(do (.stopPropagation %)
+                                 (re-frame/dispatch [::state/bring-to-top url]))
+        handle-edit-click #(do (.stopPropagation %)
+                               (re-frame/dispatch [::state/set-item-mode url (if (= mode "view") "edit" "view")]))
+        handle-edit-name-save #(do (re-frame/dispatch [::state/change-alias url %])
+                                   (re-frame/dispatch [::state/set-item-mode url "view"]))
+        handle-edit-name-cancel #(re-frame/dispatch [::state/set-item-mode url "view"])]
     [:div {:class-name (ui/get-class-name {"audio-item"           true
                                            "audio-item--selected" selected?})
            :on-click   handle-click}
@@ -24,11 +32,17 @@
                 :class-name "audio-item--icon audio-item--check-icon"}]]
      [:div {:class-name "audio-item--name"
             :title      name}
-      name]
+      (case mode
+        "edit" [item-edit (merge props
+                                 {:on-change handle-edit-name-save
+                                  :on-cancel handle-edit-name-cancel})]
+        name)]
      [:div.audio-item--actions
       [ui/button {:icon       "edit"
                   :color      "grey-3"
-                  :class-name "audio-item--button"}]
+                  :class-name (ui/get-class-name {"audio-item--button"         true
+                                                  "audio-item--button--active" (= mode "edit")})
+                  :on-click   handle-edit-click}]
       [ui/button {:icon       "select"
                   :color      "grey-3"
                   :class-name "audio-item--button"}]

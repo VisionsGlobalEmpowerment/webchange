@@ -39,6 +39,8 @@
         white-space: nowrap;
     }
 
+    @import "item_edit/styles";
+
     .audio-item--actions {
         display: flex;
         align-items: center;
@@ -53,5 +55,10 @@
     .audio-item--button {
         @extend .audio-item--icon;
         @include bbs--button-size(20px);
+
+        &.audio-item--button--active {
+            @include bbs--icon-color(bbs--color(blue-1));
+            @include bbs--icon-thickness(2px);
+        }
     }
 }

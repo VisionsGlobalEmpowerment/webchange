@@ -34,10 +34,10 @@
         show-icon? (and (some? icon)
                         (not loading?))
         shape (if icon-button? "rounded" shape)
-        handle-click (fn []
+        handle-click (fn [event]
                        (if (some? href)
                          (js/window.open href target)
-                         (on-click)))]
+                         (on-click event)))]
     (into [:button (cond-> {:class-name (get-class-name {"bbs--button"                               true
                                                          "bbs--button--icon-button"                  icon-button?
                                                          "bbs--button--text-icon-button"             (and show-icon? (not icon-button?))
