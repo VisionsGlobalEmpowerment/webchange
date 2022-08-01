@@ -1,0 +1,22 @@
+.widget--confirm-overlay {
+    z-index: 11;
+}
+
+.widget--confirm-content {
+    @include bbs--noto-12-r;
+    @include bbs--with-scrollbar;
+
+    h1 {
+        @include bbs--noto-14-b;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        list-style: disc;
+        padding-left: 16px;
+        width: 100%;
+    }
+}

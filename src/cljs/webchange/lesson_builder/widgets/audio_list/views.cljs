@@ -17,7 +17,9 @@
                                (re-frame/dispatch [::state/set-item-mode url (if (= mode "view") "edit" "view")]))
         handle-edit-name-save #(do (re-frame/dispatch [::state/change-alias url %])
                                    (re-frame/dispatch [::state/set-item-mode url "view"]))
-        handle-edit-name-cancel #(re-frame/dispatch [::state/set-item-mode url "view"])]
+        handle-edit-name-cancel #(re-frame/dispatch [::state/set-item-mode url "view"])
+        handle-remove-click #(do (.stopPropagation %)
+                                 (re-frame/dispatch [::state/remove url]))]
     [:div {:class-name (ui/get-class-name {"audio-item"           true
                                            "audio-item--selected" selected?})
            :on-click   handle-click}
@@ -48,7 +50,8 @@
                   :class-name "audio-item--button"}]
       [ui/button {:icon       "trash"
                   :color      "grey-3"
-                  :class-name "audio-item--button"}]]]))
+                  :class-name "audio-item--button"
+                  :on-click   handle-remove-click}]]]))
 
 (defn audio-list
   [{:keys [value on-change]}]

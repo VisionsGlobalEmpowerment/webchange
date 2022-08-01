@@ -59,7 +59,7 @@
       [c/dialog {:open?              open?
                  :on-close           handle-close
                  :title              "Assign Course"
-                 :content-class-name "assign-course-modal"}
+                 :class-name-content "assign-course-modal"}
        [c/select {:placeholder "Select course"
                   :value       (:course-id @data)
                   :type        "int"
