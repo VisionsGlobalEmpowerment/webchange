@@ -10,6 +10,7 @@
     [webchange.ui.components.copy-link.views :as copy-link-views]
     [webchange.ui.components.date.views :as date-views]
     [webchange.ui.components.dialog.views :as dialog-views]
+    [webchange.ui.components.file.views :as file-views]
     [webchange.ui.components.form.views :as form-views]
     [webchange.ui.components.icon.views :as icon-views]
     [webchange.ui.components.image.views :as image-views]
@@ -42,6 +43,7 @@
 (def copy-link copy-link-views/copy-link)
 (def date date-views/date)
 (def dialog dialog-views/dialog)
+(def file file-views/file)
 (def flag icon-views/flag-icon)
 (def form form-views/form)
 (def icon icon-views/general-icon)
