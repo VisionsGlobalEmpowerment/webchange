@@ -3,6 +3,7 @@
     [camel-snake-kebab.core :refer [->kebab-case-keyword]]
     [camel-snake-kebab.extras :refer [transform-keys]]
     [re-frame.core :as re-frame]
+    [webchange.lesson-builder.widgets.confirm.views :refer [block-confirm]]
     [webchange.lesson-builder.blocks.menu.views :refer [block-menu]]
     [webchange.lesson-builder.blocks.script.views :refer [block-script]]
     [webchange.lesson-builder.blocks.stage.views :refer [block-stage]]
@@ -31,6 +32,7 @@
                                                         "bbs-lesson-builder--focused-block" (contains? focused-blocks :title)})}]
           [block-toolbox {:class-name (ui/get-class-name {"bbs-lesson-builder--toolbox" true
                                                           "bbs-lesson-builder--focused-block" (contains? focused-blocks :toolbox)})}]
+          [block-confirm]
           (when-not (empty? focused-blocks)
             [ui/focus-overlay])]
          [ui/loading-overlay])])))

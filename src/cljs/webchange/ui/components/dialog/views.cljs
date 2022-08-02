@@ -6,8 +6,14 @@
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn dialog
-  [{:keys [actions class-name class-name-actions content-class-name on-close title]}]
-  [focus-overlay
+  [{:keys [actions
+           class-name
+           class-name-actions
+           class-name-content
+           class-name-overlay
+           on-close
+           title]}]
+  [focus-overlay {:class-name class-name-overlay}
    [:div {:class-name (get-class-name {"bbs--dialog" true
                                        class-name    (some? class-name)})}
     (when (some? title)
@@ -20,23 +26,26 @@
     (->> (r/current-component)
          (r/children)
          (into [:div {:class-name (get-class-name {"bbs--dialog--content" true
-                                                   content-class-name     (some? content-class-name)})}]))
+                                                   class-name-content     (some? class-name-content)})}]))
     (when (some? actions)
       [:div {:class-name (get-class-name {"bbs--dialog--actions" true
                                           class-name-actions     (some? class-name-actions)})}
        actions])]])
 
 (defn confirm
-  [{:keys [confirm-text cancel-text loading? on-confirm on-cancel open? title]
+  [{:keys [class-name class-name-content class-name-overlay confirm-text cancel-text loading? on-confirm on-cancel open? title]
     :or   {confirm-text "Yes"
            cancel-text  "Cancel"}}]
   (when open?
     (into [dialog
            {:title              title
-            :class-name         "bbs--confirm-window"
+            :class-name         (get-class-name {"bbs--confirm-window" true
+                                                 class-name            (some? class-name)})
             :class-name-actions (str "bbs--dialog--actions--" (cond-> 0
                                                                       (fn? on-confirm) (inc)
                                                                       (fn? on-cancel) (inc)))
+            :class-name-content class-name-content
+            :class-name-overlay class-name-overlay
             :actions            (when-not loading?
                                   [:<>
                                    (when (fn? on-cancel)

@@ -17,7 +17,7 @@
     [dialog {:open?    open?
              :on-close handle-close
              :title    "Select Image"
-             :content-class-name "image-modal"}
+             :class-name-content  "image-modal"}
      [select-image-form (merge props
                                {:id        id
                                 :on-change handle-change})]]))

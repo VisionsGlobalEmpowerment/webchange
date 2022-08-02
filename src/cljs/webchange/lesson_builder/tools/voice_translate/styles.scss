@@ -2,8 +2,14 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    height: 100%;
 
     .audio-manager--header {
         margin-bottom: 0;
+    }
+
+    .audio-list-wrapper {
+        flex: 1 1;
+        overflow: auto;
     }
 }

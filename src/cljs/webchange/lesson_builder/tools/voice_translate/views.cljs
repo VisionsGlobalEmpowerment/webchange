@@ -20,7 +20,8 @@
      [block {:title  "Add Audio"
              :border "none"}
       [audio-add]]
-     [block {:title "Select Audio"}
+     [block {:title      "Select Audio"
+             :class-name "audio-list-wrapper"}
       [audio-list {:value     selected-audio
                    :on-change handle-audio-changed}]]]))
 

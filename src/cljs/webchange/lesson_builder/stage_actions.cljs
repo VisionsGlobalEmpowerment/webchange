@@ -163,3 +163,12 @@
            (s/valid? ::spec/data data-patch)]}
     (let [updated-activity-data (update activity-data :assets list-utils/update-by-predicate #(= (:url %) asset-url) merge data-patch)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
+  ::remove-asset
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [asset-url]}]]
+    {:pre [(s/valid? ::spec/url asset-url)]}
+    (print ">> ::remove-asset" asset-url)
+    (let [updated-activity-data (update activity-data :assets list-utils/remove-by-predicate #(= (:url %) asset-url) merge)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))

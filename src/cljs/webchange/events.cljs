@@ -106,3 +106,10 @@
   ::location
   (fn-traced [{:keys [db]} [_ & args]]
              {:location args}))
+
+(re-frame/reg-fx
+  :callback
+  (fn [data]
+    (let [[callback & params] (if (sequential? data) data [data])]
+      (when (fn? callback)
+        (apply callback params)))))

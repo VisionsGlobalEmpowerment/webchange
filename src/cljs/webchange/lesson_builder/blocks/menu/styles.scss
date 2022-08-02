@@ -78,9 +78,10 @@
     .menu--content {
         flex: 1 1;
         padding: $menu-padding-v $menu-padding-h;
+        min-height: 0;
     }
 
     .menu--content-hidden {
-	display: none;
+        display: none;
     }
 }

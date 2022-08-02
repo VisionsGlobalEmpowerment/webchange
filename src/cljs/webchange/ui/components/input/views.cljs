@@ -38,6 +38,7 @@
            on-focus
            on-key-down
            placeholder
+           ref
            ref-atom
            required?
            select-on-focus?
@@ -73,22 +74,26 @@
                                "default"))
           handle-blur #(on-blur (.. % -target -value))
           handle-focus on-focus
-          handle-ref-atom (fn [ref]
-                            (when (some? ref)
-                              (reset! ref-atom ref)))
+          handle-ref (fn [el]
+                       (when (some? el)
+                         (when (fn? ref)
+                           (ref el))
+                         (when (some? ref-atom)
+                           (reset! ref-atom el))))
 
           has-label? (some? label)
           id (or id (when has-label? (random-uuid)))]
       [:div {:class-name       (get-class-name (-> {"bbs--input-wrapper" true}
                                                    (assoc class-name (some? class-name))))
              :data-wrapper-for id}
-       [:div {:class-name "bbs--input-wrapper--header"}
-        (when has-label?
-          [input-label {:for       id
-                        :required? required?}
-           label])
-        (when (some? error)
-          [input-error error])]
+       (when (or has-label? (some? error))
+         [:div {:class-name "bbs--input-wrapper--header"}
+          (when has-label?
+            [input-label {:for       id
+                          :required? required?}
+             label])
+          (when (some? error)
+            [input-error error])])
        [:input (cond-> {:class-name  (get-class-name {"bbs--input" true})
                         :disabled    disabled?
                         :placeholder (cond-> placeholder
@@ -105,7 +110,8 @@
                        (some? name) (assoc :name name)
                        (some? value) (assoc :value value)
                        (some? default-value) (assoc :default-value default-value)
-                       (some? ref-atom) (assoc :ref handle-ref-atom)
+                       (or (some? ref)
+                           (some? ref-atom)) (assoc :ref handle-ref)
                        (fn? on-enter-press) (assoc :on-key-press handle-key-press)
                        (fn? on-key-down) (assoc :on-key-down handle-key-down)
                        (fn? on-blur) (assoc :on-blur handle-blur)
