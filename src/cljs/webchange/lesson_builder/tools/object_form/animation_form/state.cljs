@@ -57,7 +57,6 @@
                                change-skeleton? (assoc :name name)
                                (string? skin-params) (assoc :skin skin-params)
                                (map? skin-params) (assoc :skin-names skin-params))]
-      (js/console.log "set character" value object-state)
       {:db (-> db
                (update-in [:objects object-name] merge object-state))
        :dispatch [::state-renderer/set-scene-object-state object-name object-state]})))

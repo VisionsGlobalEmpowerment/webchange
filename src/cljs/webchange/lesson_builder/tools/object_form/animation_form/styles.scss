@@ -1,0 +1,28 @@
+.animation-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    justify-content: center;
+
+    .additional-fields {
+	padding: 0px 20px;
+	.flip-field {
+	    display: flex;
+
+	    justify-content: space-between;
+
+            @include bbs--icon-size(20px);
+	}
+	.scale-field {
+	    display: flex;
+
+	    align-items: center;
+	    justify-content: space-between;
+
+	    .bbs--input {
+		width: 50px;
+	    }
+	}
+    }
+}

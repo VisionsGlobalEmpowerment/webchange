@@ -180,3 +180,13 @@
   (fn [{:keys [activity-data]} [_ {:keys [objects]}]]
     (let [updated-activity-data (update activity-data :objects merge objects)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
+  ::toggle-object-visibility
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ object-name]]
+    (let [object-key (keyword object-name)
+          visible (-> (get-in activity-data [:objects object-key :visible] true) not)
+          updated-activity-data (assoc-in activity-data [:objects object-key :visible] visible)]
+      {:dispatch-n [[::state/set-activity-data updated-activity-data]
+                    [::state-renderer/set-scene-object-state object-name {:visible visible}]]})))
