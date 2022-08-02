@@ -49,7 +49,7 @@
   (update-current-state db {:components [component-key]}))
 
 (defn- push-current-component
-  [db component-key tab-key]
+  [db component-key]
   (update-in db [current-state-key :components] concat [component-key]))
 
 ;; history
