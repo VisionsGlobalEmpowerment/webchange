@@ -1,5 +1,6 @@
 .component--toolbox {
     $gap: $default-gap * 0.5;
+    $header-gap: 18px;;
 
     display: flex;
     flex-direction: column;
@@ -14,7 +15,7 @@
     .toolbox--header {
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: $header-gap;
 
         padding: 0 24px;
         min-height: 60px;
@@ -36,6 +37,15 @@
     }
 
     .toolbox--header--name {
+    }
+
+    .toolbox--header--text {
+        @include bbs--noto-14-r;
+        border-left: solid 1px bbs--color(grey-4);
+        padding-left: $header-gap;
+    }
+
+    .toolbox--header--filler {
         flex: 1 1;
     }
 

@@ -11,7 +11,23 @@
 (s/def ::button-icon (s/or :empty nil? :defined ::ui-spec/general-icon))
 
 (defn button
-  [{:keys [class-name chip chip-color color disabled? href icon icon-side loading? on-click shape state target text text-align title variant]
+  [{:keys [class-name
+           chip
+           chip-color
+           color
+           disabled?
+           href
+           icon
+           icon-side
+           loading?
+           on-click
+           shape
+           state
+           target
+           text
+           text-align
+           title
+           variant]
     :or   {color      "yellow-1"
            shape      "rectangle"
            disabled?  false
@@ -19,8 +35,7 @@
            loading?   false
            on-click   #()
            target     "_blank"
-           text-align "center"
-           variant    "contained"}}]
+           text-align "center"}}]
   {:pre [(or (nil? chip) (some #{chip} available-values/icon-system))
          (or (nil? chip-color) (some #{chip-color} available-values/color))
          (some #{color} available-values/color)
@@ -47,6 +62,7 @@
                                                          (str "bbs--button--shape-" shape)           (some? shape)
                                                          (str "bbs--button--state-" state)           (some? state)
                                                          (str "bbs--button--text-align-" text-align) (some? text-align)
+                                                         (str "bbs--button--variant-" variant)       (some? variant)
                                                          class-name                                  (some? class-name)})
                             :disabled   (or disabled? loading?)
                             :on-click   handle-click}

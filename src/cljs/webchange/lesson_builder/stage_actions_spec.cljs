@@ -7,6 +7,11 @@
 (s/def ::action-tag string?)
 (s/def ::action-target string?)
 
+(s/def :audio-region/duration number?)
+(s/def :audio-region/end number?)
+(s/def :audio-region/start number?)
+(s/def ::audio-region (s/keys :req-un [:audio-region/duration :audio-region/end :audio-region/start]))
+
 (s/def :background-single-data/type #(= "background"))
 (s/def :background-single-data/src string?)
 (s/def ::background-single-data (s/keys :req-un [:background-single-data/type :background-single-data/src]))
@@ -24,6 +29,7 @@
                                :layered ::background-layered-data))
 
 (s/def ::data map?)
+(s/def ::number number?)
 (s/def ::object-name (s/or :string string? :keyword keyword?))
 (s/def ::position number?)
 (s/def ::text string?)

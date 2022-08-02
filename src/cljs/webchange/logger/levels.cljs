@@ -2,7 +2,7 @@
   (:require
     [webchange.utils.list :refer [in-list?]]))
 
-(def current-level (atom :trace))
+(def current-level (atom :log))
 
 (def levels (atom {:trace 300
                    :log   400

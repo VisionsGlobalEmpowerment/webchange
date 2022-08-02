@@ -11,17 +11,7 @@
     [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as utils]))
 
-(re-frame/reg-event-fx
-  ::change-background
-  [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ background-data]]
-    {:pre [(s/valid? ::spec/background-data background-data)]}
-    (let [[name] (utils/get-scene-background activity-data)
-          updated-activity-data (update-in activity-data [:objects name] merge background-data)]
-      ;; ToDo: update stage: change background
-      ;; {:dispatch [::state-renderer/set-scene-object-state name background-data]}
-      {:dispatch-n [[::state/set-activity-data updated-activity-data]
-                    [::stage-state/reset]]})))
+;; actions
 
 (defn- remove-action
   [activity-data {:keys [action-path]}]
@@ -45,75 +35,6 @@
                                 updated-activity-data)]
     updated-activity-data))
 
-(re-frame/reg-event-fx
-  ::remove-action
-  [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-path] :as props}]]
-    {:pre [(s/valid? ::spec/action-path action-path)]}
-    (let [updated-activity-data (remove-action activity-data props)]
-      {:dispatch-n [[::state/set-activity-data updated-activity-data]
-                    [::script-state/set-selected-action nil]]})))
-
-(re-frame/reg-event-fx
-  ::set-action-target
-  [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-path target]}]]
-    {:pre [(s/valid? ::spec/action-path action-path)
-           (s/valid? ::spec/action-target target)]}
-    (let [update-path (concat [:actions] action-path action-utils/inner-action-path [:target])
-          updated-activity-data (assoc-in activity-data update-path target)]
-      {:dispatch [::state/set-activity-data updated-activity-data]})))
-
-(re-frame/reg-event-fx
-  ::set-action-phrase-text
-  [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-path phrase-text]}]]
-    {:pre [(s/valid? ::spec/action-path action-path)
-           (s/valid? ::spec/action-target phrase-text)]}
-    (let [update-path (concat [:actions] action-path action-utils/inner-action-path [:phrase-text])
-          updated-activity-data (assoc-in activity-data update-path phrase-text)]
-      {:dispatch [::state/set-activity-data updated-activity-data]})))
-
-(re-frame/reg-event-fx
-  ::set-action-phrase-audio
-  [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-path audio-url]}]]
-    {:pre [(s/valid? ::spec/action-path action-path)
-           (s/valid? ::spec/url audio-url)]}
-    (let [update-path (concat [:actions] action-path action-utils/inner-action-path [:audio])
-          updated-activity-data (assoc-in activity-data update-path audio-url)]
-      {:dispatch [::state/set-activity-data updated-activity-data]})))
-
-(re-frame/reg-event-fx
-  ::toggle-action-tag
-  [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-path tag]}]]
-    {:pre [(s/valid? ::spec/action-path action-path)
-           (s/valid? ::spec/action-tag tag)]}
-    (let [action-data (utils/get-action activity-data action-path)
-          action-tags (get action-data :tags [])
-          new-tags (if (some #{tag} action-tags)
-                     (->> action-tags (remove #(= % tag)) (vec))
-                     (-> action-tags (conj tag) (distinct) (vec)))
-          update-path (concat [:actions] action-path [:tags])
-          updated-activity-data (assoc-in activity-data update-path new-tags)]
-      {:dispatch [::state/set-activity-data updated-activity-data]})))
-
-(defn- insert-action
-  [activity-data {:keys [action-data parent-data-path position]}]
-  (let [update-path (concat [:actions] parent-data-path)
-        updated-activity-data (update-in activity-data update-path list-utils/insert-at-position action-data position)]
-    updated-activity-data))
-
-(re-frame/reg-event-fx
-  ::insert-action
-  [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [action-data parent-data-path position] :as props}]]
-    {:pre [(s/valid? ::spec/action-data action-data)
-           (s/valid? ::spec/action-path parent-data-path)
-           (s/valid? ::spec/position position)]}
-    {:dispatch [::state/set-activity-data (insert-action activity-data props)]}))
-
 (defn- split-position
   [path]
   (let [path (vec path)
@@ -125,6 +46,30 @@
   [path position]
   (-> (vec path)
       (conj position)))
+
+(defn- insert-action
+  [activity-data {:keys [action-data parent-data-path position]}]
+  (let [update-path (concat [:actions] parent-data-path)
+        updated-activity-data (update-in activity-data update-path list-utils/insert-at-position action-data position)]
+    updated-activity-data))
+
+(re-frame/reg-event-fx
+  ::remove-action
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path] :as props}]]
+    {:pre [(s/valid? ::spec/action-path action-path)]}
+    (let [updated-activity-data (remove-action activity-data props)]
+      {:dispatch-n [[::state/set-activity-data updated-activity-data]
+                    [::script-state/set-selected-action nil]]})))
+
+(re-frame/reg-event-fx
+  ::insert-action
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-data parent-data-path position] :as props}]]
+    {:pre [(s/valid? ::spec/action-data action-data)
+           (s/valid? ::spec/action-path parent-data-path)
+           (s/valid? ::spec/position position)]}
+    {:dispatch [::state/set-activity-data (insert-action activity-data props)]}))
 
 (re-frame/reg-event-fx
   ::move-action
@@ -148,23 +93,66 @@
                     [::script-state/set-selected-action nil]]})))
 
 (re-frame/reg-event-fx
-  ::set-object-text
+  ::update-inner-action
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [object-name text]}]]
-    {:pre [(s/valid? ::spec/object-name object-name)
-           (s/valid? ::spec/text text)]}
-    (let [update-path [:objects (keyword object-name) :text]
-          updated-activity-data (assoc-in activity-data update-path text)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path data-patch]}]]
+    {:pre [(s/valid? ::spec/action-path action-path)
+           (s/valid? ::spec/data data-patch)]}
+    (let [update-path (concat [:actions] action-path action-utils/inner-action-path)
+          updated-activity-data (update-in activity-data update-path merge data-patch)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
-  ::update-asset
+  ::set-action-target
+  (fn [_ [_ {:keys [action-path target]}]]
+    {:pre [(s/valid? ::spec/action-target target)]}
+    {:dispatch [::update-inner-action {:action-path action-path
+                                       :data-patch  {:target target}}]}))
+
+(re-frame/reg-event-fx
+  ::set-action-phrase-text
+  (fn [_ [_ {:keys [action-path phrase-text]}]]
+    {:pre [(s/valid? ::spec/text phrase-text)]}
+    {:dispatch [::update-inner-action {:action-path action-path
+                                       :data-patch  {:phrase-text phrase-text}}]}))
+
+(re-frame/reg-event-fx
+  ::set-action-phrase-audio
+  (fn [_ [_ {:keys [action-path audio-url]}]]
+    {:pre [(s/valid? ::spec/url audio-url)]}
+    {:dispatch [::update-inner-action {:action-path action-path
+                                       :data-patch  {:audio audio-url}}]}))
+
+(re-frame/reg-event-fx
+  ::set-action-phrase-region
+  (fn [_ [_ {:keys [action-path region]}]]
+    {:pre [(s/valid? ::spec/audio-region region)]}
+    {:dispatch [::update-inner-action {:action-path action-path
+                                       :data-patch  region}]}))
+
+(re-frame/reg-event-fx
+  ::set-action-phrase-volume
+  (fn [_ [_ {:keys [action-path volume]}]]
+    {:pre [(s/valid? ::spec/number volume)]}
+    {:dispatch [::update-inner-action {:action-path action-path
+                                       :data-patch  {:volume volume}}]}))
+
+(re-frame/reg-event-fx
+  ::toggle-action-tag
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [asset-url data-patch]}]]
-    {:pre [(s/valid? ::spec/url asset-url)
-           (s/valid? ::spec/data data-patch)]}
-    (let [updated-activity-data (update activity-data :assets list-utils/update-by-predicate #(= (:url %) asset-url) merge data-patch)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path tag]}]]
+    {:pre [(s/valid? ::spec/action-path action-path)
+           (s/valid? ::spec/action-tag tag)]}
+    (let [action-data (utils/get-action activity-data action-path)
+          action-tags (get action-data :tags [])
+          new-tags (if (some #{tag} action-tags)
+                     (->> action-tags (remove #(= % tag)) (vec))
+                     (-> action-tags (conj tag) (distinct) (vec)))
+          update-path (concat [:actions] action-path [:tags])
+          updated-activity-data (assoc-in activity-data update-path new-tags)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+;; assets
 
 (re-frame/reg-event-fx
   ::add-asset
@@ -182,11 +170,38 @@
     (let [updated-activity-data (update activity-data :assets list-utils/remove-by-predicate #(= (:url %) asset-url) merge)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
+
 (re-frame/reg-event-fx
-  ::update-objects
+  ::update-asset
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [objects]}]]
-    (let [updated-activity-data (update activity-data :objects merge objects)]
+  (fn [{:keys [activity-data]} [_ {:keys [asset-url data-patch]}]]
+    {:pre [(s/valid? ::spec/url asset-url)
+           (s/valid? ::spec/data data-patch)]}
+    (let [updated-activity-data (update activity-data :assets list-utils/update-by-predicate #(= (:url %) asset-url) merge data-patch)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+;; objects
+
+(re-frame/reg-event-fx
+  ::change-background
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ background-data]]
+    {:pre [(s/valid? ::spec/background-data background-data)]}
+    (let [[name] (utils/get-scene-background activity-data)
+          updated-activity-data (update-in activity-data [:objects name] merge background-data)]
+      ;; ToDo: update stage: change background
+      ;; {:dispatch [::state-renderer/set-scene-object-state name background-data]}
+      {:dispatch-n [[::state/set-activity-data updated-activity-data]
+                    [::stage-state/reset]]})))
+
+(re-frame/reg-event-fx
+  ::set-object-text
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [object-name text]}]]
+    {:pre [(s/valid? ::spec/object-name object-name)
+           (s/valid? ::spec/text text)]}
+    (let [update-path [:objects (keyword object-name) :text]
+          updated-activity-data (assoc-in activity-data update-path text)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
@@ -198,3 +213,10 @@
           updated-activity-data (assoc-in activity-data [:objects object-key :visible] visible)]
       {:dispatch-n [[::state/set-activity-data updated-activity-data]
                     [::state-renderer/set-scene-object-state object-name {:visible visible}]]})))
+
+(re-frame/reg-event-fx
+  ::update-objects
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [objects]}]]
+    (let [updated-activity-data (update activity-data :objects merge objects)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))

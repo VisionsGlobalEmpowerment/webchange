@@ -24,7 +24,7 @@
    "Parse string to integer if string contains only digits. Return string otherwise."
    (if (or force?
            (and (string? str)
-                (integer-str? str)))
+                (number-str? str)))
      #?(:clj  (.parseFloat Float str)
         :cljs (.parseFloat js/Number str))
      str)))

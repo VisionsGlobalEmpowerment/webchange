@@ -3,23 +3,117 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.lesson-builder.widgets.action-audio-editor.state :as state]
-    [webchange.ui.index :as ui]))
+    [webchange.ui.index :as ui]
+    [webchange.utils.uid :refer [get-uid]]))
+
+(defn play-button
+  [{:keys [id class-name wave]}]
+  (let [state @(re-frame/subscribe [::state/play-button-state id])
+        handle-start-playing #(re-frame/dispatch [::state/start-playing id wave])
+        handle-stop-playing #(re-frame/dispatch [::state/stop-playing id wave])
+        handle-click #(case state
+                        "play" (handle-stop-playing)
+                        "stop" (handle-start-playing))]
+    [ui/button {:icon       (case state
+                              "play" "stop"
+                              "stop" "play")
+                :shape      "rounded"
+                :on-click   handle-click
+                :class-name class-name
+                :variant    "filled"}]))
+
+(defn rewind-buttons
+  [{:keys [class-name wave]}]
+  (let [handle-rewind-to-start #(re-frame/dispatch [::state/rewind-to-start wave])
+        handle-rewind-to-end #(re-frame/dispatch [::state/rewind-to-end wave])]
+    [:div {:class-name class-name}
+     [ui/button {:title    "Rewind to start of selection"
+                 :icon     "rewind-backward"
+                 :color    "blue-1"
+                 :on-click handle-rewind-to-start}]
+     [ui/button {:title    "Rewind to end of selection"
+                 :icon     "rewind-forward"
+                 :color    "blue-1"
+                 :on-click handle-rewind-to-end}]]))
+
+(defn volume
+  [{:keys [action-path class-name id]}]
+  (let [value @(re-frame/subscribe [::state/current-volume id])
+        handle-change #(re-frame/dispatch [::state/set-current-volume id %])
+        handle-input #(re-frame/dispatch [::state/set-action-volume action-path %])]
+    [:div {:class-name (ui/get-class-name {"audio-editor--volume" true
+                                           class-name             (some? class-name)})}
+     [ui/range {:label     "Volume"
+                :value     value
+                :on-change handle-change
+                :on-input  handle-input}]]))
+
+(defn wave
+  [{:keys [id action-path class-name ref]}]
+  (let [audio-url @(re-frame/subscribe [::state/audio-url action-path])
+        audio-region @(re-frame/subscribe [::state/audio-region action-path])
+        handle-change #(re-frame/dispatch [::state/set-action-region action-path %])
+        handle-ready #(re-frame/dispatch [::state/set-loading id false])
+        handle-ref #(reset! ref %)
+        handle-stop-playing #(re-frame/dispatch [::state/stop-playing id ref])]
+    (when (some? audio-url)
+      ^{:key (str action-path "--" audio-url)}
+      [ui/audio-wave {:url        audio-url
+                      :region     audio-region
+                      :on-change  handle-change
+                      :on-pause   handle-stop-playing
+                      :on-ready   handle-ready
+                      :ref        handle-ref
+                      :class-name class-name}])))
+
+(defn zoom
+  [{:keys [class-name wave]}]
+  (let [handle-zoom-in #(re-frame/dispatch [::state/zoom-in wave])
+        handle-zoom-out #(re-frame/dispatch [::state/zoom-out wave])]
+    [:div {:class-name class-name}
+     [ui/button {:on-click handle-zoom-out
+                 :title    "Zoom out"
+                 :icon     "zoom-out"
+                 :shape    "rounded"
+                 :color    "blue-2"}]
+     [ui/button {:on-click handle-zoom-in
+                 :title    "Zoom in"
+                 :icon     "zoom-in"
+                 :shape    "rounded"
+                 :color    "blue-2"}]]))
 
 (defn action-audio-editor
-  [{:keys [action-path]}]
-  (r/with-let [audio-wave-control (atom nil)
-               handle-ref #(reset! audio-wave-control %)]
-    (let [audio-url @(re-frame/subscribe [::state/audio-url action-path])
-          handle-play-click (fn []
-                              (let [{:keys [play]} @audio-wave-control]
-                                (play)))]
+  []
+  (let [id (get-uid)
+        audio-wave-control (atom nil)]
+    (r/create-class
+      {:component-did-mount
+       (fn [this]
+         (re-frame/dispatch [::state/init id (r/props this)]))
 
-      [:div {:class-name (ui/get-class-name {"widget--action-audio-editor" true})}
-       (when (some? audio-url)
-         ^{:key (str action-path "--" audio-url)}
-         [ui/audio-wave {:url       audio-url
-                         :on-change print
-                         :ref       handle-ref}])
-       [ui/button {:icon     "play"
-                   :shape    "rounded"
-                   :on-click handle-play-click}]])))
+       :component-will-unmount
+       (fn []
+         (re-frame/dispatch [::state/reset id]))
+
+       :reagent-render
+       (fn [{:keys [action-path]}]
+         (let [loading? @(re-frame/subscribe [::state/loading? id])]
+           [:div {:class-name (ui/get-class-name {"widget--audio-editor" true})}
+            [wave {:id          id
+                   :action-path action-path
+                   :class-name  "audio-editor--wave"
+                   :ref         audio-wave-control}]
+            (if-not loading?
+              [:<>
+               [zoom {:wave       audio-wave-control
+                      :class-name "audio-editor--zoom"}]
+               [volume {:id          id
+                        :action-path action-path
+                        :class-name  "audio-editor--volume"}]
+
+               [rewind-buttons {:wave       audio-wave-control
+                                :class-name "audio-editor--rewind"}]
+               [play-button {:id         id
+                             :wave       audio-wave-control
+                             :class-name "audio-editor--play"}]]
+              [ui/loading-overlay])]))})))

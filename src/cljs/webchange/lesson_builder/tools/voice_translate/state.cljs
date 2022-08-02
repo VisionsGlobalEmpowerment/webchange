@@ -29,6 +29,15 @@
     (-> (action-utils/get-inner-action action-data)
         (get :audio))))
 
+(re-frame/reg-sub
+  ::file-name
+  :<- [::state/activity-data]
+  :<- [::selected-audio]
+  (fn [[activity-data selected-audio]]
+    (->> (activity-utils/find-asset activity-data (fn [{:keys [data]}]
+                                                    (= (:url data) selected-audio)))
+         (activity-utils/asset-data->asset-name))))
+
 (re-frame/reg-event-fx
   ::set-selected-audio
   (fn [{:keys [db]} [_ action-path value]]

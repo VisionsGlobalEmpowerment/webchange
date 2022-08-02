@@ -1,15 +1,9 @@
-.audio-wave-form {
-    .header {
-        display: flex;
-        justify-content: space-between;
+.bbs--audio-wave {
+    wave {
+        @include bbs--with-scrollbar($show-track: true);
 
-        & > * {
-            align-items: center;
-            display: flex;
-        }
-
-        .file-name {
-            margin-left: 16px;
+        & > wave {
+            margin: 8px 0;
         }
     }
 }
