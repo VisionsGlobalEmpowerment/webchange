@@ -1,4 +1,4 @@
-(ns webchange.audio-utils.recorder)
+(ns webchange.utils.audio-recorder)
 
 (def stream (atom nil))
 (def recorder (atom nil))
