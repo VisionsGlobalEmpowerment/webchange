@@ -1718,7 +1718,7 @@
   ::progress-loaded
   (fn [{:keys [db]} [_ course-id scene-id]]
     (let [current-scene-id (or scene-id
-                               (:activity-name (progress-state/get-current-activity db))
+;                               (:activity-name (progress-state/get-current-activity db))
                                (:activity-name (lessons-activity/get-progress-next db)))]
       {:dispatch-n (list [::load-settings]
                          [::set-current-scene current-scene-id])})))
