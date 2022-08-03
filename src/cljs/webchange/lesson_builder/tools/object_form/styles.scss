@@ -1,0 +1,19 @@
+.widget--object-form {
+    @import "animation_form/styles";
+    @import "image_form/styles";
+    @import "text_form/styles";
+    @import "text_tracing_pattern_form/styles";
+    @import "video_form/styles";
+
+    max-width: 280px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    justify-content: center;
+
+    .apply-button {
+	border-radius: 30px;
+    }
+}

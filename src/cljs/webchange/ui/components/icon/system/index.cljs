@@ -28,7 +28,9 @@
     [webchange.ui.components.icon.system.icon-edit-boxed :as edit-boxed]
     [webchange.ui.components.icon.system.icon-effects :as effects]
     [webchange.ui.components.icon.system.icon-emotion :as emotion]
+    [webchange.ui.components.icon.system.icon-flip :as flip]
     [webchange.ui.components.icon.system.icon-image-broken :as image-broken]
+    [webchange.ui.components.icon.system.icon-images :as images]
     [webchange.ui.components.icon.system.icon-info :as info]
     [webchange.ui.components.icon.system.icon-move :as move]
     [webchange.ui.components.icon.system.icon-movement :as movement]
@@ -78,7 +80,9 @@
                         "edit-boxed"      edit-boxed/data
                         "effects"         effects/data
                         "emotion"         emotion/data
+                        "flip"            flip/data
                         "image-broken"    image-broken/data
+                        "images"          images/data
                         "info"            info/data
                         "move"            move/data
                         "movement"        movement/data

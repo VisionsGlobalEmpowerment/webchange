@@ -7,6 +7,7 @@
     [webchange.lesson-builder.tools.character-add.views :refer [character-add]]
     [webchange.lesson-builder.widgets.design-actions.views :refer [design-actions]]
     [webchange.lesson-builder.tools.image-add.views :refer [image-add]]
+    [webchange.lesson-builder.tools.object-form.views :refer [object-form]]
     [webchange.lesson-builder.tools.scene-layers.views :refer [scene-layers]]
     [webchange.lesson-builder.tools.settings.views :refer [settings]]
     [webchange.lesson-builder.tools.template-options.views :refer [template-options]]
@@ -19,6 +20,7 @@
                  :character-add    character-add
                  :design-actions   design-actions
                  :image-add        image-add
+                 :object-form      object-form
                  :scene-layers     scene-layers
                  :settings         settings
                  :template-options template-options

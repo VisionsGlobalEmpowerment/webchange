@@ -61,8 +61,7 @@
     (let [handle-change (fn [event]
                           (when (fn? on-change)
                             (on-change (cond->> (.. event -target -value)
-                                                (= type "int") (.parseInt js/Number)
-                                                (= type "float") (.parseFloat js/Number)))))
+                                                (= type "int") (.parseInt js/Number)))))
           handle-click (fn [event]
                          (when select-on-focus? (.select (.-target event)))
                          (when (fn? on-click) (on-click event)))

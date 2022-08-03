@@ -7,10 +7,10 @@
 
 (defn block-stage
   [{:keys [class-name]}]
-  (let [scene-data @(re-frame/subscribe [::state/scene-data])]
+  (let [scene-data @(re-frame/subscribe [::state/scene-data])
+        key @(re-frame/subscribe [::state/stage-key])]
     [:div {:id         "block--stage"
            :class-name class-name}
-     ;; ToDo: get rid of hard update
-     ^{:key (rand)}
+     ^{:key key}
      [stage {:mode       ::modes/editor
              :scene-data scene-data}]]))

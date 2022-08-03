@@ -123,6 +123,7 @@
     (let [tab-component (-> (get menu-tabs tab-key)
                             (get :component))]
       {:db (-> db
+               (assoc history-key [])
                (set-current-tab tab-key)
                (set-current-component tab-component))})))
 

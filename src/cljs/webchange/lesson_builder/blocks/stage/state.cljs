@@ -1,9 +1,17 @@
 (ns webchange.lesson-builder.blocks.stage.state
   (:require
     [re-frame.core :as re-frame]
+    [re-frame.std-interceptors :as i]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
     [webchange.lesson-builder.state :as state]
     [webchange.resources.scene-parser :refer [get-activity-resources]]))
+
+(def path-to-db :lesson-builder/stage)
+
+(re-frame/reg-sub
+  path-to-db
+  (fn [db]
+    (get db path-to-db)))
 
 (defn- get-scene-objects
   [{:keys [scene-objects objects metadata]}]
@@ -19,3 +27,15 @@
      :objects   (get-scene-objects activity-data)
      :resources (get-activity-resources activity-data)
      :metadata  (:metadata activity-data)}))
+
+(re-frame/reg-sub
+  ::stage-key
+  :<- [path-to-db]
+  (fn [db]
+    (get db :stage-key "default")))
+
+(re-frame/reg-event-fx
+  ::reset
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :stage-key (rand))}))

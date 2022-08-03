@@ -29,5 +29,5 @@
   (let [activity-id 586]
     (course/update-activity-template! activity-id 1))
   
-  (let [activity-id 555]
+  (let [activity-id 691]
     (course/get-activity-current-version activity-id)))
