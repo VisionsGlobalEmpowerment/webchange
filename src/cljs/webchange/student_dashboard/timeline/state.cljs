@@ -58,8 +58,9 @@
 (re-frame/reg-event-fx
   ::open-next-activity
   (fn [{:keys [db]} [_]]
-    (let [next-activity (get-next-activity db)]
-      {:dispatch [::open-activity next-activity]})))
+    (let [course (:current-course db)
+          href (str "/courses/" course)]
+      (set! js/document.location href))))
 
 (re-frame/reg-event-fx
   ::open-activity

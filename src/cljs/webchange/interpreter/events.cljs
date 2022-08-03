@@ -1411,8 +1411,9 @@
 (re-frame/reg-event-fx
   ::run-next-activity
   (fn [{:keys [db]} [_ _]]
-    (let [next-activity (next-activity-name db)]
-      {:dispatch-n (list [::set-current-scene next-activity])})))
+    (let [course (:current-course db)
+          href (str "/courses/" course)]
+      (set! js/document.location href))))
 
 (re-frame/reg-event-fx
   ::restart-scene
@@ -1431,9 +1432,9 @@
 (re-frame/reg-event-fx
   ::open-student-dashboard
   (fn [{:keys [db]} [_ _]]
-    (let [course-id (:current-course db)]
-      {:dispatch-n (list [::clear-current-scene]
-                         [::student-dashboard/open-student-course-dashboard {:course-id course-id}])})))
+    (let [course (:current-course db)
+          href (str "/courses/" course "/dashboard")]
+      (set! js/document.location href))))
 
 (re-frame/reg-event-fx
   ::open-student-course-dashboard
