@@ -114,4 +114,4 @@
              :uberjar-name       "webchange.jar"
              :jar-exclusions     [#"public/raw/.*" #"public/upload/.*"]
              :uberjar-exclusions [#"public/raw/.*" #"public/upload/.*"]
-             :prep-tasks         ["compile" ["sass" "once"]]}})
+             :prep-tasks         ["compile"]}})
