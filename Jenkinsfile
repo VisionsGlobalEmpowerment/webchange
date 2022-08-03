@@ -27,6 +27,7 @@ node {
     if (env.BRANCH_NAME == 'backport') {
         stage('Build') {
             sh 'lein clean'
+	    sh 'npm install'
 	    sh 'shadow-cljs release app'
 	    sh 'shadow-cljs release service-worker'
             sh 'lein uberjar'
