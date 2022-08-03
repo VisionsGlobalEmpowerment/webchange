@@ -54,7 +54,7 @@
 (defn website-token-resource
   []
   (let [website-host (env :website-host)]
-    (str "https://" website-host "/api/authenticate")))
+    (str "https://" website-host "/wp-json/api/authenticate")))
 
 (defn get-user-by-token
   [token]
