@@ -741,7 +741,8 @@
       (create-request {:key    :upload-file
                        :method :post
                        :uri    (str "/api/assets/")
-                       :body   form-data} handlers))))
+                       :body   form-data}
+                      handlers))))
 
 (re-frame/reg-event-fx
   ::upload-audio-blob

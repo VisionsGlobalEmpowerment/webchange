@@ -42,6 +42,7 @@
     [webchange.ui.components.icon.system.icon-search :as search]
     [webchange.ui.components.icon.system.icon-select :as select]
     [webchange.ui.components.icon.system.icon-statistics :as statistics]
+    [webchange.ui.components.icon.system.icon-stop-recording :as stop-recording]
     [webchange.ui.components.icon.system.icon-template :as template]
     [webchange.ui.components.icon.system.icon-translate :as translate]
     [webchange.ui.components.icon.system.icon-trash :as trash]
@@ -94,6 +95,7 @@
                         "search"          search/data
                         "select"          select/data
                         "statistics"      statistics/data
+                        "stop-recording"  stop-recording/data
                         "template"        template/data
                         "translate"       translate/data
                         "trash"           trash/data

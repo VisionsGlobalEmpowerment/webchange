@@ -27,7 +27,7 @@
     [webchange.interpreter.renderer.scene.components.flipbook.state]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.renderer.scene.components.collisions :as collisions]
-    [webchange.audio-utils.recorder :as audio-recorder]
+    [webchange.utils.audio-recorder :as audio-recorder]
     [webchange.resources.manager :as resources-manager]
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
     [webchange.interpreter.renderer.scene.app :as app]

@@ -167,6 +167,14 @@
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx
+  ::add-asset
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ asset-data]]
+    {:pre [(s/valid? ::spec/data asset-data)]}
+    (let [updated-activity-data (update activity-data :assets conj asset-data)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
   ::remove-asset
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [asset-url]}]]

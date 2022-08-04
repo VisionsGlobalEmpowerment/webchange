@@ -1,7 +1,28 @@
 .widget--audio-add {
+    padding: 16px 0;
+
     .audio-add--index {
         display: flex;
         justify-content: center;
         gap: 8px;
+    }
+
+    .audio-add--record-panel {
+         display: flex;
+         flex-direction: column;
+         gap: 8px;
+     }
+
+    .audio-add--upload-button {
+        width: 120px;
+    }
+
+    .audio-add--stop-recording-button {
+        @include bbs--icon-color(bbs--color(white));
+        width: 155px;
+    }
+
+    .record-panel--message {
+        @include bbs--noto-14-r;
     }
 }

@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.audio-utils.recorder :as recorder]
+    [webchange.utils.audio-recorder :as recorder]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
     [webchange.ui-framework.components.index :refer [icon-button]]))
 
