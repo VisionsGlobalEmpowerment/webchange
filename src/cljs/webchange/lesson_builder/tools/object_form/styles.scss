@@ -13,6 +13,12 @@
 
     justify-content: center;
 
+    .group-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;	
+    }
+    
     .apply-button {
 	border-radius: 30px;
     }

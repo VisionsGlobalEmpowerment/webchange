@@ -73,7 +73,8 @@
     (let [objects (:objects db)
           has-changes? (-> activity-data :objects (#(select-keys % (keys objects))) (not= objects))]
       (when has-changes?
-        {:dispatch [::stage-state/reset]}))))
+        {:db (assoc db :objects {})
+         :dispatch [::stage-state/reset]}))))
 
 (comment
   @(re-frame/subscribe [path-to-db]))

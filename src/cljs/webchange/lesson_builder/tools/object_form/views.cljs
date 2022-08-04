@@ -31,7 +31,9 @@
   [group]
   (re-frame/dispatch [::state/init-group group])
   (fn [group]
-    [:div "group"]))
+    [:div.group-panel
+     (for [child (:children group)]
+       [object-panel (keyword child)])]))
 
 (defn- panels
   [target]
