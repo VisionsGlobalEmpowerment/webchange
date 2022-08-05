@@ -3,6 +3,9 @@
     [webchange.ui.components.icon.system.icon-account :as account]
     [webchange.ui.components.icon.system.icon-account-add :as account-add]
     [webchange.ui.components.icon.system.icon-account-remove :as account-remove]
+    [webchange.ui.components.icon.system.icon-align-left :as align-left]
+    [webchange.ui.components.icon.system.icon-align-right :as align-right]
+    [webchange.ui.components.icon.system.icon-align-center :as align-center]
     [webchange.ui.components.icon.system.icon-archive :as archive]
     [webchange.ui.components.icon.system.icon-arrow-left :as arrow-left]
     [webchange.ui.components.icon.system.icon-arrow-right :as arrow-right]
@@ -54,6 +57,9 @@
                        {"account"         account/data
                         "account-add"     account-add/data
                         "account-remove"  account-remove/data
+                        "align-left"      align-left/data
+                        "align-right"     align-right/data
+                        "align-center"    align-center/data
                         "archive"         archive/data
                         "arrow-left"      arrow-left/data
                         "arrow-right"     arrow-right/data
