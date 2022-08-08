@@ -39,6 +39,8 @@
     [webchange.ui.components.icon.system.icon-question :as question]
     [webchange.ui.components.icon.system.icon-record :as record]
     [webchange.ui.components.icon.system.icon-restore :as restore]
+    [webchange.ui.components.icon.system.icon-rewind-backward :as rewind-backward]
+    [webchange.ui.components.icon.system.icon-rewind-forward :as rewind-forward]
     [webchange.ui.components.icon.system.icon-search :as search]
     [webchange.ui.components.icon.system.icon-select :as select]
     [webchange.ui.components.icon.system.icon-statistics :as statistics]
@@ -49,6 +51,8 @@
     [webchange.ui.components.icon.system.icon-upload :as upload]
     [webchange.ui.components.icon.system.icon-visibility-off :as visibility-off]
     [webchange.ui.components.icon.system.icon-visibility-on :as visibility-on]
+    [webchange.ui.components.icon.system.icon-zoom-in :as zoom-in]
+    [webchange.ui.components.icon.system.icon-zoom-out :as zoom-out]
     [webchange.ui.components.icon.utils :refer [with-prefix]]))
 
 (def data (with-prefix "system"
@@ -92,13 +96,17 @@
                         "question"        question/data
                         "record"          record/data
                         "restore"         restore/data
+                        "rewind-backward" rewind-backward/data
+                        "rewind-forward"  rewind-forward/data
                         "search"          search/data
                         "select"          select/data
                         "statistics"      statistics/data
-                        "stop-recording"  stop-recording/data
+                        "stop"            stop-recording/data
                         "template"        template/data
                         "translate"       translate/data
                         "trash"           trash/data
                         "upload"          upload/data
                         "visibility-off"  visibility-off/data
-                        "visibility-on"   visibility-on/data}))
+                        "visibility-on"   visibility-on/data
+                        "zoom-in"         zoom-in/data
+                        "zoom-out"        zoom-out/data}))

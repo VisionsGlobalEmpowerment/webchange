@@ -1,0 +1,61 @@
+.bbs--range {
+    @include bbs--noto-12-r;
+
+    display: flex;
+    gap: 8px;
+
+    .bbs--range--label {
+        color: bbs--color(blue-1);
+    }
+
+    .bbs--range--input-wrapper {
+        flex: 1 1;
+    }
+
+    input[type=range] {
+        -webkit-appearance: none;
+        width: 100%;
+        margin: 0;
+        background: transparent;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+    }
+
+    input[type=range]:focus {
+        outline: none;
+    }
+
+    // thumb
+
+    @mixin thumb-style {
+        $height: 13px;
+
+        -webkit-appearance: none;
+        width: 6px;
+        height: $height;
+        background: bbs--color(blue-1);
+        border-radius: 999px;
+        cursor: pointer;
+        margin-top: -$height * 0.5;
+    }
+
+    input[type=range]::-webkit-slider-thumb {@include thumb-style;}
+    input[type=range]::-moz-range-thumb {@include thumb-style; }
+
+    // track
+
+    @mixin track-style {
+        width: 100%;
+        height: 1px;
+        cursor: pointer;
+        border-bottom: 1px solid bbs--color(grey-3);
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {@include track-style;}
+    input[type=range]::-moz-range-track {@include track-style;}
+    input[type=range]:focus::-webkit-slider-runnable-track {
+        background: bbs--color(blue-1);
+    }
+}

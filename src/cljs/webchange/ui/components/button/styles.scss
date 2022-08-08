@@ -175,5 +175,32 @@
                 }
             }
         }
+
+        &.bbs--button--variant-filled {
+            .bbs--button--icon {
+                @include bbs--icon-color(bbs--color(white));
+            }
+
+            progress {
+                @include bbs--progress-color(bbs--color(white));
+            }
+
+            @each $color in $bbs--base-colors {
+                &.bbs--button--color-#{$color} {
+
+                    background-color: bbs--color(#{$color});
+
+                    &:not([disabled]):hover,
+                    &:not([disabled]).bbs--button--state-hover {
+                        background-color: bbs--button-color($color, $state: hover);
+                    }
+
+                    &:not([disabled]):active,
+                    &:not([disabled]).bbs--button--state-active {
+                        background-color: bbs--button-color($color, $state: active);
+                    }
+                }
+            }
+        }
     }
 }

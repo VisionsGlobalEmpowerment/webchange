@@ -25,6 +25,7 @@
     [webchange.ui.components.panel.views :as panel-views]
     [webchange.ui.components.password.views :as password-views]
     [webchange.ui.components.progress.views :as progress-views]
+    [webchange.ui.components.range.views :as range-views]
     [webchange.ui.components.select.views :as select-views]
     [webchange.ui.components.switch.views :as switch-views]
     [webchange.ui.components.tab.views :as tab-views]
@@ -61,6 +62,7 @@
 (def focus-overlay overlay-views/focus-overlay)
 (def panel panel-views/panel)
 (def password password-views/password)
+(def range range-views/range)
 (def select select-views/select)
 (def social-icon icon-views/social-icon)
 (def system-icon icon-views/system-icon)

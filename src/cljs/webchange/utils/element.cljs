@@ -7,6 +7,17 @@
   (-> (.-classList el)
       (.add class-name)))
 
+(defn create
+  ([]
+   (create {}))
+  ([{:keys [el]
+     :or   {el "div"}}]
+   (js/document.createElement "div")))
+
+(defn get-first-child
+  [el]
+  (.-firstChild el))
+
 (defn remove-class
   [el class-name]
   (-> (.-classList el)
@@ -28,3 +39,18 @@
 (defn closest
   [el selector]
   (.closest el selector))
+
+(defn insert-before
+  ([parent-el inserted-el]
+   (insert-before parent-el inserted-el nil))
+  ([parent-el inserted-el reference-el]
+   (.insertBefore parent-el inserted-el reference-el)))
+
+(defn remove
+  [el]
+  (.remove el))
+
+(defn remove-children
+  [el]
+  (while (get-first-child el)
+    (-> el get-first-child remove)))

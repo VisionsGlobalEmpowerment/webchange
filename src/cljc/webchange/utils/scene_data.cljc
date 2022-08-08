@@ -60,11 +60,11 @@
 
 ; Assets
 
-(defn- get-assets
+(defn get-assets
   [activity-data]
   (get activity-data :assets []))
 
-(defn- add-asset
+(defn add-asset
   [scene-data asset-data]
   (->> (fn [assets]
          (->> assets
@@ -72,7 +72,7 @@
               (vec)))
        (update scene-data :assets)))
 
-(defn- update-asset
+(defn update-asset
   [scene-data predicate asset-data-patch]
   (->> (fn [assets]
          (->> assets
@@ -83,7 +83,13 @@
               (vec)))
        (update scene-data :assets)))
 
-(defn- remove-asset
+(defn find-asset
+  [activity-data predicate]
+  (->> (get-assets activity-data)
+       (some (fn [asset-data]
+               (and (predicate {:data asset-data}) asset-data)))))
+
+(defn remove-asset
   [scene-data predicate]
   (->> (fn [assets]
          (->> assets
@@ -91,6 +97,13 @@
                         (-> {:data asset-data} (predicate) (not))))
               (vec)))
        (update scene-data :assets)))
+
+(defn asset-data->asset-name
+  [{:keys [url alias]}]
+  (or alias
+      (-> url
+          (clojure.string/split "/")
+          (last))))
 
 ; Objects
 

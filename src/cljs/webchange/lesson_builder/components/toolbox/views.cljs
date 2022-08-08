@@ -4,12 +4,15 @@
     [webchange.ui.index :as ui]))
 
 (defn- toolbox-header
-  [{:keys [actions title icon]}]
+  [{:keys [actions text title icon]}]
   [:div.toolbox--header
    (when (some? icon)
      [ui/icon {:icon       icon
                :class-name "toolbox--header--icon"}])
    [:div.toolbox--header--name title]
+   (when (some? text)
+     [:div.toolbox--header--text text])
+   [:div.toolbox--header--filler]
    (when (some? actions)
      [actions])])
 

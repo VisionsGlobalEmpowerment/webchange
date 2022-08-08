@@ -5,7 +5,7 @@
 @import "mixins";
 @import "typography";
 
-@mixin bbs--with-scrollbar {
+@mixin bbs--with-scrollbar($show-track: false) {
     &::-webkit-scrollbar-thumb {
         background-color: bbs--color(grey-4);
     }
@@ -14,12 +14,18 @@
         -webkit-appearance: none;
 
         width: 4px;
-        height: 10px;
+        height: 4px;
     }
 
     &::-webkit-scrollbar-track {
-        background-color: bbs--color(transparent);
+
         border-radius: 9999px;
+
+        @if $show-track {
+            background-color: bbs--color(grey-5);
+        } @else {
+            background-color: bbs--color(transparent);
+        }
     }
 }
 

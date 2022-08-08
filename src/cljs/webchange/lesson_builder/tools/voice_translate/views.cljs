@@ -27,13 +27,15 @@
 
 (defn audio-editor
   []
-  (let [show-audio-editor? @(re-frame/subscribe [::state/show-audio-editor?])
+  (let [file-name @(re-frame/subscribe [::state/file-name])
+        show-audio-editor? @(re-frame/subscribe [::state/show-audio-editor?])
         selected-action @(re-frame/subscribe [::state/selected-action])]
     [toolbox {:title "Voice & Translate Steps:"
               :icon  "translate"}
      "audio-editor"]
     (if show-audio-editor?
       [toolbox {:title "Audio Editor"
-                :icon  "translate"}
+                :icon  "translate"
+                :text  file-name}
        [action-audio-editor {:action-path selected-action}]]
       [welcome-translate])))

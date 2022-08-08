@@ -20,7 +20,7 @@
      [ui/button {:loading?   loading?
                  :on-click   handle-stop-recording
                  :class-name "audio-add--stop-recording-button"
-                 :icon       "stop-recording"
+                 :icon       "stop"
                  :icon-side  "left"
                  :shape      "rounded"}
       "Stop Recording"]]))
