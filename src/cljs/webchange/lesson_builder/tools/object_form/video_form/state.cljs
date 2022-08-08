@@ -23,6 +23,5 @@
   ::set-volume
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ object-name value]]
-    (js/console.log "volume" value)
     {:db (assoc-in db [:objects object-name :volume] value)
      :dispatch [::state-renderer/set-scene-object-state object-name {:volume value}]}))

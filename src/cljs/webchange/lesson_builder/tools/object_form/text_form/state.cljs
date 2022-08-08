@@ -10,9 +10,7 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ object-name]]
-    (let [scale (-> (get-in db [:objects object-name :scale :x])
-                    (js/Math.abs))]
-      {:db (assoc-in db [:values object-name :scale] scale)})))
+    {}))
 
 (re-frame/reg-sub
   ::text
