@@ -14,17 +14,6 @@
                     (js/Math.abs))]
       {:db (assoc-in db [:values object-name :scale] scale)})))
 
-(re-frame/reg-event-fx
-  ::flip
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ object-name]]
-    (let [scale (-> db
-                    (get-in [:objects object-name :scale])
-                    (or {:x 1 :y 1})
-                    (update :x #(* -1 %)))]
-      {:db (assoc-in db [:objects object-name :scale] scale)
-       :dispatch [::state-renderer/set-scene-object-state object-name {:scale scale}]})))
-
 (re-frame/reg-sub
   ::text
   :<- [path-to-db]

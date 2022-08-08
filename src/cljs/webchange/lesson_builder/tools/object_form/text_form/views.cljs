@@ -78,8 +78,8 @@
       [text-component target]]
      [:div.font-controls
       [font-family-component target]
-      [font-size-component target]
-      ]
+      [font-size-component target]]
      [text-align-component target]
      [font-color-component target]]))
+
 
