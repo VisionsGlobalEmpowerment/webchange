@@ -75,14 +75,16 @@
                                                     "with-arrow"         with-arrow?}
                                                    (assoc class-name (some? class-name)))
                                                (some? variant) (assoc (str "variant-" variant) true)))}
-     [:div {:class-name "bbs--select-wrapper--header"}
-      (when has-label?
-        [input-label {:for       id
-                      :required? required?}
-         label])
-      (when (some? error)
-        [input-error error])]
-     [:select (cond-> {:value     (or value "")
+     (when (or has-label? (some? error))
+       [:div {:class-name "bbs--select-wrapper--header"}
+        (when has-label?
+          [input-label {:for       id
+                        :required? required?}
+           label])
+        (when (some? error)
+          [input-error error])])
+     [:select (cond-> {:id        id
+                       :value     (or value "")
                        :on-change handle-change}
                       multiple? (assoc :multiple true)
                       disabled? (assoc :disabled true))

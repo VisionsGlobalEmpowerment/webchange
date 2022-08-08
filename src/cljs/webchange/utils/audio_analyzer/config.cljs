@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.audio-analyzer.config)
+(ns webchange.utils.audio-analyzer.config)
 
 (def analyze-string-length 50)
 (def confidence-chunk-threshold 0.8)

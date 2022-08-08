@@ -16,11 +16,14 @@
   [region]
   (.remove region))
 
-(defn set-prop
-  [region prop-name prop-value]
-  (aset region prop-name prop-value))
+(defn set-end
+  [region value]
+  (aset region "end" value))
 
-(defn set-props
-  [region props]
-  (doseq [[prop-name prop-value] props]
-    (set-prop region prop-name (clj->js prop-value))))
+(defn set-start
+  [region value]
+  (aset region "start" value))
+
+(defn update-render
+  [region]
+  (.updateRender region))

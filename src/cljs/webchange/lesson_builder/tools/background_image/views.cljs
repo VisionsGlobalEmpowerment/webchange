@@ -101,7 +101,7 @@
        (let [{:keys [component]} @(re-frame/subscribe [::state/form-content])]
          [toolbox {:title   "Change Background"
                    :icon    "create"
-                   :actions background-type-switcher}
+                   :actions [background-type-switcher]}
           [:div.widget--background-image
            [:div.background-image--content
             (case component

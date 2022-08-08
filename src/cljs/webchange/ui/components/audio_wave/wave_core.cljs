@@ -28,6 +28,10 @@
   [ws]
   (.-params ws))
 
+(defn is-ready?
+  [ws]
+  (.-isReady ws))
+
 (defn load-blob
   [ws blob]
   (.loadBlob ws blob))
@@ -43,6 +47,10 @@
 (defn seek-to
   [ws progress]
   (.seekTo ws progress))
+
+(defn set-audio-script
+  [ws value]
+  (.setAudioScript ws value))
 
 (defn stop
   [ws]

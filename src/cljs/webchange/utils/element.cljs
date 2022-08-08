@@ -7,12 +7,27 @@
   (-> (.-classList el)
       (.add class-name)))
 
+(defn set-element-param
+  [el param-name param-value]
+  (let [setter (get {:class-name add-class}
+                    param-name)]
+    (when (fn? setter)
+      (setter el param-value))))
+
+(defn set-element-params
+  [el params]
+  (doseq [[param-name param-value] params]
+    (set-element-param el param-name param-value))
+  el)
+
 (defn create
   ([]
    (create {}))
   ([{:keys [el]
-     :or   {el "div"}}]
-   (js/document.createElement "div")))
+     :or   {el "div"}
+     :as   params}]
+   (-> (js/document.createElement "div")
+       (set-element-params params))))
 
 (defn get-first-child
   [el]

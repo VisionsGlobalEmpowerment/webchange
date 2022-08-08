@@ -25,13 +25,27 @@
       {:component-did-mount
        (fn [this]
          (let [{:keys [url ref] :as props} (r/props this)]
-           (->> {:on-ready #(handle-wave-surfer-ready instances props)}
+           (->> {:on-ready            #(handle-wave-surfer-ready instances props)
+                 :script-class-name   "bbs--audio-wave--script"
+                 :timeline-class-name "bbs--audio-wave--timeline"
+                 :wave-class-name     "bbs--audio-wave--wave"}
                 (create-wavesurfer @element url)
                 (reset! wave-surfer))
 
            (when (fn? ref)
              (-> (get-controls instances)
                  (ref)))))
+
+       :component-did-update
+       (fn [this [_ old-props]]
+         (let [{old-region      :region
+                old-script-data :script-data} old-props
+               {new-region      :region
+                new-script-data :script-data} (r/props this)]
+           (when-not (= old-script-data new-script-data)
+             (core/update-audio-script instances new-script-data))
+           (when-not (= old-region new-region)
+             (core/update-region instances new-region))))
 
        :component-will-unmount
        (fn []
