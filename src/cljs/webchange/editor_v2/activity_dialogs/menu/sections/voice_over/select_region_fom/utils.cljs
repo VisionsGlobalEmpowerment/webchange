@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.activity-dialogs.menu.sections.voice-over.select-region-fom.utils
   (:require
-    [webchange.editor-v2.audio-analyzer.index :as audio-analyzer]))
+    [webchange.utils.audio-analyzer.index :as audio-analyzer]))
 
 (defn get-region-data
   ([text audio-script]
@@ -10,7 +10,7 @@
 
 (defn get-available-regions
   [text audio-script]
-  (audio-analyzer/gat-available-regions text audio-script))
+  (audio-analyzer/get-available-regions text audio-script))
 
 (defn get-animation-sequence-data
   [{:keys [text audio-script selection-data]}]

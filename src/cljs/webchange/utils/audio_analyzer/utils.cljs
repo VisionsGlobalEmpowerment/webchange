@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.audio-analyzer.utils
+(ns webchange.utils.audio-analyzer.utils
   (:require
     [clojure.edn :as edn]
     [webchange.utils.forty-two :as forty-two]))

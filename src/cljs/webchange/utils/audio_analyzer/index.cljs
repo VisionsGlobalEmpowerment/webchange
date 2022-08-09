@@ -1,8 +1,9 @@
-(ns webchange.editor-v2.audio-analyzer.index
+(ns webchange.utils.audio-analyzer.index
   (:require
-    [webchange.editor-v2.audio-analyzer.region-data :as rg]
-    [webchange.editor-v2.audio-analyzer.region-to-animation-sequence :as ras]
-    [webchange.editor-v2.audio-analyzer.talk-data :refer [get-chunks-for-text]]))
+    [webchange.utils.audio-analyzer.region-data :as rg]
+    [webchange.utils.audio-analyzer.region-to-animation-sequence :as ras]
+    [webchange.utils.audio-analyzer.talk-data :refer [get-chunks-for-text]]
+    [webchange.utils.numbers :refer [to-precision]]))
 
 ;; Conditions
 
@@ -44,11 +45,23 @@
                                     (number? chunk)))]
     (every? text-animation-item? text-animation-data)))
 
+(defn- prepare-region
+  [{:keys [start end]}]
+  (let [precision 2
+        start (to-precision start precision)
+        end (to-precision end precision)]
+    {:start    start
+     :end      end
+     :duration (-> (- end start) (to-precision precision))}))
+
 ;; Methods
 
-(defn gat-available-regions
+(defn get-available-regions
   [text audio-script]
-  (rg/get-start-end-options-for-text text audio-script))
+  (->> (rg/get-start-end-options-for-text text audio-script)
+       (map (fn [region-data]
+              (merge region-data
+                     (prepare-region region-data))))))
 
 (defn get-region-data
   ([text audio-script]
@@ -58,7 +71,7 @@
            (audio-script? audio-script)
            (restriction? restriction)]
     :post [(region-data? %)]}
-   (let [region-data (rg/get-region-data text audio-script)]
+   (let [region-data (-> (rg/get-region-data text audio-script) (prepare-region))]
      (if (and (some? region-data)
               (some? restriction))
        (let [start (max (:start region-data) (:start restriction))

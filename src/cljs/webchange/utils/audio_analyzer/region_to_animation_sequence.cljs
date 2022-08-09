@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.audio-analyzer.region-to-animation-sequence)
+(ns webchange.utils.audio-analyzer.region-to-animation-sequence)
 
 (defn- region-data->words-sequence
   [region-data audio-script]

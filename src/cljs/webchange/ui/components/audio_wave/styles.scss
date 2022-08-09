@@ -1,4 +1,16 @@
 .bbs--audio-wave {
+    .bbs--audio-wave--script {
+        position: relative;
+    }
+
+    .bbs--audio-wave--timeline {
+        margin-bottom: 8px;
+    }
+
+    .bbs--audio-wave--wave {
+        position: relative;
+    }
+
     wave {
         @include bbs--with-scrollbar($show-track: true);
 

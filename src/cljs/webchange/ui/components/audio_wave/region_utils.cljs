@@ -8,11 +8,26 @@
 (def play core/play)
 (def remove core/remove)
 
+(defn set-prop
+  [region prop-name prop-value]
+  (aset region prop-name prop-value))
+
+(defn set-props
+  [region props]
+  (doseq [[prop-name prop-value] props]
+    (set-prop region prop-name (clj->js prop-value))))
+
 (defn set-style
   [region region-style]
-  (core/set-props region region-style))
+  (set-props region region-style))
 
 (defn set-default-style
   [region]
   (let [region-style (-> (config/get-config :region))]
     (set-style region region-style)))
+
+(defn set-bounds
+  [region {:keys [start end]}]
+  (core/set-start region start)
+  (core/set-end region end)
+  (core/update-render region))

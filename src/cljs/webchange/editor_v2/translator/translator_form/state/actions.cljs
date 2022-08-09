@@ -2,8 +2,8 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.audio-analyzer.region-data :as region-data]
-    [webchange.editor-v2.audio-analyzer.talk-data :as talk-data]
+    [webchange.utils.audio-analyzer.region-data :as region-data]
+    [webchange.utils.audio-analyzer.talk-data :as talk-data]
     [webchange.utils.text :refer [text->chunks]]
     [webchange.editor-v2.components.audio-wave-form.state :as state-wave-form]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]

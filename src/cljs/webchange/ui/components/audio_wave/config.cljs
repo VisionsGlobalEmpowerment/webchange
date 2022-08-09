@@ -5,6 +5,7 @@
 
 (def blue-1 "#3453A1")
 (def grey-3 "#C7D1EB")
+(def yellow-1 "#F5A36C")
 (def opacity-03 "4d")
 
 (def delta-zoom 15)
@@ -19,7 +20,10 @@
     (cond->> (str s "s")
              (> m 0) (str m "m "))))
 
-(def config {;; https://github.com/katspaugh/wavesurfer.js/blob/master/src/plugin/regions/index.js#L20
+(def config {:audio-script  {:primary-color      yellow-1
+                             :secondary-color    grey-3
+                             :primary-font-color grey-3}
+             ;; https://github.com/katspaugh/wavesurfer.js/blob/master/src/plugin/regions/index.js#L20
              :region        {:loop                 false    ;; Whether to loop the region when played back.
                              :drag                 true     ;; Allow/disallow dragging the region.
                              :resize               true     ;; Allow/disallow resizing the region.
@@ -35,7 +39,7 @@
              ;; https://wavesurfer-js.org/plugins/regions.html
              :region-plugin {:drag-selection true           ;; Enable creating regions by dragging with the mouse
                              :slop           5              ;; The sensitivity of the mouse dragging
-                             :max-regions    15              ;; Maximum number of regions that may be created by the user at one time.
+                             :max-regions    15             ;; Maximum number of regions that may be created by the user at one time.
                              }
              ;; https://github.com/katspaugh/wavesurfer.js/blob/master/src/plugin/timeline/index.js#L2
              :time-line     {:height                   10

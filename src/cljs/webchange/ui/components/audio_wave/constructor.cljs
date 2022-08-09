@@ -20,14 +20,11 @@
        (.create constructor)))
 
 (defn create-wavesurfer
-  [element audio-url {:keys [on-ready]}]
+  [element audio-url {:keys [on-ready script-class-name timeline-class-name wave-class-name]}]
   (el/remove-children element)
-  (let [timeline-div (->> (el/create)
-                          (el/insert-before element))
-        ;script-div (->> (el/create)
-        ;                (el/insert-before element))
-        ws-div (->> (el/create)
-                    (el/insert-before element))
+  (let [timeline-div (->> (el/create {:class-name timeline-class-name}) (el/insert-before element))
+        script-div (->> (el/create {:class-name script-class-name}) (el/insert-before element))
+        ws-div (->> (el/create {:class-name wave-class-name}) (el/insert-before element))
         wavesurfer (create WaveSurfer (merge (get-config :wave-surfer)
                                              {:container    ws-div
                                               :height       64
@@ -35,11 +32,10 @@
                                               :scrollParent true
                                               :plugins      [(create RegionsPlugin
                                                                      (get-config :region-plugin))
-                                                             ;(create AudioScriptPlugin {:container        script-div
-                                                             ;                           :primaryColor     "#979797"
-                                                             ;                           :secondaryColor   "#979797"
-                                                             ;                           :primaryFontColor "#979797"
-                                                             ;                           :timing           []})
+                                                             (create AudioScriptPlugin
+                                                                     (merge (get-config :audio-script)
+                                                                            {:container script-div
+                                                                             :timing    []}))
                                                              (create TimelinePlugin
                                                                      (merge (get-config :time-line)
                                                                             {:container timeline-div}))]}))]

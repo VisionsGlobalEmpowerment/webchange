@@ -37,6 +37,17 @@
      :end      end
      :duration (-> (- end start) (round))}))
 
+(defn update-audio-script
+  [{:keys [wave-surfer]} script-data]
+  (let [fixed-script-data (remove #(= "[unk]" (:word %)) script-data)]
+    (->> #(w/set-audio-script @wave-surfer fixed-script-data)
+         (w/when-ready @wave-surfer))))
+
+(defn update-region
+  [{:keys [region] :as instances} region-data]
+  (r/set-bounds @region region-data)
+  (scroll-to-region instances))
+
 (defn handle-paused
   [on-pause]
   (when (fn? on-pause)

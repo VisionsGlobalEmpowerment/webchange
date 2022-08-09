@@ -1,8 +1,8 @@
-(ns webchange.editor-v2.audio-analyzer.region-data
+(ns webchange.utils.audio-analyzer.region-data
   (:require
     [webchange.logger.index :as logger]
-    [webchange.editor-v2.audio-analyzer.config :refer [analyze-string-length confidence-threshold end-search-distance]]
-    [webchange.editor-v2.audio-analyzer.utils :refer [levenshtein-distance prepare-text]]))
+    [webchange.utils.audio-analyzer.config :refer [analyze-string-length confidence-threshold end-search-distance]]
+    [webchange.utils.audio-analyzer.utils :refer [levenshtein-distance prepare-text]]))
 
 (defn- prepare-result-items
   [data]

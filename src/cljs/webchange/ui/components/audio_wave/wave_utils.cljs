@@ -50,7 +50,21 @@
     (core/seek-to ws progress)
     (set-center ws progress)))
 
+(defn set-audio-script
+  [ws script-data]
+  (->> (if (some? script-data)
+         script-data
+         [])
+       (clj->js)
+       (core/set-audio-script ws)))
+
 (defn subscribe
   [ws event handler]
   (when (fn? handler)
     (core/subscribe ws event handler)))
+
+(defn when-ready
+  [ws callback]
+  (if (core/is-ready? ws)
+    (callback)
+    (subscribe ws "ready" callback)))

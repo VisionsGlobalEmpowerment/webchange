@@ -1,6 +1,6 @@
 (ns webchange.voice-recognition
   (:require [webchange.vr-test-data :refer [stored-results]]
-            [webchange.editor-v2.audio-analyzer.region-data :as r]))
+            [webchange.utils.audio-analyzer.region-data :as r]))
 
 (defn- get-script-region-text
   [script region]

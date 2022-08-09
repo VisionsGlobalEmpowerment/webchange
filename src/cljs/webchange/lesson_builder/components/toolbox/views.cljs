@@ -14,7 +14,7 @@
      [:div.toolbox--header--text text])
    [:div.toolbox--header--filler]
    (when (some? actions)
-     [actions])])
+     actions)])
 
 (defn toolbox
   [{:keys [class-name] :as props}]
