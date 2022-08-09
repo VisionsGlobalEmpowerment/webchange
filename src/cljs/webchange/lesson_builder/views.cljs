@@ -22,15 +22,16 @@
       [:div#bbs-lesson-builder
        (if-not loading?
          [:<>
-          [block-menu {:class-name (ui/get-class-name {"bbs-lesson-builder--menu"          true
-                                                       "bbs-lesson-builder--focused-block" (contains? focused-blocks :menu)})}]
-          [block-script {:class-name (ui/get-class-name {"bbs-lesson-builder--script" true
+          [block-menu {:tabs-disabled? (contains? focused-blocks :menu)
+                       :class-name     (ui/get-class-name {"bbs-lesson-builder--menu"          true
+                                                           "bbs-lesson-builder--focused-block" (contains? focused-blocks :menu)})}]
+          [block-script {:class-name (ui/get-class-name {"bbs-lesson-builder--script"        true
                                                          "bbs-lesson-builder--focused-block" (contains? focused-blocks :script)})}]
-          [block-stage {:class-name (ui/get-class-name {"bbs-lesson-builder--stage" true
+          [block-stage {:class-name (ui/get-class-name {"bbs-lesson-builder--stage"         true
                                                         "bbs-lesson-builder--focused-block" (contains? focused-blocks :stage)})}]
-          [block-title {:class-name (ui/get-class-name {"bbs-lesson-builder--title" true
+          [block-title {:class-name (ui/get-class-name {"bbs-lesson-builder--title"         true
                                                         "bbs-lesson-builder--focused-block" (contains? focused-blocks :title)})}]
-          [block-toolbox {:class-name (ui/get-class-name {"bbs-lesson-builder--toolbox" true
+          [block-toolbox {:class-name (ui/get-class-name {"bbs-lesson-builder--toolbox"       true
                                                           "bbs-lesson-builder--focused-block" (contains? focused-blocks :toolbox)})}]
           [block-confirm]
           (when-not (empty? focused-blocks)

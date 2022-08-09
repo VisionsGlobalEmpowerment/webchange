@@ -24,4 +24,4 @@
   (fn [{:keys [_]} [_ component-name]]
     {:dispatch (cond
                  (= component-name :background-image) [::layout-state/set-state :change-background-image]
-                 :default [::menu/set-current-component component-name])}))
+                 :default [::menu/open-component component-name])}))

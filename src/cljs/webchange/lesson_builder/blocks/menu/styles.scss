@@ -15,10 +15,10 @@
         padding: 8px 20px;
         $border-radius: 6px;
         border-radius: $border-radius $border-radius 0 0;
-        cursor: pointer;
 
-        &:hover {
+        &:not(.menu--tab--disabled):hover {
             color: bbs--color(yellow-1);
+            cursor: pointer;
         }
 
         &.menu--tab--active {

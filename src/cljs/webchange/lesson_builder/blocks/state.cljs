@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.blocks.menu.state :as menu-state]
-    [webchange.lesson-builder.blocks.toolbox.state :as toolbox-state]))
+    [webchange.lesson-builder.blocks.toolbox.state :as toolbox-state]
+    [webchange.lesson-builder.tools.question-form.index :as question-form]))
 
 (def path-to-db :lesson-builder/layout)
 
@@ -35,7 +36,9 @@
                              :focus   #{:toolbox :stage}}
    :voice-and-translate     {:toolbox :welcome-translate
                              :menu    :audio-manager
-                             :focus   #{:menu :script :toolbox}}})
+                             :focus   #{:menu :script :toolbox}}
+   :edit-question           {:toolbox :question-options
+                             :menu    :question-params}})
 
 (re-frame/reg-event-fx
   ::set-state
@@ -45,8 +48,7 @@
       {:db         (cond-> db
                            (contains? state :focus) (set-focused-blocks (:focus state)))
        :dispatch-n (cond-> []
-                           (contains? state :menu) (concat [[::menu-state/set-current-component (:menu state)]
-                                                            [::menu-state/on-back [::reset-state]]])
+                           (contains? state :menu) (conj [::menu-state/open-component (:menu state) {:on-back [::reset-state]}])
                            (contains? state :toolbox) (conj [::toolbox-state/set-current-widget (:toolbox state)]))})))
 
 (re-frame/reg-event-fx
@@ -54,3 +56,25 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
     {:dispatch [::set-state :default]}))
+
+(def tools {:question-form question-form/data})
+
+(re-frame/reg-event-fx
+  ::open-tool
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ tool-id tool-props]]
+    (let [tool-data (get tools tool-id)
+          destroy-event (when (contains? tool-data :reset)
+                          (conj (:reset tool-data) tool-props))]
+      {:db         (cond-> db
+                           (contains? tool-data :focus) (set-focused-blocks (:focus tool-data)))
+       :dispatch-n (cond-> []
+                           (contains? tool-data :menu)
+                           (conj [::menu-state/open-component tool-id {:on-back (cond-> [[::reset-state]]
+                                                                                        (some? destroy-event) (conj destroy-event))}])
+
+                           (contains? tool-data :toolbox)
+                           (conj [::toolbox-state/set-current-widget tool-id])
+
+                           (contains? tool-data :init)
+                           (concat [(conj (:init tool-data) tool-props)]))})))

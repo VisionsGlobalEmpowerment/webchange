@@ -43,7 +43,7 @@
 (re-frame/reg-event-fx
   ::apply
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ value]]
+  (fn [{:keys [db]} [_]]
     (let [data (get db :form)]
       {:dispatch-n [[::lesson-builder-state/add-image data]
                     [::menu-state/history-back]]})))

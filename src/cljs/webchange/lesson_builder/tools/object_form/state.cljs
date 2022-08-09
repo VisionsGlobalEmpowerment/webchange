@@ -44,18 +44,17 @@
     (get-in db [:objects object-name])))
 
 (editor-state/register-select-object-handler
- :show-object-form
- [::show-object-form])
+  :show-object-form
+  [::show-object-form])
 
 (re-frame/reg-event-fx
   ::show-object-form
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ target]]
-    {:db (-> db
-             (assoc :target target)
-             (assoc :objects {}))
-     :dispatch-n [[::menu-state/set-current-tab :scene-layers]
-                  [::menu-state/set-current-component :object-form]]}))
+    {:db       (-> db
+                   (assoc :target target)
+                   (assoc :objects {}))
+     :dispatch [::menu-state/open-component :object-form]}))
 
 (re-frame/reg-event-fx
   ::apply
@@ -73,7 +72,7 @@
     (let [objects (:objects db)
           has-changes? (-> activity-data :objects (#(select-keys % (keys objects))) (not= objects))]
       (when has-changes?
-        {:db (assoc db :objects {})
+        {:db       (assoc db :objects {})
          :dispatch [::stage-state/reset]}))))
 
 (comment
