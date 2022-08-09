@@ -15,7 +15,7 @@
       (.item 0)))
 
 (defn select-image
-  [{:keys [label value key] :as props}]
+  [{:keys [label value key hide-preview?] :as props}]
   (r/with-let [key (or key (swap! last-key inc))
                _ (re-frame/dispatch [::state/init key props])
                file-input (atom nil)]
@@ -26,8 +26,9 @@
          [:h3.select-image-header
           label])
        [:div.options
-        ^{:key value}
-        [ui/image {:src value}]
+        (when-not hide-preview?
+          ^{:key value}
+          [ui/image {:src value}])
         [:input {:type      "file"
                  :accept    ["gif" "jpg" "jpeg" "png"]
                  :on-change #(-> % change-event->file handle-upload)

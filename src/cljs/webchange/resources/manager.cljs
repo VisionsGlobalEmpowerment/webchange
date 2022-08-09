@@ -80,7 +80,8 @@
     (-> resource-name get-resource on-complete)
     (let [resources-to-load (cond
                               animation? (parser/get-animation-resources resource-name)
-                              :default resource-name)]
+                              (string? resource-name) [resource-name]
+                              :else resource-name)]
       (load-resources resources-to-load (merge params
                                                {:on-complete (fn []
                                                                (when (fn? on-complete)

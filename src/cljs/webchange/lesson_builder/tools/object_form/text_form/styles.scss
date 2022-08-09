@@ -1,0 +1,58 @@
+.text-form-fields {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+
+    .text-control {
+	.text-component {
+	    .bbs--text-area {
+		border: 0px;
+		textarea {
+		    border: 1px solid $color-grey-4;
+		}
+	    }
+	}
+    }
+    .font-controls {
+	display: flex;
+	gap: 18px;
+
+	
+	.font-family-component {
+	    flex: 5 1;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: flex-end;
+
+	    .bbs--select {
+		select {
+		    width: 120px;
+		}
+	    }
+
+	}
+	.font-size-component {
+	    flex: 3 1;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: flex-end;
+
+	    .bbs--select {
+		select {
+		    min-width: 40px;
+		    width: 40px;
+		}
+	    }
+
+	}
+    }
+    .text-align-controls {
+	display: flex;
+    }
+    .font-color-component {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+    }
+}
