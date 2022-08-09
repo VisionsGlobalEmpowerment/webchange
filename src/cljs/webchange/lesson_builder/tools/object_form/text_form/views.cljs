@@ -10,18 +10,18 @@
   (let [value @(re-frame/subscribe [::state/text target])
         handle-change (fn [value] (re-frame/dispatch [::state/set-text target value]))]
     [:div.text-component
-     [ui/text-area {:value      value
-                    :on-change  handle-change}]]))
+     [ui/text-area {:value     value
+                    :on-change handle-change}]]))
 
 (defn- font-family-component
   [target]
   (let [value @(re-frame/subscribe [::state/font-family target])
         options @(re-frame/subscribe [::fonts/font-family-options])]
     [:div.font-family-component
-     [ui/input-label "Font"] 
-     [ui/select {:value               (or value "")
-                 :on-change           #(re-frame/dispatch [::state/set-font-family target %])
-                 :options             options}]]))
+     [ui/input-label "Font"]
+     [ui/select {:value     (or value "")
+                 :on-change #(re-frame/dispatch [::state/set-font-family target %])
+                 :options   options}]]))
 
 
 (defn- font-size-component
@@ -42,9 +42,9 @@
         options @(re-frame/subscribe [::fonts/font-color-options])]
     [:div.font-color-component
      [ui/input-label "Color"]
-     [ui/select {:value         (or value "")
-                 :options options
-                 :on-change     #(re-frame/dispatch [::state/set-font-color target %])}]]))
+     [ui/select {:value     (or value "")
+                 :options   options
+                 :on-change #(re-frame/dispatch [::state/set-font-color target %])}]]))
 
 
 (defn- text-align-button
@@ -70,10 +70,11 @@
                          :on-click handle-click}]]))
 
 (defn fields
-  [target]
+  [{:keys [target]}]
   (re-frame/dispatch [::state/init target])
-  (fn [target]
-    [:div.text-form-fields
+  (fn [{:keys [class-name target]}]
+    [:div {:class-name (ui/get-class-name {"text-form-fields" true
+                                           class-name         (some? class-name)})}
      [:div.text-control
       [text-component target]]
      [:div.font-controls

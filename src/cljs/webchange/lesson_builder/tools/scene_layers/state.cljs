@@ -65,7 +65,10 @@
 (re-frame/reg-sub
   ::layers
   :<- [::state/activity-data]
-  #(get-layers %))
+  #(->> (get-layers %)
+        (repeat)
+        (take 3)
+        (flatten)))
 
 (re-frame/reg-event-fx
   ::toggle-visibility
