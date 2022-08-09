@@ -5,13 +5,14 @@
     [webchange.ui.index :as ui]))
 
 (defn fields
-  [target]
+  [{:keys [target]}]
   (re-frame/dispatch [::state/init target])
-  (fn [target]
+  (fn [{:keys [class-name target]}]
     (let [value @(re-frame/subscribe [::state/volume target])]
-      [ui/input {:value value
+      [ui/input {:value     value
                  :on-change #(re-frame/dispatch [::state/set-volume target %])
-                 :type "range"
-                 :step 0.05
-                 :min 0
-                 :max 1}])))
+                 :type      "range"
+                 :step      0.05
+                 :min       0
+                 :max       1
+                 :class-name (ui/get-class-name {class-name (some? class-name)})}])))

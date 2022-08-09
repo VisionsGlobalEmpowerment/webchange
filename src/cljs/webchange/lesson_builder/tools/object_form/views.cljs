@@ -10,30 +10,32 @@
     [webchange.lesson-builder.tools.object-form.video-form.views :as video-form]
     [webchange.ui.index :as ui]))
 
-(def form-components {"animation" animation-form/fields
+(def form-components {"animation"            animation-form/fields
                       "text-tracing-pattern" text-tracing-pattern-form/fields
-                      "text" text-form/fields
-                      "image" image-form/fields
-                      "video" video-form/fields})
+                      "text"                 text-form/fields
+                      "image"                image-form/fields
+                      "video"                video-form/fields})
 
 (defn- available-object-type?
   [object-type]
   (contains? form-components object-type))
 
 (defn- object-panel
-  [target]
+  [{:keys [class-name target]}]
   (let [{object-type :type} @(re-frame/subscribe [::state/object target])]
     (when (available-object-type? object-type)
       (let [component (get form-components object-type)]
-        [component target]))))
+        [component {:target     target
+                    :class-name class-name}]))))
 
 (defn- group-panel
-  [group]
+  [{:keys [group]}]
   (re-frame/dispatch [::state/init-group group])
-  (fn [group]
-    [:div.group-panel
+  (fn [{:keys [class-name group]}]
+    [:div {:class-name (ui/get-class-name {"group-panel" true
+                                           class-name    (some? class-name)})}
      (for [child (:children group)]
-       [object-panel (keyword child)])]))
+       [object-panel {:target (keyword child)}])]))
 
 (defn- panels
   [target]
@@ -41,13 +43,15 @@
     (let [target @(re-frame/subscribe [::state/target])
           object @(re-frame/subscribe [::state/object target])
           group? (= "group" (:type object))]
-      [:div.widget--object-form
+      [:div {:class-name "widget--object-form"}
        [:h1 "Edit"]
        (if group?
-         [group-panel object]
-         [object-panel target])
-       [ui/button {:class-name "apply-button"
-                   :on-click #(re-frame/dispatch [::state/apply])}
+         [group-panel {:group      object
+                       :class-name "object-form--form"}]
+         [object-panel {:target     target
+                        :class-name "object-form--form"}])
+       [ui/button {:class-name "object-form--apply"
+                   :on-click   #(re-frame/dispatch [::state/apply])}
         "Apply"]])
     (finally
       (re-frame/dispatch [::state/reset]))))

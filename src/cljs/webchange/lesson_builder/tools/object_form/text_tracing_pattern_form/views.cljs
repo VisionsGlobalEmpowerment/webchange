@@ -19,9 +19,10 @@
                 :label     "Show lines?"}]))
 
 (defn fields
-  [target]
+  [{:keys [target]}]
   (re-frame/dispatch [::state/init target])
-  (fn [target]
-    [:div.text-tracing-form
+  (fn [{:keys [class-name target]}]
+    [:div {:class-name (ui/get-class-name {"text-tracing-form" true
+                                           class-name          (some? class-name)})}
      [dashed-component target]
      [show-lines-component target]]))

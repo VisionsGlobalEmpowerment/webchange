@@ -1,17 +1,9 @@
 .widget--choose-character {
     position: relative;
-    height: 100%;
-    
-    overflow: auto;
-    padding-right: 4px;
-    flex: 1 1;
 
     h2 {
-	padding: 20px 0;
-	
-	font-weight: 700;
-	font-size: 16px;
-	line-height: 20px;
+        @include bbs--noto-16-b;
+        padding: 20px 0;
     }
 
     .widget--choose-character--list {
@@ -22,41 +14,36 @@
         width: 100%;
     }
 
-
     .widget--choose-character--list-item {
-	padding: 0;
+        padding: 0;
         border-radius: 6px;
         cursor: pointer;
-	position: relative;
+        position: relative;
 
-	.img-wrapper {
-	    padding: 0;
+        .img-wrapper {
+            padding: 0;
 
-	    overflow: hidden;
-	    border-radius: 8px;
-	    width: 58px;
-	    height: 58px;
-	}
-
-	.img-wrapper-active::after {
-	    content: " ";
-	    width:58px;
-	    height:58px;
-
-	    border: 3px solid #F5A36C;
-	    border-radius: 8px;
-
-	    position: absolute;
-	    top: 0px;
+            overflow: hidden;
+            border-radius: 8px;
+            width: 58px;
+            height: 58px;
         }
 
-	.character-label {
-	    margin-top: 6px;
-	    
-	    font-weight: 400;
-	    font-size: 12px;
-	    line-height: 16px;
-	}
-	
+        .img-wrapper-active::after {
+            content: " ";
+            width:58px;
+            height:58px;
+
+            border: 3px solid #F5A36C;
+            border-radius: 8px;
+
+            position: absolute;
+            top: 0px;
+        }
+
+        .character-label {
+            @include bbs--noto-12-r;
+            margin-top: 6px;
+        }
     }
 }

@@ -15,19 +15,19 @@
          [:div.scene-layer
           [:div.scene-layer-name
            [:div.scene-layer-icon
-            [ui/icon {:icon (case object-type
-                              :uploaded-image "images"
-                              :added-character "character"
-                              "images")
+            [ui/icon {:icon  (case object-type
+                               :uploaded-image "images"
+                               :added-character "character"
+                               "images")
                       :color "grey-3"}]]
-           (:alias layer)]
+           alias]
           [:div.scene-layer-actions
-           [ui/button {:icon "edit"
-                       :color "grey-3"
+           [ui/button {:icon     "edit"
+                       :color    "grey-3"
                        :on-click #(re-frame/dispatch [::state/edit-object (:name layer)])}]
-           [ui/button {:icon (if visible "visibility-on" "visibility-off")
-                       :color "grey-3"
+           [ui/button {:icon     (if visible "visibility-on" "visibility-off")
+                       :color    "grey-3"
                        :on-click #(re-frame/dispatch [::state/toggle-visibility (:name layer)])}]
-           [ui/button {:icon "trash"
-                       :color "grey-3"
+           [ui/button {:icon     "trash"
+                       :color    "grey-3"
                        :on-click #(re-frame/dispatch [::state/remove-object (:name layer)])}]]])])))

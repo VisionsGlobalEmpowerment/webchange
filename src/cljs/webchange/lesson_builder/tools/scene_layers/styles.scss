@@ -1,35 +1,42 @@
 .widget--scene-layers {
     $padding: $menu-padding-v;
 
-    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
+    height: 100%;
+    overflow: auto;
+    @include bbs--with-scrollbar;
+    @include bbs--with-scrollbar-margin;
+
+    margin-top: 30px;
     margin-left: -$menu-padding-h;
     margin-right: -$menu-padding-h;
+    padding-top: 8px;
 
     border-top: solid 1px bbs--color(grey-4);
     
     .scene-layer {
-	height: 30px;
-	display: flex;
-	gap: 18px;
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        height: 30px;
 
-	justify-content: space-between;
+        .scene-layer-name {
+            display: flex;
+            gap: 5px;
+            align-items: center;
 
-	.scene-layer-name {
-	    display: flex;
-	    gap: 5px;
-	    align-items: center;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 18px;
+        }
 
-	    font-weight: 400;
-	    font-size: 14px;
-	    line-height: 18px;
-	}
-
-	.scene-layer-actions {
-	    width: 80px;
-	    display: flex;
-
-	    @include bbs--icon-size(18px);
-	}
+        .scene-layer-actions {
+            @include bbs--icon-size(18px);
+            width: 80px;
+            display: flex;
+        }
     }
 }
