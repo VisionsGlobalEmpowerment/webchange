@@ -1,5 +1,8 @@
 #block--stage {
+    @import "second_stage/styles";
+    
     background-color: bbs--color(blue-2, $variant: light);
     border-radius: $border-radius;
     overflow: hidden;
+    position: relative;
 }

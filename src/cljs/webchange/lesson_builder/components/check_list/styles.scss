@@ -1,0 +1,40 @@
+.component--check-list {
+    .check-list--item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 6px 0;
+
+        &:hover {
+            cursor: pointer;
+
+            .check-list--item--name {
+                color: bbs--color(blue-2);
+            }
+
+            .check-list--item--icon {
+                @include bbs--icon-color(bbs--color(blue-2));
+            }
+        }
+
+        &.check-list--item--selected {
+            .check-list--item--name {
+                color: bbs--color(blue-1);
+            }
+
+            .check-list--item--icon {
+                @include bbs--icon-color(bbs--color(blue-1));
+            }
+        }
+    }
+
+    .check-list--item--name {
+        @include bbs--noto-14-sb;
+    }
+
+    .check-list--item--icon {
+        @include bbs--icon-color(bbs--color(grey-3));
+        @include bbs--icon-size(20px);
+    }
+}
