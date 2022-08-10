@@ -7,6 +7,7 @@
     [webchange.lesson-builder.stage-actions-spec :as spec]
     [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.lesson-builder.blocks.stage.state :as stage-state]
+    [webchange.state.warehouse :as warehouse]
     [webchange.utils.list :as list-utils]
     [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as utils]))
@@ -220,3 +221,29 @@
   (fn [{:keys [activity-data]} [_ {:keys [objects]}]]
     (let [updated-activity-data (update activity-data :objects merge objects)]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+;; Apply Template Options
+
+(re-frame/reg-event-fx
+  ::apply-template-options
+  [(re-frame/inject-cofx :activity-info)]
+  (fn [{:keys [activity-info]} [_ template-options {:keys [on-success on-failure]}]]
+    (let [{:keys [id]} activity-info]
+      {:dispatch [::warehouse/apply-activity-template-options
+                  {:activity-id id
+                   :data        template-options}
+                  {:on-success [::apply-template-options-success on-success]
+                   :on-failure [::apply-template-options-failure on-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::apply-template-options-success
+  (fn [{:keys [_]} [_ on-success {:keys [data]}]]
+    {:dispatch-n (cond-> [[::state/set-activity-data data]
+                          [::stage-state/reset]]
+                         (some? on-success) (conj on-success))}))
+
+(re-frame/reg-event-fx
+  ::save-activity-failure
+  (fn [{:keys [_]} [_ on-failure]]
+    {:dispatch-n (cond-> []
+                         (some? on-failure) (conj on-failure))}))

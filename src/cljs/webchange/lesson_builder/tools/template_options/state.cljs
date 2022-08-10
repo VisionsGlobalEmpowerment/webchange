@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as lesson-builder-state]
+    [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.lesson-builder.blocks.menu.state :as menu-state]
     [webchange.utils.alphabets :as alphabets]))
 
@@ -81,18 +82,46 @@
   (fn [value]
     (re-frame/dispatch [::set-field key value])))
 
+;; apply
+
+(def loading-key :loading?)
+
+(defn- set-loading
+  [db value]
+  (assoc db loading-key value))
+
+(re-frame/reg-sub
+  ::loading?
+  :<- [path-to-db]
+  #(get % loading-key))
+
 (re-frame/reg-event-fx
   ::apply
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [template-options (get-in db [:form])]
-      {:dispatch-n [[::lesson-builder-state/apply-template-options template-options]
-                    [::menu-state/history-back]]})))
+      {:db       (set-loading db true)
+       :dispatch [::stage-actions/apply-template-options
+                  template-options
+                  {:on-success [::apply-success]}]})))
+
+(re-frame/reg-event-fx
+  ::apply-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db       (set-loading db false)
+     :dispatch [::menu-state/history-back]}))
+
+(re-frame/reg-event-fx
+  ::apply-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db       (set-loading db false)}))
 
 (re-frame/reg-event-fx
   ::update-template
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys []} [_]]
     {:dispatch-n [[::lesson-builder-state/update-template]
                   [::menu-state/history-back]]}))
 
@@ -102,38 +131,3 @@
   (fn [db [_]]
     (let [lang (:lang db)]
       (alphabets/options-for lang))))
-
-(defn- show-last-overlay-only
-  [overlays]
-  (if (seq overlays)
-    (let [last-index (-> (count overlays) dec)]
-      (as-> overlays o
-            (map #(assoc % :hidden true) o)
-            (into [] o)
-            (update o last-index assoc :hidden false)))
-    overlays))
-
-(re-frame/reg-sub
-  ::opened-overlays
-  :<- [path-to-db]
-  (fn [db]
-    (let [overlays (get db :overlays)]
-      (->> overlays
-           (remove nil?)
-           (show-last-overlay-only)))))
-
-(re-frame/reg-event-fx
-  ::show-overlay
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ label key]]
-    {:db (-> db
-             (update :overlays concat [{:key key
-                                        :label label}]))
-     :dispatch [::menu-state/on-back [::close-overlay]]}))
-
-(re-frame/reg-event-fx
-  ::close-overlay
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (update :overlays drop-last))}))

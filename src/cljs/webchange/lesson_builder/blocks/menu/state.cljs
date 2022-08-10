@@ -38,12 +38,13 @@
 (defn- push-history
   ([db component-id]
    (push-history db component-id {}))
-  ([db component-id {:keys [on-back]}]
+  ([db component-id {:keys [on-back title]}]
    (let [uid (get-uid)
          events-list? (-> on-back first vector?)]
      (->> (cond-> {:uid          uid
                    :component-id component-id}
-                  (some? on-back) (assoc :on-back (if events-list? on-back [on-back])))
+                  (some? on-back) (assoc :on-back (if events-list? on-back [on-back]))
+                  (some? title) (assoc :title title))
           (update db history-key conj)))))
 
 (defn- pop-history
@@ -95,11 +96,12 @@
 (re-frame/reg-event-fx
   ::open-component
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ component-id {:keys [on-back reset-history?] :or {reset-history? false}}]]
+  (fn [{:keys [db]} [_ component-id {:keys [on-back reset-history? title] :or {reset-history? false}}]]
     (let [current-component (get-current-component db)]
       {:db (cond-> db
                    reset-history? (reset-history)
-                   (not= component-id current-component) (push-history component-id {:on-back on-back}))})))
+                   (not= component-id current-component) (push-history component-id {:title   title
+                                                                                     :on-back on-back}))})))
 
 (re-frame/reg-event-fx
   ::history-back

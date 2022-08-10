@@ -13,22 +13,28 @@
     [webchange.lesson-builder.tools.question-form.index :as question-form]
     [webchange.lesson-builder.tools.scene-layers.views :refer [scene-layers]]
     [webchange.lesson-builder.tools.settings.views :refer [settings]]
-    [webchange.lesson-builder.tools.template-options.views :refer [template-options]]
+    [webchange.lesson-builder.tools.template-options.index :as template-options]
     [webchange.lesson-builder.widgets.select-image.views :refer [choose-image-overlay]]
     [webchange.ui.index :as ui]))
 
-(def menu-items {:default          design-actions
-                 :audio-manager    audio-manager
-                 :background-music background-music
-                 :character-add    character-add
-                 :design-actions   design-actions
-                 :image-add        image-add
-                 :object-form      object-form
-                 :scene-layers     scene-layers
-                 :settings         settings
-                 :template-options template-options
-                 :choose-image     choose-image-overlay
-                 :question-form    (:menu question-form/data)})
+(defn- add-menu-items
+  [items-map key value]
+  (if (map? value)
+    (merge items-map value)
+    (assoc items-map key value)))
+
+(def menu-items (-> {:default          design-actions
+                     :audio-manager    audio-manager
+                     :background-music background-music
+                     :character-add    character-add
+                     :design-actions   design-actions
+                     :image-add        image-add
+                     :object-form      object-form
+                     :scene-layers     scene-layers
+                     :settings         settings
+                     :choose-image     choose-image-overlay}
+                    (add-menu-items :question-form (:menu question-form/data))
+                    (add-menu-items :template-options (:menu template-options/data))))
 
 (defn- menu-header
   []

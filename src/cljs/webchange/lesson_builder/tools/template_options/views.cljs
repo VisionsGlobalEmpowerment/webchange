@@ -28,27 +28,27 @@
 (defn- string-field
   [{:keys [label key placeholder]}]
   (let [default-value @(re-frame/subscribe [::state/saved-field-value key])]
-    [ui/input {:label label
-               :placeholder placeholder
+    [ui/input {:label         label
+               :placeholder   placeholder
                :default-value default-value
-               :required? true
-               :on-change (state/handle-change-field key)}]))
+               :required?     true
+               :on-change     (state/handle-change-field key)}]))
 
 (defn- image-field
-  [{:keys [label key placeholder]}]
+  [{:keys [label key]}]
   (let [value @(re-frame/subscribe [::state/field-value key])]
-    [select-image {:label label
-                   :value (:src value)
+    [select-image {:label     label
+                   :value     (:src value)
                    :on-change #(re-frame/dispatch [::state/set-field key {:src (:url %)}])}]))
 
 (defn- letter-lookup-field
-  [{:keys [key label placeholder]}]
+  [{:keys [key label]}]
   (let [value @(re-frame/subscribe [::state/field-value key])
         letter-options @(re-frame/subscribe [::state/letter-options])]
-    [ui/select {:label label
-                :value value
+    [ui/select {:label     label
+                :value     value
                 :required? true
-                :options letter-options
+                :options   letter-options
                 :on-change (state/handle-change-field key)}]))
 
 (defn- lookup-field
@@ -57,16 +57,16 @@
     [:div.lookup-field
      [ui/input-label
       label]
-     [ui/select {:value value
-                 :required? true
-                 :options options
+     [ui/select {:value       value
+                 :required?   true
+                 :options     options
                  :placeholder placeholder
-                 :on-change (state/handle-change-field key)}]]))
+                 :on-change   (state/handle-change-field key)}]]))
 
 (defn- update-template-field
   [{:keys [label]}]
   [ui/button {:class-name "update-template"
-              :on-click #(re-frame/dispatch [::state/update-template])}
+              :on-click   #(re-frame/dispatch [::state/update-template])}
    label])
 
 (defn- option-field
@@ -90,39 +90,23 @@
 (defn- options-panel
   []
   (let [options @(re-frame/subscribe [::state/options])]
-    [:<>
+    [:div.template-options--options-panel
      (for [option options]
        [option-field option])]))
 
-(def overlay-components {:rhyming-side rhyming-sides/overlay})
-
-(defn- overlays-widget
-  []
-  (let [opened-overlays @(re-frame/subscribe [::state/opened-overlays])]
-    [:<>
-     (for [{:keys [key label hidden]} opened-overlays]
-       ^{:key key}
-       (let [component (get overlay-components key)]
-         [:div {:class-name (ui/get-class-name {"widget--template-options" true
-                                                "widget--template-options-hidden" hidden})}
-          [:h1 label]
-          [component]]))]))
-
 (defn- template-options-widget
   []
-  (let [overlays-opened? (-> @(re-frame/subscribe [::state/opened-overlays]) seq)]
-    [:div {:class-name (ui/get-class-name {"widget--template-options" true
-                                           "widget--template-options-hidden" overlays-opened?})}
+  (let [loading? @(re-frame/subscribe [::state/loading?])]
+    [:div {:class-name (ui/get-class-name {"widget--template-options" true})}
      [:h1 "Template Options"]
      [options-panel]
      [ui/button {:class-name "template-options-apply"
-                 :on-click #(re-frame/dispatch [::state/apply])}
+                 :loading?   loading?
+                 :on-click   #(re-frame/dispatch [::state/apply])}
       "Apply"]]))
 
 (defn template-options
   []
   (re-frame/dispatch [::state/init])
   (fn []
-    [:<>
-     [template-options-widget]
-     [overlays-widget]]))
+    [template-options-widget]))
