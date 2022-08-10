@@ -67,16 +67,16 @@
   (fn [{:keys [db]} [_ {:keys [content menu-item]}]]
     (cond
       (= menu-item :voice-translate) {:dispatch [::layout-state/set-state :voice-and-translate]}
-      (some? menu-item) {:dispatch [::menu/set-current-component menu-item]}
+      (some? menu-item) {:dispatch [::menu/open-component menu-item]}
       (some? content) {:db (toggle-active-menu-item db content)}
       :default {})))
 
 (re-frame/reg-event-fx
   ::open-add-image-menu
   (fn []
-    {:dispatch [::menu/set-current-component :image-add]}))
+    {:dispatch [::menu/open-component :image-add]}))
 
 (re-frame/reg-event-fx
   ::open-add-character-menu
   (fn []
-    {:dispatch [::menu/set-current-component :character-add]}))
+    {:dispatch [::menu/open-component :character-add]}))

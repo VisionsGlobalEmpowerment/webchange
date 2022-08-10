@@ -28,7 +28,7 @@
   ::upload
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ key file]]
-    {:db (assoc-in db [key :uploading] true)
+    {:db       (assoc-in db [key :uploading] true)
      :dispatch [::warehouse/upload-file
                 {:file        file
                  :form-params [["type" "image"]]}
@@ -60,9 +60,9 @@
   ::show-choose-image
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ key]]
-    {:db (-> db
-             (assoc :current-key key))
-     :dispatch [::menu-state/set-current-component :choose-image]}))
+    {:db       (-> db
+                   (assoc :current-key key))
+     :dispatch [::menu-state/open-component :choose-image]}))
 
 (re-frame/reg-event-fx
   ::select-image

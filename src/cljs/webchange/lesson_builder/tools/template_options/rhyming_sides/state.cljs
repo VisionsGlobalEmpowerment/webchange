@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.tools.template-options.state :refer [path-to-db] :as template-options-state]))
+    [webchange.lesson-builder.blocks.menu.state :as menu]
+    [webchange.lesson-builder.tools.template-options.state :refer [path-to-db]]))
 
 (re-frame/reg-event-fx
   ::init
@@ -18,9 +19,9 @@
     (let [side-name (case side
                       :left "Left Side"
                       :right "Right Side")]
-      {:db (-> db
-               (assoc :side side))
-       :dispatch [::template-options-state/show-overlay side-name :rhyming-side]})))
+      {:db       (-> db
+                     (assoc :side side))
+       :dispatch [::menu/open-component :rhyming-side {:title side-name}]})))
 
 (re-frame/reg-sub
   ::word

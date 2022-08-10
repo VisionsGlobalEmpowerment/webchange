@@ -1,38 +1,44 @@
+@import "rhyming_sides/styles";
+@import "first_words_book_spreads/styles";
+@import "select_book/styles";
+@import "slide_riddle_rounds/styles";
+@import "sandbox_digging_rounds/styles";
+@import "onset_rime_rounds/styles";
+
 .widget--template-options {
-    @import "first_words_book_spreads/styles";
-    @import "select_book/styles";
-    @import "slide_riddle_rounds/styles";
-    @import "sandbox_digging_rounds/styles";
-    @import "rhyming_sides/styles";
-    @import "onset_rime_rounds/styles";
-    
     display: flex;
     flex-direction: column;
     gap: 10px;
 
     height: 100%;
-    max-width: 280px;
+
+    .template-options--options-panel {
+        flex: 1 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        overflow: auto;
+        @include bbs--with-scrollbar;
+        @include bbs--with-scrollbar-margin;
+    }
 
     .group {
-	.group-label {
-	    margin-bottom: 2px;
-	}
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
 
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
+        .group-label {
+            margin-bottom: 2px;
+        }
     }
 
     .template-options-apply {
-	border-radius: 30px;
+        border-radius: 30px;
     }
 
     .update-template {
-	margin: 20px;
-	border-radius: 30px;
+        margin: 20px;
+        border-radius: 30px;
     }
-}
-
-.widget--template-options-hidden {
-    display: none;
 }

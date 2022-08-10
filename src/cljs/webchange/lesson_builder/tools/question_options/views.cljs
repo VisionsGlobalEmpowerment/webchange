@@ -9,7 +9,8 @@
 (defn question-options
   []
   (let [questions @(re-frame/subscribe [::state/question-options])
-        handle-add-question-click #(print "Add Question")]
+        handle-add-question-click #(print "Add Question")
+        handle-edit-click #(re-frame/dispatch [::state/edit-question %])]
     [:div.widget--question-options
      [options-list {:items [{:id       :image-add
                              :text     "Add Question"
@@ -21,7 +22,8 @@
           [draggable {:text    name
                       :action  "add-action"
                       :data    {:action-id action}
-                      :actions [#_{:icon     "edit"
-                                   :on-click #(print "edit")}
+                      :actions [{:icon     "edit"
+                                 :on-click #(handle-edit-click action)
+                                 :title    "Edit question"}
                                 #_{:icon     "trash"
                                    :on-click #(print "remove")}]}])])]))

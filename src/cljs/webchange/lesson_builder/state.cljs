@@ -246,35 +246,8 @@
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-saving false))}))
 
-;; Apply Template Options
-
-(re-frame/reg-event-fx
-  ::apply-template-options
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ template-options]]
-    (let [{:keys [id]} (get-activity-info db)]
-      {:db       (-> db (set-activity-saving true))
-       :dispatch [::warehouse/apply-activity-template-options
-                  {:activity-id id
-                   :data template-options}
-                  {:on-success [::apply-template-options-success]
-                   :on-failure [::apply-template-options-failure]}]})))
-
-(re-frame/reg-event-fx
-  ::apply-template-options-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [data]}]]
-    {:db       (-> db
-                   (set-activity-saving false)
-                   (set-activity-data data))}))
-
-(re-frame/reg-event-fx
-  ::save-activity-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db (set-activity-saving false))}))
-
 ;; Update Template
+
 (re-frame/reg-event-fx
   ::update-template
   [(i/path path-to-db)]
