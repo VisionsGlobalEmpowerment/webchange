@@ -51,7 +51,6 @@
                                            :height        height
                                            :border-radius border-radius
                                            :origin        {:type "center-center"}
-                                           :editable?     {:select true}
                                            :metadata      {:question-form-param image-param-name}}
                                           image-props)}
    :assets  [{:url  (:src image-props)
@@ -136,6 +135,7 @@
                                                           :y          y
                                                           :pivot      {:x 0.5 :y 0.5}
                                                           :transition object-name
+                                                          :editable?  {:select true}
                                                           :children   (cond-> [substrate-name]
                                                                               image-option? (conj image-name)
                                                                               text-option? (conj text-name)

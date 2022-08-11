@@ -9,6 +9,7 @@
     [webchange.interpreter.renderer.scene.app :refer [reset-app! resize-app!]]
     [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
+    [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.variables.core :as vars.core]
@@ -114,7 +115,7 @@
                        (let [{:keys [reset-resources? scene-data]} (r/props this)]
                          (init-scene scene-data current-scene-id loading reset-resources?)))
        :reagent-render
-                     (fn [{:keys [mode on-ready on-ready-to-start on-start-click scene-data force-show-scene?] :as props}]
+                     (fn [{:keys [id mode on-ready on-ready-to-start on-start-click scene-data force-show-scene?] :as props}]
                        (let [viewport (-> (element->viewport @container)
                                           (get-stage-params))
                              show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])
@@ -141,6 +142,7 @@
                                              :position "relative"}}
                           (when show-scene?
                             [scene {:mode     mode
+                                    :stage-id id
                                     :objects  (:objects scene-data)
                                     :metadata (:metadata scene-data)
                                     :viewport viewport

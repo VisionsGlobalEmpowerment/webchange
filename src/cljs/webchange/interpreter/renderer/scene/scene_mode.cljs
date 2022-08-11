@@ -72,14 +72,14 @@
       (init-mode-props mode)))
 
 (defn init-mode-object-helpers!
-  [{:keys [props wrapper children]} mode]
-  (enable-mode-helpers! mode (:object wrapper) props)
+  [{:keys [props wrapper children]} mode params]
+  (enable-mode-helpers! mode (:object wrapper) props params)
   (doseq [child children]
-    (init-mode-object-helpers! child mode)))
+    (init-mode-object-helpers! child mode params)))
 
 (defn init-mode-helpers!
-  [scene-object mode]
+  [scene-object mode params]
   (logger/group-folded "init mode helpers" (clojure.core/name mode))
-  (init-mode-object-helpers! scene-object mode)
+  (init-mode-object-helpers! scene-object mode params)
   (logger/group-end "init mode helpers" (clojure.core/name mode))
   scene-object)

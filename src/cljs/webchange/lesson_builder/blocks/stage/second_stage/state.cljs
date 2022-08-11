@@ -35,7 +35,7 @@
   (constantly nil))
 
 (re-frame/reg-sub
-  ::scene-data
+  ::activity-data
   (fn [[_ source]]
     (re-frame/subscribe [(or source ::empty-source)]))
   (fn [activity-data]

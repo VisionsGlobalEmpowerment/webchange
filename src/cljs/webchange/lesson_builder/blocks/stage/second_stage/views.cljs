@@ -17,14 +17,15 @@
      :reagent-render
      (fn []
        (let [source @(re-frame/subscribe [::state/source])
-             scene-data @(re-frame/subscribe [::state/scene-data source])
-             objects (get-scene-objects-data-by-scene-data scene-data)
-             resources (get-activity-resources nil scene-data)
+             activity-data @(re-frame/subscribe [::state/activity-data source])
+             objects (get-scene-objects-data-by-scene-data activity-data)
+             resources (get-activity-resources nil activity-data)
              id (random-uuid)]
-         (when (some? scene-data)
+         (when (some? activity-data)
            [:div.widget--second-stage
             ^{:key id}
-            [stage {:mode                ::modes/editor
+            [stage {:id                  "second"
+                    :mode                ::modes/editor
                     :scene-data          {:scene-id  id
                                           :objects   objects
                                           :resources resources}

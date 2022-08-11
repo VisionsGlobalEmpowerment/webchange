@@ -13,6 +13,7 @@
     [:div {:id         "block--stage"
            :class-name class-name}
      ^{:key key}
-     [stage {:mode       ::modes/editor
+     [stage {:id         "main"
+             :mode       ::modes/editor
              :scene-data scene-data}]
      [second-stage]]))

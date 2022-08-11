@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.interpreter.renderer.state.editor :as editor-state]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.blocks.stage.second-stage.state :as second-stage]
     [webchange.question.preview :refer [get-scene-data]]
@@ -67,7 +68,9 @@
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
   (fn [{:keys [activity-data db]} [_ {:keys [question-id]}]]
+    (editor-state/register-select-object-handler "second" [::show-object-form])
     (let [question-params (get-in activity-data [:objects (keyword question-id) :metadata :params])]
+      (print "question-params" question-params)
       {:db       (set-form-data db question-params)
        :dispatch [::second-stage/init ::scene-data]})))
 
@@ -76,6 +79,12 @@
   (fn [{:keys [db]} [_]]
     {:db         (dissoc db path-to-db)
      :dispatch-n [[::second-stage/reset]]}))
+
+(re-frame/reg-event-fx
+  ::show-object-form
+  (fn [{:keys [db]} [a b c]]
+    (print "::show-object-form " a b c)
+    {}))
 
 ;; scene data
 
@@ -86,3 +95,54 @@
   (fn [[activity-data form-data]]
     (let [[_ current-background] (get-scene-background activity-data)]
       (get-scene-data form-data {:background current-background}))))
+
+;; 
+
+;{:ok-image        {:src        /images/questions/ok.png
+;                   :image-size contain}
+; :task-text       {:text Question placeholder
+;                   :font-size 64}
+; :option-4-text   {:text Option 4
+;                   :font-size 48}
+; :option-4-image  {:src        /images/questions/option4.png
+;                   :image-size contain}
+; :option-3-image  {:src        /images/questions/option3.png
+;                   :image-size contain}
+; :ok-text         {:text      Ok
+;                   :font-size 48}
+; :option-2-text   {:text Option 2
+;                   :font-size 48}
+; :thumbs-up-image {:src        /images/questions/thumbs_up.png
+;                   :image-size contain}
+; :answers-number  one
+; :layout          vertical
+; :option-1-text   {:text Option 1
+;                   :font-size 48}
+; :option-1-image  {:src        /images/questions/option1.png
+;                   :image-size contain}
+; :option-2-image  {:src        /images/questions/option2.png
+;                   :image-size contain}
+; :thumbs-up-text  {:text Thumbs Up
+;                   :font-size 48}
+; :task-type       text
+; :question-type   multiple-choice-image
+; :alias           Question 1 - ball
+; :option-1-value option-1
+; :option-3-text {:text Option 3
+;                 :font-size 48}
+; :thumbs-down-image {:src        /images/questions/thumbs_down.png
+;                     :image-size contain}
+; :thumbs-down-value thumbs-down
+; :task-image {:src        /images/questions/question.png
+;              :image-size contain}
+; :options-number 3
+; :mark-options [thumbs-up thumbs-down]
+; :option-2-value option-2
+; :option-4-value option-4
+; :correct-answers [2]
+; :version 2
+; :thumbs-down-text {:text Thumbs Down
+;                    :font-size 48}
+; :ok-value ok
+; :thumbs-up-value thumbs-up
+; :option-3-value option-3}

@@ -10,7 +10,7 @@
     props))
 
 (defn enable-mode-helpers!
-  [mode object object-props]
+  [mode object object-props params]
   (case mode
-    ::modes/editor (editor-mode/enable-mode-helpers! object object-props)
+    ::modes/editor (editor-mode/enable-mode-helpers! object object-props params)
     nil))

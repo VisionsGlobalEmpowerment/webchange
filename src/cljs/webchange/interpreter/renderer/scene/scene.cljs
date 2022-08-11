@@ -70,7 +70,7 @@
                        (re-frame/dispatch [::state/init])
                        (re-frame/dispatch [::state/set-rendering-state true])
 
-                       (let [{:keys [mode on-ready viewport objects metadata]} (r/props this)
+                       (let [{:keys [mode on-ready stage-id viewport objects metadata]} (r/props this)
                              app (init-app viewport mode)]
                          (logger/trace-folded "scene mounted" viewport mode)
                          (.appendChild @container (.-view app))
@@ -79,7 +79,7 @@
                                                                         :parent      (.-stage app)
                                                                         :children    (apply-mode objects mode)
                                                                         :mode        mode})
-                                                     (init-mode-helpers! mode)
+                                                     (init-mode-helpers! mode {:stage-id stage-id})
                                                      (get-in [:wrapper :object])))
 
                          (-> (get-renderer)
