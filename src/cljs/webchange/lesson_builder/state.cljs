@@ -362,3 +362,40 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-saving false))}))
+
+;; Background music
+(re-frame/reg-event-fx
+  ::update-background-music
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [src volume on-success]}]]
+    (let [{:keys [id]} (get-activity-info db)]
+      (if src
+        {:db       (-> db (set-activity-saving true))
+         :dispatch [::warehouse/activity-template-action
+                    {:activity-id id
+                     :action :background-music
+                     :data {:background-music {:src src
+                                               :volume volume}}}
+                    {:on-success [::update-background-music-success on-success]
+                     :on-failure [::update-background-music-failure]}]}
+        {:db       (-> db (set-activity-saving true))
+         :dispatch [::warehouse/activity-template-action
+                    {:activity-id id
+                     :action :background-music-remove}
+                    {:on-success [::update-background-music-success on-success]
+                     :on-failure [::update-background-music-failure]}]}))))
+
+(re-frame/reg-event-fx
+  ::update-background-music-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ on-success {:keys [data]}]]
+    {:db       (-> db
+                   (set-activity-saving false)
+                   (set-activity-data data))
+     :dispatch on-success}))
+
+(re-frame/reg-event-fx
+  ::update-background-music-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-activity-saving false))}))

@@ -1,0 +1,65 @@
+.widget--background-music {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    height: 100%;
+    max-width: 280px;
+   
+    .background-music-subheader {
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 18px;
+
+	padding: 20px 0;
+    }
+
+    .audio-wrapper {
+	display: flex;
+	justify-content: space-between;
+	
+	.audio-name-wrapper {
+	    display: flex;
+	    gap: 9px;
+	    .audio-component {
+		button {
+		    background-color: $color-yellow-1;
+		    @include bbs--icon-color(bbs--color(white));
+		}
+	    }
+	    .name {
+	    }
+	}
+    }
+    .current-audio {
+	
+    }
+
+    .volume {
+    }
+
+    .music-options-list {
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+	.music-options-list-item {
+	}
+    }
+
+    .upload-music {
+	padding: 25px 0;
+
+	input[type="file"] {
+	    display: none;
+	}
+
+	.background-music-upload {
+	    border-radius: 30px;
+	    width: 100%;
+	}
+    }
+
+    .background-music-apply {
+	border-radius: 30px;
+    }
+}
