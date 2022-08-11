@@ -21,6 +21,8 @@
     [webchange.ui.components.icon.system.icon-character :as character]
     [webchange.ui.components.icon.system.icon-check :as check]
     [webchange.ui.components.icon.system.icon-close :as close]
+    [webchange.ui.components.icon.system.icon-contain :as contain]
+    [webchange.ui.components.icon.system.icon-cover :as cover]
     [webchange.ui.components.icon.system.icon-cup :as cup]
     [webchange.ui.components.icon.system.icon-dialogue :as dialogue]
     [webchange.ui.components.icon.system.icon-dnd :as dnd]
@@ -81,6 +83,8 @@
                         "character"       character/data
                         "check"           check/data
                         "close"           close/data
+                        "contain"         contain/data
+                        "cover"           cover/data
                         "cup"             cup/data
                         "dialogue"        dialogue/data
                         "dnd"             dnd/data

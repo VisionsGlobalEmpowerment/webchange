@@ -4,6 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.interpreter.renderer.state.editor :as editor-state]
     [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.blocks.menu.state :as menu]
     [webchange.lesson-builder.blocks.stage.second-stage.state :as second-stage]
     [webchange.question.preview :refer [get-scene-data]]
     [webchange.utils.scene-data :refer [get-scene-background]]))
@@ -27,9 +28,11 @@
   [db value]
   (assoc db form-data-key value))
 
-(defn- update-form-data
-  [db data-patch]
-  (update db form-data-key merge data-patch))
+(defn update-form-data
+  [db key data-patch]
+  (if (map? data-patch)
+    (update-in db [form-data-key key] merge data-patch)
+    (assoc-in db [form-data-key key] data-patch)))
 
 (re-frame/reg-sub
   ::form-data
@@ -59,7 +62,25 @@
   ::set-question-type
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    {:db (update-form-data db {question-type-key value})}))
+    {:db (update-form-data db question-type-key value)}))
+
+;; current object
+
+(def current-object-key :current-object)
+
+(defn- get-current-object
+  [db]
+  (get db current-object-key))
+
+(defn- set-current-object
+  [db value]
+  (print "set-current-object" value)
+  (assoc db current-object-key value))
+
+(re-frame/reg-sub
+  ::current-object
+  :<- [path-to-db]
+  get-current-object)
 
 ;; events
 
@@ -70,9 +91,8 @@
   (fn [{:keys [activity-data db]} [_ {:keys [question-id]}]]
     (editor-state/register-select-object-handler "second" [::show-object-form])
     (let [question-params (get-in activity-data [:objects (keyword question-id) :metadata :params])]
-      (print "question-params" question-params)
       {:db       (set-form-data db question-params)
-       :dispatch [::second-stage/init ::scene-data]})))
+       :dispatch [::second-stage/init ::activity-data]})))
 
 (re-frame/reg-event-fx
   ::reset-state
@@ -82,14 +102,15 @@
 
 (re-frame/reg-event-fx
   ::show-object-form
-  (fn [{:keys [db]} [a b c]]
-    (print "::show-object-form " a b c)
-    {}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ option-object-name]]
+    {:db       (set-current-object db option-object-name)
+     :dispatch [::menu/open-component :question-option]}))
 
 ;; scene data
 
 (re-frame/reg-sub
-  ::scene-data
+  ::activity-data
   :<- [::state/activity-data]
   :<- [::form-data]
   (fn [[activity-data form-data]]
