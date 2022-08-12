@@ -1,10 +1,9 @@
 .widget--image-library {
-    @include bbs--with-scrollbar;
+    @include bbs--scrollable($margin: 0);
 
     position: relative;
     height: 100%;
-    
-    overflow: auto;
+
     padding-right: 4px;
     flex: 1 1;
 

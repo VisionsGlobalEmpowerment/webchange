@@ -61,12 +61,10 @@
     }
 
     .block--content {
-        @include bbs--with-scrollbar;
-        @include bbs--with-scrollbar-margin;
+        @include bbs--scrollable;
         flex: 1 1;
         display: flex;
         flex-direction: column;
-        overflow: auto;
         position: relative;
     }
 

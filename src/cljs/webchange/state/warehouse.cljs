@@ -305,10 +305,10 @@
 
 (re-frame/reg-event-fx
   ::update-activity
-  (fn [{:keys [_]} [_ {:keys [course-id scene-id data]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [course-slug scene-slug data]} handlers]]
     (create-request {:key          :update-activity
                      :method       :post
-                     :uri          (str "/api/courses/" course-id "/update-activity/" scene-id)
+                     :uri          (str "/api/courses/" course-slug "/update-activity/" scene-slug)
                      :params       data
                      :request-type :update-activity}
                     handlers)))
@@ -510,7 +510,7 @@
                      :params {:update true}
                      :uri    (str "/api/activities/" activity-id "/update-template")}
                     handlers)))
-    
+
 (re-frame/reg-event-fx
   ::load-available-books
   (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
@@ -792,8 +792,8 @@
     (create-request {:key    :search-assets
                      :method :get
                      :uri    "/api/courses/editor/assets-search"
-                     :params (->> {:tag tag
-                                   :q query
+                     :params (->> {:tag  tag
+                                   :q    query
                                    :type type}
                                   (filter second)
                                   (into {}))}

@@ -8,6 +8,7 @@
     [webchange.templates.utils.dialog :as dialog]
     [webchange.question.create :as question-object]
     [webchange.question.get-question-data :refer [form->question-data]]
+    [webchange.utils.list :refer [update-by-predicate]]
     [webchange.utils.map :refer [ignore-keys]]
     [webchange.utils.scene-action-data :refer [get-inner-action get-nth-in update-inner-action]]
     [webchange.utils.scene-common-actions :as common-actions-utils]
@@ -246,6 +247,10 @@
     (-> activity-data
         (assoc-in [:metadata :tracks] updated-tracks))))
 
+(defn update-available-action
+  [activity-data {:keys [action-name]} {:keys [alias]}]
+  (update-in activity-data [:metadata :available-actions] update-by-predicate #(= (:action %) action-name) assoc :name alias))
+
 (defn edit-question
   [activity-data {:keys [data-version question-page-object question-index]}]
   (let [question-params (get-question-params question-index)
@@ -256,7 +261,8 @@
     (-> activity-data
         (merge-objects current-question-data new-question-data)
         (merge-actions current-question-data new-question-data)
-        (merge-tracks new-question-data question-params))))
+        (merge-tracks new-question-data question-params)
+        (update-available-action question-params question-page-object))))
 
 (defn- set-animation-settings
   [scene-data data]

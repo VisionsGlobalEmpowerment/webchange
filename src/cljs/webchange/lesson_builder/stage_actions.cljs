@@ -243,7 +243,39 @@
                          (some? on-success) (conj on-success))}))
 
 (re-frame/reg-event-fx
-  ::save-activity-failure
+  ::apply-template-options-failure
   (fn [{:keys [_]} [_ on-failure]]
     {:dispatch-n (cond-> []
                          (some? on-failure) (conj on-failure))}))
+
+;; call activity action
+
+(re-frame/reg-event-fx
+  ::call-activity-action
+  [(re-frame/inject-cofx :activity-info)]
+  (fn [{:keys [activity-info]} [_ {:keys [action data common-action?]
+                                   :or   {common-action? false}}
+                                {:keys [on-success on-failure]}]]
+    (let [{:keys [slug course-slug]} activity-info]
+      {:dispatch [::warehouse/update-activity
+                  {:course-slug course-slug
+                   :scene-slug  slug
+                   :data        {:common-action? common-action?
+                                 :action         action
+                                 :data           data}}
+                  {:on-success [::call-activity-action-success on-success]
+                   :on-failure [::call-activity-action-failure on-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::call-activity-action-success
+  (fn [{:keys [_]} [_ on-success {:keys [data]}]]
+    {:dispatch-n (cond-> [[::state/set-activity-data data]
+                          [::stage-state/reset]]
+                         (some? on-success) (conj on-success))}))
+
+(re-frame/reg-event-fx
+  ::call-activity-action-failure
+  (fn [{:keys [_]} [_ on-failure]]
+    {:dispatch-n (cond-> []
+                         (some? on-failure) (conj on-failure))}))
+

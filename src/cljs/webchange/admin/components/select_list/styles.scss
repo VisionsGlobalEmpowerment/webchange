@@ -1,7 +1,5 @@
 .component--select-list {
-    @include bbs--with-scrollbar;
-    @include bbs--with-scrollbar-margin;
-    overflow: auto;
+    @include bbs--scrollable;
 
     .empty-item {
         @include bbs--noto-14-sb;

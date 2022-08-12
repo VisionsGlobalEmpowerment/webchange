@@ -4,7 +4,7 @@
 
 .widget--confirm-content {
     @include bbs--noto-12-r;
-    @include bbs--with-scrollbar;
+    @include bbs--scrollable($margin: 0);
 
     h1 {
         @include bbs--noto-14-b;
