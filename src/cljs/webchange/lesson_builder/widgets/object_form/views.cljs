@@ -1,8 +1,10 @@
 (ns webchange.lesson-builder.widgets.object-form.views
   (:require
-    [webchange.lesson-builder.widgets.object-form.image-form.views :refer [image-form]]))
+    [webchange.lesson-builder.widgets.object-form.image-form.views :refer [image-form]]
+    [webchange.lesson-builder.widgets.object-form.text-form.views :refer [text-form]]))
 
-(def form-components {"image" image-form})
+(def form-components {"image" image-form
+                      "text"  text-form})
 
 (defn object-form
   [{:keys [data] :as props}]

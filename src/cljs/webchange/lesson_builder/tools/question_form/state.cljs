@@ -74,7 +74,6 @@
 
 (defn- set-current-object
   [db value]
-  (print "set-current-object" value)
   (assoc db current-object-key value))
 
 (re-frame/reg-sub

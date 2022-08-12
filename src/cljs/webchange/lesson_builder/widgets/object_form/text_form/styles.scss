@@ -1,0 +1,46 @@
+.text-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    select {
+        text-align: right;
+    }
+
+    .control-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+
+        & > * {
+            flex: 1 1;
+        }
+    }
+
+    .font-family-component,
+    .font-size-component,
+    .font-color-component {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+
+        & > *:last-child {
+            flex: 1 1;
+        }
+    }
+
+    .text-component {
+        border: 1px solid $color-grey-4;
+    }
+
+    .text-align-controls {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .font-size-component {
+        max-width: 100px;
+    }
+}

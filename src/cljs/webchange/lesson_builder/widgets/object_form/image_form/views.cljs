@@ -78,7 +78,7 @@
         handle-change #(when (fn? on-change) (on-change %))
         component-props {:data      data
                          :on-change handle-change}]
-    [:div {:class-name (ui/get-class-name {"image-form-fields" true
+    [:div {:class-name (ui/get-class-name {"image-form" true
                                            class-name          (some? class-name)})}
      [ui/image {:src        src
                 :class-name "image-preview"}]
