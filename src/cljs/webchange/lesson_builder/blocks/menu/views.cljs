@@ -68,7 +68,6 @@
             [menu-header]
             (for [{:keys [component-id hidden? uid]} open-components]
               ^{:key uid}
-              (let [body-component (get menu-items component-id :div)]
-                [:div {:class-name (ui/get-class-name {"menu--content"        true
-                                                       "menu--content-hidden" hidden?})}
-                 [body-component]]))]]]))}))
+              [:div {:class-name (ui/get-class-name {"menu--content"        true
+                                                     "menu--content-hidden" hidden?})}
+               [(get menu-items component-id :div)]])]]]))}))

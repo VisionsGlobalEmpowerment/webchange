@@ -8,7 +8,7 @@
     [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.lesson-builder.state :as state]
     [webchange.question.preview :refer [get-scene-data]]
-    [webchange.question.get-question-data :refer [current-question-version]]
+    [webchange.question.get-question-data :refer [current-question-version default-question-data]]
     [webchange.utils.scene-data :refer [get-scene-background]]))
 
 (def path-to-db :lesson-builder/question-form)
@@ -107,6 +107,25 @@
   [db value]
   (assoc db question-info-key value))
 
+(re-frame/reg-sub
+  ::question-info
+  :<- [path-to-db]
+  #(get-question-info %))
+
+(re-frame/reg-sub
+  ::current-action
+  :<- [::question-info]
+  (fn [{:keys [question-index]}]
+    (if (some? question-index) :edit :add)))
+
+(re-frame/reg-sub
+  ::menu-title
+  :<- [::current-action]
+  (fn [current-action]
+    (case current-action
+      :edit "Edit Question"
+      :add "Add Question")))
+
 ;; events
 
 (re-frame/reg-event-fx
@@ -117,7 +136,7 @@
     (editor-state/register-select-object-handler "second" [::show-object-form])
     (let [{:keys [index params]} (get-in activity-data [:objects (keyword question-id) :metadata])]
       {:db       (-> db
-                     (set-form-data params)
+                     (set-form-data (merge default-question-data params))
                      (set-question-info {:question-index index}))
        :dispatch [::second-stage/init ::activity-data]})))
 
@@ -155,18 +174,26 @@
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ action]]
     (let [form-data (get-form-data db)
           {:keys [question-index]} (get-question-info db)]
       {:db       (set-saving db true)
-       :dispatch [::stage-actions/call-activity-action
-                  {:action         :edit-question
-                   :data           {:question-page-object form-data
-                                    :question-index       question-index
-                                    :data-version         current-question-version}
-                   :common-action? true}
-                  {:on-success [::save-success]
-                   :on-failure [::save-failure]}]})))
+       :dispatch (case action
+                   :edit [::stage-actions/call-activity-action
+                          {:action         :edit-question
+                           :data           {:question-page-object form-data
+                                            :question-index       question-index
+                                            :data-version         current-question-version}
+                           :common-action? true}
+                          {:on-success [::save-success]
+                           :on-failure [::save-failure]}]
+                   :add [::stage-actions/call-activity-action
+                         {:action         :add-question
+                          :data           {:question-page-object form-data
+                                           :data-version         current-question-version}
+                          :common-action? true}
+                         {:on-success [::save-success]
+                          :on-failure [::save-failure]}])})))
 
 (re-frame/reg-event-fx
   ::save-success

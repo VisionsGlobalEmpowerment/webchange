@@ -34,7 +34,8 @@
   [{:keys [alias options] :as form-data}
    data-names
    {:keys [object-name question-id task-image-param-name] :as props}
-   {:keys [visible?] :as creation-options}]
+   {:keys [visible?] :as creation-options
+    :or   {visible? false}}]
   (let [{options-label :label} options
         substrate-name (str object-name "-substrate")
         options-name (str object-name "-options")

@@ -14,6 +14,11 @@
          (map #(select-keys % [:name :action])))))
 
 (re-frame/reg-event-fx
+  ::add-question
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::layout-state/open-tool :question-form]}))
+
+(re-frame/reg-event-fx
   ::edit-question
   (fn [{:keys [_]} [_ action]]
     {:dispatch [::layout-state/open-tool :question-form {:question-id action}]}))

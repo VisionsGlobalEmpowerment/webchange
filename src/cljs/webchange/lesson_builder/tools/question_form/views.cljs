@@ -36,9 +36,10 @@
 
 (defn- form-actions
   []
-  (let [saving? @(re-frame/subscribe [::state/saving?])
+  (let [action @(re-frame/subscribe [::state/current-action])
+        saving? @(re-frame/subscribe [::state/saving?])
         handle-cancel-click #(re-frame/dispatch [::state/cancel])
-        handle-save-click #(re-frame/dispatch [::state/save])]
+        handle-save-click #(re-frame/dispatch [::state/save action])]
     [:div.form-actions
      [ui/button {:color     "blue-1"
                  :disabled? saving?
@@ -50,14 +51,17 @@
 
 (defn question-params
   []
-  [:div.question-form--question-params
-   [:div.params-form
-    [control-group {:title "Edit Question"}
-     [info "Name your question so you can find and drag it into the correct place in the Script editor."]
-     [question-alias]]
-    [control-group {:title "Select Question Type"}
-     [question-type]]]
-   [form-actions]])
+  (let [action @(re-frame/subscribe [::state/current-action])
+        title @(re-frame/subscribe [::state/menu-title])]
+    [:div.question-form--question-params
+     [:div.params-form
+      [control-group {:title title}
+       (when (= action :add)
+         [info "Name your question so you can find and drag it into the correct place in the Script editor."])
+       [question-alias]]
+      [control-group {:title "Select Question Type"}
+       [question-type]]]
+     [form-actions]]))
 
 (defn question-options
   []
