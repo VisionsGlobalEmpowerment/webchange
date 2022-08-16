@@ -5,7 +5,8 @@
     [webchange.lesson-builder.state :as lesson-builder-state]
     [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.lesson-builder.blocks.menu.state :as menu-state]
-    [webchange.utils.alphabets :as alphabets]))
+    [webchange.utils.alphabets :as alphabets]
+    [webchange.utils.uid :refer [get-uid]]))
 
 (def path-to-db :lesson-builder/template-options)
 
@@ -16,11 +17,13 @@
 
 (defn- get-template-options
   [activity-data]
-  (-> activity-data
-      :metadata
-      :actions
-      :template-options
-      :options))
+  (->> activity-data
+       :metadata
+       :actions
+       :template-options
+       :options
+       (map (fn [option-data]
+              (assoc option-data :uid (get-uid))))))
 
 (defn get-saved-props
   [activity-data]
@@ -116,7 +119,7 @@
   ::apply-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (set-loading db false)}))
+    {:db (set-loading db false)}))
 
 (re-frame/reg-event-fx
   ::update-template

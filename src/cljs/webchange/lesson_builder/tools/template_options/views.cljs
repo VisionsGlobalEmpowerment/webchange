@@ -91,7 +91,8 @@
   []
   (let [options @(re-frame/subscribe [::state/options])]
     [:div.template-options--options-panel
-     (for [option options]
+     (for [{:keys [uid] :as option} options]
+       ^{:key uid}
        [option-field option])]))
 
 (defn- template-options-widget

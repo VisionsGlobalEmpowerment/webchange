@@ -4,7 +4,6 @@
     [reagent.core :as r]
     [webchange.lesson-builder.blocks.menu.state :as state]
     [webchange.lesson-builder.blocks.menu.menu-tabs.views :refer [menu-tabs]]
-    [webchange.lesson-builder.tools.voice-translate.views :refer [audio-manager]]
     [webchange.lesson-builder.tools.background-music.views :refer [background-music]]
     [webchange.lesson-builder.tools.character-add.views :refer [character-add]]
     [webchange.lesson-builder.widgets.design-actions.views :refer [design-actions]]
@@ -14,6 +13,7 @@
     [webchange.lesson-builder.tools.scene-layers.views :refer [scene-layers]]
     [webchange.lesson-builder.tools.settings.views :refer [settings]]
     [webchange.lesson-builder.tools.template-options.index :as template-options]
+    [webchange.lesson-builder.tools.voice-translate.index :as voice-translate]
     [webchange.lesson-builder.widgets.select-image.views :refer [choose-image-overlay]]
     [webchange.ui.index :as ui]))
 
@@ -24,7 +24,6 @@
     (assoc items-map key value)))
 
 (def menu-items (-> {:default          design-actions
-                     :audio-manager    audio-manager
                      :background-music background-music
                      :character-add    character-add
                      :design-actions   design-actions
@@ -34,7 +33,8 @@
                      :settings         settings
                      :choose-image     choose-image-overlay}
                     (add-menu-items :question-form question-form/menu)
-                    (add-menu-items :template-options (:menu template-options/data))))
+                    (add-menu-items :template-options template-options/menu)
+                    (add-menu-items :voice-translate voice-translate/menu)))
 
 (defn- menu-header
   []

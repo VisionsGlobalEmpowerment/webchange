@@ -89,10 +89,6 @@
   (r/create-class
     {:display-name "Change Background Image"
 
-     :component-did-mount
-     (fn [this]
-       (re-frame/dispatch [::state/init (r/props this)]))
-
      :component-will-unmount
      (fn [] (re-frame/dispatch [::state/reset]))
 
@@ -110,5 +106,3 @@
               "image-library" [images-collection {:type "background"}]
               [ui/loading-overlay])]
            [actions]]]))}))
-
-
