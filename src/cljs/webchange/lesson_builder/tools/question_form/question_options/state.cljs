@@ -6,19 +6,53 @@
     [webchange.question.get-question-data :refer [available-values]]
     [webchange.utils.list :refer [without-item]]))
 
+(def answers-number-key :answers-number)
+(def correct-answers-key :correct-answers)
+(def mark-options-key :mark-options)
+(def options-number-key :options-number)
+(def task-type-key :task-type)
+(def question-alias-key :alias)
+(def question-type-key :question-type)
+
+;; question alias
+
 (re-frame/reg-sub
-  ::title
-  :<- [::state/question-type]
-  :<- [::state/question-type-options]
-  (fn [[question-type options]]
-    (or (some (fn [{:keys [text value]}]
-                (and (= value question-type) text))
-              options)
-        "New Question")))
+  ::question-alias
+  :<- [::state/form-data]
+  #(get % question-alias-key))
+
+(re-frame/reg-event-fx
+  ::set-question-alias
+  [(i/path state/path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (state/update-form-data db question-alias-key value)}))
+
+;; question type
+
+(re-frame/reg-sub
+  ::question-type
+  :<- [::state/form-data]
+  #(get % question-type-key))
+
+(re-frame/reg-sub
+  ::question-type-options
+  (fn []
+    [{:text  "Multiple choice image"
+      :value "multiple-choice-image"}
+     {:text  "Multiple choice text"
+      :value "multiple-choice-text"}
+     {:text  "Thumbs up & thumbs down"
+      :value "thumbs-up-n-down"}]))
+
+(re-frame/reg-event-fx
+  ::set-question-type
+  [(i/path state/path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (-> db
+             (state/update-form-data question-type-key value)
+             (state/update-form-data correct-answers-key []))}))
 
 ;; task type
-
-(def task-type-key :task-type)
 
 (re-frame/reg-sub
   ::task-type
@@ -35,7 +69,7 @@
 (re-frame/reg-sub
   ::task-type-options
   (fn []
-    (re-frame/subscribe [::state/question-type]))
+    (re-frame/subscribe [::question-type]))
   (fn [question-type]
     (let [task-types [{:text           "Text"
                        :value          "text"
@@ -60,11 +94,9 @@
 
 (re-frame/reg-sub
   ::show-options-number?
-  :<- [::state/question-type]
+  :<- [::question-type]
   (fn [question-type]
     (not= question-type "thumbs-up-n-down")))
-
-(def options-number-key :options-number)
 
 (re-frame/reg-sub
   ::options-number
@@ -76,7 +108,9 @@
   ::set-options-number
   [(i/path state/path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    {:db (state/update-form-data db options-number-key value)}))
+    {:db (-> db
+             (state/update-form-data options-number-key value)
+             (state/update-form-data correct-answers-key []))}))
 
 (re-frame/reg-sub
   ::options-number-options
@@ -100,15 +134,6 @@
   (fn [answers-number]
     (not= answers-number "any")))
 
-(re-frame/reg-sub
-  ::correct-answers-type
-  :<- [::answers-number]
-  (fn [answers-number]
-    (case answers-number
-      "one" "one"
-      "many" "many"
-      nil)))
-
 (defn- get-mark-option-text
   [form-data mark-option]
   (let [mark-option-text (-> (str mark-option "-text") (keyword))]
@@ -117,7 +142,7 @@
 (re-frame/reg-sub
   ::correct-answers-options
   :<- [::state/form-data]
-  :<- [::state/question-type]
+  :<- [::question-type]
   :<- [::options-number]
   :<- [::mark-options]
   (fn [[form-data question-type options-number mark-options]]
@@ -125,16 +150,16 @@
       (->> mark-options
            (map (fn [value]
                   {:text  (get-mark-option-text form-data value)
-                   :value value})))
+                   :value value}))
+           (sort-by :text))
       (->> (range options-number)
            (map inc)
            (map (fn [number]
                   (let [value-key (-> (str "option-" number "-value") (keyword))
                         value (get form-data value-key)]
                     {:text  (str "Option " number)
-                     :value value})))))))
-
-(def correct-answers-key :correct-answers)
+                     :value value})))
+           (sort-by :text)))))
 
 ;; correct answers one
 
@@ -188,8 +213,6 @@
 
 ;; answers number
 
-(def answers-number-key :answers-number)
-
 (re-frame/reg-sub
   ::answers-number
   :<- [::state/form-data]
@@ -216,11 +239,9 @@
 
 ;; mark options
 
-(def mark-options-key :mark-options)
-
 (re-frame/reg-sub
   ::show-mark-options?
-  :<- [::state/question-type]
+  :<- [::question-type]
   (fn [question-type]
     (= question-type "thumbs-up-n-down")))
 
@@ -240,7 +261,8 @@
                 {:text     (get-mark-option-text form-data value)
                  :value    value
                  :checked? (-> (some #{value} current-value)
-                               (or false))})))))
+                               (or false))}))
+         (sort-by :text))))
 
 (re-frame/reg-event-fx
   ::set-mark-option
@@ -249,4 +271,5 @@
     (let [new-value (-> (state/get-form-data db)
                         (get mark-options-key)
                         (toggle-list-item value checked?))]
-      {:db (state/update-form-data db mark-options-key new-value)})))
+      (cond-> {:db (state/update-form-data db mark-options-key new-value)}
+              (false? checked?) (assoc :dispatch [::set-correct-answers-many checked? value])))))

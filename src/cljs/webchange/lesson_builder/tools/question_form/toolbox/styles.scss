@@ -1,0 +1,23 @@
+.question-form--question-toolbox {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    justify-items: stretch;
+    column-gap: 64px;
+    row-gap: 16px;
+    padding: 32px 48px;
+    height: auto;
+
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .control-group--content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+}

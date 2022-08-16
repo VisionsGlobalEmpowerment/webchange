@@ -53,31 +53,6 @@
   (fn [{:keys [db]} [_ field-name value]]
     {:db (update-form-data db field-name value)}))
 
-;; question-type
-
-(def question-type-key :question-type)
-
-(re-frame/reg-sub
-  ::question-type
-  :<- [::form-data]
-  #(get % question-type-key))
-
-(re-frame/reg-sub
-  ::question-type-options
-  (fn []
-    [{:text  "Multiple choice image"
-      :value "multiple-choice-image"}
-     {:text  "Multiple choice text"
-      :value "multiple-choice-text"}
-     {:text  "Thumbs up & thumbs down"
-      :value "thumbs-up-n-down"}]))
-
-(re-frame/reg-event-fx
-  ::set-question-type
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ value]]
-    {:db (update-form-data db question-type-key value)}))
-
 ;; current object
 
 (def current-object-key :current-object)
@@ -111,20 +86,6 @@
   ::question-info
   :<- [path-to-db]
   #(get-question-info %))
-
-(re-frame/reg-sub
-  ::current-action
-  :<- [::question-info]
-  (fn [{:keys [question-index]}]
-    (if (some? question-index) :edit :add)))
-
-(re-frame/reg-sub
-  ::menu-title
-  :<- [::current-action]
-  (fn [current-action]
-    (case current-action
-      :edit "Edit Question"
-      :add "Add Question")))
 
 ;; events
 
