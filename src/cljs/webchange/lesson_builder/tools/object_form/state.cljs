@@ -45,6 +45,7 @@
 
 (editor-state/register-select-object-handler
   "main"
+  :main-editor-frame
   [::show-object-form])
 
 (re-frame/reg-event-fx

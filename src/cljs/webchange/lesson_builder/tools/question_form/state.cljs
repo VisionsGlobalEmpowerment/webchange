@@ -94,7 +94,7 @@
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
   (fn [{:keys [activity-data db]} [_ {:keys [question-id]}]]
-    (editor-state/register-select-object-handler "second" [::show-object-form])
+    (editor-state/register-select-object-handler "second" :show-question-object-form [::show-object-form])
     (let [{:keys [index params]} (get-in activity-data [:objects (keyword question-id) :metadata])]
       {:db       (-> db
                      (set-form-data (merge default-question-data params))
