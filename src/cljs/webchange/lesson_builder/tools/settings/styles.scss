@@ -1,0 +1,110 @@
+.widget--settings {
+    $padding: $menu-padding-v;
+
+    margin-top: -$menu-padding-v;
+    margin-left: -$menu-padding-h;
+    margin-right: -$menu-padding-h;
+
+    max-width: 320px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    
+    .main-setting-panel {
+	.settings-item {
+	    border-bottom: solid 1px bbs--color(grey-4);
+            padding: $padding;
+	
+	    display: flex;
+	    flex-direction: column;
+	    gap: 16px;
+	    
+	    .settings-item-header-wrapper {
+		display: flex;
+		justify-content: space-between;
+
+		cursor: pointer;
+	    }
+	    
+	    .settings-item-header {
+		display: flex;
+		align-items: center;
+		
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 18px;	
+	    }
+
+	    .option-group {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	    }
+
+	   
+	}
+	
+    }
+
+    .activity-settings-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+
+	.activity-settings-fields {
+	    padding: $padding;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 16px;
+	   
+	    .activity-settings-field {
+		display: flex;
+		flex-direction: column;
+	   }
+	}
+    }
+
+    .create-preview-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	.create-preview-fields {
+	    padding: $padding;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 16px;
+
+	    .img-wrapper {
+		overflow: hidden;
+		border: 1px solid $color-grey-4;
+		border-radius: 6px;
+
+		height: 167px;
+	    }
+	    .take-screenshot-button {
+		margin-top: 30px;
+		border-radius: 30px;
+	    }
+	}
+    }
+
+    .menu-header {
+	height: 40px;
+	border-bottom: solid 1px bbs--color(grey-4);
+
+	display: flex;
+	align-items: center;
+	gap: 16px;
+
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 20px;
+    }
+
+    .apply-button {
+	border-radius: 30px;
+	
+    }
+}

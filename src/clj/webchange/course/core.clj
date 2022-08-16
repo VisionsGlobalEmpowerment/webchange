@@ -1031,3 +1031,27 @@
     {:activity-id activity-id
      :data activity}))
 
+(defn update-activity-settings!
+  [activity-id {:keys [activity-settings preview animation-settings guide-settings] :as data} owner-id]
+  (let [created-at (jt/local-date-time)
+        activity-info (db/get-scene-by-id {:id activity-id})
+        scene-data (-> (get-activity-current-version activity-id)
+                       (templates/update-activity-from-template {:action "set-animation-settings"
+                                                                 :common-action? true
+                                                                 :data animation-settings})
+                       (templates/update-activity-from-template {:action "set-guide-settings"
+                                                                 :common-action? true
+                                                                 :data guide-settings}))]
+    (db/edit-scene! {:id activity-id
+                     :metadata (:metadata activity-info)
+                     :name (:name activity-settings)
+                     :lang (:lang activity-settings)})
+    (db/update-scene-image! {:id activity-id
+                             :image_src (:preview data)})
+    (db/save-scene! {:scene_id    activity-id
+                     :data        scene-data
+                     :owner_id    owner-id
+                     :created_at  created-at
+                     :description "Activity Settings"})
+    {:data scene-data
+     :info (get-activity activity-id)}))

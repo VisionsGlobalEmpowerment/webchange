@@ -455,166 +455,175 @@
 
   ;; Scenes
   (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name]
-    (-> (core/get-scene-data course-slug scene-name) response))
+       (-> (core/get-scene-data course-slug scene-name) response))
   (GET "/api/courses/:course-slug/first-scene" [course-slug]
-    (-> (core/get-first-scene-data course-slug) response))
+       (-> (core/get-first-scene-data course-slug) response))
   (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
-    (handle-save-scene course-slug scene-name request))
+        (handle-save-scene course-slug scene-name request))
   (PUT "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
-    (handle-update-scene course-slug scene-name request))
+       (handle-update-scene course-slug scene-name request))
   (POST "/api/courses/:course-slug/scenes/:scene-name/skills" [course-slug scene-name :as request]
-    (handle-update-scene-skills course-slug scene-name request))
+        (handle-update-scene-skills course-slug scene-name request))
 
   (POST "/api/courses/:course-slug" [course-slug :as request]
-    (handle-save-course course-slug request))
+        (handle-save-course course-slug request))
 
   (GET "/api/courses/:course-slug/info" [course-slug]
-    (-> course-slug core/get-course-info response))
+       (-> course-slug core/get-course-info response))
   (PUT "/api/courses/:course-id/info" [course-id :as request]
-    (handle-save-course-info course-id request))
+       (handle-save-course-info course-id request))
 
   (GET "/api/courses/:course-slug/versions" [course-slug] (-> course-slug core/get-course-versions response))
   (GET "/api/courses/:course-slug/scenes/:scene-name/versions" [course-slug scene-name]
-    (-> (core/get-scene-versions course-slug scene-name) response))
+       (-> (core/get-scene-versions course-slug scene-name) response))
   (POST "/api/course-versions/:version-id/restore" [version-id :as request]
-    (handle-restore-course-version version-id request))
+        (handle-restore-course-version version-id request))
   (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-    (handle-restore-scene-version version-id request))
+        (handle-restore-scene-version version-id request))
 
   (GET "/api/available-courses" request
-    (-> (core/get-available-courses) response))
+       (-> (core/get-available-courses) response))
 
   (PUT "/api/schools/:school-id/assign-course" request
-    :coercion :spec
-    :path-params [school-id :- ::course-spec/school-id]
-    :body [data ::course-spec/assign-school-course]
-    :return ::course-spec/school-course
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/assign-school-course school-id data)
-          response)))
+       :coercion :spec
+       :path-params [school-id :- ::course-spec/school-id]
+       :body [data ::course-spec/assign-school-course]
+       :return ::course-spec/school-course
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/assign-school-course school-id data)
+             response)))
   (GET "/api/schools/:school-id/courses" request
-    :coercion :spec
-    :path-params [school-id :- ::course-spec/school-id]
-    :return ::course-spec/courses
-    (let [user-id (current-user request)]
-      (when-not (or (is-admin? user-id) (school/school-teacher? school-id user-id))
-        (throw-unauthorized {:role :educator}))
-      (-> (core/get-school-courses school-id user-id)
-          response)))
+       :coercion :spec
+       :path-params [school-id :- ::course-spec/school-id]
+       :return ::course-spec/courses
+       (let [user-id (current-user request)]
+         (when-not (or (is-admin? user-id) (school/school-teacher? school-id user-id))
+           (throw-unauthorized {:role :educator}))
+         (-> (core/get-school-courses school-id user-id)
+             response)))
   (GET "/api/classes/:class-id/course" request
-    :coercion :spec
-    :path-params [class-id :- ::course-spec/class-id]
-    (let [user-id (current-user request)]
-      (when-not (or (is-admin? user-id) (school/class-teacher? class-id user-id))
-        (throw-unauthorized {:role :educator}))
-      (-> (core/get-class-course class-id)
-          response)))
+       :coercion :spec
+       :path-params [class-id :- ::course-spec/class-id]
+       (let [user-id (current-user request)]
+         (when-not (or (is-admin? user-id) (school/class-teacher? class-id user-id))
+           (throw-unauthorized {:role :educator}))
+         (-> (core/get-class-course class-id)
+             response)))
   (GET "/api/available-activities" request
-    :coercion :spec
-    :query-params [{lang :- string? nil}]
-    (let [user-id (current-user request)]
-      (-> (core/get-available-activities lang)
-          response)))
+       :coercion :spec
+       :query-params [{lang :- string? nil}]
+       (let [user-id (current-user request)]
+         (-> (core/get-available-activities lang)
+             response)))
   (GET "/api/visible-activities" request
-    :coercion :spec
-    (let [user-id (current-user request)]
-      (-> (core/get-visible-activities)
-          response)))
+       :coercion :spec
+       (let [user-id (current-user request)]
+         (-> (core/get-visible-activities)
+             response)))
   (GET "/api/available-books" request
-    :coercion :spec
-    :query-params [{lang :- string? nil}]
-    (let [user-id (current-user request)]
-      (-> (core/get-available-books lang)
-          response)))
+       :coercion :spec
+       :query-params [{lang :- string? nil}]
+       (let [user-id (current-user request)]
+         (-> (core/get-available-books lang)
+             response)))
   (GET "/api/activities/:activity-id/current-version" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    (-> (core/get-activity-current-version activity-id)
-        response))
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       (-> (core/get-activity-current-version activity-id)
+           response))
   (GET "/api/activities/:activity-id" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    (-> (core/get-activity activity-id)
-        response))
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       (-> (core/get-activity activity-id)
+           response))
   (PUT "/api/activities/:activity-id" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/edit-activity]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/edit-activity activity-id data)
-          response)))
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/edit-activity]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/edit-activity activity-id data)
+             response)))
   (PUT "/api/activities/:activity-id/archive" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/archive-activity]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/archive-activity activity-id data)
-          response)))
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/archive-activity]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/archive-activity activity-id data)
+             response)))
   (PUT "/api/activities/:activity-id/toggle-visibility" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/toggle-visibility]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/toggle-activity-visibility activity-id data)
-          response)))
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/toggle-visibility]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/toggle-activity-visibility activity-id data)
+             response)))
   (POST "/api/activities/:activity-id/duplicate" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/duplicate]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/duplicate-activity activity-id data user-id)
-          response)))
+        :coercion :spec
+        :path-params [activity-id :- ::activity-spec/id]
+        :body [data ::activity-spec/duplicate]
+        (let [user-id (current-user request)]
+          (when-not (is-admin? user-id)
+            (throw-unauthorized {:role :educator}))
+          (-> (core/duplicate-activity activity-id data user-id)
+              response)))
   (POST "/api/activities/:activity-id/version" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/activity-data]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/save-activity-version activity-id data user-id)
-          response)))
+        :coercion :spec
+        :path-params [activity-id :- ::activity-spec/id]
+        :body [data ::activity-spec/activity-data]
+        (let [user-id (current-user request)]
+          (when-not (is-admin? user-id)
+            (throw-unauthorized {:role :educator}))
+          (-> (core/save-activity-version activity-id data user-id)
+              response)))
   (POST "/api/books" request
-    :coercion :spec
-    :body [data ::book-spec/create-book]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/create-book data user-id)
-          response)))
+        :coercion :spec
+        :body [data ::book-spec/create-book]
+        (let [user-id (current-user request)]
+          (when-not (is-admin? user-id)
+            (throw-unauthorized {:role :educator}))
+          (-> (core/create-book data user-id)
+              response)))
   (PUT "/api/activities/:activity-id/template-options" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/template-options]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/apply-template-options activity-id data user-id)
-          response)))
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/template-options]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/apply-template-options activity-id data user-id)
+             response)))
   (PUT "/api/activities/:activity-id/update-template" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/update-template]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/update-activity-template! activity-id user-id)
-          response)))
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/update-template]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/update-activity-template! activity-id user-id)
+             response)))
   (POST "/api/activities/:activity-id/template-actions" request
-    :coercion :spec
-    :path-params [activity-id :- ::activity-spec/id]
-    :body [data ::activity-spec/template-action]
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/apply-template-action activity-id data user-id)
-          response))))
+        :coercion :spec
+        :path-params [activity-id :- ::activity-spec/id]
+        :body [data ::activity-spec/template-action]
+        (let [user-id (current-user request)]
+          (when-not (is-admin? user-id)
+            (throw-unauthorized {:role :educator}))
+          (-> (core/apply-template-action activity-id data user-id)
+              response)))
+  (PUT "/api/activities/:activity-id/settings" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/update-settings]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/update-activity-settings! activity-id data user-id)
+             response))))
