@@ -29,13 +29,19 @@
     }
 }
 
-@mixin bbs--with-scrollbar-margin {
-    padding-right: 5px;
-    margin-right: -5px;
+@mixin bbs--with-scrollbar-margin($margin: 5px) {
+    padding-right: $margin;
+    margin-right: -$margin;
 }
 
 @mixin bbs--with-scrollbar-color ($color) {
     &::-webkit-scrollbar-thumb {
         background-color: $color;
     }
+}
+
+@mixin bbs--scrollable($margin: 5px) {
+    @include bbs--with-scrollbar;
+    @include bbs--with-scrollbar-margin($margin);
+    overflow: auto;
 }

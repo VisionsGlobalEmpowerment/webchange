@@ -28,13 +28,14 @@
                                               (str "variant-" variant) (some? variant)
                                               class-name               (some? class-name)})
            :data-wrapper-for id}
-     [:div {:class-name "bbs--text-area-wrapper--header"}
-      (when has-label?
-        [input-label {:for       id
-                      :required? required?}
-         label])
-      (when (some? error)
-        [input-error error])]
+     (when (or has-label? (some? error))
+       [:div {:class-name "bbs--text-area-wrapper--header"}
+        (when has-label?
+          [input-label {:for       id
+                        :required? required?}
+           label])
+        (when (some? error)
+          [input-error error])])
      [:textarea (cond-> {:value       value
                          :on-change   handle-change
                          :placeholder placeholder

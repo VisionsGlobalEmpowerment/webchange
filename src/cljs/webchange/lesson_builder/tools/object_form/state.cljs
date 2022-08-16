@@ -44,7 +44,7 @@
     (get-in db [:objects object-name])))
 
 (editor-state/register-select-object-handler
-  :show-object-form
+  "main"
   [::show-object-form])
 
 (re-frame/reg-event-fx

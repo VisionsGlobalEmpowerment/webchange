@@ -7,13 +7,11 @@
     }
 
     .children-list {
-        @include bbs--with-scrollbar;
-        @include bbs--with-scrollbar-margin;
+        @include bbs--scrollable;
         display: flex;
         flex: 1 1;
         flex-direction: column;
         gap: 16px;
-        overflow: auto;
     }
 
     .child-card {

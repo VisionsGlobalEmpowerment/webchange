@@ -1,0 +1,55 @@
+.image-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+
+    h2 {
+        @include bbs--noto-16-b;
+    }
+
+    .form-fields-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .image-preview {
+        width: 280px;
+        height: 231px;
+
+        @include bbs--checkerboard;
+
+        border: solid 1px $color-grey-4;
+        border-radius: 6px;
+
+        img {
+            object-fit: contain;
+        }
+    }
+
+    .flip-field,
+    .image-fill-field,
+    .scale-field,
+    .visible-field {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 30px;
+        @include bbs--icon-size(20px);
+    }
+
+    .image-fill-field {
+        .image-fill-filed-controls {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .scale-field {
+        .bbs--input {
+            width: 50px;
+            padding: 4px 0;
+        }
+    }
+}

@@ -41,8 +41,7 @@
         display: flex;
         flex-direction: column;
 
-        @include bbs--with-scrollbar;
-        overflow: auto;
+        @include bbs--scrollable($margin: 0);
         padding: 0 4px;
 
         background-color: bbs--color(white);

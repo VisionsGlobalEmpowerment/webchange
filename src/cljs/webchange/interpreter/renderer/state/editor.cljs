@@ -5,11 +5,12 @@
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]))
 
 (def editor-objects (atom {}))
-(defonce select-object-handlers (atom {}))
+(defonce select-object-handlers (atom []))
 
 (defn register-select-object-handler
-  [key handler]
-  (swap! select-object-handlers assoc key handler))
+  [stage-id handler]
+  (swap! select-object-handlers conj {:stage-id stage-id
+                                      :handler  handler}))
 
 (defn hide-frames
   []
@@ -43,10 +44,12 @@
 
 (re-frame/reg-event-fx
   ::select-object
-  (fn [{:keys [db]} [_ current-target]]
+  (fn [{:keys [db]} [_ current-target {:keys [stage-id]}]]
     (let [previous-target (get-in db (path-to-db [:editor :selected-object]))
           handlers (->> @select-object-handlers
-                        (map second)
+                        (filter (fn [handler-data]
+                                  (= stage-id (:stage-id handler-data))))
+                        (map #(:handler %))
                         (map #(conj % current-target))
                         (into []))]
       {:db            (assoc-in db (path-to-db [:editor :selected-object]) current-target)

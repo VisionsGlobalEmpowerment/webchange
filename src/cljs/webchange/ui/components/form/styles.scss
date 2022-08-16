@@ -12,12 +12,11 @@
     position: relative;
 
     .controls {
-        @include bbs--with-scrollbar;
+        @include bbs--scrollable($margin: 0);
         display: flex;
         flex: 1 1;
         flex-direction: column;
         gap: 16px;
-        overflow: auto;
         padding: $form-padding;
     }
 

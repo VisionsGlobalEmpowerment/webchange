@@ -392,4 +392,4 @@
                                                    {:question-id object-name}))
         (update-in [:metadata :available-actions] concat [{:action action-name
                                                            :type   "question"
-                                                           :name   (str "Ask " alias)}]))))
+                                                           :name   alias}]))))

@@ -18,9 +18,7 @@
         flex-direction: column;
         gap: 10px;
 
-        overflow: auto;
-        @include bbs--with-scrollbar;
-        @include bbs--with-scrollbar-margin;
+        @include bbs--scrollable;
     }
 
     .group {

@@ -58,9 +58,7 @@
     }
 
     .progress-list {
-        @include bbs--with-scrollbar;
-        @include bbs--with-scrollbar-margin;
-        overflow: auto;
+        @include bbs--scrollable;
         margin-right: -9px;
     }
 

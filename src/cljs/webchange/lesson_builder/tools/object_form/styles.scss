@@ -1,4 +1,4 @@
-.widget--object-form {
+.tool--object-form {
     @import "animation_form/styles";
     @import "image_form/styles";
     @import "text_form/styles";
@@ -12,10 +12,8 @@
     height: 100%;
 
     .object-form--form {
-        @include bbs--with-scrollbar;
-        @include bbs--with-scrollbar-margin;
+        @include bbs--scrollable;
         flex: 1 1;
-        overflow: auto;
     }
 
     .group-panel {

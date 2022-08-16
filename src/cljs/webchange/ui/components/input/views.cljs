@@ -5,7 +5,8 @@
     [webchange.ui.components.icon.views :refer [general-icon]]
     [webchange.ui.components.input-error.views :refer [input-error]]
     [webchange.ui.components.input-label.views :refer [input-label]]
-    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]
+    [webchange.utils.numbers :refer [try-parse-int try-parse-number]]))
 
 (defn- subscribe-document
   [handler]
@@ -61,7 +62,8 @@
     (let [handle-change (fn [event]
                           (when (fn? on-change)
                             (on-change (cond->> (.. event -target -value)
-                                                (= type "int") (.parseInt js/Number)))))
+                                                (= type "int") (try-parse-int)
+                                                (= type "float") (try-parse-number)))))
           handle-click (fn [event]
                          (when select-on-focus? (.select (.-target event)))
                          (when (fn? on-click) (on-click event)))
@@ -101,13 +103,13 @@
                         :on-input    handle-change
                         :on-change   handle-change
                         :on-click    handle-click}
+                       (some? type) (assoc :type type)
                        (or (= type "int")
                            (= type "float")) (-> (assoc :type "number")
                                                  (assoc :step step))
                        (= type "range") (-> (assoc :step (:step props))
                                             (assoc :min (:min props))
                                             (assoc :max (:max props)))
-                       (some? type) (assoc :type type)
                        (some? id) (assoc :id id)
                        (some? name) (assoc :name name)
                        (some? value) (assoc :value value)

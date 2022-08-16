@@ -29,10 +29,10 @@
           scene-id (or scene-id (core/current-scene-id db))
           action (or action (get-current-action db))]
       {:dispatch [::warehouse/update-activity
-                  {:course-id course-id
-                   :scene-id  scene-id
-                   :data      {:action action
-                               :data   data}}
+                  {:course-slug course-id
+                   :scene-slug  scene-id
+                   :data        {:action action
+                                 :data   data}}
                   {:on-success [::call-activity-action-success on-success scene-id]}]})))
 
 (re-frame/reg-event-fx
@@ -42,11 +42,11 @@
     (let [course-id (core/current-course-id db)
           scene-id (core/current-scene-id db)]
       {:dispatch [::warehouse/update-activity
-                  {:course-id course-id
-                   :scene-id  scene-id
-                   :data      {:common-action? true
-                               :action         action
-                               :data           data}}
+                  {:course-slug course-id
+                   :scene-slug  scene-id
+                   :data        {:common-action? true
+                                 :action         action
+                                 :data           data}}
                   {:on-success [::call-activity-action-success on-success scene-id]}]})))
 
 (re-frame/reg-event-fx

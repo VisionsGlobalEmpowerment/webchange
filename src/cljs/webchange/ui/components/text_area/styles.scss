@@ -6,6 +6,7 @@
     gap: 8px;
 
     @include bbs--input;
+    padding: 0;
 
     .bbs--text-area-wrapper--header {
         display: flex;
@@ -14,14 +15,13 @@
     }
 
     textarea {
-        @include bbs--input-font;
-        @include bbs--with-scrollbar;
+        @include bbs--scrollable;
 
         background-color: transparent;
         border: none;
         outline: none;
         padding: 8px;
-        padding-left: 0;
+//         padding-left: 0;
         resize: none;
         width: 100%;
     }

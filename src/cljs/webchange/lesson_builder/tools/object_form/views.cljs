@@ -43,7 +43,7 @@
     (let [target @(re-frame/subscribe [::state/target])
           object @(re-frame/subscribe [::state/object target])
           group? (= "group" (:type object))]
-      [:div {:class-name "widget--object-form"}
+      [:div {:class-name "tool--object-form"}
        [:h1 "Edit"]
        (if group?
          [group-panel {:group      object

@@ -80,8 +80,8 @@
                            [::state-flipbook/generate-stages-screenshots {:only-current-stage? true}])}))))
 
 (defn- handle-frame-click
-  [component]
-  (re-frame/dispatch [::editor/select-object (:object-name component)]))
+  [component params]
+  (re-frame/dispatch [::editor/select-object (:object-name component) params]))
 
 (defn- handle-drag
   [container props]
@@ -262,18 +262,18 @@
        (into {})))
 
 (defn- create-editor-container
-  [props]
+  [props params]
   (let [container (Container.)]
-    (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props)))
+    (when (selectable? props) (utils/set-handler container "click" #(handle-frame-click props params)))
     (when (draggable? props)
-      (enable-drag! container {:on-drag-start        #(handle-frame-click props)
+      (enable-drag! container {:on-drag-start        #(handle-frame-click props params)
                                :on-drag-end          #(handle-drag container (filter-props props))
                                :on-drag-move-options (drag-options props)}))
     container))
 
 (defn- wrap-in-container
-  [object props]
-  (let [container (create-editor-container props)
+  [object props params]
+  (let [container (create-editor-container props params)
         current-parent (.-parent object)
         index (.getChildIndex current-parent object)]
     (.addChildAt current-parent container index)
@@ -285,8 +285,8 @@
     container))
 
 (defn add-editor-frame
-  [object {:keys [editable?] :as props}]
+  [object {:keys [editable?] :as props} params]
   (when editable?
     (logger/trace-folded ["add editor frame for" (:object-name props)] props object)
-    (let [container (wrap-in-container object props)]
+    (let [container (wrap-in-container object props params)]
       (create-frame container props object))))

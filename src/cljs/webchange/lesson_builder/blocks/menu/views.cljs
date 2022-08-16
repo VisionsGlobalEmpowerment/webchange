@@ -33,7 +33,7 @@
                      :scene-layers     scene-layers
                      :settings         settings
                      :choose-image     choose-image-overlay}
-                    (add-menu-items :question-form (:menu question-form/data))
+                    (add-menu-items :question-form question-form/menu)
                     (add-menu-items :template-options (:menu template-options/data))))
 
 (defn- menu-header
@@ -68,7 +68,6 @@
             [menu-header]
             (for [{:keys [component-id hidden? uid]} open-components]
               ^{:key uid}
-              (let [body-component (get menu-items component-id :div)]
-                [:div {:class-name (ui/get-class-name {"menu--content"        true
-                                                       "menu--content-hidden" hidden?})}
-                 [body-component]]))]]]))}))
+              [:div {:class-name (ui/get-class-name {"menu--content"        true
+                                                     "menu--content-hidden" hidden?})}
+               [(get menu-items component-id :div)]])]]]))}))

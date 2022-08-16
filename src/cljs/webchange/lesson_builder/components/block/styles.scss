@@ -19,8 +19,7 @@
     }
 
     .component--block--content {
-        overflow: auto;
-        @include bbs--with-scrollbar;
+        @include bbs--scrollable($margin: 0);
 
         &.height-restricted {
             max-height: 160px;

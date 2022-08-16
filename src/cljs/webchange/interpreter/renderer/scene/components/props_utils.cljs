@@ -19,7 +19,7 @@
                            (set))
         extra-props-names (difference current-names default-names)]
     (when-not (empty? extra-props-names)
-      (logger/warn "There are extra props for" entity-id)
+      (logger/trace "There are extra props for" entity-id)
       (logger/trace-folded (str entity-id " extra props") extra-props-names))))
 
 (defn- get-processed-prop
