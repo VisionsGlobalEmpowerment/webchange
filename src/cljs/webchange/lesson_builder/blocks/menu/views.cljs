@@ -33,7 +33,7 @@
                      :scene-layers     scene-layers
                      :settings         settings
                      :choose-image     choose-image-overlay}
-                    (add-menu-items :question-form (:menu question-form/data))
+                    (add-menu-items :question-form question-form/menu)
                     (add-menu-items :template-options (:menu template-options/data))))
 
 (defn- menu-header

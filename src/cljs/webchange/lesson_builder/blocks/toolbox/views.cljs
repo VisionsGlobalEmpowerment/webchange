@@ -11,7 +11,9 @@
 (def toolboxes {:welcome           welcome
                 :welcome-translate audio-editor
                 :background-image  background-image
-                :question-form     (:toolbox question-form/data)})
+                :question-form     question-form/toolbox})
+
+;;
 
 (defn block-toolbox
   [{:keys [class-name]}]

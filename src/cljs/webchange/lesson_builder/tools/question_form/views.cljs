@@ -4,7 +4,6 @@
     [reagent.core :as r]
     [webchange.lesson-builder.components.check-list.views :refer [check-list]]
     [webchange.lesson-builder.components.info.views :refer [info]]
-    [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
     [webchange.lesson-builder.tools.question-form.state :as state]
     [webchange.ui.index :as ui]))
 
@@ -62,8 +61,3 @@
       [control-group {:title "Select Question Type"}
        [question-type]]]
      [form-actions]]))
-
-(defn question-options
-  []
-  (let []
-    [toolbox]))
