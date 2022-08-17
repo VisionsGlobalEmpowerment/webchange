@@ -503,6 +503,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::activity-settings
+  (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
+    (create-request {:key    :set-activity-settings
+                     :method :put
+                     :params data
+                     :uri    (str "/api/activities/" activity-id "/settings")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::update-template
   (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
     (create-request {:key    :update-template
