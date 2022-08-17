@@ -1,185 +1,192 @@
 .page--create-book {
     grid-template-rows: min-content auto !important;
-    
+
     .page--create-book--content {
-	height: 100%;
-	grid-row: 2;
+        height: 100%;
+        grid-row: 2;
 
-	.book-form {
-	    display: flex;
-	    .left-form {
-		flex: 0 1 364px;
+        .book-form {
+            display: flex;
 
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
+            .left-form {
+                flex: 0 1 364px;
 
-		.info {
-		    padding: 10px 30px;
-		    display: flex;
-		    flex-direction: column;
-		    gap: 10px;
-		  
-		}
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
 
-		.illustrators {
-		    margin-top: 10px;
+                .info {
+                    padding: 10px 30px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
 
-		    flex: 1 1;
-		    .illustrators-header {
-			display: flex;
-			justify-content: space-between;
+                }
 
-			.bbs--icon {    
-			    background-color: $color-blue-1;
-			    border-radius: 9999px;
-			    @include bbs--icon-size(20px);
-			    @include bbs--icon-color(#FFFFFF);
-			}
-		    }
-		}
+                .illustrators {
+                    margin-top: 10px;
 
-		.authors {
-		    margin-top: 10px;
+                    flex: 1 1;
 
-		    flex: 1 1;
-		    .authors-header {
-			display: flex;
-			justify-content: space-between;
+                    .illustrators-header {
+                        display: flex;
+                        justify-content: space-between;
 
-			.bbs--icon {    
-			    background-color: $color-blue-1;
-			    border-radius: 9999px;
-			    @include bbs--icon-size(20px);
-			    @include bbs--icon-color(#FFFFFF);
-			}
-		    }
-		}
-	    }
+                        .bbs--icon {
+                            background-color: $color-blue-1;
+                            border-radius: 9999px;
+                            @include bbs--icon-size(20px);
+                            @include bbs--icon-color(#FFFFFF);
+                        }
+                    }
+                }
 
-	    .right-form {
-		flex: 1 1;
+                .authors {
+                    margin-top: 10px;
 
-		.top-form {
-		    display: flex;
-		
-		    .cover-image {
-			padding: 10px;
-			h3 {
-			    font-weight: 700;
-			    font-size: 14px;
-			    line-height: 18px;
-			}
+                    flex: 1 1;
 
-			.options {
-			    display: flex;
-			    flex-direction: column;
-			    justify-content: center;
-			    align-items: center;
-			    width: 250px;
-			    gap: 26px;
-			    
-			    padding: 36px 8px;
-			    .bbs--image {
-				width: 133px;
-				border-radius: 6px;
-				overflow: hidden;
-			    }
+                    .authors-header {
+                        display: flex;
+                        justify-content: space-between;
 
-			    .bbs--button {
-				border-radius: 30px;
-			    }
-			    
-			    input[type="file"] {
-				display: none;
-			    }
+                        .bbs--icon {
+                            background-color: $color-blue-1;
+                            border-radius: 9999px;
+                            @include bbs--icon-size(20px);
+                            @include bbs--icon-color(#FFFFFF);
+                        }
+                    }
+                }
+            }
 
-			}
-			
-		    }
+            .right-form {
+                flex: 1 1;
 
-		    .choose-layout {
-			padding: 10px;
-			h3 {
-			    font-weight: 700;
-			    font-size: 14px;
-			    line-height: 18px;
-			}
+                .top-form {
+                    display: flex;
 
-			.options {
-			    display: flex;
-			    justify-content: center;
-			    align-items: center;
-			    gap: 26px;
-			    
-			    padding: 36px 8px;
-			    .option {
-				width: 180px;
-				margin-right: 100px;
-				
-				.image-wrapper {
-				    width: 160px;
-				    padding: 9px 8px 2px 8px;
-				    border: 1px solid $color-grey-5;
-				    border-radius: 6px;
+                    .cover-image {
+                        padding: 10px;
 
-				    .bbs--image {
-					border-radius: 6px;
-					overflow: hidden;
-				    }
-				}
+                        h3 {
+                            font-weight: 700;
+                            font-size: 14px;
+                            line-height: 18px;
+                        }
 
-				.option-name {
-				    margin-top: 30px;
-				    display: flex;
-				    justify-content: space-between;
-				    
-				}
-			    }
+                        .options {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            width: 250px;
+                            gap: 26px;
 
-			}
-		
-		    }
+                            padding: 36px 8px;
 
-		}
-		
-		.note {
-		    max-width: 800px;
-		    display: flex;
-		    align-items: center;
-		    gap: 4px;
-		    padding: 9px;
-		    margin: 30px 0;
-		    color: $color-blue-1;
+                            .bbs--image {
+                                width: 133px;
+                                border-radius: 6px;
+                                overflow: hidden;
+                            }
 
-		    font-weight: 400;
-		    font-size: 14px;
-		    line-height: 18px;
+                            .bbs--button {
+                                border-radius: 30px;
+                            }
 
-		    @include bbs--icon-size(24px);
+                            input[type="file"] {
+                                display: none;
+                            }
 
-		    background-color: #E9F6FF;
-		    border: 1px solid $color-grey-4;
-		    border-radius: 6px;
-		    overflow: hidden;   
-		}
-	    }
-	}
+                        }
+
+                    }
+
+                    .choose-layout {
+                        padding: 10px;
+
+                        h3 {
+                            font-weight: 700;
+                            font-size: 14px;
+                            line-height: 18px;
+                        }
+
+                        .options {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 26px;
+
+                            padding: 36px 8px;
+
+                            .option {
+                                width: 180px;
+                                margin-right: 100px;
+
+                                .image-wrapper {
+                                    width: 160px;
+                                    padding: 9px 8px 2px 8px;
+                                    border: 1px solid $color-grey-5;
+                                    border-radius: 6px;
+
+                                    .bbs--image {
+                                        border-radius: 6px;
+                                        overflow: hidden;
+                                    }
+                                }
+
+                                .option-name {
+                                    margin-top: 30px;
+                                    display: flex;
+                                    justify-content: space-between;
+
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                .note {
+                    max-width: 800px;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    padding: 9px;
+                    margin: 30px 0;
+                    color: $color-blue-1;
+
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 18px;
+
+                    @include bbs--icon-size(24px);
+
+                    background-color: #E9F6FF;
+                    border: 1px solid $color-grey-4;
+                    border-radius: 6px;
+                    overflow: hidden;
+                }
+            }
+        }
     }
-    
+
     .footer-text {
-	strong {
-	    padding-right: 10px;
-	}
+        strong {
+            padding-right: 10px;
+        }
     }
 
     .footer-button-confirm {
-	min-width: 222px;
+        min-width: 222px;
     }
 
     .footer-button-back {
-	min-width: 222px;
-	border: 1px solid $color-blue-2;
+        min-width: 222px;
+        border: 1px solid $color-blue-2;
     }
 
 }

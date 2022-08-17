@@ -279,3 +279,30 @@
     {:dispatch-n (cond-> []
                          (some? on-failure) (conj on-failure))}))
 
+;; Activity settings
+
+(re-frame/reg-event-fx
+  ::update-activity-settings
+  [(re-frame/inject-cofx :activity-info)]
+  (fn [{:keys [activity-info db]} [_ {:keys [data]} {:keys [on-success on-failure]}]]
+    (let [{:keys [id]} activity-info]
+      {:db       db
+       :dispatch [::warehouse/activity-settings
+                  {:activity-id id
+                   :data        data}
+                  {:on-success [::update-activity-settings-success on-success]
+                   :on-failure [::update-activity-settings-failure on-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::update-activity-settings-success
+  (fn [{:keys [_]} [_ on-success {:keys [info data]}]]
+    {:dispatch-n (cond-> [[::state/set-activity-data data]
+                          [::state/set-activity-info info]
+                          [::stage-state/reset]]
+                         (some? on-success) (conj on-success))}))
+
+(re-frame/reg-event-fx
+  ::update-activity-settings-failure
+  (fn [{:keys [_]} [_ on-failure]]
+    {:dispatch-n (cond-> []
+                         (some? on-failure) (conj on-failure))}))

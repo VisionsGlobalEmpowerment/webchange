@@ -92,6 +92,12 @@
    (->> (get-activity-info db path-to-db)
         (assoc co-effects :activity-info))))
 
+(re-frame/reg-event-fx
+  ::set-activity-info
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ activity-info]]
+    {:db (-> db (set-activity-info activity-info))}))
+
 ;; activity versions
 
 (def activity-versions-loading-key :activity-versions-loading?)
@@ -396,35 +402,6 @@
 
 (re-frame/reg-event-fx
   ::update-background-music-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db (set-activity-saving false))}))
-
-;; Activity settings
-(re-frame/reg-event-fx
-  ::update-activity-settings
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [data on-success]}]]
-    (let [{:keys [id]} (get-activity-info db)]
-      {:db       (-> db (set-activity-saving true))
-       :dispatch [::warehouse/activity-settings
-                  {:activity-id id
-                   :data data}
-                  {:on-success [::update-activity-settings-success on-success]
-                   :on-failure [::update-activity-settings-failure]}]})))
-
-(re-frame/reg-event-fx
-  ::update-activity-settings-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ on-success {:keys [info data]}]]
-    {:db       (-> db
-                   (set-activity-saving false)
-                   (set-activity-data data)
-                   (set-activity-info info))
-     :dispatch on-success}))
-
-(re-frame/reg-event-fx
-  ::update-activity-settings-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-saving false))}))

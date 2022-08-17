@@ -1,6 +1,5 @@
 (ns webchange.lesson-builder.tools.settings.views
   (:require
-    [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.settings.state :as state]
     [webchange.ui.index :as ui]
@@ -9,8 +8,8 @@
 (defn- menu-header
   [label]
   [:div.menu-header
-   [ui/button {:icon "caret-left"
-               :color "blue-1"
+   [ui/button {:icon     "caret-left"
+               :color    "blue-1"
                :on-click #(re-frame/dispatch [::state/back])}]
    label])
 
@@ -18,20 +17,20 @@
   []
   [:div.settings-item
    [:div {:class-name "settings-item-header-wrapper"
-          :on-click #(re-frame/dispatch [::state/open-activity-settings])}
+          :on-click   #(re-frame/dispatch [::state/open-activity-settings])}
     [:div.settings-item-header
      "Activity Settings"]
-    [ui/icon {:icon "caret-right"
+    [ui/icon {:icon  "caret-right"
               :color "grey-4"}]]])
 
 (defn- create-preview-image
   []
   [:div.settings-item
    [:div {:class-name "settings-item-header-wrapper"
-          :on-click #(re-frame/dispatch [::state/open-create-preview-image])}
+          :on-click   #(re-frame/dispatch [::state/open-create-preview-image])}
     [:div.settings-item-header
      "Create Preview Image"]
-    [ui/icon {:icon "caret-right"
+    [ui/icon {:icon  "caret-right"
               :color "grey-4"}]]])
 
 (defn- guide-settings
@@ -78,13 +77,13 @@
      [:div.activity-settings-fields
       [:div.activity-settings-field
        [ui/input-label "Activity Name"]
-       [ui/input {:value activity-name-value
+       [ui/input {:value     activity-name-value
                   :on-change #(re-frame/dispatch [::state/set-activity-name])}]]
       [:div.activity-settings-field
        [ui/input-label "Language"]
-       [ui/select {:value language-value
+       [ui/select {:value     language-value
                    :required? true
-                   :options language-options
+                   :options   language-options
                    :on-change #(re-frame/dispatch [::state/set-languag])}]]]]))
 
 (defn- create-preview-panel
@@ -95,25 +94,28 @@
      [:div.create-preview-fields
       [ui/note {:text "Click button to create a snapshot of the current preview to show in the student navigation"}]
       [ui/image {:class-name "img-wrapper"
-                 :src preview-value}]
+                 :src        preview-value}]
       [ui/button {:class-name "take-screenshot-button"
-                  :color "blue-1"
-                  :on-click #(re-frame/dispatch [::state/create-preview])}
+                  :color      "blue-1"
+                  :on-click   #(re-frame/dispatch [::state/create-preview])}
        "Take Screenshot"]]]))
 
 
 (defn- main-settings-panel
   []
-  [:<>
-   [:div.main-setting-panel
-    [:div.menu-header]
-    [activity-settings]
-    [create-preview-image]
-    [guide-settings]
-    [animations-settings]]
-   [ui/button {:class-name "apply-button"
-               :on-click #(re-frame/dispatch [::state/apply])}
-    "Apply"]])
+  (let [saving? @(re-frame/subscribe [::state/saving?])]
+    [:<>
+     [:div.main-setting-panel
+      [:div.menu-header]
+      [activity-settings]
+      [create-preview-image]
+      [guide-settings]
+      [animations-settings]]
+     [ui/button {:class-name "apply-button"
+                 :shape      "rounded"
+                 :loading?   saving?
+                 :on-click   #(re-frame/dispatch [::state/apply])}
+      "Apply"]]))
 
 (defn settings
   []
