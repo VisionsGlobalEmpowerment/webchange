@@ -1,0 +1,15 @@
+.component-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    @include bbs--icon-size(20px);
+}
+
+
+.scale-field {
+    .bbs--input {
+        width: 50px;
+        padding: 4px 0;
+    }
+}

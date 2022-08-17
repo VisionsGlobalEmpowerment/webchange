@@ -1,4 +1,12 @@
 .widget--object-form {
+    @import "common/styles";
     @import "image_form/styles";
     @import "text_form/styles";
+    @import "text_tracing_pattern_form/styles";
+    @import "video_form/styles";
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    height: 100%;
 }
