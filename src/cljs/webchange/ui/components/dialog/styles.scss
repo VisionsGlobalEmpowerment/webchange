@@ -13,6 +13,10 @@
     border-radius: 6px;
     box-shadow: 0px 8px 28px rgba(140, 140, 140, 0.4);
 
+    &.bbs--dialog--anchored {
+        position: absolute;
+    }
+
     .header {
         display: flex;
         align-items: center;

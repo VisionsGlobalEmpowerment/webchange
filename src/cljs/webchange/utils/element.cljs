@@ -29,6 +29,14 @@
    (-> (js/document.createElement "div")
        (set-element-params params))))
 
+(defn get-bounding-rect
+  [el]
+  (let [bounding-rect (.getBoundingClientRect el)]
+    {:x      (.-x bounding-rect)
+     :y      (.-y bounding-rect)
+     :width  (.-width bounding-rect)
+     :height (.-height bounding-rect)}))
+
 (defn get-first-child
   [el]
   (.-firstChild el))
