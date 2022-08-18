@@ -8,31 +8,33 @@
 (defn school-item
   [{:keys [id name stats]}]
   (let [{:keys [classes courses students teachers]} stats
+        handle-row-click #(re-frame/dispatch [::state/open-school id])
         handle-edit-click #(re-frame/dispatch [::state/edit-school id])
         handle-classes-click #(re-frame/dispatch [::state/manage-classes id])
         handle-courses-click #(re-frame/dispatch [::state/manage-courses id])
         handle-students-click #(re-frame/dispatch [::state/manage-students id])
         handle-teachers-click #(re-frame/dispatch [::state/manage-teachers id])]
-    [ui/list-item {:name    name
-                   :stats   [{:counter  students
-                              :icon     "students"
-                              :text     "Students"
-                              :on-click handle-students-click}
-                             {:counter  teachers
-                              :icon     "teachers"
-                              :text     "Teachers"
-                              :on-click handle-teachers-click}
-                             {:counter  classes
-                              :icon     "classes"
-                              :text     "Classes"
-                              :on-click handle-classes-click}
-                             {:counter  courses
-                              :icon     "courses"
-                              :text     "Courses"
-                              :on-click handle-courses-click}]
-                   :actions [{:icon     "edit"
-                              :title    "Edit school"
-                              :on-click handle-edit-click}]}]))
+    [ui/list-item {:name     name
+                   :stats    [{:counter  students
+                               :icon     "students"
+                               :text     "Students"
+                               :on-click handle-students-click}
+                              {:counter  teachers
+                               :icon     "teachers"
+                               :text     "Teachers"
+                               :on-click handle-teachers-click}
+                              {:counter  classes
+                               :icon     "classes"
+                               :text     "Classes"
+                               :on-click handle-classes-click}
+                              {:counter  courses
+                               :icon     "courses"
+                               :text     "Courses"
+                               :on-click handle-courses-click}]
+                   :on-click handle-row-click
+                   :actions  [{:icon     "edit"
+                               :title    "Edit school"
+                               :on-click handle-edit-click}]}]))
 
 (defn- schools-list
   []

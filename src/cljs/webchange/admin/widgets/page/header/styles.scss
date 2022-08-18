@@ -40,6 +40,16 @@
         margin-right: 32px;
     }
 
+    .widget--page--header--identity {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+
+        &.widget--page--header--identity--clickable:hover {
+            cursor: pointer;
+        }
+    }
+
     .widget--page--header--stats {
         @include bbs--noto-14-b;
         @include bbs--icon-color(bbs--color(yellow-2));

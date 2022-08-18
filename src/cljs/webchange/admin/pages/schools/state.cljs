@@ -30,9 +30,14 @@
     {:dispatch [::routes/redirect :school-add]}))
 
 (re-frame/reg-event-fx
-  ::edit-school
+  ::open-school
   (fn [{:keys [db]} [_ school-id]]
     {:dispatch [::routes/redirect :school-profile :school-id school-id]}))
+
+(re-frame/reg-event-fx
+  ::edit-school
+  (fn [{:keys [db]} [_ school-id]]
+    {:dispatch [::routes/redirect :school-profile :school-id school-id :url-params {:edit true}]}))
 
 (re-frame/reg-event-fx
   ::open-archived-schools

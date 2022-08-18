@@ -33,13 +33,21 @@
         [:div {:class-name "bbs--list-item--info-item--key"} key]
         [:div {:class-name "bbs--list-item--info-item--value"} value]])]))
 
+(defn- item-stats-item
+  [{:keys [on-click text] :as props}]
+  (let [handle-click #(do (.stopPropagation %)
+                          (when (fn? on-click) (on-click %)))]
+    [chip (merge props
+                 {:on-click handle-click})
+     text]))
+
 (defn- item-stats
   [{:keys [stats]}]
   (when-not (empty? stats)
     [:div {:class-name "bbs--list-item--stats"}
-     (for [[idx {:keys [text] :as stat-props}] (map-indexed vector stats)]
+     (for [[idx stat-props] (map-indexed vector stats)]
        ^{:key idx}
-       [chip stat-props text])]))
+       [item-stats-item stat-props])]))
 
 (defn- get-children-count
   [children]
@@ -70,14 +78,22 @@
     [:div {:class-name "bbs--list-item--controls"}
      controls]))
 
+(defn- item-action
+  [{:keys [on-click] :as props}]
+  (let [handle-click #(do (.stopPropagation %)
+                          (when (fn? on-click)
+                            (on-click %)))]
+    [button (merge {:color "grey-3"}
+                   props
+                   {:on-click handle-click})]))
+
 (defn- item-actions
   [{:keys [actions]}]
   (when-not (empty? actions)
     [:div {:class-name "bbs--list-item--actions"}
      (for [[idx action] (map-indexed vector actions)]
        ^{:key idx}
-       [button (merge {:color "grey-3"}
-                      action)])]))
+       [item-action action])]))
 
 (defn- item-filler
   [{:keys [children]}]
