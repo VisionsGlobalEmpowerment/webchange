@@ -82,6 +82,11 @@ $bss--font-weight--bold: 700;
     font-weight: $bss--font-weight--bold;
 }
 
+@mixin bbs--noto-18-r {
+    @include bbs--text-size--18;
+    font-weight: $bss--font-weight--regular;
+}
+
 @mixin bbs--noto-18-sb {
     @include bbs--text-size--18;
     font-weight: $bss--font-weight--semi-bold;
@@ -95,6 +100,12 @@ $bss--font-weight--bold: 700;
 @mixin bbs--noto-24-b {
     @include bbs--text-size--24;
     font-weight: $bss--font-weight--bold;
+}
+
+@mixin bbs--ranille-18-r {
+    @include bbs--text-size--18;
+    @include bbs--ranille;
+    font-weight: $bss--font-weight--regular;
 }
 
 @mixin bbs--ranille-36-r {

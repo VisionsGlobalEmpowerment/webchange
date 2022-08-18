@@ -1,0 +1,32 @@
+.widget--page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 36px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    color: #333;
+
+    .page-header--logo {
+        @include bbs--icon-color(bbs--color(blue-1));
+        @include bbs--icon-size(235px, 40px);
+        height: auto;
+    }
+
+    .page-header--navigation {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+
+        @include bbs--noto-18-sb;
+    }
+
+    .page-header--sign-up {
+        @include bbs--noto-18-r;
+        padding: 12px 20px;
+    }
+}

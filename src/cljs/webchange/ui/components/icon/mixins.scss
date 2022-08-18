@@ -10,10 +10,14 @@
     }
 }
 
-@mixin bbs--icon-size($size) {
+@mixin bbs--icon-size($width, $height: null) {
+    @if $height == null {
+        $height: $width;
+    }
+
     svg {
-        width: $size;
-        height: $size;
+        width: $width;
+        height: $height;
     }
 }
 
