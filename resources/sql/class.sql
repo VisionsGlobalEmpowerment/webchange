@@ -232,6 +232,11 @@ INSERT INTO school_courses
 (school_id, course_id)
 VALUES (:school_id, :course_id)
 
+-- :name unassign-school-course! :! :n
+-- :doc removes a school_course record
+DELETE FROM school_courses
+WHERE course_id = :course_id AND school_id = :school_id
+
 -- :name get-courses-by-school :? :*
 -- :doc retrieve all courses by school
 SELECT c.*

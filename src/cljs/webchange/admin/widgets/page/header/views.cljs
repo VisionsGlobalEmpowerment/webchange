@@ -13,7 +13,8 @@
 (s/def :header-actions/text string?)
 (s/def :header-actions/icon ::ui-spec/system-icon)
 (s/def :header-actions/on-click fn?)
-(s/def :header-actions/item (s/keys :req-un [:header-actions/text :header-actions/icon :header-actions/on-click]))
+(s/def :header-actions/item (s/keys :req-un [:header-actions/icon :header-actions/on-click]
+                                    :opt-un [:header-actions/text]))
 (s/def ::header-actions (s/or :empty empty? :defined (s/coll-of :header-actions/item)))
 
 (s/def :header-info/key string?)
