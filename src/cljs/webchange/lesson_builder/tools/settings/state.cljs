@@ -3,12 +3,9 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.interpreter.renderer.state.editor :as editor-state]
-    [webchange.state.warehouse :as warehouse]
     [webchange.interpreter.renderer.scene.app :as app]
-    [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.stage-actions :as stage]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]))
+    [webchange.lesson-builder.stage-actions :as stage-actions]
+    [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :lesson-builder/settings)
 
@@ -104,14 +101,43 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc db :uploading false)}))
 
+;; apply
+
+(def saving-key :saving?)
+
+(defn- set-saving
+  [db value]
+  (assoc db saving-key value))
+
+(re-frame/reg-sub
+  ::saving?
+  :<- [path-to-db]
+  #(get % saving-key false))
+
 (re-frame/reg-event-fx
   ::apply
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:dispatch-n [[::state/update-activity-settings {:data {:preview (:preview db)
-                                                            :activity-settings (:activity-settings db)
-                                                            :guide-settings (:guide-settings db)
-                                                            :animation-settings (:animation-settings db)}}]]}))
+    {:db       (-> db (set-saving true))
+     :dispatch [::stage-actions/update-activity-settings
+                {:data {:preview            (:preview db)
+                        :activity-settings  (:activity-settings db)
+                        :guide-settings     (:guide-settings db)
+                        :animation-settings (:animation-settings db)}}
+                {:on-success [::apply-success]
+                 :on-failure [::apply-failure]}]}))
+
+(re-frame/reg-event-fx
+  ::apply-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-saving false))}))
+
+(re-frame/reg-event-fx
+  ::apply-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-saving false))}))
 
 (re-frame/reg-sub
   ::show-guide
