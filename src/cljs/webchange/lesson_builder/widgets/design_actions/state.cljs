@@ -66,7 +66,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [content menu-item]}]]
     (cond
-      (= menu-item :voice-translate) {:dispatch [::layout-state/set-state :voice-and-translate]}
+      (= menu-item :voice-translate) {:dispatch [::layout-state/open-tool :voice-translate]}
       (some? menu-item) {:dispatch [::menu/open-component menu-item]}
       (some? content) {:db (toggle-active-menu-item db content)}
       :default {})))

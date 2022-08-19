@@ -23,5 +23,5 @@
   ::handle-item-click
   (fn [{:keys [_]} [_ component-name]]
     {:dispatch (cond
-                 (= component-name :background-image) [::layout-state/set-state :change-background-image]
+                 (= component-name :background-image) [::layout-state/open-tool :background-image]
                  :default [::menu/open-component component-name])}))

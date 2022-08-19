@@ -3,30 +3,18 @@
     [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.object-form.state :as state]
-    [webchange.lesson-builder.tools.object-form.animation-form.views :as animation-form]
-    [webchange.lesson-builder.tools.object-form.text-tracing-pattern-form.views :as text-tracing-pattern-form]
-    [webchange.lesson-builder.tools.object-form.text-form.views :as text-form]
-    [webchange.lesson-builder.tools.object-form.image-form.views :as image-form]
-    [webchange.lesson-builder.tools.object-form.video-form.views :as video-form]
+    [webchange.lesson-builder.widgets.object-form.views :as o]
     [webchange.ui.index :as ui]))
-
-(def form-components {"animation"            animation-form/fields
-                      "text-tracing-pattern" text-tracing-pattern-form/fields
-                      "text"                 text-form/fields
-                      "image"                image-form/fields
-                      "video"                video-form/fields})
-
-(defn- available-object-type?
-  [object-type]
-  (contains? form-components object-type))
 
 (defn- object-panel
   [{:keys [class-name target]}]
-  (let [{object-type :type} @(re-frame/subscribe [::state/object target])]
-    (when (available-object-type? object-type)
-      (let [component (get form-components object-type)]
-        [component {:target     target
-                    :class-name class-name}]))))
+  (let [object-data @(re-frame/subscribe [::state/object-data target])
+        handle-change #(re-frame/dispatch [::state/change-object target %])
+        handle-apply-to-all #(re-frame/dispatch [::state/apply-to-all target])]
+    [o/object-form {:data            object-data
+                    :class-name      class-name
+                    :on-change       handle-change
+                    :on-apply-to-all handle-apply-to-all}]))
 
 (defn- group-panel
   [{:keys [group]}]
@@ -41,7 +29,7 @@
   [target]
   (r/with-let [_ (re-frame/dispatch [::state/init-object target])]
     (let [target @(re-frame/subscribe [::state/target])
-          object @(re-frame/subscribe [::state/object target])
+          object @(re-frame/subscribe [::state/object-data target])
           group? (= "group" (:type object))]
       [:div {:class-name "tool--object-form"}
        [:h1 "Edit"]

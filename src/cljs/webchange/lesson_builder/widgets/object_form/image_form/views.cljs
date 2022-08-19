@@ -1,7 +1,15 @@
 (ns webchange.lesson-builder.widgets.object-form.image-form.views
   (:require
+    [webchange.lesson-builder.widgets.object-form.common.views :refer [flip-component scale-component]]
     [webchange.lesson-builder.widgets.select-image.views :refer [select-image]]
     [webchange.ui.index :as ui]))
+
+(defn- apply-to-all-component
+  [{:keys [on-apply-to-all]}]
+  (let [handle-click #(when (fn? on-apply-to-all) (on-apply-to-all))]
+    [ui/button {:on-click handle-click
+                :shape    "rounded"}
+     "Apply to all"]))
 
 (defn- change-image-component
   [{:keys [on-change]}]
@@ -9,19 +17,6 @@
                         (on-change {:src url}))]
     [select-image {:hide-preview? true
                    :on-change     handle-change}]))
-
-(defn- flip-component
-  [{:keys [data on-change]}]
-  (let [handle-click (fn []
-                       (let [scale (-> (get data :scale {:x 1 :y 1})
-                                       (update :x #(* -1 %)))]
-                         (on-change {:scale scale})))]
-    [:div.flip-field
-     [ui/input-label
-      "Flip"]
-     [ui/button {:icon     "flip"
-                 :color    "blue-1"
-                 :on-click handle-click}]]))
 
 (defn- image-size-component
   [{:keys [data on-change]}]
@@ -40,23 +35,6 @@
                   :color    (if (= value "contain") "blue-1" "grey-3")
                   :on-click #(handle-click "contain")}]]]))
 
-(defn- scale-component
-  [{:keys [data on-change]}]
-  (let [value (get-in data [:scale :x] 1)
-        handle-change (fn [value]
-                        (let [flip (-> (get-in data [:scale :x])
-                                       (< 0))
-                              scale {:x (if flip (- value) value)
-                                     :y value}]
-                          (on-change {:scale scale})))]
-    [:div.scale-field
-     [ui/input-label
-      "Scale"]
-     [ui/input {:value     value
-                :type      "float"
-                :step      0.05
-                :on-change handle-change}]]))
-
 (defn- visible-component
   [{:keys [data on-change]}]
   (let [value (get data :visible true)
@@ -68,18 +46,18 @@
                  :on-change handle-change}]]))
 
 (defn image-form
-  [{:keys [class-name data on-change]}]
+  [{:keys [class-name data on-change] :as props}]
   (let [{:keys [editable? src]} data
         options (get editable? :edit-form {:scale      true
                                            :flip       true
                                            :image-size true
-                                           :visible    true})
+                                           :visible    false})
 
         handle-change #(when (fn? on-change) (on-change %))
-        component-props {:data      data
-                         :on-change handle-change}]
+        component-props (merge props
+                               {:on-change handle-change})]
     [:div {:class-name (ui/get-class-name {"image-form" true
-                                           class-name          (some? class-name)})}
+                                           class-name   (some? class-name)})}
      [ui/image {:src        src
                 :class-name "image-preview"}]
      [:h2 "Edit Image"]
@@ -87,6 +65,7 @@
       (when (:flip options) [flip-component component-props])
       (when (:scale options) [scale-component component-props])
       (when (:image-size options) [image-size-component component-props])
-      (when (:visible options) [visible-component component-props])]
+      (when (:visible options) [visible-component component-props])
+      (when (:apply-to-all options) [apply-to-all-component component-props])]
      [:h2 "Change image"]
      [change-image-component component-props]]))

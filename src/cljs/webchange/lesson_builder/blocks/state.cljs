@@ -4,7 +4,9 @@
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.blocks.menu.state :as menu-state]
     [webchange.lesson-builder.blocks.toolbox.state :as toolbox-state]
-    [webchange.lesson-builder.tools.question-form.index :as question-form]))
+    [webchange.lesson-builder.tools.background-image.index :as background-image]
+    [webchange.lesson-builder.tools.question-form.index :as question-form]
+    [webchange.lesson-builder.tools.voice-translate.index :as voice-translate]))
 
 (def path-to-db :lesson-builder/layout)
 
@@ -34,9 +36,6 @@
                              :focus   #{}}
    :change-background-image {:toolbox :background-image
                              :focus   #{:toolbox :stage}}
-   :voice-and-translate     {:toolbox :welcome-translate
-                             :menu    :audio-manager
-                             :focus   #{:menu :script :toolbox}}
    :edit-question           {:toolbox :question-options
                              :menu    :question-params}})
 
@@ -57,7 +56,9 @@
   (fn [{:keys [_]} [_]]
     {:dispatch [::set-state :default]}))
 
-(def tools {:question-form question-form/data})
+(def tools {:background-image background-image/data
+            :question-form    question-form/data
+            :voice-translate  voice-translate/data})
 
 (re-frame/reg-event-fx
   ::open-tool
@@ -77,4 +78,5 @@
                            (conj [::toolbox-state/set-current-widget tool-id])
 
                            (contains? tool-data :init)
-                           (concat [(conj (:init tool-data) tool-props)]))})))
+                           (concat [(conj (:init tool-data) (merge tool-props
+                                                                   {:reset [::reset-state]}))]))})))

@@ -21,8 +21,8 @@
 (s/def :background-layered-data/surface (s/or :empty nil? :defined ::background-layered-layer))
 (s/def :background-layered-data/decoration (s/or :empty nil? :defined ::background-layered-layer))
 (s/def :background-layered-data/type #(= "layered-background"))
-(s/def ::background-layered-data (s/keys :req-un [:background-layered-data/type
-                                                  :background-layered-data/background
+(s/def ::background-layered-data (s/keys :req-un [:background-layered-data/type]
+                                         :opt-un [:background-layered-data/background
                                                   :background-layered-data/surface
                                                   :background-layered-data/decoration]))
 (s/def ::background-data (s/or :single ::background-single-data

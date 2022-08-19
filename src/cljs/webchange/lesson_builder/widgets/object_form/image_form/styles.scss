@@ -1,7 +1,7 @@
 .image-form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 18px;
 
     h2 {
@@ -28,9 +28,7 @@
         }
     }
 
-    .flip-field,
     .image-fill-field,
-    .scale-field,
     .visible-field {
         display: flex;
         align-items: center;
@@ -43,13 +41,6 @@
         .image-fill-filed-controls {
             display: flex;
             align-items: center;
-        }
-    }
-
-    .scale-field {
-        .bbs--input {
-            width: 50px;
-            padding: 4px 0;
         }
     }
 }
