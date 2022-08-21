@@ -49,7 +49,7 @@
                                         :lang {:label "Language"
                                                :type :select
                                                :options language-options}
-                                        :visible {:label (if visible? "Visible" "Not Visible")
+                                        :visible {:label (if visible? "Global" "Not published")
                                                   :icon (if visible? "visibility-on" "visibility-off")
                                                   :type :action
                                                   :on-click #(re-frame/dispatch [::state/toggle-visibility])}}}}

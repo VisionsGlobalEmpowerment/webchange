@@ -519,14 +519,33 @@
              response)))
   (GET "/api/visible-activities" request
        :coercion :spec
+       :query-params [{lang :- string? nil}]
        (let [user-id (current-user request)]
-         (-> (core/get-visible-activities)
+         (-> (core/get-visible-activities lang)
              response)))
   (GET "/api/available-books" request
        :coercion :spec
        :query-params [{lang :- string? nil}]
        (let [user-id (current-user request)]
          (-> (core/get-available-books lang)
+             response)))
+  (GET "/api/my-activities" request
+       :coercion :spec
+       :query-params [{lang :- string? nil}]
+       (let [user-id (current-user request)
+             result (if (is-admin? user-id)
+                      (core/my-activities-admin user-id lang)
+                      (core/my-activities user-id lang))]
+         (-> result
+             response)))
+  (GET "/api/my-books" request
+       :coercion :spec
+       :query-params [{lang :- string? nil}]
+       (let [user-id (current-user request)
+             result (if (is-admin? user-id)
+                      (core/my-books-admin user-id lang)
+                      (core/my-books user-id lang))]
+         (-> result
              response)))
   (GET "/api/activities/:activity-id/current-version" request
        :coercion :spec

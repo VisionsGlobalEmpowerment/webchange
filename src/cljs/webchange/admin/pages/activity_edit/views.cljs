@@ -5,11 +5,14 @@
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
-    [webchange.utils.date :refer [date-str->locale-date]]))
+    [webchange.utils.date :refer [date-str->locale-date]]
+    [webchange.utils.name :refer [fullname]]))
 
 (defn- activity-form
   [{:keys [activity-id]}]
-  (let [{:keys [name preview created-at updated-at]} @(re-frame/subscribe [::state/activity])
+  (let [{:keys [name preview created-at updated-at
+                created-by-user updated-by-user]} @(re-frame/subscribe [::state/activity])
+
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
 
@@ -20,22 +23,22 @@
         handle-remove #(re-frame/dispatch [::state/open-activities-page])]
     [:div.activity-form
      [:div.header
-      [:div.info
-       name
-       [:dl
-        [:dt "Created"]
-        [:dd (date-str->locale-date created-at)]
-        [:dt "Last Edited"]
-        [:dd (date-str->locale-date updated-at)]]]
-      [:div.actions
-       [ui/button {:icon       "system/play"
-                   :class-name "play-button"
-                   :on-click   handle-play-click}
-        "Play"]
-       [ui/button {:icon       "edit"
-                   :class-name "edit-button"
-                   :on-click   handle-edit-click}
-        "Edit Activity"]]]
+      [:div.header-top
+       [:div.info name]
+       [:div.actions
+        [ui/button {:icon       "system/play"
+                    :class-name "play-button"
+                    :on-click   handle-play-click}
+         "Play"]
+        [ui/button {:icon       "edit"
+                    :class-name "edit-button"
+                    :on-click   handle-edit-click}
+         "Edit Activity"]]]
+      [:div.header-bottom
+       [:div.date-user-info
+        "Created by:" [:strong (fullname created-by-user)] " " (date-str->locale-date created-at)]
+       [:div.date-user-info
+        "Last Edited " [:strong (fullname updated-by-user)] " " (date-str->locale-date updated-at)]]]
 
      [ui/image {:src        preview
                 :class-name "preview"}]
