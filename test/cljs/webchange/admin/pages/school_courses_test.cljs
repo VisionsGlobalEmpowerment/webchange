@@ -18,7 +18,7 @@
      (let [school-id 1
            school-name-sub (re-frame/subscribe [::state/school-name])
            courses-sub (re-frame/subscribe [::state/courses])
-           course-options-sub (re-frame/subscribe [::state/course-options])]
+           course-options-sub (re-frame/subscribe [::state/available-course-options])]
        (mock-warehouse {(str "/api/schools/" school-id) {:school school}
                         (str "/api/available-courses") available-courses
                         (str "/api/schools/" school-id "/courses") []})

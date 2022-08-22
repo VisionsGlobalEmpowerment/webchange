@@ -6,7 +6,6 @@
     [webchange.admin.routes :as routes]
     [webchange.admin.widgets.confirm.state :as confirm]
     [webchange.state.warehouse :as warehouse]
-    [webchange.validation.specs.course-spec :as course-spec]
     [webchange.validation.validate :refer [validate]]))
 
 (def path-to-db :school-courses)
