@@ -67,12 +67,13 @@
   ::classes-list-data
   :<- [::classes]
   (fn [classes]
-    (map (fn [{:keys [created-at] :as class-data}]
-           (-> class-data
-               (select-keys [:id :name :stats])
-               (update :stats #(merge {:students 0 :teachers 0} %))
-               (merge {:name-description [["Created" created-at]]})))
-         classes)))
+    (->> classes
+         (map (fn [{:keys [created-at] :as class-data}]
+                (-> class-data
+                    (select-keys [:id :name :stats])
+                    (update :stats #(merge {:students 0 :teachers 0} %))
+                    (merge {:name-description [["Created" created-at]]}))))
+         (sort-by :name))))
 
 (re-frame/reg-event-fx
   ::add-class
@@ -82,25 +83,44 @@
       {:dispatch [::routes/redirect :class-add :school-id school-id]})))
 
 (re-frame/reg-event-fx
+  ::open-class-profile
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ class-id]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
+
+(re-frame/reg-event-fx
   ::edit-class
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ class-id]]
     (let [school-id (:id (get-school-data db))]
-      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id
+                  :storage-params {:action           "edit"
+                                   :on-edit-finished [::edit-class-finished school-id]}]})))
 
 (re-frame/reg-event-fx
-  ::open-class-students
+  ::edit-class-students
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ class-id]]
     (let [school-id (:id (get-school-data db))]
-      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id
+                  :storage-params {:action                    "manage-students"
+                                   :on-edit-students-finished [::edit-class-finished school-id]}]})))
 
 (re-frame/reg-event-fx
-  ::open-class-teachers
+  ::edit-class-teachers
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ class-id]]
     (let [school-id (:id (get-school-data db))]
-      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id
+                  :storage-params {:action                    "manage-teachers"
+                                   :on-edit-teachers-finished [::edit-class-finished school-id]}]})))
+
+(re-frame/reg-event-fx
+  ::edit-class-finished
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ school-id]]
+    {:dispatch [::routes/redirect :classes :school-id school-id]}))
 
 (re-frame/reg-event-fx
   ::open-school-profile

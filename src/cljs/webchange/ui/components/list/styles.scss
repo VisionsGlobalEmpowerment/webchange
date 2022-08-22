@@ -127,11 +127,11 @@
         cursor: pointer;
 
         &:hover {
-            border-color: bbs--color(grey-3);
+            box-shadow: inset 0px 0px 1px 2px bbs--color(grey-5);
         }
 
         &:active {
-            border-color: bbs--color(blue-1);
+            box-shadow: inset 0px 0px 1px 2px bbs--color(blue-2);
         }
     }
 

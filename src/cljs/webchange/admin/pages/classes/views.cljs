@@ -8,21 +8,23 @@
 (defn- list-item
   [{:keys [id name stats]}]
   (let [{:keys [students teachers]} stats
+        handle-click #(re-frame/dispatch [::state/open-class-profile id])
         handle-edit-click #(re-frame/dispatch [::state/edit-class id])
-        handle-students-click #(re-frame/dispatch [::state/open-class-students id])
-        handle-teachers-click #(re-frame/dispatch [::state/open-class-teachers id])]
-    [ui/list-item {:name    name
-                   :stats   [{:counter  students
-                              :icon     "students"
-                              :text     "Students"
-                              :on-click handle-students-click}
-                             {:counter  teachers
-                              :icon     "teachers"
-                              :text     "Teachers"
-                              :on-click handle-teachers-click}]
-                   :actions [{:icon     "edit"
-                              :title    "Edit teacher"
-                              :on-click handle-edit-click}]}]))
+        handle-students-click #(re-frame/dispatch [::state/edit-class-students id])
+        handle-teachers-click #(re-frame/dispatch [::state/edit-class-teachers id])]
+    [ui/list-item {:name     name
+                   :on-click handle-click
+                   :stats    [{:counter  students
+                               :icon     "students"
+                               :text     "Students"
+                               :on-click handle-students-click}
+                              {:counter  teachers
+                               :icon     "teachers"
+                               :text     "Teachers"
+                               :on-click handle-teachers-click}]
+                   :actions  [{:icon     "edit"
+                               :title    "Edit teacher"
+                               :on-click handle-edit-click}]}]))
 
 (defn- classes-list
   []
@@ -41,13 +43,13 @@
           handle-add-click #(re-frame/dispatch [::state/add-class])
           handle-school-click #(re-frame/dispatch [::state/open-school-profile])]
       [page/single-page {:class-name "page--classes"
-                         :header     {:title   school-name
-                                      :icon    "school"
+                         :header     {:title    school-name
+                                      :icon     "school"
                                       :on-click handle-school-click
-                                      :stats   [{:icon    "classes"
-                                                 :counter classes-number
-                                                 :label   "Classes"}]
-                                      :actions [{:text     "Add New Class"
-                                                 :icon     "plus"
-                                                 :on-click handle-add-click}]}}
+                                      :stats    [{:icon    "classes"
+                                                  :counter classes-number
+                                                  :label   "Classes"}]
+                                      :actions  [{:text     "Add New Class"
+                                                  :icon     "plus"
+                                                  :on-click handle-add-click}]}}
        [classes-list]])))

@@ -58,7 +58,7 @@
   [{:keys [class-id school-id]}]
   (let [form-editable? @(re-frame/subscribe [::state/form-editable?])
         handle-edit-click #(re-frame/dispatch [::state/set-form-editable true])
-        handle-cancel-click #(re-frame/dispatch [::state/set-form-editable false])
+        handle-cancel-click #(re-frame/dispatch [::state/handle-class-edit-cancel])
         handle-data-save #(re-frame/dispatch [::state/update-class-data %])]
     [page/side-bar {:title    "Class Info"
                     :icon     "info"
