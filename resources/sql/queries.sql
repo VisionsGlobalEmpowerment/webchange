@@ -278,6 +278,12 @@ DELETE from collaborators where course_id=:course_id;
 -- :doc check if user is admin
 SELECT true as result from users WHERE id = :id AND type = 'admin';
 
+-- :name user-has-type? :? :n
+-- :doc check if user has one of given types
+SELECT true as result FROM users
+WHERE id = :id
+AND type IN (:v*:types);
+
 -- :name accounts-by-type :? :*
 -- :doc retrieves all user record with given type
 SELECT * FROM users

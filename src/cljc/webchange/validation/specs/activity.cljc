@@ -37,6 +37,7 @@
 
 (s/def ::archive-activity (s/keys :req-un [::archive]))
 (s/def ::toggle-visibility (s/keys :req-un [::visible]))
+(s/def ::toggle-locked (s/keys :req-un [::locked]))
 (s/def ::duplicate (s/keys :req-un [::name ::lang]))
 (s/def ::template-options map?)
 (s/def ::update-template (s/keys :req-un [::update]))

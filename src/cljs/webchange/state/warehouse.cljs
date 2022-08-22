@@ -466,6 +466,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::toggle-activity-locked
+  (fn [{:keys [_]} [_ {:keys [activity-id locked]} handlers]]
+    (create-request {:key    :toggle-activity-locked
+                     :method :put
+                     :params {:locked locked}
+                     :uri    (str "/api/activities/" activity-id "/toggle-locked")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::duplicate-activity
   (fn [{:keys [_]} [_ {:keys [activity-id data]} handlers]]
     (create-request {:key    :duplicate-activity

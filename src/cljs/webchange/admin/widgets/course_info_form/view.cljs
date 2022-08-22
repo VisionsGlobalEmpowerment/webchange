@@ -18,7 +18,9 @@
                         :type  :text}
                  :lang {:label   "Language"
                         :type    :select
-                        :options language-options}}
+                        :options language-options}
+                 :locked {:label "Lock Course"
+                          :type (if editable? :switch :empty)}}
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
       [ui/form {:form-id    (-> (str "course-info-" course-slug)
                                 (keyword))

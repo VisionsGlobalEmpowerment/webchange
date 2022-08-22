@@ -184,17 +184,24 @@
 
 (re-frame/reg-event-fx
   ::init
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [course-slug]}]]
+  [(re-frame/inject-cofx :current-user)
+   (i/path path-to-db)]
+  (fn [{:keys [db current-user]} [_ {:keys [course-slug]}]]
     {:db         (-> db
                      (set-course-slug course-slug)
-                     (set-course-fetching true))
+                     (set-course-fetching true)
+                     (assoc :is-admin? (= "admin" (:type current-user))))
      :dispatch-n [[::warehouse/load-course course-slug
                    {:on-success [::load-course-success]}]
                   [::warehouse/load-course-info course-slug
                    {:on-success [::load-course-info-success]}]
                   [::warehouse/load-visible-activities
                    {:on-success [::load-available-activities-success]}]]}))
+
+(re-frame/reg-sub
+  ::can-lock?
+  :<- [path-to-db]
+  #(get % :is-admin? false))
 
 (re-frame/reg-event-fx
   ::load-course-success
@@ -329,3 +336,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-course-fetching db false)}))
+
+(re-frame/reg-sub
+  ::locked?
+  :<- [path-to-db]
+  #(get-in % [:course-info :metadata :locked] false))

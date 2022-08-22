@@ -8,10 +8,12 @@
     [webchange.ui.components.date.views :refer [date]]
     [webchange.ui.components.form.form-action.views :refer [form-action]]
     [webchange.ui.components.input.views :refer [input]]
+    [webchange.ui.components.input-label.views :refer [input-label]]
     [webchange.ui.components.form.state :as state]
     [webchange.ui.components.overlay.views :refer [loading-overlay]]
     [webchange.ui.components.password.views :refer [password]]
     [webchange.ui.components.select.views :refer [select]]
+    [webchange.ui.components.switch.views :refer [switch]]
     [webchange.ui.components.text-area.views :refer [text-area]]
     [webchange.ui-framework.components.index :as c]))
 
@@ -138,6 +140,23 @@
                     :disabled? disabled?
                     :spec      spec}])]  )
 
+(defn- label-control
+  [{:keys [class-name label] :as props}]
+  [:div {:class-name (c/get-class-name {class-name (some? class-name)})}
+   [input-label label]])
+
+(defn- switch-control
+  [{:keys [disabled? id form-id label required?]}]
+  (let [value @(re-frame/subscribe [::state/field-value form-id id])
+        error @(re-frame/subscribe [::state/field-error form-id id])
+        handle-change #(re-frame/dispatch [::state/set-field-value form-id id (not value)])]
+    [switch {:id        id
+             :checked?  value
+             :label     label
+             :error     error
+             :disabled? disabled?
+             :on-change handle-change}]))
+
 (defn- form-control
   [{:keys [disabled? id form-id options spec]}]
   (let [{:keys [type]} options
@@ -155,7 +174,10 @@
       :password [password-control control-props]
       :select [select-control control-props]
       :custom [custom-control control-props]
-      :group [group-control control-props])))
+      :group [group-control control-props]
+      :label [label-control control-props]
+      :switch [switch-control control-props]
+      :empty [:div])))
 
 (defn- form-actions
   [{:keys [form-id disabled? on-save on-cancel saving? spec]}]

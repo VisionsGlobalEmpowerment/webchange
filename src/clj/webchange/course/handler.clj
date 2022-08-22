@@ -584,6 +584,15 @@
            (throw-unauthorized {:role :educator}))
          (-> (core/toggle-activity-visibility activity-id data)
              response)))
+  (PUT "/api/activities/:activity-id/toggle-locked" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       :body [data ::activity-spec/toggle-locked]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/toggle-activity-locked activity-id data)
+             response)))
   (POST "/api/activities/:activity-id/duplicate" request
         :coercion :spec
         :path-params [activity-id :- ::activity-spec/id]

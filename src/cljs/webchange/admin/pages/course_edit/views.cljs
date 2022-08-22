@@ -75,20 +75,26 @@
   [{:keys [idx name preview level-idx lesson-idx]}]
   (let [handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
         handle-remove-click #(do (.stopPropagation %)
-                                 (handle-remove-activity))]
-    [draggable {:data          {:type     "activity"
-                                :level    level-idx
-                                :lesson   lesson-idx
-                                :activity idx}
-                :drop-allowed? drop-allowed?
-                :on-drop       handle-drop}
-     [ui/list-item {:name       name
-                    :pre        [ui/image {:src preview
-                                           :class-name "item-image"}]
-                    :class-name "activities-list-item"
-                    :actions    [{:icon     "trash"
-                                  :title    "Remove"
-                                  :on-click handle-remove-click}]}]]))
+                                 (handle-remove-activity))
+        locked? @(re-frame/subscribe [::state/locked?])]
+    (if locked?
+      [ui/list-item {:name       name
+                     :pre        [ui/image {:src preview
+                                            :class-name "item-image"}]
+                     :class-name "activities-list-item"}]
+      [draggable {:data          {:type     "activity"
+                                  :level    level-idx
+                                  :lesson   lesson-idx
+                                  :activity idx}
+                  :drop-allowed? drop-allowed?
+                  :on-drop       handle-drop}
+       [ui/list-item {:name       name
+                      :pre        [ui/image {:src preview
+                                             :class-name "item-image"}]
+                      :class-name "activities-list-item"
+                      :actions    [{:icon     "trash"
+                                    :title    "Remove"
+                                    :on-click handle-remove-click}]}]])))
 
 (defn- activities-list
   [{:keys [level-idx lesson-idx]}]
@@ -112,28 +118,45 @@
                handle-remove-lesson #(re-frame/dispatch [::state/remove-lesson level-idx idx])
                handle-remove-click #(do (.stopPropagation %)
                                         (handle-remove-lesson))]
-    [:<>
-     [draggable {:data          {:type   "lesson"
-                                 :level  level-idx
-                                 :lesson idx}
-                 :drop-allowed? drop-allowed?
-                 :on-drop       handle-drop}
-      [ui/list-item {:name       name
-                     :class-name (ui/get-class-name {"list-item" true
-                                                     "selected"  @expanded?})
-                     :on-click   handle-item-click
-                     :pre        [:div.lesson-dnd
-                                  [ui/icon {:icon       "change-position"}]]
-                     :controls   [:div.list-item-stats
-                                  activities-number
-                                  [ui/icon {:icon       "games"
-                                            :class-name "activity"}]]
-                     :actions    [{:icon     "trash"
-                                   :title    "Remove"
-                                   :on-click handle-remove-click}]}]]
-     (when @expanded?
-       [activities-list {:level-idx  level-idx
-                         :lesson-idx idx}])]))
+    (let [locked? @(re-frame/subscribe [::state/locked?])]
+      (if locked?
+        [:<>
+         [ui/list-item {:name       name
+                        :class-name (ui/get-class-name {"list-item" true
+                                                        "selected"  @expanded?})
+                        :on-click   handle-item-click
+                        :pre        [:div.lesson-dnd
+                                     [ui/icon {:icon       "change-position"}]]
+                        :controls   [:div.list-item-stats
+                                     activities-number
+                                     [ui/icon {:icon       "games"
+                                               :class-name "activity"}]]
+                        }]
+         (when @expanded?
+           [activities-list {:level-idx  level-idx
+                             :lesson-idx idx}])]  
+        [:<>
+         [draggable {:data          {:type   "lesson"
+                                     :level  level-idx
+                                     :lesson idx}
+                     :drop-allowed? drop-allowed?
+                     :on-drop       handle-drop}
+          [ui/list-item {:name       name
+                         :class-name (ui/get-class-name {"list-item" true
+                                                         "selected"  @expanded?})
+                         :on-click   handle-item-click
+                         :pre        [:div.lesson-dnd
+                                      [ui/icon {:icon       "change-position"}]]
+                         :controls   [:div.list-item-stats
+                                      activities-number
+                                      [ui/icon {:icon       "games"
+                                                :class-name "activity"}]]
+                         :actions    [{:icon     "trash"
+                                       :title    "Remove"
+                                       :on-click handle-remove-click}]}]]
+         (when @expanded?
+           [activities-list {:level-idx  level-idx
+                             :lesson-idx idx}])]))))
 
 (defn- lessons-list
   [{:keys [level-idx]}]
@@ -154,24 +177,37 @@
                handle-remove-level #(re-frame/dispatch [::state/remove-level idx])
                handle-remove-click #(do (.stopPropagation %)
                                         (handle-remove-level))]
-    [:<>
-     [draggable {:data          {:type  "level"
-                                 :level idx}
-                 :drop-allowed? drop-allowed?
-                 :on-drop       handle-drop}
-      [ui/list-item {:name       name
-                     :class-name (ui/get-class-name {"list-item" true
-                                                     "selected"  @expanded?})
-                     :on-click   handle-item-click
-                     :controls [:div.list-item-stats
-                                lessons-number
-                                [ui/icon {:icon        "games"
-                                          ::class-name "lesson"}]]
-                     :actions    [{:icon     "trash"
-                                   :title    "Remove"
-                                   :on-click handle-remove-click}]}]]
-     (when @expanded?
-       [lessons-list {:level-idx idx}])]))
+    (let [locked? @(re-frame/subscribe [::state/locked?])]
+      (if locked?
+        [:<>
+         [ui/list-item {:name       name
+                        :class-name (ui/get-class-name {"list-item" true
+                                                        "selected"  @expanded?})
+                        :on-click   handle-item-click
+                        :controls [:div.list-item-stats
+                                   lessons-number
+                                   [ui/icon {:icon        "games"
+                                             ::class-name "lesson"}]]}]
+         (when @expanded?
+           [lessons-list {:level-idx idx}])]
+        [:<>
+         [draggable {:data          {:type  "level"
+                                     :level idx}
+                     :drop-allowed? drop-allowed?
+                     :on-drop       handle-drop}
+          [ui/list-item {:name       name
+                         :class-name (ui/get-class-name {"list-item" true
+                                                         "selected"  @expanded?})
+                         :on-click   handle-item-click
+                         :controls [:div.list-item-stats
+                                    lessons-number
+                                    [ui/icon {:icon        "games"
+                                              ::class-name "lesson"}]]
+                         :actions    [{:icon     "trash"
+                                       :title    "Remove"
+                                       :on-click handle-remove-click}]}]]
+         (when @expanded?
+           [lessons-list {:level-idx idx}])]))))
 
 (defn- levels-list
   []
@@ -251,16 +287,20 @@
                handle-edit-click #(swap! form-editable? not)
                handle-form-saved #(do (reset! form-editable? false)
                                       (re-frame/dispatch [::state/set-course-info %]))]
-    [page/side-bar {:title   "Course Details"
-                    :icon    "info"
-                    :focused? @form-editable?
-                    :actions [{:icon     (if @form-editable? "close" "edit")
-                               :on-click handle-edit-click}]}
-     [course-info-form {:course-slug course-slug
-                        :editable?   @form-editable?
-                        :on-save     handle-form-saved}]
-     (when-not @form-editable?
-       [actions-list])]))
+    (let [locked? @(re-frame/subscribe [::state/locked?])
+          can-lock? @(re-frame/subscribe [::state/can-lock?])]
+      [page/side-bar {:title   "Course Details"
+                      :icon    "info"
+                      :focused? @form-editable?
+                      :actions [(when (or (not locked?) can-lock?)
+                                  {:icon     (if @form-editable? "close" "edit")
+                                   :on-click handle-edit-click})]}
+       [course-info-form {:course-slug course-slug
+                          :editable?   @form-editable?
+                          :can-lock    can-lock?
+                          :on-save     handle-form-saved}]
+       (when-not (or @form-editable? locked?)
+         [actions-list])])))
 
 (defn- side-bar
   [props]

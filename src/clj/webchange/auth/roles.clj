@@ -4,5 +4,5 @@
 
 (defn is-admin?
   [user-id]
-  (let [{admin? :result} (db/is-admin? {:id user-id})]
+  (let [{admin? :result} (db/user-has-type? {:id user-id :types ["admin" "bbs-admin"]})]
     admin?))

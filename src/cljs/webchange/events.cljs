@@ -78,12 +78,18 @@
     {:db (update-in db [:user] merge user)
      :dispatch-n (list [:complete-request :current-user])}))
 
+(re-frame/reg-cofx
+ :current-user
+ (fn [{:keys [db] :as co-effects}]
+   (->> (get db :user)
+        (assoc co-effects :current-user))))
+
 ;; -- Request Handlers -----------------------------------------------------------
 ;;
 (re-frame/reg-event-db
   :complete-request                ;; when we complete a request we need to clean up
   (fn-traced [db [_ request-type]] ;; few things so that our ui is nice and tidy
-    (assoc-in db [:loading request-type] false)))
+             (assoc-in db [:loading request-type] false)))
 
 (re-frame/reg-event-fx
   :api-request-error                                                                         ;; triggered when we get request-error from the server

@@ -960,6 +960,14 @@
     {:id     activity-id
      :status status}))
 
+(defn toggle-activity-locked
+  [activity-id {:keys [locked]}]
+  (let [data (-> (db/get-scene-by-id {:id activity-id})
+                 (assoc-in [:metadata :locked] locked)
+                 (select-keys [:id :name :lang :metadata]))]
+    (db/edit-scene! data)
+    data))
+
 (defn duplicate-activity
   [activity-id {:keys [name lang]} owner-id]
   (let [created-at (jt/local-date-time)
