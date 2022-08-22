@@ -14,7 +14,7 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [db]} _]
+  (fn [{:keys [_]} _]
     {:dispatch [::warehouse/load-schools
                 {:on-success [::load-schools-success]}]}))
 
@@ -26,18 +26,25 @@
 
 (re-frame/reg-event-fx
   ::add-school
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :school-add]}))
 
 (re-frame/reg-event-fx
   ::open-school
-  (fn [{:keys [db]} [_ school-id]]
+  (fn [{:keys [_]} [_ school-id]]
     {:dispatch [::routes/redirect :school-profile :school-id school-id]}))
 
 (re-frame/reg-event-fx
   ::edit-school
-  (fn [{:keys [db]} [_ school-id]]
-    {:dispatch [::routes/redirect :school-profile :school-id school-id :url-params {:edit true}]}))
+  (fn [{:keys [_]} [_ school-id]]
+    {:dispatch [::routes/redirect :school-profile :school-id school-id
+                :storage-params {:on-save [::edit-school-success]}
+                :url-params {:edit true}]}))
+
+(re-frame/reg-event-fx
+  ::edit-school-success
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :schools]}))
 
 (re-frame/reg-event-fx
   ::open-archived-schools

@@ -1,10 +1,12 @@
 (ns webchange.utils.module-router
   (:require
     [bidi.bidi :as bidi]
+    [clojure.edn :as edn]
     [clojure.string :as s]
     [pushy.core :as pushy]
     [re-frame.core :as re-frame]
-    [webchange.utils.numbers :refer [try-parse-int]]))
+    [webchange.utils.numbers :refer [try-parse-int]]
+    [webchange.utils.session-storage :as storage]))
 
 (def locations {:profile "/user/profile"
                 :courses "/user/courses"
@@ -27,13 +29,12 @@
                   [(keyword key) (parse-url-param value)]))
            (into {})))))
 
-(defn- redirect-args->url-params
+(defn- redirect-args->params
   [args]
   (->> args
        (partition 2)
        (map vec)
-       (into {})
-       (:url-params)))
+       (into {})))
 
 (defn- url-params->search-string
   [params]
@@ -49,17 +50,24 @@
   [root-path routes dispatch]
   (let [routes [root-path routes]
         parse-url (partial bidi/match-route routes)
-        history (pushy/pushy (fn [props]
-                               (->> (get-url-params)
-                                    (assoc props :url-params)
-                                    (dispatch)))
+        history (pushy/pushy (fn [{:keys [handler] :as props}]
+                               (let [storage-params (-> (storage/get-item handler)
+                                                        (edn/read-string))
+                                     url-params (get-url-params)]
+                                 (storage/remove-item handler)
+                                 (-> (cond-> props
+                                             (some? storage-params) (update-in [:route-params :params] merge storage-params)
+                                             (some? url-params) (update-in [:route-params :params] merge url-params))
+                                     (dispatch))))
                              parse-url)
         url-for (partial bidi/path-for routes)
         redirect-to (fn [key & args]
+                      (if-let [params (-> args redirect-args->params :storage-params)]
+                        (storage/set-item key params))
                       (let [path (str (if (= (type key) Keyword)
                                         (apply url-for (concat [key] args))
                                         key)
-                                      (-> args redirect-args->url-params url-params->search-string))]
+                                      (-> args redirect-args->params :url-params url-params->search-string))]
                         (pushy/set-token! history path)))
         location (fn [location-name]
                    (->> (get locations location-name)
