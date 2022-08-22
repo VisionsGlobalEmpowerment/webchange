@@ -10,15 +10,41 @@
   (fn [db]
     (get db path-to-db)))
 
+;; previous page
+
+(def previous-page-key :previous-page)
+
+(defn- set-previous-page
+  [db value]
+  (assoc db previous-page-key value))
+
+(re-frame/reg-sub
+  ::previous-page
+  :<- [path-to-db]
+  #(get % previous-page-key))
+
+;; current page
+
 (def current-page-key :current-page)
+
+(defn- get-current-page
+  [db]
+  (get db current-page-key))
+
+(defn- set-current-page
+  [db value]
+  (assoc db current-page-key value))
 
 (re-frame/reg-sub
   ::current-page
   :<- [path-to-db]
-  #(get % current-page-key))
+  #(get-current-page %))
 
 (re-frame/reg-event-fx
   ::set-current-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc db current-page-key value)}))
+    (let [current-page (get-current-page db)]
+      {:db (-> db
+               (set-current-page value)
+               (set-previous-page current-page))})))

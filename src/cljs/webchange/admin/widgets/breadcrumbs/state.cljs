@@ -50,28 +50,40 @@
                  (get-path target-node (get sitemap child) (conj path child)))
                children))))))
 
+(defn shorter-path?
+  [path-1 path-2]
+  (and (clojure.set/subset? (set path-2)
+                            (set path-1))
+       (< (count path-2)
+          (count path-1))))
+
 (re-frame/reg-sub
   ::breadcrumbs
   :<- [::state/current-page]
   :<- [::custom-current-node]
-  (fn [[{:keys [handler props]} current-node]]
+  :<- [::state/previous-page]
+  (fn [[{:keys [handler props] :as route-params} current-node previous-page]]
     (if-not (= handler :dashboard)
-      (let [path (get-path handler routes/sitemap)
-            path-length (count path)]
-        (->> path
-             (take-last 2)
-             (map (fn [step]
-                    {:route {:page  step
-                             :props props}
-                     :text  (routes/get-title {:handler step
-                                               :props   props}
-                                              {:with-root? false})}))
-             (map-indexed (fn [idx step]
-                            (let [last-item? (-> path-length (dec) (= idx))]
-                              (if last-item?
-                                (cond-> (assoc step :last-item? true)
-                                        (some? current-node) (merge current-node))
-                                step))))))
+      (let [path-1 (-> (get-path handler routes/sitemap) (butlast))
+            path-2 (get-path (get previous-page :handler handler) routes/sitemap)
+            path (if (shorter-path? path-1 path-2) path-2 path-1)
+
+            last-node (cond-> {:route      {:page  handler
+                                            :props props}
+                               :text       (routes/get-title route-params
+                                                             {:with-root? false})
+                               :last-item? true}
+                              (some? current-node) (merge current-node))]
+        (conj (->> path
+                   (take-last 1)
+                   (map (fn [step]
+                          {:route {:page  step
+                                   :props props}
+                           :text  (routes/get-title {:handler step
+                                                     :props   props}
+                                                    {:with-root? false})}))
+                   (vec))
+              last-node))
       [])))
 
 (re-frame/reg-event-fx
