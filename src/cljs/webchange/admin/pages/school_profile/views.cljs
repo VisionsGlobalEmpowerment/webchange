@@ -55,9 +55,9 @@
   [{:keys [school-id]}]
   (let [school-form-editable? @(re-frame/subscribe [::state/school-form-editable?])
         handle-edit-click #(re-frame/dispatch [::state/set-school-form-editable (not school-form-editable?)])
-        handle-data-save #(re-frame/dispatch [::state/set-school-data % {:cancel-edit-mode? true}])
+        handle-data-save #(re-frame/dispatch [::state/handle-save %])
         handle-archive #(re-frame/dispatch [::state/open-schools-list])
-        handle-cancel-click #(re-frame/dispatch [::state/set-school-form-editable false])]
+        handle-cancel-click #(re-frame/dispatch [::state/handle-cancel])]
     [page/side-bar {:title    "School Info"
                     :icon     "info"
                     :focused? school-form-editable?

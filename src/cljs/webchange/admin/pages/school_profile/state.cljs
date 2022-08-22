@@ -16,10 +16,12 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id url-params]}]]
-    (let [edit? (-> url-params :edit (= "true"))]
+  (fn [{:keys [db]} [_ {:keys [school-id params]}]]
+    (let [{:keys [on-save]} params
+          edit? (-> params :edit (= "true"))]
       {:db         (-> db
                        (assoc :school-id school-id)
+                       (assoc :on-save on-save)
                        (dissoc :school-data))
        :dispatch-n (cond-> [[::warehouse/load-school {:school-id school-id}
                              {:on-success [::load-school-success]}]]
@@ -76,6 +78,24 @@
   :<- [::school-data]
   #(-> (get % :name "")
        (clojure.string/capitalize)))
+
+;; form handlers
+
+(re-frame/reg-event-fx
+  ::handle-save
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ school-data]]
+    (let [on-save (:on-save db)]
+      {:dispatch-n (cond-> [[::set-school-data school-data {:cancel-edit-mode? true}]]
+                           (some? on-save) (conj on-save))})))
+
+(re-frame/reg-event-fx
+  ::handle-cancel
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [on-save (:on-save db)]
+      {:dispatch-n (cond-> [[::set-school-form-editable false]]
+                           (some? on-save) (conj on-save))})))
 
 ;; Redirects
 
