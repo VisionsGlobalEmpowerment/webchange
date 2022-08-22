@@ -3,7 +3,7 @@
     [buddy.auth :refer [throw-unauthorized]]
     [clojure.string :as str]
     [clojure.tools.logging :as log]
-    [compojure.api.sweet :refer [GET POST PUT api context defroutes swagger-routes]]
+    [compojure.api.sweet :refer [DELETE GET POST PUT api context defroutes swagger-routes]]
     [ring.util.response :refer [redirect resource-response response]]
     [ring.util.codec :refer [url-encode]]
     [schema.core :as s]
@@ -494,6 +494,29 @@
            (throw-unauthorized {:role :educator}))
          (-> (core/assign-school-course school-id data)
              response)))
+
+  (PUT "/api/schools/:school-id/assign-courses" request
+       :coercion :spec
+       :path-params [school-id :- ::course-spec/school-id]
+       :body [data ::course-spec/assign-school-courses]
+       :return ::course-spec/school-courses
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (-> (core/assign-school-courses school-id data)
+             response)))
+
+  (DELETE "/api/schools/:school-id/assign-course" request
+    :coercion :spec
+    :path-params [school-id :- ::course-spec/school-id]
+    :body [data ::course-spec/unassign-school-course]
+    :return ::course-spec/school-course
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/unassign-school-course school-id data)
+          response)))
+
   (GET "/api/schools/:school-id/courses" request
        :coercion :spec
        :path-params [school-id :- ::course-spec/school-id]

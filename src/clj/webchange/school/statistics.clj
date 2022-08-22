@@ -46,6 +46,11 @@
    (calculate-school-stats school-id)))
 
 (e/reg
+ ::recalculate-on-unassign-course :courses/unassigned-to-school
+ (fn [{school-id :school-id}]
+   (calculate-school-stats school-id)))
+
+(e/reg
  ::recalculate-on-archive-class :classes/archived
  (fn [{class-id :class-id}]
    (let [{school-id :school-id} (db/get-class {:id class-id})]

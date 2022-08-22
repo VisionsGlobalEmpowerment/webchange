@@ -38,10 +38,12 @@
   (fn []
     (let [school-name @(re-frame/subscribe [::state/school-name])
           classes-number @(re-frame/subscribe [::state/classes-number])
-          handle-add-click #(re-frame/dispatch [::state/add-class])]
+          handle-add-click #(re-frame/dispatch [::state/add-class])
+          handle-school-click #(re-frame/dispatch [::state/open-school-profile])]
       [page/single-page {:class-name "page--classes"
                          :header     {:title   school-name
                                       :icon    "school"
+                                      :on-click handle-school-click
                                       :stats   [{:icon    "classes"
                                                  :counter classes-number
                                                  :label   "Classes"}]

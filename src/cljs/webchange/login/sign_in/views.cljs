@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.login.sign-in.state :as state]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (defn sign-in-form
   []
@@ -28,9 +28,11 @@
                     :name           "password"
                     :on-change      handle-password-changed
                     :disabled?      loading?
-                    :on-enter-press submit}]]
-     [ui/button {:on-click   submit
-                 :class-name "login-button"
-                 :loading?   loading?
-                 :disabled?  loading?}
-      "Log In"]]))
+                    :on-enter-press submit}]
+      [ui/button {:on-click   submit
+                  :class-name "login-button"
+                  :shape      "rounded"
+                  :loading?   loading?
+                  :disabled?  loading?}
+       "Log In"]]
+     ]))

@@ -14,5 +14,6 @@
      [input (cond-> props
                     :always (assoc :type (if @text-visible? "text" "password"))
                     :always (dissoc :class-name)
-                    (not disabled?) (assoc :action {:icon     (if @text-visible? "visibility-on" "visibility-off")
-                                                    :on-click toggle-visibility}))]]))
+                    (not disabled?) (assoc :action {:icon       (if @text-visible? "visibility-on" "visibility-off")
+                                                    :class-name "bbs--password--visibility-button"
+                                                    :on-click   toggle-visibility}))]]))

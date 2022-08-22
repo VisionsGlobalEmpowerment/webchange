@@ -101,3 +101,10 @@
   (fn [{:keys [db]} [_ class-id]]
     (let [school-id (:id (get-school-data db))]
       {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
+
+(re-frame/reg-event-fx
+  ::open-school-profile
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :school-profile :school-id school-id]})))

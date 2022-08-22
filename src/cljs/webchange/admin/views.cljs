@@ -5,6 +5,7 @@
     [webchange.admin.pages.index :refer [pages]]
     [webchange.admin.routes :as routes]
     [webchange.admin.state :as state]
+    [webchange.admin.widgets.confirm.views :refer [block-confirm]]
     [webchange.admin.widgets.layout.views :refer [layout]]
     [webchange.login.check-current-user :as current-user]
     [webchange.ui.index :as ui]))
@@ -31,4 +32,5 @@
             (if authenticating?
               [ui/loading-overlay]
               [layout {:no-padding? (= handler :lesson-builder)}
-               [page-component props]]))]))}))
+               [page-component props]
+               [block-confirm]]))]))}))

@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.login.header.views :refer [header]]
     [webchange.login.routes :as routes]
     [webchange.login.sign-in.views :refer [sign-in-form]]
     [webchange.login.state :as state]
@@ -24,6 +25,7 @@
              {:keys [handler props]} @(re-frame/subscribe [::state/current-page])]
          (if current-user-loaded?
            [:div#tabschool-login
+            [header]
             (case handler
               [sign-in-form props])]
            [ui/loading-overlay])))}))

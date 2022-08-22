@@ -16,12 +16,14 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db       (-> db
-                   (assoc :school-id school-id)
-                   (dissoc :school-data))
-     :dispatch [::warehouse/load-school {:school-id school-id}
-                {:on-success [::load-school-success]}]}))
+  (fn [{:keys [db]} [_ {:keys [school-id url-params]}]]
+    (let [edit? (-> url-params :edit (= "true"))]
+      {:db         (-> db
+                       (assoc :school-id school-id)
+                       (dissoc :school-data))
+       :dispatch-n (cond-> [[::warehouse/load-school {:school-id school-id}
+                             {:on-success [::load-school-success]}]]
+                           edit? (conj [::set-school-form-editable true]))})))
 
 (re-frame/reg-event-fx
   ::reset
@@ -64,10 +66,9 @@
 (re-frame/reg-event-fx
   ::set-school-data
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data]]
-    {:db       (-> db
-                   (assoc :school-data data)
-                   (set-school-form-editable false))
+  (fn [{:keys [db]} [_ data {:keys [cancel-edit-mode?] :or {cancel-edit-mode? false}}]]
+    {:db       (cond-> (assoc db :school-data data)
+                       cancel-edit-mode? (set-school-form-editable false))
      :dispatch [::breadcrumbs/set-current-node {:text (get data :name "")}]}))
 
 (re-frame/reg-sub

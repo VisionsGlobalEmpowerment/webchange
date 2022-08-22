@@ -587,12 +587,21 @@
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::assign-school-course
-  (fn [{:keys [_]} [_ {:keys [school-id data]} handlers]]
+  ::assign-school-courses
+  (fn [{:keys [_]} [_ {:keys [school-id courses-id]} handlers]]
     (create-request {:key    :assign-school-course
                      :method :put
+                     :uri    (str "/api/schools/" school-id "/assign-courses")
+                     :params {:courses-id courses-id}}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::unassign-school-course
+  (fn [{:keys [_]} [_ {:keys [school-id course-id]} handlers]]
+    (create-request {:key    :unassign-school-course
+                     :method :delete
                      :uri    (str "/api/schools/" school-id "/assign-course")
-                     :params data}
+                     :params {:course-id course-id}}
                     handlers)))
 ;;
 

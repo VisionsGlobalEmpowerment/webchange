@@ -116,3 +116,10 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ teacher-id active?]]
     {:db (update-teacher db teacher-id {:active? active?})}))
+
+(re-frame/reg-event-fx
+  ::open-school-profile
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :school-profile :school-id school-id]})))

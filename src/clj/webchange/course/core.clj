@@ -854,6 +854,19 @@
   (e/dispatch {:type :courses/assigned-to-school :school-id school-id :course-id course-id})
   {:school-id school-id :course-id course-id})
 
+(defn assign-school-courses
+  [school-id {:keys [courses-id]}]
+  (doseq [course-id courses-id]
+    (db/assign-school-course! {:school_id school-id :course_id course-id}))
+  (e/dispatch {:type :courses/assigned-to-school :school-id school-id :courses-id courses-id})
+  {:school-id school-id :courses-id courses-id})
+
+(defn unassign-school-course
+  [school-id {:keys [course-id] :as props}]
+  (db/unassign-school-course! {:school_id school-id :course_id course-id})
+  (e/dispatch {:type :courses/unassigned-to-school :school-id school-id :course-id course-id})
+  {:school-id school-id :course-id course-id})
+
 (defn get-class-course
   "Return course assigned to given class"
   [class-id]
@@ -1000,7 +1013,7 @@
   (let [created-at (jt/local-date-time)
         scene-data (-> (get-activity-current-version activity-id)
                        (templates/update-activity-from-template {:action "template-options"
-                                                                 :data data}))]
+                                                                 :data   data}))]
     (db/save-scene! {:scene_id    activity-id
                      :data        scene-data
                      :owner_id    owner-id
@@ -1029,24 +1042,24 @@
                      :created_at  created-at
                      :description "Update Template"})
     {:activity-id activity-id
-     :data activity}))
+     :data        activity}))
 
 (defn update-activity-settings!
   [activity-id {:keys [activity-settings preview animation-settings guide-settings] :as data} owner-id]
   (let [created-at (jt/local-date-time)
         activity-info (db/get-scene-by-id {:id activity-id})
         scene-data (-> (get-activity-current-version activity-id)
-                       (templates/update-activity-from-template {:action "set-animation-settings"
+                       (templates/update-activity-from-template {:action         "set-animation-settings"
                                                                  :common-action? true
-                                                                 :data animation-settings})
-                       (templates/update-activity-from-template {:action "set-guide-settings"
+                                                                 :data           animation-settings})
+                       (templates/update-activity-from-template {:action         "set-guide-settings"
                                                                  :common-action? true
-                                                                 :data guide-settings}))]
-    (db/edit-scene! {:id activity-id
+                                                                 :data           guide-settings}))]
+    (db/edit-scene! {:id       activity-id
                      :metadata (:metadata activity-info)
-                     :name (:name activity-settings)
-                     :lang (:lang activity-settings)})
-    (db/update-scene-image! {:id activity-id
+                     :name     (:name activity-settings)
+                     :lang     (:lang activity-settings)})
+    (db/update-scene-image! {:id        activity-id
                              :image_src (:preview data)})
     (db/save-scene! {:scene_id    activity-id
                      :data        scene-data

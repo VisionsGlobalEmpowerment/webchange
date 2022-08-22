@@ -46,14 +46,16 @@
   (fn []
     (let [school-name @(re-frame/subscribe [::state/school-name])
           students-number @(re-frame/subscribe [::state/students-number])
-          handle-add-click #(re-frame/dispatch [::state/add-student])]
+          handle-add-click #(re-frame/dispatch [::state/add-student])
+          handle-school-click #(re-frame/dispatch [::state/open-school-profile])]
       [page/single-page {:class-name "page--students"
-                         :header     {:title   school-name
-                                      :icon    "school"
-                                      :stats   [{:icon    "students"
-                                                 :counter students-number
-                                                 :label   "Students"}]
-                                      :actions [{:text     "Add Student to School"
-                                                 :icon     "plus"
-                                                 :on-click handle-add-click}]}}
+                         :header     {:title    school-name
+                                      :icon     "school"
+                                      :on-click handle-school-click
+                                      :stats    [{:icon    "students"
+                                                  :counter students-number
+                                                  :label   "Students"}]
+                                      :actions  [{:text     "Add Student to School"
+                                                  :icon     "plus"
+                                                  :on-click handle-add-click}]}}
        [students-list]])))

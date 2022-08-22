@@ -1,17 +1,25 @@
-.wc-input-wrapper {
-    .wc-input-label {
-        @include text-styles;
+.bbs--input-wrapper {
+    gap: 4px;
+    color: #fff;
+
+    @include bbs--auto-complete {
+        background: transparent;
     }
 
-    .wc-input {
+    .bbs--input-label {
+        @include bbs--noto-14-sb;
+        color: #fff;
+    }
+
+    .bbs--input {
         @include input-border;
         @include input-color;
         @include input-font;
         @include input-padding;
-        @include text-styles;
 
-        background: $input-background;
+        background: transparent;
         transition: border-color 0.2s;
+        color: #fff;
 
         &::selection {
            color: #fff;
