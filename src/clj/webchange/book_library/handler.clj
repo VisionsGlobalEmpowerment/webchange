@@ -25,8 +25,7 @@
   ([request]
    (handle-get-books request nil))
   ([_ language]
-   (let [books (cond->> (core/get-visible-books)
-                        (some? language) (filter #(= (:lang %) language)))]
+   (let [books (core/get-visible-books language)]
      (handle [true books]))))
 
 (defn- handle-get-categories
