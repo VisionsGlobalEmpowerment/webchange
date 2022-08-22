@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/class-profile)
@@ -80,6 +79,14 @@
   (fn [{:keys [db]} [_ value]]
     {:db (set-form-editable db value)}))
 
+(re-frame/reg-event-fx
+  ::handle-class-edit-cancel
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-edit-finished]} (:handlers db)]
+      {:dispatch-n (cond-> [[::set-form-editable false]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))
+
 ;; Class data
 
 (re-frame/reg-sub
@@ -99,9 +106,11 @@
   ::update-class-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
-    {:db (-> db
-             (update-class-data data)
-             (set-form-editable false))}))
+    (let [{:keys [on-edit-finished]} (:handlers db)]
+      (cond-> {:db (-> db
+                       (update-class-data data)
+                       (set-form-editable false))}
+              (some? on-edit-finished) (assoc :dispatch on-edit-finished)))))
 
 ;; school courses
 
@@ -126,11 +135,17 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
-    {:db         (assoc db :class-id class-id)
-     :dispatch-n [[::load-class]
-                  [::warehouse/load-school-courses {:school-id school-id}
-                   {:on-success [::load-school-courses-success]}]]}))
+  (fn [{:keys [db]} [_ {:keys [class-id school-id params]}]]
+    (let [{:keys [action]} params]
+      {:db         (-> db
+                       (assoc :class-id class-id)
+                       (assoc :handlers (select-keys params [:on-edit-finished])))
+       :dispatch-n (cond-> [[::load-class]
+                            [::warehouse/load-school-courses {:school-id school-id}
+                             {:on-success [::load-school-courses-success]}]]
+                           (= action "edit") (conj [::set-form-editable true])
+                           (= action "manage-students") (conj [::open-students-list])
+                           (= action "manage-teachers") (conj [::open-teachers-list]))})))
 
 (re-frame/reg-event-fx
   ::load-class
