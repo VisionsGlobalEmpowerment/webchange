@@ -224,6 +224,16 @@ WHERE type = :type
 --~ (when (and (contains? params :user_id) (some? (:user_id params))) " and owner_id != :user_id")
 ;
 
+-- :name find-courses :? :*
+-- :doc retrieve all courses records
+SELECT * from courses
+WHERE type = :type
+--~ (when (and (contains? params :status) (some? (:status params))) " and status = :status")
+--~ (when (and (contains? params :not_status) (some? (:not_status params))) " and status != :not_status")
+--~ (when (and (contains? params :lang) (some? (:lang params))) " and lang = :lang")
+--~ (when (and (contains? params :user_id) (some? (:user_id params))) " and owner_id != :user_id")
+;
+
 -- :name get-scenes-by-course-id :? :*
 -- :doc retrieve scenes by course id
 SELECT s.* from scenes s

@@ -307,7 +307,7 @@
   ([course]
    (->website-course course {}))
   ([course {:keys [with-host-name?] :or {with-host-name? true}}]
-   (cond-> (-> (select-keys course [:id :name :slug :lang :image-src :status :metadata])
+   (cond-> (-> (select-keys course [:id :name :slug :lang :image-src :status :metadata :owner-id])
                (assoc :updated-at (-> course :updated-at (str)))
                (with-course-page)
                (with-default-image))
@@ -378,6 +378,17 @@
 (defn get-available-courses
   []
   (->> (db/get-available-courses)
+       (map ->website-course)))
+
+(defn my-courses
+  [user-id]
+  (->> (db/find-courses {:type "course" :not_status "archived" :user_id user-id})
+       (map ->website-course)))
+
+(defn my-courses-admin
+  [user-id]
+  (->> (db/find-courses {:type "course" :not_status "archived"})
+       (filter (fn [{:keys [status owner-id]}] (or (not= status "published") (= owner-id user-id))))
        (map ->website-course)))
 
 (defn get-courses-by-website-user

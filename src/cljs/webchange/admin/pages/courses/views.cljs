@@ -5,6 +5,22 @@
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]))
 
+(defn- type-selector
+  []
+  (let [selected-type @(re-frame/subscribe [::state/selected-type])
+        courses-counter @(re-frame/subscribe [::state/courses-counter])]
+    [:div {:class-name "type-selector"}
+     [:div {:class-name (ui/get-class-name {"type-selector-item" true
+                                            "type-selector-item-active" (= selected-type :published)})
+            :on-click #(re-frame/dispatch [::state/select-type :published])}
+      "Global library"
+      [ui/chip {:counter (:published courses-counter)}]]
+     [:div.type-spacer]
+     [:div {:class-name (ui/get-class-name {"type-selector-item" true
+                                            "type-selector-item-active" (= selected-type :my)})
+            :on-click #(re-frame/dispatch [::state/select-type :my])}
+      "My Courses"
+      [ui/chip {:counter (:my courses-counter)}]]]))
 
 (defn- courses-list-item
   [{:keys [name slug lang]}]
@@ -35,11 +51,17 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    (let [handle-add-click #(re-frame/dispatch [::state/add-course])]
+    (let [handle-add-click #(re-frame/dispatch [::state/add-course])
+          show-my-global? @(re-frame/subscribe [::state/show-my-global?])]
       [page/single-page {:class-name "page--courses"
                          :header     {:title      "Courses"
                                       :icon       "courses"
                                       :icon-color "blue-2"
+                                      :controls [[type-selector]
+                                                 [ui/switch {:class-name "show-global-selector"
+                                                             :label "Show My Global Courses"
+                                                             :checked? show-my-global?
+                                                             :on-change #(re-frame/dispatch [::state/set-show-global (not show-my-global?)])}]]
                                       :actions    [{:text     "Add Course"
                                                     :icon     "plus"
                                                     :on-click handle-add-click}]}}

@@ -484,6 +484,15 @@
   (GET "/api/available-courses" request
        (-> (core/get-available-courses) response))
 
+  (GET "/api/my-courses" request
+    :coercion :spec
+    (let [user-id (current-user request)
+          result (if (is-admin? user-id)
+                   (core/my-courses-admin user-id)
+                   (core/my-courses user-id))]
+      (-> result
+          response)))
+    
   (PUT "/api/schools/:school-id/assign-course" request
        :coercion :spec
        :path-params [school-id :- ::course-spec/school-id]

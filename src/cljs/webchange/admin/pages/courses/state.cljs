@@ -14,51 +14,87 @@
 
 ;; Courses Loading
 
-(def courses-loading-key :courses-loading?)
-
-(defn- set-courses-loading
-  [db value]
-  (assoc db courses-loading-key value))
-
 (re-frame/reg-sub
   ::courses-loading?
   :<- [path-to-db]
-  #(get % courses-loading-key false))
+  (fn [db]
+    (or (:published-courses-loading db)
+        (:my-courses-loading db))))
 
 ;; Courses Data
 
-(def courses-key :courses)
+(re-frame/reg-sub
+  ::show-my-global?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :show-my-global? true)))
 
-(defn- get-courses
-  [db]
-  (get db courses-key))
-
-(defn- set-courses
-  [db value]
-  (assoc db courses-key value))
+(re-frame/reg-sub
+  ::selected-type
+  :<- [path-to-db]
+  (fn [db]
+    (get db :selected-type :visible)))
 
 (re-frame/reg-sub
   ::courses
   :<- [path-to-db]
-  #(get-courses %))
+  :<- [::selected-type]
+  :<- [::show-my-global?]
+  (fn [[db selected-type show-my-global]]
+    (let [courses (if (= selected-type :published)
+                    (:published-courses db)
+                    (:my-courses db))]
+      (if show-my-global
+        courses
+        (remove #(and
+                  (= (:status %) "published")
+                  (= (:owner-id %) (get-in db [:current-user :id])))
+                courses)))))
 
+(re-frame/reg-sub
+  ::courses-counter
+  :<- [path-to-db]
+  (fn [db]
+    {:my        (-> db :my-courses count)
+     :published (-> db :published-courses count)}))
 ;;
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (set-courses-loading db true)
-     :dispatch [::warehouse/load-available-courses
-                {:on-success [::load-courses-success]}]}))
+    {:db       (-> db
+                   (assoc :published-courses-loading true)
+                   (assoc :my-courses-loading true))
+     :dispatch-n [[::warehouse/load-available-courses
+                   {:on-success [::load-courses-success]}]
+                  [::warehouse/load-my-courses
+                   {:on-success [::load-my-courses-success]}]
+                  [::warehouse/load-current-user
+                   {:on-success [::load-account-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::load-account-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (-> db
+             (assoc :current-user data))}))
 
 (re-frame/reg-event-fx
   ::load-courses-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ courses]]
     {:db (-> db
-             (set-courses-loading false)
-             (set-courses courses))}))
+             (assoc :published-courses-loading false)
+             (assoc :published-courses courses))}))
+
+(re-frame/reg-event-fx
+  ::load-my-courses-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (-> db
+             (assoc :my-courses-loading false)
+             (assoc :my-courses data))}))
 
 (re-frame/reg-event-fx
   ::edit-course
@@ -76,3 +112,15 @@
   ::add-course
   (fn [{:keys [db]} [_]]
     {:dispatch [::routes/redirect :course-add]}))
+
+(re-frame/reg-event-fx
+  ::select-type
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ type]]
+    {:db (assoc db :selected-type type)}))
+
+(re-frame/reg-event-fx
+  ::set-show-global
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :show-my-global? value)}))
