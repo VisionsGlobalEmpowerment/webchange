@@ -65,16 +65,23 @@
 
 (re-frame/reg-event-fx
   ::init
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [book-id] :as props}]]
+  [(re-frame/inject-cofx :current-user)
+   (i/path path-to-db)]
+  (fn [{:keys [db current-user]} [_ {:keys [book-id] :as props}]]
     {:db         (-> db
                      (reset-form-data)
                      (set-data-loading true)
-                     (widgets/set-callbacks (select-keys props [:on-remove]))
-                     (assoc :book-id book-id))
+                     (widgets/set-callbacks (select-keys props [:on-remove :on-lock]))
+                     (assoc :book-id book-id)
+                     (assoc :is-admin? (= "admin" (:type current-user))))
      :dispatch-n [[::warehouse/load-activity
                    {:activity-id book-id}
                    {:on-success [::load-book-success]}]]}))
+
+(re-frame/reg-sub
+  ::can-lock?
+  :<- [path-to-db]
+  #(get % :is-admin? false))
 
 (re-frame/reg-event-fx
   ::load-book-success
@@ -107,10 +114,13 @@
   ::save-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ success-handler {:keys [data]}]]
-    {:db                (-> db
-                            (set-data-saving false)
-                            (update-form-data data))
-     ::widgets/callback [success-handler data]}))
+    (let [prepared-data (-> data
+                            (merge (:metadata data))
+                            (dissoc :metadata))]
+      {:db                (-> db
+                              (set-data-saving false)
+                              (update-form-data prepared-data))
+       ::widgets/callback [success-handler data]})))
 
 (re-frame/reg-event-fx
   ::save-failure
@@ -171,6 +181,27 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
     {:db (update-form-data db data)}))
+
+(re-frame/reg-event-fx
+  ::set-locked
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    (let [book-id (:book-id db)]
+      {:dispatch [::warehouse/toggle-activity-locked
+                  {:activity-id book-id
+                   :locked value}
+                  {:on-success [::set-locked-success]}]})))
+
+(re-frame/reg-event-fx
+  ::set-locked-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    (let [prepared-data (-> data
+                            (merge (:metadata data))
+                            (dissoc :metadata))
+          success-handler (widgets/get-callback db :on-lock)]
+      {:db (update-form-data db prepared-data)
+       ::widgets/callback [success-handler (:locked prepared-data)]})))
 
 (re-frame/reg-event-fx
   ::remove-book

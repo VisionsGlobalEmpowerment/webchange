@@ -11,68 +11,67 @@
             border-radius: 7px;
 
             display: flex;
+	    flex-direction: column;
 
-            .info {
-                flex: 1 1;
-                margin-top: 13px;
-                margin-left: 25px;
+	    .header-top {
+                display: flex;
 
-                font-weight: 700;
-                font-size: 14px;
-                line-height: 18px;
+                .info {
+                    flex: 1 1;
+                    margin-top: 13px;
+                    margin-left: 25px;
+                    @include bbs--noto-14-b;
+                }
 
-                dl {
+                .actions {
+                    flex: 1 1;
                     display: flex;
-                    gap: 0px;
-                    margin: 0 0 11px 0;
+                    justify-content: flex-end;
+                    margin-right: 15px;
 
-                    font-weight: 400;
-                    font-size: 12px;
-                    line-height: 18px;
+                    gap: 9px;
 
-                    dt {
-                        &:after {
-                            content: ":";
+                    button {
+                        min-height: 32px;
+                        border-radius: 20px;
+                        margin: 12px 0 12px 0;
+
+                        padding-left: 20px;
+                        padding-right: 40px;
+
+                        @include bbs--icon-size(24px);
+
+                        .bbs--button--icon {
+                            margin-top: -12px;
                         }
                     }
 
-                    dd {
-                        margin: 0 32px 0 0;
+                    .play-button {
+                        background: $color-blue-1;
+
+                        &:hover {
+                            background: $color-blue-1-light;
+                        }
                     }
                 }
             }
 
-            .actions {
-                flex: 1 1;
+            .header-bottom {
                 display: flex;
-                justify-content: flex-end;
-                margin-right: 15px;
+                justify-content: space-between;
+                padding: 4px 25px 10px 25px;
 
-                gap: 9px;
+                .date-user-info {
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 16px;
 
-                button {
-                    min-height: 32px;
-                    border-radius: 20px;
-                    margin: 14px 0 14px 0;
-
-                    padding-left: 20px;
-                    padding-right: 40px;
-
-                    @include bbs--icon-size(24px);
-
-                    .bbs--button--icon {
-                        margin-top: -12px;
-                    }
-                }
-
-                .play-button {
-                    background: $color-blue-1;
-
-                    &:hover {
-                        background: $color-blue-1-light;
+                    strong {
+                        font-weight: 700;
                     }
                 }
             }
+	   
         }
 
         .book-preview-area {
