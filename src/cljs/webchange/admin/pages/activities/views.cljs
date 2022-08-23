@@ -7,6 +7,23 @@
     [webchange.ui.index :as ui]
     [webchange.utils.languages :refer [language-options]]))
 
+(defn- activity-type-selector
+  []
+  (let [selected-type @(re-frame/subscribe [::state/selected-type])
+        activities-counter @(re-frame/subscribe [::state/activities-counter])]
+    [:div {:class-name "activity-type-selector"}
+     [:div {:class-name (ui/get-class-name {"activity-type-selector-item" true
+                                            "activity-type-selector-item-active" (= selected-type :visible)})
+            :on-click #(re-frame/dispatch [::state/select-type :visible])}
+      "Global library"
+      [ui/chip {:counter (:visible activities-counter)}]]
+     [:div.activity-type-spacer]
+     [:div {:class-name (ui/get-class-name {"activity-type-selector-item" true
+                                            "activity-type-selector-item-active" (= selected-type :my)})
+            :on-click #(re-frame/dispatch [::state/select-type :my])}
+      "My Activities"
+      [ui/chip {:counter (:my activities-counter)}]]]))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
@@ -16,12 +33,19 @@
           handle-card-click #(re-frame/dispatch [::state/open-activity %])
           handle-edit-click #(re-frame/dispatch [::state/edit-activity %])
           current-language @(re-frame/subscribe [::state/current-language])
-          handle-select-language #(re-frame/dispatch [::state/select-language %])]
+          handle-select-language #(re-frame/dispatch [::state/select-language %])
+          
+          show-my-global? @(re-frame/subscribe [::state/show-my-global?])]
       [page/single-page {:class-name "page--activities"
                          :header     {:title      "Activities"
                                       :icon       "games"
                                       :icon-color "blue-2"
-                                      :controls   [[ui/select {:label     "Language"
+                                      :controls   [[activity-type-selector]
+                                                   [ui/switch {:class-name "show-global-selector"
+                                                               :label "Show My Global Activities"
+                                                               :checked? show-my-global?
+                                                               :on-change #(re-frame/dispatch [::state/set-show-global (not show-my-global?)])}]
+                                                   [ui/select {:label     "Language"
                                                                :value     current-language
                                                                :options   language-options
                                                                :on-change handle-select-language}]]}}

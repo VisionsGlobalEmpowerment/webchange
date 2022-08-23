@@ -885,28 +885,44 @@
 
 (defn get-available-activities
   [lang]
-  (let [activities (if lang
-                     (db/get-scenes-by-type-and-lang {:type "activity" :lang lang})
-                     (db/get-scenes-by-type {:type "activity"}))]
-    (->> activities
-         (map ->activity-info))))
+  (->> (db/find-scenes {:type "activity" :lang lang :not_status "archived"})
+       (map ->activity-info)))
 
 (defn get-available-books
   [lang]
-  (let [books (if lang
-                (db/get-scenes-by-type-and-lang {:type "book" :lang lang})
-                (db/get-scenes-by-type {:type "book"}))]
-    (->> books
-         (map ->activity-info))))
+  (->> (db/find-scenes {:type "book" :lang lang :not_status "archived"})
+       (map ->activity-info)))
 
 (defn get-visible-activities
-  []
-  (->> (db/get-scenes-by-type-and-status {:type "activity" :status "visible"})
+  [lang]
+  (->> (db/find-scenes {:type "activity" :status "visible" :lang lang})
        (map ->activity-info)))
 
 (defn get-visible-books
-  []
-  (->> (db/get-scenes-by-type-and-status {:type "book" :status "visible"})
+  [lang]
+  (->> (db/find-scenes {:type "book" :status "visible" :lang lang})
+       (map ->activity-info)))
+
+(defn my-activities
+  [user-id lang]
+  (->> (db/find-scenes {:type "book" :lang lang :not_status "archived" :user_id user-id})
+       (map ->activity-info)))
+
+(defn my-activities-admin
+  [user-id lang]
+  (->> (db/find-scenes {:type "activity" :lang lang :not_status "archived"})
+       (filter (fn [{:keys [status owner-id]}] (or (not= status "visible") (= owner-id user-id))))
+       (map ->activity-info)))
+
+(defn my-books
+  [user-id lang]
+  (->> (db/find-scenes {:type "book" :lang lang :not_status "archived" :user_id user-id})
+       (map ->activity-info)))
+
+(defn my-books-admin
+  [user-id lang]
+  (->> (db/find-scenes {:type "book" :lang lang :not_status "archived"})
+       (filter (fn [{:keys [status owner-id]}] (or (not= status "visible") (= owner-id user-id))))
        (map ->activity-info)))
 
 (defn get-activity-current-version
@@ -914,12 +930,24 @@
   (-> (db/get-latest-scene-version {:scene_id activity-id})
       :data))
 
+(defn- get-activity-user
+  [user-id]
+  (-> (db/get-user {:id user-id})
+      (select-keys [:first-name :last-name])))
+
 (defn get-activity
   [activity-id]
-  (let [{:keys [course-id] :as activity-info} (-> (db/get-scene-by-id {:id activity-id})
-                                                  ->activity-info)
-        {course-slug :slug} (db/get-course-by-id {:id course-id})]
-    (assoc activity-info :course-slug course-slug)))
+  (let [{:keys [course-id owner-id] :as activity-info} (-> (db/get-scene-by-id {:id activity-id})
+                                                           ->activity-info)
+        {course-slug :slug} (db/get-course-by-id {:id course-id})
+        created-by-user (get-activity-user owner-id)
+        updated-by-user (-> (db/get-latest-scene-version {:scene_id activity-id})
+                            :owner-id
+                            (get-activity-user))]
+    (assoc activity-info
+      :course-slug course-slug
+      :created-by-user created-by-user
+      :updated-by-user updated-by-user)))
 
 (defn edit-activity
   [activity-id data]
@@ -944,6 +972,14 @@
                               :status status})
     {:id     activity-id
      :status status}))
+
+(defn toggle-activity-locked
+  [activity-id {:keys [locked]}]
+  (let [data (-> (db/get-scene-by-id {:id activity-id})
+                 (assoc-in [:metadata :locked] locked)
+                 (select-keys [:id :name :lang :metadata]))]
+    (db/edit-scene! data)
+    data))
 
 (defn duplicate-activity
   [activity-id {:keys [name lang]} owner-id]

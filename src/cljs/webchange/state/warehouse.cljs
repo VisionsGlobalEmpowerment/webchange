@@ -413,20 +413,21 @@
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::load-available-activities
+  ::load-visible-activities
   (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
-    (create-request {:key    :load-available-activities
+    (create-request {:key    :load-visible-activities
                      :method :get
-                     :uri    (str "/api/available-activities")
+                     :uri    (str "/api/visible-activities")
                      :params {:lang lang}}
                     handlers)))
 
 (re-frame/reg-event-fx
-  ::load-visible-activities
-  (fn [{:keys [_]} [_ handlers]]
-    (create-request {:key    :load-visible-activities
+  ::load-my-activities
+  (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
+    (create-request {:key    :load-my-activities
                      :method :get
-                     :uri    (str "/api/visible-activities")}
+                     :uri    (str "/api/my-activities")
+                     :params {:lang lang}}
                     handlers)))
 
 (re-frame/reg-event-fx
@@ -462,6 +463,15 @@
                      :method :put
                      :params {:visible visible}
                      :uri    (str "/api/activities/" activity-id "/toggle-visibility")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::toggle-activity-locked
+  (fn [{:keys [_]} [_ {:keys [activity-id locked]} handlers]]
+    (create-request {:key    :toggle-activity-locked
+                     :method :put
+                     :params {:locked locked}
+                     :uri    (str "/api/activities/" activity-id "/toggle-locked")}
                     handlers)))
 
 (re-frame/reg-event-fx

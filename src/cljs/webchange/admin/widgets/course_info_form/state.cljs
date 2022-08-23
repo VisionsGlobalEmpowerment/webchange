@@ -66,17 +66,19 @@
   ::load-course-info-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ course-info]]
-    {:db (-> db
-             (set-form-data course-info)
-             (set-data-loading false))}))
+    (let [prepared-data (-> course-info
+                            (assoc :locked (get-in course-info [:metadata :locked])))]
+      {:db (-> db
+               (set-form-data prepared-data)
+               (set-data-loading false))})))
 
 
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data {:keys [on-success]}]]
-    (let [{course-id :id} (get-form-data db)]
-      (print "::save")
+    (let [{course-id :id} (get-form-data db)
+          data (assoc-in data [:metadata :locked] (:locked data))]
       {:db       (set-data-saving db true)
        :dispatch [::warehouse/save-course-info
                   {:course-id course-id

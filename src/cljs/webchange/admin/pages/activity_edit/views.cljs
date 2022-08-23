@@ -5,37 +5,48 @@
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
-    [webchange.utils.date :refer [date-str->locale-date]]))
+    [webchange.utils.date :refer [date-str->locale-date]]
+    [webchange.utils.name :refer [fullname]]))
 
 (defn- activity-form
   [{:keys [activity-id]}]
-  (let [{:keys [name preview created-at updated-at]} @(re-frame/subscribe [::state/activity])
+  (let [{:keys [name preview created-at updated-at
+                created-by-user updated-by-user metadata]} @(re-frame/subscribe [::state/activity])
+        locked? (:locked metadata)
+        
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
+        handle-duplicate-click #(re-frame/dispatch [::state/duplicate])
 
         form-editable? @(re-frame/subscribe [::state/form-editable?])
         removing? @(re-frame/subscribe [::state/removing?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
-        handle-remove #(re-frame/dispatch [::state/open-activities-page])]
+        handle-remove #(re-frame/dispatch [::state/open-activities-page])
+        handle-lock #(re-frame/dispatch [::state/set-locked %])]
     [:div.activity-form
      [:div.header
-      [:div.info
-       name
-       [:dl
-        [:dt "Created"]
-        [:dd (date-str->locale-date created-at)]
-        [:dt "Last Edited"]
-        [:dd (date-str->locale-date updated-at)]]]
-      [:div.actions
-       [ui/button {:icon       "system/play"
-                   :class-name "play-button"
-                   :on-click   handle-play-click}
-        "Play"]
-       [ui/button {:icon       "edit"
-                   :class-name "edit-button"
-                   :on-click   handle-edit-click}
-        "Edit Activity"]]]
+      [:div.header-top
+       [:div.info name]
+       [:div.actions
+        [ui/button {:icon       "system/play"
+                    :class-name "play-button"
+                    :on-click   handle-play-click}
+         "Play"]
+        (if locked?
+          [ui/button {:icon       "duplicate"
+                      :class-name "edit-button"
+                      :on-click   handle-duplicate-click}
+           "Duplicate Activity"]
+          [ui/button {:icon       "edit"
+                      :class-name "edit-button"
+                      :on-click   handle-edit-click}
+           "Edit Activity"])]]
+      [:div.header-bottom
+       [:div.date-user-info
+        "Created by:" [:strong (fullname created-by-user)] " " (date-str->locale-date created-at)]
+       [:div.date-user-info
+        "Last Edited " [:strong (fullname updated-by-user)] " " (date-str->locale-date updated-at)]]]
 
      [ui/image {:src        preview
                 :class-name "preview"}]
@@ -43,16 +54,18 @@
      [:div.activity-details
       [:h2
        "Activity Details"
-       [:div.actions
-        [ui/button {:icon     "duplicate"
-                    :on-click handle-edit-info-click}]
-        [ui/button {:icon     (if form-editable? "close" "edit")
-                    :on-click handle-edit-info-click}]]]
+       (when-not locked?
+         [:div.actions
+          [ui/button {:icon     "duplicate"
+                      :on-click handle-duplicate-click}]
+          [ui/button {:icon     (if form-editable? "close" "edit")
+                      :on-click handle-edit-info-click}]])]
       [activity-info-form {:activity-id activity-id
                            :editable?   form-editable?
                            :on-save     handle-save
                            :on-cancel   handle-save
                            :on-remove   handle-remove
+                           :on-lock     handle-lock
                            :class-name  "info-form"}]]]))
 
 (defn page

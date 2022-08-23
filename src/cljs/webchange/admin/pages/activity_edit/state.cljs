@@ -148,3 +148,10 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :activities]}))
+
+(re-frame/reg-event-fx
+  ::set-locked
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db [:activity :metadata :locked] value)}))
+
