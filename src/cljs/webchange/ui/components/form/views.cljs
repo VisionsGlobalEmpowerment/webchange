@@ -37,9 +37,10 @@
     false))
 
 (defn- action-control
-  [{:keys [form-id id] :as props}]
-  (let [value @(re-frame/subscribe [::state/field-value form-id id])]
-    [form-action (assoc props :value value)]))
+  [{:keys [disabled? form-id id] :as props}]
+  (when-not disabled?
+    (let [value @(re-frame/subscribe [::state/field-value form-id id])]
+      [form-action (assoc props :value value)])))
 
 (defn- date-control
   [{:keys [disabled? id form-id label required?]}]
@@ -129,24 +130,24 @@
 (declare form-control)
 
 (defn- group-control
-  [{:keys [id form-id disabled? spec class-name fields] :as props}]
+  [{:keys [form-id disabled? spec class-name fields]}]
   [:div {:class-name (c/get-class-name {"form--group-control" true
-                                        class-name        (some? class-name)})}
+                                        class-name            (some? class-name)})}
    (for [[field-name field-options] fields]
      ^{:key field-name}
      [form-control {:id        field-name
                     :form-id   form-id
                     :options   field-options
                     :disabled? disabled?
-                    :spec      spec}])]  )
+                    :spec      spec}])])
 
 (defn- label-control
-  [{:keys [class-name label] :as props}]
+  [{:keys [class-name label]}]
   [:div {:class-name (c/get-class-name {class-name (some? class-name)})}
    [input-label label]])
 
 (defn- switch-control
-  [{:keys [disabled? id form-id label required?]}]
+  [{:keys [disabled? id form-id label]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
         handle-change #(re-frame/dispatch [::state/set-field-value form-id id (not value)])]

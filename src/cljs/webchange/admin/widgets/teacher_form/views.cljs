@@ -97,7 +97,8 @@
        (re-frame/dispatch [::state/reset-form (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [actions teacher-id class-name on-cancel on-save]}]
+     (fn [{:keys [actions disabled? teacher-id class-name on-cancel on-save]
+           :or   {disabled? false}}]
        (let [saving? @(re-frame/subscribe [::state/data-saving?])
              data @(re-frame/subscribe [::state/form-data])
              handle-save #(re-frame/dispatch [::state/edit-teacher teacher-id % {:on-success on-save}])]
@@ -110,6 +111,7 @@
                     :on-save    handle-save
                     :on-cancel  on-cancel
                     :saving?    saving?
+                    :disabled?  disabled?
                     :class-name (get-class-name {"widget--teacher-form" true
                                                  class-name             (some? class-name)})}]
           [remove-window {:teacher-id teacher-id}]]))}))
