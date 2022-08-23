@@ -17,13 +17,16 @@
 (def side-bar-key :side-bar)
 
 (defn- set-side-bar
-  [db value]
-  (assoc db side-bar-key value))
+  ([db component]
+   (assoc db side-bar-key {:component component}))
+  ([db component props]
+   (assoc db side-bar-key {:component component
+                           :props     props})))
 
 (re-frame/reg-sub
   ::side-bar
   :<- [path-to-db]
-  #(get % side-bar-key :class-form))
+  #(get % side-bar-key {:component :class-form}))
 
 (re-frame/reg-event-fx
   ::open-add-student-form
@@ -42,6 +45,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-side-bar db :teachers-add)}))
+
+(re-frame/reg-event-fx
+  ::open-edit-teacher-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ teacher-id]]
+    {:db (set-side-bar db :teacher-edit {:teacher-id teacher-id})}))
 
 (re-frame/reg-event-fx
   ::open-teachers-list
@@ -80,6 +89,14 @@
   (fn [{:keys [db]} [_ value]]
     {:db (set-form-editable db value)}))
 
+(re-frame/reg-event-fx
+  ::handle-class-edit-cancel
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-edit-finished]} (:handlers db)]
+      {:dispatch-n (cond-> [[::set-form-editable false]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))
+
 ;; Class data
 
 (re-frame/reg-sub
@@ -99,9 +116,11 @@
   ::update-class-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
-    {:db (-> db
-             (update-class-data data)
-             (set-form-editable false))}))
+    (let [{:keys [on-edit-finished]} (:handlers db)]
+      (cond-> {:db (-> db
+                       (update-class-data data)
+                       (set-form-editable false))}
+              (some? on-edit-finished) (assoc :dispatch on-edit-finished)))))
 
 ;; school courses
 
@@ -126,11 +145,18 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
-    {:db         (assoc db :class-id class-id)
-     :dispatch-n [[::load-class]
-                  [::warehouse/load-school-courses {:school-id school-id}
-                   {:on-success [::load-school-courses-success]}]]}))
+  (fn [{:keys [db]} [_ {:keys [class-id school-id params]}]]
+    (let [{:keys [action]} params]
+      {:db         (-> db
+                       (assoc :school-id school-id)
+                       (assoc :class-id class-id)
+                       (assoc :handlers (select-keys params [:on-edit-finished])))
+       :dispatch-n (cond-> [[::load-class]
+                            [::warehouse/load-school-courses {:school-id school-id}
+                             {:on-success [::load-school-courses-success]}]]
+                           (= action "edit") (conj [::set-form-editable true])
+                           (= action "manage-students") (conj [::open-students-list])
+                           (= action "manage-teachers") (conj [::open-teachers-list]))})))
 
 (re-frame/reg-event-fx
   ::load-class
@@ -177,3 +203,10 @@
     {:db (-> db
              (update-class-data (select-keys class [:stats]))
              (set-side-bar :class-form))}))
+
+(re-frame/reg-event-fx
+  ::open-students-activities
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [class-id school-id]} db]
+      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))

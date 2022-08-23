@@ -7,7 +7,8 @@
 
 (defn- list-item
   [{:keys [active? email id last-login name]}]
-  (let [handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])
+  (let [handle-click #(re-frame/dispatch [::state/open-teacher-profile id])
+        handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])
         handle-active-click #(re-frame/dispatch [::state/set-teacher-status id (not active?)])
         determinate? (boolean? active?)
         loading? (= active? :loading)]
@@ -17,6 +18,7 @@
                                :value email}
                               {:key   "Last Login"
                                :value last-login}]
+                   :on-click handle-click
                    :controls [ui/switch {:label          (cond
                                                            loading? "Saving.."
                                                            (not determinate?) "..."

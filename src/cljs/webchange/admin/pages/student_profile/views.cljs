@@ -1,7 +1,6 @@
 (ns webchange.admin.pages.student-profile.views
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.admin.pages.student-profile.state :as state]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
@@ -82,18 +81,20 @@
 (defn- content
   []
   (let [{class-name :name} @(re-frame/subscribe [::state/class-data])
-        {course-name :name} @(re-frame/subscribe [::state/course-data])]
-    [page/content {:title    class-name
-                   :subtitle "Started one day"
-                   :icon     "classes"
-                   :header   [:div.course-name
-                              [ui/navigation-icon {:icon "courses"}]
-                              [:span.prefix "Course: "]
-                              [:span (or course-name "Not Assigned")]]
-                   :tabs     [{:title     "Course View"
-                               :component [progress-table]}
-                              {:title     "Student History"
-                               :component [:div "Student History"]}]}]))
+        {course-name :name} @(re-frame/subscribe [::state/course-data])
+        handle-header-click #(re-frame/dispatch [::state/open-class-profile-page])]
+    [page/content {:title          class-name
+                   :subtitle       "Started one day"
+                   :icon           "classes"
+                   :on-title-click handle-header-click
+                   :header         [:div.course-name
+                                    [ui/navigation-icon {:icon "courses"}]
+                                    [:span.prefix "Course: "]
+                                    [:span (or course-name "Not Assigned")]]
+                   :tabs           [{:title     "Course View"
+                                     :component [progress-table]}
+                                    {:title     "Student History"
+                                     :component [:div "Student History"]}]}]))
 
 (defn- side-bar-complete-class
   [{:keys [student-id]}]
@@ -102,29 +103,31 @@
                          (re-frame/dispatch [::state/open-student-profile]))]
     [page/side-bar {:title    "Complete Class"
                     :icon     "teachers"
-                    :focused? true}
+                    :focused? true
+                    :actions  [{:icon     "close"
+                                :on-click handle-cancel}]}
      [student-progress-complete {:student-id student-id
                                  :on-save    handle-save
                                  :on-cancel  handle-cancel}]]))
 
 (defn- side-bar-student-profile
   [{:keys [school-id student-id]}]
-  (r/with-let [form-editable? (r/atom false)
-               handle-edit-click #(reset! form-editable? true)
-               handle-cancel-click #(reset! form-editable? false)
-               handle-remove-from-class #(re-frame/dispatch [::state/open-class-profile-page])
-               handle-save-click #(do (reset! form-editable? false)
-                                      (re-frame/dispatch [::state/update-student-data student-id]))]
+  (let [form-editable? @(re-frame/subscribe [::state/student-form-editable?])
+        handle-edit-click #(re-frame/dispatch [::state/set-student-form-editable true])
+        handle-cancel-click #(re-frame/dispatch [::state/handle-edit-canceled])
+        handle-remove-from-class #(re-frame/dispatch [::state/open-class-profile-page])
+        handle-save-click #(re-frame/dispatch [::state/handle-edit-finished student-id])]
     [page/side-bar {:title    "Student Account"
                     :icon     "teachers"
-                    :focused? @form-editable?
+                    :focused? form-editable?
                     :actions  (cond-> []
-                                      (not @form-editable?) (conj {:icon     "edit"
-                                                                   :variant  "light"
-                                                                   :on-click handle-edit-click}))}
+                                      form-editable? (conj {:icon     "close"
+                                                            :on-click handle-cancel-click})
+                                      (not form-editable?) (conj {:icon     "edit"
+                                                                  :on-click handle-edit-click}))}
      [edit-student-form {:student-id           student-id
                          :school-id            school-id
-                         :editable?            @form-editable?
+                         :editable?            form-editable?
                          :on-save              handle-save-click
                          :on-cancel            handle-cancel-click
                          :on-remove-from-class handle-remove-from-class

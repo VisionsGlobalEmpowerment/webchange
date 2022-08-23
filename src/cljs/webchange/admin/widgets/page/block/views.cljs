@@ -26,7 +26,7 @@
         title])]))
 
 (defn- header-component
-  [{:keys [actions header icon icon-color on-icon-click subtitle tabs title] :as props}]
+  [{:keys [actions header icon icon-color on-icon-click on-title-click subtitle tabs title] :as props}]
   (let [show-header? (or (some? icon)
                          (some? title)
                          (some? subtitle)
@@ -41,7 +41,9 @@
                                :on-click on-icon-click}
                               (some? icon-color) (assoc :color icon-color))]
            [ui/icon {:icon icon}]))
-       [:div.title-text
+       [:div (cond-> {:class-name (get-class-name {"title-text"            true
+                                                   "title-text--clickable" (fn? on-title-click)})}
+                     (fn? on-title-click) (assoc :on-click on-title-click))
         title
         (when (some? subtitle)
           [:div.subtitle-text subtitle])]

@@ -1,0 +1,15 @@
+.page--edit-teacher {
+    .page--edit-teacher--content {
+        align-items: flex-start;
+    }
+
+    .form-wrapper {
+        position: relative;
+    }
+
+    .form-wrapper-action {
+        position: absolute;
+        top: 0;
+        right: -32px;
+    }
+}

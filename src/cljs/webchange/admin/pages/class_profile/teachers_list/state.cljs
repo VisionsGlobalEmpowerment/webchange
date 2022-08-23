@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.pages.class-profile.state :as parent-state]
-    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.list :as lists]))
 
@@ -79,11 +78,12 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
+  (fn [{:keys [db]} [_ {:keys [class-id school-id params]}]]
     {:db       (-> db
                    (set-school-id school-id)
                    (set-class-id class-id)
-                   (set-loading true))
+                   (set-loading true)
+                   (assoc :on-finish (:on-edit-teachers-finished params)))
      :dispatch [::warehouse/load-class-teachers
                 {:class-id class-id}
                 {:on-success [::load-teachers-success]}]}))
@@ -103,9 +103,8 @@
 
 (re-frame/reg-event-fx
   ::edit-teacher
-  (fn [{:keys [db]} [_ teacher-id]]
-    (let [school-id (get-school-id db)]
-      {:dispatch [::routes/redirect :teacher-profile :school-id school-id :teacher-id teacher-id]})))
+  (fn [{:keys [_]} [_ teacher-id]]
+    {:dispatch [::parent-state/open-edit-teacher-form teacher-id]}))
 
 ;; remove teacher
 
@@ -149,6 +148,9 @@
 
 (re-frame/reg-event-fx
   ::close
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n [[::parent-state/load-class]
-                  [::parent-state/open-class-form]]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [on-finish (:on-finish db)]
+      {:dispatch-n (cond-> [[::parent-state/load-class]
+                            [::parent-state/open-class-form]]
+                           (some? on-finish) (conj on-finish))})))

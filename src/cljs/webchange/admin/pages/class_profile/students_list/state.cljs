@@ -4,6 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.pages.class-profile.state :as parent-state]
     [webchange.admin.routes :as routes]
+    [webchange.admin.widgets.confirm.state :as confirm]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.list :as lists]))
 
@@ -79,11 +80,12 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id school-id]}]]
+  (fn [{:keys [db]} [_ {:keys [class-id school-id params]}]]
     {:db       (-> db
                    (set-school-id school-id)
                    (set-class-id class-id)
-                   (set-loading true))
+                   (set-loading true)
+                   (assoc :on-finish (:on-edit-students-finished params)))
      :dispatch [::warehouse/load-class-students
                 {:class-id class-id}
                 {:on-success [::load-students-success]}]}))
@@ -102,12 +104,19 @@
              (set-students students))}))
 
 (re-frame/reg-event-fx
+  ::open-student-profile
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    (let [school-id (get-school-id db)]
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :student-id student-id]})))
+
+(re-frame/reg-event-fx
   ::edit-student
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
-    (let [class-id (get-class-id db)
-          school-id (get-school-id db)]
-      {:dispatch [::routes/redirect :student-edit :school-id school-id :student-id student-id]})))
+    (let [school-id (get-school-id db)]
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :student-id student-id
+                  :storage-params {:action "edit"}]})))
 
 ;; remove student
 
@@ -125,6 +134,13 @@
 
 (re-frame/reg-event-fx
   ::remove-student
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ student-id]]
+    {:dispatch [::confirm/show-confirm-window {:message    "Remove student from class?"
+                                               :on-confirm [::remove-student-confirmed student-id]}]}))
+
+(re-frame/reg-event-fx
+  ::remove-student-confirmed
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
     (let [class-id (get-class-id db)]
@@ -151,6 +167,9 @@
 
 (re-frame/reg-event-fx
   ::close
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n [[::parent-state/load-class]
-                  [::parent-state/open-class-form]]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [on-finish (:on-finish db)]
+      {:dispatch-n (cond-> [[::parent-state/load-class]
+                            [::parent-state/open-class-form]]
+                           (some? on-finish) (conj on-finish))})))

@@ -202,11 +202,9 @@
   ::open-student
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
-    (let [school-id (:school-id db)
-          class-id (:class-id db)]
+    (let [school-id (:school-id db)]
       {:dispatch [::routes/redirect :student-profile
                   :school-id school-id
-                  :class-id class-id
                   :student-id student-id]})))
 
 (re-frame/reg-event-fx
@@ -221,6 +219,5 @@
   ::open-student-profile-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
-    (let [school-id (:school-id db)
-          class-id (:class-id db)]
-      {:dispatch [::routes/redirect :student-profile :school-id school-id :class-id class-id :student-id student-id]})))
+    (let [school-id (:school-id db)]
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :student-id student-id]})))

@@ -25,7 +25,7 @@
   [{:keys [counter type]}]
   [:div {:class-name (get-class-name {"bbs--card--counter"                   true
                                       (str "bbs--card--counter--type-" type) true})}
-   
+
    (if (number? counter) counter "-")])
 
 (defn- card-icon
@@ -53,7 +53,8 @@
         button-props (-> props
                          (dissoc :text)
                          (assoc :on-click handle-click
-                                :shape "rounded"))]
+                                :shape "rounded"
+                                :class-name "bbs--card--action"))]
     [button button-props
      text]))
 

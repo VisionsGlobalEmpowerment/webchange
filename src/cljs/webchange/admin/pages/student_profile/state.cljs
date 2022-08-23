@@ -17,6 +17,10 @@
 
 (def student-progress-key :student-progress)
 
+(defn- get-student-progress
+  [db]
+  (get db student-progress-key))
+
 (defn- set-student-progress
   [db value]
   (assoc db student-progress-key value))
@@ -24,20 +28,22 @@
 (re-frame/reg-sub
   ::student-progress
   :<- [path-to-db]
-  #(get % student-progress-key))
+  #(get-student-progress %))
 
 ;;
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id]}]]
-    {:db       (-> db
-                   (assoc :class-id class-id)
-                   (assoc :school-id school-id)
-                   (assoc :student-id student-id)
-                   (assoc :loading-student true))
-     :dispatch [::load-student-progress]}))
+  (fn [{:keys [db]} [_ {:keys [school-id student-id params]}]]
+    (let [{:keys [action]} params]
+      {:db         (-> db
+                       (assoc :school-id school-id)
+                       (assoc :student-id student-id)
+                       (assoc :loading-student true)
+                       (assoc :callbacks (select-keys params [:on-edit-finished])))
+       :dispatch-n (cond-> [[::load-student-progress]]
+                           (= action "edit") (conj [::set-student-form-editable true]))})))
 
 (re-frame/reg-event-fx
   ::load-student-progress
@@ -89,8 +95,10 @@
   ::open-class-profile-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [school-id class-id]} db]
-      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+    (let [{:keys [school-id]} db
+          class-id (-> (get-student-progress db)
+                       (get-in [:class :id]))]
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
 
 ;; progress data
 
@@ -149,6 +157,25 @@
   (fn [{:keys [db]} [_ idx]]
     {:db (assoc db :current-level idx)}))
 
+;; student form
+
+(def student-form-editable-key :student-form-editable?)
+
+(defn- set-student-form-editable
+  [db value]
+  (assoc db student-form-editable-key value))
+
+(re-frame/reg-sub
+  ::student-form-editable?
+  :<- [path-to-db]
+  #(get % student-form-editable-key false))
+
+(re-frame/reg-event-fx
+  ::set-student-form-editable
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (set-student-form-editable db value)}))
+
 ;; Side Bar Content
 
 (def side-bar-key :side-bar)
@@ -173,3 +200,20 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-side-bar db :complete-class)}))
+
+(re-frame/reg-event-fx
+  ::handle-edit-finished
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    (let [{:keys [on-edit-finished]} (:callbacks db)]
+      {:dispatch-n (cond-> [[::set-student-form-editable false]
+                            [::update-student-data student-id]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))
+
+(re-frame/reg-event-fx
+  ::handle-edit-canceled
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-edit-finished]} (:callbacks db)]
+      {:dispatch-n (cond-> [[::set-student-form-editable false]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))
