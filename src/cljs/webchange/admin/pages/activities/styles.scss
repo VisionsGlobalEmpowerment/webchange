@@ -1,56 +1,56 @@
 .page--activities {
     .widget--page--header-controls {
-	flex: 2 1;
+        flex: 2 1;
     }
+
     .activity-type-selector {
-	min-width: 320px;
-	display: flex;
-	gap: 17px;
+        min-width: 320px;
+        display: flex;
+        gap: 17px;
 
-	font-weight: 700;
-	font-size: 14px;
-	line-height: 18px;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 18px;
 
-	.activity-type-selector-item {
-	    cursor: pointer;
-	    display: flex;
-	    //	    min-width: 160px;
-	    align-items: center;
+        .activity-type-selector-item {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
 
-	    .bbs--chip {
-		border: 0px;
-		padding: 0px;
+            .bbs--chip {
+                border: 0px;
+                padding: 0px;
 
-		color: $color-grey-1;
-	    }
+                color: bbs--color(grey-1);
+            }
 
-	    &.activity-type-selector-item-active {
-		color: #F5A36C; //$color-orange;
-		
-		.bbs--chip--counter {
-		    background-color: #F5A36C; //$color-orange;
-		}
-	    }
+            &.activity-type-selector-item-active {
+                color: bbs--color(yellow-1);
 
-	    &.activity-type-selector-item-left {
-		color: #F5A36C; //$color-orange;
-		
-		.bbs--chip--counter {
-		    background-color: #F5A36C; //$color-orange;
-		}
-	    }
-	}
+                .bbs--chip--counter {
+                    background-color: bbs--color(yellow-1);
+                }
+            }
 
-	.activity-type-spacer {
-	    width: 1px;
-	    height: 25px;
-	    padding: 0;
-	    border-left: solid 1px $color-grey-3;
-	    
-	}
+            &.activity-type-selector-item-left {
+                color: bbs--color(yellow-1);
+
+                .bbs--chip--counter {
+                    background-color: bbs--color(yellow-1);
+                }
+            }
+        }
+
+        .activity-type-spacer {
+            width: 1px;
+            height: 25px;
+            padding: 0;
+            border-left: solid 1px bbs--color(grey-3);
+
+        }
     }
 
     .show-global-selector {
-	min-width: 224px;
+        min-width: 224px;
     }
 }

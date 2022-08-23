@@ -46,17 +46,19 @@
       (if show-my-global
         activities
         (remove #(and
-                  (= (:status %) "visible")
-                  (= (:owner-id %) (get-in db [:current-user :id])))
+                   (= (:status %) "visible")
+                   (= (:owner-id %) (get-in db [:current-user :id])))
                 activities)))))
 
 (re-frame/reg-sub
   ::activities-counter
   :<- [path-to-db]
   (fn [db]
-    {:my (-> db :my-activities count)
+    {:my      (-> db :my-activities count)
      :visible (-> db :visible-activities count)}))
+
 ;;
+
 (def default-language "english")
 
 (re-frame/reg-sub
@@ -68,10 +70,10 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (-> db
-                   (assoc :visible-activities-loading true)
-                   (assoc :my-activities-loading true)
-                   (assoc :current-language default-language))
+    {:db         (-> db
+                     (assoc :visible-activities-loading true)
+                     (assoc :my-activities-loading true)
+                     (assoc :current-language default-language))
      :dispatch-n [[::warehouse/load-visible-activities
                    {:lang default-language}
                    {:on-success [::load-visible-activities-success]}]
@@ -108,10 +110,10 @@
   ::select-language
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ language]]
-    {:db (-> db
-             (assoc :visible-activities-loading true)
-             (assoc :my-actvities-loading true)
-             (assoc :current-language language))
+    {:db         (-> db
+                     (assoc :visible-activities-loading true)
+                     (assoc :my-activities-loading true)
+                     (assoc :current-language language))
      :dispatch-n [[::warehouse/load-visible-activities
                    {:lang language}
                    {:on-success [::load-visible-activities-success]}]

@@ -19,21 +19,19 @@
             border-radius: 7px;
 
             display: flex;
-	    flex-direction: column;
+            flex-direction: column;
 
-	    .header-top {
-		display: flex;
-		.info {
+            .header-top {
+                display: flex;
+
+                .info {
                     flex: 1 1;
                     margin-top: 13px;
                     margin-left: 25px;
+                    @include bbs--noto-14-b;
+                }
 
-                    font-weight: 700;
-                    font-size: 14px;
-                    line-height: 18px;
-		}
-
-		.actions {
+                .actions {
                     flex: 1 1;
                     display: flex;
                     justify-content: flex-end;
@@ -42,48 +40,45 @@
                     gap: 9px;
 
                     button {
-			min-height: 32px;
-			border-radius: 20px;
-			margin: 12px 0 12px 0;
+                        min-height: 32px;
+                        border-radius: 20px;
+                        margin: 12px 0 12px 0;
 
-			padding-left: 20px;
-			padding-right: 40px;
+                        padding-left: 20px;
+                        padding-right: 40px;
 
-			@include bbs--icon-size(24px);
+                        @include bbs--icon-size(24px);
 
-			.bbs--button--icon {
+                        .bbs--button--icon {
                             margin-top: -12px;
-			}
+                        }
                     }
 
                     .play-button {
-			background: $color-blue-1;
+                        background: $color-blue-1;
 
-			&:hover {
+                        &:hover {
                             background: $color-blue-1-light;
-			}
+                        }
                     }
+                }
+            }
 
-                    .edit-button {
+            .header-bottom {
+                display: flex;
+                justify-content: space-between;
+                padding: 4px 25px 10px 25px;
+
+                .date-user-info {
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 16px;
+
+                    strong {
+                        font-weight: 700;
                     }
-		}
-	    }
-
-	    .header-bottom {
-		display: flex;
-		justify-content: space-between;
-		padding: 4px 25px 10px 25px;
-		
-		.date-user-info {
-		    font-weight: 400;
-		    font-size: 12px;
-		    line-height: 16px;
-
-		    strong {
-			font-weight: 700;
-		    }
-		}
-	    }
+                }
+            }
         }
 
         .preview {
