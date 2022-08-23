@@ -284,16 +284,16 @@ SELECT true as result FROM users
 WHERE id = :id
 AND type IN (:v*:types);
 
--- :name accounts-by-type :? :*
+-- :name accounts-by-types :? :*
 -- :doc retrieves all user record with given type
 SELECT * FROM users
-WHERE type = :type
+WHERE type IN (:v*:types)
 LIMIT :limit OFFSET :offset
 
--- :name count-accounts-by-type :? :1
+-- :name count-accounts-by-types :? :1
 -- :doc count records
 SELECT count(*) as result FROM users
-WHERE type = :type
+WHERE type IN (:v*:types)
 
 -- :name insert-course-scenes :! :n
 -- :doc Batch insert into course scenes

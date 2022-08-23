@@ -32,6 +32,7 @@
   (fn [user-type]
     (let [module (case user-type
                    "admin" :admin
+                   "bbs-admin" :admin
                    :parent)
           {:keys [redirect-to]} @router]
       (->> (get module-location module)

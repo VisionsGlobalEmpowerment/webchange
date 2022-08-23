@@ -62,21 +62,29 @@
       (db/change-password! {:id user-id
                             :password hashed-password}))))
 
+(defn- requested-type->account-types
+  [type]
+  (case type
+    "admin" ["admin" "bbs-admin"]
+    [type]))
+
 (defn accounts-by-type
-  [type page]
+  [requested-type page]
   (let [limit 30
         offset (* limit (dec page))
-        accounts (->> (db/accounts-by-type {:type type :limit limit :offset offset})
+        types (requested-type->account-types requested-type)
+        accounts (->> (db/accounts-by-types {:types types :limit limit :offset offset})
                       (map visible-account))
-        pages (-> (db/count-accounts-by-type {:type type})
-                  :result
+        total (-> (db/count-accounts-by-types {:types types})
+                  :result)
+        pages (-> total
                   (/ limit)
                   (Math/ceil)
                   (int))]
     {:accounts accounts
      :current-page page
      :pages pages
-     :total 34}))                                            ;; ToDo: Get total accounts number
+     :total total}))
 
 (defn- with-children
   [{:keys [id] :as account}]
