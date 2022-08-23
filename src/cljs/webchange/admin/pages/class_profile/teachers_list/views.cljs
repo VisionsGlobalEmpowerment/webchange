@@ -11,16 +11,16 @@
   (let [removing? @(re-frame/subscribe [::state/teacher-removing? id])
         handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])
         handle-remove-click #(re-frame/dispatch [::state/remove-teacher id])]
-    [ui/list-item {:avatar  nil
-                   :name    name
-                   :dense?  true
-                   :actions [{:icon     "trash"
-                              :title    "Remove from class"
-                              :loading? removing?
-                              :on-click handle-remove-click}
-                             {:icon     "edit"
-                              :title    "Edit"
-                              :on-click handle-edit-click}]}]))
+    [ui/list-item {:avatar   nil
+                   :name     name
+                   :dense?   true
+                   :actions  [{:icon     "trash"
+                               :title    "Remove from class"
+                               :loading? removing?
+                               :on-click handle-remove-click}
+                              {:icon     "edit"
+                               :title    "Edit"
+                               :on-click handle-edit-click}]}]))
 
 (defn- teacher-list
   []

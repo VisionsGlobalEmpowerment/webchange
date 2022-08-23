@@ -4,6 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.pages.class-profile.state :as parent-state]
     [webchange.admin.routes :as routes]
+    [webchange.admin.widgets.confirm.state :as confirm]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.list :as lists]))
 
@@ -103,11 +104,21 @@
              (set-students students))}))
 
 (re-frame/reg-event-fx
+  ::open-student-profile
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    (let [school-id (get-school-id db)
+          class-id (get-class-id db)]
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :class-id class-id :student-id student-id]})))
+
+(re-frame/reg-event-fx
   ::edit-student
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
-    (let [school-id (get-school-id db)]
-      {:dispatch [::routes/redirect :student-edit :school-id school-id :student-id student-id]})))
+    (let [school-id (get-school-id db)
+          class-id (get-class-id db)]
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :class-id class-id :student-id student-id
+                  :storage-params {:action "edit"}]})))
 
 ;; remove student
 
@@ -125,6 +136,13 @@
 
 (re-frame/reg-event-fx
   ::remove-student
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ student-id]]
+    {:dispatch [::confirm/show-confirm-window {:message    "Remove student from class?"
+                                               :on-confirm [::remove-student-confirmed student-id]}]}))
+
+(re-frame/reg-event-fx
+  ::remove-student-confirmed
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
     (let [class-id (get-class-id db)]

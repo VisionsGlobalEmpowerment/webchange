@@ -9,11 +9,13 @@
 (defn- list-item
   [{:keys [id name]}]
   (let [removing? @(re-frame/subscribe [::state/student-removing? id])
+        handle-click #(re-frame/dispatch [::state/open-student-profile id])
         handle-edit-click #(re-frame/dispatch [::state/edit-student id])
         handle-remove-click #(re-frame/dispatch [::state/remove-student id])]
     [ui/list-item {:avatar  nil
                    :name    name
                    :dense?  true
+                   :on-click handle-click
                    :actions [{:icon     "trash"
                               :title    "Remove from class"
                               :loading? removing?

@@ -5,6 +5,7 @@
     [webchange.admin.pages.class-profile.course-assign.views :refer [assign-class-course]]
     [webchange.admin.pages.class-profile.students-add.views :refer [class-students-add]]
     [webchange.admin.pages.class-profile.students-list.views :refer [class-students-list]]
+    [webchange.admin.pages.class-profile.teacher-edit.views :refer [class-teacher-edit]]
     [webchange.admin.pages.class-profile.teachers-add.views :refer [class-teachers-add]]
     [webchange.admin.pages.class-profile.teachers-list.views :refer [class-teachers-list]]
     [webchange.admin.widgets.class-form.views :refer [class-edit-form]]
@@ -22,6 +23,7 @@
         handle-add-teacher-click #(re-frame/dispatch [::state/open-add-teacher-form])
         handle-manage-teachers-click #(re-frame/dispatch [::state/open-teachers-list])
         handle-manage-courses-click #(re-frame/dispatch [::state/open-assign-course-form])
+        handle-student-activities-click #(re-frame/dispatch [::state/open-students-activities])
         add-button-props {:color      "blue-1"
                           :chip       "plus"
                           :chip-color "yellow-1"}]
@@ -41,6 +43,12 @@
                                 (merge add-button-props
                                        {:text     "Add Student"
                                         :on-click handle-add-student-click})]}
+                     {:text       "Students Activities"
+                      :icon       "games"
+                      :counter    students
+                      :background "blue-2"
+                      :actions    [{:text     "Students Activities"
+                                    :on-click handle-student-activities-click}]}
                      {:text       (:name class-course)
                       :icon       "courses"
                       :background "green-2"
@@ -64,6 +72,8 @@
                     :icon     "info"
                     :focused? form-editable?
                     :actions  (cond-> []
+                                      form-editable? (conj {:icon     "close"
+                                                            :on-click handle-cancel-click})
                                       (not form-editable?) (conj {:icon     "edit"
                                                                   :on-click handle-edit-click}))}
      [class-edit-form {:class-id  class-id
@@ -73,13 +83,15 @@
                        :on-cancel handle-cancel-click}]]))
 
 (defn- side-bar
-  [props]
-  (let [side-bar-content @(re-frame/subscribe [::state/side-bar])]
-    (case side-bar-content
+  [side-bar-props]
+  (let [{:keys [component props]} @(re-frame/subscribe [::state/side-bar])
+        props (merge side-bar-props props)]
+    (case component
       :assign-course [assign-class-course props]
       :class-form [side-bar-class-form props]
       :students-add [class-students-add props]
       :students-list [class-students-list props]
+      :teacher-edit [class-teacher-edit props]
       :teachers-add [class-teachers-add props]
       :teachers-list [class-teachers-list props]
       nil)))

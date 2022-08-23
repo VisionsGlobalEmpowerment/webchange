@@ -30,12 +30,15 @@
   []
   (re-frame/dispatch [::state/open-remove-window]))
 
-
-(def edit-teacher-model (merge add-teacher-model
-                               {:remove {:label    "Delete account"
-                                         :type     :action
-                                         :icon     "trash"
-                                         :on-click show-remove-window}}))
+(defn- get-edit-teacher-model
+  [actions]
+  (merge add-teacher-model
+         (if (some? actions)
+           actions
+           {:remove {:label    "Delete account"
+                     :type     :action
+                     :icon     "trash"
+                     :on-click show-remove-window}})))
 
 (defn add-teacher-form
   []
@@ -71,11 +74,11 @@
         remove #(re-frame/dispatch [::state/remove-teacher teacher-id])
         close-window #(re-frame/dispatch [::state/close-remove-window])
         confirm-removed #(re-frame/dispatch [::state/handle-removed])]
-    [ui/confirm {:open?      open?
-                 :loading?   in-progress?
+    [ui/confirm {:open?        open?
+                 :loading?     in-progress?
                  :confirm-text (if done? "Ok" "Yes")
-                 :on-confirm (if done? confirm-removed remove)
-                 :on-cancel  (when-not done? close-window)}
+                 :on-confirm   (if done? confirm-removed remove)
+                 :on-cancel    (when-not done? close-window)}
      (if done?
        "Teacher account successfully deleted"
        "Are you sure you want to delete teacher account?")]))
@@ -94,17 +97,18 @@
        (re-frame/dispatch [::state/reset-form (r/props this)]))
 
      :reagent-render
-     (fn [{:keys [teacher-id class-name on-save]}]
+     (fn [{:keys [actions teacher-id class-name on-cancel on-save]}]
        (let [saving? @(re-frame/subscribe [::state/data-saving?])
              data @(re-frame/subscribe [::state/form-data])
              handle-save #(re-frame/dispatch [::state/edit-teacher teacher-id % {:on-success on-save}])]
          [:<>
           [ui/form {:form-id    (-> (str "edit-teacher")
                                     (keyword))
-                    :model      edit-teacher-model
+                    :model      (get-edit-teacher-model actions)
                     :data       data
                     :spec       ::teacher-spec/edit-teacher
                     :on-save    handle-save
+                    :on-cancel  on-cancel
                     :saving?    saving?
                     :class-name (get-class-name {"widget--teacher-form" true
                                                  class-name             (some? class-name)})}]

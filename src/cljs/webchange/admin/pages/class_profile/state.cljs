@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/class-profile)
@@ -16,13 +17,16 @@
 (def side-bar-key :side-bar)
 
 (defn- set-side-bar
-  [db value]
-  (assoc db side-bar-key value))
+  ([db component]
+   (assoc db side-bar-key {:component component}))
+  ([db component props]
+   (assoc db side-bar-key {:component component
+                           :props     props})))
 
 (re-frame/reg-sub
   ::side-bar
   :<- [path-to-db]
-  #(get % side-bar-key :class-form))
+  #(get % side-bar-key {:component :class-form}))
 
 (re-frame/reg-event-fx
   ::open-add-student-form
@@ -41,6 +45,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-side-bar db :teachers-add)}))
+
+(re-frame/reg-event-fx
+  ::open-edit-teacher-form
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ teacher-id]]
+    {:db (set-side-bar db :teacher-edit {:teacher-id teacher-id})}))
 
 (re-frame/reg-event-fx
   ::open-teachers-list
@@ -138,6 +148,7 @@
   (fn [{:keys [db]} [_ {:keys [class-id school-id params]}]]
     (let [{:keys [action]} params]
       {:db         (-> db
+                       (assoc :school-id school-id)
                        (assoc :class-id class-id)
                        (assoc :handlers (select-keys params [:on-edit-finished])))
        :dispatch-n (cond-> [[::load-class]
@@ -192,3 +203,10 @@
     {:db (-> db
              (update-class-data (select-keys class [:stats]))
              (set-side-bar :class-form))}))
+
+(re-frame/reg-event-fx
+  ::open-students-activities
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [class-id school-id]} db]
+      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))

@@ -11,7 +11,9 @@
         handle-cancel #(re-frame/dispatch [::state/close])]
     [page/side-bar {:title    "Add Teachers"
                     :icon     "teachers"
-                    :focused? true}
+                    :focused? true
+                    :actions  [{:icon     "close"
+                                :on-click handle-cancel}]}
      [add-class-teachers {:class-id  class-id
                           :school-id school-id
                           :on-save   handle-save

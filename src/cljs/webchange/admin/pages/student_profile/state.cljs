@@ -31,13 +31,15 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id]}]]
-    {:db       (-> db
-                   (assoc :class-id class-id)
-                   (assoc :school-id school-id)
-                   (assoc :student-id student-id)
-                   (assoc :loading-student true))
-     :dispatch [::load-student-progress]}))
+  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id params] :as props}]]
+    (let [{:keys [action]} params]
+      {:db         (-> db
+                       (assoc :class-id class-id)
+                       (assoc :school-id school-id)
+                       (assoc :student-id student-id)
+                       (assoc :loading-student true))
+       :dispatch-n (cond-> [[::load-student-progress]]
+                           (= action "edit") (conj [::set-student-form-editable true]))})))
 
 (re-frame/reg-event-fx
   ::load-student-progress
@@ -148,6 +150,25 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ idx]]
     {:db (assoc db :current-level idx)}))
+
+;; student form
+
+(def student-form-editable-key :student-form-editable?)
+
+(defn- set-student-form-editable
+  [db value]
+  (assoc db student-form-editable-key value))
+
+(re-frame/reg-sub
+  ::student-form-editable?
+  :<- [path-to-db]
+  #(get % student-form-editable-key false))
+
+(re-frame/reg-event-fx
+  ::set-student-form-editable
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (set-student-form-editable db value)}))
 
 ;; Side Bar Content
 

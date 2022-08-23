@@ -39,15 +39,17 @@
              saving? @(re-frame/subscribe [::state/saving?])
              handle-save #(re-frame/dispatch [::state/change-class-course])
              handle-cancel #(re-frame/dispatch [::state/close])]
-         [page/side-bar {:title  "Assign a Course"
-                         :icon   "courses"
-                         :footer [{:text     "Cancel"
-                                   :color    "blue-1"
-                                   :on-click handle-cancel}
-                                  {:text      "Apply"
-                                   :loading?  saving?
-                                   :disabled? (not apply-enable?)
-                                   :on-click  handle-save}]}
+         [page/side-bar {:title   "Assign a Course"
+                         :icon    "courses"
+                         :actions [{:icon     "close"
+                                    :on-click handle-cancel}]
+                         :footer  [{:text     "Cancel"
+                                    :color    "blue-1"
+                                    :on-click handle-cancel}
+                                   {:text      "Apply"
+                                    :loading?  saving?
+                                    :disabled? (not apply-enable?)
+                                    :on-click  handle-save}]}
           (if-not loading?
             [:<>
              [courses-list]

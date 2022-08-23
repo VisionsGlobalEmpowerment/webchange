@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.pages.class-profile.state :as parent-state]
-    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.list :as lists]))
 
@@ -104,9 +103,8 @@
 
 (re-frame/reg-event-fx
   ::edit-teacher
-  (fn [{:keys [db]} [_ teacher-id]]
-    (let [school-id (get-school-id db)]
-      {:dispatch [::routes/redirect :teacher-profile :school-id school-id :teacher-id teacher-id]})))
+  (fn [{:keys [_]} [_ teacher-id]]
+    {:dispatch [::parent-state/open-edit-teacher-form teacher-id]}))
 
 ;; remove teacher
 

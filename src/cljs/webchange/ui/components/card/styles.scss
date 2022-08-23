@@ -127,6 +127,10 @@
         width: 100%;
     }
 
+    .bbs--card--action {
+        white-space: nowrap;
+    }
+
     .bbs--card--counter {
         &.bbs--card--counter--type-vertical {
             @include bbs--noto-18-b;
